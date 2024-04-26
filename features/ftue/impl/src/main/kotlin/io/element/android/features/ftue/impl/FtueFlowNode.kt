@@ -143,7 +143,7 @@ class FtueFlowNode @AssistedInject constructor(
         }
     }
 
-    private fun moveToNextStep() {
+    private fun moveToNextStep() = lifecycleScope.launch {
         when (ftueState.getNextStep()) {
             FtueStep.SessionVerification -> {
                 backstack.newRoot(NavTarget.SessionVerification)

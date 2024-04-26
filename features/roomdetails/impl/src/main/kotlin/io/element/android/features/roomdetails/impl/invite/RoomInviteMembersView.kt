@@ -225,7 +225,7 @@ private fun RoomInviteMembersSearchBar(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomInviteMembersPreview(@PreviewParameter(RoomInviteMembersStateProvider::class) state: RoomInviteMembersState) = ElementPreview {
+internal fun RoomInviteMembersViewPreview(@PreviewParameter(RoomInviteMembersStateProvider::class) state: RoomInviteMembersState) = ElementPreview {
     RoomInviteMembersView(
         state = state,
         onBackPressed = {},

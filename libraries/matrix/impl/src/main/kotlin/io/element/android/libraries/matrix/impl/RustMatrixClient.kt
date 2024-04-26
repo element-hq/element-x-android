@@ -61,6 +61,7 @@ import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
 import io.element.android.libraries.matrix.impl.room.map
+import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewMapper
 import io.element.android.libraries.matrix.impl.roomdirectory.RustRoomDirectoryService
 import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
@@ -159,7 +160,6 @@ class RustMatrixClient(
         syncService = rustSyncService,
         sessionCoroutineScope = sessionCoroutineScope,
         dispatchers = dispatchers,
-        sessionStore = sessionStore,
     )
 
     private val roomDirectoryService = RustRoomDirectoryService(
@@ -187,7 +187,6 @@ class RustMatrixClient(
                             isTokenValid = false,
                             loginType = existingData.loginType,
                             passphrase = existingData.passphrase,
-                            needsVerification = existingData.needsVerification,
                         )
                         sessionStore.updateData(newData)
                         Timber.d("Removed session data with token: '...$anonymizedToken'.")
@@ -215,7 +214,6 @@ class RustMatrixClient(
                     isTokenValid = true,
                     loginType = existingData.loginType,
                     passphrase = existingData.passphrase,
-                    needsVerification = existingData.needsVerification,
                 )
                 sessionStore.updateData(newData)
                 Timber.d("Saved new session data with token: '...$anonymizedToken'.")
@@ -241,7 +239,6 @@ class RustMatrixClient(
         client = client,
         isSyncServiceReady = rustSyncService.syncState.map { it == SyncState.Running },
         sessionCoroutineScope = sessionCoroutineScope,
-        sessionStore = sessionStore,
     )
 
     private val eventFilters = TimelineConfig.excludedEvents
@@ -439,7 +436,7 @@ class RustMatrixClient(
             runCatching { client.removeAvatar() }
         }
 
-    override suspend fun joinRoom(roomId: RoomId): Result<RoomId> = withContext(sessionDispatcher) {
+    override suspend fun joinRoom(roomId: RoomId): Result<Unit> = withContext(sessionDispatcher) {
         runCatching {
             client.joinRoomById(roomId.value).destroy()
             try {
@@ -447,8 +444,11 @@ class RustMatrixClient(
             } catch (e: Exception) {
                 Timber.e(e, "Timeout waiting for the room to be available in the room list")
             }
-            roomId
         }
+    }
+
+    override suspend fun knockRoom(roomId: RoomId): Result<Unit> {
+        return Result.failure(NotImplementedError("Not yet implemented"))
     }
 
     override suspend fun trackRecentlyVisitedRoom(roomId: RoomId): Result<Unit> = withContext(sessionDispatcher) {
@@ -463,21 +463,15 @@ class RustMatrixClient(
         }
     }
 
-    @Suppress("TooGenericExceptionThrown")
     override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<RoomId> = withContext(sessionDispatcher) {
         runCatching {
-            // TODO Waiting for SDK to be released
-            throw Exception("Not implemented")
-            // client.resolveRoomAlias(roomAlias.value).let(::RoomId)
+            client.resolveRoomAlias(roomAlias.value).let(::RoomId)
         }
     }
 
-    @Suppress("TooGenericExceptionThrown")
     override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias): Result<RoomPreview> = withContext(sessionDispatcher) {
         runCatching {
-            // TODO Waiting for SDK to be released
-            throw Exception("Not implemented")
-            // client.getRoomPreview(roomIdOrAlias.identifier).let(RoomPreviewMapper::map)
+            client.getRoomPreview(roomIdOrAlias.identifier).let(RoomPreviewMapper::map)
         }
     }
 

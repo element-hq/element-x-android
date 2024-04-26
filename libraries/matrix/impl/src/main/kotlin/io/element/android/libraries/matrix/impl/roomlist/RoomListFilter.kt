@@ -40,7 +40,7 @@ val RoomListFilter.predicate
                 (roomSummary.details.numUnreadNotifications > 0 || roomSummary.details.isMarkedUnread)
         }
         is RoomListFilter.NormalizedMatchRoomName -> { roomSummary: RoomSummary ->
-            roomSummary is RoomSummary.Filled && roomSummary.details.name.contains(pattern, ignoreCase = true)
+            roomSummary is RoomSummary.Filled && roomSummary.details.name.orEmpty().contains(pattern, ignoreCase = true)
         }
         RoomListFilter.Invite -> { roomSummary: RoomSummary ->
             roomSummary.isInvited()

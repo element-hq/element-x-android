@@ -19,10 +19,16 @@ package io.element.android.features.joinroom.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
+import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
+import io.element.android.libraries.matrix.api.room.RoomType
+import io.element.android.libraries.matrix.ui.model.InviteSender
 
 open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
     override val values: Sequence<JoinRoomState>
@@ -32,6 +38,13 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
             ),
             aJoinRoomState(
                 contentState = anUnknownContentState()
+            ),
+            aJoinRoomState(
+                contentState = aLoadedContentState(
+                    name = null,
+                    alias = null,
+                    topic = null,
+                )
             ),
             aJoinRoomState(
                 contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanJoin)
@@ -48,13 +61,28 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
                 )
             ),
             aJoinRoomState(
-                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited)
+                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(null))
+            ),
+            aJoinRoomState(
+                contentState = aLoadedContentState(
+                    numberOfMembers = 123,
+                    joinAuthorisationStatus = JoinAuthorisationStatus.IsInvited(anInviteSender()),
+                )
             ),
             aJoinRoomState(
                 contentState = aFailureContentState()
             ),
             aJoinRoomState(
                 contentState = aFailureContentState(roomIdOrAlias = A_ROOM_ALIAS.toRoomIdOrAlias())
+            ),
+            aJoinRoomState(
+                contentState = aLoadedContentState(
+                    roomId = RoomId("!aSpaceId:domain"),
+                    name = "A space",
+                    alias = null,
+                    topic = "This is the topic of a space",
+                    roomType = RoomType.Space,
+                )
             ),
         )
 }
@@ -74,11 +102,12 @@ fun aLoadingContentState(roomId: RoomId = A_ROOM_ID) = ContentState.Loading(room
 
 fun aLoadedContentState(
     roomId: RoomId = A_ROOM_ID,
-    name: String = "Element X android",
+    name: String? = "Element X android",
     alias: RoomAlias? = RoomAlias("#exa:matrix.org"),
     topic: String? = "Element X is a secure, private and decentralized messenger.",
     numberOfMembers: Long? = null,
     isDirect: Boolean = false,
+    roomType: RoomType = RoomType.Room,
     roomAvatarUrl: String? = null,
     joinAuthorisationStatus: JoinAuthorisationStatus = JoinAuthorisationStatus.Unknown
 ) = ContentState.Loaded(
@@ -88,6 +117,7 @@ fun aLoadedContentState(
     topic = topic,
     numberOfMembers = numberOfMembers,
     isDirect = isDirect,
+    roomType = roomType,
     roomAvatarUrl = roomAvatarUrl,
     joinAuthorisationStatus = joinAuthorisationStatus
 )
@@ -95,11 +125,24 @@ fun aLoadedContentState(
 fun aJoinRoomState(
     contentState: ContentState = aLoadedContentState(),
     acceptDeclineInviteState: AcceptDeclineInviteState = anAcceptDeclineInviteState(),
+    knockAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (JoinRoomEvents) -> Unit = {}
 ) = JoinRoomState(
     contentState = contentState,
     acceptDeclineInviteState = acceptDeclineInviteState,
+    knockAction = knockAction,
+    applicationName = "AppName",
     eventSink = eventSink
+)
+
+internal fun anInviteSender(
+    userId: UserId = UserId("@bob:domain"),
+    displayName: String = "Bob",
+    avatarData: AvatarData = AvatarData(userId.value, displayName, size = AvatarSize.InviteSender),
+) = InviteSender(
+    userId = userId,
+    displayName = displayName,
+    avatarData = avatarData,
 )
 
 private val A_ROOM_ID = RoomId("!exa:matrix.org")

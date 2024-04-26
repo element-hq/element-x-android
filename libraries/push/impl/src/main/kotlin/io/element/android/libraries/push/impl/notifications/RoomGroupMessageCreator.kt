@@ -45,7 +45,7 @@ class RoomGroupMessageCreator @Inject constructor(
         imageLoader: ImageLoader,
     ): RoomNotification.Message {
         val lastKnownRoomEvent = events.last()
-        val roomName = lastKnownRoomEvent.roomName ?: lastKnownRoomEvent.senderName ?: "Room name (${roomId.value.take(8)}…)"
+        val roomName = lastKnownRoomEvent.roomName ?: lastKnownRoomEvent.senderDisambiguatedDisplayName ?: "Room name (${roomId.value.take(8)}…)"
         val roomIsGroup = !lastKnownRoomEvent.roomIsDirect
         val style = NotificationCompat.MessagingStyle(
             Person.Builder()
@@ -60,9 +60,9 @@ class RoomGroupMessageCreator @Inject constructor(
         }
 
         val tickerText = if (roomIsGroup) {
-            stringProvider.getString(R.string.notification_ticker_text_group, roomName, events.last().senderName, events.last().description)
+            stringProvider.getString(R.string.notification_ticker_text_group, roomName, events.last().senderDisambiguatedDisplayName, events.last().description)
         } else {
-            stringProvider.getString(R.string.notification_ticker_text_dm, events.last().senderName, events.last().description)
+            stringProvider.getString(R.string.notification_ticker_text_dm, events.last().senderDisambiguatedDisplayName, events.last().description)
         }
 
         val largeBitmap = getRoomBitmap(events, imageLoader)
@@ -108,7 +108,7 @@ class RoomGroupMessageCreator @Inject constructor(
                 null
             } else {
                 Person.Builder()
-                    .setName(event.senderName?.annotateForDebug(70))
+                    .setName(event.senderDisambiguatedDisplayName?.annotateForDebug(70))
                     .setIcon(bitmapLoader.getUserIcon(event.senderAvatarPath, imageLoader))
                     .setKey(event.senderId.value)
                     .build()
@@ -152,7 +152,7 @@ class RoomGroupMessageCreator @Inject constructor(
     private fun createFirstMessageSummaryLine(event: NotifiableMessageEvent, roomName: String, roomIsDirect: Boolean): CharSequence {
         return if (roomIsDirect) {
             buildSpannedString {
-                event.senderName?.let {
+                event.senderDisambiguatedDisplayName?.let {
                     inSpans(StyleSpan(Typeface.BOLD)) {
                         append(it)
                         append(": ")
@@ -165,7 +165,7 @@ class RoomGroupMessageCreator @Inject constructor(
                 inSpans(StyleSpan(Typeface.BOLD)) {
                     append(roomName)
                     append(": ")
-                    event.senderName?.let {
+                    event.senderDisambiguatedDisplayName?.let {
                         append(it)
                         append(" ")
                     }

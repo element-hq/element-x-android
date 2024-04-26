@@ -19,6 +19,8 @@ package io.element.android.features.joinroom.impl
 sealed interface JoinRoomEvents {
     data object RetryFetchingContent : JoinRoomEvents
     data object JoinRoom : JoinRoomEvents
+    data object KnockRoom : JoinRoomEvents
+    data object ClearError : JoinRoomEvents
     data object AcceptInvite : JoinRoomEvents
     data object DeclineInvite : JoinRoomEvents
 }

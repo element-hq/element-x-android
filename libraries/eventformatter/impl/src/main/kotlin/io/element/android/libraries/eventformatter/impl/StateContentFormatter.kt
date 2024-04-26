@@ -29,7 +29,7 @@ class StateContentFormatter @Inject constructor(
 ) {
     fun format(
         stateContent: StateContent,
-        senderDisplayName: String,
+        senderDisambiguatedDisplayName: String,
         senderIsYou: Boolean,
         renderingMode: RenderingMode,
     ): CharSequence? {
@@ -39,15 +39,15 @@ class StateContentFormatter @Inject constructor(
                 when {
                     senderIsYou && hasAvatarUrl -> sp.getString(R.string.state_event_room_avatar_changed_by_you)
                     senderIsYou && !hasAvatarUrl -> sp.getString(R.string.state_event_room_avatar_removed_by_you)
-                    !senderIsYou && hasAvatarUrl -> sp.getString(R.string.state_event_room_avatar_changed, senderDisplayName)
-                    else -> sp.getString(R.string.state_event_room_avatar_removed, senderDisplayName)
+                    !senderIsYou && hasAvatarUrl -> sp.getString(R.string.state_event_room_avatar_changed, senderDisambiguatedDisplayName)
+                    else -> sp.getString(R.string.state_event_room_avatar_removed, senderDisambiguatedDisplayName)
                 }
             }
             is OtherState.RoomCreate -> {
                 if (senderIsYou) {
                     sp.getString(R.string.state_event_room_created_by_you)
                 } else {
-                    sp.getString(R.string.state_event_room_created, senderDisplayName)
+                    sp.getString(R.string.state_event_room_created, senderDisambiguatedDisplayName)
                 }
             }
             is OtherState.RoomEncryption -> sp.getString(CommonStrings.common_encryption_enabled)
@@ -56,8 +56,8 @@ class StateContentFormatter @Inject constructor(
                 when {
                     senderIsYou && hasRoomName -> sp.getString(R.string.state_event_room_name_changed_by_you, content.name)
                     senderIsYou && !hasRoomName -> sp.getString(R.string.state_event_room_name_removed_by_you)
-                    !senderIsYou && hasRoomName -> sp.getString(R.string.state_event_room_name_changed, senderDisplayName, content.name)
-                    else -> sp.getString(R.string.state_event_room_name_removed, senderDisplayName)
+                    !senderIsYou && hasRoomName -> sp.getString(R.string.state_event_room_name_changed, senderDisambiguatedDisplayName, content.name)
+                    else -> sp.getString(R.string.state_event_room_name_removed, senderDisambiguatedDisplayName)
                 }
             }
             is OtherState.RoomThirdPartyInvite -> {
@@ -68,7 +68,7 @@ class StateContentFormatter @Inject constructor(
                 if (senderIsYou) {
                     sp.getString(R.string.state_event_room_third_party_invite_by_you, content.displayName)
                 } else {
-                    sp.getString(R.string.state_event_room_third_party_invite, senderDisplayName, content.displayName)
+                    sp.getString(R.string.state_event_room_third_party_invite, senderDisambiguatedDisplayName, content.displayName)
                 }
             }
             is OtherState.RoomTopic -> {
@@ -76,8 +76,8 @@ class StateContentFormatter @Inject constructor(
                 when {
                     senderIsYou && hasRoomTopic -> sp.getString(R.string.state_event_room_topic_changed_by_you, content.topic)
                     senderIsYou && !hasRoomTopic -> sp.getString(R.string.state_event_room_topic_removed_by_you)
-                    !senderIsYou && hasRoomTopic -> sp.getString(R.string.state_event_room_topic_changed, senderDisplayName, content.topic)
-                    else -> sp.getString(R.string.state_event_room_topic_removed, senderDisplayName)
+                    !senderIsYou && hasRoomTopic -> sp.getString(R.string.state_event_room_topic_changed, senderDisambiguatedDisplayName, content.topic)
+                    else -> sp.getString(R.string.state_event_room_topic_removed, senderDisambiguatedDisplayName)
                 }
             }
             is OtherState.Custom -> when (renderingMode) {

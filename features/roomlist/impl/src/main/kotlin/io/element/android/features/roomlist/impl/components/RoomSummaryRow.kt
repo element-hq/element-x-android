@@ -41,13 +41,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomlist.impl.RoomListEvents
-import io.element.android.features.roomlist.impl.model.InviteSender
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryProvider
 import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
@@ -67,6 +67,8 @@ import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.designsystem.theme.unreadIndicator
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.ui.components.InviteSenderView
+import io.element.android.libraries.matrix.ui.model.InviteSender
 import io.element.android.libraries.ui.strings.CommonStrings
 import timber.log.Timber
 
@@ -96,7 +98,10 @@ internal fun RoomSummaryRow(
                 InviteSubtitle(isDirect = room.isDirect, inviteSender = room.inviteSender, canonicalAlias = room.canonicalAlias)
                 if (!room.isDirect && room.inviteSender != null) {
                     Spacer(modifier = Modifier.height(4.dp))
-                    InviteSenderRow(sender = room.inviteSender)
+                    InviteSenderView(
+                        modifier = Modifier.fillMaxWidth(),
+                        inviteSender = room.inviteSender,
+                    )
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 InviteButtonsRow(
@@ -164,7 +169,7 @@ private fun RoomSummaryScaffoldRow(
 
 @Composable
 private fun NameAndTimestampRow(
-    name: String,
+    name: String?,
     timestamp: String?,
     isHighlighted: Boolean,
     modifier: Modifier = Modifier
@@ -177,7 +182,8 @@ private fun NameAndTimestampRow(
         Text(
             modifier = Modifier.weight(1f),
             style = ElementTheme.typography.fontBodyLgMedium,
-            text = name,
+            text = name ?: stringResource(id = CommonStrings.common_no_room_name),
+            fontStyle = FontStyle.Italic.takeIf { name == null },
             color = MaterialTheme.roomListRoomName(),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -268,7 +274,7 @@ private fun LastMessageAndIndicatorRow(
 
 @Composable
 private fun InviteNameAndIndicatorRow(
-    name: String,
+    name: String?,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -279,31 +285,14 @@ private fun InviteNameAndIndicatorRow(
         Text(
             modifier = Modifier.weight(1f),
             style = ElementTheme.typography.fontBodyLgMedium,
-            text = name,
+            text = name ?: stringResource(id = CommonStrings.common_no_room_name),
+            fontStyle = FontStyle.Italic.takeIf { name == null },
             color = MaterialTheme.roomListRoomName(),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
         UnreadIndicatorAtom(
             color = ElementTheme.colors.unreadIndicator
-        )
-    }
-}
-
-@Composable
-private fun InviteSenderRow(
-    sender: InviteSender,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-        modifier = modifier.fillMaxWidth(),
-    ) {
-        Avatar(avatarData = sender.avatarData)
-        Text(
-            text = sender.annotatedString(),
-            style = ElementTheme.typography.fontBodyMdRegular,
-            color = MaterialTheme.colorScheme.secondary,
         )
     }
 }

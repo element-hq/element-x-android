@@ -41,7 +41,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessage
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
-import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
@@ -52,6 +51,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecry
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.matrix.ui.messages.toPlainText
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
@@ -72,15 +72,13 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
 
     override fun format(event: EventTimelineItem, isDmRoom: Boolean): CharSequence? {
         val isOutgoing = event.isOwn
-        // Note: we do not use disambiguated display name here, see
-        // https://github.com/element-hq/element-x-ios/issues/1845#issuecomment-1888707428
-        val senderDisplayName = (event.senderProfile as? ProfileTimelineDetails.Ready)?.displayName ?: event.sender.value
+        val senderDisambiguatedDisplayName = event.senderProfile.getDisambiguatedDisplayName(event.sender)
         return when (val content = event.content) {
-            is MessageContent -> processMessageContents(content, senderDisplayName, isDmRoom)
+            is MessageContent -> processMessageContents(content, senderDisambiguatedDisplayName, isDmRoom)
             RedactedContent -> {
                 val message = sp.getString(CommonStrings.common_message_removed)
                 if (!isDmRoom) {
-                    prefix(message, senderDisplayName)
+                    prefix(message, senderDisambiguatedDisplayName)
                 } else {
                     message
                 }
@@ -91,36 +89,40 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
             is UnableToDecryptContent -> {
                 val message = sp.getString(CommonStrings.common_waiting_for_decryption_key)
                 if (!isDmRoom) {
-                    prefix(message, senderDisplayName)
+                    prefix(message, senderDisambiguatedDisplayName)
                 } else {
                     message
                 }
             }
             is RoomMembershipContent -> {
-                roomMembershipContentFormatter.format(content, senderDisplayName, isOutgoing)
+                roomMembershipContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing)
             }
             is ProfileChangeContent -> {
-                profileChangeContentFormatter.format(content, event.sender, senderDisplayName, isOutgoing)
+                profileChangeContentFormatter.format(content, event.sender, senderDisambiguatedDisplayName, isOutgoing)
             }
             is StateContent -> {
-                stateContentFormatter.format(content, senderDisplayName, isOutgoing, RenderingMode.RoomList)
+                stateContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing, RenderingMode.RoomList)
             }
             is PollContent -> {
                 val message = sp.getString(CommonStrings.common_poll_summary, content.question)
-                prefixIfNeeded(message, senderDisplayName, isDmRoom)
+                prefixIfNeeded(message, senderDisambiguatedDisplayName, isDmRoom)
             }
             is FailedToParseMessageLikeContent, is FailedToParseStateContent, is UnknownContent -> {
-                prefixIfNeeded(sp.getString(CommonStrings.common_unsupported_event), senderDisplayName, isDmRoom)
+                prefixIfNeeded(sp.getString(CommonStrings.common_unsupported_event), senderDisambiguatedDisplayName, isDmRoom)
             }
             is LegacyCallInviteContent -> sp.getString(CommonStrings.common_call_invite)
         }?.take(MAX_SAFE_LENGTH)
     }
 
-    private fun processMessageContents(messageContent: MessageContent, senderDisplayName: String, isDmRoom: Boolean): CharSequence? {
+    private fun processMessageContents(
+        messageContent: MessageContent,
+        senderDisambiguatedDisplayName: String,
+        isDmRoom: Boolean,
+    ): CharSequence {
         val internalMessage = when (val messageType: MessageType = messageContent.type) {
             // Doesn't need a prefix
             is EmoteMessageType -> {
-                return "* $senderDisplayName ${messageType.body}"
+                return "* $senderDisambiguatedDisplayName ${messageType.body}"
             }
             is TextMessageType -> {
                 messageType.toPlainText(permalinkParser)
@@ -153,19 +155,23 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 messageType.body
             }
         }
-        return prefixIfNeeded(internalMessage, senderDisplayName, isDmRoom)
+        return prefixIfNeeded(internalMessage, senderDisambiguatedDisplayName, isDmRoom)
     }
 
-    private fun prefixIfNeeded(message: String, senderDisplayName: String, isDmRoom: Boolean): CharSequence = if (isDmRoom) {
+    private fun prefixIfNeeded(
+        message: String,
+        senderDisambiguatedDisplayName: String,
+        isDmRoom: Boolean,
+    ): CharSequence = if (isDmRoom) {
         message
     } else {
-        prefix(message, senderDisplayName)
+        prefix(message, senderDisambiguatedDisplayName)
     }
 
-    private fun prefix(message: String, senderDisplayName: String): AnnotatedString {
+    private fun prefix(message: String, senderDisambiguatedDisplayName: String): AnnotatedString {
         return buildAnnotatedString {
             withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                append(senderDisplayName)
+                append(senderDisambiguatedDisplayName)
             }
             append(": ")
             append(message)

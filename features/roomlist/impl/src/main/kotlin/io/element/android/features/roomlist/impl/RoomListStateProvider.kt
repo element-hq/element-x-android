@@ -23,16 +23,15 @@ import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.filters.aRoomListFiltersState
-import io.element.android.features.roomlist.impl.model.InviteSender
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
 import io.element.android.features.roomlist.impl.model.aRoomListRoomSummary
+import io.element.android.features.roomlist.impl.model.anInviteSender
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.features.roomlist.impl.search.aRoomListSearchState
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -45,6 +44,7 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState(),
             aRoomListState(snackbarMessage = SnackbarMessage(CommonStrings.common_verification_complete)),
             aRoomListState(hasNetworkConnection = false),
+            aRoomListState(contextMenu = aContextMenuShown(roomName = null)),
             aRoomListState(contextMenu = aContextMenuShown(roomName = "A nice room name")),
             aRoomListState(contextMenu = aContextMenuShown(isFavorite = true)),
             aRoomListState(contentState = aRoomsContentState(securityBannerState = SecurityBannerState.RecoveryKeyConfirmation)),
@@ -52,7 +52,6 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState(contentState = aSkeletonContentState()),
             aRoomListState(matrixUser = MatrixUser(userId = UserId("@id:domain")), contentState = aMigrationContentState()),
             aRoomListState(searchState = aRoomListSearchState(isSearchActive = true, query = "Test")),
-            aRoomListState(filtersState = aRoomListFiltersState(isFeatureEnabled = true)),
         )
 }
 
@@ -64,7 +63,7 @@ internal fun aRoomListState(
     contextMenu: RoomListState.ContextMenu = RoomListState.ContextMenu.Hidden,
     leaveRoomState: LeaveRoomState = aLeaveRoomState(),
     searchState: RoomListSearchState = aRoomListSearchState(),
-    filtersState: RoomListFiltersState = aRoomListFiltersState(isFeatureEnabled = false),
+    filtersState: RoomListFiltersState = aRoomListFiltersState(),
     contentState: RoomListContentState = aRoomsContentState(),
     acceptDeclineInviteState: AcceptDeclineInviteState = anAcceptDeclineInviteState(),
     eventSink: (RoomListEvents) -> Unit = {}
@@ -88,11 +87,7 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
             name = "Room Invited",
             avatarData = AvatarData("!roomId", "Room with Alice and Bob", size = AvatarSize.RoomListItem),
             id = "!roomId:domain",
-            inviteSender = InviteSender(
-                userId = UserId("@bob:domain"),
-                displayName = "Bob",
-                avatarData = AvatarData("@bob:domain", "Bob", size = AvatarSize.InviteSender),
-            ),
+            inviteSender = anInviteSender(),
             displayType = RoomSummaryDisplayType.INVITE,
         ),
         aRoomListRoomSummary(
@@ -113,7 +108,7 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
         ),
         aRoomListRoomSummary(
             id = "!roomId3:domain",
-             displayType = RoomSummaryDisplayType.PLACEHOLDER,
+            displayType = RoomSummaryDisplayType.PLACEHOLDER,
         ),
         aRoomListRoomSummary(
             id = "!roomId4:domain",
@@ -121,17 +116,3 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
         ),
     )
 }
-
-internal fun aContextMenuShown(
-    roomName: String = "aRoom",
-    isDm: Boolean = false,
-    hasNewContent: Boolean = false,
-    isFavorite: Boolean = false,
-) = RoomListState.ContextMenu.Shown(
-    roomId = RoomId("!aRoom:aDomain"),
-    roomName = roomName,
-    isDm = isDm,
-    markAsUnreadFeatureFlagEnabled = true,
-    hasNewContent = hasNewContent,
-    isFavorite = isFavorite,
-)

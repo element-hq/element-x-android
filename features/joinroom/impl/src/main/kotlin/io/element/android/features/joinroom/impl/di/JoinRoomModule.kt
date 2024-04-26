@@ -23,6 +23,7 @@ import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.joinroom.impl.JoinRoomPresenter
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -35,7 +36,9 @@ object JoinRoomModule {
     @Provides
     fun providesJoinRoomPresenterFactory(
         client: MatrixClient,
+        knockRoom: KnockRoom,
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
+        buildMeta: BuildMeta,
     ): JoinRoomPresenter.Factory {
         return object : JoinRoomPresenter.Factory {
             override fun create(
@@ -48,7 +51,9 @@ object JoinRoomModule {
                     roomIdOrAlias = roomIdOrAlias,
                     roomDescription = roomDescription,
                     matrixClient = client,
+                    knockRoom = knockRoom,
                     acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
+                    buildMeta = buildMeta,
                 )
             }
         }

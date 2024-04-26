@@ -21,7 +21,7 @@
   <string name="screen_key_backup_disable_confirmation_title">"Ste si istí, že chcete vypnúť zálohovanie?"</string>
   <string name="screen_key_backup_disable_description">"Vypnutím zálohovania sa odstráni aktuálna záloha šifrovacích kľúčov a vypnú sa ďalšie bezpečnostné funkcie. V tomto prípade:"</string>
   <string name="screen_key_backup_disable_description_point_1">"Na nových zariadeniach nebudete mať zašifrovanú históriu správ"</string>
-  <string name="screen_key_backup_disable_description_point_2">"Stratíte prístup k svojim zašifrovaným správam, ak sa odhlásite zo všetkých %1$s zariadení"</string>
+  <string name="screen_key_backup_disable_description_point_2">"Stratíte prístup k svojim zašifrovaným správam, ak sa odhlásite z aplikácie %1$s na všetkých zariadeniach"</string>
   <string name="screen_key_backup_disable_title">"Ste si istí, že chcete vypnúť zálohovanie?"</string>
   <string name="screen_recovery_key_change_description">"Získajte nový kľúč na obnovenie, ak ste stratili svoj existujúci. Po zmene kľúča na obnovenie už starý kľúč nebude fungovať."</string>
   <string name="screen_recovery_key_change_generate_key">"Vygenerovať nový kľúč na obnovenie"</string>

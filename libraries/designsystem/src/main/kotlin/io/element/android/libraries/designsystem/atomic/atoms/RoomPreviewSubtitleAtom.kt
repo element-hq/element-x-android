@@ -27,7 +27,7 @@ fun RoomPreviewSubtitleAtom(subtitle: String, modifier: Modifier = Modifier) {
     Text(
         modifier = modifier,
         text = subtitle,
-        style = ElementTheme.typography.fontBodyLgRegular,
+        style = ElementTheme.typography.fontBodyMdRegular,
         textAlign = TextAlign.Center,
         color = ElementTheme.colors.textSecondary,
     )

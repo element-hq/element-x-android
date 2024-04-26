@@ -21,13 +21,14 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.ui.model.InviteSender
 
 @Immutable
 data class RoomListRoomSummary(
     val id: String,
     val displayType: RoomSummaryDisplayType,
     val roomId: RoomId,
-    val name: String,
+    val name: String?,
     val canonicalAlias: RoomAlias?,
     val numberOfUnreadMessages: Int,
     val numberOfUnreadMentions: Int,
@@ -42,7 +43,7 @@ data class RoomListRoomSummary(
     val isDm: Boolean,
     val isFavorite: Boolean,
     val inviteSender: InviteSender?,
-    ) {
+) {
     val isHighlighted = userDefinedNotificationMode != RoomNotificationMode.MUTE &&
         (numberOfUnreadNotifications > 0 || numberOfUnreadMentions > 0) ||
         isMarkedUnread ||

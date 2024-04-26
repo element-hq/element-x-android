@@ -57,7 +57,7 @@ class RoomSelectPresenter @AssistedInject constructor(
         LaunchedEffect(query, summaries) {
             val filteredSummaries = summaries.filterIsInstance<RoomSummary.Filled>()
                 .map { it.details }
-                .filter { it.name.contains(query, ignoreCase = true) }
+                .filter { it.name.orEmpty().contains(query, ignoreCase = true) }
                 .distinctBy { it.roomId } // This should be removed once we're sure no duplicate Rooms can be received
                 .toPersistentList()
             results = if (filteredSummaries.isNotEmpty()) {

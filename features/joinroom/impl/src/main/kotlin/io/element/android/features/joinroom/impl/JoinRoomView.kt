@@ -17,16 +17,25 @@
 package io.element.android.features.joinroom.impl
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewDescriptionAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewSubtitleAtom
@@ -35,9 +44,12 @@ import io.element.android.libraries.designsystem.atomic.molecules.ButtonRowMolec
 import io.element.android.libraries.designsystem.atomic.molecules.RoomPreviewMembersCountMolecule
 import io.element.android.libraries.designsystem.atomic.organisms.RoomPreviewOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
+import io.element.android.libraries.designsystem.background.LightGradientBackground
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.button.SuperButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -46,40 +58,61 @@ import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.room.RoomType
+import io.element.android.libraries.matrix.ui.components.InviteSenderView
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun JoinRoomView(
     state: JoinRoomState,
     onBackPressed: () -> Unit,
+    onKnockSuccess: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    HeaderFooterPage(
-        modifier = modifier,
-        paddingValues = PaddingValues(16.dp),
-        topBar = {
-            JoinRoomTopBar(onBackClicked = onBackPressed)
-        },
-        content = {
-            JoinRoomContent(contentState = state.contentState)
-        },
-        footer = {
-            JoinRoomFooter(
-                state = state,
-                onAcceptInvite = {
-                    state.eventSink(JoinRoomEvents.AcceptInvite)
-                },
-                onDeclineInvite = {
-                    state.eventSink(JoinRoomEvents.DeclineInvite)
-                },
-                onJoinRoom = {
-                    state.eventSink(JoinRoomEvents.JoinRoom)
-                },
-                onRetry = {
-                    state.eventSink(JoinRoomEvents.RetryFetchingContent)
-                }
-            )
-        }
+    Box(
+        modifier = modifier.fillMaxSize(),
+    ) {
+        LightGradientBackground()
+        HeaderFooterPage(
+            containerColor = Color.Transparent,
+            paddingValues = PaddingValues(16.dp),
+            topBar = {
+                JoinRoomTopBar(onBackClicked = onBackPressed)
+            },
+            content = {
+                JoinRoomContent(
+                    contentState = state.contentState,
+                    applicationName = state.applicationName,
+                )
+            },
+            footer = {
+                JoinRoomFooter(
+                    state = state,
+                    onAcceptInvite = {
+                        state.eventSink(JoinRoomEvents.AcceptInvite)
+                    },
+                    onDeclineInvite = {
+                        state.eventSink(JoinRoomEvents.DeclineInvite)
+                    },
+                    onJoinRoom = {
+                        state.eventSink(JoinRoomEvents.JoinRoom)
+                    },
+                    onKnockRoom = {
+                        state.eventSink(JoinRoomEvents.KnockRoom)
+                    },
+                    onRetry = {
+                        state.eventSink(JoinRoomEvents.RetryFetchingContent)
+                    },
+                    onGoBack = onBackPressed,
+                )
+            }
+        )
+    }
+
+    AsyncActionView(
+        async = state.knockAction,
+        onSuccess = { onKnockSuccess() },
+        onErrorDismiss = { state.eventSink(JoinRoomEvents.ClearError) },
     )
 }
 
@@ -89,7 +122,9 @@ private fun JoinRoomFooter(
     onAcceptInvite: () -> Unit,
     onDeclineInvite: () -> Unit,
     onJoinRoom: () -> Unit,
+    onKnockRoom: () -> Unit,
     onRetry: () -> Unit,
+    onGoBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (state.contentState is ContentState.Failure) {
@@ -97,41 +132,51 @@ private fun JoinRoomFooter(
             text = stringResource(CommonStrings.action_retry),
             onClick = onRetry,
             modifier = modifier.fillMaxWidth(),
-            size = ButtonSize.Medium,
+            size = ButtonSize.Large,
+        )
+    } else if (state.contentState is ContentState.Loaded && state.contentState.roomType == RoomType.Space) {
+        Button(
+            text = stringResource(CommonStrings.action_go_back),
+            onClick = onGoBack,
+            modifier = modifier.fillMaxWidth(),
+            size = ButtonSize.Large,
         )
     } else {
         val joinAuthorisationStatus = state.joinAuthorisationStatus
         when (joinAuthorisationStatus) {
-            JoinAuthorisationStatus.IsInvited -> {
+            is JoinAuthorisationStatus.IsInvited -> {
                 ButtonRowMolecule(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(20.dp)) {
                     OutlinedButton(
                         text = stringResource(CommonStrings.action_decline),
                         onClick = onDeclineInvite,
                         modifier = Modifier.weight(1f),
-                        size = ButtonSize.Medium,
+                        size = ButtonSize.Large,
                     )
                     Button(
                         text = stringResource(CommonStrings.action_accept),
                         onClick = onAcceptInvite,
                         modifier = Modifier.weight(1f),
-                        size = ButtonSize.Medium,
+                        size = ButtonSize.Large,
                     )
                 }
             }
             JoinAuthorisationStatus.CanJoin -> {
-                Button(
-                    text = stringResource(R.string.screen_join_room_join_action),
+                SuperButton(
                     onClick = onJoinRoom,
                     modifier = modifier.fillMaxWidth(),
-                    size = ButtonSize.Medium,
-                )
+                    buttonSize = ButtonSize.Large,
+                ) {
+                    Text(
+                        text = stringResource(R.string.screen_join_room_join_action),
+                    )
+                }
             }
             JoinAuthorisationStatus.CanKnock -> {
                 Button(
                     text = stringResource(R.string.screen_join_room_knock_action),
-                    onClick = onJoinRoom,
+                    onClick = onKnockRoom,
                     modifier = modifier.fillMaxWidth(),
-                    size = ButtonSize.Medium,
+                    size = ButtonSize.Large,
                 )
             }
             JoinAuthorisationStatus.Unknown -> Unit
@@ -142,6 +187,7 @@ private fun JoinRoomFooter(
 @Composable
 private fun JoinRoomContent(
     contentState: ContentState,
+    applicationName: String,
     modifier: Modifier = Modifier,
 ) {
     when (contentState) {
@@ -152,13 +198,48 @@ private fun JoinRoomContent(
                     Avatar(contentState.avatarData(AvatarSize.RoomHeader))
                 },
                 title = {
-                    RoomPreviewTitleAtom(contentState.computedTitle)
+                    if (contentState.name != null) {
+                        RoomPreviewTitleAtom(
+                            title = contentState.name,
+                        )
+                    } else {
+                        RoomPreviewTitleAtom(
+                            title = stringResource(id = CommonStrings.common_no_room_name),
+                            fontStyle = FontStyle.Italic
+                        )
+                    }
                 },
                 subtitle = {
-                    RoomPreviewSubtitleAtom(contentState.computedSubtitle)
+                    if (contentState.alias != null) {
+                        RoomPreviewSubtitleAtom(contentState.alias.value)
+                    }
                 },
                 description = {
-                    RoomPreviewDescriptionAtom(contentState.topic ?: "")
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        val inviteSender = (contentState.joinAuthorisationStatus as? JoinAuthorisationStatus.IsInvited)?.inviteSender
+                        if (inviteSender != null) {
+                            InviteSenderView(inviteSender = inviteSender)
+                        }
+                        RoomPreviewDescriptionAtom(contentState.topic ?: "")
+                        if (contentState.roomType == RoomType.Space) {
+                            Spacer(modifier = Modifier.height(24.dp))
+                            Text(
+                                text = stringResource(R.string.screen_join_room_space_not_supported_title),
+                                textAlign = TextAlign.Center,
+                                style = ElementTheme.typography.fontBodyLgMedium,
+                                color = MaterialTheme.colorScheme.primary,
+                            )
+                            Text(
+                                text = stringResource(R.string.screen_join_room_space_not_supported_description, applicationName),
+                                textAlign = TextAlign.Center,
+                                style = ElementTheme.typography.fontBodyMdRegular,
+                                color = MaterialTheme.colorScheme.secondary,
+                            )
+                        }
+                    }
                 },
                 memberCount = {
                     if (contentState.showMemberCount) {
@@ -213,7 +294,7 @@ private fun JoinRoomContent(
                 },
                 subtitle = {
                     Text(
-                        text = "Failed to get information about the room",
+                        text = stringResource(id = CommonStrings.error_unknown),
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.error,
                     )
@@ -241,6 +322,7 @@ private fun JoinRoomTopBar(
 internal fun JoinRoomViewPreview(@PreviewParameter(JoinRoomStateProvider::class) state: JoinRoomState) = ElementPreview {
     JoinRoomView(
         state = state,
-        onBackPressed = { }
+        onBackPressed = { },
+        onKnockSuccess = { },
     )
 }

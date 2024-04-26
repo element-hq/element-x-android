@@ -202,7 +202,7 @@ private fun OnBoardingButtons(
 
 @PreviewsDayNight
 @Composable
-internal fun OnBoardingScreenPreview(
+internal fun OnBoardingViewPreview(
     @PreviewParameter(OnBoardingStateProvider::class) state: OnBoardingState
 ) = ElementPreview {
     OnBoardingView(

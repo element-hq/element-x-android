@@ -16,7 +16,6 @@
 
 package io.element.android.features.roomlist.impl.datasource
 
-import io.element.android.features.roomlist.impl.model.InviteSender
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
 import io.element.android.libraries.core.extensions.orEmpty
@@ -27,6 +26,7 @@ import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import io.element.android.libraries.matrix.ui.model.toInviteSender
 import javax.inject.Inject
 
 class RoomListRoomSummaryFactory @Inject constructor(
@@ -83,18 +83,7 @@ class RoomListRoomSummaryFactory @Inject constructor(
             hasRoomCall = roomSummary.details.hasRoomCall,
             isDirect = roomSummary.details.isDirect,
             isFavorite = roomSummary.details.isFavorite,
-            inviteSender = roomSummary.details.inviter?.run {
-                InviteSender(
-                    userId = userId,
-                    displayName = displayName ?: "",
-                    avatarData = AvatarData(
-                        id = userId.value,
-                        name = displayName,
-                        url = avatarUrl,
-                        size = AvatarSize.InviteSender,
-                    ),
-                )
-            },
+            inviteSender = roomSummary.details.inviter?.toInviteSender(),
             isDm = roomSummary.details.isDm,
             canonicalAlias = roomSummary.details.canonicalAlias,
             displayType = if (roomSummary.details.currentUserMembership == CurrentUserMembership.INVITED) {

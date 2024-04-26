@@ -130,7 +130,6 @@ class RoomListScreen(
         ),
         filtersPresenter = RoomListFiltersPresenter(
             roomListService = matrixClient.roomListService,
-            featureFlagService = featureFlagService,
             filterSelectionStrategy = DefaultFilterSelectionStrategy(),
         ),
         acceptDeclineInvitePresenter = AcceptDeclineInvitePresenter(

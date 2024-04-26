@@ -103,10 +103,12 @@ class FakeMatrixClient(
     private var setDisplayNameResult: Result<Unit> = Result.success(Unit)
     private var uploadAvatarResult: Result<Unit> = Result.success(Unit)
     private var removeAvatarResult: Result<Unit> = Result.success(Unit)
-    var joinRoomLambda: (RoomId) -> Result<RoomId> = {
-        Result.success(it)
+    var joinRoomLambda: (RoomId) -> Result<Unit> = {
+        Result.success(Unit)
     }
-
+    var knockRoomLambda: (RoomId) -> Result<Unit> = {
+        Result.success(Unit)
+    }
     var getRoomInfoFlowLambda = { _: RoomId ->
         flowOf<Optional<MatrixRoomInfo>>(Optional.empty())
     }
@@ -197,7 +199,9 @@ class FakeMatrixClient(
         return removeAvatarResult
     }
 
-    override suspend fun joinRoom(roomId: RoomId): Result<RoomId> = joinRoomLambda(roomId)
+    override suspend fun joinRoom(roomId: RoomId): Result<Unit> = joinRoomLambda(roomId)
+
+    override suspend fun knockRoom(roomId: RoomId): Result<Unit> = knockRoomLambda(roomId)
 
     override fun sessionVerificationService(): SessionVerificationService = sessionVerificationService
 

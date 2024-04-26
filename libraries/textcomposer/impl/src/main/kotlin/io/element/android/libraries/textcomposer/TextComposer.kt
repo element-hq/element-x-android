@@ -566,6 +566,8 @@ private fun ReplyToModeView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clipToBounds(),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 style = ElementTheme.typography.fontBodySmMedium,
                 textAlign = TextAlign.Start,
                 color = ElementTheme.materialColors.primary,
@@ -731,7 +733,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                     voiceMessageState = VoiceMessageState.Idle,
                     composerMode = MessageComposerMode.Reply(
                         isThreaded = true,
-                        senderName = "Alice",
+                        senderName = "Alice with a very long name to test overflow in the composer",
                         eventId = EventId("$1234"),
                         attachmentThumbnailInfo = null,
                         defaultContent = "A message\n" +

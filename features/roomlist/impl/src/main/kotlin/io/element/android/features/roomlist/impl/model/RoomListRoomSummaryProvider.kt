@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.ui.model.InviteSender
 
 open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSummary> {
     override val values: Sequence<RoomListRoomSummary>
@@ -30,6 +31,7 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
             listOf(
                 aRoomListRoomSummary(displayType = RoomSummaryDisplayType.PLACEHOLDER),
                 aRoomListRoomSummary(),
+                aRoomListRoomSummary(name = null),
                 aRoomListRoomSummary(lastMessage = null),
                 aRoomListRoomSummary(
                     name = "A very long room name that should be truncated",
@@ -86,7 +88,7 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                 aRoomListRoomSummary(
                     displayType = RoomSummaryDisplayType.INVITE,
                     inviteSender = anInviteSender(
-                        userId = "@alice:matrix.org",
+                        userId = UserId("@alice:matrix.org"),
                         displayName = "Alice",
                     ),
                     canonicalAlias = RoomAlias("#alias:matrix.org"),
@@ -95,27 +97,36 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                     name = "Bob",
                     displayType = RoomSummaryDisplayType.INVITE,
                     inviteSender = anInviteSender(
-                        userId = "@bob:matrix.org",
+                        userId = UserId("@bob:matrix.org"),
                         displayName = "Bob",
                     ),
                     isDirect = true,
-                )
+                ),
+                aRoomListRoomSummary(
+                    name = null,
+                    displayType = RoomSummaryDisplayType.INVITE,
+                    inviteSender = anInviteSender(
+                        userId = UserId("@bob:matrix.org"),
+                        displayName = "Bob",
+                    ),
+                ),
             ),
         ).flatten()
 }
 
 internal fun anInviteSender(
-    userId: String,
-    displayName: String,
+    userId: UserId = UserId("@bob:domain"),
+    displayName: String = "Bob",
+    avatarData: AvatarData = AvatarData(userId.value, displayName, size = AvatarSize.InviteSender),
 ) = InviteSender(
-    userId = UserId(userId),
+    userId = userId,
     displayName = displayName,
-    avatarData = AvatarData(userId, displayName, size = AvatarSize.InviteSender),
+    avatarData = avatarData,
 )
 
 internal fun aRoomListRoomSummary(
     id: String = "!roomId:domain",
-    name: String = "Room name",
+    name: String? = "Room name",
     numberOfUnreadMessages: Int = 0,
     numberOfUnreadMentions: Int = 0,
     numberOfUnreadNotifications: Int = 0,

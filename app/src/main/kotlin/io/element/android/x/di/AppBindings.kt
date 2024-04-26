@@ -17,6 +17,7 @@
 package io.element.android.x.di
 
 import com.squareup.anvil.annotations.ContributesTo
+import io.element.android.features.api.MigrationEntryPoint
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.preferences.api.store.AppPreferencesStore
 import io.element.android.features.rageshake.api.reporter.BugReporter
@@ -35,4 +36,6 @@ interface AppBindings {
     fun lockScreenService(): LockScreenService
 
     fun preferencesStore(): AppPreferencesStore
+
+    fun migrationEntryPoint(): MigrationEntryPoint
 }

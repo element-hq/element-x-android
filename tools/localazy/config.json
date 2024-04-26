@@ -225,6 +225,12 @@
       ]
     },
     {
+      "name" : ":libraries:matrixui",
+      "includeRegex" : [
+        "screen_invites_invited_you"
+      ]
+    },
+    {
       "name" : ":features:call",
       "includeRegex" : [
         "call_.*"

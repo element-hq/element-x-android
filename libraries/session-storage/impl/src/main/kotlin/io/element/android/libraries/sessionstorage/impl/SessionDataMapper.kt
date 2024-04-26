@@ -34,7 +34,6 @@ internal fun SessionData.toDbModel(): DbSessionData {
         isTokenValid = if (isTokenValid) 1L else 0L,
         loginType = loginType.name,
         passphrase = passphrase,
-        needsVerification = if (needsVerification) 1L else 0L,
     )
 }
 
@@ -51,6 +50,5 @@ internal fun DbSessionData.toApiModel(): SessionData {
         isTokenValid = isTokenValid == 1L,
         loginType = LoginType.fromName(loginType ?: LoginType.UNKNOWN.name),
         passphrase = passphrase,
-        needsVerification = needsVerification == 1L,
     )
 }

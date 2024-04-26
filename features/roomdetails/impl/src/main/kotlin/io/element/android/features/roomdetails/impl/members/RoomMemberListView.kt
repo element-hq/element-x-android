@@ -357,7 +357,7 @@ private fun RoomMemberSearchBar(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomMemberListPreview(@PreviewParameter(RoomMemberListStateProvider::class) state: RoomMemberListState) = ElementPreview {
+internal fun RoomMemberListViewPreview(@PreviewParameter(RoomMemberListStateProvider::class) state: RoomMemberListState) = ElementPreview {
     RoomMemberListView(
         state = state,
         navigator = object : RoomMemberListNavigator {},
@@ -366,7 +366,7 @@ internal fun RoomMemberListPreview(@PreviewParameter(RoomMemberListStateProvider
 
 @PreviewsDayNight
 @Composable
-internal fun RoomMemberBannedListPreview(@PreviewParameter(RoomMemberListStateBannedProvider::class) state: RoomMemberListState) = ElementPreview {
+internal fun RoomMemberListViewBannedPreview(@PreviewParameter(RoomMemberListStateBannedProvider::class) state: RoomMemberListState) = ElementPreview {
     RoomMemberListView(
         initialSelectedSectionIndex = 1,
         state = state,

@@ -34,6 +34,7 @@ dependencies {
     anvil(projects.anvilcodegen)
     implementation(projects.libraries.di)
     implementation(projects.libraries.architecture)
+    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.core)

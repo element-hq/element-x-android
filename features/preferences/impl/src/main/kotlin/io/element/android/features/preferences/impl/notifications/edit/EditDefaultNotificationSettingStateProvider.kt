@@ -42,16 +42,21 @@ private fun anEditDefaultNotificationSettingsState(
 ) = EditDefaultNotificationSettingState(
     isOneToOne = isOneToOne,
     mode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
-    roomsWithUserDefinedMode = persistentListOf(aRoomSummary()),
+    roomsWithUserDefinedMode = persistentListOf(
+        aRoomSummary("Room"),
+        aRoomSummary(null),
+    ),
     changeNotificationSettingAction = changeNotificationSettingAction,
     displayMentionsOnlyDisclaimer = displayMentionsOnlyDisclaimer,
     eventSink = {}
 )
 
-private fun aRoomSummary() = RoomSummary.Filled(
+private fun aRoomSummary(
+    name: String?,
+) = RoomSummary.Filled(
     aRoomSummaryDetails(
         roomId = RoomId("!roomId:domain"),
-        name = "Room",
+        name = name,
         avatarUrl = null,
         isDirect = false,
         lastMessage = null,

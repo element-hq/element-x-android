@@ -23,9 +23,11 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -36,6 +38,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 /**
  * @param modifier Classical modifier.
  * @param paddingValues padding values to apply to the content.
+ * @param containerColor color of the container. Set to [Color.Transparent] if you provide a background in the [modifier].
  * @param background optional background component.
  * @param topBar optional topBar.
  * @param header optional header.
@@ -46,6 +49,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 fun HeaderFooterPage(
     modifier: Modifier = Modifier,
     paddingValues: PaddingValues = PaddingValues(20.dp),
+    containerColor: Color = MaterialTheme.colorScheme.background,
     background: @Composable () -> Unit = {},
     topBar: @Composable () -> Unit = {},
     header: @Composable () -> Unit = {},
@@ -55,6 +59,7 @@ fun HeaderFooterPage(
     Scaffold(
         modifier = modifier,
         topBar = topBar,
+        containerColor = containerColor,
     ) { padding ->
         Box {
             background()
