@@ -16,6 +16,7 @@
 
 package io.element.android.features.login.impl.qrcode
 
+import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
@@ -28,14 +29,15 @@ import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @SingleIn(AppScope::class)
-class QrCodeLoginPresenter @Inject constructor(
+@ContributesBinding(AppScope::class)
+class QrCodeLoginManagerImpl @Inject constructor(
     private val authenticationService: MatrixAuthenticationService,
     private val defaultLoginUserStory: DefaultLoginUserStory,
-) {
+): QrCodeLoginManager {
     private val _currentLoginStep = MutableStateFlow<QrCodeLoginStep>(QrCodeLoginStep.Uninitialized)
-    val currentLoginStep: StateFlow<QrCodeLoginStep> = _currentLoginStep
+    override val currentLoginStep: StateFlow<QrCodeLoginStep> = _currentLoginStep
 
-    suspend fun authenticate(qrCodeLoginData: MatrixQrCodeLoginData): Result<SessionId> {
+    override suspend fun authenticate(qrCodeLoginData: MatrixQrCodeLoginData): Result<SessionId> {
         _currentLoginStep.value = QrCodeLoginStep.Uninitialized
 
         return authenticationService.loginWithQrCode(qrCodeLoginData) { step ->
@@ -44,4 +46,9 @@ class QrCodeLoginPresenter @Inject constructor(
             defaultLoginUserStory.setLoginFlowIsDone(true)
         }
     }
+}
+
+interface QrCodeLoginManager {
+    val currentLoginStep: StateFlow<QrCodeLoginStep>
+    suspend fun authenticate(qrCodeLoginData: MatrixQrCodeLoginData): Result<SessionId>
 }

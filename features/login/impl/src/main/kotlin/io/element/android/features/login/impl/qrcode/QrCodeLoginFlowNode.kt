@@ -17,6 +17,7 @@
 package io.element.android.features.login.impl.qrcode
 
 import android.os.Parcelable
+import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
@@ -42,18 +43,18 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
-import kotlin.coroutines.coroutineContext
 
 @ContributesNode(AppScope::class)
 class QrCodeLoginFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val qrCodeLoginPresenter: QrCodeLoginPresenter,
+    private val qrCodeLoginManager: QrCodeLoginManager,
 ) : BaseFlowNode<QrCodeLoginFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Initial,
@@ -82,8 +83,13 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
     override fun onBuilt() {
         super.onBuilt()
 
+        observeLoginStep()
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal fun observeLoginStep() {
         lifecycleScope.launch {
-            qrCodeLoginPresenter.currentLoginStep
+            qrCodeLoginManager.currentLoginStep
                 .collect { step ->
                     when (step) {
                         is QrCodeLoginStep.EstablishingSecureChannel -> {
@@ -115,9 +121,7 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
             is NavTarget.QrCodeScan -> {
                 val callback = object : QrCodeScanNode.Callback {
                     override fun onScannedCode(qrCodeLoginData: MatrixQrCodeLoginData) {
-                        lifecycleScope.launch {
-                            startAuthentication(qrCodeLoginData)
-                        }
+                        lifecycleScope.startAuthentication(qrCodeLoginData)
                     }
 
                     override fun onCancelClicked() {
@@ -143,18 +147,21 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
         }
     }
 
-    private suspend fun startAuthentication(qrCodeLoginData: MatrixQrCodeLoginData) {
-        authenticationJob = CoroutineScope(coroutineContext).launch {
-            qrCodeLoginPresenter.authenticate(qrCodeLoginData)
+    private fun CoroutineScope.startAuthentication(qrCodeLoginData: MatrixQrCodeLoginData) {
+        authenticationJob = launch {
+            qrCodeLoginManager.authenticate(qrCodeLoginData)
                 .onSuccess {
                     println("Logged into session $it")
                     authenticationJob = null
                 }
-                .onFailure {
+                .onFailure { throwable ->
                     // TODO specify the error type
-                    Timber.e(it, "QR code authentication failed")
-                    backstack.push(NavTarget.Error(it.message ?: "Unknown error"))
+                    Timber.e(throwable, "QR code authentication failed")
                     authenticationJob = null
+                    if (throwable is CancellationException) {
+                        throw throwable
+                    }
+                    backstack.push(NavTarget.Error(throwable.message ?: "Unknown error"))
                 }
         }
     }
