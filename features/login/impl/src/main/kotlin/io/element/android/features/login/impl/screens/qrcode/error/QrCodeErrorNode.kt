@@ -16,9 +16,12 @@
 
 package io.element.android.features.login.impl.screens.qrcode.error
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
@@ -28,7 +31,17 @@ import io.element.android.libraries.di.AppScope
 class QrCodeErrorNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-) : Node(buildContext = buildContext, plugins = plugins
-) {
+) : Node(buildContext = buildContext, plugins = plugins) {
+    interface Callback: Plugin {
+        fun onRetry()
+    }
 
+    private fun onRetry() {
+        plugins<Callback>().forEach { it.onRetry() }
+    }
+
+    @Composable
+    override fun View(modifier: Modifier) {
+        QrCodeErrorView(onRetry = ::onRetry)
+    }
 }
