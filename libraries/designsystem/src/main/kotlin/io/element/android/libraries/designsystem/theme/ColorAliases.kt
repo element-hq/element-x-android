@@ -171,6 +171,8 @@ internal fun ColorAliasesPreview() = ElementPreview {
             "temporaryColorBgSpecial" to ElementTheme.colors.temporaryColorBgSpecial,
             "iconSuccessPrimaryBackground" to ElementTheme.colors.iconSuccessPrimaryBackground,
             "bigIconBackgroundColor" to ElementTheme.colors.bigIconDefaultBackgroundColor,
+            "bigCheckmarkBorderColor" to ElementTheme.colors.bigCheckmarkBorderColor,
+            "highlightedMessageBackgroundColor" to ElementTheme.colors.highlightedMessageBackgroundColor,
         )
     )
 }
