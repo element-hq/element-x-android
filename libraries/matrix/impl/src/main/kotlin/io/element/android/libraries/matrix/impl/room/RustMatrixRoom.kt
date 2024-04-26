@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.impl.room
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
+import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -169,13 +170,17 @@ class RustMatrixRoom(
 
     override suspend fun unsubscribeFromSync() = roomSyncSubscriber.unsubscribe(roomId)
 
-    override suspend fun timelineFocusedOnEvent(eventId: EventId): Timeline {
-        return innerRoom.timelineFocusedOnEvent(
-            eventId = eventId.value,
-            numContextEvents = 50u,
-            internalIdPrefix = "focus_$eventId",
-        ).let { inner ->
-            createTimeline(inner, isLive = false)
+    override suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline> {
+        return runCatching {
+            innerRoom.timelineFocusedOnEvent(
+                eventId = eventId.value,
+                numContextEvents = 50u,
+                internalIdPrefix = "focus_$eventId",
+            ).let { inner ->
+                createTimeline(inner, isLive = false)
+            }
+        }.mapFailure {
+            it.toFocusEventException()
         }
     }
 
@@ -442,7 +447,7 @@ class RustMatrixRoom(
     }
 
     override suspend fun toggleReaction(emoji: String, eventId: EventId): Result<Unit> {
-       return liveTimeline.toggleReaction(emoji, eventId)
+        return liveTimeline.toggleReaction(emoji, eventId)
     }
 
     override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> {

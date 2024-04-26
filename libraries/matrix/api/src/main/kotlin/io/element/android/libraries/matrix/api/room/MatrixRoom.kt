@@ -100,7 +100,7 @@ interface MatrixRoom : Closeable {
 
     val liveTimeline: Timeline
 
-    suspend fun timelineFocusedOnEvent(eventId: EventId): Timeline
+    suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline>
 
     fun destroy()
 

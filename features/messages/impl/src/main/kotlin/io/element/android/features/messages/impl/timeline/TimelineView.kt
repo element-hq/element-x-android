@@ -57,6 +57,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.components.TimelineItemRow
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.aFakeTimelineItemPresenterFactories
+import io.element.android.features.messages.impl.timeline.focus.FocusRequestStateView
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
@@ -64,8 +65,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.messages.impl.typing.TypingNotificationView
 import io.element.android.features.messages.impl.typing.aTypingNotificationState
-import io.element.android.libraries.designsystem.components.ProgressDialog
-import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
@@ -173,27 +172,6 @@ fun TimelineView(
                 onJumpToLive = { state.eventSink(TimelineEvents.JumpToLive) },
             )
         }
-    }
-}
-
-@Composable
-private fun FocusRequestStateView(
-    focusRequestState: FocusRequestState,
-    onClearFocusRequestState: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    when (focusRequestState) {
-        is FocusRequestState.Failure -> {
-            ErrorDialog(
-                content = stringResource(id = CommonStrings.common_failed),
-                onDismiss = onClearFocusRequestState,
-                modifier = modifier,
-            )
-        }
-        FocusRequestState.Fetching -> {
-            ProgressDialog(modifier = modifier, onDismissRequest = onClearFocusRequestState)
-        }
-        else -> Unit
     }
 }
 

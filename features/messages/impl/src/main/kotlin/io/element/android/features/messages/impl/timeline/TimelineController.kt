@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineProvider
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
@@ -40,7 +41,6 @@ import kotlinx.coroutines.flow.stateIn
 import java.io.Closeable
 import java.util.Optional
 import javax.inject.Inject
-import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * This controller is responsible of using the right timeline to display messages and make associated actions.
@@ -72,20 +72,20 @@ class TimelineController @Inject constructor(
     }
 
     suspend fun focusOnEvent(eventId: EventId): Result<Unit> {
-        return try {
-            val newDetachedTimeline = room.timelineFocusedOnEvent(eventId)
-            detachedTimeline.getAndUpdate { current ->
-                if (current.isPresent) {
-                    current.get().close()
+        return room.timelineFocusedOnEvent(eventId)
+            .onFailure {
+                if (it is CancellationException) {
+                    throw it
                 }
-                Optional.of(newDetachedTimeline)
             }
-            Result.success(Unit)
-        } catch (cancellation: CancellationException) {
-            throw cancellation
-        } catch (exception: Exception) {
-            Result.failure(exception)
-        }
+            .map { newDetachedTimeline ->
+                detachedTimeline.getAndUpdate { current ->
+                    if (current.isPresent) {
+                        current.get().close()
+                    }
+                    Optional.of(newDetachedTimeline)
+                }
+            }
     }
 
     /**
