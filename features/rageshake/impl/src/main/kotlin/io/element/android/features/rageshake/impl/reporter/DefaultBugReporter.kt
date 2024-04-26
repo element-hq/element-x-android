@@ -18,7 +18,6 @@ package io.element.android.features.rageshake.impl.reporter
 
 import android.content.Context
 import android.os.Build
-import android.text.format.DateUtils.DAY_IN_MILLIS
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesBinding
@@ -39,11 +38,8 @@ import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.SdkMetadata
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionStore
-import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -75,8 +71,6 @@ class DefaultBugReporter @Inject constructor(
     @ApplicationContext private val context: Context,
     private val screenshotHolder: ScreenshotHolder,
     private val crashDataStore: CrashDataStore,
-    private val coroutineScope: CoroutineScope,
-    private val systemClock: SystemClock,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val okHttpClient: Provider<OkHttpClient>,
     private val userAgentProvider: UserAgentProvider,
@@ -339,13 +333,6 @@ class DefaultBugReporter @Inject constructor(
         }
     }
 
-    override fun cleanLogDirectoryIfNeeded() {
-        coroutineScope.launch(coroutineDispatchers.io) {
-            // delete the log files older than 1 day, except the most recent one
-            deleteOldLogFiles(systemClock.epochMillis() - DAY_IN_MILLIS)
-        }
-    }
-
     suspend fun deleteAllFiles() {
         withContext(coroutineDispatchers.io) {
             getLogFiles().forEach { it.safeDelete() }
@@ -366,16 +353,6 @@ class DefaultBugReporter @Inject constructor(
             val logDirectory = logDirectory()
             logDirectory.listFiles()?.toList()
         }.orEmpty()
-    }
-
-    /**
-     * Delete the log files older than the given time except the most recent one.
-     * @param time the time in ms
-     */
-    private fun deleteOldLogFiles(time: Long) {
-        val logFiles = getLogFiles()
-        val oldLogFiles = logFiles.filter { it.lastModified() < time }
-        oldLogFiles.deleteAllExceptMostRecent()
     }
 
     /**
