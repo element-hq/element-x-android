@@ -215,8 +215,14 @@ class FakeMatrixRoom(
 
     override val syncUpdateFlow: StateFlow<Long> = MutableStateFlow(0L)
 
-    override suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline> {
-        return Result.success(FakeTimeline())
+    private var timelineFocusedOnEventResult: Result<Timeline> = Result.success(FakeTimeline())
+
+    fun givenTimelineFocusedOnEventResult(result: Result<Timeline>) {
+        timelineFocusedOnEventResult = result
+    }
+
+    override suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline> = simulateLongTask {
+        timelineFocusedOnEventResult
     }
 
     override suspend fun subscribeToSync() = Unit

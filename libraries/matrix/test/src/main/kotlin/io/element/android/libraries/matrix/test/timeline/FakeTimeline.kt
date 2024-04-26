@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.StateFlow
 import java.io.File
 
 class FakeTimeline(
+    private val name: String = "FakeTimeline",
     override val timelineItems: Flow<List<MatrixTimelineItem>> = MutableStateFlow(emptyList()),
     private val backwardPaginationStatus: MutableStateFlow<Timeline.PaginationStatus> = MutableStateFlow(
         Timeline.PaginationStatus(
@@ -360,5 +361,12 @@ class FakeTimeline(
         }
     }
 
-    override fun close() = Unit
+    var closeCounter = 0
+        private set
+
+    override fun close() {
+        closeCounter++
+    }
+
+    override fun toString() = "FakeTimeline: $name"
 }
