@@ -242,51 +242,50 @@ class RustMatrixAuthenticationService @Inject constructor(
                             }
                         }
                     )
-                client.use { rustClient ->
-                    val sessionData = rustClient.session()
-                        .toSessionData(
-                            isTokenValid = true,
-                            loginType = LoginType.OIDC,
-                            passphrase = pendingPassphrase,
-                            needsVerification = true,
-                        )
-                    sessionStore.storeData(sessionData)
+                val sessionData = client.session()
+                    .toSessionData(
+                        isTokenValid = true,
+                        loginType = LoginType.QR,
+                        passphrase = pendingPassphrase,
+                        needsVerification = false,
+                    )
+                sessionStore.storeData(sessionData)
 
-                    val recoveryMutex = Mutex(locked = true)
-                    val verificationMutex = Mutex(locked = true)
-                    val encryptionService = rustClient.encryption()
+                val recoveryMutex = Mutex(locked = true)
+                val verificationMutex = Mutex(locked = true)
+                val encryptionService = client.encryption()
 
-                    val syncService = rustClient.syncService().finish()
-                    syncService.start()
+                val syncService = client.syncService().finish()
+                syncService.start()
 
-                    var recoveryStateHandle: TaskHandle? = null
-                    var verificationStateHandle: TaskHandle? = null
-                    recoveryStateHandle = encryptionService.recoveryStateListener(object : RecoveryStateListener {
-                        override fun onUpdate(status: RecoveryState) {
-                            Timber.d("QR Login recovery state: $status")
-                            if (status == RecoveryState.ENABLED) {
-                                recoveryMutex.unlock()
-                                recoveryStateHandle?.cancelAndDestroy()
-                            }
+                var recoveryStateHandle: TaskHandle? = null
+                var verificationStateHandle: TaskHandle? = null
+                recoveryStateHandle = encryptionService.recoveryStateListener(object : RecoveryStateListener {
+                    override fun onUpdate(status: RecoveryState) {
+                        Timber.d("QR Login recovery state: $status")
+                        if (status == RecoveryState.ENABLED) {
+                            recoveryMutex.unlock()
+                            recoveryStateHandle?.cancelAndDestroy()
                         }
-                    })
-                    verificationStateHandle = encryptionService.verificationStateListener(object : VerificationStateListener {
-                        override fun onUpdate(status: VerificationState) {
-                            Timber.d("QR Login Verification state: $status")
-                            if (status == VerificationState.VERIFIED) {
-                                verificationMutex.unlock()
-                                verificationStateHandle?.cancelAndDestroy()
-                            }
+                    }
+                })
+                verificationStateHandle = encryptionService.verificationStateListener(object : VerificationStateListener {
+                    override fun onUpdate(status: VerificationState) {
+                        Timber.d("QR Login Verification state: $status")
+                        if (status == VerificationState.VERIFIED) {
+                            verificationMutex.unlock()
+                            verificationStateHandle?.cancelAndDestroy()
                         }
-                    })
-                    verificationMutex.lock()
-                    recoveryMutex.lock()
+                    }
+                })
+                verificationMutex.lock()
+                recoveryMutex.lock()
 
-                    syncService.stop()
-                    syncService.destroy()
+                encryptionService.destroy()
+                syncService.stop()
+                syncService.destroy()
 
-                    SessionId(sessionData.userId)
-                }
+                SessionId(sessionData.userId)
             }.onFailure { throwable ->
                 if (throwable is CancellationException) {
                     throw throwable

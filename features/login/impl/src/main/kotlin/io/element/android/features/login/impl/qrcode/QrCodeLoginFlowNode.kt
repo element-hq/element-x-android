@@ -32,6 +32,7 @@ import com.bumble.appyx.navmodel.backstack.operation.replace
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.screens.qrcode.confirmation.QrCodeConfirmationNode
 import io.element.android.features.login.impl.screens.qrcode.confirmation.QrCodeConfirmationStep
 import io.element.android.features.login.impl.screens.qrcode.error.QrCodeErrorNode
@@ -55,6 +56,7 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val qrCodeLoginManager: QrCodeLoginManager,
+    private val defaultLoginUserStory: DefaultLoginUserStory,
 ) : BaseFlowNode<QrCodeLoginFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Initial,
@@ -141,8 +143,15 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
                 createNode<QrCodeConfirmationNode>(buildContext, plugins = listOf(navTarget.step, callback))
             }
             is NavTarget.Error -> {
+                val callback = object : QrCodeErrorNode.Callback {
+                    override fun onRetry() {
+                        authenticationJob?.cancel()
+                        authenticationJob = null
+                        backstack.newRoot(NavTarget.Initial)
+                    }
+                }
                 // TODO specify the error type
-                createNode<QrCodeErrorNode>(buildContext)
+                createNode<QrCodeErrorNode>(buildContext, plugins = listOf(callback))
             }
         }
     }
@@ -151,7 +160,8 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
         authenticationJob = launch {
             qrCodeLoginManager.authenticate(qrCodeLoginData)
                 .onSuccess {
-                    println("Logged into session $it")
+                    defaultLoginUserStory.setLoginFlowIsDone(true)
+                    backstack.newRoot(NavTarget.Initial)
                     authenticationJob = null
                 }
                 .onFailure { throwable ->
