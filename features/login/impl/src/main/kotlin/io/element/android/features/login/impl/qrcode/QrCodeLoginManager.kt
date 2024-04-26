@@ -17,9 +17,7 @@
 package io.element.android.features.login.impl.qrcode
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.core.extensions.finally
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
@@ -28,7 +26,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
-@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class QrCodeLoginManagerImpl @Inject constructor(
     private val authenticationService: MatrixAuthenticationService,
@@ -41,9 +38,6 @@ class QrCodeLoginManagerImpl @Inject constructor(
 
         return authenticationService.loginWithQrCode(qrCodeLoginData) { step ->
             _currentLoginStep.value = step
-        }.finally {
-            // Whether the login was successful or not, we reset the current login step
-            _currentLoginStep.value = QrCodeLoginStep.Uninitialized
         }
     }
 }
