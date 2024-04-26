@@ -49,6 +49,7 @@ fun aTimelineState(
     timelineItems: ImmutableList<TimelineItem> = persistentListOf(),
     renderReadReceipts: Boolean = false,
     timelineRoomInfo: TimelineRoomInfo = aTimelineRoomInfo(),
+    focusedEventIndex: Int = -1,
     eventSink: (TimelineEvents) -> Unit = {},
 ) = TimelineState(
     timelineItems = timelineItems,
@@ -56,7 +57,7 @@ fun aTimelineState(
     renderReadReceipts = renderReadReceipts,
     newEventState = NewEventState.None,
     isLive = true,
-    focusedEventId = null,
+    focusedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().getOrNull(focusedEventIndex)?.eventId,
     focusRequestState = FocusRequestState.None,
     eventSink = eventSink,
 )

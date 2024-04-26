@@ -160,12 +160,13 @@ private fun TimelineItemGroupedEventsRowContent(
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemGroupedEventsRowContentExpandedPreview() = ElementPreview {
+    val events = aGroupedEvents(withReadReceipts = true)
     TimelineItemGroupedEventsRowContent(
         isExpanded = true,
         onExpandGroupClick = {},
-        timelineItem = aGroupedEvents(withReadReceipts = true),
+        timelineItem = events,
         timelineRoomInfo = aTimelineRoomInfo(),
-        focusedEventId = null,
+        focusedEventId = events.events.first().eventId,
         renderReadReceipts = true,
         isLastOutgoingMessage = false,
         onClick = {},
