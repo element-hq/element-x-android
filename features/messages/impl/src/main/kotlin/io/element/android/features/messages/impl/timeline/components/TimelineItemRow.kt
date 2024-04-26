@@ -145,13 +145,17 @@ private fun Modifier.focusedEvent(
         ElementTheme.materialColors.background
     )
     val verticalOffset = focusedEventOffset.toPx()
+    val verticalRatio = 0.7f
     return drawWithCache {
-        val brush = Brush.verticalGradient(gradientColors)
+        val brush = Brush.verticalGradient(
+            colors = gradientColors,
+            endY = size.height * verticalRatio,
+        )
         onDrawBehind {
             drawRect(
                 brush,
                 topLeft = Offset(0f, verticalOffset),
-                size = Size(size.width, size.height * 0.7f)
+                size = Size(size.width, size.height * verticalRatio)
             )
             drawLine(
                 highlightedLineColor,
