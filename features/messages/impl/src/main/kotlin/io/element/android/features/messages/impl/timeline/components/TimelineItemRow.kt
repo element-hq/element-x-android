@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.TimelineEvents
@@ -58,7 +59,12 @@ internal fun TimelineItemRow(
     modifier: Modifier = Modifier
 ) {
     val backgroundModifier = if (timelineItem.isEvent(focusedEventId)) {
-        Modifier.focusedEvent()
+        val focusedEventOffset = if ((timelineItem as? TimelineItem.Event)?.showSenderInformation == true) {
+            14.dp
+        } else {
+            2.dp
+        }
+        Modifier.focusedEvent(focusedEventOffset)
     } else {
         Modifier
     }
@@ -130,18 +136,28 @@ internal fun TimelineItemRow(
 }
 
 @Composable
-private fun Modifier.focusedEvent(): Modifier {
+private fun Modifier.focusedEvent(
+    focusedEventOffset: Dp
+): Modifier {
     val highlightedLineColor = ElementTheme.colors.textActionAccent
     val gradientColors = listOf(
         ElementTheme.colors.highlightedMessageBackgroundColor,
         ElementTheme.materialColors.background
     )
-    val verticalOffset = 2.dp.toPx()
+    val verticalOffset = focusedEventOffset.toPx()
     return drawWithCache {
         val brush = Brush.verticalGradient(gradientColors)
         onDrawBehind {
-            drawRect(brush, topLeft = Offset(0f, verticalOffset), size = Size(size.width, size.height * 0.7f))
-            drawLine(highlightedLineColor, start = Offset(0f, verticalOffset), end = Offset(size.width, verticalOffset))
+            drawRect(
+                brush,
+                topLeft = Offset(0f, verticalOffset),
+                size = Size(size.width, size.height * 0.7f)
+            )
+            drawLine(
+                highlightedLineColor,
+                start = Offset(0f, verticalOffset),
+                end = Offset(size.width, verticalOffset)
+            )
         }
     }.padding(top = 4.dp)
 }
