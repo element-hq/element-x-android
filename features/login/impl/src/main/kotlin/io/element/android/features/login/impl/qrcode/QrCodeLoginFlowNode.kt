@@ -161,7 +161,6 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
             qrCodeLoginManager.authenticate(qrCodeLoginData)
                 .onSuccess {
                     defaultLoginUserStory.setLoginFlowIsDone(true)
-                    backstack.newRoot(NavTarget.Initial)
                     authenticationJob = null
                 }
                 .onFailure { throwable ->

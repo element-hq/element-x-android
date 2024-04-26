@@ -17,7 +17,7 @@
 package io.element.android.features.login.impl.qrcode
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.login.impl.DefaultLoginUserStory
+import io.element.android.libraries.core.extensions.finally
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -41,6 +41,9 @@ class QrCodeLoginManagerImpl @Inject constructor(
 
         return authenticationService.loginWithQrCode(qrCodeLoginData) { step ->
             _currentLoginStep.value = step
+        }.finally {
+            // Whether the login was successful or not, we reset the current login step
+            _currentLoginStep.value = QrCodeLoginStep.Uninitialized
         }
     }
 }

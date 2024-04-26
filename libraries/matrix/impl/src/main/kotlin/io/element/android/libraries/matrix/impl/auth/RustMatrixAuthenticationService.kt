@@ -18,7 +18,6 @@ package io.element.android.libraries.matrix.impl.auth
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.core.extensions.finally
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
@@ -39,7 +38,6 @@ import io.element.android.libraries.matrix.impl.exception.mapClientException
 import io.element.android.libraries.matrix.impl.keys.PassphraseGenerator
 import io.element.android.libraries.matrix.impl.mapper.toSessionData
 import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
-import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.libraries.sessionstorage.api.LoginType
@@ -48,18 +46,10 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.OidcAuthenticationData
 import org.matrix.rustcomponents.sdk.QrLoginProgress
 import org.matrix.rustcomponents.sdk.QrLoginProgressListener
-import org.matrix.rustcomponents.sdk.RecoveryState
-import org.matrix.rustcomponents.sdk.RecoveryStateListener
-import org.matrix.rustcomponents.sdk.SyncService
-import org.matrix.rustcomponents.sdk.TaskHandle
-import org.matrix.rustcomponents.sdk.VerificationState
-import org.matrix.rustcomponents.sdk.VerificationStateListener
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
@@ -242,50 +232,17 @@ class RustMatrixAuthenticationService @Inject constructor(
                             }
                         }
                     )
-                val sessionData = client.session()
-                    .toSessionData(
-                        isTokenValid = true,
-                        loginType = LoginType.QR,
-                        passphrase = pendingPassphrase,
-                        needsVerification = false,
-                    )
-                sessionStore.storeData(sessionData)
-
-                val recoveryMutex = Mutex(locked = true)
-                val verificationMutex = Mutex(locked = true)
-                val encryptionService = client.encryption()
-
-                val syncService = client.syncService().finish()
-                syncService.start()
-
-                var recoveryStateHandle: TaskHandle? = null
-                var verificationStateHandle: TaskHandle? = null
-                recoveryStateHandle = encryptionService.recoveryStateListener(object : RecoveryStateListener {
-                    override fun onUpdate(status: RecoveryState) {
-                        Timber.d("QR Login recovery state: $status")
-                        if (status == RecoveryState.ENABLED) {
-                            recoveryMutex.unlock()
-                            recoveryStateHandle?.cancelAndDestroy()
-                        }
-                    }
-                })
-                verificationStateHandle = encryptionService.verificationStateListener(object : VerificationStateListener {
-                    override fun onUpdate(status: VerificationState) {
-                        Timber.d("QR Login Verification state: $status")
-                        if (status == VerificationState.VERIFIED) {
-                            verificationMutex.unlock()
-                            verificationStateHandle?.cancelAndDestroy()
-                        }
-                    }
-                })
-                verificationMutex.lock()
-                recoveryMutex.lock()
-
-                encryptionService.destroy()
-                syncService.stop()
-                syncService.destroy()
-
-                SessionId(sessionData.userId)
+                client.use { rustClient ->
+                    val sessionData = rustClient.session()
+                        .toSessionData(
+                            isTokenValid = true,
+                            loginType = LoginType.QR,
+                            passphrase = pendingPassphrase,
+                            needsVerification = false,
+                        )
+                    sessionStore.storeData(sessionData)
+                    SessionId(sessionData.userId)
+                }
             }.onFailure { throwable ->
                 if (throwable is CancellationException) {
                     throw throwable
