@@ -36,6 +36,7 @@ data class TimelineState(
     val hasAnyEvent = timelineItems.any { it is TimelineItem.Event }
 }
 
+@Immutable
 sealed interface FocusRequestState {
     data object None : FocusRequestState
     data class Cached(val index: Int) : FocusRequestState
