@@ -71,7 +71,6 @@ fun aPaginationStatus(
     )
 }
 
-
 internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList<TimelineItem> {
     return persistentListOf(
         // 3 items (First Middle Last) with isMine = false

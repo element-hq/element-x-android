@@ -22,7 +22,6 @@ import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTime
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 
 class LoadingIndicatorsPostProcessor(private val systemClock: SystemClock) {
-
     fun process(
         items: List<MatrixTimelineItem>,
         hasMoreToLoadBackward: Boolean,

@@ -153,7 +153,6 @@ val SemanticColors.bigCheckmarkBorderColor
 val SemanticColors.highlightedMessageBackgroundColor
     get() = if (isLight) LightColorTokens.colorGreen300 else DarkColorTokens.colorGreen300
 
-
 @PreviewsDayNight
 @Composable
 internal fun ColorAliasesPreview() = ElementPreview {

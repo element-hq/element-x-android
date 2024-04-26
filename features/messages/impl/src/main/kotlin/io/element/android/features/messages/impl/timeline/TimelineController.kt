@@ -53,7 +53,6 @@ import kotlin.coroutines.cancellation.CancellationException
 class TimelineController @Inject constructor(
     private val room: MatrixRoom,
 ) : Closeable, TimelineProvider {
-
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
     private val liveTimeline = MutableStateFlow(room.liveTimeline)

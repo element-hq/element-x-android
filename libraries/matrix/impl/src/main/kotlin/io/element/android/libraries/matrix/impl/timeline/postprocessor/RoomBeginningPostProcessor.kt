@@ -29,7 +29,6 @@ import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTime
  * or add the RoomBeginning item for non DM room.
  */
 class RoomBeginningPostProcessor {
-
     fun process(
         items: List<MatrixTimelineItem>,
         isDm: Boolean,
@@ -49,7 +48,6 @@ class RoomBeginningPostProcessor {
     }
 
     private fun processForDM(items: List<MatrixTimelineItem>): List<MatrixTimelineItem> {
-
         // Find room creation event. This is usually index 0
         val roomCreationEventIndex = items.indexOfFirst {
             val stateEventContent = (it as? MatrixTimelineItem.Event)?.event?.content as? StateContent
@@ -83,5 +81,4 @@ class RoomBeginningPostProcessor {
             virtual = VirtualTimelineItem.RoomBeginning
         )
     }
-
 }

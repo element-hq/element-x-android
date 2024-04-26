@@ -56,7 +56,6 @@ internal fun TimelineLoadingMoreIndicator(
                 )
             }
         }
-
     }
 }
 

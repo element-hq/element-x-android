@@ -25,7 +25,6 @@ import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTime
 class LastForwardIndicatorsPostProcessor(
     private val isTimelineLive: Boolean,
 ) {
-
     private val lastForwardIdentifiers = LinkedHashSet<String>()
 
     fun process(

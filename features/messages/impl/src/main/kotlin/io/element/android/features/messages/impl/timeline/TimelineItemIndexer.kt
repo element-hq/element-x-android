@@ -25,7 +25,6 @@ import javax.inject.Inject
 
 @SingleIn(RoomScope::class)
 class TimelineItemIndexer @Inject constructor() {
-
     private val timelineEventsIndexes = mutableMapOf<EventId, Int>()
 
     fun isKnown(eventId: EventId): Boolean {

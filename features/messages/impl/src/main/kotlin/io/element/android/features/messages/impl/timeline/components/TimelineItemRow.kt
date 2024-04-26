@@ -57,7 +57,6 @@ internal fun TimelineItemRow(
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
-
     val backgroundModifier = if (timelineItem.isEvent(focusedEventId)) {
         Modifier.focusedEvent()
     } else {

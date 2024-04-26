@@ -89,17 +89,16 @@ private const val PAGINATION_SIZE = 50
 
 class RustTimeline(
     private val inner: InnerTimeline,
-    private val isLive: Boolean,
-    private val systemClock: SystemClock,
-    private val roomCoroutineScope: CoroutineScope,
-    private val isKeyBackupEnabled: Boolean,
+    isLive: Boolean,
+    systemClock: SystemClock,
+    roomCoroutineScope: CoroutineScope,
+    isKeyBackupEnabled: Boolean,
     private val matrixRoom: MatrixRoom,
     private val dispatcher: CoroutineDispatcher,
-    private val lastLoginTimestamp: Date?,
+    lastLoginTimestamp: Date?,
     private val roomContentForwarder: RoomContentForwarder,
     private val onNewSyncedEvent: () -> Unit,
 ) : Timeline {
-
     private val initLatch = CompletableDeferred<Unit>()
     private val isInit = AtomicBoolean(false)
 
@@ -173,7 +172,7 @@ class RustTimeline(
         }
     }
 
-    // Use NonCancellable to avoid breaking the timeline when the coroutine is cancelled. 
+    // Use NonCancellable to avoid breaking the timeline when the coroutine is cancelled.
     override suspend fun paginate(direction: Timeline.PaginationDirection): Result<Boolean> = withContext(NonCancellable) {
         initLatch.await()
         runCatching {
@@ -226,7 +225,6 @@ class RustTimeline(
             }.let { items -> loadingIndicatorsPostProcessor.process(items, hasMoreToLoadBackward, hasMoreToLoadForward) }
             // Keep lastForwardIndicatorsPostProcessor last
             .let { items -> lastForwardIndicatorsPostProcessor.process(items) }
-
     }
 
     override fun close() {

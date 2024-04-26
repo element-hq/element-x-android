@@ -47,7 +47,6 @@ import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
-import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
@@ -78,14 +77,10 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.RoomListItem
-import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
-import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.TypingNotificationsListener
 import org.matrix.rustcomponents.sdk.UserPowerLevelUpdate
 import org.matrix.rustcomponents.sdk.WidgetCapabilities
 import org.matrix.rustcomponents.sdk.WidgetCapabilitiesProvider
-import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
-import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
 import org.matrix.rustcomponents.sdk.use
 import uniffi.matrix_sdk.RoomPowerLevelChanges
 import java.io.File
@@ -151,7 +146,7 @@ class RustMatrixRoom(
     private val _roomNotificationSettingsStateFlow = MutableStateFlow<MatrixRoomNotificationSettingsState>(MatrixRoomNotificationSettingsState.Unknown)
     override val roomNotificationSettingsStateFlow: StateFlow<MatrixRoomNotificationSettingsState> = _roomNotificationSettingsStateFlow
 
-    override val liveTimeline = createTimeline(innerTimeline, isLive = true){
+    override val liveTimeline = createTimeline(innerTimeline, isLive = true) {
         _syncUpdateFlow.value = systemClock.epochMillis()
     }
 
@@ -179,7 +174,7 @@ class RustMatrixRoom(
             eventId = eventId.value,
             numContextEvents = 50u,
             internalIdPrefix = "focus_$eventId",
-        ).let {inner ->
+        ).let { inner ->
             createTimeline(inner, isLive = false)
         }
     }
@@ -322,7 +317,7 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>  {
+    override suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> {
         return liveTimeline.sendMessage(body, htmlBody, mentions)
     }
 
@@ -340,7 +335,7 @@ class RustMatrixRoom(
         return liveTimeline.enterSpecialMode(eventId)
     }
 
-    override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>{
+    override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> {
         return liveTimeline.replyMessage(eventId, body, htmlBody, mentions)
     }
 
@@ -446,11 +441,11 @@ class RustMatrixRoom(
         return liveTimeline.sendFile(file, fileInfo, progressCallback)
     }
 
-    override suspend fun toggleReaction(emoji: String, eventId: EventId): Result<Unit>{
+    override suspend fun toggleReaction(emoji: String, eventId: EventId): Result<Unit> {
        return liveTimeline.toggleReaction(emoji, eventId)
     }
 
-    override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit>{
+    override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> {
         return liveTimeline.forwardEvent(eventId, roomIds)
     }
 
@@ -458,7 +453,7 @@ class RustMatrixRoom(
         return liveTimeline.retrySendMessage(transactionId)
     }
 
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit>{
+    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> {
         return liveTimeline.cancelSend(transactionId)
     }
 
@@ -563,14 +558,14 @@ class RustMatrixRoom(
     override suspend fun sendPollResponse(
         pollStartId: EventId,
         answers: List<String>
-    ): Result<Unit>  {
+    ): Result<Unit> {
         return liveTimeline.sendPollResponse(pollStartId, answers)
     }
 
     override suspend fun endPoll(
         pollStartId: EventId,
         text: String
-    ): Result<Unit>  {
+    ): Result<Unit> {
         return liveTimeline.endPoll(pollStartId, text)
     }
 
@@ -579,7 +574,7 @@ class RustMatrixRoom(
         audioInfo: AudioInfo,
         waveform: List<Float>,
         progressCallback: ProgressCallback?,
-    ): Result<MediaUploadHandler>{
+    ): Result<MediaUploadHandler> {
         return liveTimeline.sendVoiceMessage(file, audioInfo, waveform, progressCallback)
     }
 
@@ -634,5 +629,4 @@ class RustMatrixRoom(
             inner = timeline,
         )
     }
-
 }

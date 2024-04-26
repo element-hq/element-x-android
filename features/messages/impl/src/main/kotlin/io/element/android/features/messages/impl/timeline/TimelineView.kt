@@ -93,7 +93,6 @@ fun TimelineView(
     modifier: Modifier = Modifier,
     forceJumpToBottomVisibility: Boolean = false
 ) {
-
     fun clearFocusRequestState() {
         state.eventSink(TimelineEvents.ClearFocusRequestState)
     }
@@ -124,8 +123,7 @@ fun TimelineView(
                 reverseLayout = useReverseLayout,
                 contentPadding = PaddingValues(vertical = 8.dp),
             ) {
-
-                if(state.isLive) {
+                if (state.isLive) {
                     item {
                         TypingNotificationView(state = typingNotificationState)
                     }

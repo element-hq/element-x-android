@@ -33,7 +33,6 @@ import kotlinx.coroutines.flow.StateFlow
 import java.io.File
 
 interface Timeline : AutoCloseable {
-
     data class PaginationStatus(
         val isPaginating: Boolean,
         val hasMoreToLoad: Boolean,
@@ -51,7 +50,6 @@ interface Timeline : AutoCloseable {
     suspend fun paginate(direction: PaginationDirection): Result<Boolean>
     fun paginationStatus(direction: PaginationDirection): StateFlow<PaginationStatus>
     val timelineItems: Flow<List<MatrixTimelineItem>>
-
 
     suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
 
@@ -164,6 +162,4 @@ interface Timeline : AutoCloseable {
         waveform: List<Float>,
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler>
-
-
 }

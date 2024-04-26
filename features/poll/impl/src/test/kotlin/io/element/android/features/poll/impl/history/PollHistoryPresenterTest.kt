@@ -61,9 +61,10 @@ class PollHistoryPresenterTest {
     private val timeline = FakeTimeline(
         timelineItems = aPollTimelineItems(
             mapOf(
-            AN_EVENT_ID to anOngoingPollContent(),
-            AN_EVENT_ID_2 to anEndedPollContent()
-        )),
+                AN_EVENT_ID to anOngoingPollContent(),
+                AN_EVENT_ID_2 to anEndedPollContent()
+            )
+        ),
         backwardPaginationStatus = backwardPaginationStatus
     )
     private val room = FakeMatrixRoom(
@@ -136,7 +137,7 @@ class PollHistoryPresenterTest {
 
     @Test
     fun `present - load more scenario`() = runTest {
-        val paginateLambda = lambdaRecorder{ _: Timeline.PaginationDirection ->
+        val paginateLambda = lambdaRecorder { _: Timeline.PaginationDirection ->
             Result.success(false)
         }
         timeline.apply {

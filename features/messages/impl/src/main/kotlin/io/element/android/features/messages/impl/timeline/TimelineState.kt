@@ -29,18 +29,18 @@ data class TimelineState(
     val renderReadReceipts: Boolean,
     val newEventState: NewEventState,
     val isLive: Boolean,
-    val focusedEventId : EventId?,
+    val focusedEventId: EventId?,
     val focusRequestState: FocusRequestState,
     val eventSink: (TimelineEvents) -> Unit,
-){
+) {
     val hasAnyEvent = timelineItems.any { it is TimelineItem.Event }
 }
 
 sealed interface FocusRequestState {
     data object None : FocusRequestState
-    data class Cached(val index: Int): FocusRequestState
+    data class Cached(val index: Int) : FocusRequestState
     data object Fetching : FocusRequestState
-    data object Fetched: FocusRequestState
+    data object Fetched : FocusRequestState
     data class Failure(val throwable: Throwable) : FocusRequestState
 }
 

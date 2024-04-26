@@ -19,11 +19,9 @@ package io.element.android.libraries.matrix.api.timeline
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 /**
@@ -45,4 +43,3 @@ class LiveTimelineProvider @Inject constructor(
 ) : TimelineProvider {
     override fun activeTimelineFlow(): StateFlow<Timeline> = MutableStateFlow(room.liveTimeline)
 }
-

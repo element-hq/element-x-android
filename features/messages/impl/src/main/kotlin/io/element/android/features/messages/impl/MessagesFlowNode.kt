@@ -99,7 +99,7 @@ class MessagesFlowNode @AssistedInject constructor(
         data object Empty : NavTarget
 
         @Parcelize
-        data object Messages: NavTarget
+        data object Messages : NavTarget
 
         @Parcelize
         data class MediaViewer(
