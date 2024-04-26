@@ -222,7 +222,8 @@ class RustTimeline(
                     isDm = matrixRoom.isDm,
                     hasMoreToLoadBackwards = hasMoreToLoadBackward
                 )
-            }.let { items -> loadingIndicatorsPostProcessor.process(items, hasMoreToLoadBackward, hasMoreToLoadForward) }
+            }
+            .let { items -> loadingIndicatorsPostProcessor.process(items, hasMoreToLoadBackward, hasMoreToLoadForward) }
             // Keep lastForwardIndicatorsPostProcessor last
             .let { items -> lastForwardIndicatorsPostProcessor.process(items) }
     }

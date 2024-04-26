@@ -20,6 +20,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
@@ -51,8 +53,9 @@ fun TimelineItemVirtualRow(
             TimelineItemRoomBeginningModel -> TimelineItemRoomBeginningView(roomName = timelineRoomInfo.name)
             is TimelineItemLoadingIndicatorModel -> {
                 TimelineLoadingMoreIndicator(virtual.model.direction)
+                val latestEventSink by rememberUpdatedState(eventSink)
                 LaunchedEffect(virtual.model.timestamp) {
-                    eventSink(TimelineEvents.LoadMore(virtual.model.direction))
+                    latestEventSink(TimelineEvents.LoadMore(virtual.model.direction))
                 }
             }
             is TimelineItemLastForwardIndicatorModel -> {

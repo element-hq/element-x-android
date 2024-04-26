@@ -235,6 +235,7 @@ private fun BoxScope.TimelineScrollHelper(
         }
     }
 
+    val latestOnClearFocusRequestState by rememberUpdatedState(onClearFocusRequestState)
     LaunchedEffect(focusRequestState) {
         if (focusRequestState is FocusRequestState.Cached) {
             if (abs(lazyListState.firstVisibleItemIndex - focusRequestState.index) < 10) {
@@ -242,7 +243,7 @@ private fun BoxScope.TimelineScrollHelper(
             } else {
                 lazyListState.scrollToItem(focusRequestState.index)
             }
-            onClearFocusRequestState()
+            latestOnClearFocusRequestState()
         }
     }
 

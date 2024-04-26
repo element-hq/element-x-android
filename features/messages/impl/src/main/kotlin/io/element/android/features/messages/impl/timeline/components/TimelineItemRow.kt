@@ -135,6 +135,7 @@ internal fun TimelineItemRow(
     }
 }
 
+@Suppress("ModifierComposable")
 @Composable
 private fun Modifier.focusedEvent(
     focusedEventOffset: Dp
