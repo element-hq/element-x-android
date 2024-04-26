@@ -18,11 +18,9 @@ package io.element.android.features.location.impl.common.actions
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.location.api.Location
-import org.junit.Ignore
 import org.junit.Test
 import java.net.URLEncoder
 
-@Ignore
 internal class AndroidLocationActionsTest {
     // We use an Android-native encoder in the actual app, switch to an equivalent JVM one for the tests
     private fun urlEncoder(input: String) = URLEncoder.encode(input, "US-ASCII")
