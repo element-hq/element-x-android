@@ -181,7 +181,7 @@ class RustTimeline(
             updatePaginationStatus(direction) { it.copy(isPaginating = true) }
             when (direction) {
                 Timeline.PaginationDirection.BACKWARDS -> inner.paginateBackwards(PAGINATION_SIZE.toUShort())
-                Timeline.PaginationDirection.FORWARDS -> inner.paginateForwards(PAGINATION_SIZE.toUShort())
+                Timeline.PaginationDirection.FORWARDS -> inner.focusedPaginateForwards(PAGINATION_SIZE.toUShort())
             }
         }.onFailure { error ->
             updatePaginationStatus(direction) { it.copy(isPaginating = false) }
