@@ -81,7 +81,6 @@ class TimelineItemsFactory @Inject constructor(
         roomMembers: List<RoomMember>,
     ) {
         val newTimelineItemStates = ArrayList<TimelineItem>()
-        val newTimelineById = mutableMapOf<String, TimelineItem>()
         for (index in diffCache.indices().reversed()) {
             val cacheItem = diffCache.get(index)
             if (cacheItem == null) {
@@ -98,7 +97,6 @@ class TimelineItemsFactory @Inject constructor(
                 } else {
                     cacheItem
                 }
-                newTimelineById[updatedItem.identifier()] = updatedItem
                 newTimelineItemStates.add(updatedItem)
             }
         }
