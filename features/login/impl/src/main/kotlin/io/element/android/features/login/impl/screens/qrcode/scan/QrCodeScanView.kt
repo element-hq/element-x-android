@@ -162,7 +162,7 @@ private fun ColumnScope.Buttons(
                     )
                 }
             }
-            AsyncAction.Loading -> {
+            AsyncAction.Loading, is AsyncAction.Success -> {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -183,8 +183,7 @@ private fun ColumnScope.Buttons(
                 }
             }
             AsyncAction.Uninitialized,
-            AsyncAction.Confirming,
-            is AsyncAction.Success -> Unit
+            AsyncAction.Confirming -> Unit
         }
     }
 }
