@@ -68,7 +68,7 @@ fun SelectedUser(
                 text = matrixUser.getBestName(),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodyMedium,
             )
         }
         if (canRemove) {
