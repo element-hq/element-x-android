@@ -108,9 +108,8 @@ fun TimelineView(
         accessibilityManager.isTouchExplorationEnabled.not()
     }
 
-    @Suppress("UNUSED_PARAMETER")
     fun inReplyToClicked(eventId: EventId) {
-        // TODO implement this logic once we have support to 'jump to event X' in sliding sync
+        state.eventSink(TimelineEvents.FocusOnEvent(eventId))
     }
 
     // Animate alpha when timeline is first displayed, to avoid flashes or glitching when viewing rooms

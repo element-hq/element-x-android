@@ -417,7 +417,6 @@ private fun MessageSenderInformation(
 private fun MessageEventBubbleContent(
     event: TimelineItem.Event,
     onMessageLongClick: () -> Unit,
-    @Suppress("UNUSED_PARAMETER")
     inReplyToClick: () -> Unit,
     onTimestampClicked: () -> Unit,
     onLinkClicked: (String) -> Unit,
@@ -568,8 +567,8 @@ private fun MessageEventBubbleContent(
             val inReplyToModifier = Modifier
                 .padding(top = topPadding, start = 8.dp, end = 8.dp)
                 .clip(RoundedCornerShape(6.dp))
-            // FIXME when a node is clickable, its contents won't be added to the semantics tree of its parent
-            //                    .clickable(enabled = true, onClick = inReplyToClick)
+                // FIXME when a node is clickable, its contents won't be added to the semantics tree of its parent
+                .clickable(onClick = inReplyToClick)
             when (inReplyTo) {
                 is InReplyToDetails.Ready -> {
                     ReplyToContent(
