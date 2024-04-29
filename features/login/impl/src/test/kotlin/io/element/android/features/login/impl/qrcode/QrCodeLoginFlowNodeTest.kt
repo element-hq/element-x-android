@@ -21,6 +21,7 @@ import com.bumble.appyx.core.modality.AncestryInfo
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.utils.customisations.NodeCustomisationDirectoryImpl
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.screens.qrcode.confirmation.QrCodeConfirmationStep
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
@@ -51,6 +52,7 @@ class QrCodeLoginFlowNodeTest {
 
     private fun createLoginFlowNode(
         qrCodeLoginManager: FakeQrCodeLoginManager = FakeQrCodeLoginManager(),
+        defaultLoginUserStory: DefaultLoginUserStory = DefaultLoginUserStory(),
     ): QrCodeLoginFlowNode {
         val buildContext = BuildContext(
             ancestryInfo = AncestryInfo.Root,
@@ -61,6 +63,7 @@ class QrCodeLoginFlowNodeTest {
             buildContext = buildContext,
             plugins = emptyList(),
             qrCodeLoginManager = qrCodeLoginManager,
+            defaultLoginUserStory = defaultLoginUserStory
         )
     }
 

@@ -20,10 +20,6 @@ import android.os.Parcelable
 import io.element.android.libraries.architecture.NodeInputs
 import kotlinx.parcelize.Parcelize
 
-data class QrCodeConfirmationState(
-    val step: QrCodeConfirmationStep,
-)
-
 sealed interface QrCodeConfirmationStep : NodeInputs, Parcelable {
     @Parcelize
     data class DisplayCheckCode(val code: String) : QrCodeConfirmationStep

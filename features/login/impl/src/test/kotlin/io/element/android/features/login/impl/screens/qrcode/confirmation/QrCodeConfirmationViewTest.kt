@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.login.impl.screens.qrcode.scan
+package io.element.android.features.login.impl.screens.qrcode.confirmation
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
-import io.element.android.libraries.matrix.test.auth.qrlogin.FakeQrCodeLoginData
-import io.element.android.tests.testutils.EnsureNeverCalled
-import io.element.android.tests.testutils.EnsureNeverCalledWithParam
+import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
-import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBackKey
 import org.junit.Rule
 import org.junit.Test
@@ -34,42 +30,40 @@ import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class QrCodeScanViewTest {
+class QrCodeConfirmationViewTest {
     @get:Rule
     val rule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
     fun `on back pressed - calls the expected callback`() {
         ensureCalledOnce { callback ->
-            rule.setQrCodeScanView(
-                state = aQrCodeScanState(),
-                onBackClicked = callback
+            rule.setQrCodeConfirmationView(
+                step = QrCodeConfirmationStep.DisplayCheckCode("12"),
+                onCancel = callback
             )
             rule.pressBackKey()
         }
     }
 
     @Test
-    fun `on QR code data ready - calls the expected callback`() {
-        val data = FakeQrCodeLoginData()
-        ensureCalledOnceWithParam<MatrixQrCodeLoginData>(data) { callback ->
-            rule.setQrCodeScanView(
-                state = aQrCodeScanState(authenticationAction = AsyncAction.Success(data)),
-                onQrCodeDataReady = callback
+    fun `on Cancel button clicked - calls the expected callback`() {
+        ensureCalledOnce { callback ->
+            rule.setQrCodeConfirmationView(
+                step = QrCodeConfirmationStep.DisplayCheckCode("12"),
+                onCancel = callback
             )
+            rule.clickOn(CommonStrings.action_cancel)
         }
     }
 
-    private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setQrCodeScanView(
-        state: QrCodeScanState,
-        onBackClicked: () -> Unit = EnsureNeverCalled(),
-        onQrCodeDataReady: (MatrixQrCodeLoginData) -> Unit = EnsureNeverCalledWithParam(),
+    private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setQrCodeConfirmationView(
+        step: QrCodeConfirmationStep,
+        onCancel: () -> Unit
     ) {
         setContent {
-            QrCodeScanView(
-                state = state,
-                onBackClicked = onBackClicked,
-                onQrCodeDataReady = onQrCodeDataReady
+            QrCodeConfirmationView(
+                step = step,
+                onCancel = onCancel
             )
         }
     }

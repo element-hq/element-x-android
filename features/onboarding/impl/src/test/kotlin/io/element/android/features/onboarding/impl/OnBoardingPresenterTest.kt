@@ -39,7 +39,7 @@ class OnBoardingPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.isDebugBuild).isTrue()
-            assertThat(initialState.canLoginWithQrCode).isFalse()
+            assertThat(initialState.canLoginWithQrCode).isTrue()
             assertThat(initialState.canCreateAccount).isFalse()
         }
     }

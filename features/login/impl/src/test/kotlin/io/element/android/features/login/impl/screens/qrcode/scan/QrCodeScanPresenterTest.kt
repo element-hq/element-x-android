@@ -20,10 +20,10 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
-import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginDataFactory
-import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.test.auth.qrlogin.FakeMatrixQrCodeLoginDataFactory
+import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -49,11 +49,9 @@ class QrCodeScanPresenterTest {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(QrCodeScanEvents.QrCodeScanned(byteArrayOf()))
-            awaitItem().run {
-                assertThat(isScanning).isFalse()
-                assertThat(authenticationAction.isLoading()).isTrue()
-            }
-            assertThat(awaitItem().authenticationAction).isEqualTo(AsyncAction.Success(Result.success(FakeQrCodeLoginData())))
+            assertThat(awaitItem().isScanning).isFalse()
+            assertThat(awaitItem().authenticationAction.isLoading()).isTrue()
+            assertThat(awaitItem().authenticationAction.isSuccess()).isTrue()
         }
     }
 
@@ -68,33 +66,23 @@ class QrCodeScanPresenterTest {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(QrCodeScanEvents.QrCodeScanned(byteArrayOf()))
-            awaitItem().run {
-                assertThat(isScanning).isFalse()
-                assertThat(authenticationAction.isLoading()).isTrue()
-            }
+            assertThat(awaitItem().isScanning).isFalse()
+            assertThat(awaitItem().authenticationAction.isLoading()).isTrue()
+
             val errorState = awaitItem()
             assertThat(errorState.authenticationAction.isFailure()).isTrue()
 
             errorState.eventSink(QrCodeScanEvents.TryAgain)
-            awaitItem().run {
-                assertThat(isScanning).isTrue()
-                assertThat(authenticationAction.isUninitialized()).isTrue()
-            }
+            assertThat(awaitItem().isScanning).isTrue()
+            assertThat(awaitItem().authenticationAction.isUninitialized()).isTrue()
         }
     }
 
-    private fun createQrCodeScanPresenter(
+    private fun TestScope.createQrCodeScanPresenter(
         qrCodeLoginDataFactory: FakeMatrixQrCodeLoginDataFactory = FakeMatrixQrCodeLoginDataFactory(),
-    ) = QrCodeScanPresenter(qrCodeLoginDataFactory)
+        coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
+    ) = QrCodeScanPresenter(
+        qrCodeLoginDataFactory = qrCodeLoginDataFactory,
+        coroutineDispatchers = coroutineDispatchers,
+    )
 }
-
-class FakeMatrixQrCodeLoginDataFactory(
-    var parseQrCodeLoginDataResult: () -> Result<MatrixQrCodeLoginData> =
-        lambdaRecorder<Result<MatrixQrCodeLoginData>> { Result.success(FakeQrCodeLoginData()) },
-) : MatrixQrCodeLoginDataFactory {
-    override fun parseQrCodeData(data: ByteArray): Result<MatrixQrCodeLoginData> {
-        return parseQrCodeLoginDataResult()
-    }
-}
-
-class FakeQrCodeLoginData : MatrixQrCodeLoginData

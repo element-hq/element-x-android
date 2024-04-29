@@ -16,6 +16,7 @@
 
 package io.element.android.features.login.impl.screens.qrcode.confirmation
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -53,6 +54,9 @@ fun QrCodeConfirmationView(
     onCancel: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    BackHandler {
+        onCancel()
+    }
     val icon = when (step) {
         is QrCodeConfirmationStep.DisplayCheckCode -> CompoundIcons.Computer()
         is QrCodeConfirmationStep.DisplayVerificationCode -> CompoundIcons.LockSolid()
@@ -153,10 +157,10 @@ private fun Buttons(
 
 @PreviewsDayNight
 @Composable
-internal fun QrCodeConfirmationViewPreview(@PreviewParameter(QrConfirmationCodeStatePreviewProvider::class) state: QrCodeConfirmationState) {
+internal fun QrCodeConfirmationViewPreview(@PreviewParameter(QrCodeConfirmationStepPreviewProvider::class) step: QrCodeConfirmationStep) {
     ElementPreview {
         QrCodeConfirmationView(
-            step = state.step,
+            step = step,
             onCancel = {},
         )
     }

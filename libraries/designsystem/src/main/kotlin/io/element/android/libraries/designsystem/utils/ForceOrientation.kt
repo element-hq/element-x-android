@@ -18,10 +18,6 @@ package io.element.android.libraries.designsystem.utils
 
 import android.content.pm.ActivityInfo
 import androidx.activity.ComponentActivity
-import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
-import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.platform.LocalContext
@@ -36,16 +32,6 @@ fun ForceOrientation(orientation: ScreenOrientation) {
     DisposableEffect(orientation) {
         activity.requestedOrientation = orientationFlags
         onDispose { activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED }
-    }
-}
-
-@OptIn(ExperimentalMaterial3AdaptiveApi::class)
-@Composable
-fun ForceOrientationInMobileDevices(orientation: ScreenOrientation) {
-    val windowAdaptiveInfo = currentWindowAdaptiveInfo()
-    if (windowAdaptiveInfo.windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
-        || windowAdaptiveInfo.windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact) {
-        ForceOrientation(orientation = orientation)
     }
 }
 

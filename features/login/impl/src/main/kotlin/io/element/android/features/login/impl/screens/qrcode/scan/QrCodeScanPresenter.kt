@@ -26,19 +26,17 @@ import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
-import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginDataFactory
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 class QrCodeScanPresenter @Inject constructor(
     private val qrCodeLoginDataFactory: MatrixQrCodeLoginDataFactory,
+    private val coroutineDispatchers: CoroutineDispatchers,
 ) : Presenter<QrCodeScanState> {
 
     private var isScanning by mutableStateOf(true)
@@ -73,7 +71,7 @@ class QrCodeScanPresenter @Inject constructor(
     private fun CoroutineScope.getQrCodeData(codeScannedAction: MutableState<AsyncAction<MatrixQrCodeLoginData>>, code: ByteArray) {
         if (codeScannedAction.value.isSuccess() || isProcessingCode.compareAndSet(true, true)) return
 
-        launch {
+        launch(coroutineDispatchers.computation) {
             suspend {
                 qrCodeLoginDataFactory.parseQrCodeData(code).getOrThrow()
             }.runCatchingUpdatingState(codeScannedAction)
