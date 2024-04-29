@@ -98,8 +98,15 @@ interface MatrixRoom : Closeable {
 
     val syncUpdateFlow: StateFlow<Long>
 
+    /**
+     * The live timeline of the room. Must be used to send Event to a room.
+     */
     val liveTimeline: Timeline
 
+    /**
+     * Create a new timeline, focused on the provided Event.
+     * Should not be used directly, see `TimelineController` to manage the various timelines.
+     */
     suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline>
 
     fun destroy()
