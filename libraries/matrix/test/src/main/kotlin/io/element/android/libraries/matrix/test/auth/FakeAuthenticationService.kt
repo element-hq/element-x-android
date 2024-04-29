@@ -36,7 +36,8 @@ import kotlinx.coroutines.flow.flowOf
 val A_OIDC_DATA = OidcDetails(url = "a-url")
 
 class FakeAuthenticationService(
-    var loginWithQrCodeResult: () -> Result<SessionId> = lambdaRecorder<Result<SessionId>> { Result.success(A_SESSION_ID) },
+    var loginWithQrCodeResult: (qrCodeData: MatrixQrCodeLoginData, progress: (QrCodeLoginStep) -> Unit) -> Result<SessionId> =
+        lambdaRecorder<MatrixQrCodeLoginData, (QrCodeLoginStep) -> Unit, Result<SessionId>> { _, _ -> Result.success(A_SESSION_ID) },
 ) : MatrixAuthenticationService {
     private val homeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
     private var oidcError: Throwable? = null
@@ -90,7 +91,7 @@ class FakeAuthenticationService(
     }
 
     override suspend fun loginWithQrCode(qrCodeData: MatrixQrCodeLoginData, progress: (QrCodeLoginStep) -> Unit): Result<SessionId> = simulateLongTask {
-        loginWithQrCodeResult()
+        loginWithQrCodeResult(qrCodeData, progress)
     }
 
     fun givenOidcError(throwable: Throwable?) {

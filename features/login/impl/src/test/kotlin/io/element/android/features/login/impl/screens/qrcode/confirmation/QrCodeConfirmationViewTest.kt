@@ -49,7 +49,7 @@ class QrCodeConfirmationViewTest {
     fun `on Cancel button clicked - calls the expected callback`() {
         ensureCalledOnce { callback ->
             rule.setQrCodeConfirmationView(
-                step = QrCodeConfirmationStep.DisplayCheckCode("12"),
+                step = QrCodeConfirmationStep.DisplayVerificationCode("123456"),
                 onCancel = callback
             )
             rule.clickOn(CommonStrings.action_cancel)
