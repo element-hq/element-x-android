@@ -10,7 +10,12 @@ firebaseAppDistribution = "4.2.0"
 
 # AndroidX
 core = "1.13.0"
-datastore = "1.1.0"
+# Warning: there is an issue with 1.1.0, that I cannot repro on unit test.
+# To repro with the application:
+# Clear the cache of the application and run the app. Nearly each time, there is an infinite loading
+# Due to the DefaultMigrationStore not bahaving as expected.
+# Stick to 1.0.0 for now, and ensure that this scenario cannot be reproduced when upgrading the version.
+datastore = "1.0.0"
 constraintlayout = "2.1.4"
 constraintlayout_compose = "1.0.1"
 lifecycle = "2.7.0"
