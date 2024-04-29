@@ -326,24 +326,6 @@ class RustMatrixRoom(
         return liveTimeline.sendMessage(body, htmlBody, mentions)
     }
 
-    override suspend fun editMessage(
-        originalEventId: EventId?,
-        transactionId: TransactionId?,
-        body: String,
-        htmlBody: String?,
-        mentions: List<Mention>,
-    ): Result<Unit> {
-        return liveTimeline.editMessage(originalEventId, transactionId, body, htmlBody, mentions)
-    }
-
-    override suspend fun enterSpecialMode(eventId: EventId?): Result<Unit> {
-        return liveTimeline.enterSpecialMode(eventId)
-    }
-
-    override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> {
-        return liveTimeline.replyMessage(eventId, body, htmlBody, mentions)
-    }
-
     override suspend fun redactEvent(eventId: EventId, reason: String?) = withContext(roomDispatcher) {
         runCatching {
             innerRoom.redact(eventId.value, reason)

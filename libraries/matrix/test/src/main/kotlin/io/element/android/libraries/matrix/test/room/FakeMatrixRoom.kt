@@ -134,7 +134,6 @@ class FakeMatrixRoom(
     private var updatePowerLevelsResult = Result.success(Unit)
     private var resetPowerLevelsResult = Result.success(defaultRoomPowerLevels())
     var sendMessageMentions = emptyList<Mention>()
-    val editMessageCalls = mutableListOf<Pair<String, String?>>()
     private val _typingRecord = mutableListOf<Boolean>()
     val typingRecord: List<Boolean>
         get() = _typingRecord
@@ -294,31 +293,6 @@ class FakeMatrixRoom(
 
     override suspend fun getPermalinkFor(eventId: EventId): Result<String> {
         return eventPermalinkResult(eventId)
-    }
-
-    override suspend fun editMessage(
-        originalEventId: EventId?,
-        transactionId: TransactionId?,
-        body: String,
-        htmlBody: String?,
-        mentions: List<Mention>
-    ): Result<Unit> {
-        sendMessageMentions = mentions
-        editMessageCalls += body to htmlBody
-        return Result.success(Unit)
-    }
-
-    var replyMessageParameter: Pair<String, String?>? = null
-        private set
-
-    override suspend fun enterSpecialMode(eventId: EventId?): Result<Unit> {
-        return Result.success(Unit)
-    }
-
-    override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> {
-        sendMessageMentions = mentions
-        replyMessageParameter = body to htmlBody
-        return Result.success(Unit)
     }
 
     var redactEventEventIdParam: EventId? = null

@@ -131,12 +131,6 @@ interface MatrixRoom : Closeable {
 
     suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
 
-    suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
-
-    suspend fun enterSpecialMode(eventId: EventId?): Result<Unit>
-
-    suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
-
     suspend fun redactEvent(eventId: EventId, reason: String? = null): Result<Unit>
 
     suspend fun sendImage(
