@@ -299,6 +299,8 @@ class RustTimeline(
             specialModeEventTimelineItem?.destroy()
             specialModeEventTimelineItem = null
             specialModeEventTimelineItem = eventId?.let { inner.getEventTimelineItemByEventId(it.value) }
+        }.onFailure {
+            Timber.e(it, "Unable to retrieve event for special mode. Are you using the correct timeline?")
         }
     }
 
