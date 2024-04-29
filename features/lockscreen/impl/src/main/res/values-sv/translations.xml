@@ -6,6 +6,15 @@
   <string name="screen_app_lock_settings_remove_pin">"Ta bort PIN-kod"</string>
   <string name="screen_app_lock_settings_remove_pin_alert_message">"Är du säker på att du vill ta bort PIN-koden?"</string>
   <string name="screen_app_lock_settings_remove_pin_alert_title">"Ta bort PIN-koden?"</string>
+  <string name="screen_app_lock_setup_choose_pin">"Välj PIN-kod"</string>
+  <string name="screen_app_lock_setup_confirm_pin">"Bekräfta PIN-kod"</string>
+  <string name="screen_app_lock_setup_pin_blacklisted_dialog_content">"Du kan inte välja detta som din PIN-kod av säkerhetsskäl"</string>
+  <string name="screen_app_lock_setup_pin_blacklisted_dialog_title">"Välj en annan PIN-kod"</string>
+  <string name="screen_app_lock_setup_pin_context">"Lås %1$s för att lägga till extra säkerhet i dina chattar.
+
+Välj något minnesvärt. Om du glömmer den här PIN-koden loggas du ut från appen."</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Ange samma PIN-kod två gånger"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN-koder matchar inte"</string>
   <string name="screen_app_lock_signout_alert_message">"Du måste logga in igen och skapa en ny PIN-kod för att fortsätta"</string>
   <string name="screen_app_lock_signout_alert_title">"Du blir utloggad"</string>
   <plurals name="screen_app_lock_subtitle">

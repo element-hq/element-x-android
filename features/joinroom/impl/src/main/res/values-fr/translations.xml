@@ -2,6 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_join_room_join_action">"Rejoindre"</string>
   <string name="screen_join_room_knock_action">"Demander à joindre"</string>
+  <string name="screen_join_room_space_not_supported_description">"Les Spaces ne sont pas encore pris en charge par %1$s . Vous pouvez voir les Spaces sur le Web."</string>
+  <string name="screen_join_room_space_not_supported_title">"Les Spaces ne sont pas encore pris en charge"</string>
   <string name="screen_join_room_subtitle_knock">"Cliquez ci-dessous et un administrateur sera prévenu. Une fois votre demande approuvée, pour pourrez rejoindre la discussion."</string>
   <string name="screen_join_room_subtitle_no_preview">"Vous devez être un membre du salon pour pouvoir lire l’historique des messages."</string>
   <string name="screen_join_room_title_knock">"Vous souhaitez rejoindre ce salon?"</string>

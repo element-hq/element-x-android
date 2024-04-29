@@ -21,8 +21,8 @@
   <string name="screen_recovery_key_change_generate_key_description">"Se till att du kan lagra din återställningsnyckel någonstans säkert"</string>
   <string name="screen_recovery_key_change_success">"Återställningsnyckel ändrad"</string>
   <string name="screen_recovery_key_change_title">"Byt återställningsnyckel?"</string>
-  <string name="screen_recovery_key_confirm_description">"Ange din återställningsnyckel för att bekräfta åtkomst till din chattsäkerhetskopia."</string>
-  <string name="screen_recovery_key_confirm_key_description">"Ange koden på 48 tecken."</string>
+  <string name="screen_recovery_key_confirm_description">"Se till att ingen kan se den här skärmen"</string>
+  <string name="screen_recovery_key_confirm_key_description">"Om du har en säkerhetsnyckel eller säkerhetsfras så funkar den också."</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Ange …"</string>
   <string name="screen_recovery_key_confirm_success">"Återställningsnyckel bekräftad"</string>
   <string name="screen_recovery_key_confirm_title">"Ange din återställningsnyckel"</string>

@@ -158,12 +158,14 @@
   <string name="common_modern">"Modern"</string>
   <string name="common_mute">"Némítás"</string>
   <string name="common_no_results">"Nincs találat"</string>
+  <string name="common_no_room_name">"Nincs szobanév"</string>
   <string name="common_offline">"Kapcsolat nélkül"</string>
   <string name="common_or">"vagy"</string>
   <string name="common_password">"Jelszó"</string>
   <string name="common_people">"Emberek"</string>
   <string name="common_permalink">"Állandó hivatkozás"</string>
   <string name="common_permission">"Engedély"</string>
+  <string name="common_please_wait">"Kis türelmet…"</string>
   <string name="common_poll_end_confirmation">"Biztos, hogy befejezi ezt a szavazást?"</string>
   <string name="common_poll_summary">"Szavazás: %1$s"</string>
   <string name="common_poll_total_votes">"Összes szavazat: %1$s"</string>
@@ -213,6 +215,7 @@
   <string name="common_topic">"Téma"</string>
   <string name="common_topic_placeholder">"Miről szól ez a szoba?"</string>
   <string name="common_unable_to_decrypt">"Nem lehet visszafejteni"</string>
+  <string name="common_unable_to_decrypt_no_access">"Nincs hozzáférése ehhez az üzenethez"</string>
   <string name="common_unable_to_invite_message">"Nem sikerült meghívót küldeni egy vagy több felhasználónak."</string>
   <string name="common_unable_to_invite_title">"Nem sikerült elküldeni a meghívót (meghívókat)"</string>
   <string name="common_unlock">"Feloldás"</string>

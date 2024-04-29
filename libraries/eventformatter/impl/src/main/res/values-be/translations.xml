@@ -30,7 +30,7 @@
   <string name="state_event_room_join_by_you">"Вы далучыліся да пакоя"</string>
   <string name="state_event_room_knock">"%1$s прасіў(-ла) далучыцца"</string>
   <string name="state_event_room_knock_accepted">"%1$s дазволіў(-ла) %2$s далучыцца"</string>
-  <string name="state_event_room_knock_accepted_by_you">"%1$s дазволіў(-ла) вам далучыцца"</string>
+  <string name="state_event_room_knock_accepted_by_you">"Вы дазволілі %1$s далучыцца"</string>
   <string name="state_event_room_knock_by_you">"Вы прасілі далучыцца"</string>
   <string name="state_event_room_knock_denied">"%1$s адхіліў(-ла) %2$s запыт на далучэнне"</string>
   <string name="state_event_room_knock_denied_by_you">"Вы адхілілі %1$s запыт на далучэнне"</string>

@@ -49,4 +49,6 @@ Se procedi, alcune delle tue impostazioni potrebbero cambiare."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"impostazioni di sistema"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Notifiche di sistema disattivate"</string>
   <string name="screen_notification_settings_title">"Notifiche"</string>
+  <string name="troubleshoot_notifications_entry_point_section">"Risoluzione dei problemi"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"Risoluzione di problemi delle notifiche"</string>
 </resources>

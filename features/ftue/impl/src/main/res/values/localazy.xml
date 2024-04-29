@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_notification_optin_subtitle">"You can change your settings later."</string>
   <string name="screen_notification_optin_title">"Allow notifications and never miss a message"</string>
-  <string name="screen_qr_code_login_connecting_subtitle">"Establishing connection"</string>
+  <string name="screen_qr_code_login_connecting_subtitle">"Establishing a secure connection"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"A secure connection could not be made to the new device. Your existing devices are still safe and you don\'t need to worry about them."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"What now?"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_1">"Try signing in again with a QR code in case this was a network problem"</string>

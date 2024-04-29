@@ -161,12 +161,14 @@
   <string name="common_modern">"Moderní"</string>
   <string name="common_mute">"Ztlumit"</string>
   <string name="common_no_results">"Žádné výsledky"</string>
+  <string name="common_no_room_name">"Žádný název místnosti"</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_or">"nebo"</string>
   <string name="common_password">"Heslo"</string>
   <string name="common_people">"Lidé"</string>
   <string name="common_permalink">"Trvalý odkaz"</string>
   <string name="common_permission">"Oprávnění"</string>
+  <string name="common_please_wait">"Počkejte prosím…"</string>
   <string name="common_poll_end_confirmation">"Opravdu chcete ukončit toto hlasování?"</string>
   <string name="common_poll_summary">"Hlasování: %1$s"</string>
   <string name="common_poll_total_votes">"Celkový počet hlasů: %1$s"</string>
@@ -217,6 +219,7 @@
   <string name="common_topic">"Téma"</string>
   <string name="common_topic_placeholder">"O čem je tato místnost?"</string>
   <string name="common_unable_to_decrypt">"Nelze dešifrovat"</string>
+  <string name="common_unable_to_decrypt_no_access">"Nemáte přístup k této zprávě"</string>
   <string name="common_unable_to_invite_message">"Pozvánky nebylo možné odeslat jednomu nebo více uživatelům."</string>
   <string name="common_unable_to_invite_title">"Nelze odeslat pozvánky"</string>
   <string name="common_unlock">"Odemknout"</string>

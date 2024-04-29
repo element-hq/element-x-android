@@ -30,7 +30,7 @@
   <string name="state_event_room_join_by_you">"Anda bergabung ke ruangan"</string>
   <string name="state_event_room_knock">"%1$s meminta untuk bergabung"</string>
   <string name="state_event_room_knock_accepted">"%1$s memperbolehkan %2$s untuk bergabung"</string>
-  <string name="state_event_room_knock_accepted_by_you">"%1$s memperbolehkan Anda untuk bergabung"</string>
+  <string name="state_event_room_knock_accepted_by_you">"Anda memperbolehkan %1$s untuk bergabung"</string>
   <string name="state_event_room_knock_by_you">"Anda meminta untuk bergabung"</string>
   <string name="state_event_room_knock_denied">"%1$s menolak permintaan %2$s untuk bergabung"</string>
   <string name="state_event_room_knock_denied_by_you">"Anda menolak permintaan %1$s untuk bergabung"</string>
