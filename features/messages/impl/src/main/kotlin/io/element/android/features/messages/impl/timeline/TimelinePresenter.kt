@@ -158,9 +158,7 @@ class TimelinePresenter @AssistedInject constructor(
                     focusRequestState.value = FocusRequestState.None
                 }
                 is TimelineEvents.JumpToLive -> {
-                    localScope.launch {
-                        timelineController.focusOnLive()
-                    }
+                    timelineController.focusOnLive()
                 }
             }
         }
