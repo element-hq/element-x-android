@@ -22,6 +22,7 @@ import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.FakeMessagesNavigator
+import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.model.NewEventState
@@ -465,6 +466,115 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
     }
 
     @Test
+    fun `present - focus on event and jump to live make the presenter update the state with the correct Events`() = runTest {
+        val detachedTimeline = FakeTimeline(
+            timelineItems = flowOf(
+                listOf(
+                    MatrixTimelineItem.Event(
+                        uniqueId = FAKE_UNIQUE_ID,
+                        event = anEventTimelineItem(),
+                    )
+                )
+            )
+        )
+        val liveTimeline = FakeTimeline(
+            timelineItems = flowOf(emptyList())
+        )
+        val room = FakeMatrixRoom(
+            liveTimeline = liveTimeline,
+        ).apply {
+            givenTimelineFocusedOnEventResult(Result.success(detachedTimeline))
+        }
+        val presenter = createTimelinePresenter(
+            room = room,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink.invoke(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
+            awaitItem().also { state ->
+                assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
+                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Fetching)
+            }
+            skipItems(2)
+            awaitItem().also { state ->
+                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Fetched)
+                assertThat(state.timelineItems).isNotEmpty()
+            }
+            initialState.eventSink.invoke(TimelineEvents.JumpToLive)
+            skipItems(1)
+            awaitItem().also { state ->
+                // Event stays focused
+                assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
+                assertThat(state.timelineItems).isEmpty()
+            }
+        }
+    }
+
+    @Test
+    fun `present - focus on known event retrieves the event from cache`() = runTest {
+        val timelineItemIndexer = TimelineItemIndexer().apply {
+            process(listOf(aMessageEvent(eventId = AN_EVENT_ID)))
+        }
+        val presenter = createTimelinePresenter(
+            room = FakeMatrixRoom(
+                liveTimeline = FakeTimeline(
+                    timelineItems = flowOf(
+                        listOf(
+                            MatrixTimelineItem.Event(
+                                uniqueId = FAKE_UNIQUE_ID,
+                                event = anEventTimelineItem(eventId = AN_EVENT_ID),
+                            )
+                        )
+                    )
+                ),
+            ),
+            timelineItemIndexer = timelineItemIndexer,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink.invoke(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
+            awaitItem().also { state ->
+                assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
+                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Cached(0))
+            }
+        }
+    }
+
+    @Test
+    fun `present - focus on event error case`() = runTest {
+        val presenter = createTimelinePresenter(
+            room = FakeMatrixRoom(
+                liveTimeline = FakeTimeline(
+                    timelineItems = flowOf(emptyList()),
+                ),
+            ).apply {
+                givenTimelineFocusedOnEventResult(Result.failure(Throwable("An error")))
+            },
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
+            awaitItem().also { state ->
+                assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
+                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Fetching)
+            }
+            awaitItem().also { state ->
+                assertThat(state.focusRequestState).isInstanceOf(FocusRequestState.Failure::class.java)
+                state.eventSink(TimelineEvents.ClearFocusRequestState)
+            }
+            awaitItem().also { state ->
+                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.None)
+            }
+        }
+    }
+
+    @Test
     fun `present - when room member info is loaded, read receipts info should be updated`() = runTest {
         val timeline = FakeTimeline(
             timelineItems = flowOf(
@@ -523,6 +633,7 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
         endPollAction: EndPollAction = FakeEndPollAction(),
         sendPollResponseAction: SendPollResponseAction = FakeSendPollResponseAction(),
         sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
+        timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
     ): TimelinePresenter {
         return TimelinePresenter(
             timelineItemsFactory = timelineItemsFactory,
@@ -534,7 +645,7 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
             endPollAction = endPollAction,
             sendPollResponseAction = sendPollResponseAction,
             sessionPreferencesStore = sessionPreferencesStore,
-            timelineItemIndexer = TimelineItemIndexer(),
+            timelineItemIndexer = timelineItemIndexer,
             timelineController = TimelineController(room),
         )
     }
