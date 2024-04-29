@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,8 +32,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -67,13 +68,14 @@ fun SelectedUser(
                 modifier = Modifier.clipToBounds(),
                 text = matrixUser.getBestName(),
                 overflow = TextOverflow.Ellipsis,
-                maxLines = 1,
-                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 2,
+                style = ElementTheme.typography.fontBodyMdRegular,
+                textAlign = TextAlign.Center,
             )
         }
         if (canRemove) {
             Surface(
-                color = MaterialTheme.colorScheme.primary,
+                color = ElementTheme.colors.textPrimary,
                 modifier = Modifier
                     .clip(CircleShape)
                     .size(20.dp)
@@ -87,7 +89,7 @@ fun SelectedUser(
                 Icon(
                     imageVector = CompoundIcons.Close(),
                     contentDescription = stringResource(id = CommonStrings.action_remove),
-                    tint = MaterialTheme.colorScheme.onPrimary,
+                    tint = ElementTheme.colors.iconOnSolidPrimary,
                     modifier = Modifier.padding(2.dp)
                 )
             }
@@ -99,7 +101,7 @@ fun SelectedUser(
 @Composable
 internal fun SelectedUserPreview() = ElementPreview {
     SelectedUser(
-        aMatrixUser(),
+        aMatrixUser(displayName = "John Doe"),
         canRemove = true,
         onUserRemoved = {},
     )
