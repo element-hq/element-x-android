@@ -82,10 +82,7 @@ private fun Content(state: QrCodeIntroState) {
             annotatedTextWithBold(
                 text = stringResource(R.string.screen_qr_code_login_initial_state_item_3, stringResource(R.string.screen_qr_code_login_initial_state_item_3_action)),
                 boldText = stringResource(R.string.screen_qr_code_login_initial_state_item_3_action)),
-            annotatedTextWithBold(
-                text = stringResource(R.string.screen_qr_code_login_initial_state_item_4, stringResource(R.string.screen_qr_code_login_initial_state_item_4_action)),
-                boldText = stringResource(R.string.screen_qr_code_login_initial_state_item_4_action)
-            ),
+            AnnotatedString(stringResource(R.string.screen_qr_code_login_initial_state_item_4)),
         ),
     )
 }

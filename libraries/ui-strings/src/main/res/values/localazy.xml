@@ -158,12 +158,14 @@
   <string name="common_modern">"Modern"</string>
   <string name="common_mute">"Mute"</string>
   <string name="common_no_results">"No results"</string>
+  <string name="common_no_room_name">"No room name"</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_or">"or"</string>
   <string name="common_password">"Password"</string>
   <string name="common_people">"People"</string>
   <string name="common_permalink">"Permalink"</string>
   <string name="common_permission">"Permission"</string>
+  <string name="common_please_wait">"Please wait…"</string>
   <string name="common_poll_end_confirmation">"Are you sure you want to end this poll?"</string>
   <string name="common_poll_summary">"Poll: %1$s"</string>
   <string name="common_poll_total_votes">"Total votes: %1$s"</string>
@@ -213,6 +215,7 @@
   <string name="common_topic">"Topic"</string>
   <string name="common_topic_placeholder">"What is this room about?"</string>
   <string name="common_unable_to_decrypt">"Unable to decrypt"</string>
+  <string name="common_unable_to_decrypt_no_access">"You don\'t have access to this message"</string>
   <string name="common_unable_to_invite_message">"Invites couldn\'t be sent to one or more users."</string>
   <string name="common_unable_to_invite_title">"Unable to send invite(s)"</string>
   <string name="common_unlock">"Unlock"</string>
@@ -237,6 +240,7 @@
   <string name="error_failed_loading_messages">"Failed loading messages"</string>
   <string name="error_failed_locating_user">"%1$s could not access your location. Please try again later."</string>
   <string name="error_failed_uploading_voice_message">"Failed to upload your voice message."</string>
+  <string name="error_message_not_found">"Message not found"</string>
   <string name="error_missing_location_auth_android">"%1$s does not have permission to access your location. You can enable access in Settings."</string>
   <string name="error_missing_location_rationale_android">"%1$s does not have permission to access your location. Enable access below."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s does not have permission to access your microphone. Enable access to record a voice message."</string>
@@ -248,6 +252,8 @@
   <string name="preference_rageshake">"Rageshake to report bug"</string>
   <string name="screen_join_room_join_action">"Join room"</string>
   <string name="screen_join_room_knock_action">"Knock to join"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s does not support spaces yet. You can access spaces on web."</string>
+  <string name="screen_join_room_space_not_supported_title">"Spaces are not supported yet"</string>
   <string name="screen_join_room_subtitle_knock">"Click the button below and a room administrator will be notified. You’ll be able to join the conversation once approved."</string>
   <string name="screen_join_room_subtitle_no_preview">"You must be a member of this room to view the message history."</string>
   <string name="screen_join_room_title_knock">"Want to join this room?"</string>
