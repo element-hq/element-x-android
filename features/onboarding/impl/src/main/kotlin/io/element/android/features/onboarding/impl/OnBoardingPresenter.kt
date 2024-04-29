@@ -17,6 +17,7 @@
 package io.element.android.features.onboarding.impl
 
 import androidx.compose.runtime.Composable
+import io.element.android.appconfig.OnBoardingConfig
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType

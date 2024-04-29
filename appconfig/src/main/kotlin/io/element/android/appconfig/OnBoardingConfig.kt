@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.onboarding.impl
+package io.element.android.appconfig
 
 object OnBoardingConfig {
+    /** Whether the user can use QR code login. */
     const val CAN_LOGIN_WITH_QR_CODE = true
+    /** Whether the user can create an account using the app. */
     const val CAN_CREATE_ACCOUNT = false
 }
