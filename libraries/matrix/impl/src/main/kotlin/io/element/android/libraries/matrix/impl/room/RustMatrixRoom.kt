@@ -94,7 +94,7 @@ class RustMatrixRoom(
     private val isKeyBackupEnabled: Boolean,
     private val roomListItem: RoomListItem,
     private val innerRoom: InnerRoom,
-    private val innerTimeline: InnerTimeline,
+    innerTimeline: InnerTimeline,
     private val roomNotificationSettingsService: RustNotificationSettingsService,
     sessionCoroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
