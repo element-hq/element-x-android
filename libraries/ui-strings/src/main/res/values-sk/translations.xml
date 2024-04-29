@@ -160,12 +160,14 @@
   <string name="common_modern">"Moderné"</string>
   <string name="common_mute">"Stlmiť"</string>
   <string name="common_no_results">"Žiadne výsledky"</string>
+  <string name="common_no_room_name">"Žiadny názov miestnosti"</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_or">"alebo"</string>
   <string name="common_password">"Heslo"</string>
   <string name="common_people">"Ľudia"</string>
   <string name="common_permalink">"Trvalý odkaz"</string>
   <string name="common_permission">"Povolenie"</string>
+  <string name="common_please_wait">"Prosím, počkajte…"</string>
   <string name="common_poll_end_confirmation">"Ste si istí, že chcete ukončiť túto anketu?"</string>
   <string name="common_poll_summary">"Anketa: %1$s"</string>
   <string name="common_poll_total_votes">"Celkový počet hlasov: %1$s"</string>
@@ -216,6 +218,7 @@
   <string name="common_topic">"Téma"</string>
   <string name="common_topic_placeholder">"O čom je táto miestnosť?"</string>
   <string name="common_unable_to_decrypt">"Nie je možné dešifrovať"</string>
+  <string name="common_unable_to_decrypt_no_access">"Nemáte prístup k tejto správe"</string>
   <string name="common_unable_to_invite_message">"Pozvánky nebolo možné odoslať jednému alebo viacerým používateľom."</string>
   <string name="common_unable_to_invite_title">"Nie je možné odoslať pozvánku/ky"</string>
   <string name="common_unlock">"Odomknúť"</string>
@@ -240,6 +243,7 @@
   <string name="error_failed_loading_messages">"Načítanie správ zlyhalo"</string>
   <string name="error_failed_locating_user">"%1$s nemohol získať prístup k vašej polohe. Skúste to prosím neskôr."</string>
   <string name="error_failed_uploading_voice_message">"Nepodarilo sa nahrať hlasovú správu."</string>
+  <string name="error_message_not_found">"Správa sa nenašla"</string>
   <string name="error_missing_location_auth_android">"%1$s nemá povolenie na prístup k vašej polohe. Prístup môžete zapnúť v Nastaveniach."</string>
   <string name="error_missing_location_rationale_android">"%1$s nemá povolenie na prístup k vašej polohe. Povoľte prístup nižšie."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s nemá povolenie na prístup k vášmu mikrofónu. Povoľte prístup na nahrávanie hlasovej správy."</string>

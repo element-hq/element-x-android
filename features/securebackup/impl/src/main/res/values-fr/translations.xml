@@ -35,6 +35,7 @@
   <string name="screen_recovery_key_confirm_key_description">"Si vous avez une clé de sécurité ou une phrase de sécurité, cela fonctionnera également."</string>
   <string name="screen_recovery_key_confirm_key_label">"Clé de récupération"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Saisissez la clé ici…"</string>
+  <string name="screen_recovery_key_confirm_lost_recovery_key">"Clé de récupération perdue?"</string>
   <string name="screen_recovery_key_confirm_success">"Clé de récupération confirmée"</string>
   <string name="screen_recovery_key_confirm_title">"Saisissez votre clé de récupération"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Clé de récupération copiée"</string>

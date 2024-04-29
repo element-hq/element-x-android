@@ -40,6 +40,7 @@
   <string name="action_continue">"繼續"</string>
   <string name="action_copy">"複製"</string>
   <string name="action_copy_link">"複製連結"</string>
+  <string name="action_copy_link_to_message">"複製訊息連結"</string>
   <string name="action_create">"建立"</string>
   <string name="action_create_a_room">"建立聊天室"</string>
   <string name="action_decline">"拒絕"</string>
@@ -131,7 +132,7 @@
   <string name="common_favourited">"我的最愛"</string>
   <string name="common_file">"檔案"</string>
   <string name="common_file_saved_on_disk_android">"檔案已儲存至 Downloads"</string>
-  <string name="common_forward_message">"訊息轉寄"</string>
+  <string name="common_forward_message">"轉寄訊息"</string>
   <string name="common_gif">"GIF"</string>
   <string name="common_image">"圖片"</string>
   <string name="common_in_reply_to">"回覆 %1$s"</string>

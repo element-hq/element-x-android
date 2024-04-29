@@ -50,4 +50,22 @@
   <string name="push_distributor_background_sync_android">"Sincronizzazione in background"</string>
   <string name="push_distributor_firebase_android">"Servizi Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Google Play Services non trovato. Le notifiche non funzioneranno bene."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Ottieni il nome del fornitore attuale."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Nessun provider push selezionato."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Provider push attuale: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Provider push attuale"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Assicurati che l\'applicazione abbia almeno un fornitore push."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nessun provider push trovato."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"Provider %1$d push trovato: %2$s"</item>
+    <item quantity="other">"Provider %1$d push trovati: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Rileva i provider di servizi push"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Verifica che l\'applicazione possa mostrare una notifica."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"La notifica non è stata cliccata."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Impossibile visualizzare la notifica."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"La notifica è stata cliccata!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Mostra notifica"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Clicca sulla notifica per continuare il test."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Errore: %1$s."</string>
 </resources>

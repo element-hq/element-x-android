@@ -10,7 +10,7 @@
   <string name="screen_invites_invited_you">"%1$s (%2$s) hat dich eingeladen"</string>
   <string name="screen_migration_message">"Dies ist ein einmaliger Vorgang, danke fürs Warten."</string>
   <string name="screen_migration_title">"Dein Konto wird eingerichtet."</string>
-  <string name="screen_roomlist_a11y_create_message">"Eine neue Unterhaltung oder einen neuen Raum erstellen"</string>
+  <string name="screen_roomlist_a11y_create_message">"Eine Unterthaltung oder Raum erstellen"</string>
   <string name="screen_roomlist_empty_message">"Beginne, indem du jemandem eine Nachricht sendest."</string>
   <string name="screen_roomlist_empty_title">"Noch keine Chats."</string>
   <string name="screen_roomlist_filter_favourites">"Favoriten"</string>
@@ -25,7 +25,7 @@ Um deine anderen Chats zu sehen wähle diesen Filter ab."</string>
   <string name="screen_roomlist_filter_people">"Personen"</string>
   <string name="screen_roomlist_filter_people_empty_state_title">"Du hast noch keine Direktnachrichten"</string>
   <string name="screen_roomlist_filter_rooms">"Räume"</string>
-  <string name="screen_roomlist_filter_rooms_empty_state_title">"Du bist noch in keinem Raum."</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Du hast noch keine Chats."</string>
   <string name="screen_roomlist_filter_unreads">"Ungelesen"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Glückwunsch!
 Du hast keine ungelesenen Nachrichten!"</string>

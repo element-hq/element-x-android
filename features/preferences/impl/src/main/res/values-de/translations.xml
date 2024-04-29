@@ -39,7 +39,7 @@ Wenn du fortfährst, können sich einige deiner Einstellungen ändern."</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"Die Konfiguration wurde nicht korrigiert, bitte versuche es erneut."</string>
   <string name="screen_notification_settings_group_chats">"Gruppenchats"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Einladungen"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Dein Homeserver unterstützt diese Option in verschlüsselten Räumen nicht. In einigen Räumen wirst du möglicherweise nicht benachrichtigt."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Dein Homeserver unterstützt diese Option in verschlüsselten Chat nicht. In einigen Chats wirst du möglicherweise nicht benachrichtigt."</string>
   <string name="screen_notification_settings_mentions_section_title">"Erwähnungen"</string>
   <string name="screen_notification_settings_mode_all">"Alle"</string>
   <string name="screen_notification_settings_mode_mentions">"Erwähnungen"</string>

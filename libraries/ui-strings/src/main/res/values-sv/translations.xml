@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_delete">"Radera"</string>
+  <plurals name="a11y_digits_entered">
+    <item quantity="one">"%1$d siffra angiven"</item>
+    <item quantity="other">"%1$d siffror angivna"</item>
+  </plurals>
   <string name="a11y_hide_password">"Dölj lösenord"</string>
   <string name="a11y_notifications_mentions_only">"Endast omnämningar"</string>
   <string name="a11y_notifications_muted">"Tystad"</string>
   <string name="a11y_pause">"Pausa"</string>
+  <string name="a11y_pin_field">"PIN-fält"</string>
   <string name="a11y_play">"Spela upp"</string>
   <string name="a11y_poll">"Omröstning"</string>
   <string name="a11y_poll_end">"Avslutade omröstning"</string>
@@ -78,6 +83,7 @@
   <string name="action_start_verification">"Starta verifiering"</string>
   <string name="action_static_map_load">"Tryck för att ladda kartan"</string>
   <string name="action_take_photo">"Ta ett foto"</string>
+  <string name="action_try_again">"Försök igen"</string>
   <string name="action_view_source">"Visa källkod"</string>
   <string name="action_yes">"Ja"</string>
   <string name="common_about">"Om"</string>
@@ -183,6 +189,7 @@
   <string name="error_failed_loading_map">"%1$s kunde inte ladda kartan. Vänligen försök igen senare."</string>
   <string name="error_failed_loading_messages">"Misslyckades att ladda meddelanden"</string>
   <string name="error_failed_locating_user">"%1$s kunde inte komma åt din plats. Vänligen försök igen senare."</string>
+  <string name="error_failed_uploading_voice_message">"Misslyckades med att ladda upp ditt röstmeddelande."</string>
   <string name="error_missing_location_auth_android">"%1$s är inte behörig att komma åt din plats. Du kan aktivera åtkomst i Inställningar."</string>
   <string name="error_missing_location_rationale_android">"%1$s är inte behörig att komma åt din plats. Aktivera åtkomst nedan."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s är inte behörig att komma åt din mikrofon. Aktivera åtkomst för att spela in ett röstmeddelande."</string>
