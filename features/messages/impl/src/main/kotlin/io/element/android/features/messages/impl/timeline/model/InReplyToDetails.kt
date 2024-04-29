@@ -27,18 +27,23 @@ import io.element.android.libraries.matrix.api.timeline.item.event.StickerConten
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.ui.messages.toPlainText
 
-data class InReplyToDetails(
-    val eventId: EventId,
-    val senderId: UserId,
-    val senderProfile: ProfileTimelineDetails,
-    val eventContent: EventContent?,
-    val textContent: String?,
-)
+sealed class InReplyToDetails(val eventId: EventId) {
+    class Ready(
+        eventId: EventId,
+        val senderId: UserId,
+        val senderProfile: ProfileTimelineDetails,
+        val eventContent: EventContent?,
+        val textContent: String?,
+    ) : InReplyToDetails(eventId)
+
+    class Loading(eventId: EventId) : InReplyToDetails(eventId)
+    class Error(eventId: EventId, val message: String) : InReplyToDetails(eventId)
+}
 
 fun InReplyTo.map(
     permalinkParser: PermalinkParser,
 ) = when (this) {
-    is InReplyTo.Ready -> InReplyToDetails(
+    is InReplyTo.Ready -> InReplyToDetails.Ready(
         eventId = eventId,
         senderId = senderId,
         senderProfile = senderProfile,
@@ -55,5 +60,7 @@ fun InReplyTo.map(
             else -> null
         }
     )
-    else -> null
+    is InReplyTo.Error -> InReplyToDetails.Error(eventId, message)
+    is InReplyTo.NotLoaded -> InReplyToDetails.Loading(eventId)
+    is InReplyTo.Pending -> InReplyToDetails.Loading(eventId)
 }

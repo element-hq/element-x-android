@@ -57,9 +57,16 @@ class EventMessageMapper {
                         senderProfile = event.senderProfile.map(),
                     )
                 }
-                is RepliedToEventDetails.Error -> InReplyTo.Error
-                is RepliedToEventDetails.Pending -> InReplyTo.Pending
-                is RepliedToEventDetails.Unavailable -> InReplyTo.NotLoaded(inReplyToId)
+                is RepliedToEventDetails.Error -> InReplyTo.Error(
+                    eventId = inReplyToId,
+                    message = event.message,
+                )
+                RepliedToEventDetails.Pending -> InReplyTo.Pending(
+                    eventId = inReplyToId,
+                )
+                is RepliedToEventDetails.Unavailable -> InReplyTo.NotLoaded(
+                    eventId = inReplyToId
+                )
             }
         }
         MessageContent(

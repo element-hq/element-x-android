@@ -24,7 +24,6 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -94,6 +93,7 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeRepliedTo
 import io.element.android.features.messages.impl.timeline.model.metadata
+import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -437,7 +437,7 @@ private fun MessageEventBubbleContent(
     ) {
         Row(
             modifier = modifier,
-            horizontalArrangement = spacedBy(4.dp, Alignment.Start),
+            horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
@@ -565,16 +565,30 @@ private fun MessageEventBubbleContent(
         }
         val inReplyTo = @Composable { inReplyTo: InReplyToDetails ->
             val topPadding = if (showThreadDecoration) 0.dp else 8.dp
-            ReplyToContent(
-                senderId = inReplyTo.senderId,
-                senderProfile = inReplyTo.senderProfile,
-                metadata = inReplyTo.metadata(),
-                modifier = Modifier
-                    .padding(top = topPadding, start = 8.dp, end = 8.dp)
-                    .clip(RoundedCornerShape(6.dp))
-                // FIXME when a node is clickable, its contents won't be added to the semantics tree of its parent
-//                    .clickable(enabled = true, onClick = inReplyToClick)
-            )
+            val inReplyToModifier = Modifier
+                .padding(top = topPadding, start = 8.dp, end = 8.dp)
+                .clip(RoundedCornerShape(6.dp))
+            // FIXME when a node is clickable, its contents won't be added to the semantics tree of its parent
+            //                    .clickable(enabled = true, onClick = inReplyToClick)
+            when (inReplyTo) {
+                is InReplyToDetails.Ready -> {
+                    ReplyToContent(
+                        senderId = inReplyTo.senderId,
+                        senderProfile = inReplyTo.senderProfile,
+                        metadata = inReplyTo.metadata(),
+                        modifier = inReplyToModifier,
+                    )
+                }
+                is InReplyToDetails.Error ->
+                    ReplyToErrorContent(
+                        data = inReplyTo,
+                        modifier = inReplyToModifier,
+                    )
+                is InReplyToDetails.Loading ->
+                    ReplyToLoadingContent(
+                        modifier = inReplyToModifier,
+                    )
+            }
         }
         if (inReplyToDetails != null) {
             // Use SubComposeLayout only if necessary as it can have consequences on the performance.
@@ -584,7 +598,7 @@ private fun MessageEventBubbleContent(
                 contentWithTimestamp()
             }
         } else {
-            Column(modifier = modifier, verticalArrangement = spacedBy(8.dp)) {
+            Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 threadDecoration()
                 contentWithTimestamp()
             }
@@ -649,6 +663,44 @@ private fun ReplyToContent(
             )
             ReplyToContentText(metadata)
         }
+    }
+}
+
+@Composable
+private fun ReplyToLoadingContent(
+    modifier: Modifier = Modifier,
+) {
+    val paddings = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
+    Row(
+        modifier
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(paddings)
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            PlaceholderAtom(width = 80.dp, height = 12.dp)
+            PlaceholderAtom(width = 140.dp, height = 14.dp)
+        }
+    }
+}
+
+@Composable
+private fun ReplyToErrorContent(
+    data: InReplyToDetails.Error,
+    modifier: Modifier = Modifier,
+) {
+    val paddings = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
+    Row(
+        modifier
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(paddings)
+    ) {
+        Text(
+            text = data.message,
+            style = ElementTheme.typography.fontBodyMdRegular,
+            color = MaterialTheme.colorScheme.error,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 
