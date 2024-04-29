@@ -35,7 +35,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import kotlinx.collections.immutable.ImmutableList
@@ -61,16 +60,6 @@ fun aTimelineState(
     focusRequestState = FocusRequestState.None,
     eventSink = eventSink,
 )
-
-fun aPaginationStatus(
-    isPaginating: Boolean = false,
-    hasMoreToLoad: Boolean = true,
-): Timeline.PaginationStatus {
-    return Timeline.PaginationStatus(
-        isPaginating = isPaginating,
-        hasMoreToLoad = hasMoreToLoad,
-    )
-}
 
 internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList<TimelineItem> {
     return persistentListOf(
