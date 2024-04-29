@@ -93,6 +93,7 @@ private fun RowScope.MainText(
         text = text,
         style = style,
         color = color,
+        maxLines = 1,
         overflow = TextOverflow.Ellipsis,
     )
 }
@@ -117,6 +118,7 @@ private fun RowScope.SecondaryText(
         text = text,
         style = style,
         color = MaterialTheme.colorScheme.secondary,
+        maxLines = 1,
         overflow = TextOverflow.Ellipsis,
     )
 }

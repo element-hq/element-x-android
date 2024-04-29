@@ -701,6 +701,7 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
         sequenceOf(false, true).forEach { isMine ->
             ATimelineItemEventRow(
                 event = aTimelineItemEvent(
+                    senderDisplayName = "Sender with a super long name that should ellipsize",
                     isMine = isMine,
                     content = aTimelineItemTextContent().copy(
                         body = "A long text which will be displayed on several lines and" +
