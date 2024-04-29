@@ -65,10 +65,7 @@ private fun createLastForwardIndicator(identifier: String): MatrixTimelineItem {
 
 private fun List<MatrixTimelineItem>.latestEventIdentifier(): String {
     return findLast {
-        when (it) {
-            is MatrixTimelineItem.Event -> true
-            else -> false
-        }
+        it is MatrixTimelineItem.Event
     }?.let {
         (it as MatrixTimelineItem.Event).uniqueId
     } ?: "fake_id"
