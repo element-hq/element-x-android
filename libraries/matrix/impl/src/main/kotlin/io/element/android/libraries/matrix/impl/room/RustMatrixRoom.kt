@@ -618,7 +618,7 @@ class RustMatrixRoom(
 
     private fun createTimeline(
         timeline: InnerTimeline,
-        isLive: Boolean = true,
+        isLive: Boolean,
         onNewSyncedEvent: () -> Unit = {},
     ): Timeline {
         return RustTimeline(
