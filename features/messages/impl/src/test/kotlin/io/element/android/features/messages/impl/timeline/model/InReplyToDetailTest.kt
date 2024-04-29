@@ -32,22 +32,22 @@ import org.junit.Test
 
 class InReplyToDetailTest {
     @Test
-    fun `map - with a not ready InReplyTo does not work`() {
+    fun `map - with a not ready InReplyTo return expected object`() {
         assertThat(
-            InReplyTo.Pending.map(
+            InReplyTo.Pending(AN_EVENT_ID).map(
                 permalinkParser = FakePermalinkParser()
             )
-        ).isNull()
+        ).isEqualTo(InReplyToDetails.Loading(AN_EVENT_ID))
         assertThat(
             InReplyTo.NotLoaded(AN_EVENT_ID).map(
                 permalinkParser = FakePermalinkParser()
             )
-        ).isNull()
+        ).isEqualTo(InReplyToDetails.Loading(AN_EVENT_ID))
         assertThat(
-            InReplyTo.Error.map(
+            InReplyTo.Error(AN_EVENT_ID, "a message").map(
                 permalinkParser = FakePermalinkParser()
             )
-        ).isNull()
+        ).isEqualTo(InReplyToDetails.Error(AN_EVENT_ID, "a message"))
     }
 
     @Test
@@ -65,7 +65,7 @@ class InReplyToDetailTest {
             permalinkParser = FakePermalinkParser()
         )
         assertThat(inReplyToDetails).isNotNull()
-        assertThat(inReplyToDetails?.textContent).isNull()
+        assertThat((inReplyToDetails as InReplyToDetails.Ready).textContent).isNull()
     }
 
     @Test
@@ -89,9 +89,7 @@ class InReplyToDetailTest {
             )
         )
         assertThat(
-            inReplyTo.map(
-                permalinkParser = FakePermalinkParser()
-            )?.textContent
+            (inReplyTo.map(permalinkParser = FakePermalinkParser()) as InReplyToDetails.Ready).textContent
         ).isEqualTo("Hello!")
     }
 
@@ -113,9 +111,7 @@ class InReplyToDetailTest {
             )
         )
         assertThat(
-            inReplyTo.map(
-                permalinkParser = FakePermalinkParser()
-            )?.textContent
+            (inReplyTo.map(permalinkParser = FakePermalinkParser()) as InReplyToDetails.Ready).textContent
         ).isEqualTo("**Hello!**")
     }
 }

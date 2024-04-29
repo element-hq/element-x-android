@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline.model
 
+import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
@@ -27,17 +28,24 @@ import io.element.android.libraries.matrix.api.timeline.item.event.StickerConten
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.ui.messages.toPlainText
 
-sealed class InReplyToDetails(val eventId: EventId) {
-    class Ready(
-        eventId: EventId,
+@Immutable
+sealed interface InReplyToDetails {
+    data class Ready(
+        val eventId: EventId,
         val senderId: UserId,
         val senderProfile: ProfileTimelineDetails,
         val eventContent: EventContent?,
         val textContent: String?,
-    ) : InReplyToDetails(eventId)
+    ) : InReplyToDetails
 
-    class Loading(eventId: EventId) : InReplyToDetails(eventId)
-    class Error(eventId: EventId, val message: String) : InReplyToDetails(eventId)
+    data class Loading(val eventId: EventId) : InReplyToDetails
+    data class Error(val eventId: EventId, val message: String) : InReplyToDetails
+}
+
+fun InReplyToDetails.eventId() = when (this) {
+    is InReplyToDetails.Ready -> eventId
+    is InReplyToDetails.Loading -> eventId
+    is InReplyToDetails.Error -> eventId
 }
 
 fun InReplyTo.map(

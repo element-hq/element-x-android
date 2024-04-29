@@ -92,6 +92,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeRepliedTo
+import io.element.android.features.messages.impl.timeline.model.eventId
 import io.element.android.features.messages.impl.timeline.model.metadata
 import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
@@ -146,7 +147,7 @@ fun TimelineItemEventRow(
     }
 
     fun inReplyToClicked() {
-        val inReplyToEventId = event.inReplyTo?.eventId ?: return
+        val inReplyToEventId = event.inReplyTo?.eventId() ?: return
         inReplyToClick(inReplyToEventId)
     }
 
