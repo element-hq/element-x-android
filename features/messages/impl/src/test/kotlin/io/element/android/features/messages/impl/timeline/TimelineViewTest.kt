@@ -19,6 +19,8 @@ package io.element.android.features.messages.impl.timeline
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingIndicatorModel
@@ -26,6 +28,7 @@ import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.messages.impl.typing.aTypingNotificationState
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EnsureNeverCalledWithTwoParams
 import io.element.android.tests.testutils.EventsRecorder
@@ -65,6 +68,34 @@ class TimelineViewTest {
             ),
         )
     }
+
+    @Test
+    fun `scroll to bottom on live timeline does not emit the Event`() {
+        val eventsRecorder = EventsRecorder<TimelineEvents>(expectEvents = false)
+        rule.setTimelineView(
+            state = aTimelineState(
+                isLive = true,
+                eventSink = eventsRecorder,
+            ),
+            forceJumpToBottomVisibility = true,
+        )
+        val contentDescription = rule.activity.getString(CommonStrings.a11y_jump_to_bottom)
+        rule.onNodeWithContentDescription(contentDescription).performClick()
+    }
+
+    @Test
+    fun `scroll to bottom on detached timeline emits the expected Event`() {
+        val eventsRecorder = EventsRecorder<TimelineEvents>()
+        rule.setTimelineView(
+            state = aTimelineState(
+                isLive = false,
+                eventSink = eventsRecorder,
+            ),
+        )
+        val contentDescription = rule.activity.getString(CommonStrings.a11y_jump_to_bottom)
+        rule.onNodeWithContentDescription(contentDescription).performClick()
+        eventsRecorder.assertSingle(TimelineEvents.JumpToLive)
+    }
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setTimelineView(
@@ -80,6 +111,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setTimel
     onReactionLongClicked: (emoji: String, TimelineItem.Event) -> Unit = EnsureNeverCalledWithTwoParams(),
     onMoreReactionsClicked: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
     onReadReceiptClick: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
+    forceJumpToBottomVisibility: Boolean = false,
 ) {
     setContent {
         TimelineView(
@@ -95,6 +127,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setTimel
             onReactionLongClicked = onReactionLongClicked,
             onMoreReactionsClicked = onMoreReactionsClicked,
             onReadReceiptClick = onReadReceiptClick,
+            forceJumpToBottomVisibility = forceJumpToBottomVisibility,
         )
     }
 }
