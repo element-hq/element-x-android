@@ -38,9 +38,9 @@ fun TimelineItemEncryptedView(
 ) {
     val isMembershipUtd = (content.data as? UnableToDecryptContent.Data.MegolmV1AesSha2)?.utdCause == UtdCause.Membership
     val (textId, iconId) = if (isMembershipUtd) {
-        (CommonStrings.common_unable_to_decrypt_no_access to CompoundDrawables.ic_compound_block)
+        CommonStrings.common_unable_to_decrypt_no_access to CompoundDrawables.ic_compound_block
     } else {
-        (CommonStrings.common_waiting_for_decryption_key to CompoundDrawables.ic_compound_time)
+        CommonStrings.common_waiting_for_decryption_key to CompoundDrawables.ic_compound_time
     }
     TimelineItemInformativeView(
         text = stringResource(id = textId),
