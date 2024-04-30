@@ -55,14 +55,14 @@ jobs:
          ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
          ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: ${{ secrets.MAPTILER_DARK_MAP_ID }}
         run: ./gradlew app:assembleFDroidDebug -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
-      - name: Upload APK
+      - name: Upload debug APKs
         if: ${{ matrix.variant == 'debug' }}
         uses: actions/upload-artifact@v4
         with:
           name: elementx-debug
           path: |
-            app/build/outputs/apk/gplay/debug/*.apk
-            app/build/outputs/apk/fdroid/debug/*.apk
+            app/build/outputs/apk/gplay/debug/*-universal-debug.apk
+            app/build/outputs/apk/fdroid/debug/*-universal-debug.apk
       - uses: rnkdsh/action-upload-diawi@v1.5.5
         id: diawi
         # Do not fail the whole build if Diawi upload fails
