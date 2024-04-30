@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 plugins {
-    id("io.element.android-library")
-}
-
-android {
-    namespace = "io.element.android.services.toolbox.api"
+    id("io.element.jvm-library")
 }
 
 dependencies {
-    implementation(libs.androidx.corektx)
+    implementation(libs.androidx.annotationjvm)
 }

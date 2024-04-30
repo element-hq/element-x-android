@@ -31,10 +31,8 @@ android {
 dependencies {
     anvil(projects.anvilcodegen)
     implementation(libs.dagger)
-    implementation(projects.libraries.core)
     implementation(projects.libraries.di)
     implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.uiStrings)
     implementation(projects.anvilannotations)
 
     implementation(libs.coroutines.core)

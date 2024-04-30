@@ -24,7 +24,6 @@ android {
 
 dependencies {
     implementation(libs.coroutines.core)
-    implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.startup)
     implementation(projects.libraries.matrix.api)

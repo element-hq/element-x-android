@@ -17,8 +17,6 @@
 /**
  * This will generate the plugin "io.element.jvm-library", used in JVM library modules.
  */
-import extension.androidConfig
-import extension.commonDependencies
 import org.gradle.accessors.dm.LibrariesForLibs
 
 val libs = the<LibrariesForLibs>()
@@ -27,6 +25,6 @@ plugins {
     id("com.autonomousapps.dependency-analysis")
 }
 
-dependencies {
-    commonDependencies(libs)
+kotlin {
+    jvmToolchain(17)
 }

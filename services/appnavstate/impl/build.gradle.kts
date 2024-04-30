@@ -37,7 +37,6 @@ dependencies {
     implementation(projects.anvilannotations)
 
     implementation(libs.coroutines.core)
-    implementation(libs.androidx.corektx)
     implementation(libs.androidx.lifecycle.process)
 
     api(projects.services.appnavstate.api)

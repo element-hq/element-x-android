@@ -23,6 +23,5 @@ android {
 
 dependencies {
     implementation(projects.services.analytics.api)
-    implementation(projects.libraries.core)
     implementation(libs.coroutines.core)
 }

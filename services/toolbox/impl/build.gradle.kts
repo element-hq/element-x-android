@@ -28,8 +28,7 @@ anvil {
 
 dependencies {
     implementation(libs.dagger)
-    implementation(projects.libraries.androidutils)
+    implementation(libs.androidx.annotation)
     implementation(projects.libraries.di)
     api(projects.services.toolbox.api)
-    implementation(libs.androidx.corektx)
 }
