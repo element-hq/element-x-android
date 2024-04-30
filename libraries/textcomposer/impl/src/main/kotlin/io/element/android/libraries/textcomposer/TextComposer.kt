@@ -566,6 +566,8 @@ private fun ReplyToModeView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clipToBounds(),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 style = ElementTheme.typography.fontBodySmMedium,
                 textAlign = TextAlign.Start,
                 color = ElementTheme.materialColors.primary,
@@ -637,7 +639,7 @@ internal fun TextComposerSimplePreview() = ElementPreview {
             },
             {
                 ATextComposer(
-                    aRichTextEditorState(initialText = "A message without focus", initialFocus = false),
+                    aRichTextEditorState(initialText = "A message without focus"),
                     voiceMessageState = VoiceMessageState.Idle,
                     composerMode = MessageComposerMode.Normal,
                     enableTextFormatting = true,
@@ -654,7 +656,7 @@ internal fun TextComposerSimplePreview() = ElementPreview {
 internal fun TextComposerFormattingPreview() = ElementPreview {
     PreviewColumn(items = persistentListOf({
         ATextComposer(
-            aRichTextEditorState(initialText = "", initialFocus = false),
+            aRichTextEditorState(),
             voiceMessageState = VoiceMessageState.Idle,
             showTextFormatting = true,
             composerMode = MessageComposerMode.Normal,
@@ -664,7 +666,7 @@ internal fun TextComposerFormattingPreview() = ElementPreview {
         )
     }, {
         ATextComposer(
-            aRichTextEditorState(initialText = "A message", initialFocus = false),
+            aRichTextEditorState(initialText = "A message"),
             voiceMessageState = VoiceMessageState.Idle,
             showTextFormatting = true,
             composerMode = MessageComposerMode.Normal,
@@ -676,7 +678,6 @@ internal fun TextComposerFormattingPreview() = ElementPreview {
         ATextComposer(
             aRichTextEditorState(
                 initialText = "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
-                initialFocus = false
             ),
             voiceMessageState = VoiceMessageState.Idle,
             showTextFormatting = true,
@@ -710,7 +711,7 @@ internal fun TextComposerReplyPreview() = ElementPreview {
         items = persistentListOf(
             {
                 ATextComposer(
-                    aRichTextEditorState(""),
+                    aRichTextEditorState(),
                     voiceMessageState = VoiceMessageState.Idle,
                     composerMode = MessageComposerMode.Reply(
                         isThreaded = false,
@@ -728,11 +729,11 @@ internal fun TextComposerReplyPreview() = ElementPreview {
             },
             {
                 ATextComposer(
-                    RichTextEditorState(""),
+                    aRichTextEditorState(),
                     voiceMessageState = VoiceMessageState.Idle,
                     composerMode = MessageComposerMode.Reply(
                         isThreaded = true,
-                        senderName = "Alice",
+                        senderName = "Alice with a very long name to test overflow in the composer",
                         eventId = EventId("$1234"),
                         attachmentThumbnailInfo = null,
                         defaultContent = "A message\n" +
@@ -839,7 +840,7 @@ internal fun TextComposerVoicePreview() = ElementPreview {
     fun VoicePreview(
         voiceMessageState: VoiceMessageState
     ) = ATextComposer(
-        RichTextEditorState("", initialFocus = true),
+        aRichTextEditorState(initialFocus = true),
         voiceMessageState = voiceMessageState,
         composerMode = MessageComposerMode.Normal,
         enableTextFormatting = true,
@@ -915,7 +916,6 @@ private fun ATextComposer(
         voiceMessageState = voiceMessageState,
         permalinkParser = object : PermalinkParser {
             override fun parse(uriString: String): PermalinkData = TODO("Not yet implemented")
-            override fun parse(uri: Uri): PermalinkData = TODO("Not yet implemented")
         },
         composerMode = composerMode,
         enableTextFormatting = enableTextFormatting,

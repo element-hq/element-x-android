@@ -64,7 +64,7 @@ fun WithRulers(
 
 @PreviewsDayNight
 @Composable
-internal fun WithRulerPreview() = ElementPreview {
+internal fun WithRulersPreview() = ElementPreview {
     WithRulers(xRulersOffset = 20.dp, yRulersOffset = 15.dp) {
         OutlinedButton(
             text = "A Button with rulers on it!",

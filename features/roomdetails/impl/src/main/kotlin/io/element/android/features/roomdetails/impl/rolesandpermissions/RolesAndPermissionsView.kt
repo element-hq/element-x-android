@@ -203,7 +203,7 @@ private fun ChangeOwnRoleBottomSheet(
 
 @PreviewsDayNight
 @Composable
-internal fun RolesAndPermissionViewPreview(@PreviewParameter(RolesAndPermissionsStateProvider::class) state: RolesAndPermissionsState) {
+internal fun RolesAndPermissionsViewPreview(@PreviewParameter(RolesAndPermissionsStateProvider::class) state: RolesAndPermissionsState) {
     ElementPreview {
         RolesAndPermissionsView(
             state = state,

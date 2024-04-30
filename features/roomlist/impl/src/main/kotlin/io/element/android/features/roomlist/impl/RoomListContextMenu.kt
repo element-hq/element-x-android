@@ -24,6 +24,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -87,8 +89,9 @@ private fun RoomListModalBottomSheetContent(
         ListItem(
             headlineContent = {
                 Text(
-                    text = contextMenu.roomName,
+                    text = contextMenu.roomName ?: stringResource(id = CommonStrings.common_no_room_name),
                     style = ElementTheme.typography.fontBodyLgMedium,
+                    fontStyle = FontStyle.Italic.takeIf { contextMenu.roomName == null }
                 )
             }
         )
@@ -192,22 +195,11 @@ private fun RoomListModalBottomSheetContent(
 // Remove this preview when the issue is fixed.
 @PreviewsDayNight
 @Composable
-internal fun RoomListModalBottomSheetContentPreview() = ElementPreview {
+internal fun RoomListModalBottomSheetContentPreview(
+    @PreviewParameter(RoomListStateContextMenuShownProvider::class) contextMenu: RoomListState.ContextMenu.Shown
+) = ElementPreview {
     RoomListModalBottomSheetContent(
-        contextMenu = aContextMenuShown(hasNewContent = true),
-        onRoomMarkReadClicked = {},
-        onRoomMarkUnreadClicked = {},
-        onRoomSettingsClicked = {},
-        onLeaveRoomClicked = {},
-        onFavoriteChanged = {},
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun RoomListModalBottomSheetContentForDmPreview() = ElementPreview {
-    RoomListModalBottomSheetContent(
-        contextMenu = aContextMenuShown(isDm = true),
+        contextMenu = contextMenu,
         onRoomMarkReadClicked = {},
         onRoomMarkUnreadClicked = {},
         onRoomSettingsClicked = {},

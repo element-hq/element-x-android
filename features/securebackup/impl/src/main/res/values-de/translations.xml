@@ -11,7 +11,7 @@
   <string name="screen_chat_backup_recovery_action_setup_description">"Erhalte Zugriff auf deine verschlüsselten Nachrichten, wenn du alle deine Geräte verlierst oder von %1$s überall abgemeldet bist."</string>
   <string name="screen_create_new_recovery_key_list_item_1">
     "Öffne "
-    <b>"Element"</b>
+    <b>"%1$s"</b>
     " auf einem "
     <b>"Desktop-Gerät"</b>
   </string>
@@ -33,7 +33,7 @@
   <string name="screen_key_backup_disable_confirmation_description">"Du verlierst deine verschlüsselten Nachrichten, wenn du auf allen Geräten abgemeldet bist."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Bist du sicher, dass du das Backup ausschalten willst?"</string>
   <string name="screen_key_backup_disable_description">"Wenn du das Backup ausschaltest, wird dein aktuelles Backup des Verschlüsselungsschlüssels entfernt und andere Sicherheitsfunktionen werden deaktiviert. In diesem Fall wirst du:"</string>
-  <string name="screen_key_backup_disable_description_point_1">"Kein verschlüsselter Nachrichtenverlauf auf neuen Geräten"</string>
+  <string name="screen_key_backup_disable_description_point_1">"Keine Historie für verschlüsselte Nachrichten auf neuen Geräten"</string>
   <string name="screen_key_backup_disable_description_point_2">"Du verlierst den Zugriff auf deine verschlüsselten Nachrichten, wenn du dich überall von %1$s abmeldest"</string>
   <string name="screen_key_backup_disable_title">"Bist du sicher, dass du das Backup ausschalten willst?"</string>
   <string name="screen_recovery_key_change_description">"Besorge dir einen neuen Wiederherstellungsschlüssel, wenn du deinen alten verloren hast. Nachdem du deinen Wiederherstellungsschlüssel geändert hast, funktioniert dein alter Schlüssel nicht mehr."</string>
@@ -55,8 +55,9 @@
     " oder Passcode"
   </string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Eingeben…"</string>
+  <string name="screen_recovery_key_confirm_lost_recovery_key">"Hast Du Deinen Wiederherstellungschlüssel vergessen?"</string>
   <string name="screen_recovery_key_confirm_success">"Wiederherstellungsschlüssel bestätigt"</string>
-  <string name="screen_recovery_key_confirm_title">"Wiederherstellungsschlüssel oder Passcode bestätigen"</string>
+  <string name="screen_recovery_key_confirm_title">"Bitte Wiederherstellungsschlüssel eingeben"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Wiederherstellungsschlüssel kopiert"</string>
   <string name="screen_recovery_key_generating_key">"Generieren…"</string>
   <string name="screen_recovery_key_save_action">"Wiederherstellungsschlüssel speichern"</string>

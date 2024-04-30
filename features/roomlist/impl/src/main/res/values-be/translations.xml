@@ -2,6 +2,12 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="confirm_recovery_key_banner_message">"Ваша рэзервовая копія чата зараз не сінхранізавана. Вам трэба пацвердзіць ключ аднаўлення, каб захаваць доступ да рэзервовай копіі чата."</string>
   <string name="confirm_recovery_key_banner_title">"Увядзіце ключ аднаўлення"</string>
+  <string name="screen_invites_decline_chat_message">"Вы ўпэўненыя, што хочаце адхіліць запрашэнне ў %1$s?"</string>
+  <string name="screen_invites_decline_chat_title">"Адхіліць запрашэнне"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Вы ўпэўненыя, што хочаце адмовіцца ад прыватных зносін з %1$s?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Адхіліць чат"</string>
+  <string name="screen_invites_empty_list">"Няма запрашэнняў"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) запрасіў вас"</string>
   <string name="screen_migration_message">"Гэта аднаразовы працэс, дзякуем за чаканне."</string>
   <string name="screen_migration_title">"Налада ўліковага запісу."</string>
   <string name="screen_roomlist_a11y_create_message">"Стварыце новую размову або пакой"</string>
@@ -11,10 +17,12 @@
   <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Дадаць чат у абранае можна ў наладах чата.
 На дадзены момант вы можаце прыбраць фільтры, каб убачыць іншыя вашыя чаты."</string>
   <string name="screen_roomlist_filter_favourites_empty_state_title">"У вас пакуль няма абраных чатаў"</string>
+  <string name="screen_roomlist_filter_invites">"Запрашэнні"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"У вас няма непрынятых запрашэнняў."</string>
   <string name="screen_roomlist_filter_low_priority">"Нізкі прыярытэт"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Вы можаце прыбраць фільтры, каб убачыць іншыя вашыя чаты."</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"У вас няма чатаў для гэтай катэгорыі"</string>
-  <string name="screen_roomlist_filter_people">"Удзельнікі"</string>
+  <string name="screen_roomlist_filter_people">"Людзі"</string>
   <string name="screen_roomlist_filter_people_empty_state_title">"У вас пакуль няма асабістых паведамленняў"</string>
   <string name="screen_roomlist_filter_rooms">"Пакоі"</string>
   <string name="screen_roomlist_filter_rooms_empty_state_title">"Вас пакуль няма ў ніводным пакоі"</string>

@@ -27,6 +27,7 @@ val libs = the<LibrariesForLibs>()
 plugins {
     id("com.android.application")
     id("kotlin-android")
+    id("com.autonomousapps.dependency-analysis")
 }
 
 android {

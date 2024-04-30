@@ -20,11 +20,11 @@
   <string name="screen_room_attachment_source_location">"Standort"</string>
   <string name="screen_room_attachment_source_poll">"Umfrage"</string>
   <string name="screen_room_attachment_text_formatting">"Textformatierung"</string>
-  <string name="screen_room_encrypted_history_banner">"Der Nachrichtenverlauf ist derzeit in diesem Raum nicht verfügbar"</string>
-  <string name="screen_room_encrypted_history_banner_unverified">"Der Nachrichtenverlauf ist in diesem Raum nicht verfügbar. Verifiziere dieses Gerät, um deinen Nachrichtenverlauf zu sehen."</string>
+  <string name="screen_room_encrypted_history_banner">"Der Nachrichtenverlauf ist derzeit nicht verfügbar"</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"Der Nachrichtenverlauf ist nicht verfügbar. Verifiziere dieses Gerät, um deinen Nachrichtenverlauf zu sehen."</string>
   <string name="screen_room_invite_again_alert_message">"Möchtest du sie wieder einladen?"</string>
   <string name="screen_room_invite_again_alert_title">"Du bist allein in diesem Chat"</string>
-  <string name="screen_room_mentions_at_room_subtitle">"Den ganzen Raum benachrichtigen"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Alle Mitglieder benachrichtigen"</string>
   <string name="screen_room_mentions_at_room_title">"Alle"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Erneut senden"</string>
   <string name="screen_room_retry_send_menu_title">"Deine Nachricht konnte nicht gesendet werden"</string>
@@ -33,7 +33,7 @@
   <string name="screen_room_timeline_beginning_of_room_no_name">"Dies ist der Anfang dieses Gesprächs."</string>
   <string name="screen_room_timeline_less_reactions">"Weniger anzeigen"</string>
   <string name="screen_room_timeline_message_copied">"Nachricht wurde kopiert"</string>
-  <string name="screen_room_timeline_no_permission_to_post">"Du bist nicht berechtigt, in diesem Raum zu posten"</string>
+  <string name="screen_room_timeline_no_permission_to_post">"Du bist nicht berechtigt, in diesem Raum zu schreiben"</string>
   <string name="screen_room_timeline_reactions_show_less">"Weniger anzeigen"</string>
   <string name="screen_room_timeline_reactions_show_more">"Mehr anzeigen"</string>
   <string name="screen_room_timeline_read_marker_title">"Neu"</string>

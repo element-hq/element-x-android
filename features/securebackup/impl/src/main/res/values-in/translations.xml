@@ -9,7 +9,7 @@
   <string name="screen_chat_backup_recovery_action_confirm_description">"Pencadangan percakapan Anda saat ini tidak tersinkron."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Siapkan pemulihan"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Dapatkan akses ke pesan terenkripsi Anda jika Anda kehilangan semua perangkat Anda atau keluar dari %1$s di mana pun."</string>
-  <string name="screen_create_new_recovery_key_list_item_1">"Buka Element di perangkat desktop"</string>
+  <string name="screen_create_new_recovery_key_list_item_1">"Buka %1$s di perangkat desktop"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Masuk ke akun Anda lagi"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Saat diminta untuk memverifikasi perangkat Anda, pilih %1$s"</string>
   <string name="screen_create_new_recovery_key_list_item_3_reset_all">"“Atur ulang semua”"</string>
@@ -32,7 +32,7 @@
   <string name="screen_recovery_key_confirm_description">"Pastikan tidak ada yang bisa melihat layar ini!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Silakan coba lagi untuk mengonfirmasi akses ke cadangan percakapan Anda."</string>
   <string name="screen_recovery_key_confirm_error_title">"Kunci pemulihan salah"</string>
-  <string name="screen_recovery_key_confirm_key_description">"Jika Anda memiliki frasa sandi pemulihan atau frasa/kunci sandi rahasia, ini juga dapat digunakan."</string>
+  <string name="screen_recovery_key_confirm_key_description">"Jika Anda memiliki kunci keamanan atau frasa keamanan, ini juga bisa digunakan."</string>
   <string name="screen_recovery_key_confirm_key_label">"Kunci pemulihan atau kode sandi"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Masukkan…"</string>
   <string name="screen_recovery_key_confirm_success">"Kunci pemulihan dikonfirmasi"</string>

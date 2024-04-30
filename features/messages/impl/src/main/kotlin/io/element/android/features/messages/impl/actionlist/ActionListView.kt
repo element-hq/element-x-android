@@ -55,6 +55,8 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.sender.SenderName
+import io.element.android.features.messages.impl.sender.SenderNameMode
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
@@ -268,15 +270,11 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
         icon()
         Spacer(modifier = Modifier.width(8.dp))
         Column(modifier = Modifier.weight(1f)) {
-            Row {
-                if (event.senderDisplayName != null) {
-                    Text(
-                        text = event.senderDisplayName,
-                        style = ElementTheme.typography.fontBodySmMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-            }
+            SenderName(
+                senderId = event.senderId,
+                senderProfile = event.senderProfile,
+                senderNameMode = SenderNameMode.ActionList,
+            )
             content()
         }
         Spacer(modifier = Modifier.width(16.dp))

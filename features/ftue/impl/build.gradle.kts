@@ -39,6 +39,7 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.testtags)
     implementation(projects.features.analytics.api)
@@ -60,6 +61,7 @@ dependencies {
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.libraries.permissions.impl)
     testImplementation(projects.libraries.permissions.test)
+    testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.features.lockscreen.test)
     testImplementation(projects.tests.testutils)
 

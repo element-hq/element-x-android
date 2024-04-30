@@ -37,8 +37,13 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.room.getRoomMemberAsState
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class RoomMemberDetailsPresenter @AssistedInject constructor(
@@ -56,20 +61,24 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
         val coroutineScope = rememberCoroutineScope()
         var confirmationDialog by remember { mutableStateOf<ConfirmationDialog?>(null) }
         val roomMember by room.getRoomMemberAsState(roomMemberId)
+        var userProfile by remember { mutableStateOf<MatrixUser?>(null) }
         val startDmActionState: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
-        // the room member is not really live...
-        val isBlocked: MutableState<AsyncData<Boolean>> = remember(roomMember) {
-            val isIgnored = roomMember?.isIgnored
-            if (isIgnored == null) {
-                mutableStateOf(AsyncData.Uninitialized)
-            } else {
-                mutableStateOf(AsyncData.Success(isIgnored))
-            }
+        val isBlocked: MutableState<AsyncData<Boolean>> = remember { mutableStateOf(AsyncData.Uninitialized) }
+        LaunchedEffect(Unit) {
+            client.ignoredUsersFlow
+                .map { ignoredUsers -> roomMemberId in ignoredUsers }
+                .distinctUntilChanged()
+                .onEach { isBlocked.value = AsyncData.Success(it) }
+                .launchIn(this)
         }
         LaunchedEffect(Unit) {
             // Update room member info when opening this screen
             // We don't need to assign the result as it will be automatically propagated by `room.getRoomMemberAsState`
             room.getUpdatedMember(roomMemberId)
+                .onFailure {
+                    // Not a member of the room, try to get the user profile
+                    userProfile = client.getProfile(roomMemberId).getOrNull()
+                }
         }
 
         fun handleEvents(event: RoomMemberDetailsEvents) {
@@ -105,16 +114,34 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
             }
         }
 
-        val userName by produceState(initialValue = roomMember?.displayName) {
-            room.userDisplayName(roomMemberId).onSuccess { displayName ->
-                if (displayName != null) value = displayName
-            }
+        val userName: String? by produceState(
+            initialValue = roomMember?.displayName ?: userProfile?.displayName,
+            key1 = roomMember,
+            key2 = userProfile,
+        ) {
+            value = room.userDisplayName(roomMemberId)
+                .fold(
+                    onSuccess = { it },
+                    onFailure = {
+                        // Fallback to user profile
+                        userProfile?.displayName
+                    }
+                )
         }
 
-        val userAvatar by produceState(initialValue = roomMember?.avatarUrl) {
-            room.userAvatarUrl(roomMemberId).onSuccess { avatarUrl ->
-                if (avatarUrl != null) value = avatarUrl
-            }
+        val userAvatar: String? by produceState(
+            initialValue = roomMember?.avatarUrl ?: userProfile?.avatarUrl,
+            key1 = roomMember,
+            key2 = userProfile,
+        ) {
+            value = room.userAvatarUrl(roomMemberId)
+                .fold(
+                    onSuccess = { it },
+                    onFailure = {
+                        // Fallback to user profile
+                        userProfile?.avatarUrl
+                    }
+                )
         }
 
         return RoomMemberDetailsState(
@@ -124,7 +151,7 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
             isBlocked = isBlocked.value,
             startDmActionState = startDmActionState.value,
             displayConfirmationDialog = confirmationDialog,
-            isCurrentUser = client.isMe(roomMember?.userId),
+            isCurrentUser = client.isMe(roomMemberId),
             eventSink = ::handleEvents
         )
     }
@@ -132,28 +159,18 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
     private fun CoroutineScope.blockUser(userId: UserId, isBlockedState: MutableState<AsyncData<Boolean>>) = launch {
         isBlockedState.value = AsyncData.Loading(false)
         client.ignoreUser(userId)
-            .fold(
-                onSuccess = {
-                    isBlockedState.value = AsyncData.Success(true)
-                    room.getUpdatedMember(userId)
-                },
-                onFailure = {
-                    isBlockedState.value = AsyncData.Failure(it, false)
-                }
-            )
+            .onFailure {
+                isBlockedState.value = AsyncData.Failure(it, false)
+            }
+        // Note: on success, ignoredUserList will be updated.
     }
 
     private fun CoroutineScope.unblockUser(userId: UserId, isBlockedState: MutableState<AsyncData<Boolean>>) = launch {
         isBlockedState.value = AsyncData.Loading(true)
         client.unignoreUser(userId)
-            .fold(
-                onSuccess = {
-                    isBlockedState.value = AsyncData.Success(false)
-                    room.getUpdatedMember(userId)
-                },
-                onFailure = {
-                    isBlockedState.value = AsyncData.Failure(it, true)
-                }
-            )
+            .onFailure {
+                isBlockedState.value = AsyncData.Failure(it, true)
+            }
+        // Note: on success, ignoredUserList will be updated.
     }
 }

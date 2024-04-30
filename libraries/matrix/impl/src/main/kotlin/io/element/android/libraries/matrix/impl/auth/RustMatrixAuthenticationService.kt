@@ -19,8 +19,6 @@ package io.element.android.libraries.matrix.impl.auth
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.mapFailure
-import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -67,7 +65,6 @@ class RustMatrixAuthenticationService @Inject constructor(
     private val passphraseGenerator: PassphraseGenerator,
     userCertificatesProvider: UserCertificatesProvider,
     proxyProvider: ProxyProvider,
-    private val buildMeta: BuildMeta,
 ) : MatrixAuthenticationService {
     // Passphrase which will be used for new sessions. Existing sessions will use the passphrase
     // stored in the SessionData.
@@ -117,13 +114,6 @@ class RustMatrixAuthenticationService @Inject constructor(
     }
 
     private fun getDatabasePassphrase(): String? {
-        // TODO Remove this if block at some point
-        // Return a passphrase only for debug and nightly build for now
-        if (buildMeta.buildType == BuildType.RELEASE) {
-            Timber.w("New sessions will not be encrypted with a passphrase (release build)")
-            return null
-        }
-
         val passphrase = passphraseGenerator.generatePassphrase()
         if (passphrase != null) {
             Timber.w("New sessions will be encrypted with a passphrase")
@@ -155,7 +145,6 @@ class RustMatrixAuthenticationService @Inject constructor(
                         isTokenValid = true,
                         loginType = LoginType.PASSWORD,
                         passphrase = pendingPassphrase,
-                        needsVerification = true,
                     )
                 }
                 sessionStore.storeData(sessionData)
@@ -204,7 +193,6 @@ class RustMatrixAuthenticationService @Inject constructor(
                         isTokenValid = true,
                         loginType = LoginType.OIDC,
                         passphrase = pendingPassphrase,
-                        needsVerification = true,
                     )
                 }
                 pendingOidcAuthenticationData?.close()

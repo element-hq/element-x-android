@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UtdCause
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.poll.map
 import kotlinx.collections.immutable.toImmutableList
@@ -41,6 +42,7 @@ import org.matrix.rustcomponents.sdk.use
 import org.matrix.rustcomponents.sdk.EncryptedMessage as RustEncryptedMessage
 import org.matrix.rustcomponents.sdk.MembershipChange as RustMembershipChange
 import org.matrix.rustcomponents.sdk.OtherState as RustOtherState
+import uniffi.matrix_sdk_crypto.UtdCause as RustUtdCause
 
 class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMapper = EventMessageMapper()) {
     fun map(content: TimelineItemContent): EventContent {
@@ -148,6 +150,13 @@ private fun RustMembershipChange.map(): MembershipChange {
     }
 }
 
+private fun RustUtdCause.map(): UtdCause {
+    return when (this) {
+        RustUtdCause.MEMBERSHIP -> UtdCause.Membership
+        RustUtdCause.UNKNOWN -> UtdCause.Unknown
+    }
+}
+
 // TODO extract state events?
 private fun RustOtherState.map(): OtherState {
     return when (this) {
@@ -177,7 +186,7 @@ private fun RustOtherState.map(): OtherState {
 
 private fun RustEncryptedMessage.map(): UnableToDecryptContent.Data {
     return when (this) {
-        is RustEncryptedMessage.MegolmV1AesSha2 -> UnableToDecryptContent.Data.MegolmV1AesSha2(sessionId)
+        is RustEncryptedMessage.MegolmV1AesSha2 -> UnableToDecryptContent.Data.MegolmV1AesSha2(sessionId, cause.map())
         is RustEncryptedMessage.OlmV1Curve25519AesSha2 -> UnableToDecryptContent.Data.OlmV1Curve25519AesSha2(senderKey)
         RustEncryptedMessage.Unknown -> UnableToDecryptContent.Data.Unknown
     }

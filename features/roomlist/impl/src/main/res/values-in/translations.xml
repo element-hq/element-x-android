@@ -2,6 +2,12 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="confirm_recovery_key_banner_message">"Cadangan percakapan Anda saat ini tidak tersinkron. Anda perlu mengonfirmasi kunci pemulihan Anda untuk tetap memiliki akses ke cadangan percakapan Anda."</string>
   <string name="confirm_recovery_key_banner_title">"Konfirmasi kunci pemulihan Anda"</string>
+  <string name="screen_invites_decline_chat_message">"Apakah Anda yakin ingin menolak undangan untuk bergabung ke %1$s?"</string>
+  <string name="screen_invites_decline_chat_title">"Tolak undangan"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Apakah Anda yakin ingin menolak obrolan pribadi dengan %1$s?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Tolak obrolan"</string>
+  <string name="screen_invites_empty_list">"Tidak ada undangan"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) mengundang Anda"</string>
   <string name="screen_migration_message">"Ini adalah proses satu kali, terima kasih telah menunggu."</string>
   <string name="screen_migration_title">"Menyiapkan akun Anda."</string>
   <string name="screen_roomlist_a11y_create_message">"Buat percakapan atau ruangan baru"</string>
@@ -11,6 +17,8 @@
   <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Anda dapat menambahkan percakapan ke favorit Anda dalam pengaturan percakapan.
 Untuk sementara, Anda dapat membatalkan pilihan saringan untuk melihat percakapan Anda yang lain"</string>
   <string name="screen_roomlist_filter_favourites_empty_state_title">"Anda belum memiliki percakapan favorit"</string>
+  <string name="screen_roomlist_filter_invites">"Undangan"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Anda tidak memiliki undangan yang tertunda."</string>
   <string name="screen_roomlist_filter_low_priority">"Prioritas Rendah"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Anda dapat membatalkan pilihan saringan untuk melihat percakapan Anda yang lain"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Anda tidak memiliki percakapan untuk pemilihan ini"</string>

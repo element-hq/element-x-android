@@ -52,10 +52,6 @@ class FakeBugReporter(val mode: FakeBugReporterMode = FakeBugReporterMode.Succes
         listener?.onUploadSucceed()
     }
 
-    override fun cleanLogDirectoryIfNeeded() {
-        // No op
-    }
-
     override fun logDirectory(): File {
         return File("fake")
     }

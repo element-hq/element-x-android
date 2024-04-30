@@ -18,7 +18,10 @@ package io.element.android.features.messages.impl.timeline.factories.virtual
 
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemEncryptedHistoryBannerVirtualModel
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLastForwardIndicatorModel
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingIndicatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemRoomBeginningModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemVirtualModel
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
@@ -41,6 +44,12 @@ class TimelineItemVirtualFactory @Inject constructor(
             is VirtualTimelineItem.DayDivider -> daySeparatorFactory.create(inner)
             is VirtualTimelineItem.ReadMarker -> TimelineItemReadMarkerModel
             is VirtualTimelineItem.EncryptedHistoryBanner -> TimelineItemEncryptedHistoryBannerVirtualModel
+            is VirtualTimelineItem.RoomBeginning -> TimelineItemRoomBeginningModel
+            is VirtualTimelineItem.LoadingIndicator -> TimelineItemLoadingIndicatorModel(
+                direction = inner.direction,
+                timestamp = inner.timestamp
+            )
+            is VirtualTimelineItem.LastForwardIndicator -> TimelineItemLastForwardIndicatorModel
         }
     }
 }

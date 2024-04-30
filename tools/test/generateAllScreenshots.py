@@ -18,6 +18,7 @@
 import os
 import re
 import sys
+import time
 from util import compare
 
 
@@ -103,7 +104,7 @@ def detectRecordedLanguages():
 def computeDarkFileName(lightFileName):
     if "-Day_0" in lightFileName:
         return lightFileName.replace("-Day_0", "-Night_1")
-    match = re.match("(.*)-Day-(\d+)_(\d+)(.*)", lightFileName, flags=re.ASCII)
+    match = re.match("(.*)-Day-(\\d+)_(\\d+)(.*)", lightFileName, flags=re.ASCII)
     if match:
         return match.group(1) + "-Night-" + match.group(2) + "_" + str((int(match.group(3)) + 1)) + match.group(4)
     return ""
@@ -132,7 +133,13 @@ def generateJavascriptFile():
             simpleFile = file[:3] + "T" + file[4:-7] + l + file[-5:-4]
             translatedFile = "./screenshots/" + l + "/" + simpleFile + ".png"
             if os.path.exists(translatedFile):
-                dataForFile.append(1)
+                # Get the last modified date of the file in seconds and round to days
+                date = os.popen("git log -1 --format=%ct -- \"" + translatedFile + "\"").read().strip()
+                # if date is empty, use today's date
+                if date == "":
+                    date = time.time()
+                dateDay = int(date) // 86400
+                dataForFile.append(dateDay)
             else:
                 dataForFile.append(0)
         data.append(dataForFile)

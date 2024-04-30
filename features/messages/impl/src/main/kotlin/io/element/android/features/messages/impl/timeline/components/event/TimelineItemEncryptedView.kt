@@ -19,24 +19,33 @@ package io.element.android.features.messages.impl.timeline.components.event
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContentProvider
 import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UtdCause
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun TimelineItemEncryptedView(
-    @Suppress("UNUSED_PARAMETER") content: TimelineItemEncryptedContent,
+    content: TimelineItemEncryptedContent,
     onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val isMembershipUtd = (content.data as? UnableToDecryptContent.Data.MegolmV1AesSha2)?.utdCause == UtdCause.Membership
+    val (textId, iconId) = if (isMembershipUtd) {
+        CommonStrings.common_unable_to_decrypt_no_access to CompoundDrawables.ic_compound_block
+    } else {
+        CommonStrings.common_waiting_for_decryption_key to CompoundDrawables.ic_compound_time
+    }
     TimelineItemInformativeView(
-        text = stringResource(id = CommonStrings.common_waiting_for_decryption_key),
+        text = stringResource(id = textId),
         iconDescription = stringResource(id = CommonStrings.dialog_title_warning),
-        iconResourceId = CompoundDrawables.ic_compound_time,
+        iconResourceId = iconId,
         onContentLayoutChanged = onContentLayoutChanged,
         modifier = modifier
     )
@@ -44,11 +53,11 @@ fun TimelineItemEncryptedView(
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineItemEncryptedViewPreview() = ElementPreview {
+internal fun TimelineItemEncryptedViewPreview(
+    @PreviewParameter(TimelineItemEncryptedContentProvider::class) content: TimelineItemEncryptedContent
+) = ElementPreview {
     TimelineItemEncryptedView(
-        content = TimelineItemEncryptedContent(
-            data = UnableToDecryptContent.Data.Unknown
-        ),
+        content = content,
         onContentLayoutChanged = {},
     )
 }

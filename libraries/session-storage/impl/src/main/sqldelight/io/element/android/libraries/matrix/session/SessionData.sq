@@ -23,9 +23,7 @@ CREATE TABLE SessionData (
     isTokenValid INTEGER NOT NULL DEFAULT 1,
     loginType TEXT,
     -- added in version 5
-    passphrase TEXT,
-    -- added in version 6
-    needsVerification INTEGER NOT NULL DEFAULT 0
+    passphrase TEXT
 );
 
 

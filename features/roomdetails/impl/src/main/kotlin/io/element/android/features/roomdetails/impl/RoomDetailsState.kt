@@ -18,13 +18,15 @@ package io.element.android.features.roomdetails.impl
 
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState
+import io.element.android.libraries.matrix.api.core.RoomAlias
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 
 data class RoomDetailsState(
-    val roomId: String,
+    val roomId: RoomId,
     val roomName: String,
-    val roomAlias: String?,
+    val roomAlias: RoomAlias?,
     val roomAvatarUrl: String?,
     val roomTopic: RoomTopicState,
     val memberCount: Long,

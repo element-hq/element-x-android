@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.roomdirectory
 
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDescription
 import org.matrix.rustcomponents.sdk.PublicRoomJoinRule
@@ -28,7 +29,7 @@ class RoomDescriptionMapper {
             name = roomDescription.name,
             topic = roomDescription.topic,
             avatarUrl = roomDescription.avatarUrl,
-            alias = roomDescription.alias,
+            alias = roomDescription.alias?.let(::RoomAlias),
             joinRule = when (roomDescription.joinRule) {
                 PublicRoomJoinRule.PUBLIC -> RoomDescription.JoinRule.PUBLIC
                 PublicRoomJoinRule.KNOCK -> RoomDescription.JoinRule.KNOCK

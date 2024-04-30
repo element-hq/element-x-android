@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.test.room
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.TransactionId
@@ -42,8 +43,8 @@ import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
-import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
@@ -53,7 +54,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
-import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
+import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.widget.FakeWidgetDriver
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.collections.immutable.ImmutableMap
@@ -74,8 +75,8 @@ class FakeMatrixRoom(
     override val topic: String? = null,
     override val avatarUrl: String? = null,
     override val isEncrypted: Boolean = false,
-    override val alias: String? = null,
-    override val alternativeAliases: List<String> = emptyList(),
+    override val alias: RoomAlias? = null,
+    override val alternativeAliases: List<RoomAlias> = emptyList(),
     override val isPublic: Boolean = true,
     override val isSpace: Boolean = false,
     override val isDirect: Boolean = false,
@@ -83,8 +84,9 @@ class FakeMatrixRoom(
     override val joinedMemberCount: Long = 123L,
     override val activeMemberCount: Long = 234L,
     val notificationSettingsService: NotificationSettingsService = FakeNotificationSettingsService(),
-    private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
-    private var permalinkResult: () -> Result<String> = { Result.success("link") },
+    override val liveTimeline: Timeline = FakeTimeline(),
+    private var roomPermalinkResult: () -> Result<String> = { Result.success("room link") },
+    private var eventPermalinkResult: (EventId) -> Result<String> = { Result.success("event link") },
     canRedactOwn: Boolean = false,
     canRedactOther: Boolean = false,
 ) : MatrixRoom {
@@ -132,7 +134,6 @@ class FakeMatrixRoom(
     private var updatePowerLevelsResult = Result.success(Unit)
     private var resetPowerLevelsResult = Result.success(defaultRoomPowerLevels())
     var sendMessageMentions = emptyList<Mention>()
-    val editMessageCalls = mutableListOf<Pair<String, String?>>()
     private val _typingRecord = mutableListOf<Boolean>()
     val typingRecord: List<Boolean>
         get() = _typingRecord
@@ -182,7 +183,7 @@ class FakeMatrixRoom(
     var removedAvatar: Boolean = false
         private set
 
-    private var leaveRoomError: Throwable? = null
+    var leaveRoomLambda: (() -> Result<Unit>) = { Result.success(Unit) }
 
     private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
     override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
@@ -213,7 +214,15 @@ class FakeMatrixRoom(
 
     override val syncUpdateFlow: StateFlow<Long> = MutableStateFlow(0L)
 
-    override val timeline: MatrixTimeline = matrixTimeline
+    private var timelineFocusedOnEventResult: Result<Timeline> = Result.success(FakeTimeline())
+
+    fun givenTimelineFocusedOnEventResult(result: Result<Timeline>) {
+        timelineFocusedOnEventResult = result
+    }
+
+    override suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline> = simulateLongTask {
+        timelineFocusedOnEventResult
+    }
 
     override suspend fun subscribeToSync() = Unit
 
@@ -278,33 +287,12 @@ class FakeMatrixRoom(
         return cancelSendResult
     }
 
+    override suspend fun getPermalink(): Result<String> {
+        return roomPermalinkResult()
+    }
+
     override suspend fun getPermalinkFor(eventId: EventId): Result<String> {
-        return permalinkResult()
-    }
-
-    override suspend fun editMessage(
-        originalEventId: EventId?,
-        transactionId: TransactionId?,
-        body: String,
-        htmlBody: String?,
-        mentions: List<Mention>
-    ): Result<Unit> {
-        sendMessageMentions = mentions
-        editMessageCalls += body to htmlBody
-        return Result.success(Unit)
-    }
-
-    var replyMessageParameter: Pair<String, String?>? = null
-        private set
-
-    override suspend fun enterSpecialMode(eventId: EventId?): Result<Unit> {
-        return Result.success(Unit)
-    }
-
-    override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> {
-        sendMessageMentions = mentions
-        replyMessageParameter = body to htmlBody
-        return Result.success(Unit)
+        return eventPermalinkResult(eventId)
     }
 
     var redactEventEventIdParam: EventId? = null
@@ -315,8 +303,9 @@ class FakeMatrixRoom(
         return Result.success(Unit)
     }
 
-    override suspend fun leave(): Result<Unit> =
-        leaveRoomError?.let { Result.failure(it) } ?: Result.success(Unit)
+    override suspend fun leave(): Result<Unit> {
+        return leaveRoomLambda()
+    }
 
     override suspend fun join(): Result<Unit> {
         return joinRoomResult
@@ -542,10 +531,6 @@ class FakeMatrixRoom(
 
     override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver> = getWidgetDriverResult
 
-    fun givenLeaveRoomError(throwable: Throwable?) {
-        this.leaveRoomError = throwable
-    }
-
     fun givenRoomMembersState(state: MatrixRoomMembersState) {
         membersStateFlow.value = state
     }
@@ -749,7 +734,7 @@ data class EndPollInvocation(
 )
 
 fun aRoomInfo(
-    id: String = A_ROOM_ID.value,
+    id: RoomId = A_ROOM_ID,
     name: String? = A_ROOM_NAME,
     topic: String? = "A topic",
     avatarUrl: String? = AN_AVATAR_URL,
@@ -758,7 +743,7 @@ fun aRoomInfo(
     isSpace: Boolean = false,
     isTombstoned: Boolean = false,
     isFavorite: Boolean = false,
-    canonicalAlias: String? = null,
+    canonicalAlias: RoomAlias? = null,
     alternativeAliases: List<String> = emptyList(),
     currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,
     latestEvent: EventTimelineItem? = null,

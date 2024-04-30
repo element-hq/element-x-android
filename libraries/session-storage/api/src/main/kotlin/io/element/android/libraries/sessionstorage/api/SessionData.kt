@@ -44,6 +44,4 @@ data class SessionData(
     val loginType: LoginType,
     /** The optional passphrase used to encrypt data in the SDK local store. */
     val passphrase: String?,
-    /** Whether the session needs verification. */
-    val needsVerification: Boolean,
 )

@@ -2,6 +2,12 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="confirm_recovery_key_banner_message">"A csevegés biztonsági mentése nincs szinkronban. Meg kell erősítenie a helyreállítási kulcsát, hogy továbbra is hozzáférjen a csevegés biztonsági mentéséhez."</string>
   <string name="confirm_recovery_key_banner_title">"Helyreállítási kulcs megerősítése"</string>
+  <string name="screen_invites_decline_chat_message">"Biztos, hogy elutasítja a meghívást, hogy csatlakozzon ehhez: %1$s?"</string>
+  <string name="screen_invites_decline_chat_title">"Meghívás elutasítása"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Biztos, hogy elutasítja ezt a privát csevegést vele: %1$s?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Csevegés elutasítása"</string>
+  <string name="screen_invites_empty_list">"Nincsenek meghívások"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) meghívta"</string>
   <string name="screen_migration_message">"Ez egy egyszeri folyamat, köszönjük a türelmét."</string>
   <string name="screen_migration_title">"A fiók beállítása."</string>
   <string name="screen_roomlist_a11y_create_message">"Új beszélgetés vagy szoba létrehozása"</string>
@@ -11,6 +17,8 @@
   <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"A csevegési beállításokban csevegéseket adhat hozzá a kedvencekhez.
 Egyelőre törölheti a szűrőket a többi csevegés megtekintéséhez."</string>
   <string name="screen_roomlist_filter_favourites_empty_state_title">"Még nincsenek kedvenc csevegései"</string>
+  <string name="screen_roomlist_filter_invites">"Meghívások"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Nincsenek függőben lévő meghívásai."</string>
   <string name="screen_roomlist_filter_low_priority">"Alacsony prioritás"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Kikapcsolhatja a szűrőket a többi csevegés megtekintéséhez"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Ehhez a kiválasztáshoz nem tartoznak csevegések"</string>

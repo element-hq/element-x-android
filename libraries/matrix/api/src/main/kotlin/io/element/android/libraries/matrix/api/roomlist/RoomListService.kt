@@ -17,7 +17,9 @@
 package io.element.android.libraries.matrix.api.roomlist
 
 import androidx.compose.runtime.Immutable
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterIsInstance
 
 /**
  * Entry point for the room list api.
@@ -77,4 +79,8 @@ interface RoomListService {
      * The state of the service as a flow.
      */
     val state: StateFlow<State>
+}
+
+fun RoomList.loadedStateFlow(): Flow<RoomList.LoadingState.Loaded> {
+    return loadingState.filterIsInstance()
 }

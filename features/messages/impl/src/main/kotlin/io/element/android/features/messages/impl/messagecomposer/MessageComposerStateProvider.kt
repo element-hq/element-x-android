@@ -16,12 +16,12 @@
 
 package io.element.android.features.messages.impl.messagecomposer
 
-import android.net.Uri
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.mentions.MentionSuggestion
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.textcomposer.aRichTextEditorState
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.ImmutableList
@@ -35,7 +35,7 @@ open class MessageComposerStateProvider : PreviewParameterProvider<MessageCompos
 }
 
 fun aMessageComposerState(
-    richTextEditorState: RichTextEditorState = RichTextEditorState(""),
+    richTextEditorState: RichTextEditorState = aRichTextEditorState(),
     isFullScreen: Boolean = false,
     mode: MessageComposerMode = MessageComposerMode.Normal,
     showTextFormatting: Boolean = false,
@@ -48,7 +48,6 @@ fun aMessageComposerState(
     richTextEditorState = richTextEditorState,
     permalinkParser = object : PermalinkParser {
         override fun parse(uriString: String): PermalinkData = TODO()
-        override fun parse(uri: Uri): PermalinkData = TODO()
     },
     isFullScreen = isFullScreen,
     mode = mode,

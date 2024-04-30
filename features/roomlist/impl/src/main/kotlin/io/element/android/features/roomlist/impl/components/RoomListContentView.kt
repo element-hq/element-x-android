@@ -44,8 +44,6 @@ import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.roomlist.impl.InvitesEntryPointView
-import io.element.android.features.roomlist.impl.InvitesState
 import io.element.android.features.roomlist.impl.R
 import io.element.android.features.roomlist.impl.RoomListContentState
 import io.element.android.features.roomlist.impl.RoomListContentStateProvider
@@ -75,9 +73,7 @@ fun RoomListContentView(
     eventSink: (RoomListEvents) -> Unit,
     onConfirmRecoveryKeyClicked: () -> Unit,
     onRoomClicked: (RoomListRoomSummary) -> Unit,
-    onRoomLongClicked: (RoomListRoomSummary) -> Unit,
     onCreateRoomClicked: () -> Unit,
-    onInvitesClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
@@ -92,8 +88,6 @@ fun RoomListContentView(
             }
             is RoomListContentState.Empty -> {
                 EmptyView(
-                    state = contentState,
-                    onInvitesClicked = onInvitesClicked,
                     onCreateRoomClicked = onCreateRoomClicked,
                 )
             }
@@ -104,8 +98,6 @@ fun RoomListContentView(
                     eventSink = eventSink,
                     onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
                     onRoomClicked = onRoomClicked,
-                    onRoomLongClicked = onRoomLongClicked,
-                    onInvitesClicked = onInvitesClicked,
                 )
             }
         }
@@ -128,30 +120,21 @@ private fun SkeletonView(count: Int, modifier: Modifier = Modifier) {
 
 @Composable
 private fun EmptyView(
-    state: RoomListContentState.Empty,
     onCreateRoomClicked: () -> Unit,
-    onInvitesClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(
+    EmptyScaffold(
+        title = R.string.screen_roomlist_empty_title,
+        subtitle = R.string.screen_roomlist_empty_message,
+        action = {
+            Button(
+                text = stringResource(CommonStrings.action_start_chat),
+                leadingIcon = IconSource.Vector(CompoundIcons.Compose()),
+                onClick = onCreateRoomClicked,
+            )
+        },
         modifier = modifier.fillMaxSize(),
-    ) {
-        if (state.invitesState != InvitesState.NoInvites) {
-            InvitesEntryPointView(onInvitesClicked, state.invitesState)
-        }
-        EmptyScaffold(
-            title = R.string.screen_roomlist_empty_title,
-            subtitle = R.string.screen_roomlist_empty_message,
-            action = {
-                Button(
-                    text = stringResource(CommonStrings.action_start_chat),
-                    leadingIcon = IconSource.Vector(CompoundIcons.Compose()),
-                    onClick = onCreateRoomClicked,
-                )
-            },
-            modifier = Modifier.fillMaxSize(),
-        )
-    }
+    )
 }
 
 @Composable
@@ -161,8 +144,6 @@ private fun RoomsView(
     eventSink: (RoomListEvents) -> Unit,
     onConfirmRecoveryKeyClicked: () -> Unit,
     onRoomClicked: (RoomListRoomSummary) -> Unit,
-    onRoomLongClicked: (RoomListRoomSummary) -> Unit,
-    onInvitesClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (state.summaries.isEmpty() && filtersState.hasAnyFilterSelected) {
@@ -176,8 +157,6 @@ private fun RoomsView(
             eventSink = eventSink,
             onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
             onRoomClicked = onRoomClicked,
-            onRoomLongClicked = onRoomLongClicked,
-            onInvitesClicked = onInvitesClicked,
             modifier = modifier.fillMaxSize(),
         )
     }
@@ -189,8 +168,6 @@ private fun RoomsViewList(
     eventSink: (RoomListEvents) -> Unit,
     onConfirmRecoveryKeyClicked: () -> Unit,
     onRoomClicked: (RoomListRoomSummary) -> Unit,
-    onRoomLongClicked: (RoomListRoomSummary) -> Unit,
-    onInvitesClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val lazyListState = rememberLazyListState()
@@ -228,11 +205,6 @@ private fun RoomsViewList(
             else -> Unit
         }
 
-        if (state.invitesState != InvitesState.NoInvites) {
-            item {
-                InvitesEntryPointView(onInvitesClicked, state.invitesState)
-            }
-        }
         // Note: do not use a key for the LazyColumn, or the scroll will not behave as expected if a room
         // is moved to the top of the list.
         itemsIndexed(
@@ -242,7 +214,7 @@ private fun RoomsViewList(
             RoomSummaryRow(
                 room = room,
                 onClick = onRoomClicked,
-                onLongClick = onRoomLongClicked,
+                eventSink = eventSink,
             )
             if (index != state.summaries.lastIndex) {
                 HorizontalDivider()
@@ -305,8 +277,6 @@ internal fun RoomListContentViewPreview(@PreviewParameter(RoomListContentStatePr
         eventSink = {},
         onConfirmRecoveryKeyClicked = {},
         onRoomClicked = {},
-        onRoomLongClicked = {},
         onCreateRoomClicked = {},
-        onInvitesClicked = {}
     )
 }

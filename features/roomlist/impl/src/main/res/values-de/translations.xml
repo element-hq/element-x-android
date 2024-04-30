@@ -2,22 +2,30 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="confirm_recovery_key_banner_message">"Dein Chat-Backup ist derzeit nicht synchronisiert. Du musst deinen Wiederherstellungsschlüssel bestätigen, um Zugriff auf dein Chat-Backup zu erhalten."</string>
   <string name="confirm_recovery_key_banner_title">"Wiederherstellungsschlüssel bestätigen."</string>
+  <string name="screen_invites_decline_chat_message">"Möchtest du die Einladung zum Betreten von %1$s wirklich ablehnen?"</string>
+  <string name="screen_invites_decline_chat_title">"Einladung ablehnen"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Bist du sicher, dass du diese Direktnachricht von %1$s ablehnen möchtest?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Einladung ablehnen"</string>
+  <string name="screen_invites_empty_list">"Keine Einladungen"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) hat dich eingeladen"</string>
   <string name="screen_migration_message">"Dies ist ein einmaliger Vorgang, danke fürs Warten."</string>
   <string name="screen_migration_title">"Dein Konto wird eingerichtet."</string>
-  <string name="screen_roomlist_a11y_create_message">"Eine neue Unterhaltung oder einen neuen Raum erstellen"</string>
+  <string name="screen_roomlist_a11y_create_message">"Eine Unterthaltung oder Raum erstellen"</string>
   <string name="screen_roomlist_empty_message">"Beginne, indem du jemandem eine Nachricht sendest."</string>
   <string name="screen_roomlist_empty_title">"Noch keine Chats."</string>
   <string name="screen_roomlist_filter_favourites">"Favoriten"</string>
   <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"In den Chat-Einstellungen kannst du einen Chat als Favorit hinzufügen.
 Um deine anderen Chats zu sehen wähle diesen Filter ab."</string>
   <string name="screen_roomlist_filter_favourites_empty_state_title">"Du hast noch keine Chats als Favorit markiert."</string>
+  <string name="screen_roomlist_filter_invites">"Einladungen"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Du hast keine ausstehenden Einladungen."</string>
   <string name="screen_roomlist_filter_low_priority">"Niedrige Priorität"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Wähle Filter ab, um Deine Chats zu sehen."</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Du hast keine Chats für diese Auswahl"</string>
   <string name="screen_roomlist_filter_people">"Personen"</string>
   <string name="screen_roomlist_filter_people_empty_state_title">"Du hast noch keine Direktnachrichten"</string>
   <string name="screen_roomlist_filter_rooms">"Räume"</string>
-  <string name="screen_roomlist_filter_rooms_empty_state_title">"Du bist noch in keinem Raum."</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Du hast noch keine Chats."</string>
   <string name="screen_roomlist_filter_unreads">"Ungelesen"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Glückwunsch!
 Du hast keine ungelesenen Nachrichten!"</string>

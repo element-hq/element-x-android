@@ -18,7 +18,7 @@
   <string name="screen_app_lock_setup_pin_blacklisted_dialog_title">"Выберите другой PIN-код"</string>
   <string name="screen_app_lock_setup_pin_context">"Заблокируйте %1$s, чтобы повысить безопасность ваших чатов.
 
-Выберите что-нибудь незабываемое. Если вы забудете этот PIN-код, вы выйдете из приложения."</string>
+Введите что-нибудь незабываемое. Если вы забудете этот PIN-код, вы выйдете из приложения."</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Повторите PIN-код"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN-коды не совпадают"</string>
   <string name="screen_app_lock_signout_alert_message">"Чтобы продолжить, вам необходимо повторно войти в систему и создать новый PIN-код"</string>

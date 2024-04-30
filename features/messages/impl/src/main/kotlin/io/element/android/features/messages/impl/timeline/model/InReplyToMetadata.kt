@@ -66,7 +66,7 @@ internal sealed interface InReplyToMetadata {
  * Metadata can be either a thumbnail with a text OR just a text.
  */
 @Composable
-internal fun InReplyToDetails.metadata(): InReplyToMetadata? = when (eventContent) {
+internal fun InReplyToDetails.Ready.metadata(): InReplyToMetadata? = when (eventContent) {
     is MessageContent -> when (val type = eventContent.type) {
         is ImageMessageType -> InReplyToMetadata.Thumbnail(
             AttachmentThumbnailInfo(

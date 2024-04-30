@@ -32,6 +32,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
+import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -65,6 +66,7 @@ import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomMember
+import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
@@ -81,6 +83,10 @@ import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.any
+import io.element.android.tests.testutils.lambda.assert
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.waitForPredicate
 import io.mockk.mockk
 import kotlinx.collections.immutable.persistentListOf
@@ -259,7 +265,13 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - edit sent message`() = runTest {
-        val fakeMatrixRoom = FakeMatrixRoom()
+        val editMessageLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String, _: String?, _: List<Mention> ->
+            Result.success(Unit)
+        }
+        val timeline = FakeTimeline().apply {
+            this.editMessageLambda = editMessageLambda
+        }
+        val fakeMatrixRoom = FakeMatrixRoom(liveTimeline = timeline)
         val presenter = createPresenter(
             this,
             fakeMatrixRoom,
@@ -283,7 +295,13 @@ class MessageComposerPresenterTest {
             skipItems(1)
             val messageSentState = awaitItem()
             assertThat(messageSentState.richTextEditorState.messageHtml).isEqualTo("")
-            assertThat(fakeMatrixRoom.editMessageCalls.first()).isEqualTo(ANOTHER_MESSAGE to ANOTHER_MESSAGE)
+
+            advanceUntilIdle()
+
+            assert(editMessageLambda)
+                .isCalledOnce()
+                .with(any(), any(), value(ANOTHER_MESSAGE), value(ANOTHER_MESSAGE), any())
+
             assertThat(analyticsService.capturedEvents).containsExactly(
                 Composer(
                     inThread = false,
@@ -297,7 +315,13 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - edit not sent message`() = runTest {
-        val fakeMatrixRoom = FakeMatrixRoom()
+        val editMessageLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String, _: String?, _: List<Mention> ->
+            Result.success(Unit)
+        }
+        val timeline = FakeTimeline().apply {
+            this.editMessageLambda = editMessageLambda
+        }
+        val fakeMatrixRoom = FakeMatrixRoom(liveTimeline = timeline)
         val presenter = createPresenter(
             this,
             fakeMatrixRoom,
@@ -321,7 +345,13 @@ class MessageComposerPresenterTest {
             skipItems(1)
             val messageSentState = awaitItem()
             assertThat(messageSentState.richTextEditorState.messageHtml).isEqualTo("")
-            assertThat(fakeMatrixRoom.editMessageCalls.first()).isEqualTo(ANOTHER_MESSAGE to ANOTHER_MESSAGE)
+
+            advanceUntilIdle()
+
+            assert(editMessageLambda)
+                .isCalledOnce()
+                .with(any(), any(), value(ANOTHER_MESSAGE), value(ANOTHER_MESSAGE), any())
+
             assertThat(analyticsService.capturedEvents).containsExactly(
                 Composer(
                     inThread = false,
@@ -335,7 +365,13 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - reply message`() = runTest {
-        val fakeMatrixRoom = FakeMatrixRoom()
+        val replyMessageLambda = lambdaRecorder { _: EventId, _: String, _: String?, _: List<Mention> ->
+            Result.success(Unit)
+        }
+        val timeline = FakeTimeline().apply {
+            this.replyMessageLambda = replyMessageLambda
+        }
+        val fakeMatrixRoom = FakeMatrixRoom(liveTimeline = timeline)
         val presenter = createPresenter(
             this,
             fakeMatrixRoom,
@@ -355,7 +391,13 @@ class MessageComposerPresenterTest {
             state.eventSink.invoke(MessageComposerEvents.SendMessage(A_REPLY.toMessage()))
             val messageSentState = awaitItem()
             assertThat(messageSentState.richTextEditorState.messageHtml).isEqualTo("")
-            assertThat(fakeMatrixRoom.replyMessageParameter).isEqualTo(A_REPLY to A_REPLY)
+
+            advanceUntilIdle()
+
+            assert(replyMessageLambda)
+                .isCalledOnce()
+                .with(any(), value(A_REPLY), value(A_REPLY), any())
+
             assertThat(analyticsService.capturedEvents).containsExactly(
                 Composer(
                     inThread = false,
@@ -831,7 +873,17 @@ class MessageComposerPresenterTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - send messages with intentional mentions`() = runTest {
-        val room = FakeMatrixRoom()
+        val replyMessageLambda = lambdaRecorder { _: EventId, _: String, _: String?, _: List<Mention> ->
+            Result.success(Unit)
+        }
+        val editMessageLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String, _: String?, _: List<Mention> ->
+            Result.success(Unit)
+        }
+        val timeline = FakeTimeline().apply {
+            this.replyMessageLambda = replyMessageLambda
+            this.editMessageLambda = editMessageLambda
+        }
+        val room = FakeMatrixRoom(liveTimeline = timeline)
         val presenter = createPresenter(room = room, coroutineScope = this)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -866,7 +918,9 @@ class MessageComposerPresenterTest {
             initialState.eventSink(MessageComposerEvents.SendMessage(A_MESSAGE.toMessage()))
             advanceUntilIdle()
 
-            assertThat(room.sendMessageMentions).isEqualTo(listOf(Mention.User(A_USER_ID_2)))
+            assert(replyMessageLambda)
+                .isCalledOnce()
+                .with(any(), any(), any(), value(listOf(Mention.User(A_USER_ID_2))))
 
             // Check intentional mentions on edit message
             skipItems(1)
@@ -882,7 +936,9 @@ class MessageComposerPresenterTest {
             initialState.eventSink(MessageComposerEvents.SendMessage(A_MESSAGE.toMessage()))
             advanceUntilIdle()
 
-            assertThat(room.sendMessageMentions).isEqualTo(listOf(Mention.User(A_USER_ID_3)))
+            assert(editMessageLambda)
+                .isCalledOnce()
+                .with(any(), any(), any(), any(), value(listOf(Mention.User(A_USER_ID_3))))
 
             skipItems(1)
         }
@@ -968,6 +1024,7 @@ class MessageComposerPresenterTest {
         permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionPresenter),
         permalinkParser = FakePermalinkParser(),
         permalinkBuilder = permalinkBuilder,
+        timelineController = TimelineController(room),
     )
 
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {

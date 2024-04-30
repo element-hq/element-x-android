@@ -27,7 +27,7 @@ data class NotificationData(
     val roomId: RoomId,
     // mxc url
     val senderAvatarUrl: String?,
-    // private, must use `getSenderName`
+    // private, must use `getDisambiguatedDisplayName`
     private val senderDisplayName: String?,
     private val senderIsNameAmbiguous: Boolean,
     val roomAvatarUrl: String?,
@@ -39,7 +39,7 @@ data class NotificationData(
     val content: NotificationContent,
     val hasMention: Boolean,
 ) {
-    fun getSenderName(userId: UserId): String = when {
+    fun getDisambiguatedDisplayName(userId: UserId): String = when {
         senderDisplayName.isNullOrBlank() -> userId.value
         senderIsNameAmbiguous -> "$senderDisplayName ($userId)"
         else -> senderDisplayName
@@ -52,6 +52,7 @@ sealed interface NotificationContent {
         data class CallInvite(
             val senderId: UserId,
         ) : MessageLike
+
         data object CallHangup : MessageLike
         data object CallCandidates : MessageLike
         data object KeyVerificationReady : MessageLike

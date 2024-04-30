@@ -70,17 +70,21 @@ class TimelineItemContentMessageFactory @Inject constructor(
     private val htmlConverterProvider: HtmlConverterProvider,
     private val permalinkParser: PermalinkParser,
 ) {
-    suspend fun create(content: MessageContent, senderDisplayName: String, eventId: EventId?): TimelineItemEventContent {
+    suspend fun create(
+        content: MessageContent,
+        senderDisambiguatedDisplayName: String,
+        eventId: EventId?,
+    ): TimelineItemEventContent {
         return when (val messageType = content.type) {
             is EmoteMessageType -> {
-                val emoteBody = "* $senderDisplayName ${messageType.body.trimEnd()}"
+                val emoteBody = "* $senderDisambiguatedDisplayName ${messageType.body.trimEnd()}"
                 TimelineItemEmoteContent(
                     body = emoteBody,
                     htmlDocument = messageType.formatted?.toHtmlDocument(
                         permalinkParser = permalinkParser,
-                        prefix = "* $senderDisplayName",
+                        prefix = "* $senderDisambiguatedDisplayName",
                     ),
-                    formattedBody = parseHtml(messageType.formatted, prefix = "* $senderDisplayName") ?: emoteBody.withLinks(),
+                    formattedBody = parseHtml(messageType.formatted, prefix = "* $senderDisambiguatedDisplayName") ?: emoteBody.withLinks(),
                     isEdited = content.isEdited,
                 )
             }

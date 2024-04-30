@@ -63,7 +63,8 @@ data class UnableToDecryptContent(
         ) : Data
 
         data class MegolmV1AesSha2(
-            val sessionId: String
+            val sessionId: String,
+            val utdCause: UtdCause
         ) : Data
 
         data object Unknown : Data

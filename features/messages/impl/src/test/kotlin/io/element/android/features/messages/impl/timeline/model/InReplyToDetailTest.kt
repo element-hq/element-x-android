@@ -27,26 +27,27 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
+import io.element.android.libraries.matrix.test.timeline.aProfileTimelineDetails
 import org.junit.Test
 
 class InReplyToDetailTest {
     @Test
-    fun `map - with a not ready InReplyTo does not work`() {
+    fun `map - with a not ready InReplyTo return expected object`() {
         assertThat(
-            InReplyTo.Pending.map(
+            InReplyTo.Pending(AN_EVENT_ID).map(
                 permalinkParser = FakePermalinkParser()
             )
-        ).isNull()
+        ).isEqualTo(InReplyToDetails.Loading(AN_EVENT_ID))
         assertThat(
             InReplyTo.NotLoaded(AN_EVENT_ID).map(
                 permalinkParser = FakePermalinkParser()
             )
-        ).isNull()
+        ).isEqualTo(InReplyToDetails.Loading(AN_EVENT_ID))
         assertThat(
-            InReplyTo.Error.map(
+            InReplyTo.Error(AN_EVENT_ID, "a message").map(
                 permalinkParser = FakePermalinkParser()
             )
-        ).isNull()
+        ).isEqualTo(InReplyToDetails.Error(AN_EVENT_ID, "a message"))
     }
 
     @Test
@@ -54,8 +55,7 @@ class InReplyToDetailTest {
         val inReplyTo = InReplyTo.Ready(
             eventId = AN_EVENT_ID,
             senderId = A_USER_ID,
-            senderDisplayName = "senderDisplayName",
-            senderAvatarUrl = "senderAvatarUrl",
+            senderProfile = aProfileTimelineDetails(),
             content = RoomMembershipContent(
                 userId = A_USER_ID,
                 change = MembershipChange.INVITED,
@@ -65,7 +65,7 @@ class InReplyToDetailTest {
             permalinkParser = FakePermalinkParser()
         )
         assertThat(inReplyToDetails).isNotNull()
-        assertThat(inReplyToDetails?.textContent).isNull()
+        assertThat((inReplyToDetails as InReplyToDetails.Ready).textContent).isNull()
     }
 
     @Test
@@ -73,8 +73,7 @@ class InReplyToDetailTest {
         val inReplyTo = InReplyTo.Ready(
             eventId = AN_EVENT_ID,
             senderId = A_USER_ID,
-            senderDisplayName = "senderDisplayName",
-            senderAvatarUrl = "senderAvatarUrl",
+            senderProfile = aProfileTimelineDetails(),
             content = MessageContent(
                 body = "**Hello!**",
                 inReplyTo = null,
@@ -90,9 +89,7 @@ class InReplyToDetailTest {
             )
         )
         assertThat(
-            inReplyTo.map(
-                permalinkParser = FakePermalinkParser()
-            )?.textContent
+            (inReplyTo.map(permalinkParser = FakePermalinkParser()) as InReplyToDetails.Ready).textContent
         ).isEqualTo("Hello!")
     }
 
@@ -101,8 +98,7 @@ class InReplyToDetailTest {
         val inReplyTo = InReplyTo.Ready(
             eventId = AN_EVENT_ID,
             senderId = A_USER_ID,
-            senderDisplayName = "senderDisplayName",
-            senderAvatarUrl = "senderAvatarUrl",
+            senderProfile = aProfileTimelineDetails(),
             content = MessageContent(
                 body = "**Hello!**",
                 inReplyTo = null,
@@ -115,9 +111,7 @@ class InReplyToDetailTest {
             )
         )
         assertThat(
-            inReplyTo.map(
-                permalinkParser = FakePermalinkParser()
-            )?.textContent
+            (inReplyTo.map(permalinkParser = FakePermalinkParser()) as InReplyToDetails.Ready).textContent
         ).isEqualTo("**Hello!**")
     }
 }

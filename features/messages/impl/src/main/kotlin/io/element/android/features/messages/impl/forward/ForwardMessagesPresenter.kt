@@ -29,7 +29,8 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.timeline.TimelineProvider
+import io.element.android.libraries.matrix.api.timeline.getActiveTimeline
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
@@ -37,8 +38,8 @@ import kotlinx.coroutines.launch
 
 class ForwardMessagesPresenter @AssistedInject constructor(
     @Assisted eventId: String,
-    private val room: MatrixRoom,
     private val matrixCoroutineScope: CoroutineScope,
+    private val timelineProvider: TimelineProvider,
 ) : Presenter<ForwardMessagesState> {
     private val eventId: EventId = EventId(eventId)
 
@@ -79,7 +80,7 @@ class ForwardMessagesPresenter @AssistedInject constructor(
         isForwardMessagesState: MutableState<AsyncData<ImmutableList<RoomId>>>,
     ) = launch {
         isForwardMessagesState.value = AsyncData.Loading()
-        room.forwardEvent(eventId, roomIds).fold(
+        timelineProvider.getActiveTimeline().forwardEvent(eventId, roomIds).fold(
             { isForwardMessagesState.value = AsyncData.Success(roomIds) },
             { isForwardMessagesState.value = AsyncData.Failure(it) }
         )

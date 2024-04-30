@@ -19,6 +19,7 @@ Learn more about why we are building Element X in our blog post: [https://elemen
 <!--- TOC -->
 
 * [Screenshots](#screenshots)
+* [Translations](#translations)
 * [Rust SDK](#rust-sdk)
 * [Status](#status)
 * [Contributing](#contributing)
@@ -49,6 +50,16 @@ adb shell am broadcast -a com.android.systemui.demo -e command exit
 |<img src=./docs/images-lfs/screen_1_light.png width=280 />|<img src=./docs/images-lfs/screen_2_light.png width=280 />|<img src=./docs/images-lfs/screen_3_light.png width=280 />|<img src=./docs/images-lfs/screen_4_light.png width=280 />|
 |-|-|-|-|
 |<img src=./docs/images-lfs/screen_1_dark.png width=280 />|<img src=./docs/images-lfs/screen_2_dark.png width=280 />|<img src=./docs/images-lfs/screen_3_dark.png width=280 />|<img src=./docs/images-lfs/screen_4_dark.png width=280 />|
+
+## Translations
+
+Element X Android supports many languages. You can help us to translate the app in your language by joining our [Localazy project](https://localazy.com/p/element). You can also help us to improve the existing translations.
+
+Note that for now, we keep control on the French and German translations.
+
+Translations can be checked screen per screen using our tool Element X Android Gallery, available at https://element-hq.github.io/element-x-android/. Note that this page is updated every Tuesday. 
+
+More instructions about translating the application can be found at [CONTRIBUTING.md](CONTRIBUTING.md#strings).
 
 ## Rust SDK
 

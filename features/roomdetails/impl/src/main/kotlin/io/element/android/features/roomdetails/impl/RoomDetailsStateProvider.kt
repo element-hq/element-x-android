@@ -21,6 +21,8 @@ import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState
 import io.element.android.features.roomdetails.impl.members.details.aRoomMemberDetailsState
+import io.element.android.libraries.matrix.api.core.RoomAlias
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
@@ -71,9 +73,9 @@ fun aDmRoomMember(
 )
 
 fun aRoomDetailsState(
-    roomId: String = "a room id",
+    roomId: RoomId = RoomId("!aRoomId:domain.com"),
     roomName: String = "Marketing",
-    roomAlias: String? = "#marketing:domain.com",
+    roomAlias: RoomAlias? = RoomAlias("#marketing:domain.com"),
     roomAvatarUrl: String? = null,
     roomTopic: RoomTopicState = RoomTopicState.ExistingTopic(
         "Welcome to #marketing, home of the Marketing team " +

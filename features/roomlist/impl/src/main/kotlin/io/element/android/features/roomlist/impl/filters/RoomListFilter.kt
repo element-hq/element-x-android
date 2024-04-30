@@ -26,13 +26,15 @@ enum class RoomListFilter(val stringResource: Int) {
     Unread(R.string.screen_roomlist_filter_unreads),
     People(R.string.screen_roomlist_filter_people),
     Rooms(R.string.screen_roomlist_filter_rooms),
-    Favourites(R.string.screen_roomlist_filter_favourites);
+    Favourites(R.string.screen_roomlist_filter_favourites),
+    Invites(R.string.screen_roomlist_filter_invites);
 
-    val oppositeFilter: RoomListFilter?
+    val incompatibleFilters: Set<RoomListFilter>
         get() = when (this) {
-            Rooms -> People
-            People -> Rooms
-            Unread -> null
-            Favourites -> null
+            Rooms -> setOf(People, Invites)
+            People -> setOf(Rooms, Invites)
+            Unread -> setOf(Invites)
+            Favourites -> setOf(Invites)
+            Invites -> setOf(Rooms, People, Unread, Favourites)
         }
 }

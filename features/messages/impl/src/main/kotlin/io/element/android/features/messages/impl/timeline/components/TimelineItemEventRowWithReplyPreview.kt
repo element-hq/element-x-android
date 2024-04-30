@@ -42,6 +42,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageConten
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
@@ -58,7 +59,10 @@ internal fun TimelineItemEventRowWithReplyPreview(
 }
 
 @Composable
-internal fun TimelineItemEventRowWithReplyContentToPreview(inReplyToDetails: InReplyToDetails) {
+internal fun TimelineItemEventRowWithReplyContentToPreview(
+    inReplyToDetails: InReplyToDetails,
+    displayNameAmbiguous: Boolean = false,
+) {
     Column {
         sequenceOf(false, true).forEach {
             ATimelineItemEventRow(
@@ -69,6 +73,7 @@ internal fun TimelineItemEventRowWithReplyContentToPreview(inReplyToDetails: InR
                         body = "A reply."
                     ),
                     inReplyTo = inReplyToDetails,
+                    displayNameAmbiguous = displayNameAmbiguous,
                     groupPosition = TimelineItemGroupPosition.First,
                 ),
             )
@@ -80,6 +85,7 @@ internal fun TimelineItemEventRowWithReplyContentToPreview(inReplyToDetails: InR
                         aspectRatio = 2.5f
                     ),
                     inReplyTo = inReplyToDetails,
+                    displayNameAmbiguous = displayNameAmbiguous,
                     isThreaded = true,
                     groupPosition = TimelineItemGroupPosition.Last,
                 ),
@@ -150,7 +156,7 @@ open class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails>
             )
         }
 
-    private fun aMessageContent(
+    protected fun aMessageContent(
         body: String,
         type: MessageType,
     ) = MessageContent(
@@ -163,12 +169,24 @@ open class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails>
 
     protected fun aInReplyToDetails(
         eventContent: EventContent,
-    ) = InReplyToDetails(
+        displayNameAmbiguous: Boolean = false,
+    ) = InReplyToDetails.Ready(
         eventId = EventId("\$event"),
         eventContent = eventContent,
         senderId = UserId("@Sender:domain"),
-        senderDisplayName = "Sender",
-        senderAvatarUrl = null,
+        senderProfile = aProfileTimelineDetailsReady(
+            displayNameAmbiguous = displayNameAmbiguous,
+        ),
         textContent = (eventContent as? MessageContent)?.body.orEmpty(),
     )
 }
+
+internal fun aProfileTimelineDetailsReady(
+    displayName: String? = "Sender",
+    displayNameAmbiguous: Boolean = false,
+    avatarUrl: String? = null,
+) = ProfileTimelineDetails.Ready(
+    displayName = displayName,
+    displayNameAmbiguous = displayNameAmbiguous,
+    avatarUrl = avatarUrl,
+)

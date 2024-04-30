@@ -60,7 +60,7 @@ class RoomListDataSource @Inject constructor(
     fun launchIn(coroutineScope: CoroutineScope) {
         roomListService
             .allRooms
-            .summaries
+            .filteredSummaries
             .onEach { roomSummaries ->
                 replaceWith(roomSummaries)
             }

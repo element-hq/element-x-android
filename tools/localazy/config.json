@@ -21,6 +21,12 @@
       ]
     },
     {
+      "name" : ":features:roomaliasresolver:impl",
+      "includeRegex" : [
+        "screen_room_alias_resolver_.*"
+      ]
+    },
+    {
       "name" : ":features:onboarding:impl",
       "includeRegex" : [
         "screen_onboarding_.*"
@@ -33,7 +39,7 @@
       ]
     },
     {
-      "name" : ":features:invitelist:impl",
+      "name" : ":features:invite:impl",
       "includeRegex" : [
         "screen_invites_.*"
       ]
@@ -131,7 +137,8 @@
         "screen_roomlist_.*",
         "session_verification_banner_.*",
         "confirm_recovery_key_banner_.*",
-        "screen_migration_.*"
+        "screen_migration_.*",
+        "screen_invites_.*"
       ]
     },
     {
@@ -219,6 +226,12 @@
       ]
     },
     {
+      "name" : ":libraries:matrixui",
+      "includeRegex" : [
+        "screen_invites_invited_you"
+      ]
+    },
+    {
       "name" : ":features:call",
       "includeRegex" : [
         "call_.*"
@@ -235,6 +248,12 @@
       "name" : ":features:roomdirectory:impl",
       "includeRegex" : [
         "screen_room_directory_.*"
+      ]
+    },
+    {
+      "name" : ":features:joinroom:impl",
+      "includeRegex" : [
+        "screen_join_room_.*"
       ]
     }
   ]

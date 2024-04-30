@@ -35,7 +35,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageT
 import io.element.android.libraries.matrix.impl.media.map
 import org.matrix.rustcomponents.sdk.Message
 import org.matrix.rustcomponents.sdk.MessageType
-import org.matrix.rustcomponents.sdk.ProfileDetails
 import org.matrix.rustcomponents.sdk.RepliedToEventDetails
 import org.matrix.rustcomponents.sdk.use
 import org.matrix.rustcomponents.sdk.FormattedBody as RustFormattedBody
@@ -51,18 +50,23 @@ class EventMessageMapper {
             val inReplyToId = EventId(details.eventId)
             when (val event = details.event) {
                 is RepliedToEventDetails.Ready -> {
-                    val senderProfile = event.senderProfile as? ProfileDetails.Ready
                     InReplyTo.Ready(
                         eventId = inReplyToId,
                         content = timelineEventContentMapper.map(event.content),
                         senderId = UserId(event.sender),
-                        senderDisplayName = senderProfile?.displayName,
-                        senderAvatarUrl = senderProfile?.avatarUrl,
+                        senderProfile = event.senderProfile.map(),
                     )
                 }
-                is RepliedToEventDetails.Error -> InReplyTo.Error
-                is RepliedToEventDetails.Pending -> InReplyTo.Pending
-                is RepliedToEventDetails.Unavailable -> InReplyTo.NotLoaded(inReplyToId)
+                is RepliedToEventDetails.Error -> InReplyTo.Error(
+                    eventId = inReplyToId,
+                    message = event.message,
+                )
+                RepliedToEventDetails.Pending -> InReplyTo.Pending(
+                    eventId = inReplyToId,
+                )
+                is RepliedToEventDetails.Unavailable -> InReplyTo.NotLoaded(
+                    eventId = inReplyToId
+                )
             }
         }
         MessageContent(

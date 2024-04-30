@@ -144,28 +144,12 @@ class VerifySelfSessionViewTest {
         ensureCalledOnce { callback ->
             rule.setVerifySelfSessionView(
                 aVerifySelfSessionState(
-                    verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial(true, false),
+                    verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial(true),
                     eventSink = eventsRecorder
                 ),
                 onEnterRecoveryKey = callback,
             )
             rule.clickOn(R.string.screen_session_verification_enter_recovery_key)
-        }
-    }
-
-    @Config(qualifiers = "h1024dp")
-    @Test
-    fun `clicking on create new recovery key calls the expected callback`() {
-        val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>(expectEvents = false)
-        ensureCalledOnce { callback ->
-            rule.setVerifySelfSessionView(
-                aVerifySelfSessionState(
-                    verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial(true, true),
-                    eventSink = eventsRecorder
-                ),
-                onCreateNewRecoveryKey = callback,
-            )
-            rule.clickOn(R.string.screen_identity_confirmation_create_new_recovery_key)
         }
     }
 
@@ -206,7 +190,7 @@ class VerifySelfSessionViewTest {
         val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
         rule.setVerifySelfSessionView(
             aVerifySelfSessionState(
-                verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial(canEnterRecoveryKey = true, isLastDevice = false),
+                verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial(canEnterRecoveryKey = true),
                 displaySkipButton = true,
                 eventSink = eventsRecorder
             ),
@@ -232,14 +216,12 @@ class VerifySelfSessionViewTest {
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setVerifySelfSessionView(
         state: VerifySelfSessionState,
         onEnterRecoveryKey: () -> Unit = EnsureNeverCalled(),
-        onCreateNewRecoveryKey: () -> Unit = EnsureNeverCalled(),
         onFinished: () -> Unit = EnsureNeverCalled(),
     ) {
         rule.setContent {
             VerifySelfSessionView(
                 state = state,
                 onEnterRecoveryKey = onEnterRecoveryKey,
-                onCreateNewRecoveryKey = onCreateNewRecoveryKey,
                 onFinished = onFinished,
             )
         }

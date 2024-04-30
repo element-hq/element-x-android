@@ -30,6 +30,8 @@
   <string name="screen_room_change_role_confirm_demote_self_description">"Вы не сможете отменить это изменение, так как понижаете себя статус. Если вы являетесь последним привилегированным пользователем в комнате, восстановить привилегии будет невозможно."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Понизить свой уровень?"</string>
   <string name="screen_room_change_role_invited_member_name">"%1$s (Ожидание)"</string>
+  <string name="screen_room_change_role_invited_member_name_android">"(В ожидании)"</string>
+  <string name="screen_room_change_role_moderators_admin_section_footer">"Администраторы автоматически получают права модератора"</string>
   <string name="screen_room_change_role_moderators_title">"Редактировать роль модераторов"</string>
   <string name="screen_room_change_role_section_administrators">"Администраторы"</string>
   <string name="screen_room_change_role_section_moderators">"Модераторы"</string>
@@ -47,7 +49,7 @@
   <string name="screen_room_details_error_loading_notification_settings">"При загрузке настроек уведомлений произошла ошибка."</string>
   <string name="screen_room_details_error_muting">"Не удалось отключить звук в этой комнате, попробуйте еще раз."</string>
   <string name="screen_room_details_error_unmuting">"Не удалось включить звук в эту комнату, попробуйте еще раз."</string>
-  <string name="screen_room_details_invite_people_title">"Пригласить друзей"</string>
+  <string name="screen_room_details_invite_people_title">"Пригласить в комнату"</string>
   <string name="screen_room_details_leave_conversation_title">"Покинуть беседу"</string>
   <string name="screen_room_details_leave_room_title">"Покинуть комнату"</string>
   <string name="screen_room_details_notification_mode_custom">"Пользовательский"</string>
@@ -57,6 +59,7 @@
   <string name="screen_room_details_room_name_label">"Название комнаты"</string>
   <string name="screen_room_details_security_title">"Безопасность"</string>
   <string name="screen_room_details_share_room_title">"Поделиться комнатой"</string>
+  <string name="screen_room_details_title">"Информация о комнате"</string>
   <string name="screen_room_details_topic_title">"Тема"</string>
   <string name="screen_room_details_updating_room">"Обновление комнаты…"</string>
   <string name="screen_room_member_list_ban_member_confirmation_action">"Заблокировать"</string>

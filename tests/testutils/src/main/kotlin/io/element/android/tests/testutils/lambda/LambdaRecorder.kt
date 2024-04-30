@@ -71,6 +71,13 @@ inline fun <reified T1, reified T2, reified T3, reified T4, reified R> lambdaRec
     return LambdaFourParamsRecorder(ensureNeverCalled, block)
 }
 
+inline fun <reified T1, reified T2, reified T3, reified T4, reified T5, reified R> lambdaRecorder(
+    ensureNeverCalled: Boolean = false,
+    noinline block: (T1, T2, T3, T4, T5) -> R
+): LambdaFiveParamsRecorder<T1, T2, T3, T4, T5, R> {
+    return LambdaFiveParamsRecorder(ensureNeverCalled, block)
+}
+
 class LambdaNoParamRecorder<out R>(ensureNeverCalled: Boolean, val block: () -> R) : LambdaRecorder(ensureNeverCalled), () -> R {
     override fun invoke(): R {
         onInvoke()
@@ -107,5 +114,14 @@ class LambdaFourParamsRecorder<in T1, in T2, in T3, in T4, out R>(ensureNeverCal
     override fun invoke(p1: T1, p2: T2, p3: T3, p4: T4): R {
         onInvoke(p1, p2, p3, p4)
         return block(p1, p2, p3, p4)
+    }
+}
+
+class LambdaFiveParamsRecorder<in T1, in T2, in T3, in T4, in T5, out R>(ensureNeverCalled: Boolean, val block: (T1, T2, T3, T4, T5) -> R) : LambdaRecorder(
+    ensureNeverCalled
+), (T1, T2, T3, T4, T5) -> R {
+    override fun invoke(p1: T1, p2: T2, p3: T3, p4: T4, p5: T5): R {
+        onInvoke(p1, p2, p3, p4, p5)
+        return block(p1, p2, p3, p4, p5)
     }
 }

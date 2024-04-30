@@ -20,7 +20,6 @@ import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
@@ -28,15 +27,28 @@ data class TimelineState(
     val timelineItems: ImmutableList<TimelineItem>,
     val timelineRoomInfo: TimelineRoomInfo,
     val renderReadReceipts: Boolean,
-    val highlightedEventId: EventId?,
-    val paginationState: MatrixTimeline.PaginationState,
     val newEventState: NewEventState,
-    val eventSink: (TimelineEvents) -> Unit
-)
+    val isLive: Boolean,
+    val focusedEventId: EventId?,
+    val focusRequestState: FocusRequestState,
+    val eventSink: (TimelineEvents) -> Unit,
+) {
+    val hasAnyEvent = timelineItems.any { it is TimelineItem.Event }
+}
+
+@Immutable
+sealed interface FocusRequestState {
+    data object None : FocusRequestState
+    data class Cached(val index: Int) : FocusRequestState
+    data object Fetching : FocusRequestState
+    data object Fetched : FocusRequestState
+    data class Failure(val throwable: Throwable) : FocusRequestState
+}
 
 @Immutable
 data class TimelineRoomInfo(
     val isDm: Boolean,
+    val name: String?,
     val userHasPermissionToSendMessage: Boolean,
     val userHasPermissionToSendReaction: Boolean,
 )

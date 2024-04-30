@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_join_action">"Pripojiť sa do miestnosti"</string>
+  <string name="screen_join_room_knock_action">"Zaklopaním sa pripojíte"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s zatiaľ nepodporuje priestory. K priestorom môžete pristupovať na webe."</string>
+  <string name="screen_join_room_space_not_supported_title">"Priestory zatiaľ nie sú podporované"</string>
+  <string name="screen_join_room_subtitle_knock">"Kliknite na tlačidlo nižšie a správca miestnosti bude informovaný. Po schválení sa budete môcť pripojiť ku konverzácii."</string>
+  <string name="screen_join_room_subtitle_no_preview">"Ak chcete zobraziť históriu správ, musíte byť členom tejto miestnosti."</string>
+  <string name="screen_join_room_title_knock">"Chcete sa pripojiť do tejto miestnosti?"</string>
+  <string name="screen_join_room_title_no_preview">"Náhľad nie je k dispozícii"</string>
+</resources>

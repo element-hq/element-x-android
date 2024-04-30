@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_join_action">"Далучыцца да пакоя"</string>
+  <string name="screen_join_room_knock_action">"Націсніце, каб далучыцца"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s пакуль не падтрымлівае прасторы. Вы можаце атрымаць доступ да прастор праз вэб-старонку."</string>
+  <string name="screen_join_room_space_not_supported_title">"Прасторы пакуль не падтрымліваюцца"</string>
+  <string name="screen_join_room_subtitle_knock">"Націсніце кнопку ніжэй, і адміністратар пакоя атрымае апавяшчэнне. Вы зможаце далучыцца да размовы пасля зацвярджэння."</string>
+  <string name="screen_join_room_subtitle_no_preview">"Вы павінны быць удзельнікам гэтага пакоя каб прагледзець гісторыю паведамленняў."</string>
+  <string name="screen_join_room_title_knock">"Вы хочаце далучыцца да гэтага пакоя?"</string>
+  <string name="screen_join_room_title_no_preview">"Папярэдні прагляд недаступны"</string>
+</resources>

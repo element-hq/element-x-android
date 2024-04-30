@@ -164,7 +164,7 @@ class LeaveRoomPresenterImplTest {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
                     result = FakeMatrixRoom().apply {
-                        givenLeaveRoomError(RuntimeException("Blimey!"))
+                        this.leaveRoomLambda = { Result.failure(RuntimeException("Blimey!")) }
                     },
                 )
             }
@@ -210,7 +210,7 @@ class LeaveRoomPresenterImplTest {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
                     result = FakeMatrixRoom().apply {
-                        givenLeaveRoomError(RuntimeException("Blimey!"))
+                        this.leaveRoomLambda = { Result.failure(RuntimeException("Blimey!")) }
                     },
                 )
             }

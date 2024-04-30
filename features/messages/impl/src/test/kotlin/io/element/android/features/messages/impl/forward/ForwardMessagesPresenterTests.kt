@@ -21,14 +21,20 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomSummaryDetails
+import io.element.android.libraries.matrix.test.timeline.FakeTimeline
+import io.element.android.libraries.matrix.test.timeline.LiveTimelineProvider
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.assert
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import java.lang.IllegalStateException
 
 class ForwardMessagesPresenterTests {
     @get:Rule
@@ -36,7 +42,7 @@ class ForwardMessagesPresenterTests {
 
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = aPresenter()
+        val presenter = aForwardMessagesPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -49,7 +55,14 @@ class ForwardMessagesPresenterTests {
 
     @Test
     fun `present - forward successful`() = runTest {
-        val presenter = aPresenter()
+        val forwardEventLambda = lambdaRecorder { _: EventId, _: List<RoomId> ->
+            Result.success(Unit)
+        }
+        val timeline = FakeTimeline().apply {
+            this.forwardEventLambda = forwardEventLambda
+        }
+        val room = FakeMatrixRoom(liveTimeline = timeline)
+        val presenter = aForwardMessagesPresenter(fakeMatrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -61,18 +74,23 @@ class ForwardMessagesPresenterTests {
             val successfulForwardState = awaitItem()
             assertThat(successfulForwardState.isForwarding).isFalse()
             assertThat(successfulForwardState.forwardingSucceeded).isNotNull()
+            assert(forwardEventLambda).isCalledOnce()
         }
     }
 
     @Test
     fun `present - select a room and forward failed, then clear`() = runTest {
-        val room = FakeMatrixRoom()
-        val presenter = aPresenter(fakeMatrixRoom = room)
+        val forwardEventLambda = lambdaRecorder { _: EventId, _: List<RoomId> ->
+            Result.failure<Unit>(IllegalStateException("error"))
+        }
+        val timeline = FakeTimeline().apply {
+            this.forwardEventLambda = forwardEventLambda
+        }
+        val room = FakeMatrixRoom(liveTimeline = timeline)
+        val presenter = aForwardMessagesPresenter(fakeMatrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            // Test failed forwarding
-            room.givenForwardEventResult(Result.failure(Throwable("error")))
             skipItems(1)
             val summary = aRoomSummaryDetails()
             presenter.onRoomSelected(listOf(summary.roomId))
@@ -82,16 +100,17 @@ class ForwardMessagesPresenterTests {
             // Then clear error
             failedForwardState.eventSink(ForwardMessagesEvents.ClearError)
             assertThat(awaitItem().error).isNull()
+            assert(forwardEventLambda).isCalledOnce()
         }
     }
 
-    private fun CoroutineScope.aPresenter(
+    private fun CoroutineScope.aForwardMessagesPresenter(
         eventId: EventId = AN_EVENT_ID,
         fakeMatrixRoom: FakeMatrixRoom = FakeMatrixRoom(),
         coroutineScope: CoroutineScope = this,
     ) = ForwardMessagesPresenter(
         eventId = eventId.value,
-        room = fakeMatrixRoom,
+        timelineProvider = LiveTimelineProvider(fakeMatrixRoom),
         matrixCoroutineScope = coroutineScope,
     )
 }

@@ -21,6 +21,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 import org.matrix.rustcomponents.sdk.UnableToDecryptDelegate
 import org.matrix.rustcomponents.sdk.UnableToDecryptInfo
 import timber.log.Timber
+import uniffi.matrix_sdk_crypto.UtdCause
 import javax.inject.Inject
 
 class UtdTracker @Inject constructor(
@@ -28,6 +29,10 @@ class UtdTracker @Inject constructor(
 ) : UnableToDecryptDelegate {
     override fun onUtd(info: UnableToDecryptInfo) {
         Timber.d("onUtd for event ${info.eventId}, timeToDecryptMs: ${info.timeToDecryptMs}")
+        val name = when (info.cause) {
+            UtdCause.UNKNOWN -> Error.Name.OlmKeysNotSentError
+            UtdCause.MEMBERSHIP -> Error.Name.ExpectedDueToMembership
+        }
         val event = Error(
             context = null,
             // Keep cryptoModule for compatibility.
@@ -35,8 +40,7 @@ class UtdTracker @Inject constructor(
             cryptoSDK = Error.CryptoSDK.Rust,
             timeToDecryptMillis = info.timeToDecryptMs?.toInt() ?: -1,
             domain = Error.Domain.E2EE,
-            // TODO get a more specific error name from `info`
-            name = Error.Name.OlmKeysNotSentError,
+            name = name,
         )
         analyticsService.capture(event)
     }

@@ -50,6 +50,6 @@ fun MigrationScreenView(
 
 @Composable
 @PreviewsDayNight
-internal fun MigrationViewPreview() = ElementPreview {
+internal fun MigrationScreenViewPreview() = ElementPreview {
     MigrationScreenView(isMigrating = true)
 }

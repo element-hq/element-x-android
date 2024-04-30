@@ -38,7 +38,6 @@ fun aSignedOutState() = SignedOutState(
 fun aSessionData(
     sessionId: SessionId = SessionId("@alice:server.org"),
     isTokenValid: Boolean = false,
-    needsVerification: Boolean = false,
 ): SessionData {
     return SessionData(
         userId = sessionId.value,
@@ -52,6 +51,5 @@ fun aSessionData(
         isTokenValid = isTokenValid,
         loginType = LoginType.UNKNOWN,
         passphrase = null,
-        needsVerification = needsVerification,
     )
 }

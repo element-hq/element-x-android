@@ -17,9 +17,13 @@
 package io.element.android.features.messages.impl
 
 import android.content.Context
-import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.lifecycle.subscribe
@@ -31,11 +35,17 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.timeline.TimelineController
+import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
+import io.element.android.libraries.androidutils.system.toast
+import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -43,6 +53,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.services.analytics.api.AnalyticsService
@@ -59,15 +70,23 @@ class MessagesNode @AssistedInject constructor(
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
     private val mediaPlayer: MediaPlayer,
     private val permalinkParser: PermalinkParser,
+    @ApplicationContext
+    private val context: Context,
+    private val timelineController: TimelineController,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
     private val presenter = presenterFactory.create(this)
     private val callback = plugins<Callback>().firstOrNull()
+
+    data class Inputs(val focusedEventId: EventId?) : NodeInputs
+
+    private val inputs = inputs<Inputs>()
 
     interface Callback : Plugin {
         fun onRoomDetailsClicked()
         fun onEventClicked(event: TimelineItem.Event): Boolean
         fun onPreviewAttachments(attachments: ImmutableList<Attachment>)
         fun onUserDataClicked(userId: UserId)
+        fun onPermalinkClicked(data: PermalinkData)
         fun onShowEventDebugInfoClicked(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
         fun onForwardEventClicked(eventId: EventId)
         fun onReportMessage(eventId: EventId, senderId: UserId)
@@ -77,12 +96,14 @@ class MessagesNode @AssistedInject constructor(
         fun onJoinCallClicked(roomId: RoomId)
     }
 
-    init {
+    override fun onBuilt() {
+        super.onBuilt()
         lifecycle.subscribe(
             onCreate = {
                 analyticsService.capture(room.toAnalyticsViewRoom())
             },
             onDestroy = {
+                timelineController.close()
                 mediaPlayer.close()
             }
         )
@@ -107,18 +128,35 @@ class MessagesNode @AssistedInject constructor(
     private fun onLinkClicked(
         context: Context,
         url: String,
+        eventSink: (TimelineEvents) -> Unit,
     ) {
-        when (val permalink = permalinkParser.parse(Uri.parse(url))) {
+        when (val permalink = permalinkParser.parse(url)) {
             is PermalinkData.UserLink -> {
-                callback?.onUserDataClicked(UserId(permalink.userId))
+                // Open the room member profile, it will fallback to
+                // the user profile if the user is not in the room
+                callback?.onUserDataClicked(permalink.userId)
             }
             is PermalinkData.RoomLink -> {
-                // TODO Implement room link handling
+                handleRoomLinkClicked(permalink, eventSink)
             }
             is PermalinkData.FallbackLink,
             is PermalinkData.RoomEmailInviteLink -> {
                 context.openUrlInExternalApp(url)
             }
+        }
+    }
+
+    private fun handleRoomLinkClicked(roomLink: PermalinkData.RoomLink, eventSink: (TimelineEvents) -> Unit) {
+        if (room.matches(roomLink.roomIdOrAlias)) {
+            val eventId = roomLink.eventId
+            if (eventId != null) {
+                eventSink(TimelineEvents.FocusOnEvent(eventId))
+            } else {
+                // Click on the same room, ignore
+                context.toast("Already viewing this room!")
+            }
+        } else {
+            callback?.onPermalinkClicked(roomLink)
         }
     }
 
@@ -164,12 +202,23 @@ class MessagesNode @AssistedInject constructor(
                 onEventClicked = this::onEventClicked,
                 onPreviewAttachments = this::onPreviewAttachments,
                 onUserDataClicked = this::onUserDataClicked,
-                onLinkClicked = { onLinkClicked(context, it) },
+                onLinkClicked = { onLinkClicked(context, it, state.timelineState.eventSink) },
                 onSendLocationClicked = this::onSendLocationClicked,
                 onCreatePollClicked = this::onCreatePollClicked,
                 onJoinCallClicked = this::onJoinCallClicked,
                 modifier = modifier,
             )
+
+            var focusedEventId by rememberSaveable {
+                mutableStateOf(inputs.focusedEventId)
+            }
+            LaunchedEffect(Unit) {
+                focusedEventId?.also { eventId ->
+                    state.timelineState.eventSink(TimelineEvents.FocusOnEvent(eventId))
+                }
+                // Reset the focused event id to null to avoid refocusing when restoring node.
+                focusedEventId = null
+            }
         }
     }
 }

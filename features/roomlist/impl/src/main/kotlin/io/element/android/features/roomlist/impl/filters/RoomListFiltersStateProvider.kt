@@ -32,10 +32,8 @@ class RoomListFiltersStateProvider : PreviewParameterProvider<RoomListFiltersSta
 
 fun aRoomListFiltersState(
     filterSelectionStates: List<FilterSelectionState> = RoomListFilter.entries.map { FilterSelectionState(it, isSelected = false) },
-    isFeatureEnabled: Boolean = true,
     eventSink: (RoomListFiltersEvents) -> Unit = {},
 ) = RoomListFiltersState(
     filterSelectionStates = filterSelectionStates.toImmutableList(),
-    isFeatureEnabled = isFeatureEnabled,
     eventSink = eventSink,
 )

@@ -11,7 +11,7 @@
   <string name="screen_polls_history_title">"Sondaggi"</string>
   <string name="screen_room_change_permissions_administrators">"Solo amministratori"</string>
   <string name="screen_room_change_permissions_ban_people">"Escludi membri"</string>
-  <string name="screen_room_change_permissions_delete_messages">"Eliminare messaggi"</string>
+  <string name="screen_room_change_permissions_delete_messages">"Rimuovi messaggi"</string>
   <string name="screen_room_change_permissions_everyone">"Tutti"</string>
   <string name="screen_room_change_permissions_invite_people">"Invitare persone"</string>
   <string name="screen_room_change_permissions_member_moderation">"Moderazione dei membri"</string>
@@ -29,6 +29,7 @@
   <string name="screen_room_change_role_confirm_demote_self_action">"Declassa"</string>
   <string name="screen_room_change_role_confirm_demote_self_description">"Non potrai annullare questa modifica perché ti stai declassando, se sei l\'ultimo utente privilegiato nella stanza, sarà impossibile riottenere i privilegi."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Declassare te stesso?"</string>
+  <string name="screen_room_change_role_invited_member_name">"%1$s (In attesa)"</string>
   <string name="screen_room_change_role_moderators_title">"Modifica moderatori"</string>
   <string name="screen_room_change_role_section_administrators">"Amministratori"</string>
   <string name="screen_room_change_role_section_moderators">"Moderatori"</string>

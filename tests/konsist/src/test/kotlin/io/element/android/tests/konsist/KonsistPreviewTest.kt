@@ -16,8 +16,11 @@
 
 package io.element.android.tests.konsist
 
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.ext.list.withAllAnnotationsOf
+import com.lemonappdev.konsist.api.ext.list.withoutName
+import com.lemonappdev.konsist.api.verify.assertEmpty
 import com.lemonappdev.konsist.api.verify.assertTrue
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import org.junit.Test
@@ -56,5 +59,91 @@ class KonsistPreviewTest {
             .assertTrue {
                 it.hasInternalModifier
             }
+    }
+
+    @Test
+    fun `Functions with '@PreviewsDayNight' have correct name`() {
+        Konsist
+            .scopeFromProject()
+            .functions()
+            .withAllAnnotationsOf(PreviewsDayNight::class)
+            .withoutName(
+                "AsyncIndicatorFailurePreview",
+                "AsyncIndicatorLoadingPreview",
+                "BloomInitialsPreview",
+                "BloomPreview",
+                "ColorAliasesPreview",
+                "DefaultRoomListTopBarWithIndicatorPreview",
+                "GradientFloatingActionButtonCircleShapePreview",
+                "IconTitleSubtitleMoleculeWithResIconPreview",
+                "IconsCompoundPreview",
+                "IconsOtherPreview",
+                "MentionSpanPreview",
+                "MessageComposerViewVoicePreview",
+                "MessagesReactionButtonAddPreview",
+                "MessagesReactionButtonExtraPreview",
+                "MessagesViewWithTypingPreview",
+                "PageTitleWithIconFullPreview",
+                "PageTitleWithIconMinimalPreview",
+                "PendingMemberRowWithLongNamePreview",
+                "PinUnlockViewInAppPreview",
+                "PollAnswerViewDisclosedNotSelectedPreview",
+                "PollAnswerViewDisclosedSelectedPreview",
+                "PollAnswerViewEndedSelectedPreview",
+                "PollAnswerViewEndedWinnerNotSelectedPreview",
+                "PollAnswerViewEndedWinnerSelectedPreview",
+                "PollAnswerViewUndisclosedNotSelectedPreview",
+                "PollAnswerViewUndisclosedSelectedPreview",
+                "PollContentViewCreatorEditablePreview",
+                "PollContentViewCreatorEndedPreview",
+                "PollContentViewCreatorPreview",
+                "PollContentViewDisclosedPreview",
+                "PollContentViewEndedPreview",
+                "PollContentViewUndisclosedPreview",
+                "ReadReceiptBottomSheetPreview",
+                "RoomMemberListViewBannedPreview",
+                "SasEmojisPreview",
+                "SecureBackupSetupViewChangePreview",
+                "SelectedUserCannotRemovePreview",
+                "TextComposerEditPreview",
+                "TextComposerFormattingPreview",
+                "TextComposerLinkDialogCreateLinkPreview",
+                "TextComposerLinkDialogCreateLinkWithoutTextPreview",
+                "TextComposerLinkDialogEditLinkPreview",
+                "TextComposerReplyPreview",
+                "TextComposerSimplePreview",
+                "TextComposerVoicePreview",
+                "TimelineImageWithCaptionRowPreview",
+                "TimelineItemEventRowForDirectRoomPreview",
+                "TimelineItemEventRowTimestampPreview",
+                "TimelineItemEventRowWithManyReactionsPreview",
+                "TimelineItemEventRowWithRRPreview",
+                "TimelineItemEventRowWithReplyPreview",
+                "TimelineItemGroupedEventsRowContentCollapsePreview",
+                "TimelineItemGroupedEventsRowContentExpandedPreview",
+                "TimelineItemVoiceViewUnifiedPreview",
+                "TimelineVideoWithCaptionRowPreview",
+                "UserAvatarColorsPreview",
+            )
+            .assertTrue(
+                additionalMessage = "Functions for Preview should be named like this: <ViewUnderPreview>Preview. " +
+                    "Exception can be added to the test, for multiple Previews of the same view",
+            ) {
+                val testedView = it.name.removeSuffix("Preview")
+                it.text.contains("$testedView(") ||
+                    it.text.contains("$testedView {") ||
+                    it.text.contains("ContentToPreview(")
+            }
+    }
+
+    @Test
+    fun `Ensure that '@PreviewLightDark' is not used`() {
+        Konsist
+            .scopeFromProject()
+            .functions()
+            .withAllAnnotationsOf(PreviewLightDark::class)
+            .assertEmpty(
+                additionalMessage = "Use '@PreviewsDayNight' instead of '@PreviewLightDark', or else screenshot(s) will not be generated.",
+            )
     }
 }

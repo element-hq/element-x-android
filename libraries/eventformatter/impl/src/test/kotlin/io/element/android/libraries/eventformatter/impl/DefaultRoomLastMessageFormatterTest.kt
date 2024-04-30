@@ -38,7 +38,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
-import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
@@ -54,6 +53,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.timeline.aPollContent
 import io.element.android.libraries.matrix.test.timeline.aProfileChangeMessageContent
+import io.element.android.libraries.matrix.test.timeline.aProfileTimelineDetails
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import org.junit.Before
@@ -264,7 +264,7 @@ class DefaultRoomLastMessageFormatterTest {
 
         val someoneJoinedRoomEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
         val someoneJoinedRoom = formatter.format(someoneJoinedRoomEvent, false)
-        assertThat(someoneJoinedRoom).isEqualTo("${someoneContent.userId} joined the room")
+        assertThat(someoneJoinedRoom).isEqualTo("$otherName joined the room")
     }
 
     @Test
@@ -280,7 +280,7 @@ class DefaultRoomLastMessageFormatterTest {
 
         val someoneLeftRoomEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
         val someoneLeftRoom = formatter.format(someoneLeftRoomEvent, false)
-        assertThat(someoneLeftRoom).isEqualTo("${someoneContent.userId} left the room")
+        assertThat(someoneLeftRoom).isEqualTo("$otherName left the room")
     }
 
     @Test
@@ -421,7 +421,7 @@ class DefaultRoomLastMessageFormatterTest {
 
         val someoneKnockedEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
         val someoneKnocked = formatter.format(someoneKnockedEvent, false)
-        assertThat(someoneKnocked).isEqualTo("${someoneContent.userId} requested to join")
+        assertThat(someoneKnocked).isEqualTo("$otherName requested to join")
     }
 
     @Test
@@ -452,7 +452,7 @@ class DefaultRoomLastMessageFormatterTest {
 
         val someoneRetractedKnockEvent = createRoomEvent(sentByYou = false, senderDisplayName = otherName, content = someoneContent)
         val someoneRetractedKnock = formatter.format(someoneRetractedKnockEvent, false)
-        assertThat(someoneRetractedKnock).isEqualTo("${someoneContent.userId} is no longer interested in joining")
+        assertThat(someoneRetractedKnock).isEqualTo("$otherName is no longer interested in joining")
     }
 
     @Test
@@ -829,9 +829,13 @@ class DefaultRoomLastMessageFormatterTest {
 
     // endregion
 
-    private fun createRoomEvent(sentByYou: Boolean, senderDisplayName: String?, content: EventContent): EventTimelineItem {
+    private fun createRoomEvent(
+        sentByYou: Boolean,
+        senderDisplayName: String?,
+        content: EventContent,
+    ): EventTimelineItem {
         val sender = if (sentByYou) A_USER_ID else someoneElseId
-        val profile = ProfileTimelineDetails.Ready(senderDisplayName, false, null)
+        val profile = aProfileTimelineDetails(senderDisplayName)
         return anEventTimelineItem(
             content = content,
             senderProfile = profile,

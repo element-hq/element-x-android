@@ -55,10 +55,9 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.components.TimelineItemRow
-import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemRoomBeginningView
-import io.element.android.features.messages.impl.timeline.components.virtual.TimelineLoadingMoreIndicator
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.aFakeTimelineItemPresenterFactories
+import io.element.android.features.messages.impl.timeline.focus.FocusRequestStateView
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
@@ -74,12 +73,12 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 @Composable
 fun TimelineView(
     state: TimelineState,
     typingNotificationState: TypingNotificationState,
-    roomName: String?,
     onUserDataClicked: (UserId) -> Unit,
     onLinkClicked: (String) -> Unit,
     onMessageClicked: (TimelineItem.Event) -> Unit,
@@ -93,8 +92,8 @@ fun TimelineView(
     modifier: Modifier = Modifier,
     forceJumpToBottomVisibility: Boolean = false
 ) {
-    fun onReachedLoadMore() {
-        state.eventSink(TimelineEvents.LoadMore)
+    fun clearFocusRequestState() {
+        state.eventSink(TimelineEvents.ClearFocusRequestState)
     }
 
     fun onScrollFinishedAt(firstVisibleIndex: Int) {
@@ -109,9 +108,8 @@ fun TimelineView(
         accessibilityManager.isTouchExplorationEnabled.not()
     }
 
-    @Suppress("UNUSED_PARAMETER")
     fun inReplyToClicked(eventId: EventId) {
-        // TODO implement this logic once we have support to 'jump to event X' in sliding sync
+        state.eventSink(TimelineEvents.FocusOnEvent(eventId))
     }
 
     // Animate alpha when timeline is first displayed, to avoid flashes or glitching when viewing rooms
@@ -123,8 +121,10 @@ fun TimelineView(
                 reverseLayout = useReverseLayout,
                 contentPadding = PaddingValues(vertical = 8.dp),
             ) {
-                item {
-                    TypingNotificationView(state = typingNotificationState)
+                if (state.isLive) {
+                    item {
+                        TypingNotificationView(state = typingNotificationState)
+                    }
                 }
                 items(
                     items = state.timelineItems,
@@ -137,7 +137,7 @@ fun TimelineView(
                         renderReadReceipts = state.renderReadReceipts,
                         isLastOutgoingMessage = (timelineItem as? TimelineItem.Event)?.isMine == true &&
                             state.timelineItems.first().identifier() == timelineItem.identifier(),
-                        highlightedItem = state.highlightedEventId?.value,
+                        focusedEventId = state.focusedEventId,
                         onClick = onMessageClicked,
                         onLongClick = onMessageLongClicked,
                         onUserDataClick = onUserDataClicked,
@@ -152,28 +152,23 @@ fun TimelineView(
                         onSwipeToReply = onSwipeToReply,
                     )
                 }
-                if (state.paginationState.hasMoreToLoadBackwards) {
-                    // Do not use key parameter to avoid wrong positioning
-                    item(contentType = "TimelineLoadingMoreIndicator") {
-                        TimelineLoadingMoreIndicator()
-                        LaunchedEffect(Unit) {
-                            onReachedLoadMore()
-                        }
-                    }
-                }
-                if (state.paginationState.beginningOfRoomReached && !state.timelineRoomInfo.isDm) {
-                    item(contentType = "BeginningOfRoomReached") {
-                        TimelineItemRoomBeginningView(roomName = roomName)
-                    }
-                }
             }
 
+            FocusRequestStateView(
+                focusRequestState = state.focusRequestState,
+                onClearFocusRequestState = ::clearFocusRequestState
+            )
+
             TimelineScrollHelper(
-                isTimelineEmpty = state.timelineItems.isEmpty(),
+                hasAnyEvent = state.hasAnyEvent,
                 lazyListState = lazyListState,
                 forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                 newEventState = state.newEventState,
-                onScrollFinishedAt = ::onScrollFinishedAt
+                isLive = state.isLive,
+                focusRequestState = state.focusRequestState,
+                onScrollFinishedAt = ::onScrollFinishedAt,
+                onClearFocusRequestState = ::clearFocusRequestState,
+                onJumpToLive = { state.eventSink(TimelineEvents.JumpToLive) },
             )
         }
     }
@@ -181,17 +176,21 @@ fun TimelineView(
 
 @Composable
 private fun BoxScope.TimelineScrollHelper(
-    isTimelineEmpty: Boolean,
+    hasAnyEvent: Boolean,
     lazyListState: LazyListState,
     newEventState: NewEventState,
+    isLive: Boolean,
     forceJumpToBottomVisibility: Boolean,
+    focusRequestState: FocusRequestState,
+    onClearFocusRequestState: () -> Unit,
     onScrollFinishedAt: (Int) -> Unit,
+    onJumpToLive: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val isScrollFinished by remember { derivedStateOf { !lazyListState.isScrollInProgress } }
     val canAutoScroll by remember {
         derivedStateOf {
-            lazyListState.firstVisibleItemIndex < 3
+            lazyListState.firstVisibleItemIndex < 3 && isLive
         }
     }
 
@@ -205,16 +204,36 @@ private fun BoxScope.TimelineScrollHelper(
         }
     }
 
+    fun jumpToBottom() {
+        if (isLive) {
+            scrollToBottom()
+        } else {
+            onJumpToLive()
+        }
+    }
+
+    val latestOnClearFocusRequestState by rememberUpdatedState(onClearFocusRequestState)
+    LaunchedEffect(focusRequestState) {
+        if (focusRequestState is FocusRequestState.Cached) {
+            if (abs(lazyListState.firstVisibleItemIndex - focusRequestState.index) < 10) {
+                lazyListState.animateScrollToItem(focusRequestState.index)
+            } else {
+                lazyListState.scrollToItem(focusRequestState.index)
+            }
+            latestOnClearFocusRequestState()
+        }
+    }
+
     LaunchedEffect(canAutoScroll, newEventState) {
-        val shouldAutoScroll = isScrollFinished && (canAutoScroll || newEventState == NewEventState.FromMe)
-        if (shouldAutoScroll) {
+        val shouldScrollToBottom = isScrollFinished && (canAutoScroll || newEventState == NewEventState.FromMe)
+        if (shouldScrollToBottom) {
             scrollToBottom()
         }
     }
 
     val latestOnScrollFinishedAt by rememberUpdatedState(onScrollFinishedAt)
-    LaunchedEffect(isScrollFinished, isTimelineEmpty) {
-        if (isScrollFinished && !isTimelineEmpty) {
+    LaunchedEffect(isScrollFinished, hasAnyEvent) {
+        if (isScrollFinished && hasAnyEvent) {
             // Notify the parent composable about the first visible item index when scrolling finishes
             latestOnScrollFinishedAt(lazyListState.firstVisibleItemIndex)
         }
@@ -222,11 +241,11 @@ private fun BoxScope.TimelineScrollHelper(
 
     JumpToBottomButton(
         // Use inverse of canAutoScroll otherwise we might briefly see the before the scroll animation is triggered
-        isVisible = !canAutoScroll || forceJumpToBottomVisibility,
+        isVisible = !canAutoScroll || forceJumpToBottomVisibility || !isLive,
         modifier = Modifier
             .align(Alignment.BottomEnd)
             .padding(end = 24.dp, bottom = 12.dp),
-        onClick = ::scrollToBottom,
+        onClick = { jumpToBottom() },
     )
 }
 
@@ -271,18 +290,20 @@ internal fun TimelineViewPreview(
         LocalTimelineItemPresenterFactories provides aFakeTimelineItemPresenterFactories(),
     ) {
         TimelineView(
-            state = aTimelineState(timelineItems),
-            roomName = null,
+            state = aTimelineState(
+                timelineItems = timelineItems,
+                focusedEventIndex = 0,
+            ),
             typingNotificationState = aTypingNotificationState(),
-            onMessageClicked = {},
-            onTimestampClicked = {},
             onUserDataClicked = {},
             onLinkClicked = {},
+            onMessageClicked = {},
             onMessageLongClicked = {},
+            onTimestampClicked = {},
+            onSwipeToReply = {},
             onReactionClicked = { _, _ -> },
             onReactionLongClicked = { _, _ -> },
             onMoreReactionsClicked = {},
-            onSwipeToReply = {},
             onReadReceiptClick = {},
             forceJumpToBottomVisibility = true,
         )

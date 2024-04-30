@@ -33,15 +33,7 @@ class RustTracingService @Inject constructor(private val buildMeta: BuildMeta) :
         val rustTracingConfiguration = org.matrix.rustcomponents.sdk.TracingConfiguration(
             filter = tracingConfiguration.filterConfiguration.filter,
             writeToStdoutOrSystem = tracingConfiguration.writesToLogcat,
-            writeToFiles = when (val writeToFilesConfiguration = tracingConfiguration.writesToFilesConfiguration) {
-                is WriteToFilesConfiguration.Disabled -> null
-                is WriteToFilesConfiguration.Enabled -> TracingFileConfiguration(
-                    path = writeToFilesConfiguration.directory,
-                    filePrefix = writeToFilesConfiguration.filenamePrefix,
-                    fileSuffix = null,
-                    maxFiles = null,
-                )
-            },
+            writeToFiles = tracingConfiguration.writesToFilesConfiguration.toTracingFileConfiguration(),
         )
         org.matrix.rustcomponents.sdk.setupTracing(rustTracingConfiguration)
         Timber.v("Tracing config filter = $filter: ${filter.filter}")
@@ -49,5 +41,17 @@ class RustTracingService @Inject constructor(private val buildMeta: BuildMeta) :
 
     override fun createTimberTree(): Timber.Tree {
         return RustTracingTree(retrieveFromStackTrace = buildMeta.isDebuggable)
+    }
+}
+
+private fun WriteToFilesConfiguration.toTracingFileConfiguration(): TracingFileConfiguration? {
+    return when (this) {
+        is WriteToFilesConfiguration.Disabled -> null
+        is WriteToFilesConfiguration.Enabled -> TracingFileConfiguration(
+            path = directory,
+            filePrefix = filenamePrefix,
+            fileSuffix = filenameSuffix,
+            maxFiles = numberOfFiles?.toULong(),
+        )
     }
 }

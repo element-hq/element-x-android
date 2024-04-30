@@ -5,12 +5,12 @@
   <string name="state_event_avatar_url_changed_by_you">"Вы змянілі свой аватар"</string>
   <string name="state_event_demoted_to_member">"%1$s быў паніжаны(-на) да ўдзельніка"</string>
   <string name="state_event_demoted_to_moderator">"%1$s быў паніжаны(-на) да мадэратара"</string>
-  <string name="state_event_display_name_changed_from">"%1$s змяніў(-ла) сваё адлюстраванае імя з %2$s на %3$s"</string>
-  <string name="state_event_display_name_changed_from_by_you">"Вы змянілі сваё адлюстраванае імя з %1$s на %2$s"</string>
-  <string name="state_event_display_name_removed">"%1$s выдаліў(-ла) сваё адлюстраванае імя (яно было %2$s)"</string>
-  <string name="state_event_display_name_removed_by_you">"Вы выдалілі сваё адлюстраванае імя (яно было %1$s)"</string>
-  <string name="state_event_display_name_set">"%1$s усталявалі сваё адлюстраванае імя на %2$s"</string>
-  <string name="state_event_display_name_set_by_you">"Вы ўстанавілі адлюстраванае імя на %1$s"</string>
+  <string name="state_event_display_name_changed_from">"%1$s змяніў(-ла) сваё бачнае імя з %2$s на %3$s"</string>
+  <string name="state_event_display_name_changed_from_by_you">"Вы змянілі сваё бачнае імя з %1$s на %2$s"</string>
+  <string name="state_event_display_name_removed">"%1$s выдаліў(-ла) сваё бачнае імя (яно было %2$s)"</string>
+  <string name="state_event_display_name_removed_by_you">"Вы выдалілі сваё бачнае імя (яно было %1$s)"</string>
+  <string name="state_event_display_name_set">"%1$s усталявалі сваё бачнае імя на %2$s"</string>
+  <string name="state_event_display_name_set_by_you">"Вы ўстанавілі бачнае імя на %1$s"</string>
   <string name="state_event_promoted_to_administrator">"%1$s быў(-ла) павышаны(-на) да адміністратара"</string>
   <string name="state_event_promoted_to_moderator">"%1$s быў(-ла) павышаны(-на) да мадэратара"</string>
   <string name="state_event_room_avatar_changed">"%1$s змяніў(-ла) аватар пакоя"</string>
@@ -30,7 +30,7 @@
   <string name="state_event_room_join_by_you">"Вы далучыліся да пакоя"</string>
   <string name="state_event_room_knock">"%1$s прасіў(-ла) далучыцца"</string>
   <string name="state_event_room_knock_accepted">"%1$s дазволіў(-ла) %2$s далучыцца"</string>
-  <string name="state_event_room_knock_accepted_by_you">"%1$s дазволіў(-ла) вам далучыцца"</string>
+  <string name="state_event_room_knock_accepted_by_you">"Вы дазволілі %1$s далучыцца"</string>
   <string name="state_event_room_knock_by_you">"Вы прасілі далучыцца"</string>
   <string name="state_event_room_knock_denied">"%1$s адхіліў(-ла) %2$s запыт на далучэнне"</string>
   <string name="state_event_room_knock_denied_by_you">"Вы адхілілі %1$s запыт на далучэнне"</string>

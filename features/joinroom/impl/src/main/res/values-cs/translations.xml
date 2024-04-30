@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_join_action">"Připojit se do místnosti"</string>
+  <string name="screen_join_room_knock_action">"Zaklepejte a připojte se"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s zatím nepodporuje prostory. Prostory můžete používat na webu."</string>
+  <string name="screen_join_room_space_not_supported_title">"Prostory zatím nejsou podporovány"</string>
+  <string name="screen_join_room_subtitle_knock">"Klikněte na tlačítko níže a správce místnosti bude informován. Po schválení se budete moci připojit ke konverzaci."</string>
+  <string name="screen_join_room_subtitle_no_preview">"Pro zobrazení historie zpráv musíte být členem této místnosti."</string>
+  <string name="screen_join_room_title_knock">"Chcete se připojit k této místnosti?"</string>
+  <string name="screen_join_room_title_no_preview">"Náhled není k dispozici"</string>
+</resources>

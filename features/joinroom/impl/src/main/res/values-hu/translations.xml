@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_join_action">"Csatlakozás a szobához"</string>
+  <string name="screen_join_room_knock_action">"Kopogtasson a csatlakozáshoz"</string>
+  <string name="screen_join_room_space_not_supported_description">"Az %1$s még nem támogatja a tereket. A tereket a weben érheti el."</string>
+  <string name="screen_join_room_space_not_supported_title">"A terek még nem támogatottak"</string>
+  <string name="screen_join_room_subtitle_knock">"Kattintson az alábbi gombra, és a szoba adminisztrátora értesítést kap. A jóváhagyást követően csatlakozhat a beszélgetéshez."</string>
+  <string name="screen_join_room_subtitle_no_preview">"Az üzenetelőzmények megtekintéséhez a szoba tagjának kell lennie."</string>
+  <string name="screen_join_room_title_knock">"Csatlakozna ehhez a szobához?"</string>
+  <string name="screen_join_room_title_no_preview">"Az előnézet nem érhető el"</string>
+</resources>

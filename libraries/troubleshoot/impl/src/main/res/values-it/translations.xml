@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_screen_action">"Esegui i test"</string>
+  <string name="troubleshoot_notifications_screen_notice">"Esegui i test per individuare eventuali problemi nella tua configurazione che potrebbero far sì che le notifiche non si comportino come previsto."</string>
+  <string name="troubleshoot_notifications_screen_title">"Risoluzione di problemi delle notifiche"</string>
+</resources>

@@ -98,7 +98,7 @@ private fun PreferenceTopAppBar(
 
 @PreviewsDayNight
 @Composable
-internal fun PreferenceViewPreview() = ElementPreview {
+internal fun PreferencePagePreview() = ElementPreview {
     PreferencePage(
         title = "Preference screen",
         onBackPressed = {},

@@ -33,7 +33,6 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
-import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.replace
 import com.bumble.appyx.navmodel.backstack.operation.singleTop
@@ -42,35 +41,35 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.loggedin.LoggedInNode
 import io.element.android.appnav.room.RoomFlowNode
-import io.element.android.appnav.room.RoomLoadedFlowNode
+import io.element.android.appnav.room.RoomNavigationTarget
+import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
-import io.element.android.features.invitelist.api.InviteListEntryPoint
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.lockscreen.api.LockScreenLockState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.PreferencesEntryPoint
+import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.architecture.waitForChildAttached
-import io.element.android.libraries.deeplink.DeeplinkData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.MAIN_SPACE
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.roomlist.RoomList
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.sync.SyncState
-import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
@@ -79,9 +78,9 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
+import java.util.Optional
 
 @ContributesNode(SessionScope::class)
 class LoggedInFlowNode @AssistedInject constructor(
@@ -92,11 +91,9 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val createRoomEntryPoint: CreateRoomEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
     private val secureBackupEntryPoint: SecureBackupEntryPoint,
-    private val inviteListEntryPoint: InviteListEntryPoint,
     private val ftueEntryPoint: FtueEntryPoint,
     private val coroutineScope: CoroutineScope,
     private val networkMonitor: NetworkMonitor,
-    private val notificationDrawerManager: NotificationDrawerManager,
     private val ftueService: FtueService,
     private val lockScreenEntryPoint: LockScreenEntryPoint,
     private val lockScreenStateService: LockScreenService,
@@ -157,23 +154,6 @@ class LoggedInFlowNode @AssistedInject constructor(
             }
         )
         observeSyncStateAndNetworkStatus()
-        observeInvitesLoadingState()
-    }
-
-    private fun observeInvitesLoadingState() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                matrixClient.roomListService.invites.loadingState
-                    .collect { inviteState ->
-                        when (inviteState) {
-                            is RoomList.LoadingState.Loaded -> if (inviteState.numberOfRooms == 0) {
-                                backstack.removeLast(NavTarget.InviteList)
-                            }
-                            RoomList.LoadingState.NotLoaded -> Unit
-                        }
-                    }
-            }
-        }
     }
 
     @OptIn(FlowPreview::class)
@@ -212,8 +192,9 @@ class LoggedInFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class Room(
-            val roomId: RoomId,
-            val initialElement: RoomLoadedFlowNode.NavTarget = RoomLoadedFlowNode.NavTarget.Messages
+            val roomIdOrAlias: RoomIdOrAlias,
+            val roomDescription: RoomDescription? = null,
+            val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages()
         ) : NavTarget
 
         @Parcelize
@@ -228,9 +209,6 @@ class LoggedInFlowNode @AssistedInject constructor(
         data class SecureBackup(
             val initialElement: SecureBackupEntryPoint.InitialTarget = SecureBackupEntryPoint.InitialTarget.Root
         ) : NavTarget
-
-        @Parcelize
-        data object InviteList : NavTarget
 
         @Parcelize
         data object Ftue : NavTarget
@@ -253,7 +231,7 @@ class LoggedInFlowNode @AssistedInject constructor(
             NavTarget.RoomList -> {
                 val callback = object : RoomListEntryPoint.Callback {
                     override fun onRoomClicked(roomId: RoomId) {
-                        backstack.push(NavTarget.Room(roomId))
+                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
                     }
 
                     override fun onSettingsClicked() {
@@ -268,12 +246,8 @@ class LoggedInFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.SecureBackup(initialElement = SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey))
                     }
 
-                    override fun onInvitesClicked() {
-                        backstack.push(NavTarget.InviteList)
-                    }
-
                     override fun onRoomSettingsClicked(roomId: RoomId) {
-                        backstack.push(NavTarget.Room(roomId, initialElement = RoomLoadedFlowNode.NavTarget.RoomDetails))
+                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), initialElement = RoomNavigationTarget.Details))
                     }
 
                     override fun onReportBugClicked() {
@@ -290,20 +264,46 @@ class LoggedInFlowNode @AssistedInject constructor(
                     .build()
             }
             is NavTarget.Room -> {
-                val callback = object : RoomLoadedFlowNode.Callback {
+                val callback = object : JoinedRoomLoadedFlowNode.Callback {
                     override fun onOpenRoom(roomId: RoomId) {
-                        backstack.push(NavTarget.Room(roomId))
+                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
                     }
 
                     override fun onForwardedToSingleRoom(roomId: RoomId) {
                         coroutineScope.launch { attachRoom(roomId) }
                     }
 
+                    override fun onPermalinkClicked(data: PermalinkData) {
+                        when (data) {
+                            is PermalinkData.UserLink -> {
+                                // FIXME Add a user profile screen.
+                                Timber.e("User link clicked: ${data.userId}. TODO Add a user profile screen")
+                            }
+                            is PermalinkData.RoomLink -> {
+                                backstack.push(
+                                    NavTarget.Room(
+                                        roomIdOrAlias = data.roomIdOrAlias,
+                                        initialElement = RoomNavigationTarget.Messages(data.eventId),
+                                        // TODO Use the viaParameters
+                                    )
+                                )
+                            }
+                            is PermalinkData.FallbackLink,
+                            is PermalinkData.RoomEmailInviteLink -> {
+                                // Should not happen (handled by MessagesNode)
+                            }
+                        }
+                    }
+
                     override fun onOpenGlobalNotificationSettings() {
                         backstack.push(NavTarget.Settings(PreferencesEntryPoint.InitialTarget.NotificationSettings))
                     }
                 }
-                val inputs = RoomFlowNode.Inputs(roomId = navTarget.roomId, initialElement = navTarget.initialElement)
+                val inputs = RoomFlowNode.Inputs(
+                    roomIdOrAlias = navTarget.roomIdOrAlias,
+                    roomDescription = Optional.ofNullable(navTarget.roomDescription),
+                    initialElement = navTarget.initialElement
+                )
                 createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs, callback))
             }
             is NavTarget.Settings -> {
@@ -317,7 +317,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     }
 
                     override fun onOpenRoomNotificationSettings(roomId: RoomId) {
-                        backstack.push(NavTarget.Room(roomId, initialElement = RoomLoadedFlowNode.NavTarget.RoomNotificationSettings))
+                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), initialElement = RoomNavigationTarget.NotificationSettings))
                     }
                 }
                 val inputs = PreferencesEntryPoint.Params(navTarget.initialElement)
@@ -329,7 +329,7 @@ class LoggedInFlowNode @AssistedInject constructor(
             NavTarget.CreateRoom -> {
                 val callback = object : CreateRoomEntryPoint.Callback {
                     override fun onSuccess(roomId: RoomId) {
-                        backstack.replace(NavTarget.Room(roomId))
+                        backstack.replace(NavTarget.Room(roomId.toRoomIdOrAlias()))
                     }
                 }
 
@@ -341,21 +341,6 @@ class LoggedInFlowNode @AssistedInject constructor(
             is NavTarget.SecureBackup -> {
                 secureBackupEntryPoint.nodeBuilder(this, buildContext)
                     .params(SecureBackupEntryPoint.Params(initialElement = navTarget.initialElement))
-                    .build()
-            }
-            NavTarget.InviteList -> {
-                val callback = object : InviteListEntryPoint.Callback {
-                    override fun onBackClicked() {
-                        backstack.pop()
-                    }
-
-                    override fun onInviteAccepted(roomId: RoomId) {
-                        backstack.push(NavTarget.Room(roomId))
-                    }
-                }
-
-                inviteListEntryPoint.nodeBuilder(this, buildContext)
-                    .callback(callback)
                     .build()
             }
             NavTarget.Ftue -> {
@@ -370,8 +355,12 @@ class LoggedInFlowNode @AssistedInject constructor(
             NavTarget.RoomDirectorySearch -> {
                 roomDirectoryEntryPoint.nodeBuilder(this, buildContext)
                     .callback(object : RoomDirectoryEntryPoint.Callback {
-                        override fun onOpenRoom(roomId: RoomId) {
-                            coroutineScope.launch { attachRoom(roomId) }
+                        override fun onRoomJoined(roomId: RoomId) {
+                            backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
+                        }
+
+                        override fun onResultClicked(roomDescription: RoomDescription) {
+                            backstack.push(NavTarget.Room(roomDescription.roomId.toRoomIdOrAlias(), roomDescription))
                         }
                     })
                     .build()
@@ -390,17 +379,7 @@ class LoggedInFlowNode @AssistedInject constructor(
         if (!canShowRoomList()) return
         attachChild<RoomFlowNode> {
             backstack.singleTop(NavTarget.RoomList)
-            backstack.push(NavTarget.Room(roomId))
-        }
-    }
-
-    internal suspend fun attachInviteList(deeplinkData: DeeplinkData.InviteList) = withContext(lifecycleScope.coroutineContext) {
-        if (!canShowRoomList()) return@withContext
-        notificationDrawerManager.clearMembershipNotificationForSession(deeplinkData.sessionId)
-        backstack.singleTop(NavTarget.RoomList)
-        backstack.push(NavTarget.InviteList)
-        waitForChildAttached<Node, NavTarget> { navTarget ->
-            navTarget is NavTarget.InviteList
+            backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
         }
     }
 

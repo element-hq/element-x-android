@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="confirm_recovery_key_banner_message">"В настоящее время резервная копия вашего чата не синхронизирована. Требуется подтвердить вашим ключом восстановления, чтобы сохранить доступ к резервной копии чата."</string>
-  <string name="confirm_recovery_key_banner_title">"Подтвердите ключ восстановления"</string>
+  <string name="confirm_recovery_key_banner_title">
+    "Введите "
+    <b>"ключ восстановления"</b>
+  </string>
+  <string name="screen_invites_decline_chat_message">"Вы уверены, что хотите отклонить приглашение в %1$s?"</string>
+  <string name="screen_invites_decline_chat_title">"Отклонить приглашение"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Вы уверены, что хотите отказаться от личного общения с %1$s?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Отклонить чат"</string>
+  <string name="screen_invites_empty_list">"Нет приглашений"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) пригласил вас"</string>
   <string name="screen_migration_message">"Это одноразовый процесс, спасибо, что подождали."</string>
   <string name="screen_migration_title">"Настройка учетной записи."</string>
   <string name="screen_roomlist_a11y_create_message">"Создайте новую беседу или комнату"</string>
@@ -11,6 +20,8 @@
   <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Добавить чат в избранное можно в настройках чата.
 На данный момент вы можете убрать фильтры, чтобы увидеть другие ваши чаты."</string>
   <string name="screen_roomlist_filter_favourites_empty_state_title">"У вас пока нет избранных чатов"</string>
+  <string name="screen_roomlist_filter_invites">"Приглашает"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"У вас нет отложенных приглашений."</string>
   <string name="screen_roomlist_filter_low_priority">"Низкий приоритет"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Вы можете убрать фильтры, чтобы увидеть другие ваши чаты."</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"У вас нет чатов для этой подборки"</string>

@@ -40,6 +40,7 @@ import kotlinx.collections.immutable.toImmutableList
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateNewRecoveryKeyView(
+    desktopApplicationName: String,
     onBackClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -57,15 +58,15 @@ fun CreateNewRecoveryKeyView(
                 title = stringResource(R.string.screen_create_new_recovery_key_title),
                 iconStyle = BigIcon.Style.Default(CompoundIcons.Computer())
             )
-            Content()
+            Content(desktopApplicationName = desktopApplicationName)
         }
     }
 }
 
 @Composable
-private fun Content() {
+private fun Content(desktopApplicationName: String) {
     val listItems = buildList {
-        add(AnnotatedString(stringResource(R.string.screen_create_new_recovery_key_list_item_1)))
+        add(AnnotatedString(stringResource(R.string.screen_create_new_recovery_key_list_item_1, desktopApplicationName)))
         add(AnnotatedString(stringResource(R.string.screen_create_new_recovery_key_list_item_2)))
         add(
             annotatedTextWithBold(
@@ -83,6 +84,7 @@ private fun Content() {
 internal fun CreateNewRecoveryKeyViewPreview() {
     ElementPreview {
         CreateNewRecoveryKeyView(
+            desktopApplicationName = "Element",
             onBackClicked = {},
         )
     }

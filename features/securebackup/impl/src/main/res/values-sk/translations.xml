@@ -9,7 +9,7 @@
   <string name="screen_chat_backup_recovery_action_confirm_description">"Vaša záloha konverzácie nie je momentálne synchronizovaná."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Nastaviť obnovovanie"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Získajte prístup k vašim šifrovaným správam aj keď stratíte všetky svoje zariadenia alebo sa odhlásite zo všetkých %1$s zariadení."</string>
-  <string name="screen_create_new_recovery_key_list_item_1">"Otvoriť Element v stolnom počítači"</string>
+  <string name="screen_create_new_recovery_key_list_item_1">"Otvoriť %1$s v stolnom počítači"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Znova sa prihláste do svojho účtu"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Keď sa zobrazí výzva na overenie vášho zariadenia, vyberte %1$s"</string>
   <string name="screen_create_new_recovery_key_list_item_3_reset_all">"\"Obnoviť všetko\""</string>
@@ -21,7 +21,7 @@
   <string name="screen_key_backup_disable_confirmation_title">"Ste si istí, že chcete vypnúť zálohovanie?"</string>
   <string name="screen_key_backup_disable_description">"Vypnutím zálohovania sa odstráni aktuálna záloha šifrovacích kľúčov a vypnú sa ďalšie bezpečnostné funkcie. V tomto prípade:"</string>
   <string name="screen_key_backup_disable_description_point_1">"Na nových zariadeniach nebudete mať zašifrovanú históriu správ"</string>
-  <string name="screen_key_backup_disable_description_point_2">"Stratíte prístup k svojim zašifrovaným správam, ak sa odhlásite zo všetkých %1$s zariadení"</string>
+  <string name="screen_key_backup_disable_description_point_2">"Stratíte prístup k svojim zašifrovaným správam, ak sa odhlásite z aplikácie %1$s na všetkých zariadeniach"</string>
   <string name="screen_key_backup_disable_title">"Ste si istí, že chcete vypnúť zálohovanie?"</string>
   <string name="screen_recovery_key_change_description">"Získajte nový kľúč na obnovenie, ak ste stratili svoj existujúci. Po zmene kľúča na obnovenie už starý kľúč nebude fungovať."</string>
   <string name="screen_recovery_key_change_generate_key">"Vygenerovať nový kľúč na obnovenie"</string>
@@ -32,11 +32,12 @@
   <string name="screen_recovery_key_confirm_description">"Uistite sa, že túto obrazovku nikto nevidí!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Skúste prosím znova potvrdiť prístup k vašej zálohe konverzácie."</string>
   <string name="screen_recovery_key_confirm_error_title">"Nesprávny kľúč na obnovenie"</string>
-  <string name="screen_recovery_key_confirm_key_description">"Ak máte frázu na obnovenie alebo tajné heslo/kľúč, bude to tiež fungovať."</string>
+  <string name="screen_recovery_key_confirm_key_description">"Ak máte bezpečnostný kľúč alebo bezpečnostnú frázu, bude to fungovať tiež."</string>
   <string name="screen_recovery_key_confirm_key_label">"Kľúč na obnovenie alebo prístupový kód"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Zadať…"</string>
+  <string name="screen_recovery_key_confirm_lost_recovery_key">"Stratili ste kľúč na obnovenie?"</string>
   <string name="screen_recovery_key_confirm_success">"Kľúč na obnovu potvrdený"</string>
-  <string name="screen_recovery_key_confirm_title">"Zadajte kľúč na obnovenie alebo prístupový kód"</string>
+  <string name="screen_recovery_key_confirm_title">"Zadajte kľúč na obnovenie"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Skopírovaný kľúč na obnovenie"</string>
   <string name="screen_recovery_key_generating_key">"Generovanie…"</string>
   <string name="screen_recovery_key_save_action">"Uložiť kľúč na obnovenie"</string>

@@ -18,8 +18,12 @@ package io.element.android.libraries.matrix.api.permalink
 
 import android.net.Uri
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * This sealed class represents all the permalink cases.
@@ -28,19 +32,10 @@ import kotlinx.collections.immutable.ImmutableList
 @Immutable
 sealed interface PermalinkData {
     data class RoomLink(
-        val roomIdOrAlias: String,
-        val isRoomAlias: Boolean,
-        val eventId: String?,
-        val viaParameters: ImmutableList<String>
-    ) : PermalinkData {
-        fun getRoomId(): RoomId? {
-            return roomIdOrAlias.takeIf { !isRoomAlias }?.let(::RoomId)
-        }
-
-        fun getRoomAlias(): String? {
-            return roomIdOrAlias.takeIf { isRoomAlias }
-        }
-    }
+        val roomIdOrAlias: RoomIdOrAlias,
+        val eventId: EventId? = null,
+        val viaParameters: ImmutableList<String> = persistentListOf()
+    ) : PermalinkData
 
     /*
      * &room_name=Team2
@@ -48,7 +43,7 @@ sealed interface PermalinkData {
      * &inviter_name=bob
      */
     data class RoomEmailInviteLink(
-        val roomId: String,
+        val roomId: RoomId,
         val email: String,
         val signUrl: String,
         val roomName: String?,
@@ -60,7 +55,7 @@ sealed interface PermalinkData {
         val roomType: String?
     ) : PermalinkData
 
-    data class UserLink(val userId: String) : PermalinkData
+    data class UserLink(val userId: UserId) : PermalinkData
 
     data class FallbackLink(val uri: Uri, val isLegacyGroupLink: Boolean = false) : PermalinkData
 }

@@ -22,7 +22,6 @@ import kotlinx.collections.immutable.toPersistentList
 
 data class RoomListFiltersState(
     val filterSelectionStates: ImmutableList<FilterSelectionState>,
-    val isFeatureEnabled: Boolean,
     val eventSink: (RoomListFiltersEvents) -> Unit,
 ) {
     val hasAnyFilterSelected = filterSelectionStates.any { it.isSelected }

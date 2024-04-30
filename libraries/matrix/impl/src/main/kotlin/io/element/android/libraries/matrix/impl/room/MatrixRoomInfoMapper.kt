@@ -16,6 +16,8 @@
 
 package io.element.android.libraries.matrix.impl.room
 
+import io.element.android.libraries.matrix.api.core.RoomAlias
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
@@ -35,7 +37,7 @@ class MatrixRoomInfoMapper(
 ) {
     fun map(rustRoomInfo: RustRoomInfo): MatrixRoomInfo = rustRoomInfo.use {
         return MatrixRoomInfo(
-            id = it.id,
+            id = RoomId(it.id),
             name = it.name,
             topic = it.topic,
             avatarUrl = it.avatarUrl,
@@ -44,7 +46,7 @@ class MatrixRoomInfoMapper(
             isSpace = it.isSpace,
             isTombstoned = it.isTombstoned,
             isFavorite = it.isFavourite,
-            canonicalAlias = it.canonicalAlias,
+            canonicalAlias = it.canonicalAlias?.let(::RoomAlias),
             alternativeAliases = it.alternativeAliases.toImmutableList(),
             currentUserMembership = it.membership.map(),
             latestEvent = it.latestEvent?.use(timelineItemMapper::map),

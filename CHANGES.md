@@ -1,3 +1,52 @@
+Changes in Element X v0.4.10 (2024-04-17)
+=========================================
+
+Matrix Rust SDK 0.2.14
+
+Features ✨
+----------
+ - Rework room navigation to handle unknown room and prepare work on permalink. ([#2695](https://github.com/element-hq/element-x-android/issues/2695))
+
+Other changes
+-------------
+ - Encrypt new session data with a passphrase ([#2703](https://github.com/element-hq/element-x-android/issues/2703))
+ - Use sdk API to build permalinks ([#2708](https://github.com/element-hq/element-x-android/issues/2708))
+ - Parse permalink using parseMatrixEntityFrom from the SDK ([#2709](https://github.com/element-hq/element-x-android/issues/2709))
+ - Fix compile for forks that use the `noop` analytics module ([#2698](https://github.com/element-hq/element-x-android/issues/2698))
+
+
+Changes in Element X v0.4.9 (2024-04-12)
+========================================
+
+- Synchronize Localazy Strings.
+
+Changes in Element X v0.4.8 (2024-04-10)
+========================================
+
+Features ✨
+----------
+ - Move session recovery to the login flow. ([#2579](https://github.com/element-hq/element-x-android/issues/2579))
+ - Move session verification to the after login flow and make it mandatory. ([#2580](https://github.com/element-hq/element-x-android/issues/2580))
+ - Add a notification troubleshoot screen ([#2601](https://github.com/element-hq/element-x-android/issues/2601))
+ - Add action to copy permalink ([#2650](https://github.com/element-hq/element-x-android/issues/2650))
+
+Bugfixes 🐛
+----------
+ - Fix analytics issue around room considered as space by mistake. ([#2612](https://github.com/element-hq/element-x-android/issues/2612))
+ - Fix crash observed when going back to the room list. ([#2619](https://github.com/element-hq/element-x-android/issues/2619))
+ - Hide Event org.matrix.msc3401.call.member on the timeline. ([#2625](https://github.com/element-hq/element-x-android/issues/2625))
+ - Fall back to name-based generated avatars when image avatars don't load. ([#2667](https://github.com/element-hq/element-x-android/issues/2667))
+
+Other changes
+-------------
+ - Improve UI for notification permission screen in onboarding. ([#2581](https://github.com/element-hq/element-x-android/issues/2581))
+ - Categorise members by role in change roles screen. ([#2593](https://github.com/element-hq/element-x-android/issues/2593))
+ - Make completed poll more clearly visible ([#2608](https://github.com/element-hq/element-x-android/issues/2608))
+ - Show users from last visited DM as suggestion when starting a Chat or when creating a Room. ([#2634](https://github.com/element-hq/element-x-android/issues/2634))
+ - Enable room moderation feature. ([#2678](https://github.com/element-hq/element-x-android/issues/2678))
+ - Improve analytics opt-in screen UI. ([#2684](https://github.com/element-hq/element-x-android/issues/2684))
+
+
 Changes in Element X v0.4.7 (2024-03-26)
 ========================================
 

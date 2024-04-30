@@ -20,19 +20,28 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
 
 interface MessagesEntryPoint : FeatureEntryPoint {
-    fun createNode(
-        parentNode: Node,
-        buildContext: BuildContext,
-        callback: Callback,
-    ): Node
+    fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
+
+    interface NodeBuilder {
+        fun params(params: Params): NodeBuilder
+        fun callback(callback: Callback): NodeBuilder
+        fun build(): Node
+    }
+
+    data class Params(
+        val focusedEventId: EventId?,
+    )
 
     interface Callback : Plugin {
         fun onRoomDetailsClicked()
         fun onUserDataClicked(userId: UserId)
+        fun onPermalinkClicked(data: PermalinkData)
         fun onForwardedToSingleRoom(roomId: RoomId)
     }
 }

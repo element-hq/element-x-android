@@ -22,8 +22,6 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.roomlist.impl.filters.selection.DefaultFilterSelectionStrategy
 import io.element.android.features.roomlist.impl.filters.selection.FilterSelectionState
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.tests.testutils.awaitLastSequentialItem
@@ -45,6 +43,7 @@ class RoomListFiltersPresenterTests {
                     filterSelectionState(RoomListFilter.People, false),
                     filterSelectionState(RoomListFilter.Rooms, false),
                     filterSelectionState(RoomListFilter.Favourites, false),
+                    filterSelectionState(RoomListFilter.Invites, false),
                 )
             }
             cancelAndIgnoreRemainingEvents()
@@ -84,6 +83,7 @@ class RoomListFiltersPresenterTests {
                     filterSelectionState(RoomListFilter.People, false),
                     filterSelectionState(RoomListFilter.Rooms, false),
                     filterSelectionState(RoomListFilter.Favourites, false),
+                    filterSelectionState(RoomListFilter.Invites, false),
                 ).inOrder()
                 assertThat(state.selectedFilters()).isEmpty()
                 val roomListCurrentFilter = roomListService.allRooms.currentFilter.value as MatrixRoomListFilter.All
@@ -118,11 +118,9 @@ private fun filterSelectionState(filter: RoomListFilter, selected: Boolean) = Fi
 
 private fun createRoomListFiltersPresenter(
     roomListService: RoomListService = FakeRoomListService(),
-    featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
 ): RoomListFiltersPresenter {
     return RoomListFiltersPresenter(
         roomListService = roomListService,
-        featureFlagService = featureFlagService,
         filterSelectionStrategy = DefaultFilterSelectionStrategy(),
     )
 }

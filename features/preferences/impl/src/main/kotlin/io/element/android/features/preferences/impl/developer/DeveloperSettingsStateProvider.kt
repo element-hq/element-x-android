@@ -25,22 +25,36 @@ open class DeveloperSettingsStateProvider : PreviewParameterProvider<DeveloperSe
     override val values: Sequence<DeveloperSettingsState>
         get() = sequenceOf(
             aDeveloperSettingsState(),
-            aDeveloperSettingsState().copy(clearCacheAction = AsyncData.Loading()),
-            aDeveloperSettingsState().copy(
-                customElementCallBaseUrlState = CustomElementCallBaseUrlState(
+            aDeveloperSettingsState(
+                clearCacheAction = AsyncData.Loading()
+            ),
+            aDeveloperSettingsState(
+                customElementCallBaseUrlState = aCustomElementCallBaseUrlState(
                     baseUrl = "https://call.element.ahoy",
-                    defaultUrl = "https://call.element.io",
-                    validator = { true }
                 )
             ),
         )
 }
 
-fun aDeveloperSettingsState() = DeveloperSettingsState(
+fun aDeveloperSettingsState(
+    clearCacheAction: AsyncData<Unit> = AsyncData.Uninitialized,
+    customElementCallBaseUrlState: CustomElementCallBaseUrlState = aCustomElementCallBaseUrlState(),
+    eventSink: (DeveloperSettingsEvents) -> Unit = {},
+) = DeveloperSettingsState(
     features = aFeatureUiModelList(),
     rageshakeState = aRageshakePreferencesState(),
     cacheSize = AsyncData.Success("1.2 MB"),
-    clearCacheAction = AsyncData.Uninitialized,
-    customElementCallBaseUrlState = CustomElementCallBaseUrlState(baseUrl = null, defaultUrl = "https://call.element.io", validator = { true }),
-    eventSink = {}
+    clearCacheAction = clearCacheAction,
+    customElementCallBaseUrlState = customElementCallBaseUrlState,
+    eventSink = eventSink,
+)
+
+fun aCustomElementCallBaseUrlState(
+    baseUrl: String? = null,
+    defaultUrl: String = "https://call.element.io",
+    validator: (String?) -> Boolean = { true },
+) = CustomElementCallBaseUrlState(
+    baseUrl = baseUrl,
+    defaultUrl = defaultUrl,
+    validator = validator,
 )

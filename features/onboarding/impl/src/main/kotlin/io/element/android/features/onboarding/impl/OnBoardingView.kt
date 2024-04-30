@@ -129,7 +129,7 @@ private fun OnBoardingContent(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = stringResource(id = R.string.screen_onboarding_welcome_message),
+                    text = stringResource(id = R.string.screen_onboarding_welcome_message, state.productionApplicationName),
                     color = ElementTheme.materialColors.secondary,
                     style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = 17.sp),
                     textAlign = TextAlign.Center
@@ -202,7 +202,7 @@ private fun OnBoardingButtons(
 
 @PreviewsDayNight
 @Composable
-internal fun OnBoardingScreenPreview(
+internal fun OnBoardingViewPreview(
     @PreviewParameter(OnBoardingStateProvider::class) state: OnBoardingState
 ) = ElementPreview {
     OnBoardingView(

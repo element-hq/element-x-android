@@ -144,7 +144,6 @@ class DatabaseSessionStoreTests {
             isTokenValid = 1,
             loginType = null,
             passphrase = "aPassphrase",
-            needsVerification = 1L,
         )
         val secondSessionData = SessionData(
             userId = "userId",
@@ -158,7 +157,6 @@ class DatabaseSessionStoreTests {
             isTokenValid = 1,
             loginType = null,
             passphrase = "aPassphraseAltered",
-            needsVerification = 0L,
         )
         assertThat(firstSessionData.userId).isEqualTo(secondSessionData.userId)
         assertThat(firstSessionData.loginTimestamp).isNotEqualTo(secondSessionData.loginTimestamp)
@@ -179,7 +177,6 @@ class DatabaseSessionStoreTests {
         assertThat(alteredSession.loginTimestamp).isEqualTo(firstSessionData.loginTimestamp)
         assertThat(alteredSession.oidcData).isEqualTo(secondSessionData.oidcData)
         assertThat(alteredSession.passphrase).isEqualTo(secondSessionData.passphrase)
-        assertThat(alteredSession.needsVerification).isEqualTo(secondSessionData.needsVerification)
     }
 
     @Test
@@ -196,7 +193,6 @@ class DatabaseSessionStoreTests {
             isTokenValid = 1,
             loginType = null,
             passphrase = "aPassphrase",
-            needsVerification = 1L,
         )
         val secondSessionData = SessionData(
             userId = "userIdUnknown",
@@ -210,7 +206,6 @@ class DatabaseSessionStoreTests {
             isTokenValid = 1,
             loginType = null,
             passphrase = "aPassphraseAltered",
-            needsVerification = 0L,
         )
         assertThat(firstSessionData.userId).isNotEqualTo(secondSessionData.userId)
 
@@ -229,6 +224,5 @@ class DatabaseSessionStoreTests {
         assertThat(notAlteredSession.loginTimestamp).isEqualTo(firstSessionData.loginTimestamp)
         assertThat(notAlteredSession.oidcData).isEqualTo(firstSessionData.oidcData)
         assertThat(notAlteredSession.passphrase).isEqualTo(firstSessionData.passphrase)
-        assertThat(notAlteredSession.needsVerification).isEqualTo(firstSessionData.needsVerification)
     }
 }
