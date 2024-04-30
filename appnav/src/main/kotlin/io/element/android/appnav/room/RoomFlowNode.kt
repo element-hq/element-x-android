@@ -53,10 +53,11 @@ import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
-import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
@@ -68,7 +69,6 @@ class RoomFlowNode @AssistedInject constructor(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val client: MatrixClient,
-    private val roomMembershipObserver: RoomMembershipObserver,
     private val joinRoomEntryPoint: JoinRoomEntryPoint,
     private val roomAliasResolverEntryPoint: RoomAliasResolverEntryPoint,
     private val networkMonitor: NetworkMonitor,
@@ -121,14 +121,19 @@ class RoomFlowNode @AssistedInject constructor(
     }
 
     private fun subscribeToRoomInfoFlow(roomId: RoomId) {
-        client.getRoomInfoFlow(
+        val roomInfoFlow = client.getRoomInfoFlow(
             roomId = roomId
         )
-            .onEach { roomInfo ->
-                Timber.d("Room membership: ${roomInfo.map { it.currentUserMembership }}")
-                val info = roomInfo.getOrNull()
-                if (info?.currentUserMembership == CurrentUserMembership.JOINED) {
-                    if (info.isSpace) {
+            .map { it.getOrNull() }
+            .filterNotNull()
+
+        val isSpaceFlow = roomInfoFlow.map { it.isSpace }.distinctUntilChanged()
+        val currentMembershipFlow = roomInfoFlow.map { it.currentUserMembership }.distinctUntilChanged()
+        combine(currentMembershipFlow, isSpaceFlow) { membership, isSpace ->
+            Timber.d("Room membership: $membership")
+            when (membership) {
+                CurrentUserMembership.JOINED -> {
+                    if (isSpace) {
                         // It should not happen, but probably due to an issue in the sliding sync,
                         // we can have a space here in case the space has just been joined.
                         // So navigate to the JoinRoom target for now, which will
@@ -137,19 +142,17 @@ class RoomFlowNode @AssistedInject constructor(
                     } else {
                         backstack.newRoot(NavTarget.JoinedRoom(roomId))
                     }
-                } else {
+                }
+                CurrentUserMembership.LEFT -> {
+                    // Left the room, navigate out of this flow
+                    navigateUp()
+                }
+                CurrentUserMembership.INVITED -> {
+                    // Was invited, display the join room screen
                     backstack.newRoot(NavTarget.JoinRoom(roomId))
                 }
             }
-            .launchIn(lifecycleScope)
-
-        // When leaving the room from this session only, navigate up.
-        roomMembershipObserver.updates
-            .filter { update -> update.roomId == roomId && !update.isUserInRoom }
-            .onEach {
-                navigateUp()
-            }
-            .launchIn(lifecycleScope)
+        }.launchIn(lifecycleScope)
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
