@@ -27,7 +27,13 @@ open class TimelineItemEncryptedContentProvider : PreviewParameterProvider<Timel
             aTimelineItemEncryptedContent(
                 data = UnableToDecryptContent.Data.MegolmV1AesSha2(
                     sessionId = "sessionId",
-                    utdCause = UtdCause.Membership
+                    utdCause = UtdCause.Membership,
+                )
+            ),
+            aTimelineItemEncryptedContent(
+                data = UnableToDecryptContent.Data.MegolmV1AesSha2(
+                    sessionId = "sessionId",
+                    utdCause = UtdCause.Unknown,
                 )
             ),
         )
