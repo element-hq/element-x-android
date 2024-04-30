@@ -47,6 +47,7 @@ import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -55,7 +56,6 @@ import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -123,12 +123,10 @@ class RoomFlowNode @AssistedInject constructor(
     private fun subscribeToRoomInfoFlow(roomId: RoomId) {
         val roomInfoFlow = client.getRoomInfoFlow(
             roomId = roomId
-        )
-            .map { it.getOrNull() }
-            .filterNotNull()
+        ).map { it.getOrNull() }
 
-        val isSpaceFlow = roomInfoFlow.map { it.isSpace }.distinctUntilChanged()
-        val currentMembershipFlow = roomInfoFlow.map { it.currentUserMembership }.distinctUntilChanged()
+        val isSpaceFlow = roomInfoFlow.map { it?.isSpace.orFalse() }.distinctUntilChanged()
+        val currentMembershipFlow = roomInfoFlow.map { it?.currentUserMembership }.distinctUntilChanged()
         combine(currentMembershipFlow, isSpaceFlow) { membership, isSpace ->
             Timber.d("Room membership: $membership")
             when (membership) {
@@ -147,8 +145,8 @@ class RoomFlowNode @AssistedInject constructor(
                     // Left the room, navigate out of this flow
                     navigateUp()
                 }
-                CurrentUserMembership.INVITED -> {
-                    // Was invited, display the join room screen
+                else -> {
+                    // Was invited or the room is not known, display the join room screen
                     backstack.newRoot(NavTarget.JoinRoom(roomId))
                 }
             }
