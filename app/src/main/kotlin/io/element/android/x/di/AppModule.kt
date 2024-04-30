@@ -92,7 +92,6 @@ object AppModule {
         gitBranchName = BuildConfig.GIT_BRANCH_NAME,
         flavorDescription = BuildConfig.FLAVOR_DESCRIPTION,
         flavorShortDescription = BuildConfig.SHORT_FLAVOR_DESCRIPTION,
-        desktopApplicationName = "Element",
     )
 
     @Provides

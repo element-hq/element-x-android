@@ -30,5 +30,4 @@ data class BuildMeta(
     val gitBranchName: String,
     val flavorDescription: String,
     val flavorShortDescription: String,
-    val desktopApplicationName: String = applicationName,
 )

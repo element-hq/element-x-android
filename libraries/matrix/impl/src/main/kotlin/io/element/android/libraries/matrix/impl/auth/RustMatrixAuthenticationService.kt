@@ -226,7 +226,6 @@ class RustMatrixAuthenticationService @Inject constructor(
                             isTokenValid = true,
                             loginType = LoginType.QR,
                             passphrase = pendingPassphrase,
-                            needsVerification = false,
                         )
                     sessionStore.storeData(sessionData)
                     SessionId(sessionData.userId)

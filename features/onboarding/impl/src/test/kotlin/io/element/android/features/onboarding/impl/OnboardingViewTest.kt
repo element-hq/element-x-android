@@ -40,11 +40,7 @@ class OnboardingViewTest {
     fun `when can create account - clicking on create account calls the expected callback`() {
         ensureCalledOnce { callback ->
             rule.setOnboardingView(
-                state = OnBoardingState(
-                    isDebugBuild = false,
-                    canLoginWithQrCode = false,
-                    canCreateAccount = true,
-                ),
+                state = anOnBoardingState(canCreateAccount = true),
                 onCreateAccount = callback,
             )
             rule.clickOn(R.string.screen_onboarding_sign_up)
@@ -55,11 +51,7 @@ class OnboardingViewTest {
     fun `when can login with QR code - clicking on sign in with QR code calls the expected callback`() {
         ensureCalledOnce { callback ->
             rule.setOnboardingView(
-                state = OnBoardingState(
-                    isDebugBuild = false,
-                    canLoginWithQrCode = true,
-                    canCreateAccount = false,
-                ),
+                state = anOnBoardingState(canLoginWithQrCode = true),
                 onSignInWithQrCode = callback,
             )
             rule.clickOn(R.string.screen_onboarding_sign_in_with_qr_code)
@@ -70,11 +62,7 @@ class OnboardingViewTest {
     fun `when can login with QR code - clicking on sign in manually calls the expected callback`() {
         ensureCalledOnce { callback ->
             rule.setOnboardingView(
-                state = OnBoardingState(
-                    isDebugBuild = false,
-                    canLoginWithQrCode = true,
-                    canCreateAccount = false,
-                ),
+                state = anOnBoardingState(canLoginWithQrCode = true),
                 onSignIn = callback,
             )
             rule.clickOn(R.string.screen_onboarding_sign_in_manually)
@@ -85,8 +73,7 @@ class OnboardingViewTest {
     fun `when cannot login with QR code or create account - clicking on continue calls the sign in callback`() {
         ensureCalledOnce { callback ->
             rule.setOnboardingView(
-                state = OnBoardingState(
-                    isDebugBuild = false,
+                state = anOnBoardingState(
                     canLoginWithQrCode = false,
                     canCreateAccount = false,
                 ),
@@ -100,11 +87,7 @@ class OnboardingViewTest {
     fun `when on debug build - clicking on the settings icon opens the developer settings`() {
         ensureCalledOnce { callback ->
             rule.setOnboardingView(
-                state = OnBoardingState(
-                    isDebugBuild = true,
-                    canLoginWithQrCode = false,
-                    canCreateAccount = false,
-                ),
+                state = anOnBoardingState(isDebugBuild = true),
                 onOpenDeveloperSettings = callback
             )
             rule.onNode(hasContentDescription(rule.activity.getString(CommonStrings.common_settings))).performClick()
@@ -115,11 +98,7 @@ class OnboardingViewTest {
     fun `clicking on report a problem calls the sign in callback`() {
         ensureCalledOnce { callback ->
             rule.setOnboardingView(
-                state = OnBoardingState(
-                    isDebugBuild = false,
-                    canLoginWithQrCode = false,
-                    canCreateAccount = false,
-                ),
+                state = anOnBoardingState(),
                 onReportProblem = callback,
             )
             rule.clickOn(CommonStrings.common_report_a_problem)
