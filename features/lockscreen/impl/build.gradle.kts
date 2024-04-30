@@ -38,7 +38,6 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.cryptography.api)
@@ -57,7 +56,6 @@ dependencies {
     testImplementation(projects.tests.testutils)
     testImplementation(projects.libraries.cryptography.test)
     testImplementation(projects.libraries.cryptography.impl)
-    testImplementation(projects.libraries.featureflag.test)
-    implementation(projects.libraries.sessionStorage.test)
-    implementation(projects.services.appnavstate.test)
+    testImplementation(projects.libraries.sessionStorage.test)
+    testImplementation(projects.services.appnavstate.test)
 }

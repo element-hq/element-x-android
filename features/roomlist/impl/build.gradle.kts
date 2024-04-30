@@ -73,7 +73,6 @@ dependencies {
     testImplementation(projects.libraries.dateformatter.test)
     testImplementation(projects.libraries.eventformatter.test)
     testImplementation(projects.libraries.indicator.impl)
-    testImplementation(projects.libraries.permissions.noop)
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.features.networkmonitor.test)

@@ -25,8 +25,6 @@ android {
 dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.androidutils)
-    implementation(projects.libraries.uiStrings)
 
     ksp(libs.showkase.processor)
 }

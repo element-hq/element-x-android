@@ -34,11 +34,9 @@ dependencies {
     anvil(projects.anvilcodegen)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
-    implementation(projects.libraries.androidutils)
     api(projects.features.onboarding.api)
     ksp(libs.showkase.processor)
 

@@ -232,20 +232,15 @@ dependencies {
 
     implementation(libs.appyx.core)
     implementation(libs.androidx.splash)
-    implementation(libs.androidx.core)
     implementation(libs.androidx.corektx)
-    implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.startup)
     implementation(libs.androidx.preference)
-    implementation(libs.coil)
 
     implementation(platform(libs.network.okhttp.bom))
     implementation(libs.network.okhttp.logging)
     implementation(libs.serialization.json)
-
-    implementation(libs.matrix.emojibase.bindings)
 
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
@@ -253,9 +248,7 @@ dependencies {
     testImplementation(libs.test.junit)
     testImplementation(libs.test.robolectric)
     testImplementation(libs.coroutines.test)
-    testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
-    testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
 
     ksp(libs.showkase.processor)

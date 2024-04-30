@@ -28,11 +28,14 @@ anvil {
 }
 
 dependencies {
-    implementation(projects.anvilannotations)
+    // DI
+    implementation(projects.libraries.di)
+    implementation(libs.dagger)
     anvil(projects.anvilcodegen)
+
     api(projects.features.cachecleaner.api)
     implementation(projects.libraries.core)
-    implementation(projects.libraries.architecture)
+    implementation(libs.coroutines.core)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

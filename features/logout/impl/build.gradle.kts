@@ -40,12 +40,10 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
-    implementation(projects.libraries.dateformatter.api)
     api(projects.features.logout.api)
     ksp(libs.showkase.processor)
 
@@ -59,6 +57,5 @@ dependencies {
     testImplementation(libs.androidx.compose.ui.test.junit)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.tests.testutils)
 }

@@ -51,7 +51,6 @@ dependencies {
     implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.usersearch.impl)
     implementation(projects.services.analytics.api)
-    implementation(libs.coil.compose)
     api(projects.features.createroom.api)
 
     testImplementation(libs.test.junit)

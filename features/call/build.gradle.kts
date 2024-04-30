@@ -35,7 +35,6 @@ anvil {
 }
 
 dependencies {
-    implementation(projects.appnav)
     implementation(projects.appconfig)
     implementation(projects.anvilannotations)
     implementation(projects.libraries.architecture)
@@ -54,7 +53,6 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(libs.test.robolectric)
-    testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.tests.testutils)
