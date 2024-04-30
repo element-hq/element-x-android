@@ -58,7 +58,6 @@ dependencies {
     api(projects.libraries.pushstore.api)
     api(projects.libraries.push.api)
 
-    implementation(projects.services.analytics.api)
     implementation(projects.services.appnavstate.api)
     implementation(projects.services.toolbox.api)
 

@@ -34,12 +34,4 @@ dependencies {
     implementation(projects.libraries.di)
 
     implementation(libs.coroutines.core)
-
-    testImplementation(projects.tests.testutils)
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.test.mockk)
-    testImplementation(libs.test.turbine)
-    testImplementation(libs.coroutines.core)
-    testImplementation(libs.coroutines.test)
 }

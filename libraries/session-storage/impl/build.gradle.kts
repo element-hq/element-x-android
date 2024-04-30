@@ -29,14 +29,11 @@ anvil {
 
 dependencies {
     implementation(libs.dagger)
-    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.encryptedDb)
     api(projects.libraries.sessionStorage.api)
     implementation(libs.sqldelight.driver.android)
     implementation(libs.sqlcipher)
-    implementation(libs.sqlite)
-    implementation(libs.androidx.security.crypto)
     implementation(projects.libraries.di)
     implementation(libs.sqldelight.coroutines)
 

@@ -23,6 +23,5 @@ android {
 
 dependencies {
     implementation(projects.libraries.architecture)
-    implementation(libs.androidx.corektx)
     implementation(libs.coroutines.core)
 }

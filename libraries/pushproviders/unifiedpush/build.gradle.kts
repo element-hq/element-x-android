@@ -32,7 +32,6 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.uiStrings)
     api(projects.libraries.troubleshoot.api)
 
     implementation(projects.libraries.pushstore.api)
@@ -44,7 +43,6 @@ dependencies {
 
     implementation(projects.libraries.network)
     implementation(platform(libs.network.okhttp.bom))
-    implementation(libs.network.okhttp.okhttp)
     implementation(platform(libs.network.retrofit.bom))
     implementation(libs.network.retrofit)
 

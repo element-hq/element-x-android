@@ -17,7 +17,6 @@
 plugins {
     id("io.element.android-library")
     alias(libs.plugins.anvil)
-    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -42,13 +41,10 @@ dependencies {
     implementation(projects.libraries.network)
     implementation(projects.services.analytics.api)
     implementation(projects.services.toolbox.api)
-    implementation(projects.libraries.featureflag.api)
     api(projects.libraries.matrix.api)
     implementation(libs.dagger)
     implementation(projects.libraries.core)
     implementation("net.java.dev.jna:jna:5.14.0@aar")
-    implementation(libs.androidx.datastore.preferences)
-    implementation(libs.serialization.json)
     implementation(libs.kotlinx.collections.immutable)
 
     testImplementation(libs.test.junit)
@@ -56,7 +52,6 @@ dependencies {
     testImplementation(libs.test.robolectric)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.services.analytics.test)
-    testImplementation(projects.tests.testutils)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.test.turbine)
 }

@@ -16,7 +16,6 @@
 
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.anvil)
 }
 
 android {
@@ -24,8 +23,6 @@ android {
 
     dependencies {
         implementation(projects.libraries.core)
-        implementation(projects.libraries.di)
-        implementation(libs.inject)
         api(projects.libraries.mediapickers.api)
     }
 }

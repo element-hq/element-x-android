@@ -26,6 +26,5 @@ dependencies {
     api(projects.libraries.matrix.api)
     api(libs.coroutines.core)
     implementation(libs.coroutines.test)
-    implementation(projects.tests.testutils)
     implementation(projects.libraries.pushstore.api)
 }

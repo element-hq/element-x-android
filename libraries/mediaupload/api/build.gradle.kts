@@ -31,12 +31,10 @@ android {
         implementation(projects.anvilannotations)
         anvil(projects.anvilcodegen)
 
-        implementation(projects.libraries.architecture)
-        implementation(projects.libraries.androidutils)
         implementation(projects.libraries.core)
-        implementation(projects.libraries.di)
         api(projects.libraries.matrix.api)
         implementation(libs.inject)
+        implementation(libs.dagger)
         implementation(libs.coroutines.core)
 
         testImplementation(projects.libraries.matrix.test)

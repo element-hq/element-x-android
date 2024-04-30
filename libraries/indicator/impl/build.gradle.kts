@@ -31,18 +31,10 @@ dependencies {
     anvil(projects.anvilcodegen)
     implementation(libs.dagger)
     implementation(projects.libraries.di)
-    implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.matrix.api)
     implementation(projects.anvilannotations)
 
     implementation(libs.coroutines.core)
 
     api(projects.libraries.indicator.api)
-
-    testImplementation(projects.libraries.featureflag.test)
-    testImplementation(projects.libraries.matrix.test)
-    testImplementation(libs.test.junit)
-    testImplementation(libs.coroutines.test)
-    testImplementation(libs.test.turbine)
-    testImplementation(libs.test.truth)
 }

@@ -29,6 +29,5 @@ android {
 
 dependencies {
     api(libs.maplibre)
-    api(libs.maplibre.ktx)
     api(libs.maplibre.annotation)
 }

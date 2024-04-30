@@ -28,7 +28,6 @@ anvil {
 }
 
 dependencies {
-    implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.di)
     implementation(projects.libraries.matrixui)
@@ -38,7 +37,6 @@ dependencies {
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
-    testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)

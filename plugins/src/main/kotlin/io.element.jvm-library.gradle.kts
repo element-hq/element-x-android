@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.mediaplayer.impl
+/**
+ * This will generate the plugin "io.element.jvm-library", used in JVM library modules.
+ */
+import extension.androidConfig
+import extension.commonDependencies
+import org.gradle.accessors.dm.LibrariesForLibs
 
-import kotlinx.coroutines.test.runTest
-import org.junit.Test
+val libs = the<LibrariesForLibs>()
+plugins {
+    kotlin("jvm")
+    id("com.autonomousapps.dependency-analysis")
+}
 
-class MediaPlayerImplTest {
-    @Test
-    fun `default test`() = runTest {
-        // TODO
-    }
+dependencies {
+    commonDependencies(libs)
 }

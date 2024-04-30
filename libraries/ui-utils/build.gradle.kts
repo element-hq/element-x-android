@@ -23,6 +23,5 @@ android {
 
     dependencies {
         testImplementation(libs.test.junit)
-        testImplementation(libs.test.truth)
     }
 }

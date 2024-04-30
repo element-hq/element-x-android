@@ -43,7 +43,6 @@ dependencies {
     implementation(libs.coroutines.core)
     implementation(libs.dagger)
     implementation(libs.telephoto.zoomableimage)
-    implementation(libs.vanniktech.blurhash)
     implementation(libs.telephoto.flick)
 
     implementation(projects.libraries.androidutils)

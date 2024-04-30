@@ -46,7 +46,6 @@ dependencies {
     implementation(libs.androidx.security.crypto)
     api(libs.androidx.browser)
 
-    testImplementation(projects.tests.testutils)
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.robolectric)
