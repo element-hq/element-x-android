@@ -26,7 +26,7 @@ sealed interface InReplyTo {
     data class NotLoaded(val eventId: EventId) : InReplyTo
 
     /** The event details are pending to be fetched. We should **not** fetch them again. */
-    data object Pending : InReplyTo
+    data class Pending(val eventId: EventId) : InReplyTo
 
     /** The event details are available. */
     data class Ready(
@@ -44,5 +44,8 @@ sealed interface InReplyTo {
      * If the reason for the failure is consistent on the server, we'd enter a loop
      * where we keep trying to fetch the same event.
      * */
-    data object Error : InReplyTo
+    data class Error(
+        val eventId: EventId,
+        val message: String,
+    ) : InReplyTo
 }

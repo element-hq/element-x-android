@@ -16,23 +16,38 @@
 
 package io.element.android.libraries.matrix.impl.timeline.postprocessor
 
+import androidx.annotation.VisibleForTesting
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
+import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 
 /**
- * This timeline post-processor removes the room creation event and the self-join event from the timeline for DMs.
+ * This timeline post-processor removes the room creation event and the self-join event from the timeline for DMs
+ * or add the RoomBeginning item for non DM room.
  */
-class DmBeginningTimelineProcessor {
+class RoomBeginningPostProcessor {
     fun process(
         items: List<MatrixTimelineItem>,
         isDm: Boolean,
-        isAtStartOfTimeline: Boolean
+        hasMoreToLoadBackwards: Boolean
     ): List<MatrixTimelineItem> {
-        if (!isDm || !isAtStartOfTimeline) return items
+        return when {
+            hasMoreToLoadBackwards -> items
+            isDm -> processForDM(items)
+            else -> processForRoom(items)
+        }
+    }
 
+    private fun processForRoom(items: List<MatrixTimelineItem>): List<MatrixTimelineItem> {
+        if (items.hasEncryptionHistoryBanner()) return items
+        val roomBeginningItem = createRoomBeginningItem()
+        return listOf(roomBeginningItem) + items
+    }
+
+    private fun processForDM(items: List<MatrixTimelineItem>): List<MatrixTimelineItem> {
         // Find room creation event. This is usually index 0
         val roomCreationEventIndex = items.indexOfFirst {
             val stateEventContent = (it as? MatrixTimelineItem.Event)?.event?.content as? StateContent
@@ -57,5 +72,13 @@ class DmBeginningTimelineProcessor {
             newItems.removeAt(roomCreationEventIndex)
         }
         return newItems
+    }
+
+    @VisibleForTesting
+    fun createRoomBeginningItem(): MatrixTimelineItem.Virtual {
+        return MatrixTimelineItem.Virtual(
+            uniqueId = VirtualTimelineItem.RoomBeginning.toString(),
+            virtual = VirtualTimelineItem.RoomBeginning
+        )
     }
 }

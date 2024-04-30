@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.timeline.factories
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import io.element.android.features.messages.impl.timeline.TimelineItemIndexer
 import io.element.android.features.messages.impl.timeline.diff.TimelineItemsCacheInvalidator
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemEventFactory
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemVirtualFactory
@@ -43,9 +44,9 @@ class TimelineItemsFactory @Inject constructor(
     private val eventItemFactory: TimelineItemEventFactory,
     private val virtualItemFactory: TimelineItemVirtualFactory,
     private val timelineItemGrouper: TimelineItemGrouper,
+    private val timelineItemIndexer: TimelineItemIndexer,
 ) {
     private val timelineItems = MutableStateFlow(persistentListOf<TimelineItem>())
-
     private val lock = Mutex()
     private val diffCache = MutableListDiffCache<TimelineItem>()
     private val diffCacheUpdater = DiffCacheUpdater<MatrixTimelineItem, TimelineItem>(
@@ -100,6 +101,7 @@ class TimelineItemsFactory @Inject constructor(
             }
         }
         val result = timelineItemGrouper.group(newTimelineItemStates).toPersistentList()
+        timelineItemIndexer.process(result)
         this.timelineItems.emit(result)
     }
 
@@ -108,13 +110,13 @@ class TimelineItemsFactory @Inject constructor(
         index: Int,
         roomMembers: List<RoomMember>,
     ): TimelineItem? {
-        val timelineItemState =
+        val timelineItem =
             when (val currentTimelineItem = timelineItems[index]) {
                 is MatrixTimelineItem.Event -> eventItemFactory.create(currentTimelineItem, index, timelineItems, roomMembers)
                 is MatrixTimelineItem.Virtual -> virtualItemFactory.create(currentTimelineItem)
                 MatrixTimelineItem.Other -> null
             }
-        diffCache[index] = timelineItemState
-        return timelineItemState
+        diffCache[index] = timelineItem
+        return timelineItem
     }
 }

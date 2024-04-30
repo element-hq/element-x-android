@@ -43,8 +43,8 @@ import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
-import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
@@ -54,7 +54,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
-import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
+import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.widget.FakeWidgetDriver
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.collections.immutable.ImmutableMap
@@ -84,7 +84,7 @@ class FakeMatrixRoom(
     override val joinedMemberCount: Long = 123L,
     override val activeMemberCount: Long = 234L,
     val notificationSettingsService: NotificationSettingsService = FakeNotificationSettingsService(),
-    private val matrixTimeline: MatrixTimeline = FakeMatrixTimeline(),
+    override val liveTimeline: Timeline = FakeTimeline(),
     private var roomPermalinkResult: () -> Result<String> = { Result.success("room link") },
     private var eventPermalinkResult: (EventId) -> Result<String> = { Result.success("event link") },
     canRedactOwn: Boolean = false,
@@ -134,7 +134,6 @@ class FakeMatrixRoom(
     private var updatePowerLevelsResult = Result.success(Unit)
     private var resetPowerLevelsResult = Result.success(defaultRoomPowerLevels())
     var sendMessageMentions = emptyList<Mention>()
-    val editMessageCalls = mutableListOf<Pair<String, String?>>()
     private val _typingRecord = mutableListOf<Boolean>()
     val typingRecord: List<Boolean>
         get() = _typingRecord
@@ -215,7 +214,15 @@ class FakeMatrixRoom(
 
     override val syncUpdateFlow: StateFlow<Long> = MutableStateFlow(0L)
 
-    override val timeline: MatrixTimeline = matrixTimeline
+    private var timelineFocusedOnEventResult: Result<Timeline> = Result.success(FakeTimeline())
+
+    fun givenTimelineFocusedOnEventResult(result: Result<Timeline>) {
+        timelineFocusedOnEventResult = result
+    }
+
+    override suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline> = simulateLongTask {
+        timelineFocusedOnEventResult
+    }
 
     override suspend fun subscribeToSync() = Unit
 
@@ -286,31 +293,6 @@ class FakeMatrixRoom(
 
     override suspend fun getPermalinkFor(eventId: EventId): Result<String> {
         return eventPermalinkResult(eventId)
-    }
-
-    override suspend fun editMessage(
-        originalEventId: EventId?,
-        transactionId: TransactionId?,
-        body: String,
-        htmlBody: String?,
-        mentions: List<Mention>
-    ): Result<Unit> {
-        sendMessageMentions = mentions
-        editMessageCalls += body to htmlBody
-        return Result.success(Unit)
-    }
-
-    var replyMessageParameter: Pair<String, String?>? = null
-        private set
-
-    override suspend fun enterSpecialMode(eventId: EventId?): Result<Unit> {
-        return Result.success(Unit)
-    }
-
-    override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> {
-        sendMessageMentions = mentions
-        replyMessageParameter = body to htmlBody
-        return Result.success(Unit)
     }
 
     var redactEventEventIdParam: EventId? = null

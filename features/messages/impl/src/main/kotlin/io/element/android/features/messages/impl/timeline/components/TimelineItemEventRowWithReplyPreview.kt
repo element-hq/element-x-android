@@ -170,7 +170,7 @@ open class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails>
     protected fun aInReplyToDetails(
         eventContent: EventContent,
         displayNameAmbiguous: Boolean = false,
-    ) = InReplyToDetails(
+    ) = InReplyToDetails.Ready(
         eventId = EventId("\$event"),
         eventContent = eventContent,
         senderId = UserId("@Sender:domain"),

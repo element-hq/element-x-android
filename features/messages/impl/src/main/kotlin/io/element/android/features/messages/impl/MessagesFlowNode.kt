@@ -54,6 +54,7 @@ import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.architecture.overlay.Overlay
 import io.element.android.libraries.architecture.overlay.operation.show
 import io.element.android.libraries.di.ApplicationContext
@@ -81,7 +82,7 @@ class MessagesFlowNode @AssistedInject constructor(
     private val createPollEntryPoint: CreatePollEntryPoint,
 ) : BaseFlowNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.Messages(plugins.filterIsInstance<Inputs>().firstOrNull()?.focusedEventId),
+        initialElement = NavTarget.Messages,
         savedStateMap = buildContext.savedStateMap,
     ),
     overlay = Overlay(
@@ -91,15 +92,14 @@ class MessagesFlowNode @AssistedInject constructor(
     plugins = plugins
 ) {
     data class Inputs(val focusedEventId: EventId?) : NodeInputs
+    private val inputs = inputs<Inputs>()
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
         data object Empty : NavTarget
 
         @Parcelize
-        data class Messages(
-            val focusedEventId: EventId? = null,
-        ) : NavTarget
+        data object Messages : NavTarget
 
         @Parcelize
         data class MediaViewer(
@@ -191,10 +191,10 @@ class MessagesFlowNode @AssistedInject constructor(
                         ElementCallActivity.start(context, inputs)
                     }
                 }
-                val params = MessagesNode.Inputs(
-                    focusedEventId = navTarget.focusedEventId,
+                val inputs = MessagesNode.Inputs(
+                    focusedEventId = inputs.focusedEventId,
                 )
-                createNode<MessagesNode>(buildContext, listOf(callback, params))
+                createNode<MessagesNode>(buildContext, listOf(callback, inputs))
             }
             is NavTarget.MediaViewer -> {
                 val inputs = MediaViewerNode.Inputs(

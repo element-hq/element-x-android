@@ -69,7 +69,7 @@ class JoinedRoomFlowNode @AssistedInject constructor(
     ) {
     data class Inputs(
         val roomId: RoomId,
-        val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages(),
+        val initialElement: RoomNavigationTarget,
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
@@ -106,7 +106,10 @@ class JoinedRoomFlowNode @AssistedInject constructor(
                 val roomFlowNodeCallback = plugins<JoinedRoomLoadedFlowNode.Callback>()
                 val awaitRoomState = loadingRoomStateStateFlow.value
                 if (awaitRoomState is LoadingRoomState.Loaded) {
-                    val inputs = JoinedRoomLoadedFlowNode.Inputs(awaitRoomState.room, initialElement = inputs.initialElement)
+                    val inputs = JoinedRoomLoadedFlowNode.Inputs(
+                        room = awaitRoomState.room,
+                        initialElement = inputs.initialElement
+                    )
                     createNode<JoinedRoomLoadedFlowNode>(buildContext, plugins = listOf(inputs) + roomFlowNodeCallback)
                 } else {
                     loadingNode(buildContext, this::navigateUp)

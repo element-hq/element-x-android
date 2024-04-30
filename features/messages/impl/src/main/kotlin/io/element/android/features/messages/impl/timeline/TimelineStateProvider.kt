@@ -35,7 +35,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import kotlinx.collections.immutable.ImmutableList
@@ -47,31 +46,21 @@ import kotlin.random.Random
 
 fun aTimelineState(
     timelineItems: ImmutableList<TimelineItem> = persistentListOf(),
-    paginationState: MatrixTimeline.PaginationState = aPaginationState(),
     renderReadReceipts: Boolean = false,
     timelineRoomInfo: TimelineRoomInfo = aTimelineRoomInfo(),
+    focusedEventIndex: Int = -1,
+    isLive: Boolean = true,
     eventSink: (TimelineEvents) -> Unit = {},
 ) = TimelineState(
     timelineItems = timelineItems,
     timelineRoomInfo = timelineRoomInfo,
-    paginationState = paginationState,
     renderReadReceipts = renderReadReceipts,
-    highlightedEventId = null,
     newEventState = NewEventState.None,
+    isLive = isLive,
+    focusedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().getOrNull(focusedEventIndex)?.eventId,
+    focusRequestState = FocusRequestState.None,
     eventSink = eventSink,
 )
-
-fun aPaginationState(
-    isBackPaginating: Boolean = false,
-    hasMoreToLoadBackwards: Boolean = true,
-    beginningOfRoomReached: Boolean = false,
-): MatrixTimeline.PaginationState {
-    return MatrixTimeline.PaginationState(
-        isBackPaginating = isBackPaginating,
-        hasMoreToLoadBackwards = hasMoreToLoadBackwards,
-        beginningOfRoomReached = beginningOfRoomReached,
-    )
-}
 
 internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList<TimelineItem> {
     return persistentListOf(
@@ -235,10 +224,12 @@ internal fun aGroupedEvents(
 }
 
 internal fun aTimelineRoomInfo(
+    name: String = "Room name",
     isDm: Boolean = false,
     userHasPermissionToSendMessage: Boolean = true,
 ) = TimelineRoomInfo(
     isDm = isDm,
+    name = name,
     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
     userHasPermissionToSendReaction = true,
 )

@@ -43,7 +43,7 @@ fun TimelineItemGroupedEventsRow(
     timelineRoomInfo: TimelineRoomInfo,
     renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
-    highlightedItem: String?,
+    focusedEventId: EventId?,
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
     inReplyToClick: (EventId) -> Unit,
@@ -68,7 +68,7 @@ fun TimelineItemGroupedEventsRow(
         onExpandGroupClick = ::onExpandGroupClick,
         timelineItem = timelineItem,
         timelineRoomInfo = timelineRoomInfo,
-        highlightedItem = highlightedItem,
+        focusedEventId = focusedEventId,
         renderReadReceipts = renderReadReceipts,
         isLastOutgoingMessage = isLastOutgoingMessage,
         onClick = onClick,
@@ -92,7 +92,7 @@ private fun TimelineItemGroupedEventsRowContent(
     onExpandGroupClick: () -> Unit,
     timelineItem: TimelineItem.GroupedEvents,
     timelineRoomInfo: TimelineRoomInfo,
-    highlightedItem: String?,
+    focusedEventId: EventId?,
     renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     onClick: (TimelineItem.Event) -> Unit,
@@ -116,7 +116,7 @@ private fun TimelineItemGroupedEventsRowContent(
                 timelineItem.events.size
             ),
             isExpanded = isExpanded,
-            isHighlighted = !isExpanded && timelineItem.events.any { it.identifier() == highlightedItem },
+            isHighlighted = !isExpanded && timelineItem.events.any { it.isEvent(focusedEventId) },
             onClick = onExpandGroupClick,
         )
         if (isExpanded) {
@@ -127,7 +127,7 @@ private fun TimelineItemGroupedEventsRowContent(
                         timelineRoomInfo = timelineRoomInfo,
                         renderReadReceipts = renderReadReceipts,
                         isLastOutgoingMessage = isLastOutgoingMessage,
-                        highlightedItem = highlightedItem,
+                        focusedEventId = focusedEventId,
                         onClick = onClick,
                         onLongClick = onLongClick,
                         inReplyToClick = inReplyToClick,
@@ -160,12 +160,13 @@ private fun TimelineItemGroupedEventsRowContent(
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemGroupedEventsRowContentExpandedPreview() = ElementPreview {
+    val events = aGroupedEvents(withReadReceipts = true)
     TimelineItemGroupedEventsRowContent(
         isExpanded = true,
         onExpandGroupClick = {},
-        timelineItem = aGroupedEvents(withReadReceipts = true),
+        timelineItem = events,
         timelineRoomInfo = aTimelineRoomInfo(),
-        highlightedItem = null,
+        focusedEventId = events.events.first().eventId,
         renderReadReceipts = true,
         isLastOutgoingMessage = false,
         onClick = {},
@@ -190,7 +191,7 @@ internal fun TimelineItemGroupedEventsRowContentCollapsePreview() = ElementPrevi
         onExpandGroupClick = {},
         timelineItem = aGroupedEvents(withReadReceipts = true),
         timelineRoomInfo = aTimelineRoomInfo(),
-        highlightedItem = null,
+        focusedEventId = null,
         renderReadReceipts = true,
         isLastOutgoingMessage = false,
         onClick = {},
