@@ -345,11 +345,6 @@ class LoggedInFlowNode @AssistedInject constructor(
             }
             NavTarget.Ftue -> {
                 ftueEntryPoint.nodeBuilder(this, buildContext)
-                    .callback(object : FtueEntryPoint.Callback {
-                        override fun onFtueFlowFinished() {
-                            lifecycleScope.launch { attachRoomList() }
-                        }
-                    })
                     .build()
             }
             NavTarget.RoomDirectorySearch -> {
