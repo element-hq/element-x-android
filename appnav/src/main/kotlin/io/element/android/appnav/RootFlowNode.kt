@@ -288,7 +288,7 @@ class RootFlowNode @AssistedInject constructor(
             .attachSession()
             .apply {
                 when (deeplinkData) {
-                    is DeeplinkData.Root -> attachRoomList()
+                    is DeeplinkData.Root -> Unit // The room list will always be shown, observing FtueState
                     is DeeplinkData.Room -> attachRoom(deeplinkData.roomId)
                 }
             }

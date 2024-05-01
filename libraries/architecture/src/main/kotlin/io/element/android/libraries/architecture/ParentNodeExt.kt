@@ -20,6 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.children.nodeOrNull
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -42,6 +43,26 @@ suspend inline fun <reified N : Node, NavTarget : Any> ParentNode<NavTarget>.wai
                     }
                 if (expectedChildNode != null && !continuation.isCompleted) {
                     continuation.resume(expectedChildNode)
+                }
+            }
+        }.invokeOnCompletion {
+            continuation.cancel()
+        }
+    }
+
+/**
+ * Wait for a child to be attached to the parent node, only using the NavTarget
+ */
+suspend inline fun <NavTarget : Any> ParentNode<NavTarget>.waitForNavTargetAttached(crossinline predicate: (NavTarget) -> Boolean) =
+    suspendCancellableCoroutine { continuation ->
+        lifecycleScope.launch {
+            children.collect { childMap ->
+                val node = childMap.entries
+                    .map { it.key.navTarget }
+                    .lastOrNull(predicate)
+                if (node != null && !continuation.isCompleted) {
+                    continuation.resume(Unit)
+                    cancel()
                 }
             }
         }.invokeOnCompletion {

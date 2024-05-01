@@ -35,7 +35,6 @@ import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.replace
-import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
@@ -60,6 +59,7 @@ import io.element.android.features.securebackup.api.SecureBackupEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.architecture.waitForNavTargetAttached
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SessionScope
@@ -363,23 +363,13 @@ class LoggedInFlowNode @AssistedInject constructor(
         }
     }
 
-    suspend fun attachRoomList() {
-        if (!canShowRoomList()) return
-        attachChild<Node> {
-            backstack.singleTop(NavTarget.RoomList)
-        }
-    }
-
     suspend fun attachRoom(roomId: RoomId) {
-        if (!canShowRoomList()) return
+        waitForNavTargetAttached { navTarget ->
+            navTarget is NavTarget.RoomList
+        }
         attachChild<RoomFlowNode> {
-            backstack.singleTop(NavTarget.RoomList)
             backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
         }
-    }
-
-    private fun canShowRoomList(): Boolean {
-        return ftueService.state.value is FtueState.Complete
     }
 
     @Composable
