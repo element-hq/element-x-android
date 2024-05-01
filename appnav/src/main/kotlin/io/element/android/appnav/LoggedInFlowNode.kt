@@ -386,9 +386,9 @@ class LoggedInFlowNode @AssistedInject constructor(
     override fun View(modifier: Modifier) {
         Box(modifier = modifier) {
             val lockScreenState by lockScreenStateService.lockState.collectAsState()
-            val isFtueDisplayed by ftueService.state.collectAsState()
+            val ftueState by ftueService.state.collectAsState()
             BackstackView()
-            if (isFtueDisplayed is FtueState.Complete) {
+            if (ftueState is FtueState.Complete) {
                 PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
             }
             if (lockScreenState == LockScreenLockState.Locked) {
