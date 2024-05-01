@@ -55,6 +55,8 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
@@ -279,7 +281,29 @@ class RootFlowNode @AssistedInject constructor(
         when (resolvedIntent) {
             is ResolvedIntent.Navigation -> navigateTo(resolvedIntent.deeplinkData)
             is ResolvedIntent.Oidc -> onOidcAction(resolvedIntent.oidcAction)
+            is ResolvedIntent.Permalink -> navigateTo(resolvedIntent.permalinkData)
         }
+    }
+
+    private suspend fun navigateTo(permalinkData: PermalinkData) {
+        Timber.d("Navigating to $permalinkData")
+        attachSession(null)
+            .attachSession()
+            .apply {
+                when (permalinkData) {
+                    is PermalinkData.FallbackLink -> Unit
+                    is PermalinkData.RoomEmailInviteLink -> Unit
+                    is PermalinkData.RoomLink -> {
+                        attachRoom(
+                            roomIdOrAlias = permalinkData.roomIdOrAlias,
+                            eventId = permalinkData.eventId,
+                        )
+                    }
+                    is PermalinkData.UserLink -> {
+                        attachUser(permalinkData.userId)
+                    }
+                }
+            }
     }
 
     private suspend fun navigateTo(deeplinkData: DeeplinkData) {
@@ -289,7 +313,7 @@ class RootFlowNode @AssistedInject constructor(
             .apply {
                 when (deeplinkData) {
                     is DeeplinkData.Root -> Unit // The room list will always be shown, observing FtueState
-                    is DeeplinkData.Room -> attachRoom(deeplinkData.roomId)
+                    is DeeplinkData.Room -> attachRoom(deeplinkData.roomId.toRoomIdOrAlias())
                 }
             }
     }
@@ -298,10 +322,11 @@ class RootFlowNode @AssistedInject constructor(
         oidcActionFlow.post(oidcAction)
     }
 
-    private suspend fun attachSession(sessionId: SessionId): LoggedInAppScopeFlowNode {
+    // [sessionId] will be null for permalink.
+    private suspend fun attachSession(sessionId: SessionId?): LoggedInAppScopeFlowNode {
         // TODO handle multi-session
         return waitForChildAttached { navTarget ->
-            navTarget is NavTarget.LoggedInFlow && navTarget.sessionId == sessionId
+            navTarget is NavTarget.LoggedInFlow && (sessionId == null || navTarget.sessionId == sessionId)
         }
     }
 }

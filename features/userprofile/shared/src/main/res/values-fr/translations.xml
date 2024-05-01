@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_dm_details_block_alert_action">"Bloquer"</string>
+  <string name="screen_dm_details_block_alert_description">"Les utilisateurs bloqués ne pourront pas vous envoyer de messages et tous leurs messages seront masqués. Vous pouvez les débloquer à tout moment."</string>
+  <string name="screen_dm_details_block_user">"Bloquer l’utilisateur"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Débloquer"</string>
+  <string name="screen_dm_details_unblock_alert_description">"Vous pourrez à nouveau voir tous ses messages."</string>
+  <string name="screen_dm_details_unblock_user">"Débloquer l’utilisateur"</string>
+  <string name="screen_start_chat_error_starting_chat">"Une erreur s’est produite lors de la tentative de création de la discussion"</string>
+</resources>

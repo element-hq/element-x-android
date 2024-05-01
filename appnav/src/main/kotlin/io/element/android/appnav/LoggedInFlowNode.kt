@@ -56,6 +56,7 @@ import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
+import io.element.android.features.userprofile.api.UserProfileEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
@@ -64,9 +65,11 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatch
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.MAIN_SPACE
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.sync.SyncState
@@ -91,6 +94,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val createRoomEntryPoint: CreateRoomEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
     private val secureBackupEntryPoint: SecureBackupEntryPoint,
+    private val userProfileEntryPoint: UserProfileEntryPoint,
     private val ftueEntryPoint: FtueEntryPoint,
     private val coroutineScope: CoroutineScope,
     private val networkMonitor: NetworkMonitor,
@@ -198,6 +202,11 @@ class LoggedInFlowNode @AssistedInject constructor(
         ) : NavTarget
 
         @Parcelize
+        data class UserProfile(
+            val userId: UserId,
+        ) : NavTarget
+
+        @Parcelize
         data class Settings(
             val initialElement: PreferencesEntryPoint.InitialTarget = PreferencesEntryPoint.InitialTarget.Root
         ) : NavTarget
@@ -270,14 +279,14 @@ class LoggedInFlowNode @AssistedInject constructor(
                     }
 
                     override fun onForwardedToSingleRoom(roomId: RoomId) {
-                        coroutineScope.launch { attachRoom(roomId) }
+                        coroutineScope.launch { attachRoom(roomId.toRoomIdOrAlias()) }
                     }
 
                     override fun onPermalinkClicked(data: PermalinkData) {
                         when (data) {
                             is PermalinkData.UserLink -> {
-                                // FIXME Add a user profile screen.
-                                Timber.e("User link clicked: ${data.userId}. TODO Add a user profile screen")
+                                // Should not happen (handled by MessagesNode)
+                                Timber.e("User link clicked: ${data.userId}.")
                             }
                             is PermalinkData.RoomLink -> {
                                 backstack.push(
@@ -306,6 +315,17 @@ class LoggedInFlowNode @AssistedInject constructor(
                 )
                 createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs, callback))
             }
+            is NavTarget.UserProfile -> {
+                val callback = object : UserProfileEntryPoint.Callback {
+                    override fun onOpenRoom(roomId: RoomId) {
+                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
+                    }
+                }
+                userProfileEntryPoint.nodeBuilder(this, buildContext)
+                    .params(UserProfileEntryPoint.Params(userId = navTarget.userId))
+                    .callback(callback)
+                    .build()
+            }
             is NavTarget.Settings -> {
                 val callback = object : PreferencesEntryPoint.Callback {
                     override fun onOpenBugReport() {
@@ -321,7 +341,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                     }
                 }
                 val inputs = PreferencesEntryPoint.Params(navTarget.initialElement)
-                return preferencesEntryPoint.nodeBuilder(this, buildContext)
+                preferencesEntryPoint.nodeBuilder(this, buildContext)
                     .params(inputs)
                     .callback(callback)
                     .build()
@@ -363,12 +383,32 @@ class LoggedInFlowNode @AssistedInject constructor(
         }
     }
 
-    suspend fun attachRoom(roomId: RoomId) {
+    suspend fun attachRoom(roomIdOrAlias: RoomIdOrAlias, eventId: EventId? = null) {
         waitForNavTargetAttached { navTarget ->
             navTarget is NavTarget.RoomList
         }
         attachChild<RoomFlowNode> {
-            backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
+            backstack.push(
+                NavTarget.Room(
+                    roomIdOrAlias = roomIdOrAlias,
+                    initialElement = RoomNavigationTarget.Messages(
+                        focusedEventId = eventId
+                    )
+                )
+            )
+        }
+    }
+
+    suspend fun attachUser(userId: UserId) {
+        waitForNavTargetAttached { navTarget ->
+            navTarget is NavTarget.RoomList
+        }
+        attachChild<Node> {
+            backstack.push(
+                NavTarget.UserProfile(
+                    userId = userId,
+                )
+            )
         }
     }
 

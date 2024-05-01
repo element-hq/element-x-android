@@ -74,6 +74,35 @@
 
                 <data android:scheme="io.element" />
             </intent-filter>
+            <!--
+              Element web links
+              Note: On Android 12 and higher clicking a web link (that is not an Android App Link) always shows content in a web browser
+              https://developer.android.com/training/app-links#web-links
+            -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="app.element.io" />
+                <data android:host="develop.element.io" />
+            </intent-filter>
+            <!--
+              matrix.to  links
+              Note: On Android 12 and higher clicking a web link (that is not an Android App Link) always shows content in a web browser
+              https://developer.android.com/training/app-links#web-links
+            -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="matrix.to" />
+            </intent-filter>
         </activity>
 
         <provider

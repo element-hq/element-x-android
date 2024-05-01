@@ -244,6 +244,7 @@
   <string name="error_failed_loading_messages">"Načítání zpráv se nezdařilo"</string>
   <string name="error_failed_locating_user">"%1$s nemá přístup k vaší poloze. Zkuste to prosím později."</string>
   <string name="error_failed_uploading_voice_message">"Nepodařilo se nahrát hlasovou zprávu."</string>
+  <string name="error_message_not_found">"Zpráva nebyla nalezena"</string>
   <string name="error_missing_location_auth_android">"%1$s nemá oprávnění k přístupu k vaší poloze. Přístup můžete povolit v Nastavení."</string>
   <string name="error_missing_location_rationale_android">"%1$s nemá oprávnění k přístupu k vaší poloze. Povolit přístup níže."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s nemá oprávnění k přístupu k mikrofonu. Povolte přístup k nahrávání hlasové zprávy."</string>

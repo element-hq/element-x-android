@@ -9,6 +9,7 @@
   <string name="screen_session_verification_positive_button_canceled">"Försök att verifiera igen"</string>
   <string name="screen_session_verification_positive_button_initial">"Jag är redo"</string>
   <string name="screen_session_verification_positive_button_verifying_ongoing">"Väntar på att matcha"</string>
+  <string name="screen_session_verification_ready_subtitle">"Jämför en unik uppsättning emojis."</string>
   <string name="screen_session_verification_request_accepted_subtitle">"Jämför de unika emojierna och se till att de visas i samma ordning."</string>
   <string name="screen_session_verification_they_dont_match">"De matchar inte"</string>
   <string name="screen_session_verification_they_match">"De matchar"</string>

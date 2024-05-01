@@ -18,6 +18,7 @@ package io.element.android.appnav.intent
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import androidx.core.net.toUri
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.login.api.oidc.OidcAction
@@ -26,9 +27,11 @@ import io.element.android.features.login.impl.oidc.OidcUrlParser
 import io.element.android.libraries.deeplink.DeepLinkCreator
 import io.element.android.libraries.deeplink.DeeplinkData
 import io.element.android.libraries.deeplink.DeeplinkParser
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_THREAD_ID
+import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import org.junit.Assert.assertThrows
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -178,6 +181,9 @@ class IntentResolverTest {
             deeplinkParser = DeeplinkParser(),
             oidcIntentResolver = DefaultOidcIntentResolver(
                 oidcUrlParser = OidcUrlParser()
+            ),
+            permalinkParser = FakePermalinkParser(
+                result = { PermalinkData.FallbackLink(Uri.parse("https://matrix.org")) }
             ),
         )
     }

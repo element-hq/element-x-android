@@ -31,13 +31,14 @@
   </string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Ausschalten"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Du verlierst deine verschlüsselten Nachrichten, wenn du auf allen Geräten abgemeldet bist."</string>
-  <string name="screen_key_backup_disable_confirmation_title">"Bist du sicher, dass du das Backup ausschalten willst?"</string>
-  <string name="screen_key_backup_disable_description">"Wenn du das Backup ausschaltest, wird dein aktuelles Backup des Verschlüsselungsschlüssels entfernt und andere Sicherheitsfunktionen werden deaktiviert. In diesem Fall wirst du:"</string>
-  <string name="screen_key_backup_disable_description_point_1">"Keine Historie für verschlüsselte Nachrichten auf neuen Geräten"</string>
+  <string name="screen_key_backup_disable_confirmation_title">"Bist du sicher, dass du das Backup deaktivieren willst?"</string>
+  <string name="screen_key_backup_disable_description">"Wenn du das Backup deaktivierst, wird dein aktuelles Backup des Verschlüsselungsschlüssels entfernt und andere Sicherheitsfunktionen werden deaktiviert. 
+Das bedeutet:"</string>
+  <string name="screen_key_backup_disable_description_point_1">"Keine Historie für verschlüsselte Nachrichten auf neuen Geräten ."</string>
   <string name="screen_key_backup_disable_description_point_2">"Du verlierst den Zugriff auf deine verschlüsselten Nachrichten, wenn du dich überall von %1$s abmeldest"</string>
-  <string name="screen_key_backup_disable_title">"Bist du sicher, dass du das Backup ausschalten willst?"</string>
-  <string name="screen_recovery_key_change_description">"Besorge dir einen neuen Wiederherstellungsschlüssel, wenn du deinen alten verloren hast. Nachdem du deinen Wiederherstellungsschlüssel geändert hast, funktioniert dein alter Schlüssel nicht mehr."</string>
-  <string name="screen_recovery_key_change_generate_key">"Erstelle einen neuen Wiederherstellungsschlüssel"</string>
+  <string name="screen_key_backup_disable_title">"Bist du sicher, dass du das Backup deaktivieren willst?"</string>
+  <string name="screen_recovery_key_change_description">"Hier kannst Du einen neuen Wiederherstellungsschlüssel erstellen. Nachdem Du einen neuen Wiederherstellungsschlüssel erstellt hast, funktioniert dein alter Schlüssel nicht mehr."</string>
+  <string name="screen_recovery_key_change_generate_key">"Wiederherstellungsschlüssel erstellen"</string>
   <string name="screen_recovery_key_change_generate_key_description">"Stelle sicher, dass du deinen Wiederherstellungsschlüssel an einem sicheren Ort aufbewahren kannst"</string>
   <string name="screen_recovery_key_change_success">"Wiederherstellungsschlüssel geändert"</string>
   <string name="screen_recovery_key_change_title">"Wiederherstellungsschlüssel ändern?"</string>
@@ -55,7 +56,7 @@
     " oder Passcode"
   </string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Eingeben…"</string>
-  <string name="screen_recovery_key_confirm_lost_recovery_key">"Hast Du Deinen Wiederherstellungschlüssel vergessen?"</string>
+  <string name="screen_recovery_key_confirm_lost_recovery_key">"Hast du deinen Wiederherstellungschlüssel vergessen?"</string>
   <string name="screen_recovery_key_confirm_success">"Wiederherstellungsschlüssel bestätigt"</string>
   <string name="screen_recovery_key_confirm_title">"Bitte Wiederherstellungsschlüssel eingeben"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Wiederherstellungsschlüssel kopiert"</string>
