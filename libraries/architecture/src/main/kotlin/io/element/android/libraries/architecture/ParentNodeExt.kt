@@ -51,7 +51,7 @@ suspend inline fun <reified N : Node, NavTarget : Any> ParentNode<NavTarget>.wai
     }
 
 /**
- * Wait for a child to be attached to the parent node, only using the NavTarget
+ * Wait for a child to be attached to the parent node, only using the NavTarget.
  */
 suspend inline fun <NavTarget : Any> ParentNode<NavTarget>.waitForNavTargetAttached(crossinline predicate: (NavTarget) -> Boolean) =
     suspendCancellableCoroutine { continuation ->
