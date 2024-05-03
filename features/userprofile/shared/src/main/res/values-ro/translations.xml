@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_dm_details_block_alert_action">"Blocați"</string>
+  <string name="screen_dm_details_block_alert_description">"Utilizatorii blocați nu vă vor putea trimite mesaje și toate mesajele lor vor fi ascunse. Puteți anula această acțiune oricând."</string>
+  <string name="screen_dm_details_block_user">"Blocați utilizatorul"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Deblocați"</string>
+  <string name="screen_dm_details_unblock_alert_description">"La deblocarea utilizatorului, veți putea vedea din nou toate mesajele de la acesta."</string>
+  <string name="screen_dm_details_unblock_user">"Deblocați utilizatorul"</string>
+  <string name="screen_start_chat_error_starting_chat">"A apărut o eroare la încercarea începerii conversației"</string>
+</resources>

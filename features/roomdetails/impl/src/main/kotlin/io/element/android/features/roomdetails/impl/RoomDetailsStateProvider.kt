@@ -19,8 +19,8 @@ package io.element.android.features.roomdetails.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
-import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState
-import io.element.android.features.roomdetails.impl.members.details.aRoomMemberDetailsState
+import io.element.android.features.userprofile.shared.UserProfileState
+import io.element.android.features.userprofile.shared.aUserProfileState
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -90,7 +90,7 @@ fun aRoomDetailsState(
     canEdit: Boolean = false,
     canShowNotificationSettings: Boolean = true,
     roomType: RoomDetailsType = RoomDetailsType.Room,
-    roomMemberDetailsState: RoomMemberDetailsState? = null,
+    roomMemberDetailsState: UserProfileState? = null,
     leaveRoomState: LeaveRoomState = aLeaveRoomState(),
     roomNotificationSettings: RoomNotificationSettings = aRoomNotificationSettings(),
     isFavorite: Boolean = false,
@@ -130,5 +130,5 @@ fun aDmRoomDetailsState(
 ) = aRoomDetailsState(
     roomName = roomName,
     roomType = RoomDetailsType.Dm(aDmRoomMember(isIgnored = isDmMemberIgnored)),
-    roomMemberDetailsState = aRoomMemberDetailsState()
+    roomMemberDetailsState = aUserProfileState()
 )

@@ -5,7 +5,7 @@
   <string name="screen_signout_confirmation_dialog_title">"Abmelden"</string>
   <string name="screen_signout_in_progress_dialog_content">"Abmelden…"</string>
   <string name="screen_signout_key_backup_disabled_subtitle">"Du bist dabei, dich von deiner letzten Sitzung abzumelden. Wenn du dich jetzt abmeldest, verlierst du den Zugriff auf deine verschlüsselten Nachrichten."</string>
-  <string name="screen_signout_key_backup_disabled_title">"Du hast das Backup ausgeschaltet"</string>
+  <string name="screen_signout_key_backup_disabled_title">"Du hast das Backup deaktiviert."</string>
   <string name="screen_signout_key_backup_offline_subtitle">"Deine Schlüssel wurden noch gesichert, als du offline gegangen bist. Stelle die Verbindung wieder her, damit deine Schlüssel gesichert werden können, bevor du dich abmeldest."</string>
   <string name="screen_signout_key_backup_offline_title">"Deine Schlüssel werden noch gesichert"</string>
   <string name="screen_signout_key_backup_ongoing_subtitle">"Bitte warte, bis der Vorgang abgeschlossen ist, bevor du dich abmeldest."</string>

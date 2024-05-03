@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_dm_details_block_alert_action">"Zablokovat"</string>
+  <string name="screen_dm_details_block_alert_description">"Blokovaní uživatelé vám nebudou moci posílat zprávy a všechny jejich zprávy budou skryty. Můžete je kdykoli odblokovat."</string>
+  <string name="screen_dm_details_block_user">"Zablokovat uživatele"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Odblokovat"</string>
+  <string name="screen_dm_details_unblock_alert_description">"Znovu uvidíte všechny zprávy od nich."</string>
+  <string name="screen_dm_details_unblock_user">"Odblokovat uživatele"</string>
+  <string name="screen_start_chat_error_starting_chat">"Při pokusu o zahájení chatu došlo k chybě"</string>
+</resources>

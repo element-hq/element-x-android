@@ -39,6 +39,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.isDark
 import io.element.android.compound.theme.mapToTheme
+import io.element.android.features.call.ui.ElementCallActivity
 import io.element.android.features.lockscreen.api.handleSecureFlag
 import io.element.android.features.lockscreen.api.isLocked
 import io.element.android.libraries.architecture.bindings
@@ -58,6 +59,13 @@ class MainActivity : NodeActivity() {
         Timber.tag(loggerTag.value).w("onCreate, with savedInstanceState: ${savedInstanceState != null}")
         installSplashScreen()
         super.onCreate(savedInstanceState)
+        if (ElementCallActivity.maybeStart(this, intent)) {
+            Timber.tag(loggerTag.value).w("Starting Element Call Activity")
+            if (savedInstanceState == null) {
+                finish()
+                return
+            }
+        }
         appBindings = bindings()
         appBindings.lockScreenService().handleSecureFlag(this)
         enableEdgeToEdge()
@@ -135,11 +143,18 @@ class MainActivity : NodeActivity() {
      * Called when:
      * - the launcher icon is clicked (if the app is already running);
      * - a notification is clicked.
+     * - a deep link have been clicked
      * - the app is going to background (<- this is strange)
      */
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         Timber.tag(loggerTag.value).w("onNewIntent")
+
+        if (ElementCallActivity.maybeStart(this, intent)) {
+            Timber.tag(loggerTag.value).w("Starting Element Call Activity")
+            return
+        }
+
         // If the mainNode is not init yet, keep the intent for later.
         // It can happen when the activity is killed by the system. The methods are called in this order :
         // onCreate(savedInstanceState=true) -> onNewIntent -> onResume -> onMainNodeInit

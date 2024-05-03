@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_dm_details_block_alert_action">"Blockieren"</string>
-  <string name="screen_dm_details_block_alert_description">"Blockierte Benutzer können Dir keine Nachrichten senden und alle ihre alten Nachrichten werden ausgeblendet. Die Blockierung kann jederzeit aufgehoben werden."</string>
-  <string name="screen_dm_details_block_user">"Benutzer blockieren"</string>
-  <string name="screen_dm_details_unblock_alert_action">"Blockierung aufheben"</string>
-  <string name="screen_dm_details_unblock_alert_description">"Der Nutzer kann dir wieder Nachrichten senden &amp; alle Nachrichten des Nutzers werden wieder angezeigt."</string>
-  <string name="screen_dm_details_unblock_user">"Blockierung aufheben"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Beim Aktualisieren der Benachrichtigungseinstellungen ist ein Fehler aufgetreten."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Dein Homeserver unterstützt diese Option in verschlüsselten Chat nicht. In einigen Chats wirst du möglicherweise nicht benachrichtigt."</string>
   <string name="screen_polls_history_title">"Umfragen"</string>
@@ -20,15 +14,15 @@
   <string name="screen_room_change_permissions_remove_people">"Personen entfernen"</string>
   <string name="screen_room_change_permissions_room_avatar">"Avatar ändern"</string>
   <string name="screen_room_change_permissions_room_details">"Raum-Details anpassen"</string>
-  <string name="screen_room_change_permissions_room_name">"Raum-Name ändern"</string>
-  <string name="screen_room_change_permissions_room_topic">"Raum-Thema ändern"</string>
+  <string name="screen_room_change_permissions_room_name">"Raumname ändern"</string>
+  <string name="screen_room_change_permissions_room_topic">"Raumthema ändern"</string>
   <string name="screen_room_change_permissions_send_messages">"Nachrichten senden"</string>
   <string name="screen_room_change_role_administrators_title">"Admins bearbeiten"</string>
-  <string name="screen_room_change_role_confirm_add_admin_description">"Du kannst diese Aktion nicht mehr rückgängig machen. Du vergibst dieselbe Rolle, wie auch Du sie hast."</string>
+  <string name="screen_room_change_role_confirm_add_admin_description">"Du kannst diese Aktion nicht mehr rückgängig machen. Du vergibst dieselbe Rolle, die du auch hast."</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Als Administrator hinzufügen?"</string>
   <string name="screen_room_change_role_confirm_demote_self_action">"Zurückstufen"</string>
   <string name="screen_room_change_role_confirm_demote_self_description">"Du stufst dich selbst herab. Diese Änderung kann nicht rückgängig gemacht werden. Wenn du der letzte Benutzer mit dieser Rolle bist, ist es nicht möglich, diese Rolle wiederzuerlangen."</string>
-  <string name="screen_room_change_role_confirm_demote_self_title">"Möchtest Du Dich selbst herabstufen?"</string>
+  <string name="screen_room_change_role_confirm_demote_self_title">"Möchtest du dich selbst herabstufen?"</string>
   <string name="screen_room_change_role_invited_member_name">"%1$s (Ausstehend)"</string>
   <string name="screen_room_change_role_invited_member_name_android">"(Ausstehend)"</string>
   <string name="screen_room_change_role_moderators_admin_section_footer">"Administratoren haben automatisch Moderatorenrechte"</string>
@@ -56,7 +50,7 @@
   <string name="screen_room_details_notification_mode_default">"Standard"</string>
   <string name="screen_room_details_notification_title">"Benachrichtigungen"</string>
   <string name="screen_room_details_roles_and_permissions">"Rollen und Berechtigungen"</string>
-  <string name="screen_room_details_room_name_label">"Raum-Name"</string>
+  <string name="screen_room_details_room_name_label">"Raumname"</string>
   <string name="screen_room_details_security_title">"Sicherheit"</string>
   <string name="screen_room_details_share_room_title">"Teilen"</string>
   <string name="screen_room_details_title">"Informationen"</string>
@@ -116,5 +110,4 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Rollen"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Raum-Details anpassen"</string>
   <string name="screen_room_roles_and_permissions_title">"Rollen und Berechtigungen"</string>
-  <string name="screen_start_chat_error_starting_chat">"Beim Versuch, einen Chat zu starten, ist ein Fehler aufgetreten"</string>
 </resources>

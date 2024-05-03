@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_dm_details_block_alert_action">"Letiltás"</string>
+  <string name="screen_dm_details_block_alert_description">"A letiltott felhasználók nem fognak tudni üzeneteket küldeni, és az összes üzenetük rejtve lesz. Bármikor feloldhatja a letiltásukat."</string>
+  <string name="screen_dm_details_block_user">"Felhasználó letiltása"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Letiltás feloldása"</string>
+  <string name="screen_dm_details_unblock_alert_description">"Újra láthatja az összes üzenetét."</string>
+  <string name="screen_dm_details_unblock_user">"Felhasználó kitiltásának feloldása"</string>
+  <string name="screen_start_chat_error_starting_chat">"Hiba történt a csevegés indításakor"</string>
+</resources>
