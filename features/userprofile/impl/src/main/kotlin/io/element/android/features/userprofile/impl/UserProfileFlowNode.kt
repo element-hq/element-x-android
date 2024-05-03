@@ -29,9 +29,9 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.userprofile.api.UserProfileEntryPoint
-import io.element.android.features.userprofile.shared.avatar.AvatarPreviewNode
 import io.element.android.features.userprofile.impl.root.UserProfileNode
 import io.element.android.features.userprofile.shared.UserProfileNodeHelper
+import io.element.android.features.userprofile.shared.avatar.AvatarPreviewNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
