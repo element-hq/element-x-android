@@ -240,6 +240,7 @@
   <string name="error_failed_loading_messages">"Nem sikerült betölteni az üzeneteket"</string>
   <string name="error_failed_locating_user">"Az %1$s nem tudta elérni a tartózkodási helyét. Próbálja újra később."</string>
   <string name="error_failed_uploading_voice_message">"Nem sikerült feltölteni a hangüzenetét."</string>
+  <string name="error_message_not_found">"Az üzenet nem található"</string>
   <string name="error_missing_location_auth_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a tartózkodási helyéhez. Ezt a beállításokban engedélyezheti."</string>
   <string name="error_missing_location_rationale_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a tartózkodási helyéhez. Engedélyezze alább az elérését."</string>
   <string name="error_missing_microphone_voice_rationale_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a mikrofonhoz. Engedélyezze, hogy tudjon hangüzenetet felvenni."</string>

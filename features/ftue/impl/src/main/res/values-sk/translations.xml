@@ -15,8 +15,7 @@
   <string name="screen_qr_code_login_initial_state_item_2">"Kliknite na svoj obrázok"</string>
   <string name="screen_qr_code_login_initial_state_item_3">"Vyberte %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"„Prepojiť nové zariadenie“"</string>
-  <string name="screen_qr_code_login_initial_state_item_4">"Vyberte %1$s"</string>
-  <string name="screen_qr_code_login_initial_state_item_4_action">"„Zobraziť QR kód“"</string>
+  <string name="screen_qr_code_login_initial_state_item_4">"Postupujte podľa zobrazených pokynov"</string>
   <string name="screen_qr_code_login_initial_state_title">"Ak chcete získať QR kód, otvorte %1$s na inom zariadení"</string>
   <string name="screen_qr_code_login_invalid_scan_state_description">"Použite QR kód zobrazený na druhom zariadení."</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Skúste to znova"</string>

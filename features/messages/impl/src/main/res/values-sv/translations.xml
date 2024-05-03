@@ -21,8 +21,10 @@
   <string name="screen_room_attachment_source_poll">"Omröstning"</string>
   <string name="screen_room_attachment_text_formatting">"Textformatering"</string>
   <string name="screen_room_encrypted_history_banner">"Meddelandehistoriken är för närvarande otillgänglig."</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"Meddelandehistorik är inte tillgänglig i det här rummet. Verifiera den här enheten för att se din meddelandehistorik."</string>
   <string name="screen_room_invite_again_alert_message">"Vill du bjuda tillbaka dem?"</string>
   <string name="screen_room_invite_again_alert_title">"Du är ensam i den här chatten"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Meddela hela rummet"</string>
   <string name="screen_room_mentions_at_room_title">"Alla"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Skicka igen"</string>
   <string name="screen_room_retry_send_menu_title">"Ditt meddelande kunde inte skickas"</string>
