@@ -68,7 +68,8 @@ class ElementCallActivity : NodeComponentActivity(), CallScreenNavigator {
         }
 
         /**
-         * Eventually start the ElementCallActivity, and return true if it's the case.
+         * Starts the [ElementCallActivity] if the intent contains a valid URL,
+         * and returns true if it's the case.
          */
         fun maybeStart(
             activity: Activity,
