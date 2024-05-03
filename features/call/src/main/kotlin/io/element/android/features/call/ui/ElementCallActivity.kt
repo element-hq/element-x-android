@@ -84,7 +84,8 @@ class ElementCallActivity : NodeComponentActivity(), CallScreenNavigator {
                     val options = ActivityOptionsCompat.makeCustomAnimation(activity, 0, 0)
                     activity.startActivity(callIntent, options.toBundle())
                     true
-                }.orFalse()
+                }
+                .orFalse()
         }
     }
 
