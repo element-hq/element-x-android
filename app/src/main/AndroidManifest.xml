@@ -84,7 +84,11 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-                <data android:host="*.element.io" />
+                <!-- We can't use "*.element.io" here because it'll intercept the "mas.element.io" domain too. -->
+                <data android:host="app.element.io" />
+                <data android:host="staging.element.io" />
+                <data android:host="develop.element.io" />
+                <data android:host="call.element.io" />
             </intent-filter>
             <!--
               matrix.to links
