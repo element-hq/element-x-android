@@ -288,7 +288,6 @@ class RootFlowNode @AssistedInject constructor(
     private suspend fun navigateTo(permalinkData: PermalinkData) {
         Timber.d("Navigating to $permalinkData")
         attachSession(null)
-            .attachSession()
             .apply {
                 when (permalinkData) {
                     is PermalinkData.FallbackLink -> Unit
@@ -309,7 +308,6 @@ class RootFlowNode @AssistedInject constructor(
     private suspend fun navigateTo(deeplinkData: DeeplinkData) {
         Timber.d("Navigating to $deeplinkData")
         attachSession(deeplinkData.sessionId)
-            .attachSession()
             .apply {
                 when (deeplinkData) {
                     is DeeplinkData.Root -> Unit // The room list will always be shown, observing FtueState
@@ -323,10 +321,11 @@ class RootFlowNode @AssistedInject constructor(
     }
 
     // [sessionId] will be null for permalink.
-    private suspend fun attachSession(sessionId: SessionId?): LoggedInAppScopeFlowNode {
+    private suspend fun attachSession(sessionId: SessionId?): LoggedInFlowNode {
         // TODO handle multi-session
-        return waitForChildAttached { navTarget ->
+        return waitForChildAttached<LoggedInAppScopeFlowNode, NavTarget> { navTarget ->
             navTarget is NavTarget.LoggedInFlow && (sessionId == null || navTarget.sessionId == sessionId)
         }
+            .attachSession()
     }
 }
