@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_dm_details_block_alert_action">"Блокиране"</string>
+  <string name="screen_dm_details_block_user">"Блокиране на потребителя"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Отблокиране"</string>
+  <string name="screen_dm_details_unblock_user">"Отблокиране на потребителя"</string>
+</resources>

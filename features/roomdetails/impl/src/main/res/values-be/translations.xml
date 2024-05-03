@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_dm_details_block_alert_action">"Заблакіраваць"</string>
-  <string name="screen_dm_details_block_alert_description">"Заблакіраваныя карыстальнікі не змогуць адпраўляць вам паведамленні, і ўсе іх паведамленні будуць схаваны. Вы можаце разблакіраваць іх у любы час."</string>
-  <string name="screen_dm_details_block_user">"Заблакіраваць карыстальніка"</string>
-  <string name="screen_dm_details_unblock_alert_action">"Разблакіраваць"</string>
-  <string name="screen_dm_details_unblock_alert_description">"Вы зноў зможаце ўбачыць усе паведамленні."</string>
-  <string name="screen_dm_details_unblock_user">"Разблакіраваць карыстальніка"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Пры абнаўленні налад апавяшчэнняў адбылася памылка."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Ваш хатні сервер не падтрымлівае гэтую опцыю ў зашыфраваных пакоях, вы можаце не атрымаць апавяшчэнне ў некаторых пакоях."</string>
   <string name="screen_polls_history_title">"Апытанні"</string>
@@ -117,5 +111,4 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Ролі"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Дэталі пакоя"</string>
   <string name="screen_room_roles_and_permissions_title">"Ролі і дазволы"</string>
-  <string name="screen_start_chat_error_starting_chat">"Пры спробе пачаць чат адбылася памылка"</string>
 </resources>

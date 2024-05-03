@@ -29,11 +29,11 @@ else
     cd matrix-rust-sdk-$date
     git checkout ${rustSdkBranch}
     rustSdkPath=$(pwd)
-    cd ${elementPwd}
+    cd "${elementPwd}"
 fi
 
 
-cd ${rustSdkPath}
+cd "${rustSdkPath}"
 git status
 
 read -p "Will build with this version of the Rust SDK ^. Is it correct (yes/no) default to yes? " sdkCorrect
@@ -47,7 +47,7 @@ fi
 read -p "Do you want to build the app after (yes/no) default to yes? " buildApp
 buildApp=${buildApp:-yes}
 
-cd ${elementPwd}
+cd "${elementPwd}"
 
 # If folder ../matrix-rust-components-kotlin does not exist, clone the repo
 if [ ! -d "../matrix-rust-components-kotlin" ]; then
@@ -62,9 +62,9 @@ git checkout main
 git pull
 
 printf "\nBuilding the SDK for aarch64-linux-android...\n\n"
-./scripts/build.sh -p ${rustSdkPath} -m sdk -t aarch64-linux-android -o ${elementPwd}/libraries/rustsdk
+./scripts/build.sh -p "${rustSdkPath}" -m sdk -t aarch64-linux-android -o "${elementPwd}/libraries/rustsdk"
 
-cd ${elementPwd}
+cd "${elementPwd}"
 mv ./libraries/rustsdk/sdk-android-debug.aar ./libraries/rustsdk/matrix-rust-sdk.aar
 mkdir -p ./libraries/rustsdk/sdks
 cp ./libraries/rustsdk/matrix-rust-sdk.aar ./libraries/rustsdk/sdks/matrix-rust-sdk-${date}.aar

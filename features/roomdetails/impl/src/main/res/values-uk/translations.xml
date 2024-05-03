@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_dm_details_block_alert_action">"Заблокувати"</string>
-  <string name="screen_dm_details_block_alert_description">"Заблоковані користувачі не зможуть надсилати Вам повідомлення, і всі їхні повідомлення будуть приховані. Ви можете розблокувати їх у будь-який час."</string>
-  <string name="screen_dm_details_block_user">"Заблокувати користувача"</string>
-  <string name="screen_dm_details_unblock_alert_action">"Розблокувати"</string>
-  <string name="screen_dm_details_unblock_alert_description">"Ви знову зможете бачити всі повідомлення від них."</string>
-  <string name="screen_dm_details_unblock_user">"Розблокувати користувача"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Під час оновлення налаштувань сповіщень сталася помилка."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Ваш домашній сервер не підтримує цю опцію в зашифрованих кімнатах, ви можете не отримати сповіщення в деяких кімнатах."</string>
   <string name="screen_polls_history_title">"Опитування"</string>
@@ -113,5 +107,4 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Ролі"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Деталі кімнати"</string>
   <string name="screen_room_roles_and_permissions_title">"Ролі та дозволи"</string>
-  <string name="screen_start_chat_error_starting_chat">"Під час спроби почати чат сталася помилка"</string>
 </resources>

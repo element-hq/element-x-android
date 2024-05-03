@@ -34,9 +34,10 @@ import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditNode
 import io.element.android.features.roomdetails.impl.invite.RoomInviteMembersNode
 import io.element.android.features.roomdetails.impl.members.RoomMemberListNode
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsNode
-import io.element.android.features.roomdetails.impl.members.details.avatar.AvatarPreviewNode
 import io.element.android.features.roomdetails.impl.notificationsettings.RoomNotificationSettingsNode
 import io.element.android.features.roomdetails.impl.rolesandpermissions.RolesAndPermissionsFlowNode
+import io.element.android.features.userprofile.shared.UserProfileNodeHelper
+import io.element.android.features.userprofile.shared.avatar.AvatarPreviewNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
@@ -78,7 +79,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
         @Parcelize
         data class RoomNotificationSettings(
             /**
-             * When presented from outsite the context of the room, the rooms settings UI is different.
+             * When presented from outside the context of the room, the rooms settings UI is different.
              * Figma designs: https://www.figma.com/file/0MMNu7cTOzLOlWb7ctTkv3/Element-X?type=design&node-id=5199-198932&mode=design&t=fTTvpuxYFjewYQOe-0
              */
             val showUserDefinedSettingStyle: Boolean
@@ -164,7 +165,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
             }
 
             is NavTarget.RoomMemberDetails -> {
-                val callback = object : RoomMemberDetailsNode.Callback {
+                val callback = object : UserProfileNodeHelper.Callback {
                     override fun openAvatarPreview(username: String, avatarUrl: String) {
                         backstack.push(NavTarget.AvatarPreview(username, avatarUrl))
                     }
