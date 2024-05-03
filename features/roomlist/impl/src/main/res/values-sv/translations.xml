@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="confirm_recovery_key_banner_message">"Din chattsäkerhetskopia är för närvarande inte synkroniserad. Du måste ange din återställningsnyckel för att behålla åtkomsten till din chattsäkerhetskopia."</string>
+  <string name="confirm_recovery_key_banner_title">"Ange din återställningsnyckel"</string>
   <string name="screen_invites_decline_chat_message">"Är du säker på att du vill tacka nej till inbjudan att gå med%1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Avböj inbjudan"</string>
   <string name="screen_invites_decline_direct_chat_message">"Är du säker på att du vill avböja denna privata chatt med %1$s?"</string>

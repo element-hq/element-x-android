@@ -49,10 +49,10 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.leaveroom.api.LeaveRoomView
-import io.element.android.features.roomdetails.impl.blockuser.BlockUserDialogs
-import io.element.android.features.roomdetails.impl.blockuser.BlockUserSection
-import io.element.android.features.roomdetails.impl.members.details.RoomMemberHeaderSection
-import io.element.android.features.roomdetails.impl.members.details.RoomMemberMainActionsSection
+import io.element.android.features.userprofile.shared.UserProfileHeaderSection
+import io.element.android.features.userprofile.shared.UserProfileMainActionsSection
+import io.element.android.features.userprofile.shared.blockuser.BlockUserDialogs
+import io.element.android.features.userprofile.shared.blockuser.BlockUserSection
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -143,15 +143,15 @@ fun RoomDetailsView(
 
                 is RoomDetailsType.Dm -> {
                     val member = state.roomType.roomMember
-                    RoomMemberHeaderSection(
+                    UserProfileHeaderSection(
                         avatarUrl = state.roomAvatarUrl ?: member.avatarUrl,
-                        userId = member.userId.value,
+                        userId = member.userId,
                         userName = state.roomName,
                         openAvatarPreview = { avatarUrl ->
                             openAvatarPreview(member.getBestName(), avatarUrl)
                         },
                     )
-                    RoomMemberMainActionsSection(onShareUser = ::onShareMember)
+                    UserProfileMainActionsSection(onShareUser = ::onShareMember)
                 }
             }
             Spacer(Modifier.height(18.dp))

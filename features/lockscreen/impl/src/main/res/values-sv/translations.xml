@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_app_lock_biometric_authentication">"biometrisk autentisering"</string>
+  <string name="screen_app_lock_biometric_unlock">"biometrisk upplåsning"</string>
+  <string name="screen_app_lock_biometric_unlock_title_android">"Lås upp med biometri"</string>
   <string name="screen_app_lock_forgot_pin">"Glömt PIN-kod?"</string>
   <string name="screen_app_lock_settings_change_pin">"Byt PIN-kod"</string>
   <string name="screen_app_lock_settings_enable_biometric_unlock">"Tillåt biometrisk upplåsning"</string>
   <string name="screen_app_lock_settings_remove_pin">"Ta bort PIN-kod"</string>
   <string name="screen_app_lock_settings_remove_pin_alert_message">"Är du säker på att du vill ta bort PIN-koden?"</string>
   <string name="screen_app_lock_settings_remove_pin_alert_title">"Ta bort PIN-koden?"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_allow_title">"Tillåt %1$s"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_skip">"Jag vill hellre använda PIN-kod"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Bespara dig själv lite tid och använd %1$s för att låsa upp appen varje gång"</string>
   <string name="screen_app_lock_setup_choose_pin">"Välj PIN-kod"</string>
   <string name="screen_app_lock_setup_confirm_pin">"Bekräfta PIN-kod"</string>
   <string name="screen_app_lock_setup_pin_blacklisted_dialog_content">"Du kan inte välja detta som din PIN-kod av säkerhetsskäl"</string>
@@ -25,5 +31,7 @@ Välj något minnesvärt. Om du glömmer den här PIN-koden loggas du ut från a
     <item quantity="one">"Fel PIN-kod. Du har %1$d försök kvar"</item>
     <item quantity="other">"Fel PIN-kod. Du har %1$d försök kvar"</item>
   </plurals>
+  <string name="screen_app_lock_use_biometric_android">"Använd biometri"</string>
+  <string name="screen_app_lock_use_pin_android">"Använd PIN-kod"</string>
   <string name="screen_signout_in_progress_dialog_content">"Loggar ut …"</string>
 </resources>

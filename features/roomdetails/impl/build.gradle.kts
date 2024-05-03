@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(projects.features.leaveroom.api)
     implementation(projects.features.createroom.api)
+    implementation(projects.features.userprofile.shared)
     implementation(projects.services.analytics.api)
     implementation(projects.features.poll.api)
 

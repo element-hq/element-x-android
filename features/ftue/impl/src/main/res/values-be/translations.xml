@@ -15,8 +15,7 @@
   <string name="screen_qr_code_login_initial_state_item_2">"Націсніце на свой аватар"</string>
   <string name="screen_qr_code_login_initial_state_item_3">"Выберыце %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"“Звязаць новую прыладу”"</string>
-  <string name="screen_qr_code_login_initial_state_item_4">"Выберыце %1$s"</string>
-  <string name="screen_qr_code_login_initial_state_item_4_action">"“Паказаць QR-код”"</string>
+  <string name="screen_qr_code_login_initial_state_item_4">"Выконвайце паказаныя інструкцыі"</string>
   <string name="screen_qr_code_login_initial_state_title">"Адкрыйце %1$s на іншай прыладзе, каб атрымаць QR-код"</string>
   <string name="screen_qr_code_login_invalid_scan_state_description">"Выкарыстоўвайце QR-код, паказаны на іншай прыладзе."</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Паўтарыць спробу"</string>

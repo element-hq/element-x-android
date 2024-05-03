@@ -145,14 +145,19 @@
       "includeRegex" : [
         "screen_room_details_.*",
         "screen_room_member_list_.*",
-        "screen_dm_details_.*",
         "screen_room_notification_settings_.*",
         "screen_notification_settings_edit_failed_updating_default_mode",
         "screen_polls_history_title",
         "screen_notification_settings_mentions_only_disclaimer",
-        "screen_start_chat_error_starting_chat",
         "screen_room_change_.*",
         "screen_room_roles_.*"
+      ]
+    },
+    {
+      "name" : ":features:userprofile:shared",
+      "includeRegex" : [
+        "screen_start_chat_error_starting_chat",
+        "screen_dm_details_.*"
       ]
     },
     {

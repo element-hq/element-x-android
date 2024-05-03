@@ -7,7 +7,7 @@
   <string name="screen_create_room_private_option_title">"Privater Raum (nur auf Einladung)"</string>
   <string name="screen_create_room_public_option_description">"Die Nachrichten sind nicht verschlüsselt und können von jedem gelesen werden. Die Verschlüsselung kann zu einem späteren Zeitpunkt aktiviert werden."</string>
   <string name="screen_create_room_public_option_title">"Öffentlicher Raum (für alle)"</string>
-  <string name="screen_create_room_room_name_label">"Raum-Name"</string>
+  <string name="screen_create_room_room_name_label">"Raumname"</string>
   <string name="screen_create_room_title">"Raum erstellen"</string>
   <string name="screen_create_room_topic_label">"Thema (optional)"</string>
   <string name="screen_start_chat_error_starting_chat">"Beim Versuch, einen Chat zu starten, ist ein Fehler aufgetreten"</string>

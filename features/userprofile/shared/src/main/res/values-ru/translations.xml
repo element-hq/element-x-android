@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_dm_details_block_alert_action">"Заблокировать"</string>
+  <string name="screen_dm_details_block_alert_description">"Заблокированные пользователи не смогут отправлять вам сообщения, а все их сообщения будут скрыты. Вы можете разблокировать их в любое время."</string>
+  <string name="screen_dm_details_block_user">"Заблокировать пользователя"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Разблокировать"</string>
+  <string name="screen_dm_details_unblock_alert_description">"Вы снова сможете увидеть все сообщения."</string>
+  <string name="screen_dm_details_unblock_user">"Разблокировать пользователя"</string>
+  <string name="screen_start_chat_error_starting_chat">"Произошла ошибка при попытке открытия комнаты"</string>
+</resources>

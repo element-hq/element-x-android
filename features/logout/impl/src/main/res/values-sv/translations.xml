@@ -4,8 +4,15 @@
   <string name="screen_signout_confirmation_dialog_submit">"Logga ut"</string>
   <string name="screen_signout_confirmation_dialog_title">"Logga ut"</string>
   <string name="screen_signout_in_progress_dialog_content">"Loggar ut …"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"Du är på väg att logga ut ur din senaste session. Om du loggar ut nu kommer du att förlora åtkomsten till dina krypterade meddelanden."</string>
   <string name="screen_signout_key_backup_disabled_title">"Du har stängt av säkerhetskopiering"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"Dina nycklar säkerhetskopierades fortfarande när du gick offline. Anslut igen så att dina nycklar kan säkerhetskopieras innan du loggar ut."</string>
+  <string name="screen_signout_key_backup_offline_title">"Dina nycklar säkerhetskopieras fortfarande"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Vänta tills detta är klart innan du loggar ut."</string>
+  <string name="screen_signout_key_backup_ongoing_title">"Dina nycklar säkerhetskopieras fortfarande"</string>
   <string name="screen_signout_preference_item">"Logga ut"</string>
   <string name="screen_signout_recovery_disabled_subtitle">"Du är på väg att logga ut ur din sista session. Om du loggar ut nu förlorar du åtkomsten till dina krypterade meddelanden."</string>
   <string name="screen_signout_recovery_disabled_title">"Återställning inte inställd"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"Du är på väg att logga ut från din senaste session. Om du loggar ut nu kan du förlora åtkomsten till dina krypterade meddelanden."</string>
+  <string name="screen_signout_save_recovery_key_title">"Har du sparat din återställningsnyckel?"</string>
 </resources>

@@ -28,8 +28,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.roomdetails.impl.R
-import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
+import io.element.android.features.userprofile.shared.UserProfileNodeHelper
+import io.element.android.features.userprofile.shared.UserProfileView
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
@@ -38,8 +38,6 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.services.analytics.api.AnalyticsService
-import timber.log.Timber
-import io.element.android.libraries.androidutils.R as AndroidUtilsR
 
 @ContributesNode(RoomScope::class)
 class RoomMemberDetailsNode @AssistedInject constructor(
@@ -49,18 +47,14 @@ class RoomMemberDetailsNode @AssistedInject constructor(
     private val permalinkBuilder: PermalinkBuilder,
     presenterFactory: RoomMemberDetailsPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
-    interface Callback : NodeInputs {
-        fun openAvatarPreview(username: String, avatarUrl: String)
-        fun onStartDM(roomId: RoomId)
-    }
-
     data class RoomMemberDetailsInput(
         val roomMemberId: UserId
     ) : NodeInputs
 
     private val inputs = inputs<RoomMemberDetailsInput>()
-    private val callback = inputs<Callback>()
+    private val callback = inputs<UserProfileNodeHelper.Callback>()
     private val presenter = presenterFactory.create(inputs.roomMemberId)
+    private val userProfileNodeHelper = UserProfileNodeHelper(inputs.roomMemberId)
 
     init {
         lifecycle.subscribe(
@@ -75,17 +69,7 @@ class RoomMemberDetailsNode @AssistedInject constructor(
         val context = LocalContext.current
 
         fun onShareUser() {
-            val permalinkResult = permalinkBuilder.permalinkForUser(inputs.roomMemberId)
-            permalinkResult.onSuccess { permalink ->
-                context.startSharePlainTextIntent(
-                    activityResultLauncher = null,
-                    chooserTitle = context.getString(R.string.screen_room_details_share_room_title),
-                    text = permalink,
-                    noActivityFoundMessage = context.getString(AndroidUtilsR.string.error_no_compatible_app_found)
-                )
-            }.onFailure {
-                Timber.e(it)
-            }
+            userProfileNodeHelper.onShareUser(context, permalinkBuilder)
         }
 
         fun onStartDM(roomId: RoomId) {
@@ -95,11 +79,12 @@ class RoomMemberDetailsNode @AssistedInject constructor(
         val state = presenter.present()
 
         LaunchedEffect(state.startDmActionState) {
-            if (state.startDmActionState is AsyncAction.Success) {
-                onStartDM(state.startDmActionState.data)
+            val result = state.startDmActionState
+            if (result is AsyncAction.Success) {
+                onStartDM(result.data)
             }
         }
-        RoomMemberDetailsView(
+        UserProfileView(
             state = state,
             modifier = modifier,
             goBack = this::navigateUp,
