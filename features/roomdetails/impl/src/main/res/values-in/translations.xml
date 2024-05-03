@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_dm_details_block_alert_action">"Blokir"</string>
-  <string name="screen_dm_details_block_alert_description">"Pengguna yang diblokir tidak akan dapat mengirim Anda pesan dan semua pesan mereka akan disembunyikan. Anda dapat membuka blokirnya kapan saja."</string>
-  <string name="screen_dm_details_block_user">"Blokir pengguna"</string>
-  <string name="screen_dm_details_unblock_alert_action">"Buka blokir"</string>
-  <string name="screen_dm_details_unblock_alert_description">"Anda akan dapat melihat semua pesan dari mereka lagi."</string>
-  <string name="screen_dm_details_unblock_user">"Buka blokir pengguna"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Terjadi kesalahan saat memperbarui pengaturan pemberitahuan."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Homeserver Anda tidak mendukung opsi ini dalam ruangan terenkripsi, Anda mungkin tidak diberi tahu dalam beberapa ruangan."</string>
   <string name="screen_polls_history_title">"Pemungutan suara"</string>
@@ -115,5 +109,4 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Peran"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Detail ruangan"</string>
   <string name="screen_room_roles_and_permissions_title">"Peran dan perizinan"</string>
-  <string name="screen_start_chat_error_starting_chat">"Terjadi kesalahan saat mencoba memulai obrolan"</string>
 </resources>

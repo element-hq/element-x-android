@@ -15,8 +15,7 @@
   <string name="screen_qr_code_login_initial_state_item_2">"Click on your avatar"</string>
   <string name="screen_qr_code_login_initial_state_item_3">"Select %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"“Link new device”"</string>
-  <string name="screen_qr_code_login_initial_state_item_4">"Select %1$s"</string>
-  <string name="screen_qr_code_login_initial_state_item_4_action">"“Show QR code”"</string>
+  <string name="screen_qr_code_login_initial_state_item_4">"Follow the instructions shown"</string>
   <string name="screen_qr_code_login_initial_state_title">"Open %1$s on another device to get the QR code"</string>
   <string name="screen_qr_code_login_invalid_scan_state_description">"Use the QR code shown on the other device."</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Try again"</string>

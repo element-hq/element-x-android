@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_dm_details_block_alert_action">"Zablokovať"</string>
-  <string name="screen_dm_details_block_alert_description">"Blokovaní používatelia vám nebudú môcť posielať správy a všetky ich správy budú skryté. Môžete ich kedykoľvek odblokovať."</string>
-  <string name="screen_dm_details_block_user">"Zablokovať používateľa"</string>
-  <string name="screen_dm_details_unblock_alert_action">"Odblokovať"</string>
-  <string name="screen_dm_details_unblock_alert_description">"Všetky správy od nich budete môcť opäť vidieť."</string>
-  <string name="screen_dm_details_unblock_user">"Odblokovať používateľa"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Pri aktualizácii nastavenia oznámenia došlo k chybe."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Váš domovský server nepodporuje túto možnosť v šifrovaných miestnostiach, v niektorých miestnostiach nemusíte dostať upozornenie."</string>
   <string name="screen_polls_history_title">"Ankety"</string>
@@ -117,5 +111,4 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Roly"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Podrobnosti o miestnosti"</string>
   <string name="screen_room_roles_and_permissions_title">"Roly a povolenia"</string>
-  <string name="screen_start_chat_error_starting_chat">"Pri pokuse o spustenie konverzácie sa vyskytla chyba"</string>
 </resources>

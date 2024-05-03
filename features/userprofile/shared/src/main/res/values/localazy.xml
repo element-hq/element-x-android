@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_dm_details_block_alert_action">"Block"</string>
+  <string name="screen_dm_details_block_alert_description">"Blocked users won\'t be able to send you messages and all their messages will be hidden. You can unblock them anytime."</string>
+  <string name="screen_dm_details_block_user">"Block user"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Unblock"</string>
+  <string name="screen_dm_details_unblock_alert_description">"You\'ll be able to see all messages from them again."</string>
+  <string name="screen_dm_details_unblock_user">"Unblock user"</string>
+  <string name="screen_start_chat_error_starting_chat">"An error occurred when trying to start a chat"</string>
+</resources>

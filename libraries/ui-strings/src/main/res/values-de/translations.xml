@@ -158,7 +158,7 @@
   <string name="common_modern">"Modern"</string>
   <string name="common_mute">"Stummschalten"</string>
   <string name="common_no_results">"Keine Ergebnisse"</string>
-  <string name="common_no_room_name">"Kein Raum-Name"</string>
+  <string name="common_no_room_name">"Kein Raumname"</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_or">"oder"</string>
   <string name="common_password">"Passwort"</string>
@@ -177,9 +177,7 @@
   <string name="common_privacy_policy">"Datenschutz­erklärung"</string>
   <string name="common_reaction">"Reaktion"</string>
   <string name="common_reactions">"Reaktionen"</string>
-  <string name="common_recovery_key">
-    <b>"Wiederherstellungsschlüssel"</b>
-  </string>
+  <string name="common_recovery_key">"Wiederherstellungsschlüssel"</string>
   <string name="common_refreshing">"Wird erneuert…"</string>
   <string name="common_replying_to">"%1$s antworten"</string>
   <string name="common_report_a_bug">"Einen Fehler melden"</string>
@@ -187,7 +185,7 @@
   <string name="common_report_submitted">"Bericht eingereicht"</string>
   <string name="common_rich_text_editor">"Rich-Text-Editor"</string>
   <string name="common_room">"Raum"</string>
-  <string name="common_room_name">"Raum-Name"</string>
+  <string name="common_room_name">"Raumname"</string>
   <string name="common_room_name_placeholder">"z.B. dein Projektname"</string>
   <string name="common_saved_changes">"Gespeicherte Änderungen"</string>
   <string name="common_saving">"Speichern"</string>
@@ -242,6 +240,7 @@
   <string name="error_failed_loading_messages">"Fehler beim Laden der Nachrichten"</string>
   <string name="error_failed_locating_user">"%1$s konnte nicht auf deinen Standort zugreifen. Bitte versuche es später erneut."</string>
   <string name="error_failed_uploading_voice_message">"Fehler beim Hochladen der Sprachnachricht."</string>
+  <string name="error_message_not_found">"Nachricht nicht gefunden"</string>
   <string name="error_missing_location_auth_android">"%1$s hat keine Erlaubnis, auf deinen Standort zuzugreifen. Du kannst den Zugriff in den Einstellungen aktivieren."</string>
   <string name="error_missing_location_rationale_android">"%1$s hat keine Erlaubnis, auf deinen Standort zuzugreifen. Aktiviere unten den Zugriff."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s hat nicht die Erlaubnis auf dein Mikrofon zuzugreifen. Aktiviere den Zugriff, um eine Sprachnachricht aufzunehmen."</string>

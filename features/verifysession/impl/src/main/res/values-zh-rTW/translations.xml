@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_identity_confirmed_title">"裝置已認證"</string>
-  <string name="screen_identity_use_another_device">"使用另一個裝置"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"建立新的復原金鑰"</string>
+  <string name="screen_identity_confirmation_subtitle">"驗證這部裝置以設定安全通訊。"</string>
+  <string name="screen_identity_confirmation_title">"確認這是你本人"</string>
+  <string name="screen_identity_confirmed_subtitle">"您可以安全地讀取和發送訊息了，與您聊天的人也可以信任這部裝置。"</string>
+  <string name="screen_identity_confirmed_title">"裝置已驗證"</string>
+  <string name="screen_identity_use_another_device">"使用另一部裝置"</string>
   <string name="screen_identity_waiting_on_other_device">"正在等待其他裝置……"</string>
   <string name="screen_session_verification_cancelled_subtitle">"似乎出了一點問題。有可能是因為等候逾時，或是請求被拒絕。"</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"確認顯示在其他工作階段上的表情符號是否和下方的相同。"</string>
