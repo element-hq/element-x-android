@@ -38,7 +38,6 @@ class QrCodeScanPresenter @Inject constructor(
     private val qrCodeLoginDataFactory: MatrixQrCodeLoginDataFactory,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : Presenter<QrCodeScanState> {
-
     private var isScanning by mutableStateOf(true)
 
     private val isProcessingCode = AtomicBoolean(false)

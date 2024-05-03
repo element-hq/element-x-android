@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_app_lock_biometric_authentication">"Authentification biométrique"</string>
-  <string name="screen_app_lock_biometric_unlock">"Déverrouillage biométrique"</string>
+  <string name="screen_app_lock_biometric_authentication">"authentification biométrique"</string>
+  <string name="screen_app_lock_biometric_unlock">"déverrouillage biométrique"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Déverrouiller avec la biométrie"</string>
   <string name="screen_app_lock_forgot_pin">"Code PIN oublié?"</string>
   <string name="screen_app_lock_settings_change_pin">"Modifier le code PIN"</string>

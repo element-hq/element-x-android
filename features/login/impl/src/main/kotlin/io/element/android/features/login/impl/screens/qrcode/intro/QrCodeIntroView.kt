@@ -80,8 +80,12 @@ private fun Content(state: QrCodeIntroState) {
             AnnotatedString(stringResource(R.string.screen_qr_code_login_initial_state_item_1, state.desktopAppName)),
             AnnotatedString(stringResource(R.string.screen_qr_code_login_initial_state_item_2)),
             annotatedTextWithBold(
-                text = stringResource(R.string.screen_qr_code_login_initial_state_item_3, stringResource(R.string.screen_qr_code_login_initial_state_item_3_action)),
-                boldText = stringResource(R.string.screen_qr_code_login_initial_state_item_3_action)),
+                text = stringResource(
+                    id = R.string.screen_qr_code_login_initial_state_item_3,
+                    stringResource(R.string.screen_qr_code_login_initial_state_item_3_action),
+                ),
+                boldText = stringResource(R.string.screen_qr_code_login_initial_state_item_3_action)
+            ),
             AnnotatedString(stringResource(R.string.screen_qr_code_login_initial_state_item_4)),
         ),
     )

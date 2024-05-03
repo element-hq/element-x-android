@@ -26,8 +26,8 @@ import androidx.compose.runtime.Composable
 @Composable
 fun ForceOrientationInMobileDevices(orientation: ScreenOrientation) {
     val windowAdaptiveInfo = currentWindowAdaptiveInfo()
-    if (windowAdaptiveInfo.windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
-        || windowAdaptiveInfo.windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact
+    if (windowAdaptiveInfo.windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact ||
+        windowAdaptiveInfo.windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact
     ) {
         ForceOrientation(orientation = orientation)
     }

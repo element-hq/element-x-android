@@ -34,6 +34,8 @@ import androidx.compose.foundation.progressSemantics
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -64,10 +66,11 @@ fun QrCodeScanView(
     onQrCodeDataReady: (MatrixQrCodeLoginData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val updatedOnQrCodeDataReady by rememberUpdatedState(onQrCodeDataReady)
     // QR code data parsed successfully, notify the parent node
     if (state.authenticationAction is AsyncAction.Success) {
-        LaunchedEffect(state.authenticationAction) {
-            onQrCodeDataReady(state.authenticationAction.data)
+        LaunchedEffect(state.authenticationAction, updatedOnQrCodeDataReady) {
+            updatedOnQrCodeDataReady(state.authenticationAction.data)
         }
     }
 

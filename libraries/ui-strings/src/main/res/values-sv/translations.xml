@@ -15,6 +15,7 @@
   <string name="a11y_poll_end">"Avslutade omröstning"</string>
   <string name="a11y_send_files">"Skicka filer"</string>
   <string name="a11y_show_password">"Visa lösenord"</string>
+  <string name="a11y_start_call">"Starta ett samtal"</string>
   <string name="a11y_user_menu">"Användarmeny"</string>
   <string name="a11y_voice_message_record">"Spela in röstmeddelande."</string>
   <string name="action_accept">"Godkänn"</string>
@@ -39,6 +40,7 @@
   <string name="action_edit_poll">"Redigera omröstning"</string>
   <string name="action_enable">"Aktivera"</string>
   <string name="action_end_poll">"Avsluta omröstning"</string>
+  <string name="action_enter_pin">"Ange PIN-kod"</string>
   <string name="action_forgot_password">"Glömt lösenordet?"</string>
   <string name="action_forward">"Vidarebefordra"</string>
   <string name="action_invite">"Bjud in"</string>
@@ -146,8 +148,10 @@
   <string name="common_refreshing">"Uppdaterar …"</string>
   <string name="common_replying_to">"Svarar till %1$s"</string>
   <string name="common_report_a_bug">"Rapportera en bugg"</string>
+  <string name="common_report_a_problem">"Rapportera ett problem"</string>
   <string name="common_report_submitted">"Rapport inskickad"</string>
   <string name="common_rich_text_editor">"Riktextredigerare"</string>
+  <string name="common_room">"Rum"</string>
   <string name="common_room_name">"Rumsnamn"</string>
   <string name="common_room_name_placeholder">"t.ex. ditt projektnamn"</string>
   <string name="common_screen_lock">"Skärmlås"</string>
@@ -159,6 +163,7 @@
   <string name="common_server_url">"Server-URL"</string>
   <string name="common_settings">"Inställningar"</string>
   <string name="common_shared_location">"Delade plats"</string>
+  <string name="common_signing_out">"Loggar ut"</string>
   <string name="common_starting_chat">"Startar chatt …"</string>
   <string name="common_sticker">"Dekal"</string>
   <string name="common_success">"Lyckades"</string>
@@ -178,9 +183,11 @@
   <string name="common_username">"Användarnamn"</string>
   <string name="common_verification_cancelled">"Verifiering avbruten"</string>
   <string name="common_verification_complete">"Verifieringen slutförd"</string>
+  <string name="common_verify_device">"Verifiera enheten"</string>
   <string name="common_video">"Video"</string>
   <string name="common_voice_message">"Röstmeddelande"</string>
   <string name="common_waiting">"Väntar …"</string>
+  <string name="common_waiting_for_decryption_key">"Väntar på detta meddelande"</string>
   <string name="dialog_title_confirmation">"Bekräftelse"</string>
   <string name="dialog_title_error">"Fel"</string>
   <string name="dialog_title_success">"Lyckades"</string>

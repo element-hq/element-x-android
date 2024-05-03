@@ -19,6 +19,7 @@ package io.element.android.appconfig
 object OnBoardingConfig {
     /** Whether the user can use QR code login. */
     const val CAN_LOGIN_WITH_QR_CODE = true
+
     /** Whether the user can create an account using the app. */
     const val CAN_CREATE_ACCOUNT = false
 }

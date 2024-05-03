@@ -22,10 +22,13 @@
   <string name="screen_recovery_key_change_success">"Återställningsnyckel ändrad"</string>
   <string name="screen_recovery_key_change_title">"Byt återställningsnyckel?"</string>
   <string name="screen_recovery_key_confirm_description">"Se till att ingen kan se den här skärmen"</string>
+  <string name="screen_recovery_key_confirm_error_title">"Felaktig återställningsnyckel"</string>
   <string name="screen_recovery_key_confirm_key_description">"Om du har en säkerhetsnyckel eller säkerhetsfras så funkar den också."</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Ange …"</string>
   <string name="screen_recovery_key_confirm_success">"Återställningsnyckel bekräftad"</string>
   <string name="screen_recovery_key_confirm_title">"Ange din återställningsnyckel"</string>
+  <string name="screen_recovery_key_copied_to_clipboard">"Kopierade återställningsnyckel"</string>
+  <string name="screen_recovery_key_generating_key">"Genererar …"</string>
   <string name="screen_recovery_key_save_action">"Spara återställningsnyckeln"</string>
   <string name="screen_recovery_key_save_description">"Skriv ner din återställningsnyckel någonstans säkert eller spara den i en lösenordshanterare."</string>
   <string name="screen_recovery_key_save_key_description">"Tryck för att kopiera återställningsnyckeln"</string>

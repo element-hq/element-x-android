@@ -32,7 +32,7 @@ class QrCodeErrorNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
 ) : Node(buildContext = buildContext, plugins = plugins) {
-    interface Callback: Plugin {
+    interface Callback : Plugin {
         fun onRetry()
     }
 

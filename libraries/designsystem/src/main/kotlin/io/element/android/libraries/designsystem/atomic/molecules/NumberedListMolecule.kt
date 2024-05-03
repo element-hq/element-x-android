@@ -32,8 +32,13 @@ import io.element.android.libraries.designsystem.modifiers.squareSize
 import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
-fun NumberedListMolecule(index: Int, text: AnnotatedString) {
+fun NumberedListMolecule(
+    index: Int,
+    text: AnnotatedString,
+    modifier: Modifier = Modifier,
+) {
     Row(
+        modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         ItemNumber(index = index)

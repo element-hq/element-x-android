@@ -27,6 +27,7 @@
   <string name="screen_login_subtitle">"Matrix este o rețea deschisă pentru o comunicare sigură și descentralizată."</string>
   <string name="screen_login_title">"Bine ați revenit!"</string>
   <string name="screen_login_title_with_homeserver">"Conectați-vă la %1$s"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Încercați din nou"</string>
   <string name="screen_server_confirmation_change_server">"Schimbați furnizorul contului"</string>
   <string name="screen_server_confirmation_message_login_element_dot_io">"Un server privat pentru angajații Element."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix este o rețea deschisă pentru o comunicare sigură și descentralizată."</string>

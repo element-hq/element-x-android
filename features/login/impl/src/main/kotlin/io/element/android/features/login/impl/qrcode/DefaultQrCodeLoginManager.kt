@@ -29,7 +29,7 @@ import javax.inject.Inject
 @ContributesBinding(AppScope::class)
 class DefaultQrCodeLoginManager @Inject constructor(
     private val authenticationService: MatrixAuthenticationService,
-): QrCodeLoginManager {
+) : QrCodeLoginManager {
     private val _currentLoginStep = MutableStateFlow<QrCodeLoginStep>(QrCodeLoginStep.Uninitialized)
     override val currentLoginStep: StateFlow<QrCodeLoginStep> = _currentLoginStep
 

@@ -33,7 +33,6 @@ class QrCodeConfirmationNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
 ) : Node(buildContext = buildContext, plugins = plugins) {
-
     interface Callback : Plugin {
         fun onCancel()
     }
