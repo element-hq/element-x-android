@@ -81,31 +81,9 @@ fun PreferencesRootView(
             },
             user = state.myUser,
         )
-        if (state.showSecureBackup) {
-            ListItem(
-                headlineContent = { Text(stringResource(id = CommonStrings.common_chat_backup)) },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.KeySolid())),
-                trailingContent = ListItemContent.Badge.takeIf { state.showSecureBackupBadge },
-                onClick = onSecureBackupClicked,
-            )
-            HorizontalDivider()
-        }
-        if (state.accountManagementUrl != null) {
-            ListItem(
-                headlineContent = { Text(stringResource(id = CommonStrings.action_manage_account)) },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserProfile())),
-                trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.PopOut())),
-                onClick = { onManageAccountClicked(state.accountManagementUrl) },
-            )
-            HorizontalDivider()
-        }
-        if (state.showAnalyticsSettings) {
-            ListItem(
-                headlineContent = { Text(stringResource(id = CommonStrings.common_analytics)) },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Chart())),
-                onClick = onOpenAnalytics,
-            )
-        }
+
+        // 'Manage my app' section
+
         if (state.showNotificationSettings) {
             ListItem(
                 headlineContent = { Text(stringResource(id = R.string.screen_notification_settings_title)) },
@@ -113,23 +91,6 @@ fun PreferencesRootView(
                 onClick = onOpenNotificationSettings,
             )
         }
-        if (state.showBlockedUsersItem) {
-            ListItem(
-                headlineContent = { Text(stringResource(id = CommonStrings.common_blocked_users)) },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
-                onClick = onOpenBlockedUsers,
-            )
-        }
-        ListItem(
-            headlineContent = { Text(stringResource(id = CommonStrings.common_report_a_problem)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChatProblem())),
-            onClick = onOpenRageShake
-        )
-        ListItem(
-            headlineContent = { Text(stringResource(id = CommonStrings.common_about)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Info())),
-            onClick = onOpenAbout,
-        )
         if (state.showLockScreenSettings) {
             ListItem(
                 headlineContent = { Text(stringResource(id = CommonStrings.common_screen_lock)) },
@@ -137,7 +98,29 @@ fun PreferencesRootView(
                 onClick = onOpenLockScreenSettings,
             )
         }
-        HorizontalDivider()
+        if (state.showSecureBackup) {
+            ListItem(
+                headlineContent = { Text(stringResource(id = CommonStrings.common_chat_backup)) },
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.KeySolid())),
+                trailingContent = ListItemContent.Badge.takeIf { state.showSecureBackupBadge },
+                onClick = onSecureBackupClicked,
+            )
+        }
+        if (state.showNotificationSettings || state.showLockScreenSettings || state.showSecureBackup) {
+            HorizontalDivider()
+        }
+
+        // 'Account' section
+
+        if (state.accountManagementUrl != null) {
+            ListItem(
+                headlineContent = { Text(stringResource(id = CommonStrings.action_manage_account)) },
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserProfile())),
+                trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.PopOut())),
+                onClick = { onManageAccountClicked(state.accountManagementUrl) },
+            )
+        }
+
         if (state.devicesManagementUrl != null) {
             ListItem(
                 headlineContent = { Text(stringResource(id = CommonStrings.action_manage_devices)) },
@@ -145,7 +128,38 @@ fun PreferencesRootView(
                 trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.PopOut())),
                 onClick = { onManageAccountClicked(state.devicesManagementUrl) },
             )
+        }
+
+        if (state.showBlockedUsersItem) {
+            ListItem(
+                headlineContent = { Text(stringResource(id = CommonStrings.common_blocked_users)) },
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
+                onClick = onOpenBlockedUsers,
+            )
+        }
+
+        if (state.accountManagementUrl != null || state.devicesManagementUrl != null || state.showBlockedUsersItem) {
             HorizontalDivider()
+        }
+
+        // General section
+
+        ListItem(
+            headlineContent = { Text(stringResource(id = CommonStrings.common_about)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Info())),
+            onClick = onOpenAbout,
+        )
+        ListItem(
+            headlineContent = { Text(stringResource(id = CommonStrings.common_report_a_problem)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChatProblem())),
+            onClick = onOpenRageShake
+        )
+        if (state.showAnalyticsSettings) {
+            ListItem(
+                headlineContent = { Text(stringResource(id = CommonStrings.common_analytics)) },
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Chart())),
+                onClick = onOpenAnalytics,
+            )
         }
         ListItem(
             headlineContent = { Text(stringResource(id = CommonStrings.common_advanced_settings)) },
@@ -155,7 +169,6 @@ fun PreferencesRootView(
         if (state.showDeveloperSettings) {
             DeveloperPreferencesView(onOpenDeveloperSettings)
         }
-        HorizontalDivider()
         ListItem(
             headlineContent = { Text(stringResource(id = CommonStrings.action_signout)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.SignOut())),
