@@ -198,7 +198,9 @@ fun TextComposer(
                     subcomposing = subcomposing,
                     onTyping = onTyping,
                     onSuggestionReceived = onSuggestionReceived,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    composerMode = composerMode,
+                    onResetComposerMode = onResetComposerMode,
                 )
             }
         }
@@ -495,7 +497,7 @@ private fun TextInput(
 }
 
 @Composable
-private fun ComposerModeView(
+internal fun ComposerModeView(
     composerMode: MessageComposerMode,
     onResetComposerMode: () -> Unit,
 ) {
@@ -637,7 +639,9 @@ private fun charSequenceToMarkdown(charSequence: CharSequence): String {
                 val start = charSequence.getSpanStart(mention)
                 val end = charSequence.getSpanEnd(mention)
                 // TODO: Use permalinkBuilder instead
-                replace(start, end, "<a href=\"https://matrix.to/#/${mention.rawValue}\">${mention.text}</a>")
+                if (mention.type == MentionSpan.Type.USER) {
+                    replace(start, end, "[${mention.text}](https://matrix.to/#/${mention.rawValue})")
+                }
             }
         }
     } else {

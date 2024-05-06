@@ -17,28 +17,49 @@
 package io.element.android.libraries.textcomposer.components
 
 import android.content.Context
+import android.graphics.Color
 import android.text.Editable
 import android.text.Selection
-import android.text.Spannable
 import android.text.SpannableString
 import android.widget.EditText
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.text.getSpans
+import androidx.core.view.setPadding
 import androidx.core.widget.addTextChangedListener
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.core.extensions.orEmpty
+import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
+import io.element.android.libraries.textcomposer.ComposerModeView
+import io.element.android.libraries.textcomposer.R
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.concurrent.atomic.AtomicBoolean
 
 @Composable
 fun MarkdownTextInput(
@@ -46,50 +67,101 @@ fun MarkdownTextInput(
     subcomposing: Boolean,
     onTyping: (Boolean) -> Unit,
     onSuggestionReceived: (Suggestion?) -> Unit,
+    composerMode: MessageComposerMode,
+    onResetComposerMode: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    AndroidView(
-        modifier = modifier,
-        factory = { context ->
-            MarkdownEditText(context).apply {
-                setText(state.text.value())
-                if (!subcomposing) {
-                    setSelection(state.selection.first, state.selection.last)
-                    setOnFocusChangeListener { _, hasFocus ->
-                        state.hasFocus = hasFocus
-                    }
-                    addTextChangedListener { editable ->
-                        coroutineScope.launch(Dispatchers.Main) {
-                            onTyping(!editable.isNullOrEmpty())
-                            state.text.update(editable, false)
-                            state.lineCount = lineCount
 
-                            state.currentMentionSuggestion = editable?.checkSuggestionNeeded()
-                            onSuggestionReceived(state.currentMentionSuggestion)
+    val bgColor = ElementTheme.colors.bgSubtleSecondary
+    val borderColor = ElementTheme.colors.borderDisabled
+    val roundedCorners = textInputRoundedCornerShape(composerMode = composerMode)
+
+    LaunchedEffect(composerMode) {
+        if (composerMode is MessageComposerMode.Edit) {
+            state.text.update(composerMode.defaultContent, true)
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .clip(roundedCorners)
+            .border(0.5.dp, borderColor, roundedCorners)
+            .background(color = bgColor)
+            .requiredHeightIn(min = 42.dp)
+            .fillMaxSize(),
+    ) {
+        if (composerMode is MessageComposerMode.Special) {
+            ComposerModeView(composerMode = composerMode, onResetComposerMode = onResetComposerMode)
+        }
+        val defaultTypography = ElementTheme.typography.fontBodyLgRegular
+        Box(
+            modifier = Modifier
+                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 42.dp)
+                .testTag(TestTags.richTextEditor),
+            contentAlignment = Alignment.CenterStart,
+        ) {
+            // Placeholder
+            if (state.text.value().isEmpty()) {
+                Text(
+                    text = if (composerMode.inThread) {
+                        stringResource(id = CommonStrings.action_reply_in_thread)
+                    } else {
+                        stringResource(id = R.string.rich_text_editor_composer_placeholder)
+                    },
+                    style = defaultTypography.copy(
+                        color = ElementTheme.colors.textSecondary,
+                    ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+
+            AndroidView(
+                modifier = modifier,
+                factory = { context ->
+                    MarkdownEditText(context).apply {
+                        setPadding(0)
+                        setBackgroundColor(Color.TRANSPARENT)
+                        setText(state.text.value())
+                        if (!subcomposing) {
+                            setSelection(state.selection.first, state.selection.last)
+                            setOnFocusChangeListener { _, hasFocus ->
+                                state.hasFocus = hasFocus
+                            }
+                            addTextChangedListener { editable ->
+                                coroutineScope.launch(Dispatchers.Main) {
+                                    onTyping(!editable.isNullOrEmpty())
+                                    state.text.update(editable, false)
+                                    state.lineCount = lineCount
+
+                                    state.currentMentionSuggestion = editable?.checkSuggestionNeeded()
+                                    onSuggestionReceived(state.currentMentionSuggestion)
+                                }
+                            }
+                            onSelectionChangeListener = { selStart, selEnd ->
+                                state.selection = selStart..selEnd
+                                state.currentMentionSuggestion = editableText.checkSuggestionNeeded()
+                                onSuggestionReceived(state.currentMentionSuggestion)
+                            }
+                            state.onRequestFocus = { this.requestFocus() }
                         }
                     }
-                    onSelectionChangeListener = { selStart, selEnd ->
-                        state.selection = selStart..selEnd
-                        state.currentMentionSuggestion = editableText.checkSuggestionNeeded()
-                        onSuggestionReceived(state.currentMentionSuggestion)
+                },
+                update = { editText ->
+                    if (state.text.needsDisplaying()) {
+                        editText.editableText.clear()
+                        editText.editableText.append(state.text.value())
                     }
-                    state.onRequestFocus = { this.requestFocus() }
+                    if ((editText.selectionStart != state.selection.first && state.selection.first in 0..editText.editableText.length ||
+                            editText.selectionEnd != state.selection.last) && state.selection.last in 0..editText.editableText.length) {
+                        println("Changing selection to ${state.selection}")
+                        editText.setSelection(state.selection.first, state.selection.last)
+                    }
                 }
-            }
-        },
-        update = { editText ->
-            if (state.text.needsDisplaying()) {
-                editText.editableText.clear()
-                editText.editableText.append(state.text.value())
-            }
-            if ((editText.selectionStart != state.selection.first && state.selection.first in 0..editText.editableText.length ||
-                    editText.selectionEnd != state.selection.last) && state.selection.last in 0..editText.editableText.length) {
-                println("Changing selection to ${state.selection}")
-                editText.setSelection(state.selection.first, state.selection.last)
-            }
+            )
         }
-    )
+    }
 }
 
 private fun Editable.checkSuggestionNeeded(): Suggestion? {

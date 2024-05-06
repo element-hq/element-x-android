@@ -42,7 +42,7 @@ sealed interface TextEditorState {
         when (this) {
             is Markdown -> {
                 state.selection = IntRange.EMPTY
-                state.text = ImmutableCharSequence()
+                state.text.update("", true)
             }
             is Rich -> richTextEditorState.setHtml("")
         }

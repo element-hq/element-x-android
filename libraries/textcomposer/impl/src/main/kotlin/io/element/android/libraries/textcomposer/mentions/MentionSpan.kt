@@ -41,7 +41,6 @@ class MentionSpan(
 
     private var actualText: CharSequence? = null
     private var textWidth = 0
-    private var cachedRect: RectF = RectF()
     private val backgroundPaint = Paint().apply {
         isAntiAlias = true
         color = backgroundColor
@@ -59,11 +58,8 @@ class MentionSpan(
 
         // Extra vertical space to add below the baseline (y). This helps us center the span vertically
         val extraVerticalSpace = y + paint.ascent() + paint.descent() - top
-        if (cachedRect.isEmpty) {
-            cachedRect = RectF(x, top.toFloat(), x + textWidth + startPadding + endPadding, y.toFloat() + extraVerticalSpace)
-        }
 
-        val rect = cachedRect
+        val rect = RectF(x, top.toFloat(), x + textWidth + startPadding + endPadding, y.toFloat() + extraVerticalSpace)
         val radius = rect.height() / 2
         canvas.drawRoundRect(rect, radius, radius, backgroundPaint)
         paint.color = textColor
