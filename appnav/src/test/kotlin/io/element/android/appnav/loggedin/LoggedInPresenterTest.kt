@@ -24,9 +24,11 @@ import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.libraries.push.test.FakePushService
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import kotlinx.coroutines.test.runTest
@@ -73,6 +75,8 @@ class LoggedInPresenterTest {
             networkMonitor = FakeNetworkMonitor(networkStatus),
             pushService = FakePushService(),
             sessionVerificationService = FakeSessionVerificationService(),
+            analyticsService = FakeAnalyticsService(),
+            encryptionService = FakeEncryptionService()
         )
     }
 }
