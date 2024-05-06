@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
+import io.element.android.libraries.matrix.api.pusher.UnsetHttpPusherData
 import io.element.android.libraries.push.impl.pushgateway.PushGatewayNotifyRequest
 import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 import io.element.android.libraries.pushproviders.api.PusherSubscriber
@@ -107,7 +108,12 @@ class PushersManager @Inject constructor(
     }
 
     override suspend fun unregisterPusher(matrixClient: MatrixClient, pushKey: String, gateway: String) {
-        matrixClient.pushersService().unsetHttpPusher()
+        matrixClient.pushersService().unsetHttpPusher(
+            unsetHttpPusherData = UnsetHttpPusherData(
+                pushKey = pushKey,
+                appId = PushConfig.PUSHER_APP_ID
+            )
+        )
     }
 
     companion object {
