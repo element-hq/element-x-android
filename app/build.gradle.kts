@@ -165,6 +165,10 @@ android {
             buildConfigField("String", "FLAVOR_DESCRIPTION", "\"FDroid\"")
         }
     }
+
+    androidResources {
+        generateLocaleConfig = true
+    }
 }
 
 androidComponents {
