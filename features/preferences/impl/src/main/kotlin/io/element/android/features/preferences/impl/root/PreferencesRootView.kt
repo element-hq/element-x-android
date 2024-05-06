@@ -17,6 +17,7 @@
 package io.element.android.features.preferences.impl.root
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -83,103 +84,150 @@ fun PreferencesRootView(
         )
 
         // 'Manage my app' section
-
-        if (state.showNotificationSettings) {
-            ListItem(
-                headlineContent = { Text(stringResource(id = R.string.screen_notification_settings_title)) },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Notifications())),
-                onClick = onOpenNotificationSettings,
-            )
-        }
-        if (state.showLockScreenSettings) {
-            ListItem(
-                headlineContent = { Text(stringResource(id = CommonStrings.common_screen_lock)) },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
-                onClick = onOpenLockScreenSettings,
-            )
-        }
-        if (state.showSecureBackup) {
-            ListItem(
-                headlineContent = { Text(stringResource(id = CommonStrings.common_chat_backup)) },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.KeySolid())),
-                trailingContent = ListItemContent.Badge.takeIf { state.showSecureBackupBadge },
-                onClick = onSecureBackupClicked,
-            )
-        }
-        if (state.showNotificationSettings || state.showLockScreenSettings || state.showSecureBackup) {
-            HorizontalDivider()
-        }
+        ManageAppSection(
+            state = state,
+            onOpenNotificationSettings = onOpenNotificationSettings,
+            onOpenLockScreenSettings = onOpenLockScreenSettings,
+            onSecureBackupClicked = onSecureBackupClicked,
+        )
 
         // 'Account' section
-
-        if (state.accountManagementUrl != null) {
-            ListItem(
-                headlineContent = { Text(stringResource(id = CommonStrings.action_manage_account)) },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserProfile())),
-                trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.PopOut())),
-                onClick = { onManageAccountClicked(state.accountManagementUrl) },
-            )
-        }
-
-        if (state.devicesManagementUrl != null) {
-            ListItem(
-                headlineContent = { Text(stringResource(id = CommonStrings.action_manage_devices)) },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Devices())),
-                trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.PopOut())),
-                onClick = { onManageAccountClicked(state.devicesManagementUrl) },
-            )
-        }
-
-        if (state.showBlockedUsersItem) {
-            ListItem(
-                headlineContent = { Text(stringResource(id = CommonStrings.common_blocked_users)) },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
-                onClick = onOpenBlockedUsers,
-            )
-        }
-
-        if (state.accountManagementUrl != null || state.devicesManagementUrl != null || state.showBlockedUsersItem) {
-            HorizontalDivider()
-        }
+        ManageAccountSection(
+            state = state,
+            onManageAccountClicked = onManageAccountClicked,
+            onOpenBlockedUsers = onOpenBlockedUsers
+        )
 
         // General section
+        GeneralSection(
+            state = state,
+            onOpenAbout = onOpenAbout,
+            onOpenAnalytics = onOpenAnalytics,
+            onOpenRageShake = onOpenRageShake,
+            onOpenAdvancedSettings = onOpenAdvancedSettings,
+            onOpenDeveloperSettings = onOpenDeveloperSettings,
+            onSignOutClicked = onSignOutClicked,
+        )
 
-        ListItem(
-            headlineContent = { Text(stringResource(id = CommonStrings.common_about)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Info())),
-            onClick = onOpenAbout,
-        )
-        ListItem(
-            headlineContent = { Text(stringResource(id = CommonStrings.common_report_a_problem)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChatProblem())),
-            onClick = onOpenRageShake
-        )
-        if (state.showAnalyticsSettings) {
-            ListItem(
-                headlineContent = { Text(stringResource(id = CommonStrings.common_analytics)) },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Chart())),
-                onClick = onOpenAnalytics,
-            )
-        }
-        ListItem(
-            headlineContent = { Text(stringResource(id = CommonStrings.common_advanced_settings)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Settings())),
-            onClick = onOpenAdvancedSettings,
-        )
-        if (state.showDeveloperSettings) {
-            DeveloperPreferencesView(onOpenDeveloperSettings)
-        }
-        ListItem(
-            headlineContent = { Text(stringResource(id = CommonStrings.action_signout)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.SignOut())),
-            style = ListItemStyle.Destructive,
-            onClick = onSignOutClicked,
-        )
         Footer(
             version = state.version,
             deviceId = state.deviceId,
         )
     }
+}
+
+@Composable
+private fun ColumnScope.ManageAppSection(
+    state: PreferencesRootState,
+    onOpenNotificationSettings: () -> Unit,
+    onOpenLockScreenSettings: () -> Unit,
+    onSecureBackupClicked: () -> Unit,
+) {
+    if (state.showNotificationSettings) {
+        ListItem(
+            headlineContent = { Text(stringResource(id = R.string.screen_notification_settings_title)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Notifications())),
+            onClick = onOpenNotificationSettings,
+        )
+    }
+    if (state.showLockScreenSettings) {
+        ListItem(
+            headlineContent = { Text(stringResource(id = CommonStrings.common_screen_lock)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
+            onClick = onOpenLockScreenSettings,
+        )
+    }
+    if (state.showSecureBackup) {
+        ListItem(
+            headlineContent = { Text(stringResource(id = CommonStrings.common_chat_backup)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.KeySolid())),
+            trailingContent = ListItemContent.Badge.takeIf { state.showSecureBackupBadge },
+            onClick = onSecureBackupClicked,
+        )
+    }
+    if (state.showNotificationSettings || state.showLockScreenSettings || state.showSecureBackup) {
+        HorizontalDivider()
+    }
+}
+
+@Composable
+private fun ColumnScope.ManageAccountSection(
+    state: PreferencesRootState,
+    onManageAccountClicked: (url: String) -> Unit,
+    onOpenBlockedUsers: () -> Unit,
+) {
+    state.accountManagementUrl?.let { url ->
+        ListItem(
+            headlineContent = { Text(stringResource(id = CommonStrings.action_manage_account)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserProfile())),
+            trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.PopOut())),
+            onClick = { onManageAccountClicked(url) },
+        )
+    }
+
+    state.devicesManagementUrl?.let { url ->
+        ListItem(
+            headlineContent = { Text(stringResource(id = CommonStrings.action_manage_devices)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Devices())),
+            trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.PopOut())),
+            onClick = { onManageAccountClicked(url) },
+        )
+    }
+
+    if (state.showBlockedUsersItem) {
+        ListItem(
+            headlineContent = { Text(stringResource(id = CommonStrings.common_blocked_users)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
+            onClick = onOpenBlockedUsers,
+        )
+    }
+
+    if (state.accountManagementUrl != null || state.devicesManagementUrl != null || state.showBlockedUsersItem) {
+        HorizontalDivider()
+    }
+}
+
+@Composable
+private fun ColumnScope.GeneralSection(
+    state: PreferencesRootState,
+    onOpenAbout: () -> Unit,
+    onOpenAnalytics: () -> Unit,
+    onOpenRageShake: () -> Unit,
+    onOpenAdvancedSettings: () -> Unit,
+    onOpenDeveloperSettings: () -> Unit,
+    onSignOutClicked: () -> Unit,
+) {
+    ListItem(
+        headlineContent = { Text(stringResource(id = CommonStrings.common_about)) },
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Info())),
+        onClick = onOpenAbout,
+    )
+    ListItem(
+        headlineContent = { Text(stringResource(id = CommonStrings.common_report_a_problem)) },
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChatProblem())),
+        onClick = onOpenRageShake
+    )
+    if (state.showAnalyticsSettings) {
+        ListItem(
+            headlineContent = { Text(stringResource(id = CommonStrings.common_analytics)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Chart())),
+            onClick = onOpenAnalytics,
+        )
+    }
+    ListItem(
+        headlineContent = { Text(stringResource(id = CommonStrings.common_advanced_settings)) },
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Settings())),
+        onClick = onOpenAdvancedSettings,
+    )
+    if (state.showDeveloperSettings) {
+        DeveloperPreferencesView(onOpenDeveloperSettings)
+    }
+    ListItem(
+        headlineContent = { Text(stringResource(id = CommonStrings.action_signout)) },
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.SignOut())),
+        style = ListItemStyle.Destructive,
+        onClick = onSignOutClicked,
+    )
 }
 
 @Composable
