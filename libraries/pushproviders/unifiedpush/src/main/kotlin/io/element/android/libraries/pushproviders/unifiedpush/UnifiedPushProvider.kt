@@ -71,7 +71,7 @@ class UnifiedPushProvider @Inject constructor(
 
     override suspend fun unregister(matrixClient: MatrixClient) {
         val clientSecret = pushClientSecret.getSecretForUser(matrixClient.sessionId)
-        unRegisterUnifiedPushUseCase.execute(clientSecret)
+        unRegisterUnifiedPushUseCase.execute(matrixClient, clientSecret)
     }
 
     override suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig? {
