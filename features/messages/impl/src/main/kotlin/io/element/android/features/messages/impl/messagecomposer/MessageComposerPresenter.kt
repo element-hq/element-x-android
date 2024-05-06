@@ -19,6 +19,9 @@ package io.element.android.features.messages.impl.messagecomposer
 import android.Manifest
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -31,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.core.text.getSpans
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
 import im.vector.app.features.analytics.plan.Composer
@@ -39,6 +43,7 @@ import io.element.android.features.messages.impl.attachments.preview.error.sendA
 import io.element.android.features.messages.impl.mentions.MentionSuggestion
 import io.element.android.features.messages.impl.mentions.MentionSuggestionsProcessor
 import io.element.android.features.messages.impl.timeline.TimelineController
+import io.element.android.features.preferences.api.store.AppPreferencesStore
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -59,9 +64,14 @@ import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
+import io.element.android.libraries.textcomposer.mentions.MentionSpan
+import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
+import io.element.android.libraries.textcomposer.mentions.rememberMentionSpanProvider
+import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
+import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.persistentListOf
@@ -102,6 +112,7 @@ class MessageComposerPresenter @Inject constructor(
     private val permalinkBuilder: PermalinkBuilder,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
     private val timelineController: TimelineController,
+    private val appPreferencesStore: AppPreferencesStore,
 ) : Presenter<MessageComposerState> {
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
     private var pendingEvent: MessageComposerEvents? = null
@@ -113,6 +124,10 @@ class MessageComposerPresenter @Inject constructor(
     @Composable
     override fun present(): MessageComposerState {
         val localCoroutineScope = rememberCoroutineScope()
+        val isRichTextEditorEnabled by appPreferencesStore
+            .isRichTextEditorEnabledFlow()
+            .collectAsState(initial = false)
+        var markdownTextEditorState by remember { mutableStateOf(MarkdownTextEditorState()) }
 
         var isMentionsEnabled by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
@@ -229,13 +244,21 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
+        val textEditorState = if (isRichTextEditorEnabled) {
+            TextEditorState.Rich(richTextEditorState)
+        } else {
+            TextEditorState.Markdown(markdownTextEditorState)
+        }
+
+        val mentionSpanProvider = rememberMentionSpanProvider(currentUserId = room.sessionId, permalinkParser = permalinkParser)
+
         fun handleEvents(event: MessageComposerEvents) {
             when (event) {
                 MessageComposerEvents.ToggleFullScreenState -> isFullScreen.value = !isFullScreen.value
                 MessageComposerEvents.CloseSpecialMode -> {
                     if (messageComposerContext.composerMode is MessageComposerMode.Edit) {
                         localCoroutineScope.launch {
-                            richTextEditorState.setHtml("")
+                            textEditorState.reset()
                         }
                     }
                     messageComposerContext.composerMode = MessageComposerMode.Normal
@@ -243,7 +266,7 @@ class MessageComposerPresenter @Inject constructor(
                 is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(
                     message = event.message,
                     updateComposerMode = { messageComposerContext.composerMode = it },
-                    richTextEditorState = richTextEditorState,
+                    textEditorState = textEditorState,
                 )
                 is MessageComposerEvents.SendUri -> appCoroutineScope.sendAttachment(
                     attachment = Attachment.Media(
@@ -335,14 +358,44 @@ class MessageComposerPresenter @Inject constructor(
                 }
                 is MessageComposerEvents.InsertMention -> {
                     localCoroutineScope.launch {
-                        when (val mention = event.mention) {
-                            is MentionSuggestion.Room -> {
-                                richTextEditorState.insertAtRoomMentionAtSuggestion()
+                        if (isRichTextEditorEnabled) {
+                            when (val mention = event.mention) {
+                                is MentionSuggestion.Room -> {
+                                    richTextEditorState.insertAtRoomMentionAtSuggestion()
+                                }
+                                is MentionSuggestion.Member -> {
+                                    val text = mention.roomMember.displayName?.prependIndent("@") ?: mention.roomMember.userId.value
+                                    val link = permalinkBuilder.permalinkForUser(mention.roomMember.userId).getOrNull() ?: return@launch
+                                    richTextEditorState.insertMentionAtSuggestion(text = text, link = link)
+                                }
                             }
-                            is MentionSuggestion.Member -> {
-                                val text = mention.roomMember.displayName?.prependIndent("@") ?: mention.roomMember.userId.value
-                                val link = permalinkBuilder.permalinkForUser(mention.roomMember.userId).getOrNull() ?: return@launch
-                                richTextEditorState.insertMentionAtSuggestion(text = text, link = link)
+                        } else if (markdownTextEditorState.currentMentionSuggestion != null) {
+                            when (val mention = event.mention) {
+                                is MentionSuggestion.Room -> {
+                                    val suggestion = markdownTextEditorState.currentMentionSuggestion!!
+                                    val currentText = SpannableStringBuilder(markdownTextEditorState.text.value())
+                                    val replaceText = "@room"
+                                    val roomPill = mentionSpanProvider.getMentionSpanFor(replaceText, "")
+                                    currentText.replace(suggestion.start, suggestion.end, "  ")
+                                    val end = suggestion.start + 1
+                                    currentText.setSpan(roomPill, suggestion.start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    markdownTextEditorState.text.update(currentText, true)
+                                    markdownTextEditorState.selection = IntRange(end + 1, end + 1)
+                                    suggestionSearchTrigger.value = null
+                                }
+                                is MentionSuggestion.Member -> {
+                                    val suggestion = markdownTextEditorState.currentMentionSuggestion!!
+                                    val currentText = SpannableStringBuilder(markdownTextEditorState.text.value())
+                                    val text = mention.roomMember.displayName?.prependIndent("@") ?: mention.roomMember.userId.value
+                                    val link = permalinkBuilder.permalinkForUser(mention.roomMember.userId).getOrNull() ?: return@launch
+                                    val mentionPill = mentionSpanProvider.getMentionSpanFor(text, link)
+                                    currentText.replace(suggestion.start, suggestion.end, "  ")
+                                    val end = suggestion.start + 1
+                                    currentText.setSpan(mentionPill, suggestion.start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                                    markdownTextEditorState.text.update(currentText, true)
+                                    markdownTextEditorState.selection = IntRange(end + 1, end + 1)
+                                    suggestionSearchTrigger.value = null
+                                }
                             }
                         }
                     }
@@ -351,7 +404,7 @@ class MessageComposerPresenter @Inject constructor(
         }
 
         return MessageComposerState(
-            richTextEditorState = richTextEditorState,
+            textEditorState =  textEditorState,
             permalinkParser = permalinkParser,
             isFullScreen = isFullScreen.value,
             mode = messageComposerContext.composerMode,
@@ -369,21 +422,42 @@ class MessageComposerPresenter @Inject constructor(
     private fun CoroutineScope.sendMessage(
         message: Message,
         updateComposerMode: (newComposerMode: MessageComposerMode) -> Unit,
-        richTextEditorState: RichTextEditorState,
+        textEditorState: TextEditorState,
     ) = launch {
         val capturedMode = messageComposerContext.composerMode
-        val mentions = richTextEditorState.mentionsState?.let { state ->
-            buildList {
-                if (state.hasAtRoomMention) {
-                    add(Mention.AtRoom)
-                }
-                for (userId in state.userIds) {
-                    add(Mention.User(UserId(userId)))
+        // TODO: handle mentions in markdown editor
+        val mentions = when (textEditorState) {
+            is TextEditorState.Rich -> {
+                textEditorState.richTextEditorState.mentionsState?.let { state ->
+                    buildList {
+                        if (state.hasAtRoomMention) {
+                            add(Mention.AtRoom)
+                        }
+                        for (userId in state.userIds) {
+                            add(Mention.User(UserId(userId)))
+                        }
+                    }
+                }.orEmpty()
+            }
+            is TextEditorState.Markdown -> {
+                val text = SpannableString(textEditorState.state.text.value())
+                val mentionSpans = text.getSpans<MentionSpan>(0, text.length)
+                mentionSpans.mapNotNull { mentionSpan ->
+                    when (mentionSpan.type) {
+                        MentionSpan.Type.USER -> {
+                            if (mentionSpan.rawValue == "@room") {
+                                Mention.AtRoom
+                            } else {
+                                Mention.User(UserId(mentionSpan.rawValue))
+                            }
+                        }
+                        else -> null
+                    }
                 }
             }
-        }.orEmpty()
+        }
         // Reset composer right away
-        richTextEditorState.setHtml("")
+        textEditorState.reset()
         updateComposerMode(MessageComposerMode.Normal)
         when (capturedMode) {
             is MessageComposerMode.Normal -> room.sendMessage(body = message.markdown, htmlBody = message.html, mentions = mentions)

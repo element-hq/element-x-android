@@ -26,6 +26,8 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 
 class MentionSpan(
+    val text: String,
+    val rawValue: String,
     val type: Type,
     val backgroundColor: Int,
     val textColor: Int,
@@ -46,14 +48,14 @@ class MentionSpan(
     }
 
     override fun getSize(paint: Paint, text: CharSequence?, start: Int, end: Int, fm: Paint.FontMetricsInt?): Int {
-        val mentionText = getActualText(text, start, end)
+        val mentionText = getActualText(this.text)
         paint.typeface = typeface
         textWidth = paint.measureText(mentionText, 0, mentionText.length).roundToInt()
         return textWidth + startPadding + endPadding
     }
 
     override fun draw(canvas: Canvas, text: CharSequence?, start: Int, end: Int, x: Float, top: Int, y: Int, bottom: Int, paint: Paint) {
-        val mentionText = getActualText(text, start, end)
+        val mentionText = getActualText(this.text)
 
         // Extra vertical space to add below the baseline (y). This helps us center the span vertically
         val extraVerticalSpace = y + paint.ascent() + paint.descent() - top
@@ -69,24 +71,24 @@ class MentionSpan(
         canvas.drawText(mentionText, 0, mentionText.length, x + startPadding, y.toFloat(), paint)
     }
 
-    private fun getActualText(text: CharSequence?, start: Int, end: Int): CharSequence {
+    private fun getActualText(text: String): CharSequence {
         if (actualText != null) return actualText!!
         return buildString {
             val mentionText = text.orEmpty()
             when (type) {
                 Type.USER -> {
-                    if (start in mentionText.indices && mentionText[start] != '@') {
+                    if (text.firstOrNull() != '@') {
                         append("@")
                     }
                 }
                 Type.ROOM -> {
-                    if (start in mentionText.indices && mentionText[start] != '#') {
+                    if (text.firstOrNull() != '#') {
                         append("#")
                     }
                 }
             }
-            append(mentionText.substring(start, min(end, start + MAX_LENGTH)))
-            if (end - start > MAX_LENGTH) {
+            append(mentionText.substring(0, min(mentionText.length, MAX_LENGTH)))
+            if (mentionText.length > MAX_LENGTH) {
                 append("…")
             }
             actualText = this

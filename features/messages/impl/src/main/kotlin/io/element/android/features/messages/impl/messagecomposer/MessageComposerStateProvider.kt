@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.textcomposer.aRichTextEditorState
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -45,7 +46,7 @@ fun aMessageComposerState(
     attachmentsState: AttachmentsState = AttachmentsState.None,
     memberSuggestions: ImmutableList<MentionSuggestion> = persistentListOf(),
 ) = MessageComposerState(
-    richTextEditorState = richTextEditorState,
+    textEditorState = TextEditorState.Rich(richTextEditorState),
     permalinkParser = object : PermalinkParser {
         override fun parse(uriString: String): PermalinkData = TODO()
     },

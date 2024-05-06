@@ -17,6 +17,9 @@
 package io.element.android.libraries.textcomposer
 
 import android.net.Uri
+import android.text.Spannable
+import android.text.Spanned
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -39,7 +42,6 @@ import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
@@ -73,6 +75,7 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.textcomposer.components.ComposerOptionsButton
 import io.element.android.libraries.textcomposer.components.DismissTextFormattingButton
+import io.element.android.libraries.textcomposer.components.MarkdownTextInput
 import io.element.android.libraries.textcomposer.components.SendButton
 import io.element.android.libraries.textcomposer.components.TextFormatting
 import io.element.android.libraries.textcomposer.components.VoiceMessageDeleteButton
@@ -80,10 +83,12 @@ import io.element.android.libraries.textcomposer.components.VoiceMessagePreview
 import io.element.android.libraries.textcomposer.components.VoiceMessageRecorderButton
 import io.element.android.libraries.textcomposer.components.VoiceMessageRecording
 import io.element.android.libraries.textcomposer.components.textInputRoundedCornerShape
+import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.rememberMentionSpanProvider
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
+import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
@@ -98,7 +103,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun TextComposer(
-    state: RichTextEditorState,
+    state: TextEditorState,
     voiceMessageState: VoiceMessageState,
     permalinkParser: PermalinkParser,
     composerMode: MessageComposerMode,
@@ -122,9 +127,15 @@ fun TextComposer(
     showTextFormatting: Boolean = false,
     subcomposing: Boolean = false,
 ) {
+    val markdown = when (state) {
+        is TextEditorState.Markdown -> state.state.text.value()
+        is TextEditorState.Rich -> state.richTextEditorState.messageMarkdown
+    }
     val onSendClicked = {
-        val html = if (enableTextFormatting) state.messageHtml else null
-        onSendMessage(Message(html = html, markdown = state.messageMarkdown))
+        val html = if (state is TextEditorState.Rich && enableTextFormatting) {
+            state.richTextEditorState.messageHtml
+        } else null
+        onSendMessage(Message(html = html, markdown = charSequenceToMarkdown(markdown)))
     }
 
     val onPlayVoiceMessageClicked = {
@@ -153,32 +164,47 @@ fun TextComposer(
         }
     }
 
-    val textInput: @Composable () -> Unit = remember(state, subcomposing, composerMode, onResetComposerMode, onError) {
-        @Composable {
-            val mentionSpanProvider = rememberMentionSpanProvider(
-                currentUserId = currentUserId,
-                permalinkParser = permalinkParser,
-            )
-            TextInput(
-                state = state,
-                subcomposing = subcomposing,
-                placeholder = if (composerMode.inThread) {
-                    stringResource(id = CommonStrings.action_reply_in_thread)
-                } else {
-                    stringResource(id = R.string.rich_text_editor_composer_placeholder)
-                },
-                composerMode = composerMode,
-                onResetComposerMode = onResetComposerMode,
-                resolveMentionDisplay = { text, url -> TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor(text, url)) },
-                resolveRoomMentionDisplay = { TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor("@room", "#")) },
-                onError = onError,
-                onTyping = onTyping,
-                onRichContentSelected = onRichContentSelected,
-            )
+    val textInput: @Composable () -> Unit = when (state) {
+        is TextEditorState.Rich -> {
+            remember(state.richTextEditorState, subcomposing, composerMode, onResetComposerMode, onError) {
+                @Composable {
+                    val mentionSpanProvider = rememberMentionSpanProvider(
+                        currentUserId = currentUserId,
+                        permalinkParser = permalinkParser,
+                    )
+                    TextInput(
+                        state = state.richTextEditorState,
+                        subcomposing = subcomposing,
+                        placeholder = if (composerMode.inThread) {
+                            stringResource(id = CommonStrings.action_reply_in_thread)
+                        } else {
+                            stringResource(id = R.string.rich_text_editor_composer_placeholder)
+                        },
+                        composerMode = composerMode,
+                        onResetComposerMode = onResetComposerMode,
+                        resolveMentionDisplay = { text, url -> TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor(text, url)) },
+                        resolveRoomMentionDisplay = { TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor("@room", "#")) },
+                        onError = onError,
+                        onTyping = onTyping,
+                        onRichContentSelected = onRichContentSelected,
+                    )
+                }
+            }
+        }
+        is TextEditorState.Markdown -> {
+            @Composable {
+                MarkdownTextInput(
+                    state = state.state,
+                    subcomposing = subcomposing,
+                    onTyping = onTyping,
+                    onSuggestionReceived = onSuggestionReceived,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
         }
     }
 
-    val canSendMessage by remember { derivedStateOf { state.messageMarkdown.isNotBlank() } }
+    val canSendMessage = markdown.isNotBlank()
     val sendButton = @Composable {
         SendButton(
             canSendMessage = canSendMessage,
@@ -205,7 +231,9 @@ fun TextComposer(
         )
     }
 
-    val textFormattingOptions = @Composable { TextFormatting(state = state) }
+    val textFormattingOptions: @Composable (() -> Unit)? = (state as? TextEditorState.Rich)?.let {
+        @Composable { TextFormatting(state = it.richTextEditorState) }
+    }
 
     val sendOrRecordButton = when {
         enableVoiceMessages && !canSendMessage ->
@@ -217,8 +245,7 @@ fun TextComposer(
                     false -> sendVoiceButton
                 }
             }
-        else ->
-            sendButton
+        else -> sendButton
     }
 
     val voiceRecording = @Composable {
@@ -251,7 +278,7 @@ fun TextComposer(
         }
     }
 
-    if (showTextFormatting) {
+    if (showTextFormatting && textFormattingOptions != null) {
         TextFormattingLayout(
             modifier = layoutModifier,
             textInput = textInput,
@@ -282,14 +309,16 @@ fun TextComposer(
         SoftKeyboardEffect(showTextFormatting, onRequestFocus) { it }
     }
 
-    val menuAction = state.menuAction
     val latestOnSuggestionReceived by rememberUpdatedState(onSuggestionReceived)
-    LaunchedEffect(menuAction) {
-        if (menuAction is MenuAction.Suggestion) {
-            val suggestion = Suggestion(menuAction.suggestionPattern)
-            latestOnSuggestionReceived(suggestion)
-        } else {
-            latestOnSuggestionReceived(null)
+    if (state is TextEditorState.Rich) {
+        val menuAction = state.richTextEditorState.menuAction
+        LaunchedEffect(menuAction) {
+            if (menuAction is MenuAction.Suggestion) {
+                val suggestion = Suggestion(menuAction.suggestionPattern)
+                latestOnSuggestionReceived(suggestion)
+            } else {
+                latestOnSuggestionReceived(null)
+            }
         }
     }
 }
@@ -596,6 +625,23 @@ private fun ReplyToModeView(
                     indication = rememberRipple(bounded = false)
                 ),
         )
+    }
+}
+
+private fun charSequenceToMarkdown(charSequence: CharSequence): String {
+    return if (charSequence is Spanned) {
+        val mentions = charSequence.getSpans(0, charSequence.length, MentionSpan::class.java)
+        buildString {
+            append(charSequence)
+            for (mention in mentions.reversed()) {
+                val start = charSequence.getSpanStart(mention)
+                val end = charSequence.getSpanEnd(mention)
+                // TODO: Use permalinkBuilder instead
+                replace(start, end, "<a href=\"https://matrix.to/#/${mention.rawValue}\">${mention.text}</a>")
+            }
+        }
+    } else {
+        charSequence.toString()
     }
 }
 
@@ -911,7 +957,8 @@ private fun ATextComposer(
     showTextFormatting: Boolean = false,
 ) {
     TextComposer(
-        state = richTextEditorState,
+        // TODO: fix this
+        state = TextEditorState.Rich(richTextEditorState),
         showTextFormatting = showTextFormatting,
         voiceMessageState = voiceMessageState,
         permalinkParser = object : PermalinkParser {

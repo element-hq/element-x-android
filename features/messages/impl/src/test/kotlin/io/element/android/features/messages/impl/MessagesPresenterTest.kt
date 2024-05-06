@@ -511,7 +511,7 @@ class MessagesPresenterTest {
             // Initially the composer doesn't have focus, so we don't show the alert
             assertThat(initialState.showReinvitePrompt).isFalse()
             // When the input field is focused we show the alert
-            initialState.composerState.richTextEditorState.requestFocus()
+            initialState.composerState.textEditorState.requestFocus()
             val focusedState = consumeItemsUntilPredicate(timeout = 250.milliseconds) { state ->
                 state.showReinvitePrompt
             }.last()
@@ -534,7 +534,7 @@ class MessagesPresenterTest {
         }.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
-            initialState.composerState.richTextEditorState.requestFocus()
+            initialState.composerState.textEditorState.requestFocus()
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isFalse()
         }
@@ -549,7 +549,7 @@ class MessagesPresenterTest {
         }.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
-            initialState.composerState.richTextEditorState.requestFocus()
+            initialState.composerState.textEditorState.requestFocus()
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isFalse()
         }

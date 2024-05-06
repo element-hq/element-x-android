@@ -23,12 +23,12 @@ import io.element.android.features.messages.impl.mentions.MentionSuggestion
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
-import io.element.android.wysiwyg.compose.RichTextEditorState
+import io.element.android.libraries.textcomposer.model.TextEditorState
 import kotlinx.collections.immutable.ImmutableList
 
 @Stable
 data class MessageComposerState(
-    val richTextEditorState: RichTextEditorState,
+    val textEditorState: TextEditorState,
     val permalinkParser: PermalinkParser,
     val isFullScreen: Boolean,
     val mode: MessageComposerMode,
@@ -41,7 +41,7 @@ data class MessageComposerState(
     val currentUserId: UserId,
     val eventSink: (MessageComposerEvents) -> Unit,
 ) {
-    val hasFocus: Boolean = richTextEditorState.hasFocus
+    val hasFocus: Boolean = textEditorState.hasFocus()
 }
 
 @Immutable

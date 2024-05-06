@@ -84,6 +84,8 @@ class MentionSpanProvider(
             permalinkData is PermalinkData.UserLink -> {
                 val isCurrentUser = permalinkData.userId == currentSessionId
                 MentionSpan(
+                    text = text,
+                    rawValue = permalinkData.userId.toString(),
                     type = MentionSpan.Type.USER,
                     backgroundColor = if (isCurrentUser) currentUserBackgroundColor else otherBackgroundColor,
                     textColor = if (isCurrentUser) currentUserTextColor else otherTextColor,
@@ -94,7 +96,21 @@ class MentionSpanProvider(
             }
             text == "@room" && permalinkData is PermalinkData.FallbackLink -> {
                 MentionSpan(
+                    text = text,
+                    rawValue = "@room",
                     type = MentionSpan.Type.USER,
+                    backgroundColor = otherBackgroundColor,
+                    textColor = otherTextColor,
+                    startPadding = startPaddingPx,
+                    endPadding = endPaddingPx,
+                    typeface = typeface.value,
+                )
+            }
+            permalinkData is PermalinkData.RoomLink -> {
+                MentionSpan(
+                    text = text,
+                    rawValue = permalinkData.roomIdOrAlias.toString(),
+                    type = MentionSpan.Type.ROOM,
                     backgroundColor = otherBackgroundColor,
                     textColor = otherTextColor,
                     startPadding = startPaddingPx,
@@ -104,6 +120,8 @@ class MentionSpanProvider(
             }
             else -> {
                 MentionSpan(
+                    text = text,
+                    rawValue = text,
                     type = MentionSpan.Type.ROOM,
                     backgroundColor = otherBackgroundColor,
                     textColor = otherTextColor,

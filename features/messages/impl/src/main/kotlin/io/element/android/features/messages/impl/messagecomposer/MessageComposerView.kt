@@ -85,7 +85,7 @@ internal fun MessageComposerView(
     val coroutineScope = rememberCoroutineScope()
     fun onRequestFocus() {
         coroutineScope.launch {
-            state.richTextEditorState.requestFocus()
+            state.textEditorState.requestFocus()
         }
     }
 
@@ -107,7 +107,7 @@ internal fun MessageComposerView(
 
     TextComposer(
         modifier = modifier,
-        state = state.richTextEditorState,
+        state = state.textEditorState,
         voiceMessageState = voiceMessageState.voiceMessageState,
         permalinkParser = state.permalinkParser,
         subcomposing = subcomposing,
