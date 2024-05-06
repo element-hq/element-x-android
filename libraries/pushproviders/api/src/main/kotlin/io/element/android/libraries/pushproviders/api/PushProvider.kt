@@ -42,7 +42,7 @@ interface PushProvider {
     /**
      * Register the pusher to the homeserver.
      */
-    suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor)
+    suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor): Result<Unit>
 
     /**
      * Return the current distributor, or null if none.
@@ -52,7 +52,7 @@ interface PushProvider {
     /**
      * Unregister the pusher.
      */
-    suspend fun unregister(matrixClient: MatrixClient)
+    suspend fun unregister(matrixClient: MatrixClient): Result<Unit>
 
     suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig?
 }

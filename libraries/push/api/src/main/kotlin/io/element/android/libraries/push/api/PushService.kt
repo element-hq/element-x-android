@@ -40,7 +40,11 @@ interface PushService {
      *
      * The method has effect only if the [PushProvider] is different than the current one.
      */
-    suspend fun registerWith(matrixClient: MatrixClient, pushProvider: PushProvider, distributor: Distributor)
+    suspend fun registerWith(
+        matrixClient: MatrixClient,
+        pushProvider: PushProvider,
+        distributor: Distributor,
+    ): Result<Unit>
 
     /**
      * Return false in case of early error.

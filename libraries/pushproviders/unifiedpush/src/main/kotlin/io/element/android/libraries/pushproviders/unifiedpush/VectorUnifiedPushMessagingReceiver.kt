@@ -73,12 +73,17 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
         // If the endpoint has changed
         // or the gateway has changed
         if (unifiedPushStore.getEndpoint(instance) != endpoint) {
-            unifiedPushStore.storeUpEndpoint(endpoint, instance)
             coroutineScope.launch {
                 val gateway = unifiedPushGatewayResolver.getGateway(endpoint)
                 unifiedPushStore.storePushGateway(gateway, instance)
                 gateway?.let { pushGateway ->
                     newGatewayHandler.handle(endpoint, pushGateway, instance)
+                        .onFailure {
+                            Timber.tag(loggerTag.value).e("Failed to handle new gateway")
+                        }
+                        .onSuccess {
+                            unifiedPushStore.storeUpEndpoint(endpoint, instance)
+                        }
                 }
             }
         } else {

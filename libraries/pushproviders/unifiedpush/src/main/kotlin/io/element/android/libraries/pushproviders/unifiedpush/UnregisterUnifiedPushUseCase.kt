@@ -21,7 +21,6 @@ import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.pushproviders.api.PusherSubscriber
 import org.unifiedpush.android.connector.UnifiedPush
-import timber.log.Timber
 import javax.inject.Inject
 
 class UnregisterUnifiedPushUseCase @Inject constructor(
@@ -29,18 +28,17 @@ class UnregisterUnifiedPushUseCase @Inject constructor(
     private val unifiedPushStore: UnifiedPushStore,
     private val pusherSubscriber: PusherSubscriber,
 ) {
-    suspend fun execute(matrixClient: MatrixClient, clientSecret: String) {
+    suspend fun execute(matrixClient: MatrixClient, clientSecret: String): Result<Unit> {
         val endpoint = unifiedPushStore.getEndpoint(clientSecret)
         val gateway = unifiedPushStore.getPushGateway(clientSecret)
-        if (endpoint != null && gateway != null) {
-            try {
-                pusherSubscriber.unregisterPusher(matrixClient, endpoint, gateway)
-            } catch (e: Exception) {
-                Timber.d(e, "Probably unregistering a non existing pusher")
-            }
+        if (endpoint == null || gateway == null) {
+            return Result.failure(IllegalStateException("No endpoint or gateway found for client secret"))
         }
-        unifiedPushStore.storeUpEndpoint(null, clientSecret)
-        unifiedPushStore.storePushGateway(null, clientSecret)
-        UnifiedPush.unregisterApp(context)
+        return pusherSubscriber.unregisterPusher(matrixClient, endpoint, gateway)
+            .onSuccess {
+                unifiedPushStore.storeUpEndpoint(null, clientSecret)
+                unifiedPushStore.storePushGateway(null, clientSecret)
+                UnifiedPush.unregisterApp(context)
+            }
     }
 }

@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.pushproviders.firebase
 
+import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -46,9 +47,17 @@ class FirebaseNewTokenHandler @Inject constructor(
             .forEach { userId ->
                 val userDataStore = userPushStoreFactory.getOrCreate(userId)
                 if (userDataStore.getPushProviderName() == FirebaseConfig.NAME) {
-                    matrixAuthenticationService.restoreSession(userId).getOrNull()?.use { client ->
-                        pusherSubscriber.registerPusher(client, firebaseToken, FirebaseConfig.PUSHER_HTTP_URL)
-                    }
+                    matrixAuthenticationService
+                        .restoreSession(userId)
+                        .onFailure {
+                            Timber.tag(loggerTag.value).e(it, "Failed to restore session $userId")
+                        }
+                        .flatMap { client ->
+                            pusherSubscriber.registerPusher(client, firebaseToken, FirebaseConfig.PUSHER_HTTP_URL)
+                        }
+                        .onFailure {
+                            Timber.tag(loggerTag.value).e(it, "Failed to register pusher for session $userId")
+                        }
                 } else {
                     Timber.tag(loggerTag.value).d("This session is not using Firebase pusher")
                 }

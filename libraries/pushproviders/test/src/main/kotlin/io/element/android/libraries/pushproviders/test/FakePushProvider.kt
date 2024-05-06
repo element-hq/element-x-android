@@ -31,12 +31,12 @@ class FakePushProvider(
 
     override fun getDistributors(): List<Distributor> = distributors
 
-    override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor) {
-        // No-op
+    override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor): Result<Unit> {
+        return Result.success(Unit)
     }
 
-    override suspend fun unregister(matrixClient: MatrixClient) {
-        // No-op
+    override suspend fun unregister(matrixClient: MatrixClient): Result<Unit> {
+        return Result.success(Unit)
     }
 
     override suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig? {

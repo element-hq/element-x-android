@@ -36,7 +36,7 @@ class FakeUserPushStore : UserPushStore {
         return currentRegisteredPushKey
     }
 
-    override suspend fun setCurrentRegisteredPushKey(value: String) {
+    override suspend fun setCurrentRegisteredPushKey(value: String?) {
         currentRegisteredPushKey = value
     }
 

@@ -63,22 +63,26 @@ class PushersManager @Inject constructor(
     /**
      * Register a pusher to the server if not done yet.
      */
-    override suspend fun registerPusher(matrixClient: MatrixClient, pushKey: String, gateway: String) {
+    override suspend fun registerPusher(
+        matrixClient: MatrixClient,
+        pushKey: String,
+        gateway: String,
+    ): Result<Unit> {
         val userDataStore = userPushStoreFactory.getOrCreate(matrixClient.sessionId)
         if (userDataStore.getCurrentRegisteredPushKey() == pushKey) {
             Timber.tag(loggerTag.value)
                 .d("Unnecessary to register again the same pusher, but do it in case the pusher has been removed from the server")
         }
-        matrixClient.pushersService().setHttpPusher(
-            createHttpPusher(pushKey, gateway, matrixClient.sessionId)
-        ).fold(
-            {
+        return matrixClient.pushersService()
+            .setHttpPusher(
+                createHttpPusher(pushKey, gateway, matrixClient.sessionId)
+            )
+            .onSuccess {
                 userDataStore.setCurrentRegisteredPushKey(pushKey)
-            },
-            { throwable ->
+            }
+            .onFailure { throwable ->
                 Timber.tag(loggerTag.value).e(throwable, "Unable to register the pusher")
             }
-        )
     }
 
     private suspend fun createHttpPusher(
@@ -107,13 +111,25 @@ class PushersManager @Inject constructor(
         return "{\"cs\":\"$secretForUser\"}"
     }
 
-    override suspend fun unregisterPusher(matrixClient: MatrixClient, pushKey: String, gateway: String) {
-        matrixClient.pushersService().unsetHttpPusher(
-            unsetHttpPusherData = UnsetHttpPusherData(
-                pushKey = pushKey,
-                appId = PushConfig.PUSHER_APP_ID
+    override suspend fun unregisterPusher(
+        matrixClient: MatrixClient,
+        pushKey: String,
+        gateway: String,
+    ): Result<Unit> {
+        val userDataStore = userPushStoreFactory.getOrCreate(matrixClient.sessionId)
+        return matrixClient.pushersService()
+            .unsetHttpPusher(
+                unsetHttpPusherData = UnsetHttpPusherData(
+                    pushKey = pushKey,
+                    appId = PushConfig.PUSHER_APP_ID
+                )
             )
-        )
+            .onSuccess {
+                userDataStore.setCurrentRegisteredPushKey(null)
+            }
+            .onFailure { throwable ->
+                Timber.tag(loggerTag.value).e(throwable, "Unable to unregister the pusher")
+            }
     }
 
     companion object {

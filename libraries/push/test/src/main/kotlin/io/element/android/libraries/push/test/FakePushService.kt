@@ -32,7 +32,12 @@ class FakePushService(
         return emptyList()
     }
 
-    override suspend fun registerWith(matrixClient: MatrixClient, pushProvider: PushProvider, distributor: Distributor) {
+    override suspend fun registerWith(
+        matrixClient: MatrixClient,
+        pushProvider: PushProvider,
+        distributor: Distributor,
+    ): Result<Unit> {
+        return Result.success(Unit)
     }
 
     override suspend fun testPush(): Boolean = simulateLongTask {
