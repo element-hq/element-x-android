@@ -3,6 +3,8 @@
   <string name="screen_session_verification_cancelled_subtitle">"Något verkar inte stämma. Antingen gick tidsgränsen för begäran ut eller så avvisades begäran."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Bekräfta att emojierna nedan matchar de som visas på din andra session."</string>
   <string name="screen_session_verification_compare_emojis_title">"Jämför emojis"</string>
+  <string name="screen_session_verification_compare_numbers_subtitle">"Bekräfta att siffrorna nedan matchar de som visas på din andra session."</string>
+  <string name="screen_session_verification_compare_numbers_title">"Jämför siffror"</string>
   <string name="screen_session_verification_complete_subtitle">"Din nya session är nu verifierad. Den har tillgång till dina krypterade meddelanden, och andra användare kommer att se den som betrodd."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Bevisa att det är du för att komma åt din krypterade meddelandehistorik."</string>
   <string name="screen_session_verification_open_existing_session_title">"Öppna en befintlig session"</string>

@@ -41,4 +41,13 @@
     <item quantity="one">"%1$d rumsändring"</item>
     <item quantity="other">"%1$d rumsändringar"</item>
   </plurals>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="one">"%1$s, %2$s och %3$d annan"</item>
+    <item quantity="other">"%1$s, %2$s och %3$d andra"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="one">"%1$s skriver"</item>
+    <item quantity="other">"%1$s skriver"</item>
+  </plurals>
+  <string name="screen_room_typing_two_members">"%1$s och %2$s"</string>
 </resources>
