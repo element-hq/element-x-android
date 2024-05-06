@@ -24,4 +24,7 @@ sealed interface AdvancedSettingsEvents {
     data object ChangeTheme : AdvancedSettingsEvents
     data object CancelChangeTheme : AdvancedSettingsEvents
     data class SetTheme(val theme: Theme) : AdvancedSettingsEvents
+    data object ChangePushProvider : AdvancedSettingsEvents
+    data object CancelChangePushProvider : AdvancedSettingsEvents
+    data class SetPushProvider(val distributorName: String) : AdvancedSettingsEvents
 }

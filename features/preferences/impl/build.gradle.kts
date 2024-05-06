@@ -57,6 +57,7 @@ dependencies {
     implementation(projects.libraries.mediaupload.api)
     implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.push.api)
+    implementation(projects.libraries.pushproviders.api)
     implementation(projects.features.rageshake.api)
     implementation(projects.features.lockscreen.api)
     implementation(projects.features.analytics.api)

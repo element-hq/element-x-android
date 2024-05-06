@@ -17,11 +17,15 @@
 package io.element.android.features.preferences.impl.advanced
 
 import io.element.android.compound.theme.Theme
+import kotlinx.collections.immutable.ImmutableList
 
 data class AdvancedSettingsState(
     val isDeveloperModeEnabled: Boolean,
     val isSharePresenceEnabled: Boolean,
     val theme: Theme,
     val showChangeThemeDialog: Boolean,
+    val pushDistributor: String,
+    val pushDistributors: ImmutableList<String>,
+    val showChangePushProviderDialog: Boolean,
     val eventSink: (AdvancedSettingsEvents) -> Unit
 )

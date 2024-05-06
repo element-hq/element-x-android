@@ -81,6 +81,18 @@ fun AdvancedSettingsView(
             ),
             onClick = { state.eventSink(AdvancedSettingsEvents.SetSharePresenceEnabled(!state.isSharePresenceEnabled)) }
         )
+        ListItem(
+            headlineContent = {
+                // TODO i18n
+                Text(text = "Push provider")
+            },
+            trailingContent = ListItemContent.Text(
+                state.pushDistributor
+            ),
+            onClick = {
+                state.eventSink(AdvancedSettingsEvents.ChangePushProvider)
+            }
+        )
     }
 
     if (state.showChangeThemeDialog) {
@@ -95,6 +107,23 @@ fun AdvancedSettingsView(
                 )
             },
             onDismissRequest = { state.eventSink(AdvancedSettingsEvents.CancelChangeTheme) },
+        )
+    }
+
+    if (state.showChangePushProviderDialog) {
+        SingleSelectionDialog(
+            options = state.pushDistributors.map {
+                ListOption(title = it)
+            }.toImmutableList(),
+            initialSelection = state.pushDistributors.indexOf(state.pushDistributor),
+            onOptionSelected = {
+                state.eventSink(
+                    AdvancedSettingsEvents.SetPushProvider(
+                        state.pushDistributors[it]
+                    )
+                )
+            },
+            onDismissRequest = { state.eventSink(AdvancedSettingsEvents.CancelChangePushProvider) },
         )
     }
 }

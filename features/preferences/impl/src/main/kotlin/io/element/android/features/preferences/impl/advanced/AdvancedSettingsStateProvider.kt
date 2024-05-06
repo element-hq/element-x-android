@@ -18,6 +18,7 @@ package io.element.android.features.preferences.impl.advanced
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.compound.theme.Theme
+import kotlinx.collections.immutable.toImmutableList
 
 open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSettingsState> {
     override val values: Sequence<AdvancedSettingsState>
@@ -26,6 +27,7 @@ open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSett
             aAdvancedSettingsState(isDeveloperModeEnabled = true),
             aAdvancedSettingsState(showChangeThemeDialog = true),
             aAdvancedSettingsState(isSendPublicReadReceiptsEnabled = true),
+            aAdvancedSettingsState(showChangePushProviderDialog = true),
         )
 }
 
@@ -33,10 +35,16 @@ fun aAdvancedSettingsState(
     isDeveloperModeEnabled: Boolean = false,
     isSendPublicReadReceiptsEnabled: Boolean = false,
     showChangeThemeDialog: Boolean = false,
+    pushDistributor: String = "Firebase",
+    pushDistributors: List<String> = listOf("Firebase", "ntfy"),
+    showChangePushProviderDialog: Boolean = false,
 ) = AdvancedSettingsState(
     isDeveloperModeEnabled = isDeveloperModeEnabled,
     isSharePresenceEnabled = isSendPublicReadReceiptsEnabled,
     theme = Theme.System,
     showChangeThemeDialog = showChangeThemeDialog,
+    pushDistributor = pushDistributor,
+    pushDistributors = pushDistributors.toImmutableList(),
+    showChangePushProviderDialog = showChangePushProviderDialog,
     eventSink = {}
 )

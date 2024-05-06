@@ -17,8 +17,10 @@
 package io.element.android.features.preferences.impl.advanced
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -28,12 +30,17 @@ import io.element.android.compound.theme.mapToTheme
 import io.element.android.features.preferences.api.store.AppPreferencesStore
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.push.api.PushService
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AdvancedSettingsPresenter @Inject constructor(
     private val appPreferencesStore: AppPreferencesStore,
     private val sessionPreferencesStore: SessionPreferencesStore,
+    private val matrixClient: MatrixClient,
+    private val pushService: PushService,
 ) : Presenter<AdvancedSettingsState> {
     @Composable
     override fun present(): AdvancedSettingsState {
@@ -49,6 +56,21 @@ class AdvancedSettingsPresenter @Inject constructor(
         }
             .collectAsState(initial = Theme.System)
         var showChangeThemeDialog by remember { mutableStateOf(false) }
+
+        var currentPushProvider by remember { mutableStateOf<String?>(null) }
+        var distributors by remember { mutableStateOf<List<String>>(emptyList()) }
+        var refreshPushProvider by remember { mutableIntStateOf(0) }
+
+        LaunchedEffect(refreshPushProvider) {
+            val p = pushService.getCurrentPushProvider()
+            currentPushProvider = p?.getCurrentDistributor(matrixClient)?.name
+            distributors = pushService.getAvailablePushProviders()
+                .flatMap { pushProvider ->
+                    pushProvider.getDistributors().map { it.name }
+                }
+        }
+
+        var showChangePushProviderDialog by remember { mutableStateOf(false) }
         fun handleEvents(event: AdvancedSettingsEvents) {
             when (event) {
                 is AdvancedSettingsEvents.SetDeveloperModeEnabled -> localCoroutineScope.launch {
@@ -63,6 +85,25 @@ class AdvancedSettingsPresenter @Inject constructor(
                     appPreferencesStore.setTheme(event.theme.name)
                     showChangeThemeDialog = false
                 }
+                AdvancedSettingsEvents.ChangePushProvider -> showChangePushProviderDialog = true
+                AdvancedSettingsEvents.CancelChangePushProvider -> showChangePushProviderDialog = false
+                is AdvancedSettingsEvents.SetPushProvider -> {
+                    localCoroutineScope.launch {
+                        // Retrieve the push provider
+                        // TODO rework this
+                        val pushProvider = pushService.getAvailablePushProviders().firstOrNull { pushProvider ->
+                            pushProvider.getDistributors().any { it.name == event.distributorName }
+                        } ?: return@launch
+                        val distributor = pushProvider.getDistributors().firstOrNull { it.name == event.distributorName } ?: return@launch
+                        pushService.registerWith(
+                            matrixClient,
+                            pushProvider = pushProvider,
+                            distributor = distributor
+                        )
+                        showChangePushProviderDialog = false
+                        refreshPushProvider++
+                    }
+                }
             }
         }
 
@@ -71,6 +112,9 @@ class AdvancedSettingsPresenter @Inject constructor(
             isSharePresenceEnabled = isSharePresenceEnabled,
             theme = theme,
             showChangeThemeDialog = showChangeThemeDialog,
+            pushDistributor = currentPushProvider ?: "",
+            pushDistributors = distributors.toImmutableList(),
+            showChangePushProviderDialog = showChangePushProviderDialog,
             eventSink = { handleEvents(it) }
         )
     }
