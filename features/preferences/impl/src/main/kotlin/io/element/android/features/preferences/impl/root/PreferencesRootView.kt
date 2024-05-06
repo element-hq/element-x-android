@@ -247,7 +247,7 @@ private fun Footer(
     Text(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 40.dp, bottom = 24.dp),
+            .padding(start = 16.dp, end = 16.dp, top = 40.dp, bottom = 24.dp),
         textAlign = TextAlign.Center,
         text = text,
         style = ElementTheme.typography.fontBodySmRegular,
