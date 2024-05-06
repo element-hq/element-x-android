@@ -46,6 +46,7 @@
 
                 <data android:scheme="https" />
 
+                <!-- Matching asset file: https://call.element.io/.well-known/assetlinks.json -->
                 <data android:host="call.element.io" />
             </intent-filter>
             <!-- Custom scheme to handle urls from other domains in the format: element://call?url=https%3A%2F%2Felement.io -->
