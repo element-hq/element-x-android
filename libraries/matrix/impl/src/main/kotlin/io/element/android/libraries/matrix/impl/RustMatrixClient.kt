@@ -96,6 +96,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.BackupState
@@ -145,12 +146,7 @@ class RustMatrixClient(
         dispatchers = dispatchers,
     )
     private val notificationProcessSetup = NotificationProcessSetup.SingleProcess(syncService)
-    private val notificationClient = client.notificationClient(notificationProcessSetup)
-        .use { builder ->
-            builder
-                .filterByPushRules()
-                .finish()
-        }
+    private val notificationClient = runBlocking { client.notificationClient(notificationProcessSetup) }
     private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
     private val notificationSettingsService = RustNotificationSettingsService(client, dispatchers)
         .apply { start() }
