@@ -33,6 +33,7 @@ jobs:
       - name: Run Localazy script
         run: |
           ./tools/localazy/downloadStrings.sh --all
+          ./tools/localazy/importSupportedLocalesFromLocalazy.py
           ./tools/test/generateAllScreenshots.py
       - name: Create Pull Request for Strings
         uses: peter-evans/create-pull-request@v6
