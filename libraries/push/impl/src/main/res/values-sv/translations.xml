@@ -20,12 +20,14 @@
     <item quantity="other">"%d inbjudningar"</item>
   </plurals>
   <string name="notification_invite_body">"Bjöd in dig att chatta"</string>
+  <string name="notification_mentioned_you_body">"Nämnde dig: %1$s"</string>
   <string name="notification_new_messages">"Nya meddelanden"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d nytt meddelande"</item>
     <item quantity="other">"%d nya meddelanden"</item>
   </plurals>
   <string name="notification_reaction_body">"Reagerade med %1$s"</string>
+  <string name="notification_room_action_mark_as_read">"Markera som läst"</string>
   <string name="notification_room_action_quick_reply">"Snabbsvar"</string>
   <string name="notification_room_invite_body">"Bjöd in dig att gå med i rummet"</string>
   <string name="notification_sender_me">"Jag"</string>

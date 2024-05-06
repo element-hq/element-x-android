@@ -12,4 +12,5 @@
   <string name="screen_bug_report_include_screenshot">"Skicka skärmdump"</string>
   <string name="screen_bug_report_logs_description">"Loggar kommer att inkluderas i ditt meddelande för att se till att allt fungerar korrekt. Om du vill skicka ditt meddelande utan loggar stänger du av den här inställningen."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s kraschade senast den användes. Vill du dela en kraschrapport med oss?"</string>
+  <string name="screen_bug_report_view_logs">"Se loggar"</string>
 </resources>
