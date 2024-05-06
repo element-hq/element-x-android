@@ -515,7 +515,7 @@ class RustTimeline(
         }
     }
 
-    private fun fetchDetailsForEvent(eventId: EventId): Result<Unit> {
+    private suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit> {
         return runCatching {
             inner.fetchDetailsForEvent(eventId.value)
         }
