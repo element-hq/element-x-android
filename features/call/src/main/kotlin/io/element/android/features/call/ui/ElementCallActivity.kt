@@ -17,7 +17,6 @@
 package io.element.android.features.call.ui
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
@@ -36,7 +35,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.IntentCompat
 import com.bumble.appyx.core.integrationpoint.NodeComponentActivity
 import io.element.android.compound.theme.ElementTheme
@@ -49,7 +47,6 @@ import io.element.android.features.call.di.CallBindings
 import io.element.android.features.call.utils.CallIntentDataParser
 import io.element.android.features.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.architecture.bindings
-import io.element.android.libraries.core.bool.orFalse
 import javax.inject.Inject
 
 class ElementCallActivity : NodeComponentActivity(), CallScreenNavigator {
@@ -65,28 +62,6 @@ class ElementCallActivity : NodeComponentActivity(), CallScreenNavigator {
                 addFlags(FLAG_ACTIVITY_NEW_TASK)
             }
             context.startActivity(intent)
-        }
-
-        /**
-         * Starts the [ElementCallActivity] if the intent contains a valid URL,
-         * and returns true if it's the case.
-         */
-        fun maybeStart(
-            activity: Activity,
-            intent: Intent?,
-        ): Boolean {
-            return intent?.data
-                ?.takeIf { uri -> uri.scheme == "https" && uri.host == "call.element.io" }
-                ?.let { uri ->
-                    val callIntent = Intent(activity, ElementCallActivity::class.java).apply {
-                        data = uri
-                    }
-                    // Disable animation since MainActivity has already been animated.
-                    val options = ActivityOptionsCompat.makeCustomAnimation(activity, 0, 0)
-                    activity.startActivity(callIntent, options.toBundle())
-                    true
-                }
-                .orFalse()
         }
     }
 
