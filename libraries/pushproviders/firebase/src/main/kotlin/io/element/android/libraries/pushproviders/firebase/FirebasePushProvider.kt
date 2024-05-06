@@ -43,7 +43,7 @@ class FirebasePushProvider @Inject constructor(
     }
 
     override fun getDistributors(): List<Distributor> {
-        return listOf(Distributor("Firebase", "Firebase"))
+        return listOf(firebaseDistributor)
     }
 
     override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor) {
@@ -52,6 +52,8 @@ class FirebasePushProvider @Inject constructor(
         }
         pusherSubscriber.registerPusher(matrixClient, pushKey, FirebaseConfig.PUSHER_HTTP_URL)
     }
+
+    override suspend fun getCurrentDistributor(matrixClient: MatrixClient) = firebaseDistributor
 
     override suspend fun unregister(matrixClient: MatrixClient) {
         val pushKey = firebaseStore.getFcmToken() ?: return Unit.also {
@@ -67,5 +69,9 @@ class FirebasePushProvider @Inject constructor(
                 pushKey = fcmToken
             )
         }
+    }
+
+    companion object {
+        private val firebaseDistributor = Distributor("Firebase", "Firebase")
     }
 }

@@ -25,6 +25,11 @@ interface PushService {
     fun notificationStyleChanged()
 
     /**
+     * Return the current push provider, or null if none.
+     */
+    suspend fun getCurrentPushProvider(): PushProvider?
+
+    /**
      * Return the list of push providers, available at compile time, and
      * available at runtime, sorted by index.
      */

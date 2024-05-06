@@ -39,6 +39,11 @@ class DefaultPushService @Inject constructor(
         defaultNotificationDrawerManager.notificationStyleChanged()
     }
 
+    override suspend fun getCurrentPushProvider(): PushProvider? {
+        val currentPushProvider = getCurrentPushProvider.getCurrentPushProvider()
+        return pushProviders.find { it.name == currentPushProvider }
+    }
+
     override fun getAvailablePushProviders(): List<PushProvider> {
         return pushProviders
             .filter { it.isAvailable() }
@@ -51,7 +56,8 @@ class DefaultPushService @Inject constructor(
     override suspend fun registerWith(matrixClient: MatrixClient, pushProvider: PushProvider, distributor: Distributor) {
         val userPushStore = userPushStoreFactory.getOrCreate(matrixClient.sessionId)
         val currentPushProviderName = userPushStore.getPushProviderName()
-        if (currentPushProviderName != pushProvider.name) {
+        val currentDistributorValue = pushProvider.getCurrentDistributor(matrixClient)?.value
+        if (currentPushProviderName != pushProvider.name || currentDistributorValue != distributor.value) {
             // Unregister previous one if any
             pushProviders.find { it.name == currentPushProviderName }?.unregister(matrixClient)
         }
@@ -61,8 +67,7 @@ class DefaultPushService @Inject constructor(
     }
 
     override suspend fun testPush(): Boolean {
-        val currentPushProvider = getCurrentPushProvider.getCurrentPushProvider()
-        val pushProvider = pushProviders.find { it.name == currentPushProvider } ?: return false
+        val pushProvider = getCurrentPushProvider() ?: return false
         val config = pushProvider.getCurrentUserPushConfig() ?: return false
         pushersManager.testPush(config)
         return true

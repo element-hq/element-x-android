@@ -55,10 +55,23 @@ class LoggedInPresenter @Inject constructor(
         LaunchedEffect(isVerified) {
             if (isVerified) {
                 // Ensure pusher is registered
-                // TODO Manually select push provider for now
-                val pushProvider = pushService.getAvailablePushProviders().firstOrNull() ?: return@LaunchedEffect
-                val distributor = pushProvider.getDistributors().firstOrNull() ?: return@LaunchedEffect
-                pushService.registerWith(matrixClient, pushProvider, distributor)
+                val currentPushProvider = pushService.getCurrentPushProvider()
+                if (currentPushProvider == null) {
+                    // Register with the first available push provider
+                    val pushProvider = pushService.getAvailablePushProviders().firstOrNull() ?: return@LaunchedEffect
+                    val distributor = pushProvider.getDistributors().firstOrNull() ?: return@LaunchedEffect
+                    pushService.registerWith(matrixClient, pushProvider, distributor)
+                } else {
+                    val currentPushDistributor = currentPushProvider.getCurrentDistributor(matrixClient)
+                    if (currentPushDistributor == null) {
+                        // Register with the first available distributor
+                        val distributor = currentPushProvider.getDistributors().firstOrNull() ?: return@LaunchedEffect
+                        pushService.registerWith(matrixClient, currentPushProvider, distributor)
+                    } else {
+                        // Re-register with the current distributor
+                        pushService.registerWith(matrixClient, currentPushProvider, currentPushDistributor)
+                    }
+                }
             }
         }
 

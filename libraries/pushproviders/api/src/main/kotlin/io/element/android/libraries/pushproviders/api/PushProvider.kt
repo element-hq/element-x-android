@@ -45,6 +45,11 @@ interface PushProvider {
     suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor)
 
     /**
+     * Return the current distributor, or null if none.
+     */
+    suspend fun getCurrentDistributor(matrixClient: MatrixClient): Distributor?
+
+    /**
      * Unregister the pusher.
      */
     suspend fun unregister(matrixClient: MatrixClient)
