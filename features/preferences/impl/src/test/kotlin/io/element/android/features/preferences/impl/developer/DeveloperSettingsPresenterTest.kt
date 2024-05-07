@@ -29,7 +29,7 @@ import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataSto
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
-import io.element.android.libraries.featureflag.test.InMemoryAppPreferencesStore
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import kotlinx.coroutines.test.runTest

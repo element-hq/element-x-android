@@ -17,9 +17,9 @@
 package io.element.android.features.migration.impl.migrations
 
 import com.squareup.anvil.annotations.ContributesMultibinding
+import io.element.android.features.preferences.api.store.SessionPreferencesStoreFactory
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.preferences.impl.store.DefaultSessionPreferencesStoreFactory
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
@@ -27,7 +27,7 @@ import javax.inject.Inject
 @ContributesMultibinding(AppScope::class)
 class AppMigration02 @Inject constructor(
     private val sessionStore: SessionStore,
-    private val sessionPreferenceStoreFactory: DefaultSessionPreferencesStoreFactory,
+    private val sessionPreferenceStoreFactory: SessionPreferencesStoreFactory,
 ) : AppMigration {
     override val order: Int = 2
 

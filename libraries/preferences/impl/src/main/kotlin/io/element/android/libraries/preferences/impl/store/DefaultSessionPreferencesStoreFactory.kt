@@ -17,6 +17,9 @@
 package io.element.android.libraries.preferences.impl.store
 
 import android.content.Context
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.features.preferences.api.store.SessionPreferencesStore
+import io.element.android.features.preferences.api.store.SessionPreferencesStoreFactory
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
@@ -28,10 +31,11 @@ import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
 @SingleIn(AppScope::class)
+@ContributesBinding(AppScope::class)
 class DefaultSessionPreferencesStoreFactory @Inject constructor(
     @ApplicationContext private val context: Context,
     sessionObserver: SessionObserver,
-) {
+) : SessionPreferencesStoreFactory {
     private val cache = ConcurrentHashMap<SessionId, DefaultSessionPreferencesStore>()
 
     init {
@@ -44,11 +48,11 @@ class DefaultSessionPreferencesStoreFactory @Inject constructor(
         })
     }
 
-    fun get(sessionId: SessionId, sessionCoroutineScope: CoroutineScope): DefaultSessionPreferencesStore = cache.getOrPut(sessionId) {
+    override fun get(sessionId: SessionId, sessionCoroutineScope: CoroutineScope): SessionPreferencesStore = cache.getOrPut(sessionId) {
         DefaultSessionPreferencesStore(context, sessionId, sessionCoroutineScope)
     }
 
-    fun remove(sessionId: SessionId) {
+    override fun remove(sessionId: SessionId) {
         cache.remove(sessionId)
     }
 }

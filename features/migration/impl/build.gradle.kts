@@ -42,6 +42,9 @@ dependencies {
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
+    testImplementation(projects.libraries.sessionStorage.implMemory)
+    testImplementation(projects.libraries.sessionStorage.test)
+    testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.tests.testutils)
     testImplementation(projects.features.rageshake.test)
 }

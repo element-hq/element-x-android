@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.rageshake.test.logs
+package io.element.android.features.preferences.api.store
 
-import io.element.android.features.rageshake.api.logs.LogFilesRemover
-import io.element.android.tests.testutils.lambda.LambdaNoParamRecorder
-import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.libraries.matrix.api.core.SessionId
+import kotlinx.coroutines.CoroutineScope
 
-class FakeLogFilesRemover(
-    var performLambda: LambdaNoParamRecorder<Unit> = lambdaRecorder { -> },
-) : LogFilesRemover {
-    override suspend fun perform() {
-        performLambda()
-    }
+interface SessionPreferencesStoreFactory {
+    fun get(sessionId: SessionId, sessionCoroutineScope: CoroutineScope): SessionPreferencesStore
+    fun remove(sessionId: SessionId)
 }
