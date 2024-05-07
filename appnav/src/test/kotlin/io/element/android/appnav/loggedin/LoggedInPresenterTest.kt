@@ -73,10 +73,11 @@ class LoggedInPresenterTest {
     @Test
     fun `present - report crypto status analytics`() = runTest {
         val analyticsService = FakeAnalyticsService()
+        val roomListService = FakeRoomListService()
         val verificationService = FakeSessionVerificationService()
         val encryptionService = FakeEncryptionService()
         val presenter = LoggedInPresenter(
-            matrixClient = FakeMatrixClient(encryptionService = encryptionService),
+            matrixClient = FakeMatrixClient(roomListService = roomListService, encryptionService = encryptionService),
             networkMonitor = FakeNetworkMonitor(NetworkStatus.Online),
             pushService = FakePushService(),
             sessionVerificationService = verificationService,
@@ -90,17 +91,19 @@ class LoggedInPresenterTest {
             encryptionService.emitRecoveryState(RecoveryState.INCOMPLETE)
             verificationService.emitVerifiedStatus(SessionVerifiedStatus.Verified)
 
-            // Should only capture once (not report while checking state -like unknown-)
-            consumeItemsUntilPredicate {
-                analyticsService.capturedEvents.size == 1 &&
-                    analyticsService.capturedEvents[0] is CryptoSessionStateChange
-            }
-            consumeItemsUntilPredicate {
-                analyticsService.capturedUserProperties.size == 1 &&
-                    analyticsService.capturedUserProperties[0].recoveryState == UserProperties.RecoveryState.Incomplete &&
-                    analyticsService.capturedUserProperties[0].verificationState == UserProperties.VerificationState.Verified
-            }
-            cancelAndConsumeRemainingEvents()
+            skipItems(4)
+
+            assertThat(analyticsService.capturedEvents.size).isEqualTo(1)
+            assertThat(analyticsService.capturedEvents[0]).isInstanceOf(CryptoSessionStateChange::class.java)
+
+            assertThat(analyticsService.capturedUserProperties.size).isEqualTo(1)
+            assertThat(analyticsService.capturedUserProperties[0].recoveryState).isEqualTo(UserProperties.RecoveryState.Incomplete)
+            assertThat(analyticsService.capturedUserProperties[0].verificationState).isEqualTo(UserProperties.VerificationState.Verified)
+
+            // ensure a sync status change does not trigger a new capture
+            roomListService.postSyncIndicator(RoomListService.SyncIndicator.Show)
+            skipItems(1)
+            assertThat(analyticsService.capturedEvents.size).isEqualTo(1)
         }
     }
 

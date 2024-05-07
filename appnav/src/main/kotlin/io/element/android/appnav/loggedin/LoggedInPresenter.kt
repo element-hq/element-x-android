@@ -71,7 +71,9 @@ class LoggedInPresenter @Inject constructor(
         }
         val verificationState by sessionVerificationService.sessionVerifiedStatus.collectAsState()
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
-        reportCryptoStatusToAnalytics(verificationState, recoveryState)
+        LaunchedEffect(verificationState, recoveryState) {
+            reportCryptoStatusToAnalytics(verificationState, recoveryState)
+        }
 
         return LoggedInState(
             showSyncSpinner = showSyncSpinner,
