@@ -32,12 +32,15 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -62,6 +65,7 @@ fun RoomListFiltersView(
     }
 
     val lazyListState = rememberLazyListState()
+    val previousFilters = remember { mutableStateOf(listOf<RoomListFilter>()) }
     LazyRow(
         contentPadding = PaddingValues(start = 8.dp, end = 16.dp),
         modifier = modifier.fillMaxWidth(),
@@ -75,17 +79,26 @@ fun RoomListFiltersView(
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .testTag(TestTags.homeScreenClearFilters),
-                    onClick = ::onClearFiltersClicked
+                    onClick = {
+                        previousFilters.value = state.selectedFilters()
+                        onClearFiltersClicked()
+                    }
                 )
             }
         }
-        for (filterWithSelection in state.filterSelectionStates) {
+        state.filterSelectionStates.forEachIndexed { i, filterWithSelection ->
             item(filterWithSelection.filter) {
+                val zIndex = (if (previousFilters.value.contains(filterWithSelection.filter)) state.filterSelectionStates.size else 0) - i.toFloat()
                 RoomListFilterView(
-                    modifier = Modifier.animateItemPlacement(),
+                    modifier = Modifier
+                        .animateItemPlacement()
+                        .zIndex(zIndex),
                     roomListFilter = filterWithSelection.filter,
                     selected = filterWithSelection.isSelected,
-                    onClick = ::onToggleFilter,
+                    onClick = {
+                        previousFilters.value = state.selectedFilters()
+                        onToggleFilter(it)
+                    },
                 )
             }
         }
