@@ -17,6 +17,7 @@
 package io.element.android.features.preferences.impl.advanced
 
 import io.element.android.compound.theme.Theme
+import io.element.android.libraries.architecture.AsyncAction
 import kotlinx.collections.immutable.ImmutableList
 
 data class AdvancedSettingsState(
@@ -24,7 +25,7 @@ data class AdvancedSettingsState(
     val isSharePresenceEnabled: Boolean,
     val theme: Theme,
     val showChangeThemeDialog: Boolean,
-    val pushDistributor: String,
+    val pushDistributor: AsyncAction<String>,
     val pushDistributors: ImmutableList<String>,
     val showChangePushProviderDialog: Boolean,
     val eventSink: (AdvancedSettingsEvents) -> Unit

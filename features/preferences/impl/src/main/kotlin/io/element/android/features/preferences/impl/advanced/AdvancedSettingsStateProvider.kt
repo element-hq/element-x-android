@@ -18,6 +18,7 @@ package io.element.android.features.preferences.impl.advanced
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.compound.theme.Theme
+import io.element.android.libraries.architecture.AsyncAction
 import kotlinx.collections.immutable.toImmutableList
 
 open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSettingsState> {
@@ -28,6 +29,8 @@ open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSett
             aAdvancedSettingsState(showChangeThemeDialog = true),
             aAdvancedSettingsState(isSendPublicReadReceiptsEnabled = true),
             aAdvancedSettingsState(showChangePushProviderDialog = true),
+            aAdvancedSettingsState(pushDistributor = AsyncAction.Loading),
+            aAdvancedSettingsState(pushDistributor = AsyncAction.Failure(Exception("Failed to change distributor"))),
         )
 }
 
@@ -35,7 +38,7 @@ fun aAdvancedSettingsState(
     isDeveloperModeEnabled: Boolean = false,
     isSendPublicReadReceiptsEnabled: Boolean = false,
     showChangeThemeDialog: Boolean = false,
-    pushDistributor: String = "Firebase",
+    pushDistributor: AsyncAction<String> = AsyncAction.Success("Firebase"),
     pushDistributors: List<String> = listOf("Firebase", "ntfy"),
     showChangePushProviderDialog: Boolean = false,
 ) = AdvancedSettingsState(

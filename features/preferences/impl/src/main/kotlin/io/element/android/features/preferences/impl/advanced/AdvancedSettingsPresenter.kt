@@ -29,10 +29,14 @@ import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.mapToTheme
 import io.element.android.features.preferences.api.store.AppPreferencesStore
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.push.api.PushService
+import io.element.android.libraries.pushproviders.api.Distributor
+import io.element.android.libraries.pushproviders.api.PushProvider
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -57,20 +61,60 @@ class AdvancedSettingsPresenter @Inject constructor(
             .collectAsState(initial = Theme.System)
         var showChangeThemeDialog by remember { mutableStateOf(false) }
 
-        var currentPushProvider by remember { mutableStateOf<String?>(null) }
-        var distributors by remember { mutableStateOf<List<String>>(emptyList()) }
+        // List of PushProvider -> Distributor
+        var distributors by remember { mutableStateOf<List<Pair<PushProvider, Distributor>>>(emptyList()) }
+        var distributorNames by remember { mutableStateOf<List<String>>(emptyList()) }
+        LaunchedEffect(Unit) {
+            distributors = pushService.getAvailablePushProviders()
+                .flatMap { pushProvider ->
+                    pushProvider.getDistributors().map { distributor ->
+                        pushProvider to distributor
+                    }
+                }
+            distributorNames = distributors.map { it.second.name }
+        }
+
+        var currentDistributorName by remember { mutableStateOf<AsyncAction<String>>(AsyncAction.Uninitialized) }
         var refreshPushProvider by remember { mutableIntStateOf(0) }
 
         LaunchedEffect(refreshPushProvider) {
             val p = pushService.getCurrentPushProvider()
-            currentPushProvider = p?.getCurrentDistributor(matrixClient)?.name
-            distributors = pushService.getAvailablePushProviders()
-                .flatMap { pushProvider ->
-                    pushProvider.getDistributors().map { it.name }
-                }
+            val name = p?.getCurrentDistributor(matrixClient)?.name
+            currentDistributorName = if (name != null) {
+                AsyncAction.Success(name)
+            } else {
+                AsyncAction.Failure(Exception("Failed to get current push provider"))
+            }
         }
 
         var showChangePushProviderDialog by remember { mutableStateOf(false) }
+
+        fun CoroutineScope.changePushProvider(
+            data: Pair<PushProvider, Distributor>?
+        ) = launch {
+            showChangePushProviderDialog = false
+            data ?: return@launch
+            // No op if the value is the same.
+            if (data.second.name == currentDistributorName.dataOrNull()) return@launch
+            currentDistributorName = AsyncAction.Loading
+            data.let { (pushProvider, distributor) ->
+                pushService.registerWith(
+                    matrixClient = matrixClient,
+                    pushProvider = pushProvider,
+                    distributor = distributor
+                )
+                    .fold(
+                        {
+                            currentDistributorName = AsyncAction.Success(distributor.name)
+                            refreshPushProvider++
+                        },
+                        {
+                            currentDistributorName = AsyncAction.Failure(it)
+                        }
+                    )
+            }
+        }
+
         fun handleEvents(event: AdvancedSettingsEvents) {
             when (event) {
                 is AdvancedSettingsEvents.SetDeveloperModeEnabled -> localCoroutineScope.launch {
@@ -87,23 +131,7 @@ class AdvancedSettingsPresenter @Inject constructor(
                 }
                 AdvancedSettingsEvents.ChangePushProvider -> showChangePushProviderDialog = true
                 AdvancedSettingsEvents.CancelChangePushProvider -> showChangePushProviderDialog = false
-                is AdvancedSettingsEvents.SetPushProvider -> {
-                    localCoroutineScope.launch {
-                        // Retrieve the push provider
-                        // TODO rework this
-                        val pushProvider = pushService.getAvailablePushProviders().firstOrNull { pushProvider ->
-                            pushProvider.getDistributors().any { it.name == event.distributorName }
-                        } ?: return@launch
-                        val distributor = pushProvider.getDistributors().firstOrNull { it.name == event.distributorName } ?: return@launch
-                        pushService.registerWith(
-                            matrixClient,
-                            pushProvider = pushProvider,
-                            distributor = distributor
-                        )
-                        showChangePushProviderDialog = false
-                        refreshPushProvider++
-                    }
-                }
+                is AdvancedSettingsEvents.SetPushProvider -> localCoroutineScope.changePushProvider(distributors.getOrNull(event.index))
             }
         }
 
@@ -112,10 +140,11 @@ class AdvancedSettingsPresenter @Inject constructor(
             isSharePresenceEnabled = isSharePresenceEnabled,
             theme = theme,
             showChangeThemeDialog = showChangeThemeDialog,
-            pushDistributor = currentPushProvider ?: "",
-            pushDistributors = distributors.toImmutableList(),
+            pushDistributor = currentDistributorName,
+            pushDistributors = distributorNames.toImmutableList(),
             showChangePushProviderDialog = showChangePushProviderDialog,
             eventSink = { handleEvents(it) }
         )
     }
 }
+
