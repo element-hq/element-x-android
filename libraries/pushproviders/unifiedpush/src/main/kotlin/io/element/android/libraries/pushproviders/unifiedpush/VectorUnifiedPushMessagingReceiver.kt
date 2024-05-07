@@ -69,25 +69,19 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
      * You should send the endpoint to your application server and sync for missing notifications.
      */
     override fun onNewEndpoint(context: Context, endpoint: String, instance: String) {
-        Timber.tag(loggerTag.value).i("onNewEndpoint: adding $endpoint")
-        // If the endpoint has changed
-        // or the gateway has changed
-        if (unifiedPushStore.getEndpoint(instance) != endpoint) {
-            coroutineScope.launch {
-                val gateway = unifiedPushGatewayResolver.getGateway(endpoint)
-                unifiedPushStore.storePushGateway(gateway, instance)
-                gateway?.let { pushGateway ->
-                    newGatewayHandler.handle(endpoint, pushGateway, instance)
-                        .onFailure {
-                            Timber.tag(loggerTag.value).e("Failed to handle new gateway")
-                        }
-                        .onSuccess {
-                            unifiedPushStore.storeUpEndpoint(endpoint, instance)
-                        }
-                }
+        Timber.tag(loggerTag.value).i("onNewEndpoint: $endpoint")
+        coroutineScope.launch {
+            val gateway = unifiedPushGatewayResolver.getGateway(endpoint)
+            unifiedPushStore.storePushGateway(gateway, instance)
+            gateway?.let { pushGateway ->
+                newGatewayHandler.handle(endpoint, pushGateway, instance)
+                    .onFailure {
+                        Timber.tag(loggerTag.value).e(it, "Failed to handle new gateway")
+                    }
+                    .onSuccess {
+                        unifiedPushStore.storeUpEndpoint(endpoint, instance)
+                    }
             }
-        } else {
-            Timber.tag(loggerTag.value).i("onNewEndpoint: skipped")
         }
         guardServiceStarter.stop()
     }
