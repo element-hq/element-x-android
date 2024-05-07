@@ -28,7 +28,7 @@ import javax.inject.Inject
 private val loggerTag = LoggerTag("UnifiedPushNewGatewayHandler", LoggerTag.PushLoggerTag)
 
 /**
- * Handle new endpoint received from UnifiedPush. Will update all the sessions which are using UnifiedPush as a push provider.
+ * Handle new endpoint received from UnifiedPush. Will update the session matching the client secret.
  */
 class UnifiedPushNewGatewayHandler @Inject constructor(
     private val pusherSubscriber: PusherSubscriber,
