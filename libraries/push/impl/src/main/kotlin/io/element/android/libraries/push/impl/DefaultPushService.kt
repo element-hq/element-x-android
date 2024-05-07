@@ -67,13 +67,13 @@ class DefaultPushService @Inject constructor(
             pushProviders.find { it.name == currentPushProviderName }?.unregister(matrixClient)
                 ?.onFailure {
                     Timber.w(it, "Failed to unregister previous push provider")
+                    return Result.failure(it)
                 }
         }
+        // Store new value
+        userPushStore.setPushProviderName(pushProvider.name)
+        // Then try to register
         return pushProvider.registerWith(matrixClient, distributor)
-            .onSuccess {
-                // Store new value
-                userPushStore.setPushProviderName(pushProvider.name)
-            }
     }
 
     override suspend fun testPush(): Boolean {
