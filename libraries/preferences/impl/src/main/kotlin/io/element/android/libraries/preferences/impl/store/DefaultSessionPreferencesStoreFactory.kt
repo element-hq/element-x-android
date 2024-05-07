@@ -47,4 +47,8 @@ class DefaultSessionPreferencesStoreFactory @Inject constructor(
     fun get(sessionId: SessionId, sessionCoroutineScope: CoroutineScope): DefaultSessionPreferencesStore = cache.getOrPut(sessionId) {
         DefaultSessionPreferencesStore(context, sessionId, sessionCoroutineScope)
     }
+
+    fun remove(sessionId: SessionId) {
+        cache.remove(sessionId)
+    }
 }
