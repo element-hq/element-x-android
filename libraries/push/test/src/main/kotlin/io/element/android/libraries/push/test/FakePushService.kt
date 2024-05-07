@@ -28,6 +28,10 @@ class FakePushService(
     override fun notificationStyleChanged() {
     }
 
+    override suspend fun getCurrentPushProvider(): PushProvider? {
+        return null
+    }
+
     override fun getAvailablePushProviders(): List<PushProvider> {
         return emptyList()
     }

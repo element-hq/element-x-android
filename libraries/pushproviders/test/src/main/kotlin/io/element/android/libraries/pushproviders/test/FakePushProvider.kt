@@ -35,6 +35,10 @@ class FakePushProvider(
         return Result.success(Unit)
     }
 
+    override suspend fun getCurrentDistributor(matrixClient: MatrixClient): Distributor? {
+        return null
+    }
+
     override suspend fun unregister(matrixClient: MatrixClient): Result<Unit> {
         return Result.success(Unit)
     }
