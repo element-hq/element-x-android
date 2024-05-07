@@ -54,7 +54,11 @@ class FirebasePushProvider @Inject constructor(
         ).also {
             Timber.tag(loggerTag.value).w("Unable to register pusher, Firebase token is not known.")
         }
-        return pusherSubscriber.registerPusher(matrixClient, pushKey, FirebaseConfig.PUSHER_HTTP_URL)
+        return pusherSubscriber.registerPusher(
+            matrixClient = matrixClient,
+            pushKey = pushKey,
+            gateway = FirebaseConfig.PUSHER_HTTP_URL,
+        )
     }
 
     override suspend fun getCurrentDistributor(matrixClient: MatrixClient) = firebaseDistributor

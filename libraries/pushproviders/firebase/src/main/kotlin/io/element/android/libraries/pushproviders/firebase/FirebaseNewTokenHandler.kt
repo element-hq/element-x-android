@@ -44,19 +44,23 @@ class FirebaseNewTokenHandler @Inject constructor(
         // Register the pusher for all the sessions
         sessionStore.getAllSessions().toUserList()
             .map { SessionId(it) }
-            .forEach { userId ->
-                val userDataStore = userPushStoreFactory.getOrCreate(userId)
+            .forEach { sessionId ->
+                val userDataStore = userPushStoreFactory.getOrCreate(sessionId)
                 if (userDataStore.getPushProviderName() == FirebaseConfig.NAME) {
                     matrixAuthenticationService
-                        .restoreSession(userId)
+                        .restoreSession(sessionId)
                         .onFailure {
-                            Timber.tag(loggerTag.value).e(it, "Failed to restore session $userId")
+                            Timber.tag(loggerTag.value).e(it, "Failed to restore session $sessionId")
                         }
                         .flatMap { client ->
-                            pusherSubscriber.registerPusher(client, firebaseToken, FirebaseConfig.PUSHER_HTTP_URL)
+                            pusherSubscriber.registerPusher(
+                                matrixClient = client,
+                                pushKey = firebaseToken,
+                                gateway = FirebaseConfig.PUSHER_HTTP_URL,
+                            )
                         }
                         .onFailure {
-                            Timber.tag(loggerTag.value).e(it, "Failed to register pusher for session $userId")
+                            Timber.tag(loggerTag.value).e(it, "Failed to register pusher for session $sessionId")
                         }
                 } else {
                     Timber.tag(loggerTag.value).d("This session is not using Firebase pusher")
