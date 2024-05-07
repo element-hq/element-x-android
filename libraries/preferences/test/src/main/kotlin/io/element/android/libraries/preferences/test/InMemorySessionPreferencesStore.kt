@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.featureflag.test
+package io.element.android.libraries.preferences.test
 
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import kotlinx.coroutines.flow.Flow

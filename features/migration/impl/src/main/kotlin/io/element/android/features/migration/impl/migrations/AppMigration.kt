@@ -14,16 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.rageshake.test.logs
+package io.element.android.features.migration.impl.migrations
 
-import io.element.android.features.rageshake.api.logs.LogFilesRemover
-import io.element.android.tests.testutils.lambda.LambdaNoParamRecorder
-import io.element.android.tests.testutils.lambda.lambdaRecorder
-
-class FakeLogFilesRemover(
-    var performLambda: LambdaNoParamRecorder<Unit> = lambdaRecorder { -> },
-) : LogFilesRemover {
-    override suspend fun perform() {
-        performLambda()
-    }
+interface AppMigration {
+    val order: Int
+    suspend fun migrate()
 }

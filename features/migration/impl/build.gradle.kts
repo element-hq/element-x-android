@@ -27,9 +27,12 @@ android {
 dependencies {
     implementation(projects.features.migration.api)
     implementation(projects.libraries.architecture)
+    implementation(projects.libraries.preferences.impl)
     implementation(libs.androidx.datastore.preferences)
     implementation(projects.features.rageshake.api)
     implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.sessionStorage.api)
     implementation(projects.libraries.uiStrings)
 
     ksp(libs.showkase.processor)
@@ -39,6 +42,9 @@ dependencies {
     testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
+    testImplementation(projects.libraries.sessionStorage.implMemory)
+    testImplementation(projects.libraries.sessionStorage.test)
+    testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.tests.testutils)
     testImplementation(projects.features.rageshake.test)
 }

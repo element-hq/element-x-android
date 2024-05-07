@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.features.rageshake.test.logs
+package io.element.android.features.migration.impl.migrations
 
+import com.squareup.anvil.annotations.ContributesMultibinding
 import io.element.android.features.rageshake.api.logs.LogFilesRemover
-import io.element.android.tests.testutils.lambda.LambdaNoParamRecorder
-import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.libraries.di.AppScope
+import javax.inject.Inject
 
-class FakeLogFilesRemover(
-    var performLambda: LambdaNoParamRecorder<Unit> = lambdaRecorder { -> },
-) : LogFilesRemover {
-    override suspend fun perform() {
-        performLambda()
+@ContributesMultibinding(AppScope::class)
+class AppMigration01 @Inject constructor(
+    private val logFilesRemover: LogFilesRemover,
+) : AppMigration {
+    override val order: Int = 1
+
+    override suspend fun migrate() {
+        logFilesRemover.perform()
     }
 }
