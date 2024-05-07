@@ -20,10 +20,11 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.rageshake.api.logs.LogFilesRemover
-import io.element.android.features.rageshake.test.logs.FakeLogFilesRemover
+import io.element.android.features.migration.impl.migrations.AppMigration
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
+import io.element.android.tests.testutils.lambda.LambdaNoParamRecorder
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -54,10 +55,10 @@ class MigrationPresenterTest {
     @Test
     fun `present - testing all migrations`() = runTest {
         val store = InMemoryMigrationStore(0)
-        val logFilesRemoverLambda = lambdaRecorder { -> }
+        val migrations = (1..MigrationPresenter.MIGRATION_VERSION).map { FakeMigration(it) }
         val presenter = createPresenter(
             migrationStore = store,
-            logFilesRemover = FakeLogFilesRemover(logFilesRemoverLambda),
+            migrations = migrations.toSet(),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -67,19 +68,28 @@ class MigrationPresenterTest {
             awaitItem().also { state ->
                 assertThat(state.migrationAction).isEqualTo(AsyncData.Loading(Unit))
             }
-            awaitItem().also { state ->
-                assertThat(state.migrationAction).isEqualTo(AsyncData.Success(Unit))
-            }
-            logFilesRemoverLambda.assertions().isCalledExactly(1)
+            consumeItemsUntilPredicate { it.migrationAction is AsyncData.Success }
             assertThat(store.applicationMigrationVersion().first()).isEqualTo(MigrationPresenter.MIGRATION_VERSION)
+            for (migration in migrations) {
+                migration.migrateLambda.assertions().isCalledOnce()
+            }
         }
     }
 }
 
 private fun createPresenter(
     migrationStore: MigrationStore = InMemoryMigrationStore(0),
-    logFilesRemover: LogFilesRemover = FakeLogFilesRemover(lambdaRecorder(ensureNeverCalled = true) { -> }),
+    migrations: Set<AppMigration> = setOf(FakeMigration(1)),
 ) = MigrationPresenter(
     migrationStore = migrationStore,
-    logFilesRemover = logFilesRemover,
+    migrations = migrations,
 )
+
+private class FakeMigration(
+    override val order: Int,
+    var migrateLambda: LambdaNoParamRecorder<Unit> = lambdaRecorder { -> },
+) : AppMigration {
+    override suspend fun migrate() {
+        migrateLambda()
+    }
+}
