@@ -61,10 +61,11 @@ class DefaultPushService @Inject constructor(
     ): Result<Unit> {
         val userPushStore = userPushStoreFactory.getOrCreate(matrixClient.sessionId)
         val currentPushProviderName = userPushStore.getPushProviderName()
-        val currentDistributorValue = pushProvider.getCurrentDistributor(matrixClient)?.value
+        val currentPushProvider = pushProviders.find { it.name == currentPushProviderName }
+        val currentDistributorValue = currentPushProvider?.getCurrentDistributor(matrixClient)?.value
         if (currentPushProviderName != pushProvider.name || currentDistributorValue != distributor.value) {
             // Unregister previous one if any
-            pushProviders.find { it.name == currentPushProviderName }?.unregister(matrixClient)
+            currentPushProvider?.unregister(matrixClient)
                 ?.onFailure {
                     Timber.w(it, "Failed to unregister previous push provider")
                     return Result.failure(it)
