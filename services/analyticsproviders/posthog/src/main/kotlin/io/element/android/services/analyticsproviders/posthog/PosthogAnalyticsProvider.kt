@@ -87,7 +87,7 @@ class PosthogAnalyticsProvider @Inject constructor(
             userProperties.getProperties()?.let {
                 pendingUserProperties?.putAll(it)
             }
-            // We are not currently using `identify` in EIX, if it was the case
+            // We are not currently using `identify` in EAX, if it was the case
             // we could have called identify to update the user properties.
             // For now, we have to store them, and they will be updated when the next call
             // to capture will happen.
