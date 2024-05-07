@@ -35,8 +35,11 @@ import javax.inject.Inject
 @SingleIn(AppScope::class)
 class MigrationPresenter @Inject constructor(
     private val migrationStore: MigrationStore,
-    private val migrations: Set<@JvmSuppressWildcards AppMigration>,
+    migrations: Set<@JvmSuppressWildcards AppMigration>,
 ) : Presenter<MigrationState> {
+    private val orderedMigrations = migrations.sortedBy { it.order }
+    private val lastMigration: Int = orderedMigrations.lastOrNull()?.order ?: 0
+
     @Composable
     override fun present(): MigrationState {
         val migrationStoreVersion by migrationStore.applicationMigrationVersion().collectAsState(initial = null)
@@ -48,11 +51,9 @@ class MigrationPresenter @Inject constructor(
 //            migrationStore.setApplicationMigrationVersion(0)
 //        }
 
-        val orderedMigrations = migrations.sortedBy { it.order }
-
         LaunchedEffect(migrationStoreVersion) {
             val migrationValue = migrationStoreVersion ?: return@LaunchedEffect
-            if (migrationValue == MIGRATION_VERSION) {
+            if (migrationValue == lastMigration) {
                 Timber.d("Current app migration version: $migrationValue. No migration needed.")
                 migrationAction = AsyncData.Success(Unit)
                 return@LaunchedEffect
@@ -69,11 +70,5 @@ class MigrationPresenter @Inject constructor(
         return MigrationState(
             migrationAction = migrationAction,
         )
-    }
-
-    companion object {
-        // Increment this value when you need to run the migration again, and
-        // add step in the LaunchedEffect above
-        const val MIGRATION_VERSION = 2
     }
 }

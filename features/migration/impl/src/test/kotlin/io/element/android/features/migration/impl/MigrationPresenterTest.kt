@@ -37,9 +37,11 @@ class MigrationPresenterTest {
 
     @Test
     fun `present - no migration should occurs if ApplicationMigrationVersion is the last one`() = runTest {
-        val store = InMemoryMigrationStore(MigrationPresenter.MIGRATION_VERSION)
+        val migrations = (1..10).map { FakeMigration(it) }
+        val store = InMemoryMigrationStore(migrations.maxOf { it.order })
         val presenter = createPresenter(
             migrationStore = store,
+            migrations = migrations.toSet(),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -55,7 +57,7 @@ class MigrationPresenterTest {
     @Test
     fun `present - testing all migrations`() = runTest {
         val store = InMemoryMigrationStore(0)
-        val migrations = (1..MigrationPresenter.MIGRATION_VERSION).map { FakeMigration(it) }
+        val migrations = (1..10).map { FakeMigration(it) }
         val presenter = createPresenter(
             migrationStore = store,
             migrations = migrations.toSet(),
@@ -69,7 +71,7 @@ class MigrationPresenterTest {
                 assertThat(state.migrationAction).isEqualTo(AsyncData.Loading(Unit))
             }
             consumeItemsUntilPredicate { it.migrationAction is AsyncData.Success }
-            assertThat(store.applicationMigrationVersion().first()).isEqualTo(MigrationPresenter.MIGRATION_VERSION)
+            assertThat(store.applicationMigrationVersion().first()).isEqualTo(migrations.maxOf { it.order })
             for (migration in migrations) {
                 migration.migrateLambda.assertions().isCalledOnce()
             }
