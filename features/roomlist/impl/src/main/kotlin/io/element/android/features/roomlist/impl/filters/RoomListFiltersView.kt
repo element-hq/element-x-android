@@ -16,6 +16,9 @@
 
 package io.element.android.features.roomlist.impl.filters
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -139,16 +142,27 @@ private fun RoomListFilterView(
     onClick: (RoomListFilter) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val background = animateColorAsState(
+        targetValue = if (selected) ElementTheme.colors.bgActionPrimaryRest else ElementTheme.colors.bgCanvasDefault,
+        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+        label = "chip background colour",
+    )
+    val textColour = animateColorAsState(
+        targetValue = if (selected) ElementTheme.colors.textOnSolidPrimary else ElementTheme.colors.textPrimary,
+        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+        label = "chip text colour",
+    )
+
     FilterChip(
         selected = selected,
         onClick = { onClick(roomListFilter) },
         modifier = modifier.height(36.dp),
         shape = CircleShape,
         colors = FilterChipDefaults.filterChipColors(
-            containerColor = ElementTheme.colors.bgCanvasDefault,
-            selectedContainerColor = ElementTheme.colors.bgActionPrimaryRest,
-            labelColor = ElementTheme.colors.textPrimary,
-            selectedLabelColor = ElementTheme.colors.textOnSolidPrimary,
+            containerColor = background.value,
+            selectedContainerColor = background.value,
+            labelColor = textColour.value,
+            selectedLabelColor = textColour.value
         ),
         label = {
             Text(text = stringResource(id = roomListFilter.stringResource))
