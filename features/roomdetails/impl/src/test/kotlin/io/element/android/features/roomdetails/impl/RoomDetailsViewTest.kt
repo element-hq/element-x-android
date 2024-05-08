@@ -62,7 +62,7 @@ class RoomDetailsViewTest {
             rule.setRoomDetailView(
                 onShareRoom = callback,
             )
-            rule.clickOn(R.string.screen_room_details_share_room_title)
+            rule.clickOn(CommonStrings.action_share)
         }
     }
 
@@ -112,9 +112,8 @@ class RoomDetailsViewTest {
         }
     }
 
-    @Config(qualifiers = "h1024dp")
     @Test
-    fun `click on invite people invokes expected callback`() {
+    fun `click on invite invokes expected callback`() {
         ensureCalledOnce { callback ->
             rule.setRoomDetailView(
                 state = aRoomDetailsState(
@@ -123,7 +122,21 @@ class RoomDetailsViewTest {
                 ),
                 invitePeople = callback,
             )
-            rule.clickOn(R.string.screen_room_details_invite_people_title)
+            rule.clickOn(CommonStrings.action_invite)
+        }
+    }
+
+    @Test
+    fun `click on call invokes expected callback`() {
+        ensureCalledOnce { callback ->
+            rule.setRoomDetailView(
+                state = aRoomDetailsState(
+                    eventSink = EventsRecorder(expectEvents = false),
+                    canInvite = true,
+                ),
+                onJoinCallClicked = callback,
+            )
+            rule.clickOn(CommonStrings.action_call)
         }
     }
 
@@ -258,6 +271,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
     openAvatarPreview: (name: String, url: String) -> Unit = EnsureNeverCalledWithTwoParams(),
     openPollHistory: () -> Unit = EnsureNeverCalled(),
     openAdminSettings: () -> Unit = EnsureNeverCalled(),
+    onJoinCallClicked: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         RoomDetailsView(
@@ -272,6 +286,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
             openAvatarPreview = openAvatarPreview,
             openPollHistory = openPollHistory,
             openAdminSettings = openAdminSettings,
+            onJoinCallClicked = onJoinCallClicked,
         )
     }
 }

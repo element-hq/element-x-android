@@ -46,6 +46,7 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
                 // Also test the roomNotificationSettings ALL_MESSAGES in the same screenshot. Icon 'Mute' should be displayed
                 roomNotificationSettings = aRoomNotificationSettings(mode = RoomNotificationMode.ALL_MESSAGES, isDefault = true)
             ),
+            aRoomDetailsState(canCall = false, canInvite = false),
             // Add other state here
         )
 }
@@ -89,6 +90,7 @@ fun aRoomDetailsState(
     canInvite: Boolean = false,
     canEdit: Boolean = false,
     canShowNotificationSettings: Boolean = true,
+    canCall: Boolean = true,
     roomType: RoomDetailsType = RoomDetailsType.Room,
     roomMemberDetailsState: UserProfileState? = null,
     leaveRoomState: LeaveRoomState = aLeaveRoomState(),
@@ -107,6 +109,7 @@ fun aRoomDetailsState(
     canInvite = canInvite,
     canEdit = canEdit,
     canShowNotificationSettings = canShowNotificationSettings,
+    canCall = canCall,
     roomType = roomType,
     roomMemberDetailsState = roomMemberDetailsState,
     leaveRoomState = leaveRoomState,

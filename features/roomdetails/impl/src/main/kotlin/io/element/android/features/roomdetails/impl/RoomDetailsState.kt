@@ -36,6 +36,7 @@ data class RoomDetailsState(
     val canEdit: Boolean,
     val canInvite: Boolean,
     val canShowNotificationSettings: Boolean,
+    val canCall: Boolean,
     val leaveRoomState: LeaveRoomState,
     val roomNotificationSettings: RoomNotificationSettings?,
     val isFavorite: Boolean,

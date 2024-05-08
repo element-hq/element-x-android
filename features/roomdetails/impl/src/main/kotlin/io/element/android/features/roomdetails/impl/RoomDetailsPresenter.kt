@@ -44,6 +44,7 @@ import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendState
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
+import io.element.android.libraries.matrix.ui.room.canCall
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import io.element.android.libraries.matrix.ui.room.isOwnUserAdmin
 import io.element.android.services.analytics.api.AnalyticsService
@@ -86,11 +87,14 @@ class RoomDetailsPresenter @Inject constructor(
             }
         }
 
+        val syncUpdateTimestamp by room.syncUpdateFlow.collectAsState()
+
         val membersState by room.membersStateFlow.collectAsState()
         val canInvite by getCanInvite(membersState)
         val canEditName by getCanSendState(membersState, StateEventType.ROOM_NAME)
         val canEditAvatar by getCanSendState(membersState, StateEventType.ROOM_AVATAR)
         val canEditTopic by getCanSendState(membersState, StateEventType.ROOM_TOPIC)
+        val canJoinCall by room.canCall(updateKey = syncUpdateTimestamp)
         val dmMember by room.getDirectRoomMember(membersState)
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
         val roomType by getRoomType(dmMember)
@@ -138,6 +142,7 @@ class RoomDetailsPresenter @Inject constructor(
             canInvite = canInvite,
             canEdit = (canEditAvatar || canEditName || canEditTopic) && roomType == RoomDetailsType.Room,
             canShowNotificationSettings = canShowNotificationSettings.value,
+            canCall = canJoinCall,
             roomType = roomType,
             roomMemberDetailsState = roomMemberDetailsState,
             leaveRoomState = leaveRoomState,

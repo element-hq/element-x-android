@@ -34,6 +34,7 @@
   <string name="action_accept">"Accept"</string>
   <string name="action_add_to_timeline">"Add to timeline"</string>
   <string name="action_back">"Back"</string>
+  <string name="action_call">"Call"</string>
   <string name="action_cancel">"Cancel"</string>
   <string name="action_choose_photo">"Choose photo"</string>
   <string name="action_clear">"Clear"</string>

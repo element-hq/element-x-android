@@ -86,6 +86,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import io.element.android.libraries.matrix.ui.room.canCall
 import io.element.android.libraries.matrix.ui.room.canRedactOtherAsState
 import io.element.android.libraries.matrix.ui.room.canRedactOwnAsState
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
@@ -158,21 +159,13 @@ class MessagesPresenter @AssistedInject constructor(
             mutableStateOf(false)
         }
 
-        var canJoinCall by rememberSaveable {
-            mutableStateOf(false)
-        }
+        val canJoinCall by room.canCall(updateKey = syncUpdateFlow.value)
 
         LaunchedEffect(Unit) {
             // Remove the unread flag on entering but don't send read receipts
             // as those will be handled by the timeline.
             withContext(dispatchers.io) {
                 room.setUnreadFlag(isUnread = false)
-            }
-        }
-
-        LaunchedEffect(syncUpdateFlow.value) {
-            withContext(dispatchers.io) {
-                canJoinCall = room.canUserJoinCall(room.sessionId).getOrDefault(false)
             }
         }
 
