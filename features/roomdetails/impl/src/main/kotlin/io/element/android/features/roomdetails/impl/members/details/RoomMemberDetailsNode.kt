@@ -76,6 +76,10 @@ class RoomMemberDetailsNode @AssistedInject constructor(
             callback.onStartDM(roomId)
         }
 
+        fun onStartCall(roomId: RoomId) {
+            callback.onStartCall(roomId)
+        }
+
         val state = presenter.present()
 
         LaunchedEffect(state.startDmActionState) {
@@ -89,7 +93,8 @@ class RoomMemberDetailsNode @AssistedInject constructor(
             modifier = modifier,
             goBack = this::navigateUp,
             onShareUser = ::onShareUser,
-            onDMStarted = ::onStartDM,
+            onDmStarted = ::onStartDM,
+            onStartCall = ::onStartCall,
             openAvatarPreview = callback::openAvatarPreview,
         )
     }

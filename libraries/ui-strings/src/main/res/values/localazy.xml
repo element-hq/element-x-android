@@ -73,6 +73,7 @@
   <string name="action_load_more">"Load more"</string>
   <string name="action_manage_account">"Manage account"</string>
   <string name="action_manage_devices">"Manage devices"</string>
+  <string name="action_message">"Message"</string>
   <string name="action_next">"Next"</string>
   <string name="action_no">"No"</string>
   <string name="action_not_now">"Not now"</string>

@@ -16,6 +16,7 @@
 
 package io.element.android.features.userprofile.impl
 
+import android.content.Context
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,6 +29,8 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.call.CallType
+import io.element.android.features.call.ui.ElementCallActivity
 import io.element.android.features.userprofile.api.UserProfileEntryPoint
 import io.element.android.features.userprofile.impl.root.UserProfileNode
 import io.element.android.features.userprofile.shared.UserProfileNodeHelper
@@ -37,9 +40,11 @@ import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
 import kotlinx.parcelize.Parcelize
@@ -48,6 +53,8 @@ import kotlinx.parcelize.Parcelize
 class UserProfileFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    @ApplicationContext private val context: Context,
+    private val sessionIdHolder: CurrentSessionIdHolder,
 ) : BaseFlowNode<UserProfileFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -74,6 +81,10 @@ class UserProfileFlowNode @AssistedInject constructor(
 
                     override fun onStartDM(roomId: RoomId) {
                         plugins<UserProfileEntryPoint.Callback>().forEach { it.onOpenRoom(roomId) }
+                    }
+
+                    override fun onStartCall(roomId: RoomId) {
+                        ElementCallActivity.start(context, CallType.RoomCall(sessionId = sessionIdHolder.current, roomId = roomId))
                     }
                 }
                 val params = UserProfileNode.UserProfileInputs(userId = inputs<UserProfileEntryPoint.Params>().userId)
