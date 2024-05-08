@@ -46,6 +46,7 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.mediaviewer.api)
+    implementation(projects.features.call)
     api(projects.features.userprofile.api)
     api(projects.features.userprofile.shared)
     implementation(libs.coil.compose)

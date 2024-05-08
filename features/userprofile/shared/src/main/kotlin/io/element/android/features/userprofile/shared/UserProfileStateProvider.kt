@@ -32,6 +32,8 @@ open class UserProfileStateProvider : PreviewParameterProvider<UserProfileState>
             aUserProfileState(displayConfirmationDialog = UserProfileState.ConfirmationDialog.Unblock),
             aUserProfileState(isBlocked = AsyncData.Loading(true)),
             aUserProfileState(startDmActionState = AsyncAction.Loading),
+            aUserProfileState(canCall = true),
+            aUserProfileState(dmRoomId = null),
             // Add other states here
         )
 }
@@ -44,6 +46,8 @@ fun aUserProfileState(
     startDmActionState: AsyncAction<RoomId> = AsyncAction.Uninitialized,
     displayConfirmationDialog: UserProfileState.ConfirmationDialog? = null,
     isCurrentUser: Boolean = false,
+    dmRoomId: RoomId? = null,
+    canCall: Boolean = false,
     eventSink: (UserProfileEvents) -> Unit = {},
 ) = UserProfileState(
     userId = userId,
@@ -53,5 +57,7 @@ fun aUserProfileState(
     startDmActionState = startDmActionState,
     displayConfirmationDialog = displayConfirmationDialog,
     isCurrentUser = isCurrentUser,
+    dmRoomId = dmRoomId,
+    canCall = canCall,
     eventSink = eventSink,
 )

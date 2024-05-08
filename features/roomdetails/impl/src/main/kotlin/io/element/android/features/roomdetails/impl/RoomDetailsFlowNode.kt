@@ -188,6 +188,10 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                     override fun onStartDM(roomId: RoomId) {
                         plugins<RoomDetailsEntryPoint.Callback>().forEach { it.onOpenRoom(roomId) }
                     }
+
+                    override fun onStartCall(roomId: RoomId) {
+                        ElementCallActivity.start(context, CallType.RoomCall(roomId = roomId, sessionId = room.sessionId))
+                    }
                 }
                 val plugins = listOf(RoomMemberDetailsNode.RoomMemberDetailsInput(navTarget.roomMemberId), callback)
                 createNode<RoomMemberDetailsNode>(buildContext, plugins)

@@ -29,11 +29,32 @@ import io.element.android.libraries.designsystem.components.button.MainActionBut
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
-fun UserProfileMainActionsSection(onShareUser: () -> Unit, modifier: Modifier = Modifier) {
+fun UserProfileMainActionsSection(
+    isCurrentUser: Boolean,
+    canCall: Boolean,
+    onShareUser: () -> Unit,
+    onStartDM: () -> Unit,
+    onCall: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Row(
         modifier.fillMaxWidth().padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
+        if (!isCurrentUser) {
+            MainActionButton(
+                title = stringResource(CommonStrings.action_message),
+                imageVector = CompoundIcons.Chat(),
+                onClick = onStartDM,
+            )
+        }
+        if (canCall) {
+            MainActionButton(
+                title = stringResource(CommonStrings.action_call),
+                imageVector = CompoundIcons.VideoCall(),
+                onClick = onCall,
+            )
+        }
         MainActionButton(
             title = stringResource(CommonStrings.action_share),
             imageVector = CompoundIcons.ShareAndroid(),

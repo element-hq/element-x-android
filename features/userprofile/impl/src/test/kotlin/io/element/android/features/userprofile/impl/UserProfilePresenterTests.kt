@@ -64,6 +64,8 @@ class UserProfilePresenterTests {
             assertThat(initialState.userName).isEqualTo(matrixUser.displayName)
             assertThat(initialState.avatarUrl).isEqualTo(matrixUser.avatarUrl)
             assertThat(initialState.isBlocked).isEqualTo(AsyncData.Success(false))
+            assertThat(initialState.dmRoomId).isEqualTo(A_ROOM_ID)
+            assertThat(initialState.canCall).isFalse()
         }
     }
 

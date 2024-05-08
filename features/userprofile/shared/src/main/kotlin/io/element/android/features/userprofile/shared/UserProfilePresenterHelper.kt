@@ -16,9 +16,14 @@
 
 package io.element.android.features.userprofile.shared
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.produceState
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -27,6 +32,24 @@ class UserProfilePresenterHelper(
     private val userId: UserId,
     private val client: MatrixClient,
 ) {
+    @Composable
+    fun getDmRoomId(): State<RoomId?> {
+        return produceState<RoomId?>(initialValue = null) {
+            value = client.findDM(userId)
+        }
+    }
+
+    @Composable
+    fun getCanCall(roomId: RoomId?): State<Boolean> {
+        return produceState(initialValue = false, roomId) {
+            value = if (client.isMe(userId)) {
+                false
+            } else {
+                roomId?.let { client.getRoom(it)?.canUserJoinCall(client.sessionId)?.getOrNull() == true }.orFalse()
+            }
+        }
+    }
+
     fun blockUser(
         scope: CoroutineScope,
         isBlockedState: MutableState<AsyncData<Boolean>>,
