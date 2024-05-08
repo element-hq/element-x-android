@@ -32,7 +32,9 @@ import io.element.android.libraries.designsystem.theme.badgePositiveContentColor
 
 object RoomBadge {
     enum class Type {
-        Positive, Negative, Neutral
+        Positive,
+        Neutral,
+        Negative
     }
 
     @Composable fun View(
@@ -42,18 +44,18 @@ object RoomBadge {
     ) {
         val backgroundColor = when (type) {
             Type.Positive -> ElementTheme.colors.badgePositiveBackgroundColor
-            Type.Negative -> ElementTheme.colors.badgeNegativeBackgroundColor
             Type.Neutral -> ElementTheme.colors.badgeNeutralBackgroundColor
+            Type.Negative -> ElementTheme.colors.badgeNegativeBackgroundColor
         }
         val textColor = when (type) {
             Type.Positive -> ElementTheme.colors.badgePositiveContentColor
-            Type.Negative -> ElementTheme.colors.badgeNegativeContentColor
             Type.Neutral -> ElementTheme.colors.badgeNeutralContentColor
+            Type.Negative -> ElementTheme.colors.badgeNegativeContentColor
         }
         val iconColor = when (type) {
             Type.Positive -> ElementTheme.colors.iconSuccessPrimary
-            Type.Negative -> ElementTheme.colors.iconCriticalPrimary
             Type.Neutral -> ElementTheme.colors.iconSecondary
+            Type.Negative -> ElementTheme.colors.iconCriticalPrimary
         }
         Badge(
             text = text,

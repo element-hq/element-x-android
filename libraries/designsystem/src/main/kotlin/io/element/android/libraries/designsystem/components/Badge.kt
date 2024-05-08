@@ -40,6 +40,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 
+@Suppress("ModifierMissing")
 @Composable
 fun Badge(
     text: String,
