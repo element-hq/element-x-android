@@ -288,7 +288,7 @@ class MessagesPresenterTest {
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, aMessageEvent()))
             val finalState = awaitItem()
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
-            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assertThat(finalState.actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
@@ -298,10 +298,9 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(2)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, aMessageEvent(eventId = null)))
-            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assertThat(initialState.actionListState.target).isEqualTo(ActionListState.Target.None)
             // Otherwise we would have some extra items here
             ensureAllEventsConsumed()
         }
@@ -335,7 +334,7 @@ class MessagesPresenterTest {
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
             val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
             assertThat(replyMode.attachmentThumbnailInfo).isNotNull()
-            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assertThat(finalState.actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
@@ -368,7 +367,7 @@ class MessagesPresenterTest {
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
             val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
             assertThat(replyMode.attachmentThumbnailInfo).isNotNull()
-            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assertThat(finalState.actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
@@ -394,7 +393,7 @@ class MessagesPresenterTest {
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
             val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
             assertThat(replyMode.attachmentThumbnailInfo).isNotNull()
-            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assertThat(finalState.actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
@@ -408,7 +407,7 @@ class MessagesPresenterTest {
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Edit, aMessageEvent()))
             val finalState = awaitItem()
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Edit::class.java)
-            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assertThat(finalState.actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
@@ -732,7 +731,7 @@ class MessagesPresenterTest {
             assertThat(replyMode.attachmentThumbnailInfo).isNotNull()
             assertThat(replyMode.attachmentThumbnailInfo?.textContent)
                 .isEqualTo("What type of food should we have at the party?")
-            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assertThat(finalState.actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 

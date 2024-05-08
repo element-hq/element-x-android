@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -100,6 +99,7 @@ fun RoomDetailsView(
     openAvatarPreview: (name: String, url: String) -> Unit,
     openPollHistory: () -> Unit,
     openAdminSettings: () -> Unit,
+    onJoinCallClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun onShareMember() {
@@ -137,7 +137,9 @@ fun RoomDetailsView(
                     )
                     MainActionsSection(
                         state = state,
-                        onShareRoom = onShareRoom
+                        onShareRoom = onShareRoom,
+                        onInvitePeople = invitePeople,
+                        onCall = onJoinCallClicked,
                     )
                 }
 
@@ -188,20 +190,12 @@ fun RoomDetailsView(
             }
 
             val displayMemberListItem = state.roomType is RoomDetailsType.Room
-            val displayInviteMembersItem = state.canInvite
-            if (displayMemberListItem || displayInviteMembersItem) {
+            if (displayMemberListItem) {
                 PreferenceCategory {
-                    if (displayMemberListItem) {
-                        MembersItem(
-                            memberCount = state.memberCount,
-                            openRoomMemberList = openRoomMemberList,
-                        )
-                    }
-                    if (displayInviteMembersItem) {
-                        InviteItem(
-                            invitePeople = invitePeople
-                        )
-                    }
+                    MembersItem(
+                        memberCount = state.memberCount,
+                        openRoomMemberList = openRoomMemberList,
+                    )
                 }
             }
 
@@ -267,10 +261,12 @@ private fun RoomDetailsTopBar(
 private fun MainActionsSection(
     state: RoomDetailsState,
     onShareRoom: () -> Unit,
+    onInvitePeople: () -> Unit,
+    onCall: () -> Unit,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
         val roomNotificationSettings = state.roomNotificationSettings
         if (state.canShowNotificationSettings && roomNotificationSettings != null) {
@@ -292,9 +288,22 @@ private fun MainActionsSection(
                 )
             }
         }
-        Spacer(modifier = Modifier.width(20.dp))
+        if (state.canCall) {
+            MainActionButton(
+                title = stringResource(CommonStrings.action_call),
+                imageVector = CompoundIcons.VideoCall(),
+                onClick = onCall,
+            )
+        }
+        if (state.roomType is RoomDetailsType.Room && state.canInvite) {
+            MainActionButton(
+                title = stringResource(CommonStrings.action_invite),
+                imageVector = CompoundIcons.UserAdd(),
+                onClick = onInvitePeople,
+            )
+        }
         MainActionButton(
-            title = stringResource(R.string.screen_room_details_share_room_title),
+            title = stringResource(CommonStrings.action_share),
             imageVector = CompoundIcons.ShareAndroid(),
             onClick = onShareRoom
         )
@@ -411,17 +420,6 @@ private fun MembersItem(
 }
 
 @Composable
-private fun InviteItem(
-    invitePeople: () -> Unit,
-) {
-    ListItem(
-        headlineContent = { Text(stringResource(R.string.screen_room_details_invite_people_title)) },
-        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserAdd())),
-        onClick = invitePeople,
-    )
-}
-
-@Composable
 private fun PollsSection(
     openPollHistory: () -> Unit,
 ) {
@@ -491,5 +489,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
         openAvatarPreview = { _, _ -> },
         openPollHistory = {},
         openAdminSettings = {},
+        onJoinCallClicked = {},
     )
 }

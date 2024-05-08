@@ -58,6 +58,7 @@ class RoomDetailsNode @AssistedInject constructor(
         fun openAvatarPreview(name: String, url: String)
         fun openPollHistory()
         fun openAdminSettings()
+        fun onJoinCall()
     }
 
     private val callbacks = plugins<Callback>()
@@ -84,6 +85,10 @@ class RoomDetailsNode @AssistedInject constructor(
 
     private fun openPollHistory() {
         callbacks.forEach { it.openPollHistory() }
+    }
+
+    private fun onJoinCall() {
+        callbacks.forEach { it.onJoinCall() }
     }
 
     private fun CoroutineScope.onShareRoom(context: Context) = launch {
@@ -162,6 +167,7 @@ class RoomDetailsNode @AssistedInject constructor(
             openAvatarPreview = ::openAvatarPreview,
             openPollHistory = ::openPollHistory,
             openAdminSettings = this::openAdminSettings,
+            onJoinCallClicked = ::onJoinCall,
         )
     }
 }
