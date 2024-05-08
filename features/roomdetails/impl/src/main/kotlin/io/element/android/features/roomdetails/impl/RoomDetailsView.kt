@@ -20,7 +20,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -80,7 +79,6 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.getBestName
 import io.element.android.libraries.testtags.TestTags
@@ -93,7 +91,6 @@ fun RoomDetailsView(
     goBack: () -> Unit,
     onActionClicked: (RoomDetailsAction) -> Unit,
     onShareRoom: () -> Unit,
-    onShareMember: (RoomMember) -> Unit,
     openRoomMemberList: () -> Unit,
     openRoomNotificationSettings: () -> Unit,
     invitePeople: () -> Unit,
@@ -103,10 +100,6 @@ fun RoomDetailsView(
     onJoinCallClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    fun onShareMember() {
-        onShareMember((state.roomType as RoomDetailsType.Dm).roomMember)
-    }
-
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -533,7 +526,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
         goBack = {},
         onActionClicked = {},
         onShareRoom = {},
-        onShareMember = {},
         openRoomMemberList = {},
         openRoomNotificationSettings = {},
         invitePeople = {},

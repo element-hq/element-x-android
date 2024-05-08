@@ -32,9 +32,7 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -48,7 +46,6 @@ class RoomDetailsNode @AssistedInject constructor(
     private val presenter: RoomDetailsPresenter,
     private val room: MatrixRoom,
     private val analyticsService: AnalyticsService,
-    private val permalinkBuilder: PermalinkBuilder,
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
         fun openRoomMemberList()
@@ -106,22 +103,6 @@ class RoomDetailsNode @AssistedInject constructor(
             }
     }
 
-    private fun onShareMember(context: Context, member: RoomMember) {
-        val permalinkResult = permalinkBuilder.permalinkForUser(member.userId)
-        permalinkResult
-            .onSuccess { permalink ->
-                context.startSharePlainTextIntent(
-                    activityResultLauncher = null,
-                    chooserTitle = context.getString(R.string.screen_room_details_share_room_title),
-                    text = permalink,
-                    noActivityFoundMessage = context.getString(AndroidUtilsR.string.error_no_compatible_app_found)
-                )
-            }
-            .onFailure {
-                Timber.e(it)
-            }
-    }
-
     private fun onEditRoomDetails() {
         callbacks.forEach { it.editRoomDetails() }
     }
@@ -143,10 +124,6 @@ class RoomDetailsNode @AssistedInject constructor(
             lifecycleScope.onShareRoom(context)
         }
 
-        fun onShareMember(roomMember: RoomMember) {
-            this.onShareMember(context, roomMember)
-        }
-
         fun onActionClicked(action: RoomDetailsAction) {
             when (action) {
                 RoomDetailsAction.Edit -> onEditRoomDetails()
@@ -160,7 +137,6 @@ class RoomDetailsNode @AssistedInject constructor(
             goBack = this::navigateUp,
             onActionClicked = ::onActionClicked,
             onShareRoom = ::onShareRoom,
-            onShareMember = ::onShareMember,
             openRoomMemberList = ::openRoomMemberList,
             openRoomNotificationSettings = ::openRoomNotificationSettings,
             invitePeople = ::invitePeople,
