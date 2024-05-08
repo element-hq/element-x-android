@@ -49,7 +49,6 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.userprofile.shared.UserProfileHeaderSection
-import io.element.android.features.userprofile.shared.UserProfileMainActionsSection
 import io.element.android.features.userprofile.shared.blockuser.BlockUserDialogs
 import io.element.android.features.userprofile.shared.blockuser.BlockUserSection
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
@@ -153,7 +152,12 @@ fun RoomDetailsView(
                             openAvatarPreview(member.getBestName(), avatarUrl)
                         },
                     )
-                    UserProfileMainActionsSection(onShareUser = ::onShareMember)
+                    MainActionsSection(
+                        state = state,
+                        onShareRoom = onShareRoom,
+                        onInvitePeople = invitePeople,
+                        onCall = onJoinCallClicked,
+                    )
                 }
             }
             Spacer(Modifier.height(18.dp))
@@ -295,18 +299,21 @@ private fun MainActionsSection(
                 onClick = onCall,
             )
         }
-        if (state.roomType is RoomDetailsType.Room && state.canInvite) {
+        if (state.roomType is RoomDetailsType.Room) {
+            if (state.canInvite) {
+                MainActionButton(
+                    title = stringResource(CommonStrings.action_invite),
+                    imageVector = CompoundIcons.UserAdd(),
+                    onClick = onInvitePeople,
+                )
+            }
+            // Share CTA should be hidden for DMs
             MainActionButton(
-                title = stringResource(CommonStrings.action_invite),
-                imageVector = CompoundIcons.UserAdd(),
-                onClick = onInvitePeople,
+                title = stringResource(CommonStrings.action_share),
+                imageVector = CompoundIcons.ShareAndroid(),
+                onClick = onShareRoom
             )
         }
-        MainActionButton(
-            title = stringResource(CommonStrings.action_share),
-            imageVector = CompoundIcons.ShareAndroid(),
-            onClick = onShareRoom
-        )
     }
 }
 
