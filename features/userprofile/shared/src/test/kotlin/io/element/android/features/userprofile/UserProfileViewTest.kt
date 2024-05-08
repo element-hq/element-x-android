@@ -17,8 +17,10 @@
 package io.element.android.features.userprofile
 
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.userprofile.shared.R
 import io.element.android.features.userprofile.shared.UserProfileEvents
@@ -27,7 +29,10 @@ import io.element.android.features.userprofile.shared.UserProfileView
 import io.element.android.features.userprofile.shared.aUserProfileState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_USER_NAME
+import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
@@ -36,6 +41,7 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
+import io.element.android.tests.testutils.ensureCalledOnceWithTwoParams
 import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.pressBackKey
 import kotlinx.coroutines.test.runTest
@@ -66,6 +72,27 @@ class UserProfileViewTest {
             )
             rule.pressBack()
         }
+    }
+
+    @Test
+    fun `on avatar clicked - the expected callback is called`() = runTest {
+        ensureCalledOnceWithTwoParams(A_USER_NAME, AN_AVATAR_URL) { callback ->
+            rule.setUserProfileView(
+                state = aUserProfileState(userName = A_USER_NAME, avatarUrl = AN_AVATAR_URL),
+                openAvatarPreview = callback,
+            )
+            rule.onNode(hasTestTag(TestTags.memberDetailAvatar.value)).performClick()
+        }
+    }
+
+    @Test
+    fun `on avatar clicked with no avatar - nothing happens`() = runTest {
+        val callback = EnsureNeverCalledWithTwoParams<String, String>()
+        rule.setUserProfileView(
+            state = aUserProfileState(userName = A_USER_NAME, avatarUrl = null),
+            openAvatarPreview = callback,
+        )
+        rule.onNode(hasTestTag(TestTags.memberDetailAvatar.value)).performClick()
     }
 
     @Test
