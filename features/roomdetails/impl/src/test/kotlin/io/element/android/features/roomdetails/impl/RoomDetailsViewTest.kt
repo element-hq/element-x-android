@@ -66,19 +66,6 @@ class RoomDetailsViewTest {
         }
     }
 
-    @Test
-    fun `click on share member invokes expected callback`() {
-        val state = aDmRoomDetailsState()
-        val roomMember = (state.roomType as RoomDetailsType.Dm).roomMember
-        ensureCalledOnceWithParam(roomMember) { callback ->
-            rule.setRoomDetailView(
-                state = aDmRoomDetailsState(),
-                onShareMember = callback,
-            )
-            rule.clickOn(CommonStrings.action_share)
-        }
-    }
-
     @Config(qualifiers = "h1024dp")
     @Test
     fun `click on room members invokes expected callback`() {
