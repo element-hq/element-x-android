@@ -20,6 +20,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -48,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.leaveroom.api.LeaveRoomView
+import io.element.android.features.roomdetails.impl.components.RoomBadge
 import io.element.android.features.userprofile.shared.UserProfileHeaderSection
 import io.element.android.features.userprofile.shared.blockuser.BlockUserDialogs
 import io.element.android.features.userprofile.shared.blockuser.BlockUserSection
@@ -130,6 +132,8 @@ fun RoomDetailsView(
                         roomId = state.roomId,
                         roomName = state.roomName,
                         roomAlias = state.roomAlias,
+                        isEncrypted = state.isEncrypted,
+                        isPublic = state.isPublic,
                         openAvatarPreview = { avatarUrl ->
                             openAvatarPreview(state.roomName, avatarUrl)
                         },
@@ -160,7 +164,7 @@ fun RoomDetailsView(
                     )
                 }
             }
-            Spacer(Modifier.height(18.dp))
+            Spacer(Modifier.height(12.dp))
 
             if (state.roomTopic !is RoomTopicState.Hidden) {
                 TopicSection(
@@ -269,7 +273,9 @@ private fun MainActionsSection(
     onCall: () -> Unit,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
         val roomNotificationSettings = state.roomNotificationSettings
@@ -323,6 +329,8 @@ private fun RoomHeaderSection(
     roomId: RoomId,
     roomName: String,
     roomAlias: RoomAlias?,
+    isEncrypted: Boolean,
+    isPublic: Boolean,
     openAvatarPreview: (url: String) -> Unit,
 ) {
     Column(
@@ -353,7 +361,43 @@ private fun RoomHeaderSection(
                 textAlign = TextAlign.Center,
             )
         }
+        BadgeList(isEncrypted = isEncrypted, isPublic = isPublic)
         Spacer(Modifier.height(32.dp))
+    }
+}
+
+@Composable
+private fun BadgeList(
+    isEncrypted: Boolean,
+    isPublic: Boolean,
+) {
+    if (isEncrypted || isPublic) {
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            if (isEncrypted) {
+                RoomBadge.View(
+                    text = stringResource(R.string.screen_room_details_badge_encrypted),
+                    icon = CompoundIcons.LockSolid(),
+                    type = RoomBadge.Type.Positive,
+                )
+            } else {
+                RoomBadge.View(
+                    text = stringResource(R.string.screen_room_details_badge_not_encrypted),
+                    icon = CompoundIcons.LockOff(),
+                    type = RoomBadge.Type.Neutral,
+                )
+            }
+            if (isPublic) {
+                RoomBadge.View(
+                    text = stringResource(R.string.screen_room_details_badge_public),
+                    icon = CompoundIcons.Public(),
+                    type = RoomBadge.Type.Neutral,
+                )
+            }
+        }
     }
 }
 

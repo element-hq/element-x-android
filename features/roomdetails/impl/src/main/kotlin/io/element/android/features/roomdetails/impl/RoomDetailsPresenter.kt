@@ -78,6 +78,7 @@ class RoomDetailsPresenter @Inject constructor(
         val roomName by remember { derivedStateOf { (roomInfo?.name ?: room.name ?: room.displayName).trim() } }
         val roomTopic by remember { derivedStateOf { roomInfo?.topic ?: room.topic } }
         val isFavorite by remember { derivedStateOf { roomInfo?.isFavorite.orFalse() } }
+        val isPublic by remember { derivedStateOf { roomInfo?.isPublic.orFalse() } }
 
         LaunchedEffect(Unit) {
             canShowNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
@@ -149,6 +150,7 @@ class RoomDetailsPresenter @Inject constructor(
             roomNotificationSettings = roomNotificationSettingsState.roomNotificationSettings(),
             isFavorite = isFavorite,
             displayRolesAndPermissionsSettings = !room.isDm && isUserAdmin,
+            isPublic = isPublic,
             eventSink = ::handleEvents,
         )
     }

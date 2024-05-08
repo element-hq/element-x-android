@@ -47,6 +47,7 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
                 roomNotificationSettings = aRoomNotificationSettings(mode = RoomNotificationMode.ALL_MESSAGES, isDefault = true)
             ),
             aRoomDetailsState(canCall = false, canInvite = false),
+            aRoomDetailsState(isPublic = false),
             // Add other state here
         )
 }
@@ -97,6 +98,7 @@ fun aRoomDetailsState(
     roomNotificationSettings: RoomNotificationSettings = aRoomNotificationSettings(),
     isFavorite: Boolean = false,
     displayAdminSettings: Boolean = false,
+    isPublic: Boolean = true,
     eventSink: (RoomDetailsEvent) -> Unit = {},
 ) = RoomDetailsState(
     roomId = roomId,
@@ -116,6 +118,7 @@ fun aRoomDetailsState(
     roomNotificationSettings = roomNotificationSettings,
     isFavorite = isFavorite,
     displayRolesAndPermissionsSettings = displayAdminSettings,
+    isPublic = isPublic,
     eventSink = eventSink
 )
 
