@@ -48,7 +48,7 @@ jobs:
       - name: Upload APK as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ format('elementx-apk-maestro-{0}', github.ref) }}
+          name: elementx-apk-maestro
           path: |
             app/build/outputs/apk/gplay/debug/app-gplay-x86_64-debug.apk
           retention-days: 5
@@ -68,7 +68,7 @@ jobs:
       - name: Download APK artifact from previous job
         uses: actions/download-artifact@v4
         with:
-          name: ${{ format('elementx-apk-maestro-{0}', github.ref) }}
+          name: elementx-apk-maestro
       - uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
         if: (github.event_name == 'pull_request' && github.event.pull_request.fork == null) || github.event_name == 'workflow_dispatch'
         with:
