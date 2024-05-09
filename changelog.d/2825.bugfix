@@ -1,0 +1,1 @@
+Make log less verbose, make sure we upload as many log files as possible before reaching the request size limit of the bug reporting service, discard older logs if they don't fit.
