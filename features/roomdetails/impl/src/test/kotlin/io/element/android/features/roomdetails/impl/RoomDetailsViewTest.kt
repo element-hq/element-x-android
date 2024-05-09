@@ -23,7 +23,6 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -251,7 +250,6 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
     goBack: () -> Unit = EnsureNeverCalled(),
     onActionClicked: (RoomDetailsAction) -> Unit = EnsureNeverCalledWithParam(),
     onShareRoom: () -> Unit = EnsureNeverCalled(),
-    onShareMember: (RoomMember) -> Unit = EnsureNeverCalledWithParam(),
     openRoomMemberList: () -> Unit = EnsureNeverCalled(),
     openRoomNotificationSettings: () -> Unit = EnsureNeverCalled(),
     invitePeople: () -> Unit = EnsureNeverCalled(),
@@ -266,7 +264,6 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
             goBack = goBack,
             onActionClicked = onActionClicked,
             onShareRoom = onShareRoom,
-            onShareMember = onShareMember,
             openRoomMemberList = openRoomMemberList,
             openRoomNotificationSettings = openRoomNotificationSettings,
             invitePeople = invitePeople,

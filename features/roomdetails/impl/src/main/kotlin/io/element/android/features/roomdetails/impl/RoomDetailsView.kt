@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.leaveroom.api.LeaveRoomView
+import io.element.android.features.roomdetails.impl.components.RoomBadge
 import io.element.android.features.userprofile.shared.UserProfileHeaderSection
 import io.element.android.features.userprofile.shared.blockuser.BlockUserDialogs
 import io.element.android.features.userprofile.shared.blockuser.BlockUserSection
@@ -78,7 +79,6 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.getBestName
 import io.element.android.libraries.testtags.TestTags
@@ -91,7 +91,6 @@ fun RoomDetailsView(
     goBack: () -> Unit,
     onActionClicked: (RoomDetailsAction) -> Unit,
     onShareRoom: () -> Unit,
-    onShareMember: (RoomMember) -> Unit,
     openRoomMemberList: () -> Unit,
     openRoomNotificationSettings: () -> Unit,
     invitePeople: () -> Unit,
@@ -101,10 +100,6 @@ fun RoomDetailsView(
     onJoinCallClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    fun onShareMember() {
-        onShareMember((state.roomType as RoomDetailsType.Dm).roomMember)
-    }
-
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -130,6 +125,8 @@ fun RoomDetailsView(
                         roomId = state.roomId,
                         roomName = state.roomName,
                         roomAlias = state.roomAlias,
+                        isEncrypted = state.isEncrypted,
+                        isPublic = state.isPublic,
                         openAvatarPreview = { avatarUrl ->
                             openAvatarPreview(state.roomName, avatarUrl)
                         },
@@ -160,7 +157,7 @@ fun RoomDetailsView(
                     )
                 }
             }
-            Spacer(Modifier.height(18.dp))
+            Spacer(Modifier.height(12.dp))
 
             if (state.roomTopic !is RoomTopicState.Hidden) {
                 TopicSection(
@@ -269,7 +266,9 @@ private fun MainActionsSection(
     onCall: () -> Unit,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
         val roomNotificationSettings = state.roomNotificationSettings
@@ -323,6 +322,8 @@ private fun RoomHeaderSection(
     roomId: RoomId,
     roomName: String,
     roomAlias: RoomAlias?,
+    isEncrypted: Boolean,
+    isPublic: Boolean,
     openAvatarPreview: (url: String) -> Unit,
 ) {
     Column(
@@ -353,7 +354,43 @@ private fun RoomHeaderSection(
                 textAlign = TextAlign.Center,
             )
         }
+        BadgeList(isEncrypted = isEncrypted, isPublic = isPublic)
         Spacer(Modifier.height(32.dp))
+    }
+}
+
+@Composable
+private fun BadgeList(
+    isEncrypted: Boolean,
+    isPublic: Boolean,
+) {
+    if (isEncrypted || isPublic) {
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            if (isEncrypted) {
+                RoomBadge.View(
+                    text = stringResource(R.string.screen_room_details_badge_encrypted),
+                    icon = CompoundIcons.LockSolid(),
+                    type = RoomBadge.Type.Positive,
+                )
+            } else {
+                RoomBadge.View(
+                    text = stringResource(R.string.screen_room_details_badge_not_encrypted),
+                    icon = CompoundIcons.LockOff(),
+                    type = RoomBadge.Type.Neutral,
+                )
+            }
+            if (isPublic) {
+                RoomBadge.View(
+                    text = stringResource(R.string.screen_room_details_badge_public),
+                    icon = CompoundIcons.Public(),
+                    type = RoomBadge.Type.Neutral,
+                )
+            }
+        }
     }
 }
 
@@ -489,7 +526,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
         goBack = {},
         onActionClicked = {},
         onShareRoom = {},
-        onShareMember = {},
         openRoomMemberList = {},
         openRoomNotificationSettings = {},
         invitePeople = {},
