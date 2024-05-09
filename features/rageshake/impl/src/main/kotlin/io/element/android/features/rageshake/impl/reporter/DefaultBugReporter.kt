@@ -21,6 +21,7 @@ import android.os.Build
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.appconfig.ApplicationConfig
 import io.element.android.features.rageshake.api.crash.CrashDataStore
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.features.rageshake.api.reporter.BugReporterListener
@@ -83,7 +84,6 @@ class DefaultBugReporter @Inject constructor(
         // filenames
         private const val LOG_CAT_FILENAME = "logcat.log"
         private const val LOG_DIRECTORY_NAME = "logs"
-        private const val BUFFER_SIZE = 1024 * 1024 * 50
     }
 
     // the pending bug report call
@@ -120,7 +120,7 @@ class DefaultBugReporter @Inject constructor(
                 val gzippedFiles = ArrayList<File>()
 
                 if (withDevicesLogs) {
-                    val files = getLogFiles()
+                    val files = getLogFiles().sortedByDescending { it.lastModified() }
                     files.mapNotNullTo(gzippedFiles) { f ->
                         when {
                             isCancelled -> null
@@ -135,7 +135,7 @@ class DefaultBugReporter @Inject constructor(
                     saveLogCat()
                     val gzippedLogcat = compressFile(logCatErrFile)
                     if (null != gzippedLogcat) {
-                        if (gzippedFiles.size == 0) {
+                        if (gzippedFiles.isEmpty()) {
                             gzippedFiles.add(gzippedLogcat)
                         } else {
                             gzippedFiles.add(0, gzippedLogcat)
@@ -166,10 +166,18 @@ class DefaultBugReporter @Inject constructor(
                     }
 
                     // add the gzipped files, don't cancel the whole upload if only some file failed to upload
+                    var totalUploadedSize = 0L
                     var uploadedSomeLogs = false
                     for (file in gzippedFiles) {
                         try {
-                            builder.addFormDataPart("compressed-log", file.name, file.asRequestBody(MimeTypes.OctetStream.toMediaTypeOrNull()))
+                            val requestBody = file.asRequestBody(MimeTypes.OctetStream.toMediaTypeOrNull())
+                            totalUploadedSize += requestBody.contentLength()
+                            // If we are about to upload more than the max request size, stop here
+                            if (totalUploadedSize > ApplicationConfig.MAX_LOG_UPLOAD_SIZE) {
+                                Timber.e("Could not upload file ${file.name} because it would exceed the max request size")
+                                break
+                            }
+                            builder.addFormDataPart("compressed-log", file.name, requestBody)
                             uploadedSomeLogs = true
                         } catch (e: CancellationException) {
                             throw e
@@ -411,7 +419,7 @@ class DefaultBugReporter @Inject constructor(
             val separator = System.getProperty("line.separator")
             logcatProc.inputStream
                 .reader()
-                .buffered(BUFFER_SIZE)
+                .buffered(ApplicationConfig.MAX_LOG_UPLOAD_SIZE.toInt())
                 .forEachLine { line ->
                     streamWriter.append(line)
                     streamWriter.append(separator)
