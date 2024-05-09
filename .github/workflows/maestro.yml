@@ -12,12 +12,10 @@ env:
   CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 8 --no-daemon
 
 jobs:
-  maestro-cloud:
-    name: Maestro test suite
+  build-apk:
+    name: Build APK
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'Run-Maestro'
-    strategy:
-      fail-fast: false
     # Allow one per PR.
     concurrency:
       group: ${{ format('maestro-{0}', github.ref) }}
@@ -41,19 +39,49 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
       - name: Assemble debug APK
-        run: ./gradlew :app:assembleDebug $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew :app:assembleGplayDebug $CI_GRADLE_ARG_PROPERTIES
         if: (github.event_name == 'pull_request' && github.event.pull_request.fork == null) || github.event_name == 'workflow_dispatch'
         env:
           ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
           ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
           ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: ${{ secrets.MAPTILER_DARK_MAP_ID }}
+      - name: Upload APK as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: elementx-apk-maestro
+          path: |
+            app/build/outputs/apk/gplay/debug/app-gplay-x86_64-debug.apk
+          retention-days: 5
+          overwrite: true
+          if-no-files-found: error
+
+  maestro-cloud:
+    name: Maestro test suite
+    runs-on: ubuntu-latest
+    needs: build-apk
+    if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'Run-Maestro'
+    # Allow one per PR.
+    concurrency:
+      group: ${{ format('maestro-{0}', github.ref) }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+        if: (github.event_name == 'pull_request' && github.event.pull_request.fork == null) || github.event_name == 'workflow_dispatch'
+        with:
+          # Ensure we are building the branch and not the branch after being merged on develop
+          # https://github.com/actions/checkout/issues/881
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
+      - name: Download APK artifact from previous job
+        uses: actions/download-artifact@v4
+        with:
+          name: elementx-apk-maestro
       - uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
         if: (github.event_name == 'pull_request' && github.event.pull_request.fork == null) || github.event_name == 'workflow_dispatch'
         with:
           api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
           # Doc says (https://github.com/mobile-dev-inc/action-maestro-cloud#android):
           # app-file should point to an x86 compatible APK file, so upload the x86_64 one (much smaller than the universal APK).
-          app-file: app/build/outputs/apk/gplay/debug/app-gplay-x86_64-debug.apk
+          app-file: app-gplay-x86_64-debug.apk
           env: |
             MAESTRO_USERNAME=maestroelement
             MAESTRO_PASSWORD=${{ secrets.MATRIX_MAESTRO_ACCOUNT_PASSWORD }}
