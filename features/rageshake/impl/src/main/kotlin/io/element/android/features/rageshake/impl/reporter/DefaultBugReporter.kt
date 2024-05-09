@@ -131,7 +131,6 @@ class DefaultBugReporter @Inject constructor(
                     files.deleteAllExceptMostRecent()
                 }
 
-
                 if (!isCancelled && (withCrashLogs || withDevicesLogs)) {
                     saveLogCat()
                     val gzippedLogcat = compressFile(logCatErrFile)
