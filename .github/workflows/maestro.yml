@@ -50,7 +50,7 @@ jobs:
         with:
           name: ${{ format('elementx-apk-maestro-{0}', github.ref) }}
           path: |
-            app/build/outputs/apk/debug/debug/app-gplay-x86_64-debug.apk
+            app/build/outputs/apk/gplay/debug/app-gplay-x86_64-debug.apk
           retention-days: 5
           overwrite: true
           if-no-files-found: error
