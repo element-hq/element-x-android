@@ -50,10 +50,10 @@ import io.element.android.libraries.matrix.impl.timeline.postprocessor.LoadingIn
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.RoomBeginningPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.TimelineEncryptedHistoryPostProcessor
 import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
@@ -66,6 +66,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.FormattedBody
@@ -101,6 +103,7 @@ class RustTimeline(
 ) : Timeline {
     private val initLatch = CompletableDeferred<Unit>()
     private val isInit = AtomicBoolean(false)
+    private val paginationMutex = Mutex()
 
     private val _timelineItems: MutableStateFlow<List<MatrixTimelineItem>> =
         MutableStateFlow(emptyList())
@@ -172,25 +175,30 @@ class RustTimeline(
         }
     }
 
-    // Use NonCancellable to avoid breaking the timeline when the coroutine is cancelled.
-    override suspend fun paginate(direction: Timeline.PaginationDirection): Result<Boolean> = withContext(NonCancellable) {
+    override suspend fun paginate(direction: Timeline.PaginationDirection): Result<Boolean> = withContext(dispatcher) {
         initLatch.await()
-        runCatching {
-            if (!canPaginate(direction)) throw TimelineException.CannotPaginate
-            updatePaginationStatus(direction) { it.copy(isPaginating = true) }
-            when (direction) {
-                Timeline.PaginationDirection.BACKWARDS -> inner.paginateBackwards(PAGINATION_SIZE.toUShort())
-                Timeline.PaginationDirection.FORWARDS -> inner.focusedPaginateForwards(PAGINATION_SIZE.toUShort())
+        // Performing 2 paginations at the same time sometimes leads to a deadlock
+        paginationMutex.withLock {
+            runCatching {
+                if (!canPaginate(direction)) throw TimelineException.CannotPaginate
+                updatePaginationStatus(direction) { it.copy(isPaginating = true) }
+                when (direction) {
+                    Timeline.PaginationDirection.BACKWARDS -> inner.paginateBackwards(PAGINATION_SIZE.toUShort())
+                    Timeline.PaginationDirection.FORWARDS -> inner.focusedPaginateForwards(PAGINATION_SIZE.toUShort())
+                }
+            }.onFailure { error ->
+                if (error is CancellationException) {
+                    throw error
+                }
+                updatePaginationStatus(direction) { it.copy(isPaginating = false) }
+                if (error is TimelineException.CannotPaginate) {
+                    Timber.d("Can't paginate $direction on room ${matrixRoom.roomId} with paginationStatus: ${backPaginationStatus.value}")
+                } else {
+                    Timber.e(error, "Error paginating $direction on room ${matrixRoom.roomId}")
+                }
+            }.onSuccess { hasReachedEnd ->
+                updatePaginationStatus(direction) { it.copy(isPaginating = false, hasMoreToLoad = !hasReachedEnd) }
             }
-        }.onFailure { error ->
-            updatePaginationStatus(direction) { it.copy(isPaginating = false) }
-            if (error is TimelineException.CannotPaginate) {
-                Timber.d("Can't paginate $direction on room ${matrixRoom.roomId} with paginationStatus: ${backPaginationStatus.value}")
-            } else {
-                Timber.e(error, "Error paginating $direction on room ${matrixRoom.roomId}")
-            }
-        }.onSuccess { hasReachedEnd ->
-            updatePaginationStatus(direction) { it.copy(isPaginating = false, hasMoreToLoad = !hasReachedEnd) }
         }
     }
 
