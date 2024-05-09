@@ -131,7 +131,7 @@ class DefaultFtueService @Inject constructor(
     private suspend fun shouldAskNotificationPermissions(): Boolean {
         return if (sdkVersionProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU)) {
             val permission = Manifest.permission.POST_NOTIFICATIONS
-            val isPermissionDenied = runBlocking { permissionStateProvider.isPermissionDenied(permission).first() }
+            val isPermissionDenied = permissionStateProvider.isPermissionDenied(permission).first()
             val isPermissionGranted = permissionStateProvider.isPermissionGranted(permission)
             !isPermissionGranted && !isPermissionDenied
         } else {
