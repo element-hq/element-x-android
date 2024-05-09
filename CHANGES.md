@@ -19,6 +19,10 @@ Changes in Element X v0.4.9 (2024-04-12)
 ========================================
 
 - Synchronize Localazy Strings.
+  
+Security
+----------
+- Fix crash while processing a room message containing a malformed pill.
 
 Changes in Element X v0.4.8 (2024-04-10)
 ========================================
