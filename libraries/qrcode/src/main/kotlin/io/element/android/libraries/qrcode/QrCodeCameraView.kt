@@ -42,6 +42,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.coroutines.delay
@@ -135,6 +136,9 @@ fun QrCodeCameraView(
                 factory = { context ->
                     val previewView = PreviewView(context)
                     previewUseCase.setSurfaceProvider(previewView.surfaceProvider)
+                    previewView.previewStreamState.observe(lifecycleOwner) { state ->
+                        previewView.alpha = if (state == PreviewView.StreamState.STREAMING) 1f else 0f
+                    }
                     previewView
                 },
                 update = { previewView ->
