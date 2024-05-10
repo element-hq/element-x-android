@@ -22,15 +22,11 @@ import io.element.android.libraries.di.AppScope
 import javax.inject.Inject
 
 /**
- * Remove existing logs from the device to remove any leaks of sensitive data.
+ * This performs the same operation as [AppMigration01], since we need to clear the local logs again.
  */
 @ContributesMultibinding(AppScope::class)
-open class AppMigration01 @Inject constructor(
+class AppMigration03 @Inject constructor(
     private val logFilesRemover: LogFilesRemover,
-) : AppMigration {
-    override val order: Int = 1
-
-    override suspend fun migrate() {
-        logFilesRemover.perform()
-    }
+) : AppMigration01(logFilesRemover) {
+    override val order: Int = 3
 }
