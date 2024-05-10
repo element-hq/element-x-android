@@ -461,7 +461,7 @@ class RustMatrixClient(
 
     override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<RoomId> = withContext(sessionDispatcher) {
         runCatching {
-            client.resolveRoomAlias(roomAlias.value).let(::RoomId)
+            client.resolveRoomAlias(roomAlias.value).roomId.let(::RoomId)
         }
     }
 
