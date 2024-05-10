@@ -21,12 +21,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -76,10 +74,6 @@ fun RoomDirectoryView(
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    fun joinRoom(roomDescription: RoomDescription) {
-        state.eventSink(RoomDirectoryEvents.JoinRoom(roomDescription.roomId))
-    }
-
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -89,7 +83,6 @@ fun RoomDirectoryView(
             RoomDirectoryContent(
                 state = state,
                 onResultClicked = onResultClicked,
-                onJoinClicked = ::joinRoom,
                 modifier = Modifier
                         .padding(padding)
                         .consumeWindowInsets(padding)
@@ -132,7 +125,6 @@ private fun RoomDirectoryTopBar(
 private fun RoomDirectoryContent(
     state: RoomDirectoryState,
     onResultClicked: (RoomDescription) -> Unit,
-    onJoinClicked: (RoomDescription) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -147,7 +139,6 @@ private fun RoomDirectoryContent(
             displayLoadMoreIndicator = state.displayLoadMoreIndicator,
             displayEmptyState = state.displayEmptyState,
             onResultClicked = onResultClicked,
-            onJoinClicked = onJoinClicked,
             onReachedLoadMore = { state.eventSink(RoomDirectoryEvents.LoadMore) },
         )
     }
@@ -159,7 +150,6 @@ private fun RoomDirectoryRoomList(
     displayLoadMoreIndicator: Boolean,
     displayEmptyState: Boolean,
     onResultClicked: (RoomDescription) -> Unit,
-    onJoinClicked: (RoomDescription) -> Unit,
     onReachedLoadMore: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -169,9 +159,6 @@ private fun RoomDirectoryRoomList(
                 roomDescription = roomDescription,
                 onClick = {
                     onResultClicked(roomDescription)
-                },
-                onJoinClick = {
-                    onJoinClicked(roomDescription)
                 },
             )
         }
@@ -199,10 +186,10 @@ private fun RoomDirectoryRoomList(
 @Composable
 private fun LoadMoreIndicator(modifier: Modifier = Modifier) {
     Box(
-            modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .padding(24.dp),
+        modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(24.dp),
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(
@@ -268,7 +255,6 @@ private fun SearchTextField(
 private fun RoomDirectoryRoomRow(
     roomDescription: RoomDescription,
     onClick: () -> Unit,
-    onJoinClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -289,7 +275,7 @@ private fun RoomDirectoryRoomRow(
         Column(
             modifier = Modifier
                     .weight(1f)
-                    .padding(start = 16.dp)
+                    .padding(horizontal = 16.dp)
         ) {
             Text(
                 text = roomDescription.computedName,
@@ -305,19 +291,6 @@ private fun RoomDirectoryRoomRow(
                 color = ElementTheme.colors.textSecondary,
                 overflow = TextOverflow.Ellipsis,
             )
-        }
-        if (roomDescription.canJoinOrKnock) {
-            Text(
-                text = stringResource(id = CommonStrings.action_join),
-                color = ElementTheme.colors.textSuccessPrimary,
-                modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .clickable(onClick = onJoinClick)
-                        .padding(start = 4.dp, end = 12.dp)
-                        .testTag(TestTags.callToAction.value)
-            )
-        } else {
-            Spacer(modifier = Modifier.width(24.dp))
         }
     }
 }
