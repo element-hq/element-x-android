@@ -161,6 +161,9 @@ class DefaultBugReporter @Inject constructor(
                         .addFormDataPart("sdk_sha", sdkMetadata.sdkGitSha)
                         .addFormDataPart("local_time", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME))
                         .addFormDataPart("utc_time", LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC).format(DateTimeFormatter.ISO_DATE_TIME))
+                        .addFormDataPart("app_id", buildMeta.applicationId)
+                        // Nightly versions have a custom version name suffix that we should remove for the bug report
+                        .addFormDataPart("Version", buildMeta.versionName.replace("-nightly", ""))
                     currentTracingFilter?.let {
                         builder.addFormDataPart("tracing_filter", it)
                     }
