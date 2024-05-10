@@ -27,19 +27,28 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        // To have immediate access to Rust SDK versions
+        maven {
+            url = URI("https://s01.oss.sonatype.org/content/repositories/releases")
+            content {
+                includeModule("org.matrix.rustcomponents", "sdk-android")
+            }
+        }
+        // Sonatype S01 snapshots (Rust SDK, Compound)
+        maven {
+            url = URI("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+            content {
+                includeModule("org.matrix.rustcomponents", "sdk-android")
+            }
+        }
         google()
         mavenCentral()
-        maven { url = URI("https://oss.sonatype.org/content/repositories/snapshots/") }
         maven {
             url = URI("https://www.jitpack.io")
             content {
                 includeModule("com.github.UnifiedPush", "android-connector")
                 includeModule("com.github.matrix-org", "matrix-analytics-events")
             }
-        }
-        // To have immediate access to Rust SDK versions
-        maven {
-            url = URI("https://s01.oss.sonatype.org/content/repositories/releases")
         }
         flatDir {
             dirs("libraries/matrix/libs")
