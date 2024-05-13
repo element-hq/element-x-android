@@ -39,14 +39,12 @@ interface RoomList {
 
     /**
      * The source of the room list data.
-     * All: all rooms except invites.
-     * Invites: only invites.
+     * All: all rooms.
      *
      * To apply some dynamic filtering on top of that, use [DynamicRoomList].
      */
     enum class Source {
-        All,
-        Invites,
+        All
     }
 
     /**

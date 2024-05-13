@@ -75,7 +75,7 @@ class RoomDetailsPresenter @Inject constructor(
 
         val roomAvatar by remember { derivedStateOf { roomInfo?.avatarUrl ?: room.avatarUrl } }
 
-        val roomName by remember { derivedStateOf { (roomInfo?.name ?: room.name ?: room.displayName).trim() } }
+        val roomName by remember { derivedStateOf { (roomInfo?.name ?: room.displayName).trim() } }
         val roomTopic by remember { derivedStateOf { roomInfo?.topic ?: room.topic } }
         val isFavorite by remember { derivedStateOf { roomInfo?.isFavorite.orFalse() } }
         val isPublic by remember { derivedStateOf { roomInfo?.isPublic.orFalse() } }
