@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_account_provider_change">"更改账户提供者"</string>
+  <string name="screen_account_provider_form_hint">"服务器地址"</string>
+  <string name="screen_account_provider_form_notice">"输入搜索词或域名地址。"</string>
+  <string name="screen_account_provider_form_subtitle">"搜索公司、社区或私人服务器。"</string>
+  <string name="screen_account_provider_form_title">"查找账户提供者"</string>
+  <string name="screen_account_provider_signin_subtitle">"这是您的对话将进行的地方，就像您使用电子邮件提供商来保存电子邮件一样。"</string>
+  <string name="screen_account_provider_signin_title">"您即将登录%s"</string>
+  <string name="screen_account_provider_signup_subtitle">"这是您的对话将进行的地方，就像您使用电子邮件提供商来保存电子邮件一样。"</string>
+  <string name="screen_account_provider_signup_title">"您即将在 %s 上创建一个帐户"</string>
+  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org 由 Matrix.org 基金会运营，是用于安全、去中心化的通信的公共 Matrix 网络上的大型免费服务器。"</string>
+  <string name="screen_change_account_provider_other">"其他"</string>
+  <string name="screen_change_account_provider_subtitle">"使用其他帐户提供者，例如您自己的私人服务器或工作帐户。"</string>
+  <string name="screen_change_account_provider_title">"更改账户提供者"</string>
+  <string name="screen_change_server_error_invalid_homeserver">"我们无法访问此主服务器。请检查您输入的主服务器网址是否正确。如果 URL 正确，请联系您的主服务器管理员寻求进一步帮助。"</string>
+  <string name="screen_change_server_error_invalid_well_known">"由于 Well Known 文件中的问题，Sliding Sync 不可用：
+%1$s"</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"该服务器目前不支持sliding sync。"</string>
+  <string name="screen_change_server_form_header">"主服务器网址"</string>
+  <string name="screen_change_server_form_notice">"您只能连接到支持sliding sync的现有服务器。您的主服务器管理员需要对其进行配置。%1$s"</string>
+  <string name="screen_change_server_subtitle">"您的服务器地址是什么？"</string>
+  <string name="screen_change_server_title">"选择服务器"</string>
+  <string name="screen_login_error_deactivated_account">"该账户已被停用。"</string>
+  <string name="screen_login_error_invalid_credentials">"错误的用户名和/或密码"</string>
+  <string name="screen_login_error_invalid_user_id">"这不是合法的用户 ID。期望格式：‘@user:homeserver.org’。"</string>
+  <string name="screen_login_error_refresh_tokens">"此服务器使用刷新令牌。使用密码登录时不支持这些功能。"</string>
+  <string name="screen_login_error_unsupported_authentication">"该服务器不支持密码登录和 OIDC 第三方账户登录。请联系服务器管理员，或选择别的服务器。"</string>
+  <string name="screen_login_form_header">"输入您的详细信息"</string>
+  <string name="screen_login_subtitle">"Matrix 是一个用于安全、去中心化通信的开放网络。"</string>
+  <string name="screen_login_title">"欢迎回来！"</string>
+  <string name="screen_login_title_with_homeserver">"登录到 %1$s"</string>
+  <string name="screen_server_confirmation_change_server">"更改账户提供者"</string>
+  <string name="screen_server_confirmation_message_login_element_dot_io">"专为 Element 员工提供的私人服务器。"</string>
+  <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix 是一个用于安全、去中心化通信的开放网络。"</string>
+  <string name="screen_server_confirmation_message_register">"这是您的对话将进行的地方，就像您使用电子邮件提供商来保存电子邮件一样。"</string>
+  <string name="screen_server_confirmation_title_login">"你即将登录 %1$s"</string>
+  <string name="screen_server_confirmation_title_register">"你即将在 %1$s 上创建一个账户"</string>
+  <string name="screen_waitlist_message">"目前 %1$s 上 %2$s 的负载很大。过几天再回来试试吧。
+
+感谢您的耐心！"</string>
+  <string name="screen_waitlist_message_success">"欢迎使用 %1$s"</string>
+  <string name="screen_waitlist_title">"马上就好。"</string>
+  <string name="screen_waitlist_title_success">"您已加入。"</string>
+</resources>

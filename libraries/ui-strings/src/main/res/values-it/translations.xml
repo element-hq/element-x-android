@@ -158,12 +158,14 @@
   <string name="common_modern">"Moderno"</string>
   <string name="common_mute">"Silenzia"</string>
   <string name="common_no_results">"Nessun risultato"</string>
+  <string name="common_no_room_name">"Nessun nome della stanza"</string>
   <string name="common_offline">"Non in linea"</string>
   <string name="common_or">"o"</string>
   <string name="common_password">"Password"</string>
   <string name="common_people">"Persone"</string>
   <string name="common_permalink">"Collegamento permanente"</string>
   <string name="common_permission">"Autorizzazione"</string>
+  <string name="common_please_wait">"Attendere prego…"</string>
   <string name="common_poll_end_confirmation">"Vuoi davvero terminare questo sondaggio?"</string>
   <string name="common_poll_summary">"Sondaggio: %1$s"</string>
   <string name="common_poll_total_votes">"Voti totali: %1$s"</string>
@@ -200,6 +202,7 @@
   <string name="common_settings">"Impostazioni"</string>
   <string name="common_shared_location">"Posizione condivisa"</string>
   <string name="common_signing_out">"Disconnessione"</string>
+  <string name="common_something_went_wrong">"Qualcosa è andato storto"</string>
   <string name="common_starting_chat">"Avvio della conversazione…"</string>
   <string name="common_sticker">"Adesivo"</string>
   <string name="common_success">"Operazione riuscita"</string>
@@ -212,6 +215,7 @@
   <string name="common_topic">"Argomento"</string>
   <string name="common_topic_placeholder">"Di cosa parla questa stanza?"</string>
   <string name="common_unable_to_decrypt">"Impossibile decrittografare"</string>
+  <string name="common_unable_to_decrypt_no_access">"Non hai accesso a questo messaggio"</string>
   <string name="common_unable_to_invite_message">"Non è stato possibile spedire inviti a uno o più utenti."</string>
   <string name="common_unable_to_invite_title">"Impossibile inviare inviti"</string>
   <string name="common_unlock">"Sblocca"</string>
@@ -236,6 +240,7 @@
   <string name="error_failed_loading_messages">"Caricamento dei messaggi non riuscito"</string>
   <string name="error_failed_locating_user">"%1$s non è riuscito ad accedere alla tua posizione. Riprova più tardi."</string>
   <string name="error_failed_uploading_voice_message">"Invio del messaggio vocale fallito."</string>
+  <string name="error_message_not_found">"Messaggio non trovato"</string>
   <string name="error_missing_location_auth_android">"%1$s non ha l\'autorizzazione di accedere alla tua posizione. Puoi attivare l\'accesso nelle impostazioni."</string>
   <string name="error_missing_location_rationale_android">"%1$s non ha l\'autorizzazione per accedere alla tua posizione. Attiva l\'accesso di seguito."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s non ha l\'autorizzazione di accedere al microfono. Attiva l\'accesso per registrare un messaggio vocale."</string>
@@ -253,6 +258,7 @@
   <string name="screen_room_member_details_block_alert_action">"Blocca"</string>
   <string name="screen_room_member_details_block_alert_description">"Gli utenti bloccati non saranno in grado di inviarti messaggi e tutti quelli già ricevuti saranno nascosti. Puoi sbloccarli in qualsiasi momento."</string>
   <string name="screen_room_member_details_block_user">"Blocca utente"</string>
+  <string name="screen_room_member_details_title">"Profilo"</string>
   <string name="screen_room_member_details_unblock_alert_action">"Sblocca"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Potrai vedere di nuovo tutti i suoi messaggi."</string>
   <string name="screen_room_member_details_unblock_user">"Sblocca utente"</string>

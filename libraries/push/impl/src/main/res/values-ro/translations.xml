@@ -50,4 +50,28 @@
   <string name="push_distributor_background_sync_android">"Sincronizare în fundal"</string>
   <string name="push_distributor_firebase_android">"Servicii Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Nu au fost găsite servicii Google Play valide. Este posibil ca notificările să nu funcționeze corect."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Obțineți numele furnizorului curent."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Niciun furnizor push selectat."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Furnizor de push actual: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Furnizor de push curent"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Asigurați-vă că aplicația are cel puțin un furnizor push."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nu s-au găsit furnizori push."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"S-a găsit %1$d furnizor push: %2$s"</item>
+    <item quantity="other">"S-au găsit %1$d furnizori push: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Detectați furnizorii push"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Verificați dacă aplicația poate afișa notificări."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"Notificarea nu a fost apăsată."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Nu s-a putut afișa notificarea."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"Notificarea a fost apăsată!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Afișați notificarea"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Vă rugăm să faceți clic pe notificare pentru a continua testul."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"Asigurați-vă că aplicația primește push-uri."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Eroare: pusher-ul a respins cererea."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Eroare: %1$s."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Eroare, nu se poate testa push-ul."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Eroare, timeout în așteptare pentru push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"Push-ul înapoi a durat %1$d ms."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"Testați că push-ul se întoarce"</string>
 </resources>

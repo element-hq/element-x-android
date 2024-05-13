@@ -13,10 +13,12 @@ val locales = setOf(
     "hu",
     "in",
     "it",
+    "pt",
     "ro",
     "ru",
     "sk",
     "sv",
     "uk",
+    "zh-rCN",
     "zh-rTW",
 )

@@ -2,6 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_join_room_join_action">"Присоединиться к комнате"</string>
   <string name="screen_join_room_knock_action">"Постучите, чтобы присоединиться"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s еще не поддерживает пространства. Вы можете получить к ним доступ в веб-версии."</string>
+  <string name="screen_join_room_space_not_supported_title">"Пространства пока не поддерживаются"</string>
   <string name="screen_join_room_subtitle_knock">"Нажмите кнопку ниже и администратор комнаты получит уведомление. После одобрения вы сможете присоединиться к обсуждению."</string>
   <string name="screen_join_room_subtitle_no_preview">"Вы должны быть участником этой комнаты, чтобы просмотреть историю сообщений."</string>
   <string name="screen_join_room_title_knock">"Хотите присоединиться к этой комнате?"</string>

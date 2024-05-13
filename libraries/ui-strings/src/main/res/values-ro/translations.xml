@@ -36,6 +36,7 @@
   <string name="action_accept">"Acceptați"</string>
   <string name="action_add_to_timeline">"Adăugați conversației"</string>
   <string name="action_back">"Înapoi"</string>
+  <string name="action_call">"Apel"</string>
   <string name="action_cancel">"Anulați"</string>
   <string name="action_choose_photo">"Alegeți o fotografie"</string>
   <string name="action_clear">"Ștergeți"</string>
@@ -51,6 +52,7 @@
   <string name="action_decline">"Refuzați"</string>
   <string name="action_delete_poll">"Ștergeți sondajul"</string>
   <string name="action_disable">"Dezactivați"</string>
+  <string name="action_discard">"Renunţare"</string>
   <string name="action_done">"Efectuat"</string>
   <string name="action_edit">"Editați"</string>
   <string name="action_edit_poll">"Editați sondajul"</string>
@@ -59,6 +61,7 @@
   <string name="action_enter_pin">"Introduceți PIN-ul"</string>
   <string name="action_forgot_password">"Ați uitat parola?"</string>
   <string name="action_forward">"Redirecționați"</string>
+  <string name="action_go_back">"Înapoi"</string>
   <string name="action_invite">"Invitați"</string>
   <string name="action_invite_friends">"Invitați prieteni"</string>
   <string name="action_invite_friends_to_app">"Invitați prieteni în %1$s"</string>
@@ -86,6 +89,7 @@
   <string name="action_reply_in_thread">"Răspundeți în fir"</string>
   <string name="action_report_bug">"Raportați o eroare"</string>
   <string name="action_report_content">"Raportați conținutul"</string>
+  <string name="action_reset">"Resetare"</string>
   <string name="action_retry">"Reîncercați"</string>
   <string name="action_retry_decryption">"Reîncercați decriptarea"</string>
   <string name="action_save">"Salvați"</string>
@@ -113,7 +117,9 @@
   <string name="common_analytics">"Analitice"</string>
   <string name="common_appearance">"Aspect"</string>
   <string name="common_audio">"Audio"</string>
+  <string name="common_blocked_users">"Utilizatori blocați"</string>
   <string name="common_bubbles">"Baloane"</string>
+  <string name="common_call_invite">"Apel în curs (nesuportat)"</string>
   <string name="common_chat_backup">"Backup conversații"</string>
   <string name="common_copyright">"Drepturi de autor"</string>
   <string name="common_creating_room">"Se creează camera…"</string>
@@ -129,6 +135,7 @@
   <string name="common_enter_your_pin">"Introduceți codul PIN"</string>
   <string name="common_error">"Eroare"</string>
   <string name="common_everyone">"Toți"</string>
+  <string name="common_failed">"Eșuat"</string>
   <string name="common_favourite">"Favorite"</string>
   <string name="common_favourited">"Favorită"</string>
   <string name="common_file">"Fişier"</string>
@@ -155,11 +162,14 @@
   <string name="common_modern">"Modern"</string>
   <string name="common_mute">"Dezactivați sunetul"</string>
   <string name="common_no_results">"Niciun rezultat"</string>
+  <string name="common_no_room_name">"Fără nume de cameră"</string>
   <string name="common_offline">"Deconectat"</string>
+  <string name="common_or">"sau"</string>
   <string name="common_password">"Parola"</string>
   <string name="common_people">"Persoane"</string>
   <string name="common_permalink">"Permalink"</string>
   <string name="common_permission">"Permisiune"</string>
+  <string name="common_please_wait">"Va rugam asteptati…"</string>
   <string name="common_poll_end_confirmation">"Sunteți sigur că doriți să încheiați acest sondaj?"</string>
   <string name="common_poll_summary">"Sondajul %1$s"</string>
   <string name="common_poll_total_votes">"Total voturi: %1$s"</string>
@@ -182,6 +192,8 @@
   <string name="common_room">"Cameră"</string>
   <string name="common_room_name">"Numele camerei"</string>
   <string name="common_room_name_placeholder">"de exemplu, numele proiectului dvs."</string>
+  <string name="common_saved_changes">"Modificări salvate"</string>
+  <string name="common_saving">"Se salvează…"</string>
   <string name="common_screen_lock">"Blocare ecran"</string>
   <string name="common_search_for_someone">"Căutați pe cineva"</string>
   <string name="common_search_results">"Rezultatele căutării"</string>
@@ -195,6 +207,7 @@
   <string name="common_settings">"Setări"</string>
   <string name="common_shared_location">"Locație partajată"</string>
   <string name="common_signing_out">"Deconectare în curs"</string>
+  <string name="common_something_went_wrong">"Ceva nu a mers bine"</string>
   <string name="common_starting_chat">"Se începe conversația…"</string>
   <string name="common_sticker">"Autocolant"</string>
   <string name="common_success">"Succes"</string>
@@ -207,6 +220,7 @@
   <string name="common_topic">"Subiect"</string>
   <string name="common_topic_placeholder">"Despre ce este vorba în această cameră?"</string>
   <string name="common_unable_to_decrypt">"Nu s-a putut decripta"</string>
+  <string name="common_unable_to_decrypt_no_access">"Nu aveți acces la acest mesaj"</string>
   <string name="common_unable_to_invite_message">"Nu am putut trimite invitații unuia sau mai multor utilizatori."</string>
   <string name="common_unable_to_invite_title">"Nu s-a putut trimite invitația (invitațiile)"</string>
   <string name="common_unlock">"Deblocare"</string>
@@ -224,11 +238,14 @@
   <string name="dialog_title_error">"Eroare"</string>
   <string name="dialog_title_success">"Succes"</string>
   <string name="dialog_title_warning">"Avertisment"</string>
+  <string name="dialog_unsaved_changes_description_android">"Modificările dumneavoastră nu au fost salvate. Sunteți sigur că doriți să vă întoarceți?"</string>
+  <string name="dialog_unsaved_changes_title">"Salvați modificările?"</string>
   <string name="error_failed_creating_the_permalink">"Crearea permalink-ului a eșuat"</string>
   <string name="error_failed_loading_map">"%1$s nu a putut încărca harta. Vă rugăm să încercați din nou mai târziu."</string>
   <string name="error_failed_loading_messages">"Încărcarea mesajelor a eșuat"</string>
   <string name="error_failed_locating_user">"%1$s nu a putut accesa locația dumneavoastră. Vă rugăm să încercați din nou mai târziu."</string>
   <string name="error_failed_uploading_voice_message">"Trimiterea mesajului vocal nu a reușit."</string>
+  <string name="error_message_not_found">"Mesajul nu a fost găsit"</string>
   <string name="error_missing_location_auth_android">"%1$s nu are permisiuni pentru a accesa locația dumneavoastră. Puteți permite accesul în Setări."</string>
   <string name="error_missing_location_rationale_android">"%1$s nu are permisiuni pentru a accesa locația dumneavoastră. Permiteți accesul mai jos."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s nu are permisiunea de a vă accesa microfonul. Permiteți accesul pentru a înregistra un mesaj vocal."</string>
@@ -246,9 +263,11 @@
   <string name="screen_room_member_details_block_alert_action">"Blocați"</string>
   <string name="screen_room_member_details_block_alert_description">"Utilizatorii blocați nu vă vor putea trimite mesaje și toate mesajele lor vor fi ascunse. Puteți anula această acțiune oricând."</string>
   <string name="screen_room_member_details_block_user">"Blocați utilizatorul"</string>
+  <string name="screen_room_member_details_title">"Profil"</string>
   <string name="screen_room_member_details_unblock_alert_action">"Deblocați"</string>
   <string name="screen_room_member_details_unblock_alert_description">"La deblocarea utilizatorului, veți putea vedea din nou toate mesajele de la acesta."</string>
   <string name="screen_room_member_details_unblock_user">"Deblocați utilizatorul"</string>
+  <string name="screen_room_title">"Chat"</string>
   <string name="screen_share_location_title">"Partajați locația"</string>
   <string name="screen_share_my_location_action">"Distribuiți locația mea"</string>
   <string name="screen_share_open_apple_maps">"Deschideți în Apple Maps"</string>
