@@ -47,7 +47,6 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.features.roomdirectory.impl.R
-import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -61,7 +60,6 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
@@ -70,7 +68,6 @@ import kotlinx.collections.immutable.ImmutableList
 fun RoomDirectoryView(
     state: RoomDirectoryState,
     onResultClicked: (RoomDescription) -> Unit,
-    onRoomJoined: (RoomId) -> Unit,
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -84,19 +81,9 @@ fun RoomDirectoryView(
                 state = state,
                 onResultClicked = onResultClicked,
                 modifier = Modifier
-                        .padding(padding)
-                        .consumeWindowInsets(padding)
+                    .padding(padding)
+                    .consumeWindowInsets(padding)
             )
-        }
-    )
-    AsyncActionView(
-        async = state.joinRoomAction,
-        onSuccess = onRoomJoined,
-        onErrorDismiss = {
-            state.eventSink(RoomDirectoryEvents.JoinRoomDismissError)
-        },
-        errorMessage = {
-            stringResource(id = CommonStrings.error_unknown)
         }
     )
 }
@@ -186,10 +173,10 @@ private fun RoomDirectoryRoomList(
 @Composable
 private fun LoadMoreIndicator(modifier: Modifier = Modifier) {
     Box(
-        modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(24.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(24.dp),
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(
@@ -259,14 +246,14 @@ private fun RoomDirectoryRoomRow(
 ) {
     Row(
         modifier = modifier
-                .fillMaxWidth()
-                .clickable(onClick = onClick)
-                .padding(
-                        top = 12.dp,
-                        bottom = 12.dp,
-                        start = 16.dp,
-                )
-                .height(IntrinsicSize.Min),
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(
+                top = 12.dp,
+                bottom = 12.dp,
+                start = 16.dp,
+            )
+            .height(IntrinsicSize.Min),
     ) {
         Avatar(
             avatarData = roomDescription.avatarData(AvatarSize.RoomDirectoryItem),
@@ -274,8 +261,8 @@ private fun RoomDirectoryRoomRow(
         )
         Column(
             modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 16.dp)
+                .weight(1f)
+                .padding(horizontal = 16.dp)
         ) {
             Text(
                 text = roomDescription.computedName,
@@ -301,7 +288,6 @@ internal fun RoomDirectoryViewPreview(@PreviewParameter(RoomDirectoryStateProvid
     RoomDirectoryView(
         state = state,
         onResultClicked = {},
-        onRoomJoined = {},
         onBackPressed = {},
     )
 }

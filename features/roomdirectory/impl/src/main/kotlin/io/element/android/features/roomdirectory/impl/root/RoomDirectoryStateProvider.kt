@@ -18,7 +18,6 @@ package io.element.android.features.roomdirectory.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.roomdirectory.api.RoomDescription
-import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.collections.immutable.ImmutableList
@@ -37,16 +36,6 @@ open class RoomDirectoryStateProvider : PreviewParameterProvider<RoomDirectorySt
                 roomDescriptions = aRoomDescriptionList(),
                 displayLoadMoreIndicator = true,
             ),
-            aRoomDirectoryState(
-                query = "Element",
-                roomDescriptions = aRoomDescriptionList(),
-                joinRoomAction = AsyncAction.Loading,
-            ),
-            aRoomDirectoryState(
-                query = "Element",
-                roomDescriptions = aRoomDescriptionList(),
-                joinRoomAction = AsyncAction.Failure(Exception("Failed to join room")),
-            ),
         )
 }
 
@@ -54,13 +43,11 @@ fun aRoomDirectoryState(
     query: String = "",
     displayLoadMoreIndicator: Boolean = false,
     roomDescriptions: ImmutableList<RoomDescription> = persistentListOf(),
-    joinRoomAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
     eventSink: (RoomDirectoryEvents) -> Unit = {},
 ) = RoomDirectoryState(
     query = query,
     roomDescriptions = roomDescriptions,
     displayLoadMoreIndicator = displayLoadMoreIndicator,
-    joinRoomAction = joinRoomAction,
     eventSink = eventSink,
 )
 

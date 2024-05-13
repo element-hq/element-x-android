@@ -370,10 +370,6 @@ class LoggedInFlowNode @AssistedInject constructor(
             NavTarget.RoomDirectorySearch -> {
                 roomDirectoryEntryPoint.nodeBuilder(this, buildContext)
                     .callback(object : RoomDirectoryEntryPoint.Callback {
-                        override fun onRoomJoined(roomId: RoomId) {
-                            backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
-                        }
-
                         override fun onResultClicked(roomDescription: RoomDescription) {
                             backstack.push(NavTarget.Room(roomDescription.roomId.toRoomIdOrAlias(), roomDescription))
                         }
