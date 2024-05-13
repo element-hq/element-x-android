@@ -158,12 +158,14 @@
   <string name="common_modern">"Moderne"</string>
   <string name="common_mute">"Mettre en sourdine"</string>
   <string name="common_no_results">"Aucun résultat"</string>
+  <string name="common_no_room_name">"Salon sans nom"</string>
   <string name="common_offline">"Hors ligne"</string>
   <string name="common_or">"ou"</string>
   <string name="common_password">"Mot de passe"</string>
   <string name="common_people">"Personnes"</string>
   <string name="common_permalink">"Permalien"</string>
   <string name="common_permission">"Autorisation"</string>
+  <string name="common_please_wait">"Veuillez patienter…"</string>
   <string name="common_poll_end_confirmation">"Êtes-vous sûr de vouloir mettre fin à ce sondage ?"</string>
   <string name="common_poll_summary">"Sondage : %1$s"</string>
   <string name="common_poll_total_votes">"Nombre total de votes : %1$s"</string>
@@ -213,6 +215,7 @@
   <string name="common_topic">"Sujet"</string>
   <string name="common_topic_placeholder">"De quoi s’agit-il dans ce salon ?"</string>
   <string name="common_unable_to_decrypt">"Échec de déchiffrement"</string>
+  <string name="common_unable_to_decrypt_no_access">"Vous ne pouvez pas voir ce message"</string>
   <string name="common_unable_to_invite_message">"Les invitations n’ont pas pu être envoyées à un ou plusieurs utilisateurs."</string>
   <string name="common_unable_to_invite_title">"Impossible d’envoyer une ou plusieurs invitations"</string>
   <string name="common_unlock">"Déverrouillage"</string>
@@ -237,6 +240,7 @@
   <string name="error_failed_loading_messages">"Échec du chargement des messages"</string>
   <string name="error_failed_locating_user">"%1$s n’a pas pu accéder à votre position. Veuillez réessayer ultérieurement."</string>
   <string name="error_failed_uploading_voice_message">"Échec lors de l’envoi du message vocal."</string>
+  <string name="error_message_not_found">"Message introuvable"</string>
   <string name="error_missing_location_auth_android">"%1$s n’est pas autorisé à accéder à votre position. Vous pouvez activer l’accès dans les Paramètres."</string>
   <string name="error_missing_location_rationale_android">"%1$s n’est pas autorisé à accéder à votre position. Activez l’accès ci-dessous."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s n’a pas l’autorisation d’accéder au microphone. Autorisez l’accès pour enregistrer un message."</string>
@@ -258,6 +262,7 @@
   <string name="screen_room_member_details_unblock_alert_action">"Débloquer"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Vous pourrez à nouveau voir tous ses messages."</string>
   <string name="screen_room_member_details_unblock_user">"Débloquer l’utilisateur"</string>
+  <string name="screen_room_title">"Discussion"</string>
   <string name="screen_share_location_title">"Partage de position"</string>
   <string name="screen_share_my_location_action">"Partager ma position"</string>
   <string name="screen_share_open_apple_maps">"Ouvrir dans Apple Maps"</string>
@@ -266,5 +271,5 @@
   <string name="screen_share_this_location_action">"Partager cette position"</string>
   <string name="screen_view_location_title">"Position"</string>
   <string name="settings_version_number">"Version : %1$s ( %2$s )"</string>
-  <string name="test_language_identifier">"Ang."</string>
+  <string name="test_language_identifier">"fr"</string>
 </resources>

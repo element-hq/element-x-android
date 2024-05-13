@@ -98,7 +98,7 @@ class RoomDetailsEditPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.roomId).isEqualTo(room.roomId.value)
-            assertThat(initialState.roomName).isEqualTo(room.name)
+            assertThat(initialState.roomName).isEqualTo(room.displayName)
             assertThat(initialState.roomAvatarUrl).isEqualTo(roomAvatarUri)
             assertThat(initialState.roomTopic).isEqualTo(room.topic.orEmpty())
             assertThat(initialState.avatarActions).containsExactly(
@@ -191,7 +191,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - updates state in response to changes`() = runTest {
-        val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL)
+        val room = aMatrixRoom(topic = "My topic", displayName = "Name", avatarUrl = AN_AVATAR_URL)
         val presenter = createRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionMode.Immediate) {
@@ -234,7 +234,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - obtains avatar uris from gallery`() = runTest {
-        val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL)
+        val room = aMatrixRoom(topic = "My topic", displayName = "Name", avatarUrl = AN_AVATAR_URL)
 
         fakePickerProvider.givenResult(anotherAvatarUri)
 
@@ -255,7 +255,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - obtains avatar uris from camera`() = runTest {
-        val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL)
+        val room = aMatrixRoom(topic = "My topic", displayName = "Name", avatarUrl = AN_AVATAR_URL)
 
         fakePickerProvider.givenResult(anotherAvatarUri)
         val fakePermissionsPresenter = FakePermissionsPresenter()
@@ -288,7 +288,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - updates save button state`() = runTest {
-        val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL)
+        val room = aMatrixRoom(topic = "My topic", displayName = "Name", avatarUrl = AN_AVATAR_URL)
 
         fakePickerProvider.givenResult(roomAvatarUri)
 
@@ -340,7 +340,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - updates save button state when initial values are null`() = runTest {
-        val room = aMatrixRoom(topic = null, name = null, displayName = "fallback", avatarUrl = null)
+        val room = aMatrixRoom(topic = null, displayName = "fallback", avatarUrl = null)
 
         fakePickerProvider.givenResult(roomAvatarUri)
 
@@ -392,7 +392,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - save changes room details if different`() = runTest {
-        val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL)
+        val room = aMatrixRoom(topic = "My topic", displayName = "Name", avatarUrl = AN_AVATAR_URL)
 
         val presenter = createRoomDetailsEditPresenter(room)
 
@@ -417,7 +417,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - save doesn't change room details if they're the same trimmed`() = runTest {
-        val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL)
+        val room = aMatrixRoom(topic = "My topic", displayName = "Name", avatarUrl = AN_AVATAR_URL)
 
         val presenter = createRoomDetailsEditPresenter(room)
 
@@ -441,7 +441,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - save doesn't change topic if it was unset and is now blank`() = runTest {
-        val room = aMatrixRoom(topic = null, name = "Name", avatarUrl = AN_AVATAR_URL)
+        val room = aMatrixRoom(topic = null, displayName = "Name", avatarUrl = AN_AVATAR_URL)
 
         val presenter = createRoomDetailsEditPresenter(room)
 
@@ -464,7 +464,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - save doesn't change name if it's now empty`() = runTest {
-        val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL)
+        val room = aMatrixRoom(topic = "My topic", displayName = "Name", avatarUrl = AN_AVATAR_URL)
 
         val presenter = createRoomDetailsEditPresenter(room)
 
@@ -487,7 +487,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - save processes and sets avatar when processor returns successfully`() = runTest {
-        val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL)
+        val room = aMatrixRoom(topic = "My topic", displayName = "Name", avatarUrl = AN_AVATAR_URL)
 
         givenPickerReturnsFile()
 
@@ -511,7 +511,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - save does not set avatar data if processor fails`() = runTest {
-        val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL)
+        val room = aMatrixRoom(topic = "My topic", displayName = "Name", avatarUrl = AN_AVATAR_URL)
 
         fakePickerProvider.givenResult(anotherAvatarUri)
         fakeMediaPreProcessor.givenResult(Result.failure(Throwable("Oh no")))
@@ -538,7 +538,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - sets save action to failure if name update fails`() = runTest {
-        val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL).apply {
+        val room = aMatrixRoom(topic = "My topic", displayName = "Name", avatarUrl = AN_AVATAR_URL).apply {
             givenSetNameResult(Result.failure(Throwable("!")))
         }
 
@@ -547,7 +547,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - sets save action to failure if topic update fails`() = runTest {
-        val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL).apply {
+        val room = aMatrixRoom(topic = "My topic", displayName = "Name", avatarUrl = AN_AVATAR_URL).apply {
             givenSetTopicResult(Result.failure(Throwable("!")))
         }
 
@@ -556,7 +556,7 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - sets save action to failure if removing avatar fails`() = runTest {
-        val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL).apply {
+        val room = aMatrixRoom(topic = "My topic", displayName = "Name", avatarUrl = AN_AVATAR_URL).apply {
             givenRemoveAvatarResult(Result.failure(Throwable("!")))
         }
 
@@ -567,7 +567,7 @@ class RoomDetailsEditPresenterTest {
     fun `present - sets save action to failure if setting avatar fails`() = runTest {
         givenPickerReturnsFile()
 
-        val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL).apply {
+        val room = aMatrixRoom(topic = "My topic", displayName = "Name", avatarUrl = AN_AVATAR_URL).apply {
             givenUpdateAvatarResult(Result.failure(Throwable("!")))
         }
 
@@ -578,7 +578,7 @@ class RoomDetailsEditPresenterTest {
     fun `present - CancelSaveChanges resets save action state`() = runTest {
         givenPickerReturnsFile()
 
-        val room = aMatrixRoom(topic = "My topic", name = "Name", avatarUrl = AN_AVATAR_URL).apply {
+        val room = aMatrixRoom(topic = "My topic", displayName = "Name", avatarUrl = AN_AVATAR_URL).apply {
             givenSetTopicResult(Result.failure(Throwable("!")))
         }
 

@@ -30,8 +30,8 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
 import io.element.android.features.poll.api.pollcontent.aPollAnswerItemList
-import io.element.android.libraries.featureflag.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.matrix.test.A_MESSAGE
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest

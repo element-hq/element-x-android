@@ -27,7 +27,9 @@ import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
+import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
@@ -36,6 +38,14 @@ sealed interface TimelineItem {
         is Event -> id
         is Virtual -> id
         is GroupedEvents -> id
+    }
+
+    fun isEvent(eventId: EventId?): Boolean {
+        if (eventId == null) return false
+        return when (this) {
+            is Event -> this.eventId == eventId
+            else -> false
+        }
     }
 
     fun contentType(): String = when (this) {
@@ -57,7 +67,7 @@ sealed interface TimelineItem {
         val eventId: EventId? = null,
         val transactionId: TransactionId? = null,
         val senderId: UserId,
-        val senderDisplayName: String?,
+        val senderProfile: ProfileTimelineDetails,
         val senderAvatar: AvatarData,
         val content: TimelineItemEventContent,
         val sentTime: String = "",
@@ -74,7 +84,7 @@ sealed interface TimelineItem {
     ) : TimelineItem {
         val showSenderInformation = groupPosition.isNew() && !isMine
 
-        val safeSenderName: String = senderDisplayName ?: senderId.value
+        val safeSenderName: String = senderProfile.getDisambiguatedDisplayName(senderId)
 
         val failedToSend: Boolean = localSendState is LocalEventSendState.SendingFailed
 

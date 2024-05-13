@@ -20,22 +20,17 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationD
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
-import io.element.android.tests.testutils.lambda.LambdaOneParamRecorder
-import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class FakeSessionVerificationService(
-    var saveVerifiedStateResult: LambdaOneParamRecorder<Boolean, Unit> = lambdaRecorder<Boolean, Unit> {}
-) : SessionVerificationService {
+class FakeSessionVerificationService : SessionVerificationService {
     private val _isReady = MutableStateFlow(false)
     private val _sessionVerifiedStatus = MutableStateFlow<SessionVerifiedStatus>(SessionVerifiedStatus.Unknown)
     private var _verificationFlowState = MutableStateFlow<VerificationFlowState>(VerificationFlowState.Initial)
     private var _canVerifySessionFlow = MutableStateFlow(true)
     var shouldFail = false
 
-    override val needsVerificationFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
     override val verificationFlowState: StateFlow<VerificationFlowState> = _verificationFlowState
     override val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus> = _sessionVerifiedStatus
     override val canVerifySessionFlow: Flow<Boolean> = _canVerifySessionFlow
@@ -82,6 +77,10 @@ class FakeSessionVerificationService(
         _sessionVerifiedStatus.value = status
     }
 
+    suspend fun emitVerifiedStatus(status: SessionVerifiedStatus) {
+        _sessionVerifiedStatus.emit(status)
+    }
+
     fun givenVerificationFlowState(state: VerificationFlowState) {
         _verificationFlowState.value = state
     }
@@ -94,15 +93,7 @@ class FakeSessionVerificationService(
         _isReady.value = value
     }
 
-    fun givenNeedsVerification(value: Boolean) {
-        needsVerificationFlow.value = value
-    }
-
     override suspend fun reset() {
         _verificationFlowState.value = VerificationFlowState.Initial
-    }
-
-    override suspend fun saveVerifiedState(verified: Boolean) {
-        saveVerifiedStateResult(verified)
     }
 }

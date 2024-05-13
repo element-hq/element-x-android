@@ -108,6 +108,7 @@ class RoomDirectoryPresenter @Inject constructor(
     private fun CoroutineScope.joinRoom(state: MutableState<AsyncAction<RoomId>>, roomId: RoomId) = launch {
         state.runUpdatingState {
             joinRoom(roomId)
+                .map { roomId }
         }
     }
 

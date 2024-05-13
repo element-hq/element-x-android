@@ -56,11 +56,13 @@ class TracingInitializer : Initializer<Unit> {
                 writesToLogcat = false,
                 writesToFilesConfiguration = WriteToFilesConfiguration.Enabled(
                     directory = bugReporter.logDirectory().absolutePath,
-                    filenamePrefix = "logs"
+                    filenamePrefix = "logs",
+                    filenameSuffix = null,
+                    // Keep a minimum of 1 week of log files.
+                    numberOfFiles = 7 * 24,
                 )
             )
         }
-        bugReporter.cleanLogDirectoryIfNeeded()
         bugReporter.setCurrentTracingFilter(tracingConfiguration.filterConfiguration.filter)
         tracingService.setupTracing(tracingConfiguration)
         // Also set env variable for rust back trace

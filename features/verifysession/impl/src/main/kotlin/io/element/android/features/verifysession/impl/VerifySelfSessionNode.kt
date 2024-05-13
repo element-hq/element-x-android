@@ -43,7 +43,6 @@ class VerifySelfSessionNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             onEnterRecoveryKey = callback::onEnterRecoveryKey,
-            onCreateNewRecoveryKey = callback::onCreateNewRecoveryKey,
             onFinished = callback::onDone,
         )
     }

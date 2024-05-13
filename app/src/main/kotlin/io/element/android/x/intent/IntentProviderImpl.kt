@@ -45,11 +45,4 @@ class IntentProviderImpl @Inject constructor(
             data = deepLinkCreator.room(sessionId, roomId, threadId).toUri()
         }
     }
-
-    override fun getInviteListIntent(sessionId: SessionId): Intent {
-        return Intent(context, MainActivity::class.java).apply {
-            action = Intent.ACTION_VIEW
-            data = deepLinkCreator.inviteList(sessionId).toUri()
-        }
-    }
 }

@@ -58,9 +58,6 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object EnterRecoveryKey : NavTarget
-
-        @Parcelize
-        data object CreateNewRecoveryKey : NavTarget
     }
 
     interface Callback : Plugin {
@@ -68,10 +65,6 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
     }
 
     private val secureBackupEntryPointCallback = object : SecureBackupEntryPoint.Callback {
-        override fun onCreateNewRecoveryKey() {
-            backstack.push(NavTarget.CreateNewRecoveryKey)
-        }
-
         override fun onDone() {
             lifecycleScope.launch {
                 // Move to the completed state view in the verification flow
@@ -89,10 +82,6 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
                             backstack.push(NavTarget.EnterRecoveryKey)
                         }
 
-                        override fun onCreateNewRecoveryKey() {
-                            backstack.push(NavTarget.CreateNewRecoveryKey)
-                        }
-
                         override fun onDone() {
                             plugins<Callback>().forEach { it.onDone() }
                         }
@@ -102,12 +91,6 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
             is NavTarget.EnterRecoveryKey -> {
                 secureBackupEntryPoint.nodeBuilder(this, buildContext)
                     .params(SecureBackupEntryPoint.Params(SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey))
-                    .callback(secureBackupEntryPointCallback)
-                    .build()
-            }
-            is NavTarget.CreateNewRecoveryKey -> {
-                secureBackupEntryPoint.nodeBuilder(this, buildContext)
-                    .params(SecureBackupEntryPoint.Params(SecureBackupEntryPoint.InitialTarget.CreateNewRecoveryKey))
                     .callback(secureBackupEntryPointCallback)
                     .build()
             }

@@ -42,6 +42,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
@@ -55,6 +56,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.media.aMediaSource
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.aPollContent
+import io.element.android.libraries.matrix.test.timeline.aProfileTimelineDetails
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
@@ -68,7 +70,7 @@ class InReplyToMetadataKtTest {
     @Test
     fun `any message content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
-            anInReplyToDetails(eventContent = aMessageContent()).metadata()
+            anInReplyToDetailsReady(eventContent = aMessageContent()).metadata()
         }.test {
             awaitItem().let {
                 assertThat(it).isEqualTo(InReplyToMetadata.Text("textContent"))
@@ -79,7 +81,7 @@ class InReplyToMetadataKtTest {
     @Test
     fun `an image message content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
-            anInReplyToDetails(
+            anInReplyToDetailsReady(
                 eventContent = aMessageContent(
                     messageType = ImageMessageType(
                         body = "body",
@@ -109,7 +111,7 @@ class InReplyToMetadataKtTest {
     @Test
     fun `a sticker message content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
-            anInReplyToDetails(
+            anInReplyToDetailsReady(
                 eventContent = StickerContent(
                     body = "body",
                     info = anImageInfo(),
@@ -135,7 +137,7 @@ class InReplyToMetadataKtTest {
     @Test
     fun `a video message content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
-            anInReplyToDetails(
+            anInReplyToDetailsReady(
                 eventContent = aMessageContent(
                     messageType = VideoMessageType(
                         body = "body",
@@ -165,7 +167,7 @@ class InReplyToMetadataKtTest {
     @Test
     fun `a file message content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
-            anInReplyToDetails(
+            anInReplyToDetailsReady(
                 eventContent = aMessageContent(
                     messageType = FileMessageType(
                         body = "body",
@@ -198,7 +200,7 @@ class InReplyToMetadataKtTest {
     @Test
     fun `a audio message content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
-            anInReplyToDetails(
+            anInReplyToDetailsReady(
                 eventContent = aMessageContent(
                     messageType = AudioMessageType(
                         body = "body",
@@ -230,7 +232,7 @@ class InReplyToMetadataKtTest {
     fun `a location message content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
             testEnv {
-                anInReplyToDetails(
+                anInReplyToDetailsReady(
                     eventContent = aMessageContent(
                         messageType = LocationMessageType(
                             body = "body",
@@ -260,7 +262,7 @@ class InReplyToMetadataKtTest {
     fun `a voice message content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
             testEnv {
-                anInReplyToDetails(
+                anInReplyToDetailsReady(
                     eventContent = aMessageContent(
                         messageType = VoiceMessageType(
                             body = "body",
@@ -290,7 +292,7 @@ class InReplyToMetadataKtTest {
     @Test
     fun `a poll content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
-            anInReplyToDetails(
+            anInReplyToDetailsReady(
                 eventContent = aPollContent()
             ).metadata()
         }.test {
@@ -312,7 +314,7 @@ class InReplyToMetadataKtTest {
     @Test
     fun `redacted content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
-            anInReplyToDetails(
+            anInReplyToDetailsReady(
                 eventContent = RedactedContent
             ).metadata()
         }.test {
@@ -325,7 +327,7 @@ class InReplyToMetadataKtTest {
     @Test
     fun `unable to decrypt content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
-            anInReplyToDetails(
+            anInReplyToDetailsReady(
                 eventContent = UnableToDecryptContent(UnableToDecryptContent.Data.Unknown)
             ).metadata()
         }.test {
@@ -338,7 +340,7 @@ class InReplyToMetadataKtTest {
     @Test
     fun `failed to parse message content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
-            anInReplyToDetails(
+            anInReplyToDetailsReady(
                 eventContent = FailedToParseMessageLikeContent("", "")
             ).metadata()
         }.test {
@@ -351,7 +353,7 @@ class InReplyToMetadataKtTest {
     @Test
     fun `failed to parse state content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
-            anInReplyToDetails(
+            anInReplyToDetailsReady(
                 eventContent = FailedToParseStateContent("", "", "")
             ).metadata()
         }.test {
@@ -364,7 +366,7 @@ class InReplyToMetadataKtTest {
     @Test
     fun `profile change content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
-            anInReplyToDetails(
+            anInReplyToDetailsReady(
                 eventContent = ProfileChangeContent("", "", "", "")
             ).metadata()
         }.test {
@@ -377,7 +379,7 @@ class InReplyToMetadataKtTest {
     @Test
     fun `room membership content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
-            anInReplyToDetails(
+            anInReplyToDetailsReady(
                 eventContent = RoomMembershipContent(A_USER_ID, null)
             ).metadata()
         }.test {
@@ -390,7 +392,7 @@ class InReplyToMetadataKtTest {
     @Test
     fun `state content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
-            anInReplyToDetails(
+            anInReplyToDetailsReady(
                 eventContent = StateContent("", OtherState.RoomJoinRules)
             ).metadata()
         }.test {
@@ -403,7 +405,7 @@ class InReplyToMetadataKtTest {
     @Test
     fun `unknown content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
-            anInReplyToDetails(
+            anInReplyToDetailsReady(
                 eventContent = UnknownContent
             ).metadata()
         }.test {
@@ -416,7 +418,7 @@ class InReplyToMetadataKtTest {
     @Test
     fun `null content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
-            anInReplyToDetails(
+            anInReplyToDetailsReady(
                 eventContent = null
             ).metadata()
         }.test {
@@ -427,18 +429,16 @@ class InReplyToMetadataKtTest {
     }
 }
 
-fun anInReplyToDetails(
+private fun anInReplyToDetailsReady(
     eventId: EventId = AN_EVENT_ID,
     senderId: UserId = A_USER_ID,
-    senderDisplayName: String? = "senderDisplayName",
-    senderAvatarUrl: String? = "senderAvatarUrl",
+    senderProfile: ProfileTimelineDetails = aProfileTimelineDetails(),
     eventContent: EventContent? = aMessageContent(),
     textContent: String? = "textContent",
-) = InReplyToDetails(
+) = InReplyToDetails.Ready(
     eventId = eventId,
     senderId = senderId,
-    senderDisplayName = senderDisplayName,
-    senderAvatarUrl = senderAvatarUrl,
+    senderProfile = senderProfile,
     eventContent = eventContent,
     textContent = textContent,
 )

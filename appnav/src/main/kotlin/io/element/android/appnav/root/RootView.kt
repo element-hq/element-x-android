@@ -68,7 +68,7 @@ fun RootView(
 
 @PreviewsDayNight
 @Composable
-internal fun RootPreview(@PreviewParameter(RootStateProvider::class) rootState: RootState) = ElementPreview {
+internal fun RootViewPreview(@PreviewParameter(RootStateProvider::class) rootState: RootState) = ElementPreview {
     RootView(
         state = rootState,
         onOpenBugReport = {},

@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.api.room
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.TransactionId
@@ -31,8 +32,8 @@ import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
-import io.element.android.libraries.matrix.api.timeline.MatrixTimeline
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import kotlinx.coroutines.flow.Flow
@@ -43,10 +44,9 @@ import java.io.File
 interface MatrixRoom : Closeable {
     val sessionId: SessionId
     val roomId: RoomId
-    val name: String?
     val displayName: String
-    val alias: String?
-    val alternativeAliases: List<String>
+    val alias: RoomAlias?
+    val alternativeAliases: List<RoomAlias>
     val topic: String?
     val avatarUrl: String?
     val isEncrypted: Boolean
@@ -97,7 +97,16 @@ interface MatrixRoom : Closeable {
 
     val syncUpdateFlow: StateFlow<Long>
 
-    val timeline: MatrixTimeline
+    /**
+     * The live timeline of the room. Must be used to send Event to a room.
+     */
+    val liveTimeline: Timeline
+
+    /**
+     * Create a new timeline, focused on the provided Event.
+     * Should not be used directly, see `TimelineController` to manage the various timelines.
+     */
+    suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline>
 
     fun destroy()
 
@@ -120,12 +129,6 @@ interface MatrixRoom : Closeable {
     suspend fun userAvatarUrl(userId: UserId): Result<String?>
 
     suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
-
-    suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
-
-    suspend fun enterSpecialMode(eventId: EventId?): Result<Unit>
-
-    suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
 
     suspend fun redactEvent(eventId: EventId, reason: String? = null): Result<Unit>
 

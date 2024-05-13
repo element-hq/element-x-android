@@ -27,6 +27,7 @@ import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.bumble.appyx.testing.unit.common.helper.parentNodeTestHelper
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appnav.di.RoomComponentFactory
+import io.element.android.appnav.room.RoomNavigationTarget
 import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
@@ -47,14 +48,30 @@ class JoinRoomLoadedFlowNodeTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private class FakeMessagesEntryPoint : MessagesEntryPoint {
+    private class FakeMessagesEntryPoint : MessagesEntryPoint, MessagesEntryPoint.NodeBuilder {
+        var buildContext: BuildContext? = null
         var nodeId: String? = null
+        var parameters: MessagesEntryPoint.Params? = null
         var callback: MessagesEntryPoint.Callback? = null
 
-        override fun createNode(parentNode: Node, buildContext: BuildContext, callback: MessagesEntryPoint.Callback): Node {
-            return node(buildContext) {}.also {
+        override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): MessagesEntryPoint.NodeBuilder {
+            this.buildContext = buildContext
+            return this
+        }
+
+        override fun params(params: MessagesEntryPoint.Params): MessagesEntryPoint.NodeBuilder {
+            parameters = params
+            return this
+        }
+
+        override fun callback(callback: MessagesEntryPoint.Callback): MessagesEntryPoint.NodeBuilder {
+            this.callback = callback
+            return this
+        }
+
+        override fun build(): Node {
+            return node(buildContext!!) {}.also {
                 nodeId = it.id
-                this.callback = callback
             }
         }
     }
@@ -108,7 +125,7 @@ class JoinRoomLoadedFlowNodeTest {
         // GIVEN
         val room = FakeMatrixRoom()
         val fakeMessagesEntryPoint = FakeMessagesEntryPoint()
-        val inputs = JoinedRoomLoadedFlowNode.Inputs(room)
+        val inputs = JoinedRoomLoadedFlowNode.Inputs(room, RoomNavigationTarget.Messages())
         val roomFlowNode = createJoinedRoomLoadedFlowNode(
             plugins = listOf(inputs),
             messagesEntryPoint = fakeMessagesEntryPoint,
@@ -118,9 +135,9 @@ class JoinRoomLoadedFlowNodeTest {
         val roomFlowNodeTestHelper = roomFlowNode.parentNodeTestHelper()
 
         // THEN
-        assertThat(roomFlowNode.backstack.activeElement).isEqualTo(JoinedRoomLoadedFlowNode.NavTarget.Messages)
-        roomFlowNodeTestHelper.assertChildHasLifecycle(JoinedRoomLoadedFlowNode.NavTarget.Messages, Lifecycle.State.CREATED)
-        val messagesNode = roomFlowNode.childNode(JoinedRoomLoadedFlowNode.NavTarget.Messages)!!
+        assertThat(roomFlowNode.backstack.activeElement).isEqualTo(JoinedRoomLoadedFlowNode.NavTarget.Messages())
+        roomFlowNodeTestHelper.assertChildHasLifecycle(JoinedRoomLoadedFlowNode.NavTarget.Messages(), Lifecycle.State.CREATED)
+        val messagesNode = roomFlowNode.childNode(JoinedRoomLoadedFlowNode.NavTarget.Messages())!!
         assertThat(messagesNode.id).isEqualTo(fakeMessagesEntryPoint.nodeId)
     }
 
@@ -130,7 +147,7 @@ class JoinRoomLoadedFlowNodeTest {
         val room = FakeMatrixRoom()
         val fakeMessagesEntryPoint = FakeMessagesEntryPoint()
         val fakeRoomDetailsEntryPoint = FakeRoomDetailsEntryPoint()
-        val inputs = JoinedRoomLoadedFlowNode.Inputs(room)
+        val inputs = JoinedRoomLoadedFlowNode.Inputs(room, RoomNavigationTarget.Messages())
         val roomFlowNode = createJoinedRoomLoadedFlowNode(
             plugins = listOf(inputs),
             messagesEntryPoint = fakeMessagesEntryPoint,

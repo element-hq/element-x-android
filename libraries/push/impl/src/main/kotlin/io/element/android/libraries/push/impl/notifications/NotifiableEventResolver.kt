@@ -93,8 +93,8 @@ class NotifiableEventResolver @Inject constructor(
     ): NotifiableEvent? {
         return when (val content = this.content) {
             is NotificationContent.MessageLike.RoomMessage -> {
-                val senderName = getSenderName(content.senderId)
-                val messageBody = descriptionFromMessageContent(content, senderName)
+                val senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId)
+                val messageBody = descriptionFromMessageContent(content, senderDisambiguatedDisplayName)
                 val notificationBody = if (hasMention) {
                     stringProvider.getString(R.string.notification_mentioned_you_body, messageBody)
                 } else {
@@ -107,7 +107,7 @@ class NotifiableEventResolver @Inject constructor(
                     eventId = eventId,
                     noisy = isNoisy,
                     timestamp = this.timestamp,
-                    senderName = senderName,
+                    senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
                     body = notificationBody,
                     imageUriString = fetchImageIfPresent(client)?.toString(),
                     roomName = roomDisplayName,
@@ -154,7 +154,7 @@ class NotifiableEventResolver @Inject constructor(
                     eventId = eventId,
                     noisy = isNoisy,
                     timestamp = this.timestamp,
-                    senderName = null,
+                    senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
                     body = stringProvider.getString(CommonStrings.common_call_invite),
                     imageUriString = fetchImageIfPresent(client)?.toString(),
                     roomName = roomDisplayName,
@@ -180,7 +180,7 @@ class NotifiableEventResolver @Inject constructor(
                     eventId = eventId,
                     noisy = isNoisy,
                     timestamp = this.timestamp,
-                    senderName = getSenderName(content.senderId),
+                    senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
                     body = stringProvider.getString(CommonStrings.common_poll_summary, content.question),
                     imageUriString = null,
                     roomName = roomDisplayName,
@@ -244,12 +244,12 @@ class NotifiableEventResolver @Inject constructor(
 
     private fun descriptionFromMessageContent(
         content: NotificationContent.MessageLike.RoomMessage,
-        senderDisplayName: String,
+        senderDisambiguatedDisplayName: String,
     ): String {
         return when (val messageType = content.messageType) {
             is AudioMessageType -> messageType.body
             is VoiceMessageType -> stringProvider.getString(CommonStrings.common_voice_message)
-            is EmoteMessageType -> "* $senderDisplayName ${messageType.body}"
+            is EmoteMessageType -> "* $senderDisambiguatedDisplayName ${messageType.body}"
             is FileMessageType -> messageType.body
             is ImageMessageType -> messageType.body
             is StickerMessageType -> messageType.body
@@ -310,7 +310,7 @@ private fun buildNotifiableMessageEvent(
     canBeReplaced: Boolean = false,
     noisy: Boolean,
     timestamp: Long,
-    senderName: String?,
+    senderDisambiguatedDisplayName: String?,
     body: String?,
     // We cannot use Uri? type here, as that could trigger a
     // NotSerializableException when persisting this to storage
@@ -335,7 +335,7 @@ private fun buildNotifiableMessageEvent(
     canBeReplaced = canBeReplaced,
     noisy = noisy,
     timestamp = timestamp,
-    senderName = senderName,
+    senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
     body = body,
     imageUriString = imageUriString,
     threadId = threadId,

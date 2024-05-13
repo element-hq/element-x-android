@@ -108,7 +108,7 @@ fun PageTitle(
 
 @PreviewsDayNight
 @Composable
-internal fun TitleWithIconFullPreview(@PreviewParameter(BigIconStylePreviewProvider::class) style: BigIcon.Style) {
+internal fun PageTitleWithIconFullPreview(@PreviewParameter(BigIconStylePreviewProvider::class) style: BigIcon.Style) {
     ElementPreview {
         PageTitle(
             modifier = Modifier.padding(top = 24.dp),
@@ -124,7 +124,7 @@ internal fun TitleWithIconFullPreview(@PreviewParameter(BigIconStylePreviewProvi
 
 @PreviewsDayNight
 @Composable
-internal fun TitleWithIconMinimalPreview() {
+internal fun PageTitleWithIconMinimalPreview() {
     ElementPreview {
         PageTitle(
             modifier = Modifier.padding(top = 24.dp),

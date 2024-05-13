@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.impl.verification
 
-import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -24,7 +23,6 @@ import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatu
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
-import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -33,10 +31,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -58,7 +53,6 @@ class RustSessionVerificationService(
     private val client: Client,
     isSyncServiceReady: Flow<Boolean>,
     private val sessionCoroutineScope: CoroutineScope,
-    private val sessionStore: SessionStore,
 ) : SessionVerificationService, SessionVerificationControllerDelegate {
     private val encryptionService: Encryption = client.encryption()
     private lateinit var verificationController: SessionVerificationController
@@ -80,11 +74,6 @@ class RustSessionVerificationService(
         }
     })
 
-    override val needsVerificationFlow: StateFlow<Boolean> = sessionStore.sessionsFlow()
-        .map { sessions -> sessions.firstOrNull { it.userId == client.userId() }?.needsVerification.orFalse() }
-        .distinctUntilChanged()
-        .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, false)
-
     private val _verificationFlowState = MutableStateFlow<VerificationFlowState>(VerificationFlowState.Initial)
     override val verificationFlowState = _verificationFlowState.asStateFlow()
 
@@ -98,6 +87,9 @@ class RustSessionVerificationService(
     }
 
     init {
+        // Update initial state in case sliding sync isn't ready
+        updateVerificationStatus(encryptionService.verificationState())
+
         isReady.onEach { isReady ->
             if (isReady) {
                 Timber.d("Starting verification service")
@@ -165,7 +157,6 @@ class RustSessionVerificationService(
                 }
             }
                 .onSuccess {
-                    saveVerifiedState(true)
                     updateVerificationStatus(VerificationState.VERIFIED)
                     _verificationFlowState.value = VerificationFlowState.Finished
                 }
@@ -193,14 +184,6 @@ class RustSessionVerificationService(
             tryOrNull { verificationController.cancelVerification() }
         }
         _verificationFlowState.value = VerificationFlowState.Initial
-    }
-
-    override suspend fun saveVerifiedState(verified: Boolean) = tryOrFail {
-        val existingSession = sessionStore.getSession(client.userId())
-            ?: error("Failed to save verification state. No session with id ${client.userId()}")
-        sessionStore.updateData(existingSession.copy(needsVerification = !verified))
-        // Wait until the new state is saved
-        needsVerificationFlow.first { needsVerification -> !needsVerification }
     }
 
     fun destroy() {

@@ -138,11 +138,11 @@ import org.junit.Test
 
     @Test
     fun `present - emit join room event`() = runTest {
-        val joinRoomSuccess = lambdaRecorder { roomId: RoomId ->
-            Result.success(roomId)
+        val joinRoomSuccess = lambdaRecorder { _: RoomId ->
+            Result.success(Unit)
         }
         val joinRoomFailure = lambdaRecorder { roomId: RoomId ->
-            Result.failure<RoomId>(RuntimeException("Failed to join room $roomId"))
+            Result.failure<Unit>(RuntimeException("Failed to join room $roomId"))
         }
         val fakeJoinRoom = FakeJoinRoom(joinRoomSuccess)
         val presenter = createRoomDirectoryPresenter(joinRoom = fakeJoinRoom)
@@ -171,7 +171,7 @@ import org.junit.Test
         roomDirectoryService: RoomDirectoryService = FakeRoomDirectoryService(
             createRoomDirectoryListFactory = { FakeRoomDirectoryList() }
         ),
-        joinRoom: JoinRoom = FakeJoinRoom { Result.success(it) },
+        joinRoom: JoinRoom = FakeJoinRoom { Result.success(Unit) },
     ): RoomDirectoryPresenter {
         return RoomDirectoryPresenter(
             dispatchers = testCoroutineDispatchers(),

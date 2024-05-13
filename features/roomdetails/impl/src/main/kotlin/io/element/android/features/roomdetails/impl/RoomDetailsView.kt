@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -49,10 +48,10 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.leaveroom.api.LeaveRoomView
-import io.element.android.features.roomdetails.impl.blockuser.BlockUserDialogs
-import io.element.android.features.roomdetails.impl.blockuser.BlockUserSection
-import io.element.android.features.roomdetails.impl.members.details.RoomMemberHeaderSection
-import io.element.android.features.roomdetails.impl.members.details.RoomMemberMainActionsSection
+import io.element.android.features.roomdetails.impl.components.RoomBadge
+import io.element.android.features.userprofile.shared.UserProfileHeaderSection
+import io.element.android.features.userprofile.shared.blockuser.BlockUserDialogs
+import io.element.android.features.userprofile.shared.blockuser.BlockUserSection
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -78,7 +77,8 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.core.RoomAlias
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.getBestName
 import io.element.android.libraries.testtags.TestTags
@@ -91,19 +91,15 @@ fun RoomDetailsView(
     goBack: () -> Unit,
     onActionClicked: (RoomDetailsAction) -> Unit,
     onShareRoom: () -> Unit,
-    onShareMember: (RoomMember) -> Unit,
     openRoomMemberList: () -> Unit,
     openRoomNotificationSettings: () -> Unit,
     invitePeople: () -> Unit,
     openAvatarPreview: (name: String, url: String) -> Unit,
     openPollHistory: () -> Unit,
     openAdminSettings: () -> Unit,
+    onJoinCallClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    fun onShareMember() {
-        onShareMember((state.roomType as RoomDetailsType.Dm).roomMember)
-    }
-
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -129,30 +125,39 @@ fun RoomDetailsView(
                         roomId = state.roomId,
                         roomName = state.roomName,
                         roomAlias = state.roomAlias,
+                        isEncrypted = state.isEncrypted,
+                        isPublic = state.isPublic,
                         openAvatarPreview = { avatarUrl ->
                             openAvatarPreview(state.roomName, avatarUrl)
                         },
                     )
                     MainActionsSection(
                         state = state,
-                        onShareRoom = onShareRoom
+                        onShareRoom = onShareRoom,
+                        onInvitePeople = invitePeople,
+                        onCall = onJoinCallClicked,
                     )
                 }
 
                 is RoomDetailsType.Dm -> {
                     val member = state.roomType.roomMember
-                    RoomMemberHeaderSection(
+                    UserProfileHeaderSection(
                         avatarUrl = state.roomAvatarUrl ?: member.avatarUrl,
-                        userId = member.userId.value,
+                        userId = member.userId,
                         userName = state.roomName,
                         openAvatarPreview = { avatarUrl ->
                             openAvatarPreview(member.getBestName(), avatarUrl)
                         },
                     )
-                    RoomMemberMainActionsSection(onShareUser = ::onShareMember)
+                    MainActionsSection(
+                        state = state,
+                        onShareRoom = onShareRoom,
+                        onInvitePeople = invitePeople,
+                        onCall = onJoinCallClicked,
+                    )
                 }
             }
-            Spacer(Modifier.height(18.dp))
+            Spacer(Modifier.height(12.dp))
 
             if (state.roomTopic !is RoomTopicState.Hidden) {
                 TopicSection(
@@ -186,20 +191,12 @@ fun RoomDetailsView(
             }
 
             val displayMemberListItem = state.roomType is RoomDetailsType.Room
-            val displayInviteMembersItem = state.canInvite
-            if (displayMemberListItem || displayInviteMembersItem) {
+            if (displayMemberListItem) {
                 PreferenceCategory {
-                    if (displayMemberListItem) {
-                        MembersItem(
-                            memberCount = state.memberCount,
-                            openRoomMemberList = openRoomMemberList,
-                        )
-                    }
-                    if (displayInviteMembersItem) {
-                        InviteItem(
-                            invitePeople = invitePeople
-                        )
-                    }
+                    MembersItem(
+                        memberCount = state.memberCount,
+                        openRoomMemberList = openRoomMemberList,
+                    )
                 }
             }
 
@@ -265,10 +262,14 @@ private fun RoomDetailsTopBar(
 private fun MainActionsSection(
     state: RoomDetailsState,
     onShareRoom: () -> Unit,
+    onInvitePeople: () -> Unit,
+    onCall: () -> Unit,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
         val roomNotificationSettings = state.roomNotificationSettings
         if (state.canShowNotificationSettings && roomNotificationSettings != null) {
@@ -290,21 +291,39 @@ private fun MainActionsSection(
                 )
             }
         }
-        Spacer(modifier = Modifier.width(20.dp))
-        MainActionButton(
-            title = stringResource(R.string.screen_room_details_share_room_title),
-            imageVector = CompoundIcons.ShareAndroid(),
-            onClick = onShareRoom
-        )
+        if (state.canCall) {
+            MainActionButton(
+                title = stringResource(CommonStrings.action_call),
+                imageVector = CompoundIcons.VideoCall(),
+                onClick = onCall,
+            )
+        }
+        if (state.roomType is RoomDetailsType.Room) {
+            if (state.canInvite) {
+                MainActionButton(
+                    title = stringResource(CommonStrings.action_invite),
+                    imageVector = CompoundIcons.UserAdd(),
+                    onClick = onInvitePeople,
+                )
+            }
+            // Share CTA should be hidden for DMs
+            MainActionButton(
+                title = stringResource(CommonStrings.action_share),
+                imageVector = CompoundIcons.ShareAndroid(),
+                onClick = onShareRoom
+            )
+        }
     }
 }
 
 @Composable
 private fun RoomHeaderSection(
     avatarUrl: String?,
-    roomId: String,
+    roomId: RoomId,
     roomName: String,
-    roomAlias: String?,
+    roomAlias: RoomAlias?,
+    isEncrypted: Boolean,
+    isPublic: Boolean,
     openAvatarPreview: (url: String) -> Unit,
 ) {
     Column(
@@ -314,7 +333,7 @@ private fun RoomHeaderSection(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Avatar(
-            avatarData = AvatarData(roomId, roomName, avatarUrl, AvatarSize.RoomHeader),
+            avatarData = AvatarData(roomId.value, roomName, avatarUrl, AvatarSize.RoomHeader),
             modifier = Modifier
                 .size(70.dp)
                 .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
@@ -329,13 +348,49 @@ private fun RoomHeaderSection(
         if (roomAlias != null) {
             Spacer(modifier = Modifier.height(6.dp))
             Text(
-                text = roomAlias,
+                text = roomAlias.value,
                 style = ElementTheme.typography.fontBodyLgRegular,
                 color = MaterialTheme.colorScheme.secondary,
                 textAlign = TextAlign.Center,
             )
         }
+        BadgeList(isEncrypted = isEncrypted, isPublic = isPublic)
         Spacer(Modifier.height(32.dp))
+    }
+}
+
+@Composable
+private fun BadgeList(
+    isEncrypted: Boolean,
+    isPublic: Boolean,
+) {
+    if (isEncrypted || isPublic) {
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            if (isEncrypted) {
+                RoomBadge.View(
+                    text = stringResource(R.string.screen_room_details_badge_encrypted),
+                    icon = CompoundIcons.LockSolid(),
+                    type = RoomBadge.Type.Positive,
+                )
+            } else {
+                RoomBadge.View(
+                    text = stringResource(R.string.screen_room_details_badge_not_encrypted),
+                    icon = CompoundIcons.LockOff(),
+                    type = RoomBadge.Type.Neutral,
+                )
+            }
+            if (isPublic) {
+                RoomBadge.View(
+                    text = stringResource(R.string.screen_room_details_badge_public),
+                    icon = CompoundIcons.Public(),
+                    type = RoomBadge.Type.Neutral,
+                )
+            }
+        }
     }
 }
 
@@ -409,17 +464,6 @@ private fun MembersItem(
 }
 
 @Composable
-private fun InviteItem(
-    invitePeople: () -> Unit,
-) {
-    ListItem(
-        headlineContent = { Text(stringResource(R.string.screen_room_details_invite_people_title)) },
-        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserAdd())),
-        onClick = invitePeople,
-    )
-}
-
-@Composable
 private fun PollsSection(
     openPollHistory: () -> Unit,
 ) {
@@ -482,12 +526,12 @@ private fun ContentToPreview(state: RoomDetailsState) {
         goBack = {},
         onActionClicked = {},
         onShareRoom = {},
-        onShareMember = {},
         openRoomMemberList = {},
         openRoomNotificationSettings = {},
         invitePeople = {},
         openAvatarPreview = { _, _ -> },
         openPollHistory = {},
         openAdminSettings = {},
+        onJoinCallClicked = {},
     )
 }

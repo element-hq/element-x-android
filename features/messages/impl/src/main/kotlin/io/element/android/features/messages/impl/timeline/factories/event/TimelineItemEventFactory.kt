@@ -33,7 +33,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
-import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import kotlinx.collections.immutable.toImmutableList
 import java.text.DateFormat
@@ -55,15 +55,14 @@ class TimelineItemEventFactory @Inject constructor(
         val currentSender = currentTimelineItem.event.sender
         val groupPosition =
             computeGroupPosition(currentTimelineItem, timelineItems, index)
-        val (senderDisplayName, senderAvatarUrl) = currentTimelineItem.getSenderInfo()
-
+        val senderProfile = currentTimelineItem.event.senderProfile
         val timeFormatter = DateFormat.getTimeInstance(DateFormat.SHORT)
         val sentTime = timeFormatter.format(Date(currentTimelineItem.event.timestamp))
 
         val senderAvatarData = AvatarData(
             id = currentSender.value,
-            name = senderDisplayName ?: currentSender.value,
-            url = senderAvatarUrl,
+            name = senderProfile.getDisambiguatedDisplayName(currentSender),
+            url = senderProfile.getAvatarUrl(),
             size = AvatarSize.TimelineSender
         )
         currentTimelineItem.event
@@ -72,7 +71,7 @@ class TimelineItemEventFactory @Inject constructor(
             eventId = currentTimelineItem.eventId,
             transactionId = currentTimelineItem.transactionId,
             senderId = currentSender,
-            senderDisplayName = senderDisplayName,
+            senderProfile = senderProfile,
             senderAvatar = senderAvatarData,
             content = contentFactory.create(currentTimelineItem.event),
             isMine = currentTimelineItem.event.isOwn,
@@ -97,26 +96,6 @@ class TimelineItemEventFactory @Inject constructor(
         return timelineItem.copy(
             readReceiptState = receivedMatrixTimelineItem.computeReadReceiptState(roomMembers)
         )
-    }
-
-    private fun MatrixTimelineItem.Event.getSenderInfo(): Pair<String?, String?> {
-        val senderDisplayName: String?
-        val senderAvatarUrl: String?
-
-        when (val senderProfile = event.senderProfile) {
-            ProfileTimelineDetails.Unavailable,
-            ProfileTimelineDetails.Pending,
-            is ProfileTimelineDetails.Error -> {
-                senderDisplayName = null
-                senderAvatarUrl = null
-            }
-            is ProfileTimelineDetails.Ready -> {
-                senderDisplayName = senderProfile.getDisambiguatedDisplayName(event.sender)
-                senderAvatarUrl = senderProfile.avatarUrl
-            }
-        }
-
-        return senderDisplayName to senderAvatarUrl
     }
 
     private fun MatrixTimelineItem.Event.computeReactionsState(): TimelineItemReactions {

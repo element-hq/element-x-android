@@ -26,6 +26,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roomlist.impl.components.RoomListMenuAction
+import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -93,7 +94,9 @@ class RoomListViewTest {
         val state = aRoomListState(
             eventSink = eventsRecorder,
         )
-        val room0 = state.contentAsRooms().summaries.first()
+        val room0 = state.contentAsRooms().summaries.first {
+            it.displayType == RoomSummaryDisplayType.ROOM
+        }
         ensureCalledOnceWithParam(room0.roomId) { callback ->
             rule.setRoomListView(
                 state = state,
@@ -109,7 +112,9 @@ class RoomListViewTest {
         val state = aRoomListState(
             eventSink = eventsRecorder,
         )
-        val room0 = state.contentAsRooms().summaries.first()
+        val room0 = state.contentAsRooms().summaries.first {
+            it.displayType == RoomSummaryDisplayType.ROOM
+        }
         rule.setRoomListView(
             state = state,
         )
@@ -136,19 +141,20 @@ class RoomListViewTest {
     }
 
     @Test
-    fun `clicking on invites invokes the expected callback`() {
+    fun `clicking on accept and decline invite emits the expected Events`() {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
         val state = aRoomListState(
-            contentState = aRoomsContentState(invitesState = InvitesState.NewInvites),
             eventSink = eventsRecorder,
         )
-        ensureCalledOnce { callback ->
-            rule.setRoomListView(
-                state = state,
-                onInvitesClicked = callback,
-            )
-            rule.clickOn(CommonStrings.action_invites_list)
+        val invitedRoom = state.contentAsRooms().summaries.first {
+            it.displayType == RoomSummaryDisplayType.INVITE
         }
+        rule.setRoomListView(state = state)
+        rule.clickOn(CommonStrings.action_accept)
+        rule.clickOn(CommonStrings.action_decline)
+        eventsRecorder.assertList(
+            listOf(RoomListEvents.AcceptInvite(invitedRoom), RoomListEvents.DeclineInvite(invitedRoom)),
+        )
     }
 }
 
@@ -158,7 +164,6 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomL
     onSettingsClicked: () -> Unit = EnsureNeverCalled(),
     onConfirmRecoveryKeyClicked: () -> Unit = EnsureNeverCalled(),
     onCreateRoomClicked: () -> Unit = EnsureNeverCalled(),
-    onInvitesClicked: () -> Unit = EnsureNeverCalled(),
     onRoomSettingsClicked: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
     onMenuActionClicked: (RoomListMenuAction) -> Unit = EnsureNeverCalledWithParam(),
     onRoomDirectorySearchClicked: () -> Unit = EnsureNeverCalled(),
@@ -170,10 +175,10 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomL
             onSettingsClicked = onSettingsClicked,
             onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
             onCreateRoomClicked = onCreateRoomClicked,
-            onInvitesClicked = onInvitesClicked,
             onRoomSettingsClicked = onRoomSettingsClicked,
             onMenuActionClicked = onMenuActionClicked,
             onRoomDirectorySearchClicked = onRoomDirectorySearchClicked,
+            acceptDeclineInviteView = { },
         )
     }
 }

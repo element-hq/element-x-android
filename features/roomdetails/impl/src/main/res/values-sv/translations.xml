@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_dm_details_block_alert_action">"Blockera"</string>
-  <string name="screen_dm_details_block_alert_description">"Blockerade användare kommer inte att kunna skicka meddelanden till dig och alla deras meddelanden kommer att döljas. Du kan avblockera dem när som helst."</string>
-  <string name="screen_dm_details_block_user">"Blockera användare"</string>
-  <string name="screen_dm_details_unblock_alert_action">"Avblockera"</string>
-  <string name="screen_dm_details_unblock_alert_description">"Du kommer att kunna se alla meddelanden från dem igen."</string>
-  <string name="screen_dm_details_unblock_user">"Avblockera användare"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Ett fel uppstod vid uppdatering av aviseringsinställningen."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Din hemserver stöder inte det här alternativet i krypterade rum, du kanske inte aviseras i vissa rum."</string>
+  <string name="screen_polls_history_title">"Omröstningar"</string>
   <string name="screen_room_change_permissions_everyone">"Alla"</string>
   <string name="screen_room_details_add_topic_title">"Lägg till ämne"</string>
   <string name="screen_room_details_already_a_member">"Redan medlem"</string>
@@ -20,6 +16,7 @@
   <string name="screen_room_details_error_muting">"Misslyckades att tysta det här rummet, vänligen pröva igen."</string>
   <string name="screen_room_details_error_unmuting">"Misslyckades att avtysta det här rummet, vänligen pröva igen."</string>
   <string name="screen_room_details_invite_people_title">"Bjud in personer"</string>
+  <string name="screen_room_details_leave_conversation_title">"Lämna konversation"</string>
   <string name="screen_room_details_leave_room_title">"Lämna rum"</string>
   <string name="screen_room_details_notification_mode_custom">"Anpassad"</string>
   <string name="screen_room_details_notification_mode_default">"Förval"</string>
@@ -45,8 +42,8 @@
   <string name="screen_room_notification_settings_error_loading_settings">"Ett fel uppstod vid laddning av aviseringsinställningarna."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Misslyckades att återställa standardläget, vänligen försök igen."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Misslyckades att ställa in läget, vänligen pröva igen."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Din hemserver stöder inte det här alternativet i krypterade rum, du blir inte aviserad i det här rummet."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Alla meddelanden"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Endast omnämnanden och nyckelord"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"I det här rummet, meddela mig för"</string>
-  <string name="screen_start_chat_error_starting_chat">"Ett fel uppstod när du försökte starta en chatt"</string>
 </resources>

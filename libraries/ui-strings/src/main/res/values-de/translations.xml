@@ -68,7 +68,7 @@
   <string name="action_learn_more">"Mehr erfahren"</string>
   <string name="action_leave">"Verlassen"</string>
   <string name="action_leave_conversation">"Unterhaltung verlassen"</string>
-  <string name="action_leave_room">"Raum verlassen"</string>
+  <string name="action_leave_room">"Verlassen"</string>
   <string name="action_load_more">"Mehr laden …"</string>
   <string name="action_manage_account">"Konto verwalten"</string>
   <string name="action_manage_devices">"Geräte verwalten"</string>
@@ -120,7 +120,7 @@
   <string name="common_chat_backup">"Chat-Backup"</string>
   <string name="common_copyright">"Copyright"</string>
   <string name="common_creating_room">"Raum wird erstellt…"</string>
-  <string name="common_current_user_left_room">"Raum verlassen"</string>
+  <string name="common_current_user_left_room">"Hat den Raum verlassen"</string>
   <string name="common_dark">"Dunkel"</string>
   <string name="common_decryption_error">"Dekodierungsfehler"</string>
   <string name="common_developer_options">"Entwickleroptionen"</string>
@@ -158,12 +158,14 @@
   <string name="common_modern">"Modern"</string>
   <string name="common_mute">"Stummschalten"</string>
   <string name="common_no_results">"Keine Ergebnisse"</string>
+  <string name="common_no_room_name">"Kein Raumname"</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_or">"oder"</string>
   <string name="common_password">"Passwort"</string>
   <string name="common_people">"Personen"</string>
   <string name="common_permalink">"Permalink"</string>
   <string name="common_permission">"Erlaubnis"</string>
+  <string name="common_please_wait">"Bitte warten …"</string>
   <string name="common_poll_end_confirmation">"Bist du sicher, dass du diese Umfrage beenden möchtest?"</string>
   <string name="common_poll_summary">"Umfrage: %1$s"</string>
   <string name="common_poll_total_votes">"Stimmen insgesamt: %1$s"</string>
@@ -175,9 +177,7 @@
   <string name="common_privacy_policy">"Datenschutz­erklärung"</string>
   <string name="common_reaction">"Reaktion"</string>
   <string name="common_reactions">"Reaktionen"</string>
-  <string name="common_recovery_key">
-    <b>"Wiederherstellungsschlüssel"</b>
-  </string>
+  <string name="common_recovery_key">"Wiederherstellungsschlüssel"</string>
   <string name="common_refreshing">"Wird erneuert…"</string>
   <string name="common_replying_to">"%1$s antworten"</string>
   <string name="common_report_a_bug">"Einen Fehler melden"</string>
@@ -215,6 +215,7 @@
   <string name="common_topic">"Thema"</string>
   <string name="common_topic_placeholder">"Worum geht es in diesem Raum?"</string>
   <string name="common_unable_to_decrypt">"Entschlüsselung nicht möglich"</string>
+  <string name="common_unable_to_decrypt_no_access">"Du hast kein Recht diese Nachricht zu lesen."</string>
   <string name="common_unable_to_invite_message">"Einladungen konnten nicht an einen oder mehrere Benutzer gesendet werden."</string>
   <string name="common_unable_to_invite_title">"Einladung(en) konnte(n) nicht gesendet werden"</string>
   <string name="common_unlock">"Entsperren"</string>
@@ -239,6 +240,7 @@
   <string name="error_failed_loading_messages">"Fehler beim Laden der Nachrichten"</string>
   <string name="error_failed_locating_user">"%1$s konnte nicht auf deinen Standort zugreifen. Bitte versuche es später erneut."</string>
   <string name="error_failed_uploading_voice_message">"Fehler beim Hochladen der Sprachnachricht."</string>
+  <string name="error_message_not_found">"Nachricht nicht gefunden"</string>
   <string name="error_missing_location_auth_android">"%1$s hat keine Erlaubnis, auf deinen Standort zuzugreifen. Du kannst den Zugriff in den Einstellungen aktivieren."</string>
   <string name="error_missing_location_rationale_android">"%1$s hat keine Erlaubnis, auf deinen Standort zuzugreifen. Aktiviere unten den Zugriff."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s hat nicht die Erlaubnis auf dein Mikrofon zuzugreifen. Aktiviere den Zugriff, um eine Sprachnachricht aufzunehmen."</string>

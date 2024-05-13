@@ -6,10 +6,15 @@
 android_gradle_plugin = "8.3.2"
 kotlin = "1.9.23"
 ksp = "1.9.23-1.0.20"
-firebaseAppDistribution = "4.2.0"
+firebaseAppDistribution = "5.0.0"
 
 # AndroidX
-core = "1.12.0"
+core = "1.13.0"
+# Warning: there is an issue with 1.1.0, that I cannot repro on unit test.
+# To repro with the application:
+# Clear the cache of the application and run the app. Nearly each time, there is an infinite loading
+# Due to the DefaultMigrationStore not bahaving as expected.
+# Stick to 1.0.0 for now, and ensure that this scenario cannot be reproduced when upgrading the version.
 datastore = "1.0.0"
 constraintlayout = "2.1.4"
 constraintlayout_compose = "1.0.1"
@@ -18,8 +23,8 @@ activity = "1.8.2"
 media3 = "1.3.1"
 
 # Compose
-compose_bom = "2024.04.00"
-composecompiler = "1.5.11"
+compose_bom = "2024.05.00"
+composecompiler = "1.5.13"
 
 # Coroutines
 coroutines = "1.8.0"
@@ -38,8 +43,8 @@ serialization_json = "1.6.3"
 showkase = "1.0.2"
 appyx = "1.4.0"
 sqldelight = "2.0.2"
-wysiwyg = "2.37.0"
-telephoto = "0.10.0"
+wysiwyg = "2.37.2"
+telephoto = "0.11.2"
 
 # DI
 dagger = "2.51.1"
@@ -63,7 +68,7 @@ kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 gms_google_services = "com.google.gms:google-services:4.4.1"
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:32.8.1"
+google_firebase_bom = "com.google.firebase:firebase-bom:33.0.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 
@@ -91,7 +96,7 @@ androidx_activity_activity = { module = "androidx.activity:activity", version.re
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx_startup = "androidx.startup:startup-runtime:1.1.1"
 androidx_preference = "androidx.preference:preference:1.2.1"
-androidx_webkit = "androidx.webkit:webkit:1.10.0"
+androidx_webkit = "androidx.webkit:webkit:1.11.0"
 
 androidx_compose_bom = { module = "androidx.compose:compose-bom", version.ref = "compose_bom" }
 androidx_compose_material3 = "androidx.compose.material3:material3:1.2.1"
@@ -135,7 +140,7 @@ test_mockk = "io.mockk:mockk:1.13.10"
 test_konsist = "com.lemonappdev:konsist:0.13.0"
 test_turbine = "app.cash.turbine:turbine:1.1.0"
 test_truth = "com.google.truth:truth:1.4.2"
-test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.15"
+test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.16"
 test_robolectric = "org.robolectric:robolectric:4.12.1"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
 
@@ -154,7 +159,7 @@ jsoup = "org.jsoup:jsoup:1.17.2"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:1.4.2"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.14"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.18"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
@@ -168,18 +173,17 @@ vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.1"
-maplibre = "org.maplibre.gl:android-sdk:10.3.0"
+maplibre = "org.maplibre.gl:android-sdk:10.3.1"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:2.0.2"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:2.0.2"
 opusencoder = "io.element.android:opusencoder:1.1.0"
 kotlinpoet = "com.squareup:kotlinpoet:1.16.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.1.17"
+posthog = "com.posthog:posthog-android:3.2.1"
 sentry = "io.sentry:sentry-android:7.8.0"
-# Note: only 0.19.0 will compile properly
 # main branch can be tested replacing the version with main-SNAPSHOT
-matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.15.0"
+matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.21.0"
 
 # Emojibase
 matrix_emojibase_bindings = "io.element.android:emojibase-bindings:1.1.3"
@@ -217,7 +221,7 @@ kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
 detekt = "io.gitlab.arturbosch.detekt:1.23.6"
-ktlint = "org.jlleitschuh.gradle.ktlint:12.1.0"
+ktlint = "org.jlleitschuh.gradle.ktlint:12.1.1"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
 dependencycheck = "org.owasp.dependencycheck:9.1.0"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }

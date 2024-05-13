@@ -141,7 +141,7 @@ private fun RoomMemberSuggestionItemView(
 
 @PreviewsDayNight
 @Composable
-internal fun MentionSuggestionsPickerView_Preview() {
+internal fun MentionSuggestionsPickerViewPreview() {
     ElementPreview {
         val roomMember = RoomMember(
             userId = UserId("@alice:server.org"),

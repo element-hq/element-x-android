@@ -358,7 +358,7 @@ private fun PinUnlockFooter(
 
 @Composable
 @PreviewsDayNight
-internal fun PinUnlockInAppViewPreview(@PreviewParameter(PinUnlockStateProvider::class) state: PinUnlockState) {
+internal fun PinUnlockViewInAppPreview(@PreviewParameter(PinUnlockStateProvider::class) state: PinUnlockState) {
     ElementPreview {
         PinUnlockView(
             state = state,
@@ -369,7 +369,7 @@ internal fun PinUnlockInAppViewPreview(@PreviewParameter(PinUnlockStateProvider:
 
 @Composable
 @PreviewsDayNight
-internal fun PinUnlockDefaultViewPreview(@PreviewParameter(PinUnlockStateProvider::class) state: PinUnlockState) {
+internal fun PinUnlockViewPreview(@PreviewParameter(PinUnlockStateProvider::class) state: PinUnlockState) {
     ElementPreview {
         PinUnlockView(
             state = state,

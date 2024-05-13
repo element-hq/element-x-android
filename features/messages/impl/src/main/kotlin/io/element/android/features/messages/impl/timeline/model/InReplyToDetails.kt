@@ -16,33 +16,45 @@
 
 package io.element.android.features.messages.impl.timeline.model
 
+import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.ui.messages.toPlainText
 
-data class InReplyToDetails(
-    val eventId: EventId,
-    val senderId: UserId,
-    val senderDisplayName: String?,
-    val senderAvatarUrl: String?,
-    val eventContent: EventContent?,
-    val textContent: String?,
-)
+@Immutable
+sealed interface InReplyToDetails {
+    data class Ready(
+        val eventId: EventId,
+        val senderId: UserId,
+        val senderProfile: ProfileTimelineDetails,
+        val eventContent: EventContent?,
+        val textContent: String?,
+    ) : InReplyToDetails
+
+    data class Loading(val eventId: EventId) : InReplyToDetails
+    data class Error(val eventId: EventId, val message: String) : InReplyToDetails
+}
+
+fun InReplyToDetails.eventId() = when (this) {
+    is InReplyToDetails.Ready -> eventId
+    is InReplyToDetails.Loading -> eventId
+    is InReplyToDetails.Error -> eventId
+}
 
 fun InReplyTo.map(
     permalinkParser: PermalinkParser,
 ) = when (this) {
-    is InReplyTo.Ready -> InReplyToDetails(
+    is InReplyTo.Ready -> InReplyToDetails.Ready(
         eventId = eventId,
         senderId = senderId,
-        senderDisplayName = senderDisplayName,
-        senderAvatarUrl = senderAvatarUrl,
+        senderProfile = senderProfile,
         eventContent = content,
         textContent = when (content) {
             is MessageContent -> {
@@ -56,5 +68,7 @@ fun InReplyTo.map(
             else -> null
         }
     )
-    else -> null
+    is InReplyTo.Error -> InReplyToDetails.Error(eventId, message)
+    is InReplyTo.NotLoaded -> InReplyToDetails.Loading(eventId)
+    is InReplyTo.Pending -> InReplyToDetails.Loading(eventId)
 }

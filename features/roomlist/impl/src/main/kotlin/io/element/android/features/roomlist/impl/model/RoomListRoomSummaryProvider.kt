@@ -19,15 +19,19 @@ package io.element.android.features.roomlist.impl.model
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.ui.model.InviteSender
 
 open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSummary> {
     override val values: Sequence<RoomListRoomSummary>
         get() = sequenceOf(
             listOf(
-                aRoomListRoomSummary(isPlaceholder = true),
+                aRoomListRoomSummary(displayType = RoomSummaryDisplayType.PLACEHOLDER),
                 aRoomListRoomSummary(),
+                aRoomListRoomSummary(name = null),
                 aRoomListRoomSummary(lastMessage = null),
                 aRoomListRoomSummary(
                     name = "A very long room name that should be truncated",
@@ -80,24 +84,64 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                     )
                 }.flatten()
             }.flatten(),
+            listOf(
+                aRoomListRoomSummary(
+                    displayType = RoomSummaryDisplayType.INVITE,
+                    inviteSender = anInviteSender(
+                        userId = UserId("@alice:matrix.org"),
+                        displayName = "Alice",
+                    ),
+                    canonicalAlias = RoomAlias("#alias:matrix.org"),
+                ),
+                aRoomListRoomSummary(
+                    name = "Bob",
+                    displayType = RoomSummaryDisplayType.INVITE,
+                    inviteSender = anInviteSender(
+                        userId = UserId("@bob:matrix.org"),
+                        displayName = "Bob",
+                    ),
+                    isDirect = true,
+                ),
+                aRoomListRoomSummary(
+                    name = null,
+                    displayType = RoomSummaryDisplayType.INVITE,
+                    inviteSender = anInviteSender(
+                        userId = UserId("@bob:matrix.org"),
+                        displayName = "Bob",
+                    ),
+                ),
+            ),
         ).flatten()
 }
 
+internal fun anInviteSender(
+    userId: UserId = UserId("@bob:domain"),
+    displayName: String = "Bob",
+    avatarData: AvatarData = AvatarData(userId.value, displayName, size = AvatarSize.InviteSender),
+) = InviteSender(
+    userId = userId,
+    displayName = displayName,
+    avatarData = avatarData,
+)
+
 internal fun aRoomListRoomSummary(
     id: String = "!roomId:domain",
-    name: String = "Room name",
+    name: String? = "Room name",
     numberOfUnreadMessages: Int = 0,
     numberOfUnreadMentions: Int = 0,
     numberOfUnreadNotifications: Int = 0,
     isMarkedUnread: Boolean = false,
     lastMessage: String? = "Last message",
     timestamp: String? = lastMessage?.let { "88:88" },
-    isPlaceholder: Boolean = false,
     notificationMode: RoomNotificationMode? = null,
     hasRoomCall: Boolean = false,
     avatarData: AvatarData = AvatarData(id, name, size = AvatarSize.RoomListItem),
+    isDirect: Boolean = false,
     isDm: Boolean = false,
     isFavorite: Boolean = false,
+    inviteSender: InviteSender? = null,
+    displayType: RoomSummaryDisplayType = RoomSummaryDisplayType.ROOM,
+    canonicalAlias: RoomAlias? = null,
 ) = RoomListRoomSummary(
     id = id,
     roomId = RoomId(id),
@@ -109,9 +153,12 @@ internal fun aRoomListRoomSummary(
     timestamp = timestamp,
     lastMessage = lastMessage,
     avatarData = avatarData,
-    isPlaceholder = isPlaceholder,
     userDefinedNotificationMode = notificationMode,
     hasRoomCall = hasRoomCall,
+    isDirect = isDirect,
     isDm = isDm,
     isFavorite = isFavorite,
+    inviteSender = inviteSender,
+    displayType = displayType,
+    canonicalAlias = canonicalAlias,
 )

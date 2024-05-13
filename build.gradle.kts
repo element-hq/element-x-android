@@ -118,6 +118,9 @@ dependencyAnalysis {
             onUnusedDependencies {
                 exclude("com.jakewharton.timber:timber")
             }
+            onUnusedAnnotationProcessors {}
+            onRedundantPlugins {}
+            onIncorrectConfiguration {}
         }
     }
 }

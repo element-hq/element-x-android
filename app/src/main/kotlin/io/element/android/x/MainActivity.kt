@@ -86,6 +86,7 @@ class MainActivity : NodeActivity() {
             appBindings.preferencesStore().getThemeFlow().mapToTheme()
         }
             .collectAsState(initial = Theme.System)
+        val migrationState = appBindings.migrationEntryPoint().present()
         ElementTheme(
             darkTheme = theme.isDark()
         ) {
@@ -98,19 +99,12 @@ class MainActivity : NodeActivity() {
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background),
                 ) {
-                    NodeHost(integrationPoint = appyxIntegrationPoint) {
-                        MainNode(
-                            it,
-                            plugins = listOf(
-                                object : NodeReadyObserver<MainNode> {
-                                    override fun init(node: MainNode) {
-                                        Timber.tag(loggerTag.value).w("onMainNodeInit")
-                                        mainNode = node
-                                        mainNode.handleIntent(intent)
-                                    }
-                                }
-                            ),
-                            context = applicationContext
+                    if (migrationState.migrationAction.isSuccess()) {
+                        MainNodeHost()
+                    } else {
+                        appBindings.migrationEntryPoint().Render(
+                            state = migrationState,
+                            modifier = Modifier,
                         )
                     }
                 }
@@ -118,10 +112,30 @@ class MainActivity : NodeActivity() {
         }
     }
 
+    @Composable
+    private fun MainNodeHost() {
+        NodeHost(integrationPoint = appyxIntegrationPoint) {
+            MainNode(
+                it,
+                plugins = listOf(
+                    object : NodeReadyObserver<MainNode> {
+                        override fun init(node: MainNode) {
+                            Timber.tag(loggerTag.value).w("onMainNodeInit")
+                            mainNode = node
+                            mainNode.handleIntent(intent)
+                        }
+                    }
+                ),
+                context = applicationContext
+            )
+        }
+    }
+
     /**
      * Called when:
      * - the launcher icon is clicked (if the app is already running);
      * - a notification is clicked.
+     * - a deep link have been clicked
      * - the app is going to background (<- this is strange)
      */
     override fun onNewIntent(intent: Intent) {

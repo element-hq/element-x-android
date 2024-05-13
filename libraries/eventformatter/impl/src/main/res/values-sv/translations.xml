@@ -26,7 +26,7 @@
   <string name="state_event_room_join_by_you">"Du gick med i rummet"</string>
   <string name="state_event_room_knock">"%1$s begärde att gå med"</string>
   <string name="state_event_room_knock_accepted">"%1$s tillät %2$s att gå med"</string>
-  <string name="state_event_room_knock_accepted_by_you">"%1$s tillät dig att gå med"</string>
+  <string name="state_event_room_knock_accepted_by_you">"Du lät %1$s att gå med"</string>
   <string name="state_event_room_knock_by_you">"Du begärde att gå med"</string>
   <string name="state_event_room_knock_denied">"%1$s avvisade begäran från %2$s om att gå med"</string>
   <string name="state_event_room_knock_denied_by_you">"Du avvisade begäran från %1$s om att gå med"</string>
@@ -39,6 +39,8 @@
   <string name="state_event_room_name_changed_by_you">"Du bytte rummets namn till: %1$s"</string>
   <string name="state_event_room_name_removed">"%1$s tog bort rummets namn"</string>
   <string name="state_event_room_name_removed_by_you">"Du tog bort rummets namn"</string>
+  <string name="state_event_room_none">"%1$s gjorde inga ändringar"</string>
+  <string name="state_event_room_none_by_you">"Du gjorde inga ändringar"</string>
   <string name="state_event_room_reject">"%1$s avvisade inbjudan"</string>
   <string name="state_event_room_reject_by_you">"Du avvisade inbjudan"</string>
   <string name="state_event_room_remove">"%1$s tog bort %2$s"</string>

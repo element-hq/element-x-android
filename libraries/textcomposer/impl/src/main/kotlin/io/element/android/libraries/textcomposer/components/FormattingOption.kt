@@ -89,7 +89,7 @@ internal fun FormattingOption(
 
 @PreviewsDayNight
 @Composable
-internal fun FormattingButtonPreview() = ElementPreview {
+internal fun FormattingOptionPreview() = ElementPreview {
     Row {
         FormattingOption(
             state = FormattingOptionState.Default,

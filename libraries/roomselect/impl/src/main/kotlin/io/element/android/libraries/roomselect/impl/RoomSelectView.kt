@@ -36,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -235,7 +236,8 @@ private fun RoomSummaryView(
             // Name
             Text(
                 style = ElementTheme.typography.fontBodyLgRegular,
-                text = summary.name,
+                text = summary.name ?: stringResource(id = CommonStrings.common_no_room_name),
+                fontStyle = FontStyle.Italic.takeIf { summary.name == null },
                 color = ElementTheme.colors.textPrimary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -243,7 +245,7 @@ private fun RoomSummaryView(
             // Alias
             summary.canonicalAlias?.let { alias ->
                 Text(
-                    text = alias,
+                    text = alias.value,
                     color = ElementTheme.colors.textSecondary,
                     style = ElementTheme.typography.fontBodySmRegular,
                     maxLines = 1,

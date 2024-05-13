@@ -19,8 +19,6 @@ package io.element.android.features.roomdirectory.impl.root
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onAllNodesWithTag
-import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -72,19 +70,6 @@ class RoomDirectoryViewTest {
             )
             rule.onNodeWithText(clickedRoom.computedName).performClick()
         }
-    }
-
-    @Test
-    fun `clicking on room item join cta emits the expected Event`() {
-        val eventsRecorder = EventsRecorder<RoomDirectoryEvents>()
-        val state = aRoomDirectoryState(
-            roomDescriptions = aRoomDescriptionList(),
-            eventSink = eventsRecorder,
-        )
-        rule.setRoomDirectoryView(state = state)
-        val clickedRoom = state.roomDescriptions.first()
-        rule.onAllNodesWithTag(TestTags.callToAction.value).onFirst().performClick()
-        eventsRecorder.assertSingle(RoomDirectoryEvents.JoinRoom(clickedRoom.roomId))
     }
 
     @Test

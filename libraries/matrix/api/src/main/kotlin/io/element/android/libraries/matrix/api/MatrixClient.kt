@@ -17,7 +17,9 @@
 package io.element.android.libraries.matrix.api
 
 import io.element.android.libraries.matrix.api.core.ProgressCallback
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
@@ -30,6 +32,7 @@ import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.room.preview.RoomPreview
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.sync.SyncService
@@ -62,7 +65,8 @@ interface MatrixClient : Closeable {
     suspend fun setDisplayName(displayName: String): Result<Unit>
     suspend fun uploadAvatar(mimeType: String, data: ByteArray): Result<Unit>
     suspend fun removeAvatar(): Result<Unit>
-    suspend fun joinRoom(roomId: RoomId): Result<RoomId>
+    suspend fun joinRoom(roomId: RoomId): Result<Unit>
+    suspend fun knockRoom(roomId: RoomId): Result<Unit>
     fun syncService(): SyncService
     fun sessionVerificationService(): SessionVerificationService
     fun pushersService(): PushersService
@@ -98,4 +102,6 @@ interface MatrixClient : Closeable {
 
     suspend fun trackRecentlyVisitedRoom(roomId: RoomId): Result<Unit>
     suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>>
+    suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<RoomId>
+    suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias): Result<RoomPreview>
 }

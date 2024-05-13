@@ -85,7 +85,7 @@ fun aNotifiableMessageEvent(
     editedEventId = null,
     noisy = false,
     timestamp = timestamp,
-    senderName = "sender-name",
+    senderDisambiguatedDisplayName = "sender-name",
     senderId = UserId("@sending-id:domain.com"),
     body = "message-body",
     roomId = roomId,

@@ -23,6 +23,7 @@ import extension.allServicesImpl
 import extension.gitBranchName
 import extension.gitRevision
 import extension.koverDependencies
+import extension.locales
 import extension.setupKover
 
 plugins {
@@ -73,6 +74,10 @@ android {
                 // Generate a universal APK that includes all ABIs, so user who installs from CI tool can use this one by default.
                 isUniversalApk = true
             }
+        }
+
+        defaultConfig {
+            resourceConfigurations += locales
         }
     }
 
@@ -219,6 +224,7 @@ dependencies {
     allServicesImpl()
     allFeaturesImpl(rootDir, logger)
     implementation(projects.features.call)
+    implementation(projects.features.migration.api)
     implementation(projects.anvilannotations)
     implementation(projects.appnav)
     implementation(projects.appconfig)

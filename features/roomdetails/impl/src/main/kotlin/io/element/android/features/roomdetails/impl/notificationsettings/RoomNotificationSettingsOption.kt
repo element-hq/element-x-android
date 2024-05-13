@@ -57,7 +57,7 @@ fun RoomNotificationSettingsOption(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomPrivacyOptionPreview() = ElementPreview {
+internal fun RoomNotificationSettingsOptionPreview() = ElementPreview {
     Column {
         for ((index, item) in roomNotificationSettingsItems().withIndex()) {
             RoomNotificationSettingsOption(

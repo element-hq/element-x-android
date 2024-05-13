@@ -241,7 +241,7 @@ private fun CreatorView(
 
 @PreviewsDayNight
 @Composable
-internal fun PollContentUndisclosedPreview() = ElementPreview {
+internal fun PollContentViewUndisclosedPreview() = ElementPreview {
     PollContentView(
         eventId = EventId("\$anEventId"),
         question = "What type of food should we have at the party?",
@@ -258,7 +258,7 @@ internal fun PollContentUndisclosedPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
-internal fun PollContentDisclosedPreview() = ElementPreview {
+internal fun PollContentViewDisclosedPreview() = ElementPreview {
     PollContentView(
         eventId = EventId("\$anEventId"),
         question = "What type of food should we have at the party?",
@@ -275,7 +275,7 @@ internal fun PollContentDisclosedPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
-internal fun PollContentEndedPreview() = ElementPreview {
+internal fun PollContentViewEndedPreview() = ElementPreview {
     PollContentView(
         eventId = EventId("\$anEventId"),
         question = "What type of food should we have at the party?",
@@ -292,7 +292,7 @@ internal fun PollContentEndedPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
-internal fun PollContentCreatorEditablePreview() = ElementPreview {
+internal fun PollContentViewCreatorEditablePreview() = ElementPreview {
     PollContentView(
         eventId = EventId("\$anEventId"),
         question = "What type of food should we have at the party?",
@@ -309,7 +309,7 @@ internal fun PollContentCreatorEditablePreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
-internal fun PollContentCreatorPreview() = ElementPreview {
+internal fun PollContentViewCreatorPreview() = ElementPreview {
     PollContentView(
         eventId = EventId("\$anEventId"),
         question = "What type of food should we have at the party?",
@@ -326,7 +326,7 @@ internal fun PollContentCreatorPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
-internal fun PollContentCreatorEndedPreview() = ElementPreview {
+internal fun PollContentViewCreatorEndedPreview() = ElementPreview {
     PollContentView(
         eventId = EventId("\$anEventId"),
         question = "What type of food should we have at the party?",

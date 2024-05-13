@@ -138,7 +138,6 @@ class RustMatrixAuthenticationService @Inject constructor(
                         isTokenValid = true,
                         loginType = LoginType.PASSWORD,
                         passphrase = pendingPassphrase,
-                        needsVerification = true,
                     )
                 }
                 sessionStore.storeData(sessionData)
@@ -187,7 +186,6 @@ class RustMatrixAuthenticationService @Inject constructor(
                         isTokenValid = true,
                         loginType = LoginType.OIDC,
                         passphrase = pendingPassphrase,
-                        needsVerification = true,
                     )
                 }
                 pendingOidcAuthenticationData?.close()

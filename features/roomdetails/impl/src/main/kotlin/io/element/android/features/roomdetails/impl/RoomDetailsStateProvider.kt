@@ -19,8 +19,10 @@ package io.element.android.features.roomdetails.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
-import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState
-import io.element.android.features.roomdetails.impl.members.details.aRoomMemberDetailsState
+import io.element.android.features.userprofile.shared.UserProfileState
+import io.element.android.features.userprofile.shared.aUserProfileState
+import io.element.android.libraries.matrix.api.core.RoomAlias
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
@@ -44,6 +46,8 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
                 // Also test the roomNotificationSettings ALL_MESSAGES in the same screenshot. Icon 'Mute' should be displayed
                 roomNotificationSettings = aRoomNotificationSettings(mode = RoomNotificationMode.ALL_MESSAGES, isDefault = true)
             ),
+            aRoomDetailsState(canCall = false, canInvite = false),
+            aRoomDetailsState(isPublic = false),
             // Add other state here
         )
 }
@@ -71,9 +75,9 @@ fun aDmRoomMember(
 )
 
 fun aRoomDetailsState(
-    roomId: String = "a room id",
+    roomId: RoomId = RoomId("!aRoomId:domain.com"),
     roomName: String = "Marketing",
-    roomAlias: String? = "#marketing:domain.com",
+    roomAlias: RoomAlias? = RoomAlias("#marketing:domain.com"),
     roomAvatarUrl: String? = null,
     roomTopic: RoomTopicState = RoomTopicState.ExistingTopic(
         "Welcome to #marketing, home of the Marketing team " +
@@ -87,12 +91,14 @@ fun aRoomDetailsState(
     canInvite: Boolean = false,
     canEdit: Boolean = false,
     canShowNotificationSettings: Boolean = true,
+    canCall: Boolean = true,
     roomType: RoomDetailsType = RoomDetailsType.Room,
-    roomMemberDetailsState: RoomMemberDetailsState? = null,
+    roomMemberDetailsState: UserProfileState? = null,
     leaveRoomState: LeaveRoomState = aLeaveRoomState(),
     roomNotificationSettings: RoomNotificationSettings = aRoomNotificationSettings(),
     isFavorite: Boolean = false,
     displayAdminSettings: Boolean = false,
+    isPublic: Boolean = true,
     eventSink: (RoomDetailsEvent) -> Unit = {},
 ) = RoomDetailsState(
     roomId = roomId,
@@ -105,12 +111,14 @@ fun aRoomDetailsState(
     canInvite = canInvite,
     canEdit = canEdit,
     canShowNotificationSettings = canShowNotificationSettings,
+    canCall = canCall,
     roomType = roomType,
     roomMemberDetailsState = roomMemberDetailsState,
     leaveRoomState = leaveRoomState,
     roomNotificationSettings = roomNotificationSettings,
     isFavorite = isFavorite,
     displayRolesAndPermissionsSettings = displayAdminSettings,
+    isPublic = isPublic,
     eventSink = eventSink
 )
 
@@ -128,5 +136,5 @@ fun aDmRoomDetailsState(
 ) = aRoomDetailsState(
     roomName = roomName,
     roomType = RoomDetailsType.Dm(aDmRoomMember(isIgnored = isDmMemberIgnored)),
-    roomMemberDetailsState = aRoomMemberDetailsState()
+    roomMemberDetailsState = aUserProfileState()
 )

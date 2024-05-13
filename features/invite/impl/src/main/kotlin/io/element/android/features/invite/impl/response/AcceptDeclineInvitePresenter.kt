@@ -102,12 +102,14 @@ class AcceptDeclineInvitePresenter @Inject constructor(
 
     private fun CoroutineScope.acceptInvite(roomId: RoomId, acceptedAction: MutableState<AsyncAction<RoomId>>) = launch {
         acceptedAction.runUpdatingState {
-            client.joinRoom(roomId).onSuccess {
-                notificationDrawerManager.clearMembershipNotificationForRoom(client.sessionId, roomId, doRender = true)
-                client.getRoom(roomId)?.use { room ->
-                    analyticsService.capture(room.toAnalyticsJoinedRoom(JoinedRoom.Trigger.Invite))
+            client.joinRoom(roomId)
+                .onSuccess {
+                    notificationDrawerManager.clearMembershipNotificationForRoom(client.sessionId, roomId, doRender = true)
+                    client.getRoom(roomId)?.use { room ->
+                        analyticsService.capture(room.toAnalyticsJoinedRoom(JoinedRoom.Trigger.Invite))
+                    }
                 }
-            }
+                .map { roomId }
         }
     }
 

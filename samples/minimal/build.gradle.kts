@@ -65,4 +65,5 @@ dependencies {
     implementation(projects.libraries.featureflag.impl)
     implementation(projects.services.analytics.noop)
     implementation(libs.coroutines.core)
+    implementation(projects.libraries.push.test)
 }

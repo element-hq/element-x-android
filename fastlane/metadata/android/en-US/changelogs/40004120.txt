@@ -1,0 +1,10 @@
+Main changes in this version:
+
+- Added support for opening matrix URLs inside the app and navigating to replied to messages.
+- Added per-app language support for Android 13+.
+- Session verification is no longer mandatory for already logged in users.
+- Better log handling.
+- Fixed CVE-2024-34353 / GHSA-9ggc-845v-gcgv.
+- UX improvements.
+
+Full changelog: https://github.com/element-hq/element-x-android/releases

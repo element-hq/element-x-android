@@ -58,7 +58,6 @@ internal class RustRoomListService(
         ) {
             when (source) {
                 RoomList.Source.All -> innerRoomListService.allRooms()
-                RoomList.Source.Invites -> innerRoomListService.invites()
             }
         }
     }
@@ -68,13 +67,6 @@ internal class RustRoomListService(
         coroutineContext = sessionDispatcher,
     ) {
         innerRoomListService.allRooms()
-    }
-
-    override val invites: RoomList = roomListFactory.createRoomList(
-        pageSize = Int.MAX_VALUE,
-        coroutineContext = sessionDispatcher,
-    ) {
-        innerRoomListService.invites()
     }
 
     init {

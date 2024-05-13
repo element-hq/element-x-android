@@ -20,7 +20,7 @@
   <string name="screen_key_backup_disable_confirmation_description">"Ha kijelentkezik az összes eszközéről, akkor elveszti a titkosított üzeneteit."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Biztos, hogy kikapcsolja a biztonsági mentéseket?"</string>
   <string name="screen_key_backup_disable_description">"A biztonsági mentés kikapcsolása eltávolítja a jelenlegi titkosítási kulcsának mentését, és kikapcsol más biztonsági funkciókat is. Ebben az esetben:"</string>
-  <string name="screen_key_backup_disable_description_point_1">"Nem lesznek meg a titkosított üzenetelőzményei az új eszközein"</string>
+  <string name="screen_key_backup_disable_description_point_1">"Nem lesznek meg a titkosított üzenetek előzményei az új eszközein"</string>
   <string name="screen_key_backup_disable_description_point_2">"Elveszti a titkosított üzenetei hozzáférését, ha mindenhol kilép az %1$sből"</string>
   <string name="screen_key_backup_disable_title">"Biztos, hogy kikapcsolja a biztonsági mentéseket?"</string>
   <string name="screen_recovery_key_change_description">"Szerezzen új helyreállítási kulcsot, ha elvesztette a meglévőt. A helyreállítása kulcsa módosítása után a régi már nem fog működni."</string>
@@ -35,8 +35,9 @@
   <string name="screen_recovery_key_confirm_key_description">"Ha van biztonsági kulcsa vagy biztonsági jelmondata, akkor ez is fog működni."</string>
   <string name="screen_recovery_key_confirm_key_label">"Helyreállítási kulcs vagy jelkód"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Megadás…"</string>
+  <string name="screen_recovery_key_confirm_lost_recovery_key">"Elvesztette a helyreállítási kulcsát?"</string>
   <string name="screen_recovery_key_confirm_success">"Helyreállítási kulcs megerősítve"</string>
-  <string name="screen_recovery_key_confirm_title">"Adja meg a helyreállítási kulcsát vagy a jelkódját"</string>
+  <string name="screen_recovery_key_confirm_title">"Adja meg a helyreállítási kulcsát"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Helyreállítási kulcs másolva"</string>
   <string name="screen_recovery_key_generating_key">"Előállítás…"</string>
   <string name="screen_recovery_key_save_action">"Helyreállítási kulcs mentése"</string>

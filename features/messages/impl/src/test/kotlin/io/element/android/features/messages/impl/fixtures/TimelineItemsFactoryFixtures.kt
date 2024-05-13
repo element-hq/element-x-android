@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.fixtures
 
+import io.element.android.features.messages.impl.timeline.TimelineItemIndexer
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFailedToParseMessageFactory
@@ -46,7 +47,9 @@ import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractorW
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 
-internal fun TestScope.aTimelineItemsFactory(): TimelineItemsFactory {
+internal fun TestScope.aTimelineItemsFactory(
+    timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer()
+): TimelineItemsFactory {
     val timelineEventFormatter = aTimelineEventFormatter()
     val matrixClient = FakeMatrixClient()
     return TimelineItemsFactory(
@@ -83,6 +86,7 @@ internal fun TestScope.aTimelineItemsFactory(): TimelineItemsFactory {
             ),
         ),
         timelineItemGrouper = TimelineItemGrouper(),
+        timelineItemIndexer = timelineItemIndexer,
     )
 }
 

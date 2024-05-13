@@ -27,6 +27,7 @@ import io.element.android.features.lockscreen.test.FakeLockScreenService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.libraries.permissions.impl.FakePermissionStateProvider
+import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
@@ -90,7 +91,6 @@ class DefaultFtueServiceTests {
     fun `traverse flow`() = runTest {
         val sessionVerificationService = FakeSessionVerificationService().apply {
             givenVerifiedStatus(SessionVerifiedStatus.NotVerified)
-            givenNeedsVerification(true)
         }
         val analyticsService = FakeAnalyticsService()
         val permissionStateProvider = FakePermissionStateProvider(permissionGranted = false)
@@ -108,7 +108,7 @@ class DefaultFtueServiceTests {
 
         // Session verification
         steps.add(state.getNextStep(steps.lastOrNull()))
-        sessionVerificationService.givenNeedsVerification(false)
+        sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.NotVerified)
 
         // Notifications opt in
         steps.add(state.getNextStep(steps.lastOrNull()))
@@ -200,6 +200,7 @@ class DefaultFtueServiceTests {
         analyticsService: AnalyticsService = FakeAnalyticsService(),
         permissionStateProvider: FakePermissionStateProvider = FakePermissionStateProvider(permissionGranted = false),
         lockScreenService: LockScreenService = FakeLockScreenService(),
+        sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
         // First version where notification permission is required
         sdkIntVersion: Int = Build.VERSION_CODES.TIRAMISU,
     ) = DefaultFtueService(
@@ -209,5 +210,6 @@ class DefaultFtueServiceTests {
         analyticsService = analyticsService,
         permissionStateProvider = permissionStateProvider,
         lockScreenService = lockScreenService,
+        sessionPreferencesStore = sessionPreferencesStore,
     )
 }

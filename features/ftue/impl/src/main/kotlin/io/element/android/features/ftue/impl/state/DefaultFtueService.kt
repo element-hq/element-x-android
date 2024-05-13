@@ -23,18 +23,26 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.lockscreen.api.LockScreenService
+import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.permissions.api.PermissionStateProvider
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.timeout
 import kotlinx.coroutines.runBlocking
+import timber.log.Timber
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 @ContributesBinding(SessionScope::class)
 class DefaultFtueService @Inject constructor(
@@ -44,6 +52,7 @@ class DefaultFtueService @Inject constructor(
     private val permissionStateProvider: PermissionStateProvider,
     private val lockScreenService: LockScreenService,
     private val sessionVerificationService: SessionVerificationService,
+    private val sessionPreferencesStore: SessionPreferencesStore,
 ) : FtueService {
     override val state = MutableStateFlow<FtueState>(FtueState.Unknown)
 
@@ -55,7 +64,7 @@ class DefaultFtueService @Inject constructor(
     }
 
     init {
-        sessionVerificationService.needsVerificationFlow
+        sessionVerificationService.sessionVerifiedStatus
             .onEach { updateState() }
             .launchIn(coroutineScope)
 
@@ -64,7 +73,7 @@ class DefaultFtueService @Inject constructor(
             .launchIn(coroutineScope)
     }
 
-    fun getNextStep(currentStep: FtueStep? = null): FtueStep? =
+    suspend fun getNextStep(currentStep: FtueStep? = null): FtueStep? =
         when (currentStep) {
             null -> if (isSessionNotVerified()) {
                 FtueStep.SessionVerification
@@ -89,8 +98,8 @@ class DefaultFtueService @Inject constructor(
             FtueStep.AnalyticsOptIn -> null
         }
 
-    private fun isAnyStepIncomplete(): Boolean {
-        return listOf(
+    private suspend fun isAnyStepIncomplete(): Boolean {
+        return listOf<suspend () -> Boolean>(
             { isSessionNotVerified() },
             { shouldAskNotificationPermissions() },
             { needsAnalyticsOptIn() },
@@ -98,16 +107,28 @@ class DefaultFtueService @Inject constructor(
         ).any { it() }
     }
 
-    private fun isSessionNotVerified(): Boolean {
-        return sessionVerificationService.needsVerificationFlow.value
+    @OptIn(FlowPreview::class)
+    private suspend fun isSessionNotVerified(): Boolean {
+        // Wait for the first known (or ready) verification status
+        val readyVerifiedSessionStatus = sessionVerificationService.sessionVerifiedStatus
+            .filter { it != SessionVerifiedStatus.Unknown }
+            // This is not ideal, but there are some very rare cases when reading the flow seems to get stuck
+            .timeout(5.seconds)
+            .catch {
+                Timber.e(it, "Failed to get session verification status, assume it's not verified")
+                emit(SessionVerifiedStatus.NotVerified)
+            }
+            .first()
+        val skipVerification = suspend { sessionPreferencesStore.isSessionVerificationSkipped().first() }
+        return readyVerifiedSessionStatus == SessionVerifiedStatus.NotVerified && !skipVerification()
     }
 
-    private fun needsAnalyticsOptIn(): Boolean {
+    private suspend fun needsAnalyticsOptIn(): Boolean {
         // We need this function to not be suspend, so we need to load the value through runBlocking
-        return runBlocking { analyticsService.didAskUserConsent().first().not() }
+        return analyticsService.didAskUserConsent().first().not()
     }
 
-    private fun shouldAskNotificationPermissions(): Boolean {
+    private suspend fun shouldAskNotificationPermissions(): Boolean {
         return if (sdkVersionProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU)) {
             val permission = Manifest.permission.POST_NOTIFICATIONS
             val isPermissionDenied = runBlocking { permissionStateProvider.isPermissionDenied(permission).first() }
@@ -118,14 +139,12 @@ class DefaultFtueService @Inject constructor(
         }
     }
 
-    private fun shouldDisplayLockscreenSetup(): Boolean {
-        return runBlocking {
-            lockScreenService.isSetupRequired().first()
-        }
+    private suspend fun shouldDisplayLockscreenSetup(): Boolean {
+        return lockScreenService.isSetupRequired().first()
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    internal fun updateState() {
+    internal suspend fun updateState() {
         state.value = when {
             isAnyStepIncomplete() -> FtueState.Incomplete
             else -> FtueState.Complete

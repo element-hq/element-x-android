@@ -22,13 +22,20 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.UnableToDecryptInfo
+import uniffi.matrix_sdk_crypto.UtdCause
 
 class UtdTrackerTest {
     @Test
     fun `when onUtd is called with null timeToDecryptMs, the expected analytics Event is sent`() {
         val fakeAnalyticsService = FakeAnalyticsService()
         val sut = UtdTracker(fakeAnalyticsService)
-        sut.onUtd(UnableToDecryptInfo(eventId = AN_EVENT_ID.value, timeToDecryptMs = null))
+        sut.onUtd(
+            UnableToDecryptInfo(
+                eventId = AN_EVENT_ID.value,
+                timeToDecryptMs = null,
+                cause = UtdCause.UNKNOWN,
+            )
+        )
         assertThat(fakeAnalyticsService.capturedEvents).containsExactly(
             Error(
                 context = null,
@@ -47,7 +54,13 @@ class UtdTrackerTest {
     fun `when onUtd is called with timeToDecryptMs, the expected analytics Event is sent`() {
         val fakeAnalyticsService = FakeAnalyticsService()
         val sut = UtdTracker(fakeAnalyticsService)
-        sut.onUtd(UnableToDecryptInfo(eventId = AN_EVENT_ID.value, timeToDecryptMs = 123.toULong()))
+        sut.onUtd(
+            UnableToDecryptInfo(
+                eventId = AN_EVENT_ID.value,
+                timeToDecryptMs = 123.toULong(),
+                cause = UtdCause.UNKNOWN,
+            )
+        )
         assertThat(fakeAnalyticsService.capturedEvents).containsExactly(
             Error(
                 context = null,
@@ -56,6 +69,31 @@ class UtdTrackerTest {
                 timeToDecryptMillis = 123,
                 domain = Error.Domain.E2EE,
                 name = Error.Name.OlmKeysNotSentError
+            )
+        )
+        assertThat(fakeAnalyticsService.screenEvents).isEmpty()
+        assertThat(fakeAnalyticsService.trackedErrors).isEmpty()
+    }
+
+    @Test
+    fun `when onUtd is called with membership cause, the expected analytics Event is sent`() {
+        val fakeAnalyticsService = FakeAnalyticsService()
+        val sut = UtdTracker(fakeAnalyticsService)
+        sut.onUtd(
+            UnableToDecryptInfo(
+                eventId = AN_EVENT_ID.value,
+                timeToDecryptMs = 123.toULong(),
+                cause = UtdCause.MEMBERSHIP,
+            )
+        )
+        assertThat(fakeAnalyticsService.capturedEvents).containsExactly(
+            Error(
+                context = null,
+                cryptoModule = Error.CryptoModule.Rust,
+                cryptoSDK = Error.CryptoSDK.Rust,
+                timeToDecryptMillis = 123,
+                domain = Error.Domain.E2EE,
+                name = Error.Name.ExpectedDueToMembership
             )
         )
         assertThat(fakeAnalyticsService.screenEvents).isEmpty()

@@ -106,6 +106,8 @@ fun aMessagesState(
     voiceMessageComposerState: VoiceMessageComposerState = aVoiceMessageComposerState(),
     timelineState: TimelineState = aTimelineState(
         timelineItems = aTimelineItemList(aTimelineItemTextContent()),
+        // Render a focused event for an event with sender information displayed
+        focusedEventIndex = 2,
     ),
     retrySendMenuState: RetrySendMenuState = aRetrySendMenuState(),
     readReceiptBottomSheetState: ReadReceiptBottomSheetState = aReadReceiptBottomSheetState(),

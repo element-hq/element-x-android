@@ -25,16 +25,16 @@ import org.matrix.rustcomponents.sdk.RoomMember as RustRoomMember
 
 object RoomMemberMapper {
     fun map(roomMember: RustRoomMember): RoomMember = RoomMember(
-            UserId(roomMember.userId),
-            roomMember.displayName,
-            roomMember.avatarUrl,
-            mapMembership(roomMember.membership),
-            roomMember.isNameAmbiguous,
-            roomMember.powerLevel,
-            roomMember.normalizedPowerLevel,
-            roomMember.isIgnored,
-            mapRole(roomMember.suggestedRoleForPowerLevel),
-        )
+        userId = UserId(roomMember.userId),
+        displayName = roomMember.displayName,
+        avatarUrl = roomMember.avatarUrl,
+        membership = mapMembership(roomMember.membership),
+        isNameAmbiguous = roomMember.isNameAmbiguous,
+        powerLevel = roomMember.powerLevel,
+        normalizedPowerLevel = roomMember.normalizedPowerLevel,
+        isIgnored = roomMember.isIgnored,
+        role = mapRole(roomMember.suggestedRoleForPowerLevel),
+    )
 
     fun mapRole(role: RoomMemberRole): RoomMember.Role =
         when (role) {

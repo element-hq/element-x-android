@@ -31,6 +31,8 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagesummary.FakeMessageSummaryFormatter
 import io.element.android.features.messages.impl.textcomposer.TestRichTextEditorStateFactory
+import io.element.android.features.messages.impl.timeline.TimelineController
+import io.element.android.features.messages.impl.timeline.TimelineItemIndexer
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
 import io.element.android.features.messages.impl.timeline.components.customreaction.FakeEmojibaseProvider
@@ -61,8 +63,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
-import io.element.android.libraries.featureflag.test.InMemoryAppPreferencesStore
-import io.element.android.libraries.featureflag.test.InMemorySessionPreferencesStore
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -81,6 +82,7 @@ import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
+import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.libraries.mediaupload.api.MediaSender
@@ -89,12 +91,17 @@ import io.element.android.libraries.mediaviewer.test.FakeLocalMediaFactory
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
+import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.voicerecorder.test.FakeVoiceRecorder
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.consumeItemsUntilTimeout
+import io.element.android.tests.testutils.lambda.assert
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.mockk
 import kotlinx.collections.immutable.persistentListOf
@@ -167,7 +174,13 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle toggling a reaction`() = runTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
-        val room = FakeMatrixRoom()
+        val toggleReactionSuccess = lambdaRecorder { _: String, _: EventId -> Result.success(Unit) }
+        val toggleReactionFailure = lambdaRecorder { _: String, _: EventId -> Result.failure<Unit>(IllegalStateException("Failed to send reaction")) }
+
+        val timeline = FakeTimeline().apply {
+            this.toggleReactionLambda = toggleReactionSuccess
+        }
+        val room = FakeMatrixRoom(liveTimeline = timeline)
         val presenter = createMessagesPresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -175,29 +188,42 @@ class MessagesPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID))
-            assertThat(room.myReactions.count()).isEqualTo(1)
             // No crashes when sending a reaction failed
-            room.givenToggleReactionResult(Result.failure(IllegalStateException("Failed to send reaction")))
+            timeline.apply { toggleReactionLambda = toggleReactionFailure }
             initialState.eventSink.invoke(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID))
-            assertThat(room.myReactions.count()).isEqualTo(1)
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+
+            assert(toggleReactionSuccess)
+                .isCalledOnce()
+                .with(value("👍"), value(AN_EVENT_ID))
+            assert(toggleReactionFailure)
+                .isCalledOnce()
+                .with(value("👍"), value(AN_EVENT_ID))
         }
     }
 
     @Test
     fun `present - handle toggling a reaction twice`() = runTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
-        val room = FakeMatrixRoom()
+        val toggleReactionSuccess = lambdaRecorder { _: String, _: EventId -> Result.success(Unit) }
+
+        val timeline = FakeTimeline().apply {
+            this.toggleReactionLambda = toggleReactionSuccess
+        }
+        val room = FakeMatrixRoom(liveTimeline = timeline)
         val presenter = createMessagesPresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
             initialState.eventSink.invoke(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID))
-            assertThat(room.myReactions.count()).isEqualTo(1)
-
             initialState.eventSink.invoke(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID))
-            assertThat(room.myReactions.count()).isEqualTo(0)
+            assert(toggleReactionSuccess)
+                .isCalledExactly(2)
+                .withSequence(
+                    listOf(value("👍"), value(AN_EVENT_ID)),
+                    listOf(value("👍"), value(AN_EVENT_ID)),
+                )
         }
     }
 
@@ -262,7 +288,7 @@ class MessagesPresenterTest {
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, aMessageEvent()))
             val finalState = awaitItem()
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
-            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assertThat(finalState.actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
@@ -272,10 +298,9 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(3)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Reply, aMessageEvent(eventId = null)))
-            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assertThat(initialState.actionListState.target).isEqualTo(ActionListState.Target.None)
             // Otherwise we would have some extra items here
             ensureAllEventsConsumed()
         }
@@ -309,7 +334,7 @@ class MessagesPresenterTest {
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
             val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
             assertThat(replyMode.attachmentThumbnailInfo).isNotNull()
-            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assertThat(finalState.actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
@@ -342,7 +367,7 @@ class MessagesPresenterTest {
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
             val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
             assertThat(replyMode.attachmentThumbnailInfo).isNotNull()
-            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assertThat(finalState.actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
@@ -368,7 +393,7 @@ class MessagesPresenterTest {
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
             val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
             assertThat(replyMode.attachmentThumbnailInfo).isNotNull()
-            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assertThat(finalState.actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
@@ -382,7 +407,7 @@ class MessagesPresenterTest {
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Edit, aMessageEvent()))
             val finalState = awaitItem()
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Edit::class.java)
-            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assertThat(finalState.actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
@@ -428,7 +453,6 @@ class MessagesPresenterTest {
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Redact, aMessageEvent()))
             assertThat(matrixRoom.redactEventEventIdParam).isEqualTo(AN_EVENT_ID)
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
-            skipItems(1) // back paginating
         }
     }
 
@@ -707,7 +731,7 @@ class MessagesPresenterTest {
             assertThat(replyMode.attachmentThumbnailInfo).isNotNull()
             assertThat(replyMode.attachmentThumbnailInfo?.textContent)
                 .isEqualTo("What type of food should we have at the party?")
-            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assertThat(finalState.actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
 
@@ -720,7 +744,7 @@ class MessagesPresenterTest {
     private fun TestScope.createMessagesPresenter(
         coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         matrixRoom: MatrixRoom = FakeMatrixRoom().apply {
-            givenRoomInfo(aRoomInfo(id = roomId.value, name = ""))
+            givenRoomInfo(aRoomInfo(id = roomId, name = ""))
         },
         navigator: FakeMessagesNavigator = FakeMessagesNavigator(),
         clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
@@ -748,6 +772,7 @@ class MessagesPresenterTest {
             currentSessionIdHolder = CurrentSessionIdHolder(FakeMatrixClient(A_SESSION_ID)),
             permalinkParser = FakePermalinkParser(),
             permalinkBuilder = FakePermalinkBuilder(),
+            timelineController = TimelineController(matrixRoom),
         )
         val voiceMessageComposerPresenter = VoiceMessageComposerPresenter(
             this,
@@ -768,6 +793,8 @@ class MessagesPresenterTest {
             endPollAction = endPollAction,
             sendPollResponseAction = FakeSendPollResponseAction(),
             sessionPreferencesStore = sessionPreferencesStore,
+            timelineItemIndexer = TimelineItemIndexer(),
+            timelineController = TimelineController(matrixRoom),
         )
         val timelinePresenterFactory = object : TimelinePresenter.Factory {
             override fun create(navigator: MessagesNavigator): TimelinePresenter {
@@ -804,6 +831,7 @@ class MessagesPresenterTest {
             buildMeta = aBuildMeta(),
             dispatchers = coroutineDispatchers,
             htmlConverterProvider = FakeHtmlConverterProvider(),
+            timelineController = TimelineController(matrixRoom),
         )
     }
 }

@@ -31,7 +31,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 
 @PreviewsDayNight
 @Composable
-internal fun UserAvatarPreview() = ElementPreview {
+internal fun UserAvatarColorsPreview() = ElementPreview {
     Column(
         modifier = Modifier.padding(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),

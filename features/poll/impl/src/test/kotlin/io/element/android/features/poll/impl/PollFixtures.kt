@@ -20,16 +20,17 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
-import io.element.android.libraries.matrix.test.timeline.FakeMatrixTimeline
 import io.element.android.libraries.matrix.test.timeline.aPollContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
-fun aPollTimeline(
+fun aPollTimelineItems(
     polls: Map<EventId, PollContent> = emptyMap(),
-): FakeMatrixTimeline {
-    return FakeMatrixTimeline(
-        initialTimelineItems = polls.map { entry ->
+): Flow<List<MatrixTimelineItem>> {
+    return flowOf(
+        polls.map { entry ->
             MatrixTimelineItem.Event(
                 entry.key.value,
                 anEventTimelineItem(

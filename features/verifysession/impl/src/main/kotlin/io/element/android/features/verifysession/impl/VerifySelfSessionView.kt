@@ -66,7 +66,6 @@ import io.element.android.features.verifysession.impl.VerifySelfSessionState.Ver
 fun VerifySelfSessionView(
     state: VerifySelfSessionState,
     onEnterRecoveryKey: () -> Unit,
-    onCreateNewRecoveryKey: () -> Unit,
     onFinished: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -115,7 +114,6 @@ fun VerifySelfSessionView(
                 screenState = state,
                 goBack = ::resetFlow,
                 onEnterRecoveryKey = onEnterRecoveryKey,
-                onCreateNewRecoveryKey = onCreateNewRecoveryKey,
                 onFinished = onFinished,
             )
         }
@@ -228,7 +226,6 @@ private fun EmojiItemView(emoji: VerificationEmoji, modifier: Modifier = Modifie
 private fun BottomMenu(
     screenState: VerifySelfSessionState,
     onEnterRecoveryKey: () -> Unit,
-    onCreateNewRecoveryKey: () -> Unit,
     goBack: () -> Unit,
     onFinished: () -> Unit,
 ) {
@@ -243,8 +240,6 @@ private fun BottomMenu(
                 BottomMenu(
                     positiveButtonTitle = stringResource(R.string.screen_session_verification_enter_recovery_key),
                     onPositiveButtonClicked = onEnterRecoveryKey,
-                    negativeButtonTitle = stringResource(R.string.screen_identity_confirmation_create_new_recovery_key),
-                    onNegativeButtonClicked = onCreateNewRecoveryKey,
                 )
             } else {
                 BottomMenu(
@@ -346,7 +341,6 @@ internal fun VerifySelfSessionViewPreview(@PreviewParameter(VerifySelfSessionSta
     VerifySelfSessionView(
         state = state,
         onEnterRecoveryKey = {},
-        onCreateNewRecoveryKey = {},
         onFinished = {},
     )
 }

@@ -157,7 +157,7 @@ class NotificationCreator @Inject constructor(
 //            .addAction(acceptInvitationActionFactory.create(inviteNotifiableEvent))
             .apply {
                 // Build the pending intent for when the notification is clicked
-                setContentIntent(pendingIntentFactory.createInviteListPendingIntent(inviteNotifiableEvent.sessionId))
+                setContentIntent(pendingIntentFactory.createOpenRoomPendingIntent(inviteNotifiableEvent.sessionId, inviteNotifiableEvent.roomId))
 
                 if (inviteNotifiableEvent.noisy) {
                     // Compat

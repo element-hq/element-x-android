@@ -24,7 +24,6 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -69,6 +68,8 @@ import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstraintLayout
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.messages.impl.sender.SenderName
+import io.element.android.features.messages.impl.sender.SenderNameMode
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
@@ -91,7 +92,9 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeRepliedTo
+import io.element.android.features.messages.impl.timeline.model.eventId
 import io.element.android.features.messages.impl.timeline.model.metadata
+import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -106,6 +109,8 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -142,7 +147,7 @@ fun TimelineItemEventRow(
     }
 
     fun inReplyToClicked() {
-        val inReplyToEventId = event.inReplyTo?.eventId ?: return
+        val inReplyToEventId = event.inReplyTo?.eventId() ?: return
         inReplyToClick(inReplyToEventId)
     }
 
@@ -291,7 +296,8 @@ private fun TimelineItemEventRowContent(
         val avatarStrokeSize = 3.dp
         if (event.showSenderInformation && !timelineRoomInfo.isDm) {
             MessageSenderInformation(
-                event.safeSenderName,
+                event.senderId,
+                event.senderProfile,
                 event.senderAvatar,
                 avatarStrokeSize,
                 Modifier
@@ -371,7 +377,8 @@ private fun TimelineItemEventRowContent(
 
 @Composable
 private fun MessageSenderInformation(
-    sender: String,
+    senderId: UserId,
+    senderProfile: ProfileTimelineDetails,
     senderAvatar: AvatarData,
     avatarStrokeSize: Dp,
     modifier: Modifier = Modifier
@@ -398,13 +405,10 @@ private fun MessageSenderInformation(
         Row {
             Avatar(senderAvatar)
             Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                modifier = Modifier.clipToBounds(),
-                text = sender,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                color = avatarColors.foreground,
-                style = ElementTheme.typography.fontBodyMdMedium,
+            SenderName(
+                senderId = senderId,
+                senderProfile = senderProfile,
+                senderNameMode = SenderNameMode.Timeline(avatarColors.foreground),
             )
         }
     }
@@ -414,7 +418,6 @@ private fun MessageSenderInformation(
 private fun MessageEventBubbleContent(
     event: TimelineItem.Event,
     onMessageLongClick: () -> Unit,
-    @Suppress("UNUSED_PARAMETER")
     inReplyToClick: () -> Unit,
     onTimestampClicked: () -> Unit,
     onLinkClicked: (String) -> Unit,
@@ -434,7 +437,7 @@ private fun MessageEventBubbleContent(
     ) {
         Row(
             modifier = modifier,
-            horizontalArrangement = spacedBy(4.dp, Alignment.Start),
+            horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
@@ -561,17 +564,31 @@ private fun MessageEventBubbleContent(
             }
         }
         val inReplyTo = @Composable { inReplyTo: InReplyToDetails ->
-            val senderName = inReplyTo.senderDisplayName ?: inReplyTo.senderId.value
             val topPadding = if (showThreadDecoration) 0.dp else 8.dp
-            ReplyToContent(
-                senderName = senderName,
-                metadata = inReplyTo.metadata(),
-                modifier = Modifier
-                    .padding(top = topPadding, start = 8.dp, end = 8.dp)
-                    .clip(RoundedCornerShape(6.dp))
+            val inReplyToModifier = Modifier
+                .padding(top = topPadding, start = 8.dp, end = 8.dp)
+                .clip(RoundedCornerShape(6.dp))
                 // FIXME when a node is clickable, its contents won't be added to the semantics tree of its parent
-//                    .clickable(enabled = true, onClick = inReplyToClick)
-            )
+                .clickable(onClick = inReplyToClick)
+            when (inReplyTo) {
+                is InReplyToDetails.Ready -> {
+                    ReplyToContent(
+                        senderId = inReplyTo.senderId,
+                        senderProfile = inReplyTo.senderProfile,
+                        metadata = inReplyTo.metadata(),
+                        modifier = inReplyToModifier,
+                    )
+                }
+                is InReplyToDetails.Error ->
+                    ReplyToErrorContent(
+                        data = inReplyTo,
+                        modifier = inReplyToModifier,
+                    )
+                is InReplyToDetails.Loading ->
+                    ReplyToLoadingContent(
+                        modifier = inReplyToModifier,
+                    )
+            }
         }
         if (inReplyToDetails != null) {
             // Use SubComposeLayout only if necessary as it can have consequences on the performance.
@@ -581,7 +598,7 @@ private fun MessageEventBubbleContent(
                 contentWithTimestamp()
             }
         } else {
-            Column(modifier = modifier, verticalArrangement = spacedBy(8.dp)) {
+            Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 threadDecoration()
                 contentWithTimestamp()
             }
@@ -609,7 +626,8 @@ private fun MessageEventBubbleContent(
 
 @Composable
 private fun ReplyToContent(
-    senderName: String,
+    senderId: UserId,
+    senderProfile: ProfileTimelineDetails,
     metadata: InReplyToMetadata?,
     modifier: Modifier = Modifier,
 ) {
@@ -633,21 +651,56 @@ private fun ReplyToContent(
             )
             Spacer(modifier = Modifier.width(8.dp))
         }
-        val a11InReplyToText = stringResource(CommonStrings.common_in_reply_to, senderName)
+        val a11InReplyToText = stringResource(CommonStrings.common_in_reply_to, senderProfile.getDisambiguatedDisplayName(senderId))
         Column(verticalArrangement = Arrangement.SpaceBetween) {
-            Text(
+            SenderName(
+                senderId = senderId,
+                senderProfile = senderProfile,
+                senderNameMode = SenderNameMode.Reply,
                 modifier = Modifier.semantics {
                     contentDescription = a11InReplyToText
                 },
-                text = senderName,
-                style = ElementTheme.typography.fontBodySmMedium,
-                textAlign = TextAlign.Start,
-                color = ElementTheme.materialColors.primary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
             )
             ReplyToContentText(metadata)
         }
+    }
+}
+
+@Composable
+private fun ReplyToLoadingContent(
+    modifier: Modifier = Modifier,
+) {
+    val paddings = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
+    Row(
+        modifier
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(paddings)
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            PlaceholderAtom(width = 80.dp, height = 12.dp)
+            PlaceholderAtom(width = 140.dp, height = 14.dp)
+        }
+    }
+}
+
+@Composable
+private fun ReplyToErrorContent(
+    data: InReplyToDetails.Error,
+    modifier: Modifier = Modifier,
+) {
+    val paddings = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
+    Row(
+        modifier
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(paddings)
+    ) {
+        Text(
+            text = data.message,
+            style = ElementTheme.typography.fontBodyMdRegular,
+            color = MaterialTheme.colorScheme.error,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 
@@ -700,6 +753,7 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
         sequenceOf(false, true).forEach { isMine ->
             ATimelineItemEventRow(
                 event = aTimelineItemEvent(
+                    senderDisplayName = "Sender with a super long name that should ellipsize",
                     isMine = isMine,
                     content = aTimelineItemTextContent().copy(
                         body = "A long text which will be displayed on several lines and" +

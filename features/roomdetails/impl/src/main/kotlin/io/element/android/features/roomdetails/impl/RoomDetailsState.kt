@@ -17,27 +17,31 @@
 package io.element.android.features.roomdetails.impl
 
 import io.element.android.features.leaveroom.api.LeaveRoomState
-import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState
+import io.element.android.features.userprofile.shared.UserProfileState
+import io.element.android.libraries.matrix.api.core.RoomAlias
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 
 data class RoomDetailsState(
-    val roomId: String,
+    val roomId: RoomId,
     val roomName: String,
-    val roomAlias: String?,
+    val roomAlias: RoomAlias?,
     val roomAvatarUrl: String?,
     val roomTopic: RoomTopicState,
     val memberCount: Long,
     val isEncrypted: Boolean,
     val roomType: RoomDetailsType,
-    val roomMemberDetailsState: RoomMemberDetailsState?,
+    val roomMemberDetailsState: UserProfileState?,
     val canEdit: Boolean,
     val canInvite: Boolean,
     val canShowNotificationSettings: Boolean,
+    val canCall: Boolean,
     val leaveRoomState: LeaveRoomState,
     val roomNotificationSettings: RoomNotificationSettings?,
     val isFavorite: Boolean,
     val displayRolesAndPermissionsSettings: Boolean,
+    val isPublic: Boolean,
     val eventSink: (RoomDetailsEvent) -> Unit
 )
 

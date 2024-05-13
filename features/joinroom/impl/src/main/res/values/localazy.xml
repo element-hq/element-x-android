@@ -2,6 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_join_room_join_action">"Join room"</string>
   <string name="screen_join_room_knock_action">"Knock to join"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s does not support spaces yet. You can access spaces on web."</string>
+  <string name="screen_join_room_space_not_supported_title">"Spaces are not supported yet"</string>
   <string name="screen_join_room_subtitle_knock">"Click the button below and a room administrator will be notified. You’ll be able to join the conversation once approved."</string>
   <string name="screen_join_room_subtitle_no_preview">"You must be a member of this room to view the message history."</string>
   <string name="screen_join_room_title_knock">"Want to join this room?"</string>

@@ -10,7 +10,7 @@
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Изключване"</string>
   <string name="screen_recovery_key_change_generate_key">"Генериране на нов ключ за възстановяване"</string>
   <string name="screen_recovery_key_change_title">"Промяна на ключа за възстановяване?"</string>
-  <string name="screen_recovery_key_confirm_description">"Въведете ключа си за възстановяване, за да потвърдите достъпа до резервното копие на чатовете си."</string>
+  <string name="screen_recovery_key_confirm_description">"Уверете се, че никой не може да види този екран!"</string>
   <string name="screen_recovery_key_confirm_error_title">"Неправилен ключ за възстановяване"</string>
   <string name="screen_recovery_key_confirm_key_description">"Въведете 48-символния код."</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Въведете…"</string>

@@ -34,6 +34,7 @@
   <string name="action_accept">"Accept"</string>
   <string name="action_add_to_timeline">"Add to timeline"</string>
   <string name="action_back">"Back"</string>
+  <string name="action_call">"Call"</string>
   <string name="action_cancel">"Cancel"</string>
   <string name="action_choose_photo">"Choose photo"</string>
   <string name="action_clear">"Clear"</string>
@@ -72,6 +73,7 @@
   <string name="action_load_more">"Load more"</string>
   <string name="action_manage_account">"Manage account"</string>
   <string name="action_manage_devices">"Manage devices"</string>
+  <string name="action_message">"Message"</string>
   <string name="action_next">"Next"</string>
   <string name="action_no">"No"</string>
   <string name="action_not_now">"Not now"</string>
@@ -158,12 +160,14 @@
   <string name="common_modern">"Modern"</string>
   <string name="common_mute">"Mute"</string>
   <string name="common_no_results">"No results"</string>
+  <string name="common_no_room_name">"No room name"</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_or">"or"</string>
   <string name="common_password">"Password"</string>
   <string name="common_people">"People"</string>
   <string name="common_permalink">"Permalink"</string>
   <string name="common_permission">"Permission"</string>
+  <string name="common_please_wait">"Please wait…"</string>
   <string name="common_poll_end_confirmation">"Are you sure you want to end this poll?"</string>
   <string name="common_poll_summary">"Poll: %1$s"</string>
   <string name="common_poll_total_votes">"Total votes: %1$s"</string>
@@ -213,6 +217,7 @@
   <string name="common_topic">"Topic"</string>
   <string name="common_topic_placeholder">"What is this room about?"</string>
   <string name="common_unable_to_decrypt">"Unable to decrypt"</string>
+  <string name="common_unable_to_decrypt_no_access">"You don\'t have access to this message"</string>
   <string name="common_unable_to_invite_message">"Invites couldn\'t be sent to one or more users."</string>
   <string name="common_unable_to_invite_title">"Unable to send invite(s)"</string>
   <string name="common_unlock">"Unlock"</string>
@@ -237,6 +242,7 @@
   <string name="error_failed_loading_messages">"Failed loading messages"</string>
   <string name="error_failed_locating_user">"%1$s could not access your location. Please try again later."</string>
   <string name="error_failed_uploading_voice_message">"Failed to upload your voice message."</string>
+  <string name="error_message_not_found">"Message not found"</string>
   <string name="error_missing_location_auth_android">"%1$s does not have permission to access your location. You can enable access in Settings."</string>
   <string name="error_missing_location_rationale_android">"%1$s does not have permission to access your location. Enable access below."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s does not have permission to access your microphone. Enable access to record a voice message."</string>
@@ -258,6 +264,7 @@
   <string name="screen_room_member_details_unblock_alert_action">"Unblock"</string>
   <string name="screen_room_member_details_unblock_alert_description">"You\'ll be able to see all messages from them again."</string>
   <string name="screen_room_member_details_unblock_user">"Unblock user"</string>
+  <string name="screen_room_title">"Chat"</string>
   <string name="screen_share_location_title">"Share location"</string>
   <string name="screen_share_my_location_action">"Share my location"</string>
   <string name="screen_share_open_apple_maps">"Open in Apple Maps"</string>

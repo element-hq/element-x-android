@@ -30,7 +30,7 @@
   <string name="state_event_room_join_by_you">"Du hast den Raum betreten"</string>
   <string name="state_event_room_knock">"%1$s hat angefragt beizutreten"</string>
   <string name="state_event_room_knock_accepted">"%1$s hat %2$s den Beitritt erlaubt"</string>
-  <string name="state_event_room_knock_accepted_by_you">"%1$s hat Ihnen den Betritt erlaubt"</string>
+  <string name="state_event_room_knock_accepted_by_you">"Du hast %1$s den Beitritt erlaubt."</string>
   <string name="state_event_room_knock_by_you">"Du hast angefragt beizutreten"</string>
   <string name="state_event_room_knock_denied">"%1$s hat die Beitrittsanfrage von %2$s abgelehnt"</string>
   <string name="state_event_room_knock_denied_by_you">"Du hast die Beitrittsanfrage von %1$s abgelehnt"</string>
@@ -39,10 +39,10 @@
   <string name="state_event_room_knock_retracted_by_you">"Du hast deine Beitrittsanfrage zurückgezogen"</string>
   <string name="state_event_room_leave">"%1$s hat den Raum verlassen"</string>
   <string name="state_event_room_leave_by_you">"Du hast den Raum verlassen"</string>
-  <string name="state_event_room_name_changed">"%1$s hat den Raumnamen geändert in: %2$s"</string>
-  <string name="state_event_room_name_changed_by_you">"Du hast den Raumnamen geändert in: %1$s"</string>
-  <string name="state_event_room_name_removed">"%1$s hat den Raumnamen entfernt"</string>
-  <string name="state_event_room_name_removed_by_you">"Du hast den Raumnamen entfernt"</string>
+  <string name="state_event_room_name_changed">"%1$s hat den Raum-Namen geändert in: %2$s"</string>
+  <string name="state_event_room_name_changed_by_you">"Du hast den Raum-Namen geändert in: %1$s"</string>
+  <string name="state_event_room_name_removed">"%1$s hat den Raum-Namen entfernt"</string>
+  <string name="state_event_room_name_removed_by_you">"Du hast den Raum-Namen entfernt"</string>
   <string name="state_event_room_none">"%1$shat keine Änderungen vorgenommen"</string>
   <string name="state_event_room_none_by_you">"Du hast keine Änderungen vorgenommen"</string>
   <string name="state_event_room_reject">"%1$s hat die Einladung abgelehnt"</string>
@@ -55,9 +55,9 @@
   <string name="state_event_room_third_party_revoked_invite_by_you">"Du hast die Einladung an %1$s zum Betreten des Raums zurückgezogen"</string>
   <string name="state_event_room_topic_changed">"%1$s hat das Thema geändert in: %2$s"</string>
   <string name="state_event_room_topic_changed_by_you">"Du hast das Thema geändert in: %1$s"</string>
-  <string name="state_event_room_topic_removed">"%1$s hat das Raumthema entfernt"</string>
-  <string name="state_event_room_topic_removed_by_you">"Du hast das Raumthema entfernt"</string>
+  <string name="state_event_room_topic_removed">"%1$s hat das Raum-Thema entfernt"</string>
+  <string name="state_event_room_topic_removed_by_you">"Du hast das Raum-Thema entfernt"</string>
   <string name="state_event_room_unban">"%1$s hat die Sperre für %2$s aufgehoben"</string>
   <string name="state_event_room_unban_by_you">"Du hast die Sperre für %1$s aufgehoben"</string>
-  <string name="state_event_room_unknown_membership_change">"%1$s hat eine unbekannte Raumänderung vorgenommen"</string>
+  <string name="state_event_room_unknown_membership_change">"%1$s hat eine unbekannte Änderung vorgenommen"</string>
 </resources>

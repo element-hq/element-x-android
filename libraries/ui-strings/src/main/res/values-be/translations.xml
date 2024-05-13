@@ -161,12 +161,14 @@
   <string name="common_modern">"Сучасны"</string>
   <string name="common_mute">"Адключыць гук"</string>
   <string name="common_no_results">"Вынікаў няма"</string>
+  <string name="common_no_room_name">"Няма назвы пакоя"</string>
   <string name="common_offline">"Па-за сеткай"</string>
   <string name="common_or">"або"</string>
   <string name="common_password">"Пароль"</string>
-  <string name="common_people">"Удзельнікі"</string>
+  <string name="common_people">"Людзі"</string>
   <string name="common_permalink">"Пастаянная спасылка"</string>
   <string name="common_permission">"Дазвол"</string>
+  <string name="common_please_wait">"Калі ласка, пачакайце…"</string>
   <string name="common_poll_end_confirmation">"Вы ўпэўнены, што хочаце скончыць гэтае апытанне?"</string>
   <string name="common_poll_summary">"Апытанне: %1$s"</string>
   <string name="common_poll_total_votes">"Усяго галасоў: %1$s"</string>
@@ -217,6 +219,7 @@
   <string name="common_topic">"Тэма"</string>
   <string name="common_topic_placeholder">"Пра што гэты пакой?"</string>
   <string name="common_unable_to_decrypt">"Немагчыма расшыфраваць"</string>
+  <string name="common_unable_to_decrypt_no_access">"У вас няма доступу да гэтага паведамлення"</string>
   <string name="common_unable_to_invite_message">"Не ўдалося адправіць запрашэнні аднаму або некалькім карыстальнікам."</string>
   <string name="common_unable_to_invite_title">"Немагчыма адправіць запрашэнне(я)"</string>
   <string name="common_unlock">"Разблакіраваць"</string>
@@ -241,6 +244,7 @@
   <string name="error_failed_loading_messages">"Не ўдалося загрузіць паведамленні"</string>
   <string name="error_failed_locating_user">"%1$s не магчыма атрымаць доступ да вашага месцазнаходжання. Калі ласка паспрабуйце зноў пазней."</string>
   <string name="error_failed_uploading_voice_message">"Не ўдалося загрузіць ваша галасавое паведамленне."</string>
+  <string name="error_message_not_found">"Паведамленне не знойдзена"</string>
   <string name="error_missing_location_auth_android">"У %1$s няма дазволу на доступ да вашага месцазнаходжання. Вы можаце даць доступ у Наладах."</string>
   <string name="error_missing_location_rationale_android">"У %1$s няма дазволу на доступ да вашага месцазнаходжання. Дазвольце доступ ніжэй."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s не мае дазволу на доступ да вашага мікрафона. Дазвольце доступ да запісу галасавога паведамлення."</string>

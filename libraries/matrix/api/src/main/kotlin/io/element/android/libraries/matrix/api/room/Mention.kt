@@ -23,5 +23,5 @@ sealed interface Mention {
     data class User(val userId: UserId) : Mention
     data object AtRoom : Mention
     data class Room(val roomId: RoomId) : Mention
-    data class RoomAlias(val roomAlias: String?) : Mention
+    data class RoomAlias(val roomAlias: RoomAlias?) : Mention
 }

@@ -16,7 +16,7 @@ appId: ${MAESTRO_APP_ID}
 - tapOn: "Create"
 - takeScreenshot: build/maestro/320-createAndDeleteRoom
 - tapOn: "aRoomName"
-- tapOn: "Invite people"
+- tapOn: "Invite"
 # assert there's 1 member and 1 invitee
 - tapOn: "Search for someone"
 - inputText: ${MAESTRO_INVITEE2_MXID}

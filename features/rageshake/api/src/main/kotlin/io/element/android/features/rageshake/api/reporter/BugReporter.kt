@@ -39,11 +39,6 @@ interface BugReporter {
     )
 
     /**
-     * Clean the log files if needed to avoid wasting disk space.
-     */
-    fun cleanLogDirectoryIfNeeded()
-
-    /**
      * Provide the log directory.
      */
     fun logDirectory(): File

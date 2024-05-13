@@ -16,7 +16,7 @@
   <string name="screen_app_lock_setup_confirm_pin">"PIN bestätigen"</string>
   <string name="screen_app_lock_setup_pin_blacklisted_dialog_content">"Aus Sicherheitsgründen kann dieser PIN-Code nicht verwendet werden."</string>
   <string name="screen_app_lock_setup_pin_blacklisted_dialog_title">"Bitte eine andere PIN verwenden."</string>
-  <string name="screen_app_lock_setup_pin_context">"Sperre %1$s mit einem PIN Code, um den Zugriff auf Deine Chats zu beschränken.
+  <string name="screen_app_lock_setup_pin_context">"Sperre %1$s mit einem PIN Code, um den Zugriff auf deine Chats zu beschränken.
 
 Wähle etwas Einprägsames. Bei falscher Eingabe wirst du aus der App ausgeloggt."</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Bitte gib die gleiche PIN wie zuvor ein."</string>

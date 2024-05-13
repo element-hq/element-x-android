@@ -67,16 +67,6 @@ class IntentProviderImplTest {
         assertThat(result.data.toString()).isEqualTo("elementx://open/@alice:server.org/!aRoomId:domain/\$aThreadId")
     }
 
-    @Test
-    fun `test getInviteListIntent`() {
-        val sut = createIntentProviderImpl()
-        val result = sut.getInviteListIntent(
-            sessionId = A_SESSION_ID,
-        )
-        result.commonAssertions()
-        assertThat(result.data.toString()).isEqualTo("elementx://open/@alice:server.org/invites")
-    }
-
     private fun createIntentProviderImpl(): IntentProviderImpl {
         return IntentProviderImpl(
             context = RuntimeEnvironment.getApplication() as Context,

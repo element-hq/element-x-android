@@ -116,7 +116,7 @@ private fun UserDefinedRoomNotificationSettingsTopBar(
 
 @PreviewsDayNight
 @Composable
-internal fun UserDefinedRoomNotificationSettingsPreview(
+internal fun UserDefinedRoomNotificationSettingsViewPreview(
     @PreviewParameter(UserDefinedRoomNotificationSettingsStateProvider::class) state: RoomNotificationSettingsState
 ) = ElementPreview {
     UserDefinedRoomNotificationSettingsView(

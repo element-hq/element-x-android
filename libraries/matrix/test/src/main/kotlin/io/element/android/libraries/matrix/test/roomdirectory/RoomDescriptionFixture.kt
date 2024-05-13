@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.test.roomdirectory
 
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDescription
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -24,7 +25,7 @@ fun aRoomDescription(
     roomId: RoomId = A_ROOM_ID,
     name: String? = null,
     topic: String? = null,
-    alias: String? = null,
+    alias: RoomAlias? = null,
     avatarUrl: String? = null,
     joinRule: RoomDescription.JoinRule = RoomDescription.JoinRule.UNKNOWN,
     isWorldReadable: Boolean = true,
