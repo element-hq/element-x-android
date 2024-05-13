@@ -24,7 +24,7 @@ class AppMigration03Test {
     @Test
     fun `test migration`() = runTest {
         val logsFileRemover = FakeLogFilesRemover()
-        val migration = AppMigration03(logsFileRemover)
+        val migration = AppMigration03(migration01 = AppMigration01(logsFileRemover))
 
         migration.migrate()
 

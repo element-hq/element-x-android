@@ -25,7 +25,7 @@ import javax.inject.Inject
  * Remove existing logs from the device to remove any leaks of sensitive data.
  */
 @ContributesMultibinding(AppScope::class)
-open class AppMigration01 @Inject constructor(
+class AppMigration01 @Inject constructor(
     private val logFilesRemover: LogFilesRemover,
 ) : AppMigration {
     override val order: Int = 1

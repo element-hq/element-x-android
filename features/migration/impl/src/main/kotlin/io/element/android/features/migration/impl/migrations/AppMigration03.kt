@@ -17,7 +17,6 @@
 package io.element.android.features.migration.impl.migrations
 
 import com.squareup.anvil.annotations.ContributesMultibinding
-import io.element.android.features.rageshake.api.logs.LogFilesRemover
 import io.element.android.libraries.di.AppScope
 import javax.inject.Inject
 
@@ -26,7 +25,11 @@ import javax.inject.Inject
  */
 @ContributesMultibinding(AppScope::class)
 class AppMigration03 @Inject constructor(
-    private val logFilesRemover: LogFilesRemover,
-) : AppMigration01(logFilesRemover) {
+    private val migration01: AppMigration01,
+) : AppMigration {
     override val order: Int = 3
+
+    override suspend fun migrate() {
+        migration01.migrate()
+    }
 }
