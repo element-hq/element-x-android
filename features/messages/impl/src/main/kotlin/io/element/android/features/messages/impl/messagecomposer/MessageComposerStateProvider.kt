@@ -17,7 +17,7 @@
 package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.messages.impl.mentions.MentionSuggestion
+import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
@@ -44,7 +44,7 @@ fun aMessageComposerState(
     canShareLocation: Boolean = true,
     canCreatePoll: Boolean = true,
     attachmentsState: AttachmentsState = AttachmentsState.None,
-    memberSuggestions: ImmutableList<MentionSuggestion> = persistentListOf(),
+    memberSuggestions: ImmutableList<ResolvedMentionSuggestion> = persistentListOf(),
 ) = MessageComposerState(
     textEditorState = TextEditorState.Rich(richTextEditorState),
     permalinkParser = object : PermalinkParser {

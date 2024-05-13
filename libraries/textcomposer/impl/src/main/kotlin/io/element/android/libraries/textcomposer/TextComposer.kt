@@ -17,9 +17,6 @@
 package io.element.android.libraries.textcomposer
 
 import android.net.Uri
-import android.text.Spannable
-import android.text.Spanned
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -83,9 +80,7 @@ import io.element.android.libraries.textcomposer.components.VoiceMessagePreview
 import io.element.android.libraries.textcomposer.components.VoiceMessageRecorderButton
 import io.element.android.libraries.textcomposer.components.VoiceMessageRecording
 import io.element.android.libraries.textcomposer.components.textInputRoundedCornerShape
-import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.rememberMentionSpanProvider
-import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.TextEditorState
@@ -111,7 +106,7 @@ fun TextComposer(
     enableVoiceMessages: Boolean,
     currentUserId: UserId,
     onRequestFocus: () -> Unit,
-    onSendMessage: (Message) -> Unit,
+    onSendMessage: () -> Unit,
     onResetComposerMode: () -> Unit,
     onAddAttachment: () -> Unit,
     onDismissTextFormatting: () -> Unit,
@@ -132,10 +127,7 @@ fun TextComposer(
         is TextEditorState.Rich -> state.richTextEditorState.messageMarkdown
     }
     val onSendClicked = {
-        val html = if (state is TextEditorState.Rich && enableTextFormatting) {
-            state.richTextEditorState.messageHtml
-        } else null
-        onSendMessage(Message(html = html, markdown = charSequenceToMarkdown(markdown)))
+        onSendMessage()
     }
 
     val onPlayVoiceMessageClicked = {
@@ -193,6 +185,7 @@ fun TextComposer(
         }
         is TextEditorState.Markdown -> {
             @Composable {
+                val style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.hasFocus())
                 MarkdownTextInput(
                     state = state.state,
                     subcomposing = subcomposing,
@@ -201,6 +194,7 @@ fun TextComposer(
                     modifier = Modifier.fillMaxSize(),
                     composerMode = composerMode,
                     onResetComposerMode = onResetComposerMode,
+                    richTextEditorStyle = style,
                 )
             }
         }
@@ -627,25 +621,6 @@ private fun ReplyToModeView(
                     indication = rememberRipple(bounded = false)
                 ),
         )
-    }
-}
-
-private fun charSequenceToMarkdown(charSequence: CharSequence): String {
-    return if (charSequence is Spanned) {
-        val mentions = charSequence.getSpans(0, charSequence.length, MentionSpan::class.java)
-        buildString {
-            append(charSequence)
-            for (mention in mentions.reversed()) {
-                val start = charSequence.getSpanStart(mention)
-                val end = charSequence.getSpanEnd(mention)
-                // TODO: Use permalinkBuilder instead
-                if (mention.type == MentionSpan.Type.USER) {
-                    replace(start, end, "[${mention.text}](https://matrix.to/#/${mention.rawValue})")
-                }
-            }
-        }
-    } else {
-        charSequence.toString()
     }
 }
 

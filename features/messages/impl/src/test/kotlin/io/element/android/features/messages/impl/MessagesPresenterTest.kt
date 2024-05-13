@@ -773,7 +773,10 @@ class MessagesPresenterTest {
             permalinkParser = FakePermalinkParser(),
             permalinkBuilder = FakePermalinkBuilder(),
             timelineController = TimelineController(matrixRoom),
-        )
+        ).apply {
+            showTextFormatting = true
+            isTesting = true
+        }
         val voiceMessageComposerPresenter = VoiceMessageComposerPresenter(
             this,
             FakeVoiceRecorder(),

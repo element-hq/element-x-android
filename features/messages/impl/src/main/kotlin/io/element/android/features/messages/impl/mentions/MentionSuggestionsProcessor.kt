@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.roomMembers
+import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
 
@@ -45,7 +46,7 @@ object MentionSuggestionsProcessor {
         roomMembersState: MatrixRoomMembersState,
         currentUserId: UserId,
         canSendRoomMention: suspend () -> Boolean,
-    ): List<MentionSuggestion> {
+    ): List<ResolvedMentionSuggestion> {
         val members = roomMembersState.roomMembers()
         return when {
             members.isNullOrEmpty() || suggestion == null -> {
@@ -78,7 +79,7 @@ object MentionSuggestionsProcessor {
         roomMembers: List<RoomMember>?,
         currentUserId: UserId,
         canSendRoomMention: Boolean,
-    ): List<MentionSuggestion> {
+    ): List<ResolvedMentionSuggestion> {
         return if (roomMembers.isNullOrEmpty()) {
             emptyList()
         } else {
@@ -96,10 +97,10 @@ object MentionSuggestionsProcessor {
                 .filterUpTo(MAX_BATCH_ITEMS) { member ->
                     isJoinedMemberAndNotSelf(member) && memberMatchesQuery(member, query)
                 }
-                .map(MentionSuggestion::Member)
+                .map(ResolvedMentionSuggestion::Member)
 
             if ("room".contains(query) && canSendRoomMention) {
-                listOf(MentionSuggestion.Room) + matchingMembers
+                listOf(ResolvedMentionSuggestion.Room) + matchingMembers
             } else {
                 matchingMembers
             }

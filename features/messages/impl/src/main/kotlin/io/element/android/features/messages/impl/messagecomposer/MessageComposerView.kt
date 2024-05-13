@@ -49,8 +49,8 @@ internal fun MessageComposerView(
     modifier: Modifier = Modifier,
 ) {
     val view = LocalView.current
-    fun sendMessage(message: Message) {
-        state.eventSink(MessageComposerEvents.SendMessage(message))
+    fun sendMessage() {
+        state.eventSink(MessageComposerEvents.SendMessage)
     }
 
     fun sendUri(uri: Uri) {

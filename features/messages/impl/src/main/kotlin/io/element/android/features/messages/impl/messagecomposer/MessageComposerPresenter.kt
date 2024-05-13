@@ -19,9 +19,7 @@ package io.element.android.features.messages.impl.messagecomposer
 import android.Manifest
 import android.annotation.SuppressLint
 import android.net.Uri
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
+import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -34,16 +32,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.core.text.getSpans
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
 import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
-import io.element.android.features.messages.impl.mentions.MentionSuggestion
 import io.element.android.features.messages.impl.mentions.MentionSuggestionsProcessor
 import io.element.android.features.messages.impl.timeline.TimelineController
-import io.element.android.features.preferences.api.store.AppPreferencesStore
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -64,7 +59,7 @@ import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
-import io.element.android.libraries.textcomposer.mentions.MentionSpan
+import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
 import io.element.android.libraries.textcomposer.mentions.rememberMentionSpanProvider
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.Message
@@ -78,6 +73,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
@@ -110,22 +106,25 @@ class MessageComposerPresenter @Inject constructor(
     private val permalinkBuilder: PermalinkBuilder,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
     private val timelineController: TimelineController,
-    private val appPreferencesStore: AppPreferencesStore,
 ) : Presenter<MessageComposerState> {
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
     private var pendingEvent: MessageComposerEvents? = null
 
     private val suggestionSearchTrigger = MutableStateFlow<Suggestion?>(null)
 
+    // Used to disable some UI related elements in tests
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal var isTesting: Boolean = false
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal var showTextFormatting: Boolean by mutableStateOf(false)
+
     @OptIn(FlowPreview::class)
     @SuppressLint("UnsafeOptInUsageError")
     @Composable
     override fun present(): MessageComposerState {
         val localCoroutineScope = rememberCoroutineScope()
-        val isRichTextEditorEnabled by appPreferencesStore
-            .isRichTextEditorEnabledFlow()
-            .collectAsState(initial = false)
-        var markdownTextEditorState by remember { mutableStateOf(MarkdownTextEditorState()) }
+        val markdownTextEditorState = remember { MarkdownTextEditorState() }
 
         var isMentionsEnabled by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
@@ -166,13 +165,13 @@ class MessageComposerPresenter @Inject constructor(
         val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
 
         var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
-        var showTextFormatting: Boolean by remember { mutableStateOf(false) }
 
         val sendTypingNotifications by sessionPreferencesStore.isSendTypingNotificationsEnabled().collectAsState(initial = true)
 
         LaunchedEffect(messageComposerContext.composerMode) {
             when (val modeValue = messageComposerContext.composerMode) {
                 is MessageComposerMode.Edit ->
+                    // No need to handle this for plain text editor
                     richTextEditorState.setHtml(modeValue.defaultContent)
                 else -> Unit
             }
@@ -201,7 +200,7 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
-        val memberSuggestions = remember { mutableStateListOf<MentionSuggestion>() }
+        val memberSuggestions = remember { mutableStateListOf<ResolvedMentionSuggestion>() }
         LaunchedEffect(isMentionsEnabled) {
             if (!isMentionsEnabled) return@LaunchedEffect
             val currentUserId = currentSessionIdHolder.current
@@ -242,13 +241,37 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
-        val textEditorState = if (isRichTextEditorEnabled) {
+        val textEditorState = if (showTextFormatting) {
             TextEditorState.Rich(richTextEditorState)
         } else {
             TextEditorState.Markdown(markdownTextEditorState)
         }
 
-        val mentionSpanProvider = rememberMentionSpanProvider(currentUserId = room.sessionId, permalinkParser = permalinkParser)
+        LaunchedEffect(showTextFormatting) {
+            if (showTextFormatting) {
+                val markdown = markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
+                if (markdown.isNotEmpty()) {
+                    richTextEditorState.setMarkdown(markdown)
+                    richTextEditorState.requestFocus()
+                }
+            } else {
+                val markdown = richTextEditorState.messageMarkdown
+                if (markdown.isNotEmpty()) {
+                    markdownTextEditorState.text.update(markdown, true)
+                    delay(50)
+                    markdownTextEditorState.requestFocusAction()
+                }
+            }
+        }
+
+        val mentionSpanProvider = if (isTesting) {
+            null
+        } else {
+            rememberMentionSpanProvider(
+                currentUserId = room.sessionId,
+                permalinkParser = permalinkParser,
+            )
+        }
 
         fun handleEvents(event: MessageComposerEvents) {
             when (event) {
@@ -261,11 +284,21 @@ class MessageComposerPresenter @Inject constructor(
                     }
                     messageComposerContext.composerMode = MessageComposerMode.Normal
                 }
-                is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(
-                    message = event.message,
-                    updateComposerMode = { messageComposerContext.composerMode = it },
-                    textEditorState = textEditorState,
-                )
+                is MessageComposerEvents.SendMessage -> {
+                    val html = if (showTextFormatting) {
+                        richTextEditorState.messageHtml
+                    } else null
+                    val markdown = if (showTextFormatting) {
+                        richTextEditorState.messageMarkdown
+                    } else {
+                        markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
+                    }
+                    appCoroutineScope.sendMessage(
+                        message = Message(html = html, markdown = markdown),
+                        updateComposerMode = { messageComposerContext.composerMode = it },
+                        textEditorState = textEditorState,
+                    )
+                }
                 is MessageComposerEvents.SendUri -> appCoroutineScope.sendAttachment(
                     attachment = Attachment.Media(
                         localMedia = localMediaFactory.createFromUri(
@@ -356,45 +389,26 @@ class MessageComposerPresenter @Inject constructor(
                 }
                 is MessageComposerEvents.InsertMention -> {
                     localCoroutineScope.launch {
-                        if (isRichTextEditorEnabled) {
+                        if (showTextFormatting) {
                             when (val mention = event.mention) {
-                                is MentionSuggestion.Room -> {
+                                is ResolvedMentionSuggestion.Room -> {
                                     richTextEditorState.insertAtRoomMentionAtSuggestion()
                                 }
-                                is MentionSuggestion.Member -> {
+                                is ResolvedMentionSuggestion.Member -> {
                                     val text = mention.roomMember.displayName?.prependIndent("@") ?: mention.roomMember.userId.value
                                     val link = permalinkBuilder.permalinkForUser(mention.roomMember.userId).getOrNull() ?: return@launch
                                     richTextEditorState.insertMentionAtSuggestion(text = text, link = link)
                                 }
                             }
                         } else if (markdownTextEditorState.currentMentionSuggestion != null) {
-                            when (val mention = event.mention) {
-                                is MentionSuggestion.Room -> {
-                                    val suggestion = markdownTextEditorState.currentMentionSuggestion!!
-                                    val currentText = SpannableStringBuilder(markdownTextEditorState.text.value())
-                                    val replaceText = "@room"
-                                    val roomPill = mentionSpanProvider.getMentionSpanFor(replaceText, "")
-                                    currentText.replace(suggestion.start, suggestion.end, ". ")
-                                    val end = suggestion.start + 1
-                                    currentText.setSpan(roomPill, suggestion.start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                    markdownTextEditorState.text.update(currentText, true)
-                                    markdownTextEditorState.selection = IntRange(end + 1, end + 1)
-                                    suggestionSearchTrigger.value = null
-                                }
-                                is MentionSuggestion.Member -> {
-                                    val suggestion = markdownTextEditorState.currentMentionSuggestion!!
-                                    val currentText = SpannableStringBuilder(markdownTextEditorState.text.value())
-                                    val text = mention.roomMember.displayName?.prependIndent("@") ?: mention.roomMember.userId.value
-                                    val link = permalinkBuilder.permalinkForUser(mention.roomMember.userId).getOrNull() ?: return@launch
-                                    val mentionPill = mentionSpanProvider.getMentionSpanFor(text, link)
-                                    currentText.replace(suggestion.start, suggestion.end, ". ")
-                                    val end = suggestion.start + 1
-                                    currentText.setSpan(mentionPill, suggestion.start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                                    markdownTextEditorState.text.update(currentText, true)
-                                    markdownTextEditorState.selection = IntRange(end + 1, end + 1)
-                                    suggestionSearchTrigger.value = null
-                                }
+                            mentionSpanProvider?.let {
+                                markdownTextEditorState.insertMention(
+                                    mention = event.mention,
+                                    mentionSpanProvider = it,
+                                    permalinkBuilder = permalinkBuilder,
+                                )
                             }
+                            suggestionSearchTrigger.value = null
                         }
                     }
                 }
@@ -423,7 +437,6 @@ class MessageComposerPresenter @Inject constructor(
         textEditorState: TextEditorState,
     ) = launch {
         val capturedMode = messageComposerContext.composerMode
-        // TODO: handle mentions in markdown editor
         val mentions = when (textEditorState) {
             is TextEditorState.Rich -> {
                 textEditorState.richTextEditorState.mentionsState?.let { state ->
@@ -437,22 +450,7 @@ class MessageComposerPresenter @Inject constructor(
                     }
                 }.orEmpty()
             }
-            is TextEditorState.Markdown -> {
-                val text = SpannableString(textEditorState.state.text.value())
-                val mentionSpans = text.getSpans<MentionSpan>(0, text.length)
-                mentionSpans.mapNotNull { mentionSpan ->
-                    when (mentionSpan.type) {
-                        MentionSpan.Type.USER -> {
-                            if (mentionSpan.rawValue == "@room") {
-                                Mention.AtRoom
-                            } else {
-                                Mention.User(UserId(mentionSpan.rawValue))
-                            }
-                        }
-                        else -> null
-                    }
-                }
-            }
+            is TextEditorState.Markdown -> textEditorState.state.getMentions()
         }
         // Reset composer right away
         textEditorState.reset()

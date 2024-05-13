@@ -18,7 +18,7 @@ package io.element.android.features.messages.impl.messagecomposer
 
 import android.net.Uri
 import androidx.compose.runtime.Immutable
-import io.element.android.features.messages.impl.mentions.MentionSuggestion
+import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
@@ -26,7 +26,7 @@ import io.element.android.libraries.textcomposer.model.Suggestion
 @Immutable
 sealed interface MessageComposerEvents {
     data object ToggleFullScreenState : MessageComposerEvents
-    data class SendMessage(val message: Message) : MessageComposerEvents
+    data object SendMessage : MessageComposerEvents
     data class SendUri(val uri: Uri) : MessageComposerEvents
     data object CloseSpecialMode : MessageComposerEvents
     data class SetMode(val composerMode: MessageComposerMode) : MessageComposerEvents
@@ -45,5 +45,5 @@ sealed interface MessageComposerEvents {
     data class Error(val error: Throwable) : MessageComposerEvents
     data class TypingNotice(val isTyping: Boolean) : MessageComposerEvents
     data class SuggestionReceived(val suggestion: Suggestion?) : MessageComposerEvents
-    data class InsertMention(val mention: MentionSuggestion) : MessageComposerEvents
+    data class InsertMention(val mention: ResolvedMentionSuggestion) : MessageComposerEvents
 }

@@ -58,6 +58,8 @@ import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.wysiwyg.compose.RichTextEditorStyle
+import io.element.android.wysiwyg.compose.internal.applyStyleInCompose
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -69,6 +71,7 @@ fun MarkdownTextInput(
     onSuggestionReceived: (Suggestion?) -> Unit,
     composerMode: MessageComposerMode,
     onResetComposerMode: () -> Unit,
+    richTextEditorStyle: RichTextEditorStyle,
     modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -144,11 +147,13 @@ fun MarkdownTextInput(
                                 state.currentMentionSuggestion = editableText.checkSuggestionNeeded()
                                 onSuggestionReceived(state.currentMentionSuggestion)
                             }
-                            state.onRequestFocus = { this.requestFocus() }
+                            state.requestFocusAction = { this.requestFocus() }
                         }
                     }
                 },
                 update = { editText ->
+                    editText.applyStyleInCompose(richTextEditorStyle)
+
                     if (state.text.needsDisplaying()) {
                         editText.editableText.clear()
                         editText.editableText.append(state.text.value())
