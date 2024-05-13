@@ -101,7 +101,7 @@
   <string name="action_start_chat">"开始聊天"</string>
   <string name="action_start_verification">"开始验证"</string>
   <string name="action_static_map_load">"点击以加载地图"</string>
-  <string name="action_take_photo">"	拍摄照片"</string>
+  <string name="action_take_photo">"拍摄照片"</string>
   <string name="action_tap_for_options">"点按查看选项"</string>
   <string name="action_try_again">"再试一次"</string>
   <string name="action_view_source">"查看来源"</string>

@@ -13,7 +13,7 @@
   <string name="screen_report_content_explanation">"此消息将举报给您的主服务器管理员。他们无法读取任何加密消息。"</string>
   <string name="screen_report_content_hint">"举报此内容的原因"</string>
   <string name="screen_room_attachment_source_camera">"相机"</string>
-  <string name="screen_room_attachment_source_camera_photo">"	拍摄照片"</string>
+  <string name="screen_room_attachment_source_camera_photo">"拍摄照片"</string>
   <string name="screen_room_attachment_source_camera_video">"录制视频"</string>
   <string name="screen_room_attachment_source_files">"附件"</string>
   <string name="screen_room_attachment_source_gallery">"照片和视频库"</string>
