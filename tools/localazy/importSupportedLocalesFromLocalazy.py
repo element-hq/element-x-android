@@ -27,6 +27,8 @@ def normalizeForResourceConfigurations(locale):
             return "in"
         case "zh_TW#Hant":
             return "zh-rTW"
+        case "zh#Hans":
+            return "zh-rCN"
         case _:
             return locale
 
@@ -37,6 +39,8 @@ def normalizeForLocalConfig(locale):
             return "in"
         case "zh_TW#Hant":
             return "zh-TW"
+        case "zh#Hans":
+            return "zh-CN"
         case _:
             return locale
 
