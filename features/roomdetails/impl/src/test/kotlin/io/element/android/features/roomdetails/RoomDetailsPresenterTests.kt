@@ -118,7 +118,7 @@ class RoomDetailsPresenterTests {
         presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.roomId).isEqualTo(room.roomId)
-            assertThat(initialState.roomName).isEqualTo(room.name)
+            assertThat(initialState.roomName).isEqualTo(room.displayName)
             assertThat(initialState.roomAvatarUrl).isEqualTo(room.avatarUrl)
             assertThat(initialState.roomTopic).isEqualTo(RoomTopicState.ExistingTopic(room.topic!!))
             assertThat(initialState.memberCount).isEqualTo(room.joinedMemberCount)
@@ -148,7 +148,7 @@ class RoomDetailsPresenterTests {
 
     @Test
     fun `present - initial state with no room name`() = runTest {
-        val room = aMatrixRoom(name = null)
+        val room = aMatrixRoom(displayName = "")
         val presenter = createRoomDetailsPresenter(room)
         presenter.test {
             val initialState = awaitItem()
@@ -476,8 +476,7 @@ class RoomDetailsPresenterTests {
 
 fun aMatrixRoom(
     roomId: RoomId = A_ROOM_ID,
-    name: String? = A_ROOM_NAME,
-    displayName: String = "A fallback display name",
+    displayName: String = A_ROOM_NAME,
     topic: String? = "A topic",
     avatarUrl: String? = "https://matrix.org/avatar.jpg",
     isEncrypted: Boolean = true,
@@ -486,7 +485,6 @@ fun aMatrixRoom(
     notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService()
 ) = FakeMatrixRoom(
     roomId = roomId,
-    name = name,
     displayName = displayName,
     topic = topic,
     avatarUrl = avatarUrl,

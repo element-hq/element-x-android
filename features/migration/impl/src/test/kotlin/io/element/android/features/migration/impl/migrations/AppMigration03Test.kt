@@ -16,21 +16,18 @@
 
 package io.element.android.features.migration.impl.migrations
 
-import com.squareup.anvil.annotations.ContributesMultibinding
-import io.element.android.features.rageshake.api.logs.LogFilesRemover
-import io.element.android.libraries.di.AppScope
-import javax.inject.Inject
+import io.element.android.features.rageshake.test.logs.FakeLogFilesRemover
+import kotlinx.coroutines.test.runTest
+import org.junit.Test
 
-/**
- * Remove existing logs from the device to remove any leaks of sensitive data.
- */
-@ContributesMultibinding(AppScope::class)
-class AppMigration01 @Inject constructor(
-    private val logFilesRemover: LogFilesRemover,
-) : AppMigration {
-    override val order: Int = 1
+class AppMigration03Test {
+    @Test
+    fun `test migration`() = runTest {
+        val logsFileRemover = FakeLogFilesRemover()
+        val migration = AppMigration03(migration01 = AppMigration01(logsFileRemover))
 
-    override suspend fun migrate() {
-        logFilesRemover.perform()
+        migration.migrate()
+
+        logsFileRemover.performLambda.assertions().isCalledOnce()
     }
 }

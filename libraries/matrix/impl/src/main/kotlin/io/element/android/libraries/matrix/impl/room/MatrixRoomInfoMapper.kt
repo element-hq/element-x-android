@@ -38,7 +38,7 @@ class MatrixRoomInfoMapper(
     fun map(rustRoomInfo: RustRoomInfo): MatrixRoomInfo = rustRoomInfo.use {
         return MatrixRoomInfo(
             id = RoomId(it.id),
-            name = it.name,
+            name = it.displayName,
             topic = it.topic,
             avatarUrl = it.avatarUrl,
             isDirect = it.isDirect,

@@ -24,6 +24,10 @@ import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 
+/**
+ * This migration sets the skip session verification preference to true for all existing sessions.
+ * This way we don't force existing users to verify their session again.
+ */
 @ContributesMultibinding(AppScope::class)
 class AppMigration02 @Inject constructor(
     private val sessionStore: SessionStore,

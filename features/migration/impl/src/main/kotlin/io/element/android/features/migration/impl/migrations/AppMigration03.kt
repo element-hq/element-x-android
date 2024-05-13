@@ -17,20 +17,19 @@
 package io.element.android.features.migration.impl.migrations
 
 import com.squareup.anvil.annotations.ContributesMultibinding
-import io.element.android.features.rageshake.api.logs.LogFilesRemover
 import io.element.android.libraries.di.AppScope
 import javax.inject.Inject
 
 /**
- * Remove existing logs from the device to remove any leaks of sensitive data.
+ * This performs the same operation as [AppMigration01], since we need to clear the local logs again.
  */
 @ContributesMultibinding(AppScope::class)
-class AppMigration01 @Inject constructor(
-    private val logFilesRemover: LogFilesRemover,
+class AppMigration03 @Inject constructor(
+    private val migration01: AppMigration01,
 ) : AppMigration {
-    override val order: Int = 1
+    override val order: Int = 3
 
     override suspend fun migrate() {
-        logFilesRemover.perform()
+        migration01.migrate()
     }
 }

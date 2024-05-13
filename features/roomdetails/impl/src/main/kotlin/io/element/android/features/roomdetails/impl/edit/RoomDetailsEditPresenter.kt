@@ -65,7 +65,7 @@ class RoomDetailsEditPresenter @Inject constructor(
         // just erase the local value when the room field has changed
         var roomAvatarUri by rememberSaveable(room.avatarUrl) { mutableStateOf(room.avatarUrl?.toUri()) }
 
-        var roomName by rememberSaveable { mutableStateOf((room.name ?: room.displayName).trim()) }
+        var roomName by rememberSaveable { mutableStateOf(room.displayName.trim()) }
         var roomTopic by rememberSaveable { mutableStateOf(room.topic?.trim()) }
 
         val saveButtonEnabled by remember(
@@ -76,7 +76,7 @@ class RoomDetailsEditPresenter @Inject constructor(
         ) {
             derivedStateOf {
                 roomAvatarUri?.toString()?.trim() != room.avatarUrl?.toUri()?.toString()?.trim() ||
-                    roomName.trim() != (room.name ?: room.displayName).trim() ||
+                    roomName.trim() != room.displayName.trim() ||
                     roomTopic.orEmpty().trim() != room.topic.orEmpty().trim()
             }
         }
@@ -168,7 +168,7 @@ class RoomDetailsEditPresenter @Inject constructor(
                     Timber.e(it, "Failed to set room topic")
                 })
             }
-            if (name.isNotEmpty() && name.trim() != room.name.orEmpty().trim()) {
+            if (name.isNotEmpty() && name.trim() != room.displayName.trim()) {
                 results.add(room.setName(name).onFailure {
                     Timber.e(it, "Failed to set room name")
                 })
