@@ -44,7 +44,7 @@ showkase = "1.0.2"
 appyx = "1.4.0"
 sqldelight = "2.0.2"
 # TODO: revert snapshot
-wysiwyg = "2.37.2-SNAPSHOT"
+wysiwyg = "2.37.2-markdown-SNAPSHOT"
 telephoto = "0.11.2"
 
 # DI
