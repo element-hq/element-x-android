@@ -48,19 +48,6 @@ class DefaultAppPreferencesStore @Inject constructor(
 ) : AppPreferencesStore {
     private val store = context.dataStore
 
-    override suspend fun setRichTextEditorEnabled(enabled: Boolean) {
-        store.edit { prefs ->
-            prefs[richTextEditorKey] = enabled
-        }
-    }
-
-    override fun isRichTextEditorEnabledFlow(): Flow<Boolean> {
-        return store.data.map { prefs ->
-            // enabled by default
-            prefs[richTextEditorKey].orTrue()
-        }
-    }
-
     override suspend fun setDeveloperModeEnabled(enabled: Boolean) {
         store.edit { prefs ->
             prefs[developerModeKey] = enabled

@@ -21,7 +21,7 @@ import android.graphics.Color
 import android.text.Editable
 import android.text.Selection
 import android.text.SpannableString
-import android.widget.EditText
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -200,7 +200,7 @@ private fun Editable.checkSuggestionNeeded(): Suggestion? {
 
 class MarkdownEditText(
     context: Context,
-) : EditText(context) {
+) : AppCompatEditText(context) {
     var onSelectionChangeListener: ((Int, Int) -> Unit)? = null
 
     private var isModifyingText = false

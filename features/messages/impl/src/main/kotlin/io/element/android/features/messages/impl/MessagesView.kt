@@ -439,7 +439,6 @@ private fun MessagesViewComposerBottomSheetContents(
                 state = state.composerState,
                 voiceMessageState = state.voiceMessageComposerState,
                 subcomposing = subcomposing,
-                enableTextFormatting = state.enableTextFormatting,
                 enableVoiceMessages = state.enableVoiceMessages,
                 modifier = Modifier.fillMaxWidth(),
             )

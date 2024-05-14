@@ -124,7 +124,10 @@ class MessageComposerPresenter @Inject constructor(
     @Composable
     override fun present(): MessageComposerState {
         val localCoroutineScope = rememberCoroutineScope()
-        val markdownTextEditorState = remember { MarkdownTextEditorState() }
+
+        // Initially disabled so we don't set focus and text twice
+        var applyFormattingModeChanges by remember { mutableStateOf(false) }
+        val markdownTextEditorState = remember { MarkdownTextEditorState(initialText = null) }
 
         var isMentionsEnabled by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
@@ -162,6 +165,9 @@ class MessageComposerPresenter @Inject constructor(
             mutableStateOf(false)
         }
         val richTextEditorState = richTextEditorStateFactory.create()
+        if (isTesting) {
+            richTextEditorState.isReadyToProcessActions = true
+        }
         val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
 
         var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
@@ -248,19 +254,21 @@ class MessageComposerPresenter @Inject constructor(
         }
 
         LaunchedEffect(showTextFormatting) {
+            if (!applyFormattingModeChanges) {
+                applyFormattingModeChanges = true
+                return@LaunchedEffect
+            }
             if (showTextFormatting) {
                 val markdown = markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
-                if (markdown.isNotEmpty()) {
-                    richTextEditorState.setMarkdown(markdown)
-                    richTextEditorState.requestFocus()
-                }
+                richTextEditorState.setMarkdown(markdown)
+                // Give some time for the focus of the previous editor to be cleared
+                richTextEditorState.requestFocus()
             } else {
                 val markdown = richTextEditorState.messageMarkdown
-                if (markdown.isNotEmpty()) {
-                    markdownTextEditorState.text.update(markdown, true)
-                    delay(50)
-                    markdownTextEditorState.requestFocusAction()
-                }
+                markdownTextEditorState.text.update(markdown, true)
+                // Give some time for the focus of the previous editor to be cleared
+                delay(100)
+                markdownTextEditorState.requestFocusAction()
             }
         }
 

@@ -19,7 +19,6 @@ package io.element.android.features.messages.impl.messagecomposer
 import android.net.Uri
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
-import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
 

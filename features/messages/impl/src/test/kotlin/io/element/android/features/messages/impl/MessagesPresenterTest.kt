@@ -754,7 +754,7 @@ class MessagesPresenterTest {
     ): MessagesPresenter {
         val mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom)
         val permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter)
-        val appPreferencesStore = InMemoryAppPreferencesStore(isRichTextEditorEnabled = true)
+        val appPreferencesStore = InMemoryAppPreferencesStore()
         val sessionPreferencesStore = InMemorySessionPreferencesStore()
         val messageComposerPresenter = MessageComposerPresenter(
             appCoroutineScope = this,
@@ -829,7 +829,6 @@ class MessagesPresenterTest {
             messageSummaryFormatter = FakeMessageSummaryFormatter(),
             navigator = navigator,
             clipboardHelper = clipboardHelper,
-            appPreferencesStore = appPreferencesStore,
             featureFlagsService = FakeFeatureFlagService(),
             buildMeta = aBuildMeta(),
             dispatchers = coroutineDispatchers,

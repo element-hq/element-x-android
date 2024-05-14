@@ -19,9 +19,9 @@ package io.element.android.features.messages.impl.messagecomposer
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import kotlinx.collections.immutable.ImmutableList
@@ -40,9 +40,7 @@ data class MessageComposerState(
     val memberSuggestions: ImmutableList<ResolvedMentionSuggestion>,
     val currentUserId: UserId,
     val eventSink: (MessageComposerEvents) -> Unit,
-) {
-    val hasFocus: Boolean = textEditorState.hasFocus()
-}
+)
 
 @Immutable
 sealed interface AttachmentsState {

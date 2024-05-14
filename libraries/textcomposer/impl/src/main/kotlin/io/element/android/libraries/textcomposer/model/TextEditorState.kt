@@ -20,6 +20,8 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -35,6 +37,7 @@ import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
 import io.element.android.wysiwyg.compose.RichTextEditorState
 
+@Immutable
 sealed interface TextEditorState {
     data class Markdown(
         val state: MarkdownTextEditorState,
@@ -55,6 +58,12 @@ sealed interface TextEditorState {
     }
 
     fun hasFocus(): Boolean = when (this) {
+        is Markdown -> state.hasFocus
+        is Rich -> richTextEditorState.hasFocus
+    }
+
+    @Composable
+    fun focusState(): Boolean = when (this) {
         is Markdown -> state.hasFocus
         is Rich -> richTextEditorState.hasFocus
     }
@@ -84,7 +93,7 @@ sealed interface TextEditorState {
 
 @Stable
 class MarkdownTextEditorState(
-    initialText: String? = null,
+    initialText: String?,
 ) {
     var text by mutableStateOf(ImmutableCharSequence(initialText ?: ""))
     var selection by mutableStateOf(0..0)
@@ -130,13 +139,15 @@ class MarkdownTextEditorState(
         return if (charSequence is Spanned) {
             val mentions = charSequence.getSpans(0, charSequence.length, MentionSpan::class.java)
             buildString {
-                append(charSequence)
-                for (mention in mentions.reversed()) {
-                    val start = charSequence.getSpanStart(mention)
-                    val end = charSequence.getSpanEnd(mention)
-                    if (mention.type == MentionSpan.Type.USER) {
-                        val link = permalinkBuilder.permalinkForUser(UserId(mention.rawValue)).getOrNull() ?: continue
-                        replace(start, end, "[${mention.text}]($link)")
+                append(charSequence.toString())
+                if (mentions != null && mentions.isNotEmpty()) {
+                    for (mention in mentions.reversed()) {
+                        val start = charSequence.getSpanStart(mention)
+                        val end = charSequence.getSpanEnd(mention)
+                        if (mention.type == MentionSpan.Type.USER) {
+                            val link = permalinkBuilder.permalinkForUser(UserId(mention.rawValue)).getOrNull() ?: continue
+                            replace(start, end, "[${mention.text}]($link)")
+                        }
                     }
                 }
             }
