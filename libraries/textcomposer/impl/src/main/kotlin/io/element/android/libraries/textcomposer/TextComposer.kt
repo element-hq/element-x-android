@@ -548,7 +548,7 @@ internal fun TextComposerSimplePreview() = ElementPreview {
             },
             {
                 ATextComposer(
-                    TextEditorState.Markdown(aMarkdownTextEditorState(initialText = "A message without focus")),
+                    TextEditorState.Markdown(aMarkdownTextEditorState(initialText = "A message without focus", initialFocus = false)),
                     voiceMessageState = VoiceMessageState.Idle,
                     composerMode = MessageComposerMode.Normal,
                     enableVoiceMessages = true,
