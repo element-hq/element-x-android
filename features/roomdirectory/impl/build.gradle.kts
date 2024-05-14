@@ -49,6 +49,7 @@ dependencies {
 
     testImplementation(libs.test.junit)
     testImplementation(libs.androidx.compose.ui.test.junit)
+    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
     testImplementation(libs.test.robolectric)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)
