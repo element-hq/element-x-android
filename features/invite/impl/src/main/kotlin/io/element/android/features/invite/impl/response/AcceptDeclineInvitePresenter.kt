@@ -33,9 +33,8 @@ import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.join.JoinRoom
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
-import io.element.android.services.analytics.api.AnalyticsService
-import io.element.android.services.analytics.api.extensions.toAnalyticsJoinedRoom
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.Optional
@@ -44,7 +43,7 @@ import kotlin.jvm.optionals.getOrNull
 
 class AcceptDeclineInvitePresenter @Inject constructor(
     private val client: MatrixClient,
-    private val analyticsService: AnalyticsService,
+    private val joinRoom: JoinRoom,
     private val notificationDrawerManager: NotificationDrawerManager,
 ) : Presenter<AcceptDeclineInviteState> {
     @Composable
@@ -59,9 +58,11 @@ class AcceptDeclineInvitePresenter @Inject constructor(
         fun handleEvents(event: AcceptDeclineInviteEvents) {
             when (event) {
                 is AcceptDeclineInviteEvents.AcceptInvite -> {
-                    currentInvite = Optional.of(event.invite)
-                    localCoroutineScope.acceptInvite(event.invite.roomId, acceptedAction)
+                    // currentInvite is used to render the decline confirmation dialog
+                    // and to reuse the roomId when the user confirm the rejection of the invitation.
+                    // Just set it to empty here.
                     currentInvite = Optional.empty()
+                    localCoroutineScope.acceptInvite(event.invite.roomId, acceptedAction)
                 }
 
                 is AcceptDeclineInviteEvents.DeclineInvite -> {
@@ -100,14 +101,18 @@ class AcceptDeclineInvitePresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.acceptInvite(roomId: RoomId, acceptedAction: MutableState<AsyncAction<RoomId>>) = launch {
+    private fun CoroutineScope.acceptInvite(
+        roomId: RoomId,
+        acceptedAction: MutableState<AsyncAction<RoomId>>,
+    ) = launch {
         acceptedAction.runUpdatingState {
-            client.joinRoom(roomId)
+            joinRoom(
+                roomId = roomId,
+                serverNames = emptyList(),
+                trigger = JoinedRoom.Trigger.Invite,
+            )
                 .onSuccess {
                     notificationDrawerManager.clearMembershipNotificationForRoom(client.sessionId, roomId, doRender = true)
-                    client.getRoom(roomId)?.use { room ->
-                        analyticsService.capture(room.toAnalyticsJoinedRoom(JoinedRoom.Trigger.Invite))
-                    }
                 }
                 .map { roomId }
         }

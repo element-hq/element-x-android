@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdirectory.impl.root
+package io.element.android.libraries.matrix.api.room.alias
 
-import io.element.android.features.roomdirectory.impl.root.di.JoinRoom
 import io.element.android.libraries.matrix.api.core.RoomId
 
-class FakeJoinRoom(
-    var lambda: (RoomId) -> Result<Unit> = { Result.success(Unit) }
-) : JoinRoom {
-    override suspend fun invoke(roomId: RoomId) = lambda(roomId)
-}
+/**
+ * Information about a room, that was resolved from a room alias.
+ */
+data class ResolvedRoomAlias(
+    /**
+     * The room ID that the alias resolved to.
+     */
+    val roomId: RoomId,
+    /**
+     * A list of servers that can be used to find the room by its room ID.
+     */
+    val servers: List<String>
+)

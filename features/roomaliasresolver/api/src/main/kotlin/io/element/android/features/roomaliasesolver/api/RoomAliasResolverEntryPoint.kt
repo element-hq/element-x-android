@@ -22,7 +22,7 @@ import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.matrix.api.core.RoomAlias
-import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 
 interface RoomAliasResolverEntryPoint : FeatureEntryPoint {
     fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
@@ -34,7 +34,7 @@ interface RoomAliasResolverEntryPoint : FeatureEntryPoint {
     }
 
     interface Callback : Plugin {
-        fun onAliasResolved(roomId: RoomId)
+        fun onAliasResolved(data: ResolvedRoomAlias)
     }
 
     data class Params(

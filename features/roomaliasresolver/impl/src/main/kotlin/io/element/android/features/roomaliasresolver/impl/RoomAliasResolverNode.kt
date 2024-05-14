@@ -28,7 +28,7 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.roomaliasesolver.api.RoomAliasResolverEntryPoint
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 
 @ContributesNode(SessionScope::class)
 class RoomAliasResolverNode @AssistedInject constructor(
@@ -42,8 +42,8 @@ class RoomAliasResolverNode @AssistedInject constructor(
         inputs.roomAlias
     )
 
-    private fun onAliasResolved(roomId: RoomId) {
-        plugins<RoomAliasResolverEntryPoint.Callback>().forEach { it.onAliasResolved(roomId) }
+    private fun onAliasResolved(data: ResolvedRoomAlias) {
+        plugins<RoomAliasResolverEntryPoint.Callback>().forEach { it.onAliasResolved(data) }
     }
 
     @Composable

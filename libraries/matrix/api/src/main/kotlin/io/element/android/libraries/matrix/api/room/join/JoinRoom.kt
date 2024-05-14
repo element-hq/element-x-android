@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomaliasresolver.impl
+package io.element.android.libraries.matrix.api.room.join
 
-import androidx.compose.runtime.Immutable
-import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.matrix.api.core.RoomAlias
-import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
+import im.vector.app.features.analytics.plan.JoinedRoom
+import io.element.android.libraries.matrix.api.core.RoomId
 
-@Immutable
-data class RoomAliasResolverState(
-    val roomAlias: RoomAlias,
-    val resolveState: AsyncData<ResolvedRoomAlias>,
-    val eventSink: (RoomAliasResolverEvents) -> Unit
-)
+interface JoinRoom {
+    suspend operator fun invoke(
+        roomId: RoomId,
+        serverNames: List<String>,
+        trigger: JoinedRoom.Trigger,
+    ): Result<Unit>
+}

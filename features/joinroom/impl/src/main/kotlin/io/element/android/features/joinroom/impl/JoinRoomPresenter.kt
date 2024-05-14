@@ -29,6 +29,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.InviteData
@@ -45,6 +46,7 @@ import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomType
+import io.element.android.libraries.matrix.api.room.join.JoinRoom
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
 import io.element.android.libraries.matrix.ui.model.toInviteSender
 import kotlinx.coroutines.CoroutineScope
@@ -55,7 +57,10 @@ class JoinRoomPresenter @AssistedInject constructor(
     @Assisted private val roomId: RoomId,
     @Assisted private val roomIdOrAlias: RoomIdOrAlias,
     @Assisted private val roomDescription: Optional<RoomDescription>,
+    @Assisted private val serverNames: List<String>,
+    @Assisted private val trigger: JoinedRoom.Trigger,
     private val matrixClient: MatrixClient,
+    private val joinRoom: JoinRoom,
     private val knockRoom: KnockRoom,
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
     private val buildMeta: BuildMeta,
@@ -65,6 +70,8 @@ class JoinRoomPresenter @AssistedInject constructor(
             roomId: RoomId,
             roomIdOrAlias: RoomIdOrAlias,
             roomDescription: Optional<RoomDescription>,
+            serverNames: List<String>,
+            trigger: JoinedRoom.Trigger,
         ): JoinRoomPresenter
     }
 
@@ -73,6 +80,7 @@ class JoinRoomPresenter @AssistedInject constructor(
         val coroutineScope = rememberCoroutineScope()
         var retryCount by remember { mutableIntStateOf(0) }
         val roomInfo by matrixClient.getRoomInfoFlow(roomId).collectAsState(initial = Optional.empty())
+        val joinAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val knockAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val contentState by produceState<ContentState>(
             initialValue = ContentState.Loading(roomIdOrAlias),
@@ -108,15 +116,13 @@ class JoinRoomPresenter @AssistedInject constructor(
 
         fun handleEvents(event: JoinRoomEvents) {
             when (event) {
-                JoinRoomEvents.AcceptInvite,
-                JoinRoomEvents.JoinRoom -> {
+                JoinRoomEvents.JoinRoom -> coroutineScope.joinRoom(joinAction)
+                JoinRoomEvents.KnockRoom -> coroutineScope.knockRoom(knockAction)
+                JoinRoomEvents.AcceptInvite -> {
                     val inviteData = contentState.toInviteData() ?: return
                     acceptDeclineInviteState.eventSink(
                         AcceptDeclineInviteEvents.AcceptInvite(inviteData)
                     )
-                }
-                JoinRoomEvents.KnockRoom -> {
-                    coroutineScope.knockRoom(roomId, knockAction)
                 }
                 JoinRoomEvents.DeclineInvite -> {
                     val inviteData = contentState.toInviteData() ?: return
@@ -129,6 +135,7 @@ class JoinRoomPresenter @AssistedInject constructor(
                 }
                 JoinRoomEvents.ClearError -> {
                     knockAction.value = AsyncAction.Uninitialized
+                    joinAction.value = AsyncAction.Uninitialized
                 }
             }
         }
@@ -136,13 +143,24 @@ class JoinRoomPresenter @AssistedInject constructor(
         return JoinRoomState(
             contentState = contentState,
             acceptDeclineInviteState = acceptDeclineInviteState,
+            joinAction = joinAction.value,
             knockAction = knockAction.value,
             applicationName = buildMeta.applicationName,
             eventSink = ::handleEvents
         )
     }
 
-    private fun CoroutineScope.knockRoom(roomId: RoomId, knockAction: MutableState<AsyncAction<Unit>>) = launch {
+    private fun CoroutineScope.joinRoom(joinAction: MutableState<AsyncAction<Unit>>) = launch {
+        joinAction.runUpdatingState {
+            joinRoom.invoke(
+                roomId = roomId,
+                serverNames = serverNames,
+                trigger = trigger
+            )
+        }
+    }
+
+    private fun CoroutineScope.knockRoom(knockAction: MutableState<AsyncAction<Unit>>) = launch {
         knockAction.runUpdatingState {
             knockRoom(roomId)
         }

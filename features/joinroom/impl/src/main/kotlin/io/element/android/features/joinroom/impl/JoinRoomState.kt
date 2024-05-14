@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.ui.model.InviteSender
 data class JoinRoomState(
     val contentState: ContentState,
     val acceptDeclineInviteState: AcceptDeclineInviteState,
+    val joinAction: AsyncAction<Unit>,
     val knockAction: AsyncAction<Unit>,
     val applicationName: String,
     val eventSink: (JoinRoomEvents) -> Unit

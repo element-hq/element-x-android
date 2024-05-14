@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomdirectory.impl.root.di
+package io.element.android.libraries.matrix.test.room.join
 
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.matrix.api.MatrixClient
+import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.libraries.matrix.api.core.RoomId
-import javax.inject.Inject
+import io.element.android.libraries.matrix.api.room.join.JoinRoom
+import io.element.android.tests.testutils.simulateLongTask
 
-interface JoinRoom {
-    suspend operator fun invoke(roomId: RoomId): Result<Unit>
-}
-
-@ContributesBinding(SessionScope::class)
-class DefaultJoinRoom @Inject constructor(private val client: MatrixClient) : JoinRoom {
-    override suspend fun invoke(roomId: RoomId) = client.joinRoom(roomId)
+class FakeJoinRoom(
+    var lambda: (RoomId, List<String>, JoinedRoom.Trigger) -> Result<Unit>
+) : JoinRoom {
+    override suspend fun invoke(
+        roomId: RoomId,
+        serverNames: List<String>,
+        trigger: JoinedRoom.Trigger,
+    ): Result<Unit> = simulateLongTask {
+        lambda(roomId, serverNames, trigger)
+    }
 }
