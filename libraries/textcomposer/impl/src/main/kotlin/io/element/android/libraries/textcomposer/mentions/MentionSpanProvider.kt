@@ -173,8 +173,8 @@ internal fun MentionSpanPreview() {
         provider.setup()
 
         val textColor = ElementTheme.colors.textPrimary.toArgb()
-        fun mentionSpanMe() = provider.getMentionSpanFor("me", "https://matrix.to/#/@me:matrix.org")
-        fun mentionSpanOther() = provider.getMentionSpanFor("other", "https://matrix.to/#/@other:matrix.org")
+        fun mentionSpanMe() = provider.getMentionSpanFor("mention", "https://matrix.to/#/@me:matrix.org")
+        fun mentionSpanOther() = provider.getMentionSpanFor("mention", "https://matrix.to/#/@other:matrix.org")
         fun mentionSpanRoom() = provider.getMentionSpanFor("room", "https://matrix.to/#/#room:matrix.org")
         AndroidView(factory = { context ->
             TextView(context).apply {
