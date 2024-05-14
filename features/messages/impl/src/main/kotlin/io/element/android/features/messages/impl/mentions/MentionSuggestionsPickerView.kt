@@ -63,7 +63,7 @@ fun MentionSuggestionsPickerView(
             memberSuggestions,
             key = { suggestion ->
                 when (suggestion) {
-                    is ResolvedMentionSuggestion.Room -> "@room"
+                    is ResolvedMentionSuggestion.AtRoom -> "@room"
                     is ResolvedMentionSuggestion.Member -> suggestion.roomMember.userId.value
                 }
             }
@@ -95,7 +95,7 @@ private fun RoomMemberSuggestionItemView(
     Row(modifier = modifier.clickable { onSuggestionSelected(memberSuggestion) }, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
         val avatarSize = AvatarSize.TimelineRoom
         val avatarData = when (memberSuggestion) {
-            is ResolvedMentionSuggestion.Room -> roomAvatar?.copy(size = avatarSize) ?: AvatarData(roomId, roomName, null, avatarSize)
+            is ResolvedMentionSuggestion.AtRoom -> roomAvatar?.copy(size = avatarSize) ?: AvatarData(roomId, roomName, null, avatarSize)
             is ResolvedMentionSuggestion.Member -> AvatarData(
                 memberSuggestion.roomMember.userId.value,
                 memberSuggestion.roomMember.displayName,
@@ -104,12 +104,12 @@ private fun RoomMemberSuggestionItemView(
             )
         }
         val title = when (memberSuggestion) {
-            is ResolvedMentionSuggestion.Room -> stringResource(R.string.screen_room_mentions_at_room_title)
+            is ResolvedMentionSuggestion.AtRoom -> stringResource(R.string.screen_room_mentions_at_room_title)
             is ResolvedMentionSuggestion.Member -> memberSuggestion.roomMember.displayName
         }
 
         val subtitle = when (memberSuggestion) {
-            is ResolvedMentionSuggestion.Room -> "@room"
+            is ResolvedMentionSuggestion.AtRoom -> "@room"
             is ResolvedMentionSuggestion.Member -> memberSuggestion.roomMember.userId.value
         }
 
@@ -160,7 +160,7 @@ internal fun MentionSuggestionsPickerViewPreview() {
             roomName = "Room",
             roomAvatarData = null,
             memberSuggestions = persistentListOf(
-                ResolvedMentionSuggestion.Room,
+                ResolvedMentionSuggestion.AtRoom,
                 ResolvedMentionSuggestion.Member(roomMember),
                 ResolvedMentionSuggestion.Member(roomMember.copy(userId = UserId("@bob:server.org"), displayName = "Bob")),
             ),

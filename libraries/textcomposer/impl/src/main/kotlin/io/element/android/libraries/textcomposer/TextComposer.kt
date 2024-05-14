@@ -62,13 +62,14 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.textcomposer.components.ComposerOptionsButton
 import io.element.android.libraries.textcomposer.components.DismissTextFormattingButton
-import io.element.android.libraries.textcomposer.components.MarkdownTextInput
 import io.element.android.libraries.textcomposer.components.SendButton
 import io.element.android.libraries.textcomposer.components.TextFormatting
 import io.element.android.libraries.textcomposer.components.VoiceMessageDeleteButton
 import io.element.android.libraries.textcomposer.components.VoiceMessagePreview
 import io.element.android.libraries.textcomposer.components.VoiceMessageRecorderButton
 import io.element.android.libraries.textcomposer.components.VoiceMessageRecording
+import io.element.android.libraries.textcomposer.components.markdown.MarkdownTextInput
+import io.element.android.libraries.textcomposer.components.markdown.aMarkdownTextEditorState
 import io.element.android.libraries.textcomposer.components.textInputRoundedCornerShape
 import io.element.android.libraries.textcomposer.mentions.rememberMentionSpanProvider
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
@@ -147,6 +148,11 @@ fun TextComposer(
 
     val textInput: @Composable () -> Unit = when (state) {
         is TextEditorState.Rich -> {
+            val placeholder = if (composerMode.inThread) {
+                stringResource(id = CommonStrings.action_reply_in_thread)
+            } else {
+                stringResource(id = R.string.rich_text_editor_composer_placeholder)
+            }
             remember(state.richTextEditorState, subcomposing, composerMode, onResetComposerMode, onError) {
                 @Composable {
                     val mentionSpanProvider = rememberMentionSpanProvider(
@@ -156,11 +162,7 @@ fun TextComposer(
                     TextInput(
                         state = state.richTextEditorState,
                         subcomposing = subcomposing,
-                        placeholder = if (composerMode.inThread) {
-                            stringResource(id = CommonStrings.action_reply_in_thread)
-                        } else {
-                            stringResource(id = R.string.rich_text_editor_composer_placeholder)
-                        },
+                        placeholder = placeholder,
                         composerMode = composerMode,
                         onResetComposerMode = onResetComposerMode,
                         resolveMentionDisplay = { text, url -> TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor(text, url)) },
@@ -173,17 +175,28 @@ fun TextComposer(
             }
         }
         is TextEditorState.Markdown -> {
+            val placeholder = if (composerMode.inThread) {
+                stringResource(id = CommonStrings.action_reply_in_thread)
+            } else {
+                stringResource(id = R.string.rich_text_editor_composer_placeholder)
+            }
             @Composable {
                 val style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.hasFocus())
-                MarkdownTextInput(
-                    state = state.state,
-                    subcomposing = subcomposing,
-                    onTyping = onTyping,
-                    onSuggestionReceived = onSuggestionReceived,
+                TextInputBox(
                     composerMode = composerMode,
                     onResetComposerMode = onResetComposerMode,
-                    richTextEditorStyle = style,
-                )
+                    placeholder = placeholder,
+                    showPlaceholder = { state.state.text.value().isEmpty() },
+                ) {
+                    MarkdownTextInput(
+                        state = state.state,
+                        subcomposing = subcomposing,
+                        onTyping = onTyping,
+                        onSuggestionReceived = onSuggestionReceived,
+                        composerMode = composerMode,
+                        richTextEditorStyle = style,
+                    )
+                }
             }
         }
     }
@@ -413,17 +426,12 @@ private fun TextFormattingLayout(
 }
 
 @Composable
-private fun TextInput(
-    state: RichTextEditorState,
-    subcomposing: Boolean,
-    placeholder: String,
+private fun TextInputBox(
     composerMode: MessageComposerMode,
     onResetComposerMode: () -> Unit,
-    resolveRoomMentionDisplay: () -> TextDisplay,
-    resolveMentionDisplay: (text: String, url: String) -> TextDisplay,
-    onError: (Throwable) -> Unit,
-    onTyping: (Boolean) -> Unit,
-    onRichContentSelected: ((Uri) -> Unit)?,
+    placeholder: String,
+    showPlaceholder: () -> Boolean,
+    textInput: @Composable () -> Unit,
 ) {
     val bgColor = ElementTheme.colors.bgSubtleSecondary
     val borderColor = ElementTheme.colors.borderDisabled
@@ -448,7 +456,7 @@ private fun TextInput(
             contentAlignment = Alignment.CenterStart,
         ) {
             // Placeholder
-            if (state.messageHtml.isEmpty()) {
+            if (showPlaceholder()) {
                 Text(
                     placeholder,
                     style = defaultTypography.copy(
@@ -459,22 +467,45 @@ private fun TextInput(
                 )
             }
 
-            RichTextEditor(
-                state = state,
-                // Disable most of the editor functionality if it's just being measured for a subcomposition.
-                // This prevents it gaining focus and mutating the state.
-                registerStateUpdates = !subcomposing,
-                modifier = Modifier
-                    .padding(top = 6.dp, bottom = 6.dp)
-                    .fillMaxWidth(),
-                style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.hasFocus),
-                resolveMentionDisplay = resolveMentionDisplay,
-                resolveRoomMentionDisplay = resolveRoomMentionDisplay,
-                onError = onError,
-                onRichContentSelected = onRichContentSelected,
-                onTyping = onTyping,
-            )
+            textInput()
         }
+    }
+}
+
+@Composable
+private fun TextInput(
+    state: RichTextEditorState,
+    subcomposing: Boolean,
+    placeholder: String,
+    composerMode: MessageComposerMode,
+    onResetComposerMode: () -> Unit,
+    resolveRoomMentionDisplay: () -> TextDisplay,
+    resolveMentionDisplay: (text: String, url: String) -> TextDisplay,
+    onError: (Throwable) -> Unit,
+    onTyping: (Boolean) -> Unit,
+    onRichContentSelected: ((Uri) -> Unit)?,
+) {
+    TextInputBox(
+        composerMode = composerMode,
+        onResetComposerMode = onResetComposerMode,
+        placeholder = placeholder,
+        showPlaceholder = { state.messageHtml.isEmpty() }
+    ) {
+        RichTextEditor(
+            state = state,
+            // Disable most of the editor functionality if it's just being measured for a subcomposition.
+            // This prevents it gaining focus and mutating the state.
+            registerStateUpdates = !subcomposing,
+            modifier = Modifier
+                .padding(top = 6.dp, bottom = 6.dp)
+                .fillMaxWidth(),
+            style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.hasFocus),
+            resolveMentionDisplay = resolveMentionDisplay,
+            resolveRoomMentionDisplay = resolveRoomMentionDisplay,
+            onError = onError,
+            onRichContentSelected = onRichContentSelected,
+            onTyping = onTyping,
+        )
     }
 }
 
@@ -485,7 +516,7 @@ internal fun TextComposerSimplePreview() = ElementPreview {
         items = persistentListOf(
             {
                 ATextComposer(
-                    TextEditorState.Rich(aRichTextEditorState(initialText = "", initialFocus = true)),
+                    TextEditorState.Markdown(aMarkdownTextEditorState(initialText = "", initialFocus = true)),
                     voiceMessageState = VoiceMessageState.Idle,
                     composerMode = MessageComposerMode.Normal,
                     enableVoiceMessages = true,
@@ -494,7 +525,7 @@ internal fun TextComposerSimplePreview() = ElementPreview {
             },
             {
                 ATextComposer(
-                    TextEditorState.Rich(aRichTextEditorState(initialText = "A message", initialFocus = true)),
+                    TextEditorState.Markdown(aMarkdownTextEditorState(initialText = "A message", initialFocus = true)),
                     voiceMessageState = VoiceMessageState.Idle,
                     composerMode = MessageComposerMode.Normal,
                     enableVoiceMessages = true,
@@ -503,8 +534,8 @@ internal fun TextComposerSimplePreview() = ElementPreview {
             },
             {
                 ATextComposer(
-                    TextEditorState.Rich(
-                        aRichTextEditorState(
+                    TextEditorState.Markdown(
+                        aMarkdownTextEditorState(
                             initialText = "A message\nWith several lines\nTo preview larger textfields and long lines with overflow",
                             initialFocus = true
                         )
@@ -517,7 +548,7 @@ internal fun TextComposerSimplePreview() = ElementPreview {
             },
             {
                 ATextComposer(
-                    TextEditorState.Rich(aRichTextEditorState(initialText = "A message without focus")),
+                    TextEditorState.Markdown(aMarkdownTextEditorState(initialText = "A message without focus")),
                     voiceMessageState = VoiceMessageState.Idle,
                     composerMode = MessageComposerMode.Normal,
                     enableVoiceMessages = true,

@@ -127,7 +127,7 @@ class MessageComposerPresenter @Inject constructor(
 
         // Initially disabled so we don't set focus and text twice
         var applyFormattingModeChanges by remember { mutableStateOf(false) }
-        val markdownTextEditorState = remember { MarkdownTextEditorState(initialText = null) }
+        val markdownTextEditorState = remember { MarkdownTextEditorState(initialText = null, initialFocus = false) }
 
         var isMentionsEnabled by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
@@ -401,7 +401,7 @@ class MessageComposerPresenter @Inject constructor(
                     localCoroutineScope.launch {
                         if (showTextFormatting) {
                             when (val mention = event.mention) {
-                                is ResolvedMentionSuggestion.Room -> {
+                                is ResolvedMentionSuggestion.AtRoom -> {
                                     richTextEditorState.insertAtRoomMentionAtSuggestion()
                                 }
                                 is ResolvedMentionSuggestion.Member -> {

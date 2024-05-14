@@ -75,6 +75,11 @@ object TestTags {
     val richTextEditor = TestTag("rich_text_editor")
 
     /**
+     * EditText inside the MarkdownTextInput.
+     */
+    val plainTextEditor = TestTag("plain_text_editor")
+
+    /**
      * Message bubble.
      */
     val messageBubble = TestTag("message_bubble")

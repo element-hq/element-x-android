@@ -100,7 +100,7 @@ object MentionSuggestionsProcessor {
                 .map(ResolvedMentionSuggestion::Member)
 
             if ("room".contains(query) && canSendRoomMention) {
-                listOf(ResolvedMentionSuggestion.Room) + matchingMembers
+                listOf(ResolvedMentionSuggestion.AtRoom) + matchingMembers
             } else {
                 matchingMembers
             }

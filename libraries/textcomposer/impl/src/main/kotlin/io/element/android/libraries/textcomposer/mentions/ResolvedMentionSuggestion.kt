@@ -21,6 +21,6 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 
 @Immutable
 sealed interface ResolvedMentionSuggestion {
-    data object Room : ResolvedMentionSuggestion
+    data object AtRoom : ResolvedMentionSuggestion
     data class Member(val roomMember: RoomMember) : ResolvedMentionSuggestion
 }

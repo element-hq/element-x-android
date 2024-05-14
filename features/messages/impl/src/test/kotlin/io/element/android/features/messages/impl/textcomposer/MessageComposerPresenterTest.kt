@@ -781,11 +781,11 @@ class MessageComposerPresenterTest {
             // An empty suggestion returns the room and joined members that are not the current user
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
             assertThat(awaitItem().memberSuggestions)
-                .containsExactly(ResolvedMentionSuggestion.Room, ResolvedMentionSuggestion.Member(bob), ResolvedMentionSuggestion.Member(david))
+                .containsExactly(ResolvedMentionSuggestion.AtRoom, ResolvedMentionSuggestion.Member(bob), ResolvedMentionSuggestion.Member(david))
 
             // A suggestion containing a part of "room" will also return the room mention
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "roo")))
-            assertThat(awaitItem().memberSuggestions).containsExactly(ResolvedMentionSuggestion.Room)
+            assertThat(awaitItem().memberSuggestions).containsExactly(ResolvedMentionSuggestion.AtRoom)
 
             // A non-empty suggestion will return those joined members whose user id matches it
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "bob")))
