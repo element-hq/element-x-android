@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"附上截图"</string>
+  <string name="screen_bug_report_contact_me">"如果您有任何后续问题，可以与我联系。"</string>
+  <string name="screen_bug_report_contact_me_title">"联系我"</string>
+  <string name="screen_bug_report_edit_screenshot">"编辑截图"</string>
+  <string name="screen_bug_report_editor_description">"请尽可能详细地描述问题。您做了什么？您预期会发生什么？实际发生了什么？"</string>
+  <string name="screen_bug_report_editor_placeholder">"描述问题…"</string>
+  <string name="screen_bug_report_editor_supporting">"请尽可能用英文描述。"</string>
+  <string name="screen_bug_report_error_description_too_short">"描述太短，请提供详细情况。谢谢！"</string>
+  <string name="screen_bug_report_include_crash_logs">"发送崩溃日志"</string>
+  <string name="screen_bug_report_include_logs">"允许日志"</string>
+  <string name="screen_bug_report_include_screenshot">"发送屏幕截图"</string>
+  <string name="screen_bug_report_logs_description">"为确认一切正常运行，您的消息中将包含日志。如要发送不带日志的消息，请关闭此设置。"</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s 上次使用时崩溃了。你想和我们分享崩溃报告吗？"</string>
+  <string name="screen_bug_report_view_logs">"查看日志"</string>
+</resources>

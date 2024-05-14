@@ -34,6 +34,7 @@
   <string name="action_accept">"Elfogadás"</string>
   <string name="action_add_to_timeline">"Hozzáadás az idővonalhoz"</string>
   <string name="action_back">"Vissza"</string>
+  <string name="action_call">"Hívás"</string>
   <string name="action_cancel">"Mégse"</string>
   <string name="action_choose_photo">"Fénykép kiválasztása"</string>
   <string name="action_clear">"Törlés"</string>
@@ -72,6 +73,7 @@
   <string name="action_load_more">"Továbbiak betöltése"</string>
   <string name="action_manage_account">"Fiók kezelése"</string>
   <string name="action_manage_devices">"Eszközök kezelése"</string>
+  <string name="action_message">"Üzenet"</string>
   <string name="action_next">"Következő"</string>
   <string name="action_no">"Nem"</string>
   <string name="action_not_now">"Most nem"</string>
@@ -262,6 +264,7 @@
   <string name="screen_room_member_details_unblock_alert_action">"Letiltás feloldása"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Újra láthatja az összes üzenetét."</string>
   <string name="screen_room_member_details_unblock_user">"Felhasználó kitiltásának feloldása"</string>
+  <string name="screen_room_title">"Csevegés"</string>
   <string name="screen_share_location_title">"Hely megosztása"</string>
   <string name="screen_share_my_location_action">"Saját hely megosztása"</string>
   <string name="screen_share_open_apple_maps">"Megnyitás az Apple Mapsben"</string>

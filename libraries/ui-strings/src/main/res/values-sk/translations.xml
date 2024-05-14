@@ -36,6 +36,7 @@
   <string name="action_accept">"Prijať"</string>
   <string name="action_add_to_timeline">"Pridať na časovú os"</string>
   <string name="action_back">"Späť"</string>
+  <string name="action_call">"Zavolať"</string>
   <string name="action_cancel">"Zrušiť"</string>
   <string name="action_choose_photo">"Vybrať fotku"</string>
   <string name="action_clear">"Vyčistiť"</string>
@@ -74,6 +75,7 @@
   <string name="action_load_more">"Načítať viac"</string>
   <string name="action_manage_account">"Spravovať účet"</string>
   <string name="action_manage_devices">"Spravovať zariadenia"</string>
+  <string name="action_message">"Poslať správu"</string>
   <string name="action_next">"Ďalej"</string>
   <string name="action_no">"Nie"</string>
   <string name="action_not_now">"Teraz nie"</string>

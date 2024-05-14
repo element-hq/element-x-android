@@ -14,13 +14,25 @@
   <string name="screen_roomlist_empty_message">"Începeți prin a trimite mesaje cuiva."</string>
   <string name="screen_roomlist_empty_title">"Nu există încă discuții."</string>
   <string name="screen_roomlist_filter_favourites">"Favorite"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Puteți adăuga un chat la preferințele dvs. în setările de chat.
+Deocamdată, puteți deselecta filtrele pentru a vedea celelalte chat-uri"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Încă nu aveți conversații preferate"</string>
+  <string name="screen_roomlist_filter_invites">"Invitații"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Nu aveți invitații în așteptare."</string>
   <string name="screen_roomlist_filter_low_priority">"Prioritate scăzută"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Puteți deselecta filtrele pentru a vedea celelalte chat-uri"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Nu aveți chat-uri pentru această selecție"</string>
   <string name="screen_roomlist_filter_people">"Persoane"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Încă nu aveți DM-uri"</string>
   <string name="screen_roomlist_filter_rooms">"Camere"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Nu sunteți încă în nicio cameră"</string>
   <string name="screen_roomlist_filter_unreads">"Necitite"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Felicitari!
+Nu aveți mesaje necitite!"</string>
   <string name="screen_roomlist_main_space_title">"Toate conversatiile"</string>
   <string name="screen_roomlist_mark_as_read">"Marcați ca citită"</string>
   <string name="screen_roomlist_mark_as_unread">"Marcați ca necitită"</string>
+  <string name="screen_roomlist_room_directory_button_title">"Răsfoiți toate camerele"</string>
   <string name="session_verification_banner_message">"Se pare că folosiți un dispozitiv nou. Verificați-vă identitatea cu un alt dispozitiv pentru a accesa mesajele dumneavoastră criptate."</string>
   <string name="session_verification_banner_title">"Verificați că sunteți dumneavoastră"</string>
 </resources>

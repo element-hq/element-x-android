@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_developer_mode">"开发者模式"</string>
+  <string name="screen_advanced_settings_developer_mode_description">"允许开发人员访问特性和功能。"</string>
+  <string name="screen_advanced_settings_element_call_base_url">"自定义 Element 通话 URL"</string>
+  <string name="screen_advanced_settings_element_call_base_url_description">"为 Element 通话设置根 URL。"</string>
+  <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL 无效，请确保包含协议（http/https）和正确的地址。"</string>
+  <string name="screen_advanced_settings_rich_text_editor_description">"禁用富文本编辑器，手动输入 Markdown。"</string>
+  <string name="screen_advanced_settings_send_read_receipts">"已读回执"</string>
+  <string name="screen_advanced_settings_send_read_receipts_description">"如果关闭，您的已读回执将不会发送给别人。您仍能收到别人的已读回执。"</string>
+  <string name="screen_advanced_settings_share_presence">"分享在线状态"</string>
+  <string name="screen_advanced_settings_share_presence_description">"如果关闭，您将无法发送或接收已读回执、输入通知"</string>
+  <string name="screen_advanced_settings_view_source_description">"启用在时间轴中查看消息来源的选项。"</string>
+  <string name="screen_blocked_users_empty">"您没有屏蔽用户"</string>
+  <string name="screen_blocked_users_unblock_alert_action">"解封"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"你可以重新接收他们的消息。"</string>
+  <string name="screen_blocked_users_unblock_alert_title">"解封用户"</string>
+  <string name="screen_blocked_users_unblocking">"正在解除屏蔽……"</string>
+  <string name="screen_edit_profile_display_name">"显示名称"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"你的显示名称"</string>
+  <string name="screen_edit_profile_error">"遇到未知错误，无法更改信息。"</string>
+  <string name="screen_edit_profile_error_title">"无法更新个人资料"</string>
+  <string name="screen_edit_profile_title">"编辑个人资料"</string>
+  <string name="screen_edit_profile_updating_details">"更新个人资料……"</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"更多设置"</string>
+  <string name="screen_notification_settings_calls_label">"音视频通话"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"配置不匹配"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"我们简化了通知设置，使选项更易于查找。您过去选择的某些自定义设置未在此处显示，但它们仍然有效。
+
+如果继续，您的某些设置可能会更改。"</string>
+  <string name="screen_notification_settings_direct_chats">"直接聊天"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"各聊天室的独立设置"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"更新通知设置时出错。"</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"全部消息"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"仅限提及和关键词"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"在私聊中，请通知我："</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"在群聊中，请通知我："</string>
+  <string name="screen_notification_settings_enable_notifications">"在此设备上启用通知"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"配置尚未更正，请重试。"</string>
+  <string name="screen_notification_settings_group_chats">"群聊"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"邀请"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"您的服务器在加密房间中不支持此选项，因此在某些房间您可能无法收到通知。"</string>
+  <string name="screen_notification_settings_mentions_section_title">"提及"</string>
+  <string name="screen_notification_settings_mode_all">"全部"</string>
+  <string name="screen_notification_settings_mode_mentions">"提及"</string>
+  <string name="screen_notification_settings_notification_section_title">"请通知我："</string>
+  <string name="screen_notification_settings_room_mention_label">"在 @room 通知我"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"要接收通知，请更改您的 %1$s。"</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"系统设置"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"系统通知已关闭"</string>
+  <string name="screen_notification_settings_title">"通知"</string>
+  <string name="troubleshoot_notifications_entry_point_section">"排查问题"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"排查通知问题"</string>
+</resources>

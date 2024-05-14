@@ -31,6 +31,8 @@
     <item quantity="other">"%1$d personer"</item>
   </plurals>
   <string name="screen_room_member_list_pending_header_title">"Väntar"</string>
+  <string name="screen_room_member_list_role_administrator">"Admin"</string>
+  <string name="screen_room_member_list_role_moderator">"Moderator"</string>
   <string name="screen_room_member_list_room_members_header_title">"Rumsmedlemmar"</string>
   <string name="screen_room_notification_settings_allow_custom">"Tillåt anpassad inställning"</string>
   <string name="screen_room_notification_settings_allow_custom_footnote">"Om du aktiverar detta åsidosätts din standardinställning"</string>

@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Creați o nouă cheie de recuperare"</string>
+  <string name="screen_identity_confirmation_subtitle">"Verificați acest dispozitiv pentru a configura mesagerie securizată."</string>
+  <string name="screen_identity_confirmation_title">"Confirmați că sunteți dumneavoastră"</string>
+  <string name="screen_identity_confirmed_subtitle">"Acum puteți citi sau trimite mesaje în siguranță, iar oricine cu care conversați poate avea încredere în acest dispozitiv."</string>
+  <string name="screen_identity_confirmed_title">"Dispozitiv verificat"</string>
+  <string name="screen_identity_use_another_device">"Utilizați un alt dispozitiv"</string>
+  <string name="screen_identity_waiting_on_other_device">"Se așteaptă celălalt dispozitiv…"</string>
   <string name="screen_session_verification_cancelled_subtitle">"Ceva nu este în regulă. Fie cererea a expirat, fie a fost respinsă."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Confirmați că emoticoanele de mai jos se potrivesc cu cele afișate în cealaltă sesiune."</string>
   <string name="screen_session_verification_compare_emojis_title">"Comparați emoticoanele"</string>

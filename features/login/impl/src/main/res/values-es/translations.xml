@@ -14,6 +14,8 @@
   <string name="screen_change_account_provider_subtitle">"Usa un proveedor de cuenta diferente, como tu propio servidor privado o una cuenta de trabajo."</string>
   <string name="screen_change_account_provider_title">"Cambiar el proveedor de la cuenta"</string>
   <string name="screen_change_server_error_invalid_homeserver">"No hemos podido acceder a este servidor. Comprueba que has introducido correctamente la dirección del servidor. Si la dirección es correcta, ponte en contacto con el administrador del servidor para obtener más ayuda."</string>
+  <string name="screen_change_server_error_invalid_well_known">"Sliding sync no está disponible debido a un problema en el archivo well-known:
+%1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Este servidor no soporta sliding sync."</string>
   <string name="screen_change_server_form_header">"Dirección del homeserver"</string>
   <string name="screen_change_server_form_notice">"Solo puedes conectarte a un servidor que soporte sliding sync. El administrador de tu servidor tendrá que configurarlo. %1$s"</string>
@@ -22,6 +24,7 @@
   <string name="screen_login_error_deactivated_account">"Esta cuenta ha sido desactivada."</string>
   <string name="screen_login_error_invalid_credentials">"Usuario y/o contraseña incorrectos"</string>
   <string name="screen_login_error_invalid_user_id">"Este no es un id de usuario válido. Formato esperado: \'@user:homeserver.org\'"</string>
+  <string name="screen_login_error_refresh_tokens">"Este servidor está configurado para utilizar tokens de actualización. Estos no son compatibles cuando se utiliza el inicio de sesión basado en contraseña."</string>
   <string name="screen_login_error_unsupported_authentication">"El servidor seleccionado no admite contraseñas ni inicio de sesión OIDC. Póngase en contacto con su administrador o elija otro homeserver."</string>
   <string name="screen_login_form_header">"Introduce tus datos"</string>
   <string name="screen_login_subtitle">"Matrix es una red abierta para una comunicación segura y descentralizada."</string>

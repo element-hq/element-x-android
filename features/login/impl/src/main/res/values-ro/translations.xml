@@ -14,6 +14,8 @@
   <string name="screen_change_account_provider_subtitle">"Utilizați un alt furnizor de cont, cum ar fi propriul server privat sau un cont de serviciu."</string>
   <string name="screen_change_account_provider_title">"Schimbați furnizorul contului"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Nu am putut accesa acest homeserver. Te rugăm să verifici că ai introdus corect adresa URL a homeserver-ului. Dacă adresa URL este corectă, contactează administratorul homeserver-ului pentru ajutor suplimentar."</string>
+  <string name="screen_change_server_error_invalid_well_known">"Sliding sync nu este disponibil din cauza unei probleme în fișierul well-known:
+%1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Momentan acest server nu oferă suport pentru sliding sync."</string>
   <string name="screen_change_server_form_header">"Adresa URL a homeserver-ului"</string>
   <string name="screen_change_server_form_notice">"Vă putețo conecta numai la un server existent care oferă suport pentru sliding sync. Administratorul homeserver-ului dumneavoastră va trebui să îl configureze. %1$s"</string>
@@ -22,6 +24,7 @@
   <string name="screen_login_error_deactivated_account">"Acest cont a fost dezactivat."</string>
   <string name="screen_login_error_invalid_credentials">"Utilizator și/sau parolă incorecte"</string>
   <string name="screen_login_error_invalid_user_id">"Acesta nu este un identificator de utilizator valid. Format așteptat: „@user:homeserver.org”"</string>
+  <string name="screen_login_error_refresh_tokens">"Acest server este configurat pentru a utiliza token-uri de reîmprospătare. Acestea nu sunt acceptate atunci când utilizați autentificare bazată pe parolă."</string>
   <string name="screen_login_error_unsupported_authentication">"Homeserver-ul selectat nu acceptă autentificarea prin parola sau OIDC. Te rugăm să contactezi administratorul sau să alegi un alt homeserver."</string>
   <string name="screen_login_form_header">"Introduceți detaliile"</string>
   <string name="screen_login_subtitle">"Matrix este o rețea deschisă pentru o comunicare sigură și descentralizată."</string>

@@ -48,7 +48,7 @@
   <string name="screen_recovery_key_setup_confirmation_title">"Avez-vous sauvegardé votre clé de récupération?"</string>
   <string name="screen_recovery_key_setup_description">"Votre sauvegarde est protégée par votre clé de récupération. Si vous avez besoin d’une nouvelle clé après la configuration, vous pourrez en créer une nouvelle en cliquant sur \"Changer la clé de récupération\"."</string>
   <string name="screen_recovery_key_setup_generate_key">"Générer la clé de récupération"</string>
-  <string name="screen_recovery_key_setup_generate_key_description">"Assurez-vous de pouvoir enregistrer votre clé dans un endroit sécurisé"</string>
+  <string name="screen_recovery_key_setup_generate_key_description">"Assurez-vous de conserver la clé dans un endroit sûr"</string>
   <string name="screen_recovery_key_setup_success">"Sauvegarde mise en place avec succès"</string>
   <string name="screen_recovery_key_setup_title">"Configurer la sauvegarde"</string>
 </resources>

@@ -35,6 +35,9 @@
   <string name="screen_room_details_add_topic_title">"Дадаць тэму"</string>
   <string name="screen_room_details_already_a_member">"Ужо ўдзельнік"</string>
   <string name="screen_room_details_already_invited">"Ужо запрасілі"</string>
+  <string name="screen_room_details_badge_encrypted">"Зашыфравана"</string>
+  <string name="screen_room_details_badge_not_encrypted">"Не зашыфравана"</string>
+  <string name="screen_room_details_badge_public">"Публічны пакой"</string>
   <string name="screen_room_details_edit_room_title">"Рэдагаваць пакой"</string>
   <string name="screen_room_details_edition_error">"Адбылася невядомая памылка, і інфармацыю нельга было змяніць."</string>
   <string name="screen_room_details_edition_error_title">"Немагчыма абнавіць пакой"</string>
