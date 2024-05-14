@@ -19,7 +19,7 @@ package io.element.android.features.roomaliasresolver.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.RoomAlias
-import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 
 open class RoomAliasResolverStateProvider : PreviewParameterProvider<RoomAliasResolverState> {
     override val values: Sequence<RoomAliasResolverState>
@@ -36,7 +36,7 @@ open class RoomAliasResolverStateProvider : PreviewParameterProvider<RoomAliasRe
 
 fun aRoomAliasResolverState(
     roomAlias: RoomAlias = A_ROOM_ALIAS,
-    resolveState: AsyncData<RoomId> = AsyncData.Uninitialized,
+    resolveState: AsyncData<ResolvedRoomAlias> = AsyncData.Uninitialized,
     eventSink: (RoomAliasResolverEvents) -> Unit = {}
 ) = RoomAliasResolverState(
     roomAlias = roomAlias,

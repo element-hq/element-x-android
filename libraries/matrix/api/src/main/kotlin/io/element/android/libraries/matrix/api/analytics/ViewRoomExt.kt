@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.services.analytics.api.extensions
+package io.element.android.libraries.matrix.api.analytics
 
 import im.vector.app.features.analytics.plan.ViewRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 
-fun MatrixRoom.toAnalyticsViewRoom(trigger: ViewRoom.Trigger? = null, selectedSpace: MatrixRoom? = null, viaKeyboard: Boolean? = null): ViewRoom {
+fun MatrixRoom.toAnalyticsViewRoom(
+    trigger: ViewRoom.Trigger? = null,
+    selectedSpace: MatrixRoom? = null,
+    viaKeyboard: Boolean? = null,
+): ViewRoom {
     val activeSpace = selectedSpace?.toActiveSpace() ?: ViewRoom.ActiveSpace.Home
 
     return ViewRoom(

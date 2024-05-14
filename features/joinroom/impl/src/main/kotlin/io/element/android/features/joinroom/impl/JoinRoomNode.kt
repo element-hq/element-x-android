@@ -41,6 +41,8 @@ class JoinRoomNode @AssistedInject constructor(
         inputs.roomId,
         inputs.roomIdOrAlias,
         inputs.roomDescription,
+        inputs.serverNames,
+        inputs.trigger,
     )
 
     @Composable
@@ -49,6 +51,7 @@ class JoinRoomNode @AssistedInject constructor(
         JoinRoomView(
             state = state,
             onBackPressed = ::navigateUp,
+            onJoinSuccess = ::navigateUp,
             onKnockSuccess = ::navigateUp,
             modifier = modifier
         )

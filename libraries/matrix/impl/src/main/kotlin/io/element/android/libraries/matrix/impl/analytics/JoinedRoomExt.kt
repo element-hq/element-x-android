@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.services.analytics.api.extensions
+package io.element.android.libraries.matrix.impl.analytics
 
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 
-fun Long?.toAnalyticsRoomSize(): JoinedRoom.RoomSize {
+private fun Long?.toAnalyticsRoomSize(): JoinedRoom.RoomSize {
     return when (this) {
         null,
         2L -> JoinedRoom.RoomSize.Two

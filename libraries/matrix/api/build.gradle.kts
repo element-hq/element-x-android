@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.dagger)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
+    implementation(projects.services.analytics.api)
     implementation(libs.serialization.json)
     api(projects.libraries.sessionStorage.api)
     implementation(libs.coroutines.core)

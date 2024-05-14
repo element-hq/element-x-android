@@ -76,3 +76,5 @@ val A_THROWABLE = Throwable(A_FAILURE_REASON)
 val AN_EXCEPTION = Exception(A_FAILURE_REASON)
 
 const val A_RECOVERY_KEY = "1234 5678"
+
+val A_SERVER_LIST = listOf("server1", "server2")
