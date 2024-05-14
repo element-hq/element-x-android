@@ -126,7 +126,7 @@ internal fun MessageComposerView(
         onTyping = ::onTyping,
         currentUserId = state.currentUserId,
         onRichContentSelected = ::sendUri,
-        hasAttachments = state.attachmentsState != AttachmentsState.None,
+        hasAttachments = state.attachmentsState is AttachmentsState.Previewing,
     )
 }
 

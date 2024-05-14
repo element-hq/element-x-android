@@ -594,6 +594,7 @@ class MessageComposerPresenter @Inject constructor(
                 }
             }
         }
+        attachmentState.value = AttachmentsState.Sending.Uploading(0F)
         mediaSender.sendMedia(
             uri = uri,
             mimeType = mimeType,
