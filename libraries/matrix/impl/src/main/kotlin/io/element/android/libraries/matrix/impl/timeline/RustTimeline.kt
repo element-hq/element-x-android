@@ -174,23 +174,25 @@ class RustTimeline(
 
     // Use NonCancellable to avoid breaking the timeline when the coroutine is cancelled.
     override suspend fun paginate(direction: Timeline.PaginationDirection): Result<Boolean> = withContext(NonCancellable) {
-        initLatch.await()
-        runCatching {
-            if (!canPaginate(direction)) throw TimelineException.CannotPaginate
-            updatePaginationStatus(direction) { it.copy(isPaginating = true) }
-            when (direction) {
-                Timeline.PaginationDirection.BACKWARDS -> inner.paginateBackwards(PAGINATION_SIZE.toUShort())
-                Timeline.PaginationDirection.FORWARDS -> inner.focusedPaginateForwards(PAGINATION_SIZE.toUShort())
+        withContext(dispatcher) {
+            initLatch.await()
+            runCatching {
+                if (!canPaginate(direction)) throw TimelineException.CannotPaginate
+                updatePaginationStatus(direction) { it.copy(isPaginating = true) }
+                when (direction) {
+                    Timeline.PaginationDirection.BACKWARDS -> inner.paginateBackwards(PAGINATION_SIZE.toUShort())
+                    Timeline.PaginationDirection.FORWARDS -> inner.focusedPaginateForwards(PAGINATION_SIZE.toUShort())
+                }
+            }.onFailure { error ->
+                updatePaginationStatus(direction) { it.copy(isPaginating = false) }
+                if (error is TimelineException.CannotPaginate) {
+                    Timber.d("Can't paginate $direction on room ${matrixRoom.roomId} with paginationStatus: ${backPaginationStatus.value}")
+                } else {
+                    Timber.e(error, "Error paginating $direction on room ${matrixRoom.roomId}")
+                }
+            }.onSuccess { hasReachedEnd ->
+                updatePaginationStatus(direction) { it.copy(isPaginating = false, hasMoreToLoad = !hasReachedEnd) }
             }
-        }.onFailure { error ->
-            updatePaginationStatus(direction) { it.copy(isPaginating = false) }
-            if (error is TimelineException.CannotPaginate) {
-                Timber.d("Can't paginate $direction on room ${matrixRoom.roomId} with paginationStatus: ${backPaginationStatus.value}")
-            } else {
-                Timber.e(error, "Error paginating $direction on room ${matrixRoom.roomId}")
-            }
-        }.onSuccess { hasReachedEnd ->
-            updatePaginationStatus(direction) { it.copy(isPaginating = false, hasMoreToLoad = !hasReachedEnd) }
         }
     }
 
@@ -214,18 +216,20 @@ class RustTimeline(
         backPaginationStatus.map { it.hasMoreToLoad }.distinctUntilChanged(),
         forwardPaginationStatus.map { it.hasMoreToLoad }.distinctUntilChanged(),
     ) { timelineItems, hasMoreToLoadBackward, hasMoreToLoadForward ->
-        timelineItems
-            .let { items -> encryptedHistoryPostProcessor.process(items) }
-            .let { items ->
-                roomBeginningPostProcessor.process(
-                    items = items,
-                    isDm = matrixRoom.isDm,
-                    hasMoreToLoadBackwards = hasMoreToLoadBackward
-                )
-            }
-            .let { items -> loadingIndicatorsPostProcessor.process(items, hasMoreToLoadBackward, hasMoreToLoadForward) }
-            // Keep lastForwardIndicatorsPostProcessor last
-            .let { items -> lastForwardIndicatorsPostProcessor.process(items) }
+        withContext(dispatcher) {
+            timelineItems
+                .let { items -> encryptedHistoryPostProcessor.process(items) }
+                .let { items ->
+                    roomBeginningPostProcessor.process(
+                        items = items,
+                        isDm = matrixRoom.isDm,
+                        hasMoreToLoadBackwards = hasMoreToLoadBackward
+                    )
+                }
+                .let { items -> loadingIndicatorsPostProcessor.process(items, hasMoreToLoadBackward, hasMoreToLoadForward) }
+                // Keep lastForwardIndicatorsPostProcessor last
+                .let { items -> lastForwardIndicatorsPostProcessor.process(items) }
+        }
     }
 
     override fun close() {
