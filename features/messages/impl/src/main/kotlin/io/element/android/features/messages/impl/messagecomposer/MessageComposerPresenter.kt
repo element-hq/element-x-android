@@ -295,7 +295,9 @@ class MessageComposerPresenter @Inject constructor(
                 is MessageComposerEvents.SendMessage -> {
                     val html = if (showTextFormatting) {
                         richTextEditorState.messageHtml
-                    } else null
+                    } else {
+                        null
+                    }
                     val markdown = if (showTextFormatting) {
                         richTextEditorState.messageMarkdown
                     } else {
@@ -424,7 +426,7 @@ class MessageComposerPresenter @Inject constructor(
         }
 
         return MessageComposerState(
-            textEditorState =  textEditorState,
+            textEditorState = textEditorState,
             permalinkParser = permalinkParser,
             isFullScreen = isFullScreen.value,
             mode = messageComposerContext.composerMode,

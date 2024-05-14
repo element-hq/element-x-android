@@ -27,6 +27,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.runtime.Composable
@@ -63,6 +64,7 @@ import io.element.android.wysiwyg.compose.internal.applyStyleInCompose
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+@Suppress("ModifierMissing")
 @Composable
 fun MarkdownTextInput(
     state: MarkdownTextEditorState,
@@ -72,7 +74,6 @@ fun MarkdownTextInput(
     composerMode: MessageComposerMode,
     onResetComposerMode: () -> Unit,
     richTextEditorStyle: RichTextEditorStyle,
-    modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -121,7 +122,9 @@ fun MarkdownTextInput(
             }
 
             AndroidView(
-                modifier = modifier,
+                modifier = Modifier
+                    .padding(top = 6.dp, bottom = 6.dp)
+                    .fillMaxWidth(),
                 factory = { context ->
                     MarkdownEditText(context).apply {
                         setPadding(0)
@@ -158,9 +161,12 @@ fun MarkdownTextInput(
                         editText.editableText.clear()
                         editText.editableText.append(state.text.value())
                     }
-                    if ((editText.selectionStart != state.selection.first && state.selection.first in 0..editText.editableText.length ||
-                            editText.selectionEnd != state.selection.last) && state.selection.last in 0..editText.editableText.length) {
-                        println("Changing selection to ${state.selection}")
+                    val newSelectionStart = state.selection.first
+                    val newSelectionEnd = state.selection.last
+                    val currentTextRange = 0..editText.editableText.length
+                    val didSelectionChange = { editText.selectionStart != newSelectionStart || editText.selectionEnd != newSelectionEnd }
+                    val isNewSelectionValid = { newSelectionStart in currentTextRange && newSelectionEnd in currentTextRange }
+                    if (didSelectionChange() && isNewSelectionValid()) {
                         editText.setSelection(state.selection.first, state.selection.last)
                     }
                 }

@@ -25,7 +25,6 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.preferences.api.store.AppPreferencesStore
-import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.di.AppScope
@@ -36,7 +35,6 @@ import javax.inject.Inject
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "elementx_preferences")
 
-private val richTextEditorKey = booleanPreferencesKey("richTextEditor")
 private val developerModeKey = booleanPreferencesKey("developerMode")
 private val customElementCallBaseUrlKey = stringPreferencesKey("elementCallBaseUrl")
 private val themeKey = stringPreferencesKey("theme")
