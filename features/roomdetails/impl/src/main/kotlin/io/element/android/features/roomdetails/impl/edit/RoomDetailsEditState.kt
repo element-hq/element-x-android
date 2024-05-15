@@ -18,12 +18,13 @@ package io.element.android.features.roomdetails.impl.edit
 
 import android.net.Uri
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.permissions.api.PermissionsState
 import kotlinx.collections.immutable.ImmutableList
 
 data class RoomDetailsEditState(
-    val roomId: String,
+    val roomId: RoomId,
     val roomName: String,
     val canChangeName: Boolean,
     val roomTopic: String,

@@ -19,6 +19,7 @@ package io.element.android.features.roomdetails.impl.edit
 import android.net.Uri
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.permissions.api.aPermissionsState
 import kotlinx.collections.immutable.persistentListOf
 
@@ -36,7 +37,7 @@ open class RoomDetailsEditStateProvider : PreviewParameterProvider<RoomDetailsEd
 }
 
 fun aRoomDetailsEditState() = RoomDetailsEditState(
-    roomId = "a room id",
+    roomId = RoomId("!aRoomId:aDomain"),
     roomName = "Marketing",
     canChangeName = true,
     roomTopic = "a room topic that is quite long so should wrap onto multiple lines",

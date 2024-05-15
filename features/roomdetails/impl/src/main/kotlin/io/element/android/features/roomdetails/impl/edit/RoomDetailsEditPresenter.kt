@@ -140,7 +140,7 @@ class RoomDetailsEditPresenter @Inject constructor(
         }
 
         return RoomDetailsEditState(
-            roomId = room.roomId.value,
+            roomId = room.roomId,
             roomName = roomName,
             canChangeName = canChangeName,
             roomTopic = roomTopic.orEmpty(),

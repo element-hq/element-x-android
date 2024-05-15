@@ -97,7 +97,7 @@ class RoomDetailsEditPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.roomId).isEqualTo(room.roomId.value)
+            assertThat(initialState.roomId).isEqualTo(room.roomId)
             assertThat(initialState.roomName).isEqualTo(room.displayName)
             assertThat(initialState.roomAvatarUrl).isEqualTo(roomAvatarUri)
             assertThat(initialState.roomTopic).isEqualTo(room.topic.orEmpty())
