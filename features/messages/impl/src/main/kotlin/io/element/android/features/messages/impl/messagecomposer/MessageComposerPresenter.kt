@@ -127,7 +127,7 @@ class MessageComposerPresenter @Inject constructor(
 
         // Initially disabled so we don't set focus and text twice
         var applyFormattingModeChanges by remember { mutableStateOf(false) }
-        val richTextEditorState = richTextEditorStateFactory.create()
+        val richTextEditorState = richTextEditorStateFactory.remember()
         if (isTesting) {
             richTextEditorState.isReadyToProcessActions = true
         }
@@ -264,7 +264,6 @@ class MessageComposerPresenter @Inject constructor(
             if (showTextFormatting) {
                 val markdown = markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
                 richTextEditorState.setMarkdown(markdown)
-                // Give some time for the focus of the previous editor to be cleared
                 richTextEditorState.requestFocus()
             } else {
                 val markdown = richTextEditorState.messageMarkdown
