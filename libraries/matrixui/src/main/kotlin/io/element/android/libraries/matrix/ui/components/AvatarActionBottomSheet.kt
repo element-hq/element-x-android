@@ -78,16 +78,15 @@ fun AvatarActionBottomSheet(
             },
             modifier = modifier,
             sheetState = sheetState,
-            content = {
-                AvatarActionBottomSheetContent(
-                    actions = actions,
-                    onActionClicked = ::onItemActionClicked,
-                    modifier = Modifier
-                        .navigationBarsPadding()
-                        .imePadding()
-                )
-            }
-        )
+        ) {
+            AvatarActionBottomSheetContent(
+                actions = actions,
+                onActionClicked = ::onItemActionClicked,
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .imePadding()
+            )
+        }
     }
 }
 
