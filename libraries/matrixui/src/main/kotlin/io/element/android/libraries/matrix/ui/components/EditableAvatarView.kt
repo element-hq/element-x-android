@@ -33,11 +33,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 
 @Composable
@@ -93,4 +97,27 @@ fun EditableAvatarView(
             }
         }
     }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun EditableAvatarViewPreview(
+    @PreviewParameter(EditableAvatarViewUriProvider::class) uri: Uri?
+) = ElementPreview {
+    EditableAvatarView(
+        matrixId = "id",
+        displayName = "A room",
+        avatarUrl = uri,
+        avatarSize = AvatarSize.EditRoomDetails,
+        onAvatarClicked = {},
+    )
+}
+
+open class EditableAvatarViewUriProvider : PreviewParameterProvider<Uri?> {
+    override val values: Sequence<Uri?>
+        get() = sequenceOf(
+            null,
+            Uri.parse("mxc://matrix.org/123456"),
+            Uri.parse("https://example.com/avatar.jpg"),
+        )
 }
