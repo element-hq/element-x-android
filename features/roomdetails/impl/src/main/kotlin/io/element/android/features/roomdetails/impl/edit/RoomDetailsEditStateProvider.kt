@@ -39,7 +39,7 @@ open class RoomDetailsEditStateProvider : PreviewParameterProvider<RoomDetailsEd
         )
 }
 
-private fun aRoomDetailsEditState(
+fun aRoomDetailsEditState(
     roomId: RoomId = RoomId("!aRoomId:aDomain"),
     roomRawName: String = "Marketing",
     canChangeName: Boolean = true,

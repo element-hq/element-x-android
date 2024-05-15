@@ -43,6 +43,8 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 
 @Composable
 fun EditableAvatarView(
@@ -53,7 +55,10 @@ fun EditableAvatarView(
     onAvatarClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
         Box(
             modifier = Modifier
                 .size(avatarSize.dp)
@@ -62,6 +67,7 @@ fun EditableAvatarView(
                     onClick = onAvatarClicked,
                     indication = rememberRipple(bounded = false),
                 )
+                .testTag(TestTags.editAvatar)
         ) {
             when (avatarUrl?.scheme) {
                 null, "mxc" -> {
