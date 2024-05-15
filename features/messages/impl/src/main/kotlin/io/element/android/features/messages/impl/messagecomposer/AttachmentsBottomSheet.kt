@@ -107,18 +107,6 @@ private fun AttachmentSourcePickerMenu(
             .imePadding()
     ) {
         ListItem(
-            modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Image())),
-            headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_gallery)) },
-            style = ListItemStyle.Primary,
-        )
-        ListItem(
-            modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Attachment())),
-            headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_files)) },
-            style = ListItemStyle.Primary,
-        )
-        ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.PhotoFromCamera) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.TakePhoto())),
             headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_camera_photo)) },
@@ -128,6 +116,18 @@ private fun AttachmentSourcePickerMenu(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.VideoFromCamera) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VideoCall())),
             headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_camera_video)) },
+            style = ListItemStyle.Primary,
+        )
+        ListItem(
+            modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Image())),
+            headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_gallery)) },
+            style = ListItemStyle.Primary,
+        )
+        ListItem(
+            modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Attachment())),
+            headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_files)) },
             style = ListItemStyle.Primary,
         )
         if (state.canShareLocation) {

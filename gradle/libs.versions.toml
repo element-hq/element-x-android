@@ -3,7 +3,7 @@
 
 [versions]
 # Project
-android_gradle_plugin = "8.3.2"
+android_gradle_plugin = "8.4.0"
 kotlin = "1.9.24"
 ksp = "1.9.24-1.0.20"
 firebaseAppDistribution = "5.0.0"
