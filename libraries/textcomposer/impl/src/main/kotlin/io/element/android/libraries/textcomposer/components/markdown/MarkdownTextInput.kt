@@ -118,7 +118,7 @@ private fun Editable.checkSuggestionNeeded(): Suggestion? {
     // If a mention span already exists we don't need suggestions
     if (getSpans<MentionSpan>(startOfWord, startOfWord + 1).isNotEmpty()) return null
 
-    return if (firstChar in listOf('@', '#', "/")) {
+    return if (firstChar in listOf('@', '#', '/')) {
         var endOfWord = end
         while (endOfWord < this.length && !this[endOfWord].isWhitespace()) {
             endOfWord++
@@ -128,7 +128,7 @@ private fun Editable.checkSuggestionNeeded(): Suggestion? {
             '@' -> SuggestionType.Mention
             '#' -> SuggestionType.Room
             '/' -> SuggestionType.Command
-            else -> return null
+            else -> error("Unknown suggestion type. This should never happen.")
         }
         Suggestion(startOfWord, endOfWord, suggestionType, text)
     } else {

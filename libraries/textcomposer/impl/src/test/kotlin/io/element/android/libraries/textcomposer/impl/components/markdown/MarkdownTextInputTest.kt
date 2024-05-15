@@ -106,8 +106,8 @@ class MarkdownTextInputTest {
                 Suggestion(0, 1, SuggestionType.Mention, ""),
                 // Room suggestion
                 Suggestion(0, 1, SuggestionType.Room, ""),
-                // Slash command suggestion, not supported yet
-                null,
+                // Slash command suggestion
+                Suggestion(0, 1, SuggestionType.Command, ""),
             )
         )
     }
@@ -123,6 +123,33 @@ class MarkdownTextInputTest {
         rule.awaitIdle()
         // Selection is updated
         assertThat(state.selection).isEqualTo(2..2)
+    }
+
+    @Test
+    fun `when the selection state changes in the view is updated`() = runTest {
+        val state = aMarkdownTextEditorState(initialText = "Test", initialFocus = true)
+        rule.setMarkdownTextInput(state = state)
+        var editor: EditText? = null
+        rule.activityRule.scenario.onActivity {
+            editor = it.findEditor()
+            state.selection = 2..2
+        }
+        rule.awaitIdle()
+        // Selection state is updated
+        assertThat(editor?.selectionStart).isEqualTo(2)
+        assertThat(editor?.selectionEnd).isEqualTo(2)
+    }
+
+    @Test
+    fun `when the view focus changes the state is updated`() = runTest {
+        val state = aMarkdownTextEditorState(initialText = "Test", initialFocus = false)
+        rule.setMarkdownTextInput(state = state)
+        rule.activityRule.scenario.onActivity {
+            val editor = it.findEditor()
+            editor.requestFocus()
+        }
+        // Focus state is updated
+        assertThat(state.hasFocus).isTrue()
     }
 
     @Test
