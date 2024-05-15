@@ -21,16 +21,19 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 
 fun aMatrixRoom(
     roomId: RoomId = A_ROOM_ID,
     displayName: String = A_ROOM_NAME,
+    rawName: String? = displayName,
     topic: String? = "A topic",
     avatarUrl: String? = "https://matrix.org/avatar.jpg",
     isEncrypted: Boolean = true,
     isPublic: Boolean = true,
     isDirect: Boolean = false,
-    notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService()
+    notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
+    emitRoomInfo: Boolean = false,
 ) = FakeMatrixRoom(
     roomId = roomId,
     displayName = displayName,
@@ -40,4 +43,17 @@ fun aMatrixRoom(
     isPublic = isPublic,
     isDirect = isDirect,
     notificationSettingsService = notificationSettingsService
-)
+).apply {
+    if (emitRoomInfo) {
+        givenRoomInfo(
+            aRoomInfo(
+                name = displayName,
+                rawName = rawName,
+                topic = topic,
+                avatarUrl = avatarUrl,
+                isDirect = isDirect,
+                isPublic = isPublic,
+            )
+        )
+    }
+}
