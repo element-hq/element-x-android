@@ -27,7 +27,10 @@ import kotlinx.collections.immutable.ImmutableMap
 @Immutable
 data class MatrixRoomInfo(
     val id: RoomId,
+    /** The room's name from the room state event if received from sync, or one that's been computed otherwise. */
     val name: String?,
+    /** Room name as defined by the room state event only. */
+    val rawName: String?,
     val topic: String?,
     val avatarUrl: String?,
     val isDirect: Boolean,
