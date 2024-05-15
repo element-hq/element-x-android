@@ -67,5 +67,11 @@
   <string name="troubleshoot_notifications_test_display_notification_success">"La notifica è stata cliccata!"</string>
   <string name="troubleshoot_notifications_test_display_notification_title">"Mostra notifica"</string>
   <string name="troubleshoot_notifications_test_display_notification_waiting">"Clicca sulla notifica per continuare il test."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"Assicurati che l\'applicazione riceva le notifiche push"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Errore: il servizio push ha rifiutato la richiesta."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Errore: %1$s."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Errore, impossibile testare le notifiche push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Errore, tempo scaduto in attesa della notifica push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"Il test push loop back ha impiegato %1$d ms."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"Prova invio notifica push loop back"</string>
 </resources>

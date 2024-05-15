@@ -30,7 +30,7 @@
   <string name="state_event_room_join_by_you">"Ti sei unito alla stanza"</string>
   <string name="state_event_room_knock">"%1$s ha chiesto di unirsi"</string>
   <string name="state_event_room_knock_accepted">"%1$s ha permesso a %2$s di unirsi"</string>
-  <string name="state_event_room_knock_accepted_by_you">"%1$s ti ha permesso di unirti"</string>
+  <string name="state_event_room_knock_accepted_by_you">"Hai permesso a %1$s di partecipare"</string>
   <string name="state_event_room_knock_by_you">"Hai richiesto di unirti"</string>
   <string name="state_event_room_knock_denied">"%1$s ha rifiutato la richiesta di unirsi di %2$s"</string>
   <string name="state_event_room_knock_denied_by_you">"Hai rifiutato la richiesta di unirsi di %1$s"</string>

@@ -22,5 +22,6 @@ android {
 }
 
 dependencies {
+    implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.sessionStorage.api)
 }

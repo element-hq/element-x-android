@@ -49,6 +49,7 @@
   <string name="action_decline">"Rechazar"</string>
   <string name="action_delete_poll">"Eliminar encuesta"</string>
   <string name="action_disable">"Desactivar"</string>
+  <string name="action_discard">"Descartar"</string>
   <string name="action_done">"Hecho"</string>
   <string name="action_edit">"Editar"</string>
   <string name="action_edit_poll">"Editar encuesta"</string>
@@ -57,6 +58,7 @@
   <string name="action_enter_pin">"Introducir PIN"</string>
   <string name="action_forgot_password">"¿Olvidaste tu contraseña?"</string>
   <string name="action_forward">"Reenviar"</string>
+  <string name="action_go_back">"Volver atrás"</string>
   <string name="action_invite">"Invitar"</string>
   <string name="action_invite_friends">"Invitar personas"</string>
   <string name="action_invite_friends_to_app">"Invita a alguien a %1$s"</string>
@@ -65,6 +67,7 @@
   <string name="action_join">"Unirse"</string>
   <string name="action_learn_more">"Más información"</string>
   <string name="action_leave">"Salir"</string>
+  <string name="action_leave_conversation">"Salir de la conversación"</string>
   <string name="action_leave_room">"Salir de la sala"</string>
   <string name="action_load_more">"Cargar más"</string>
   <string name="action_manage_account">"Gestionar cuenta"</string>
@@ -83,6 +86,7 @@
   <string name="action_reply_in_thread">"Responder en el hilo"</string>
   <string name="action_report_bug">"Informar de un error"</string>
   <string name="action_report_content">"Reportar Contenido"</string>
+  <string name="action_reset">"Restablecer"</string>
   <string name="action_retry">"Reintentar"</string>
   <string name="action_retry_decryption">"Reintentar descifrado"</string>
   <string name="action_save">"Guardar"</string>
@@ -110,7 +114,9 @@
   <string name="common_analytics">"Estadísticas"</string>
   <string name="common_appearance">"Apariencia"</string>
   <string name="common_audio">"Sonido"</string>
+  <string name="common_blocked_users">"Usuarios bloqueados"</string>
   <string name="common_bubbles">"Burbujas"</string>
+  <string name="common_call_invite">"Llamada en curso (no admitida)"</string>
   <string name="common_chat_backup">"Copia de seguridad del chat"</string>
   <string name="common_copyright">"Derechos de autor"</string>
   <string name="common_creating_room">"Creando sala…"</string>
@@ -126,6 +132,9 @@
   <string name="common_enter_your_pin">"Introduce tu PIN"</string>
   <string name="common_error">"Error"</string>
   <string name="common_everyone">"Todos"</string>
+  <string name="common_failed">"Falló"</string>
+  <string name="common_favourite">"Favorito"</string>
+  <string name="common_favourited">"Marcado como favorito"</string>
   <string name="common_file">"Archivo"</string>
   <string name="common_file_saved_on_disk_android">"Archivo guardado en Descargas"</string>
   <string name="common_forward_message">"Reenviar mensaje"</string>
@@ -150,6 +159,7 @@
   <string name="common_mute">"Silenciar"</string>
   <string name="common_no_results">"No hay resultados"</string>
   <string name="common_offline">"Sin conexión"</string>
+  <string name="common_or">"o"</string>
   <string name="common_password">"Contraseña"</string>
   <string name="common_people">"Personas"</string>
   <string name="common_permalink">"Enlace permanente"</string>
@@ -175,6 +185,8 @@
   <string name="common_room">"Sala"</string>
   <string name="common_room_name">"Nombre de la sala"</string>
   <string name="common_room_name_placeholder">"p. ej., el nombre de tu proyecto"</string>
+  <string name="common_saved_changes">"Cambios guardados"</string>
+  <string name="common_saving">"Guardando"</string>
   <string name="common_screen_lock">"Bloqueo de pantalla"</string>
   <string name="common_search_for_someone">"Buscar a alguien"</string>
   <string name="common_search_results">"Buscar resultados"</string>
@@ -217,6 +229,8 @@
   <string name="dialog_title_error">"Error"</string>
   <string name="dialog_title_success">"Terminado"</string>
   <string name="dialog_title_warning">"Atención"</string>
+  <string name="dialog_unsaved_changes_description_android">"Tus cambios no se han guardado. ¿Estás seguro de que quieres volver atrás?"</string>
+  <string name="dialog_unsaved_changes_title">"¿Guardar cambios?"</string>
   <string name="error_failed_creating_the_permalink">"No se pudo crear el enlace permanente"</string>
   <string name="error_failed_loading_map">"%1$s no pudo cargar el mapa. Por favor vuelve a intentarlo más tarde."</string>
   <string name="error_failed_loading_messages">"Error al cargar mensajes"</string>

@@ -44,7 +44,6 @@ import java.io.File
 interface MatrixRoom : Closeable {
     val sessionId: SessionId
     val roomId: RoomId
-    val name: String?
     val displayName: String
     val alias: RoomAlias?
     val alternativeAliases: List<RoomAlias>

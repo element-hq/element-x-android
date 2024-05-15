@@ -30,7 +30,7 @@
   <string name="state_event_room_join_by_you">"Vous avez rejoint le salon"</string>
   <string name="state_event_room_knock">"%1$s a demandé à rejoindre"</string>
   <string name="state_event_room_knock_accepted">"%1$s a autorisé %2$s à rejoindre"</string>
-  <string name="state_event_room_knock_accepted_by_you">"Vous avez autoriser %1$s à joindre le salon"</string>
+  <string name="state_event_room_knock_accepted_by_you">"Vous avez autorisé %1$s à joindre le salon"</string>
   <string name="state_event_room_knock_by_you">"Vous avez demandé à rejoindre"</string>
   <string name="state_event_room_knock_denied">"%1$s a rejeté la demande de %2$s pour rejoindre"</string>
   <string name="state_event_room_knock_denied_by_you">"Vous avez rejeté la demande de %1$s pour rejoindre"</string>

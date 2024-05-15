@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Nova sala"</string>
+  <string name="screen_create_room_add_people_title">"Convidar pessoas"</string>
+  <string name="screen_create_room_error_creating_room">"Ocorreu um erro ao criar a sala"</string>
+  <string name="screen_create_room_private_option_description">"As mensagens serão cifradas. Uma vez ativada, não é possível desativar a cifragem."</string>
+  <string name="screen_create_room_private_option_title">"Sala privada (entrada apenas por convite)"</string>
+  <string name="screen_create_room_public_option_description">"As mensagens não serão cifradas e qualquer um as poderá ler. É possível ativar a cifragem posteriormente."</string>
+  <string name="screen_create_room_public_option_title">"Sala pública (entrada livre)"</string>
+  <string name="screen_create_room_room_name_label">"Nome da sala"</string>
+  <string name="screen_create_room_title">"Criar uma sala"</string>
+  <string name="screen_create_room_topic_label">"Descrição (opcional)"</string>
+  <string name="screen_start_chat_error_starting_chat">"Ocorreu um erro ao tentar iniciar uma conversa"</string>
+</resources>

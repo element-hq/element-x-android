@@ -25,9 +25,9 @@ import io.element.android.features.createroom.api.StartDMAction
 import io.element.android.features.createroom.test.FakeStartDMAction
 import io.element.android.features.roomdetails.aMatrixRoom
 import io.element.android.features.roomdetails.impl.members.aRoomMember
-import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsEvents
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
-import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsState
+import io.element.android.features.userprofile.shared.UserProfileEvents
+import io.element.android.features.userprofile.shared.UserProfileState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -66,10 +66,12 @@ class RoomMemberDetailsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
-            assertThat(initialState.userId).isEqualTo(roomMember.userId.value)
+            assertThat(initialState.userId).isEqualTo(roomMember.userId)
             assertThat(initialState.userName).isEqualTo(roomMember.displayName)
             assertThat(initialState.avatarUrl).isEqualTo(roomMember.avatarUrl)
             assertThat(initialState.isBlocked).isEqualTo(AsyncData.Success(roomMember.isIgnored))
+            assertThat(initialState.dmRoomId).isEqualTo(A_ROOM_ID)
+            assertThat(initialState.canCall).isFalse()
             skipItems(1)
             val loadedState = awaitItem()
             assertThat(loadedState.userName).isEqualTo("A custom name")
@@ -157,12 +159,12 @@ class RoomMemberDetailsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink(RoomMemberDetailsEvents.BlockUser(needsConfirmation = true))
+            initialState.eventSink(UserProfileEvents.BlockUser(needsConfirmation = true))
 
             val dialogState = awaitItem()
-            assertThat(dialogState.displayConfirmationDialog).isEqualTo(RoomMemberDetailsState.ConfirmationDialog.Block)
+            assertThat(dialogState.displayConfirmationDialog).isEqualTo(UserProfileState.ConfirmationDialog.Block)
 
-            dialogState.eventSink(RoomMemberDetailsEvents.ClearConfirmationDialog)
+            dialogState.eventSink(UserProfileEvents.ClearConfirmationDialog)
             assertThat(awaitItem().displayConfirmationDialog).isNull()
 
             ensureAllEventsConsumed()
@@ -181,12 +183,12 @@ class RoomMemberDetailsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink(RoomMemberDetailsEvents.BlockUser(needsConfirmation = false))
+            initialState.eventSink(UserProfileEvents.BlockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
             client.emitIgnoreUserList(listOf(roomMember.userId))
             assertThat(awaitItem().isBlocked.dataOrNull()).isTrue()
 
-            initialState.eventSink(RoomMemberDetailsEvents.UnblockUser(needsConfirmation = false))
+            initialState.eventSink(UserProfileEvents.UnblockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
             client.emitIgnoreUserList(listOf())
             assertThat(awaitItem().isBlocked.dataOrNull()).isFalse()
@@ -202,12 +204,12 @@ class RoomMemberDetailsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink(RoomMemberDetailsEvents.BlockUser(needsConfirmation = false))
+            initialState.eventSink(UserProfileEvents.BlockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
             val errorState = awaitItem()
             assertThat(errorState.isBlocked.errorOrNull()).isEqualTo(A_THROWABLE)
             // Clear error
-            initialState.eventSink(RoomMemberDetailsEvents.ClearBlockUserError)
+            initialState.eventSink(UserProfileEvents.ClearBlockUserError)
             assertThat(awaitItem().isBlocked).isEqualTo(AsyncData.Success(false))
         }
     }
@@ -221,12 +223,12 @@ class RoomMemberDetailsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink(RoomMemberDetailsEvents.UnblockUser(needsConfirmation = false))
+            initialState.eventSink(UserProfileEvents.UnblockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
             val errorState = awaitItem()
             assertThat(errorState.isBlocked.errorOrNull()).isEqualTo(A_THROWABLE)
             // Clear error
-            initialState.eventSink(RoomMemberDetailsEvents.ClearBlockUserError)
+            initialState.eventSink(UserProfileEvents.ClearBlockUserError)
             assertThat(awaitItem().isBlocked).isEqualTo(AsyncData.Success(true))
         }
     }
@@ -238,12 +240,12 @@ class RoomMemberDetailsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink(RoomMemberDetailsEvents.UnblockUser(needsConfirmation = true))
+            initialState.eventSink(UserProfileEvents.UnblockUser(needsConfirmation = true))
 
             val dialogState = awaitItem()
-            assertThat(dialogState.displayConfirmationDialog).isEqualTo(RoomMemberDetailsState.ConfirmationDialog.Unblock)
+            assertThat(dialogState.displayConfirmationDialog).isEqualTo(UserProfileState.ConfirmationDialog.Unblock)
 
-            dialogState.eventSink(RoomMemberDetailsEvents.ClearConfirmationDialog)
+            dialogState.eventSink(UserProfileEvents.ClearConfirmationDialog)
             assertThat(awaitItem().displayConfirmationDialog).isNull()
 
             ensureAllEventsConsumed()
@@ -264,18 +266,18 @@ class RoomMemberDetailsPresenterTests {
 
             // Failure
             startDMAction.givenExecuteResult(startDMFailureResult)
-            initialState.eventSink(RoomMemberDetailsEvents.StartDM)
+            initialState.eventSink(UserProfileEvents.StartDM)
             assertThat(awaitItem().startDmActionState).isInstanceOf(AsyncAction.Loading::class.java)
             awaitItem().also { state ->
                 assertThat(state.startDmActionState).isEqualTo(startDMFailureResult)
-                state.eventSink(RoomMemberDetailsEvents.ClearStartDMState)
+                state.eventSink(UserProfileEvents.ClearStartDMState)
             }
 
             // Success
             startDMAction.givenExecuteResult(startDMSuccessResult)
             awaitItem().also { state ->
                 assertThat(state.startDmActionState).isEqualTo(AsyncAction.Uninitialized)
-                state.eventSink(RoomMemberDetailsEvents.StartDM)
+                state.eventSink(UserProfileEvents.StartDM)
             }
             assertThat(awaitItem().startDmActionState).isInstanceOf(AsyncAction.Loading::class.java)
             awaitItem().also { state ->

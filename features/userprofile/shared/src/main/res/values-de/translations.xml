@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_dm_details_block_alert_action">"Blockieren"</string>
+  <string name="screen_dm_details_block_alert_description">"Blockierte Benutzer können Dir keine Nachrichten senden und alle ihre alten Nachrichten werden ausgeblendet. Die Blockierung kann jederzeit aufgehoben werden."</string>
+  <string name="screen_dm_details_block_user">"Benutzer blockieren"</string>
+  <string name="screen_dm_details_unblock_alert_action">"Blockierung aufheben"</string>
+  <string name="screen_dm_details_unblock_alert_description">"Der Nutzer kann dir wieder Nachrichten senden &amp; alle Nachrichten des Nutzers werden wieder angezeigt."</string>
+  <string name="screen_dm_details_unblock_user">"Blockierung aufheben"</string>
+  <string name="screen_start_chat_error_starting_chat">"Beim Versuch, einen Chat zu starten, ist ein Fehler aufgetreten"</string>
+</resources>

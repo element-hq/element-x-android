@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"添加附件"</string>
+  <string name="rich_text_editor_bullet_list">"切换符号列表"</string>
+  <string name="rich_text_editor_close_formatting_options">"关闭格式化选项"</string>
+  <string name="rich_text_editor_code_block">"切换代码块"</string>
+  <string name="rich_text_editor_composer_placeholder">"消息…"</string>
+  <string name="rich_text_editor_create_link">"创建链接"</string>
+  <string name="rich_text_editor_edit_link">"编辑链接"</string>
+  <string name="rich_text_editor_format_bold">"应用粗体格式"</string>
+  <string name="rich_text_editor_format_italic">"应用斜体格式"</string>
+  <string name="rich_text_editor_format_strikethrough">"应用删除线格式"</string>
+  <string name="rich_text_editor_format_underline">"应用下划线格式"</string>
+  <string name="rich_text_editor_full_screen_toggle">"切换全屏模式"</string>
+  <string name="rich_text_editor_indent">"缩进"</string>
+  <string name="rich_text_editor_inline_code">"应用行内代码格式"</string>
+  <string name="rich_text_editor_link">"设置链接"</string>
+  <string name="rich_text_editor_numbered_list">"切换编号列表"</string>
+  <string name="rich_text_editor_open_compose_options">"打开撰写选项"</string>
+  <string name="rich_text_editor_quote">"切换引用"</string>
+  <string name="rich_text_editor_remove_link">"删除链接"</string>
+  <string name="rich_text_editor_unindent">"取消缩进"</string>
+  <string name="rich_text_editor_url_placeholder">"链接"</string>
+  <string name="screen_room_voice_message_tooltip">"按住录制"</string>
+</resources>

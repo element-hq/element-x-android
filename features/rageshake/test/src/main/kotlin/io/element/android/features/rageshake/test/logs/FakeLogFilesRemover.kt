@@ -18,9 +18,10 @@ package io.element.android.features.rageshake.test.logs
 
 import io.element.android.features.rageshake.api.logs.LogFilesRemover
 import io.element.android.tests.testutils.lambda.LambdaNoParamRecorder
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 
 class FakeLogFilesRemover(
-    private val performLambda: LambdaNoParamRecorder<Unit>,
+    var performLambda: LambdaNoParamRecorder<Unit> = lambdaRecorder { -> },
 ) : LogFilesRemover {
     override suspend fun perform() {
         performLambda()

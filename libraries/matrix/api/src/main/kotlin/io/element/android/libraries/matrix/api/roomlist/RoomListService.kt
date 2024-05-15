@@ -60,11 +60,6 @@ interface RoomListService {
     val allRooms: DynamicRoomList
 
     /**
-     * returns a [RoomList] object of all invites.
-     */
-    val invites: RoomList
-
-    /**
      * Will set the visible range of all rooms.
      * This is useful to load more data when the user scrolls down.
      */

@@ -33,6 +33,7 @@ class FakeAnalyticsService(
     val capturedEvents = mutableListOf<VectorAnalyticsEvent>()
     val screenEvents = mutableListOf<VectorAnalyticsScreen>()
     val trackedErrors = mutableListOf<Throwable>()
+    val capturedUserProperties = mutableListOf<UserProperties>()
 
     override fun getAvailableAnalyticsProviders(): Set<AnalyticsProvider> = emptySet()
 
@@ -65,6 +66,7 @@ class FakeAnalyticsService(
     }
 
     override fun updateUserProperties(userProperties: UserProperties) {
+        capturedUserProperties += userProperties
     }
 
     override fun trackError(throwable: Throwable) {

@@ -36,6 +36,7 @@
   <string name="action_accept">"Разрешить"</string>
   <string name="action_add_to_timeline">"Добавить в хронологию"</string>
   <string name="action_back">"Назад"</string>
+  <string name="action_call">"Позвонить"</string>
   <string name="action_cancel">"Отмена"</string>
   <string name="action_choose_photo">"Выбрать фото"</string>
   <string name="action_clear">"Очистить"</string>
@@ -161,12 +162,14 @@
   <string name="common_modern">"Современный"</string>
   <string name="common_mute">"Без звука"</string>
   <string name="common_no_results">"Ничего не найдено"</string>
+  <string name="common_no_room_name">"Нету названия комнаты"</string>
   <string name="common_offline">"Не в сети"</string>
   <string name="common_or">"или"</string>
   <string name="common_password">"Пароль"</string>
   <string name="common_people">"Люди"</string>
   <string name="common_permalink">"Постоянная ссылка"</string>
   <string name="common_permission">"Разрешение"</string>
+  <string name="common_please_wait">"Подождите…"</string>
   <string name="common_poll_end_confirmation">"Вы действительно хотите завершить данный опрос?"</string>
   <string name="common_poll_summary">"Опрос: %1$s"</string>
   <string name="common_poll_total_votes">"Всего голосов: %1$s"</string>
@@ -219,6 +222,7 @@
   <string name="common_topic">"Тема"</string>
   <string name="common_topic_placeholder">"О чем эта комната?"</string>
   <string name="common_unable_to_decrypt">"Невозможно расшифровать"</string>
+  <string name="common_unable_to_decrypt_no_access">"Вы не имеете доступа к этому сообщению"</string>
   <string name="common_unable_to_invite_message">"Не удалось отправить приглашения одному или нескольким пользователям."</string>
   <string name="common_unable_to_invite_title">"Не удалось отправить приглашение(я)"</string>
   <string name="common_unlock">"Разблокировать"</string>
@@ -243,6 +247,7 @@
   <string name="error_failed_loading_messages">"Не удалось загрузить сообщения"</string>
   <string name="error_failed_locating_user">"%1$s не удалось получить доступ к вашему местоположению. Пожалуйста, повторите попытку позже."</string>
   <string name="error_failed_uploading_voice_message">"Не удалось загрузить голосовое сообщение."</string>
+  <string name="error_message_not_found">"Сообщение не найдено"</string>
   <string name="error_missing_location_auth_android">"У %1$s нет разрешения на доступ к вашему местоположению. Вы можете разрешить доступ в Настройках."</string>
   <string name="error_missing_location_rationale_android">"У %1$s нет разрешения на доступ к вашему местоположению. Разрешите доступ ниже."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s не имеет разрешения на доступ к вашему микрофону. Разрешите доступ к записи голосового сообщения."</string>
@@ -264,6 +269,7 @@
   <string name="screen_room_member_details_unblock_alert_action">"Разблокировать"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Вы снова сможете увидеть все сообщения."</string>
   <string name="screen_room_member_details_unblock_user">"Разблокировать пользователя"</string>
+  <string name="screen_room_title">"Чат"</string>
   <string name="screen_share_location_title">"Поделиться местоположением"</string>
   <string name="screen_share_my_location_action">"Поделиться моим местоположением"</string>
   <string name="screen_share_open_apple_maps">"Открыть в Apple Maps"</string>

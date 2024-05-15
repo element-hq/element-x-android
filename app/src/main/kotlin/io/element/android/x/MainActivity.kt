@@ -135,6 +135,7 @@ class MainActivity : NodeActivity() {
      * Called when:
      * - the launcher icon is clicked (if the app is already running);
      * - a notification is clicked.
+     * - a deep link have been clicked
      * - the app is going to background (<- this is strange)
      */
     override fun onNewIntent(intent: Intent) {

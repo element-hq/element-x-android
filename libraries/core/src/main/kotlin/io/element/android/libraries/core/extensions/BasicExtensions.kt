@@ -58,3 +58,15 @@ fun String.ellipsize(length: Int): String {
 
     return "${this.take(length)}…"
 }
+
+/**
+ * Replace the old prefix with the new prefix.
+ * If the string does not start with the old prefix, the string is returned as is.
+ */
+fun String.replacePrefix(oldPrefix: String, newPrefix: String): String {
+    return if (startsWith(oldPrefix)) {
+        newPrefix + substring(oldPrefix.length)
+    } else {
+        this
+    }
+}

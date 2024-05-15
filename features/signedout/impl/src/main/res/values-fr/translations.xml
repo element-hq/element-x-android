@@ -3,6 +3,6 @@
   <string name="screen_signed_out_reason_1">"Le mot de passe de votre compte a été modifié sur un autre appareil"</string>
   <string name="screen_signed_out_reason_2">"Cette session a été supprimée depuis un autre appareil"</string>
   <string name="screen_signed_out_reason_3">"L’administrateur de votre serveur a révoqué votre accès."</string>
-  <string name="screen_signed_out_subtitle">"La déconnexion peut être due à une des raisons ci-dessous. Veuillez vous connecter à nouveau pour continuer à utiliser %1$s."</string>
+  <string name="screen_signed_out_subtitle">"La déconnexion peut être due à une des raisons ci-dessous. Veuillez vous connecter à nouveau pour continuer à utiliser %s."</string>
   <string name="screen_signed_out_title">"Vous avez été déconnecté"</string>
 </resources>

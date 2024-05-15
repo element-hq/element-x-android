@@ -15,7 +15,7 @@
   <string name="screen_blocked_users_unblock_alert_action">"Розблокувати"</string>
   <string name="screen_blocked_users_unblock_alert_description">"Ви знову зможете бачити всі повідомлення від них."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Розблокувати користувача"</string>
-  <string name="screen_blocked_users_unblocking">"Заблокування…"</string>
+  <string name="screen_blocked_users_unblocking">"Розблокування…"</string>
   <string name="screen_edit_profile_display_name">"Відображуване ім\'я"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Ваше відображуване ім\'я"</string>
   <string name="screen_edit_profile_error">"Була виявлена невідома помилка, і інформацію не вдалося змінити."</string>
