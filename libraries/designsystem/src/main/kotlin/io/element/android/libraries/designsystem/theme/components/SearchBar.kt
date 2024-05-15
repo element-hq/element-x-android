@@ -78,6 +78,7 @@ fun <T> SearchBar(
         focusManager.clearFocus()
     }
 
+    @Suppress("DEPRECATION")
     androidx.compose.material3.SearchBar(
         query = query,
         onQueryChange = onQueryChange,

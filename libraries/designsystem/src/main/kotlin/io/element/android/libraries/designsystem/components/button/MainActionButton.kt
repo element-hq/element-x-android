@@ -25,9 +25,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -51,7 +51,7 @@ fun MainActionButton(
     enabled: Boolean = true,
     contentDescription: String = title,
 ) {
-    val ripple = rememberRipple(bounded = false)
+    val ripple = ripple(bounded = false)
     val interactionSource = remember { MutableInteractionSource() }
     Column(
         modifier

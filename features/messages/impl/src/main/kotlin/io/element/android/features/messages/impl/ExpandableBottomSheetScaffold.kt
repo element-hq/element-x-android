@@ -21,7 +21,10 @@ package io.element.android.features.messages.impl
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -39,9 +42,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import io.element.android.libraries.designsystem.theme.components.BottomSheetScaffold
-import io.element.android.libraries.designsystem.theme.components.bottomsheet.CustomSheetState
-import io.element.android.libraries.designsystem.theme.components.bottomsheet.rememberBottomSheetScaffoldState
-import io.element.android.libraries.designsystem.theme.components.bottomsheet.rememberStandardBottomSheetState
 import kotlin.math.roundToInt
 
 /**
@@ -167,7 +167,7 @@ internal fun ExpandableBottomSheetScaffold(
     )
 }
 
-private fun CustomSheetState.getIntOffset(): Int? = try {
+private fun SheetState.getIntOffset(): Int? = try {
     requireOffset().roundToInt()
 } catch (e: IllegalStateException) {
     null
