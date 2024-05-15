@@ -37,14 +37,11 @@ import io.element.android.features.roomdetails.impl.members.details.RoomMemberDe
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.StateEventType
-import io.element.android.libraries.matrix.test.A_ROOM_ID
-import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -474,22 +471,3 @@ class RoomDetailsPresenterTests {
     }
 }
 
-fun aMatrixRoom(
-    roomId: RoomId = A_ROOM_ID,
-    displayName: String = A_ROOM_NAME,
-    topic: String? = "A topic",
-    avatarUrl: String? = "https://matrix.org/avatar.jpg",
-    isEncrypted: Boolean = true,
-    isPublic: Boolean = true,
-    isDirect: Boolean = false,
-    notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService()
-) = FakeMatrixRoom(
-    roomId = roomId,
-    displayName = displayName,
-    topic = topic,
-    avatarUrl = avatarUrl,
-    isEncrypted = isEncrypted,
-    isPublic = isPublic,
-    isDirect = isDirect,
-    notificationSettingsService = notificationSettingsService
-)
