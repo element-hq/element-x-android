@@ -86,11 +86,8 @@ class RoomDetailsEditPresenter @Inject constructor(
 
         val saveButtonEnabled by remember(
             roomRawNameTrimmed,
-            roomRawNameEdited,
             roomTopicTrimmed,
-            roomTopicEdited,
             roomAvatarUri,
-            roomAvatarUriEdited,
         ) {
             derivedStateOf {
                 roomRawNameTrimmed != roomRawNameEdited.trim() ||
