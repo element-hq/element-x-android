@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package io.element.android.features.roomdetails.impl.edit
 
@@ -29,13 +29,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -61,9 +59,7 @@ import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.EditableAvatarView
 import io.element.android.libraries.permissions.api.PermissionsView
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun RoomDetailsEditView(
     state: RoomDetailsEditState,
@@ -71,17 +67,12 @@ fun RoomDetailsEditView(
     onRoomEdited: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val coroutineScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
-    val itemActionsBottomSheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden,
-    )
+    val isAvatarActionsSheetVisible = remember { mutableStateOf(false) }
 
     fun onAvatarClicked() {
         focusManager.clearFocus()
-        coroutineScope.launch {
-            itemActionsBottomSheetState.show()
-        }
+        isAvatarActionsSheetVisible.value = true
     }
 
     Scaffold(
@@ -167,7 +158,7 @@ fun RoomDetailsEditView(
 
     AvatarActionBottomSheet(
         actions = state.avatarActions,
-        modalBottomSheetState = itemActionsBottomSheetState,
+        isVisible = isAvatarActionsSheetVisible,
         onActionSelected = { state.eventSink(RoomDetailsEditEvents.HandleAvatarAction(it)) }
     )
 

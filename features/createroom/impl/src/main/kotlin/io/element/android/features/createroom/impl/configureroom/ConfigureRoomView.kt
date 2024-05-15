@@ -29,12 +29,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -63,9 +61,7 @@ import io.element.android.libraries.matrix.ui.components.SelectedUsersRowList
 import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
 import io.element.android.libraries.permissions.api.PermissionsView
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ConfigureRoomView(
     state: ConfigureRoomState,
@@ -73,17 +69,12 @@ fun ConfigureRoomView(
     onRoomCreated: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val coroutineScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
-    val itemActionsBottomSheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden,
-    )
+    val isAvatarActionsSheetVisible = remember { mutableStateOf(false) }
 
     fun onAvatarClicked() {
         focusManager.clearFocus()
-        coroutineScope.launch {
-            itemActionsBottomSheetState.show()
-        }
+        isAvatarActionsSheetVisible.value = true
     }
 
     Scaffold(
@@ -143,7 +134,7 @@ fun ConfigureRoomView(
 
     AvatarActionBottomSheet(
         actions = state.avatarActions,
-        modalBottomSheetState = itemActionsBottomSheetState,
+        isVisible = isAvatarActionsSheetVisible,
         onActionSelected = { state.eventSink(ConfigureRoomEvents.HandleAvatarAction(it)) }
     )
 
