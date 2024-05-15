@@ -118,7 +118,7 @@ fun RoomDetailsEditView(
         ) {
             Spacer(modifier = Modifier.height(24.dp))
             EditableAvatarView(
-                userId = state.roomId.value,
+                matrixId = state.roomId.value,
                 displayName = state.roomName,
                 avatarUrl = state.roomAvatarUrl,
                 avatarSize = AvatarSize.EditRoomDetails,

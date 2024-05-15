@@ -114,7 +114,7 @@ fun EditUserProfileView(
         ) {
             Spacer(modifier = Modifier.height(24.dp))
             EditableAvatarView(
-                userId = state.userId?.value,
+                matrixId = state.userId?.value,
                 displayName = state.displayName,
                 avatarUrl = state.userAvatarUrl,
                 avatarSize = AvatarSize.RoomHeader,
