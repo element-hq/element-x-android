@@ -114,7 +114,7 @@ fun EditUserProfileView(
         ) {
             Spacer(modifier = Modifier.height(24.dp))
             EditableAvatarView(
-                matrixId = state.userId?.value,
+                matrixId = state.userId.value,
                 displayName = state.displayName,
                 avatarUrl = state.userAvatarUrl,
                 avatarSize = AvatarSize.RoomHeader,
@@ -122,14 +122,12 @@ fun EditUserProfileView(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             )
             Spacer(modifier = Modifier.height(16.dp))
-            state.userId?.let {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = it.value,
-                    style = ElementTheme.typography.fontBodyLgRegular,
-                    textAlign = TextAlign.Center,
-                )
-            }
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = state.userId.value,
+                style = ElementTheme.typography.fontBodyLgRegular,
+                textAlign = TextAlign.Center,
+            )
             Spacer(modifier = Modifier.height(40.dp))
             LabelledOutlinedTextField(
                 label = stringResource(R.string.screen_edit_profile_display_name),

@@ -46,7 +46,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 
 @Composable
 fun EditableAvatarView(
-    matrixId: String?,
+    matrixId: String,
     displayName: String?,
     avatarUrl: Uri?,
     avatarSize: AvatarSize,
@@ -65,12 +65,10 @@ fun EditableAvatarView(
         ) {
             when (avatarUrl?.scheme) {
                 null, "mxc" -> {
-                    matrixId?.let {
-                        Avatar(
-                            avatarData = AvatarData(it, displayName, avatarUrl?.toString(), size = avatarSize),
-                            modifier = Modifier.fillMaxSize(),
-                        )
-                    }
+                    Avatar(
+                        avatarData = AvatarData(matrixId, displayName, avatarUrl?.toString(), size = avatarSize),
+                        modifier = Modifier.fillMaxSize(),
+                    )
                 }
                 else -> {
                     UnsavedAvatar(
