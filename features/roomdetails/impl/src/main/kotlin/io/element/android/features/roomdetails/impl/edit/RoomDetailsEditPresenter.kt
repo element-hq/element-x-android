@@ -37,6 +37,9 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendState
 import io.element.android.libraries.matrix.ui.media.AvatarAction
+import io.element.android.libraries.matrix.ui.room.avatarUrl
+import io.element.android.libraries.matrix.ui.room.rawName
+import io.element.android.libraries.matrix.ui.room.topic
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.permissions.api.PermissionsEvents
@@ -61,23 +64,38 @@ class RoomDetailsEditPresenter @Inject constructor(
         val cameraPermissionState = cameraPermissionPresenter.present()
         val roomSyncUpdateFlow = room.syncUpdateFlow.collectAsState()
 
-        // Since there is no way to obtain the new avatar uri after uploading a new avatar,
-        // just erase the local value when the room field has changed
-        var roomAvatarUri by rememberSaveable(room.avatarUrl) { mutableStateOf(room.avatarUrl?.toUri()) }
+        val roomAvatarUri = room.avatarUrl()?.toUri()
+        var roomAvatarUriEdited by rememberSaveable { mutableStateOf<Uri?>(null) }
+        LaunchedEffect(roomAvatarUri) {
+            // Every time the roomAvatar change (from sync), we can set the new avatar.
+            roomAvatarUriEdited = roomAvatarUri
+        }
 
-        var roomName by rememberSaveable { mutableStateOf(room.displayName.trim()) }
-        var roomTopic by rememberSaveable { mutableStateOf(room.topic?.trim()) }
+        val roomRawNameTrimmed = room.rawName().orEmpty().trim()
+        var roomRawNameEdited by rememberSaveable { mutableStateOf("") }
+        LaunchedEffect(roomRawNameTrimmed) {
+            // Every time the rawName change (from sync), we can set the new name.
+            roomRawNameEdited = roomRawNameTrimmed
+        }
+        val roomTopicTrimmed = room.topic().orEmpty().trim()
+        var roomTopicEdited by rememberSaveable { mutableStateOf("") }
+        LaunchedEffect(roomTopicTrimmed) {
+            // Every time the topic change (from sync), we can set the new topic.
+            roomTopicEdited = roomTopicTrimmed
+        }
 
         val saveButtonEnabled by remember(
-            roomSyncUpdateFlow.value,
-            roomName,
-            roomTopic,
+            roomRawNameTrimmed,
+            roomRawNameEdited,
+            roomTopicTrimmed,
+            roomTopicEdited,
             roomAvatarUri,
+            roomAvatarUriEdited,
         ) {
             derivedStateOf {
-                roomAvatarUri?.toString()?.trim() != room.avatarUrl?.toUri()?.toString()?.trim() ||
-                    roomName.trim() != room.displayName.trim() ||
-                    roomTopic.orEmpty().trim() != room.topic.orEmpty().trim()
+                roomRawNameTrimmed != roomRawNameEdited.trim() ||
+                    roomTopicTrimmed != roomTopicEdited.trim() ||
+                    roomAvatarUri != roomAvatarUriEdited
             }
         }
 
@@ -85,17 +103,17 @@ class RoomDetailsEditPresenter @Inject constructor(
         var canChangeTopic by remember { mutableStateOf(false) }
         var canChangeAvatar by remember { mutableStateOf(false) }
 
-        LaunchedEffect(Unit) {
+        LaunchedEffect(roomSyncUpdateFlow.value) {
             canChangeName = room.canSendState(StateEventType.ROOM_NAME).getOrElse { false }
             canChangeTopic = room.canSendState(StateEventType.ROOM_TOPIC).getOrElse { false }
             canChangeAvatar = room.canSendState(StateEventType.ROOM_AVATAR).getOrElse { false }
         }
 
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
-            onResult = { uri -> if (uri != null) roomAvatarUri = uri }
+            onResult = { uri -> if (uri != null) roomAvatarUriEdited = uri }
         )
         val galleryImagePicker = mediaPickerProvider.registerGalleryImagePicker(
-            onResult = { uri -> if (uri != null) roomAvatarUri = uri }
+            onResult = { uri -> if (uri != null) roomAvatarUriEdited = uri }
         )
 
         LaunchedEffect(cameraPermissionState.permissionGranted) {
@@ -105,12 +123,12 @@ class RoomDetailsEditPresenter @Inject constructor(
             }
         }
 
-        val avatarActions by remember(roomAvatarUri) {
+        val avatarActions by remember(roomAvatarUriEdited) {
             derivedStateOf {
                 listOfNotNull(
                     AvatarAction.TakePhoto,
                     AvatarAction.ChoosePhoto,
-                    AvatarAction.Remove.takeIf { roomAvatarUri != null },
+                    AvatarAction.Remove.takeIf { roomAvatarUriEdited != null },
                 ).toImmutableList()
             }
         }
@@ -119,7 +137,15 @@ class RoomDetailsEditPresenter @Inject constructor(
         val localCoroutineScope = rememberCoroutineScope()
         fun handleEvents(event: RoomDetailsEditEvents) {
             when (event) {
-                is RoomDetailsEditEvents.Save -> localCoroutineScope.saveChanges(roomName, roomTopic, roomAvatarUri, saveAction)
+                is RoomDetailsEditEvents.Save -> localCoroutineScope.saveChanges(
+                    currentNameTrimmed = roomRawNameTrimmed,
+                    newNameTrimmed = roomRawNameEdited.trim(),
+                    currentTopicTrimmed = roomTopicTrimmed,
+                    newTopicTrimmed = roomTopicEdited.trim(),
+                    currentAvatar = roomAvatarUri,
+                    newAvatarUri = roomAvatarUriEdited,
+                    action = saveAction,
+                )
                 is RoomDetailsEditEvents.HandleAvatarAction -> {
                     when (event.action) {
                         AvatarAction.ChoosePhoto -> galleryImagePicker.launch()
@@ -129,23 +155,23 @@ class RoomDetailsEditPresenter @Inject constructor(
                             pendingPermissionRequest = true
                             cameraPermissionState.eventSink(PermissionsEvents.RequestPermissions)
                         }
-                        AvatarAction.Remove -> roomAvatarUri = null
+                        AvatarAction.Remove -> roomAvatarUriEdited = null
                     }
                 }
 
-                is RoomDetailsEditEvents.UpdateRoomName -> roomName = event.name
-                is RoomDetailsEditEvents.UpdateRoomTopic -> roomTopic = event.topic.takeUnless { it.isEmpty() }
+                is RoomDetailsEditEvents.UpdateRoomName -> roomRawNameEdited = event.name
+                is RoomDetailsEditEvents.UpdateRoomTopic -> roomTopicEdited = event.topic
                 RoomDetailsEditEvents.CancelSaveChanges -> saveAction.value = AsyncAction.Uninitialized
             }
         }
 
         return RoomDetailsEditState(
             roomId = room.roomId,
-            roomName = roomName,
+            roomRawName = roomRawNameEdited,
             canChangeName = canChangeName,
-            roomTopic = roomTopic.orEmpty(),
+            roomTopic = roomTopicEdited,
             canChangeTopic = canChangeTopic,
-            roomAvatarUrl = roomAvatarUri,
+            roomAvatarUrl = roomAvatarUriEdited,
             canChangeAvatar = canChangeAvatar,
             avatarActions = avatarActions,
             saveButtonEnabled = saveButtonEnabled,
@@ -156,25 +182,28 @@ class RoomDetailsEditPresenter @Inject constructor(
     }
 
     private fun CoroutineScope.saveChanges(
-        name: String,
-        topic: String?,
-        avatarUri: Uri?,
+        currentNameTrimmed: String,
+        newNameTrimmed: String,
+        currentTopicTrimmed: String,
+        newTopicTrimmed: String,
+        currentAvatar: Uri?,
+        newAvatarUri: Uri?,
         action: MutableState<AsyncAction<Unit>>,
     ) = launch {
         val results = mutableListOf<Result<Unit>>()
         suspend {
-            if (topic.orEmpty().trim() != room.topic.orEmpty().trim()) {
-                results.add(room.setTopic(topic.orEmpty()).onFailure {
+            if (newTopicTrimmed != currentTopicTrimmed) {
+                results.add(room.setTopic(newTopicTrimmed).onFailure {
                     Timber.e(it, "Failed to set room topic")
                 })
             }
-            if (name.isNotEmpty() && name.trim() != room.displayName.trim()) {
-                results.add(room.setName(name).onFailure {
+            if (newNameTrimmed.isNotEmpty() && newNameTrimmed != currentNameTrimmed) {
+                results.add(room.setName(newNameTrimmed).onFailure {
                     Timber.e(it, "Failed to set room name")
                 })
             }
-            if (avatarUri?.toString()?.trim() != room.avatarUrl?.trim()) {
-                results.add(updateAvatar(avatarUri).onFailure {
+            if (newAvatarUri != currentAvatar) {
+                results.add(updateAvatar(newAvatarUri).onFailure {
                     Timber.e(it, "Failed to update avatar")
                 })
             }

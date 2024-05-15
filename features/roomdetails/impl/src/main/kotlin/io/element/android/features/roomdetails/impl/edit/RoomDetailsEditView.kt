@@ -119,7 +119,8 @@ fun RoomDetailsEditView(
             Spacer(modifier = Modifier.height(24.dp))
             EditableAvatarView(
                 matrixId = state.roomId.value,
-                displayName = state.roomName,
+                // As per Element Web, we use the raw name for the avatar as well
+                displayName = state.roomRawName,
                 avatarUrl = state.roomAvatarUrl,
                 avatarSize = AvatarSize.EditRoomDetails,
                 onAvatarClicked = ::onAvatarClicked,
@@ -130,7 +131,7 @@ fun RoomDetailsEditView(
             if (state.canChangeName) {
                 LabelledTextField(
                     label = stringResource(id = R.string.screen_room_details_room_name_label),
-                    value = state.roomName,
+                    value = state.roomRawName,
                     placeholder = stringResource(CommonStrings.common_room_name_placeholder),
                     singleLine = true,
                     onValueChange = { state.eventSink(RoomDetailsEditEvents.UpdateRoomName(it)) },
@@ -138,7 +139,7 @@ fun RoomDetailsEditView(
             } else {
                 LabelledReadOnlyField(
                     title = stringResource(R.string.screen_room_details_room_name_label),
-                    value = state.roomName
+                    value = state.roomRawName
                 )
             }
 

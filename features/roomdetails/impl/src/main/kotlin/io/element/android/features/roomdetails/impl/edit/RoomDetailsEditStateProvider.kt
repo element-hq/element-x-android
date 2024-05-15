@@ -30,17 +30,18 @@ open class RoomDetailsEditStateProvider : PreviewParameterProvider<RoomDetailsEd
         get() = sequenceOf(
             aRoomDetailsEditState(),
             aRoomDetailsEditState(roomTopic = ""),
+            aRoomDetailsEditState(roomRawName = ""),
             aRoomDetailsEditState(roomAvatarUrl = Uri.parse("example://uri")),
             aRoomDetailsEditState(canChangeName = true, canChangeTopic = false, canChangeAvatar = true, saveButtonEnabled = false),
             aRoomDetailsEditState(canChangeName = false, canChangeTopic = true, canChangeAvatar = false, saveButtonEnabled = false),
             aRoomDetailsEditState(saveAction = AsyncAction.Loading),
-            aRoomDetailsEditState(saveAction = AsyncAction.Failure(Throwable("Whelp")))
+            aRoomDetailsEditState(saveAction = AsyncAction.Failure(Throwable("Whelp"))),
         )
 }
 
 private fun aRoomDetailsEditState(
     roomId: RoomId = RoomId("!aRoomId:aDomain"),
-    roomName: String = "Marketing",
+    roomRawName: String = "Marketing",
     canChangeName: Boolean = true,
     roomTopic: String = "a room topic that is quite long so should wrap onto multiple lines",
     canChangeTopic: Boolean = true,
@@ -53,7 +54,7 @@ private fun aRoomDetailsEditState(
     eventSink: (RoomDetailsEditEvents) -> Unit = {},
 ) = RoomDetailsEditState(
     roomId = roomId,
-    roomName = roomName,
+    roomRawName = roomRawName,
     canChangeName = canChangeName,
     roomTopic = roomTopic,
     canChangeTopic = canChangeTopic,

@@ -62,3 +62,21 @@ fun MatrixRoom.isOwnUserAdmin(): Boolean {
     val powerLevel = roomInfo?.userPowerLevels?.get(sessionId) ?: 0L
     return RoomMember.Role.forPowerLevel(powerLevel) == RoomMember.Role.ADMIN
 }
+
+@Composable
+fun MatrixRoom.rawName(): String? {
+    val roomInfo by roomInfoFlow.collectAsState(initial = null)
+    return roomInfo?.rawName
+}
+
+@Composable
+fun MatrixRoom.topic(): String? {
+    val roomInfo by roomInfoFlow.collectAsState(initial = null)
+    return roomInfo?.topic
+}
+
+@Composable
+fun MatrixRoom.avatarUrl(): String? {
+    val roomInfo by roomInfoFlow.collectAsState(initial = null)
+    return roomInfo?.avatarUrl
+}

@@ -28,6 +28,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
@@ -90,7 +91,17 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - initial state is created from room info`() = runTest {
-        val room = aMatrixRoom(avatarUrl = AN_AVATAR_URL)
+        val room = aMatrixRoom(
+            avatarUrl = AN_AVATAR_URL,
+            displayName = "a display name",
+        ).also {
+            it.givenRoomInfo(
+                aRoomInfo(
+                    name = "a display name",
+                    rawName = "a raw name",
+                )
+            )
+        }
         val presenter = createRoomDetailsEditPresenter(room)
 
         moleculeFlow(RecompositionMode.Immediate) {
@@ -98,7 +109,7 @@ class RoomDetailsEditPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.roomId).isEqualTo(room.roomId)
-            assertThat(initialState.roomName).isEqualTo(room.displayName)
+            assertThat(initialState.roomRawName).isEqualTo("a raw name")
             assertThat(initialState.roomAvatarUrl).isEqualTo(roomAvatarUri)
             assertThat(initialState.roomTopic).isEqualTo(room.topic.orEmpty())
             assertThat(initialState.avatarActions).containsExactly(
@@ -199,34 +210,34 @@ class RoomDetailsEditPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.roomTopic).isEqualTo("My topic")
-            assertThat(initialState.roomName).isEqualTo("Name")
+            assertThat(initialState.roomRawName).isEqualTo("Name")
             assertThat(initialState.roomAvatarUrl).isEqualTo(roomAvatarUri)
 
             initialState.eventSink(RoomDetailsEditEvents.UpdateRoomName("Name II"))
             awaitItem().apply {
                 assertThat(roomTopic).isEqualTo("My topic")
-                assertThat(roomName).isEqualTo("Name II")
+                assertThat(roomRawName).isEqualTo("Name II")
                 assertThat(roomAvatarUrl).isEqualTo(roomAvatarUri)
             }
 
             initialState.eventSink(RoomDetailsEditEvents.UpdateRoomName("Name III"))
             awaitItem().apply {
                 assertThat(roomTopic).isEqualTo("My topic")
-                assertThat(roomName).isEqualTo("Name III")
+                assertThat(roomRawName).isEqualTo("Name III")
                 assertThat(roomAvatarUrl).isEqualTo(roomAvatarUri)
             }
 
             initialState.eventSink(RoomDetailsEditEvents.UpdateRoomTopic("Another topic"))
             awaitItem().apply {
                 assertThat(roomTopic).isEqualTo("Another topic")
-                assertThat(roomName).isEqualTo("Name III")
+                assertThat(roomRawName).isEqualTo("Name III")
                 assertThat(roomAvatarUrl).isEqualTo(roomAvatarUri)
             }
 
             initialState.eventSink(RoomDetailsEditEvents.HandleAvatarAction(AvatarAction.Remove))
             awaitItem().apply {
                 assertThat(roomTopic).isEqualTo("Another topic")
-                assertThat(roomName).isEqualTo("Name III")
+                assertThat(roomRawName).isEqualTo("Name III")
                 assertThat(roomAvatarUrl).isNull()
             }
         }

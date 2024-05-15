@@ -25,7 +25,8 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class RoomDetailsEditState(
     val roomId: RoomId,
-    val roomName: String,
+    /** The raw room name (i.e. the room name from the state event `m.room.name`), not the display name. */
+    val roomRawName: String,
     val canChangeName: Boolean,
     val roomTopic: String,
     val canChangeTopic: Boolean,
