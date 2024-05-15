@@ -26,6 +26,13 @@ internal class MarkdownEditText(
 
     private var isModifyingText = false
 
+    fun updateEditableText(charSequence: CharSequence) {
+        isModifyingText = true
+        editableText.clear()
+        editableText.append(charSequence)
+        isModifyingText = false
+    }
+
     override fun setText(text: CharSequence?, type: BufferType?) {
         isModifyingText = true
         super.setText(text, type)

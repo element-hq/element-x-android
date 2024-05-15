@@ -17,11 +17,13 @@
 package io.element.android.libraries.textcomposer.components.markdown
 
 import android.text.SpannableString
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import io.element.android.libraries.core.extensions.orEmpty
 
+@Stable
 class ImmutableCharSequence(initialText: CharSequence = "") {
     private var value by mutableStateOf<SpannableString>(SpannableString(initialText))
     private var needsDisplaying by mutableStateOf(false)
@@ -33,4 +35,8 @@ class ImmutableCharSequence(initialText: CharSequence = "") {
 
     fun value(): CharSequence = value
     fun needsDisplaying(): Boolean = needsDisplaying
+
+    override fun toString(): String {
+        return "ImmutableCharSequence(value='$value', needsDisplaying=$needsDisplaying)"
+    }
 }

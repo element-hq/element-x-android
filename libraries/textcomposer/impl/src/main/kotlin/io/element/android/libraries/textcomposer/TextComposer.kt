@@ -193,7 +193,6 @@ fun TextComposer(
                         subcomposing = subcomposing,
                         onTyping = onTyping,
                         onSuggestionReceived = onSuggestionReceived,
-                        composerMode = composerMode,
                         richTextEditorStyle = style,
                     )
                 }

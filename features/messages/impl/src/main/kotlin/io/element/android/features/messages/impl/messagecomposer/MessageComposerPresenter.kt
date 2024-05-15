@@ -127,6 +127,10 @@ class MessageComposerPresenter @Inject constructor(
 
         // Initially disabled so we don't set focus and text twice
         var applyFormattingModeChanges by remember { mutableStateOf(false) }
+        val richTextEditorState = richTextEditorStateFactory.create()
+        if (isTesting) {
+            richTextEditorState.isReadyToProcessActions = true
+        }
         val markdownTextEditorState = remember { MarkdownTextEditorState(initialText = null, initialFocus = false) }
 
         var isMentionsEnabled by remember { mutableStateOf(false) }
@@ -164,10 +168,6 @@ class MessageComposerPresenter @Inject constructor(
         val isFullScreen = rememberSaveable {
             mutableStateOf(false)
         }
-        val richTextEditorState = richTextEditorStateFactory.create()
-        if (isTesting) {
-            richTextEditorState.isReadyToProcessActions = true
-        }
         val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
 
         var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
@@ -177,8 +177,11 @@ class MessageComposerPresenter @Inject constructor(
         LaunchedEffect(messageComposerContext.composerMode) {
             when (val modeValue = messageComposerContext.composerMode) {
                 is MessageComposerMode.Edit ->
-                    // No need to handle this for plain text editor
-                    richTextEditorState.setHtml(modeValue.defaultContent)
+                    if (showTextFormatting) {
+                        richTextEditorState.setHtml(modeValue.defaultContent)
+                    } else {
+                        markdownTextEditorState.text.update(modeValue.defaultContent, true)
+                    }
                 else -> Unit
             }
         }

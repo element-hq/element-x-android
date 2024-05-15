@@ -41,7 +41,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
-class JoinAtRoomLoadedFlowNodeTest {
+class JoinRoomLoadedFlowNodeTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 

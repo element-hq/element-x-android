@@ -36,7 +36,6 @@ import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
-import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
 import io.element.android.tests.testutils.EnsureCalledOnceWithParam
@@ -87,7 +86,7 @@ class MarkdownTextInputTest {
             it.findEditor().setText("Test")
         }
         rule.awaitIdle()
-        onSuggestionReceived.assertList(listOf(null, null)) // Initial value and after typing
+        onSuggestionReceived.assertSingle(null)
     }
 
     @Test
@@ -103,16 +102,10 @@ class MarkdownTextInputTest {
         rule.awaitIdle()
         onSuggestionReceived.assertList(
             listOf(
-                // Initial value
-                null,
                 // User mention suggestion
                 Suggestion(0, 1, SuggestionType.Mention, ""),
-                // Text cleared
-                null,
                 // Room suggestion
                 Suggestion(0, 1, SuggestionType.Room, ""),
-                // Text cleared
-                null,
                 // Slash command suggestion, not supported yet
                 null,
             )
@@ -162,7 +155,6 @@ class MarkdownTextInputTest {
         subcomposing: Boolean = false,
         onTyping: (Boolean) -> Unit = {},
         onSuggestionReceived: (Suggestion?) -> Unit = {},
-        composerMode: MessageComposerMode = MessageComposerMode.Normal,
     ) {
         rule.setContent {
             val style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.hasFocus)
@@ -171,7 +163,6 @@ class MarkdownTextInputTest {
                 subcomposing = subcomposing,
                 onTyping = onTyping,
                 onSuggestionReceived = onSuggestionReceived,
-                composerMode = composerMode,
                 richTextEditorStyle = style,
             )
         }

@@ -22,8 +22,6 @@ import android.text.Selection
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -36,13 +34,10 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
-import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
 import io.element.android.wysiwyg.compose.RichTextEditorStyle
 import io.element.android.wysiwyg.compose.internal.applyStyleInCompose
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Suppress("ModifierMissing")
 @Composable
@@ -51,17 +46,9 @@ fun MarkdownTextInput(
     subcomposing: Boolean,
     onTyping: (Boolean) -> Unit,
     onSuggestionReceived: (Suggestion?) -> Unit,
-    composerMode: MessageComposerMode,
     richTextEditorStyle: RichTextEditorStyle,
 ) {
-    val coroutineScope = rememberCoroutineScope()
-
-    LaunchedEffect(composerMode) {
-        if (composerMode is MessageComposerMode.Edit) {
-            state.text.update(composerMode.defaultContent, true)
-        }
-    }
-
+    val canUpdateState = !subcomposing
     AndroidView(
         modifier = Modifier
             .padding(top = 6.dp, bottom = 6.dp)
@@ -72,20 +59,18 @@ fun MarkdownTextInput(
                 setPadding(0)
                 setBackgroundColor(Color.TRANSPARENT)
                 setText(state.text.value())
-                if (!subcomposing) {
+                if (canUpdateState) {
                     setSelection(state.selection.first, state.selection.last)
                     setOnFocusChangeListener { _, hasFocus ->
                         state.hasFocus = hasFocus
                     }
                     addTextChangedListener { editable ->
-                        coroutineScope.launch(Dispatchers.Main) {
-                            onTyping(!editable.isNullOrEmpty())
-                            state.text.update(editable, false)
-                            state.lineCount = lineCount
+                        onTyping(!editable.isNullOrEmpty())
+                        state.text.update(editable, false)
+                        state.lineCount = lineCount
 
-                            state.currentMentionSuggestion = editable?.checkSuggestionNeeded()
-                            onSuggestionReceived(state.currentMentionSuggestion)
-                        }
+                        state.currentMentionSuggestion = editable?.checkSuggestionNeeded()
+                        onSuggestionReceived(state.currentMentionSuggestion)
                     }
                     onSelectionChangeListener = { selStart, selEnd ->
                         state.selection = selStart..selEnd
@@ -100,16 +85,20 @@ fun MarkdownTextInput(
             editText.applyStyleInCompose(richTextEditorStyle)
 
             if (state.text.needsDisplaying()) {
-                editText.editableText.clear()
-                editText.editableText.append(state.text.value())
+                editText.updateEditableText(state.text.value())
+                if (canUpdateState) {
+                    state.text.update(editText.editableText, false)
+                }
             }
-            val newSelectionStart = state.selection.first
-            val newSelectionEnd = state.selection.last
-            val currentTextRange = 0..editText.editableText.length
-            val didSelectionChange = { editText.selectionStart != newSelectionStart || editText.selectionEnd != newSelectionEnd }
-            val isNewSelectionValid = { newSelectionStart in currentTextRange && newSelectionEnd in currentTextRange }
-            if (didSelectionChange() && isNewSelectionValid()) {
-                editText.setSelection(state.selection.first, state.selection.last)
+            if (canUpdateState) {
+                val newSelectionStart = state.selection.first
+                val newSelectionEnd = state.selection.last
+                val currentTextRange = 0..editText.editableText.length
+                val didSelectionChange = { editText.selectionStart != newSelectionStart || editText.selectionEnd != newSelectionEnd }
+                val isNewSelectionValid = { newSelectionStart in currentTextRange && newSelectionEnd in currentTextRange }
+                if (didSelectionChange() && isNewSelectionValid()) {
+                    editText.setSelection(state.selection.first, state.selection.last)
+                }
             }
         }
     )
@@ -125,7 +114,10 @@ private fun Editable.checkSuggestionNeeded(): Suggestion? {
     }
     if (startOfWord !in indices) return null
     val firstChar = this[startOfWord]
+
+    // If a mention span already exists we don't need suggestions
     if (getSpans<MentionSpan>(startOfWord, startOfWord + 1).isNotEmpty()) return null
+
     return if (firstChar in listOf('@', '#', "/")) {
         var endOfWord = end
         while (endOfWord < this.length && !this[endOfWord].isWhitespace()) {
@@ -154,7 +146,6 @@ internal fun MarkdownTextInputPreview() {
             subcomposing = false,
             onTyping = {},
             onSuggestionReceived = {},
-            composerMode = MessageComposerMode.Normal,
             richTextEditorStyle = style,
         )
     }
