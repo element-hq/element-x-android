@@ -34,6 +34,7 @@ fun aPreferencesRootState(
     showAnalyticsSettings = true,
     showDeveloperSettings = true,
     showNotificationSettings = true,
+    showLanguageSettings = true,
     showLockScreenSettings = true,
     showBlockedUsersItem = true,
     snackbarMessage = SnackbarMessage(CommonStrings.common_verification_complete),

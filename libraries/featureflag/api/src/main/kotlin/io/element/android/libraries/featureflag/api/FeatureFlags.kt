@@ -81,5 +81,11 @@ enum class FeatureFlags(
         description = "Allow user to search for public rooms in their homeserver",
         defaultValue = false,
         isFinished = false,
-    )
+    ),
+    LanguageSettings(
+        key = "feature.languagesettings",
+        title = "Show language settings",
+        defaultValue = false,
+        isFinished = false,
+    ),
 }

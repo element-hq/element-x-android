@@ -100,6 +100,7 @@ class PreferencesRootPresenterTest {
             assertThat(loadedState.showDeveloperSettings).isTrue()
             assertThat(loadedState.showLockScreenSettings).isTrue()
             assertThat(loadedState.showNotificationSettings).isTrue()
+            assertThat(loadedState.showLanguageSettings).isFalse()
             assertThat(loadedState.directLogoutState).isEqualTo(aDirectLogoutState)
             assertThat(loadedState.snackbarMessage).isNull()
         }

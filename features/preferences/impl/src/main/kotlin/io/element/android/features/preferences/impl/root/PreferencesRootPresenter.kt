@@ -68,6 +68,10 @@ class PreferencesRootPresenter @Inject constructor(
         LaunchedEffect(Unit) {
             showNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
         }
+        val showLanguageSettings = remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) {
+            showLanguageSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.LanguageSettings)
+        }
         val showLockScreenSettings = remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
             showLockScreenSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.PinUnlock)
@@ -109,6 +113,7 @@ class PreferencesRootPresenter @Inject constructor(
             showAnalyticsSettings = hasAnalyticsProviders,
             showDeveloperSettings = showDeveloperSettings,
             showNotificationSettings = showNotificationSettings.value,
+            showLanguageSettings = showLanguageSettings.value,
             showLockScreenSettings = showLockScreenSettings.value,
             showBlockedUsersItem = showBlockedUsersItem,
             directLogoutState = directLogoutState,

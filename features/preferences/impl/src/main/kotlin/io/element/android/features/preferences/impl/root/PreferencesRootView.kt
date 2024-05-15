@@ -62,6 +62,7 @@ fun PreferencesRootView(
     onOpenDeveloperSettings: () -> Unit,
     onOpenAdvancedSettings: () -> Unit,
     onOpenNotificationSettings: () -> Unit,
+    onOpenLanguageSettings: () -> Unit,
     onOpenUserProfile: (MatrixUser) -> Unit,
     onOpenBlockedUsers: () -> Unit,
     onSignOutClicked: () -> Unit,
@@ -87,6 +88,7 @@ fun PreferencesRootView(
         ManageAppSection(
             state = state,
             onOpenNotificationSettings = onOpenNotificationSettings,
+            onOpenLanguageSettings = onOpenLanguageSettings,
             onOpenLockScreenSettings = onOpenLockScreenSettings,
             onSecureBackupClicked = onSecureBackupClicked,
         )
@@ -120,6 +122,7 @@ fun PreferencesRootView(
 private fun ColumnScope.ManageAppSection(
     state: PreferencesRootState,
     onOpenNotificationSettings: () -> Unit,
+    onOpenLanguageSettings: () -> Unit,
     onOpenLockScreenSettings: () -> Unit,
     onSecureBackupClicked: () -> Unit,
 ) {
@@ -128,6 +131,13 @@ private fun ColumnScope.ManageAppSection(
             headlineContent = { Text(stringResource(id = R.string.screen_notification_settings_title)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Notifications())),
             onClick = onOpenNotificationSettings,
+        )
+    }
+    if (state.showLanguageSettings) {
+        ListItem(
+            headlineContent = { Text(stringResource(id = CommonStrings.common_language_settings)) },
+            // TODO: Add icon
+            onClick = onOpenLanguageSettings,
         )
     }
     if (state.showLockScreenSettings) {
@@ -288,6 +298,7 @@ private fun ContentToPreview(matrixUser: MatrixUser) {
         onSecureBackupClicked = {},
         onManageAccountClicked = {},
         onOpenNotificationSettings = {},
+        onOpenLanguageSettings = {},
         onOpenLockScreenSettings = {},
         onOpenUserProfile = {},
         onOpenBlockedUsers = {},

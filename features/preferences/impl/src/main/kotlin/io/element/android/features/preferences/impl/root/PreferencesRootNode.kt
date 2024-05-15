@@ -49,6 +49,7 @@ class PreferencesRootNode @AssistedInject constructor(
         fun onOpenAbout()
         fun onOpenDeveloperSettings()
         fun onOpenNotificationSettings()
+        fun onOpenLanguageSettings()
         fun onOpenLockScreenSettings()
         fun onOpenAdvancedSettings()
         fun onOpenUserProfile(matrixUser: MatrixUser)
@@ -105,6 +106,10 @@ class PreferencesRootNode @AssistedInject constructor(
         plugins<Callback>().forEach { it.onOpenNotificationSettings() }
     }
 
+    private fun onOpenLanguageSettings() {
+        plugins<Callback>().forEach { it.onOpenLanguageSettings() }
+    }
+
     private fun onOpenLockScreenSettings() {
         plugins<Callback>().forEach { it.onOpenLockScreenSettings() }
     }
@@ -138,6 +143,7 @@ class PreferencesRootNode @AssistedInject constructor(
             onOpenAdvancedSettings = this::onOpenAdvancedSettings,
             onManageAccountClicked = { onManageAccountClicked(activity, it, isDark) },
             onOpenNotificationSettings = this::onOpenNotificationSettings,
+            onOpenLanguageSettings = this::onOpenLanguageSettings,
             onOpenLockScreenSettings = this::onOpenLockScreenSettings,
             onOpenUserProfile = this::onOpenUserProfile,
             onOpenBlockedUsers = this::onOpenBlockedUsers,
