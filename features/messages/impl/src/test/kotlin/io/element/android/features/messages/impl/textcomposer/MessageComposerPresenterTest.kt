@@ -238,7 +238,7 @@ class MessageComposerPresenterTest {
     }
 
     @Test
-    fun `present - send message`() = runTest {
+    fun `present - send message with rich text enabled`() = runTest {
         val presenter = createPresenter(this)
         moleculeFlow(RecompositionMode.Immediate) {
             val state = presenter.present()
@@ -251,6 +251,35 @@ class MessageComposerPresenterTest {
             withMessageState.eventSink.invoke(MessageComposerEvents.SendMessage)
             val messageSentState = awaitItem()
             assertThat(messageSentState.textEditorState.messageHtml()).isEqualTo("")
+            waitForPredicate { analyticsService.capturedEvents.size == 1 }
+            assertThat(analyticsService.capturedEvents).containsExactly(
+                Composer(
+                    inThread = false,
+                    isEditing = false,
+                    isReply = false,
+                    messageType = Composer.MessageType.Text,
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - send message with plain text enabled`() = runTest {
+        val permalinkBuilder = FakePermalinkBuilder(result = { Result.success("") })
+        val presenter = createPresenter(this, isRichTextEditorEnabled = false)
+        moleculeFlow(RecompositionMode.Immediate) {
+            val state = presenter.present()
+            val messageMarkdown = state.textEditorState.messageMarkdown(permalinkBuilder)
+            remember(state, messageMarkdown) { state }
+        }.test {
+            val initialState = awaitFirstItem()
+            initialState.textEditorState.setMarkdown(A_MESSAGE)
+            val withMessageState = awaitItem()
+            assertThat(withMessageState.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo(A_MESSAGE)
+            assertThat(withMessageState.textEditorState.messageHtml()).isNull()
+            withMessageState.eventSink.invoke(MessageComposerEvents.SendMessage)
+            val messageSentState = awaitItem()
+            assertThat(messageSentState.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo("")
             waitForPredicate { analyticsService.capturedEvents.size == 1 }
             assertThat(analyticsService.capturedEvents).containsExactly(
                 Composer(
@@ -1049,4 +1078,8 @@ fun aQuoteMode() = MessageComposerMode.Quote(AN_EVENT_ID, A_MESSAGE)
 
 private suspend fun TextEditorState.setHtml(html: String) {
     (this as? TextEditorState.Rich)?.richTextEditorState?.setHtml(html) ?: error("TextEditorState is not Rich")
+}
+
+private fun TextEditorState.setMarkdown(markdown: String) {
+    (this as? TextEditorState.Markdown)?.state?.text?.update(markdown, needsDisplaying = false) ?: error("TextEditorState is not Markdown")
 }

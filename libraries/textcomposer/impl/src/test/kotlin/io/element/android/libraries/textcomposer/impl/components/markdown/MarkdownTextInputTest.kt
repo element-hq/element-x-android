@@ -20,11 +20,21 @@ import android.widget.EditText
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.core.text.getSpans
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
+import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
+import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.textcomposer.components.markdown.MarkdownTextInput
 import io.element.android.libraries.textcomposer.components.markdown.aMarkdownTextEditorState
+import io.element.android.libraries.textcomposer.mentions.MentionSpan
+import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
+import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
@@ -62,9 +72,10 @@ class MarkdownTextInputTest {
             val editText = it.findEditor()
             editText.setText("Test")
             editText.setText("")
+            editText.setText(null)
         }
         rule.awaitIdle()
-        onTyping.assertList(listOf(true, false))
+        onTyping.assertList(listOf(true, false, false))
     }
 
     @Test
@@ -85,17 +96,65 @@ class MarkdownTextInputTest {
         val onSuggestionReceived = EventsRecorder<Suggestion?>()
         rule.setMarkdownTextInput(state = state, onSuggestionReceived = onSuggestionReceived)
         rule.activityRule.scenario.onActivity {
-            it.findEditor().setText("@Al")
+            it.findEditor().setText("@")
+            it.findEditor().setText("#")
+            it.findEditor().setText("/")
         }
         rule.awaitIdle()
         onSuggestionReceived.assertList(
             listOf(
-                // From setting text
-                Suggestion(0, 3, SuggestionType.Mention, "Al"),
-                // From setting selection
-                Suggestion(0, 3, SuggestionType.Mention, "Al"),
+                // Initial value
+                null,
+                // User mention suggestion
+                Suggestion(0, 1, SuggestionType.Mention, ""),
+                // Text cleared
+                null,
+                // Room suggestion
+                Suggestion(0, 1, SuggestionType.Room, ""),
+                // Text cleared
+                null,
+                // Slash command suggestion, not supported yet
+                null,
             )
         )
+    }
+
+    @Test
+    fun `when the selection changes in the UI the state is updated`() = runTest {
+        val state = aMarkdownTextEditorState(initialText = "Test", initialFocus = true)
+        rule.setMarkdownTextInput(state = state)
+        rule.activityRule.scenario.onActivity {
+            val editor = it.findEditor()
+            editor.setSelection(2)
+        }
+        rule.awaitIdle()
+        // Selection is updated
+        assertThat(state.selection).isEqualTo(2..2)
+    }
+
+    @Test
+    fun `inserting a mention replaces the existing text with a span`() = runTest {
+        val permalinkParser = FakePermalinkParser(result = { PermalinkData.UserLink(A_SESSION_ID) })
+        val permalinkBuilder = FakePermalinkBuilder(result = { Result.success("https://matrix.to/#/$A_SESSION_ID") })
+        val state = aMarkdownTextEditorState(initialText = "@", initialFocus = true)
+        state.currentMentionSuggestion = Suggestion(0, 1, SuggestionType.Mention, "")
+        rule.setMarkdownTextInput(state = state)
+        var editor: EditText? = null
+        rule.activityRule.scenario.onActivity {
+            editor = it.findEditor()
+            state.insertMention(
+                ResolvedMentionSuggestion.Member(roomMember = aRoomMember()),
+                MentionSpanProvider(currentSessionId = A_SESSION_ID, permalinkParser = permalinkParser),
+                permalinkBuilder,
+            )
+        }
+        rule.awaitIdle()
+
+        // Text is replaced with a placeholder
+        assertThat(editor?.editableText.toString()).isEqualTo(". ")
+        // The placeholder contains a MentionSpan
+        val mentionSpans = editor?.editableText?.getSpans<MentionSpan>(0, 2).orEmpty()
+        assertThat(mentionSpans).isNotEmpty()
     }
 
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMarkdownTextInput(

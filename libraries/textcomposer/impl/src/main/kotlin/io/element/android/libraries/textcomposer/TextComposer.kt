@@ -612,6 +612,20 @@ internal fun TextComposerEditPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
+internal fun MarkdownTextComposerEditPreview() = ElementPreview {
+    PreviewColumn(items = persistentListOf({
+        ATextComposer(
+            TextEditorState.Markdown(aMarkdownTextEditorState(initialText = "A message", initialFocus = true)),
+            voiceMessageState = VoiceMessageState.Idle,
+            composerMode = MessageComposerMode.Edit(EventId("$1234"), "Some text", TransactionId("1234")),
+            enableVoiceMessages = true,
+            currentUserId = UserId("@alice:localhost")
+        )
+    }))
+}
+
+@PreviewsDayNight
+@Composable
 internal fun TextComposerReplyPreview() = ElementPreview {
     PreviewColumn(
         items = persistentListOf(
