@@ -158,7 +158,8 @@ fun RoomDetailsEditView(
 
     AvatarActionBottomSheet(
         actions = state.avatarActions,
-        isVisible = isAvatarActionsSheetVisible,
+        isVisible = isAvatarActionsSheetVisible.value,
+        onDismiss = { isAvatarActionsSheetVisible.value = false },
         onActionSelected = { state.eventSink(RoomDetailsEditEvents.HandleAvatarAction(it)) }
     )
 

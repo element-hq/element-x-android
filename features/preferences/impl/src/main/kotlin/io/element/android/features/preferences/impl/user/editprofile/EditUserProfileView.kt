@@ -132,7 +132,8 @@ fun EditUserProfileView(
 
         AvatarActionBottomSheet(
             actions = state.avatarActions,
-            isVisible = isAvatarActionsSheetVisible,
+            isVisible = isAvatarActionsSheetVisible.value,
+            onDismiss = { isAvatarActionsSheetVisible.value = false },
             onActionSelected = { state.eventSink(EditUserProfileEvents.HandleAvatarAction(it)) }
         )
 

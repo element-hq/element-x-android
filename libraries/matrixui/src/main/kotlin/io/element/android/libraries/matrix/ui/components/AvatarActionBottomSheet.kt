@@ -29,9 +29,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -53,8 +50,9 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun AvatarActionBottomSheet(
     actions: ImmutableList<AvatarAction>,
-    isVisible: MutableState<Boolean>,
+    isVisible: Boolean,
     onActionSelected: (action: AvatarAction) -> Unit,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -62,19 +60,19 @@ fun AvatarActionBottomSheet(
         skipPartiallyExpanded = true
     )
 
-    BackHandler(enabled = isVisible.value) {
-        sheetState.hide(coroutineScope, then = { isVisible.value = false })
+    BackHandler(enabled = isVisible) {
+        sheetState.hide(coroutineScope, then = { onDismiss() })
     }
 
     fun onItemActionClicked(itemAction: AvatarAction) {
         onActionSelected(itemAction)
-        sheetState.hide(coroutineScope, then = { isVisible.value = false })
+        sheetState.hide(coroutineScope, then = { onDismiss() })
     }
 
-    if (isVisible.value) {
+    if (isVisible) {
         ModalBottomSheet(
             onDismissRequest = {
-                sheetState.hide(coroutineScope, then = { isVisible.value = false })
+                sheetState.hide(coroutineScope, then = { onDismiss() })
             },
             modifier = modifier,
             sheetState = sheetState,
@@ -126,7 +124,8 @@ private fun AvatarActionBottomSheetContent(
 internal fun AvatarActionBottomSheetPreview() = ElementPreview {
     AvatarActionBottomSheet(
         actions = persistentListOf(AvatarAction.TakePhoto, AvatarAction.ChoosePhoto, AvatarAction.Remove),
-        isVisible = remember { mutableStateOf(true) },
+        isVisible = true,
         onActionSelected = { },
+        onDismiss = { },
     )
 }

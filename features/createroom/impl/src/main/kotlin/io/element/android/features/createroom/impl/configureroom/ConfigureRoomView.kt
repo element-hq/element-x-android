@@ -134,7 +134,8 @@ fun ConfigureRoomView(
 
     AvatarActionBottomSheet(
         actions = state.avatarActions,
-        isVisible = isAvatarActionsSheetVisible,
+        isVisible = isAvatarActionsSheetVisible.value,
+        onDismiss = { isAvatarActionsSheetVisible.value = false },
         onActionSelected = { state.eventSink(ConfigureRoomEvents.HandleAvatarAction(it)) }
     )
 
