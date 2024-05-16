@@ -33,23 +33,32 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 
 @Composable
 fun EditableAvatarView(
-    userId: String?,
+    matrixId: String,
     displayName: String?,
     avatarUrl: Uri?,
     avatarSize: AvatarSize,
     onAvatarClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
         Box(
             modifier = Modifier
                 .size(avatarSize.dp)
@@ -58,15 +67,14 @@ fun EditableAvatarView(
                     onClick = onAvatarClicked,
                     indication = rememberRipple(bounded = false),
                 )
+                .testTag(TestTags.editAvatar)
         ) {
             when (avatarUrl?.scheme) {
                 null, "mxc" -> {
-                    userId?.let {
-                        Avatar(
-                            avatarData = AvatarData(it, displayName, avatarUrl?.toString(), size = avatarSize),
-                            modifier = Modifier.fillMaxSize(),
-                        )
-                    }
+                    Avatar(
+                        avatarData = AvatarData(matrixId, displayName, avatarUrl?.toString(), size = avatarSize),
+                        modifier = Modifier.fillMaxSize(),
+                    )
                 }
                 else -> {
                     UnsavedAvatar(
@@ -93,4 +101,27 @@ fun EditableAvatarView(
             }
         }
     }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun EditableAvatarViewPreview(
+    @PreviewParameter(EditableAvatarViewUriProvider::class) uri: Uri?
+) = ElementPreview {
+    EditableAvatarView(
+        matrixId = "id",
+        displayName = "A room",
+        avatarUrl = uri,
+        avatarSize = AvatarSize.EditRoomDetails,
+        onAvatarClicked = {},
+    )
+}
+
+open class EditableAvatarViewUriProvider : PreviewParameterProvider<Uri?> {
+    override val values: Sequence<Uri?>
+        get() = sequenceOf(
+            null,
+            Uri.parse("mxc://matrix.org/123456"),
+            Uri.parse("https://example.com/avatar.jpg"),
+        )
 }

@@ -735,6 +735,7 @@ data class EndPollInvocation(
 fun aRoomInfo(
     id: RoomId = A_ROOM_ID,
     name: String? = A_ROOM_NAME,
+    rawName: String? = name,
     topic: String? = "A topic",
     avatarUrl: String? = AN_AVATAR_URL,
     isDirect: Boolean = false,
@@ -759,6 +760,7 @@ fun aRoomInfo(
 ) = MatrixRoomInfo(
     id = id,
     name = name,
+    rawName = rawName,
     topic = topic,
     avatarUrl = avatarUrl,
     isDirect = isDirect,
