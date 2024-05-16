@@ -146,13 +146,13 @@ fun TextComposer(
         }
     }
 
+    val placeholder = if (composerMode.inThread) {
+        stringResource(id = CommonStrings.action_reply_in_thread)
+    } else {
+        stringResource(id = R.string.rich_text_editor_composer_placeholder)
+    }
     val textInput: @Composable () -> Unit = when (state) {
         is TextEditorState.Rich -> {
-            val placeholder = if (composerMode.inThread) {
-                stringResource(id = CommonStrings.action_reply_in_thread)
-            } else {
-                stringResource(id = R.string.rich_text_editor_composer_placeholder)
-            }
             remember(state.richTextEditorState, subcomposing, composerMode, onResetComposerMode, onError) {
                 @Composable {
                     val mentionSpanProvider = rememberMentionSpanProvider(
@@ -175,11 +175,6 @@ fun TextComposer(
             }
         }
         is TextEditorState.Markdown -> {
-            val placeholder = if (composerMode.inThread) {
-                stringResource(id = CommonStrings.action_reply_in_thread)
-            } else {
-                stringResource(id = R.string.rich_text_editor_composer_placeholder)
-            }
             @Composable {
                 val style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.hasFocus())
                 TextInputBox(

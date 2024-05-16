@@ -24,7 +24,7 @@ import androidx.compose.runtime.setValue
 import io.element.android.libraries.core.extensions.orEmpty
 
 @Stable
-class ImmutableCharSequence(initialText: CharSequence = "") {
+class StableCharSequence(initialText: CharSequence = "") {
     private var value by mutableStateOf<SpannableString>(SpannableString(initialText))
     private var needsDisplaying by mutableStateOf(false)
 

@@ -29,7 +29,7 @@ import androidx.core.text.getSpans
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.room.Mention
-import io.element.android.libraries.textcomposer.components.markdown.ImmutableCharSequence
+import io.element.android.libraries.textcomposer.components.markdown.StableCharSequence
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
@@ -39,7 +39,7 @@ class MarkdownTextEditorState(
     initialText: String?,
     initialFocus: Boolean,
 ) {
-    var text by mutableStateOf(ImmutableCharSequence(initialText ?: ""))
+    var text by mutableStateOf(StableCharSequence(initialText ?: ""))
     var selection by mutableStateOf(0..0)
     var hasFocus by mutableStateOf(initialFocus)
     var requestFocusAction by mutableStateOf({})
