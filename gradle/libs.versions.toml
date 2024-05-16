@@ -57,7 +57,7 @@ autoservice = "1.1.1"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
-kover = "0.7.6"
+kover = "0.8.0"
 
 [libraries]
 # Project
