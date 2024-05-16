@@ -764,11 +764,12 @@ class MessageComposerPresenterTest {
             val composerOptions = awaitItem()
             assertThat(composerOptions.showAttachmentSourcePicker).isTrue()
             composerOptions.eventSink(MessageComposerEvents.ToggleTextFormatting(true))
-            awaitItem() // composer options closed
+            skipItems(2) // composer options closed
             val showTextFormatting = awaitItem()
             assertThat(showTextFormatting.showAttachmentSourcePicker).isFalse()
             assertThat(showTextFormatting.showTextFormatting).isTrue()
             showTextFormatting.eventSink(MessageComposerEvents.ToggleTextFormatting(false))
+            skipItems(1)
             val finished = awaitItem()
             assertThat(finished.showTextFormatting).isFalse()
         }
