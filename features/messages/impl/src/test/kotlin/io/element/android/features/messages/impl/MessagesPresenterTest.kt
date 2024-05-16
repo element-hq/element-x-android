@@ -470,10 +470,11 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink.invoke(
                 MessagesEvents.HandleAction(
-                    TimelineItemAction.Redact, aMessageEvent(
-                    transactionId = A_TRANSACTION_ID,
-                    sendState = LocalEventSendState.SendingFailed("Failed to send message")
-                )
+                    action = TimelineItemAction.Redact,
+                    event = aMessageEvent(
+                        transactionId = A_TRANSACTION_ID,
+                        sendState = LocalEventSendState.SendingFailed("Failed to send message")
+                    )
                 )
             )
             assertThat(matrixRoom.cancelSendCount).isEqualTo(1)
