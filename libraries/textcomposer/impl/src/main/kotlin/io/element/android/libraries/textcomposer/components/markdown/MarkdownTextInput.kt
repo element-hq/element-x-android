@@ -31,7 +31,6 @@ import androidx.core.widget.addTextChangedListener
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.testtags.TestTags
-import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
@@ -53,8 +52,7 @@ fun MarkdownTextInput(
     AndroidView(
         modifier = Modifier
             .padding(top = 6.dp, bottom = 6.dp)
-            .fillMaxWidth()
-            .testTag(TestTags.plainTextEditor),
+            .fillMaxWidth(),
         factory = { context ->
             MarkdownEditText(context).apply {
                 tag = TestTags.plainTextEditor.value // Needed for UI tests

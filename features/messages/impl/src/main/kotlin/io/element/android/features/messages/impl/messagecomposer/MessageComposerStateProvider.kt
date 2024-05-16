@@ -24,7 +24,6 @@ import io.element.android.libraries.textcomposer.aRichTextEditorState
 import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.TextEditorState
-import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -36,7 +35,7 @@ open class MessageComposerStateProvider : PreviewParameterProvider<MessageCompos
 }
 
 fun aMessageComposerState(
-    richTextEditorState: RichTextEditorState = aRichTextEditorState(),
+    textEditorState: TextEditorState = TextEditorState.Rich(aRichTextEditorState()),
     isFullScreen: Boolean = false,
     mode: MessageComposerMode = MessageComposerMode.Normal,
     showTextFormatting: Boolean = false,
@@ -46,7 +45,7 @@ fun aMessageComposerState(
     attachmentsState: AttachmentsState = AttachmentsState.None,
     memberSuggestions: ImmutableList<ResolvedMentionSuggestion> = persistentListOf(),
 ) = MessageComposerState(
-    textEditorState = TextEditorState.Rich(richTextEditorState),
+    textEditorState = textEditorState,
     permalinkParser = object : PermalinkParser {
         override fun parse(uriString: String): PermalinkData = TODO()
     },

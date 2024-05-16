@@ -182,6 +182,7 @@ fun TextComposer(
                     onResetComposerMode = onResetComposerMode,
                     placeholder = placeholder,
                     showPlaceholder = { state.state.text.value().isEmpty() },
+                    subcomposing = subcomposing,
                 ) {
                     MarkdownTextInput(
                         state = state.state,
@@ -425,6 +426,7 @@ private fun TextInputBox(
     onResetComposerMode: () -> Unit,
     placeholder: String,
     showPlaceholder: () -> Boolean,
+    subcomposing: Boolean,
     textInput: @Composable () -> Unit,
 ) {
     val bgColor = ElementTheme.colors.bgSubtleSecondary
@@ -446,7 +448,8 @@ private fun TextInputBox(
         Box(
             modifier = Modifier
                 .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 42.dp)
-                .testTag(TestTags.richTextEditor),
+                // Apply test tag only once, otherwise 2 nodes will have it (both the normal and subcomposing one) and tests will fail
+                .then(if (!subcomposing) Modifier.testTag(TestTags.textEditor) else Modifier),
             contentAlignment = Alignment.CenterStart,
         ) {
             // Placeholder
@@ -483,7 +486,8 @@ private fun TextInput(
         composerMode = composerMode,
         onResetComposerMode = onResetComposerMode,
         placeholder = placeholder,
-        showPlaceholder = { state.messageHtml.isEmpty() }
+        showPlaceholder = { state.messageHtml.isEmpty() },
+        subcomposing = subcomposing,
     ) {
         RichTextEditor(
             state = state,
