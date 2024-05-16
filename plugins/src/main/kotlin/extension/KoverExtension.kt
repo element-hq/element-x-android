@@ -171,6 +171,7 @@ fun Project.setupKover() {
             }
             variant(KoverVariant.States.variantName) {
                 verify {
+                    onCheck = true
                     // Rule to ensure that coverage of States is sufficient.
                     rule("Check code coverage of states") {
                         groupBy = GroupingEntityType.CLASS
@@ -213,6 +214,7 @@ fun Project.setupKover() {
             }
             variant(KoverVariant.Views.variantName) {
                 verify {
+                    onCheck = true
                     // Rule to ensure that coverage of Views is sufficient (deactivated for now).
                     rule("Check code coverage of views") {
                         groupBy = GroupingEntityType.CLASS
