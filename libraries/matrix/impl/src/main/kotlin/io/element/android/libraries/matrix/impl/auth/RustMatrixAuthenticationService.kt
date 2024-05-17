@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginDat
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
+import io.element.android.libraries.matrix.impl.auth.qrlogin.QrErrorMapper
 import io.element.android.libraries.matrix.impl.auth.qrlogin.SdkQrCodeLoginData
 import io.element.android.libraries.matrix.impl.auth.qrlogin.toStep
 import io.element.android.libraries.matrix.impl.certificates.UserCertificatesProvider
@@ -46,6 +47,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.OidcAuthenticationData
+import org.matrix.rustcomponents.sdk.QrCodeDecodeException
+import org.matrix.rustcomponents.sdk.QrLoginException
 import org.matrix.rustcomponents.sdk.QrLoginProgress
 import org.matrix.rustcomponents.sdk.QrLoginProgressListener
 import org.matrix.rustcomponents.sdk.use
@@ -233,6 +236,12 @@ class RustMatrixAuthenticationService @Inject constructor(
             }.onFailure { throwable ->
                 if (throwable is CancellationException) {
                     throw throwable
+                }
+            }.mapFailure {
+                when (it) {
+                    is QrCodeDecodeException -> QrErrorMapper.map(it)
+                    is QrLoginException -> QrErrorMapper.map(it)
+                    else -> it
                 }
             }
     }

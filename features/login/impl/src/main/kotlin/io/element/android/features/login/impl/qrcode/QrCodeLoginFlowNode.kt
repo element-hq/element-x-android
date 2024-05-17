@@ -164,7 +164,6 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
                     authenticationJob = null
                 }
                 .onFailure { throwable ->
-                    // TODO specify the error type
                     Timber.e(throwable, "QR code authentication failed")
                     authenticationJob = null
                     if (throwable is CancellationException) {
