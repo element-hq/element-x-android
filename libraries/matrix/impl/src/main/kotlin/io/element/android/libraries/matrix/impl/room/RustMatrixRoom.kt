@@ -191,10 +191,6 @@ class RustMatrixRoom(
         roomListItem.destroy()
     }
 
-    // TODO: delete this one, replace it with displayName
-    override val name: String?
-        get() = runCatching { roomListItem.displayName() }.getOrDefault(null)
-
     override val displayName: String
         get() = runCatching { innerRoom.displayName() }.getOrDefault("")
 

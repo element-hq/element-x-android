@@ -16,8 +16,12 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
-    <uses-feature android:name="android.hardware.microphone" android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false" />
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -28,19 +32,27 @@
     <application>
         <activity
             android:name=".ui.ElementCallActivity"
-            android:label="@string/element_call"
-            android:exported="true"
-            android:taskAffinity="io.element.android.features.call"
             android:configChanges="screenSize|screenLayout|orientation|keyboardHidden|keyboard|navigation|uiMode"
-            android:launchMode="singleTask">
+            android:exported="true"
+            android:label="@string/element_call"
+            android:launchMode="singleTask"
+            android:taskAffinity="io.element.android.features.call">
 
-            <!--
-             Note: intent-filter for https://call.element.io link is now managed by the MainActivity.
-            -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+
+                <!-- Matching asset file: https://call.element.io/.well-known/assetlinks.json -->
+                <data android:host="call.element.io" />
+            </intent-filter>
             <!-- Custom scheme to handle urls from other domains in the format: element://call?url=https%3A%2F%2Felement.io -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -50,6 +62,7 @@
             <!-- Custom scheme to handle urls from other domains in the format: io.element.call:/?url=https%3A%2F%2Felement.io -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -57,7 +70,10 @@
             </intent-filter>
 
         </activity>
-        <service android:name=".CallForegroundService" android:enabled="true" android:foregroundServiceType="mediaPlayback" />
+        <service
+            android:name=".CallForegroundService"
+            android:enabled="true"
+            android:foregroundServiceType="mediaPlayback" />
     </application>
 
 </manifest>

@@ -49,14 +49,14 @@ import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun RoomAliasResolverView(
     state: RoomAliasResolverState,
     onBackPressed: () -> Unit,
-    onAliasResolved: (RoomId) -> Unit,
+    onAliasResolved: (ResolvedRoomAlias) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val latestOnAliasResolved by rememberUpdatedState(onAliasResolved)

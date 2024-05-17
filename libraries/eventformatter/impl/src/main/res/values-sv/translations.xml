@@ -39,6 +39,8 @@
   <string name="state_event_room_name_changed_by_you">"Du bytte rummets namn till: %1$s"</string>
   <string name="state_event_room_name_removed">"%1$s tog bort rummets namn"</string>
   <string name="state_event_room_name_removed_by_you">"Du tog bort rummets namn"</string>
+  <string name="state_event_room_none">"%1$s gjorde inga ändringar"</string>
+  <string name="state_event_room_none_by_you">"Du gjorde inga ändringar"</string>
   <string name="state_event_room_reject">"%1$s avvisade inbjudan"</string>
   <string name="state_event_room_reject_by_you">"Du avvisade inbjudan"</string>
   <string name="state_event_room_remove">"%1$s tog bort %2$s"</string>

@@ -56,6 +56,7 @@ val A_TRANSACTION_ID = TransactionId("aTransactionId")
 const val A_UNIQUE_ID = "aUniqueId"
 
 const val A_ROOM_NAME = "A room name"
+const val A_ROOM_RAW_NAME = "A room raw name"
 const val A_MESSAGE = "Hello world!"
 const val A_REPLY = "OK, I'll be there!"
 const val ANOTHER_MESSAGE = "Hello universe!"
@@ -76,3 +77,5 @@ val A_THROWABLE = Throwable(A_FAILURE_REASON)
 val AN_EXCEPTION = Exception(A_FAILURE_REASON)
 
 const val A_RECOVERY_KEY = "1234 5678"
+
+val A_SERVER_LIST = listOf("server1", "server2")

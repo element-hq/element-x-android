@@ -28,6 +28,7 @@
     <item quantity="other">"%d mensajes nuevos"</item>
   </plurals>
   <string name="notification_reaction_body">"Reaccionó con %1$s"</string>
+  <string name="notification_room_action_mark_as_read">"Marcar como leído"</string>
   <string name="notification_room_action_quick_reply">"Respuesta rápida"</string>
   <string name="notification_room_invite_body">"Te invitó a unirte a la sala"</string>
   <string name="notification_sender_me">"Yo"</string>

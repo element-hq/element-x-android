@@ -34,6 +34,7 @@
   <string name="action_accept">"Akzeptieren"</string>
   <string name="action_add_to_timeline">"Zum Nachrichtenverlauf hinzufügen"</string>
   <string name="action_back">"Zurück"</string>
+  <string name="action_call">"Anruf"</string>
   <string name="action_cancel">"Abbrechen"</string>
   <string name="action_choose_photo">"Foto auswählen"</string>
   <string name="action_clear">"Löschen"</string>
@@ -72,6 +73,7 @@
   <string name="action_load_more">"Mehr laden …"</string>
   <string name="action_manage_account">"Konto verwalten"</string>
   <string name="action_manage_devices">"Geräte verwalten"</string>
+  <string name="action_message">"Nachricht"</string>
   <string name="action_next">"Weiter"</string>
   <string name="action_no">"Nein"</string>
   <string name="action_not_now">"Später"</string>
@@ -262,6 +264,7 @@
   <string name="screen_room_member_details_unblock_alert_action">"Blockierung aufheben"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Der Nutzer kann dir wieder Nachrichten senden &amp; alle Nachrichten des Nutzers werden wieder angezeigt."</string>
   <string name="screen_room_member_details_unblock_user">"Blockierung aufheben"</string>
+  <string name="screen_room_title">"Chat"</string>
   <string name="screen_share_location_title">"Standort teilen"</string>
   <string name="screen_share_my_location_action">"Meinen Standort teilen"</string>
   <string name="screen_share_open_apple_maps">"In Apple Maps öffnen"</string>

@@ -35,6 +35,13 @@ object SessionStorageModule {
     fun provideMatrixDatabase(@ApplicationContext context: Context): SessionDatabase {
         val name = "session_database"
         val secretFile = context.getDatabasePath("$name.key")
+
+        // Make sure the parent directory of the key file exists, otherwise it will crash in older Android versions
+        val parentDir = secretFile.parentFile
+        if (parentDir != null && !parentDir.exists()) {
+            parentDir.mkdirs()
+        }
+
         val passphraseProvider = RandomSecretPassphraseProvider(context, secretFile)
         val driver = SqlCipherDriverFactory(passphraseProvider)
             .create(SessionDatabase.Schema, "$name.db", context)

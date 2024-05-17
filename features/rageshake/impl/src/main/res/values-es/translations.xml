@@ -7,9 +7,11 @@
   <string name="screen_bug_report_editor_description">"Describe el problema. ¿Qué has hecho? ¿Qué esperabas que ocurriera? ¿Qué ocurrió realmente? Por favor, detállalo todo lo que puedas."</string>
   <string name="screen_bug_report_editor_placeholder">"Describe el problema…"</string>
   <string name="screen_bug_report_editor_supporting">"Si es posible, escriba la descripción en inglés."</string>
+  <string name="screen_bug_report_error_description_too_short">"La descripción es demasiado corta. Proporcione más detalles sobre lo sucedido. ¡Gracias!"</string>
   <string name="screen_bug_report_include_crash_logs">"Enviar registros de fallos"</string>
   <string name="screen_bug_report_include_logs">"Permitir registros"</string>
   <string name="screen_bug_report_include_screenshot">"Enviar captura de pantalla"</string>
   <string name="screen_bug_report_logs_description">"Los registros se incluirán con su mensaje para asegurarse de que todo funciona correctamente. Para enviar tu mensaje sin registros, desactiva esta configuración."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s se cerró inesperadamente la última vez que se lo usaste. ¿Quieres compartir un informe de error con nosotros?"</string>
+  <string name="screen_bug_report_view_logs">"Ver los registros"</string>
 </resources>

@@ -29,6 +29,8 @@ data class UserProfileState(
     val startDmActionState: AsyncAction<RoomId>,
     val displayConfirmationDialog: ConfirmationDialog?,
     val isCurrentUser: Boolean,
+    val dmRoomId: RoomId?,
+    val canCall: Boolean,
     val eventSink: (UserProfileEvents) -> Unit
 ) {
     enum class ConfirmationDialog {

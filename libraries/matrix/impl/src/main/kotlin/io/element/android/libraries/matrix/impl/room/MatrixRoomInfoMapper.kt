@@ -39,6 +39,7 @@ class MatrixRoomInfoMapper(
         return MatrixRoomInfo(
             id = RoomId(it.id),
             name = it.displayName,
+            rawName = it.rawName,
             topic = it.topic,
             avatarUrl = it.avatarUrl,
             isDirect = it.isDirect,

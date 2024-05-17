@@ -16,6 +16,7 @@
 
 package io.element.android.features.roomdetails.impl
 
+import android.content.Context
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,6 +29,8 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.call.CallType
+import io.element.android.features.call.ui.ElementCallActivity
 import io.element.android.features.poll.api.history.PollHistoryEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditNode
@@ -42,10 +45,12 @@ import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
 import kotlinx.parcelize.Parcelize
@@ -54,7 +59,9 @@ import kotlinx.parcelize.Parcelize
 class RoomDetailsFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    @ApplicationContext private val context: Context,
     private val pollHistoryEntryPoint: PollHistoryEntryPoint,
+    private val room: MatrixRoom,
 ) : BaseFlowNode<RoomDetailsFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<RoomDetailsEntryPoint.Params>().first().initialElement.toNavTarget(),
@@ -129,6 +136,14 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                     override fun openAdminSettings() {
                         backstack.push(NavTarget.AdminSettings)
                     }
+
+                    override fun onJoinCall() {
+                        val inputs = CallType.RoomCall(
+                            sessionId = room.sessionId,
+                            roomId = room.roomId,
+                        )
+                        ElementCallActivity.start(context, inputs)
+                    }
                 }
                 createNode<RoomDetailsNode>(buildContext, listOf(roomDetailsCallback))
             }
@@ -172,6 +187,10 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
                     override fun onStartDM(roomId: RoomId) {
                         plugins<RoomDetailsEntryPoint.Callback>().forEach { it.onOpenRoom(roomId) }
+                    }
+
+                    override fun onStartCall(roomId: RoomId) {
+                        ElementCallActivity.start(context, CallType.RoomCall(roomId = roomId, sessionId = room.sessionId))
                     }
                 }
                 val plugins = listOf(RoomMemberDetailsNode.RoomMemberDetailsInput(navTarget.roomMemberId), callback)

@@ -57,7 +57,6 @@ class RustMatrixClientFactory @Inject constructor(
 
         val syncService = client.syncService()
             .withUtdHook(utdTracker)
-            .withUnifiedInvitesInRoomList(true)
             .finish()
 
         RustMatrixClient(

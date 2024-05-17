@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_onboarding_sign_in_manually">"手动登录"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"使用二维码登录"</string>
+  <string name="screen_onboarding_sign_up">"创建账户"</string>
+  <string name="screen_onboarding_welcome_message">"欢迎使用 %1$s，快而简约的消息应用。"</string>
+  <string name="screen_onboarding_welcome_subtitle">"欢迎使用 %1$s，速度与简洁的极致。"</string>
+  <string name="screen_onboarding_welcome_title">"融入您的 Element"</string>
+</resources>

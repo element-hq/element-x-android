@@ -16,6 +16,7 @@
 
 package io.element.android.features.userprofile.shared
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -29,20 +30,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.userprofile.shared.blockuser.BlockUserDialogs
 import io.element.android.features.userprofile.shared.blockuser.BlockUserSection
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.IconSource
-import io.element.android.libraries.designsystem.theme.components.ListItem
-import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -52,11 +47,13 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun UserProfileView(
     state: UserProfileState,
     onShareUser: () -> Unit,
-    onDMStarted: (RoomId) -> Unit,
+    onDmStarted: (RoomId) -> Unit,
+    onStartCall: (RoomId) -> Unit,
     goBack: () -> Unit,
     openAvatarPreview: (username: String, url: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    BackHandler { goBack() }
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -78,12 +75,17 @@ fun UserProfileView(
                 },
             )
 
-            UserProfileMainActionsSection(onShareUser = onShareUser)
+            UserProfileMainActionsSection(
+                isCurrentUser = state.isCurrentUser,
+                canCall = state.canCall,
+                onShareUser = onShareUser,
+                onStartDM = { state.eventSink(UserProfileEvents.StartDM) },
+                onCall = { state.dmRoomId?.let { onStartCall(it) } }
+            )
 
             Spacer(modifier = Modifier.height(26.dp))
 
             if (!state.isCurrentUser) {
-                StartDMSection(onStartDMClicked = { state.eventSink(UserProfileEvents.StartDM) })
                 BlockUserSection(state)
                 BlockUserDialogs(state)
             }
@@ -94,25 +96,13 @@ fun UserProfileView(
                         progressText = stringResource(CommonStrings.common_starting_chat),
                     )
                 },
-                onSuccess = onDMStarted,
+                onSuccess = onDmStarted,
                 errorMessage = { stringResource(R.string.screen_start_chat_error_starting_chat) },
                 onRetry = { state.eventSink(UserProfileEvents.StartDM) },
                 onErrorDismiss = { state.eventSink(UserProfileEvents.ClearStartDMState) },
             )
         }
     }
-}
-
-@Composable
-private fun StartDMSection(
-    onStartDMClicked: () -> Unit,
-) {
-    ListItem(
-        headlineContent = { Text(stringResource(CommonStrings.common_direct_chat)) },
-        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Chat())),
-        style = ListItemStyle.Primary,
-        onClick = onStartDMClicked,
-    )
 }
 
 @PreviewsDayNight
@@ -124,7 +114,8 @@ internal fun UserProfileViewPreview(
         state = state,
         onShareUser = {},
         goBack = {},
-        onDMStarted = {},
+        onDmStarted = {},
+        onStartCall = {},
         openAvatarPreview = { _, _ -> }
     )
 }

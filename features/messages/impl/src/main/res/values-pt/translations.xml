@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Atividades"</string>
+  <string name="emoji_picker_category_flags">"Bandeiras"</string>
+  <string name="emoji_picker_category_foods">"Comidas e Bebidas"</string>
+  <string name="emoji_picker_category_nature">"Animais e Natureza"</string>
+  <string name="emoji_picker_category_objects">"Objetos"</string>
+  <string name="emoji_picker_category_people">"Caras e Pessoas"</string>
+  <string name="emoji_picker_category_places">"Viagens e Lugares"</string>
+  <string name="emoji_picker_category_symbols">"Símbolos"</string>
+  <string name="screen_report_content_block_user">"Bloquear utilizador"</string>
+  <string name="screen_report_content_block_user_hint">"Ativar para esconder todas as atuais e futuras mensagens deste utilizador"</string>
+  <string name="screen_report_content_explanation">"Esta mensagem será denunciada ao administrador do teu servidor. Porém, não lhe será possível ler quaisquer mensagens cifradas."</string>
+  <string name="screen_report_content_hint">"Razão de denúncia"</string>
+  <string name="screen_room_attachment_source_camera">"Câmara"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Tirar foto"</string>
+  <string name="screen_room_attachment_source_camera_video">"Gravar vídeo"</string>
+  <string name="screen_room_attachment_source_files">"Anexo"</string>
+  <string name="screen_room_attachment_source_gallery">"Biblioteca de fotos e vídeos"</string>
+  <string name="screen_room_attachment_source_location">"Localização"</string>
+  <string name="screen_room_attachment_source_poll">"Sondagem"</string>
+  <string name="screen_room_attachment_text_formatting">"Formatação de texto"</string>
+  <string name="screen_room_encrypted_history_banner">"De momento, o histórico de mensagens está indisponível."</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"O histórico de mensagens não está disponível nesta sala. Verifica este dispositivo para veres o histórico."</string>
+  <string name="screen_room_invite_again_alert_message">"Gostarias de convidá-lo de volta?"</string>
+  <string name="screen_room_invite_again_alert_title">"Estás sozinho nesta conversa"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Notificar toda a sala"</string>
+  <string name="screen_room_mentions_at_room_title">"Toda a gente"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"Enviar novamente"</string>
+  <string name="screen_room_retry_send_menu_title">"Falha ao enviar a tua mensagem"</string>
+  <string name="screen_room_timeline_add_reaction">"Adicionar emoji"</string>
+  <string name="screen_room_timeline_beginning_of_room">"%1$s começou aqui."</string>
+  <string name="screen_room_timeline_beginning_of_room_no_name">"Esta conversa começou aqui."</string>
+  <string name="screen_room_timeline_less_reactions">"Mostrar menos"</string>
+  <string name="screen_room_timeline_message_copied">"Mensagem copiada"</string>
+  <string name="screen_room_timeline_no_permission_to_post">"Não tens permissão para publicar nesta sala"</string>
+  <string name="screen_room_timeline_reactions_show_less">"Mostrar menos"</string>
+  <string name="screen_room_timeline_reactions_show_more">"Mostrar mais"</string>
+  <string name="screen_room_timeline_read_marker_title">"Novas"</string>
+  <plurals name="screen_room_timeline_state_changes">
+    <item quantity="one">"%1$d alteração à sala"</item>
+    <item quantity="other">"%1$d alterações à sala"</item>
+  </plurals>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="one">"%1$s, %2$s e %3$d outro"</item>
+    <item quantity="other">"%1$s, %2$s e %3$d outros"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="one">"%1$s está a escrever"</item>
+    <item quantity="other">"%1$s estão a escrever"</item>
+  </plurals>
+  <string name="screen_room_typing_two_members">"%1$s e %2$s"</string>
+</resources>

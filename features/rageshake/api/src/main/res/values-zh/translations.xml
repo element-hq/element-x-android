@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crash_detection_dialog_content">"%1$s 上次使用时崩溃了。你想和我们分享崩溃报告吗？"</string>
+  <string name="rageshake_detection_dialog_content">"你似乎愤怒地摇晃了手机。想要打开 Bug 报告页面吗？"</string>
+  <string name="settings_rageshake">"摇一摇"</string>
+  <string name="settings_rageshake_detection_threshold">"检测阈值"</string>
+</resources>

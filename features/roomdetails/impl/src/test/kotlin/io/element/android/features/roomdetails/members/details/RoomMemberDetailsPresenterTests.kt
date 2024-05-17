@@ -70,6 +70,8 @@ class RoomMemberDetailsPresenterTests {
             assertThat(initialState.userName).isEqualTo(roomMember.displayName)
             assertThat(initialState.avatarUrl).isEqualTo(roomMember.avatarUrl)
             assertThat(initialState.isBlocked).isEqualTo(AsyncData.Success(roomMember.isIgnored))
+            assertThat(initialState.dmRoomId).isEqualTo(A_ROOM_ID)
+            assertThat(initialState.canCall).isFalse()
             skipItems(1)
             val loadedState = awaitItem()
             assertThat(loadedState.userName).isEqualTo("A custom name")

@@ -71,6 +71,9 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
         var userProfile by remember { mutableStateOf<MatrixUser?>(null) }
         val startDmActionState: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val isBlocked: MutableState<AsyncData<Boolean>> = remember { mutableStateOf(AsyncData.Uninitialized) }
+        val isCurrentUser = remember { client.isMe(roomMemberId) }
+        val dmRoomId by userProfilePresenterHelper.getDmRoomId()
+        val canCall by userProfilePresenterHelper.getCanCall(dmRoomId)
         LaunchedEffect(Unit) {
             client.ignoredUsersFlow
                 .map { ignoredUsers -> roomMemberId in ignoredUsers }
@@ -158,7 +161,9 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
             isBlocked = isBlocked.value,
             startDmActionState = startDmActionState.value,
             displayConfirmationDialog = confirmationDialog,
-            isCurrentUser = client.isMe(roomMemberId),
+            isCurrentUser = isCurrentUser,
+            dmRoomId = dmRoomId,
+            canCall = canCall,
             eventSink = ::handleEvents
         )
     }

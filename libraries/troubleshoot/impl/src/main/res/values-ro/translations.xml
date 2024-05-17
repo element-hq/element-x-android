@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_screen_action">"Rulați testele"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Rulați din nou testele"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Unele teste au eșuat. Vă rugăm să verificați detaliile."</string>
+  <string name="troubleshoot_notifications_screen_notice">"Rulați testele pentru a detecta probleme în configurația dumneavoastră care poat face ca notificările să nu se funcționeze corect."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Încercați să remediați"</string>
+  <string name="troubleshoot_notifications_screen_success">"Toate testele au trecut cu succes."</string>
+  <string name="troubleshoot_notifications_screen_title">"Depanați notificările"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Unele teste necesită atenția dumneavoastră. Vă rugăm să verificați detaliile."</string>
+</resources>

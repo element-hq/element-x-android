@@ -17,6 +17,8 @@
   <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Puoi aggiungere una conversazione ai tuoi preferiti nelle impostazioni della stessa.
 Per il momento, puoi deselezionare i filtri per vedere le altre conversazioni."</string>
   <string name="screen_roomlist_filter_favourites_empty_state_title">"Non hai ancora conversazioni preferite"</string>
+  <string name="screen_roomlist_filter_invites">"Inviti"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Non hai nessun invito in sospeso."</string>
   <string name="screen_roomlist_filter_low_priority">"Bassa priorità"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Puoi deselezionare i filtri per vedere le altre conversazioni."</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Non hai conversazioni per questa selezione"</string>

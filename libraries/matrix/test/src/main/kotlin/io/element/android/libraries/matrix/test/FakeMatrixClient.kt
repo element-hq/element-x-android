@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
@@ -76,7 +77,7 @@ class FakeMatrixClient(
     private val encryptionService: FakeEncryptionService = FakeEncryptionService(),
     private val roomDirectoryService: RoomDirectoryService = FakeRoomDirectoryService(),
     private val accountManagementUrlString: Result<String?> = Result.success(null),
-    private val resolveRoomAliasResult: (RoomAlias) -> Result<RoomId> = { Result.success(A_ROOM_ID) },
+    private val resolveRoomAliasResult: (RoomAlias) -> Result<ResolvedRoomAlias> = { Result.success(ResolvedRoomAlias(A_ROOM_ID, emptyList())) },
     private val getRoomPreviewResult: (RoomIdOrAlias) -> Result<RoomPreview> = { Result.failure(AN_EXCEPTION) },
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
@@ -104,6 +105,9 @@ class FakeMatrixClient(
     private var uploadAvatarResult: Result<Unit> = Result.success(Unit)
     private var removeAvatarResult: Result<Unit> = Result.success(Unit)
     var joinRoomLambda: (RoomId) -> Result<Unit> = {
+        Result.success(Unit)
+    }
+    var joinRoomByIdOrAliasLambda: (RoomId, List<String>) -> Result<Unit> = { _, _ ->
         Result.success(Unit)
     }
     var knockRoomLambda: (RoomId) -> Result<Unit> = {
@@ -201,6 +205,10 @@ class FakeMatrixClient(
 
     override suspend fun joinRoom(roomId: RoomId): Result<Unit> = joinRoomLambda(roomId)
 
+    override suspend fun joinRoomByIdOrAlias(roomId: RoomId, serverNames: List<String>): Result<Unit> {
+        return joinRoomByIdOrAliasLambda(roomId, serverNames)
+    }
+
     override suspend fun knockRoom(roomId: RoomId): Result<Unit> = knockRoomLambda(roomId)
 
     override fun sessionVerificationService(): SessionVerificationService = sessionVerificationService
@@ -285,11 +293,11 @@ class FakeMatrixClient(
         return Result.success(Unit)
     }
 
-    override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<RoomId> = simulateLongTask {
+    override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<ResolvedRoomAlias> = simulateLongTask {
         resolveRoomAliasResult(roomAlias)
     }
 
-    override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias): Result<RoomPreview> = simulateLongTask {
+    override suspend fun getRoomPreviewForRoomId(roomIdOrAlias: RoomIdOrAlias): Result<RoomPreview> = simulateLongTask {
         getRoomPreviewResult(roomIdOrAlias)
     }
 

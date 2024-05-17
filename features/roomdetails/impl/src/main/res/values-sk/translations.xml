@@ -35,6 +35,9 @@
   <string name="screen_room_details_add_topic_title">"Pridať tému"</string>
   <string name="screen_room_details_already_a_member">"Už ste členom"</string>
   <string name="screen_room_details_already_invited">"Už ste pozvaní"</string>
+  <string name="screen_room_details_badge_encrypted">"Zašifrované"</string>
+  <string name="screen_room_details_badge_not_encrypted">"Nešifrované"</string>
+  <string name="screen_room_details_badge_public">"Verejná miestnosť"</string>
   <string name="screen_room_details_edit_room_title">"Upraviť miestnosť"</string>
   <string name="screen_room_details_edition_error">"Vyskytla sa neznáma chyba a informácie nebolo možné zmeniť."</string>
   <string name="screen_room_details_edition_error_title">"Nepodarilo sa aktualizovať miestnosť"</string>

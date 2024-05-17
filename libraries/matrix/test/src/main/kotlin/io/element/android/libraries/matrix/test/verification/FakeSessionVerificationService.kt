@@ -77,6 +77,10 @@ class FakeSessionVerificationService : SessionVerificationService {
         _sessionVerifiedStatus.value = status
     }
 
+    suspend fun emitVerifiedStatus(status: SessionVerifiedStatus) {
+        _sessionVerifiedStatus.emit(status)
+    }
+
     fun givenVerificationFlowState(state: VerificationFlowState) {
         _verificationFlowState.value = state
     }

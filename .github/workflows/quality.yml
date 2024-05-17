@@ -26,10 +26,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python 3.9
+      - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
-          python-version: 3.9
+          python-version: 3.12
       - name: Search for invalid screenshot files
         run: ./tools/test/checkInvalidScreenshots.py
 
@@ -72,7 +72,7 @@ jobs:
           yarn add danger-plugin-lint-report --dev
       - name: Danger lint
         if: always()
-        uses: danger/danger-js@12.1.0
+        uses: danger/danger-js@12.2.0
         with:
           args: "--dangerfile ./tools/danger/dangerfile-lint.js"
         env:

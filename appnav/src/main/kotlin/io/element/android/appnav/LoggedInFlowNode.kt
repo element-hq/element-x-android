@@ -37,6 +37,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.replace
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.loggedin.LoggedInNode
 import io.element.android.appnav.room.RoomFlowNode
@@ -197,6 +198,8 @@ class LoggedInFlowNode @AssistedInject constructor(
         @Parcelize
         data class Room(
             val roomIdOrAlias: RoomIdOrAlias,
+            val serverNames: List<String> = emptyList(),
+            val trigger: JoinedRoom.Trigger? = null,
             val roomDescription: RoomDescription? = null,
             val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages()
         ) : NavTarget
@@ -292,8 +295,9 @@ class LoggedInFlowNode @AssistedInject constructor(
                                 backstack.push(
                                     NavTarget.Room(
                                         roomIdOrAlias = data.roomIdOrAlias,
+                                        serverNames = data.viaParameters,
+                                        trigger = JoinedRoom.Trigger.Timeline,
                                         initialElement = RoomNavigationTarget.Messages(data.eventId),
-                                        // TODO Use the viaParameters
                                     )
                                 )
                             }
@@ -311,6 +315,8 @@ class LoggedInFlowNode @AssistedInject constructor(
                 val inputs = RoomFlowNode.Inputs(
                     roomIdOrAlias = navTarget.roomIdOrAlias,
                     roomDescription = Optional.ofNullable(navTarget.roomDescription),
+                    serverNames = navTarget.serverNames,
+                    trigger = Optional.ofNullable(navTarget.trigger),
                     initialElement = navTarget.initialElement
                 )
                 createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs, callback))
@@ -370,12 +376,14 @@ class LoggedInFlowNode @AssistedInject constructor(
             NavTarget.RoomDirectorySearch -> {
                 roomDirectoryEntryPoint.nodeBuilder(this, buildContext)
                     .callback(object : RoomDirectoryEntryPoint.Callback {
-                        override fun onRoomJoined(roomId: RoomId) {
-                            backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
-                        }
-
                         override fun onResultClicked(roomDescription: RoomDescription) {
-                            backstack.push(NavTarget.Room(roomDescription.roomId.toRoomIdOrAlias(), roomDescription))
+                            backstack.push(
+                                NavTarget.Room(
+                                    roomIdOrAlias = roomDescription.roomId.toRoomIdOrAlias(),
+                                    roomDescription = roomDescription,
+                                    trigger = JoinedRoom.Trigger.RoomDirectory,
+                                )
+                            )
                         }
                     })
                     .build()
@@ -383,7 +391,12 @@ class LoggedInFlowNode @AssistedInject constructor(
         }
     }
 
-    suspend fun attachRoom(roomIdOrAlias: RoomIdOrAlias, eventId: EventId? = null) {
+    suspend fun attachRoom(
+        roomIdOrAlias: RoomIdOrAlias,
+        serverNames: List<String> = emptyList(),
+        trigger: JoinedRoom.Trigger? = null,
+        eventId: EventId? = null,
+    ) {
         waitForNavTargetAttached { navTarget ->
             navTarget is NavTarget.RoomList
         }
@@ -391,6 +404,8 @@ class LoggedInFlowNode @AssistedInject constructor(
             backstack.push(
                 NavTarget.Room(
                     roomIdOrAlias = roomIdOrAlias,
+                    serverNames = serverNames,
+                    trigger = trigger,
                     initialElement = RoomNavigationTarget.Messages(
                         focusedEventId = eventId
                     )

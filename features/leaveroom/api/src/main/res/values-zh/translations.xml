@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_conversation_alert_subtitle">"您确定要离开此对话吗？此对话不公开，未经邀请您将无法重新加入。"</string>
+  <string name="leave_room_alert_empty_subtitle">"你确定要离开这个房间吗？这里只有你一个人，如果你走了，包括你在内的所有人都无法进入此房间。"</string>
+  <string name="leave_room_alert_private_subtitle">"你确定要离开这个房间吗？这个房间不是公开的，如果没有邀请，你将无法重新加入。"</string>
+  <string name="leave_room_alert_subtitle">"你确定要离开房间吗？"</string>
+</resources>

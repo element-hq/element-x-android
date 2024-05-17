@@ -18,7 +18,7 @@ package io.element.android.libraries.pushproviders.firebase
 
 import android.content.Context
 import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.common.GoogleApiAvailabilityLight
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
@@ -34,7 +34,7 @@ class DefaultIsPlayServiceAvailable @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : IsPlayServiceAvailable {
     override fun isAvailable(): Boolean {
-        val apiAvailability = GoogleApiAvailability.getInstance()
+        val apiAvailability = GoogleApiAvailabilityLight.getInstance()
         val resultCode = apiAvailability.isGooglePlayServicesAvailable(context)
         return if (resultCode == ConnectionResult.SUCCESS) {
             Timber.d("Google Play Services is available")

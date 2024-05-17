@@ -20,13 +20,19 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import im.vector.app.features.analytics.plan.CryptoSessionStateChange
+import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
+import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.libraries.push.test.FakePushService
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import kotlinx.coroutines.test.runTest
@@ -64,15 +70,56 @@ class LoggedInPresenterTest {
         }
     }
 
+    @Test
+    fun `present - report crypto status analytics`() = runTest {
+        val analyticsService = FakeAnalyticsService()
+        val roomListService = FakeRoomListService()
+        val verificationService = FakeSessionVerificationService()
+        val encryptionService = FakeEncryptionService()
+        val presenter = LoggedInPresenter(
+            matrixClient = FakeMatrixClient(roomListService = roomListService, encryptionService = encryptionService),
+            networkMonitor = FakeNetworkMonitor(NetworkStatus.Online),
+            pushService = FakePushService(),
+            sessionVerificationService = verificationService,
+            analyticsService = analyticsService,
+            encryptionService = encryptionService
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            encryptionService.emitRecoveryState(RecoveryState.UNKNOWN)
+            encryptionService.emitRecoveryState(RecoveryState.INCOMPLETE)
+            verificationService.emitVerifiedStatus(SessionVerifiedStatus.Verified)
+
+            skipItems(4)
+
+            assertThat(analyticsService.capturedEvents.size).isEqualTo(1)
+            assertThat(analyticsService.capturedEvents[0]).isInstanceOf(CryptoSessionStateChange::class.java)
+
+            assertThat(analyticsService.capturedUserProperties.size).isEqualTo(1)
+            assertThat(analyticsService.capturedUserProperties[0].recoveryState).isEqualTo(UserProperties.RecoveryState.Incomplete)
+            assertThat(analyticsService.capturedUserProperties[0].verificationState).isEqualTo(UserProperties.VerificationState.Verified)
+
+            // ensure a sync status change does not trigger a new capture
+            roomListService.postSyncIndicator(RoomListService.SyncIndicator.Show)
+            skipItems(1)
+            assertThat(analyticsService.capturedEvents.size).isEqualTo(1)
+        }
+    }
+
     private fun createLoggedInPresenter(
         roomListService: RoomListService = FakeRoomListService(),
-        networkStatus: NetworkStatus = NetworkStatus.Offline
+        networkStatus: NetworkStatus = NetworkStatus.Offline,
+        analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
+        encryptionService: FakeEncryptionService = FakeEncryptionService(),
     ): LoggedInPresenter {
         return LoggedInPresenter(
             matrixClient = FakeMatrixClient(roomListService = roomListService),
             networkMonitor = FakeNetworkMonitor(networkStatus),
             pushService = FakePushService(),
             sessionVerificationService = FakeSessionVerificationService(),
+            analyticsService = analyticsService,
+            encryptionService = encryptionService
         )
     }
 }
