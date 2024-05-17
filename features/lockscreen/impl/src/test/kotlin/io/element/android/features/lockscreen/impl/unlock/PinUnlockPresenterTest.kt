@@ -29,7 +29,6 @@ import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.pin.model.assertText
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.matrix.test.FakeMatrixClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -150,7 +149,7 @@ class PinUnlockPresenterTest {
         return PinUnlockPresenter(
             pinCodeManager = pinCodeManager,
             biometricUnlockManager = biometricUnlockManager,
-            matrixClient = FakeMatrixClient(),
+            signOut = FakeSignOut(),
             coroutineScope = scope,
             pinUnlockHelper = PinUnlockHelper(biometricUnlockManager, pinCodeManager),
         )
