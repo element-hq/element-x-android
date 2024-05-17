@@ -91,6 +91,7 @@ dependencies {
     testImplementation(projects.features.rageshake.test)
     testImplementation(projects.features.rageshake.impl)
     testImplementation(projects.libraries.indicator.impl)
+    testImplementation(projects.libraries.pushproviders.test)
     testImplementation(projects.features.logout.impl)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.services.toolbox.test)
