@@ -44,6 +44,7 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
+import io.element.android.libraries.matrix.api.auth.qrlogin.QrLoginException
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -78,8 +79,7 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
         data class QrCodeConfirmation(val step: QrCodeConfirmationStep) : NavTarget
 
         @Parcelize
-        // TODO specify the error type
-        data class Error(val message: String) : NavTarget
+        data class Error(val errorType: QrCodeErrorScreenType) : NavTarget
     }
 
     override fun onBuilt() {
@@ -169,7 +169,30 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
                     if (throwable is CancellationException) {
                         throw throwable
                     }
-                    backstack.push(NavTarget.Error(throwable.message ?: "Unknown error"))
+                    when (throwable) {
+                        is QrLoginException.InvalidQrCode -> {
+                            // Inline error code
+                        }
+                        is QrLoginException.Cancelled -> {
+                            backstack.replace(NavTarget.Error(QrCodeErrorScreenType.Cancelled))
+                        }
+                        is QrLoginException.Expired -> {
+                            backstack.replace(NavTarget.Error(QrCodeErrorScreenType.Expired))
+                        }
+                        is QrLoginException.Declined -> {
+                            backstack.replace(NavTarget.Error(QrCodeErrorScreenType.Declined))
+                        }
+                        is QrLoginException.ConnectionInsecure -> {
+                            backstack.replace(NavTarget.Error(QrCodeErrorScreenType.InsecureChannelDetected))
+                        }
+                        is QrLoginException.LinkingNotSupported -> {
+                            backstack.replace(NavTarget.Error(QrCodeErrorScreenType.ProtocolNotSupported))
+                        }
+                        else -> {
+                            Timber.e(throwable, "Unknown error found")
+                            backstack.replace(NavTarget.Error(QrCodeErrorScreenType.UnknownError))
+                        }
+                    }
                 }
         }
     }
@@ -178,4 +201,24 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
     override fun View(modifier: Modifier) {
         BackstackView()
     }
+}
+
+sealed interface QrCodeErrorScreenType : Parcelable {
+    @Parcelize
+    data object Cancelled : QrCodeErrorScreenType
+
+    @Parcelize
+    data object Expired : QrCodeErrorScreenType
+
+    @Parcelize
+    data object InsecureChannelDetected : QrCodeErrorScreenType
+
+    @Parcelize
+    data object Declined : QrCodeErrorScreenType
+
+    @Parcelize
+    data object ProtocolNotSupported : QrCodeErrorScreenType
+
+    @Parcelize
+    data object UnknownError : QrCodeErrorScreenType
 }

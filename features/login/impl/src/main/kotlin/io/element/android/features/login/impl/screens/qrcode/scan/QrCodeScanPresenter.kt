@@ -72,7 +72,9 @@ class QrCodeScanPresenter @Inject constructor(
 
         launch(coroutineDispatchers.computation) {
             suspend {
-                qrCodeLoginDataFactory.parseQrCodeData(code).getOrThrow()
+                qrCodeLoginDataFactory.parseQrCodeData(code).onFailure {
+                    println("Error parsing QR code data: $it")
+                }.getOrThrow()
             }.runCatchingUpdatingState(codeScannedAction)
         }.invokeOnCompletion {
             isProcessingCode.set(false)
