@@ -42,7 +42,6 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
-import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomType
@@ -96,7 +95,7 @@ class JoinRoomPresenter @AssistedInject constructor(
                 }
                 else -> {
                     value = ContentState.Loading(roomIdOrAlias)
-                    val result = matrixClient.getRoomPreview(roomId.toRoomIdOrAlias())
+                    val result = matrixClient.getRoomPreviewFromRoomId(roomId, serverNames)
                     value = result.fold(
                         onSuccess = { roomPreview ->
                             roomPreview.toContentState()

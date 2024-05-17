@@ -25,7 +25,6 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
@@ -487,9 +486,12 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias): Result<RoomPreview> = withContext(sessionDispatcher) {
+    override suspend fun getRoomPreviewFromRoomId(roomId: RoomId, serverNames: List<String>): Result<RoomPreview> = withContext(sessionDispatcher) {
         runCatching {
-            client.getRoomPreview(roomIdOrAlias.identifier).let(RoomPreviewMapper::map)
+            client.getRoomPreviewFromRoomId(
+                roomId = roomId.value,
+                viaServers = serverNames,
+            ).let(RoomPreviewMapper::map)
         }
     }
 
