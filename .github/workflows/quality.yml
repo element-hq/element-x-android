@@ -188,7 +188,7 @@ jobs:
         run: ./gradlew knitCheck $CI_GRADLE_ARG_PROPERTIES
 
   upload_reports:
-    name: Quality checks reports
+    name: Project Check Suite
     runs-on: ubuntu-latest
     needs: [konsist, lint, ktlint, detekt]
     steps:
