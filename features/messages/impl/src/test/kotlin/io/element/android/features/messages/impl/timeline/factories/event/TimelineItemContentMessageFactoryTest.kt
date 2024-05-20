@@ -78,6 +78,7 @@ import org.robolectric.RobolectricTestRunner
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
+@Suppress("LargeClass")
 @RunWith(RobolectricTestRunner::class)
 class TimelineItemContentMessageFactoryTest {
     @Test
