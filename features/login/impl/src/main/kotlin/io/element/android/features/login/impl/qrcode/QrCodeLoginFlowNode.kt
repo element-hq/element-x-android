@@ -40,6 +40,7 @@ import io.element.android.features.login.impl.screens.qrcode.intro.QrCodeIntroNo
 import io.element.android.features.login.impl.screens.qrcode.scan.QrCodeScanNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
@@ -150,8 +151,7 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
                         backstack.newRoot(NavTarget.Initial)
                     }
                 }
-                // TODO specify the error type
-                createNode<QrCodeErrorNode>(buildContext, plugins = listOf(callback))
+                createNode<QrCodeErrorNode>(buildContext, plugins = listOf(navTarget.errorType, callback))
             }
         }
     }
@@ -171,7 +171,8 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
                     }
                     when (throwable) {
                         is QrLoginException.InvalidQrCode -> {
-                            // Inline error code
+                            // This is handled in the scan QR screen, we should never receive it here
+                            Timber.e(throwable, "Unexpected invalid QR code error found after decoding")
                         }
                         is QrLoginException.Cancelled -> {
                             backstack.replace(NavTarget.Error(QrCodeErrorScreenType.Cancelled))
@@ -203,7 +204,7 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
     }
 }
 
-sealed interface QrCodeErrorScreenType : Parcelable {
+sealed interface QrCodeErrorScreenType : NodeInputs, Parcelable {
     @Parcelize
     data object Cancelled : QrCodeErrorScreenType
 

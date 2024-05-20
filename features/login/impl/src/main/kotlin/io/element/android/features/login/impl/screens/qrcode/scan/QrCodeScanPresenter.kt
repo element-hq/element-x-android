@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginDat
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginDataFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
@@ -73,7 +74,7 @@ class QrCodeScanPresenter @Inject constructor(
         launch(coroutineDispatchers.computation) {
             suspend {
                 qrCodeLoginDataFactory.parseQrCodeData(code).onFailure {
-                    println("Error parsing QR code data: $it")
+                    Timber.e(it, "Error parsing QR code data")
                 }.getOrThrow()
             }.runCatchingUpdatingState(codeScannedAction)
         }.invokeOnCompletion {

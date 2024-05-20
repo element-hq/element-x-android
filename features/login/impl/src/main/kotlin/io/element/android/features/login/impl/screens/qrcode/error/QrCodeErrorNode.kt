@@ -25,6 +25,8 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.login.impl.qrcode.QrCodeErrorScreenType
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)
@@ -40,8 +42,14 @@ class QrCodeErrorNode @AssistedInject constructor(
         plugins<Callback>().forEach { it.onRetry() }
     }
 
+    private val qrCodeErrorScreenType = inputs<QrCodeErrorScreenType>()
+
     @Composable
     override fun View(modifier: Modifier) {
-        QrCodeErrorView(onRetry = ::onRetry)
+        QrCodeErrorView(
+            modifier = modifier,
+            errorScreenType = qrCodeErrorScreenType,
+            onRetry = ::onRetry
+        )
     }
 }
