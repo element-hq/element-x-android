@@ -121,6 +121,7 @@
   <string name="common_blocked_users">"Blokovaní používatelia"</string>
   <string name="common_bubbles">"Bubliny"</string>
   <string name="common_call_invite">"Prebieha hovor (nepodporované)"</string>
+  <string name="common_call_started">"Hovor sa začal"</string>
   <string name="common_chat_backup">"Záloha konverzácie"</string>
   <string name="common_copyright">"Autorské práva"</string>
   <string name="common_creating_room">"Vytváranie miestnosti…"</string>
@@ -138,6 +139,7 @@
   <string name="common_everyone">"Všetci"</string>
   <string name="common_failed">"Zlyhalo"</string>
   <string name="common_favourite">"Obľúbené"</string>
+  <string name="common_favourited">"Obľúbené"</string>
   <string name="common_file">"Súbor"</string>
   <string name="common_file_saved_on_disk_android">"Súbor bol uložený do priečinka Stiahnuté súbory"</string>
   <string name="common_forward_message">"Preposlať správu"</string>
