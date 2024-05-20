@@ -10,7 +10,7 @@ on:
 # Enrich gradle.properties for CI/CD
 env:
   GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx6g -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.incremental=false -XX:+UseParallelGC
-  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 8
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 8  --no-daemon
 
 jobs:
   checkScript:
@@ -153,7 +153,7 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Run Ktlint check
-        run: ./gradlew ktlintCheck $CI_GRADLE_ARG_PROPERTIES --no-daemon
+        run: ./gradlew ktlintCheck $CI_GRADLE_ARG_PROPERTIES
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -185,7 +185,7 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Run Knit
-        run: ./gradlew knitCheck $CI_GRADLE_ARG_PROPERTIES --no-daemon
+        run: ./gradlew knitCheck $CI_GRADLE_ARG_PROPERTIES
 
   upload_reports:
     name: Quality checks reports
