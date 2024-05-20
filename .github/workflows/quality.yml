@@ -192,6 +192,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: [konsist, lint, ktlint, detekt]
     steps:
+      - uses: actions/checkout@v4
+        with:
+          # Ensure we are building the branch and not the branch after being merged on develop
+          # https://github.com/actions/checkout/issues/881
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
       - name: Download reports from previous jobs
         uses: actions/download-artifact@v4
       - name: Prepare Danger
