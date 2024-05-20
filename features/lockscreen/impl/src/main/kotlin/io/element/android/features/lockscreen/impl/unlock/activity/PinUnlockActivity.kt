@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PinUnlockActivity : AppCompatActivity() {
-    companion object {
+    internal companion object {
         fun newIntent(context: Context): Intent {
             return Intent(context, PinUnlockActivity::class.java)
         }

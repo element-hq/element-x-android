@@ -16,17 +16,19 @@
 
 package io.element.android.features.lockscreen.api
 
+import android.content.Context
+import android.content.Intent
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
 
 interface LockScreenEntryPoint : FeatureEntryPoint {
-    fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
+    fun nodeBuilder(parentNode: Node, buildContext: BuildContext, navTarget: Target): NodeBuilder
+    fun pinUnlockIntent(context: Context): Intent
 
     interface NodeBuilder {
         fun callback(callback: Callback): NodeBuilder
-        fun target(target: Target): NodeBuilder
         fun build(): Node
     }
 
@@ -37,6 +39,5 @@ interface LockScreenEntryPoint : FeatureEntryPoint {
     enum class Target {
         Settings,
         Setup,
-        Unlock
     }
 }

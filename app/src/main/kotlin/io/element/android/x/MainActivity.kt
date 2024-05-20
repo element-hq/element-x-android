@@ -42,10 +42,10 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.isDark
 import io.element.android.compound.theme.mapToTheme
+import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.lockscreen.api.LockScreenLockState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.lockscreen.api.handleSecureFlag
-import io.element.android.features.lockscreen.impl.unlock.activity.PinUnlockActivity
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.designsystem.utils.snackbar.LocalSnackbarDispatcher
@@ -65,7 +65,7 @@ class MainActivity : NodeActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         appBindings = bindings()
-        setupLockManagement(appBindings.lockScreenService())
+        setupLockManagement(appBindings.lockScreenService(), appBindings.lockScreenEntryPoint())
         enableEdgeToEdge()
         setContent {
             MainContent(appBindings)
@@ -123,13 +123,16 @@ class MainActivity : NodeActivity() {
         }
     }
 
-    private fun setupLockManagement(lockScreenService: LockScreenService) {
+    private fun setupLockManagement(
+        lockScreenService: LockScreenService,
+        lockScreenEntryPoint: LockScreenEntryPoint
+    ) {
         lockScreenService.handleSecureFlag(this)
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 lockScreenService.lockState.collect { state ->
                     if (state == LockScreenLockState.Locked) {
-                        startActivity(PinUnlockActivity.newIntent(this@MainActivity))
+                        startActivity(lockScreenEntryPoint.pinUnlockIntent(this@MainActivity))
                     }
                 }
             }

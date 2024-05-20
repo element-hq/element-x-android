@@ -54,7 +54,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -96,7 +95,6 @@ class FakeMatrixClient(
     private var createRoomResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var findDmResult: RoomId? = A_ROOM_ID
-    private var logoutFailure: Throwable? = null
     private val getRoomResults = mutableMapOf<RoomId, MatrixRoom>()
     private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()
     private val getProfileResults = mutableMapOf<UserId, Result<MatrixUser>>()
@@ -115,6 +113,9 @@ class FakeMatrixClient(
     }
     var getRoomInfoFlowLambda = { _: RoomId ->
         flowOf<Optional<MatrixRoomInfo>>(Optional.empty())
+    }
+    var logoutLambda: (Boolean) -> String? = {
+        null
     }
 
     override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
@@ -160,12 +161,8 @@ class FakeMatrixClient(
     override suspend fun clearCache() {
     }
 
-    override suspend fun logout(ignoreSdkError: Boolean): String? {
-        delay(100)
-        if (ignoreSdkError.not()) {
-            logoutFailure?.let { throw it }
-        }
-        return null
+    override suspend fun logout(ignoreSdkError: Boolean): String? = simulateLongTask {
+        return logoutLambda(ignoreSdkError)
     }
 
     override fun close() = Unit
@@ -228,10 +225,6 @@ class FakeMatrixClient(
     }
 
     // Mocks
-
-    fun givenLogoutError(failure: Throwable?) {
-        logoutFailure = failure
-    }
 
     fun givenCreateRoomResult(result: Result<RoomId>) {
         createRoomResult = result
