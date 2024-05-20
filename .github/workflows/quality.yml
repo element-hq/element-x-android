@@ -37,6 +37,10 @@ jobs:
   konsist:
     name: Konsist tests
     runs-on: ubuntu-latest
+    # Allow all jobs on main and develop. Just one per PR.
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/main' && format('check-konsist-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-konsist-develop-{0}', github.sha) || format('check-konsist-{0}', github.ref) }}
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
         with:
@@ -67,7 +71,7 @@ jobs:
     runs-on: ubuntu-latest
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
-      group: ${{ github.ref == 'refs/heads/main' && format('check-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-develop-{0}', github.sha) || format('check-{0}', github.ref) }}
+      group: ${{ github.ref == 'refs/heads/main' && format('check-lint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-lint-develop-{0}', github.sha) || format('check-lint-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
@@ -101,7 +105,7 @@ jobs:
     runs-on: ubuntu-latest
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
-      group: ${{ github.ref == 'refs/heads/main' && format('check-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-develop-{0}', github.sha) || format('check-{0}', github.ref) }}
+      group: ${{ github.ref == 'refs/heads/main' && format('check-detekt-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-detekt-develop-{0}', github.sha) || format('check-detekt-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
@@ -133,7 +137,7 @@ jobs:
     runs-on: ubuntu-latest
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
-      group: ${{ github.ref == 'refs/heads/main' && format('check-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-develop-{0}', github.sha) || format('check-{0}', github.ref) }}
+      group: ${{ github.ref == 'refs/heads/main' && format('check-knit-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-knit-develop-{0}', github.sha) || format('check-knit-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
