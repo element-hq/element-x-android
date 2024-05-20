@@ -69,12 +69,14 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
+import io.element.android.libraries.matrix.test.A_TRANSACTION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
@@ -452,6 +454,31 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Redact, aMessageEvent()))
             assertThat(matrixRoom.redactEventEventIdParam).isEqualTo(AN_EVENT_ID)
+            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+        }
+    }
+
+    @Test
+    fun `present - handle action redact message in error, in this case the message is just cancelled`() = runTest {
+        val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
+        val matrixRoom = FakeMatrixRoom()
+        val presenter = createMessagesPresenter(matrixRoom = matrixRoom, coroutineDispatchers = coroutineDispatchers)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(
+                MessagesEvents.HandleAction(
+                    action = TimelineItemAction.Redact,
+                    event = aMessageEvent(
+                        transactionId = A_TRANSACTION_ID,
+                        sendState = LocalEventSendState.SendingFailed("Failed to send message")
+                    )
+                )
+            )
+            assertThat(matrixRoom.cancelSendCount).isEqualTo(1)
+            assertThat(matrixRoom.redactEventEventIdParam).isNull()
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }

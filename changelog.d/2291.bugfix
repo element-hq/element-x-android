@@ -1,0 +1,1 @@
+Make sure explicit links in messages take priority over links found by linkification (urls, emails, phone numbers, etc.)
