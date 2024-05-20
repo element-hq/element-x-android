@@ -160,7 +160,7 @@ jobs:
   upload_reports:
     name: Quality checks reports
     runs-on: ubuntu-latest
-    needs: [konsist, lint, detekt, knit]
+    needs: [konsist, lint, detekt]
     steps:
       - name: Download reports from previous jobs
         uses: actions/download-artifact@v4
