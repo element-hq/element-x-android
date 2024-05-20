@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -432,7 +433,8 @@ class LoggedInFlowNode @AssistedInject constructor(
         Box(modifier = modifier) {
             val lockScreenState by lockScreenStateService.lockState.collectAsState()
             val ftueState by ftueService.state.collectAsState()
-            BackstackView()
+            val backStackAlpha = if (lockScreenState == LockScreenLockState.Locked) 0f else 1f
+            BackstackView(modifier = Modifier.alpha(backStackAlpha))
             if (ftueState is FtueState.Complete) {
                 PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
             }
