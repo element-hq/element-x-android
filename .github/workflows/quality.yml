@@ -67,7 +67,7 @@ jobs:
             **/build/reports/**/*.*
 
   lint:
-    name: Lint checks
+    name: Android lint check
     runs-on: ubuntu-latest
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
@@ -89,9 +89,7 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Run lint
-        run: ./gradlew lintDebug $CI_GRADLE_ARG_PROPERTIES
-      - name: Run ktlint
-        run: ./gradlew ktlintCheck $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew :app:lintGplayDebug :app:lintFdroidDebug $CI_GRADLE_ARG_PROPERTIES
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -132,6 +130,38 @@ jobs:
           path: |
             **/build/reports/**/*.*
 
+  ktlint:
+    name: Ktlint checks
+    runs-on: ubuntu-latest
+    # Allow all jobs on main and develop. Just one per PR.
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/main' && format('check-ktlint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-ktlint-develop-{0}', github.sha) || format('check-ktlint-{0}', github.ref) }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Ensure we are building the branch and not the branch after being merged on develop
+          # https://github.com/actions/checkout/issues/881
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
+      - name: Use JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
+      - name: Configure gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
+      - name: Run Ktlint check
+        run: ./gradlew ktlintCheck $CI_GRADLE_ARG_PROPERTIES --no-daemon
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ktlint-report
+          path: |
+            **/build/reports/**/*.*
+
   knit:
     name: Knit checks
     runs-on: ubuntu-latest
@@ -160,7 +190,7 @@ jobs:
   upload_reports:
     name: Quality checks reports
     runs-on: ubuntu-latest
-    needs: [konsist, lint, detekt]
+    needs: [konsist, lint, ktlint, detekt]
     steps:
       - name: Download reports from previous jobs
         uses: actions/download-artifact@v4
