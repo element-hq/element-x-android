@@ -16,7 +16,9 @@
 
 package io.element.android.features.messages.impl.timeline.factories.event
 
+import android.net.Uri
 import android.text.SpannableString
+import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.URLSpan
 import androidx.core.text.buildSpannedString
@@ -46,6 +48,7 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.media.ThumbnailInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
@@ -75,6 +78,7 @@ import org.robolectric.RobolectricTestRunner
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
+@Suppress("LargeClass")
 @RunWith(RobolectricTestRunner::class)
 class TimelineItemContentMessageFactoryTest {
     @Test
@@ -641,6 +645,31 @@ class TimelineItemContentMessageFactoryTest {
         assertThat((result as TimelineItemEmoteContent).formattedBody).isEqualTo(SpannableString("* Bob formatted"))
     }
 
+    @Test
+    fun `a message with existing URLSpans keeps it after linkification`() = runTest {
+        val expectedSpanned = SpannableStringBuilder().apply {
+            append("Test ")
+            inSpans(URLSpan("https://www.example.org")) {
+                append("me@matrix.org")
+            }
+        }
+        val sut = createTimelineItemContentMessageFactory(
+            htmlConverterTransform = { expectedSpanned },
+            permalinkParser = FakePermalinkParser { PermalinkData.FallbackLink(Uri.EMPTY) }
+        )
+        val result = sut.create(
+            content = createMessageContent(
+                type = TextMessageType(
+                    body = "Test [me@matrix.org](https://www.example.org)",
+                    formatted = FormattedBody(MessageFormat.HTML, "Test <a href=\"https://www.example.org\">me@matrix.org</a>")
+                )
+            ),
+            senderDisambiguatedDisplayName = "Bob",
+            eventId = AN_EVENT_ID,
+        )
+        assertThat((result as TimelineItemTextContent).formattedBody).isEqualTo(expectedSpanned)
+    }
+
     private fun createMessageContent(
         body: String = "Body",
         inReplyTo: InReplyTo? = null,
@@ -660,12 +689,13 @@ class TimelineItemContentMessageFactoryTest {
     private fun createTimelineItemContentMessageFactory(
         featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
         htmlConverterTransform: (String) -> CharSequence = { it },
+        permalinkParser: FakePermalinkParser = FakePermalinkParser(),
     ) = TimelineItemContentMessageFactory(
         fileSizeFormatter = FakeFileSizeFormatter(),
         fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
         featureFlagService = featureFlagService,
         htmlConverterProvider = FakeHtmlConverterProvider(htmlConverterTransform),
-        permalinkParser = FakePermalinkParser(),
+        permalinkParser = permalinkParser,
     )
 
     private fun createStickerContent(
