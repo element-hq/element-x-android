@@ -54,7 +54,6 @@ anvil = "2.4.9"
 autoservice = "1.1.1"
 
 # quality
-junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
 kover = "0.8.0"
@@ -114,7 +113,6 @@ coroutines_test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 
 # Accompanist
 accompanist_permission = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
-accompanist_systemui = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 
 # Libraries
 squareup_seismic = "com.squareup:seismic:1.0.3"
@@ -135,7 +133,6 @@ test_corektx = { module = "androidx.test:core-ktx", version.ref = "test_core" }
 test_arch_core = "androidx.arch.core:core-testing:2.2.0"
 test_junit = "junit:junit:4.13.2"
 test_runner = "androidx.test:runner:1.5.2"
-test_junitext = "androidx.test.ext:junit:1.1.5"
 test_mockk = "io.mockk:mockk:1.13.11"
 test_konsist = "com.lemonappdev:konsist:0.13.0"
 test_turbine = "app.cash.turbine:turbine:1.1.0"
@@ -204,7 +201,6 @@ google_autoservice_annotations = { module = "com.google.auto.service:auto-servic
 # value of `composecompiler` (which is used to set composeOptions.kotlinCompilerExtensionVersion.
 # See https://github.com/renovatebot/renovate/issues/18354
 android_composeCompiler = { module = "androidx.compose.compiler:compiler", version.ref = "composecompiler" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 appcompat = "androidx.appcompat:appcompat:1.6.1"
@@ -226,7 +222,6 @@ dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
 dependencycheck = "org.owasp.dependencycheck:9.1.0"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
 paparazzi = "app.cash.paparazzi:1.3.3"
-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppDistribution" }
 knit = { id = "org.jetbrains.kotlinx.knit", version = "0.5.0" }
