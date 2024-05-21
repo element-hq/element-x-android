@@ -187,6 +187,14 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
+        val textEditorState by rememberUpdatedState(
+            if (showTextFormatting) {
+                TextEditorState.Rich(richTextEditorState)
+            } else {
+                TextEditorState.Markdown(markdownTextEditorState)
+            }
+        )
+
         LaunchedEffect(attachmentsState.value) {
             when (val attachmentStateValue = attachmentsState.value) {
                 is AttachmentsState.Sending.Processing -> {
@@ -194,7 +202,7 @@ class MessageComposerPresenter @Inject constructor(
                         attachment = attachmentStateValue.attachments.first(),
                         message = null,
                         attachmentState = attachmentsState,
-                        richTextEditorState = richTextEditorState,
+                        textEditorState = textEditorState,
                     )
                 }
                 else -> Unit
@@ -253,14 +261,6 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
-        val textEditorState by rememberUpdatedState(
-            if (showTextFormatting) {
-                TextEditorState.Rich(richTextEditorState)
-            } else {
-                TextEditorState.Markdown(markdownTextEditorState)
-            }
-        )
-
         LaunchedEffect(showTextFormatting) {
             if (!applyFormattingModeChanges) {
                 applyFormattingModeChanges = true
@@ -315,9 +315,9 @@ class MessageComposerPresenter @Inject constructor(
                         is AttachmentsState.Previewing -> {
                             appCoroutineScope.sendAttachment(
                                 attachmentState.attachments.first(),
-                                Message(html = html, markdown = markdown),
+                                message = Message(html = html, markdown = markdown),
                                 attachmentState = attachmentsState,
-                                richTextEditorState = richTextEditorState,
+                                textEditorState = textEditorState,
                             )
                         }
                         // Send normal message
@@ -342,7 +342,7 @@ class MessageComposerPresenter @Inject constructor(
                     ),
                     message = null,
                     attachmentState = attachmentsState,
-                    richTextEditorState = richTextEditorState,
+                    textEditorState,
                 )
                 is MessageComposerEvents.SetMode -> {
                     messageComposerContext.composerMode = event.composerMode
@@ -523,11 +523,11 @@ class MessageComposerPresenter @Inject constructor(
         attachment: Attachment,
         message: Message?,
         attachmentState: MutableState<AttachmentsState>,
-        richTextEditorState: RichTextEditorState,
+        textEditorState: TextEditorState,
     ) = launch {
         when (attachment) {
             is Attachment.Media -> {
-                richTextEditorState.setHtml("")
+                textEditorState.reset()
                 sendMedia(
                         uri = attachment.localMedia.uri,
                         mimeType = attachment.localMedia.info.mimeType,

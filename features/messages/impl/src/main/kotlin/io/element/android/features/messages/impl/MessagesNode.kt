@@ -34,7 +34,6 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
@@ -58,7 +57,6 @@ import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.services.analytics.api.AnalyticsService
-import io.element.android.services.analytics.api.extensions.toAnalyticsViewRoom
 import kotlinx.collections.immutable.ImmutableList
 
 @ContributesNode(RoomScope::class)
