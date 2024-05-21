@@ -50,7 +50,7 @@ parser.add_argument('-i',
 parser.add_argument('-d',
                     '--directory',
                     default="",
-                    help='the target directory, where files will be downloaded. If not provided the build number will be used to create a directory.')
+                    help='the target directory, where files will be downloaded. If not provided the artifactId will be used to create a directory.')
 parser.add_argument('-v',
                     '--verbose',
                     help="increase output verbosity.",
