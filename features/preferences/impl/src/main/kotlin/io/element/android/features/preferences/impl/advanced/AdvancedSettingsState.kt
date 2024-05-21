@@ -25,8 +25,8 @@ data class AdvancedSettingsState(
     val isSharePresenceEnabled: Boolean,
     val theme: Theme,
     val showChangeThemeDialog: Boolean,
-    val pushDistributor: AsyncAction<String>,
-    val pushDistributors: ImmutableList<String>,
+    val currentPushDistributor: AsyncAction<String>,
+    val availablePushDistributors: ImmutableList<String>,
     val showChangePushProviderDialog: Boolean,
     val eventSink: (AdvancedSettingsEvents) -> Unit
 )

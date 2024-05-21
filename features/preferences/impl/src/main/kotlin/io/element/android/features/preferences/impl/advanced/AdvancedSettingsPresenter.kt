@@ -140,8 +140,8 @@ class AdvancedSettingsPresenter @Inject constructor(
             isSharePresenceEnabled = isSharePresenceEnabled,
             theme = theme,
             showChangeThemeDialog = showChangeThemeDialog,
-            pushDistributor = currentDistributorName,
-            pushDistributors = distributorNames.toImmutableList(),
+            currentPushDistributor = currentDistributorName,
+            availablePushDistributors = distributorNames.toImmutableList(),
             showChangePushProviderDialog = showChangePushProviderDialog,
             eventSink = { handleEvents(it) }
         )

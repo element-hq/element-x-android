@@ -29,8 +29,8 @@ open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSett
             aAdvancedSettingsState(showChangeThemeDialog = true),
             aAdvancedSettingsState(isSendPublicReadReceiptsEnabled = true),
             aAdvancedSettingsState(showChangePushProviderDialog = true),
-            aAdvancedSettingsState(pushDistributor = AsyncAction.Loading),
-            aAdvancedSettingsState(pushDistributor = AsyncAction.Failure(Exception("Failed to change distributor"))),
+            aAdvancedSettingsState(currentPushDistributor = AsyncAction.Loading),
+            aAdvancedSettingsState(currentPushDistributor = AsyncAction.Failure(Exception("Failed to change distributor"))),
         )
 }
 
@@ -38,16 +38,16 @@ fun aAdvancedSettingsState(
     isDeveloperModeEnabled: Boolean = false,
     isSendPublicReadReceiptsEnabled: Boolean = false,
     showChangeThemeDialog: Boolean = false,
-    pushDistributor: AsyncAction<String> = AsyncAction.Success("Firebase"),
-    pushDistributors: List<String> = listOf("Firebase", "ntfy"),
+    currentPushDistributor: AsyncAction<String> = AsyncAction.Success("Firebase"),
+    availablePushDistributors: List<String> = listOf("Firebase", "ntfy"),
     showChangePushProviderDialog: Boolean = false,
 ) = AdvancedSettingsState(
     isDeveloperModeEnabled = isDeveloperModeEnabled,
     isSharePresenceEnabled = isSendPublicReadReceiptsEnabled,
     theme = Theme.System,
     showChangeThemeDialog = showChangeThemeDialog,
-    pushDistributor = pushDistributor,
-    pushDistributors = pushDistributors.toImmutableList(),
+    currentPushDistributor = currentPushDistributor,
+    availablePushDistributors = availablePushDistributors.toImmutableList(),
     showChangePushProviderDialog = showChangePushProviderDialog,
     eventSink = {}
 )

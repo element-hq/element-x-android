@@ -90,7 +90,7 @@ fun AdvancedSettingsView(
             headlineContent = {
                 Text(text = stringResource(id = R.string.screen_advanced_settings_push_provider_android))
             },
-            trailingContent = when (state.pushDistributor) {
+            trailingContent = when (state.currentPushDistributor) {
                 AsyncAction.Uninitialized,
                 AsyncAction.Confirming,
                 AsyncAction.Loading -> ListItemContent.Custom {
@@ -105,11 +105,11 @@ fun AdvancedSettingsView(
                     stringResource(id = CommonStrings.common_error)
                 )
                 is AsyncAction.Success -> ListItemContent.Text(
-                    state.pushDistributor.dataOrNull() ?: ""
+                    state.currentPushDistributor.dataOrNull() ?: ""
                 )
             },
             onClick = {
-                if (state.pushDistributor.isReady()) {
+                if (state.currentPushDistributor.isReady()) {
                     state.eventSink(AdvancedSettingsEvents.ChangePushProvider)
                 }
             }
@@ -134,10 +134,10 @@ fun AdvancedSettingsView(
     if (state.showChangePushProviderDialog) {
         SingleSelectionDialog(
             title = stringResource(id = R.string.screen_advanced_settings_choose_distributor_dialog_title_android),
-            options = state.pushDistributors.map {
+            options = state.availablePushDistributors.map {
                 ListOption(title = it)
             }.toImmutableList(),
-            initialSelection = state.pushDistributors.indexOf(state.pushDistributor.dataOrNull()),
+            initialSelection = state.availablePushDistributors.indexOf(state.currentPushDistributor.dataOrNull()),
             onOptionSelected = { index ->
                 state.eventSink(
                     AdvancedSettingsEvents.SetPushProvider(index)

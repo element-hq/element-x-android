@@ -117,8 +117,8 @@ class AdvancedSettingsPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitLastSequentialItem()
-            assertThat(initialState.pushDistributor).isEqualTo(AsyncAction.Success("aDistributorName0"))
-            assertThat(initialState.pushDistributors).containsExactly("aDistributorName0", "aDistributorName1")
+            assertThat(initialState.currentPushDistributor).isEqualTo(AsyncAction.Success("aDistributorName0"))
+            assertThat(initialState.availablePushDistributors).containsExactly("aDistributorName0", "aDistributorName1")
             initialState.eventSink.invoke(AdvancedSettingsEvents.ChangePushProvider)
             val withDialog = awaitItem()
             assertThat(withDialog.showChangePushProviderDialog).isTrue()
@@ -131,9 +131,9 @@ class AdvancedSettingsPresenterTest {
             withDialog.eventSink(AdvancedSettingsEvents.SetPushProvider(1))
             val withNewProvider = awaitItem()
             assertThat(withNewProvider.showChangePushProviderDialog).isFalse()
-            assertThat(withNewProvider.pushDistributor).isEqualTo(AsyncAction.Loading)
+            assertThat(withNewProvider.currentPushDistributor).isEqualTo(AsyncAction.Loading)
             val lastItem = awaitItem()
-            assertThat(lastItem.pushDistributor).isEqualTo(AsyncAction.Success("aDistributorName1"))
+            assertThat(lastItem.currentPushDistributor).isEqualTo(AsyncAction.Success("aDistributorName1"))
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -157,9 +157,9 @@ class AdvancedSettingsPresenterTest {
             withDialog.eventSink(AdvancedSettingsEvents.SetPushProvider(1))
             val withNewProvider = awaitItem()
             assertThat(withNewProvider.showChangePushProviderDialog).isFalse()
-            assertThat(withNewProvider.pushDistributor).isEqualTo(AsyncAction.Loading)
+            assertThat(withNewProvider.currentPushDistributor).isEqualTo(AsyncAction.Loading)
             val lastItem = awaitItem()
-            assertThat(lastItem.pushDistributor).isInstanceOf(AsyncAction.Failure::class.java)
+            assertThat(lastItem.currentPushDistributor).isInstanceOf(AsyncAction.Failure::class.java)
         }
     }
 
