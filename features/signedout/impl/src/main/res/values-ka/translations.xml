@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signed_out_reason_1">"თქვენ პაროლი შეცვალეთ სხვა სესიაში"</string>
+  <string name="screen_signed_out_reason_2">"თქვენ სესია წაშალეთ სხვა სესიიდან"</string>
+  <string name="screen_signed_out_reason_3">"თქვენი სერვერის ადმინისტრატორმა გააუქმა თქვენი წვდომა"</string>
+  <string name="screen_signed_out_subtitle">"ალბათ, თქვენ გამოხვედით ქვემოთ ჩამოთვლილი ერთ-ერთი მიზეზის გამო. გთხოვთ, შეხვიდეთ ანგარიშში, რათა გააგრძელოთ %s-ს გამოყენება."</string>
+  <string name="screen_signed_out_title">"თქვენ ანგარიშიდან გამოსული ხართ"</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_onboarding_sign_in_manually">"ხელით შესვლა"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"შესვლა QR კოდით"</string>
+  <string name="screen_onboarding_sign_up">"ანგარიშის შექმნა"</string>
+  <string name="screen_onboarding_welcome_message">"კეთილი იყოს თქვენი მობრძანება უსწრაფეს %1$s-ში. დამუხტულია სიჩქარისა და სიმარტივისათვის."</string>
+  <string name="screen_onboarding_welcome_subtitle">"კეთილი იყოს თქვენი მობრძანება %1$s-ში! დამუხტული სიჩქარისა და სიმარტივისთვის."</string>
+  <string name="screen_onboarding_welcome_title">"იყავი შენს element-ში"</string>
+</resources>

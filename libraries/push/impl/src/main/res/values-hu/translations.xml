@@ -46,7 +46,6 @@
     <item quantity="one">"%d szoba"</item>
     <item quantity="other">"%d szoba"</item>
   </plurals>
-  <string name="push_choose_distributor_dialog_title_android">"Válassza ki az értesítések fogadási módját"</string>
   <string name="push_distributor_background_sync_android">"Háttérszinkronizálás"</string>
   <string name="push_distributor_firebase_android">"Google szolgáltatások"</string>
   <string name="push_no_valid_google_play_services_apk_android">"A Google Play szolgáltatások nem találhatók. Előfordulhat, hogy az értesítések nem működnek megfelelően."</string>

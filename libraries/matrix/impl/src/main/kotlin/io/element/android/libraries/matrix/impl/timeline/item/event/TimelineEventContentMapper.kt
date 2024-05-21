@@ -88,8 +88,9 @@ class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMap
         }
         is TimelineItemContentKind.RoomMembership -> {
             RoomMembershipContent(
-                UserId(kind.userId),
-                kind.change?.map()
+                userId = UserId(kind.userId),
+                userDisplayName = kind.userDisplayName,
+                change = kind.change?.map()
             )
         }
         is TimelineItemContentKind.State -> {

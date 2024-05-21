@@ -59,18 +59,6 @@ fun AdvancedSettingsView(
         )
         ListItem(
             headlineContent = {
-                Text(text = stringResource(id = CommonStrings.common_rich_text_editor))
-            },
-            supportingContent = {
-                Text(text = stringResource(id = R.string.screen_advanced_settings_rich_text_editor_description))
-            },
-            trailingContent = ListItemContent.Switch(
-                checked = state.isRichTextEditorEnabled,
-            ),
-            onClick = { state.eventSink(AdvancedSettingsEvents.SetRichTextEditorEnabled(!state.isRichTextEditorEnabled)) }
-        )
-        ListItem(
-            headlineContent = {
                 Text(text = stringResource(id = CommonStrings.action_view_source))
             },
             supportingContent = {

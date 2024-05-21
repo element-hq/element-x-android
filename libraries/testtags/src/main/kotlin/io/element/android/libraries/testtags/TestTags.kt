@@ -75,9 +75,14 @@ object TestTags {
     val welcomeScreenTitle = TestTag("welcome_screen-title")
 
     /**
-     * RichTextEditor.
+     * TextEditor.
      */
-    val richTextEditor = TestTag("rich_text_editor")
+    val textEditor = TestTag("text_editor")
+
+    /**
+     * EditText inside the MarkdownTextInput.
+     */
+    val plainTextEditor = TestTag("plain_text_editor")
 
     /**
      * Message bubble.

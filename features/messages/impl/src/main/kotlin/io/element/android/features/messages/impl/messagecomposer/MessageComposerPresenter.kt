@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.messagecomposer
 import android.Manifest
 import android.annotation.SuppressLint
 import android.net.Uri
+import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -29,6 +30,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.media3.common.MimeTypes
@@ -36,7 +38,6 @@ import androidx.media3.common.util.UnstableApi
 import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
-import io.element.android.features.messages.impl.mentions.MentionSuggestion
 import io.element.android.features.messages.impl.mentions.MentionSuggestionsProcessor
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
@@ -59,17 +60,21 @@ import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
+import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
+import io.element.android.libraries.textcomposer.mentions.rememberMentionSpanProvider
+import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
+import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.services.analytics.api.AnalyticsService
-import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
@@ -108,11 +113,26 @@ class MessageComposerPresenter @Inject constructor(
 
     private val suggestionSearchTrigger = MutableStateFlow<Suggestion?>(null)
 
+    // Used to disable some UI related elements in tests
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal var isTesting: Boolean = false
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal var showTextFormatting: Boolean by mutableStateOf(false)
+
     @OptIn(FlowPreview::class)
     @SuppressLint("UnsafeOptInUsageError")
     @Composable
     override fun present(): MessageComposerState {
         val localCoroutineScope = rememberCoroutineScope()
+
+        // Initially disabled so we don't set focus and text twice
+        var applyFormattingModeChanges by remember { mutableStateOf(false) }
+        val richTextEditorState = richTextEditorStateFactory.remember()
+        if (isTesting) {
+            richTextEditorState.isReadyToProcessActions = true
+        }
+        val markdownTextEditorState = remember { MarkdownTextEditorState(initialText = null, initialFocus = false) }
 
         var isMentionsEnabled by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
@@ -149,18 +169,20 @@ class MessageComposerPresenter @Inject constructor(
         val isFullScreen = rememberSaveable {
             mutableStateOf(false)
         }
-        val richTextEditorState = richTextEditorStateFactory.create()
         val ongoingSendAttachmentJob = remember { mutableStateOf<Job?>(null) }
 
         var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
-        var showTextFormatting: Boolean by remember { mutableStateOf(false) }
 
         val sendTypingNotifications by sessionPreferencesStore.isSendTypingNotificationsEnabled().collectAsState(initial = true)
 
         LaunchedEffect(messageComposerContext.composerMode) {
             when (val modeValue = messageComposerContext.composerMode) {
                 is MessageComposerMode.Edit ->
-                    richTextEditorState.setHtml(modeValue.defaultContent)
+                    if (showTextFormatting) {
+                        richTextEditorState.setHtml(modeValue.defaultContent)
+                    } else {
+                        markdownTextEditorState.text.update(modeValue.defaultContent, true)
+                    }
                 else -> Unit
             }
         }
@@ -188,7 +210,7 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
-        val memberSuggestions = remember { mutableStateListOf<MentionSuggestion>() }
+        val memberSuggestions = remember { mutableStateListOf<ResolvedMentionSuggestion>() }
         LaunchedEffect(isMentionsEnabled) {
             if (!isMentionsEnabled) return@LaunchedEffect
             val currentUserId = currentSessionIdHolder.current
@@ -229,22 +251,69 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
+        val textEditorState by rememberUpdatedState(
+            if (showTextFormatting) {
+                TextEditorState.Rich(richTextEditorState)
+            } else {
+                TextEditorState.Markdown(markdownTextEditorState)
+            }
+        )
+
+        LaunchedEffect(showTextFormatting) {
+            if (!applyFormattingModeChanges) {
+                applyFormattingModeChanges = true
+                return@LaunchedEffect
+            }
+            if (showTextFormatting) {
+                val markdown = markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
+                richTextEditorState.setMarkdown(markdown)
+                richTextEditorState.requestFocus()
+            } else {
+                val markdown = richTextEditorState.messageMarkdown
+                markdownTextEditorState.text.update(markdown, true)
+                // Give some time for the focus of the previous editor to be cleared
+                delay(100)
+                markdownTextEditorState.requestFocusAction()
+            }
+        }
+
+        val mentionSpanProvider = if (isTesting) {
+            null
+        } else {
+            rememberMentionSpanProvider(
+                currentUserId = room.sessionId,
+                permalinkParser = permalinkParser,
+            )
+        }
+
         fun handleEvents(event: MessageComposerEvents) {
             when (event) {
                 MessageComposerEvents.ToggleFullScreenState -> isFullScreen.value = !isFullScreen.value
                 MessageComposerEvents.CloseSpecialMode -> {
                     if (messageComposerContext.composerMode is MessageComposerMode.Edit) {
                         localCoroutineScope.launch {
-                            richTextEditorState.setHtml("")
+                            textEditorState.reset()
                         }
                     }
                     messageComposerContext.composerMode = MessageComposerMode.Normal
                 }
-                is MessageComposerEvents.SendMessage -> appCoroutineScope.sendMessage(
-                    message = event.message,
-                    updateComposerMode = { messageComposerContext.composerMode = it },
-                    richTextEditorState = richTextEditorState,
-                )
+                is MessageComposerEvents.SendMessage -> {
+                    val html = if (showTextFormatting) {
+                        richTextEditorState.messageHtml
+                    } else {
+                        null
+                    }
+                    val markdown = if (showTextFormatting) {
+                        richTextEditorState.messageMarkdown
+                    } else {
+                        markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
+                    }
+                    appCoroutineScope.sendMessage(
+                        message = Message(html = html, markdown = markdown),
+                        updateComposerMode = { messageComposerContext.composerMode = it },
+                        textEditorState = textEditorState,
+                    )
+                }
                 is MessageComposerEvents.SendUri -> appCoroutineScope.sendAttachment(
                     attachment = Attachment.Media(
                         localMedia = localMediaFactory.createFromUri(
@@ -335,15 +404,26 @@ class MessageComposerPresenter @Inject constructor(
                 }
                 is MessageComposerEvents.InsertMention -> {
                     localCoroutineScope.launch {
-                        when (val mention = event.mention) {
-                            is MentionSuggestion.Room -> {
-                                richTextEditorState.insertAtRoomMentionAtSuggestion()
+                        if (showTextFormatting) {
+                            when (val mention = event.mention) {
+                                is ResolvedMentionSuggestion.AtRoom -> {
+                                    richTextEditorState.insertAtRoomMentionAtSuggestion()
+                                }
+                                is ResolvedMentionSuggestion.Member -> {
+                                    val text = mention.roomMember.displayName?.prependIndent("@") ?: mention.roomMember.userId.value
+                                    val link = permalinkBuilder.permalinkForUser(mention.roomMember.userId).getOrNull() ?: return@launch
+                                    richTextEditorState.insertMentionAtSuggestion(text = text, link = link)
+                                }
                             }
-                            is MentionSuggestion.Member -> {
-                                val text = mention.roomMember.displayName?.prependIndent("@") ?: mention.roomMember.userId.value
-                                val link = permalinkBuilder.permalinkForUser(mention.roomMember.userId).getOrNull() ?: return@launch
-                                richTextEditorState.insertMentionAtSuggestion(text = text, link = link)
+                        } else if (markdownTextEditorState.currentMentionSuggestion != null) {
+                            mentionSpanProvider?.let {
+                                markdownTextEditorState.insertMention(
+                                    mention = event.mention,
+                                    mentionSpanProvider = it,
+                                    permalinkBuilder = permalinkBuilder,
+                                )
                             }
+                            suggestionSearchTrigger.value = null
                         }
                     }
                 }
@@ -351,7 +431,7 @@ class MessageComposerPresenter @Inject constructor(
         }
 
         return MessageComposerState(
-            richTextEditorState = richTextEditorState,
+            textEditorState = textEditorState,
             permalinkParser = permalinkParser,
             isFullScreen = isFullScreen.value,
             mode = messageComposerContext.composerMode,
@@ -369,21 +449,26 @@ class MessageComposerPresenter @Inject constructor(
     private fun CoroutineScope.sendMessage(
         message: Message,
         updateComposerMode: (newComposerMode: MessageComposerMode) -> Unit,
-        richTextEditorState: RichTextEditorState,
+        textEditorState: TextEditorState,
     ) = launch {
         val capturedMode = messageComposerContext.composerMode
-        val mentions = richTextEditorState.mentionsState?.let { state ->
-            buildList {
-                if (state.hasAtRoomMention) {
-                    add(Mention.AtRoom)
-                }
-                for (userId in state.userIds) {
-                    add(Mention.User(UserId(userId)))
-                }
+        val mentions = when (textEditorState) {
+            is TextEditorState.Rich -> {
+                textEditorState.richTextEditorState.mentionsState?.let { state ->
+                    buildList {
+                        if (state.hasAtRoomMention) {
+                            add(Mention.AtRoom)
+                        }
+                        for (userId in state.userIds) {
+                            add(Mention.User(UserId(userId)))
+                        }
+                    }
+                }.orEmpty()
             }
-        }.orEmpty()
+            is TextEditorState.Markdown -> textEditorState.state.getMentions()
+        }
         // Reset composer right away
-        richTextEditorState.setHtml("")
+        textEditorState.reset()
         updateComposerMode(MessageComposerMode.Normal)
         when (capturedMode) {
             is MessageComposerMode.Normal -> room.sendMessage(body = message.markdown, htmlBody = message.html, mentions = mentions)

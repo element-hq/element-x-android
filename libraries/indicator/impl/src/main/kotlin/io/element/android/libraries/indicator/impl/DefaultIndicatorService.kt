@@ -38,7 +38,7 @@ class DefaultIndicatorService @Inject constructor(
 ) : IndicatorService {
     @Composable
     override fun showRoomListTopBarIndicator(): State<Boolean> {
-        val canVerifySession by sessionVerificationService.canVerifySessionFlow.collectAsState(initial = false)
+        val canVerifySession by sessionVerificationService.needsSessionVerification.collectAsState(initial = false)
         val settingChatBackupIndicator = showSettingChatBackupIndicator()
 
         return remember {

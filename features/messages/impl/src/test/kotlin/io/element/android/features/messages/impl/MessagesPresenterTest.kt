@@ -538,7 +538,7 @@ class MessagesPresenterTest {
             // Initially the composer doesn't have focus, so we don't show the alert
             assertThat(initialState.showReinvitePrompt).isFalse()
             // When the input field is focused we show the alert
-            initialState.composerState.richTextEditorState.requestFocus()
+            initialState.composerState.textEditorState.requestFocus()
             val focusedState = consumeItemsUntilPredicate(timeout = 250.milliseconds) { state ->
                 state.showReinvitePrompt
             }.last()
@@ -561,7 +561,7 @@ class MessagesPresenterTest {
         }.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
-            initialState.composerState.richTextEditorState.requestFocus()
+            initialState.composerState.textEditorState.requestFocus()
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isFalse()
         }
@@ -576,7 +576,7 @@ class MessagesPresenterTest {
         }.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
-            initialState.composerState.richTextEditorState.requestFocus()
+            initialState.composerState.textEditorState.requestFocus()
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isFalse()
         }
@@ -781,7 +781,7 @@ class MessagesPresenterTest {
     ): MessagesPresenter {
         val mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom)
         val permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter)
-        val appPreferencesStore = InMemoryAppPreferencesStore(isRichTextEditorEnabled = true)
+        val appPreferencesStore = InMemoryAppPreferencesStore()
         val sessionPreferencesStore = InMemorySessionPreferencesStore()
         val messageComposerPresenter = MessageComposerPresenter(
             appCoroutineScope = this,
@@ -800,7 +800,10 @@ class MessagesPresenterTest {
             permalinkParser = FakePermalinkParser(),
             permalinkBuilder = FakePermalinkBuilder(),
             timelineController = TimelineController(matrixRoom),
-        )
+        ).apply {
+            showTextFormatting = true
+            isTesting = true
+        }
         val voiceMessageComposerPresenter = VoiceMessageComposerPresenter(
             this,
             FakeVoiceRecorder(),
@@ -853,7 +856,6 @@ class MessagesPresenterTest {
             messageSummaryFormatter = FakeMessageSummaryFormatter(),
             navigator = navigator,
             clipboardHelper = clipboardHelper,
-            appPreferencesStore = appPreferencesStore,
             featureFlagsService = FakeFeatureFlagService(),
             buildMeta = aBuildMeta(),
             dispatchers = coroutineDispatchers,

@@ -75,6 +75,7 @@
   <string name="action_load_more">"Încărcați mai mult"</string>
   <string name="action_manage_account">"Administrare cont"</string>
   <string name="action_manage_devices">"Gestionare dispozitive"</string>
+  <string name="action_message">"Mesaj"</string>
   <string name="action_next">"Următorul"</string>
   <string name="action_no">"Nu"</string>
   <string name="action_not_now">"Nu acum"</string>

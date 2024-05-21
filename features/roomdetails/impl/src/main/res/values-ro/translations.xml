@@ -35,6 +35,9 @@
   <string name="screen_room_details_add_topic_title">"Adăugare subiect"</string>
   <string name="screen_room_details_already_a_member">"Deja membru"</string>
   <string name="screen_room_details_already_invited">"Deja invitat"</string>
+  <string name="screen_room_details_badge_encrypted">"Criptat"</string>
+  <string name="screen_room_details_badge_not_encrypted">"Necriptat"</string>
+  <string name="screen_room_details_badge_public">"Cameră publică"</string>
   <string name="screen_room_details_edit_room_title">"Editați camera"</string>
   <string name="screen_room_details_edition_error">"A apărut o eroare la actualizarea detaliilor camerei"</string>
   <string name="screen_room_details_edition_error_title">"Nu s-a putut actualiza camera"</string>
