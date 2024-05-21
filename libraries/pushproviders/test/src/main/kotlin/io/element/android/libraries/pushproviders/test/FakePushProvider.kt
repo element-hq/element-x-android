@@ -25,18 +25,22 @@ class FakePushProvider(
     override val index: Int = 0,
     override val name: String = "aFakePushProvider",
     private val isAvailable: Boolean = true,
-    private val distributors: List<Distributor> = emptyList()
+    private val distributors: List<Distributor> = listOf(Distributor("aDistributorValue", "aDistributorName")),
 ) : PushProvider {
     override fun isAvailable(): Boolean = isAvailable
 
     override fun getDistributors(): List<Distributor> = distributors
 
-    override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor) {
-        // No-op
+    override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor): Result<Unit> {
+        return Result.success(Unit)
     }
 
-    override suspend fun unregister(matrixClient: MatrixClient) {
-        // No-op
+    override suspend fun getCurrentDistributor(matrixClient: MatrixClient): Distributor? {
+        return distributors.firstOrNull()
+    }
+
+    override suspend fun unregister(matrixClient: MatrixClient): Result<Unit> {
+        return Result.success(Unit)
     }
 
     override suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig? {

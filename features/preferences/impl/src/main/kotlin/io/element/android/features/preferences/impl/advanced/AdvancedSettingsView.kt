@@ -16,19 +16,24 @@
 
 package io.element.android.features.preferences.impl.advanced
 
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.progressSemantics
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.themes
 import io.element.android.features.preferences.impl.R
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.dialogs.ListOption
 import io.element.android.libraries.designsystem.components.dialogs.SingleSelectionDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -81,6 +86,34 @@ fun AdvancedSettingsView(
             ),
             onClick = { state.eventSink(AdvancedSettingsEvents.SetSharePresenceEnabled(!state.isSharePresenceEnabled)) }
         )
+        ListItem(
+            headlineContent = {
+                Text(text = stringResource(id = R.string.screen_advanced_settings_push_provider_android))
+            },
+            trailingContent = when (state.currentPushDistributor) {
+                AsyncAction.Uninitialized,
+                AsyncAction.Confirming,
+                AsyncAction.Loading -> ListItemContent.Custom {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .progressSemantics()
+                            .size(20.dp),
+                        strokeWidth = 2.dp
+                    )
+                }
+                is AsyncAction.Failure -> ListItemContent.Text(
+                    stringResource(id = CommonStrings.common_error)
+                )
+                is AsyncAction.Success -> ListItemContent.Text(
+                    state.currentPushDistributor.dataOrNull() ?: ""
+                )
+            },
+            onClick = {
+                if (state.currentPushDistributor.isReady()) {
+                    state.eventSink(AdvancedSettingsEvents.ChangePushProvider)
+                }
+            }
+        )
     }
 
     if (state.showChangeThemeDialog) {
@@ -95,6 +128,22 @@ fun AdvancedSettingsView(
                 )
             },
             onDismissRequest = { state.eventSink(AdvancedSettingsEvents.CancelChangeTheme) },
+        )
+    }
+
+    if (state.showChangePushProviderDialog) {
+        SingleSelectionDialog(
+            title = stringResource(id = R.string.screen_advanced_settings_choose_distributor_dialog_title_android),
+            options = state.availablePushDistributors.map {
+                ListOption(title = it)
+            }.toImmutableList(),
+            initialSelection = state.availablePushDistributors.indexOf(state.currentPushDistributor.dataOrNull()),
+            onOptionSelected = { index ->
+                state.eventSink(
+                    AdvancedSettingsEvents.SetPushProvider(index)
+                )
+            },
+            onDismissRequest = { state.eventSink(AdvancedSettingsEvents.CancelChangePushProvider) },
         )
     }
 }

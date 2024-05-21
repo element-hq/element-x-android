@@ -18,6 +18,8 @@ package io.element.android.features.preferences.impl.advanced
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.compound.theme.Theme
+import io.element.android.libraries.architecture.AsyncAction
+import kotlinx.collections.immutable.toImmutableList
 
 open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSettingsState> {
     override val values: Sequence<AdvancedSettingsState>
@@ -26,6 +28,9 @@ open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSett
             aAdvancedSettingsState(isDeveloperModeEnabled = true),
             aAdvancedSettingsState(showChangeThemeDialog = true),
             aAdvancedSettingsState(isSendPublicReadReceiptsEnabled = true),
+            aAdvancedSettingsState(showChangePushProviderDialog = true),
+            aAdvancedSettingsState(currentPushDistributor = AsyncAction.Loading),
+            aAdvancedSettingsState(currentPushDistributor = AsyncAction.Failure(Exception("Failed to change distributor"))),
         )
 }
 
@@ -33,10 +38,17 @@ fun aAdvancedSettingsState(
     isDeveloperModeEnabled: Boolean = false,
     isSendPublicReadReceiptsEnabled: Boolean = false,
     showChangeThemeDialog: Boolean = false,
+    currentPushDistributor: AsyncAction<String> = AsyncAction.Success("Firebase"),
+    availablePushDistributors: List<String> = listOf("Firebase", "ntfy"),
+    showChangePushProviderDialog: Boolean = false,
+    eventSink: (AdvancedSettingsEvents) -> Unit = {},
 ) = AdvancedSettingsState(
     isDeveloperModeEnabled = isDeveloperModeEnabled,
     isSharePresenceEnabled = isSendPublicReadReceiptsEnabled,
     theme = Theme.System,
     showChangeThemeDialog = showChangeThemeDialog,
-    eventSink = {}
+    currentPushDistributor = currentPushDistributor,
+    availablePushDistributors = availablePushDistributors.toImmutableList(),
+    showChangePushProviderDialog = showChangePushProviderDialog,
+    eventSink = eventSink
 )

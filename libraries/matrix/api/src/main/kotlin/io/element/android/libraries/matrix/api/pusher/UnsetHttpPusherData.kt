@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.pushproviders.api
+package io.element.android.libraries.matrix.api.pusher
 
-/**
- * Firebase does not have the concept of distributor. So for Firebase, there will be one distributor:
- * Distributor("Firebase", "Firebase").
- *
- * For UnifiedPush, for instance, the Distributor can be:
- * Distributor("io.heckel.ntfy", "ntfy").
- * But other values are possible.
- */
-data class Distributor(
-    val value: String,
-    val name: String,
+data class UnsetHttpPusherData(
+    val pushKey: String,
+    val appId: String,
 )

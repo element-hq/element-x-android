@@ -36,6 +36,7 @@ import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatu
 import io.element.android.libraries.push.api.PushService
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import javax.inject.Inject
 
 class LoggedInPresenter @Inject constructor(
@@ -55,10 +56,26 @@ class LoggedInPresenter @Inject constructor(
         LaunchedEffect(isVerified) {
             if (isVerified) {
                 // Ensure pusher is registered
-                // TODO Manually select push provider for now
-                val pushProvider = pushService.getAvailablePushProviders().firstOrNull() ?: return@LaunchedEffect
-                val distributor = pushProvider.getDistributors().firstOrNull() ?: return@LaunchedEffect
-                pushService.registerWith(matrixClient, pushProvider, distributor)
+                val currentPushProvider = pushService.getCurrentPushProvider()
+                val result = if (currentPushProvider == null) {
+                    // Register with the first available push provider
+                    val pushProvider = pushService.getAvailablePushProviders().firstOrNull() ?: return@LaunchedEffect
+                    val distributor = pushProvider.getDistributors().firstOrNull() ?: return@LaunchedEffect
+                    pushService.registerWith(matrixClient, pushProvider, distributor)
+                } else {
+                    val currentPushDistributor = currentPushProvider.getCurrentDistributor(matrixClient)
+                    if (currentPushDistributor == null) {
+                        // Register with the first available distributor
+                        val distributor = currentPushProvider.getDistributors().firstOrNull() ?: return@LaunchedEffect
+                        pushService.registerWith(matrixClient, currentPushProvider, distributor)
+                    } else {
+                        // Re-register with the current distributor
+                        pushService.registerWith(matrixClient, currentPushProvider, currentPushDistributor)
+                    }
+                }
+                result.onFailure {
+                    Timber.e(it, "Failed to register pusher")
+                }
             }
         }
 
