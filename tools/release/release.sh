@@ -117,7 +117,7 @@ version=${version:-${versionCandidate}}
 versionMajor=`echo ${version} | cut  -d "." -f1`
 versionMinor=`echo ${version} | cut  -d "." -f2`
 versionPatch=`echo ${version} | cut  -d "." -f3`
-nextPatchVersion=$((versionPatch + 2))
+nextPatchVersion=$((versionPatch + 1))
 
 printf "\n================================================================================\n"
 printf "Starting the release ${version}\n"
