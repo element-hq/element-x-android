@@ -34,7 +34,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -104,13 +103,6 @@ fun RoomListFiltersView(
                     },
                 )
             }
-        }
-    }
-    LaunchedEffect(state.filterSelectionStates) {
-        // Checking for canScrollBackward is necessary for the itemPlacementAnimation to work correctly.
-        // We don't want the itemPlacementAnimation to be triggered when clearing the filters.
-        if (!state.hasAnyFilterSelected || lazyListState.canScrollBackward) {
-            lazyListState.animateScrollToItem(0)
         }
     }
 }
