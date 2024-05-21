@@ -80,9 +80,13 @@ class RustSessionVerificationService(
     private val _sessionVerifiedStatus = MutableStateFlow<SessionVerifiedStatus>(SessionVerifiedStatus.Unknown)
     override val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus> = _sessionVerifiedStatus.asStateFlow()
 
-    override val isReady = isSyncServiceReady.stateIn(sessionCoroutineScope, SharingStarted.Eagerly, false)
+    /**
+     * The internal service that checks verification can only run after the initial sync.
+     * This [StateFlow] will notify consumers when the service is ready to be used.
+     */
+    private val isReady = isSyncServiceReady.stateIn(sessionCoroutineScope, SharingStarted.Eagerly, false)
 
-    override val canVerifySessionFlow = sessionVerifiedStatus.map { verificationStatus ->
+    override val needsSessionVerification = sessionVerifiedStatus.map { verificationStatus ->
         verificationStatus == SessionVerifiedStatus.NotVerified
     }
 
