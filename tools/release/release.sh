@@ -215,26 +215,25 @@ fi
 
 printf "\n================================================================================\n"
 printf "Wait for the GitHub action https://github.com/element-hq/element-x-android/actions/workflows/release.yml?query=branch%%3Amain to build the 'main' branch.\n"
-read -p "Please enter the artifact URL for Gplay app bundle (for 'elementx-app-gplay-bundle-unsigned'): " artifactGplayUrl
-read -p "Please enter the artifact URL for FDroid APKs (for 'elementx-app-fdroid-apks-unsigned'): " artifactFdroidUrl
+printf "Please enter the url of the github action (!!! WARNING: NOT THE URL OF THE ARTIFACT ANYMORE !!!)\n"
+read -p "For instance https://github.com/element-hq/element-x-android/actions/runs/9065756777: " runUrl
 
 targetPath="./tmp/Element/${version}"
 
 printf "\n================================================================================\n"
-printf "Downloading the FDroid artifact...\n"
+printf "Downloading the artifacts...\n"
 
-fdroidTargetPath="${targetPath}/fdroid"
-
-python3 ./tools/github/download_github_artifacts.py \
+python3 ./tools/github/download_all_github_artifacts.py \
      --token ${gitHubToken} \
-     --artifactUrl ${artifactFdroidUrl} \
-     --directory ${fdroidTargetPath} \
+     --runUrl ${runUrl} \
+     --directory ${targetPath} \
      --ignoreErrors
 
 printf "\n================================================================================\n"
-printf "Unzipping the artifact...\n"
+printf "Unzipping the F-Droid artifact...\n"
 
-unzip ${fdroidTargetPath}/elementx-app-fdroid-apks-unsigned.zip -d ${fdroidTargetPath}
+fdroidTargetPath="${targetPath}/fdroid"
+unzip ${targetPath}/elementx-app-fdroid-apks-unsigned.zip -d ${fdroidTargetPath}
 
 # Flatten folder hierarchy
 mv ${fdroidTargetPath}/fdroid/release/* ${fdroidTargetPath}
@@ -306,21 +305,10 @@ printf "\n======================================================================
 printf "The APKs in ${fdroidTargetPath} have been signed!\n"
 
 printf "\n================================================================================\n"
-printf "Downloading the Gplay artifact...\n"
+printf "Unzipping the Gplay artifact...\n"
 
- # Download files
 gplayTargetPath="${targetPath}/gplay"
-
-python3 ./tools/github/download_github_artifacts.py \
-     --token ${gitHubToken} \
-     --artifactUrl ${artifactGplayUrl} \
-     --directory ${gplayTargetPath} \
-     --ignoreErrors
-
-printf "\n================================================================================\n"
-printf "Unzipping the artifact...\n"
-
-unzip ${gplayTargetPath}/elementx-app-gplay-bundle-unsigned.zip -d ${gplayTargetPath}
+unzip ${targetPath}/elementx-app-gplay-bundle-unsigned.zip -d ${gplayTargetPath}
 
 unsignedBundlePath="${gplayTargetPath}/app-gplay-release.aab"
 signedBundlePath="${gplayTargetPath}/app-gplay-release-signed.aab"
