@@ -233,16 +233,17 @@ class RustMatrixAuthenticationService @Inject constructor(
                     sessionStore.storeData(sessionData)
                     SessionId(sessionData.userId)
                 }
-            }.onFailure { throwable ->
-                if (throwable is CancellationException) {
-                    throw throwable
-                }
             }.mapFailure {
                 when (it) {
                     is QrCodeDecodeException -> QrErrorMapper.map(it)
                     is QrLoginException -> QrErrorMapper.map(it)
                     else -> it
                 }
+            }.onFailure { throwable ->
+                if (throwable is CancellationException) {
+                    throw throwable
+                }
+                Timber.e(throwable, "Failed to login with QR code")
             }
     }
 }

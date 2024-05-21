@@ -19,52 +19,28 @@ package io.element.android.libraries.qrcode
 import android.graphics.ImageFormat
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
-import com.google.zxing.BinaryBitmap
-import com.google.zxing.NotFoundException
-import com.google.zxing.PlanarYUVLuminanceSource
-import com.google.zxing.ResultMetadataType
-import com.google.zxing.common.HybridBinarizer
-import com.google.zxing.qrcode.QRCodeReader
 import timber.log.Timber
-import java.nio.ByteBuffer
+import zxingcpp.BarcodeReader
 
 internal class QRCodeAnalyzer(
     private val onQrCodeScanned: (result: ByteArray?) -> Unit
 ) : ImageAnalysis.Analyzer {
-    private val reader = QRCodeReader()
+    private val reader = BarcodeReader()
 
     override fun analyze(image: ImageProxy) {
         if (image.format in SUPPORTED_IMAGE_FORMATS) {
-            val bytes = image.planes.first().buffer.toByteArray()
-            val source = PlanarYUVLuminanceSource(
-                bytes,
-                image.width,
-                image.height,
-                0,
-                0,
-                image.width,
-                image.height,
-                false
-            )
-            val binaryBitmap = BinaryBitmap(HybridBinarizer(source))
+
             try {
-                val result = reader.decode(binaryBitmap)
-                val byteSegments = result.resultMetadata[ResultMetadataType.BYTE_SEGMENTS] as? List<*>
-                val contents = byteSegments?.first() as? ByteArray ?: error("No byte segments found")
-                onQrCodeScanned(contents)
-            } catch (_: NotFoundException) {
-                // No QR code found in the image
+                val bytes = reader.read(image).firstNotNullOfOrNull { it.bytes }
+                if (bytes != null ) {
+                    onQrCodeScanned(bytes)
+                }
             } catch (e: Exception) {
                 Timber.w(e, "Error decoding QR code")
             } finally {
                 image.close()
             }
         }
-    }
-
-    private fun ByteBuffer.toByteArray(): ByteArray {
-        rewind()
-        return ByteArray(remaining()).also { get(it) }
     }
 
     companion object {
