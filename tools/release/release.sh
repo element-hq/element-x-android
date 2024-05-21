@@ -152,9 +152,6 @@ yes | towncrier build --version "v${version}"
 printf "\n================================================================================\n"
 read -p "Check the file CHANGES.md consistency. It's possible to reorder items (most important changes first) or change their section if relevant. Also an opportunity to fix some typo, or rewrite things. Do not commit your change. Press enter to continue. "
 
-# Get the changes to use it to create the GitHub release
-changelogUrlEncoded=`git diff CHANGES.md | grep ^+ | tail -n +2 | cut -c2- | jq -sRr @uri | sed s/\(/%28/g | sed s/\)/%29/g`
-
 printf "\n================================================================================\n"
 printf "Committing...\n"
 git commit -a -m "Changelog for version ${version}"
@@ -393,12 +390,14 @@ printf "You can then go to \"Publishing overview\" and send the new release for 
 read -p "Press enter to continue. "
 
 printf "\n================================================================================\n"
-githubCreateReleaseLink="https://github.com/element-hq/element-x-android/releases/new?tag=v${version}&title=Element%20X%20Android%20v${version}&body=${changelogUrlEncoded}"
+# Url encode for "<!-- Copy paste the section of the file CHANGES.md for this release here -->"
+body="%3C%21--%20Copy%20paste%20the%20section%20of%20the%20file%20CHANGES.md%20for%20this%20release%20here%20--%3E"
+githubCreateReleaseLink="https://github.com/element-hq/element-x-android/releases/new?tag=v${version}&title=Element%20X%20Android%20v${version}&body=${body}"
 printf "Creating the release on gitHub.\n"
 printf -- "Open this link: %s\n" ${githubCreateReleaseLink}
 printf "Then\n"
-printf " - copy paste the section of the file CHANGES.md for this release (if not there yet)\n"
-printf " - click on the 'Generate releases notes' button\n"
+printf " - copy paste the section of the file CHANGES.md for this release.\n"
+printf " - click on the 'Generate releases notes' button.\n"
 printf " - Add the file ${signedBundlePath} to the GitHub release.\n"
 printf " - Add the universal APK, downloaded from the GooglePlay console to the GitHub release.\n"
 printf " - Add the 4 signed APKs for F-Droid, located at ${fdroidTargetPath} to the GitHub release.\n"
