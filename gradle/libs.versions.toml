@@ -113,7 +113,6 @@ coroutines_test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 
 # Accompanist
 accompanist_permission = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
-accompanist_systemui = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 
 # Libraries
 squareup_seismic = "com.squareup:seismic:1.0.3"
