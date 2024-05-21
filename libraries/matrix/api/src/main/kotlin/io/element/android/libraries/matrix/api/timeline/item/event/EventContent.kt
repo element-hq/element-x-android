@@ -73,6 +73,7 @@ data class UnableToDecryptContent(
 
 data class RoomMembershipContent(
     val userId: UserId,
+    val userDisplayName: String?,
     val change: MembershipChange?
 ) : EventContent
 

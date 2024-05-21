@@ -58,6 +58,7 @@ class InReplyToDetailTest {
             senderProfile = aProfileTimelineDetails(),
             content = RoomMembershipContent(
                 userId = A_USER_ID,
+                userDisplayName = null,
                 change = MembershipChange.INVITED,
             )
         )
