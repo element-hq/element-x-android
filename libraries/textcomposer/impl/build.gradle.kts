@@ -22,6 +22,9 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.textcomposer"
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
 }
 
 dependencies {
@@ -47,9 +50,13 @@ dependencies {
     ksp(libs.showkase.processor)
 
     testImplementation(libs.test.junit)
-    testImplementation(libs.test.truth)
     testImplementation(libs.coroutines.test)
+    testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.robolectric)
+    testImplementation(libs.test.truth)
+    testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.tests.testutils)
+    testImplementation(libs.androidx.compose.ui.test.junit)
+    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 }

@@ -38,9 +38,6 @@ class AdvancedSettingsPresenter @Inject constructor(
     @Composable
     override fun present(): AdvancedSettingsState {
         val localCoroutineScope = rememberCoroutineScope()
-        val isRichTextEditorEnabled by appPreferencesStore
-            .isRichTextEditorEnabledFlow()
-            .collectAsState(initial = false)
         val isDeveloperModeEnabled by appPreferencesStore
             .isDeveloperModeEnabledFlow()
             .collectAsState(initial = false)
@@ -54,9 +51,6 @@ class AdvancedSettingsPresenter @Inject constructor(
         var showChangeThemeDialog by remember { mutableStateOf(false) }
         fun handleEvents(event: AdvancedSettingsEvents) {
             when (event) {
-                is AdvancedSettingsEvents.SetRichTextEditorEnabled -> localCoroutineScope.launch {
-                    appPreferencesStore.setRichTextEditorEnabled(event.enabled)
-                }
                 is AdvancedSettingsEvents.SetDeveloperModeEnabled -> localCoroutineScope.launch {
                     appPreferencesStore.setDeveloperModeEnabled(event.enabled)
                 }
@@ -73,7 +67,6 @@ class AdvancedSettingsPresenter @Inject constructor(
         }
 
         return AdvancedSettingsState(
-            isRichTextEditorEnabled = isRichTextEditorEnabled,
             isDeveloperModeEnabled = isDeveloperModeEnabled,
             isSharePresenceEnabled = isSharePresenceEnabled,
             theme = theme,

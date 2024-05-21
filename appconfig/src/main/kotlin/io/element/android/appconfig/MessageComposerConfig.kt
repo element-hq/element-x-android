@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.advanced
+package io.element.android.appconfig
 
-import io.element.android.compound.theme.Theme
-
-data class AdvancedSettingsState(
-    val isDeveloperModeEnabled: Boolean,
-    val isSharePresenceEnabled: Boolean,
-    val theme: Theme,
-    val showChangeThemeDialog: Boolean,
-    val eventSink: (AdvancedSettingsEvents) -> Unit
-)
+object MessageComposerConfig {
+    /**
+     * Enable the rich text editing in the composer.
+     */
+    const val ENABLE_RICH_TEXT_EDITING = true
+}

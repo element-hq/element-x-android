@@ -26,7 +26,6 @@ import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Composer
-import io.element.android.features.messages.impl.mentions.MentionSuggestion
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerContextImpl
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
@@ -77,10 +76,11 @@ import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
-import io.element.android.libraries.textcomposer.model.Message
+import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
+import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.any
@@ -127,7 +127,7 @@ class MessageComposerPresenterTest {
         }.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.isFullScreen).isFalse()
-            assertThat(initialState.richTextEditorState.messageHtml).isEqualTo("")
+            assertThat(initialState.textEditorState.messageHtml()).isEqualTo("")
             assertThat(initialState.mode).isEqualTo(MessageComposerMode.Normal)
             assertThat(initialState.showAttachmentSourcePicker).isFalse()
             assertThat(initialState.canShareLocation).isTrue()
@@ -158,10 +158,10 @@ class MessageComposerPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
-            initialState.richTextEditorState.setHtml(A_MESSAGE)
-            assertThat(initialState.richTextEditorState.messageHtml).isEqualTo(A_MESSAGE)
-            initialState.richTextEditorState.setHtml("")
-            assertThat(initialState.richTextEditorState.messageHtml).isEqualTo("")
+            initialState.textEditorState.setHtml(A_MESSAGE)
+            assertThat(initialState.textEditorState.messageHtml()).isEqualTo(A_MESSAGE)
+            initialState.textEditorState.setHtml("")
+            assertThat(initialState.textEditorState.messageHtml()).isEqualTo("")
         }
     }
 
@@ -170,7 +170,7 @@ class MessageComposerPresenterTest {
         val presenter = createPresenter(this)
         moleculeFlow(RecompositionMode.Immediate) {
             val state = presenter.present()
-            remember(state, state.richTextEditorState.messageHtml) { state }
+            remember(state, state.textEditorState.messageHtml()) { state }
         }.test {
             var state = awaitFirstItem()
             val mode = anEditMode()
@@ -178,11 +178,11 @@ class MessageComposerPresenterTest {
             state = awaitItem()
             assertThat(state.mode).isEqualTo(mode)
             state = awaitItem()
-            assertThat(state.richTextEditorState.messageHtml).isEqualTo(A_MESSAGE)
+            assertThat(state.textEditorState.messageHtml()).isEqualTo(A_MESSAGE)
             state = backToNormalMode(state, skipCount = 1)
 
             // The message that was being edited is cleared
-            assertThat(state.richTextEditorState.messageHtml).isEqualTo("")
+            assertThat(state.textEditorState.messageHtml()).isEqualTo("")
         }
     }
 
@@ -197,7 +197,7 @@ class MessageComposerPresenterTest {
             state.eventSink.invoke(MessageComposerEvents.SetMode(mode))
             state = awaitItem()
             assertThat(state.mode).isEqualTo(mode)
-            assertThat(state.richTextEditorState.messageHtml).isEqualTo("")
+            assertThat(state.textEditorState.messageHtml()).isEqualTo("")
             backToNormalMode(state)
         }
     }
@@ -213,11 +213,11 @@ class MessageComposerPresenterTest {
             state.eventSink.invoke(MessageComposerEvents.SetMode(mode))
             state = awaitItem()
             assertThat(state.mode).isEqualTo(mode)
-            state.richTextEditorState.setHtml(A_REPLY)
+            state.textEditorState.setHtml(A_REPLY)
             state = backToNormalMode(state)
 
             // The message typed while replying is not cleared
-            assertThat(state.richTextEditorState.messageHtml).isEqualTo(A_REPLY)
+            assertThat(state.textEditorState.messageHtml()).isEqualTo(A_REPLY)
         }
     }
 
@@ -232,25 +232,54 @@ class MessageComposerPresenterTest {
             state.eventSink.invoke(MessageComposerEvents.SetMode(mode))
             state = awaitItem()
             assertThat(state.mode).isEqualTo(mode)
-            assertThat(state.richTextEditorState.messageHtml).isEqualTo("")
+            assertThat(state.textEditorState.messageHtml()).isEqualTo("")
             backToNormalMode(state)
         }
     }
 
     @Test
-    fun `present - send message`() = runTest {
+    fun `present - send message with rich text enabled`() = runTest {
         val presenter = createPresenter(this)
         moleculeFlow(RecompositionMode.Immediate) {
             val state = presenter.present()
-            remember(state, state.richTextEditorState.messageHtml) { state }
+            remember(state, state.textEditorState.messageHtml()) { state }
         }.test {
             val initialState = awaitFirstItem()
-            initialState.richTextEditorState.setHtml(A_MESSAGE)
+            initialState.textEditorState.setHtml(A_MESSAGE)
             val withMessageState = awaitItem()
-            assertThat(withMessageState.richTextEditorState.messageHtml).isEqualTo(A_MESSAGE)
-            withMessageState.eventSink.invoke(MessageComposerEvents.SendMessage(A_MESSAGE.toMessage()))
+            assertThat(withMessageState.textEditorState.messageHtml()).isEqualTo(A_MESSAGE)
+            withMessageState.eventSink.invoke(MessageComposerEvents.SendMessage)
             val messageSentState = awaitItem()
-            assertThat(messageSentState.richTextEditorState.messageHtml).isEqualTo("")
+            assertThat(messageSentState.textEditorState.messageHtml()).isEqualTo("")
+            waitForPredicate { analyticsService.capturedEvents.size == 1 }
+            assertThat(analyticsService.capturedEvents).containsExactly(
+                Composer(
+                    inThread = false,
+                    isEditing = false,
+                    isReply = false,
+                    messageType = Composer.MessageType.Text,
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - send message with plain text enabled`() = runTest {
+        val permalinkBuilder = FakePermalinkBuilder(result = { Result.success("") })
+        val presenter = createPresenter(this, isRichTextEditorEnabled = false)
+        moleculeFlow(RecompositionMode.Immediate) {
+            val state = presenter.present()
+            val messageMarkdown = state.textEditorState.messageMarkdown(permalinkBuilder)
+            remember(state, messageMarkdown) { state }
+        }.test {
+            val initialState = awaitFirstItem()
+            initialState.textEditorState.setMarkdown(A_MESSAGE)
+            val withMessageState = awaitItem()
+            assertThat(withMessageState.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo(A_MESSAGE)
+            assertThat(withMessageState.textEditorState.messageHtml()).isNull()
+            withMessageState.eventSink.invoke(MessageComposerEvents.SendMessage)
+            val messageSentState = awaitItem()
+            assertThat(messageSentState.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo("")
             waitForPredicate { analyticsService.capturedEvents.size == 1 }
             assertThat(analyticsService.capturedEvents).containsExactly(
                 Composer(
@@ -278,23 +307,23 @@ class MessageComposerPresenterTest {
         )
         moleculeFlow(RecompositionMode.Immediate) {
             val state = presenter.present()
-            remember(state, state.richTextEditorState.messageHtml) { state }
+            remember(state, state.textEditorState.messageHtml()) { state }
         }.test {
             val initialState = awaitFirstItem()
-            assertThat(initialState.richTextEditorState.messageHtml).isEqualTo("")
+            assertThat(initialState.textEditorState.messageHtml()).isEqualTo("")
             val mode = anEditMode()
             initialState.eventSink.invoke(MessageComposerEvents.SetMode(mode))
             skipItems(1)
             val withMessageState = awaitItem()
             assertThat(withMessageState.mode).isEqualTo(mode)
-            assertThat(withMessageState.richTextEditorState.messageHtml).isEqualTo(A_MESSAGE)
-            withMessageState.richTextEditorState.setHtml(ANOTHER_MESSAGE)
+            assertThat(withMessageState.textEditorState.messageHtml()).isEqualTo(A_MESSAGE)
+            withMessageState.textEditorState.setHtml(ANOTHER_MESSAGE)
             val withEditedMessageState = awaitItem()
-            assertThat(withEditedMessageState.richTextEditorState.messageHtml).isEqualTo(ANOTHER_MESSAGE)
-            withEditedMessageState.eventSink.invoke(MessageComposerEvents.SendMessage(ANOTHER_MESSAGE.toMessage()))
+            assertThat(withEditedMessageState.textEditorState.messageHtml()).isEqualTo(ANOTHER_MESSAGE)
+            withEditedMessageState.eventSink.invoke(MessageComposerEvents.SendMessage)
             skipItems(1)
             val messageSentState = awaitItem()
-            assertThat(messageSentState.richTextEditorState.messageHtml).isEqualTo("")
+            assertThat(messageSentState.textEditorState.messageHtml()).isEqualTo("")
 
             advanceUntilIdle()
 
@@ -328,23 +357,23 @@ class MessageComposerPresenterTest {
         )
         moleculeFlow(RecompositionMode.Immediate) {
             val state = presenter.present()
-            remember(state, state.richTextEditorState.messageHtml) { state }
+            remember(state, state.textEditorState.messageHtml()) { state }
         }.test {
             val initialState = awaitFirstItem()
-            assertThat(initialState.richTextEditorState.messageHtml).isEqualTo("")
+            assertThat(initialState.textEditorState.messageHtml()).isEqualTo("")
             val mode = anEditMode(eventId = null, transactionId = A_TRANSACTION_ID)
             initialState.eventSink.invoke(MessageComposerEvents.SetMode(mode))
             skipItems(1)
             val withMessageState = awaitItem()
             assertThat(withMessageState.mode).isEqualTo(mode)
-            assertThat(withMessageState.richTextEditorState.messageHtml).isEqualTo(A_MESSAGE)
-            withMessageState.richTextEditorState.setHtml(ANOTHER_MESSAGE)
+            assertThat(withMessageState.textEditorState.messageHtml()).isEqualTo(A_MESSAGE)
+            withMessageState.textEditorState.setHtml(ANOTHER_MESSAGE)
             val withEditedMessageState = awaitItem()
-            assertThat(withEditedMessageState.richTextEditorState.messageHtml).isEqualTo(ANOTHER_MESSAGE)
-            withEditedMessageState.eventSink.invoke(MessageComposerEvents.SendMessage(ANOTHER_MESSAGE.toMessage()))
+            assertThat(withEditedMessageState.textEditorState.messageHtml()).isEqualTo(ANOTHER_MESSAGE)
+            withEditedMessageState.eventSink.invoke(MessageComposerEvents.SendMessage)
             skipItems(1)
             val messageSentState = awaitItem()
-            assertThat(messageSentState.richTextEditorState.messageHtml).isEqualTo("")
+            assertThat(messageSentState.textEditorState.messageHtml()).isEqualTo("")
 
             advanceUntilIdle()
 
@@ -380,17 +409,17 @@ class MessageComposerPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
-            assertThat(initialState.richTextEditorState.messageHtml).isEqualTo("")
+            assertThat(initialState.textEditorState.messageHtml()).isEqualTo("")
             val mode = aReplyMode()
             initialState.eventSink.invoke(MessageComposerEvents.SetMode(mode))
             val state = awaitItem()
             assertThat(state.mode).isEqualTo(mode)
-            assertThat(state.richTextEditorState.messageHtml).isEqualTo("")
-            state.richTextEditorState.setHtml(A_REPLY)
-            assertThat(state.richTextEditorState.messageHtml).isEqualTo(A_REPLY)
-            state.eventSink.invoke(MessageComposerEvents.SendMessage(A_REPLY.toMessage()))
+            assertThat(state.textEditorState.messageHtml()).isEqualTo("")
+            state.textEditorState.setHtml(A_REPLY)
+            assertThat(state.textEditorState.messageHtml()).isEqualTo(A_REPLY)
+            state.eventSink.invoke(MessageComposerEvents.SendMessage)
             val messageSentState = awaitItem()
-            assertThat(messageSentState.richTextEditorState.messageHtml).isEqualTo("")
+            assertThat(messageSentState.textEditorState.messageHtml()).isEqualTo("")
 
             advanceUntilIdle()
 
@@ -725,7 +754,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - ToggleTextFormatting toggles text formatting`() = runTest {
-        val presenter = createPresenter(this)
+        val presenter = createPresenter(this, isRichTextEditorEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -735,11 +764,12 @@ class MessageComposerPresenterTest {
             val composerOptions = awaitItem()
             assertThat(composerOptions.showAttachmentSourcePicker).isTrue()
             composerOptions.eventSink(MessageComposerEvents.ToggleTextFormatting(true))
-            awaitItem() // composer options closed
+            skipItems(2) // composer options closed
             val showTextFormatting = awaitItem()
             assertThat(showTextFormatting.showAttachmentSourcePicker).isFalse()
             assertThat(showTextFormatting.showTextFormatting).isTrue()
             showTextFormatting.eventSink(MessageComposerEvents.ToggleTextFormatting(false))
+            skipItems(1)
             val finished = awaitItem()
             assertThat(finished.showTextFormatting).isFalse()
         }
@@ -781,19 +811,19 @@ class MessageComposerPresenterTest {
             // An empty suggestion returns the room and joined members that are not the current user
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
             assertThat(awaitItem().memberSuggestions)
-                .containsExactly(MentionSuggestion.Room, MentionSuggestion.Member(bob), MentionSuggestion.Member(david))
+                .containsExactly(ResolvedMentionSuggestion.AtRoom, ResolvedMentionSuggestion.Member(bob), ResolvedMentionSuggestion.Member(david))
 
             // A suggestion containing a part of "room" will also return the room mention
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "roo")))
-            assertThat(awaitItem().memberSuggestions).containsExactly(MentionSuggestion.Room)
+            assertThat(awaitItem().memberSuggestions).containsExactly(ResolvedMentionSuggestion.AtRoom)
 
             // A non-empty suggestion will return those joined members whose user id matches it
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "bob")))
-            assertThat(awaitItem().memberSuggestions).containsExactly(MentionSuggestion.Member(bob))
+            assertThat(awaitItem().memberSuggestions).containsExactly(ResolvedMentionSuggestion.Member(bob))
 
             // A non-empty suggestion will return those joined members whose display name matches it
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "dave")))
-            assertThat(awaitItem().memberSuggestions).containsExactly(MentionSuggestion.Member(david))
+            assertThat(awaitItem().memberSuggestions).containsExactly(ResolvedMentionSuggestion.Member(david))
 
             // If the suggestion isn't a mention, no suggestions are returned
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Command, "")))
@@ -803,7 +833,7 @@ class MessageComposerPresenterTest {
             room.givenCanTriggerRoomNotification(Result.success(false))
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
             assertThat(awaitItem().memberSuggestions)
-                .containsExactly(MentionSuggestion.Member(bob), MentionSuggestion.Member(david))
+                .containsExactly(ResolvedMentionSuggestion.Member(bob), ResolvedMentionSuggestion.Member(david))
 
             // If room is a DM, `RoomMemberSuggestion.Room` is not returned
             room.givenCanTriggerRoomNotification(Result.success(true))
@@ -844,7 +874,7 @@ class MessageComposerPresenterTest {
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
             skipItems(1)
             assertThat(awaitItem().memberSuggestions)
-                .containsExactly(MentionSuggestion.Member(bob), MentionSuggestion.Member(david))
+                .containsExactly(ResolvedMentionSuggestion.Member(bob), ResolvedMentionSuggestion.Member(david))
         }
     }
 
@@ -862,10 +892,10 @@ class MessageComposerPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
-            initialState.richTextEditorState.setHtml("Hey @bo")
-            initialState.eventSink(MessageComposerEvents.InsertMention(MentionSuggestion.Member(aRoomMember(userId = A_USER_ID_2))))
+            initialState.textEditorState.setHtml("Hey @bo")
+            initialState.eventSink(MessageComposerEvents.InsertMention(ResolvedMentionSuggestion.Member(aRoomMember(userId = A_USER_ID_2))))
 
-            assertThat(initialState.richTextEditorState.messageHtml)
+            assertThat(initialState.textEditorState.messageHtml())
                 .isEqualTo("Hey <a href='https://matrix.to/#/${A_USER_ID_2.value}'>${A_USER_ID_2.value}</a>")
         }
     }
@@ -892,14 +922,14 @@ class MessageComposerPresenterTest {
 
             // Check intentional mentions on message sent
             val mentionUser1 = listOf(A_USER_ID.value)
-            initialState.richTextEditorState.mentionsState = MentionsState(
+            (initialState.textEditorState as? TextEditorState.Rich)?.richTextEditorState?.mentionsState = MentionsState(
                 userIds = mentionUser1,
                 roomIds = emptyList(),
                 roomAliases = emptyList(),
                 hasAtRoomMention = false
             )
-            initialState.richTextEditorState.setHtml(A_MESSAGE)
-            initialState.eventSink(MessageComposerEvents.SendMessage(A_MESSAGE.toMessage()))
+            initialState.textEditorState.setHtml(A_MESSAGE)
+            initialState.eventSink(MessageComposerEvents.SendMessage)
 
             advanceUntilIdle()
 
@@ -908,14 +938,14 @@ class MessageComposerPresenterTest {
             // Check intentional mentions on reply sent
             initialState.eventSink(MessageComposerEvents.SetMode(aReplyMode()))
             val mentionUser2 = listOf(A_USER_ID_2.value)
-            awaitItem().richTextEditorState.mentionsState = MentionsState(
+            (awaitItem().textEditorState as? TextEditorState.Rich)?.richTextEditorState?.mentionsState = MentionsState(
                 userIds = mentionUser2,
                 roomIds = emptyList(),
                 roomAliases = emptyList(),
                 hasAtRoomMention = false
             )
 
-            initialState.eventSink(MessageComposerEvents.SendMessage(A_MESSAGE.toMessage()))
+            initialState.eventSink(MessageComposerEvents.SendMessage)
             advanceUntilIdle()
 
             assert(replyMessageLambda)
@@ -926,14 +956,14 @@ class MessageComposerPresenterTest {
             skipItems(1)
             initialState.eventSink(MessageComposerEvents.SetMode(anEditMode()))
             val mentionUser3 = listOf(A_USER_ID_3.value)
-            awaitItem().richTextEditorState.mentionsState = MentionsState(
+            (awaitItem().textEditorState as? TextEditorState.Rich)?.richTextEditorState?.mentionsState = MentionsState(
                 userIds = mentionUser3,
                 roomIds = emptyList(),
                 roomAliases = emptyList(),
                 hasAtRoomMention = false
             )
 
-            initialState.eventSink(MessageComposerEvents.SendMessage(A_MESSAGE.toMessage()))
+            initialState.eventSink(MessageComposerEvents.SendMessage)
             advanceUntilIdle()
 
             assert(editMessageLambda)
@@ -949,7 +979,7 @@ class MessageComposerPresenterTest {
         val presenter = createPresenter(this)
         moleculeFlow(RecompositionMode.Immediate) {
             val state = presenter.present()
-            remember(state, state.richTextEditorState.messageHtml) { state }
+            remember(state, state.textEditorState.messageHtml()) { state }
         }.test {
             val initialState = awaitFirstItem()
             initialState.eventSink.invoke(MessageComposerEvents.SendUri(Uri.parse("content://uri")))
@@ -1007,7 +1037,8 @@ class MessageComposerPresenterTest {
         mediaPreProcessor: MediaPreProcessor = this.mediaPreProcessor,
         snackbarDispatcher: SnackbarDispatcher = this.snackbarDispatcher,
         permissionPresenter: PermissionsPresenter = FakePermissionsPresenter(),
-        permalinkBuilder: PermalinkBuilder = FakePermalinkBuilder()
+        permalinkBuilder: PermalinkBuilder = FakePermalinkBuilder(),
+        isRichTextEditorEnabled: Boolean = true,
     ) = MessageComposerPresenter(
         coroutineScope,
         room,
@@ -1025,7 +1056,10 @@ class MessageComposerPresenterTest {
         permalinkParser = FakePermalinkParser(),
         permalinkBuilder = permalinkBuilder,
         timelineController = TimelineController(room),
-    )
+    ).apply {
+        isTesting = true
+        showTextFormatting = isRichTextEditorEnabled
+    }
 
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
         // Skip 2 item if Mentions feature is enabled, else 1
@@ -1043,7 +1077,10 @@ fun anEditMode(
 fun aReplyMode() = MessageComposerMode.Reply(A_USER_NAME, null, false, AN_EVENT_ID, A_MESSAGE)
 fun aQuoteMode() = MessageComposerMode.Quote(AN_EVENT_ID, A_MESSAGE)
 
-private fun String.toMessage() = Message(
-    html = this,
-    markdown = this,
-)
+private suspend fun TextEditorState.setHtml(html: String) {
+    (this as? TextEditorState.Rich)?.richTextEditorState?.setHtml(html) ?: error("TextEditorState is not Rich")
+}
+
+private fun TextEditorState.setMarkdown(markdown: String) {
+    (this as? TextEditorState.Markdown)?.state?.text?.update(markdown, needsDisplaying = false) ?: error("TextEditorState is not Markdown")
+}
