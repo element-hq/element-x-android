@@ -72,10 +72,10 @@ class EmojiPickerStatePresenter @Inject constructor(
 }
 
 fun searchEmojis(searchQuery: String, allEmojis: List<Emoji>): SearchBarResultState<List<Emoji>> {
-    if (searchQuery == "")
+    val query = searchQuery.trim()
+    if (query == "")
         return SearchBarResultState.Initial()
 
-    val query = searchQuery.trim()
     val matches = allEmojis.filter { emoji ->
         emoji.unicode == query
             || emoji.label.contains(query, true)

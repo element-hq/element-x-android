@@ -73,7 +73,7 @@ class CustomReactionPresenter @Inject constructor(
         return CustomReactionState(
             target = target.value,
             selectedEmoji = selectedEmoji,
-            eventSink = { handleEvents(it) },
+            eventSink = ::handleEvents,
             searchState = searchState,
         )
     }

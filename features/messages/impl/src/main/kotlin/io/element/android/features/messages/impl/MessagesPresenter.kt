@@ -196,7 +196,7 @@ class MessagesPresenter @AssistedInject constructor(
                     )
                 }
                 is MessagesEvents.ToggleReaction -> {
-                    localCoroutineScope.toggleReaction(event.emoji, event.eventId)
+                    localCoroutineScope.toggleReaction(event.reaction, event.eventId)
                 }
                 is MessagesEvents.InviteDialogDismissed -> {
                     hasDismissedInviteDialog = true

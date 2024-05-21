@@ -24,6 +24,7 @@ import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -45,6 +46,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -62,16 +64,20 @@ import io.element.android.emojibasebindings.EmojibaseCategory
 import io.element.android.emojibasebindings.EmojibaseDatasource
 import io.element.android.emojibasebindings.EmojibaseStore
 import io.element.android.emojibasebindings.allEmojis
+import io.element.android.features.messages.impl.timeline.components.MessagesReactionButton
+import io.element.android.features.messages.impl.timeline.components.MessagesReactionsButtonContent
+import io.element.android.features.messages.impl.timeline.model.MAX_REACTION_LENGTH_CHARS
+import io.element.android.libraries.core.extensions.ellipsize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toSp
 import io.element.android.libraries.designsystem.theme.components.ElementSearchBarDefaults
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.coroutines.launch
@@ -80,6 +86,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun EmojiPicker(
     onEmojiSelected: (Emoji) -> Unit,
+    onReactionSelected: (String) -> Unit,
     emojibaseStore: EmojibaseStore,
     selectedEmojis: ImmutableSet<String>,
     state: EmojiPickerState,
@@ -111,54 +118,56 @@ fun EmojiPicker(
                     }
                 }
         ) {
-            if (state.searchQuery.isEmpty()) {
-                SecondaryTabRow(
-                    selectedTabIndex = pagerState.currentPage,
-                ) {
-                    EmojibaseCategory.entries.forEachIndexed { index, category ->
-                        Tab(icon = {
-                            Icon(
-                                imageVector = category.icon, contentDescription = stringResource(id = category.title)
-                            )
-                        }, selected = pagerState.currentPage == index, onClick = {
-                            coroutineScope.launch { pagerState.animateScrollToPage(index) }
-                        })
+            when (state.searchResults) {
+                is SearchBarResultState.Initial -> {
+                    SecondaryTabRow(
+                        selectedTabIndex = pagerState.currentPage,
+                    ) {
+                        EmojibaseCategory.entries.forEachIndexed { index, category ->
+                            Tab(icon = {
+                                Icon(
+                                    imageVector = category.icon, contentDescription = stringResource(id = category.title)
+                                )
+                            }, selected = pagerState.currentPage == index, onClick = {
+                                coroutineScope.launch { pagerState.animateScrollToPage(index) }
+                            })
+                        }
+                    }
+
+                    HorizontalPager(
+                        state = pagerState,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) { index ->
+                        val category = EmojibaseCategory.entries[index]
+                        val emojis = categories[category] ?: listOf()
+                        EmojiGrid(emojis = emojis, selectedEmojis = selectedEmojis, onEmojiSelected = onEmojiSelected)
                     }
                 }
-
-                HorizontalPager(
-                    state = pagerState,
-                    modifier = Modifier.fillMaxWidth(),
-                ) { index ->
-                    val category = EmojibaseCategory.entries[index]
-                    val emojis = categories[category] ?: listOf()
-                    EmojiGrid(emojis = emojis, selectedEmojis = selectedEmojis, onEmojiSelected = onEmojiSelected)
+                is SearchBarResultState.Results -> {
+                    FreeformReaction(
+                        searchQuery = state.searchQuery,
+                        onReactionSelected = onReactionSelected
+                    )
+                    EmojiGrid(
+                        emojis = state.searchResults.results,
+                        selectedEmojis = selectedEmojis,
+                        onEmojiSelected = onEmojiSelected,
+                    )
                 }
-            } else {
-                when (state.searchResults) {
-                    is SearchBarResultState.Results<ImmutableList<Emoji>> -> {
-                        EmojiGrid(
-                            emojis = state.searchResults.results,
-                            selectedEmojis = selectedEmojis,
-                            onEmojiSelected = onEmojiSelected,
-                        )
-                    }
+                is SearchBarResultState.NoResultsFound -> {
+                    FreeformReaction(
+                        searchQuery = state.searchQuery,
+                        onReactionSelected = onReactionSelected
+                    )
+                    // No results found, show a message
+                    Spacer(Modifier.size(80.dp))
 
-                    is SearchBarResultState.NoResultsFound<ImmutableList<Emoji>> -> {
-                        // No results found, show a message
-                        Spacer(Modifier.size(80.dp))
-
-                        Text(
-                            text = stringResource(CommonStrings.common_no_results),
-                            textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.tertiary,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-
-                    else -> {
-                        // Not searching - nothing to show.
-                    }
+                    Text(
+                        text = stringResource(CommonStrings.common_no_results),
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.tertiary,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
         }
@@ -224,9 +233,9 @@ private fun EmojiPickerSearchBar(
         trailingIcon = when {
             query.isNotEmpty() -> {
                 {
-                    IconButton(onClick = {
-                        onQueryChange("")
-                    }) {
+                    IconButton(
+                        onClick = { onQueryChange("") },
+                    ) {
                         Icon(
                             imageVector = CompoundIcons.Close(),
                             contentDescription = stringResource(CommonStrings.action_clear),
@@ -267,11 +276,41 @@ private fun EmojiPickerSearchBar(
     }
 }
 
+@Composable
+private fun FreeformReaction(
+    searchQuery: String,
+    onReactionSelected: (String) -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        val reaction = searchQuery.trim()
+
+        Text(text = "Tap to react with  ")
+        MessagesReactionButton(
+            content = MessagesReactionsButtonContent.Text(
+                text = reaction.ellipsize(MAX_REACTION_LENGTH_CHARS),
+                highlight = true,
+            ),
+            onClick = { onReactionSelected(reaction) },
+            onLongClick = {},
+        )
+    }
+    HorizontalDivider(
+        modifier = Modifier
+            .padding(top = 12.dp, bottom = 4.dp)
+            .fillMaxWidth()
+    )
+}
+
 @PreviewsDayNight
 @Composable
 internal fun EmojiPickerPreview() = ElementPreview {
     EmojiPicker(
         onEmojiSelected = {},
+        onReactionSelected = {},
         emojibaseStore = EmojibaseDatasource().load(LocalContext.current),
         selectedEmojis = persistentSetOf("😀", "😄", "😃"),
         state = EmojiPickerState(
@@ -291,6 +330,7 @@ internal fun EmojiPickerSearchPreview() = ElementPreview {
     val query = "grin"
     EmojiPicker(
         onEmojiSelected = {},
+        onReactionSelected = {},
         emojibaseStore = emojibaseStore,
         selectedEmojis = persistentSetOf("😀", "😄", "😃"),
         state = EmojiPickerState(
@@ -307,9 +347,11 @@ internal fun EmojiPickerSearchPreview() = ElementPreview {
 @Composable
 internal fun EmojiPickerSearchNoMatchPreview() = ElementPreview {
     val emojibaseStore = EmojibaseDatasource().load(LocalContext.current)
-    val query = "this is a very long string that won't match anything"
+    // padded with whitespace to test that it's trimmed
+    val query = "   this is a very long string that won't match anything   "
     EmojiPicker(
         onEmojiSelected = {},
+        onReactionSelected = {},
         emojibaseStore = emojibaseStore,
         selectedEmojis = persistentSetOf("😀", "😄", "😃"),
         state = EmojiPickerState(

@@ -111,12 +111,16 @@ fun MessagesReactionButton(
 
 @Immutable
 sealed interface MessagesReactionsButtonContent {
-    data class Text(val text: String) : MessagesReactionsButtonContent
+    data class Text(val text: String, val highlight: Boolean = false) : MessagesReactionsButtonContent
     data class Icon(@DrawableRes val resourceId: Int) : MessagesReactionsButtonContent
 
     data class Reaction(val reaction: AggregatedReaction) : MessagesReactionsButtonContent
 
-    val isHighlighted get() = this is Reaction && reaction.isHighlighted
+    val isHighlighted get() = when(this) {
+        is Reaction -> reaction.isHighlighted
+        is Text -> highlight
+        else -> false
+    }
 }
 
 internal val REACTION_EMOJI_LINE_HEIGHT = 20.sp
