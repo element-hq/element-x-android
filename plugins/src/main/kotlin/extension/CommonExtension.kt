@@ -60,7 +60,7 @@ fun CommonExtension<*, *, *, *, *, *>.composeConfig(libs: LibrariesForLibs) {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composecompiler.get()
+        kotlinCompilerExtensionVersion = libs.versions.kotlin.get()
     }
 
     packaging {

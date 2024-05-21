@@ -97,9 +97,8 @@ allprojects {
         // This is disabled by default, but the CI will enforce this.
         // You can override by passing `-PallWarningsAsErrors=true` in the command line
         // Or add a line with "allWarningsAsErrors=true" in your ~/.gradle/gradle.properties file
-        kotlinOptions.allWarningsAsErrors = project.properties["allWarningsAsErrors"] == "true"
-
-        kotlinOptions {
+        compilerOptions {
+            allWarningsAsErrors = project.properties["allWarningsAsErrors"] == "true"
             /*
             // Uncomment to suppress Compose Kotlin compiler compatibility warning
             freeCompilerArgs += listOf(
@@ -221,19 +220,23 @@ subprojects {
 
 subprojects {
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-        kotlinOptions {
+        compilerOptions {
             if (project.findProperty("composeCompilerReports") == "true") {
-                freeCompilerArgs += listOf(
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
-                        "${project.layout.buildDirectory.asFile.get().absolutePath}/compose_compiler"
+                freeCompilerArgs.appendAll(
+                    listOf(
+                        "-P",
+                        "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+                            "${project.layout.buildDirectory.asFile.get().absolutePath}/compose_compiler"
+                    )
                 )
             }
             if (project.findProperty("composeCompilerMetrics") == "true") {
-                freeCompilerArgs += listOf(
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
-                        "${project.layout.buildDirectory.asFile.get().absolutePath}/compose_compiler"
+                freeCompilerArgs.appendAll(
+                    listOf(
+                        "-P",
+                        "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
+                            "${project.layout.buildDirectory.asFile.get().absolutePath}/compose_compiler"
+                    )
                 )
             }
         }

@@ -4,8 +4,8 @@
 [versions]
 # Project
 android_gradle_plugin = "8.4.0"
-kotlin = "1.9.24"
-ksp = "1.9.24-1.0.20"
+kotlin = "2.0.0"
+ksp = "2.0.0-RC3-1.0.20"
 firebaseAppDistribution = "5.0.0"
 
 # AndroidX
@@ -24,7 +24,6 @@ media3 = "1.3.1"
 
 # Compose
 compose_bom = "2024.05.00"
-composecompiler = "1.5.14"
 
 # Coroutines
 coroutines = "1.8.1"
@@ -62,6 +61,7 @@ kover = "0.8.0"
 [libraries]
 # Project
 android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "android_gradle_plugin" }
+compose_compiler_plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 # https://developer.android.com/studio/write/java8-support#library-desugaring-versions
 android_desugar = "com.android.tools:desugar_jdk_libs:2.0.4"
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -203,7 +203,7 @@ google_autoservice_annotations = { module = "com.google.auto.service:auto-servic
 # Add unused dependency to androidx.compose.compiler:compiler to let Renovate create PR to change the
 # value of `composecompiler` (which is used to set composeOptions.kotlinCompilerExtensionVersion.
 # See https://github.com/renovatebot/renovate/issues/18354
-android_composeCompiler = { module = "androidx.compose.compiler:compiler", version.ref = "composecompiler" }
+#android_composeCompiler = { module = "androidx.compose.compiler:compiler", version.ref = "composecompiler" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
@@ -214,6 +214,7 @@ appcompat = "androidx.appcompat:appcompat:1.6.1"
 [plugins]
 android_application = { id = "com.android.application", version.ref = "android_gradle_plugin" }
 android_library = { id = "com.android.library", version.ref = "android_gradle_plugin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin_android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin_jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
