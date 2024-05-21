@@ -218,27 +218,115 @@ fi
 
 printf "\n================================================================================\n"
 printf "Wait for the GitHub action https://github.com/element-hq/element-x-android/actions/workflows/release.yml?query=branch%%3Amain to build the 'main' branch.\n"
-read -p "After GHA is finished, please enter the artifact URL (for 'elementx-app-gplay-bundle-unsigned'): " artifactUrl
+read -p "Please enter the artifact URL for Gplay app bundle (for 'elementx-app-gplay-bundle-unsigned'): " artifactGplayUrl
+read -p "Please enter the artifact URL for FDroid APKs (for 'elementx-app-fdroid-apks-unsigned'): " artifactFdroidUrl
+
+targetPath="./tmp/Element/${version}"
 
 printf "\n================================================================================\n"
-printf "Downloading the artifact...\n"
+printf "Downloading the FDroid artifact...\n"
 
- # Download files
-targetPath="./tmp/Element/${version}"
+fdroidTargetPath="${targetPath}/fdroid"
 
 python3 ./tools/github/download_github_artifacts.py \
      --token ${gitHubToken} \
-     --artifactUrl ${artifactUrl} \
-     --directory ${targetPath} \
+     --artifactUrl ${artifactFdroidUrl} \
+     --directory ${fdroidTargetPath} \
      --ignoreErrors
 
 printf "\n================================================================================\n"
 printf "Unzipping the artifact...\n"
 
-unzip ${targetPath}/elementx-app-gplay-bundle-unsigned.zip -d ${targetPath}
+unzip ${fdroidTargetPath}/elementx-app-fdroid-apks-unsigned.zip -d ${fdroidTargetPath}
 
-unsignedBundlePath="${targetPath}/app-gplay-release.aab"
-signedBundlePath="${targetPath}/app-gplay-release-signed.aab"
+# Flatten folder hierarchy
+mv ${fdroidTargetPath}/fdroid/release/* ${fdroidTargetPath}
+rm -rf ${fdroidTargetPath}/fdroid
+
+printf "\n================================================================================\n"
+printf "Signing the FDroid APKs...\n"
+app-fdroid-arm64-v8a-release
+cp ${fdroidTargetPath}/app-fdroid-arm64-v8a-release-unsigned.apk \
+   ${fdroidTargetPath}/app-fdroid-arm64-v8a-release-signed.apk
+${buildToolsPath}/apksigner sign \
+       -v \
+       --ks ${keyStorePath} \
+       --ks-pass pass:${keyStorePassword} \
+       --ks-key-alias elementx \
+       --key-pass pass:${keyPassword} \
+       --min-sdk-version ${minSdkVersion} \
+       ${fdroidTargetPath}/app-fdroid-arm64-v8a-release-signed.apk
+
+cp ${fdroidTargetPath}/app-fdroid-armeabi-v7a-release-unsigned.apk \
+   ${fdroidTargetPath}/app-fdroid-armeabi-v7a-release-signed.apk
+${buildToolsPath}/apksigner sign \
+       -v \
+       --ks ${keyStorePath} \
+       --ks-pass pass:${keyStorePassword} \
+       --ks-key-alias elementx \
+       --key-pass pass:${keyPassword} \
+       --min-sdk-version ${minSdkVersion} \
+       ${fdroidTargetPath}/app-fdroid-armeabi-v7a-release-signed.apk
+
+cp ${fdroidTargetPath}/app-fdroid-x86-release-unsigned.apk \
+   ${fdroidTargetPath}/app-fdroid-x86-release-signed.apk
+${buildToolsPath}/apksigner sign \
+       -v \
+       --ks ${keyStorePath} \
+       --ks-pass pass:${keyStorePassword} \
+       --ks-key-alias elementx \
+       --key-pass pass:${keyPassword} \
+       --min-sdk-version ${minSdkVersion} \
+       ${fdroidTargetPath}/app-fdroid-x86-release-signed.apk
+
+cp ${fdroidTargetPath}/app-fdroid-x86_64-release-unsigned.apk \
+   ${fdroidTargetPath}/app-fdroid-x86_64-release-signed.apk
+${buildToolsPath}/apksigner sign \
+       -v \
+       --ks ${keyStorePath} \
+       --ks-pass pass:${keyStorePassword} \
+       --ks-key-alias elementx \
+       --key-pass pass:${keyPassword} \
+       --min-sdk-version ${minSdkVersion} \
+       ${fdroidTargetPath}/app-fdroid-x86_64-release-signed.apk
+
+printf "\n================================================================================\n"
+printf "Please check the information below:\n"
+
+printf "File app-fdroid-arm64-v8a-release-signed.apk:\n"
+${buildToolsPath}/aapt dump badging ${fdroidTargetPath}/app-fdroid-arm64-v8a-release-signed.apk | grep package
+printf "File app-fdroid-armeabi-v7a-release-signed.apk:\n"
+${buildToolsPath}/aapt dump badging ${fdroidTargetPath}/app-fdroid-armeabi-v7a-release-signed.apk | grep package
+printf "File app-fdroid-x86-release-signed.apk:\n"
+${buildToolsPath}/aapt dump badging ${fdroidTargetPath}/app-fdroid-x86-release-signed.apk | grep package
+printf "File app-fdroid-x86_64-release-signed.apk:\n"
+${buildToolsPath}/aapt dump badging ${fdroidTargetPath}/app-fdroid-x86_64-release-signed.apk | grep package
+
+printf "\n"
+read -p "Does it look correct? Press enter when it's done."
+
+printf "\n================================================================================\n"
+printf "The APKs in ${fdroidTargetPath} have been signed!\n"
+
+printf "\n================================================================================\n"
+printf "Downloading the Gplay artifact...\n"
+
+ # Download files
+gplayTargetPath="${targetPath}/gplay"
+
+python3 ./tools/github/download_github_artifacts.py \
+     --token ${gitHubToken} \
+     --artifactUrl ${artifactGplayUrl} \
+     --directory ${gplayTargetPath} \
+     --ignoreErrors
+
+printf "\n================================================================================\n"
+printf "Unzipping the artifact...\n"
+
+unzip ${gplayTargetPath}/elementx-app-gplay-bundle-unsigned.zip -d ${gplayTargetPath}
+
+unsignedBundlePath="${gplayTargetPath}/app-gplay-release.aab"
+signedBundlePath="${gplayTargetPath}/app-gplay-release-signed.aab"
 
 printf "\n================================================================================\n"
 printf "Signing file ${unsignedBundlePath} with build-tools version ${buildToolsVersion} for min SDK version ${minSdkVersion}...\n"
@@ -274,7 +362,7 @@ doBuildApks=${doBuildApks:-yes}
 
 if [ ${doBuildApks} == "yes" ]; then
   printf "Building apks...\n"
-  bundletool build-apks --bundle=${signedBundlePath} --output=${targetPath}/elementx.apks \
+  bundletool build-apks --bundle=${signedBundlePath} --output=${gplayTargetPath}/elementx.apks \
       --ks=./app/signature/debug.keystore --ks-pass=pass:android --ks-key-alias=androiddebugkey --key-pass=pass:android \
       --overwrite
 
@@ -282,7 +370,7 @@ if [ ${doBuildApks} == "yes" ]; then
   doDeploy=${doDeploy:-yes}
   if [ ${doDeploy} == "yes" ]; then
     printf "Installing apk for your device...\n"
-    bundletool install-apks --apks=${targetPath}/elementx.apks
+    bundletool install-apks --apks=${gplayTargetPath}/elementx.apks
     read -p "Please run the application on your phone to check that the upgrade went well. Press enter to continue. "
   else
     printf "APK will not be deployed!\n"
@@ -313,6 +401,7 @@ printf " - copy paste the section of the file CHANGES.md for this release (if no
 printf " - click on the 'Generate releases notes' button\n"
 printf " - Add the file ${signedBundlePath} to the GitHub release.\n"
 printf " - Add the universal APK, downloaded from the GooglePlay console to the GitHub release.\n"
+printf " - Add the 4 signed APKs for F-Droid, located at ${fdroidTargetPath} to the GitHub release.\n"
 read -p ". Press enter to continue. "
 
 printf "\n================================================================================\n"
