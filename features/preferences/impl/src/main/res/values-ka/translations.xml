@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"აირჩიეთ, თუ როგორ გსურთ შეტყობინებების მიღება"</string>
+  <string name="screen_advanced_settings_developer_mode">"დეველოპერის რეჟიმი"</string>
+  <string name="screen_advanced_settings_developer_mode_description">"ჩართეთ დეველოპერების ფუნქციებზე წვდომა."</string>
+  <string name="screen_advanced_settings_element_call_base_url">"მორგებული Element-ის ზარის საბაზისო URL"</string>
+  <string name="screen_advanced_settings_element_call_base_url_description">"დააყენეთ საბაზისო URL Element-ის ზარებისათვის."</string>
+  <string name="screen_advanced_settings_element_call_base_url_validation_error">"არასწორი URL, გთხოვთ, დარწმუნდეთ, რომ შეიტანეთ პროტოკოლი (http/https) და სწორი მისამართი."</string>
+  <string name="screen_advanced_settings_rich_text_editor_description">"გამორთეთ მდიდარი ტექსტის რედაქტორი, რათა ხელით აკრიფოთ Markdown."</string>
+  <string name="screen_blocked_users_unblock_alert_action">"განბლოკვა"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"თქვენ კვლავ შეძლებთ მათგან ყველა შეტყობინების ნახვას."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Მომხმარებლის განბლოკვა"</string>
+  <string name="screen_edit_profile_display_name">"ნაჩვენები სახელი"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"თქვენი ნაჩვენები სახელი"</string>
+  <string name="screen_edit_profile_error">"დაფიქსირდა უცნობი შეცდომა და ინფორმაციის შეცვლა ვერ მოხერხდა."</string>
+  <string name="screen_edit_profile_error_title">"პროფილის განახლება ვერ მოხერხდა"</string>
+  <string name="screen_edit_profile_title">"Პროფილის რედაქტირება"</string>
+  <string name="screen_edit_profile_updating_details">"პროფილის განახლება…"</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"დამატებითი პარამეტრები"</string>
+  <string name="screen_notification_settings_calls_label">"აუდიო და ვიდეო ზარები"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"კონფიგურაციის შეუსაბამობა"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"ჩვენ გავამარტივეთ შეტყობინებების პარამეტრები, რათა გაგიადვილოთ ვარიანტების პოვნა. 
+
+თქვენ მიერ წარსულში არჩეული ზოგიერთი მორგებული პარამეტრი აქ არ არის ნაჩვენები, მაგრამ ისინი კვლავ აქტიურია. თუ გააგრძელებთ, თქვენი ზოგიერთი პარამეტრი შეიძლება შეიცვალოს."</string>
+  <string name="screen_notification_settings_direct_chats">"პირდაპირი ჩატები"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"მორგებული პარამეტრი ჩატზე"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"შეტყობინებების პარამეტრის განახლებისას მოხდა შეცდომა."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"ყველა შეტყობინება"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"მხოლოდ ხსენებები და საკვანძო სიტყვები"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"პირდაპირ ჩატებზე, შემატყობინეთ:"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"ჯგუფურ ჩატებზე, შემატყობინეთ:"</string>
+  <string name="screen_notification_settings_enable_notifications">"შეტყობინებების ჩართვა ამ მოწყობილობაზე"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"კონფიგურაცია არ გამოსწორებულა, გთხოვთ, კვლავ სცადოთ."</string>
+  <string name="screen_notification_settings_group_chats">"ჯგუფური ჩატები"</string>
+  <string name="screen_notification_settings_mentions_section_title">"ხსენებები"</string>
+  <string name="screen_notification_settings_mode_all">"ყველა"</string>
+  <string name="screen_notification_settings_mode_mentions">"ხსენებები"</string>
+  <string name="screen_notification_settings_notification_section_title">"ჩემი შეტყობინება შემდეგისთვის:"</string>
+  <string name="screen_notification_settings_room_mention_label">"ჩემი შეტყობინება @room-ზე"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"შეტყობინებების მისაღებად გთხოვთ შეცვალოთ %1$s."</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"სისტემის პარამეტრები"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"სისტემის შეტყობინებები გამორთულია"</string>
+  <string name="screen_notification_settings_title">"შეტყობინებები"</string>
+</resources>

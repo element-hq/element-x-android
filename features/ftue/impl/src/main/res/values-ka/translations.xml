@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_notification_optin_subtitle">"თქვენ შეგიძლიათ შეცვალოთ თქვენი პარამეტრები მოგვიანებით."</string>
+  <string name="screen_notification_optin_title">"ყველა შეტყობინებაზე შეტყობინებების მიღება"</string>
+  <string name="screen_welcome_bullet_1">"ზარები, გამოკითხვები, ძიება და სხვა დაემატება ამ წლის ბოლოს."</string>
+  <string name="screen_welcome_bullet_2">"დაშიფრული ოთახებისთვის შეტყობინებების ისტორია ჯერ არ არის ხელმისაწვდომი."</string>
+  <string name="screen_welcome_bullet_3">"ჩვენ სიამოვნებით მოვისმინოთ თქვენგან, შეგვატყობინეთ რას ფიქრობთ პარამეტრების გვერდზე."</string>
+  <string name="screen_welcome_button">"დავიწყოთ!"</string>
+  <string name="screen_welcome_subtitle">"აი, რა უნდა იცოდეთ:"</string>
+  <string name="screen_welcome_title">"კეთილი იყოს თქვენი მობრძანება %1$s-ში!"</string>
+</resources>

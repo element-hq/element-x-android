@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"ვარიანტის დამატება"</string>
+  <string name="screen_create_poll_anonymous_desc">"შედეგების ჩვენება მხოლოდ გამოკითხვის დასრულების შემდეგ"</string>
+  <string name="screen_create_poll_anonymous_headline">"ხმების დამალვა"</string>
+  <string name="screen_create_poll_answer_hint">"ვარიანტი %1$d"</string>
+  <string name="screen_create_poll_question_desc">"კითხვა ან თემა"</string>
+  <string name="screen_create_poll_question_hint">"რას ეხება გამოკითხვა?"</string>
+  <string name="screen_create_poll_title">"გამოკითხვის შექმნა"</string>
+  <string name="screen_edit_poll_title">"გამოკითხვის რედაქტირება"</string>
+</resources>

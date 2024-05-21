@@ -46,7 +46,6 @@
     <item quantity="one">"%d salon"</item>
     <item quantity="other">"%d salons"</item>
   </plurals>
-  <string name="push_choose_distributor_dialog_title_android">"Choisissez le mode de réception des notifications"</string>
   <string name="push_distributor_background_sync_android">"Synchronisation en arrière-plan"</string>
   <string name="push_distributor_firebase_android">"Services Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Aucun service Google Play valide n’a été trouvé. Les notifications peuvent ne pas fonctionner correctement."</string>
