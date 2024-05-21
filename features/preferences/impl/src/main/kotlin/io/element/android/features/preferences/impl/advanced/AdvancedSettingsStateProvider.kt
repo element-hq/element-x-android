@@ -41,6 +41,7 @@ fun aAdvancedSettingsState(
     currentPushDistributor: AsyncAction<String> = AsyncAction.Success("Firebase"),
     availablePushDistributors: List<String> = listOf("Firebase", "ntfy"),
     showChangePushProviderDialog: Boolean = false,
+    eventSink: (AdvancedSettingsEvents) -> Unit = {},
 ) = AdvancedSettingsState(
     isDeveloperModeEnabled = isDeveloperModeEnabled,
     isSharePresenceEnabled = isSendPublicReadReceiptsEnabled,
@@ -49,5 +50,5 @@ fun aAdvancedSettingsState(
     currentPushDistributor = currentPushDistributor,
     availablePushDistributors = availablePushDistributors.toImmutableList(),
     showChangePushProviderDialog = showChangePushProviderDialog,
-    eventSink = {}
+    eventSink = eventSink
 )
