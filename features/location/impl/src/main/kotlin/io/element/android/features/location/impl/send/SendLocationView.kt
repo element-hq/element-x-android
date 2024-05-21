@@ -37,7 +37,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.mapbox.mapboxsdk.camera.CameraPosition
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.location.api.Location
@@ -61,9 +60,10 @@ import io.element.android.libraries.designsystem.theme.components.bottomsheet.re
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.maplibre.compose.CameraMode
 import io.element.android.libraries.maplibre.compose.CameraMoveStartedReason
-import io.element.android.libraries.maplibre.compose.MapboxMap
+import io.element.android.libraries.maplibre.compose.MapLibreMap
 import io.element.android.libraries.maplibre.compose.rememberCameraPositionState
 import io.element.android.libraries.ui.strings.CommonStrings
+import org.maplibre.android.camera.CameraPosition
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -189,7 +189,7 @@ fun SendLocationView(
                 .consumeWindowInsets(it),
             contentAlignment = Alignment.Center
         ) {
-            MapboxMap(
+            MapLibreMap(
                 styleUri = rememberTileStyleUrl(),
                 modifier = Modifier.fillMaxSize(),
                 cameraPositionState = cameraPositionState,
