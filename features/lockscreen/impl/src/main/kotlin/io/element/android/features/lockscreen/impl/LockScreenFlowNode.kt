@@ -30,7 +30,6 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.lockscreen.impl.settings.LockScreenSettingsFlowNode
 import io.element.android.features.lockscreen.impl.setup.LockScreenSetupFlowNode
-import io.element.android.features.lockscreen.impl.unlock.PinUnlockNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
@@ -44,20 +43,17 @@ class LockScreenFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
 ) : BaseFlowNode<LockScreenFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = plugins.filterIsInstance(Inputs::class.java).first().initialNavTarget,
+        initialElement = plugins.filterIsInstance<Inputs>().first().initialNavTarget,
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
     plugins = plugins,
 ) {
     data class Inputs(
-        val initialNavTarget: NavTarget = NavTarget.Unlock,
+        val initialNavTarget: NavTarget,
     ) : NodeInputs
 
     sealed interface NavTarget : Parcelable {
-        @Parcelize
-        data object Unlock : NavTarget
-
         @Parcelize
         data object Setup : NavTarget
 
@@ -75,10 +71,6 @@ class LockScreenFlowNode @AssistedInject constructor(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.Unlock -> {
-                val inputs = PinUnlockNode.Inputs(isInAppUnlock = false)
-                createNode<PinUnlockNode>(buildContext, plugins = listOf(inputs))
-            }
             NavTarget.Setup -> {
                 val callback = OnSetupDoneCallback(plugins())
                 createNode<LockScreenSetupFlowNode>(buildContext, plugins = listOf(callback))

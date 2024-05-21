@@ -39,13 +39,13 @@ class FakeAuthenticationService : MatrixAuthenticationService {
     private var changeServerError: Throwable? = null
     private var matrixClient: MatrixClient? = null
 
+    var getLatestSessionIdLambda: (() -> SessionId?) = { null }
+
     override fun loggedInStateFlow(): Flow<LoggedInState> {
         return flowOf(LoggedInState.NotLoggedIn)
     }
 
-    override suspend fun getLatestSessionId(): SessionId? {
-        return null
-    }
+    override suspend fun getLatestSessionId(): SessionId? = getLatestSessionIdLambda()
 
     override suspend fun restoreSession(sessionId: SessionId): Result<MatrixClient> {
         return if (matrixClient != null) {
