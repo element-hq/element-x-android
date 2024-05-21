@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"დაამატეთ დანართი"</string>
+  <string name="rich_text_editor_bullet_list">"პუნქტების სიის ჩართვა"</string>
+  <string name="rich_text_editor_close_formatting_options">"ფორმატირების პარამეტრები დახურვა"</string>
+  <string name="rich_text_editor_code_block">"კოდის ბლოკის ჩართვა"</string>
+  <string name="rich_text_editor_composer_placeholder">"შეტყობინება…"</string>
+  <string name="rich_text_editor_create_link">"ბმულის შექმნა"</string>
+  <string name="rich_text_editor_edit_link">"ბმულის რედაქტირება"</string>
+  <string name="rich_text_editor_format_bold">"თამამი შრიფტის გამოყენება"</string>
+  <string name="rich_text_editor_format_italic">"კურსიული შრიფტის გამოყენება"</string>
+  <string name="rich_text_editor_format_strikethrough">"გადახაზული ფორმატის გამოყენება"</string>
+  <string name="rich_text_editor_format_underline">"ხაზგასმული ფორმატის გამოყენება"</string>
+  <string name="rich_text_editor_full_screen_toggle">"სრული ეკრანის რეჟიმის ჩართვა"</string>
+  <string name="rich_text_editor_indent">"აბზაცი"</string>
+  <string name="rich_text_editor_inline_code">"კოდის შიდა ფორმატის გამოყენება"</string>
+  <string name="rich_text_editor_link">"ბმულის დაყენება"</string>
+  <string name="rich_text_editor_numbered_list">"დანომრილი სიის ჩართვა"</string>
+  <string name="rich_text_editor_open_compose_options">"გახსენით შედგენის ვარიანტები"</string>
+  <string name="rich_text_editor_quote">"ციტატის ჩართვა"</string>
+  <string name="rich_text_editor_remove_link">"ბმულის წაშლა"</string>
+  <string name="rich_text_editor_unindent">"აბზაცის გარეშე"</string>
+  <string name="rich_text_editor_url_placeholder">"Ბმული"</string>
+  <string name="screen_room_voice_message_tooltip">"ჩასაწერად დააჭირეთ"</string>
+</resources>

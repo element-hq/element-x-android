@@ -34,7 +34,7 @@ class RoomBeginningPostProcessorTest {
     fun `processor removes room creation event and self-join event from DM timeline`() {
         val timelineItems = listOf(
             MatrixTimelineItem.Event("m.room.create", anEventTimelineItem(sender = A_USER_ID, content = StateContent("", OtherState.RoomCreate))),
-            MatrixTimelineItem.Event("m.room.member", anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, MembershipChange.JOINED))),
+            MatrixTimelineItem.Event("m.room.member", anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, null, MembershipChange.JOINED))),
         )
         val processor = RoomBeginningPostProcessor()
         val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = false)
@@ -44,13 +44,13 @@ class RoomBeginningPostProcessorTest {
     @Test
     fun `processor removes room creation event and self-join event from DM timeline even if they're not the first items`() {
         val timelineItems = listOf(
-            MatrixTimelineItem.Event("m.room.member_other", anEventTimelineItem(content = RoomMembershipContent(A_USER_ID_2, MembershipChange.JOINED))),
+            MatrixTimelineItem.Event("m.room.member_other", anEventTimelineItem(content = RoomMembershipContent(A_USER_ID_2, null, MembershipChange.JOINED))),
             MatrixTimelineItem.Event("m.room.create", anEventTimelineItem(sender = A_USER_ID, content = StateContent("", OtherState.RoomCreate))),
             MatrixTimelineItem.Event("m.room.message", anEventTimelineItem(content = aMessageContent("hi"))),
-            MatrixTimelineItem.Event("m.room.member", anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, MembershipChange.JOINED))),
+            MatrixTimelineItem.Event("m.room.member", anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, null, MembershipChange.JOINED))),
         )
         val expected = listOf(
-            MatrixTimelineItem.Event("m.room.member_other", anEventTimelineItem(content = RoomMembershipContent(A_USER_ID_2, MembershipChange.JOINED))),
+            MatrixTimelineItem.Event("m.room.member_other", anEventTimelineItem(content = RoomMembershipContent(A_USER_ID_2, null, MembershipChange.JOINED))),
             MatrixTimelineItem.Event("m.room.message", anEventTimelineItem(content = aMessageContent("hi"))),
         )
         val processor = RoomBeginningPostProcessor()
@@ -62,7 +62,7 @@ class RoomBeginningPostProcessorTest {
     fun `processor will add beginning of room item if it's not a DM`() {
         val timelineItems = listOf(
             MatrixTimelineItem.Event("m.room.create", anEventTimelineItem(sender = A_USER_ID, content = StateContent("", OtherState.RoomCreate))),
-            MatrixTimelineItem.Event("m.room.member", anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, MembershipChange.JOINED))),
+            MatrixTimelineItem.Event("m.room.member", anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, null, MembershipChange.JOINED))),
         )
         val processor = RoomBeginningPostProcessor()
         val processedItems = processor.process(timelineItems, isDm = false, hasMoreToLoadBackwards = false)
@@ -85,7 +85,7 @@ class RoomBeginningPostProcessorTest {
     fun `processor won't remove items if it's not at the start of the timeline`() {
         val timelineItems = listOf(
             MatrixTimelineItem.Event("m.room.create", anEventTimelineItem(sender = A_USER_ID, content = StateContent("", OtherState.RoomCreate))),
-            MatrixTimelineItem.Event("m.room.member", anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, MembershipChange.JOINED))),
+            MatrixTimelineItem.Event("m.room.member", anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, null, MembershipChange.JOINED))),
         )
         val processor = RoomBeginningPostProcessor()
         val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = true)
@@ -95,7 +95,7 @@ class RoomBeginningPostProcessorTest {
     @Test
     fun `processor won't remove the first member join event if it can't find the room creation event`() {
         val timelineItems = listOf(
-            MatrixTimelineItem.Event("m.room.member", anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, MembershipChange.JOINED))),
+            MatrixTimelineItem.Event("m.room.member", anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, null, MembershipChange.JOINED))),
         )
         val processor = RoomBeginningPostProcessor()
         val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = true)
@@ -106,7 +106,7 @@ class RoomBeginningPostProcessorTest {
     fun `processor won't remove the first member join event if it's not from the room creator`() {
         val timelineItems = listOf(
             MatrixTimelineItem.Event("m.room.create", anEventTimelineItem(sender = A_USER_ID, content = StateContent("", OtherState.RoomCreate))),
-            MatrixTimelineItem.Event("m.room.member", anEventTimelineItem(content = RoomMembershipContent(A_USER_ID_2, MembershipChange.JOINED))),
+            MatrixTimelineItem.Event("m.room.member", anEventTimelineItem(content = RoomMembershipContent(A_USER_ID_2, null, MembershipChange.JOINED))),
         )
         val processor = RoomBeginningPostProcessor()
         val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = true)

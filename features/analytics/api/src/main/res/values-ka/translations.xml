@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_analytics_settings_help_us_improve">"გააზიარეთ ანონიმური გამოყენების მონაცემები, რათა დაგვეხმაროთ პრობლემების იდენტიფიცირებაში."</string>
+  <string name="screen_analytics_settings_read_terms">"შეგიძლიათ, წაიკითხოთ ჩვენი ყველა პირობა %1$s."</string>
+  <string name="screen_analytics_settings_read_terms_content_link">"აქ"</string>
+  <string name="screen_analytics_settings_share_data">"გააზიარეთ ანალიტიკური მონაცემები"</string>
+</resources>

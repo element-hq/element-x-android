@@ -57,7 +57,7 @@ autoservice = "1.1.1"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
-kover = "0.7.6"
+kover = "0.8.0"
 
 [libraries]
 # Project
@@ -75,7 +75,7 @@ autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:depend
 # AndroidX
 androidx_core = { module = "androidx.core:core", version.ref = "core" }
 androidx_corektx = { module = "androidx.core:core-ktx", version.ref = "core" }
-androidx_annotationjvm = "androidx.annotation:annotation-jvm:1.7.1"
+androidx_annotationjvm = "androidx.annotation:annotation-jvm:1.8.0"
 androidx_datastore_preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 androidx_datastore_datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 androidx_exifinterface = "androidx.exifinterface:exifinterface:1.3.7"
@@ -136,7 +136,7 @@ test_arch_core = "androidx.arch.core:core-testing:2.2.0"
 test_junit = "junit:junit:4.13.2"
 test_runner = "androidx.test:runner:1.5.2"
 test_junitext = "androidx.test.ext:junit:1.1.5"
-test_mockk = "io.mockk:mockk:1.13.10"
+test_mockk = "io.mockk:mockk:1.13.11"
 test_konsist = "com.lemonappdev:konsist:0.13.0"
 test_turbine = "app.cash.turbine:turbine:1.1.0"
 test_truth = "com.google.truth:truth:1.4.2"
@@ -157,9 +157,9 @@ showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
 jsoup = "org.jsoup:jsoup:1.17.2"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
-molecule-runtime = "app.cash.molecule:molecule-runtime:1.4.2"
+molecule-runtime = "app.cash.molecule:molecule-runtime:1.4.3"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.18"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.19"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }

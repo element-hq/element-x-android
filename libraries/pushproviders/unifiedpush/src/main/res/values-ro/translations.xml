@@ -4,6 +4,7 @@
   <string name="troubleshoot_notifications_test_unified_push_failure">"Nu au fost găsiți distribuitori push."</string>
   <plurals name="troubleshoot_notifications_test_unified_push_success">
     <item quantity="one">"%1$d distribuitor găsit: %2$s."</item>
+    <item quantity="few">"%1$d distribuitori găsiți: %2$s."</item>
     <item quantity="other">"%1$d distribuitori găsiți: %2$s."</item>
   </plurals>
   <string name="troubleshoot_notifications_test_unified_push_title">"Verificați UnifiedPush"</string>

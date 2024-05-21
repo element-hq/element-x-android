@@ -366,7 +366,7 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewResult = {
+            getRoomPreviewFromRoomIdResult = { _, _ ->
                 Result.success(
                     RoomPreview(
                         roomId = A_ROOM_ID,
@@ -411,7 +411,7 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded with error`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewResult = {
+            getRoomPreviewFromRoomIdResult = { _, _ ->
                 Result.failure(AN_EXCEPTION)
             }
         )
@@ -449,7 +449,7 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded with error 403`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewResult = {
+            getRoomPreviewFromRoomIdResult = { _, _ ->
                 Result.failure(Exception("403"))
             }
         )
