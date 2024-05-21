@@ -62,16 +62,17 @@ class AdvancedSettingsPresenter @Inject constructor(
         var showChangeThemeDialog by remember { mutableStateOf(false) }
 
         // List of PushProvider -> Distributor
-        var distributors by remember { mutableStateOf<List<Pair<PushProvider, Distributor>>>(emptyList()) }
-        var distributorNames by remember { mutableStateOf<List<String>>(emptyList()) }
-        LaunchedEffect(Unit) {
-            distributors = pushService.getAvailablePushProviders()
+        val distributors = remember {
+            pushService.getAvailablePushProviders()
                 .flatMap { pushProvider ->
                     pushProvider.getDistributors().map { distributor ->
                         pushProvider to distributor
                     }
                 }
-            distributorNames = distributors.map { it.second.name }
+        }
+        // List of Distributor names
+        val distributorNames = remember {
+            distributors.map { it.second.name }
         }
 
         var currentDistributorName by remember { mutableStateOf<AsyncAction<String>>(AsyncAction.Uninitialized) }
