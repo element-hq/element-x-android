@@ -19,7 +19,9 @@ package io.element.android.libraries.pushproviders.unifiedpush.troubleshoot
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.pushproviders.api.Distributor
+import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushConfig
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
+import io.element.android.libraries.troubleshoot.api.test.TestFilterData
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
@@ -80,5 +82,16 @@ class UnifiedPushTestTest {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Success)
         }
+    }
+
+    @Test
+    fun `test isRelevant`() = runTest {
+        val sut = UnifiedPushTest(
+            unifiedPushDistributorProvider = FakeUnifiedPushDistributorProvider(),
+            openDistributorWebPageAction = FakeOpenDistributorWebPageAction(),
+            stringProvider = FakeStringProvider(),
+        )
+        assertThat(sut.isRelevant(TestFilterData(currentPushProviderName = UnifiedPushConfig.NAME))).isTrue()
+        assertThat(sut.isRelevant(TestFilterData(currentPushProviderName = "other"))).isFalse()
     }
 }
