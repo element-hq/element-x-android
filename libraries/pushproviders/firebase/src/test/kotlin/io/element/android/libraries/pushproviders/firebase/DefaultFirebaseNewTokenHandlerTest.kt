@@ -82,7 +82,7 @@ class DefaultFirebaseNewTokenHandlerTest {
                         A_USER_ID -> FakeUserPushStore(pushProviderName = FirebaseConfig.NAME)
                         A_USER_ID_2 -> FakeUserPushStore(pushProviderName = "Other")
                         A_USER_ID_3 -> FakeUserPushStore(pushProviderName = FirebaseConfig.NAME)
-                        else -> throw IllegalStateException()
+                        else -> error("Unexpected sessionId: $sessionId")
                     }
                 }
             ),

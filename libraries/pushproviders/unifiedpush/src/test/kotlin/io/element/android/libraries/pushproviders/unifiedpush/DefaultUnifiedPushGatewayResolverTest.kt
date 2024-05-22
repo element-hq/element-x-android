@@ -17,6 +17,7 @@
 package io.element.android.libraries.pushproviders.unifiedpush
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.pushproviders.unifiedpush.network.DiscoveryResponse
 import io.element.android.libraries.pushproviders.unifiedpush.network.DiscoveryUnifiedPush
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -96,7 +97,7 @@ class DefaultUnifiedPushGatewayResolverTest {
     @Test
     fun `when a custom url is not reachable, the default url is returned`() = runTest {
         val unifiedPushApiFactory = FakeUnifiedPushApiFactory(
-            discoveryResponse = { throw Exception() }
+            discoveryResponse = { throw AN_EXCEPTION }
         )
         val sut = createDefaultUnifiedPushGatewayResolver(
             unifiedPushApiFactory = unifiedPushApiFactory
