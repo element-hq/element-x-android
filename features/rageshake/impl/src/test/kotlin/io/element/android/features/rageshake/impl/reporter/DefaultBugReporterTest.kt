@@ -20,16 +20,24 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.rageshake.api.reporter.BugReporterListener
 import io.element.android.features.rageshake.test.crash.FakeCrashDataStore
 import io.element.android.features.rageshake.test.screenshot.FakeScreenshotHolder
+import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.FakeSdkMetadata
 import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.network.useragent.DefaultUserAgentProvider
+import io.element.android.libraries.sessionstorage.api.LoginType
+import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
+import okhttp3.MultipartReader
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import okio.buffer
+import okio.source
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -82,6 +90,90 @@ class DefaultBugReporterTest {
         assertThat(onUploadFailedCalled).isFalse()
         assertThat(progressValues.size).isEqualTo(EXPECTED_NUMBER_OF_PROGRESS_VALUE)
         assertThat(onUploadSucceedCalled).isTrue()
+    }
+
+    @Test
+    fun `test sendBugReport form data`() = runTest {
+        val server = MockWebServer()
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+        )
+        server.start()
+
+        val mockSessionStore = InMemorySessionStore().apply {
+            storeData(
+                SessionData(
+                    userId = "@foo:eample.com",
+                    deviceId = "ABCDEFGH",
+                    homeserverUrl = "example.com",
+                    accessToken = "AA",
+                    isTokenValid = true,
+                    loginType = LoginType.DIRECT,
+                    loginTimestamp = null,
+                    oidcData = null,
+                    refreshToken = null,
+                    slidingSyncProxy = null,
+                    passphrase = null
+                )
+            )
+        }
+
+        val buildMeta = aBuildMeta()
+        val fakeEncryptionService = FakeEncryptionService()
+        val matrixClient = FakeMatrixClient(encryptionService = fakeEncryptionService)
+
+        fakeEncryptionService.givenDeviceKeys("CURVECURVECURVE", "EDKEYEDKEYEDKY")
+        val sut = DefaultBugReporter(
+            context = RuntimeEnvironment.getApplication(),
+            screenshotHolder = FakeScreenshotHolder(),
+            crashDataStore = FakeCrashDataStore(),
+            coroutineDispatchers = testCoroutineDispatchers(),
+            okHttpClient = { OkHttpClient.Builder().build() },
+            userAgentProvider = DefaultUserAgentProvider(buildMeta, FakeSdkMetadata("123456789")),
+            sessionStore = mockSessionStore,
+            buildMeta = buildMeta,
+            bugReporterUrlProvider = { server.url("/") },
+            sdkMetadata = FakeSdkMetadata("123456789"),
+            matrixClientsProvider = FakeMatrixClientProvider(getClient = { Result.success(matrixClient) })
+        )
+
+        sut.sendBugReport(
+            withDevicesLogs = true,
+            withCrashLogs = true,
+            withScreenshot = true,
+            theBugDescription = "a bug occurred",
+            canContact = true,
+            listener = null
+        )
+        val request = server.takeRequest()
+
+        val boundary = request.headers["Content-Type"]!!.split("=").last()
+        val foundValues = HashMap<String, String>()
+        request.body.inputStream().source().buffer().use {
+            val multipartReader = MultipartReader(it, boundary)
+            // Just use simple parsing to detect basic properties
+            val regex = "form-data; name=\"(\\w*)\".*".toRegex()
+            multipartReader.use {
+                while (true) {
+                    val part = multipartReader.nextPart() ?: break
+                    val contentDisposition = part.headers["Content-Disposition"] ?: continue
+                    regex.find(contentDisposition)?.groupValues?.get(1)?.let { name ->
+                        foundValues.put(name, part.body.readUtf8())
+                    }
+                }
+            }
+        }
+
+        assertThat(foundValues["app"]).isEqualTo("element-x-android")
+        assertThat(foundValues["can_contact"]).isEqualTo("true")
+        assertThat(foundValues["device_id"]).isEqualTo("ABCDEFGH")
+        assertThat(foundValues["sdk_sha"]).isEqualTo("123456789")
+        assertThat(foundValues["user_id"]).isEqualTo("@foo:eample.com")
+        assertThat(foundValues["text"]).isEqualTo("a bug occurred")
+        assertThat(foundValues["device_keys"]).isEqualTo("curve25519:CURVECURVECURVE, ed25519:EDKEYEDKEYEDKY")
+
+        server.shutdown()
     }
 
     @Test
@@ -150,6 +242,7 @@ class DefaultBugReporterTest {
             buildMeta = buildMeta,
             bugReporterUrlProvider = { server.url("/") },
             sdkMetadata = FakeSdkMetadata("123456789"),
+            matrixClientsProvider = FakeMatrixClientProvider()
         )
     }
 
