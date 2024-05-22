@@ -20,8 +20,9 @@ import io.element.android.libraries.pushstore.api.UserPushStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class FakeUserPushStore : UserPushStore {
+class FakeUserPushStore(
     private var pushProviderName: String? = null
+) : UserPushStore {
     private var currentRegisteredPushKey: String? = null
     private val notificationEnabledForDevice = MutableStateFlow(true)
     override suspend fun getPushProviderName(): String? {

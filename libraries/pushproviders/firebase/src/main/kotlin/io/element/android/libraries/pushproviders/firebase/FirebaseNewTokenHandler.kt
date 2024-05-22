@@ -60,14 +60,15 @@ class DefaultFirebaseNewTokenHandler @Inject constructor(
                             Timber.tag(loggerTag.value).e(it, "Failed to restore session $sessionId")
                         }
                         .flatMap { client ->
-                            pusherSubscriber.registerPusher(
-                                matrixClient = client,
-                                pushKey = firebaseToken,
-                                gateway = FirebaseConfig.PUSHER_HTTP_URL,
-                            )
-                        }
-                        .onFailure {
-                            Timber.tag(loggerTag.value).e(it, "Failed to register pusher for session $sessionId")
+                            pusherSubscriber
+                                .registerPusher(
+                                    matrixClient = client,
+                                    pushKey = firebaseToken,
+                                    gateway = FirebaseConfig.PUSHER_HTTP_URL,
+                                )
+                                .onFailure {
+                                    Timber.tag(loggerTag.value).e(it, "Failed to register pusher for session $sessionId")
+                                }
                         }
                 } else {
                     Timber.tag(loggerTag.value).d("This session is not using Firebase pusher")

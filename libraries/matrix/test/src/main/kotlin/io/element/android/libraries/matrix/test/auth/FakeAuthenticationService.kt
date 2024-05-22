@@ -31,7 +31,9 @@ import kotlinx.coroutines.flow.flowOf
 
 val A_OIDC_DATA = OidcDetails(url = "a-url")
 
-class FakeAuthenticationService : MatrixAuthenticationService {
+class FakeAuthenticationService(
+    private val matrixClientResult: ((SessionId) -> Result<MatrixClient>)? = null
+) : MatrixAuthenticationService {
     private val homeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
     private var oidcError: Throwable? = null
     private var oidcCancelError: Throwable? = null
@@ -48,6 +50,9 @@ class FakeAuthenticationService : MatrixAuthenticationService {
     override suspend fun getLatestSessionId(): SessionId? = getLatestSessionIdLambda()
 
     override suspend fun restoreSession(sessionId: SessionId): Result<MatrixClient> {
+        if (matrixClientResult != null) {
+            return matrixClientResult.invoke(sessionId)
+        }
         return if (matrixClient != null) {
             Result.success(matrixClient!!)
         } else {
