@@ -20,7 +20,10 @@ import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
 import io.element.android.libraries.matrix.api.pusher.UnsetHttpPusherData
 
-class FakePushersService : PushersService {
-    override suspend fun setHttpPusher(setHttpPusherData: SetHttpPusherData) = Result.success(Unit)
-    override suspend fun unsetHttpPusher(unsetHttpPusherData: UnsetHttpPusherData): Result<Unit> = Result.success(Unit)
+class FakePushersService(
+    private val setHttpPusherResult: (SetHttpPusherData) -> Result<Unit> = { TODO() },
+    private val unsetHttpPusherResult: (UnsetHttpPusherData) -> Result<Unit> = { TODO() },
+) : PushersService {
+    override suspend fun setHttpPusher(setHttpPusherData: SetHttpPusherData) = setHttpPusherResult(setHttpPusherData)
+    override suspend fun unsetHttpPusher(unsetHttpPusherData: UnsetHttpPusherData): Result<Unit> = unsetHttpPusherResult(unsetHttpPusherData)
 }
