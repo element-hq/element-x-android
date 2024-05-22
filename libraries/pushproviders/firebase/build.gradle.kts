@@ -58,8 +58,11 @@ dependencies {
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
+    testImplementation(libs.test.robolectric)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.push.test)
+    testImplementation(projects.libraries.pushstore.test)
+    testImplementation(projects.libraries.sessionStorage.implMemory)
     testImplementation(projects.tests.testutils)
     testImplementation(projects.services.toolbox.test)
 }
