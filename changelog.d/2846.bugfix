@@ -1,1 +1,0 @@
-Fix a crash when trying to create an `EncryptedFile` in Android 6.
