@@ -76,29 +76,19 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
         coroutineScope.launch {
             val gateway = unifiedPushGatewayResolver.getGateway(endpoint)
             unifiedPushStore.storePushGateway(gateway, instance)
-            if (gateway == null) {
-                Timber.tag(loggerTag.value).w("No gateway found for endpoint $endpoint")
-                endpointRegistrationHandler.registrationDone(
-                    RegistrationResult(
-                        clientSecret = instance,
-                        result = Result.failure(IllegalStateException("No gateway found for endpoint $endpoint")),
-                    )
+            val result = newGatewayHandler.handle(endpoint, gateway, instance)
+                .onFailure {
+                    Timber.tag(loggerTag.value).e(it, "Failed to handle new gateway")
+                }
+                .onSuccess {
+                    unifiedPushStore.storeUpEndpoint(endpoint, instance)
+                }
+            endpointRegistrationHandler.registrationDone(
+                RegistrationResult(
+                    clientSecret = instance,
+                    result = result,
                 )
-            } else {
-                val result = newGatewayHandler.handle(endpoint, gateway, instance)
-                    .onFailure {
-                        Timber.tag(loggerTag.value).e(it, "Failed to handle new gateway")
-                    }
-                    .onSuccess {
-                        unifiedPushStore.storeUpEndpoint(endpoint, instance)
-                    }
-                endpointRegistrationHandler.registrationDone(
-                    RegistrationResult(
-                        clientSecret = instance,
-                        result = result,
-                    )
-                )
-            }
+            )
         }
         guardServiceStarter.stop()
     }

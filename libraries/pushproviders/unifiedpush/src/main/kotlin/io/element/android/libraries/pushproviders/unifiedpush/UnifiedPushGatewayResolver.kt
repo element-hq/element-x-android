@@ -26,7 +26,7 @@ class UnifiedPushGatewayResolver @Inject constructor(
     private val unifiedPushApiFactory: UnifiedPushApiFactory,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) {
-    suspend fun getGateway(endpoint: String): String? {
+    suspend fun getGateway(endpoint: String): String {
         val gateway = UnifiedPushConfig.DEFAULT_PUSH_GATEWAY_HTTP_URL
         try {
             val url = URL(endpoint)
