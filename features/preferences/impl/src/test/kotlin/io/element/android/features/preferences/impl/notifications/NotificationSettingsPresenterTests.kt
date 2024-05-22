@@ -19,12 +19,12 @@ package io.element.android.features.preferences.impl.notifications
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
-import com.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
+import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import kotlinx.coroutines.test.runTest
 import org.junit.Test

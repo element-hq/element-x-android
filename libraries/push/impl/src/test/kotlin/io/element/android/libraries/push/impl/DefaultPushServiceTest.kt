@@ -16,8 +16,6 @@
 
 package io.element.android.libraries.push.impl
 
-import com.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStore
-import com.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
@@ -31,6 +29,8 @@ import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.pushproviders.test.FakePushProvider
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
+import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStore
+import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.test.runTest

@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush
 
-import com.element.android.libraries.pushstore.test.userpushstore.FakePushClientSecret
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -29,6 +28,7 @@ import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.unifiedpush.troubleshoot.FakeUnifiedPushDistributorProvider
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
+import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.FakePushClientSecret
 import io.element.android.services.appnavstate.api.AppNavigationState
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import io.element.android.services.appnavstate.api.NavigationState

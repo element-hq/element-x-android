@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.element.android.libraries.pushstore.test.userpushstore
+package io.element.android.libraries.pushstore.test.userpushstore
 
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushstore.api.UserPushStore
