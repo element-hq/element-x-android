@@ -24,7 +24,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class UnifiedPushGatewayResolverTest {
+class DefaultUnifiedPushGatewayResolverTest {
     private val matrixDiscoveryResponse = {
         DiscoveryResponse(
             unifiedpush = DiscoveryUnifiedPush(
@@ -46,7 +46,7 @@ class UnifiedPushGatewayResolverTest {
         val unifiedPushApiFactory = FakeUnifiedPushApiFactory(
             discoveryResponse = matrixDiscoveryResponse
         )
-        val sut = createUnifiedPushGatewayResolver(
+        val sut = createDefaultUnifiedPushGatewayResolver(
             unifiedPushApiFactory = unifiedPushApiFactory
         )
         val result = sut.getGateway("https://custom.url")
@@ -59,7 +59,7 @@ class UnifiedPushGatewayResolverTest {
         val unifiedPushApiFactory = FakeUnifiedPushApiFactory(
             discoveryResponse = matrixDiscoveryResponse
         )
-        val sut = createUnifiedPushGatewayResolver(
+        val sut = createDefaultUnifiedPushGatewayResolver(
             unifiedPushApiFactory = unifiedPushApiFactory
         )
         val result = sut.getGateway("https://custom.url:123")
@@ -72,7 +72,7 @@ class UnifiedPushGatewayResolverTest {
         val unifiedPushApiFactory = FakeUnifiedPushApiFactory(
             discoveryResponse = matrixDiscoveryResponse
         )
-        val sut = createUnifiedPushGatewayResolver(
+        val sut = createDefaultUnifiedPushGatewayResolver(
             unifiedPushApiFactory = unifiedPushApiFactory
         )
         val result = sut.getGateway("https://custom.url:123/some/path")
@@ -85,7 +85,7 @@ class UnifiedPushGatewayResolverTest {
         val unifiedPushApiFactory = FakeUnifiedPushApiFactory(
             discoveryResponse = matrixDiscoveryResponse
         )
-        val sut = createUnifiedPushGatewayResolver(
+        val sut = createDefaultUnifiedPushGatewayResolver(
             unifiedPushApiFactory = unifiedPushApiFactory
         )
         val result = sut.getGateway("http://custom.url:123/some/path")
@@ -98,7 +98,7 @@ class UnifiedPushGatewayResolverTest {
         val unifiedPushApiFactory = FakeUnifiedPushApiFactory(
             discoveryResponse = { throw Exception() }
         )
-        val sut = createUnifiedPushGatewayResolver(
+        val sut = createDefaultUnifiedPushGatewayResolver(
             unifiedPushApiFactory = unifiedPushApiFactory
         )
         val result = sut.getGateway("http://custom.url")
@@ -111,7 +111,7 @@ class UnifiedPushGatewayResolverTest {
         val unifiedPushApiFactory = FakeUnifiedPushApiFactory(
             discoveryResponse = matrixDiscoveryResponse
         )
-        val sut = createUnifiedPushGatewayResolver(
+        val sut = createDefaultUnifiedPushGatewayResolver(
             unifiedPushApiFactory = unifiedPushApiFactory
         )
         val result = sut.getGateway("invalid")
@@ -124,7 +124,7 @@ class UnifiedPushGatewayResolverTest {
         val unifiedPushApiFactory = FakeUnifiedPushApiFactory(
             discoveryResponse = invalidDiscoveryResponse
         )
-        val sut = createUnifiedPushGatewayResolver(
+        val sut = createDefaultUnifiedPushGatewayResolver(
             unifiedPushApiFactory = unifiedPushApiFactory
         )
         val result = sut.getGateway("https://custom.url")
@@ -132,11 +132,11 @@ class UnifiedPushGatewayResolverTest {
         assertThat(result).isEqualTo(UnifiedPushConfig.DEFAULT_PUSH_GATEWAY_HTTP_URL)
     }
 
-    private fun TestScope.createUnifiedPushGatewayResolver(
+    private fun TestScope.createDefaultUnifiedPushGatewayResolver(
         unifiedPushApiFactory: UnifiedPushApiFactory = FakeUnifiedPushApiFactory(
             discoveryResponse = { DiscoveryResponse() }
         )
-    ) = UnifiedPushGatewayResolver(
+    ) = DefaultUnifiedPushGatewayResolver(
         unifiedPushApiFactory = unifiedPushApiFactory,
         coroutineDispatchers = testCoroutineDispatchers()
     )

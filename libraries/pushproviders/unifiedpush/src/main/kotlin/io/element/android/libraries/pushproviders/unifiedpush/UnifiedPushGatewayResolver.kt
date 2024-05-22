@@ -16,13 +16,20 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush
 
+import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.di.AppScope
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.net.URL
 import javax.inject.Inject
 
-class UnifiedPushGatewayResolver @Inject constructor(
+interface UnifiedPushGatewayResolver {
+    suspend fun getGateway(endpoint: String): String
+}
+
+@ContributesBinding(AppScope::class)
+class DefaultUnifiedPushGatewayResolver @Inject constructor(
     private val unifiedPushApiFactory: UnifiedPushApiFactory,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) {
