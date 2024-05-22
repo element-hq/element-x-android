@@ -141,7 +141,7 @@ class DefaultPushServiceTest {
             pushProviders = setOf(aCurrentPushProvider, aPushProvider),
             getCurrentPushProvider = FakeGetCurrentPushProvider(currentPushProvider = aCurrentPushProvider.name),
             userPushStoreFactory = FakeUserPushStoreFactory(
-                userPushStore = userPushStore,
+                userPushStore = { userPushStore },
             ),
         )
         val result = defaultPushService.registerWith(client, aPushProvider, aDistributor)
@@ -170,7 +170,7 @@ class DefaultPushServiceTest {
             pushProviders = setOf(aCurrentPushProvider, aPushProvider),
             getCurrentPushProvider = FakeGetCurrentPushProvider(currentPushProvider = aCurrentPushProvider.name),
             userPushStoreFactory = FakeUserPushStoreFactory(
-                userPushStore = userPushStore,
+                userPushStore = { userPushStore },
             ),
         )
         val result = defaultPushService.registerWith(client, aPushProvider, aDistributor)

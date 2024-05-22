@@ -89,7 +89,7 @@ class DefaultPusherSubscriberTest {
                 getSecretForUserResult = { A_SECRET },
             ),
             userPushStoreFactory = FakeUserPushStoreFactory(
-                userPushStore = userPushStore,
+                userPushStore = { userPushStore },
             ),
         )
         val result = defaultPusherSubscriber.registerPusher(
@@ -155,7 +155,7 @@ class DefaultPusherSubscriberTest {
                 getSecretForUserResult = { A_SECRET },
             ),
             userPushStoreFactory = FakeUserPushStoreFactory(
-                userPushStore = userPushStore,
+                userPushStore = { userPushStore },
             ),
         )
         val result = defaultPusherSubscriber.unregisterPusher(

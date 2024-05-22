@@ -257,7 +257,7 @@ class DefaultPushHandlerTest {
                     incrementPushCounterResult()
                 }
             },
-            userPushStoreFactory = FakeUserPushStoreFactory(userPushStore),
+            userPushStoreFactory = FakeUserPushStoreFactory { userPushStore },
             pushClientSecret = pushClientSecret,
             buildMeta = buildMeta,
             matrixAuthenticationService = matrixAuthenticationService,

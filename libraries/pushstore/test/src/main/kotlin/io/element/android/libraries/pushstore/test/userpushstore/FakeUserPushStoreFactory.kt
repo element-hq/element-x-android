@@ -21,9 +21,9 @@ import io.element.android.libraries.pushstore.api.UserPushStore
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 
 class FakeUserPushStoreFactory(
-    val userPushStore: UserPushStore = FakeUserPushStore()
+    val userPushStore: (SessionId) -> UserPushStore = { FakeUserPushStore() }
 ) : UserPushStoreFactory {
     override fun getOrCreate(userId: SessionId): UserPushStore {
-        return userPushStore
+        return userPushStore(userId)
     }
 }
