@@ -19,7 +19,9 @@ package io.element.android.libraries.push.impl.notifications
 import android.content.Context
 import android.net.Uri
 import androidx.core.content.FileProvider
+import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.log.logger.LoggerTag
+import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
@@ -67,6 +69,7 @@ interface NotifiableEventResolver {
     suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): NotifiableEvent?
 }
 
+@ContributesBinding(AppScope::class)
 class DefaultNotifiableEventResolver @Inject constructor(
     private val stringProvider: StringProvider,
     private val clock: SystemClock,
