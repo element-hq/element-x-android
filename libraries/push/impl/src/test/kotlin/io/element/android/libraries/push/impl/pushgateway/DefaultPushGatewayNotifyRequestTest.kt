@@ -23,7 +23,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertThrows
 import org.junit.Test
 
-class PushGatewayNotifyRequestTest {
+class DefaultPushGatewayNotifyRequestTest {
     @Test
     fun `notify success`() = runTest {
         val factory = FakePushGatewayApiFactory(
@@ -33,7 +33,7 @@ class PushGatewayNotifyRequestTest {
                 )
             }
         )
-        val pushGatewayNotifyRequest = PushGatewayNotifyRequest(
+        val pushGatewayNotifyRequest = DefaultPushGatewayNotifyRequest(
             pushGatewayApiFactory = factory,
         )
         pushGatewayNotifyRequest.execute(
@@ -57,7 +57,7 @@ class PushGatewayNotifyRequestTest {
                 )
             }
         )
-        val pushGatewayNotifyRequest = PushGatewayNotifyRequest(
+        val pushGatewayNotifyRequest = DefaultPushGatewayNotifyRequest(
             pushGatewayApiFactory = factory,
         )
         pushGatewayNotifyRequest.execute(
@@ -81,7 +81,7 @@ class PushGatewayNotifyRequestTest {
                 )
             }
         )
-        val pushGatewayNotifyRequest = PushGatewayNotifyRequest(
+        val pushGatewayNotifyRequest = DefaultPushGatewayNotifyRequest(
             pushGatewayApiFactory = factory,
         )
         assertThrows(PushGatewayFailure.PusherRejected::class.java) {

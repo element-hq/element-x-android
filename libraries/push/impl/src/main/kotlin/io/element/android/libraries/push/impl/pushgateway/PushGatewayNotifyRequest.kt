@@ -15,14 +15,14 @@
  */
 package io.element.android.libraries.push.impl.pushgateway
 
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.push.api.gateway.PushGatewayFailure
 import javax.inject.Inject
 
-class PushGatewayNotifyRequest @Inject constructor(
-    private val pushGatewayApiFactory: PushGatewayApiFactory,
-) {
+interface PushGatewayNotifyRequest {
     data class Params(
         val url: String,
         val appId: String,
@@ -31,7 +31,15 @@ class PushGatewayNotifyRequest @Inject constructor(
         val roomId: RoomId,
     )
 
-    suspend fun execute(params: Params) {
+    suspend fun execute(params: Params)
+}
+
+@ContributesBinding(AppScope::class)
+class DefaultPushGatewayNotifyRequest @Inject constructor(
+    private val pushGatewayApiFactory: PushGatewayApiFactory,
+) : PushGatewayNotifyRequest {
+
+    override suspend fun execute(params: PushGatewayNotifyRequest.Params) {
         val pushGatewayApi = pushGatewayApiFactory.create(
             params.url.substringBefore(PushGatewayConfig.URI_PUSH_GATEWAY_PREFIX_PATH)
         )
