@@ -194,7 +194,9 @@ class AcceptDeclineInvitePresenterTest {
         assert(joinRoomFailure)
             .isCalledOnce()
             .with(
-                value(A_ROOM_ID), value(emptyList<String>()), value(JoinedRoom.Trigger.Invite)
+                value(A_ROOM_ID),
+                value(emptyList<String>()),
+                value(JoinedRoom.Trigger.Invite)
             )
     }
 
@@ -223,7 +225,9 @@ class AcceptDeclineInvitePresenterTest {
         assert(joinRoomSuccess)
             .isCalledOnce()
             .with(
-                value(A_ROOM_ID), value(emptyList<String>()), value(JoinedRoom.Trigger.Invite)
+                value(A_ROOM_ID),
+                value(emptyList<String>()),
+                value(JoinedRoom.Trigger.Invite)
             )
     }
 

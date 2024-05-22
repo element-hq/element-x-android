@@ -38,7 +38,6 @@ interface PushGatewayNotifyRequest {
 class DefaultPushGatewayNotifyRequest @Inject constructor(
     private val pushGatewayApiFactory: PushGatewayApiFactory,
 ) : PushGatewayNotifyRequest {
-
     override suspend fun execute(params: PushGatewayNotifyRequest.Params) {
         val pushGatewayApi = pushGatewayApiFactory.create(
             params.url.substringBefore(PushGatewayConfig.URI_PUSH_GATEWAY_PREFIX_PATH)

@@ -90,7 +90,8 @@ class DefaultJoinRoomTest {
             .assertions()
             .isCalledOnce()
             .with(
-                value(A_ROOM_ID), value(A_SERVER_LIST)
+                value(A_ROOM_ID),
+                value(A_SERVER_LIST)
             )
         joinRoomLambda
             .assertions()

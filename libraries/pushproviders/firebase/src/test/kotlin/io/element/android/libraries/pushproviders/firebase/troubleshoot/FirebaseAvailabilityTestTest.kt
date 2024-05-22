@@ -19,7 +19,6 @@ package io.element.android.libraries.pushproviders.firebase.troubleshoot
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.pushproviders.firebase.FakeIsPlayServiceAvailable
-import io.element.android.libraries.pushproviders.firebase.IsPlayServiceAvailable
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import kotlinx.coroutines.launch
