@@ -17,28 +17,25 @@
 package io.element.android.libraries.pushproviders.unifiedpush
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.network.RetrofitFactory
-import io.element.android.libraries.pushproviders.unifiedpush.network.UnifiedPushApi
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.net.URL
 import javax.inject.Inject
 
 class UnifiedPushGatewayResolver @Inject constructor(
-    private val retrofitFactory: RetrofitFactory,
+    private val unifiedPushApiFactory: UnifiedPushApiFactory,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) {
     suspend fun getGateway(endpoint: String): String? {
         val gateway = UnifiedPushConfig.DEFAULT_PUSH_GATEWAY_HTTP_URL
-        val url = URL(endpoint)
-        val port = if (url.port != -1) ":${url.port}" else ""
-        val customBase = "${url.protocol}://${url.host}$port"
-        val customUrl = "$customBase/_matrix/push/v1/notify"
-        Timber.i("Testing $customUrl")
         try {
+            val url = URL(endpoint)
+            val port = if (url.port != -1) ":${url.port}" else ""
+            val customBase = "${url.protocol}://${url.host}$port"
+            val customUrl = "$customBase/_matrix/push/v1/notify"
+            Timber.i("Testing $customUrl")
             return withContext(coroutineDispatchers.io) {
-                val api = retrofitFactory.create(customBase)
-                    .create(UnifiedPushApi::class.java)
+                val api = unifiedPushApiFactory.create(customBase)
                 try {
                     val discoveryResponse = api.discover()
                     if (discoveryResponse.unifiedpush.gateway == "matrix") {
