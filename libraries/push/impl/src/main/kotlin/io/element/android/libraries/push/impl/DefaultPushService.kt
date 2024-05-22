@@ -46,9 +46,6 @@ class DefaultPushService @Inject constructor(
             .sortedBy { it.index }
     }
 
-    /**
-     * Get current push provider, compare with provided one, then unregister and register if different, and store change.
-     */
     override suspend fun registerWith(
         matrixClient: MatrixClient,
         pushProvider: PushProvider,

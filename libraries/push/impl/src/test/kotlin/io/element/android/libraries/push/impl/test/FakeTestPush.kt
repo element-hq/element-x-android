@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package com.element.android.libraries.pushstore.test.userpushstore
+package io.element.android.libraries.push.impl.test
 
-import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.pushstore.api.UserPushStore
-import io.element.android.libraries.pushstore.api.UserPushStoreFactory
+import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 
-class FakeUserPushStoreFactory(
-    val userPushStore: UserPushStore = FakeUserPushStore()
-) : UserPushStoreFactory {
-    override fun getOrCreate(userId: SessionId): UserPushStore {
-        return userPushStore
+class FakeTestPush(
+    private val executeResult: (CurrentUserPushConfig) -> Unit = { TODO() }
+) : TestPush {
+    override suspend fun execute(config: CurrentUserPushConfig) {
+        executeResult(config)
     }
 }
