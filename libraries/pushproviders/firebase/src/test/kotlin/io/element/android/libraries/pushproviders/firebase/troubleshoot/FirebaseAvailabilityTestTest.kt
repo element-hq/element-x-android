@@ -18,6 +18,7 @@ package io.element.android.libraries.pushproviders.firebase.troubleshoot
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.pushproviders.firebase.FakeIsPlayServiceAvailable
 import io.element.android.libraries.pushproviders.firebase.IsPlayServiceAvailable
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
@@ -29,11 +30,7 @@ class FirebaseAvailabilityTestTest {
     @Test
     fun `test FirebaseAvailabilityTest success`() = runTest {
         val sut = FirebaseAvailabilityTest(
-            isPlayServiceAvailable = object : IsPlayServiceAvailable {
-                override fun isAvailable(): Boolean {
-                    return true
-                }
-            },
+            isPlayServiceAvailable = FakeIsPlayServiceAvailable(true),
             stringProvider = FakeStringProvider(),
         )
         launch {
@@ -50,11 +47,7 @@ class FirebaseAvailabilityTestTest {
     @Test
     fun `test FirebaseAvailabilityTest failure`() = runTest {
         val sut = FirebaseAvailabilityTest(
-            isPlayServiceAvailable = object : IsPlayServiceAvailable {
-                override fun isAvailable(): Boolean {
-                    return false
-                }
-            },
+            isPlayServiceAvailable = FakeIsPlayServiceAvailable(false),
             stringProvider = FakeStringProvider(),
         )
         launch {
