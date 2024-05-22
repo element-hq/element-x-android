@@ -17,6 +17,7 @@
 package io.element.android.features.joinroom.impl
 
 import com.google.common.truth.Truth.assertThat
+import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
@@ -36,10 +37,12 @@ import io.element.android.libraries.matrix.api.room.preview.RoomPreview
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
+import io.element.android.libraries.matrix.test.A_SERVER_LIST
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
+import io.element.android.libraries.matrix.test.room.join.FakeJoinRoom
 import io.element.android.libraries.matrix.ui.model.toInviteSender
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.assert
@@ -170,6 +173,59 @@ class JoinRoomPresenterTest {
                         listOf(value(AcceptDeclineInviteEvents.AcceptInvite(inviteData))),
                         listOf(value(AcceptDeclineInviteEvents.DeclineInvite(inviteData))),
                     )
+            }
+        }
+    }
+
+    @Test
+    fun `present - when room is joined with success, all the parameters are provided`() = runTest {
+        val aTrigger = JoinedRoom.Trigger.MobilePermalink
+        val joinRoomLambda = lambdaRecorder { _: RoomId, _: List<String>, _: JoinedRoom.Trigger ->
+            Result.success(Unit)
+        }
+        val presenter = createJoinRoomPresenter(
+            trigger = aTrigger,
+            serverNames = A_SERVER_LIST,
+            joinRoomLambda = joinRoomLambda,
+        )
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                state.eventSink(JoinRoomEvents.JoinRoom)
+            }
+            awaitItem().also { state ->
+                assertThat(state.joinAction).isEqualTo(AsyncAction.Loading)
+            }
+            awaitItem().also { state ->
+                assertThat(state.joinAction).isEqualTo(AsyncAction.Success(Unit))
+            }
+            joinRoomLambda.assertions()
+                .isCalledOnce()
+                .with(value(A_ROOM_ID), value(A_SERVER_LIST), value(aTrigger))
+        }
+    }
+
+    @Test
+    fun `present - when room is joined with error, it is possible to clear the error`() = runTest {
+        val presenter = createJoinRoomPresenter(
+            joinRoomLambda = { _, _, _ ->
+                Result.failure(AN_EXCEPTION)
+            },
+        )
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                state.eventSink(JoinRoomEvents.JoinRoom)
+            }
+            awaitItem().also { state ->
+                assertThat(state.joinAction).isEqualTo(AsyncAction.Loading)
+            }
+            awaitItem().also { state ->
+                assertThat(state.joinAction).isEqualTo(AsyncAction.Failure(AN_EXCEPTION))
+                state.eventSink(JoinRoomEvents.ClearError)
+            }
+            awaitItem().also { state ->
+                assertThat(state.joinAction).isEqualTo(AsyncAction.Uninitialized)
             }
         }
     }
@@ -310,7 +366,7 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewResult = {
+            getRoomPreviewFromRoomIdResult = { _, _ ->
                 Result.success(
                     RoomPreview(
                         roomId = A_ROOM_ID,
@@ -355,7 +411,7 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded with error`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewResult = {
+            getRoomPreviewFromRoomIdResult = { _, _ ->
                 Result.failure(AN_EXCEPTION)
             }
         )
@@ -393,7 +449,7 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded with error 403`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewResult = {
+            getRoomPreviewFromRoomIdResult = { _, _ ->
                 Result.failure(Exception("403"))
             }
         )
@@ -415,7 +471,12 @@ class JoinRoomPresenterTest {
     private fun createJoinRoomPresenter(
         roomId: RoomId = A_ROOM_ID,
         roomDescription: Optional<RoomDescription> = Optional.empty(),
+        serverNames: List<String> = emptyList(),
+        trigger: JoinedRoom.Trigger = JoinedRoom.Trigger.Invite,
         matrixClient: MatrixClient = FakeMatrixClient(),
+        joinRoomLambda: (RoomId, List<String>, JoinedRoom.Trigger) -> Result<Unit> = { _, _, _ ->
+            Result.success(Unit)
+        },
         knockRoom: KnockRoom = FakeKnockRoom(),
         buildMeta: BuildMeta = aBuildMeta(applicationName = "AppName"),
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() }
@@ -424,7 +485,10 @@ class JoinRoomPresenterTest {
             roomId = roomId,
             roomIdOrAlias = roomId.toRoomIdOrAlias(),
             roomDescription = roomDescription,
+            serverNames = serverNames,
+            trigger = trigger,
             matrixClient = matrixClient,
+            joinRoom = FakeJoinRoom(joinRoomLambda),
             knockRoom = knockRoom,
             buildMeta = buildMeta,
             acceptDeclineInvitePresenter = acceptDeclineInvitePresenter

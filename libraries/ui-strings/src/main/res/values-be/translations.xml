@@ -36,6 +36,7 @@
   <string name="action_accept">"Прыняць"</string>
   <string name="action_add_to_timeline">"Дадаць у хроніку"</string>
   <string name="action_back">"Назад"</string>
+  <string name="action_call">"Выклік"</string>
   <string name="action_cancel">"Скасаваць"</string>
   <string name="action_choose_photo">"Выбраць фота"</string>
   <string name="action_clear">"Ачысціць"</string>
@@ -74,6 +75,7 @@
   <string name="action_load_more">"Загрузіць больш"</string>
   <string name="action_manage_account">"Кіраванне ўліковым запісам"</string>
   <string name="action_manage_devices">"Кіраванне прыладамі"</string>
+  <string name="action_message">"Паведамленне"</string>
   <string name="action_next">"Далей"</string>
   <string name="action_no">"Не"</string>
   <string name="action_not_now">"Не зараз"</string>
@@ -119,6 +121,7 @@
   <string name="common_blocked_users">"Заблакіраваныя карыстальнікі"</string>
   <string name="common_bubbles">"Бурбалкі"</string>
   <string name="common_call_invite">"Ідзе выклік (не падтрымліваецца)"</string>
+  <string name="common_call_started">"Выклік пачаўся"</string>
   <string name="common_chat_backup">"Рэзервовае капіраванне чатаў"</string>
   <string name="common_copyright">"Аўтарскае права"</string>
   <string name="common_creating_room">"Стварэнне пакоя…"</string>
@@ -266,6 +269,7 @@
   <string name="screen_room_member_details_unblock_alert_action">"Разблакіраваць"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Вы зноў зможаце ўбачыць усе паведамленні."</string>
   <string name="screen_room_member_details_unblock_user">"Разблакіраваць карыстальніка"</string>
+  <string name="screen_room_title">"Чат"</string>
   <string name="screen_share_location_title">"Падзяліцца месцазнаходжаннем"</string>
   <string name="screen_share_my_location_action">"Падзяліцца маім месцазнаходжаннем"</string>
   <string name="screen_share_open_apple_maps">"Адкрыць у Apple Maps"</string>

@@ -37,6 +37,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.replace
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.loggedin.LoggedInNode
 import io.element.android.appnav.room.RoomFlowNode
@@ -46,9 +47,6 @@ import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
-import io.element.android.features.lockscreen.api.LockScreenEntryPoint
-import io.element.android.features.lockscreen.api.LockScreenLockState
-import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.PreferencesEntryPoint
@@ -99,8 +97,6 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val coroutineScope: CoroutineScope,
     private val networkMonitor: NetworkMonitor,
     private val ftueService: FtueService,
-    private val lockScreenEntryPoint: LockScreenEntryPoint,
-    private val lockScreenStateService: LockScreenService,
     private val roomDirectoryEntryPoint: RoomDirectoryEntryPoint,
     private val matrixClient: MatrixClient,
     snackbarDispatcher: SnackbarDispatcher,
@@ -110,7 +106,7 @@ class LoggedInFlowNode @AssistedInject constructor(
         savedStateMap = buildContext.savedStateMap,
     ),
     permanentNavModel = PermanentNavModel(
-        navTargets = setOf(NavTarget.LoggedInPermanent, NavTarget.LockPermanent),
+        navTargets = setOf(NavTarget.LoggedInPermanent),
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -189,14 +185,13 @@ class LoggedInFlowNode @AssistedInject constructor(
         data object LoggedInPermanent : NavTarget
 
         @Parcelize
-        data object LockPermanent : NavTarget
-
-        @Parcelize
         data object RoomList : NavTarget
 
         @Parcelize
         data class Room(
             val roomIdOrAlias: RoomIdOrAlias,
+            val serverNames: List<String> = emptyList(),
+            val trigger: JoinedRoom.Trigger? = null,
             val roomDescription: RoomDescription? = null,
             val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages()
         ) : NavTarget
@@ -231,11 +226,6 @@ class LoggedInFlowNode @AssistedInject constructor(
             NavTarget.Placeholder -> createNode<PlaceholderNode>(buildContext)
             NavTarget.LoggedInPermanent -> {
                 createNode<LoggedInNode>(buildContext)
-            }
-            NavTarget.LockPermanent -> {
-                lockScreenEntryPoint.nodeBuilder(this, buildContext)
-                    .target(LockScreenEntryPoint.Target.Unlock)
-                    .build()
             }
             NavTarget.RoomList -> {
                 val callback = object : RoomListEntryPoint.Callback {
@@ -292,8 +282,9 @@ class LoggedInFlowNode @AssistedInject constructor(
                                 backstack.push(
                                     NavTarget.Room(
                                         roomIdOrAlias = data.roomIdOrAlias,
+                                        serverNames = data.viaParameters,
+                                        trigger = JoinedRoom.Trigger.Timeline,
                                         initialElement = RoomNavigationTarget.Messages(data.eventId),
-                                        // TODO Use the viaParameters
                                     )
                                 )
                             }
@@ -311,6 +302,8 @@ class LoggedInFlowNode @AssistedInject constructor(
                 val inputs = RoomFlowNode.Inputs(
                     roomIdOrAlias = navTarget.roomIdOrAlias,
                     roomDescription = Optional.ofNullable(navTarget.roomDescription),
+                    serverNames = navTarget.serverNames,
+                    trigger = Optional.ofNullable(navTarget.trigger),
                     initialElement = navTarget.initialElement
                 )
                 createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs, callback))
@@ -370,12 +363,14 @@ class LoggedInFlowNode @AssistedInject constructor(
             NavTarget.RoomDirectorySearch -> {
                 roomDirectoryEntryPoint.nodeBuilder(this, buildContext)
                     .callback(object : RoomDirectoryEntryPoint.Callback {
-                        override fun onRoomJoined(roomId: RoomId) {
-                            backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
-                        }
-
                         override fun onResultClicked(roomDescription: RoomDescription) {
-                            backstack.push(NavTarget.Room(roomDescription.roomId.toRoomIdOrAlias(), roomDescription))
+                            backstack.push(
+                                NavTarget.Room(
+                                    roomIdOrAlias = roomDescription.roomId.toRoomIdOrAlias(),
+                                    roomDescription = roomDescription,
+                                    trigger = JoinedRoom.Trigger.RoomDirectory,
+                                )
+                            )
                         }
                     })
                     .build()
@@ -383,7 +378,12 @@ class LoggedInFlowNode @AssistedInject constructor(
         }
     }
 
-    suspend fun attachRoom(roomIdOrAlias: RoomIdOrAlias, eventId: EventId? = null) {
+    suspend fun attachRoom(
+        roomIdOrAlias: RoomIdOrAlias,
+        serverNames: List<String> = emptyList(),
+        trigger: JoinedRoom.Trigger? = null,
+        eventId: EventId? = null,
+    ) {
         waitForNavTargetAttached { navTarget ->
             navTarget is NavTarget.RoomList
         }
@@ -391,6 +391,8 @@ class LoggedInFlowNode @AssistedInject constructor(
             backstack.push(
                 NavTarget.Room(
                     roomIdOrAlias = roomIdOrAlias,
+                    serverNames = serverNames,
+                    trigger = trigger,
                     initialElement = RoomNavigationTarget.Messages(
                         focusedEventId = eventId
                     )
@@ -415,14 +417,10 @@ class LoggedInFlowNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         Box(modifier = modifier) {
-            val lockScreenState by lockScreenStateService.lockState.collectAsState()
             val ftueState by ftueService.state.collectAsState()
             BackstackView()
             if (ftueState is FtueState.Complete) {
                 PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
-            }
-            if (lockScreenState == LockScreenLockState.Locked) {
-                PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LockPermanent)
             }
         }
     }

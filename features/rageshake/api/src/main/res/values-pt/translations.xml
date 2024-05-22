@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crash_detection_dialog_content">"A %1$s teve uma falha da última vez que foi utilizada. Gostarias de partilhar um relatório de acidente connosco?"</string>
+  <string name="rageshake_detection_dialog_content">"Parece que estás a abanar o telefone em sinal de frustração. Gostarias de abrir o painel de relatório de erros?"</string>
+  <string name="settings_rageshake">"Rageshake"</string>
+  <string name="settings_rageshake_detection_threshold">"Limiar de deteção"</string>
+</resources>

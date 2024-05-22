@@ -69,12 +69,14 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
+import io.element.android.libraries.matrix.test.A_TRANSACTION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
@@ -457,6 +459,31 @@ class MessagesPresenterTest {
     }
 
     @Test
+    fun `present - handle action redact message in error, in this case the message is just cancelled`() = runTest {
+        val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
+        val matrixRoom = FakeMatrixRoom()
+        val presenter = createMessagesPresenter(matrixRoom = matrixRoom, coroutineDispatchers = coroutineDispatchers)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(
+                MessagesEvents.HandleAction(
+                    action = TimelineItemAction.Redact,
+                    event = aMessageEvent(
+                        transactionId = A_TRANSACTION_ID,
+                        sendState = LocalEventSendState.SendingFailed("Failed to send message")
+                    )
+                )
+            )
+            assertThat(matrixRoom.cancelSendCount).isEqualTo(1)
+            assertThat(matrixRoom.redactEventEventIdParam).isNull()
+            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+        }
+    }
+
+    @Test
     fun `present - handle action report content`() = runTest {
         val navigator = FakeMessagesNavigator()
         val presenter = createMessagesPresenter(navigator = navigator)
@@ -511,7 +538,7 @@ class MessagesPresenterTest {
             // Initially the composer doesn't have focus, so we don't show the alert
             assertThat(initialState.showReinvitePrompt).isFalse()
             // When the input field is focused we show the alert
-            initialState.composerState.richTextEditorState.requestFocus()
+            initialState.composerState.textEditorState.requestFocus()
             val focusedState = consumeItemsUntilPredicate(timeout = 250.milliseconds) { state ->
                 state.showReinvitePrompt
             }.last()
@@ -534,7 +561,7 @@ class MessagesPresenterTest {
         }.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
-            initialState.composerState.richTextEditorState.requestFocus()
+            initialState.composerState.textEditorState.requestFocus()
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isFalse()
         }
@@ -549,7 +576,7 @@ class MessagesPresenterTest {
         }.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
-            initialState.composerState.richTextEditorState.requestFocus()
+            initialState.composerState.textEditorState.requestFocus()
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isFalse()
         }
@@ -754,7 +781,7 @@ class MessagesPresenterTest {
     ): MessagesPresenter {
         val mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom)
         val permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter)
-        val appPreferencesStore = InMemoryAppPreferencesStore(isRichTextEditorEnabled = true)
+        val appPreferencesStore = InMemoryAppPreferencesStore()
         val sessionPreferencesStore = InMemorySessionPreferencesStore()
         val messageComposerPresenter = MessageComposerPresenter(
             appCoroutineScope = this,
@@ -773,7 +800,10 @@ class MessagesPresenterTest {
             permalinkParser = FakePermalinkParser(),
             permalinkBuilder = FakePermalinkBuilder(),
             timelineController = TimelineController(matrixRoom),
-        )
+        ).apply {
+            showTextFormatting = true
+            isTesting = true
+        }
         val voiceMessageComposerPresenter = VoiceMessageComposerPresenter(
             this,
             FakeVoiceRecorder(),
@@ -826,7 +856,6 @@ class MessagesPresenterTest {
             messageSummaryFormatter = FakeMessageSummaryFormatter(),
             navigator = navigator,
             clipboardHelper = clipboardHelper,
-            appPreferencesStore = appPreferencesStore,
             featureFlagsService = FakeFeatureFlagService(),
             buildMeta = aBuildMeta(),
             dispatchers = coroutineDispatchers,

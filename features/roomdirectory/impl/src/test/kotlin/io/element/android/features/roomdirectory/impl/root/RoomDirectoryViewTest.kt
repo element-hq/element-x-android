@@ -25,8 +25,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roomdirectory.api.RoomDescription
-import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
@@ -82,37 +80,17 @@ class RoomDirectoryViewTest {
         rule.setRoomDirectoryView(state = state)
         eventsRecorder.assertSingle(RoomDirectoryEvents.LoadMore)
     }
-
-    @Test
-    fun `when joining room with success then onRoomJoined lambda is called once`() {
-        val eventsRecorder = EventsRecorder<RoomDirectoryEvents>(expectEvents = false)
-        val roomDescriptions = aRoomDescriptionList()
-        val joinedRoomId = roomDescriptions.first().roomId
-        val state = aRoomDirectoryState(
-            joinRoomAction = AsyncAction.Success(joinedRoomId),
-            roomDescriptions = roomDescriptions,
-            eventSink = eventsRecorder,
-        )
-        ensureCalledOnceWithParam(joinedRoomId) { callback ->
-            rule.setRoomDirectoryView(
-                state = state,
-                onRoomJoined = callback,
-            )
-        }
-    }
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomDirectoryView(
     state: RoomDirectoryState,
     onBackPressed: () -> Unit = EnsureNeverCalled(),
     onResultClicked: (RoomDescription) -> Unit = EnsureNeverCalledWithParam(),
-    onRoomJoined: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
 ) {
     setContent {
         RoomDirectoryView(
             state = state,
             onResultClicked = onResultClicked,
-            onRoomJoined = onRoomJoined,
             onBackPressed = onBackPressed,
         )
     }

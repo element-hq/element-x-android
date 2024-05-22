@@ -11,11 +11,12 @@
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Pripojenie nie je bezpečené"</string>
   <string name="screen_qr_code_login_device_code_subtitle">"Budete požiadaní o zadanie dvoch číslic zobrazených na tomto zariadení."</string>
   <string name="screen_qr_code_login_device_code_title">"Zadajte nižšie uvedené číslo na vašom druhom zariadení"</string>
+  <string name="screen_qr_code_login_initial_state_button_title">"Pripravené na skenovanie"</string>
   <string name="screen_qr_code_login_initial_state_item_1">"Otvorte %1$s na stolnom zariadení"</string>
   <string name="screen_qr_code_login_initial_state_item_2">"Kliknite na svoj obrázok"</string>
   <string name="screen_qr_code_login_initial_state_item_3">"Vyberte %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"„Prepojiť nové zariadenie“"</string>
-  <string name="screen_qr_code_login_initial_state_item_4">"Postupujte podľa zobrazených pokynov"</string>
+  <string name="screen_qr_code_login_initial_state_item_4">"Naskenujte QR kód pomocou tohto zariadenia"</string>
   <string name="screen_qr_code_login_initial_state_title">"Ak chcete získať QR kód, otvorte %1$s na inom zariadení"</string>
   <string name="screen_qr_code_login_invalid_scan_state_description">"Použite QR kód zobrazený na druhom zariadení."</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Skúste to znova"</string>

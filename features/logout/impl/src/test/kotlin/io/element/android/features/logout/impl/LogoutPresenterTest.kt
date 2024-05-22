@@ -144,7 +144,9 @@ class LogoutPresenterTest {
     @Test
     fun `present - logout with error then cancel`() = runTest {
         val matrixClient = FakeMatrixClient().apply {
-            givenLogoutError(A_THROWABLE)
+            logoutLambda = { _ ->
+                throw A_THROWABLE
+            }
         }
         val presenter = createLogoutPresenter(
             matrixClient,
@@ -170,7 +172,13 @@ class LogoutPresenterTest {
     @Test
     fun `present - logout with error then force`() = runTest {
         val matrixClient = FakeMatrixClient().apply {
-            givenLogoutError(A_THROWABLE)
+            logoutLambda = { ignoreSdkError ->
+                if (!ignoreSdkError) {
+                    throw A_THROWABLE
+                } else {
+                    null
+                }
+            }
         }
         val presenter = createLogoutPresenter(
             matrixClient,

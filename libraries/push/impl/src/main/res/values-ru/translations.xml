@@ -52,7 +52,6 @@
     <item quantity="few">"%d комнаты"</item>
     <item quantity="many">"%d комнат"</item>
   </plurals>
-  <string name="push_choose_distributor_dialog_title_android">"Выберите способ получения уведомлений"</string>
   <string name="push_distributor_background_sync_android">"Фоновая синхронизация"</string>
   <string name="push_distributor_firebase_android">"Сервисы Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Не найдены действующие службы Google Play. Уведомления могут работать некорректно."</string>

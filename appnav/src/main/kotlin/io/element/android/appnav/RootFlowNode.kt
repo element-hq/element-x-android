@@ -34,6 +34,7 @@ import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.di.MatrixClientsHolder
 import io.element.android.appnav.intent.IntentResolver
@@ -295,6 +296,8 @@ class RootFlowNode @AssistedInject constructor(
                     is PermalinkData.RoomLink -> {
                         attachRoom(
                             roomIdOrAlias = permalinkData.roomIdOrAlias,
+                            trigger = JoinedRoom.Trigger.MobilePermalink,
+                            serverNames = permalinkData.viaParameters,
                             eventId = permalinkData.eventId,
                         )
                     }

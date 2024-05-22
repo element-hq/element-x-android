@@ -17,6 +17,7 @@
 package io.element.android.features.invite.impl.response
 
 import com.google.common.truth.Truth.assertThat
+import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.InviteData
 import io.element.android.libraries.architecture.AsyncAction
@@ -26,13 +27,13 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.join.FakeJoinRoom
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.libraries.push.test.notifications.FakeNotificationDrawerManager
-import io.element.android.services.analytics.api.AnalyticsService
-import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -163,13 +164,10 @@ class AcceptDeclineInvitePresenterTest {
 
     @Test
     fun `present - accepting invite error flow`() = runTest {
-        val joinRoomFailure = lambdaRecorder { roomId: RoomId ->
+        val joinRoomFailure = lambdaRecorder { roomId: RoomId, _: List<String>, _: JoinedRoom.Trigger ->
             Result.failure<Unit>(RuntimeException("Failed to join room $roomId"))
         }
-        val client = FakeMatrixClient().apply {
-            joinRoomLambda = joinRoomFailure
-        }
-        val presenter = createAcceptDeclineInvitePresenter(client = client)
+        val presenter = createAcceptDeclineInvitePresenter(joinRoomLambda = joinRoomFailure)
         presenter.test {
             val inviteData = anInviteData()
             awaitItem().also { state ->
@@ -177,33 +175,35 @@ class AcceptDeclineInvitePresenterTest {
                     AcceptDeclineInviteEvents.AcceptInvite(inviteData)
                 )
             }
-            skipItems(1)
             awaitItem().also { state ->
-                assertThat(state.invite).isEqualTo(Optional.of(inviteData))
+                assertThat(state.invite).isEqualTo(Optional.empty<InviteData>())
+                assertThat(state.acceptAction).isEqualTo(AsyncAction.Loading)
+            }
+            awaitItem().also { state ->
                 assertThat(state.acceptAction).isInstanceOf(AsyncAction.Failure::class.java)
                 state.eventSink(
                     InternalAcceptDeclineInviteEvents.DismissAcceptError
                 )
             }
-            skipItems(1)
             awaitItem().also { state ->
                 assertThat(state.invite).isEqualTo(Optional.empty<InviteData>())
                 assertThat(state.acceptAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
             }
             cancelAndConsumeRemainingEvents()
         }
-        assert(joinRoomFailure).isCalledOnce()
+        assert(joinRoomFailure)
+            .isCalledExactly(1)
+            .withSequence(
+                listOf(value(A_ROOM_ID), value(emptyList<String>()), value(JoinedRoom.Trigger.Invite))
+            )
     }
 
     @Test
     fun `present - accepting invite success flow`() = runTest {
-        val joinRoomSuccess = lambdaRecorder { _: RoomId ->
+        val joinRoomSuccess = lambdaRecorder { _: RoomId, _: List<String>, _: JoinedRoom.Trigger ->
             Result.success(Unit)
         }
-        val client = FakeMatrixClient().apply {
-            joinRoomLambda = joinRoomSuccess
-        }
-        val presenter = createAcceptDeclineInvitePresenter(client = client)
+        val presenter = createAcceptDeclineInvitePresenter(joinRoomLambda = joinRoomSuccess)
         presenter.test {
             val inviteData = anInviteData()
             awaitItem().also { state ->
@@ -211,14 +211,20 @@ class AcceptDeclineInvitePresenterTest {
                     AcceptDeclineInviteEvents.AcceptInvite(inviteData)
                 )
             }
-            skipItems(1)
             awaitItem().also { state ->
-                assertThat(state.invite).isEqualTo(Optional.of(inviteData))
+                assertThat(state.invite).isEqualTo(Optional.empty<InviteData>())
+                assertThat(state.acceptAction).isEqualTo(AsyncAction.Loading)
+            }
+            awaitItem().also { state ->
                 assertThat(state.acceptAction).isInstanceOf(AsyncAction.Success::class.java)
             }
             cancelAndConsumeRemainingEvents()
         }
-        assert(joinRoomSuccess).isCalledOnce()
+        assert(joinRoomSuccess)
+            .isCalledExactly(1)
+            .withSequence(
+                listOf(value(A_ROOM_ID), value(emptyList<String>()), value(JoinedRoom.Trigger.Invite))
+            )
     }
 
     private fun anInviteData(
@@ -235,12 +241,14 @@ class AcceptDeclineInvitePresenterTest {
 
     private fun createAcceptDeclineInvitePresenter(
         client: MatrixClient = FakeMatrixClient(),
-        analyticsService: AnalyticsService = FakeAnalyticsService(),
+        joinRoomLambda: (RoomId, List<String>, JoinedRoom.Trigger) -> Result<Unit> = { _, _, _ ->
+            Result.success(Unit)
+        },
         notificationDrawerManager: NotificationDrawerManager = FakeNotificationDrawerManager(),
     ): AcceptDeclineInvitePresenter {
         return AcceptDeclineInvitePresenter(
             client = client,
-            analyticsService = analyticsService,
+            joinRoom = FakeJoinRoom(joinRoomLambda),
             notificationDrawerManager = notificationDrawerManager,
         )
     }

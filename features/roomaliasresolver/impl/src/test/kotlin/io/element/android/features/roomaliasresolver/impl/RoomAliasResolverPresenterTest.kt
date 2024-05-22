@@ -22,9 +22,12 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_SERVER_LIST
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
@@ -48,8 +51,9 @@ class RoomAliasResolverPresenterTest {
 
     @Test
     fun `present - resolve alias to roomId`() = runTest {
+        val result = aResolvedRoomAlias()
         val client = FakeMatrixClient(
-            resolveRoomAliasResult = { Result.success(A_ROOM_ID) }
+            resolveRoomAliasResult = { Result.success(result) }
         )
         val presenter = createPresenter(matrixClient = client)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -59,7 +63,7 @@ class RoomAliasResolverPresenterTest {
             assertThat(awaitItem().resolveState.isLoading()).isTrue()
             val resultState = awaitItem()
             assertThat(resultState.roomAlias).isEqualTo(A_ROOM_ALIAS)
-            assertThat(resultState.resolveState.dataOrNull()).isEqualTo(A_ROOM_ID)
+            assertThat(resultState.resolveState.dataOrNull()).isEqualTo(result)
         }
     }
 
@@ -92,3 +96,11 @@ class RoomAliasResolverPresenterTest {
         matrixClient = matrixClient,
     )
 }
+
+internal fun aResolvedRoomAlias(
+    roomId: RoomId = A_ROOM_ID,
+    servers: List<String> = A_SERVER_LIST,
+) = ResolvedRoomAlias(
+    roomId = roomId,
+    servers = servers,
+)

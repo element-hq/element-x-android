@@ -3,12 +3,16 @@
   <string name="state_event_avatar_changed_too">"(s-a schimbat si avatarul)"</string>
   <string name="state_event_avatar_url_changed">"%1$s și-a schimbat avatarul"</string>
   <string name="state_event_avatar_url_changed_by_you">"V-ați schimbat avatarul"</string>
+  <string name="state_event_demoted_to_member">"%1$s a fost retrogradat la funcția de membru"</string>
+  <string name="state_event_demoted_to_moderator">"%1$s a fost retrogradat la funcția de moderator"</string>
   <string name="state_event_display_name_changed_from">"%1$s și-a schimbat numele din %2$s în %3$s"</string>
   <string name="state_event_display_name_changed_from_by_you">"V-ați schimbat numele din %1$s în %2$s"</string>
   <string name="state_event_display_name_removed">"%1$s și-a sters numele (era %2$s)"</string>
   <string name="state_event_display_name_removed_by_you">"V-ați sters numele (era %1$s)"</string>
   <string name="state_event_display_name_set">"%1$s și-a schimbat numele %2$s"</string>
   <string name="state_event_display_name_set_by_you">"V-ați schimbat numele în %1$s"</string>
+  <string name="state_event_promoted_to_administrator">"%1$s a fost promovat în funcția de administrator"</string>
+  <string name="state_event_promoted_to_moderator">"%1$s a fost promovat la funcția de moderator"</string>
   <string name="state_event_room_avatar_changed">"%1$s a schimbat avatarul camerei"</string>
   <string name="state_event_room_avatar_changed_by_you">"Ați schimbat avatarul camerei"</string>
   <string name="state_event_room_avatar_removed">"%1$s a șters avatarul camerei"</string>
@@ -26,7 +30,7 @@
   <string name="state_event_room_join_by_you">"Ați intrat în cameră"</string>
   <string name="state_event_room_knock">"%1$s a solicitat să se alăture camerei"</string>
   <string name="state_event_room_knock_accepted">"%1$s i-a permis lui %2$s să se alăture camerei"</string>
-  <string name="state_event_room_knock_accepted_by_you">"%1$s v-a permis să vă alăturați camerei"</string>
+  <string name="state_event_room_knock_accepted_by_you">"I-ați permis lui %1$s să se alăture"</string>
   <string name="state_event_room_knock_by_you">"Ați solicitat să vă alăturați camerei"</string>
   <string name="state_event_room_knock_denied">"%1$s a respins solicitarea de alăturare a lui %2$s"</string>
   <string name="state_event_room_knock_denied_by_you">"Ați respins solicitarea de alăturare a lui %1$s"</string>

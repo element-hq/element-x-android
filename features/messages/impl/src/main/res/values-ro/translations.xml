@@ -48,9 +48,9 @@
     <item quantity="other">"%1$s, %2$s și încă %3$d"</item>
   </plurals>
   <plurals name="screen_room_typing_notification">
-    <item quantity="one">"%1$s scrie"</item>
-    <item quantity="few">"%1$s scriu"</item>
-    <item quantity="other">"%1$s scriu"</item>
+    <item quantity="one">"%1$s tastează"</item>
+    <item quantity="few">"%1$s tastează"</item>
+    <item quantity="other">"%1$s tastează"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s și %2$s"</string>
 </resources>

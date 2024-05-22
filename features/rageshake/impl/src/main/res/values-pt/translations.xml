@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"Anexar captura de ecrã"</string>
+  <string name="screen_bug_report_contact_me">"Podem contactar-me se tiverem mais questões."</string>
+  <string name="screen_bug_report_contact_me_title">"Contactar-me"</string>
+  <string name="screen_bug_report_edit_screenshot">"Editar captura de ecrã"</string>
+  <string name="screen_bug_report_editor_description">"Descreve o problema. O que é que fizeste? O que esperavas que acontecesse? O que realmente aconteceu? Por favor, dá o máximo de detalhes que puderes."</string>
+  <string name="screen_bug_report_editor_placeholder">"Descreve o problema…"</string>
+  <string name="screen_bug_report_editor_supporting">"Se possível, escreve a descrição em inglês."</string>
+  <string name="screen_bug_report_error_description_too_short">"A descrição é demasiado curta. Por favor dá mais detalhes sobre o que aconteceu. Obrigado!"</string>
+  <string name="screen_bug_report_include_crash_logs">"Enviar registos de falha"</string>
+  <string name="screen_bug_report_include_logs">"Permitir registos"</string>
+  <string name="screen_bug_report_include_screenshot">"Enviar captura de ecrã"</string>
+  <string name="screen_bug_report_logs_description">"Os registos serão incluídos na tua mensagem para garantir que tudo está a funcionar corretamente. Para enviares a tua mensagem sem registos, desativa esta definição."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"A %1$s teve uma falha da última vez que foi utilizada. Gostarias de partilhar um relatório de acidente connosco?"</string>
+  <string name="screen_bug_report_view_logs">"Ver registos"</string>
+</resources>

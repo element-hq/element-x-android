@@ -35,6 +35,9 @@
   <string name="screen_room_details_add_topic_title">"Thema hinzufügen"</string>
   <string name="screen_room_details_already_a_member">"Bereits Mitglied"</string>
   <string name="screen_room_details_already_invited">"Bereits eingeladen"</string>
+  <string name="screen_room_details_badge_encrypted">"Verschlüsselt"</string>
+  <string name="screen_room_details_badge_not_encrypted">"Nicht verschlüsselt"</string>
+  <string name="screen_room_details_badge_public">"Öffentlicher Raum"</string>
   <string name="screen_room_details_edit_room_title">"Raum bearbeiten"</string>
   <string name="screen_room_details_edition_error">"Es ist ein unbekannter Fehler aufgetreten und die Informationen konnten nicht geändert werden."</string>
   <string name="screen_room_details_edition_error_title">"Raum kann nicht aktualisiert werden"</string>

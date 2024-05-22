@@ -18,6 +18,7 @@ package io.element.android.features.joinroom.api
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.architecture.NodeInputs
@@ -32,5 +33,7 @@ interface JoinRoomEntryPoint : FeatureEntryPoint {
         val roomId: RoomId,
         val roomIdOrAlias: RoomIdOrAlias,
         val roomDescription: Optional<RoomDescription>,
+        val serverNames: List<String>,
+        val trigger: JoinedRoom.Trigger,
     ) : NodeInputs
 }

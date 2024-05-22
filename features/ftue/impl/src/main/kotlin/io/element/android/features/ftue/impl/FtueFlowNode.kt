@@ -132,9 +132,8 @@ class FtueFlowNode @AssistedInject constructor(
                         lifecycleScope.launch { moveToNextStep() }
                     }
                 }
-                lockScreenEntryPoint.nodeBuilder(this, buildContext)
+                lockScreenEntryPoint.nodeBuilder(this, buildContext, LockScreenEntryPoint.Target.Setup)
                     .callback(callback)
-                    .target(LockScreenEntryPoint.Target.Setup)
                     .build()
             }
         }

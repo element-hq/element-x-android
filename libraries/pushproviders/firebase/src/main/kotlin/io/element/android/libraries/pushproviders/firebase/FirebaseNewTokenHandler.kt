@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.pushproviders.firebase
 
+import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -43,12 +44,24 @@ class FirebaseNewTokenHandler @Inject constructor(
         // Register the pusher for all the sessions
         sessionStore.getAllSessions().toUserList()
             .map { SessionId(it) }
-            .forEach { userId ->
-                val userDataStore = userPushStoreFactory.getOrCreate(userId)
+            .forEach { sessionId ->
+                val userDataStore = userPushStoreFactory.getOrCreate(sessionId)
                 if (userDataStore.getPushProviderName() == FirebaseConfig.NAME) {
-                    matrixAuthenticationService.restoreSession(userId).getOrNull()?.use { client ->
-                        pusherSubscriber.registerPusher(client, firebaseToken, FirebaseConfig.PUSHER_HTTP_URL)
-                    }
+                    matrixAuthenticationService
+                        .restoreSession(sessionId)
+                        .onFailure {
+                            Timber.tag(loggerTag.value).e(it, "Failed to restore session $sessionId")
+                        }
+                        .flatMap { client ->
+                            pusherSubscriber.registerPusher(
+                                matrixClient = client,
+                                pushKey = firebaseToken,
+                                gateway = FirebaseConfig.PUSHER_HTTP_URL,
+                            )
+                        }
+                        .onFailure {
+                            Timber.tag(loggerTag.value).e(it, "Failed to register pusher for session $sessionId")
+                        }
                 } else {
                     Timber.tag(loggerTag.value).d("This session is not using Firebase pusher")
                 }

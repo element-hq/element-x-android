@@ -39,6 +39,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.core)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.testtags)
     implementation(libs.coil.compose)
     implementation(libs.coil.gif)
     implementation(libs.jsoup)

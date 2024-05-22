@@ -21,6 +21,7 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.DefaultPreferences
+import io.element.android.libraries.matrix.api.core.UserId
 import javax.inject.Inject
 
 class UnifiedPushStore @Inject constructor(
@@ -71,8 +72,19 @@ class UnifiedPushStore @Inject constructor(
         }
     }
 
+    fun getDistributorValue(userId: UserId): String? {
+        return defaultPrefs.getString(PREFS_DISTRIBUTOR + userId, null)
+    }
+
+    fun setDistributorValue(userId: UserId, value: String) {
+        defaultPrefs.edit {
+            putString(PREFS_DISTRIBUTOR + userId, value)
+        }
+    }
+
     companion object {
         private const val PREFS_ENDPOINT_OR_TOKEN = "UP_ENDPOINT_OR_TOKEN"
         private const val PREFS_PUSH_GATEWAY = "PUSH_GATEWAY"
+        private const val PREFS_DISTRIBUTOR = "DISTRIBUTOR"
     }
 }
