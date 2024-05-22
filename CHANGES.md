@@ -1,3 +1,26 @@
+Changes in Element X v0.4.13 (2024-05-22)
+=========================================
+
+Features ✨
+----------
+ - Add plain text editor based on Markdown input. ([#2840](https://github.com/element-hq/element-x-android/issues/2840))
+
+Bugfixes 🐛
+----------
+ - Use members display names for their membership state events. ([#2286](https://github.com/element-hq/element-x-android/issues/2286))
+ - Make sure explicit links in messages take priority over links found by linkification (urls, emails, phone numbers, etc.) ([#2291](https://github.com/element-hq/element-x-android/issues/2291))
+ - Fix modal contents overlapping screen lock pin. ([#2692](https://github.com/element-hq/element-x-android/issues/2692))
+ - Fix a crash when trying to create an `EncryptedFile` in Android 6. ([#2846](https://github.com/element-hq/element-x-android/issues/2846))
+ - Session falsely displayed as 'verified' with no internet connection. ([#2884](https://github.com/element-hq/element-x-android/issues/2884))
+
+Other changes
+-------------
+ - Allow configuring push notification provider ([#2340](https://github.com/element-hq/element-x-android/issues/2340))
+ - UX cleanup: reorder text composer actions to prioritise camera ones. ([#2803](https://github.com/element-hq/element-x-android/issues/2803))
+ - Translation added into Portuguese and Simplified Chinese ([#2834](https://github.com/element-hq/element-x-android/issues/2834))
+ - Use via parameters when joining a room from permalink. ([#2843](https://github.com/element-hq/element-x-android/issues/2843))
+
+
 Changes in Element X v0.4.12 (2024-05-13)
 =========================================
 
