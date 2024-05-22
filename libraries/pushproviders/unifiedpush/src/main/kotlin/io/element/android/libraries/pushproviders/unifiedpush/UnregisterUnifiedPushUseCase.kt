@@ -17,18 +17,25 @@
 package io.element.android.libraries.pushproviders.unifiedpush
 
 import android.content.Context
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.pushproviders.api.PusherSubscriber
 import org.unifiedpush.android.connector.UnifiedPush
 import javax.inject.Inject
 
-class UnregisterUnifiedPushUseCase @Inject constructor(
+interface UnregisterUnifiedPushUseCase {
+    suspend fun execute(matrixClient: MatrixClient, clientSecret: String): Result<Unit>
+}
+
+@ContributesBinding(AppScope::class)
+class DefaultUnregisterUnifiedPushUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
     private val unifiedPushStore: UnifiedPushStore,
     private val pusherSubscriber: PusherSubscriber,
-) {
-    suspend fun execute(matrixClient: MatrixClient, clientSecret: String): Result<Unit> {
+) : UnregisterUnifiedPushUseCase {
+    override suspend fun execute(matrixClient: MatrixClient, clientSecret: String): Result<Unit> {
         val endpoint = unifiedPushStore.getEndpoint(clientSecret)
         val gateway = unifiedPushStore.getPushGateway(clientSecret)
         if (endpoint == null || gateway == null) {

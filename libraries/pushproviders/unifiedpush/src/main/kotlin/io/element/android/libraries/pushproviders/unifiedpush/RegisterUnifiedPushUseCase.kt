@@ -17,6 +17,8 @@
 package io.element.android.libraries.pushproviders.unifiedpush
 
 import android.content.Context
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.unifiedpush.registration.EndpointRegistrationHandler
@@ -30,12 +32,17 @@ import org.unifiedpush.android.connector.UnifiedPush
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
-class RegisterUnifiedPushUseCase @Inject constructor(
+interface RegisterUnifiedPushUseCase {
+    suspend fun execute(distributor: Distributor, clientSecret: String): Result<Unit>
+}
+
+@ContributesBinding(AppScope::class)
+class DefaultRegisterUnifiedPushUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
     private val endpointRegistrationHandler: EndpointRegistrationHandler,
     private val coroutineScope: CoroutineScope,
-) {
-    suspend fun execute(distributor: Distributor, clientSecret: String): Result<Unit> {
+) : RegisterUnifiedPushUseCase {
+    override suspend fun execute(distributor: Distributor, clientSecret: String): Result<Unit> {
         UnifiedPush.saveDistributor(context, distributor.value)
         val completable = CompletableDeferred<Result<Unit>>()
         val job = coroutineScope.launch {
