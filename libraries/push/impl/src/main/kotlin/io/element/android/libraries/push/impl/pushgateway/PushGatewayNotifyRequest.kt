@@ -17,12 +17,11 @@ package io.element.android.libraries.push.impl.pushgateway
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.network.RetrofitFactory
 import io.element.android.libraries.push.api.gateway.PushGatewayFailure
 import javax.inject.Inject
 
 class PushGatewayNotifyRequest @Inject constructor(
-    private val retrofitFactory: RetrofitFactory,
+    private val pushGatewayApiFactory: PushGatewayApiFactory,
 ) {
     data class Params(
         val url: String,
@@ -33,12 +32,10 @@ class PushGatewayNotifyRequest @Inject constructor(
     )
 
     suspend fun execute(params: Params) {
-        val sygnalApi = retrofitFactory.create(
+        val pushGatewayApi = pushGatewayApiFactory.create(
             params.url.substringBefore(PushGatewayConfig.URI_PUSH_GATEWAY_PREFIX_PATH)
         )
-            .create(PushGatewayAPI::class.java)
-
-        val response = sygnalApi.notify(
+        val response = pushGatewayApi.notify(
             PushGatewayNotifyBody(
                 PushGatewayNotification(
                     eventId = params.eventId.value,

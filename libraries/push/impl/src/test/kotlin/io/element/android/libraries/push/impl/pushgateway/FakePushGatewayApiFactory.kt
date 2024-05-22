@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,22 @@
 
 package io.element.android.libraries.push.impl.pushgateway
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+class FakePushGatewayApiFactory(
+    private val notifyResponse: () -> PushGatewayNotifyResponse
+) : PushGatewayApiFactory {
+    var baseUrlParameter: String? = null
+        private set
 
-@Serializable
-data class PushGatewayNotifyBody(
-    /**
-     * Required. Information about the push notification
-     */
-    @SerialName("notification")
-    val notification: PushGatewayNotification
-)
+    override fun create(baseUrl: String): PushGatewayAPI {
+        baseUrlParameter = baseUrl
+        return FakePushGatewayAPI(notifyResponse)
+    }
+}
+
+class FakePushGatewayAPI(
+    private val notifyResponse: () -> PushGatewayNotifyResponse
+) : PushGatewayAPI {
+    override suspend fun notify(body: PushGatewayNotifyBody): PushGatewayNotifyResponse {
+        return notifyResponse()
+    }
+}
