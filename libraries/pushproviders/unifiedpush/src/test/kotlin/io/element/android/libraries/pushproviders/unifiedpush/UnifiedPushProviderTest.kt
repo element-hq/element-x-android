@@ -92,14 +92,14 @@ class UnifiedPushProviderTest {
         val result = unifiedPushProvider.registerWith(FakeMatrixClient(), Distributor("value", "Name"))
         assertThat(result).isEqualTo(Result.success(Unit))
         getSecretForUserResultLambda.assertions()
-            .isCalledExactly(1)
-            .withSequence(listOf(value(A_SESSION_ID)))
+            .isCalledOnce()
+            .with(value(A_SESSION_ID))
         executeLambda.assertions()
-            .isCalledExactly(1)
-            .withSequence(listOf(value(Distributor("value", "Name")), value(A_SECRET)))
+            .isCalledOnce()
+            .with(value(Distributor("value", "Name")), value(A_SECRET))
         setDistributorValueResultLambda.assertions()
-            .isCalledExactly(1)
-            .withSequence(listOf(value(A_SESSION_ID), value("value")))
+            .isCalledOnce()
+            .with(value(A_SESSION_ID), value("value"))
     }
 
     @Test
@@ -121,11 +121,11 @@ class UnifiedPushProviderTest {
         val result = unifiedPushProvider.registerWith(FakeMatrixClient(), Distributor("value", "Name"))
         assertThat(result).isEqualTo(Result.failure<Unit>(AN_EXCEPTION))
         getSecretForUserResultLambda.assertions()
-            .isCalledExactly(1)
-            .withSequence(listOf(value(A_SESSION_ID)))
+            .isCalledOnce()
+            .with(value(A_SESSION_ID))
         executeLambda.assertions()
-            .isCalledExactly(1)
-            .withSequence(listOf(value(Distributor("value", "Name")), value(A_SECRET)))
+            .isCalledOnce()
+            .with(value(Distributor("value", "Name")), value(A_SECRET))
     }
 
     @Test
@@ -144,11 +144,11 @@ class UnifiedPushProviderTest {
         val result = unifiedPushProvider.unregister(matrixClient)
         assertThat(result).isEqualTo(Result.success(Unit))
         getSecretForUserResultLambda.assertions()
-            .isCalledExactly(1)
-            .withSequence(listOf(value(A_SESSION_ID)))
+            .isCalledOnce()
+            .with(value(A_SESSION_ID))
         executeLambda.assertions()
-            .isCalledExactly(1)
-            .withSequence(listOf(value(matrixClient), value(A_SECRET)))
+            .isCalledOnce()
+            .with(value(matrixClient), value(A_SECRET))
     }
 
     @Test
@@ -167,11 +167,11 @@ class UnifiedPushProviderTest {
         val result = unifiedPushProvider.unregister(matrixClient)
         assertThat(result).isEqualTo(Result.failure<Unit>(AN_EXCEPTION))
         getSecretForUserResultLambda.assertions()
-            .isCalledExactly(1)
-            .withSequence(listOf(value(A_SESSION_ID)))
+            .isCalledOnce()
+            .with(value(A_SESSION_ID))
         executeLambda.assertions()
-            .isCalledExactly(1)
-            .withSequence(listOf(value(matrixClient), value(A_SECRET)))
+            .isCalledOnce()
+            .with(value(matrixClient), value(A_SECRET))
     }
 
     @Test

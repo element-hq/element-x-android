@@ -70,8 +70,8 @@ class DefaultPushServiceTest {
         )
         assertThat(defaultPushService.testPush()).isTrue()
         testPushResult.assertions()
-            .isCalledExactly(1)
-            .withSequence(listOf(value(aConfig)))
+            .isCalledOnce()
+            .with(value(aConfig))
     }
 
     @Test
@@ -177,11 +177,11 @@ class DefaultPushServiceTest {
         assertThat(result.isSuccess).isTrue()
         assertThat(userPushStore.getPushProviderName()).isEqualTo(aPushProvider.name)
         unregisterLambda.assertions()
-            .isCalledExactly(1)
-            .withSequence(listOf(value(client)))
+            .isCalledOnce()
+            .with(value(client))
         registerLambda.assertions()
-            .isCalledExactly(1)
-            .withSequence(listOf(value(client), value(aDistributor)))
+            .isCalledOnce()
+            .with(value(client), value(aDistributor))
     }
 
     @Test

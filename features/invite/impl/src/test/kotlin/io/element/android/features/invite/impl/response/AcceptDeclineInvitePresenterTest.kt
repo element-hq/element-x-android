@@ -192,9 +192,9 @@ class AcceptDeclineInvitePresenterTest {
             cancelAndConsumeRemainingEvents()
         }
         assert(joinRoomFailure)
-            .isCalledExactly(1)
-            .withSequence(
-                listOf(value(A_ROOM_ID), value(emptyList<String>()), value(JoinedRoom.Trigger.Invite))
+            .isCalledOnce()
+            .with(
+                value(A_ROOM_ID), value(emptyList<String>()), value(JoinedRoom.Trigger.Invite)
             )
     }
 
@@ -221,9 +221,9 @@ class AcceptDeclineInvitePresenterTest {
             cancelAndConsumeRemainingEvents()
         }
         assert(joinRoomSuccess)
-            .isCalledExactly(1)
-            .withSequence(
-                listOf(value(A_ROOM_ID), value(emptyList<String>()), value(JoinedRoom.Trigger.Invite))
+            .isCalledOnce()
+            .with(
+                value(A_ROOM_ID), value(emptyList<String>()), value(JoinedRoom.Trigger.Invite)
             )
     }
 

@@ -99,21 +99,19 @@ class DefaultPusherSubscriberTest {
         )
         assertThat(result).isEqualTo(registerResult)
         setHttpPusherResult.assertions()
-            .isCalledExactly(1)
-            .withSequence(
-                listOf(
-                    value(
-                        SetHttpPusherData(
-                            pushKey = "aPushKey",
-                            appId = PushConfig.PUSHER_APP_ID,
-                            url = "aGateway",
-                            appDisplayName = "MyApp",
-                            deviceDisplayName = "MyDevice",
-                            profileTag = DEFAULT_PUSHER_FILE_TAG + "_",
-                            lang = "en",
-                            defaultPayload = "{\"cs\":\"$A_SECRET\"}",
-                        ),
-                    )
+            .isCalledOnce()
+            .with(
+                value(
+                    SetHttpPusherData(
+                        pushKey = "aPushKey",
+                        appId = PushConfig.PUSHER_APP_ID,
+                        url = "aGateway",
+                        appDisplayName = "MyApp",
+                        deviceDisplayName = "MyDevice",
+                        profileTag = DEFAULT_PUSHER_FILE_TAG + "_",
+                        lang = "en",
+                        defaultPayload = "{\"cs\":\"$A_SECRET\"}",
+                    ),
                 )
             )
         assertThat(userPushStore.getCurrentRegisteredPushKey()).isEqualTo(
@@ -167,15 +165,13 @@ class DefaultPusherSubscriberTest {
         )
         assertThat(result).isEqualTo(unregisterResult)
         unsetHttpPusherResult.assertions()
-            .isCalledExactly(1)
-            .withSequence(
-                listOf(
-                    value(
-                        UnsetHttpPusherData(
-                            pushKey = "aPushKey",
-                            appId = PushConfig.PUSHER_APP_ID,
-                        ),
-                    )
+            .isCalledOnce()
+            .with(
+                value(
+                    UnsetHttpPusherData(
+                        pushKey = "aPushKey",
+                        appId = PushConfig.PUSHER_APP_ID,
+                    ),
                 )
             )
         assertThat(userPushStore.getCurrentRegisteredPushKey()).isEqualTo(

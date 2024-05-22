@@ -82,8 +82,8 @@ class FirebasePushProviderTest {
         val result = firebasePushProvider.registerWith(matrixClient, Distributor("value", "Name"))
         assertThat(result).isEqualTo(Result.success(Unit))
         registerPusherResultLambda.assertions()
-            .isCalledExactly(1)
-            .withSequence(listOf(value(matrixClient), value("aToken"), value(FirebaseConfig.PUSHER_HTTP_URL)))
+            .isCalledOnce()
+            .with(value(matrixClient), value("aToken"), value(FirebaseConfig.PUSHER_HTTP_URL))
     }
 
     @Test
@@ -129,8 +129,8 @@ class FirebasePushProviderTest {
         val result = firebasePushProvider.unregister(matrixClient)
         assertThat(result).isEqualTo(Result.success(Unit))
         unregisterPusherResultLambda.assertions()
-            .isCalledExactly(1)
-            .withSequence(listOf(value(matrixClient), value("aToken"), value(FirebaseConfig.PUSHER_HTTP_URL)))
+            .isCalledOnce()
+            .with(value(matrixClient), value("aToken"), value(FirebaseConfig.PUSHER_HTTP_URL))
     }
 
     @Test
