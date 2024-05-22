@@ -135,16 +135,27 @@ class DefaultBugReporterTest {
             buildMeta = buildMeta,
             bugReporterUrlProvider = { server.url("/") },
             sdkMetadata = FakeSdkMetadata("123456789"),
-            matrixClientsProvider = FakeMatrixClientProvider(getClient = { Result.success(matrixClient) })
+            matrixClientProvider = FakeMatrixClientProvider(getClient = { Result.success(matrixClient) })
         )
 
+        val progressValues = mutableListOf<Int>()
         sut.sendBugReport(
             withDevicesLogs = true,
             withCrashLogs = true,
             withScreenshot = true,
             theBugDescription = "a bug occurred",
             canContact = true,
-            listener = null
+            listener = object : BugReporterListener {
+                override fun onUploadCancelled() {}
+
+                override fun onUploadFailed(reason: String?) {}
+
+                override fun onProgress(progress: Int) {
+                    progressValues.add(progress)
+                }
+
+                override fun onUploadSucceed() {}
+            },
         )
         val request = server.takeRequest()
 
@@ -155,12 +166,14 @@ class DefaultBugReporterTest {
             // Just use simple parsing to detect basic properties
             val regex = "form-data; name=\"(\\w*)\".*".toRegex()
             multipartReader.use {
-                while (true) {
-                    val part = multipartReader.nextPart() ?: break
-                    val contentDisposition = part.headers["Content-Disposition"] ?: continue
-                    regex.find(contentDisposition)?.groupValues?.get(1)?.let { name ->
-                        foundValues.put(name, part.body.readUtf8())
+                var part = multipartReader.nextPart()
+                while (part != null) {
+                        part.headers["Content-Disposition"]?.let { contentDisposition ->
+                        regex.find(contentDisposition)?.groupValues?.get(1)?.let { name ->
+                            foundValues.put(name, part!!.body.readUtf8())
+                        }
                     }
+                    part = multipartReader.nextPart()
                 }
             }
         }
@@ -172,6 +185,9 @@ class DefaultBugReporterTest {
         assertThat(foundValues["user_id"]).isEqualTo("@foo:eample.com")
         assertThat(foundValues["text"]).isEqualTo("a bug occurred")
         assertThat(foundValues["device_keys"]).isEqualTo("curve25519:CURVECURVECURVE, ed25519:EDKEYEDKEYEDKY")
+
+        // device_key now added given they are not null
+        assertThat(progressValues.size).isEqualTo(EXPECTED_NUMBER_OF_PROGRESS_VALUE + 1)
 
         server.shutdown()
     }
@@ -242,7 +258,7 @@ class DefaultBugReporterTest {
             buildMeta = buildMeta,
             bugReporterUrlProvider = { server.url("/") },
             sdkMetadata = FakeSdkMetadata("123456789"),
-            matrixClientsProvider = FakeMatrixClientProvider()
+            matrixClientProvider = FakeMatrixClientProvider()
         )
     }
 

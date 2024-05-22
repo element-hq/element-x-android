@@ -38,8 +38,7 @@ import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.SdkMetadata
-import io.element.android.libraries.matrix.api.core.MatrixPatterns
-import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.CancellationException
@@ -82,7 +81,7 @@ class DefaultBugReporter @Inject constructor(
     private val buildMeta: BuildMeta,
     private val bugReporterUrlProvider: BugReporterUrlProvider,
     private val sdkMetadata: SdkMetadata,
-    private val matrixClientsProvider: MatrixClientProvider,
+    private val matrixClientProvider: MatrixClientProvider,
 ) : BugReporter {
     companion object {
         // filenames
@@ -149,7 +148,7 @@ class DefaultBugReporter @Inject constructor(
 
                 val sessionData = sessionStore.getLatestSession()
                 val deviceId = sessionData?.deviceId ?: "undefined"
-                val userId = sessionData?.userId ?: "undefined"
+                val userId = sessionData?.userId?.let { UserId(it) }
 
                 if (!isCancelled) {
                     // build the multi part request
@@ -157,14 +156,12 @@ class DefaultBugReporter @Inject constructor(
                         .addFormDataPart("text", bugDescription)
                         .addFormDataPart("app", context.getString(R.string.bug_report_app_name))
                         .addFormDataPart("user_agent", userAgentProvider.provide())
-                        .addFormDataPart("user_id", userId)
+                        .addFormDataPart("user_id", userId?.toString() ?: "undefined")
                         .addFormDataPart("can_contact", canContact.toString())
                         .addFormDataPart("device_id", deviceId)
                         .apply {
-                            userId.takeIf { MatrixPatterns.isUserId(it) }?.let {
-                                SessionId(it)
-                            }?.let { sessionId ->
-                                matrixClientsProvider.getOrNull(sessionId)?.let { client ->
+                            userId?.let {
+                                matrixClientProvider.getOrNull(it)?.let { client ->
                                     val curveKey = client.encryptionService().deviceCurve25519()
                                     val edKey = client.encryptionService().deviceEd25519()
                                     if (curveKey != null && edKey != null) {
