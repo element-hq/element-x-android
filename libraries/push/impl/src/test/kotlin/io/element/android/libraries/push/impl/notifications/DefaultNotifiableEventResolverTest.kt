@@ -59,17 +59,17 @@ import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
-class NotifiableEventResolverTest {
+class DefaultNotifiableEventResolverTest {
     @Test
     fun `resolve event no session`() = runTest {
-        val sut = createNotifiableEventResolver(notificationService = null)
+        val sut = createDefaultNotifiableEventResolver(notificationService = null)
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
         assertThat(result).isNull()
     }
 
     @Test
     fun `resolve event failure`() = runTest {
-        val sut = createNotifiableEventResolver(
+        val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.failure(AN_EXCEPTION)
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
@@ -78,7 +78,7 @@ class NotifiableEventResolverTest {
 
     @Test
     fun `resolve event null`() = runTest {
-        val sut = createNotifiableEventResolver(
+        val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(null)
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
@@ -87,7 +87,7 @@ class NotifiableEventResolverTest {
 
     @Test
     fun `resolve event message text`() = runTest {
-        val sut = createNotifiableEventResolver(
+        val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
@@ -105,7 +105,7 @@ class NotifiableEventResolverTest {
     @Test
     @Config(qualifiers = "en")
     fun `resolve event message with mention`() = runTest {
-        val sut = createNotifiableEventResolver(
+        val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
@@ -123,7 +123,7 @@ class NotifiableEventResolverTest {
 
     @Test
     fun `resolve HTML formatted event message text takes plain text version`() = runTest {
-        val sut = createNotifiableEventResolver(
+        val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
@@ -146,7 +146,7 @@ class NotifiableEventResolverTest {
 
     @Test
     fun `resolve incorrectly formatted event message text uses fallback`() = runTest {
-        val sut = createNotifiableEventResolver(
+        val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
@@ -169,7 +169,7 @@ class NotifiableEventResolverTest {
 
     @Test
     fun `resolve event message audio`() = runTest {
-        val sut = createNotifiableEventResolver(
+        val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
@@ -186,7 +186,7 @@ class NotifiableEventResolverTest {
 
     @Test
     fun `resolve event message video`() = runTest {
-        val sut = createNotifiableEventResolver(
+        val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
@@ -203,7 +203,7 @@ class NotifiableEventResolverTest {
 
     @Test
     fun `resolve event message voice`() = runTest {
-        val sut = createNotifiableEventResolver(
+        val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
@@ -220,7 +220,7 @@ class NotifiableEventResolverTest {
 
     @Test
     fun `resolve event message image`() = runTest {
-        val sut = createNotifiableEventResolver(
+        val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
@@ -237,7 +237,7 @@ class NotifiableEventResolverTest {
 
     @Test
     fun `resolve event message sticker`() = runTest {
-        val sut = createNotifiableEventResolver(
+        val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
@@ -254,7 +254,7 @@ class NotifiableEventResolverTest {
 
     @Test
     fun `resolve event message file`() = runTest {
-        val sut = createNotifiableEventResolver(
+        val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
@@ -271,7 +271,7 @@ class NotifiableEventResolverTest {
 
     @Test
     fun `resolve event message location`() = runTest {
-        val sut = createNotifiableEventResolver(
+        val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
@@ -288,7 +288,7 @@ class NotifiableEventResolverTest {
 
     @Test
     fun `resolve event message notice`() = runTest {
-        val sut = createNotifiableEventResolver(
+        val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
@@ -305,7 +305,7 @@ class NotifiableEventResolverTest {
 
     @Test
     fun `resolve event message emote`() = runTest {
-        val sut = createNotifiableEventResolver(
+        val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
@@ -322,7 +322,7 @@ class NotifiableEventResolverTest {
 
     @Test
     fun `resolve poll`() = runTest {
-        val sut = createNotifiableEventResolver(
+        val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.MessageLike.Poll(
@@ -339,7 +339,7 @@ class NotifiableEventResolverTest {
 
     @Test
     fun `resolve RoomMemberContent invite room`() = runTest {
-        val sut = createNotifiableEventResolver(
+        val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.StateEvent.RoomMemberContent(
@@ -372,7 +372,7 @@ class NotifiableEventResolverTest {
 
     @Test
     fun `resolve RoomMemberContent invite direct`() = runTest {
-        val sut = createNotifiableEventResolver(
+        val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.StateEvent.RoomMemberContent(
@@ -405,7 +405,7 @@ class NotifiableEventResolverTest {
 
     @Test
     fun `resolve RoomMemberContent other`() = runTest {
-        val sut = createNotifiableEventResolver(
+        val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.StateEvent.RoomMemberContent(
@@ -421,7 +421,7 @@ class NotifiableEventResolverTest {
 
     @Test
     fun `resolve RoomEncrypted`() = runTest {
-        val sut = createNotifiableEventResolver(
+        val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.MessageLike.RoomEncrypted
@@ -445,7 +445,7 @@ class NotifiableEventResolverTest {
 
     @Test
     fun `resolve CallInvite`() = runTest {
-        val sut = createNotifiableEventResolver(
+        val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.MessageLike.CallInvite(A_USER_ID_2)
@@ -517,7 +517,7 @@ class NotifiableEventResolverTest {
     }
 
     private fun testNull(content: NotificationContent) = runTest {
-        val sut = createNotifiableEventResolver(
+        val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
                     content = content
@@ -528,10 +528,10 @@ class NotifiableEventResolverTest {
         assertThat(result).isNull()
     }
 
-    private fun createNotifiableEventResolver(
+    private fun createDefaultNotifiableEventResolver(
         notificationService: FakeNotificationService? = FakeNotificationService(),
         notificationResult: Result<NotificationData?> = Result.success(null),
-    ): NotifiableEventResolver {
+    ): DefaultNotifiableEventResolver {
         val context = RuntimeEnvironment.getApplication() as Context
         notificationService?.givenGetNotificationResult(notificationResult)
         val matrixClientProvider = FakeMatrixClientProvider(getClient = {
@@ -544,7 +544,7 @@ class NotifiableEventResolverTest {
         val notificationMediaRepoFactory = NotificationMediaRepo.Factory {
             FakeNotificationMediaRepo()
         }
-        return NotifiableEventResolver(
+        return DefaultNotifiableEventResolver(
             stringProvider = AndroidStringProvider(context.resources),
             clock = FakeSystemClock(),
             matrixClientProvider = matrixClientProvider,

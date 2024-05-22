@@ -55,7 +55,7 @@ import io.element.android.services.toolbox.api.systemclock.SystemClock
 import timber.log.Timber
 import javax.inject.Inject
 
-private val loggerTag = LoggerTag("NotifiableEventResolver", LoggerTag.NotificationLoggerTag)
+private val loggerTag = LoggerTag("DefaultNotifiableEventResolver", LoggerTag.NotificationLoggerTag)
 
 /**
  * The notifiable event resolver is able to create a NotifiableEvent (view model for notifications) from an sdk Event.
@@ -63,15 +63,19 @@ private val loggerTag = LoggerTag("NotifiableEventResolver", LoggerTag.Notificat
  * The NotifiableEventResolver is the only aware of session/store, the NotificationDrawerManager has no knowledge of that,
  * this pattern allow decoupling between the object responsible of displaying notifications and the matrix sdk.
  */
-class NotifiableEventResolver @Inject constructor(
+interface NotifiableEventResolver {
+    suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): NotifiableEvent?
+}
+
+class DefaultNotifiableEventResolver @Inject constructor(
     private val stringProvider: StringProvider,
     private val clock: SystemClock,
     private val matrixClientProvider: MatrixClientProvider,
     private val notificationMediaRepoFactory: NotificationMediaRepo.Factory,
     @ApplicationContext private val context: Context,
     private val permalinkParser: PermalinkParser,
-) {
-    suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): NotifiableEvent? {
+) : NotifiableEventResolver {
+    override suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): NotifiableEvent? {
         // Restore session
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return null
         val notificationService = client.notificationService()
