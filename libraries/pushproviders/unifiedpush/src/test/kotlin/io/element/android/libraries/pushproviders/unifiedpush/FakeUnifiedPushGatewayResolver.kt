@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,10 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush
 
-import io.element.android.libraries.core.data.tryOrNull
-import io.element.android.libraries.pushproviders.api.PushData
-import kotlinx.serialization.json.Json
-import javax.inject.Inject
-
-class UnifiedPushParser @Inject constructor() {
-    private val json by lazy { Json { ignoreUnknownKeys = true } }
-
-    fun parse(message: ByteArray, clientSecret: String): PushData? {
-        return tryOrNull { json.decodeFromString<PushDataUnifiedPush>(String(message)) }?.toPushData(clientSecret)
+class FakeUnifiedPushGatewayResolver(
+    private val getGatewayResult: (String) -> String = { TODO() },
+) : UnifiedPushGatewayResolver {
+    override suspend fun getGateway(endpoint: String): String {
+        return getGatewayResult(endpoint)
     }
 }

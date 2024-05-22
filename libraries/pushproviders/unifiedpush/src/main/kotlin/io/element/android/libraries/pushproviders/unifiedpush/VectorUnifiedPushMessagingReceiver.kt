@@ -24,7 +24,6 @@ import io.element.android.libraries.pushproviders.api.PushHandler
 import io.element.android.libraries.pushproviders.unifiedpush.registration.EndpointRegistrationHandler
 import io.element.android.libraries.pushproviders.unifiedpush.registration.RegistrationResult
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.unifiedpush.android.connector.MessagingReceiver
 import timber.log.Timber
@@ -40,8 +39,7 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var unifiedPushGatewayResolver: UnifiedPushGatewayResolver
     @Inject lateinit var newGatewayHandler: UnifiedPushNewGatewayHandler
     @Inject lateinit var endpointRegistrationHandler: EndpointRegistrationHandler
-
-    private val coroutineScope = CoroutineScope(SupervisorJob())
+    @Inject lateinit var coroutineScope: CoroutineScope
 
     override fun onReceive(context: Context, intent: Intent) {
         context.applicationContext.bindings<VectorUnifiedPushMessagingReceiverBindings>().inject(this)
