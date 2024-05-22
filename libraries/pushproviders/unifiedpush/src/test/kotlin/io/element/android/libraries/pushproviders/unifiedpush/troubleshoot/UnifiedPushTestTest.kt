@@ -85,7 +85,7 @@ class UnifiedPushTestTest {
     }
 
     @Test
-    fun `test isRelevant`() = runTest {
+    fun `test isRelevant`() {
         val sut = UnifiedPushTest(
             unifiedPushDistributorProvider = FakeUnifiedPushDistributorProvider(),
             openDistributorWebPageAction = FakeOpenDistributorWebPageAction(),
