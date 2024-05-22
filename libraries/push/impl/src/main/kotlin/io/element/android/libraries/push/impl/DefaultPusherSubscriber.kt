@@ -22,13 +22,9 @@ import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
 import io.element.android.libraries.matrix.api.pusher.UnsetHttpPusherData
-import io.element.android.libraries.push.impl.pushgateway.PushGatewayNotifyRequest
-import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 import io.element.android.libraries.pushproviders.api.PusherSubscriber
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
@@ -37,29 +33,14 @@ import javax.inject.Inject
 
 internal const val DEFAULT_PUSHER_FILE_TAG = "mobile"
 
-private val loggerTag = LoggerTag("PushersManager", LoggerTag.PushLoggerTag)
+private val loggerTag = LoggerTag("DefaultPusherSubscriber", LoggerTag.PushLoggerTag)
 
 @ContributesBinding(AppScope::class)
-class PushersManager @Inject constructor(
-    // private val localeProvider: LocaleProvider,
+class DefaultPusherSubscriber @Inject constructor(
     private val buildMeta: BuildMeta,
-    // private val getDeviceInfoUseCase: GetDeviceInfoUseCase,
-    private val pushGatewayNotifyRequest: PushGatewayNotifyRequest,
     private val pushClientSecret: PushClientSecret,
     private val userPushStoreFactory: UserPushStoreFactory,
 ) : PusherSubscriber {
-    suspend fun testPush(config: CurrentUserPushConfig) {
-        pushGatewayNotifyRequest.execute(
-            PushGatewayNotifyRequest.Params(
-                url = config.url,
-                appId = PushConfig.PUSHER_APP_ID,
-                pushKey = config.pushKey,
-                eventId = TEST_EVENT_ID,
-                roomId = TEST_ROOM_ID,
-            )
-        )
-    }
-
     /**
      * Register a pusher to the server if not done yet.
      */
@@ -130,10 +111,5 @@ class PushersManager @Inject constructor(
             .onFailure { throwable ->
                 Timber.tag(loggerTag.value).e(throwable, "Unable to unregister the pusher")
             }
-    }
-
-    companion object {
-        val TEST_EVENT_ID = EventId("\$THIS_IS_A_FAKE_EVENT_ID")
-        val TEST_ROOM_ID = RoomId("!room:domain")
     }
 }

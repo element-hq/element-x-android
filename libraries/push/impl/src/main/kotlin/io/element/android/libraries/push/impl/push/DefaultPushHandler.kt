@@ -23,10 +23,12 @@ import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
-import io.element.android.libraries.push.impl.PushersManager
+import io.element.android.libraries.push.impl.DefaultPusherSubscriber
 import io.element.android.libraries.push.impl.notifications.DefaultNotificationDrawerManager
 import io.element.android.libraries.push.impl.notifications.NotifiableEventResolver
 import io.element.android.libraries.push.impl.store.DefaultPushDataStore
+import io.element.android.libraries.push.impl.test.DefaultTestPush
+import io.element.android.libraries.push.impl.test.TestPush
 import io.element.android.libraries.push.impl.troubleshoot.DiagnosticPushHandler
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushproviders.api.PushHandler
@@ -76,7 +78,7 @@ class DefaultPushHandler @Inject constructor(
         defaultPushDataStore.incrementPushCounter()
 
         // Diagnostic Push
-        if (pushData.eventId == PushersManager.TEST_EVENT_ID) {
+        if (pushData.eventId == DefaultTestPush.TEST_EVENT_ID) {
             diagnosticPushHandler.handlePush()
             return
         }
