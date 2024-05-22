@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package io.element.android.libraries.pushproviders.firebase
 
 import android.os.Bundle
@@ -26,8 +28,10 @@ import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushproviders.api.PushHandler
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -43,7 +47,6 @@ class VectorFirebaseMessagingServiceTest {
         vectorFirebaseMessagingService.onMessageReceived(RemoteMessage(Bundle()))
     }
 
-    @Ignore("The test does not wait for the end of the coroutine.")
     @Test
     fun `test receiving valid data`() = runTest {
         val lambda = lambdaRecorder<PushData, Unit> { }
@@ -59,12 +62,12 @@ class VectorFirebaseMessagingServiceTest {
                 },
             )
         )
+        advanceUntilIdle()
         lambda.assertions()
             .isCalledOnce()
             .with(value(PushData(AN_EVENT_ID, A_ROOM_ID, null, A_SECRET)))
     }
 
-    @Ignore("The test does not wait for the end of the coroutine.")
     @Test
     fun `test new token is forwarded to the handler`() = runTest {
         val lambda = lambdaRecorder<String, Unit> { }
@@ -72,12 +75,13 @@ class VectorFirebaseMessagingServiceTest {
             firebaseNewTokenHandler = FakeFirebaseNewTokenHandler(handleResult = lambda)
         )
         vectorFirebaseMessagingService.onNewToken("aToken")
+        advanceUntilIdle()
         lambda.assertions()
             .isCalledOnce()
             .with(value("aToken"))
     }
 
-    private fun createVectorFirebaseMessagingService(
+    private fun TestScope.createVectorFirebaseMessagingService(
         firebaseNewTokenHandler: FirebaseNewTokenHandler = FakeFirebaseNewTokenHandler(),
         pushHandler: PushHandler = FakePushHandler(),
     ): VectorFirebaseMessagingService {
@@ -85,6 +89,7 @@ class VectorFirebaseMessagingServiceTest {
             this.firebaseNewTokenHandler = firebaseNewTokenHandler
             this.pushParser = FirebasePushParser()
             this.pushHandler = pushHandler
+            this.coroutineScope = this@createVectorFirebaseMessagingService
         }
     }
 }
