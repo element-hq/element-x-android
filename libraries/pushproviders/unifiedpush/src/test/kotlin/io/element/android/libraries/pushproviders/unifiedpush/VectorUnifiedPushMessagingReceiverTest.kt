@@ -99,8 +99,8 @@ class VectorUnifiedPushMessagingReceiverTest {
     @Test
     fun `onNewEndpoint run the expected tasks`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val storePushGatewayResult = lambdaRecorder<String?, String, Unit> { _, _ -> }
-        val storeUpEndpointResult = lambdaRecorder<String?, String, Unit> { _, _ -> }
+        val storePushGatewayResult = lambdaRecorder<String, String?, Unit> { _, _ -> }
+        val storeUpEndpointResult = lambdaRecorder<String, String?, Unit> { _, _ -> }
         val unifiedPushStore = FakeUnifiedPushStore(
             storePushGatewayResult = storePushGatewayResult,
             storeUpEndpointResult = storeUpEndpointResult,
@@ -130,17 +130,17 @@ class VectorUnifiedPushMessagingReceiverTest {
         }
         storePushGatewayResult.assertions()
             .isCalledOnce()
-            .with(value("aGateway"), value(A_SECRET))
+            .with(value(A_SECRET), value("aGateway"))
         storeUpEndpointResult.assertions()
             .isCalledOnce()
-            .with(value("anEndpoint"), value(A_SECRET))
+            .with(value(A_SECRET), value("anEndpoint"))
     }
 
     @Test
     fun `onNewEndpoint, if registration fails, the endpoint should not be stored`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val storePushGatewayResult = lambdaRecorder<String?, String, Unit> { _, _ -> }
-        val storeUpEndpointResult = lambdaRecorder<String?, String, Unit> { _, _ -> }
+        val storePushGatewayResult = lambdaRecorder<String, String?, Unit> { _, _ -> }
+        val storeUpEndpointResult = lambdaRecorder<String, String?, Unit> { _, _ -> }
         val unifiedPushStore = FakeUnifiedPushStore(
             storePushGatewayResult = storePushGatewayResult,
             storeUpEndpointResult = storeUpEndpointResult,
@@ -170,7 +170,7 @@ class VectorUnifiedPushMessagingReceiverTest {
         }
         storePushGatewayResult.assertions()
             .isCalledOnce()
-            .with(value("aGateway"), value(A_SECRET))
+            .with(value(A_SECRET), value("aGateway"))
         storeUpEndpointResult.assertions()
             .isNeverCalled()
     }

@@ -20,9 +20,9 @@ import io.element.android.libraries.matrix.api.core.UserId
 
 class FakeUnifiedPushStore(
     private val getEndpointResult: (String) -> String? = { TODO() },
-    private val storeUpEndpointResult: (String?, String) -> Unit = { _, _ -> TODO() },
+    private val storeUpEndpointResult: (String, String?) -> Unit = { _, _ -> TODO() },
     private val getPushGatewayResult: (String) -> String? = { TODO() },
-    private val storePushGatewayResult: (String?, String) -> Unit = { _, _ -> TODO() },
+    private val storePushGatewayResult: (String, String?) -> Unit = { _, _ -> TODO() },
     private val getDistributorValueResult: (UserId) -> String? = { TODO() },
     private val setDistributorValueResult: (UserId, String) -> Unit = { _, _ -> TODO() },
 ) : UnifiedPushStore {
@@ -30,16 +30,16 @@ class FakeUnifiedPushStore(
         return getEndpointResult(clientSecret)
     }
 
-    override fun storeUpEndpoint(endpoint: String?, clientSecret: String) {
-        storeUpEndpointResult(endpoint, clientSecret)
+    override fun storeUpEndpoint(clientSecret: String, endpoint: String?) {
+        storeUpEndpointResult(clientSecret, endpoint)
     }
 
     override fun getPushGateway(clientSecret: String): String? {
         return getPushGatewayResult(clientSecret)
     }
 
-    override fun storePushGateway(gateway: String?, clientSecret: String) {
-        storePushGatewayResult(gateway, clientSecret)
+    override fun storePushGateway(clientSecret: String, gateway: String?) {
+        storePushGatewayResult(clientSecret, gateway)
     }
 
     override fun getDistributorValue(userId: UserId): String? {

@@ -36,8 +36,8 @@ class DefaultUnregisterUnifiedPushUseCaseTest {
     @Test
     fun `test un registration successful`() = runTest {
         val lambda = lambdaRecorder { _: MatrixClient, _: String, _: String -> Result.success(Unit) }
-        val storeUpEndpointResult = lambdaRecorder { _: String?, _: String -> }
-        val storePushGatewayResult = lambdaRecorder { _: String?, _: String -> }
+        val storeUpEndpointResult = lambdaRecorder { _: String, _: String? -> }
+        val storePushGatewayResult = lambdaRecorder { _: String, _: String? -> }
         val matrixClient = FakeMatrixClient()
         val useCase = createDefaultUnregisterUnifiedPushUseCase(
             unifiedPushStore = FakeUnifiedPushStore(
@@ -57,10 +57,10 @@ class DefaultUnregisterUnifiedPushUseCaseTest {
             .with(value(matrixClient), value("aEndpoint"), value("aGateway"))
         storeUpEndpointResult.assertions()
             .isCalledOnce()
-            .with(value(null), value(A_SECRET))
+            .with(value(A_SECRET), value(null))
         storePushGatewayResult.assertions()
             .isCalledOnce()
-            .with(value(null), value(A_SECRET))
+            .with(value(A_SECRET), value(null))
     }
 
     @Test

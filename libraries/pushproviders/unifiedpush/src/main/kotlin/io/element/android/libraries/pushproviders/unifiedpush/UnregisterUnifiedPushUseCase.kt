@@ -43,8 +43,8 @@ class DefaultUnregisterUnifiedPushUseCase @Inject constructor(
         }
         return pusherSubscriber.unregisterPusher(matrixClient, endpoint, gateway)
             .onSuccess {
-                unifiedPushStore.storeUpEndpoint(null, clientSecret)
-                unifiedPushStore.storePushGateway(null, clientSecret)
+                unifiedPushStore.storeUpEndpoint(clientSecret, null)
+                unifiedPushStore.storePushGateway(clientSecret, null)
                 UnifiedPush.unregisterApp(context)
             }
     }

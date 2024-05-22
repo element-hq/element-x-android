@@ -28,9 +28,9 @@ import javax.inject.Inject
 
 interface UnifiedPushStore {
     fun getEndpoint(clientSecret: String): String?
-    fun storeUpEndpoint(endpoint: String?, clientSecret: String)
+    fun storeUpEndpoint(clientSecret: String, endpoint: String?)
     fun getPushGateway(clientSecret: String): String?
-    fun storePushGateway(gateway: String?, clientSecret: String)
+    fun storePushGateway(clientSecret: String, gateway: String?)
     fun getDistributorValue(userId: UserId): String?
     fun setDistributorValue(userId: UserId, value: String)
 }
@@ -53,10 +53,10 @@ class DefaultUnifiedPushStore @Inject constructor(
     /**
      * Store UnifiedPush Endpoint to the SharedPrefs.
      *
-     * @param endpoint the endpoint to store
      * @param clientSecret the client secret, to identify the session
+     * @param endpoint the endpoint to store
      */
-    override fun storeUpEndpoint(endpoint: String?, clientSecret: String) {
+    override fun storeUpEndpoint(clientSecret: String, endpoint: String?) {
         defaultPrefs.edit {
             putString(PREFS_ENDPOINT_OR_TOKEN + clientSecret, endpoint)
         }
@@ -75,10 +75,10 @@ class DefaultUnifiedPushStore @Inject constructor(
     /**
      * Store Push Gateway to the SharedPrefs.
      *
-     * @param gateway the push gateway to store
      * @param clientSecret the client secret, to identify the session
+     * @param gateway the push gateway to store
      */
-    override fun storePushGateway(gateway: String?, clientSecret: String) {
+    override fun storePushGateway(clientSecret: String, gateway: String?) {
         defaultPrefs.edit {
             putString(PREFS_PUSH_GATEWAY + clientSecret, gateway)
         }

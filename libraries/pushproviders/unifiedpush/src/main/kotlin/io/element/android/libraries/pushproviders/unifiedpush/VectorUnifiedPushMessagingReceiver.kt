@@ -73,13 +73,13 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
         Timber.tag(loggerTag.value).i("onNewEndpoint: $endpoint")
         coroutineScope.launch {
             val gateway = unifiedPushGatewayResolver.getGateway(endpoint)
-            unifiedPushStore.storePushGateway(gateway, instance)
+            unifiedPushStore.storePushGateway(instance, gateway)
             val result = newGatewayHandler.handle(endpoint, gateway, instance)
                 .onFailure {
                     Timber.tag(loggerTag.value).e(it, "Failed to handle new gateway")
                 }
                 .onSuccess {
-                    unifiedPushStore.storeUpEndpoint(endpoint, instance)
+                    unifiedPushStore.storeUpEndpoint(instance, endpoint)
                 }
             endpointRegistrationHandler.registrationDone(
                 RegistrationResult(
