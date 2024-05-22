@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.pushproviders.unifiedpush
+package com.element.android.libraries.pushstore.test.userpushstore.clientsecret
 
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret

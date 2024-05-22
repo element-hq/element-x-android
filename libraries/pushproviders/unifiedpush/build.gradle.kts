@@ -58,6 +58,7 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.pushstore.test)
     testImplementation(projects.tests.testutils)
     testImplementation(projects.services.toolbox.test)
     testImplementation(projects.services.appnavstate.test)

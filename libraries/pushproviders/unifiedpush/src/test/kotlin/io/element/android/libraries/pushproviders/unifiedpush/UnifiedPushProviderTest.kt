@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush
 
+import com.element.android.libraries.pushstore.test.userpushstore.FakePushClientSecret
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId

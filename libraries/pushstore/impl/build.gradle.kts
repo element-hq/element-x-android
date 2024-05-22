@@ -49,6 +49,7 @@ dependencies {
     testImplementation(libs.coroutines.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.services.appnavstate.test)
+    testImplementation(projects.libraries.pushstore.test)
     testImplementation(projects.libraries.sessionStorage.test)
 
     androidTestImplementation(libs.coroutines.test)

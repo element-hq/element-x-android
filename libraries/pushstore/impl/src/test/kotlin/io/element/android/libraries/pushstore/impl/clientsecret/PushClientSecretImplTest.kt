@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.pushstore.impl.clientsecret
 
+import com.element.android.libraries.pushstore.test.userpushstore.clientsecret.InMemoryPushClientSecretStore
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.sessionstorage.test.observer.NoOpSessionObserver
