@@ -21,7 +21,6 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.push.api.GetCurrentPushProvider
 import io.element.android.libraries.push.api.PushService
-import io.element.android.libraries.push.impl.notifications.DefaultNotificationDrawerManager
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
@@ -30,16 +29,11 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultPushService @Inject constructor(
-    private val defaultNotificationDrawerManager: DefaultNotificationDrawerManager,
     private val pushersManager: PushersManager,
     private val userPushStoreFactory: UserPushStoreFactory,
     private val pushProviders: Set<@JvmSuppressWildcards PushProvider>,
     private val getCurrentPushProvider: GetCurrentPushProvider,
 ) : PushService {
-    override fun notificationStyleChanged() {
-        defaultNotificationDrawerManager.notificationStyleChanged()
-    }
-
     override suspend fun getCurrentPushProvider(): PushProvider? {
         val currentPushProvider = getCurrentPushProvider.getCurrentPushProvider()
         return pushProviders.find { it.name == currentPushProvider }

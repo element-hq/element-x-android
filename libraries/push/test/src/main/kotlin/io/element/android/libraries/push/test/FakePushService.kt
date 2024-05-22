@@ -29,9 +29,6 @@ class FakePushService(
         Result.success(Unit)
     },
 ) : PushService {
-    override fun notificationStyleChanged() {
-    }
-
     override suspend fun getCurrentPushProvider(): PushProvider? {
         return availablePushProviders.firstOrNull()
     }
