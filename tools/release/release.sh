@@ -222,8 +222,7 @@ printf "Downloading the artifacts...\n"
 python3 ./tools/github/download_all_github_artifacts.py \
      --token ${gitHubToken} \
      --runUrl ${runUrl} \
-     --directory ${targetPath} \
-     --ignoreErrors
+     --directory ${targetPath}
 
 printf "\n================================================================================\n"
 printf "Unzipping the F-Droid artifact...\n"
@@ -231,14 +230,10 @@ printf "Unzipping the F-Droid artifact...\n"
 fdroidTargetPath="${targetPath}/fdroid"
 unzip ${targetPath}/elementx-app-fdroid-apks-unsigned.zip -d ${fdroidTargetPath}
 
-# Flatten folder hierarchy
-mv ${fdroidTargetPath}/fdroid/release/* ${fdroidTargetPath}
-rm -rf ${fdroidTargetPath}/fdroid
-
 printf "\n================================================================================\n"
 printf "Signing the FDroid APKs...\n"
-app-fdroid-arm64-v8a-release
-cp ${fdroidTargetPath}/app-fdroid-arm64-v8a-release-unsigned.apk \
+
+cp ${fdroidTargetPath}/app-fdroid-arm64-v8a-release.apk \
    ${fdroidTargetPath}/app-fdroid-arm64-v8a-release-signed.apk
 ${buildToolsPath}/apksigner sign \
        -v \
@@ -249,7 +244,7 @@ ${buildToolsPath}/apksigner sign \
        --min-sdk-version ${minSdkVersion} \
        ${fdroidTargetPath}/app-fdroid-arm64-v8a-release-signed.apk
 
-cp ${fdroidTargetPath}/app-fdroid-armeabi-v7a-release-unsigned.apk \
+cp ${fdroidTargetPath}/app-fdroid-armeabi-v7a-release.apk \
    ${fdroidTargetPath}/app-fdroid-armeabi-v7a-release-signed.apk
 ${buildToolsPath}/apksigner sign \
        -v \
@@ -260,7 +255,7 @@ ${buildToolsPath}/apksigner sign \
        --min-sdk-version ${minSdkVersion} \
        ${fdroidTargetPath}/app-fdroid-armeabi-v7a-release-signed.apk
 
-cp ${fdroidTargetPath}/app-fdroid-x86-release-unsigned.apk \
+cp ${fdroidTargetPath}/app-fdroid-x86-release.apk \
    ${fdroidTargetPath}/app-fdroid-x86-release-signed.apk
 ${buildToolsPath}/apksigner sign \
        -v \
@@ -271,7 +266,7 @@ ${buildToolsPath}/apksigner sign \
        --min-sdk-version ${minSdkVersion} \
        ${fdroidTargetPath}/app-fdroid-x86-release-signed.apk
 
-cp ${fdroidTargetPath}/app-fdroid-x86_64-release-unsigned.apk \
+cp ${fdroidTargetPath}/app-fdroid-x86_64-release.apk \
    ${fdroidTargetPath}/app-fdroid-x86_64-release-signed.apk
 ${buildToolsPath}/apksigner sign \
        -v \
