@@ -27,12 +27,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import kotlin.time.Duration.Companion.seconds
 
 @RunWith(RobolectricTestRunner::class)
 class DefaultRegisterUnifiedPushUseCaseTest {
@@ -74,7 +72,6 @@ class DefaultRegisterUnifiedPushUseCaseTest {
         )
         val aDistributor = Distributor("aValue", "aName")
         val result = useCase.execute(aDistributor, A_SECRET)
-        advanceTimeBy(30.seconds)
         assertThat(result.isSuccess).isFalse()
     }
 
