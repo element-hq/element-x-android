@@ -62,11 +62,11 @@ import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
 import io.element.android.libraries.textcomposer.mentions.rememberMentionSpanProvider
-import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.TextEditorState
+import io.element.android.libraries.textcomposer.model.rememberMarkdownTextEditorState
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -132,7 +132,7 @@ class MessageComposerPresenter @Inject constructor(
         if (isTesting) {
             richTextEditorState.isReadyToProcessActions = true
         }
-        val markdownTextEditorState = remember { MarkdownTextEditorState(initialText = null, initialFocus = false) }
+        val markdownTextEditorState = rememberMarkdownTextEditorState(initialText = null, initialFocus = false)
 
         var isMentionsEnabled by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {

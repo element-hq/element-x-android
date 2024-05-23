@@ -18,6 +18,7 @@ package io.element.android.libraries.textcomposer.components.markdown
 
 import android.graphics.Color
 import android.text.Editable
+import android.text.InputType
 import android.text.Selection
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -59,6 +60,10 @@ fun MarkdownTextInput(
                 setPadding(0)
                 setBackgroundColor(Color.TRANSPARENT)
                 setText(state.text.value())
+                inputType = InputType.TYPE_CLASS_TEXT or
+                    InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or
+                    InputType.TYPE_TEXT_FLAG_MULTI_LINE or
+                    InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
                 if (canUpdateState) {
                     setSelection(state.selection.first, state.selection.last)
                     setOnFocusChangeListener { _, hasFocus ->
