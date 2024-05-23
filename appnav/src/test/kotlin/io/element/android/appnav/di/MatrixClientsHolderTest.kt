@@ -20,21 +20,21 @@ import com.bumble.appyx.core.state.MutableSavedStateMapImpl
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
+import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class MatrixClientsHolderTest {
     @Test
     fun `test getOrNull`() {
-        val fakeAuthenticationService = FakeAuthenticationService()
+        val fakeAuthenticationService = FakeMatrixAuthenticationService()
         val matrixClientsHolder = MatrixClientsHolder(fakeAuthenticationService)
         assertThat(matrixClientsHolder.getOrNull(A_SESSION_ID)).isNull()
     }
 
     @Test
     fun `test getOrRestore`() = runTest {
-        val fakeAuthenticationService = FakeAuthenticationService()
+        val fakeAuthenticationService = FakeMatrixAuthenticationService()
         val matrixClientsHolder = MatrixClientsHolder(fakeAuthenticationService)
         val fakeMatrixClient = FakeMatrixClient()
         fakeAuthenticationService.givenMatrixClient(fakeMatrixClient)
@@ -47,7 +47,7 @@ class MatrixClientsHolderTest {
 
     @Test
     fun `test remove`() = runTest {
-        val fakeAuthenticationService = FakeAuthenticationService()
+        val fakeAuthenticationService = FakeMatrixAuthenticationService()
         val matrixClientsHolder = MatrixClientsHolder(fakeAuthenticationService)
         val fakeMatrixClient = FakeMatrixClient()
         fakeAuthenticationService.givenMatrixClient(fakeMatrixClient)
@@ -60,7 +60,7 @@ class MatrixClientsHolderTest {
 
     @Test
     fun `test remove all`() = runTest {
-        val fakeAuthenticationService = FakeAuthenticationService()
+        val fakeAuthenticationService = FakeMatrixAuthenticationService()
         val matrixClientsHolder = MatrixClientsHolder(fakeAuthenticationService)
         val fakeMatrixClient = FakeMatrixClient()
         fakeAuthenticationService.givenMatrixClient(fakeMatrixClient)
@@ -73,7 +73,7 @@ class MatrixClientsHolderTest {
 
     @Test
     fun `test save and restore`() = runTest {
-        val fakeAuthenticationService = FakeAuthenticationService()
+        val fakeAuthenticationService = FakeMatrixAuthenticationService()
         val matrixClientsHolder = MatrixClientsHolder(fakeAuthenticationService)
         val fakeMatrixClient = FakeMatrixClient()
         fakeAuthenticationService.givenMatrixClient(fakeMatrixClient)

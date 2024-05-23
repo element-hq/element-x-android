@@ -20,7 +20,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.lockscreen.impl.unlock.signout.DefaultSignOut
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
-import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
+import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.test.runTest
@@ -28,7 +28,7 @@ import org.junit.Test
 
 class DefaultSignOutTest {
     private val matrixClient = FakeMatrixClient()
-    private val authenticationService = FakeAuthenticationService()
+    private val authenticationService = FakeMatrixAuthenticationService()
     private val matrixClientProvider = FakeMatrixClientProvider(getClient = { Result.success(matrixClient) })
     private val sut = DefaultSignOut(authenticationService, matrixClientProvider)
 
