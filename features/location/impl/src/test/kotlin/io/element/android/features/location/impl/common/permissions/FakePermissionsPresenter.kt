@@ -18,7 +18,7 @@ package io.element.android.features.location.impl.common.permissions
 
 import androidx.compose.runtime.Composable
 
-class PermissionsPresenterFake : PermissionsPresenter {
+class FakePermissionsPresenter : PermissionsPresenter {
     val events = mutableListOf<PermissionsEvents>()
 
     private fun handleEvent(event: PermissionsEvents) {
