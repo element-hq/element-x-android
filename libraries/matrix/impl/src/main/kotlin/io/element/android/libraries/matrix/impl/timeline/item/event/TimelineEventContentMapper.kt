@@ -103,7 +103,6 @@ class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMap
             StickerContent(
                 body = kind.body,
                 info = kind.info.map(),
-                url = kind.url,
                 source = kind.source.map()
             )
         }

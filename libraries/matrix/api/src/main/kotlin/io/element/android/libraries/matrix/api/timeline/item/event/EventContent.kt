@@ -41,7 +41,6 @@ data object RedactedContent : EventContent
 data class StickerContent(
     val body: String,
     val info: ImageInfo,
-    val url: String,
     val source: MediaSource
 ) : EventContent
 
