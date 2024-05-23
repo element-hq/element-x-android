@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
+import io.element.android.tests.testutils.lambda.lambdaError
 import org.junit.Assert.assertThrows
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -229,7 +230,7 @@ class IntentResolverTest {
     }
 
     private fun createIntentResolver(
-        permalinkParserResult: () -> PermalinkData = { throw NotImplementedError() }
+        permalinkParserResult: () -> PermalinkData = { lambdaError() }
     ): IntentResolver {
         return IntentResolver(
             deeplinkParser = DeeplinkParser(),
