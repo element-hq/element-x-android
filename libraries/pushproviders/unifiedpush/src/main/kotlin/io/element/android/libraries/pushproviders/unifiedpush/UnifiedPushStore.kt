@@ -19,32 +19,44 @@ package io.element.android.libraries.pushproviders.unifiedpush
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.DefaultPreferences
 import io.element.android.libraries.matrix.api.core.UserId
 import javax.inject.Inject
 
-class UnifiedPushStore @Inject constructor(
+interface UnifiedPushStore {
+    fun getEndpoint(clientSecret: String): String?
+    fun storeUpEndpoint(clientSecret: String, endpoint: String?)
+    fun getPushGateway(clientSecret: String): String?
+    fun storePushGateway(clientSecret: String, gateway: String?)
+    fun getDistributorValue(userId: UserId): String?
+    fun setDistributorValue(userId: UserId, value: String)
+}
+
+@ContributesBinding(AppScope::class)
+class DefaultUnifiedPushStore @Inject constructor(
     @ApplicationContext val context: Context,
     @DefaultPreferences private val defaultPrefs: SharedPreferences,
-) {
+) : UnifiedPushStore {
     /**
      * Retrieves the UnifiedPush Endpoint.
      *
      * @param clientSecret the client secret, to identify the session
      * @return the UnifiedPush Endpoint or null if not received
      */
-    fun getEndpoint(clientSecret: String): String? {
+    override fun getEndpoint(clientSecret: String): String? {
         return defaultPrefs.getString(PREFS_ENDPOINT_OR_TOKEN + clientSecret, null)
     }
 
     /**
      * Store UnifiedPush Endpoint to the SharedPrefs.
      *
-     * @param endpoint the endpoint to store
      * @param clientSecret the client secret, to identify the session
+     * @param endpoint the endpoint to store
      */
-    fun storeUpEndpoint(endpoint: String?, clientSecret: String) {
+    override fun storeUpEndpoint(clientSecret: String, endpoint: String?) {
         defaultPrefs.edit {
             putString(PREFS_ENDPOINT_OR_TOKEN + clientSecret, endpoint)
         }
@@ -56,27 +68,27 @@ class UnifiedPushStore @Inject constructor(
      * @param clientSecret the client secret, to identify the session
      * @return the Push Gateway or null if not defined
      */
-    fun getPushGateway(clientSecret: String): String? {
+    override fun getPushGateway(clientSecret: String): String? {
         return defaultPrefs.getString(PREFS_PUSH_GATEWAY + clientSecret, null)
     }
 
     /**
      * Store Push Gateway to the SharedPrefs.
      *
-     * @param gateway the push gateway to store
      * @param clientSecret the client secret, to identify the session
+     * @param gateway the push gateway to store
      */
-    fun storePushGateway(gateway: String?, clientSecret: String) {
+    override fun storePushGateway(clientSecret: String, gateway: String?) {
         defaultPrefs.edit {
             putString(PREFS_PUSH_GATEWAY + clientSecret, gateway)
         }
     }
 
-    fun getDistributorValue(userId: UserId): String? {
+    override fun getDistributorValue(userId: UserId): String? {
         return defaultPrefs.getString(PREFS_DISTRIBUTOR + userId, null)
     }
 
-    fun setDistributorValue(userId: UserId, value: String) {
+    override fun setDistributorValue(userId: UserId, value: String) {
         defaultPrefs.edit {
             putString(PREFS_DISTRIBUTOR + userId, value)
         }

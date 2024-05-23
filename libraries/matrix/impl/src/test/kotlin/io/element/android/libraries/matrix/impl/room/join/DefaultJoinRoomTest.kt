@@ -57,9 +57,9 @@ class DefaultJoinRoomTest {
             .isNeverCalled()
         joinRoomLambda
             .assertions()
-            .isCalledExactly(1)
-            .withSequence(
-                listOf(value(A_ROOM_ID))
+            .isCalledOnce()
+            .with(
+                value(A_ROOM_ID)
             )
         assertThat(analyticsService.capturedEvents).containsExactly(
             roomResult.toAnalyticsJoinedRoom(aTrigger)
@@ -88,9 +88,10 @@ class DefaultJoinRoomTest {
         sut.invoke(A_ROOM_ID, A_SERVER_LIST, aTrigger)
         joinRoomByIdOrAliasLambda
             .assertions()
-            .isCalledExactly(1)
-            .withSequence(
-                listOf(value(A_ROOM_ID), value(A_SERVER_LIST))
+            .isCalledOnce()
+            .with(
+                value(A_ROOM_ID),
+                value(A_SERVER_LIST)
             )
         joinRoomLambda
             .assertions()

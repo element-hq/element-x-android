@@ -20,19 +20,23 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
+import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakePushProvider(
     override val index: Int = 0,
     override val name: String = "aFakePushProvider",
     private val isAvailable: Boolean = true,
     private val distributors: List<Distributor> = listOf(Distributor("aDistributorValue", "aDistributorName")),
+    private val currentUserPushConfig: CurrentUserPushConfig? = null,
+    private val registerWithResult: (MatrixClient, Distributor) -> Result<Unit> = { _, _ -> lambdaError() },
+    private val unregisterWithResult: (MatrixClient) -> Result<Unit> = { lambdaError() },
 ) : PushProvider {
     override fun isAvailable(): Boolean = isAvailable
 
     override fun getDistributors(): List<Distributor> = distributors
 
     override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor): Result<Unit> {
-        return Result.success(Unit)
+        return registerWithResult(matrixClient, distributor)
     }
 
     override suspend fun getCurrentDistributor(matrixClient: MatrixClient): Distributor? {
@@ -40,10 +44,10 @@ class FakePushProvider(
     }
 
     override suspend fun unregister(matrixClient: MatrixClient): Result<Unit> {
-        return Result.success(Unit)
+        return unregisterWithResult(matrixClient)
     }
 
     override suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig? {
-        return null
+        return currentUserPushConfig
     }
 }

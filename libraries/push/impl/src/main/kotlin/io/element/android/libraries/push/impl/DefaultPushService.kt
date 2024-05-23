@@ -21,7 +21,7 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.push.api.GetCurrentPushProvider
 import io.element.android.libraries.push.api.PushService
-import io.element.android.libraries.push.impl.notifications.DefaultNotificationDrawerManager
+import io.element.android.libraries.push.impl.test.TestPush
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
@@ -30,16 +30,11 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultPushService @Inject constructor(
-    private val defaultNotificationDrawerManager: DefaultNotificationDrawerManager,
-    private val pushersManager: PushersManager,
+    private val testPush: TestPush,
     private val userPushStoreFactory: UserPushStoreFactory,
     private val pushProviders: Set<@JvmSuppressWildcards PushProvider>,
     private val getCurrentPushProvider: GetCurrentPushProvider,
 ) : PushService {
-    override fun notificationStyleChanged() {
-        defaultNotificationDrawerManager.notificationStyleChanged()
-    }
-
     override suspend fun getCurrentPushProvider(): PushProvider? {
         val currentPushProvider = getCurrentPushProvider.getCurrentPushProvider()
         return pushProviders.find { it.name == currentPushProvider }
@@ -51,9 +46,6 @@ class DefaultPushService @Inject constructor(
             .sortedBy { it.index }
     }
 
-    /**
-     * Get current push provider, compare with provided one, then unregister and register if different, and store change.
-     */
     override suspend fun registerWith(
         matrixClient: MatrixClient,
         pushProvider: PushProvider,
@@ -80,7 +72,7 @@ class DefaultPushService @Inject constructor(
     override suspend fun testPush(): Boolean {
         val pushProvider = getCurrentPushProvider() ?: return false
         val config = pushProvider.getCurrentUserPushConfig() ?: return false
-        pushersManager.testPush(config)
+        testPush.execute(config)
         return true
     }
 }
