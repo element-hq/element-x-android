@@ -25,7 +25,6 @@ import io.element.android.libraries.pushproviders.unifiedpush.registration.Endpo
 import io.element.android.libraries.pushproviders.unifiedpush.registration.RegistrationResult
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -65,7 +64,7 @@ class DefaultRegisterUnifiedPushUseCaseTest {
     }
 
     @Test
-    fun `test registration timeout`() = runTest(StandardTestDispatcher()) {
+    fun `test registration timeout`() = runTest {
         val endpointRegistrationHandler = EndpointRegistrationHandler()
         val useCase = createDefaultRegisterUnifiedPushUseCase(
             endpointRegistrationHandler = endpointRegistrationHandler
