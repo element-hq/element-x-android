@@ -225,7 +225,7 @@ class DefaultBugReporterTest {
         val sut = DefaultBugReporter(
             context = RuntimeEnvironment.getApplication(),
             screenshotHolder = FakeScreenshotHolder(),
-            crashDataStore = FakeCrashDataStore(),
+            crashDataStore = FakeCrashDataStore("I did crash", true),
             coroutineDispatchers = testCoroutineDispatchers(),
             okHttpClient = { OkHttpClient.Builder().build() },
             userAgentProvider = DefaultUserAgentProvider(buildMeta, FakeSdkMetadata("123456789")),
@@ -247,10 +247,11 @@ class DefaultBugReporterTest {
         val request = server.takeRequest()
 
         val foundValues = collectValuesFromFormData(request)
+        println("## FOUND VALUES $foundValues")
         assertThat(foundValues["device_keys"]).isNull()
         assertThat(foundValues["device_id"]).isEqualTo("undefined")
         assertThat(foundValues["user_id"]).isEqualTo("undefined")
-        server.shutdown()
+        assertThat(foundValues["label"]).isEqualTo("crash")
     }
 
     private fun collectValuesFromFormData(request: RecordedRequest): HashMap<String, String> {
