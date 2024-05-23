@@ -209,6 +209,50 @@ class DefaultBugReporterTest {
         server.shutdown()
     }
 
+    @Test
+    fun `test sendBugReport no client provider no session data`() = runTest {
+        val server = MockWebServer()
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+        )
+        server.start()
+
+        val buildMeta = aBuildMeta()
+        val fakeEncryptionService = FakeEncryptionService()
+
+        fakeEncryptionService.givenDeviceKeys(null, null)
+        val sut = DefaultBugReporter(
+            context = RuntimeEnvironment.getApplication(),
+            screenshotHolder = FakeScreenshotHolder(),
+            crashDataStore = FakeCrashDataStore(),
+            coroutineDispatchers = testCoroutineDispatchers(),
+            okHttpClient = { OkHttpClient.Builder().build() },
+            userAgentProvider = DefaultUserAgentProvider(buildMeta, FakeSdkMetadata("123456789")),
+            sessionStore = InMemorySessionStore(),
+            buildMeta = buildMeta,
+            bugReporterUrlProvider = { server.url("/") },
+            sdkMetadata = FakeSdkMetadata("123456789"),
+            matrixClientProvider = FakeMatrixClientProvider(getClient = { Result.failure(Exception("Mock no client")) })
+        )
+
+        sut.sendBugReport(
+            withDevicesLogs = true,
+            withCrashLogs = true,
+            withScreenshot = true,
+            theBugDescription = "a bug occurred",
+            canContact = true,
+            listener = null
+        )
+        val request = server.takeRequest()
+
+        val foundValues = collectValuesFromFormData(request)
+        assertThat(foundValues["device_keys"]).isNull()
+        assertThat(foundValues["device_id"]).isEqualTo("undefined")
+        assertThat(foundValues["user_id"]).isEqualTo("undefined")
+        server.shutdown()
+    }
+
     private fun collectValuesFromFormData(request: RecordedRequest): HashMap<String, String> {
         val boundary = request.headers["Content-Type"]!!.split("=").last()
         val foundValues = HashMap<String, String>()
