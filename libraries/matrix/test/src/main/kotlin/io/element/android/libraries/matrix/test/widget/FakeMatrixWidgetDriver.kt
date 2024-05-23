@@ -20,7 +20,7 @@ import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import kotlinx.coroutines.flow.MutableSharedFlow
 import java.util.UUID
 
-class FakeWidgetDriver(
+class FakeMatrixWidgetDriver(
     override val id: String = UUID.randomUUID().toString(),
 ) : MatrixWidgetDriver {
     private val _sentMessages = mutableListOf<String>()
