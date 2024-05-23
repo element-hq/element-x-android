@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.pushproviders.unifiedpush
+package io.element.android.tests.testutils.lambda
 
-import io.element.android.tests.testutils.lambda.lambdaError
-
-class FakeUnifiedPushGatewayResolver(
-    private val getGatewayResult: (String) -> String = { lambdaError() },
-) : UnifiedPushGatewayResolver {
-    override suspend fun getGateway(endpoint: String): String {
-        return getGatewayResult(endpoint)
-    }
+fun lambdaError(
+    message: String = "This lambda should never be called."
+): Nothing {
+    throw AssertionError(message)
 }

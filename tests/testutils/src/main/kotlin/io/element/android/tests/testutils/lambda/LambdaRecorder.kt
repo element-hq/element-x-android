@@ -26,7 +26,7 @@ abstract class LambdaRecorder internal constructor(
 
     internal fun onInvoke(vararg params: Any?) {
         if (assertNoInvocation) {
-            throw AssertionError("This lambda should never be called.")
+            lambdaError()
         }
         parametersSequence.add(params.toList())
     }

@@ -16,8 +16,10 @@
 
 package io.element.android.libraries.pushproviders.unifiedpush
 
+import io.element.android.tests.testutils.lambda.lambdaError
+
 class FakeUnifiedPushNewGatewayHandler(
-    private val handleResult: suspend (String, String, String) -> Result<Unit> = { _, _, _ -> TODO() },
+    private val handleResult: suspend (String, String, String) -> Result<Unit> = { _, _, _ -> lambdaError() },
 ) : UnifiedPushNewGatewayHandler {
     override suspend fun handle(endpoint: String, pushGateway: String, clientSecret: String): Result<Unit> {
         return handleResult(endpoint, pushGateway, clientSecret)

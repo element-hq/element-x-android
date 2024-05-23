@@ -17,9 +17,10 @@
 package io.element.android.libraries.pushproviders.unifiedpush
 
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeUnregisterUnifiedPushUseCase(
-    private val result: (MatrixClient, String) -> Result<Unit> = { _, _ -> TODO("Not yet implemented") }
+    private val result: (MatrixClient, String) -> Result<Unit> = { _, _ -> lambdaError() }
 ) : UnregisterUnifiedPushUseCase {
     override suspend fun execute(matrixClient: MatrixClient, clientSecret: String): Result<Unit> {
         return result(matrixClient, clientSecret)

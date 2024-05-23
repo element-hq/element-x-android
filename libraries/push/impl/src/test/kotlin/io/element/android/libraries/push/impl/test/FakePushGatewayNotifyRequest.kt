@@ -17,9 +17,10 @@
 package io.element.android.libraries.push.impl.test
 
 import io.element.android.libraries.push.impl.pushgateway.PushGatewayNotifyRequest
+import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakePushGatewayNotifyRequest(
-    private val executeResult: (PushGatewayNotifyRequest.Params) -> Unit = { TODO() }
+    private val executeResult: (PushGatewayNotifyRequest.Params) -> Unit = { lambdaError() }
 ) : PushGatewayNotifyRequest {
     override suspend fun execute(params: PushGatewayNotifyRequest.Params) {
         executeResult(params)

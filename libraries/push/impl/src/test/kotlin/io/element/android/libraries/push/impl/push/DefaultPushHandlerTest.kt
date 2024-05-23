@@ -41,6 +41,7 @@ import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStore
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
 import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.FakePushClientSecret
+import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -240,9 +241,9 @@ class DefaultPushHandlerTest {
         }
 
     private fun createDefaultPushHandler(
-        onNotifiableEventReceived: (NotifiableEvent) -> Unit = { TODO() },
-        notifiableEventResult: (SessionId, RoomId, EventId) -> NotifiableEvent? = { _, _, _ -> TODO() },
-        incrementPushCounterResult: () -> Unit = { TODO() },
+        onNotifiableEventReceived: (NotifiableEvent) -> Unit = { lambdaError() },
+        notifiableEventResult: (SessionId, RoomId, EventId) -> NotifiableEvent? = { _, _, _ -> lambdaError() },
+        incrementPushCounterResult: () -> Unit = { lambdaError() },
         userPushStore: UserPushStore = FakeUserPushStore(),
         pushClientSecret: PushClientSecret = FakePushClientSecret(),
         buildMeta: BuildMeta = aBuildMeta(),

@@ -164,7 +164,7 @@ internal fun MentionSpanPreview() {
                         eventId = null,
                         viaParameters = persistentListOf(),
                     )
-                    else -> TODO()
+                    else -> throw AssertionError("Unexpected value $uriString")
                 }
             }
         },

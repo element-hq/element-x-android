@@ -18,9 +18,10 @@ package io.element.android.libraries.push.test.test
 
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushproviders.api.PushHandler
+import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakePushHandler(
-    private val handleResult: (PushData) -> Unit = { TODO() }
+    private val handleResult: (PushData) -> Unit = { lambdaError() }
 ) : PushHandler {
     override suspend fun handle(pushData: PushData) {
         handleResult(pushData)

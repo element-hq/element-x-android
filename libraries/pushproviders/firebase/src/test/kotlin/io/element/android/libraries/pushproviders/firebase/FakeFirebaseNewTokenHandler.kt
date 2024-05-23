@@ -16,8 +16,10 @@
 
 package io.element.android.libraries.pushproviders.firebase
 
+import io.element.android.tests.testutils.lambda.lambdaError
+
 class FakeFirebaseNewTokenHandler(
-    private val handleResult: (String) -> Unit = { TODO() }
+    private val handleResult: (String) -> Unit = { lambdaError() }
 ) : FirebaseNewTokenHandler {
     override suspend fun handle(firebaseToken: String) {
         handleResult(firebaseToken)

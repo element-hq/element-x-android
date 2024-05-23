@@ -27,8 +27,8 @@ class FakePushProvider(
     private val isAvailable: Boolean = true,
     private val distributors: List<Distributor> = listOf(Distributor("aDistributorValue", "aDistributorName")),
     private val currentUserPushConfig: CurrentUserPushConfig? = null,
-    private val registerWithResult: (MatrixClient, Distributor) -> Result<Unit> = { _, _ -> TODO() },
-    private val unregisterWithResult: (MatrixClient) -> Result<Unit> = { TODO() },
+    private val registerWithResult: (MatrixClient, Distributor) -> Result<Unit> = { _, _ -> lambdaError() },
+    private val unregisterWithResult: (MatrixClient) -> Result<Unit> = { lambdaError() },
 ) : PushProvider {
     override fun isAvailable(): Boolean = isAvailable
 

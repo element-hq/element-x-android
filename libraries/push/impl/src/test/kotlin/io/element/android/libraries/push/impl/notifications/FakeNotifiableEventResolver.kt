@@ -20,9 +20,10 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
+import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeNotifiableEventResolver(
-    private val notifiableEventResult: (SessionId, RoomId, EventId) -> NotifiableEvent? = { _, _, _ -> TODO() }
+    private val notifiableEventResult: (SessionId, RoomId, EventId) -> NotifiableEvent? = { _, _, _ -> lambdaError() }
 ) : NotifiableEventResolver {
     override suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): NotifiableEvent? {
         return notifiableEventResult(sessionId, roomId, eventId)

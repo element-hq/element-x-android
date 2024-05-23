@@ -17,14 +17,15 @@
 package io.element.android.libraries.pushproviders.unifiedpush
 
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeUnifiedPushStore(
-    private val getEndpointResult: (String) -> String? = { TODO() },
-    private val storeUpEndpointResult: (String, String?) -> Unit = { _, _ -> TODO() },
-    private val getPushGatewayResult: (String) -> String? = { TODO() },
-    private val storePushGatewayResult: (String, String?) -> Unit = { _, _ -> TODO() },
-    private val getDistributorValueResult: (UserId) -> String? = { TODO() },
-    private val setDistributorValueResult: (UserId, String) -> Unit = { _, _ -> TODO() },
+    private val getEndpointResult: (String) -> String? = { lambdaError() },
+    private val storeUpEndpointResult: (String, String?) -> Unit = { _, _ -> lambdaError() },
+    private val getPushGatewayResult: (String) -> String? = { lambdaError() },
+    private val storePushGatewayResult: (String, String?) -> Unit = { _, _ -> lambdaError() },
+    private val getDistributorValueResult: (UserId) -> String? = { lambdaError() },
+    private val setDistributorValueResult: (UserId, String) -> Unit = { _, _ -> lambdaError() },
 ) : UnifiedPushStore {
     override fun getEndpoint(clientSecret: String): String? {
         return getEndpointResult(clientSecret)

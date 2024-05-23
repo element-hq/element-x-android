@@ -17,9 +17,10 @@
 package io.element.android.libraries.pushproviders.unifiedpush
 
 import io.element.android.libraries.pushproviders.api.Distributor
+import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeRegisterUnifiedPushUseCase(
-    private val result: (Distributor, String) -> Result<Unit> = { _, _ -> TODO("Not yet implemented") }
+    private val result: (Distributor, String) -> Result<Unit> = { _, _ -> lambdaError() }
 ) : RegisterUnifiedPushUseCase {
     override suspend fun execute(distributor: Distributor, clientSecret: String): Result<Unit> {
         return result(distributor, clientSecret)

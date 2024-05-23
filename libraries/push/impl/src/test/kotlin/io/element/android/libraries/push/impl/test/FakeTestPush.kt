@@ -17,9 +17,10 @@
 package io.element.android.libraries.push.impl.test
 
 import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
+import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeTestPush(
-    private val executeResult: (CurrentUserPushConfig) -> Unit = { TODO() }
+    private val executeResult: (CurrentUserPushConfig) -> Unit = { lambdaError() }
 ) : TestPush {
     override suspend fun execute(config: CurrentUserPushConfig) {
         executeResult(config)
