@@ -172,7 +172,7 @@ class DefaultBugReporterTest {
         server.start()
 
         val mockSessionStore = InMemorySessionStore().apply {
-            storeData(mockSessionData("@foo:eample.com", null))
+            storeData(mockSessionData("@foo:eample.com", "ABCDEFGH"))
         }
 
         val buildMeta = aBuildMeta()
