@@ -22,11 +22,8 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.unifiedpush.registration.EndpointRegistrationHandler
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import org.unifiedpush.android.connector.UnifiedPush
 import javax.inject.Inject
@@ -40,27 +37,21 @@ interface RegisterUnifiedPushUseCase {
 class DefaultRegisterUnifiedPushUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
     private val endpointRegistrationHandler: EndpointRegistrationHandler,
-    private val coroutineScope: CoroutineScope,
 ) : RegisterUnifiedPushUseCase {
     override suspend fun execute(distributor: Distributor, clientSecret: String): Result<Unit> {
         UnifiedPush.saveDistributor(context, distributor.value)
-        val completable = CompletableDeferred<Result<Unit>>()
-        val job = coroutineScope.launch {
-            val result = endpointRegistrationHandler.state
-                .filter { it.clientSecret == clientSecret }
-                .first()
-                .result
-            completable.complete(result)
-        }
         // This will trigger the callback
         // VectorUnifiedPushMessagingReceiver.onNewEndpoint
         UnifiedPush.registerApp(context = context, instance = clientSecret)
         // Wait for VectorUnifiedPushMessagingReceiver.onNewEndpoint to proceed
-        return withTimeout(30.seconds) {
-            completable.await()
-        }
-            .onFailure {
-                job.cancel()
+        return runCatching {
+            withTimeout(30.seconds) {
+                val result = endpointRegistrationHandler.state
+                    .filter { it.clientSecret == clientSecret }
+                    .first()
+                    .result
+                result.getOrThrow()
             }
+        }
     }
 }

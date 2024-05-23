@@ -25,12 +25,14 @@ import io.element.android.libraries.pushproviders.unifiedpush.registration.Endpo
 import io.element.android.libraries.pushproviders.unifiedpush.registration.RegistrationResult
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import kotlin.time.Duration.Companion.seconds
 
 @RunWith(RobolectricTestRunner::class)
 class DefaultRegisterUnifiedPushUseCaseTest {
@@ -64,15 +66,15 @@ class DefaultRegisterUnifiedPushUseCaseTest {
         assertThat(result.isSuccess).isFalse()
     }
 
-    @Ignore("Find a solution to test timeout")
     @Test
-    fun `test registration timeout`() = runTest {
+    fun `test registration timeout`() = runTest(StandardTestDispatcher()) {
         val endpointRegistrationHandler = EndpointRegistrationHandler()
         val useCase = createDefaultRegisterUnifiedPushUseCase(
             endpointRegistrationHandler = endpointRegistrationHandler
         )
         val aDistributor = Distributor("aValue", "aName")
         val result = useCase.execute(aDistributor, A_SECRET)
+        advanceTimeBy(30.seconds)
         assertThat(result.isSuccess).isFalse()
     }
 
@@ -83,7 +85,6 @@ class DefaultRegisterUnifiedPushUseCaseTest {
         return DefaultRegisterUnifiedPushUseCase(
             context = context,
             endpointRegistrationHandler = endpointRegistrationHandler,
-            coroutineScope = this@createDefaultRegisterUnifiedPushUseCase
         )
     }
 }
