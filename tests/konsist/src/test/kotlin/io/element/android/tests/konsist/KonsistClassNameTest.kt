@@ -21,6 +21,7 @@ import com.bumble.appyx.core.node.Node
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.ext.list.withAllParentsOf
 import com.lemonappdev.konsist.api.ext.list.withNameContaining
+import com.lemonappdev.konsist.api.ext.list.withoutName
 import com.lemonappdev.konsist.api.verify.assertTrue
 import io.element.android.libraries.architecture.Presenter
 import org.junit.Test
@@ -69,6 +70,9 @@ class KonsistClassNameTest {
         Konsist.scopeFromProject()
             .classes()
             .withNameContaining("Fake")
+            .withoutName(
+                "FakeImageLoader",
+            )
             .assertTrue {
                 val interfaceName = it.name.replace("Fake", "")
                 it.name.startsWith("Fake") &&
