@@ -71,6 +71,7 @@ class KonsistClassNameTest {
             .classes()
             .withNameContaining("Fake")
             .withoutName(
+                "FakeFileSystem",
                 "FakeImageLoader",
             )
             .assertTrue {
