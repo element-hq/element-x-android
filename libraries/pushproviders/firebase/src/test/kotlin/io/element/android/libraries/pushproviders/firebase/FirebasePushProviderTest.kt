@@ -134,17 +134,14 @@ class FirebasePushProviderTest {
     }
 
     @Test
-    fun `unregister ko no token`() = runTest {
+    fun `unregister no token - in this case, the error is ignored`() = runTest {
         val firebasePushProvider = createFirebasePushProvider(
             firebaseStore = InMemoryFirebaseStore(
                 token = null
             ),
-            pusherSubscriber = FakePusherSubscriber(
-                unregisterPusherResult = { _, _, _ -> Result.success(Unit) }
-            )
         )
         val result = firebasePushProvider.unregister(FakeMatrixClient())
-        assertThat(result.isFailure).isTrue()
+        assertThat(result.isSuccess).isTrue()
     }
 
     @Test
