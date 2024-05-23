@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
+import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakePushProvider(
     override val index: Int = 0,
