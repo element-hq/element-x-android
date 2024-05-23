@@ -64,14 +64,13 @@ class FirebasePushProvider @Inject constructor(
     override suspend fun getCurrentDistributor(matrixClient: MatrixClient) = firebaseDistributor
 
     override suspend fun unregister(matrixClient: MatrixClient): Result<Unit> {
-        val pushKey = firebaseStore.getFcmToken() ?: return Result.failure<Unit>(
-            IllegalStateException(
-                "Unable to unregister pusher, Firebase token is not known."
-            )
-        ).also {
+        val pushKey = firebaseStore.getFcmToken()
+        return if (pushKey == null) {
             Timber.tag(loggerTag.value).w("Unable to unregister pusher, Firebase token is not known.")
+            Result.success(Unit)
+        } else {
+            pusherSubscriber.unregisterPusher(matrixClient, pushKey, FirebaseConfig.PUSHER_HTTP_URL)
         }
-        return pusherSubscriber.unregisterPusher(matrixClient, pushKey, FirebaseConfig.PUSHER_HTTP_URL)
     }
 
     override suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig? {

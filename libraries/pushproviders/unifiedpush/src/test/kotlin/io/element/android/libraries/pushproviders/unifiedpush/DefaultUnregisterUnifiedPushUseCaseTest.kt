@@ -64,29 +64,49 @@ class DefaultUnregisterUnifiedPushUseCaseTest {
     }
 
     @Test
-    fun `test un registration error - no endpoint`() = runTest {
+    fun `test un registration error - no endpoint - will not unregister but return success`() = runTest {
         val matrixClient = FakeMatrixClient()
+        val storeUpEndpointResult = lambdaRecorder { _: String, _: String? -> }
+        val storePushGatewayResult = lambdaRecorder { _: String, _: String? -> }
         val useCase = createDefaultUnregisterUnifiedPushUseCase(
             unifiedPushStore = FakeUnifiedPushStore(
                 getEndpointResult = { null },
                 getPushGatewayResult = { "aGateway" },
+                storeUpEndpointResult = storeUpEndpointResult,
+                storePushGatewayResult = storePushGatewayResult,
             ),
         )
         val result = useCase.execute(matrixClient, A_SECRET)
-        assertThat(result.isFailure).isTrue()
+        assertThat(result.isSuccess).isTrue()
+        storeUpEndpointResult.assertions()
+            .isCalledOnce()
+            .with(value(A_SECRET), value(null))
+        storePushGatewayResult.assertions()
+            .isCalledOnce()
+            .with(value(A_SECRET), value(null))
     }
 
     @Test
-    fun `test un registration error - no gateway`() = runTest {
+    fun `test un registration error - no gateway - will not unregister but return success`() = runTest {
         val matrixClient = FakeMatrixClient()
+        val storeUpEndpointResult = lambdaRecorder { _: String, _: String? -> }
+        val storePushGatewayResult = lambdaRecorder { _: String, _: String? -> }
         val useCase = createDefaultUnregisterUnifiedPushUseCase(
             unifiedPushStore = FakeUnifiedPushStore(
                 getEndpointResult = { "aEndpoint" },
                 getPushGatewayResult = { null },
+                storeUpEndpointResult = storeUpEndpointResult,
+                storePushGatewayResult = storePushGatewayResult,
             ),
         )
         val result = useCase.execute(matrixClient, A_SECRET)
-        assertThat(result.isFailure).isTrue()
+        assertThat(result.isSuccess).isTrue()
+        storeUpEndpointResult.assertions()
+            .isCalledOnce()
+            .with(value(A_SECRET), value(null))
+        storePushGatewayResult.assertions()
+            .isCalledOnce()
+            .with(value(A_SECRET), value(null))
     }
 
     @Test
