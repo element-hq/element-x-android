@@ -24,7 +24,7 @@ import io.element.android.tests.testutils.lambda.LambdaTwoParamsRecorder
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.CoroutineScope
 
-class FakeSessionPreferenceStoreFactory(
+class FakeSessionPreferencesStoreFactory(
     var getLambda: LambdaTwoParamsRecorder<SessionId, CoroutineScope, SessionPreferencesStore> = lambdaRecorder { _, _ -> throw NotImplementedError() },
     var removeLambda: LambdaOneParamRecorder<SessionId, Unit> = lambdaRecorder { _ -> },
 ) : SessionPreferencesStoreFactory {

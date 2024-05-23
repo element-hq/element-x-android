@@ -17,7 +17,7 @@
 package io.element.android.features.migration.impl.migrations
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.preferences.test.FakeSessionPreferenceStoreFactory
+import io.element.android.libraries.preferences.test.FakeSessionPreferencesStoreFactory
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
@@ -33,7 +33,7 @@ class AppMigration02Test {
             updateData(aSessionData())
         }
         val sessionPreferencesStore = InMemorySessionPreferencesStore(isSessionVerificationSkipped = false)
-        val sessionPreferencesStoreFactory = FakeSessionPreferenceStoreFactory(
+        val sessionPreferencesStoreFactory = FakeSessionPreferencesStoreFactory(
             getLambda = lambdaRecorder { _, _, -> sessionPreferencesStore },
         )
         val migration = AppMigration02(sessionStore = sessionStore, sessionPreferenceStoreFactory = sessionPreferencesStoreFactory)
