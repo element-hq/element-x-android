@@ -105,6 +105,14 @@ internal fun PreferenceCheckboxPreview() = ElementThemedPreview {
         PreferenceCheckbox(
             title = "Checkbox with supporting text",
             supportingText = "Supporting text",
+            iconResourceId = CompoundDrawables.ic_compound_threads,
+            enabled = false,
+            isChecked = true,
+            onCheckedChange = {},
+        )
+        PreferenceCheckbox(
+            title = "Checkbox with supporting text",
+            supportingText = "Supporting text",
             iconResourceId = null,
             showIconAreaIfNoIcon = true,
             enabled = true,
