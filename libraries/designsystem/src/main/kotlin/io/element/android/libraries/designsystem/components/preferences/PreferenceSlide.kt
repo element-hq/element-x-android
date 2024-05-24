@@ -87,12 +87,22 @@ fun PreferenceSlide(
 @Preview(group = PreviewGroup.Preferences)
 @Composable
 internal fun PreferenceSlidePreview() = ElementThemedPreview {
-    PreferenceSlide(
-        icon = CompoundIcons.UserProfile(),
-        title = "Slide",
-        summary = "Summary",
-        enabled = false,
-        value = 0.75F,
-        onValueChange = {},
-    )
+    Column {
+        PreferenceSlide(
+            icon = CompoundIcons.UserProfile(),
+            title = "Slide",
+            summary = "Summary",
+            enabled = true,
+            value = 0.75F,
+            onValueChange = {},
+        )
+        PreferenceSlide(
+            icon = CompoundIcons.UserProfile(),
+            title = "Slide",
+            summary = "Summary",
+            enabled = false,
+            value = 0.75F,
+            onValueChange = {},
+        )
+    }
 }
