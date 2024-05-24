@@ -19,16 +19,13 @@ package io.element.android.libraries.designsystem.components.preferences
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
-import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.ListSectionHeader
 
 @Composable
 fun PreferenceCategory(
@@ -42,28 +39,13 @@ fun PreferenceCategory(
             .fillMaxWidth()
     ) {
         if (title != null) {
-            PreferenceCategoryTitle(title = title)
+            ListSectionHeader(title = title)
         }
         content()
         if (showDivider) {
             PreferenceDivider()
         }
     }
-}
-
-@Composable
-private fun PreferenceCategoryTitle(title: String) {
-    Text(
-        modifier = Modifier.padding(
-            top = 20.dp,
-            bottom = 8.dp,
-            start = preferencePaddingHorizontal,
-            end = preferencePaddingHorizontal,
-        ),
-        style = ElementTheme.typography.fontBodyLgMedium,
-        color = ElementTheme.materialColors.primary,
-        text = title,
-    )
 }
 
 @Preview(group = PreviewGroup.Preferences)
