@@ -19,7 +19,6 @@ package io.element.android.libraries.designsystem.components.preferences
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,7 +42,6 @@ fun PreferenceSwitch(
     icon: ImageVector? = null,
     @DrawableRes iconResourceId: Int? = null,
     showIconAreaIfNoIcon: Boolean = false,
-    switchAlignment: Alignment.Vertical = Alignment.CenterVertically
 ) {
     ListItem(
         modifier = modifier,
