@@ -85,6 +85,7 @@ class QrCodeScanPresenter @Inject constructor(
                 .onEach { state ->
                     if (state is QrCodeLoginStep.Failed && state.error is QrLoginException.InvalidQrCode) {
                         authenticationAction.value = AsyncAction.Failure(state.error)
+                        qrCodeLoginManager.reset()
                     }
                 }
                 .launchIn(this)

@@ -21,6 +21,7 @@ import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.login.impl.R
+import io.element.android.features.login.impl.qrcode.QrCodeErrorScreenType
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBackKey
@@ -55,10 +56,16 @@ class QrCodeErrorViewTest {
     }
 
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setQrCodeErrorView(
-        onRetry: () -> Unit
+        onRetry: () -> Unit,
+        errorScreenType: QrCodeErrorScreenType = QrCodeErrorScreenType.UnknownError,
+        appName: String = "Element X",
     ) {
         setContent {
-            QrCodeErrorView(onRetry = onRetry)
+            QrCodeErrorView(
+                errorScreenType = errorScreenType,
+                appName = appName,
+                onRetry = onRetry
+            )
         }
     }
 }

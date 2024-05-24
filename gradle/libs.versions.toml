@@ -102,8 +102,8 @@ androidx_preference = "androidx.preference:preference:1.2.1"
 androidx_webkit = "androidx.webkit:webkit:1.11.0"
 
 androidx_compose_bom = { module = "androidx.compose:compose-bom", version.ref = "compose_bom" }
-androidx_compose_material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
-androidx_compose_material3_windowsizeclass = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "material3" }
+androidx_compose_material3 = { module = "androidx.compose.material3:material3" }
+androidx_compose_material3_windowsizeclass = { module = "androidx.compose.material3:material3-window-size-class" }
 androidx_compose_material3_adaptive = "androidx.compose.material3:material3-adaptive-android:1.0.0-alpha06"
 androidx_compose_ui = { module = "androidx.compose.ui:ui" }
 androidx_compose_ui_tooling = { module = "androidx.compose.ui:ui-tooling" }

@@ -19,6 +19,7 @@ package io.element.android.features.login.impl.qrcode
 import android.os.Parcelable
 import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
@@ -45,6 +46,7 @@ import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.DaggerComponentOwner
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
@@ -62,6 +64,7 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     qrCodeLoginComponentBuilder: QrCodeLoginComponent.Builder,
     private val defaultLoginUserStory: DefaultLoginUserStory,
+    private val coroutineDispatchers: CoroutineDispatchers,
 ) : BaseFlowNode<QrCodeLoginFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Initial,
@@ -93,6 +96,10 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
         super.onBuilt()
 
         observeLoginStep()
+    }
+
+    fun isLoginInProgress(): Boolean {
+        return authenticationJob?.isActive == true
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
@@ -174,30 +181,30 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
             }
             is NavTarget.QrCodeConfirmation -> {
                 val callback = object : QrCodeConfirmationNode.Callback {
-                    override fun onCancel() {
-                        authenticationJob?.cancel()
-                        authenticationJob = null
-                        backstack.newRoot(NavTarget.Initial)
-                    }
+                    override fun onCancel() = reset()
                 }
                 createNode<QrCodeConfirmationNode>(buildContext, plugins = listOf(navTarget.step, callback))
             }
             is NavTarget.Error -> {
                 val callback = object : QrCodeErrorNode.Callback {
-                    override fun onRetry() {
-                        authenticationJob?.cancel()
-                        authenticationJob = null
-                        qrCodeLoginManager.reset()
-                        backstack.newRoot(NavTarget.Initial)
-                    }
+                    override fun onRetry() = reset()
                 }
                 createNode<QrCodeErrorNode>(buildContext, plugins = listOf(navTarget.errorType, callback))
             }
         }
     }
 
-    private fun CoroutineScope.startAuthentication(qrCodeLoginData: MatrixQrCodeLoginData) {
-        authenticationJob = launch {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal fun reset() {
+        authenticationJob?.cancel()
+        authenticationJob = null
+        qrCodeLoginManager.reset()
+        backstack.newRoot(NavTarget.Initial)
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal fun CoroutineScope.startAuthentication(qrCodeLoginData: MatrixQrCodeLoginData) {
+        authenticationJob = launch(coroutineDispatchers.main) {
             qrCodeLoginManager.authenticate(qrCodeLoginData)
                 .onSuccess {
                     defaultLoginUserStory.setLoginFlowIsDone(true)
@@ -216,6 +223,7 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
     }
 }
 
+@Immutable
 sealed interface QrCodeErrorScreenType : NodeInputs, Parcelable {
     @Parcelize
     data object Cancelled : QrCodeErrorScreenType

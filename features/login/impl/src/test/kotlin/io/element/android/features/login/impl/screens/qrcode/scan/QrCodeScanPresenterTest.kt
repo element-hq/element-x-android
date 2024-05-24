@@ -20,8 +20,12 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.login.impl.qrcode.FakeQrCodeLoginManager
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
+import io.element.android.libraries.matrix.api.auth.qrlogin.QrLoginException
 import io.element.android.libraries.matrix.test.auth.qrlogin.FakeMatrixQrCodeLoginDataFactory
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -78,11 +82,39 @@ class QrCodeScanPresenterTest {
         }
     }
 
+    @Test
+    fun `present - login failed with invalid QR format and we display it and recover from it`() = runTest {
+        val qrCodeLoginDataFactory = FakeMatrixQrCodeLoginDataFactory()
+        val qrCodeLoginManager = FakeQrCodeLoginManager()
+        val resetAction = lambdaRecorder<Unit> {
+            qrCodeLoginManager.currentLoginStep.value = QrCodeLoginStep.Uninitialized
+        }
+        qrCodeLoginManager.resetAction = resetAction
+        val presenter = createQrCodeScanPresenter(qrCodeLoginDataFactory = qrCodeLoginDataFactory, qrCodeLoginManager = qrCodeLoginManager)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            // Skip initial item
+            skipItems(1)
+
+            qrCodeLoginManager.currentLoginStep.value = QrCodeLoginStep.Failed(QrLoginException.InvalidQrCode)
+
+            val errorState = awaitItem()
+            // The state for this screen is failure
+            assertThat(errorState.authenticationAction.isFailure()).isTrue()
+            // However, the QrCodeLoginManager is reset
+            resetAction.assertions().isCalledOnce()
+            assertThat(qrCodeLoginManager.currentLoginStep.value).isEqualTo(QrCodeLoginStep.Uninitialized)
+        }
+    }
+
     private fun TestScope.createQrCodeScanPresenter(
         qrCodeLoginDataFactory: FakeMatrixQrCodeLoginDataFactory = FakeMatrixQrCodeLoginDataFactory(),
         coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
+        qrCodeLoginManager: FakeQrCodeLoginManager = FakeQrCodeLoginManager(),
     ) = QrCodeScanPresenter(
         qrCodeLoginDataFactory = qrCodeLoginDataFactory,
+        qrCodeLoginManager = qrCodeLoginManager,
         coroutineDispatchers = coroutineDispatchers,
     )
 }

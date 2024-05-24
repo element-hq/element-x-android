@@ -25,7 +25,7 @@ import zxingcpp.BarcodeReader
 internal class QRCodeAnalyzer(
     private val onQrCodeScanned: (result: ByteArray?) -> Unit
 ) : ImageAnalysis.Analyzer {
-    private val reader = BarcodeReader()
+    private val reader by lazy { BarcodeReader() }
 
     override fun analyze(image: ImageProxy) {
         if (image.format in SUPPORTED_IMAGE_FORMATS) {

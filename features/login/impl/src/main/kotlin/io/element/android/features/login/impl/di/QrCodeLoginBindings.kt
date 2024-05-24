@@ -18,8 +18,9 @@ package io.element.android.features.login.impl.di
 
 import com.squareup.anvil.annotations.ContributesTo
 import io.element.android.features.login.impl.qrcode.DefaultQrCodeLoginManager
+import io.element.android.features.login.impl.qrcode.QrCodeLoginManager
 
 @ContributesTo(QrCodeLoginScope::class)
 interface QrCodeLoginBindings {
-    fun qrCodeLoginManager(): DefaultQrCodeLoginManager
+    fun qrCodeLoginManager(): QrCodeLoginManager
 }
