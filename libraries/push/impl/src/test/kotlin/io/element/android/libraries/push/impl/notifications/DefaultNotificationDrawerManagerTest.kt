@@ -116,7 +116,7 @@ class DefaultNotificationDrawerManagerTest {
             notificationRenderer = NotificationRenderer(
                 notificationIdProvider = NotificationIdProvider(),
                 notificationDisplayer = NotificationDisplayer(context),
-                notificationFactory = NotificationFactory(
+                notificationDataFactory = NotificationDataFactory(
                     notificationCreator = MockkNotificationCreator().instance,
                     roomGroupMessageCreator = MockkRoomGroupMessageCreator().instance,
                     summaryGroupMessageCreator = MockkSummaryGroupMessageCreator().instance,

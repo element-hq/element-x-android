@@ -58,7 +58,7 @@ class NotificationRendererTest {
     private val notificationRenderer = NotificationRenderer(
         notificationIdProvider = notificationIdProvider,
         notificationDisplayer = mockkNotificationDisplayer.instance,
-        notificationFactory = mockkNotificationFactory.instance,
+        notificationDataFactory = mockkNotificationFactory.instance,
     )
 
     @Test

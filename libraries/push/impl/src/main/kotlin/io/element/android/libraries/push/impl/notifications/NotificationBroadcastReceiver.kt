@@ -47,26 +47,26 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             actionIds.smartReply ->
                 handleSmartReply(intent, context)
             actionIds.dismissRoom -> if (roomId != null) {
-                defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId, doRender = false)
+                defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
             }
             actionIds.dismissSummary ->
                 defaultNotificationDrawerManager.clearAllMessagesEvents(sessionId, doRender = false)
             actionIds.dismissInvite -> if (roomId != null) {
-                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId, doRender = false)
+                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId)
             }
             actionIds.dismissEvent -> if (eventId != null) {
-                defaultNotificationDrawerManager.clearEvent(sessionId, eventId, doRender = false)
+                defaultNotificationDrawerManager.clearEvent(sessionId, eventId)
             }
             actionIds.markRoomRead -> if (roomId != null) {
-                defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId, doRender = true)
+                defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
                 handleMarkAsRead(sessionId, roomId)
             }
             actionIds.join -> if (roomId != null) {
-                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId, doRender = true)
+                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId)
                 handleJoinRoom(sessionId, roomId)
             }
             actionIds.reject -> if (roomId != null) {
-                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId, doRender = true)
+                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId)
                 handleRejectRoom(sessionId, roomId)
             }
         }

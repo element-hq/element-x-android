@@ -18,7 +18,7 @@ package io.element.android.libraries.push.impl.notifications.fake
 
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.notifications.GroupedNotificationEvents
-import io.element.android.libraries.push.impl.notifications.NotificationFactory
+import io.element.android.libraries.push.impl.notifications.NotificationDataFactory
 import io.element.android.libraries.push.impl.notifications.OneShotNotification
 import io.element.android.libraries.push.impl.notifications.RoomNotification
 import io.element.android.libraries.push.impl.notifications.SummaryNotification
@@ -27,7 +27,7 @@ import io.mockk.every
 import io.mockk.mockk
 
 class MockkNotificationFactory {
-    val instance = mockk<NotificationFactory>()
+    val instance = mockk<NotificationDataFactory>()
 
     fun givenNotificationsFor(
         groupedEvents: GroupedNotificationEvents,

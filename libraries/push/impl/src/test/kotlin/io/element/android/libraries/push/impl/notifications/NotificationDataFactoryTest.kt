@@ -40,19 +40,19 @@ private val A_SIMPLE_EVENT = aSimpleNotifiableEvent(eventId = AN_EVENT_ID)
 private val A_MESSAGE_EVENT = aNotifiableMessageEvent(eventId = AN_EVENT_ID, roomId = A_ROOM_ID)
 
 @RunWith(RobolectricTestRunner::class)
-class NotificationFactoryTest {
+class NotificationDataFactoryTest {
     private val mockkNotificationCreator = MockkNotificationCreator()
     private val mockkRoomGroupMessageCreator = MockkRoomGroupMessageCreator()
     private val mockkSummaryGroupMessageCreator = MockkSummaryGroupMessageCreator()
 
-    private val notificationFactory = NotificationFactory(
+    private val notificationDataFactory = NotificationDataFactory(
         notificationCreator = mockkNotificationCreator.instance,
         roomGroupMessageCreator = mockkRoomGroupMessageCreator.instance,
         summaryGroupMessageCreator = mockkSummaryGroupMessageCreator.instance
     )
 
     @Test
-    fun `given a room invitation when mapping to notification then is Append`() = testWith(notificationFactory) {
+    fun `given a room invitation when mapping to notification then is Append`() = testWith(notificationDataFactory) {
         val expectedNotification = mockkNotificationCreator.givenCreateRoomInvitationNotificationFor(AN_INVITATION_EVENT)
         val roomInvitation = listOf(ProcessedEvent(ProcessedEvent.Type.KEEP, AN_INVITATION_EVENT))
 
@@ -74,7 +74,7 @@ class NotificationFactoryTest {
     }
 
     @Test
-    fun `given a missing event in room invitation when mapping to notification then is Removed`() = testWith(notificationFactory) {
+    fun `given a missing event in room invitation when mapping to notification then is Removed`() = testWith(notificationDataFactory) {
         val missingEventRoomInvitation = listOf(ProcessedEvent(ProcessedEvent.Type.REMOVE, AN_INVITATION_EVENT))
 
         val result = missingEventRoomInvitation.toNotifications()
@@ -89,7 +89,7 @@ class NotificationFactoryTest {
     }
 
     @Test
-    fun `given a simple event when mapping to notification then is Append`() = testWith(notificationFactory) {
+    fun `given a simple event when mapping to notification then is Append`() = testWith(notificationDataFactory) {
         val expectedNotification = mockkNotificationCreator.givenCreateSimpleInvitationNotificationFor(A_SIMPLE_EVENT)
         val roomInvitation = listOf(ProcessedEvent(ProcessedEvent.Type.KEEP, A_SIMPLE_EVENT))
 
@@ -111,7 +111,7 @@ class NotificationFactoryTest {
     }
 
     @Test
-    fun `given a missing simple event when mapping to notification then is Removed`() = testWith(notificationFactory) {
+    fun `given a missing simple event when mapping to notification then is Removed`() = testWith(notificationDataFactory) {
         val missingEventRoomInvitation = listOf(ProcessedEvent(ProcessedEvent.Type.REMOVE, A_SIMPLE_EVENT))
 
         val result = missingEventRoomInvitation.toNotifications()
@@ -126,7 +126,7 @@ class NotificationFactoryTest {
     }
 
     @Test
-    fun `given room with message when mapping to notification then delegates to room group message creator`() = testWith(notificationFactory) {
+    fun `given room with message when mapping to notification then delegates to room group message creator`() = testWith(notificationDataFactory) {
         val events = listOf(A_MESSAGE_EVENT)
         val expectedNotification = mockkRoomGroupMessageCreator.givenCreatesRoomMessageFor(
             MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
@@ -146,7 +146,7 @@ class NotificationFactoryTest {
     }
 
     @Test
-    fun `given a room with no events to display when mapping to notification then is Empty`() = testWith(notificationFactory) {
+    fun `given a room with no events to display when mapping to notification then is Empty`() = testWith(notificationDataFactory) {
         val events = listOf(ProcessedEvent(ProcessedEvent.Type.REMOVE, A_MESSAGE_EVENT))
         val emptyRoom = mapOf(A_ROOM_ID to events)
 
@@ -167,7 +167,7 @@ class NotificationFactoryTest {
     }
 
     @Test
-    fun `given a room with only redacted events when mapping to notification then is Empty`() = testWith(notificationFactory) {
+    fun `given a room with only redacted events when mapping to notification then is Empty`() = testWith(notificationDataFactory) {
         val redactedRoom = mapOf(A_ROOM_ID to listOf(ProcessedEvent(ProcessedEvent.Type.KEEP, A_MESSAGE_EVENT.copy(isRedacted = true))))
 
         val fakeImageLoader = FakeImageLoader()
@@ -188,7 +188,7 @@ class NotificationFactoryTest {
 
     @Test
     fun `given a room with redacted and non redacted message events when mapping to notification then redacted events are removed`() = testWith(
-        notificationFactory
+        notificationDataFactory
     ) {
         val roomWithRedactedMessage = mapOf(
             A_ROOM_ID to listOf(
