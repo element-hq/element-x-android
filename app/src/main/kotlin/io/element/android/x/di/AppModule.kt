@@ -26,6 +26,7 @@ import dagger.Provides
 import io.element.android.appconfig.ApplicationConfig
 import io.element.android.features.messages.impl.timeline.components.customreaction.DefaultEmojibaseProvider
 import io.element.android.features.messages.impl.timeline.components.customreaction.EmojibaseProvider
+import io.element.android.libraries.androidutils.system.getVersionCodeFromManifest
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
@@ -87,7 +88,7 @@ object AppModule {
         // TODO EAx Config.LOW_PRIVACY_LOG_ENABLE,
         lowPrivacyLoggingEnabled = false,
         versionName = BuildConfig.VERSION_NAME,
-        versionCode = BuildConfig.VERSION_CODE,
+        versionCode = context.getVersionCodeFromManifest(),
         gitRevision = BuildConfig.GIT_REVISION,
         gitBranchName = BuildConfig.GIT_BRANCH_NAME,
         flavorDescription = BuildConfig.FLAVOR_DESCRIPTION,

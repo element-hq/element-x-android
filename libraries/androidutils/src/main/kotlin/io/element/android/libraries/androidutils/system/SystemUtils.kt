@@ -28,6 +28,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.RequiresApi
+import androidx.core.content.pm.PackageInfoCompat
 import io.element.android.libraries.androidutils.R
 import io.element.android.libraries.androidutils.compat.getApplicationInfoCompat
 import io.element.android.libraries.core.mimetype.MimeTypes
@@ -45,6 +46,19 @@ fun Context.getApplicationLabel(packageName: String): String {
     } catch (e: PackageManager.NameNotFoundException) {
         packageName
     }
+}
+
+/**
+ * Retrieve the versionCode from the Manifest.
+ * The value is more accurate than BuildConfig.VERSION_CODE, as it is correct according to the
+ * computation in the `androidComponents` block of the app build.gradle.kts file.
+ * In other words, the last digit (for the architecture) will be set, whereas BuildConfig.VERSION_CODE
+ * last digit will always be 0.
+ */
+fun Context.getVersionCodeFromManifest(): Long {
+    return PackageInfoCompat.getLongVersionCode(
+        packageManager.getPackageInfo(packageName, 0)
+    )
 }
 
 // ==============================================================================================================
