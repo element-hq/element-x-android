@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_permission_camera">"იმისათვის, რომ აპლიკაციამ გამოიყენოს კამერა, გთხოვთ, მიანიჭოთ ნებართვა სისტემის პარამეტრებში."</string>
+  <string name="dialog_permission_generic">"გთხოვთ, მიანიჭოთ ნებართვა სისტემის პარამეტრებში."</string>
+  <string name="dialog_permission_microphone">"იმისათვის, რომ აპლიკაციამ მიკროფონი გამოიყენოს, გთხოვთ, მიანიჭოთ ნებართვა სისტემის პარამეტრებში."</string>
+  <string name="dialog_permission_notification">"იმისათვის, რომ აპლიკაციამ გამოაჩინოს შეტყობინებები, გთხოვთ, მიანიჭოთ ნებართვა სისტემის პარამეტრებში."</string>
+</resources>

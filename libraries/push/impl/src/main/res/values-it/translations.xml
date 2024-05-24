@@ -46,7 +46,6 @@
     <item quantity="one">"%d stanza"</item>
     <item quantity="other">"%d stanze"</item>
   </plurals>
-  <string name="push_choose_distributor_dialog_title_android">"Scegli come ricevere le notifiche"</string>
   <string name="push_distributor_background_sync_android">"Sincronizzazione in background"</string>
   <string name="push_distributor_firebase_android">"Servizi Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Google Play Services non trovato. Le notifiche non funzioneranno bene."</string>

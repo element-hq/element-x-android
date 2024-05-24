@@ -86,6 +86,8 @@ sealed interface AsyncAction<out T> {
     fun isFailure(): Boolean = this is Failure
 
     fun isSuccess(): Boolean = this is Success
+
+    fun isReady() = isSuccess() || isFailure()
 }
 
 suspend inline fun <T> MutableState<AsyncAction<T>>.runCatchingUpdatingState(

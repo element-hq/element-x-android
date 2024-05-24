@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Elige cómo recibir las notificaciones"</string>
   <string name="screen_advanced_settings_developer_mode">"Modo desarrollador"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Habilita para tener acceso a características y funcionalidades para desarrolladores."</string>
   <string name="screen_advanced_settings_element_call_base_url">"URL base personalizada de Element Call"</string>

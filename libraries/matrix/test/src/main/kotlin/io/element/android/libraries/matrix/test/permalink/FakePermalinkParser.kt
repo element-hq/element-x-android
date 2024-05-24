@@ -18,9 +18,10 @@ package io.element.android.libraries.matrix.test.permalink
 
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakePermalinkParser(
-    private var result: () -> PermalinkData = { TODO("Not implemented") }
+    private var result: () -> PermalinkData = { lambdaError() }
 ) : PermalinkParser {
     fun givenResult(result: PermalinkData) {
         this.result = { result }

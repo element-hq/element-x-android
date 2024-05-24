@@ -362,7 +362,7 @@ private fun MessagesViewContent(
         // Any state change that should trigger a height size should be added to the list of remembered values here.
         val sheetResizeContentKey = remember { mutableIntStateOf(0) }
         LaunchedEffect(
-            state.composerState.richTextEditorState.lineCount,
+            state.composerState.textEditorState.lineCount,
             state.composerState.showTextFormatting,
         ) {
             sheetResizeContentKey.intValue = Random.nextInt()
@@ -439,7 +439,6 @@ private fun MessagesViewComposerBottomSheetContents(
                 state = state.composerState,
                 voiceMessageState = state.voiceMessageComposerState,
                 subcomposing = subcomposing,
-                enableTextFormatting = state.enableTextFormatting,
                 enableVoiceMessages = state.enableVoiceMessages,
                 modifier = Modifier.fillMaxWidth(),
             )

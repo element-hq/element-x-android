@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_invites_decline_chat_message">"დარწმუნებული ხართ, რომ გსურთ, უარი თქვათ მოწვევაზე %1$s-ში?"</string>
+  <string name="screen_invites_decline_chat_title">"მოწვევაზე უარის თქმა"</string>
+  <string name="screen_invites_decline_direct_chat_message">"დარწმუნებული ხართ, რომ გსურთ, უარი თქვათ ჩატზე %1$s-თან?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"ჩატზე უარის თქვა"</string>
+  <string name="screen_invites_empty_list">"მოწვევები არ არის"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) მოგიწვიათ"</string>
+  <string name="screen_migration_message">"ეს არის ერთჯერადი პროცესი, მადლობა ლოდინისთვის."</string>
+  <string name="screen_migration_title">"თქვენი ანგარიშის კონფიგურაცია"</string>
+  <string name="screen_roomlist_a11y_create_message">"ახალი საუბრისა ან ოთახის შექმნა"</string>
+  <string name="screen_roomlist_empty_message">"დაიწყეთ ვინმესთვის შეტყობინების გაგზავნით."</string>
+  <string name="screen_roomlist_empty_title">"არც ერთი ჩატი ჯერ არაა."</string>
+  <string name="screen_roomlist_filter_people">"ხალხი"</string>
+  <string name="screen_roomlist_main_space_title">"ჩატები"</string>
+  <string name="session_verification_banner_message">"როგორც ჩანს, ახალ მოწყობილობას იყენებთ. დაადასტურეთ სხვა მოწყობილობით თქვენს დაშიფრულ შეტყობინებებზე წვდომისთვის."</string>
+  <string name="session_verification_banner_title">"დაადასტურეთ, რომ ეს თქვენ ხართ"</string>
+</resources>

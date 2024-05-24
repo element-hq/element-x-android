@@ -43,21 +43,34 @@ class FirebasePushProvider @Inject constructor(
     }
 
     override fun getDistributors(): List<Distributor> {
-        return listOf(Distributor("Firebase", "Firebase"))
+        return listOf(firebaseDistributor)
     }
 
-    override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor) {
-        val pushKey = firebaseStore.getFcmToken() ?: return Unit.also {
+    override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor): Result<Unit> {
+        val pushKey = firebaseStore.getFcmToken() ?: return Result.failure<Unit>(
+            IllegalStateException(
+                "Unable to register pusher, Firebase token is not known."
+            )
+        ).also {
             Timber.tag(loggerTag.value).w("Unable to register pusher, Firebase token is not known.")
         }
-        pusherSubscriber.registerPusher(matrixClient, pushKey, FirebaseConfig.PUSHER_HTTP_URL)
+        return pusherSubscriber.registerPusher(
+            matrixClient = matrixClient,
+            pushKey = pushKey,
+            gateway = FirebaseConfig.PUSHER_HTTP_URL,
+        )
     }
 
-    override suspend fun unregister(matrixClient: MatrixClient) {
-        val pushKey = firebaseStore.getFcmToken() ?: return Unit.also {
+    override suspend fun getCurrentDistributor(matrixClient: MatrixClient) = firebaseDistributor
+
+    override suspend fun unregister(matrixClient: MatrixClient): Result<Unit> {
+        val pushKey = firebaseStore.getFcmToken()
+        return if (pushKey == null) {
             Timber.tag(loggerTag.value).w("Unable to unregister pusher, Firebase token is not known.")
+            Result.success(Unit)
+        } else {
+            pusherSubscriber.unregisterPusher(matrixClient, pushKey, FirebaseConfig.PUSHER_HTTP_URL)
         }
-        pusherSubscriber.unregisterPusher(matrixClient, pushKey, FirebaseConfig.PUSHER_HTTP_URL)
     }
 
     override suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig? {
@@ -67,5 +80,9 @@ class FirebasePushProvider @Inject constructor(
                 pushKey = fcmToken
             )
         }
+    }
+
+    companion object {
+        private val firebaseDistributor = Distributor("Firebase", "Firebase")
     }
 }

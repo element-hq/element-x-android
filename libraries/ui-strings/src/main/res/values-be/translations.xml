@@ -121,6 +121,7 @@
   <string name="common_blocked_users">"Заблакіраваныя карыстальнікі"</string>
   <string name="common_bubbles">"Бурбалкі"</string>
   <string name="common_call_invite">"Ідзе выклік (не падтрымліваецца)"</string>
+  <string name="common_call_started">"Выклік пачаўся"</string>
   <string name="common_chat_backup">"Рэзервовае капіраванне чатаў"</string>
   <string name="common_copyright">"Аўтарскае права"</string>
   <string name="common_creating_room">"Стварэнне пакоя…"</string>

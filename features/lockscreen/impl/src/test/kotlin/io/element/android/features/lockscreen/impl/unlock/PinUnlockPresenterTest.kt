@@ -28,8 +28,10 @@ import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.pin.model.assertText
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
+import io.element.android.features.lockscreen.impl.unlock.signout.SignOut
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.tests.testutils.lambda.assert
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -104,7 +106,9 @@ class PinUnlockPresenterTest {
 
     @Test
     fun `present - forgot pin flow`() = runTest {
-        val presenter = createPinUnlockPresenter(this)
+        val signOutLambda = lambdaRecorder<String?> { null }
+        val signOut = FakeSignOut(signOutLambda)
+        val presenter = createPinUnlockPresenter(this, signOut = signOut)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -131,6 +135,7 @@ class PinUnlockPresenterTest {
             awaitItem().also { state ->
                 assertThat(state.signOutAction).isInstanceOf(AsyncData.Success::class.java)
             }
+            assert(signOutLambda).isCalledOnce().withNoParameter()
         }
     }
 
@@ -142,6 +147,7 @@ class PinUnlockPresenterTest {
         scope: CoroutineScope,
         biometricUnlockManager: BiometricUnlockManager = FakeBiometricUnlockManager(),
         callback: PinCodeManager.Callback = DefaultPinCodeManagerCallback(),
+        signOut: SignOut = FakeSignOut(),
     ): PinUnlockPresenter {
         val pinCodeManager = aPinCodeManager().apply {
             addCallback(callback)
@@ -150,7 +156,7 @@ class PinUnlockPresenterTest {
         return PinUnlockPresenter(
             pinCodeManager = pinCodeManager,
             biometricUnlockManager = biometricUnlockManager,
-            matrixClient = FakeMatrixClient(),
+            signOut = signOut,
             coroutineScope = scope,
             pinUnlockHelper = PinUnlockHelper(biometricUnlockManager, pinCodeManager),
         )

@@ -31,7 +31,6 @@
   <plurals name="notification_unread_notified_messages_in_room_rooms">
     <item quantity="other">"%d 個聊天室"</item>
   </plurals>
-  <string name="push_choose_distributor_dialog_title_android">"選擇接收通知的機制"</string>
   <string name="push_distributor_background_sync_android">"背景同步"</string>
   <string name="push_distributor_firebase_android">"Google 服務"</string>
 </resources>

@@ -125,7 +125,9 @@ class DefaultDirectLogoutPresenterTest {
     @Test
     fun `present - logout with error then cancel`() = runTest {
         val matrixClient = FakeMatrixClient().apply {
-            givenLogoutError(A_THROWABLE)
+            logoutLambda = { _ ->
+                throw A_THROWABLE
+            }
         }
         val presenter = createDefaultDirectLogoutPresenter(
             matrixClient,
@@ -151,7 +153,13 @@ class DefaultDirectLogoutPresenterTest {
     @Test
     fun `present - logout with error then force`() = runTest {
         val matrixClient = FakeMatrixClient().apply {
-            givenLogoutError(A_THROWABLE)
+            logoutLambda = { ignoreSdkError ->
+                if (!ignoreSdkError) {
+                    throw A_THROWABLE
+                } else {
+                    null
+                }
+            }
         }
         val presenter = createDefaultDirectLogoutPresenter(
             matrixClient,

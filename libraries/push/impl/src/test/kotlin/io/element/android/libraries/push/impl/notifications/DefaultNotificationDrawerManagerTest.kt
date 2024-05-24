@@ -59,7 +59,6 @@ class DefaultNotificationDrawerManagerTest {
     fun `cover all APIs`() = runTest {
         // For now just call all the API. Later, add more valuable tests.
         val defaultNotificationDrawerManager = createDefaultNotificationDrawerManager()
-        defaultNotificationDrawerManager.notificationStyleChanged()
         defaultNotificationDrawerManager.clearAllMessagesEvents(A_SESSION_ID, doRender = true)
         defaultNotificationDrawerManager.clearAllMessagesEvents(A_SESSION_ID, doRender = false)
         defaultNotificationDrawerManager.clearEvent(A_SESSION_ID, AN_EVENT_ID, doRender = true)

@@ -20,7 +20,6 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
@@ -54,7 +53,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -78,7 +76,7 @@ class FakeMatrixClient(
     private val roomDirectoryService: RoomDirectoryService = FakeRoomDirectoryService(),
     private val accountManagementUrlString: Result<String?> = Result.success(null),
     private val resolveRoomAliasResult: (RoomAlias) -> Result<ResolvedRoomAlias> = { Result.success(ResolvedRoomAlias(A_ROOM_ID, emptyList())) },
-    private val getRoomPreviewResult: (RoomIdOrAlias) -> Result<RoomPreview> = { Result.failure(AN_EXCEPTION) },
+    private val getRoomPreviewFromRoomIdResult: (RoomId, List<String>) -> Result<RoomPreview> = { _, _ -> Result.failure(AN_EXCEPTION) },
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -96,7 +94,6 @@ class FakeMatrixClient(
     private var createRoomResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var findDmResult: RoomId? = A_ROOM_ID
-    private var logoutFailure: Throwable? = null
     private val getRoomResults = mutableMapOf<RoomId, MatrixRoom>()
     private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()
     private val getProfileResults = mutableMapOf<UserId, Result<MatrixUser>>()
@@ -115,6 +112,9 @@ class FakeMatrixClient(
     }
     var getRoomInfoFlowLambda = { _: RoomId ->
         flowOf<Optional<MatrixRoomInfo>>(Optional.empty())
+    }
+    var logoutLambda: (Boolean) -> String? = {
+        null
     }
 
     override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
@@ -160,12 +160,8 @@ class FakeMatrixClient(
     override suspend fun clearCache() {
     }
 
-    override suspend fun logout(ignoreSdkError: Boolean): String? {
-        delay(100)
-        if (ignoreSdkError.not()) {
-            logoutFailure?.let { throw it }
-        }
-        return null
+    override suspend fun logout(ignoreSdkError: Boolean): String? = simulateLongTask {
+        return logoutLambda(ignoreSdkError)
     }
 
     override fun close() = Unit
@@ -228,10 +224,6 @@ class FakeMatrixClient(
     }
 
     // Mocks
-
-    fun givenLogoutError(failure: Throwable?) {
-        logoutFailure = failure
-    }
 
     fun givenCreateRoomResult(result: Result<RoomId>) {
         createRoomResult = result
@@ -297,8 +289,8 @@ class FakeMatrixClient(
         resolveRoomAliasResult(roomAlias)
     }
 
-    override suspend fun getRoomPreviewForRoomId(roomIdOrAlias: RoomIdOrAlias): Result<RoomPreview> = simulateLongTask {
-        getRoomPreviewResult(roomIdOrAlias)
+    override suspend fun getRoomPreviewFromRoomId(roomId: RoomId, serverNames: List<String>) = simulateLongTask {
+        getRoomPreviewFromRoomIdResult(roomId, serverNames)
     }
 
     override suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>> {

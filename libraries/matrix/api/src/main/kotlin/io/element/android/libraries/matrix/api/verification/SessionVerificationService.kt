@@ -27,21 +27,15 @@ interface SessionVerificationService {
     val verificationFlowState: StateFlow<VerificationFlowState>
 
     /**
-     * The internal service that checks verification can only run after the initial sync.
-     * This [StateFlow] will notify consumers when the service is ready to be used.
-     */
-    val isReady: StateFlow<Boolean>
-
-    /**
      * Returns whether the current verification status is either: [SessionVerifiedStatus.Unknown], [SessionVerifiedStatus.NotVerified]
      * or [SessionVerifiedStatus.Verified].
      */
     val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus>
 
     /**
-     * Returns whether the current session needs to be verified and the SDK is ready to start the verification.
+     * Returns whether the current session needs to be verified.
      */
-    val canVerifySessionFlow: Flow<Boolean>
+    val needsSessionVerification: Flow<Boolean>
 
     /**
      * Request verification of the current session.

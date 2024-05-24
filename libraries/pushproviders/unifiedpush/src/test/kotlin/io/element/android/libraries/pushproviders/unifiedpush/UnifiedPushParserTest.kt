@@ -82,9 +82,8 @@ class UnifiedPushParserTest {
     }
 
     companion object {
-        private val UNIFIED_PUSH_DATA =
+        val UNIFIED_PUSH_DATA =
             "{\"notification\":{\"event_id\":\"$AN_EVENT_ID\",\"room_id\":\"$A_ROOM_ID\",\"counts\":{\"unread\":1},\"prio\":\"high\"}}"
-        // TODO Check client secret format?
     }
 }
 

@@ -136,7 +136,7 @@ class BugReportPresenterTest {
             initialState.eventSink.invoke(BugReportEvents.ResetAll)
             val resetState = awaitItem()
             assertThat(resetState.hasCrashLogs).isFalse()
-            logFilesRemoverLambda.assertions().isCalledExactly(1)
+            logFilesRemoverLambda.assertions().isCalledOnce()
             // TODO Make it live assertThat(resetState.screenshotUri).isNull()
         }
     }
