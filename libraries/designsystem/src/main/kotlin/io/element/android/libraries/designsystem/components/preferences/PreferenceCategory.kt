@@ -31,7 +31,8 @@ import io.element.android.libraries.designsystem.theme.components.ListSectionHea
 fun PreferenceCategory(
     modifier: Modifier = Modifier,
     title: String? = null,
-    showDivider: Boolean = true,
+    showTopDivider: Boolean = true,
+    showBottomDivider: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
@@ -39,10 +40,15 @@ fun PreferenceCategory(
             .fillMaxWidth()
     ) {
         if (title != null) {
-            ListSectionHeader(title = title)
+            ListSectionHeader(
+                title = title,
+                hasDivider = showTopDivider,
+            )
+        } else if (showTopDivider) {
+            PreferenceDivider()
         }
         content()
-        if (showDivider) {
+        if (showBottomDivider) {
             PreferenceDivider()
         }
     }

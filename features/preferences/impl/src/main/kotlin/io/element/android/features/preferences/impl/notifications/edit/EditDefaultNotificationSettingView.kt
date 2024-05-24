@@ -68,7 +68,10 @@ fun EditDefaultNotificationSettingView(
         } else {
             R.string.screen_notification_settings_edit_screen_group_section_header
         }
-        PreferenceCategory(title = stringResource(id = categoryTitle)) {
+        PreferenceCategory(
+            title = stringResource(id = categoryTitle),
+            showTopDivider = false,
+        ) {
             if (state.mode != null) {
                 Column(modifier = Modifier.selectableGroup()) {
                     validModes.forEach { item ->
@@ -83,7 +86,7 @@ fun EditDefaultNotificationSettingView(
             }
         }
         if (state.roomsWithUserDefinedMode.isNotEmpty()) {
-            PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_edit_custom_settings_section_title)) {
+            PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_edit_custom_settings_section_title),) {
                 state.roomsWithUserDefinedMode.forEach { summary ->
                     val subtitle = when (summary.details.userDefinedNotificationMode) {
                         RoomNotificationMode.ALL_MESSAGES -> stringResource(id = R.string.screen_notification_settings_edit_mode_all_messages)
