@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.auth.qrlogin
+package io.element.android.features.login.impl.di
 
-sealed interface QrCodeLoginStep {
-    data object Uninitialized : QrCodeLoginStep
-    data class EstablishingSecureChannel(val checkCode: String) : QrCodeLoginStep
-    data object Starting : QrCodeLoginStep
-    data class WaitingForToken(val userCode: String) : QrCodeLoginStep
-    data class Failed(val error: QrLoginException) : QrCodeLoginStep
-    data object Finished : QrCodeLoginStep
+import com.squareup.anvil.annotations.ContributesTo
+import io.element.android.features.login.impl.qrcode.DefaultQrCodeLoginManager
+
+@ContributesTo(QrCodeLoginScope::class)
+interface QrCodeLoginBindings {
+    fun qrCodeLoginManager(): DefaultQrCodeLoginManager
 }

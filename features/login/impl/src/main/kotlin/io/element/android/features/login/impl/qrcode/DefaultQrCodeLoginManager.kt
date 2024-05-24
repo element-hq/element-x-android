@@ -17,16 +17,19 @@
 package io.element.android.features.login.impl.qrcode
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.di.AppScope
+import io.element.android.features.login.impl.di.QrCodeLoginScope
+import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
+import io.element.android.libraries.matrix.api.auth.qrlogin.QrLoginException
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
-@ContributesBinding(AppScope::class)
+@SingleIn(QrCodeLoginScope::class)
+@ContributesBinding(QrCodeLoginScope::class)
 class DefaultQrCodeLoginManager @Inject constructor(
     private val authenticationService: MatrixAuthenticationService,
 ) : QrCodeLoginManager {
@@ -34,10 +37,18 @@ class DefaultQrCodeLoginManager @Inject constructor(
     override val currentLoginStep: StateFlow<QrCodeLoginStep> = _currentLoginStep
 
     override suspend fun authenticate(qrCodeLoginData: MatrixQrCodeLoginData): Result<SessionId> {
-        _currentLoginStep.value = QrCodeLoginStep.Uninitialized
+        reset()
 
         return authenticationService.loginWithQrCode(qrCodeLoginData) { step ->
             _currentLoginStep.value = step
+        }.onFailure { throwable ->
+            if (throwable is QrLoginException) {
+                _currentLoginStep.value = QrCodeLoginStep.Failed(throwable)
+            }
         }
+    }
+
+    override fun reset() {
+        _currentLoginStep.value = QrCodeLoginStep.Uninitialized
     }
 }

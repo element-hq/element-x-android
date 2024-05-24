@@ -25,10 +25,10 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.libraries.di.AppScope
+import io.element.android.features.login.impl.di.QrCodeLoginScope
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 
-@ContributesNode(AppScope::class)
+@ContributesNode(QrCodeLoginScope::class)
 class QrCodeScanNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,

@@ -36,4 +36,6 @@ interface QrCodeLoginManager {
      * @return the logged in [SessionId] if the authentication was successful or a failure result.
      */
     suspend fun authenticate(qrCodeLoginData: MatrixQrCodeLoginData): Result<SessionId>
+
+    fun reset()
 }
