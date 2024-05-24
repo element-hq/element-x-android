@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.list.ListItemContent
-import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
+import io.element.android.libraries.designsystem.components.preferences.components.preferenceIcon
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.ListItem
@@ -48,18 +48,12 @@ fun PreferenceSwitch(
     ListItem(
         modifier = modifier,
         enabled = enabled,
-        leadingContent = if (iconResourceId != null || icon != null || showIconAreaIfNoIcon) {
-            ListItemContent.Custom {
-                PreferenceIcon(
-                    icon = icon,
-                    iconResourceId = iconResourceId,
-                    enabled = enabled,
-                    isVisible = showIconAreaIfNoIcon
-                )
-            }
-        } else {
-            null
-        },
+        leadingContent = preferenceIcon(
+            icon = icon,
+            iconResourceId = iconResourceId,
+            enabled = enabled,
+            showIconAreaIfNoIcon = showIconAreaIfNoIcon,
+        ),
         headlineContent = {
             Text(
                 style = ElementTheme.typography.fontBodyLgRegular,

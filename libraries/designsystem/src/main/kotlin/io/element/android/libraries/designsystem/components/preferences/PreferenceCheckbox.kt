@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.list.ListItemContent
-import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
+import io.element.android.libraries.designsystem.components.preferences.components.preferenceIcon
 import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
@@ -47,18 +47,12 @@ fun PreferenceCheckbox(
 ) {
     ListItem(
         modifier = modifier,
-        leadingContent = if (iconResourceId != null || icon != null || showIconAreaIfNoIcon) {
-            ListItemContent.Custom {
-                PreferenceIcon(
-                    icon = icon,
-                    iconResourceId = iconResourceId,
-                    enabled = enabled,
-                    isVisible = showIconAreaIfNoIcon
-                )
-            }
-        } else {
-            null
-        },
+        leadingContent = preferenceIcon(
+            icon = icon,
+            iconResourceId = iconResourceId,
+            enabled = enabled,
+            showIconAreaIfNoIcon = showIconAreaIfNoIcon,
+        ),
         headlineContent = {
             Text(
                 style = ElementTheme.typography.fontBodyLgRegular,

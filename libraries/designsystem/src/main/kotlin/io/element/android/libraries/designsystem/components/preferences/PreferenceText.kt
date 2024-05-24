@@ -36,7 +36,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.atomic.atoms.RedIndicatorAtom
 import io.element.android.libraries.designsystem.components.list.ListItemContent
-import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
+import io.element.android.libraries.designsystem.components.preferences.components.preferenceIcon
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewGroup
@@ -67,18 +67,14 @@ fun PreferenceText(
         modifier = modifier,
         enabled = enabled,
         onClick = onClick,
-        leadingContent = if (icon != null || iconResourceId != null || showIconAreaIfNoIcon) {
-            ListItemContent.Custom {
-                PreferenceIcon(
-                    icon = icon,
-                    iconResourceId = iconResourceId,
-                    showIconBadge = showIconBadge,
-                    enabled = enabled,
-                    isVisible = showIconAreaIfNoIcon,
-                    tintColor = tintColor,
-                )
-            }
-        } else null,
+        leadingContent = preferenceIcon(
+            icon = icon,
+            iconResourceId = iconResourceId,
+            showIconBadge = showIconBadge,
+            enabled = enabled,
+            showIconAreaIfNoIcon = showIconAreaIfNoIcon,
+            tintColor = tintColor,
+        ),
         headlineContent = {
             Text(
                 style = ElementTheme.typography.fontBodyLgRegular,
