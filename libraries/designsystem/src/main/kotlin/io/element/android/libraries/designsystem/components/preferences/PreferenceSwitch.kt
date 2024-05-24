@@ -17,30 +17,19 @@
 package io.element.android.libraries.designsystem.components.preferences
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
-import io.element.android.libraries.designsystem.theme.components.Switch
+import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.toEnabledColor
-import io.element.android.libraries.designsystem.toSecondaryEnabledColor
 
 @Composable
 fun PreferenceSwitch(
@@ -55,49 +44,41 @@ fun PreferenceSwitch(
     showIconAreaIfNoIcon: Boolean = false,
     switchAlignment: Alignment.Vertical = Alignment.CenterVertically
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .defaultMinSize(minHeight = preferenceMinHeight)
-            .clickable { onCheckedChange(!isChecked) }
-            .padding(vertical = 4.dp, horizontal = preferencePaddingHorizontal),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        PreferenceIcon(
-            icon = icon,
-            iconResourceId = iconResourceId,
-            enabled = enabled,
-            isVisible = showIconAreaIfNoIcon
-        )
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .align(Alignment.CenterVertically)
-        ) {
+    ListItem(
+        modifier = modifier,
+        enabled = enabled,
+        leadingContent = if (iconResourceId != null || icon != null || showIconAreaIfNoIcon) {
+            ListItemContent.Custom {
+                PreferenceIcon(
+                    icon = icon,
+                    iconResourceId = iconResourceId,
+                    enabled = enabled,
+                    isVisible = showIconAreaIfNoIcon
+                )
+            }
+        } else {
+            null
+        },
+        headlineContent = {
             Text(
                 style = ElementTheme.typography.fontBodyLgRegular,
                 text = title,
-                color = enabled.toEnabledColor(),
             )
+        },
+        supportingContent = {
             if (subtitle != null) {
-                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     style = ElementTheme.typography.fontBodyMdRegular,
                     text = subtitle,
-                    color = enabled.toSecondaryEnabledColor(),
                 )
             }
-        }
-        Spacer(modifier = Modifier.width(16.dp))
-        // TODO Create a wrapper for Switch
-        Switch(
-            modifier = Modifier
-                .align(switchAlignment),
+        },
+        trailingContent = ListItemContent.Switch(
             checked = isChecked,
+            onChange = onCheckedChange,
             enabled = enabled,
-            onCheckedChange = onCheckedChange
         )
-    }
+    )
 }
 
 @Preview(group = PreviewGroup.Preferences)

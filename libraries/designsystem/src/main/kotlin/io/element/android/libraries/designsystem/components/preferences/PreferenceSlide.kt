@@ -32,7 +32,6 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Slider
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.toEnabledColor
 
 @Composable
 fun PreferenceSlide(
@@ -50,6 +49,7 @@ fun PreferenceSlide(
 ) {
     ListItem(
         modifier = modifier,
+        enabled = enabled,
         leadingContent = if (iconResourceId != null || icon != null || showIconAreaIfNoIcon) {
             ListItemContent.Custom {
                 PreferenceIcon(
@@ -66,13 +66,11 @@ fun PreferenceSlide(
                 Text(
                     style = ElementTheme.typography.fontBodyLgRegular,
                     text = title,
-                    color = enabled.toEnabledColor(),
                 )
                 summary?.let {
                     Text(
                         style = ElementTheme.typography.fontBodyMdRegular,
                         text = summary,
-                        color = enabled.toEnabledColor(),
                     )
                 }
                 Slider(
@@ -93,6 +91,7 @@ internal fun PreferenceSlidePreview() = ElementThemedPreview {
         icon = CompoundIcons.UserProfile(),
         title = "Slide",
         summary = "Summary",
+        enabled = false,
         value = 0.75F,
         onValueChange = {},
     )
