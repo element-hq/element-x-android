@@ -19,12 +19,12 @@ package io.element.android.libraries.matrix.impl.auth.qrlogin
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeDecodeException
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrLoginException
 import org.matrix.rustcomponents.sdk.HumanQrLoginException
-import org.matrix.rustcomponents.sdk.HumanQrLoginException as RustHumanQrLoginException
 import uniffi.matrix_sdk_crypto.LoginQrCodeDecodeError
+import org.matrix.rustcomponents.sdk.HumanQrLoginException as RustHumanQrLoginException
 import org.matrix.rustcomponents.sdk.QrCodeDecodeException as RustQrCodeDecodeException
 
 object QrErrorMapper {
-    fun map(qrCodeDecodeException: RustQrCodeDecodeException) : QrCodeDecodeException = when (qrCodeDecodeException) {
+    fun map(qrCodeDecodeException: RustQrCodeDecodeException): QrCodeDecodeException = when (qrCodeDecodeException) {
         is RustQrCodeDecodeException.Crypto -> {
             val reason = when (qrCodeDecodeException.error) {
                 LoginQrCodeDecodeError.NOT_ENOUGH_DATA -> QrCodeDecodeException.Crypto.Reason.NOT_ENOUGH_DATA
@@ -38,7 +38,7 @@ object QrErrorMapper {
             QrCodeDecodeException.Crypto(qrCodeDecodeException.message, reason)
         }
     }
-    
+
     fun map(humanQrLoginError: RustHumanQrLoginException): QrLoginException = when (humanQrLoginError) {
         is RustHumanQrLoginException.Cancelled -> QrLoginException.Cancelled
         is RustHumanQrLoginException.ConnectionInsecure -> QrLoginException.ConnectionInsecure

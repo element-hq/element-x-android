@@ -29,12 +29,9 @@ internal class QRCodeAnalyzer(
 
     override fun analyze(image: ImageProxy) {
         if (image.format in SUPPORTED_IMAGE_FORMATS) {
-
             try {
                 val bytes = reader.read(image).firstNotNullOfOrNull { it.bytes }
-                if (bytes != null ) {
-                    onQrCodeScanned(bytes)
-                }
+                bytes?.let { onQrCodeScanned(it) }
             } catch (e: Exception) {
                 Timber.w(e, "Error decoding QR code")
             } finally {

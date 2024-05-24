@@ -49,10 +49,10 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun QrCodeErrorView(
-    modifier: Modifier = Modifier,
     errorScreenType: QrCodeErrorScreenType,
     appName: String,
     onRetry: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     BackHandler {
         onRetry()
@@ -106,17 +106,6 @@ private fun ColumnScope.InsecureChannelDetectedError() {
             AnnotatedString(stringResource(R.string.screen_qr_code_login_connection_note_secure_state_list_item_2)),
             AnnotatedString(stringResource(R.string.screen_qr_code_login_connection_note_secure_state_list_item_3)),
         )
-    )
-}
-
-@Composable
-private fun ErrorMessageParagraph(text: String) {
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        text = text,
-        style = ElementTheme.typography.fontBodyMdRegular,
-        color = ElementTheme.colors.textSecondary,
-        textAlign = TextAlign.Center,
     )
 }
 

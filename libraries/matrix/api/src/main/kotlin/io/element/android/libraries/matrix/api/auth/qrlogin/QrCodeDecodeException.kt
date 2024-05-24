@@ -25,7 +25,7 @@ sealed class QrCodeDecodeException(message: String) : Exception(message) {
             INVALID_MODE,
             INVALID_VERSION,
             BASE64,
-            INVALID_PREFIX;
+            INVALID_PREFIX
         }
     }
 }

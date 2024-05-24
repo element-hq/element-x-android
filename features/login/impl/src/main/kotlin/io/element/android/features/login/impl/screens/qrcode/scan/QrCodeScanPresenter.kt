@@ -19,7 +19,6 @@ package io.element.android.features.login.impl.screens.qrcode.scan
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,7 +55,9 @@ class QrCodeScanPresenter @Inject constructor(
         val coroutineScope = rememberCoroutineScope()
         val authenticationAction: MutableState<AsyncAction<MatrixQrCodeLoginData>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
-        ObserveQRCodeLoginFailures(authenticationAction = authenticationAction)
+        ObserveQRCodeLoginFailures {
+            authenticationAction.value = AsyncAction.Failure(it)
+        }
 
         fun handleEvents(event: QrCodeScanEvents) {
             when (event) {
@@ -79,12 +80,13 @@ class QrCodeScanPresenter @Inject constructor(
     }
 
     @Composable
-    private fun ObserveQRCodeLoginFailures(authenticationAction: MutableState<AsyncAction<MatrixQrCodeLoginData>>) {
-        LaunchedEffect(Unit) {
+    private fun ObserveQRCodeLoginFailures(onInvalidQrCodeError: (QrLoginException) -> Unit) {
+        LaunchedEffect(onInvalidQrCodeError) {
             qrCodeLoginManager.currentLoginStep
                 .onEach { state ->
                     if (state is QrCodeLoginStep.Failed && state.error is QrLoginException.InvalidQrCode) {
-                        authenticationAction.value = AsyncAction.Failure(state.error)
+                        onInvalidQrCodeError(state.error)
+                        // The error was handled here, reset the login state
                         qrCodeLoginManager.reset()
                     }
                 }
