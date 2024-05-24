@@ -19,20 +19,17 @@ package io.element.android.libraries.designsystem.components.preferences
 import androidx.annotation.DrawableRes
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.components.PreferenceIcon
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Slider
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.toEnabledColor
@@ -51,41 +48,42 @@ fun PreferenceSlide(
     summary: String? = null,
     steps: Int = 0,
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .defaultMinSize(minHeight = preferenceMinHeight)
-            .padding(vertical = 4.dp, horizontal = preferencePaddingHorizontal),
-    ) {
-        PreferenceIcon(
-            icon = icon,
-            iconResourceId = iconResourceId,
-            isVisible = showIconAreaIfNoIcon,
-        )
-        Column(
-            modifier = Modifier
-                .weight(1f),
-        ) {
-            Text(
-                style = ElementTheme.typography.fontBodyLgRegular,
-                text = title,
-                color = enabled.toEnabledColor(),
-            )
-            summary?.let {
-                Text(
-                    style = ElementTheme.typography.fontBodyMdRegular,
-                    text = summary,
-                    color = enabled.toEnabledColor(),
+    ListItem(
+        modifier = modifier,
+        leadingContent = if (iconResourceId != null || icon != null || showIconAreaIfNoIcon) {
+            ListItemContent.Custom {
+                PreferenceIcon(
+                    icon = icon,
+                    iconResourceId = iconResourceId,
+                    isVisible = showIconAreaIfNoIcon,
                 )
             }
-            Slider(
-                value = value,
-                steps = steps,
-                onValueChange = onValueChange,
-                enabled = enabled,
-            )
+        } else {
+            null
+        },
+        headlineContent = {
+            Column {
+                Text(
+                    style = ElementTheme.typography.fontBodyLgRegular,
+                    text = title,
+                    color = enabled.toEnabledColor(),
+                )
+                summary?.let {
+                    Text(
+                        style = ElementTheme.typography.fontBodyMdRegular,
+                        text = summary,
+                        color = enabled.toEnabledColor(),
+                    )
+                }
+                Slider(
+                    value = value,
+                    steps = steps,
+                    onValueChange = onValueChange,
+                    enabled = enabled,
+                )
+            }
         }
-    }
+    )
 }
 
 @Preview(group = PreviewGroup.Preferences)
