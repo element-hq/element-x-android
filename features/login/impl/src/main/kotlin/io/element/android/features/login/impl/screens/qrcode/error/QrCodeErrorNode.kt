@@ -27,12 +27,14 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.login.impl.qrcode.QrCodeErrorScreenType
 import io.element.android.libraries.architecture.inputs
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 
 @ContributesNode(AppScope::class)
 class QrCodeErrorNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val buildMeta: BuildMeta,
 ) : Node(buildContext = buildContext, plugins = plugins) {
     interface Callback : Plugin {
         fun onRetry()
@@ -49,7 +51,8 @@ class QrCodeErrorNode @AssistedInject constructor(
         QrCodeErrorView(
             modifier = modifier,
             errorScreenType = qrCodeErrorScreenType,
-            onRetry = ::onRetry
+            appName = buildMeta.productionApplicationName,
+            onRetry = ::onRetry,
         )
     }
 }

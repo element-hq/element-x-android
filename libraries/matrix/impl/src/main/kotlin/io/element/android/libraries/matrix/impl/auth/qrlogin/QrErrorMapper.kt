@@ -18,15 +18,12 @@ package io.element.android.libraries.matrix.impl.auth.qrlogin
 
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeDecodeException
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrLoginException
-import org.matrix.rustcomponents.sdk.HumanQrLoginError
-import org.matrix.rustcomponents.sdk.qrLoginErrorToHumanError
+import org.matrix.rustcomponents.sdk.HumanQrLoginException
+import org.matrix.rustcomponents.sdk.HumanQrLoginException as RustHumanQrLoginException
 import uniffi.matrix_sdk_crypto.LoginQrCodeDecodeError
 import org.matrix.rustcomponents.sdk.QrCodeDecodeException as RustQrCodeDecodeException
-import org.matrix.rustcomponents.sdk.QrLoginException as RustQrLoginException
 
 object QrErrorMapper {
-    fun map(loginException: RustQrLoginException) : QrLoginException = map(qrLoginErrorToHumanError(loginException))
-
     fun map(qrCodeDecodeException: RustQrCodeDecodeException) : QrCodeDecodeException = when (qrCodeDecodeException) {
         is RustQrCodeDecodeException.Crypto -> {
             val reason = when (qrCodeDecodeException.error) {
@@ -42,13 +39,15 @@ object QrErrorMapper {
         }
     }
     
-    private fun map(humanQrLoginError: HumanQrLoginError): QrLoginException = when (humanQrLoginError) {
-        is HumanQrLoginError.Cancelled -> QrLoginException.Cancelled
-        is HumanQrLoginError.ConnectionInsecure -> QrLoginException.ConnectionInsecure
-        is HumanQrLoginError.Declined -> QrLoginException.Declined
-        is HumanQrLoginError.Expired -> QrLoginException.Expired
-        is HumanQrLoginError.InvalidQrCode -> QrLoginException.InvalidQrCode
-        is HumanQrLoginError.LinkingNotSupported -> QrLoginException.LinkingNotSupported
-        is HumanQrLoginError.Unknown -> QrLoginException.Unknown
+    fun map(humanQrLoginError: RustHumanQrLoginException): QrLoginException = when (humanQrLoginError) {
+        is RustHumanQrLoginException.Cancelled -> QrLoginException.Cancelled
+        is RustHumanQrLoginException.ConnectionInsecure -> QrLoginException.ConnectionInsecure
+        is RustHumanQrLoginException.Declined -> QrLoginException.Declined
+        is RustHumanQrLoginException.Expired -> QrLoginException.Expired
+        is RustHumanQrLoginException.InvalidQrCode -> QrLoginException.InvalidQrCode
+        is RustHumanQrLoginException.LinkingNotSupported -> QrLoginException.LinkingNotSupported
+        is RustHumanQrLoginException.Unknown -> QrLoginException.Unknown
+        is HumanQrLoginException.OidcMetadataInvalid -> QrLoginException.OidcMetadataInvalid
+        is HumanQrLoginException.SlidingSyncNotAvailable -> QrLoginException.SlidingSyncNotAvailable
     }
 }

@@ -23,5 +23,7 @@ sealed class QrLoginException : Exception() {
     data object Expired : QrLoginException()
     data object InvalidQrCode : QrLoginException()
     data object LinkingNotSupported : QrLoginException()
+    data object OidcMetadataInvalid : QrLoginException()
+    data object SlidingSyncNotAvailable : QrLoginException()
     data object Unknown : QrLoginException()
 }

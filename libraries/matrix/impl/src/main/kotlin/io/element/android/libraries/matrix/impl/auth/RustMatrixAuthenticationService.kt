@@ -46,9 +46,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.HumanQrLoginException
 import org.matrix.rustcomponents.sdk.OidcAuthenticationData
 import org.matrix.rustcomponents.sdk.QrCodeDecodeException
-import org.matrix.rustcomponents.sdk.QrLoginException
 import org.matrix.rustcomponents.sdk.QrLoginProgress
 import org.matrix.rustcomponents.sdk.QrLoginProgressListener
 import org.matrix.rustcomponents.sdk.use
@@ -236,7 +236,7 @@ class RustMatrixAuthenticationService @Inject constructor(
             }.mapFailure {
                 when (it) {
                     is QrCodeDecodeException -> QrErrorMapper.map(it)
-                    is QrLoginException -> QrErrorMapper.map(it)
+                    is HumanQrLoginException -> QrErrorMapper.map(it)
                     else -> it
                 }
             }.onFailure { throwable ->

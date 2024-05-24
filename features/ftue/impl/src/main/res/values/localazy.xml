@@ -17,10 +17,12 @@
   <string name="screen_qr_code_login_error_declined_title">"Sign in declined"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"Sign in expired. Please try again."</string>
   <string name="screen_qr_code_login_error_expired_title">"The sign in was not completed in time"</string>
-  <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Your other device does not support signing in to Element with a QR code.
+  <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Your other device does not support signing in to %s with a QR code.
 
 Try signing in manually, or scan the QR code with another device."</string>
   <string name="screen_qr_code_login_error_linking_not_suported_title">"QR code not supported"</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"Your account provider does not support %1$s."</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"%1$s not supported"</string>
   <string name="screen_qr_code_login_initial_state_button_title">"Ready to scan"</string>
   <string name="screen_qr_code_login_initial_state_item_1">"Open %1$s on a desktop device"</string>
   <string name="screen_qr_code_login_initial_state_item_2">"Click on your avatar"</string>

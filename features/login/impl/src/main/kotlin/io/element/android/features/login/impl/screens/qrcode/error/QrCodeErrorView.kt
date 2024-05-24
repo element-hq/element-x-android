@@ -51,6 +51,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun QrCodeErrorView(
     modifier: Modifier = Modifier,
     errorScreenType: QrCodeErrorScreenType,
+    appName: String,
     onRetry: () -> Unit,
 ) {
     BackHandler {
@@ -59,37 +60,41 @@ fun QrCodeErrorView(
     FlowStepPage(
         modifier = modifier,
         iconStyle = BigIcon.Style.AlertSolid,
-        title = titleText(errorScreenType),
-        subTitle = subtitleText(errorScreenType),
+        title = titleText(errorScreenType, appName),
+        subTitle = subtitleText(errorScreenType, appName),
         content = { Content(errorScreenType) },
         buttons = { Buttons(onRetry) }
     )
 }
 
 @Composable
-private fun titleText(errorScreenType: QrCodeErrorScreenType) = when (errorScreenType) {
+private fun titleText(errorScreenType: QrCodeErrorScreenType, appName: String) = when (errorScreenType) {
     QrCodeErrorScreenType.Cancelled -> stringResource(R.string.screen_qr_code_login_error_cancelled_title)
     QrCodeErrorScreenType.Declined -> stringResource(R.string.screen_qr_code_login_error_declined_title)
     QrCodeErrorScreenType.Expired -> stringResource(R.string.screen_qr_code_login_error_expired_title)
     QrCodeErrorScreenType.ProtocolNotSupported -> stringResource(R.string.screen_qr_code_login_error_linking_not_suported_title)
     QrCodeErrorScreenType.InsecureChannelDetected -> stringResource(id = R.string.screen_qr_code_login_connection_note_secure_state_title)
+    QrCodeErrorScreenType.SlidingSyncNotAvailable -> stringResource(id = R.string.screen_qr_code_login_error_sliding_sync_not_supported_title, appName)
     is QrCodeErrorScreenType.UnknownError -> stringResource(CommonStrings.common_something_went_wrong)
 }
 
 @Composable
-private fun subtitleText(errorScreenType: QrCodeErrorScreenType) = when (errorScreenType) {
+private fun subtitleText(errorScreenType: QrCodeErrorScreenType, appName: String) = when (errorScreenType) {
     QrCodeErrorScreenType.Cancelled -> stringResource(R.string.screen_qr_code_login_error_cancelled_subtitle)
     QrCodeErrorScreenType.Declined -> stringResource(R.string.screen_qr_code_login_error_declined_subtitle)
     QrCodeErrorScreenType.Expired -> stringResource(R.string.screen_qr_code_login_error_expired_subtitle)
-    QrCodeErrorScreenType.ProtocolNotSupported -> stringResource(R.string.screen_qr_code_login_error_linking_not_suported_subtitle)
+    QrCodeErrorScreenType.ProtocolNotSupported -> stringResource(R.string.screen_qr_code_login_error_linking_not_suported_subtitle, appName)
     QrCodeErrorScreenType.InsecureChannelDetected -> stringResource(id = R.string.screen_qr_code_login_connection_note_secure_state_description)
+    QrCodeErrorScreenType.SlidingSyncNotAvailable -> stringResource(id = R.string.screen_qr_code_login_error_sliding_sync_not_supported_subtitle, appName)
     is QrCodeErrorScreenType.UnknownError -> stringResource(R.string.screen_qr_code_login_unknown_error_description)
 }
 
 @Composable
 private fun ColumnScope.InsecureChannelDetectedError() {
     Text(
-        modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState()),
         text = stringResource(R.string.screen_qr_code_login_connection_note_secure_state_list_header),
         style = ElementTheme.typography.fontBodyLgMedium,
         textAlign = TextAlign.Center,
@@ -148,6 +153,7 @@ internal fun QrCodeErrorViewPreview(@PreviewParameter(QrCodeErrorTypeProvider::c
     ElementPreview {
         QrCodeErrorView(
             errorScreenType = errorScreenType,
+            appName = "Element X",
             onRetry = {}
         )
     }
@@ -160,6 +166,7 @@ class QrCodeErrorTypeProvider : PreviewParameterProvider<QrCodeErrorScreenType> 
         QrCodeErrorScreenType.Expired,
         QrCodeErrorScreenType.ProtocolNotSupported,
         QrCodeErrorScreenType.InsecureChannelDetected,
+        QrCodeErrorScreenType.SlidingSyncNotAvailable,
         QrCodeErrorScreenType.UnknownError
     )
 }

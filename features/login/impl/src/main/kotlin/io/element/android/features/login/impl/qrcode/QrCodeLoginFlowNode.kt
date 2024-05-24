@@ -221,5 +221,8 @@ sealed interface QrCodeErrorScreenType : NodeInputs, Parcelable {
     data object ProtocolNotSupported : QrCodeErrorScreenType
 
     @Parcelize
+    data object SlidingSyncNotAvailable : QrCodeErrorScreenType
+
+    @Parcelize
     data object UnknownError : QrCodeErrorScreenType
 }
