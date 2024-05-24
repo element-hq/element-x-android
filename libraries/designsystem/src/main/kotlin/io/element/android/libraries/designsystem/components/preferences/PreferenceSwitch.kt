@@ -17,6 +17,7 @@
 package io.element.android.libraries.designsystem.components.preferences
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -84,12 +85,22 @@ fun PreferenceSwitch(
 @Preview(group = PreviewGroup.Preferences)
 @Composable
 internal fun PreferenceSwitchPreview() = ElementThemedPreview {
-    PreferenceSwitch(
-        title = "Switch",
-        subtitle = "Subtitle Switch",
-        icon = CompoundIcons.Threads(),
-        enabled = true,
-        isChecked = true,
-        onCheckedChange = {},
-    )
+    Column {
+        PreferenceSwitch(
+            title = "Switch",
+            subtitle = "Subtitle Switch",
+            icon = CompoundIcons.Threads(),
+            enabled = true,
+            isChecked = true,
+            onCheckedChange = {},
+        )
+        PreferenceSwitch(
+            title = "Switch",
+            subtitle = "Subtitle Switch",
+            icon = CompoundIcons.Threads(),
+            enabled = false,
+            isChecked = true,
+            onCheckedChange = {},
+        )
+    }
 }
