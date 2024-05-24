@@ -1,4 +1,4 @@
-name: Create release App Bundle
+name: Create release App Bundle and APKs
 
 on:
   workflow_dispatch:
