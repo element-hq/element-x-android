@@ -56,7 +56,9 @@ fun preferenceIcon(
                 tintColor = tintColor,
             )
         }
-    } else null
+    } else {
+        null
+    }
 }
 
 @Composable
