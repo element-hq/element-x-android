@@ -94,5 +94,13 @@ internal fun PreferenceSwitchPreview() = ElementThemedPreview {
             isChecked = true,
             onCheckedChange = {},
         )
+        PreferenceSwitch(
+            title = "Switch no subtitle",
+            subtitle = null,
+            icon = CompoundIcons.Threads(),
+            enabled = false,
+            isChecked = true,
+            onCheckedChange = {},
+        )
     }
 }
