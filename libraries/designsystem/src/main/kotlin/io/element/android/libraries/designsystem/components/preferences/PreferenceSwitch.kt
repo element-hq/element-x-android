@@ -59,8 +59,8 @@ fun PreferenceSwitch(
                 text = title,
             )
         },
-        supportingContent = {
-            if (subtitle != null) {
+        supportingContent = subtitle?.let {
+            {
                 Text(
                     style = ElementTheme.typography.fontBodyMdRegular,
                     text = subtitle,
