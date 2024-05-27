@@ -32,7 +32,6 @@ fun PreferenceCategory(
     modifier: Modifier = Modifier,
     title: String? = null,
     showTopDivider: Boolean = true,
-    showBottomDivider: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
@@ -48,9 +47,6 @@ fun PreferenceCategory(
             PreferenceDivider()
         }
         content()
-        if (showBottomDivider) {
-            PreferenceDivider()
-        }
     }
 }
 
