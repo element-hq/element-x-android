@@ -17,10 +17,12 @@
   <string name="screen_qr_code_login_error_declined_title">"Přihlášení odmítnuto"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"Platnost přihlášení vypršela. Zkuste to prosím znovu."</string>
   <string name="screen_qr_code_login_error_expired_title">"Přihlášení nebylo dokončeno včas"</string>
-  <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Vaše druhé zařízení nepodporuje přihlášení k Elementu pomocí QR kódu.
+  <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Vaše druhé zařízení nepodporuje přihlášení k %su pomocí QR kódu.
 
 Zkuste se přihlásit ručně nebo naskenujte QR kód pomocí jiného zařízení."</string>
   <string name="screen_qr_code_login_error_linking_not_suported_title">"QR kód není podporován"</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"Váš poskytovatel účtu nepodporuje %1$s."</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"%1$s není podporováno"</string>
   <string name="screen_qr_code_login_initial_state_button_title">"Připraveno ke skenování"</string>
   <string name="screen_qr_code_login_initial_state_item_1">"Otevřete %1$s na stolním počítači"</string>
   <string name="screen_qr_code_login_initial_state_item_2">"Klikněte na svůj avatar"</string>
