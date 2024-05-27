@@ -25,10 +25,15 @@ import kotlinx.collections.immutable.toImmutableList
 open class NotificationSettingsStateProvider : PreviewParameterProvider<NotificationSettingsState> {
     override val values: Sequence<NotificationSettingsState>
         get() = sequenceOf(
-            aValidNotificationSettingsState(),
             aValidNotificationSettingsState(systemNotificationsEnabled = false),
+            aValidNotificationSettingsState(),
             aValidNotificationSettingsState(changeNotificationSettingAction = AsyncAction.Loading),
             aValidNotificationSettingsState(changeNotificationSettingAction = AsyncAction.Failure(Throwable("error"))),
+            aValidNotificationSettingsState(
+                availablePushDistributors = listOf("Firebase"),
+                changeNotificationSettingAction = AsyncAction.Failure(Throwable("error")),
+            ),
+            aValidNotificationSettingsState(availablePushDistributors = listOf("Firebase")),
             aValidNotificationSettingsState(showChangePushProviderDialog = true),
             aValidNotificationSettingsState(currentPushDistributor = AsyncAction.Loading),
             aValidNotificationSettingsState(currentPushDistributor = AsyncAction.Failure(Exception("Failed to change distributor"))),

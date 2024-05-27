@@ -181,50 +181,52 @@ private fun NotificationSettingsContentView(
                 onClick = onTroubleshootNotificationsClicked
             )
         }
-        PreferenceCategory(title = stringResource(id = CommonStrings.common_advanced_settings)) {
-            ListItem(
-                headlineContent = {
-                    Text(text = stringResource(id = R.string.screen_advanced_settings_push_provider_android))
-                },
-                trailingContent = when (state.currentPushDistributor) {
-                    AsyncAction.Uninitialized,
-                    AsyncAction.Confirming,
-                    AsyncAction.Loading -> ListItemContent.Custom {
-                        CircularProgressIndicator(
-                            modifier = Modifier
-                                .progressSemantics()
-                                .size(20.dp),
-                            strokeWidth = 2.dp
+        if (state.showAdvancedSettings) {
+            PreferenceCategory(title = stringResource(id = CommonStrings.common_advanced_settings)) {
+                ListItem(
+                    headlineContent = {
+                        Text(text = stringResource(id = R.string.screen_advanced_settings_push_provider_android))
+                    },
+                    trailingContent = when (state.currentPushDistributor) {
+                        AsyncAction.Uninitialized,
+                        AsyncAction.Confirming,
+                        AsyncAction.Loading -> ListItemContent.Custom {
+                            CircularProgressIndicator(
+                                modifier = Modifier
+                                    .progressSemantics()
+                                    .size(20.dp),
+                                strokeWidth = 2.dp
+                            )
+                        }
+                        is AsyncAction.Failure -> ListItemContent.Text(
+                            stringResource(id = CommonStrings.common_error)
                         )
+                        is AsyncAction.Success -> ListItemContent.Text(
+                            state.currentPushDistributor.dataOrNull() ?: ""
+                        )
+                    },
+                    onClick = {
+                        if (state.currentPushDistributor.isReady()) {
+                            state.eventSink(NotificationSettingsEvents.ChangePushProvider)
+                        }
                     }
-                    is AsyncAction.Failure -> ListItemContent.Text(
-                        stringResource(id = CommonStrings.common_error)
-                    )
-                    is AsyncAction.Success -> ListItemContent.Text(
-                        state.currentPushDistributor.dataOrNull() ?: ""
-                    )
-                },
-                onClick = {
-                    if (state.currentPushDistributor.isReady()) {
-                        state.eventSink(NotificationSettingsEvents.ChangePushProvider)
-                    }
-                }
-            )
-        }
-        if (state.showChangePushProviderDialog) {
-            SingleSelectionDialog(
-                title = stringResource(id = R.string.screen_advanced_settings_choose_distributor_dialog_title_android),
-                options = state.availablePushDistributors.map {
-                    ListOption(title = it)
-                }.toImmutableList(),
-                initialSelection = state.availablePushDistributors.indexOf(state.currentPushDistributor.dataOrNull()),
-                onOptionSelected = { index ->
-                    state.eventSink(
-                        NotificationSettingsEvents.SetPushProvider(index)
-                    )
-                },
-                onDismissRequest = { state.eventSink(NotificationSettingsEvents.CancelChangePushProvider) },
-            )
+                )
+            }
+            if (state.showChangePushProviderDialog) {
+                SingleSelectionDialog(
+                    title = stringResource(id = R.string.screen_advanced_settings_choose_distributor_dialog_title_android),
+                    options = state.availablePushDistributors.map {
+                        ListOption(title = it)
+                    }.toImmutableList(),
+                    initialSelection = state.availablePushDistributors.indexOf(state.currentPushDistributor.dataOrNull()),
+                    onOptionSelected = { index ->
+                        state.eventSink(
+                            NotificationSettingsEvents.SetPushProvider(index)
+                        )
+                    },
+                    onDismissRequest = { state.eventSink(NotificationSettingsEvents.CancelChangePushProvider) },
+                )
+            }
         }
     }
 }
