@@ -40,10 +40,11 @@ class BlockedUsersStatePreviewProvider : PreviewParameterProvider<BlockedUsersSt
 internal fun aBlockedUsersState(
     blockedUsers: List<MatrixUser> = aMatrixUserList(),
     unblockUserAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    eventSink: (BlockedUsersEvents) -> Unit = {},
 ): BlockedUsersState {
     return BlockedUsersState(
         blockedUsers = blockedUsers.toPersistentList(),
         unblockUserAction = unblockUserAction,
-        eventSink = {},
+        eventSink = eventSink,
     )
 }
