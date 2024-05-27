@@ -46,6 +46,7 @@ fun PreferenceSwitch(
     ListItem(
         modifier = modifier,
         enabled = enabled,
+        onClick = onCheckedChange.takeIf { enabled }?.let { { onCheckedChange(!isChecked) } },
         leadingContent = preferenceIcon(
             icon = icon,
             iconResourceId = iconResourceId,
@@ -68,7 +69,6 @@ fun PreferenceSwitch(
         },
         trailingContent = ListItemContent.Switch(
             checked = isChecked,
-            onChange = onCheckedChange,
             enabled = enabled,
         )
     )

@@ -47,6 +47,7 @@ fun PreferenceCheckbox(
 ) {
     ListItem(
         modifier = modifier,
+        onClick = onCheckedChange.takeIf { enabled }?.let { { onCheckedChange(!isChecked) } },
         leadingContent = preferenceIcon(
             icon = icon,
             iconResourceId = iconResourceId,
@@ -71,7 +72,6 @@ fun PreferenceCheckbox(
         },
         trailingContent = ListItemContent.Checkbox(
             checked = isChecked,
-            onChange = onCheckedChange,
             enabled = enabled,
         ),
     )
