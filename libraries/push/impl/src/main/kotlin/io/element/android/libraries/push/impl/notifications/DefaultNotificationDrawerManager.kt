@@ -181,7 +181,8 @@ class DefaultNotificationDrawerManager @Inject constructor(
      */
     @Suppress("UNUSED_PARAMETER")
     private fun onEnteringThread(sessionId: SessionId, roomId: RoomId, threadId: ThreadId) {
-        // TODO: maybe we'll have to embed more data in the tag to get a threadId
+        // TODO maybe we'll have to embed more data in the tag to get a threadId
+        // Do nothing for now
     }
 
     private suspend fun renderEvents(eventsToRender: List<NotifiableEvent>) {

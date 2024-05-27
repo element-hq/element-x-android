@@ -44,8 +44,7 @@ class FakeNotificationCreator(
     var createSummaryListNotificationResult: LambdaFiveParamsRecorder<MatrixUser, NotificationCompat.InboxStyle?, String, Boolean, Long, Notification> =
         lambdaRecorder { _, _, _, _, _ -> A_NOTIFICATION },
     var createDiagnosticNotificationResult: LambdaNoParamRecorder<Notification> = lambdaRecorder { -> A_NOTIFICATION },
-
-    ) : NotificationCreator {
+) : NotificationCreator {
     override suspend fun createMessagesListNotification(
         roomInfo: RoomEventGroupInfo,
         threadId: ThreadId?,

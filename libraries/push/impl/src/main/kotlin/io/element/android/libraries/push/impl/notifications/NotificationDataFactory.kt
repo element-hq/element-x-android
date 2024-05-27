@@ -17,15 +17,23 @@
 package io.element.android.libraries.push.impl.notifications
 
 import android.app.Notification
+import android.graphics.Typeface
+import android.text.style.StyleSpan
+import androidx.core.text.buildSpannedString
+import androidx.core.text.inSpans
 import coil.ImageLoader
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
+import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
 
 interface NotificationDataFactory {
@@ -35,10 +43,10 @@ interface NotificationDataFactory {
         imageLoader: ImageLoader,
     ): List<RoomNotification>
 
-    @JvmName("toNofificationInvites")
+    @JvmName("toNotificationInvites")
     @Suppress("INAPPLICABLE_JVM_NAME")
     fun toNotifications(invites: List<InviteNotifiableEvent>): List<OneShotNotification>
-    @JvmName("toNofificationSimpleEvents")
+    @JvmName("toNotificationSimpleEvents")
     @Suppress("INAPPLICABLE_JVM_NAME")
     fun toNotifications(simpleEvents: List<SimpleNotifiableEvent>): List<OneShotNotification>
     fun toNotifications(fallback: List<FallbackNotifiableEvent>): List<OneShotNotification>
@@ -53,11 +61,13 @@ interface NotificationDataFactory {
     ): SummaryNotification
 }
 
+@ContributesBinding(AppScope::class)
 class DefaultNotificationDataFactory @Inject constructor(
     private val notificationCreator: NotificationCreator,
     private val roomGroupMessageCreator: RoomGroupMessageCreator,
     private val summaryGroupMessageCreator: SummaryGroupMessageCreator,
     private val activeNotificationsProvider: ActiveNotificationsProvider,
+    private val stringProvider: StringProvider,
 ) : NotificationDataFactory {
     override suspend fun toNotifications(
         messages: List<NotifiableMessageEvent>,
@@ -67,6 +77,8 @@ class DefaultNotificationDataFactory @Inject constructor(
         val messagesToDisplay = messages.filterNot { it.canNotBeDisplayed() }
             .groupBy { it.roomId }
         return messagesToDisplay.map { (roomId, events) ->
+            val roomName = events.lastOrNull()?.roomName ?: roomId.value
+            val isDirect = events.lastOrNull()?.roomIsDirect ?: false
             val notification = roomGroupMessageCreator.createRoomMessage(
                 currentUser = currentUser,
                 events = events,
@@ -77,10 +89,11 @@ class DefaultNotificationDataFactory @Inject constructor(
             RoomNotification(
                 notification = notification,
                 roomId = roomId,
-                summaryLine = "${events.size} messages", // events.last().description, // TODO: use a real summary
+                summaryLine = createRoomMessagesGroupSummaryLine(events, roomName, isDirect),
                 messageCount = events.size,
                 latestTimestamp = events.maxOf { it.timestamp },
-                shouldBing = events.any { it.noisy })
+                shouldBing = events.any { it.noisy }
+            )
         }
     }
 
@@ -90,7 +103,7 @@ class DefaultNotificationDataFactory @Inject constructor(
         return activeNotificationsProvider.getNotificationsForRoom(sessionId, roomId).firstOrNull()?.notification
     }
 
-    @JvmName("toNofificationInvites")
+    @JvmName("toNotificationInvites")
     @Suppress("INAPPLICABLE_JVM_NAME")
     override fun toNotifications(invites: List<InviteNotifiableEvent>): List<OneShotNotification> {
         return invites.map { event ->
@@ -104,7 +117,7 @@ class DefaultNotificationDataFactory @Inject constructor(
         }
     }
 
-    @JvmName("toNofificationSimpleEvents")
+    @JvmName("toNotificationSimpleEvents")
     @Suppress("INAPPLICABLE_JVM_NAME")
     override fun toNotifications(simpleEvents: List<SimpleNotifiableEvent>): List<OneShotNotification> {
         return simpleEvents.map { event ->
@@ -152,6 +165,46 @@ class DefaultNotificationDataFactory @Inject constructor(
             )
         }
     }
+
+    private fun createRoomMessagesGroupSummaryLine(events: List<NotifiableMessageEvent>, roomName: String, roomIsDirect: Boolean): CharSequence {
+        return when (events.size) {
+            1 -> createFirstMessageSummaryLine(events.first(), roomName, roomIsDirect)
+            else -> {
+                stringProvider.getQuantityString(
+                    R.plurals.notification_compat_summary_line_for_room,
+                    events.size,
+                    roomName,
+                    events.size
+                )
+            }
+        }
+    }
+
+    private fun createFirstMessageSummaryLine(event: NotifiableMessageEvent, roomName: String, roomIsDirect: Boolean): CharSequence {
+        return if (roomIsDirect) {
+            buildSpannedString {
+                event.senderDisambiguatedDisplayName?.let {
+                    inSpans(StyleSpan(Typeface.BOLD)) {
+                        append(it)
+                        append(": ")
+                    }
+                }
+                append(event.description)
+            }
+        } else {
+            buildSpannedString {
+                inSpans(StyleSpan(Typeface.BOLD)) {
+                    append(roomName)
+                    append(": ")
+                    event.senderDisambiguatedDisplayName?.let {
+                        append(it)
+                        append(" ")
+                    }
+                }
+                append(event.description)
+            }
+        }
+    }
 }
 
 data class RoomNotification(
@@ -161,7 +214,16 @@ data class RoomNotification(
     val messageCount: Int,
     val latestTimestamp: Long,
     val shouldBing: Boolean,
-)
+) {
+    fun isDataEqualTo(other: RoomNotification): Boolean {
+        return notification == other.notification &&
+            roomId == other.roomId &&
+            summaryLine.toString() == other.summaryLine.toString() &&
+            messageCount == other.messageCount &&
+            latestTimestamp == other.latestTimestamp &&
+            shouldBing == other.shouldBing
+    }
+}
 
 data class OneShotNotification(
     val notification: Notification,

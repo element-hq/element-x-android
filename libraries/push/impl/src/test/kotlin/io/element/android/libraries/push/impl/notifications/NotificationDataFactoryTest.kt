@@ -30,6 +30,7 @@ import io.element.android.libraries.push.impl.notifications.fake.FakeSummaryGrou
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aSimpleNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.anInviteNotifiableEvent
+import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -52,6 +53,7 @@ class NotificationDataFactoryTest {
         roomGroupMessageCreator = fakeRoomGroupMessageCreator,
         summaryGroupMessageCreator = fakeSummaryGroupMessageCreator,
         activeNotificationsProvider = activeNotificationsProvider,
+        stringProvider = FakeStringProvider(),
     )
 
     @Test
@@ -106,7 +108,7 @@ class NotificationDataFactoryTest {
                 null,
             ),
             roomId = A_ROOM_ID,
-            summaryLine = "${events.size} messages",
+            summaryLine = "room-name: sender-name message-body",
             messageCount = events.size,
             latestTimestamp = events.maxOf { it.timestamp },
             shouldBing = events.any { it.noisy }
@@ -120,7 +122,8 @@ class NotificationDataFactoryTest {
             imageLoader = fakeImageLoader.getImageLoader(),
         )
 
-        assertThat(result).isEqualTo(listOf(expectedNotification))
+        assertThat(result.size).isEqualTo(1)
+        assertThat(result.first().isDataEqualTo(expectedNotification)).isTrue()
         assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
     }
 
@@ -157,7 +160,7 @@ class NotificationDataFactoryTest {
                 null,
             ),
             roomId = A_ROOM_ID,
-            summaryLine = "${withRedactedRemoved.size} messages",
+            summaryLine = "room-name: sender-name message-body",
             messageCount = withRedactedRemoved.size,
             latestTimestamp = withRedactedRemoved.maxOf { it.timestamp },
             shouldBing = withRedactedRemoved.any { it.noisy }
@@ -170,7 +173,8 @@ class NotificationDataFactoryTest {
             imageLoader = fakeImageLoader.getImageLoader(),
         )
 
-        assertThat(result).isEqualTo(listOf(expectedNotification))
+        assertThat(result.size).isEqualTo(1)
+        assertThat(result.first().isDataEqualTo(expectedNotification)).isTrue()
         assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
     }
 }

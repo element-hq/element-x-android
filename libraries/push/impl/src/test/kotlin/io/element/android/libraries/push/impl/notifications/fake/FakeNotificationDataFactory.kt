@@ -46,19 +46,20 @@ class FakeNotificationDataFactory(
     > = lambdaRecorder { _, _, _, _, _, _ -> SummaryNotification.Update(A_NOTIFICATION) },
     var inviteToNotificationsResult: LambdaOneParamRecorder<List<InviteNotifiableEvent>, List<OneShotNotification>> = lambdaRecorder { _ -> emptyList() },
     var simpleEventToNotificationsResult: LambdaOneParamRecorder<List<SimpleNotifiableEvent>, List<OneShotNotification>> = lambdaRecorder { _ -> emptyList() },
-    var fallbackEventToNotificationsResult: LambdaOneParamRecorder<List<FallbackNotifiableEvent>, List<OneShotNotification>> = lambdaRecorder { _ -> emptyList() },
+    var fallbackEventToNotificationsResult: LambdaOneParamRecorder<List<FallbackNotifiableEvent>, List<OneShotNotification>> =
+    lambdaRecorder { _ -> emptyList() },
 ) : NotificationDataFactory {
     override suspend fun toNotifications(messages: List<NotifiableMessageEvent>, currentUser: MatrixUser, imageLoader: ImageLoader): List<RoomNotification> {
         return messageEventToNotificationsResult(messages, currentUser, imageLoader)
     }
 
-    @JvmName("toNofificationInvites")
+    @JvmName("toNotificationInvites")
     @Suppress("INAPPLICABLE_JVM_NAME")
     override fun toNotifications(invites: List<InviteNotifiableEvent>): List<OneShotNotification> {
         return inviteToNotificationsResult(invites)
     }
 
-    @JvmName("toNofificationSimpleEvents")
+    @JvmName("toNotificationSimpleEvents")
     @Suppress("INAPPLICABLE_JVM_NAME")
     override fun toNotifications(simpleEvents: List<SimpleNotifiableEvent>): List<OneShotNotification> {
         return simpleEventToNotificationsResult(simpleEvents)

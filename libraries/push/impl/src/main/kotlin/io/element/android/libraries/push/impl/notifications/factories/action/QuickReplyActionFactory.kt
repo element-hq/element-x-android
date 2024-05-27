@@ -46,21 +46,20 @@ class QuickReplyActionFactory @Inject constructor(
         if (!NotificationConfig.SUPPORT_QUICK_REPLY_ACTION) return null
         val sessionId = roomInfo.sessionId
         val roomId = roomInfo.roomId
-        return buildQuickReplyIntent(sessionId, roomId, threadId)?.let { replyPendingIntent ->
-            val remoteInput = RemoteInput.Builder(NotificationBroadcastReceiver.KEY_TEXT_REPLY)
-                .setLabel(stringProvider.getString(R.string.notification_room_action_quick_reply))
-                .build()
+        val replyPendingIntent = buildQuickReplyIntent(sessionId, roomId, threadId)
+        val remoteInput = RemoteInput.Builder(NotificationBroadcastReceiver.KEY_TEXT_REPLY)
+            .setLabel(stringProvider.getString(R.string.notification_room_action_quick_reply))
+            .build()
 
-            NotificationCompat.Action.Builder(
-                R.drawable.vector_notification_quick_reply,
-                stringProvider.getString(R.string.notification_room_action_quick_reply),
-                replyPendingIntent
-            )
-                .addRemoteInput(remoteInput)
-                .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_REPLY)
-                .setShowsUserInterface(false)
-                .build()
-        }
+        return NotificationCompat.Action.Builder(
+            R.drawable.vector_notification_quick_reply,
+            stringProvider.getString(R.string.notification_room_action_quick_reply),
+            replyPendingIntent
+        )
+            .addRemoteInput(remoteInput)
+            .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_REPLY)
+            .setShowsUserInterface(false)
+            .build()
     }
 
     /*
@@ -74,30 +73,26 @@ class QuickReplyActionFactory @Inject constructor(
         sessionId: SessionId,
         roomId: RoomId,
         threadId: ThreadId?,
-    ): PendingIntent? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            val intent = Intent(context, NotificationBroadcastReceiver::class.java)
-            intent.action = actionIds.smartReply
-            intent.data = createIgnoredUri("quickReply/$sessionId/$roomId" + threadId?.let { "/$it" }.orEmpty())
-            intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId.value)
-            intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId.value)
-            threadId?.let {
-                intent.putExtra(NotificationBroadcastReceiver.KEY_THREAD_ID, it.value)
-            }
-
-            PendingIntent.getBroadcast(
-                context,
-                clock.epochMillis().toInt(),
-                intent,
-                // PendingIntents attached to actions with remote inputs must be mutable
-                PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    PendingIntent.FLAG_MUTABLE
-                } else {
-                    0
-                }
-            )
-        } else {
-            null
+    ): PendingIntent {
+        val intent = Intent(context, NotificationBroadcastReceiver::class.java)
+        intent.action = actionIds.smartReply
+        intent.data = createIgnoredUri("quickReply/$sessionId/$roomId" + threadId?.let { "/$it" }.orEmpty())
+        intent.putExtra(NotificationBroadcastReceiver.KEY_SESSION_ID, sessionId.value)
+        intent.putExtra(NotificationBroadcastReceiver.KEY_ROOM_ID, roomId.value)
+        threadId?.let {
+            intent.putExtra(NotificationBroadcastReceiver.KEY_THREAD_ID, it.value)
         }
+
+        return PendingIntent.getBroadcast(
+            context,
+            clock.epochMillis().toInt(),
+            intent,
+            // PendingIntents attached to actions with remote inputs must be mutable
+            PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                PendingIntent.FLAG_MUTABLE
+            } else {
+                0
+            }
+        )
     }
 }

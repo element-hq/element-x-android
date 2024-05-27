@@ -36,6 +36,7 @@ import io.element.android.services.appnavstate.api.AppNavigationStateService
 import io.element.android.services.appnavstate.api.NavigationState
 import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
 import io.element.android.services.appnavstate.test.aNavigationState
+import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -135,7 +136,8 @@ class DefaultNotificationDrawerManagerTest {
                     roomGroupMessageCreator = roomGroupMessageCreator,
                     summaryGroupMessageCreator = summaryGroupMessageCreator,
                     activeNotificationsProvider = activeNotificationsProvider,
-                )
+                    stringProvider = FakeStringProvider(),
+                ),
             ),
             notificationIdProvider = NotificationIdProvider(),
             appNavigationStateService = appNavigationStateService,

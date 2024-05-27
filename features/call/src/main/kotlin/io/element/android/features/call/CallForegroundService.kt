@@ -72,15 +72,10 @@ class CallForegroundService : Service() {
         startForeground(1, notification)
     }
 
-    @Suppress("DEPRECATION")
     override fun onDestroy() {
         super.onDestroy()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            stopForeground(STOP_FOREGROUND_REMOVE)
-        } else {
-            stopForeground(true)
-        }
+        stopForeground(STOP_FOREGROUND_REMOVE)
     }
 
     override fun onBind(intent: Intent?): IBinder? {

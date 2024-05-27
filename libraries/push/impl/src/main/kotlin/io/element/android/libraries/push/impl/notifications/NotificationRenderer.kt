@@ -94,7 +94,6 @@ class NotificationRenderer @Inject constructor(
                 }
             }
 
-            // TODO: check if this is right
             // Show only the first fallback notification
             if (fallbackNotifications.isNotEmpty()) {
                 Timber.tag(loggerTag.value).d("Showing fallback notification")

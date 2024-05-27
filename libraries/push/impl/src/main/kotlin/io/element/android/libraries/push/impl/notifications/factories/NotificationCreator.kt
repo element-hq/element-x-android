@@ -20,16 +20,12 @@ import android.app.Notification
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Typeface
-import android.text.style.StyleSpan
 import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.MessagingStyle
 import androidx.core.app.Person
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.text.buildSpannedString
-import androidx.core.text.inSpans
 import coil.ImageLoader
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.NotificationConfig
@@ -425,46 +421,6 @@ class DefaultNotificationCreator @Inject constructor(
                     }
                     addMessage(message)
                 }
-            }
-        }
-    }
-
-    private fun createRoomMessagesGroupSummaryLine(events: List<NotifiableMessageEvent>, roomName: String, roomIsDirect: Boolean): CharSequence {
-        return when (events.size) {
-            1 -> createFirstMessageSummaryLine(events.first(), roomName, roomIsDirect)
-            else -> {
-                stringProvider.getQuantityString(
-                    R.plurals.notification_compat_summary_line_for_room,
-                    events.size,
-                    roomName,
-                    events.size
-                )
-            }
-        }
-    }
-
-    private fun createFirstMessageSummaryLine(event: NotifiableMessageEvent, roomName: String, roomIsDirect: Boolean): CharSequence {
-        return if (roomIsDirect) {
-            buildSpannedString {
-                event.senderDisambiguatedDisplayName?.let {
-                    inSpans(StyleSpan(Typeface.BOLD)) {
-                        append(it)
-                        append(": ")
-                    }
-                }
-                append(event.description)
-            }
-        } else {
-            buildSpannedString {
-                inSpans(StyleSpan(Typeface.BOLD)) {
-                    append(roomName)
-                    append(": ")
-                    event.senderDisambiguatedDisplayName?.let {
-                        append(it)
-                        append(" ")
-                    }
-                }
-                append(event.description)
             }
         }
     }
