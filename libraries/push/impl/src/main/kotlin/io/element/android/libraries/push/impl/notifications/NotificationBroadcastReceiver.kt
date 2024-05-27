@@ -43,6 +43,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         val roomId = intent.getStringExtra(KEY_ROOM_ID)?.let(::RoomId)
         val eventId = intent.getStringExtra(KEY_EVENT_ID)?.let(::EventId)
         Timber.tag(loggerTag.value).d("onReceive: ${intent.action} ${intent.data} for: ${roomId?.value}/${eventId?.value}")
+        // Not sure if the 'clear*' calls here are needed anymore
         when (intent.action) {
             actionIds.smartReply ->
                 handleSmartReply(intent, context)
@@ -50,7 +51,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
             }
             actionIds.dismissSummary ->
-                defaultNotificationDrawerManager.clearAllMessagesEvents(sessionId, doRender = false)
+                defaultNotificationDrawerManager.clearAllMessagesEvents(sessionId)
             actionIds.dismissInvite -> if (roomId != null) {
                 defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId)
             }

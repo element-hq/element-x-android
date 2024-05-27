@@ -55,7 +55,6 @@ class DefaultNotificationDrawerManager @Inject constructor(
     @ApplicationContext private val context: Context,
     private val notificationRenderer: NotificationRenderer,
     private val notificationIdProvider: NotificationIdProvider,
-    private val filteredEventDetector: FilteredEventDetector,
     private val appNavigationStateService: AppNavigationStateService,
     private val coroutineScope: CoroutineScope,
     private val matrixClientProvider: MatrixClientProvider,
@@ -124,10 +123,8 @@ class DefaultNotificationDrawerManager @Inject constructor(
     /**
      * Clear all known events and refresh the notification drawer.
      */
-    fun clearAllMessagesEvents(sessionId: SessionId, doRender: Boolean) {
-//        updateEvents(doRender = doRender) {
-//            it.clearMessagesForSession(sessionId)
-//        }
+    fun clearAllMessagesEvents(sessionId: SessionId) {
+        notificationManager.cancel(null, notificationIdProvider.getRoomMessagesNotificationId(sessionId))
     }
 
     /**
