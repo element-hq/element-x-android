@@ -59,16 +59,16 @@ class AndroidMediaPreProcessorTest {
         assertThat(data.file.path).endsWith("image.png")
         val info = data as MediaUploadInfo.Image
         // Computing thumbnailFile is failing with Robolectric
-        assertThat(info.thumbnailFile).isNull()
+        assertThat(info.thumbnailFile).isNotNull()
         assertThat(info.imageInfo).isEqualTo(
             ImageInfo(
                 height = 1_178,
                 width = 1_818,
                 mimetype = MimeTypes.Png,
                 size = 114_867,
-                thumbnailInfo = null,
+                ThumbnailInfo(height = 294, width = 454, mimetype = "image/jpeg", size = 4567),
                 thumbnailSource = null,
-                blurhash = null,
+                blurhash = "K13]7q%zWC00R4of%\$baad"
             )
         )
         assertThat(file.exists()).isTrue()
