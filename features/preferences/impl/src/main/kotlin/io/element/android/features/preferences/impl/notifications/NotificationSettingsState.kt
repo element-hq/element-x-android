@@ -19,12 +19,16 @@ package io.element.android.features.preferences.impl.notifications
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
 data class NotificationSettingsState(
     val matrixSettings: MatrixSettings,
     val appSettings: AppSettings,
     val changeNotificationSettingAction: AsyncAction<Unit>,
+    val currentPushDistributor: AsyncAction<String>,
+    val availablePushDistributors: ImmutableList<String>,
+    val showChangePushProviderDialog: Boolean,
     val eventSink: (NotificationSettingsEvents) -> Unit,
 ) {
     sealed interface MatrixSettings {

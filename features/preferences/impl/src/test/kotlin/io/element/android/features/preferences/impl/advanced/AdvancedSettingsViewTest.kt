@@ -19,8 +19,6 @@ package io.element.android.features.preferences.impl.advanced
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.compound.theme.Theme
 import io.element.android.features.preferences.impl.R
@@ -34,7 +32,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 class AdvancedSettingsViewTest {
@@ -102,33 +99,6 @@ class AdvancedSettingsViewTest {
         )
         rule.clickOn(R.string.screen_advanced_settings_share_presence)
         eventsRecorder.assertSingle(AdvancedSettingsEvents.SetSharePresenceEnabled(true))
-    }
-
-    @Config(qualifiers = "h1024dp")
-    @Test
-    fun `clicking on Push notification provider emits the expected event`() {
-        val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>()
-        rule.setAdvancedSettingsView(
-            state = aAdvancedSettingsState(
-                eventSink = eventsRecorder
-            ),
-        )
-        rule.clickOn(R.string.screen_advanced_settings_push_provider_android)
-        eventsRecorder.assertSingle(AdvancedSettingsEvents.ChangePushProvider)
-    }
-
-    @Test
-    fun `clicking on a push provider emits the expected event`() {
-        val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>()
-        rule.setAdvancedSettingsView(
-            state = aAdvancedSettingsState(
-                eventSink = eventsRecorder,
-                showChangePushProviderDialog = true,
-                availablePushDistributors = listOf("P1", "P2")
-            ),
-        )
-        rule.onNodeWithText("P2").performClick()
-        eventsRecorder.assertSingle(AdvancedSettingsEvents.SetPushProvider(1))
     }
 }
 

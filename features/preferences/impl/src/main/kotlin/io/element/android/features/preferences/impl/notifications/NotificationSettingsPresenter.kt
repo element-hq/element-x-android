@@ -20,17 +20,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.push.api.PushService
+import io.element.android.libraries.pushproviders.api.Distributor
+import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.pushstore.api.UserPushStore
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
@@ -44,7 +51,8 @@ class NotificationSettingsPresenter @Inject constructor(
     private val notificationSettingsService: NotificationSettingsService,
     private val userPushStoreFactory: UserPushStoreFactory,
     private val matrixClient: MatrixClient,
-    private val systemNotificationsEnabledProvider: SystemNotificationsEnabledProvider
+    private val pushService: PushService,
+    private val systemNotificationsEnabledProvider: SystemNotificationsEnabledProvider,
 ) : Presenter<NotificationSettingsState> {
     @Composable
     override fun present(): NotificationSettingsState {
@@ -68,6 +76,61 @@ class NotificationSettingsPresenter @Inject constructor(
             observeNotificationSettings(matrixSettings)
         }
 
+        // List of PushProvider -> Distributor
+        val distributors = remember {
+            pushService.getAvailablePushProviders()
+                .flatMap { pushProvider ->
+                    pushProvider.getDistributors().map { distributor ->
+                        pushProvider to distributor
+                    }
+                }
+        }
+        // List of Distributor names
+        val distributorNames = remember {
+            distributors.map { it.second.name }
+        }
+
+        var currentDistributorName by remember { mutableStateOf<AsyncAction<String>>(AsyncAction.Uninitialized) }
+        var refreshPushProvider by remember { mutableIntStateOf(0) }
+
+        LaunchedEffect(refreshPushProvider) {
+            val p = pushService.getCurrentPushProvider()
+            val name = p?.getCurrentDistributor(matrixClient)?.name
+            currentDistributorName = if (name != null) {
+                AsyncAction.Success(name)
+            } else {
+                AsyncAction.Failure(Exception("Failed to get current push provider"))
+            }
+        }
+
+        var showChangePushProviderDialog by remember { mutableStateOf(false) }
+
+        fun CoroutineScope.changePushProvider(
+            data: Pair<PushProvider, Distributor>?
+        ) = launch {
+            showChangePushProviderDialog = false
+            data ?: return@launch
+            // No op if the value is the same.
+            if (data.second.name == currentDistributorName.dataOrNull()) return@launch
+            currentDistributorName = AsyncAction.Loading
+            data.let { (pushProvider, distributor) ->
+                pushService.registerWith(
+                    matrixClient = matrixClient,
+                    pushProvider = pushProvider,
+                    distributor = distributor
+                )
+                    .fold(
+                        {
+                            currentDistributorName = AsyncAction.Success(distributor.name)
+                            refreshPushProvider++
+                        },
+                        {
+                            currentDistributorName = AsyncAction.Failure(it)
+                        }
+                    )
+            }
+        }
+
         fun handleEvents(event: NotificationSettingsEvents) {
             when (event) {
                 is NotificationSettingsEvents.SetAtRoomNotificationsEnabled -> {
@@ -88,6 +151,9 @@ class NotificationSettingsPresenter @Inject constructor(
                     systemNotificationsEnabled.value = systemNotificationsEnabledProvider.notificationsEnabled()
                 }
                 NotificationSettingsEvents.ClearNotificationChangeError -> changeNotificationSettingAction.value = AsyncAction.Uninitialized
+                NotificationSettingsEvents.ChangePushProvider -> showChangePushProviderDialog = true
+                NotificationSettingsEvents.CancelChangePushProvider -> showChangePushProviderDialog = false
+                is NotificationSettingsEvents.SetPushProvider -> localCoroutineScope.changePushProvider(distributors.getOrNull(event.index))
             }
         }
 
@@ -98,6 +164,9 @@ class NotificationSettingsPresenter @Inject constructor(
                 appNotificationsEnabled = appNotificationsEnabled.value
             ),
             changeNotificationSettingAction = changeNotificationSettingAction.value,
+            currentPushDistributor = currentDistributorName,
+            availablePushDistributors = distributorNames.toImmutableList(),
+            showChangePushProviderDialog = showChangePushProviderDialog,
             eventSink = ::handleEvents
         )
     }
