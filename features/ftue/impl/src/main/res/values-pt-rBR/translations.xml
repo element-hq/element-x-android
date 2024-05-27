@@ -11,6 +11,7 @@
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Ligação insegura"</string>
   <string name="screen_qr_code_login_device_code_subtitle">"Ser-te-á pedido que insiras os dois dígitos indicados neste dispositivo."</string>
   <string name="screen_qr_code_login_device_code_title">"Insere o número abaixo no teu dispositivo"</string>
+  <string name="screen_qr_code_login_error_cancelled_title">"Pedido de início de sessão cancelado"</string>
   <string name="screen_qr_code_login_initial_state_button_title">"Pronto para ler"</string>
   <string name="screen_qr_code_login_initial_state_item_1">"Abre a %1$s num computador"</string>
   <string name="screen_qr_code_login_initial_state_item_2">"Carrega no teu avatar"</string>
