@@ -45,7 +45,7 @@ fun BlockUserSection(
 ) {
     PreferenceCategory(
         modifier = modifier,
-        showDivider = false,
+        showTopDivider = false,
     ) {
         when (state.isBlocked) {
             is AsyncData.Failure -> PreferenceBlockUser(isBlocked = state.isBlocked.prevData, isLoading = false, eventSink = state.eventSink)
