@@ -90,16 +90,16 @@ fun PreferenceText(
                     color = tintColor ?: enabled.toSecondaryEnabledColor(),
                 )
             }
-        } else if (subtitleAnnotated != null) {
-            {
-                Text(
-                    style = ElementTheme.typography.fontBodyMdRegular,
-                    text = subtitleAnnotated,
-                    color = tintColor ?: enabled.toSecondaryEnabledColor(),
-                )
-            }
         } else {
-            null
+            subtitleAnnotated?.let {
+                {
+                    Text(
+                        style = ElementTheme.typography.fontBodyMdRegular,
+                        text = it,
+                        color = tintColor ?: enabled.toSecondaryEnabledColor(),
+                    )
+                }
+            }
         },
         trailingContent = if (currentValue != null || loadingCurrentValue || showEndBadge) {
             ListItemContent.Custom {

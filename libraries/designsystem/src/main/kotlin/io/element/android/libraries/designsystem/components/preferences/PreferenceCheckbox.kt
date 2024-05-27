@@ -61,16 +61,14 @@ fun PreferenceCheckbox(
                 color = enabled.toEnabledColor(),
             )
         },
-        supportingContent = if (supportingText != null) {
+        supportingContent = supportingText?.let {
             {
                 Text(
                     style = ElementTheme.typography.fontBodyMdRegular,
-                    text = supportingText,
+                    text = it,
                     color = enabled.toSecondaryEnabledColor(),
                 )
             }
-        } else {
-            null
         },
         trailingContent = ListItemContent.Checkbox(
             checked = isChecked,
