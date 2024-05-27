@@ -34,8 +34,9 @@
   <string name="action_accept">"Accepter"</string>
   <string name="action_add_to_timeline">"Ajouter à la discussion"</string>
   <string name="action_back">"Retour"</string>
+  <string name="action_call">"Appel"</string>
   <string name="action_cancel">"Annuler"</string>
-  <string name="action_choose_photo">"Choisissez une photo"</string>
+  <string name="action_choose_photo">"Choisir une photo"</string>
   <string name="action_clear">"Effacer"</string>
   <string name="action_close">"Fermer"</string>
   <string name="action_complete_verification">"Terminer la vérification"</string>
@@ -72,6 +73,7 @@
   <string name="action_load_more">"Voir plus"</string>
   <string name="action_manage_account">"Gérer le compte"</string>
   <string name="action_manage_devices">"Gérez les sessions"</string>
+  <string name="action_message">"Message"</string>
   <string name="action_next">"Suivant"</string>
   <string name="action_no">"Non"</string>
   <string name="action_not_now">"Pas maintenant"</string>
@@ -117,6 +119,7 @@
   <string name="common_blocked_users">"Utilisateurs bloqués"</string>
   <string name="common_bubbles">"Bulles"</string>
   <string name="common_call_invite">"Appel en cours (non supporté)"</string>
+  <string name="common_call_started">"Appel démarré"</string>
   <string name="common_chat_backup">"Sauvegarde des discussions"</string>
   <string name="common_copyright">"Droits d’auteur"</string>
   <string name="common_creating_room">"Création du salon…"</string>

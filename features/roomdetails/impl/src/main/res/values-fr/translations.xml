@@ -35,6 +35,9 @@
   <string name="screen_room_details_add_topic_title">"Ajouter un sujet"</string>
   <string name="screen_room_details_already_a_member">"Déjà membre"</string>
   <string name="screen_room_details_already_invited">"Déjà invité(e)"</string>
+  <string name="screen_room_details_badge_encrypted">"Chiffré"</string>
+  <string name="screen_room_details_badge_not_encrypted">"Non chiffré"</string>
+  <string name="screen_room_details_badge_public">"Salon public"</string>
   <string name="screen_room_details_edit_room_title">"Modifier le salon"</string>
   <string name="screen_room_details_edition_error">"Une erreur inconnue s’est produite et les informations n’ont pas pu être modifiées."</string>
   <string name="screen_room_details_edition_error_title">"Impossible de mettre à jour le salon"</string>
