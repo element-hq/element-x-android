@@ -55,7 +55,7 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
-import io.element.android.libraries.matrix.test.widget.FakeWidgetDriver
+import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
@@ -125,7 +125,7 @@ class FakeMatrixRoom(
     private var endPollResult = Result.success(Unit)
     private var progressCallbackValues = emptyList<Pair<Long, Long>>()
     private var generateWidgetWebViewUrlResult = Result.success("https://call.element.io")
-    private var getWidgetDriverResult: Result<MatrixWidgetDriver> = Result.success(FakeWidgetDriver())
+    private var getWidgetDriverResult: Result<MatrixWidgetDriver> = Result.success(FakeMatrixWidgetDriver())
     private var canUserTriggerRoomNotificationResult: Result<Boolean> = Result.success(true)
     private var canUserJoinCallResult: Result<Boolean> = Result.success(true)
     private var setIsFavoriteResult = Result.success(Unit)

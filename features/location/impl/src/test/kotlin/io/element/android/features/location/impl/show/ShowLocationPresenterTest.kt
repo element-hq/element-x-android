@@ -23,9 +23,9 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.aPermissionsState
 import io.element.android.features.location.impl.common.actions.FakeLocationActions
+import io.element.android.features.location.impl.common.permissions.FakePermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsEvents
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
-import io.element.android.features.location.impl.common.permissions.PermissionsPresenterFake
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.tests.testutils.WarmUpRule
@@ -38,13 +38,13 @@ class ShowLocationPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
-    private val permissionsPresenterFake = PermissionsPresenterFake()
+    private val fakePermissionsPresenter = FakePermissionsPresenter()
     private val fakeLocationActions = FakeLocationActions()
     private val fakeBuildMeta = aBuildMeta(applicationName = "app name")
     private val location = Location(1.23, 4.56, 7.8f)
     private val presenter = ShowLocationPresenter(
         permissionsPresenterFactory = object : PermissionsPresenter.Factory {
-            override fun create(permissions: List<String>): PermissionsPresenter = permissionsPresenterFake
+            override fun create(permissions: List<String>): PermissionsPresenter = fakePermissionsPresenter
         },
         fakeLocationActions,
         fakeBuildMeta,
@@ -54,7 +54,7 @@ class ShowLocationPresenterTest {
 
     @Test
     fun `emits initial state with no location permission`() = runTest {
-        permissionsPresenterFake.givenState(
+        fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,
@@ -74,7 +74,7 @@ class ShowLocationPresenterTest {
 
     @Test
     fun `emits initial state location permission denied once`() = runTest {
-        permissionsPresenterFake.givenState(
+        fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = true,
@@ -94,7 +94,7 @@ class ShowLocationPresenterTest {
 
     @Test
     fun `emits initial state with location permission`() = runTest {
-        permissionsPresenterFake.givenState(aPermissionsState(permissions = PermissionsState.Permissions.AllGranted))
+        fakePermissionsPresenter.givenState(aPermissionsState(permissions = PermissionsState.Permissions.AllGranted))
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -109,7 +109,7 @@ class ShowLocationPresenterTest {
 
     @Test
     fun `emits initial state with partial location permission`() = runTest {
-        permissionsPresenterFake.givenState(aPermissionsState(permissions = PermissionsState.Permissions.SomeGranted))
+        fakePermissionsPresenter.givenState(aPermissionsState(permissions = PermissionsState.Permissions.SomeGranted))
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -137,7 +137,7 @@ class ShowLocationPresenterTest {
 
     @Test
     fun `centers on user location`() = runTest {
-        permissionsPresenterFake.givenState(aPermissionsState(permissions = PermissionsState.Permissions.AllGranted))
+        fakePermissionsPresenter.givenState(aPermissionsState(permissions = PermissionsState.Permissions.AllGranted))
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -165,7 +165,7 @@ class ShowLocationPresenterTest {
 
     @Test
     fun `rationale dialog dismiss`() = runTest {
-        permissionsPresenterFake.givenState(
+        fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = true,
@@ -196,7 +196,7 @@ class ShowLocationPresenterTest {
 
     @Test
     fun `rationale dialog continue`() = runTest {
-        permissionsPresenterFake.givenState(
+        fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = true,
@@ -218,13 +218,13 @@ class ShowLocationPresenterTest {
 
             // Continue the dialog sends permission request to the permissions presenter
             trackLocationState.eventSink(ShowLocationEvents.RequestPermissions)
-            assertThat(permissionsPresenterFake.events.last()).isEqualTo(PermissionsEvents.RequestPermissions)
+            assertThat(fakePermissionsPresenter.events.last()).isEqualTo(PermissionsEvents.RequestPermissions)
         }
     }
 
     @Test
     fun `permission denied dialog dismiss`() = runTest {
-        permissionsPresenterFake.givenState(
+        fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,
@@ -255,7 +255,7 @@ class ShowLocationPresenterTest {
 
     @Test
     fun `open settings activity`() = runTest {
-        permissionsPresenterFake.givenState(
+        fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,

@@ -28,7 +28,7 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SECRET
 import io.element.android.libraries.matrix.test.A_USER_ID
-import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
+import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.push.impl.notifications.FakeNotifiableEventResolver
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
@@ -135,7 +135,7 @@ class DefaultPushHandlerTest {
                 pushClientSecret = FakePushClientSecret(
                     getUserIdFromSecretResult = { null }
                 ),
-                matrixAuthenticationService = FakeAuthenticationService().apply {
+                matrixAuthenticationService = FakeMatrixAuthenticationService().apply {
                     getLatestSessionIdLambda = { A_USER_ID }
                 },
                 incrementPushCounterResult = incrementPushCounterResult
@@ -171,7 +171,7 @@ class DefaultPushHandlerTest {
                 pushClientSecret = FakePushClientSecret(
                     getUserIdFromSecretResult = { null }
                 ),
-                matrixAuthenticationService = FakeAuthenticationService().apply {
+                matrixAuthenticationService = FakeMatrixAuthenticationService().apply {
                     getLatestSessionIdLambda = { null }
                 },
                 incrementPushCounterResult = incrementPushCounterResult
@@ -247,7 +247,7 @@ class DefaultPushHandlerTest {
         userPushStore: UserPushStore = FakeUserPushStore(),
         pushClientSecret: PushClientSecret = FakePushClientSecret(),
         buildMeta: BuildMeta = aBuildMeta(),
-        matrixAuthenticationService: MatrixAuthenticationService = FakeAuthenticationService(),
+        matrixAuthenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
         diagnosticPushHandler: DiagnosticPushHandler = DiagnosticPushHandler(),
     ): DefaultPushHandler {
         return DefaultPushHandler(

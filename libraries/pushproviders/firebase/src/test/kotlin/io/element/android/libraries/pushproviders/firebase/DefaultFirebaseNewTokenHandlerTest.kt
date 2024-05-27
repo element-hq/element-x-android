@@ -25,7 +25,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
+import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.push.test.FakePusherSubscriber
 import io.element.android.libraries.pushproviders.api.PusherSubscriber
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
@@ -66,7 +66,7 @@ class DefaultFirebaseNewTokenHandlerTest {
                 storeData(aSessionData(A_USER_ID_2))
                 storeData(aSessionData(A_USER_ID_3))
             },
-            matrixAuthenticationService = FakeAuthenticationService(
+            matrixAuthenticationService = FakeMatrixAuthenticationService(
                 matrixClientResult = { sessionId ->
                     when (sessionId) {
                         A_USER_ID -> Result.success(aMatrixClient1)
@@ -105,7 +105,7 @@ class DefaultFirebaseNewTokenHandlerTest {
             sessionStore = InMemoryMultiSessionsStore().apply {
                 storeData(aSessionData(A_USER_ID))
             },
-            matrixAuthenticationService = FakeAuthenticationService(
+            matrixAuthenticationService = FakeMatrixAuthenticationService(
                 matrixClientResult = { _ ->
                     Result.failure(IllegalStateException())
                 }
@@ -131,7 +131,7 @@ class DefaultFirebaseNewTokenHandlerTest {
             sessionStore = InMemoryMultiSessionsStore().apply {
                 storeData(aSessionData(A_USER_ID))
             },
-            matrixAuthenticationService = FakeAuthenticationService(
+            matrixAuthenticationService = FakeMatrixAuthenticationService(
                 matrixClientResult = { _ ->
                     Result.success(aMatrixClient1)
                 }
@@ -154,7 +154,7 @@ class DefaultFirebaseNewTokenHandlerTest {
         pusherSubscriber: PusherSubscriber = FakePusherSubscriber(),
         sessionStore: SessionStore = InMemorySessionStore(),
         userPushStoreFactory: UserPushStoreFactory = FakeUserPushStoreFactory(),
-        matrixAuthenticationService: MatrixAuthenticationService = FakeAuthenticationService(),
+        matrixAuthenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
         firebaseStore: FirebaseStore = InMemoryFirebaseStore(),
     ): FirebaseNewTokenHandler {
         return DefaultFirebaseNewTokenHandler(

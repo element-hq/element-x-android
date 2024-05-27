@@ -21,7 +21,7 @@ import io.element.android.libraries.voicerecorder.impl.audio.Audio
 import io.element.android.libraries.voicerecorder.impl.audio.AudioConfig
 import io.element.android.libraries.voicerecorder.impl.audio.AudioReader
 
-class FakeAudioRecorderFactory(
+class FakeAudioReaderFactory(
     private val audio: List<Audio>
 ) : AudioReader.Factory {
     override fun create(config: AudioConfig, dispatchers: CoroutineDispatchers): AudioReader {
