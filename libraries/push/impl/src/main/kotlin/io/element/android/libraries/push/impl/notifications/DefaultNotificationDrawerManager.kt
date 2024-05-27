@@ -18,10 +18,8 @@ package io.element.android.libraries.push.impl.notifications
 
 import android.content.Context
 import androidx.core.app.NotificationManagerCompat
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.log.logger.LoggerTag
-import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
@@ -56,9 +54,10 @@ class DefaultNotificationDrawerManager @Inject constructor(
     private val notificationRenderer: NotificationRenderer,
     private val notificationIdProvider: NotificationIdProvider,
     private val appNavigationStateService: AppNavigationStateService,
-    private val coroutineScope: CoroutineScope,
+    coroutineScope: CoroutineScope,
     private val matrixClientProvider: MatrixClientProvider,
     private val imageLoaderHolder: ImageLoaderHolder,
+    private val activeNotificationsProvider: ActiveNotificationsProvider,
 ) : NotificationDrawerManager {
     private var appNavigationStateObserver: Job? = null
 
@@ -131,8 +130,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
      * Clear all notifications related to the session and refresh the notification drawer.
      */
     fun clearAllEvents(sessionId: SessionId) {
-        notificationManager.activeNotifications
-            .filter { it.groupKey == sessionId.value }
+        activeNotificationsProvider.getNotificationsForSession(sessionId)
             .forEach { notificationManager.cancel(it.tag, it.id) }
     }
 
@@ -143,23 +141,22 @@ class DefaultNotificationDrawerManager @Inject constructor(
      */
     fun clearMessagesForRoom(sessionId: SessionId, roomId: RoomId) {
         notificationManager.cancel(roomId.value, notificationIdProvider.getRoomMessagesNotificationId(sessionId))
+        clearSummaryNotificationIfNeeded(sessionId)
     }
 
     override fun clearMembershipNotificationForSession(sessionId: SessionId) {
-        val notificationId = notificationIdProvider.getRoomInvitationNotificationId(sessionId)
-        notificationManager.activeNotifications
-            .filter { it.tag.startsWith("invite-") && it.id == notificationId }
+        activeNotificationsProvider.getMembershipNotificationForSession(sessionId)
             .forEach { notificationManager.cancel(it.tag, it.id) }
+        clearSummaryNotificationIfNeeded(sessionId)
     }
 
     /**
      * Clear invitation notification for the provided room.
      */
     override fun clearMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId) {
-        val notificationId = notificationIdProvider.getRoomInvitationNotificationId(sessionId)
-        notificationManager.activeNotifications
-            .filter { it.tag == "invite-${roomId.value}" && it.id == notificationId }
+        activeNotificationsProvider.getMembershipNotificationForRoom(sessionId, roomId)
             .forEach { notificationManager.cancel(it.tag, it.id) }
+        clearSummaryNotificationIfNeeded(sessionId)
     }
 
     /**
@@ -168,12 +165,21 @@ class DefaultNotificationDrawerManager @Inject constructor(
     fun clearEvent(sessionId: SessionId, eventId: EventId) {
         val id = notificationIdProvider.getRoomEventNotificationId(sessionId)
         notificationManager.cancel(eventId.value, id)
+        clearSummaryNotificationIfNeeded(sessionId)
+    }
+
+    private fun clearSummaryNotificationIfNeeded(sessionId: SessionId) {
+        val summaryNotification = activeNotificationsProvider.getSummaryNotification(sessionId)
+        if (summaryNotification != null) {
+            notificationManager.cancel(null, summaryNotification.id)
+        }
     }
 
     /**
      * Should be called when the application is currently opened and showing timeline for the given threadId.
      * Used to ignore events related to that thread (no need to display notification) and clean any existing notification on this room.
      */
+    @Suppress("UNUSED_PARAMETER")
     private fun onEnteringThread(sessionId: SessionId, roomId: RoomId, threadId: ThreadId) {
         // TODO: maybe we'll have to embed more data in the tag to get a threadId
     }

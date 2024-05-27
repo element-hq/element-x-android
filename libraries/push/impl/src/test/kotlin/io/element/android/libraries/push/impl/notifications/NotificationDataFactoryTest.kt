@@ -22,10 +22,11 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.push.impl.notifications.fake.FakeActiveNotificationsProvider
 import io.element.android.libraries.push.impl.notifications.fake.FakeImageLoader
-import io.element.android.libraries.push.impl.notifications.fake.MockkNotificationCreator
-import io.element.android.libraries.push.impl.notifications.fake.MockkRoomGroupMessageCreator
-import io.element.android.libraries.push.impl.notifications.fake.MockkSummaryGroupMessageCreator
+import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationCreator
+import io.element.android.libraries.push.impl.notifications.fake.FakeRoomGroupMessageCreator
+import io.element.android.libraries.push.impl.notifications.fake.FakeSummaryGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aSimpleNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.anInviteNotifiableEvent
@@ -41,85 +42,53 @@ private val A_MESSAGE_EVENT = aNotifiableMessageEvent(eventId = AN_EVENT_ID, roo
 
 @RunWith(RobolectricTestRunner::class)
 class NotificationDataFactoryTest {
-    private val mockkNotificationCreator = MockkNotificationCreator()
-    private val mockkRoomGroupMessageCreator = MockkRoomGroupMessageCreator()
-    private val mockkSummaryGroupMessageCreator = MockkSummaryGroupMessageCreator()
+    private val notificationCreator = FakeNotificationCreator()
+    private val fakeRoomGroupMessageCreator = FakeRoomGroupMessageCreator()
+    private val fakeSummaryGroupMessageCreator = FakeSummaryGroupMessageCreator()
+    private val activeNotificationsProvider = FakeActiveNotificationsProvider()
 
-    private val notificationDataFactory = NotificationDataFactory(
-        notificationCreator = mockkNotificationCreator.instance,
-        roomGroupMessageCreator = mockkRoomGroupMessageCreator.instance,
-        summaryGroupMessageCreator = mockkSummaryGroupMessageCreator.instance
+    private val notificationDataFactory = DefaultNotificationDataFactory(
+        notificationCreator = notificationCreator,
+        roomGroupMessageCreator = fakeRoomGroupMessageCreator,
+        summaryGroupMessageCreator = fakeSummaryGroupMessageCreator,
+        activeNotificationsProvider = activeNotificationsProvider,
     )
 
     @Test
-    fun `given a room invitation when mapping to notification then is Append`() = testWith(notificationDataFactory) {
-        val expectedNotification = mockkNotificationCreator.givenCreateRoomInvitationNotificationFor(AN_INVITATION_EVENT)
-        val roomInvitation = listOf(ProcessedEvent(ProcessedEvent.Type.KEEP, AN_INVITATION_EVENT))
+    fun `given a room invitation when mapping to notification then it's added`() = testWith(notificationDataFactory) {
+        val expectedNotification = notificationCreator.createRoomInvitationNotificationResult(AN_INVITATION_EVENT)
+        val roomInvitation = listOf(AN_INVITATION_EVENT)
 
-        val result = roomInvitation.toNotifications()
+        val result = toNotifications(roomInvitation)
 
         assertThat(result).isEqualTo(
             listOf(
-                OneShotNotification.Append(
+                OneShotNotification(
                     notification = expectedNotification,
-                    meta = OneShotNotification.Append.Meta(
-                        key = A_ROOM_ID.value,
-                        summaryLine = AN_INVITATION_EVENT.description,
-                        isNoisy = AN_INVITATION_EVENT.noisy,
-                        timestamp = AN_INVITATION_EVENT.timestamp
-                    )
+                    key = "invite-${A_ROOM_ID.value}",
+                    summaryLine = AN_INVITATION_EVENT.description,
+                    isNoisy = AN_INVITATION_EVENT.noisy,
+                    timestamp = AN_INVITATION_EVENT.timestamp
                 )
             )
         )
     }
 
     @Test
-    fun `given a missing event in room invitation when mapping to notification then is Removed`() = testWith(notificationDataFactory) {
-        val missingEventRoomInvitation = listOf(ProcessedEvent(ProcessedEvent.Type.REMOVE, AN_INVITATION_EVENT))
+    fun `given a simple event when mapping to notification then it's added`() = testWith(notificationDataFactory) {
+        val expectedNotification = notificationCreator.createRoomInvitationNotificationResult(AN_INVITATION_EVENT)
+        val roomInvitation = listOf(A_SIMPLE_EVENT)
 
-        val result = missingEventRoomInvitation.toNotifications()
-
-        assertThat(result).isEqualTo(
-            listOf(
-                OneShotNotification.Removed(
-                    key = A_ROOM_ID.value
-                )
-            )
-        )
-    }
-
-    @Test
-    fun `given a simple event when mapping to notification then is Append`() = testWith(notificationDataFactory) {
-        val expectedNotification = mockkNotificationCreator.givenCreateSimpleInvitationNotificationFor(A_SIMPLE_EVENT)
-        val roomInvitation = listOf(ProcessedEvent(ProcessedEvent.Type.KEEP, A_SIMPLE_EVENT))
-
-        val result = roomInvitation.toNotifications()
+        val result = toNotifications(roomInvitation)
 
         assertThat(result).isEqualTo(
             listOf(
-                OneShotNotification.Append(
+                OneShotNotification(
                     notification = expectedNotification,
-                    meta = OneShotNotification.Append.Meta(
-                        key = AN_EVENT_ID.value,
-                        summaryLine = A_SIMPLE_EVENT.description,
-                        isNoisy = A_SIMPLE_EVENT.noisy,
-                        timestamp = AN_INVITATION_EVENT.timestamp
-                    )
-                )
-            )
-        )
-    }
-
-    @Test
-    fun `given a missing simple event when mapping to notification then is Removed`() = testWith(notificationDataFactory) {
-        val missingEventRoomInvitation = listOf(ProcessedEvent(ProcessedEvent.Type.REMOVE, A_SIMPLE_EVENT))
-
-        val result = missingEventRoomInvitation.toNotifications()
-
-        assertThat(result).isEqualTo(
-            listOf(
-                OneShotNotification.Removed(
-                    key = AN_EVENT_ID.value
+                    key = AN_EVENT_ID.value,
+                    summaryLine = A_SIMPLE_EVENT.description,
+                    isNoisy = A_SIMPLE_EVENT.noisy,
+                    timestamp = AN_INVITATION_EVENT.timestamp
                 )
             )
         )
@@ -128,15 +97,25 @@ class NotificationDataFactoryTest {
     @Test
     fun `given room with message when mapping to notification then delegates to room group message creator`() = testWith(notificationDataFactory) {
         val events = listOf(A_MESSAGE_EVENT)
-        val expectedNotification = mockkRoomGroupMessageCreator.givenCreatesRoomMessageFor(
-            MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
-            events,
-            A_ROOM_ID
+        val expectedNotification = RoomNotification(
+            notification = fakeRoomGroupMessageCreator.createRoomMessage(
+                MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
+                events,
+                A_ROOM_ID,
+                FakeImageLoader().getImageLoader(),
+                null,
+            ),
+            roomId = A_ROOM_ID,
+            summaryLine = "${events.size} messages",
+            messageCount = events.size,
+            latestTimestamp = events.maxOf { it.timestamp },
+            shouldBing = events.any { it.noisy }
         )
-        val roomWithMessage = mapOf(A_ROOM_ID to listOf(ProcessedEvent(ProcessedEvent.Type.KEEP, A_MESSAGE_EVENT)))
+        val roomWithMessage = listOf(A_MESSAGE_EVENT)
 
         val fakeImageLoader = FakeImageLoader()
-        val result = roomWithMessage.toNotifications(
+        val result = toNotifications(
+            messages = roomWithMessage,
             currentUser = MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
             imageLoader = fakeImageLoader.getImageLoader(),
         )
@@ -146,43 +125,17 @@ class NotificationDataFactoryTest {
     }
 
     @Test
-    fun `given a room with no events to display when mapping to notification then is Empty`() = testWith(notificationDataFactory) {
-        val events = listOf(ProcessedEvent(ProcessedEvent.Type.REMOVE, A_MESSAGE_EVENT))
-        val emptyRoom = mapOf(A_ROOM_ID to events)
-
-        val fakeImageLoader = FakeImageLoader()
-        val result = emptyRoom.toNotifications(
-            currentUser = MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
-            imageLoader = fakeImageLoader.getImageLoader(),
-        )
-
-        assertThat(result).isEqualTo(
-            listOf(
-                RoomNotification.Removed(
-                    roomId = A_ROOM_ID
-                )
-            )
-        )
-        assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
-    }
-
-    @Test
     fun `given a room with only redacted events when mapping to notification then is Empty`() = testWith(notificationDataFactory) {
-        val redactedRoom = mapOf(A_ROOM_ID to listOf(ProcessedEvent(ProcessedEvent.Type.KEEP, A_MESSAGE_EVENT.copy(isRedacted = true))))
+        val redactedRoom = listOf(A_MESSAGE_EVENT.copy(isRedacted = true))
 
         val fakeImageLoader = FakeImageLoader()
-        val result = redactedRoom.toNotifications(
+        val result = toNotifications(
+            messages = redactedRoom,
             currentUser = MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
             imageLoader = fakeImageLoader.getImageLoader(),
         )
 
-        assertThat(result).isEqualTo(
-            listOf(
-                RoomNotification.Removed(
-                    roomId = A_ROOM_ID
-                )
-            )
-        )
+        assertThat(result).isEmpty()
         assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
     }
 
@@ -190,21 +143,29 @@ class NotificationDataFactoryTest {
     fun `given a room with redacted and non redacted message events when mapping to notification then redacted events are removed`() = testWith(
         notificationDataFactory
     ) {
-        val roomWithRedactedMessage = mapOf(
-            A_ROOM_ID to listOf(
-                ProcessedEvent(ProcessedEvent.Type.KEEP, A_MESSAGE_EVENT.copy(isRedacted = true)),
-                ProcessedEvent(ProcessedEvent.Type.KEEP, A_MESSAGE_EVENT.copy(eventId = EventId("\$not-redacted")))
-            )
+        val roomWithRedactedMessage = listOf(
+            A_MESSAGE_EVENT.copy(isRedacted = true),
+            A_MESSAGE_EVENT.copy(eventId = EventId("\$not-redacted")),
         )
         val withRedactedRemoved = listOf(A_MESSAGE_EVENT.copy(eventId = EventId("\$not-redacted")))
-        val expectedNotification = mockkRoomGroupMessageCreator.givenCreatesRoomMessageFor(
-            MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
-            withRedactedRemoved,
-            A_ROOM_ID,
+        val expectedNotification = RoomNotification(
+            notification = fakeRoomGroupMessageCreator.createRoomMessage(
+                MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
+                withRedactedRemoved,
+                A_ROOM_ID,
+                FakeImageLoader().getImageLoader(),
+                null,
+            ),
+            roomId = A_ROOM_ID,
+            summaryLine = "${withRedactedRemoved.size} messages",
+            messageCount = withRedactedRemoved.size,
+            latestTimestamp = withRedactedRemoved.maxOf { it.timestamp },
+            shouldBing = withRedactedRemoved.any { it.noisy }
         )
 
         val fakeImageLoader = FakeImageLoader()
-        val result = roomWithRedactedMessage.toNotifications(
+        val result = toNotifications(
+            messages = roomWithRedactedMessage,
             currentUser = MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
             imageLoader = fakeImageLoader.getImageLoader(),
         )

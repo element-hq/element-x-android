@@ -18,12 +18,25 @@ package io.element.android.libraries.push.impl.notifications
 
 import android.app.Notification
 import androidx.core.app.NotificationCompat
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.debug.annotateForDebug
 import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
 import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
+
+interface SummaryGroupMessageCreator {
+    fun createSummaryNotification(
+        currentUser: MatrixUser,
+        roomNotifications: List<RoomNotification>,
+        invitationNotifications: List<OneShotNotification>,
+        simpleNotifications: List<OneShotNotification>,
+        fallbackNotifications: List<OneShotNotification>,
+        useCompleteNotificationFormat: Boolean
+    ): Notification
+}
 
 /**
  * ======== Build summary notification =========
@@ -34,11 +47,12 @@ import javax.inject.Inject
  * To ensure the best experience on all devices and versions, always include a group summary when you create a group
  * https://developer.android.com/training/notify-user/group
  */
-class SummaryGroupMessageCreator @Inject constructor(
+@ContributesBinding(AppScope::class)
+class DefaultSummaryGroupMessageCreator @Inject constructor(
     private val stringProvider: StringProvider,
     private val notificationCreator: NotificationCreator,
-) {
-    fun createSummaryNotification(
+) : SummaryGroupMessageCreator {
+    override fun createSummaryNotification(
         currentUser: MatrixUser,
         roomNotifications: List<RoomNotification>,
         invitationNotifications: List<OneShotNotification>,

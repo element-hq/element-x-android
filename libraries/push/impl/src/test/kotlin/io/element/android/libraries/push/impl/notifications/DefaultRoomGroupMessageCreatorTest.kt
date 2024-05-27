@@ -18,7 +18,7 @@ package io.element.android.libraries.push.impl.notifications
 
 import android.content.Context
 import android.os.Build
-import coil.annotation.ExperimentalCoilApi
+import androidx.core.app.NotificationCompat
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -42,7 +42,7 @@ private const val A_USER_AVATAR_1 = "mxc://userAvatar1"
 private const val A_USER_AVATAR_2 = "mxc://userAvatar2"
 
 @RunWith(RobolectricTestRunner::class)
-class RoomGroupMessageCreatorTest {
+class DefaultRoomGroupMessageCreatorTest {
     @Test
     fun `test createRoomMessage with one Event`() = runTest {
         val sut = createRoomGroupMessageCreator()
@@ -56,19 +56,12 @@ class RoomGroupMessageCreatorTest {
             ),
             roomId = A_ROOM_ID,
             imageLoader = fakeImageLoader.getImageLoader(),
+            existingNotification = null,
         )
-        val resultMetaWithoutFormatting = result.meta.copy(
-            summaryLine = result.meta.summaryLine.toString()
-        )
-        assertThat(resultMetaWithoutFormatting).isEqualTo(
-            RoomNotification.Message.Meta(
-                roomId = A_ROOM_ID,
-                summaryLine = "room-name: sender-name message-body",
-                messageCount = 1,
-                latestTimestamp = A_TIMESTAMP,
-                shouldBing = false,
-            )
-        )
+        assertThat(result.number).isEqualTo(1)
+        @Suppress("DEPRECATION")
+        assertThat(result.priority).isEqualTo(NotificationCompat.PRIORITY_LOW)
+        assertThat(result.`when`).isEqualTo(A_TIMESTAMP)
         assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
     }
 
@@ -85,19 +78,10 @@ class RoomGroupMessageCreatorTest {
             ),
             roomId = A_ROOM_ID,
             imageLoader = fakeImageLoader.getImageLoader(),
+            existingNotification = null,
         )
-        val resultMetaWithoutFormatting = result.meta.copy(
-            summaryLine = result.meta.summaryLine.toString()
-        )
-        assertThat(resultMetaWithoutFormatting).isEqualTo(
-            RoomNotification.Message.Meta(
-                roomId = A_ROOM_ID,
-                summaryLine = "room-name: sender-name message-body",
-                messageCount = 1,
-                latestTimestamp = A_TIMESTAMP,
-                shouldBing = true,
-            )
-        )
+        @Suppress("DEPRECATION")
+        assertThat(result.priority).isEqualTo(NotificationCompat.PRIORITY_DEFAULT)
         assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
     }
 
@@ -115,7 +99,6 @@ class RoomGroupMessageCreatorTest {
         )
     }
 
-    @OptIn(ExperimentalCoilApi::class)
     @Test
     fun `test createRoomMessage with room avatar and sender avatar android P`() = runTest {
         `test createRoomMessage with room avatar and sender avatar`(
@@ -138,7 +121,6 @@ class RoomGroupMessageCreatorTest {
         )
     }
 
-    @OptIn(ExperimentalCoilApi::class)
     private fun `test createRoomMessage with room avatar and sender avatar`(
         api: Int,
         expectedCoilRequests: List<Any>,
@@ -160,20 +142,10 @@ class RoomGroupMessageCreatorTest {
             ),
             roomId = A_ROOM_ID,
             imageLoader = fakeImageLoader.getImageLoader(),
+            existingNotification = null,
         )
-        val resultMetaWithoutFormatting = result.meta.copy(
-            summaryLine = result.meta.summaryLine.toString()
-        )
-        assertThat(resultMetaWithoutFormatting).isEqualTo(
-            RoomNotification.Message.Meta(
-                roomId = A_ROOM_ID,
-                summaryLine = "room-name: sender-name message-body",
-                messageCount = 1,
-                latestTimestamp = A_TIMESTAMP,
-                shouldBing = false,
-            )
-        )
-        assertThat(fakeImageLoader.getCoilRequests()).isEqualTo(expectedCoilRequests)
+        assertThat(result.number).isEqualTo(1)
+        assertThat(fakeImageLoader.getCoilRequests()).containsExactlyElementsIn(expectedCoilRequests)
     }
 
     @Test
@@ -188,19 +160,10 @@ class RoomGroupMessageCreatorTest {
             ),
             roomId = A_ROOM_ID,
             imageLoader = fakeImageLoader.getImageLoader(),
+            existingNotification = null,
         )
-        val resultMetaWithoutFormatting = result.meta.copy(
-            summaryLine = result.meta.summaryLine.toString()
-        )
-        assertThat(resultMetaWithoutFormatting).isEqualTo(
-            RoomNotification.Message.Meta(
-                roomId = A_ROOM_ID,
-                summaryLine = "room-name: 2 messages",
-                messageCount = 2,
-                latestTimestamp = A_TIMESTAMP + 10,
-                shouldBing = false,
-            )
-        )
+        assertThat(result.number).isEqualTo(2)
+        assertThat(result.`when`).isEqualTo(A_TIMESTAMP + 10)
         assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
     }
 
@@ -218,19 +181,9 @@ class RoomGroupMessageCreatorTest {
             ),
             roomId = A_ROOM_ID,
             imageLoader = fakeImageLoader.getImageLoader(),
+            existingNotification = null,
         )
-        val resultMetaWithoutFormatting = result.meta.copy(
-            summaryLine = result.meta.summaryLine.toString()
-        )
-        assertThat(resultMetaWithoutFormatting).isEqualTo(
-            RoomNotification.Message.Meta(
-                roomId = A_ROOM_ID,
-                summaryLine = "room-name: sender-name message-body",
-                messageCount = 0,
-                latestTimestamp = A_TIMESTAMP,
-                shouldBing = false,
-            )
-        )
+        assertThat(result.actions).isNull()
         assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
     }
 
@@ -247,19 +200,10 @@ class RoomGroupMessageCreatorTest {
             ),
             roomId = A_ROOM_ID,
             imageLoader = fakeImageLoader.getImageLoader(),
+            existingNotification = null,
         )
-        val resultMetaWithoutFormatting = result.meta.copy(
-            summaryLine = result.meta.summaryLine.toString()
-        )
-        assertThat(resultMetaWithoutFormatting).isEqualTo(
-            RoomNotification.Message.Meta(
-                roomId = A_ROOM_ID,
-                summaryLine = "sender-name: message-body",
-                messageCount = 1,
-                latestTimestamp = A_TIMESTAMP,
-                shouldBing = false,
-            )
-        )
+        assertThat(result.number).isEqualTo(1)
+        assertThat(result.`when`).isEqualTo(A_TIMESTAMP)
         assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
     }
 }
@@ -268,12 +212,13 @@ fun createRoomGroupMessageCreator(
     sdkIntProvider: BuildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(Build.VERSION_CODES.O),
 ): RoomGroupMessageCreator {
     val context = RuntimeEnvironment.getApplication() as Context
-    return RoomGroupMessageCreator(
-        notificationCreator = createNotificationCreator(),
-        bitmapLoader = NotificationBitmapLoader(
-            context = RuntimeEnvironment.getApplication(),
-            sdkIntProvider = sdkIntProvider,
-        ),
+    val bitmapLoader = NotificationBitmapLoader(
+        context = RuntimeEnvironment.getApplication(),
+        sdkIntProvider = sdkIntProvider,
+    )
+    return DefaultRoomGroupMessageCreator(
+        notificationCreator = createNotificationCreator(bitmapLoader = bitmapLoader),
+        bitmapLoader = bitmapLoader,
         stringProvider = AndroidStringProvider(context.resources)
     )
 }

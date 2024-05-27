@@ -52,6 +52,7 @@ dependencies {
     implementation(projects.libraries.network)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
+    implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.troubleshoot.api)
     api(projects.libraries.pushproviders.api)
@@ -64,7 +65,6 @@ dependencies {
 
     testImplementation(libs.test.junit)
     testImplementation(libs.test.robolectric)
-    testImplementation(libs.test.mockk)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(libs.coil.test)

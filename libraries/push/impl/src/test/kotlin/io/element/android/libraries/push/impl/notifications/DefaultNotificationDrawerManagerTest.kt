@@ -16,25 +16,27 @@
 
 package io.element.android.libraries.push.impl.notifications
 
+import android.app.Notification
+import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SPACE_ID
 import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
-import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.libraries.matrix.ui.components.aMatrixUser
+import io.element.android.libraries.push.impl.notifications.fake.FakeActiveNotificationsProvider
 import io.element.android.libraries.push.impl.notifications.fake.FakeImageLoaderHolder
-import io.element.android.libraries.push.impl.notifications.fake.MockkNotificationCreator
-import io.element.android.libraries.push.impl.notifications.fake.MockkRoomGroupMessageCreator
-import io.element.android.libraries.push.impl.notifications.fake.MockkSummaryGroupMessageCreator
+import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationCreator
+import io.element.android.libraries.push.impl.notifications.fake.FakeRoomGroupMessageCreator
+import io.element.android.libraries.push.impl.notifications.fake.FakeSummaryGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
-import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.services.appnavstate.api.AppNavigationState
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import io.element.android.services.appnavstate.api.NavigationState
 import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
 import io.element.android.services.appnavstate.test.aNavigationState
-import io.element.android.tests.testutils.testCoroutineDispatchers
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
@@ -58,16 +60,29 @@ class DefaultNotificationDrawerManagerTest {
     @Test
     fun `cover all APIs`() = runTest {
         // For now just call all the API. Later, add more valuable tests.
-        val defaultNotificationDrawerManager = createDefaultNotificationDrawerManager()
-        defaultNotificationDrawerManager.clearAllMessagesEvents(A_SESSION_ID, doRender = true)
-        defaultNotificationDrawerManager.clearAllMessagesEvents(A_SESSION_ID, doRender = false)
-        defaultNotificationDrawerManager.clearEvent(A_SESSION_ID, AN_EVENT_ID, doRender = true)
-        defaultNotificationDrawerManager.clearEvent(A_SESSION_ID, AN_EVENT_ID, doRender = false)
-        defaultNotificationDrawerManager.clearMessagesForRoom(A_SESSION_ID, A_ROOM_ID, doRender = true)
-        defaultNotificationDrawerManager.clearMessagesForRoom(A_SESSION_ID, A_ROOM_ID, doRender = false)
+        val matrixUser = aMatrixUser(id = A_SESSION_ID.value, displayName = "alice", avatarUrl = "mxc://data")
+        val mockRoomGroupMessageCreator = FakeRoomGroupMessageCreator(
+            createRoomMessageResult = lambdaRecorder { user, _, roomId, _, existingNotification, ->
+                assertThat(user).isEqualTo(matrixUser)
+                assertThat(roomId).isEqualTo(A_ROOM_ID)
+                assertThat(existingNotification).isNull()
+                Notification()
+            }
+        )
+        val summaryGroupMessageCreator = FakeSummaryGroupMessageCreator()
+        val defaultNotificationDrawerManager = createDefaultNotificationDrawerManager(
+            roomGroupMessageCreator = mockRoomGroupMessageCreator,
+            summaryGroupMessageCreator = summaryGroupMessageCreator,
+        )
+        defaultNotificationDrawerManager.clearAllMessagesEvents(A_SESSION_ID)
+        defaultNotificationDrawerManager.clearAllMessagesEvents(A_SESSION_ID)
+        defaultNotificationDrawerManager.clearEvent(A_SESSION_ID, AN_EVENT_ID)
+        defaultNotificationDrawerManager.clearEvent(A_SESSION_ID, AN_EVENT_ID)
+        defaultNotificationDrawerManager.clearMessagesForRoom(A_SESSION_ID, A_ROOM_ID)
+        defaultNotificationDrawerManager.clearMessagesForRoom(A_SESSION_ID, A_ROOM_ID)
         defaultNotificationDrawerManager.clearMembershipNotificationForSession(A_SESSION_ID)
-        defaultNotificationDrawerManager.clearMembershipNotificationForRoom(A_SESSION_ID, A_ROOM_ID, doRender = true)
-        defaultNotificationDrawerManager.clearMembershipNotificationForRoom(A_SESSION_ID, A_ROOM_ID, doRender = false)
+        defaultNotificationDrawerManager.clearMembershipNotificationForRoom(A_SESSION_ID, A_ROOM_ID)
+        defaultNotificationDrawerManager.clearMembershipNotificationForRoom(A_SESSION_ID, A_ROOM_ID)
         defaultNotificationDrawerManager.onNotifiableEventReceived(aNotifiableMessageEvent())
         // Add the same Event again (will be ignored)
         defaultNotificationDrawerManager.onNotifiableEventReceived(aNotifiableMessageEvent())
@@ -105,31 +120,29 @@ class DefaultNotificationDrawerManagerTest {
 
     private fun TestScope.createDefaultNotificationDrawerManager(
         appNavigationStateService: AppNavigationStateService = FakeAppNavigationStateService(),
-        initialData: List<NotifiableEvent> = emptyList()
+        roomGroupMessageCreator: RoomGroupMessageCreator = FakeRoomGroupMessageCreator(),
+        summaryGroupMessageCreator: SummaryGroupMessageCreator = FakeSummaryGroupMessageCreator(),
+        activeNotificationsProvider: FakeActiveNotificationsProvider = FakeActiveNotificationsProvider(),
     ): DefaultNotificationDrawerManager {
         val context = RuntimeEnvironment.getApplication()
         return DefaultNotificationDrawerManager(
-            notifiableEventProcessor = NotifiableEventProcessor(
-                outdatedDetector = OutdatedEventDetector(),
-                appNavigationStateService = appNavigationStateService
-            ),
+            context = context,
             notificationRenderer = NotificationRenderer(
                 notificationIdProvider = NotificationIdProvider(),
-                notificationDisplayer = NotificationDisplayer(context),
-                notificationDataFactory = NotificationDataFactory(
-                    notificationCreator = MockkNotificationCreator().instance,
-                    roomGroupMessageCreator = MockkRoomGroupMessageCreator().instance,
-                    summaryGroupMessageCreator = MockkSummaryGroupMessageCreator().instance,
+                notificationDisplayer = DefaultNotificationDisplayer(context),
+                notificationDataFactory = DefaultNotificationDataFactory(
+                    notificationCreator = FakeNotificationCreator(),
+                    roomGroupMessageCreator = roomGroupMessageCreator,
+                    summaryGroupMessageCreator = summaryGroupMessageCreator,
+                    activeNotificationsProvider = activeNotificationsProvider,
                 )
             ),
-            notificationEventPersistence = InMemoryNotificationEventPersistence(initialData = initialData),
-            filteredEventDetector = FilteredEventDetector(),
+            notificationIdProvider = NotificationIdProvider(),
             appNavigationStateService = appNavigationStateService,
             coroutineScope = this,
-            dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
-            buildMeta = aBuildMeta(),
             matrixClientProvider = FakeMatrixClientProvider(),
             imageLoaderHolder = FakeImageLoaderHolder(),
+            activeNotificationsProvider = activeNotificationsProvider,
         )
     }
 }

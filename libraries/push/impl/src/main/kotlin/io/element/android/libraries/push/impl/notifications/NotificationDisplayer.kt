@@ -22,16 +22,27 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import timber.log.Timber
 import javax.inject.Inject
 
-class NotificationDisplayer @Inject constructor(
+interface NotificationDisplayer {
+    fun showNotificationMessage(tag: String?, id: Int, notification: Notification): Boolean
+    fun cancelNotificationMessage(tag: String?, id: Int)
+    fun cancelAllNotifications()
+    fun displayDiagnosticNotification(notification: Notification): Boolean
+    fun dismissDiagnosticNotification()
+}
+
+@ContributesBinding(AppScope::class)
+class DefaultNotificationDisplayer @Inject constructor(
     @ApplicationContext private val context: Context,
-) {
+) : NotificationDisplayer {
     private val notificationManager = NotificationManagerCompat.from(context)
 
-    fun showNotificationMessage(tag: String?, id: Int, notification: Notification): Boolean {
+    override fun showNotificationMessage(tag: String?, id: Int, notification: Notification): Boolean {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             Timber.w("Not allowed to notify.")
             return false
@@ -40,11 +51,11 @@ class NotificationDisplayer @Inject constructor(
         return true
     }
 
-    fun cancelNotificationMessage(tag: String?, id: Int) {
+    override fun cancelNotificationMessage(tag: String?, id: Int) {
         notificationManager.cancel(tag, id)
     }
 
-    fun cancelAllNotifications() {
+    override fun cancelAllNotifications() {
         // Keep this try catch (reported by GA)
         try {
             notificationManager.cancelAll()
@@ -53,7 +64,7 @@ class NotificationDisplayer @Inject constructor(
         }
     }
 
-    fun displayDiagnosticNotification(notification: Notification): Boolean {
+    override fun displayDiagnosticNotification(notification: Notification): Boolean {
         return showNotificationMessage(
             tag = "DIAGNOSTIC",
             id = NOTIFICATION_ID_DIAGNOSTIC,
@@ -61,33 +72,17 @@ class NotificationDisplayer @Inject constructor(
         )
     }
 
-    fun dismissDiagnosticNotification() {
+    override fun dismissDiagnosticNotification() {
         cancelNotificationMessage(
             tag = "DIAGNOSTIC",
             id = NOTIFICATION_ID_DIAGNOSTIC
         )
     }
 
-    /**
-     * Cancel the foreground notification service.
-     */
-    fun cancelNotificationForegroundService() {
-        notificationManager.cancel(NOTIFICATION_ID_FOREGROUND_SERVICE)
-    }
-
     companion object {
         /* ==========================================================================================
          * IDs for notifications
          * ========================================================================================== */
-
-        /**
-         * Identifier of the foreground notification used to keep the application alive
-         * when it runs in background.
-         * This notification, which is not removable by the end user, displays what
-         * the application is doing while in background.
-         */
-        private const val NOTIFICATION_ID_FOREGROUND_SERVICE = 61
-
         private const val NOTIFICATION_ID_DIAGNOSTIC = 888
     }
 }

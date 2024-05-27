@@ -17,11 +17,9 @@
 package io.element.android.libraries.push.impl.notifications
 
 import android.app.Notification
-import android.content.Context
-import androidx.core.app.NotificationManagerCompat
 import coil.ImageLoader
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
@@ -30,17 +28,43 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableMess
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import javax.inject.Inject
 
-class NotificationDataFactory @Inject constructor(
-    @ApplicationContext private val context: Context,
+interface NotificationDataFactory {
+    suspend fun toNotifications(
+        messages: List<NotifiableMessageEvent>,
+        currentUser: MatrixUser,
+        imageLoader: ImageLoader,
+    ): List<RoomNotification>
+
+    @JvmName("toNofificationInvites")
+    @Suppress("INAPPLICABLE_JVM_NAME")
+    fun toNotifications(invites: List<InviteNotifiableEvent>): List<OneShotNotification>
+    @JvmName("toNofificationSimpleEvents")
+    @Suppress("INAPPLICABLE_JVM_NAME")
+    fun toNotifications(simpleEvents: List<SimpleNotifiableEvent>): List<OneShotNotification>
+    fun toNotifications(fallback: List<FallbackNotifiableEvent>): List<OneShotNotification>
+
+    fun createSummaryNotification(
+        currentUser: MatrixUser,
+        roomNotifications: List<RoomNotification>,
+        invitationNotifications: List<OneShotNotification>,
+        simpleNotifications: List<OneShotNotification>,
+        fallbackNotifications: List<OneShotNotification>,
+        useCompleteNotificationFormat: Boolean
+    ): SummaryNotification
+}
+
+class DefaultNotificationDataFactory @Inject constructor(
     private val notificationCreator: NotificationCreator,
     private val roomGroupMessageCreator: RoomGroupMessageCreator,
-    private val summaryGroupMessageCreator: SummaryGroupMessageCreator
-) {
-    suspend fun List<NotifiableMessageEvent>.toNotifications(
+    private val summaryGroupMessageCreator: SummaryGroupMessageCreator,
+    private val activeNotificationsProvider: ActiveNotificationsProvider,
+) : NotificationDataFactory {
+    override suspend fun toNotifications(
+        messages: List<NotifiableMessageEvent>,
         currentUser: MatrixUser,
         imageLoader: ImageLoader,
     ): List<RoomNotification> {
-        val messagesToDisplay = filterNot { it.canNotBeDisplayed() }
+        val messagesToDisplay = messages.filterNot { it.canNotBeDisplayed() }
             .groupBy { it.roomId }
         return messagesToDisplay.map { (roomId, events) ->
             val notification = roomGroupMessageCreator.createRoomMessage(
@@ -48,7 +72,7 @@ class NotificationDataFactory @Inject constructor(
                 events = events,
                 roomId = roomId,
                 imageLoader = imageLoader,
-                existingNotification = getExistingNotificationForMessages(roomId),
+                existingNotification = getExistingNotificationForMessages(currentUser.userId, roomId),
             )
             RoomNotification(
                 notification = notification,
@@ -62,13 +86,14 @@ class NotificationDataFactory @Inject constructor(
 
     private fun NotifiableMessageEvent.canNotBeDisplayed() = isRedacted
 
-    private fun getExistingNotificationForMessages(roomId: RoomId): Notification? {
-        return NotificationManagerCompat.from(context).activeNotifications.find {it.tag == roomId.value }?.notification
+    private fun getExistingNotificationForMessages(sessionId: SessionId, roomId: RoomId): Notification? {
+        return activeNotificationsProvider.getNotificationsForRoom(sessionId, roomId).firstOrNull()?.notification
     }
 
-    @JvmName("toNotificationsInviteNotifiableEvent")
-    fun List<InviteNotifiableEvent>.toNotifications(): List<OneShotNotification> {
-        return map { event ->
+    @JvmName("toNofificationInvites")
+    @Suppress("INAPPLICABLE_JVM_NAME")
+    override fun toNotifications(invites: List<InviteNotifiableEvent>): List<OneShotNotification> {
+        return invites.map { event ->
             OneShotNotification(
                 key = "invite-${event.roomId.value}",
                 notification = notificationCreator.createRoomInvitationNotification(event),
@@ -79,9 +104,10 @@ class NotificationDataFactory @Inject constructor(
         }
     }
 
-    @JvmName("toNotificationsSimpleNotifiableEvent")
-    fun List<SimpleNotifiableEvent>.toNotifications(): List<OneShotNotification> {
-        return map { event ->
+    @JvmName("toNofificationSimpleEvents")
+    @Suppress("INAPPLICABLE_JVM_NAME")
+    override fun toNotifications(simpleEvents: List<SimpleNotifiableEvent>): List<OneShotNotification> {
+        return simpleEvents.map { event ->
             OneShotNotification(
                 key = event.eventId.value,
                 notification = notificationCreator.createSimpleEventNotification(event),
@@ -92,8 +118,8 @@ class NotificationDataFactory @Inject constructor(
         }
     }
 
-    fun List<FallbackNotifiableEvent>.toNotifications(): List<OneShotNotification> {
-        return map { event ->
+    override fun toNotifications(fallback: List<FallbackNotifiableEvent>): List<OneShotNotification> {
+        return fallback.map { event ->
             OneShotNotification(
                 key = event.eventId.value,
                 notification = notificationCreator.createFallbackNotification(event),
@@ -104,7 +130,7 @@ class NotificationDataFactory @Inject constructor(
         }
     }
 
-    fun createSummaryNotification(
+    override fun createSummaryNotification(
         currentUser: MatrixUser,
         roomNotifications: List<RoomNotification>,
         invitationNotifications: List<OneShotNotification>,
