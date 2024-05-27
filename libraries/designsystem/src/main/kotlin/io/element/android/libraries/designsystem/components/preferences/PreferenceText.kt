@@ -82,48 +82,56 @@ fun PreferenceText(
                 color = tintColor ?: enabled.toEnabledColor(),
             )
         },
-        supportingContent = {
-            if (subtitle != null) {
+        supportingContent = if (subtitle != null) {
+            {
                 Text(
                     style = ElementTheme.typography.fontBodyMdRegular,
                     text = subtitle,
                     color = tintColor ?: enabled.toSecondaryEnabledColor(),
                 )
-            } else if (subtitleAnnotated != null) {
+            }
+        } else if (subtitleAnnotated != null) {
+            {
                 Text(
                     style = ElementTheme.typography.fontBodyMdRegular,
                     text = subtitleAnnotated,
                     color = tintColor ?: enabled.toSecondaryEnabledColor(),
                 )
             }
+        } else {
+            null
         },
-        trailingContent = ListItemContent.Custom {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                if (currentValue != null) {
-                    Text(
-                        text = currentValue,
-                        style = ElementTheme.typography.fontBodyXsMedium,
-                        color = enabled.toSecondaryEnabledColor(),
-                    )
-                } else if (loadingCurrentValue) {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .progressSemantics()
-                            .size(20.dp),
-                        strokeWidth = 2.dp
-                    )
-                }
-                if (showEndBadge) {
-                    val endBadgeStartPadding = if (currentValue != null || loadingCurrentValue) 16.dp else 0.dp
-                    RedIndicatorAtom(
-                        modifier = Modifier
-                            .padding(start = endBadgeStartPadding)
-                    )
+        trailingContent = if (currentValue != null || loadingCurrentValue || showEndBadge) {
+            ListItemContent.Custom {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    if (currentValue != null) {
+                        Text(
+                            text = currentValue,
+                            style = ElementTheme.typography.fontBodyXsMedium,
+                            color = enabled.toSecondaryEnabledColor(),
+                        )
+                    } else if (loadingCurrentValue) {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .progressSemantics()
+                                .size(20.dp),
+                            strokeWidth = 2.dp
+                        )
+                    }
+                    if (showEndBadge) {
+                        val endBadgeStartPadding = if (currentValue != null || loadingCurrentValue) 16.dp else 0.dp
+                        RedIndicatorAtom(
+                            modifier = Modifier
+                                .padding(start = endBadgeStartPadding)
+                        )
+                    }
                 }
             }
-        },
+        } else {
+            null
+        }
     )
 }
 
