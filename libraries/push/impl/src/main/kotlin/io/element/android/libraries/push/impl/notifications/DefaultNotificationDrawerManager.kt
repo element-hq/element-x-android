@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
+import io.element.android.libraries.push.impl.notifications.model.shouldIgnoreEventInRoom
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import io.element.android.services.appnavstate.api.NavigationState
 import io.element.android.services.appnavstate.api.currentSessionId
@@ -112,6 +113,9 @@ class DefaultNotificationDrawerManager @Inject constructor(
      * Events might be grouped and there might not be one notification per event!
      */
     suspend fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
+        if (notifiableEvent.shouldIgnoreEventInRoom(appNavigationStateService.appNavigationState.value)) {
+            return
+        }
         renderEvents(listOf(notifiableEvent))
     }
 
