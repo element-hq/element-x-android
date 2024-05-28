@@ -399,7 +399,10 @@ private fun TopicSection(
     roomTopic: RoomTopicState,
     onActionClicked: (RoomDetailsAction) -> Unit,
 ) {
-    PreferenceCategory(title = stringResource(CommonStrings.common_topic)) {
+    PreferenceCategory(
+        title = stringResource(CommonStrings.common_topic),
+        showTopDivider = false,
+    ) {
         if (roomTopic is RoomTopicState.CanAddTopic) {
             PreferenceText(
                 title = stringResource(R.string.screen_room_details_add_topic_title),
@@ -489,7 +492,7 @@ private fun SecuritySection() {
 
 @Composable
 private fun OtherActionsSection(isDm: Boolean, onLeaveRoom: () -> Unit) {
-    PreferenceCategory(showDivider = false) {
+    PreferenceCategory(showTopDivider = true) {
         ListItem(
             headlineContent = {
                 val leaveText = stringResource(

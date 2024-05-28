@@ -68,7 +68,10 @@ fun EditDefaultNotificationSettingView(
         } else {
             R.string.screen_notification_settings_edit_screen_group_section_header
         }
-        PreferenceCategory(title = stringResource(id = categoryTitle)) {
+        PreferenceCategory(
+            title = stringResource(id = categoryTitle),
+            showTopDivider = false,
+        ) {
             if (state.mode != null) {
                 Column(modifier = Modifier.selectableGroup()) {
                     validModes.forEach { item ->

@@ -17,7 +17,6 @@
 package io.element.android.features.preferences.impl.notifications
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -121,7 +120,6 @@ private fun NotificationSettingsContentView(
     PreferenceSwitch(
         title = stringResource(id = R.string.screen_notification_settings_enable_notifications),
         isChecked = systemSettings.appNotificationsEnabled,
-        switchAlignment = Alignment.Top,
         onCheckedChange = onNotificationsEnabledChanged
     )
 
@@ -145,7 +143,6 @@ private fun NotificationSettingsContentView(
                 modifier = Modifier,
                 title = stringResource(id = R.string.screen_notification_settings_room_mention_label),
                 isChecked = matrixSettings.atRoomNotificationsEnabled,
-                switchAlignment = Alignment.Top,
                 onCheckedChange = onMentionNotificationsChanged
             )
         }
@@ -162,7 +159,6 @@ private fun NotificationSettingsContentView(
                 modifier = Modifier,
                 title = stringResource(id = R.string.screen_notification_settings_invite_for_me_label),
                 isChecked = matrixSettings.inviteForMeNotificationsEnabled,
-                switchAlignment = Alignment.Top,
                 onCheckedChange = onInviteForMeNotificationsChanged
             )
         }
