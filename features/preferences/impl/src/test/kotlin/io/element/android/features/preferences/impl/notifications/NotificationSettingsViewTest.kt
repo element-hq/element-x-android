@@ -261,7 +261,12 @@ class NotificationSettingsViewTest {
             ),
         )
         rule.clickOn(R.string.screen_advanced_settings_push_provider_android)
-        eventsRecorder.assertSingle(NotificationSettingsEvents.ChangePushProvider)
+        eventsRecorder.assertList(
+            listOf(
+                NotificationSettingsEvents.RefreshSystemNotificationsEnabled,
+                NotificationSettingsEvents.ChangePushProvider,
+            )
+        )
     }
 
     @Test
@@ -275,7 +280,12 @@ class NotificationSettingsViewTest {
             ),
         )
         rule.onNodeWithText("P2").performClick()
-        eventsRecorder.assertSingle(NotificationSettingsEvents.SetPushProvider(1))
+        eventsRecorder.assertList(
+            listOf(
+                NotificationSettingsEvents.RefreshSystemNotificationsEnabled,
+                NotificationSettingsEvents.SetPushProvider(1),
+            )
+        )
     }
 }
 
