@@ -19,7 +19,6 @@ package io.element.android.services.analyticsproviders.test
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.plan.UserProperties
-
 import io.element.android.services.analyticsproviders.api.AnalyticsProvider
 import io.element.android.tests.testutils.lambda.lambdaError
 
