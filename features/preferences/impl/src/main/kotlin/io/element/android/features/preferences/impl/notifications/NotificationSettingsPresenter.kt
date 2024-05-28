@@ -87,7 +87,7 @@ class NotificationSettingsPresenter @Inject constructor(
         }
         // List of Distributor names
         val distributorNames = remember {
-            distributors.map { it.second.name }
+            distributors.map { it.second.name }.toImmutableList()
         }
 
         var currentDistributorName by remember { mutableStateOf<AsyncAction<String>>(AsyncAction.Uninitialized) }
@@ -164,7 +164,7 @@ class NotificationSettingsPresenter @Inject constructor(
             ),
             changeNotificationSettingAction = changeNotificationSettingAction.value,
             currentPushDistributor = currentDistributorName,
-            availablePushDistributors = distributorNames.toImmutableList(),
+            availablePushDistributors = distributorNames,
             showChangePushProviderDialog = showChangePushProviderDialog,
             eventSink = ::handleEvents
         )
