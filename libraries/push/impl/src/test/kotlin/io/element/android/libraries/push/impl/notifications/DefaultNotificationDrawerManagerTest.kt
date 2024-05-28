@@ -199,7 +199,7 @@ class DefaultNotificationDrawerManagerTest {
             notificationManager = notificationManager,
             notificationRenderer = NotificationRenderer(
                 notificationIdProvider = NotificationIdProvider(),
-                notificationDisplayer = DefaultNotificationDisplayer(context),
+                notificationDisplayer = DefaultNotificationDisplayer(context, NotificationManagerCompat.from(context)),
                 notificationDataFactory = DefaultNotificationDataFactory(
                     notificationCreator = FakeNotificationCreator(),
                     roomGroupMessageCreator = roomGroupMessageCreator,

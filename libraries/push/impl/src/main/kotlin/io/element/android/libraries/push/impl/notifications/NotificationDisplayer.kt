@@ -38,9 +38,8 @@ interface NotificationDisplayer {
 @ContributesBinding(AppScope::class)
 class DefaultNotificationDisplayer @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val notificationManager: NotificationManagerCompat
 ) : NotificationDisplayer {
-    private val notificationManager = NotificationManagerCompat.from(context)
-
     override fun showNotificationMessage(tag: String?, id: Int, notification: Notification): Boolean {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             Timber.w("Not allowed to notify.")

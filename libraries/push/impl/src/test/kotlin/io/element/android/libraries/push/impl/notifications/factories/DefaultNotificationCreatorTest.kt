@@ -20,6 +20,7 @@ import android.app.Notification
 import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -328,5 +329,5 @@ fun createNotificationCreator(
 
 fun createNotificationChannels(): NotificationChannels {
     val context = RuntimeEnvironment.getApplication()
-    return NotificationChannels(context, FakeStringProvider(""))
+    return NotificationChannels(context, NotificationManagerCompat.from(context), FakeStringProvider(""))
 }
