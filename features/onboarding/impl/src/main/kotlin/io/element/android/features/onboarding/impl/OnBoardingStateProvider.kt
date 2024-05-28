@@ -31,7 +31,7 @@ open class OnBoardingStateProvider : PreviewParameterProvider<OnBoardingState> {
 
 fun anOnBoardingState(
     isDebugBuild: Boolean = false,
-    productionApplicationName: String = "Element",
+    productionApplicationName: String = "Parolla",
     canLoginWithQrCode: Boolean = false,
     canCreateAccount: Boolean = false
 ) = OnBoardingState(
