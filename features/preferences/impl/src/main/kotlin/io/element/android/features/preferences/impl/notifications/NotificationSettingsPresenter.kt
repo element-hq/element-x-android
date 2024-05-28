@@ -121,7 +121,6 @@ class NotificationSettingsPresenter @Inject constructor(
                 )
                     .fold(
                         {
-                            currentDistributorName = AsyncAction.Success(distributor.name)
                             refreshPushProvider++
                         },
                         {

@@ -262,6 +262,7 @@ class NotificationSettingsPresenterTests {
             val withNewProvider = awaitItem()
             assertThat(withNewProvider.showChangePushProviderDialog).isFalse()
             assertThat(withNewProvider.currentPushDistributor).isEqualTo(AsyncAction.Loading)
+            skipItems(1)
             val lastItem = awaitItem()
             assertThat(lastItem.currentPushDistributor).isEqualTo(AsyncAction.Success("aDistributorName1"))
             cancelAndIgnoreRemainingEvents()
