@@ -16,11 +16,13 @@
 
 package io.element.android.libraries.push.impl.notifications
 
+import androidx.annotation.VisibleForTesting
 import androidx.core.app.NotificationManagerCompat
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -43,7 +45,7 @@ import javax.inject.Inject
 private val loggerTag = LoggerTag("DefaultNotificationDrawerManager", LoggerTag.NotificationLoggerTag)
 
 /**
- * The NotificationDrawerManager receives notification events as they arrived (from event stream or fcm) and
+ * The NotificationDrawerManager receives notification events as they arrive (from event stream or fcm) and
  * organise them in order to display them in the notification drawer.
  * Events can be grouped into the same notification, old (already read) events can be removed to do some cleaning.
  */
@@ -72,7 +74,8 @@ class DefaultNotificationDrawerManager @Inject constructor(
     }
 
     // For test only
-    fun destroy() {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal fun destroy() {
         appNavigationStateObserver?.cancel()
     }
 
@@ -107,9 +110,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
     }
 
     /**
-     * Should be called as soon as a new event is ready to be displayed.
-     * The notification corresponding to this event will not be displayed until
-     * #refreshNotificationDrawer() is called.
+     * Should be called as soon as a new event is ready to be displayed, filtering out notifications that shouldn't be displayed.
      * Events might be grouped and there might not be one notification per event!
      */
     suspend fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
@@ -120,7 +121,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
     }
 
     /**
-     * Clear all known events and refresh the notification drawer.
+     * Clear all known message events for a [sessionId].
      */
     fun clearAllMessagesEvents(sessionId: SessionId) {
         notificationManager.cancel(null, notificationIdProvider.getRoomMessagesNotificationId(sessionId))
@@ -128,7 +129,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
     }
 
     /**
-     * Clear all notifications related to the session and refresh the notification drawer.
+     * Clear all notifications related to the session.
      */
     fun clearAllEvents(sessionId: SessionId) {
         activeNotificationsProvider.getNotificationsForSession(sessionId)
@@ -136,7 +137,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
     }
 
     /**
-     * Should be called when the application is currently opened and showing timeline for the given roomId.
+     * Should be called when the application is currently opened and showing timeline for the given [roomId].
      * Used to ignore events related to that room (no need to display notification) and clean any existing notification on this room.
      * Can also be called when a notification for this room is dismissed by the user.
      */
@@ -192,7 +193,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
             it.sessionId
         }
 
-        eventsForSessions.forEach { (sessionId, notifiableEvents) ->
+        for ((sessionId, notifiableEvents) in eventsForSessions) {
             val client = matrixClientProvider.getOrRestore(sessionId).getOrThrow()
             val imageLoader = imageLoaderHolder.get(client)
             val userFromCache = client.userProfile.value
@@ -200,27 +201,29 @@ class DefaultNotificationDrawerManager @Inject constructor(
                 // We have an avatar and a display name, use it
                 userFromCache
             } else {
-                tryOrNull(
-                    onError = { Timber.tag(loggerTag.value).e(it, "Unable to retrieve info for user ${sessionId.value}") },
-                    operation = {
-                        client.getUserProfile().getOrNull()
-                            ?.let {
-                                // displayName cannot be empty else NotificationCompat.MessagingStyle() will crash
-                                if (it.displayName.isNullOrEmpty()) {
-                                    it.copy(displayName = sessionId.value)
-                                } else {
-                                    it
-                                }
-                            }
-                    }
-                ) ?: MatrixUser(
-                    userId = sessionId,
-                    displayName = sessionId.value,
-                    avatarUrl = null
-                )
+                client.getSafeUserProfile()
             }
 
             notificationRenderer.render(currentUser, useCompleteNotificationFormat, notifiableEvents, imageLoader)
         }
+    }
+
+    private suspend fun MatrixClient.getSafeUserProfile(): MatrixUser {
+        return tryOrNull(
+            onError = { Timber.tag(loggerTag.value).e(it, "Unable to retrieve info for user ${sessionId.value}") },
+            operation = {
+                val profile = getUserProfile().getOrNull()
+                // displayName cannot be empty else NotificationCompat.MessagingStyle() will crash
+                if (profile?.displayName.isNullOrEmpty()) {
+                    profile?.copy(displayName = sessionId.value)
+                } else {
+                    profile
+                }
+            }
+        ) ?: MatrixUser(
+            userId = sessionId,
+            displayName = sessionId.value,
+            avatarUrl = null
+        )
     }
 }
