@@ -108,7 +108,7 @@ class DefaultNotificationDataFactory @Inject constructor(
     override fun toNotifications(invites: List<InviteNotifiableEvent>): List<OneShotNotification> {
         return invites.map { event ->
             OneShotNotification(
-                key = "invite-${event.roomId.value}",
+                key = event.roomId.value,
                 notification = notificationCreator.createRoomInvitationNotification(event),
                 summaryLine = event.description,
                 isNoisy = event.noisy,

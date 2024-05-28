@@ -76,7 +76,7 @@ class DefaultActiveNotificationsProviderTest {
             aStatusBarNotification(
                 id = notificationIdProvider.getRoomInvitationNotificationId(A_SESSION_ID_2),
                 groupId = A_SESSION_ID_2.value,
-                tag = "invite-$A_ROOM_ID",
+                tag = A_ROOM_ID.value,
             ),
         )
         val activeNotificationsProvider = createActiveNotificationsProvider(activeNotifications = activeNotifications)
@@ -126,19 +126,19 @@ class DefaultActiveNotificationsProviderTest {
             aStatusBarNotification(
                 id = notificationIdProvider.getRoomInvitationNotificationId(A_SESSION_ID_2),
                 groupId = A_SESSION_ID_2.value,
-                tag = "invite-$A_ROOM_ID"
+                tag = A_ROOM_ID_2.value
             ),
             aStatusBarNotification(id = notificationIdProvider.getSummaryNotificationId(A_SESSION_ID_2), groupId = A_SESSION_ID_2.value, tag = A_ROOM_ID.value),
             aStatusBarNotification(
                 id = notificationIdProvider.getRoomInvitationNotificationId(A_SESSION_ID_2),
                 groupId = A_SESSION_ID_2.value,
-                tag = "invite-$A_ROOM_ID_2"
+                tag = A_ROOM_ID_2.value
             ),
         )
         val activeNotificationsProvider = createActiveNotificationsProvider(activeNotifications = activeNotifications)
 
         assertThat(activeNotificationsProvider.getMembershipNotificationForRoom(A_SESSION_ID, A_ROOM_ID)).isEmpty()
-        assertThat(activeNotificationsProvider.getMembershipNotificationForRoom(A_SESSION_ID_2, A_ROOM_ID_2)).hasSize(1)
+        assertThat(activeNotificationsProvider.getMembershipNotificationForRoom(A_SESSION_ID_2, A_ROOM_ID_2)).hasSize(2)
     }
 
     @Test

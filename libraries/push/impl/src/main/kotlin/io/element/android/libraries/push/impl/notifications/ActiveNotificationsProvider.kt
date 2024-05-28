@@ -48,7 +48,8 @@ class DefaultActiveNotificationsProvider @Inject constructor(
     }
 
     override fun getMembershipNotificationForSession(sessionId: SessionId): List<StatusBarNotification> {
-        return getNotificationsForSession(sessionId).filter { it.tag?.startsWith("invite-") == true }
+        val notificationId = notificationIdProvider.getRoomInvitationNotificationId(sessionId)
+        return getNotificationsForSession(sessionId).filter { it.id == notificationId }
     }
 
     override fun getMessageNotificationsForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification> {
@@ -58,8 +59,7 @@ class DefaultActiveNotificationsProvider @Inject constructor(
 
     override fun getMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification> {
         val notificationId = notificationIdProvider.getRoomInvitationNotificationId(sessionId)
-        return notificationManager.activeNotifications
-            .filter { it.id == notificationId && it.tag == "invite-$roomId" }
+        return getNotificationsForSession(sessionId).filter { it.id == notificationId && it.tag == roomId.value }
     }
 
     override fun getSummaryNotification(sessionId: SessionId): StatusBarNotification? {

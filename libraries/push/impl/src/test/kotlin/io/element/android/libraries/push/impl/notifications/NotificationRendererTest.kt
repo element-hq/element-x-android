@@ -107,7 +107,7 @@ class NotificationRendererTest {
         renderEventsAsNotifications(listOf(anInviteNotifiableEvent()))
 
         notificationDisplayer.showNotificationMessageResult.assertions().isCalledExactly(2).withSequence(
-            listOf(value("invite-${A_ROOM_ID.value}"), value(notificationIdProvider.getRoomInvitationNotificationId(A_SESSION_ID)), value(A_NOTIFICATION)),
+            listOf(value(A_ROOM_ID.value), value(notificationIdProvider.getRoomInvitationNotificationId(A_SESSION_ID)), value(A_NOTIFICATION)),
             listOf(value(null), value(notificationIdProvider.getSummaryNotificationId(A_SESSION_ID)), value(A_SUMMARY_NOTIFICATION.notification))
         )
     }

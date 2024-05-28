@@ -67,7 +67,7 @@ class NotificationDataFactoryTest {
             listOf(
                 OneShotNotification(
                     notification = expectedNotification,
-                    key = "invite-${A_ROOM_ID.value}",
+                    key = A_ROOM_ID.value,
                     summaryLine = AN_INVITATION_EVENT.description,
                     isNoisy = AN_INVITATION_EVENT.noisy,
                     timestamp = AN_INVITATION_EVENT.timestamp
