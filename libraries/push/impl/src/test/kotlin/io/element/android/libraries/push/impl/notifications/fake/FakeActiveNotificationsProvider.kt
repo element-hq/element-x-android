@@ -48,7 +48,7 @@ class FakeActiveNotificationsProvider(
         return activeNotifications.firstOrNull()
     }
 
-    override fun count(): Int {
+    override fun count(sessionId: SessionId): Int {
         return activeNotifications.size
     }
 }

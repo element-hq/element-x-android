@@ -31,7 +31,7 @@ interface ActiveNotificationsProvider {
     fun getMembershipNotificationForSession(sessionId: SessionId): List<StatusBarNotification>
     fun getMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification>
     fun getSummaryNotification(sessionId: SessionId): StatusBarNotification?
-    fun count(): Int
+    fun count(sessionId: SessionId): Int
 }
 
 @ContributesBinding(AppScope::class)
@@ -67,7 +67,7 @@ class DefaultActiveNotificationsProvider @Inject constructor(
         return notificationManager.activeNotifications.find { it.id == summaryId }
     }
 
-    override fun count(): Int {
-        return getAllNotifications().size
+    override fun count(sessionId: SessionId): Int {
+        return getNotificationsForSession(sessionId).size
     }
 }

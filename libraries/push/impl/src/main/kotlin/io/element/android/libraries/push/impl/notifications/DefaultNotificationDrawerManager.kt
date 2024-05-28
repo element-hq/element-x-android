@@ -171,7 +171,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
 
     private fun clearSummaryNotificationIfNeeded(sessionId: SessionId) {
         val summaryNotification = activeNotificationsProvider.getSummaryNotification(sessionId)
-        if (summaryNotification != null && activeNotificationsProvider.count() == 1) {
+        if (summaryNotification != null && activeNotificationsProvider.count(sessionId) == 1) {
             notificationManager.cancel(null, summaryNotification.id)
         }
     }
