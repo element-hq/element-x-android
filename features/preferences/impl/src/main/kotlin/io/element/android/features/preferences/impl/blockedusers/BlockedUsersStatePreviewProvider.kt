@@ -18,7 +18,7 @@ package io.element.android.features.preferences.impl.blockedusers
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import kotlinx.collections.immutable.toPersistentList
 
@@ -26,6 +26,7 @@ class BlockedUsersStatePreviewProvider : PreviewParameterProvider<BlockedUsersSt
     override val values: Sequence<BlockedUsersState>
         get() = sequenceOf(
             aBlockedUsersState(),
+            aBlockedUsersState(blockedUsers = aMatrixUserList().map { it.copy(displayName = null, avatarUrl = null) }),
             aBlockedUsersState(blockedUsers = emptyList()),
             aBlockedUsersState(unblockUserAction = AsyncAction.Confirming),
             // Sadly there's no good way to preview Loading or Failure states since they're presented with an animation
@@ -37,7 +38,7 @@ class BlockedUsersStatePreviewProvider : PreviewParameterProvider<BlockedUsersSt
 }
 
 internal fun aBlockedUsersState(
-    blockedUsers: List<UserId> = aMatrixUserList().map { it.userId },
+    blockedUsers: List<MatrixUser> = aMatrixUserList(),
     unblockUserAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
 ): BlockedUsersState {
     return BlockedUsersState(
