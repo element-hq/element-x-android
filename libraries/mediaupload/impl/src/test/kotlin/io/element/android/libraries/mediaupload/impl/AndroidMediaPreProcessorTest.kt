@@ -58,7 +58,6 @@ class AndroidMediaPreProcessorTest {
         val data = result.getOrThrow()
         assertThat(data.file.path).endsWith("image.png")
         val info = data as MediaUploadInfo.Image
-        // Computing thumbnailFile is failing with Robolectric
         assertThat(info.thumbnailFile).isNotNull()
         assertThat(info.imageInfo).isEqualTo(
             ImageInfo(
@@ -88,7 +87,6 @@ class AndroidMediaPreProcessorTest {
         val data = result.getOrThrow()
         assertThat(data.file.path).endsWith("image.png")
         val info = data as MediaUploadInfo.Image
-        // Computing thumbnailFile is failing with Robolectric
         assertThat(info.thumbnailFile).isNull()
         assertThat(info.imageInfo).isEqualTo(
             ImageInfo(

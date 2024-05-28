@@ -33,6 +33,7 @@ class AppMigration04Test {
         val file = context.getDatabasePath(AppMigration04.NOTIFICATION_FILE_NAME)
         file.parentFile?.mkdirs()
         file.createNewFile()
+        assertThat(file.exists()).isTrue()
 
         val migration = AppMigration04(context)
 
