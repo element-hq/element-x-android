@@ -16,19 +16,17 @@
 
 package io.element.android.libraries.push.impl.notifications
 
-import android.content.Context
 import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationManagerCompat
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import javax.inject.Inject
 
 interface ActiveNotificationsProvider {
     fun getAllNotifications(): List<StatusBarNotification>
-    fun getNotificationsForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification>
+    fun getMessageNotificationsForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification>
     fun getNotificationsForSession(sessionId: SessionId): List<StatusBarNotification>
     fun getMembershipNotificationForSession(sessionId: SessionId): List<StatusBarNotification>
     fun getMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification>
@@ -38,11 +36,9 @@ interface ActiveNotificationsProvider {
 
 @ContributesBinding(AppScope::class)
 class DefaultActiveNotificationsProvider @Inject constructor(
-    @ApplicationContext context: Context,
+    private val notificationManager: NotificationManagerCompat,
     private val notificationIdProvider: NotificationIdProvider,
 ) : ActiveNotificationsProvider {
-    private val notificationManager = NotificationManagerCompat.from(context)
-
     override fun getAllNotifications(): List<StatusBarNotification> {
         return notificationManager.activeNotifications
     }
@@ -55,13 +51,15 @@ class DefaultActiveNotificationsProvider @Inject constructor(
         return getNotificationsForSession(sessionId).filter { it.tag?.startsWith("invite-") == true }
     }
 
-    override fun getNotificationsForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification> {
-        val notificationId = notificationIdProvider.getRoomInvitationNotificationId(sessionId)
-        return notificationManager.activeNotifications.filter { it.id == notificationId }
+    override fun getMessageNotificationsForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification> {
+        val notificationId = notificationIdProvider.getRoomMessagesNotificationId(sessionId)
+        return notificationManager.activeNotifications.filter { it.id == notificationId && it.tag == roomId.value }
     }
 
     override fun getMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification> {
-        return getNotificationsForRoom(sessionId, roomId).filter { it.tag?.startsWith("invite-") == true }
+        val notificationId = notificationIdProvider.getRoomInvitationNotificationId(sessionId)
+        return notificationManager.activeNotifications
+            .filter { it.id == notificationId && it.tag == "invite-$roomId" }
     }
 
     override fun getSummaryNotification(sessionId: SessionId): StatusBarNotification? {

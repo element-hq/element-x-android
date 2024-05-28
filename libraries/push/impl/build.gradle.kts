@@ -64,6 +64,7 @@ dependencies {
     implementation(projects.services.toolbox.api)
 
     testImplementation(libs.test.junit)
+    testImplementation(libs.test.mockk)
     testImplementation(libs.test.robolectric)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)

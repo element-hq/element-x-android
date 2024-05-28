@@ -17,12 +17,15 @@
 package io.element.android.libraries.push.impl.notifications
 
 import android.app.Notification
+import androidx.core.app.NotificationManagerCompat
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SPACE_ID
 import io.element.android.libraries.matrix.test.A_THREAD_ID
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.push.impl.notifications.fake.FakeActiveNotificationsProvider
@@ -37,7 +40,12 @@ import io.element.android.services.appnavstate.api.NavigationState
 import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
 import io.element.android.services.appnavstate.test.aNavigationState
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
+import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
@@ -119,15 +127,76 @@ class DefaultNotificationDrawerManagerTest {
         defaultNotificationDrawerManager.destroy()
     }
 
+    @Test
+    fun `when MatrixClient has no cached user name a fallback one is used to render the notification`() = runTest {
+        val matrixClient = FakeMatrixClient(userDisplayName = null)
+        val matrixClientProvider = FakeMatrixClientProvider(getClient = { Result.success(matrixClient) })
+        val messageCreator = FakeRoomGroupMessageCreator()
+        val defaultNotificationDrawerManager = createDefaultNotificationDrawerManager(
+            matrixClientProvider = matrixClientProvider,
+            roomGroupMessageCreator = messageCreator,
+        )
+        // Gets a display name from MatrixClient.getUserProfile
+        matrixClient.givenGetProfileResult(A_SESSION_ID, Result.success(aMatrixUser(id = A_SESSION_ID.value, displayName = "alice")))
+        defaultNotificationDrawerManager.onNotifiableEventReceived(aNotifiableMessageEvent())
+
+        // Uses the user id as a fallback value since display name is blank
+        matrixClient.givenGetProfileResult(A_SESSION_ID, Result.success(aMatrixUser(id = A_SESSION_ID.value, displayName = "")))
+        defaultNotificationDrawerManager.onNotifiableEventReceived(aNotifiableMessageEvent())
+
+        // Uses the user id as a fallback value since the result fails
+        matrixClient.givenGetProfileResult(A_SESSION_ID, Result.failure(IllegalStateException("Failed to get profile")))
+        defaultNotificationDrawerManager.onNotifiableEventReceived(aNotifiableMessageEvent())
+
+        messageCreator.createRoomMessageResult.assertions()
+            .isCalledExactly(3)
+            .withSequence(
+                listOf(value(aMatrixUser(id = A_SESSION_ID.value, displayName = "alice")), any(), any(), any(), any()),
+                listOf(value(aMatrixUser(id = A_SESSION_ID.value, displayName = A_SESSION_ID.value)), any(), any(), any(), any()),
+                listOf(value(aMatrixUser(id = A_SESSION_ID.value, displayName = A_SESSION_ID.value, avatarUrl = AN_AVATAR_URL)), any(), any(), any(), any()),
+            )
+
+        defaultNotificationDrawerManager.destroy()
+    }
+
+    @Test
+    fun `clearSummaryNotificationIfNeeded will run after clearing all other notifications`() = runTest {
+        val notificationManager = mockk<NotificationManagerCompat> {
+            every { cancel(any(), any()) } returns Unit
+        }
+        val summaryId = NotificationIdProvider().getSummaryNotificationId(A_SESSION_ID)
+        val activeNotificationsProvider = FakeActiveNotificationsProvider(
+            mutableListOf(
+                mockk {
+                    every { id } returns summaryId
+                }
+            )
+        )
+        val defaultNotificationDrawerManager = createDefaultNotificationDrawerManager(
+            notificationManager = notificationManager,
+            activeNotificationsProvider = activeNotificationsProvider,
+        )
+
+        // Ask to clear all existing message notifications. Since only the summary notification is left, it should be cleared
+        defaultNotificationDrawerManager.clearAllMessagesEvents(A_SESSION_ID)
+
+        // Verify we asked to cancel the notification with summaryId
+        verify { notificationManager.cancel(null, summaryId) }
+
+        defaultNotificationDrawerManager.destroy()
+    }
+
     private fun TestScope.createDefaultNotificationDrawerManager(
+        notificationManager: NotificationManagerCompat = NotificationManagerCompat.from(RuntimeEnvironment.getApplication()),
         appNavigationStateService: AppNavigationStateService = FakeAppNavigationStateService(),
         roomGroupMessageCreator: RoomGroupMessageCreator = FakeRoomGroupMessageCreator(),
         summaryGroupMessageCreator: SummaryGroupMessageCreator = FakeSummaryGroupMessageCreator(),
         activeNotificationsProvider: FakeActiveNotificationsProvider = FakeActiveNotificationsProvider(),
+        matrixClientProvider: FakeMatrixClientProvider = FakeMatrixClientProvider(),
     ): DefaultNotificationDrawerManager {
         val context = RuntimeEnvironment.getApplication()
         return DefaultNotificationDrawerManager(
-            context = context,
+            notificationManager = notificationManager,
             notificationRenderer = NotificationRenderer(
                 notificationIdProvider = NotificationIdProvider(),
                 notificationDisplayer = DefaultNotificationDisplayer(context),
@@ -142,7 +211,7 @@ class DefaultNotificationDrawerManagerTest {
             notificationIdProvider = NotificationIdProvider(),
             appNavigationStateService = appNavigationStateService,
             coroutineScope = this,
-            matrixClientProvider = FakeMatrixClientProvider(),
+            matrixClientProvider = matrixClientProvider,
             imageLoaderHolder = FakeImageLoaderHolder(),
             activeNotificationsProvider = activeNotificationsProvider,
         )

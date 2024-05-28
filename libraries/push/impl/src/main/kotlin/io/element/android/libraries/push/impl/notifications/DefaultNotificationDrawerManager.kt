@@ -16,12 +16,10 @@
 
 package io.element.android.libraries.push.impl.notifications
 
-import android.content.Context
 import androidx.core.app.NotificationManagerCompat
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
@@ -50,7 +48,7 @@ private val loggerTag = LoggerTag("DefaultNotificationDrawerManager", LoggerTag.
  */
 @SingleIn(AppScope::class)
 class DefaultNotificationDrawerManager @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val notificationManager: NotificationManagerCompat,
     private val notificationRenderer: NotificationRenderer,
     private val notificationIdProvider: NotificationIdProvider,
     private val appNavigationStateService: AppNavigationStateService,
@@ -63,8 +61,6 @@ class DefaultNotificationDrawerManager @Inject constructor(
 
     // TODO EAx add a setting per user for this
     private var useCompleteNotificationFormat = true
-
-    private val notificationManager = NotificationManagerCompat.from(context)
 
     init {
         // Observe application state
@@ -124,6 +120,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
      */
     fun clearAllMessagesEvents(sessionId: SessionId) {
         notificationManager.cancel(null, notificationIdProvider.getRoomMessagesNotificationId(sessionId))
+        clearSummaryNotificationIfNeeded(sessionId)
     }
 
     /**

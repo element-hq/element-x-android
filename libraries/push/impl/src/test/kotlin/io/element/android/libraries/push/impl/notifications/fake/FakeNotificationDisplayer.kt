@@ -30,7 +30,6 @@ import io.element.android.tests.testutils.lambda.value
 class FakeNotificationDisplayer(
     var showNotificationMessageResult: LambdaThreeParamsRecorder<String?, Int, Notification, Boolean> = lambdaRecorder { _, _, _ -> true },
     var cancelNotificationMessageResult: LambdaTwoParamsRecorder<String?, Int, Unit> = lambdaRecorder { _, _ -> },
-    var cancelAllNotificationsResult: LambdaNoParamRecorder<Unit> = lambdaRecorder { -> },
     var displayDiagnosticNotificationResult: LambdaOneParamRecorder<Notification, Boolean> = lambdaRecorder { _ -> true },
     var dismissDiagnosticNotificationResult: LambdaNoParamRecorder<Unit> = lambdaRecorder { -> },
 ) : NotificationDisplayer {
@@ -40,10 +39,6 @@ class FakeNotificationDisplayer(
 
     override fun cancelNotificationMessage(tag: String?, id: Int) {
         return cancelNotificationMessageResult(tag, id)
-    }
-
-    override fun cancelAllNotifications() {
-        return cancelAllNotificationsResult()
     }
 
     override fun displayDiagnosticNotification(notification: Notification): Boolean {

@@ -115,10 +115,6 @@ class NotificationRenderer @Inject constructor(
             }
         }
     }
-
-    fun cancelAllNotifications() {
-        notificationDisplayer.cancelAllNotifications()
-    }
 }
 
 private fun List<NotifiableEvent>.groupByType(): GroupedNotificationEvents {

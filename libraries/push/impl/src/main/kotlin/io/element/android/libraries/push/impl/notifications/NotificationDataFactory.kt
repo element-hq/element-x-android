@@ -100,7 +100,7 @@ class DefaultNotificationDataFactory @Inject constructor(
     private fun NotifiableMessageEvent.canNotBeDisplayed() = isRedacted
 
     private fun getExistingNotificationForMessages(sessionId: SessionId, roomId: RoomId): Notification? {
-        return activeNotificationsProvider.getNotificationsForRoom(sessionId, roomId).firstOrNull()?.notification
+        return activeNotificationsProvider.getMessageNotificationsForRoom(sessionId, roomId).firstOrNull()?.notification
     }
 
     @JvmName("toNotificationInvites")

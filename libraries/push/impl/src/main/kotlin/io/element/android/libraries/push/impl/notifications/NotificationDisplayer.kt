@@ -31,7 +31,6 @@ import javax.inject.Inject
 interface NotificationDisplayer {
     fun showNotificationMessage(tag: String?, id: Int, notification: Notification): Boolean
     fun cancelNotificationMessage(tag: String?, id: Int)
-    fun cancelAllNotifications()
     fun displayDiagnosticNotification(notification: Notification): Boolean
     fun dismissDiagnosticNotification()
 }
@@ -53,15 +52,6 @@ class DefaultNotificationDisplayer @Inject constructor(
 
     override fun cancelNotificationMessage(tag: String?, id: Int) {
         notificationManager.cancel(tag, id)
-    }
-
-    override fun cancelAllNotifications() {
-        // Keep this try catch (reported by GA)
-        try {
-            notificationManager.cancelAll()
-        } catch (e: Exception) {
-            Timber.e(e, "## cancelAllNotifications() failed")
-        }
     }
 
     override fun displayDiagnosticNotification(notification: Notification): Boolean {

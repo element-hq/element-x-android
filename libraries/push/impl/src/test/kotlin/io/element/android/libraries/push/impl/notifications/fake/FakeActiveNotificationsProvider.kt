@@ -28,7 +28,7 @@ class FakeActiveNotificationsProvider(
         return activeNotifications
     }
 
-    override fun getNotificationsForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification> {
+    override fun getMessageNotificationsForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification> {
         return activeNotifications
     }
 
