@@ -16,27 +16,38 @@
 
 package io.element.android.features.preferences.impl.notifications
 
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.progressSemantics
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.androidutils.system.startNotificationSettingsIntent
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.DialogLikeBannerMolecule
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
+import io.element.android.libraries.designsystem.components.dialogs.ListOption
+import io.element.android.libraries.designsystem.components.dialogs.SingleSelectionDialog
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ListItem
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * A view that allows a user edit their global notification settings.
@@ -69,7 +80,7 @@ fun NotificationSettingsView(
             NotificationSettingsState.MatrixSettings.Uninitialized -> return@PreferencePage
             is NotificationSettingsState.MatrixSettings.Valid -> NotificationSettingsContentView(
                 matrixSettings = state.matrixSettings,
-                systemSettings = state.appSettings,
+                state = state,
                 onNotificationsEnabledChanged = { state.eventSink(NotificationSettingsEvents.SetNotificationsEnabled(it)) },
                 onGroupChatsClicked = { onOpenEditDefault(false) },
                 onDirectChatsClicked = { onOpenEditDefault(true) },
@@ -92,7 +103,7 @@ fun NotificationSettingsView(
 @Composable
 private fun NotificationSettingsContentView(
     matrixSettings: NotificationSettingsState.MatrixSettings.Valid,
-    systemSettings: NotificationSettingsState.AppSettings,
+    state: NotificationSettingsState,
     onNotificationsEnabledChanged: (Boolean) -> Unit,
     onGroupChatsClicked: () -> Unit,
     onDirectChatsClicked: () -> Unit,
@@ -103,6 +114,7 @@ private fun NotificationSettingsContentView(
     onTroubleshootNotificationsClicked: () -> Unit,
 ) {
     val context = LocalContext.current
+    val systemSettings: NotificationSettingsState.AppSettings = state.appSettings
     if (systemSettings.appNotificationsEnabled && !systemSettings.systemNotificationsEnabled) {
         PreferenceText(
             icon = CompoundIcons.NotificationsOffSolid(),
@@ -168,6 +180,52 @@ private fun NotificationSettingsContentView(
                 title = stringResource(id = R.string.troubleshoot_notifications_entry_point_title),
                 onClick = onTroubleshootNotificationsClicked
             )
+        }
+        if (state.showAdvancedSettings) {
+            PreferenceCategory(title = stringResource(id = CommonStrings.common_advanced_settings)) {
+                ListItem(
+                    headlineContent = {
+                        Text(text = stringResource(id = R.string.screen_advanced_settings_push_provider_android))
+                    },
+                    trailingContent = when (state.currentPushDistributor) {
+                        AsyncData.Uninitialized,
+                        is AsyncData.Loading -> ListItemContent.Custom {
+                            CircularProgressIndicator(
+                                modifier = Modifier
+                                    .progressSemantics()
+                                    .size(20.dp),
+                                strokeWidth = 2.dp
+                            )
+                        }
+                        is AsyncData.Failure -> ListItemContent.Text(
+                            stringResource(id = CommonStrings.common_error)
+                        )
+                        is AsyncData.Success -> ListItemContent.Text(
+                            state.currentPushDistributor.dataOrNull() ?: ""
+                        )
+                    },
+                    onClick = {
+                        if (state.currentPushDistributor.isReady()) {
+                            state.eventSink(NotificationSettingsEvents.ChangePushProvider)
+                        }
+                    }
+                )
+            }
+            if (state.showChangePushProviderDialog) {
+                SingleSelectionDialog(
+                    title = stringResource(id = R.string.screen_advanced_settings_choose_distributor_dialog_title_android),
+                    options = state.availablePushDistributors.map {
+                        ListOption(title = it)
+                    }.toImmutableList(),
+                    initialSelection = state.availablePushDistributors.indexOf(state.currentPushDistributor.dataOrNull()),
+                    onOptionSelected = { index ->
+                        state.eventSink(
+                            NotificationSettingsEvents.SetPushProvider(index)
+                        )
+                    },
+                    onDismissRequest = { state.eventSink(NotificationSettingsEvents.CancelChangePushProvider) },
+                )
+            }
         }
     }
 }

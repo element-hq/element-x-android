@@ -29,7 +29,7 @@ interface SystemNotificationsEnabledProvider {
 }
 
 @SingleIn(AppScope::class)
-@ContributesBinding(AppScope::class, boundType = SystemNotificationsEnabledProvider::class)
+@ContributesBinding(AppScope::class)
 class DefaultSystemNotificationsEnabledProvider @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : SystemNotificationsEnabledProvider {
