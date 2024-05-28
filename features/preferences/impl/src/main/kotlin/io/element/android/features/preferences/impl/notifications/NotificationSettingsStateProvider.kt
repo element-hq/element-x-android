@@ -18,6 +18,7 @@ package io.element.android.features.preferences.impl.notifications
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -35,8 +36,8 @@ open class NotificationSettingsStateProvider : PreviewParameterProvider<Notifica
             ),
             aValidNotificationSettingsState(availablePushDistributors = listOf("Firebase")),
             aValidNotificationSettingsState(showChangePushProviderDialog = true),
-            aValidNotificationSettingsState(currentPushDistributor = AsyncAction.Loading),
-            aValidNotificationSettingsState(currentPushDistributor = AsyncAction.Failure(Exception("Failed to change distributor"))),
+            aValidNotificationSettingsState(currentPushDistributor = AsyncData.Loading()),
+            aValidNotificationSettingsState(currentPushDistributor = AsyncData.Failure(Exception("Failed to change distributor"))),
             aInvalidNotificationSettingsState(),
             aInvalidNotificationSettingsState(fixFailed = true),
         )
@@ -49,7 +50,7 @@ fun aValidNotificationSettingsState(
     inviteForMeNotificationsEnabled: Boolean = true,
     systemNotificationsEnabled: Boolean = true,
     appNotificationEnabled: Boolean = true,
-    currentPushDistributor: AsyncAction<String> = AsyncAction.Success("Firebase"),
+    currentPushDistributor: AsyncData<String> = AsyncData.Success("Firebase"),
     availablePushDistributors: List<String> = listOf("Firebase", "ntfy"),
     showChangePushProviderDialog: Boolean = false,
     eventSink: (NotificationSettingsEvents) -> Unit = {},
@@ -84,7 +85,7 @@ fun aInvalidNotificationSettingsState(
         appNotificationsEnabled = true,
     ),
     changeNotificationSettingAction = AsyncAction.Uninitialized,
-    currentPushDistributor = AsyncAction.Uninitialized,
+    currentPushDistributor = AsyncData.Uninitialized,
     availablePushDistributors = persistentListOf(),
     showChangePushProviderDialog = false,
     eventSink = eventSink,

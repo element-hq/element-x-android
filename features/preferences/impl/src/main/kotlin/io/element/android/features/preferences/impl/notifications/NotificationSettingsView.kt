@@ -28,7 +28,7 @@ import androidx.lifecycle.Lifecycle
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.androidutils.system.startNotificationSettingsIntent
-import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.DialogLikeBannerMolecule
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
@@ -188,9 +188,8 @@ private fun NotificationSettingsContentView(
                         Text(text = stringResource(id = R.string.screen_advanced_settings_push_provider_android))
                     },
                     trailingContent = when (state.currentPushDistributor) {
-                        AsyncAction.Uninitialized,
-                        AsyncAction.Confirming,
-                        AsyncAction.Loading -> ListItemContent.Custom {
+                        AsyncData.Uninitialized,
+                        is AsyncData.Loading -> ListItemContent.Custom {
                             CircularProgressIndicator(
                                 modifier = Modifier
                                     .progressSemantics()
@@ -198,10 +197,10 @@ private fun NotificationSettingsContentView(
                                 strokeWidth = 2.dp
                             )
                         }
-                        is AsyncAction.Failure -> ListItemContent.Text(
+                        is AsyncData.Failure -> ListItemContent.Text(
                             stringResource(id = CommonStrings.common_error)
                         )
-                        is AsyncAction.Success -> ListItemContent.Text(
+                        is AsyncData.Success -> ListItemContent.Text(
                             state.currentPushDistributor.dataOrNull() ?: ""
                         )
                     },

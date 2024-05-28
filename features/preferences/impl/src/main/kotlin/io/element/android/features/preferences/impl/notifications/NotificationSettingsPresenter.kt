@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -90,16 +91,16 @@ class NotificationSettingsPresenter @Inject constructor(
             distributors.map { it.second.name }.toImmutableList()
         }
 
-        var currentDistributorName by remember { mutableStateOf<AsyncAction<String>>(AsyncAction.Uninitialized) }
+        var currentDistributorName by remember { mutableStateOf<AsyncData<String>>(AsyncData.Uninitialized) }
         var refreshPushProvider by remember { mutableIntStateOf(0) }
 
         LaunchedEffect(refreshPushProvider) {
             val p = pushService.getCurrentPushProvider()
             val name = p?.getCurrentDistributor(matrixClient)?.name
             currentDistributorName = if (name != null) {
-                AsyncAction.Success(name)
+                AsyncData.Success(name)
             } else {
-                AsyncAction.Failure(Exception("Failed to get current push provider"))
+                AsyncData.Failure(Exception("Failed to get current push provider"))
             }
         }
 
@@ -112,7 +113,7 @@ class NotificationSettingsPresenter @Inject constructor(
             data ?: return@launch
             // No op if the value is the same.
             if (data.second.name == currentDistributorName.dataOrNull()) return@launch
-            currentDistributorName = AsyncAction.Loading
+            currentDistributorName = AsyncData.Loading(currentDistributorName.dataOrNull())
             data.let { (pushProvider, distributor) ->
                 pushService.registerWith(
                     matrixClient = matrixClient,
@@ -124,7 +125,7 @@ class NotificationSettingsPresenter @Inject constructor(
                             refreshPushProvider++
                         },
                         {
-                            currentDistributorName = AsyncAction.Failure(it)
+                            currentDistributorName = AsyncData.Failure(it)
                         }
                     )
             }
