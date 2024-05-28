@@ -54,7 +54,7 @@ class DefaultActiveNotificationsProvider @Inject constructor(
 
     override fun getMessageNotificationsForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification> {
         val notificationId = notificationIdProvider.getRoomMessagesNotificationId(sessionId)
-        return notificationManager.activeNotifications.filter { it.id == notificationId && it.tag == roomId.value }
+        return getNotificationsForSession(sessionId).filter { it.id == notificationId && it.tag == roomId.value }
     }
 
     override fun getMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification> {
@@ -64,7 +64,7 @@ class DefaultActiveNotificationsProvider @Inject constructor(
 
     override fun getSummaryNotification(sessionId: SessionId): StatusBarNotification? {
         val summaryId = notificationIdProvider.getSummaryNotificationId(sessionId)
-        return notificationManager.activeNotifications.find { it.id == summaryId }
+        return getNotificationsForSession(sessionId).find { it.id == summaryId }
     }
 
     override fun count(sessionId: SessionId): Int {
