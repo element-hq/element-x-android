@@ -156,9 +156,9 @@ class DefaultAnalyticsServiceTest {
         )
         assertThat(store.analyticsIdFlow.first()).isEqualTo("")
         assertThat(sut.getAnalyticsId().first()).isEqualTo("")
-        sut.setAnalyticsId(anId)
-        assertThat(store.analyticsIdFlow.first()).isEqualTo(anId)
-        assertThat(sut.getAnalyticsId().first()).isEqualTo(anId)
+        sut.setAnalyticsId(AN_ID)
+        assertThat(store.analyticsIdFlow.first()).isEqualTo(AN_ID)
+        assertThat(sut.getAnalyticsId().first()).isEqualTo(AN_ID)
     }
 
     @Test
@@ -281,6 +281,6 @@ class DefaultAnalyticsServiceTest {
             ftueUseCaseSelection = UserProperties.FtueUseCaseSelection.WorkMessaging,
         )
         private val anError = Exception("a reason")
-        private val anId = "anId"
+        private const val AN_ID = "anId"
     }
 }
