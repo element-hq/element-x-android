@@ -20,7 +20,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.test.A_THROWABLE
@@ -247,7 +247,7 @@ class NotificationSettingsPresenterTests {
             presenter.present()
         }.test {
             val initialState = awaitLastSequentialItem()
-            assertThat(initialState.currentPushDistributor).isEqualTo(AsyncAction.Success("aDistributorName0"))
+            assertThat(initialState.currentPushDistributor).isEqualTo(AsyncData.Success("aDistributorName0"))
             assertThat(initialState.availablePushDistributors).containsExactly("aDistributorName0", "aDistributorName1")
             initialState.eventSink.invoke(NotificationSettingsEvents.ChangePushProvider)
             val withDialog = awaitItem()
@@ -261,10 +261,10 @@ class NotificationSettingsPresenterTests {
             withDialog.eventSink(NotificationSettingsEvents.SetPushProvider(1))
             val withNewProvider = awaitItem()
             assertThat(withNewProvider.showChangePushProviderDialog).isFalse()
-            assertThat(withNewProvider.currentPushDistributor).isEqualTo(AsyncAction.Loading)
+            assertThat(withNewProvider.currentPushDistributor).isInstanceOf(AsyncData.Loading::class.java)
             skipItems(1)
             val lastItem = awaitItem()
-            assertThat(lastItem.currentPushDistributor).isEqualTo(AsyncAction.Success("aDistributorName1"))
+            assertThat(lastItem.currentPushDistributor).isEqualTo(AsyncData.Success("aDistributorName1"))
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -288,9 +288,9 @@ class NotificationSettingsPresenterTests {
             withDialog.eventSink(NotificationSettingsEvents.SetPushProvider(1))
             val withNewProvider = awaitItem()
             assertThat(withNewProvider.showChangePushProviderDialog).isFalse()
-            assertThat(withNewProvider.currentPushDistributor).isEqualTo(AsyncAction.Loading)
+            assertThat(withNewProvider.currentPushDistributor).isInstanceOf(AsyncData.Loading::class.java)
             val lastItem = awaitItem()
-            assertThat(lastItem.currentPushDistributor).isInstanceOf(AsyncAction.Failure::class.java)
+            assertThat(lastItem.currentPushDistributor).isInstanceOf(AsyncData.Failure::class.java)
         }
     }
 
