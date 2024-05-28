@@ -140,7 +140,7 @@ class RoomListPresenterTests {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.showAvatarIndicator).isTrue()
-            sessionVerificationService.givenCanVerifySession(false)
+            sessionVerificationService.givenNeedsSessionVerification(false)
             encryptionService.emitBackupState(BackupState.ENABLED)
             val finalState = awaitItem()
             assertThat(finalState.showAvatarIndicator).isFalse()
@@ -282,7 +282,7 @@ class RoomListPresenterTests {
             roomListService = roomListService,
             encryptionService = encryptionService,
             sessionVerificationService = FakeSessionVerificationService().apply {
-                givenCanVerifySession(false)
+                givenNeedsSessionVerification(false)
             },
             syncService = FakeSyncService(initialState = SyncState.Running)
         )

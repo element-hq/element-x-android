@@ -28,7 +28,7 @@ fun aBuildMeta(
     applicationId: String = "",
     lowPrivacyLoggingEnabled: Boolean = true,
     versionName: String = "",
-    versionCode: Int = 0,
+    versionCode: Long = 0,
     gitRevision: String = "",
     gitBranchName: String = "",
     flavorDescription: String = "",

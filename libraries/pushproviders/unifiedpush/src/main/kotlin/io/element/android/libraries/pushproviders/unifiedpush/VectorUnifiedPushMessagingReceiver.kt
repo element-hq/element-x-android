@@ -21,8 +21,9 @@ import android.content.Intent
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.pushproviders.api.PushHandler
+import io.element.android.libraries.pushproviders.unifiedpush.registration.EndpointRegistrationHandler
+import io.element.android.libraries.pushproviders.unifiedpush.registration.RegistrationResult
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.unifiedpush.android.connector.MessagingReceiver
 import timber.log.Timber
@@ -37,8 +38,8 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var unifiedPushStore: UnifiedPushStore
     @Inject lateinit var unifiedPushGatewayResolver: UnifiedPushGatewayResolver
     @Inject lateinit var newGatewayHandler: UnifiedPushNewGatewayHandler
-
-    private val coroutineScope = CoroutineScope(SupervisorJob())
+    @Inject lateinit var endpointRegistrationHandler: EndpointRegistrationHandler
+    @Inject lateinit var coroutineScope: CoroutineScope
 
     override fun onReceive(context: Context, intent: Intent) {
         context.applicationContext.bindings<VectorUnifiedPushMessagingReceiverBindings>().inject(this)
@@ -69,20 +70,23 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
      * You should send the endpoint to your application server and sync for missing notifications.
      */
     override fun onNewEndpoint(context: Context, endpoint: String, instance: String) {
-        Timber.tag(loggerTag.value).i("onNewEndpoint: adding $endpoint")
-        // If the endpoint has changed
-        // or the gateway has changed
-        if (unifiedPushStore.getEndpoint(instance) != endpoint) {
-            unifiedPushStore.storeUpEndpoint(endpoint, instance)
-            coroutineScope.launch {
-                val gateway = unifiedPushGatewayResolver.getGateway(endpoint)
-                unifiedPushStore.storePushGateway(gateway, instance)
-                gateway?.let { pushGateway ->
-                    newGatewayHandler.handle(endpoint, pushGateway, instance)
+        Timber.tag(loggerTag.value).i("onNewEndpoint: $endpoint")
+        coroutineScope.launch {
+            val gateway = unifiedPushGatewayResolver.getGateway(endpoint)
+            unifiedPushStore.storePushGateway(instance, gateway)
+            val result = newGatewayHandler.handle(endpoint, gateway, instance)
+                .onFailure {
+                    Timber.tag(loggerTag.value).e(it, "Failed to handle new gateway")
                 }
-            }
-        } else {
-            Timber.tag(loggerTag.value).i("onNewEndpoint: skipped")
+                .onSuccess {
+                    unifiedPushStore.storeUpEndpoint(instance, endpoint)
+                }
+            endpointRegistrationHandler.registrationDone(
+                RegistrationResult(
+                    clientSecret = instance,
+                    result = result,
+                )
+            )
         }
         guardServiceStarter.stop()
     }

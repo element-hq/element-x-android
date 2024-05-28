@@ -21,22 +21,23 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.push.api.GetCurrentPushProvider
 import io.element.android.libraries.push.api.PushService
-import io.element.android.libraries.push.impl.notifications.DefaultNotificationDrawerManager
+import io.element.android.libraries.push.impl.test.TestPush
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
+import timber.log.Timber
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultPushService @Inject constructor(
-    private val defaultNotificationDrawerManager: DefaultNotificationDrawerManager,
-    private val pushersManager: PushersManager,
+    private val testPush: TestPush,
     private val userPushStoreFactory: UserPushStoreFactory,
     private val pushProviders: Set<@JvmSuppressWildcards PushProvider>,
     private val getCurrentPushProvider: GetCurrentPushProvider,
 ) : PushService {
-    override fun notificationStyleChanged() {
-        defaultNotificationDrawerManager.notificationStyleChanged()
+    override suspend fun getCurrentPushProvider(): PushProvider? {
+        val currentPushProvider = getCurrentPushProvider.getCurrentPushProvider()
+        return pushProviders.find { it.name == currentPushProvider }
     }
 
     override fun getAvailablePushProviders(): List<PushProvider> {
@@ -45,26 +46,36 @@ class DefaultPushService @Inject constructor(
             .sortedBy { it.index }
     }
 
-    /**
-     * Get current push provider, compare with provided one, then unregister and register if different, and store change.
-     */
-    override suspend fun registerWith(matrixClient: MatrixClient, pushProvider: PushProvider, distributor: Distributor) {
+    override suspend fun registerWith(
+        matrixClient: MatrixClient,
+        pushProvider: PushProvider,
+        distributor: Distributor,
+    ): Result<Unit> {
+        Timber.d("Registering with ${pushProvider.name}/${distributor.name}}")
         val userPushStore = userPushStoreFactory.getOrCreate(matrixClient.sessionId)
         val currentPushProviderName = userPushStore.getPushProviderName()
-        if (currentPushProviderName != pushProvider.name) {
+        val currentPushProvider = pushProviders.find { it.name == currentPushProviderName }
+        val currentDistributorValue = currentPushProvider?.getCurrentDistributor(matrixClient)?.value
+        if (currentPushProviderName != pushProvider.name || currentDistributorValue != distributor.value) {
             // Unregister previous one if any
-            pushProviders.find { it.name == currentPushProviderName }?.unregister(matrixClient)
+            currentPushProvider
+                ?.also { Timber.d("Unregistering previous push provider $currentPushProviderName/$currentDistributorValue") }
+                ?.unregister(matrixClient)
+                ?.onFailure {
+                    Timber.w(it, "Failed to unregister previous push provider")
+                    return Result.failure(it)
+                }
         }
-        pushProvider.registerWith(matrixClient, distributor)
         // Store new value
         userPushStore.setPushProviderName(pushProvider.name)
+        // Then try to register
+        return pushProvider.registerWith(matrixClient, distributor)
     }
 
     override suspend fun testPush(): Boolean {
-        val currentPushProvider = getCurrentPushProvider.getCurrentPushProvider()
-        val pushProvider = pushProviders.find { it.name == currentPushProvider } ?: return false
+        val pushProvider = getCurrentPushProvider() ?: return false
         val config = pushProvider.getCurrentUserPushConfig() ?: return false
-        pushersManager.testPush(config)
+        testPush.execute(config)
         return true
     }
 }

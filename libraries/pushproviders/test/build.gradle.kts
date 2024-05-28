@@ -24,4 +24,5 @@ android {
 dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.pushproviders.api)
+    implementation(projects.tests.testutils)
 }

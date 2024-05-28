@@ -121,6 +121,7 @@
   <string name="common_blocked_users">"Заблакіраваныя карыстальнікі"</string>
   <string name="common_bubbles">"Бурбалкі"</string>
   <string name="common_call_invite">"Ідзе выклік (не падтрымліваецца)"</string>
+  <string name="common_call_started">"Выклік пачаўся"</string>
   <string name="common_chat_backup">"Рэзервовае капіраванне чатаў"</string>
   <string name="common_copyright">"Аўтарскае права"</string>
   <string name="common_creating_room">"Стварэнне пакоя…"</string>
@@ -143,7 +144,7 @@
   <string name="common_file_saved_on_disk_android">"Файл захаваны ў папку Спампоўкі"</string>
   <string name="common_forward_message">"Перасылка паведамлення"</string>
   <string name="common_gif">"GIF"</string>
-  <string name="common_image">"Выява"</string>
+  <string name="common_image">"Відарыс"</string>
   <string name="common_in_reply_to">"У адказ на %1$s"</string>
   <string name="common_install_apk_android">"Усталяваць APK"</string>
   <string name="common_invite_unknown_profile">"Гэты Matrix ID не знойдзены, таму запрашэнне можа быць не атрымана."</string>
@@ -153,7 +154,7 @@
   <string name="common_loading">"Загрузка…"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d удзельнік"</item>
-    <item quantity="few">"%1$d удзельніка"</item>
+    <item quantity="few">"%1$d удзельнікі"</item>
     <item quantity="many">"%1$d удзельнікаў"</item>
   </plurals>
   <string name="common_message">"Паведамленне"</string>

@@ -221,18 +221,6 @@ class DefaultNotificationDrawerManager @Inject constructor(
         }
     }
 
-    // TODO EAx Must be per account
-    fun notificationStyleChanged() {
-        updateEvents(doRender = true) {
-            val newSettings = true // pushDataStore.useCompleteNotificationFormat()
-            if (newSettings != useCompleteNotificationFormat) {
-                // Settings has changed, remove all current notifications
-                notificationRenderer.cancelAllNotifications()
-                useCompleteNotificationFormat = newSettings
-            }
-        }
-    }
-
     private fun updateEvents(
         doRender: Boolean,
         action: (NotificationEventQueue) -> Unit,

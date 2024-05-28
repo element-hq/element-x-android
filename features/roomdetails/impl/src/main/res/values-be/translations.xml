@@ -66,7 +66,7 @@
   <string name="screen_room_member_list_banning_user">"Блакіроўка %1$s"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d удзельнік"</item>
-    <item quantity="few">"%1$d удзельніка"</item>
+    <item quantity="few">"%1$d удзельнікі"</item>
     <item quantity="many">"%1$d удзельнікаў"</item>
   </plurals>
   <string name="screen_room_member_list_manage_member_ban">"Выдаліць і заблакіраваць удзельніка"</string>

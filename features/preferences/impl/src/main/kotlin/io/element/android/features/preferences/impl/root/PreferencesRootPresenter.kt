@@ -74,7 +74,7 @@ class PreferencesRootPresenter @Inject constructor(
         }
 
         // We should display the 'complete verification' option if the current session can be verified
-        val canVerifyUserSession by sessionVerificationService.canVerifySessionFlow.collectAsState(false)
+        val canVerifyUserSession by sessionVerificationService.needsSessionVerification.collectAsState(false)
 
         val showSecureBackupIndicator by indicatorService.showSettingChatBackupIndicator()
 

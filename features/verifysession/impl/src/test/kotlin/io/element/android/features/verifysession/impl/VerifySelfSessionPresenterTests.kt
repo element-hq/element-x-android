@@ -296,8 +296,7 @@ class VerifySelfSessionPresenterTests {
     @Test
     fun `present - When verification is not needed, the flow is completed`() = runTest {
         val service = FakeSessionVerificationService().apply {
-            givenCanVerifySession(false)
-            givenIsReady(true)
+            givenNeedsSessionVerification(false)
             givenVerifiedStatus(SessionVerifiedStatus.Verified)
             givenVerificationFlowState(VerificationFlowState.Finished)
         }

@@ -47,9 +47,6 @@ import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
-import io.element.android.features.lockscreen.api.LockScreenEntryPoint
-import io.element.android.features.lockscreen.api.LockScreenLockState
-import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.PreferencesEntryPoint
@@ -100,8 +97,6 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val coroutineScope: CoroutineScope,
     private val networkMonitor: NetworkMonitor,
     private val ftueService: FtueService,
-    private val lockScreenEntryPoint: LockScreenEntryPoint,
-    private val lockScreenStateService: LockScreenService,
     private val roomDirectoryEntryPoint: RoomDirectoryEntryPoint,
     private val matrixClient: MatrixClient,
     snackbarDispatcher: SnackbarDispatcher,
@@ -111,7 +106,7 @@ class LoggedInFlowNode @AssistedInject constructor(
         savedStateMap = buildContext.savedStateMap,
     ),
     permanentNavModel = PermanentNavModel(
-        navTargets = setOf(NavTarget.LoggedInPermanent, NavTarget.LockPermanent),
+        navTargets = setOf(NavTarget.LoggedInPermanent),
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -190,9 +185,6 @@ class LoggedInFlowNode @AssistedInject constructor(
         data object LoggedInPermanent : NavTarget
 
         @Parcelize
-        data object LockPermanent : NavTarget
-
-        @Parcelize
         data object RoomList : NavTarget
 
         @Parcelize
@@ -234,11 +226,6 @@ class LoggedInFlowNode @AssistedInject constructor(
             NavTarget.Placeholder -> createNode<PlaceholderNode>(buildContext)
             NavTarget.LoggedInPermanent -> {
                 createNode<LoggedInNode>(buildContext)
-            }
-            NavTarget.LockPermanent -> {
-                lockScreenEntryPoint.nodeBuilder(this, buildContext)
-                    .target(LockScreenEntryPoint.Target.Unlock)
-                    .build()
             }
             NavTarget.RoomList -> {
                 val callback = object : RoomListEntryPoint.Callback {
@@ -430,14 +417,10 @@ class LoggedInFlowNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         Box(modifier = modifier) {
-            val lockScreenState by lockScreenStateService.lockState.collectAsState()
             val ftueState by ftueService.state.collectAsState()
             BackstackView()
             if (ftueState is FtueState.Complete) {
                 PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
-            }
-            if (lockScreenState == LockScreenLockState.Locked) {
-                PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LockPermanent)
             }
         }
     }

@@ -43,7 +43,7 @@ fun LockScreenSettingsView(
         onBackPressed = onBackPressed,
         modifier = modifier
     ) {
-        PreferenceCategory(showDivider = false) {
+        PreferenceCategory(showTopDivider = false) {
             PreferenceText(
                 title = stringResource(id = R.string.screen_app_lock_settings_change_pin),
                 onClick = onChangePinClicked

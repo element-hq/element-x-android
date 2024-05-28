@@ -18,6 +18,7 @@ package io.element.android.libraries.pushstore.impl.clientsecret
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.InMemoryPushClientSecretStore
 import io.element.android.libraries.sessionstorage.test.observer.NoOpSessionObserver
 import kotlinx.coroutines.test.runTest
 import org.junit.Test

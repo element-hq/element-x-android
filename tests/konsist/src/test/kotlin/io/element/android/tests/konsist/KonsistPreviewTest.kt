@@ -78,6 +78,7 @@ class KonsistPreviewTest {
                 "IconTitleSubtitleMoleculeWithResIconPreview",
                 "IconsCompoundPreview",
                 "IconsOtherPreview",
+                "MarkdownTextComposerEditPreview",
                 "MentionSpanPreview",
                 "MessageComposerViewVoicePreview",
                 "MessagesReactionButtonAddPreview",

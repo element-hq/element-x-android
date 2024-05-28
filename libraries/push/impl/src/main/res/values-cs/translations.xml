@@ -52,7 +52,6 @@
     <item quantity="few">"%d místnosti"</item>
     <item quantity="other">"%d místností"</item>
   </plurals>
-  <string name="push_choose_distributor_dialog_title_android">"Vyberte, jak chcete přijímat oznámení"</string>
   <string name="push_distributor_background_sync_android">"Synchronizace na pozadí"</string>
   <string name="push_distributor_firebase_android">"Služby Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Nebyly nalezeny žádné funkční služby Google Play. Oznámení nemusí fungovat správně."</string>

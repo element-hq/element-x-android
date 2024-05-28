@@ -23,16 +23,26 @@ import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.tests.testutils.simulateLongTask
 
 class FakePushService(
-    private val testPushBlock: suspend () -> Boolean = { true }
+    private val testPushBlock: suspend () -> Boolean = { true },
+    private val availablePushProviders: List<PushProvider> = emptyList(),
+    private val registerWithLambda: suspend (MatrixClient, PushProvider, Distributor) -> Result<Unit> = { _, _, _ ->
+        Result.success(Unit)
+    },
 ) : PushService {
-    override fun notificationStyleChanged() {
+    override suspend fun getCurrentPushProvider(): PushProvider? {
+        return availablePushProviders.firstOrNull()
     }
 
     override fun getAvailablePushProviders(): List<PushProvider> {
-        return emptyList()
+        return availablePushProviders
     }
 
-    override suspend fun registerWith(matrixClient: MatrixClient, pushProvider: PushProvider, distributor: Distributor) {
+    override suspend fun registerWith(
+        matrixClient: MatrixClient,
+        pushProvider: PushProvider,
+        distributor: Distributor,
+    ): Result<Unit> = simulateLongTask {
+        return registerWithLambda(matrixClient, pushProvider, distributor)
     }
 
     override suspend fun testPush(): Boolean = simulateLongTask {

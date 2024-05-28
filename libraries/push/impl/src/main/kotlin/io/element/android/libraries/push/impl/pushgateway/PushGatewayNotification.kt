@@ -20,7 +20,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class PushGatewayNotification(
+data class PushGatewayNotification(
     @SerialName("event_id")
     val eventId: String,
     @SerialName("room_id")

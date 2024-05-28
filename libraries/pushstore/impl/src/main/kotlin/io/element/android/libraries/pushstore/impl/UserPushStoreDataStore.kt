@@ -76,9 +76,13 @@ class UserPushStoreDataStore(
         return context.dataStore.data.first()[currentPushKey]
     }
 
-    override suspend fun setCurrentRegisteredPushKey(value: String) {
+    override suspend fun setCurrentRegisteredPushKey(value: String?) {
         context.dataStore.edit {
-            it[currentPushKey] = value
+            if (value == null) {
+                it.remove(currentPushKey)
+            } else {
+                it[currentPushKey] = value
+            }
         }
     }
 

@@ -6,6 +6,7 @@
   <string name="screen_session_verification_compare_numbers_subtitle">"Bekräfta att siffrorna nedan matchar de som visas på din andra session."</string>
   <string name="screen_session_verification_compare_numbers_title">"Jämför siffror"</string>
   <string name="screen_session_verification_complete_subtitle">"Din nya session är nu verifierad. Den har tillgång till dina krypterade meddelanden, och andra användare kommer att se den som betrodd."</string>
+  <string name="screen_session_verification_enter_recovery_key">"Ange återställningsnyckel"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Bevisa att det är du för att komma åt din krypterade meddelandehistorik."</string>
   <string name="screen_session_verification_open_existing_session_title">"Öppna en befintlig session"</string>
   <string name="screen_session_verification_positive_button_canceled">"Försök att verifiera igen"</string>

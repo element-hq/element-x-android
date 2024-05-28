@@ -20,6 +20,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.bumble.appyx.core.node.Node
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.ext.list.withAllParentsOf
+import com.lemonappdev.konsist.api.ext.list.withNameContaining
+import com.lemonappdev.konsist.api.ext.list.withoutName
 import com.lemonappdev.konsist.api.verify.assertTrue
 import io.element.android.libraries.architecture.Presenter
 import org.junit.Test
@@ -60,6 +62,23 @@ class KonsistClassNameTest {
                     .removeSuffix("?")
                     .replace(".", "")
                 it.name.endsWith("Provider") && (it.name.contains("IconList") || it.name.contains(providedType))
+            }
+    }
+
+    @Test
+    fun `Fake classes must be named using Fake and the interface it fakes`() {
+        Konsist.scopeFromProject()
+            .classes()
+            .withNameContaining("Fake")
+            .withoutName(
+                "FakeFileSystem",
+                "FakeImageLoader",
+                "FakeRustRoom",
+            )
+            .assertTrue {
+                val interfaceName = it.name.replace("Fake", "")
+                it.name.startsWith("Fake") &&
+                    it.parents.any { parent -> parent.name.replace(".", "") == interfaceName }
             }
     }
 }

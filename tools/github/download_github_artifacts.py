@@ -50,7 +50,7 @@ parser.add_argument('-i',
 parser.add_argument('-d',
                     '--directory',
                     default="",
-                    help='the target directory, where files will be downloaded. If not provided the build number will be used to create a directory.')
+                    help='the target directory, where files will be downloaded. If not provided the artifactId will be used to create a directory.')
 parser.add_argument('-v',
                     '--verbose',
                     help="increase output verbosity.",
@@ -71,15 +71,27 @@ if args.verbose:
 # Ex: https://github.com/element-hq/element-x-android/actions/runs/7299827320/artifacts/1131077517
 artifactUrl = args.artifactUrl
 
-url_regex = r"https://github.com/(.+?)/(.+?)/actions/runs/.+?/artifacts/(.+)"
-result = re.search(url_regex, artifactUrl)
+# if artifactUrl starts with https://github.com
+if artifactUrl.startswith('https://github.com'):
+    url_regex = r"https://github.com/(.+?)/(.+?)/actions/runs/.+?/artifacts/(.+)"
+    result = re.search(url_regex, artifactUrl)
 
-if result is None:
-    print(
-        "❌ Invalid parameter --artifactUrl '%s'. Please check the format.\nIt should be something like: %s" %
-        (artifactUrl, 'https://github.com/element-hq/element-x-android/actions/runs/7299827320/artifacts/1131077517')
-    )
-    exit(1)
+    if result is None:
+        print(
+            "❌ Invalid parameter --artifactUrl '%s'. Please check the format.\nIt should be something like: %s" %
+            (artifactUrl, 'https://github.com/element-hq/element-x-android/actions/runs/7299827320/artifacts/1131077517')
+        )
+        exit(1)
+else:
+    url_regex = r"https://api.github.com/repos/(.+?)/(.+?)/actions/artifacts/(.+)"
+    result = re.search(url_regex, artifactUrl)
+    if result is None:
+        print(
+            "❌ Invalid parameter --artifactUrl '%s'. Please check the format.\nIt should be something like: %s" %
+            (artifactUrl, 'https://api.github.com/repos/element-hq/element-x-android/actions/artifacts/1131077517')
+        )
+        exit(1)
+
 
 (gitHubRepoOwner, gitHubRepo, artifactId) = result.groups()
 

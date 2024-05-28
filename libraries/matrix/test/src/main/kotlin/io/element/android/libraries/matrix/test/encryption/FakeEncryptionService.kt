@@ -39,6 +39,9 @@ class FakeEncryptionService : EncryptionService {
 
     private var enableBackupsFailure: Exception? = null
 
+    private var curve25519: String? = null
+    private var ed25519: String? = null
+
     fun givenEnableBackupsFailure(exception: Exception?) {
         enableBackupsFailure = exception
     }
@@ -93,6 +96,15 @@ class FakeEncryptionService : EncryptionService {
     override fun waitForBackupUploadSteadyState(): Flow<BackupUploadState> {
         return waitForBackupUploadSteadyStateFlow
     }
+
+    fun givenDeviceKeys(curve25519: String?, ed25519: String?) {
+        this.curve25519 = curve25519
+        this.ed25519 = ed25519
+    }
+
+    override suspend fun deviceCurve25519(): String? = curve25519
+
+    override suspend fun deviceEd25519(): String? = ed25519
 
     suspend fun emitBackupState(state: BackupState) {
         backupStateStateFlow.emit(state)
