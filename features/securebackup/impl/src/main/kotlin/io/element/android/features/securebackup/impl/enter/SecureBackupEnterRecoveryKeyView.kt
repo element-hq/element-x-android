@@ -58,9 +58,10 @@ fun SecureBackupEnterRecoveryKeyView(
         iconVector = CompoundIcons.KeySolid(),
         title = stringResource(id = R.string.screen_recovery_key_confirm_title),
         subTitle = stringResource(id = R.string.screen_recovery_key_confirm_description),
-        content = { Content(state = state) },
         buttons = { Buttons(state = state, onCreateRecoveryKey = onCreateNewRecoveryKey) }
-    )
+    ) {
+        Content(state = state)
+    }
 }
 
 @Composable

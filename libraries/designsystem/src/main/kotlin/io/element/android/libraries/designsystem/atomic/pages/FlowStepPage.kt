@@ -54,8 +54,8 @@ fun FlowStepPage(
     modifier: Modifier = Modifier,
     onBackClick: (() -> Unit)? = null,
     subTitle: String? = null,
-    content: @Composable () -> Unit = {},
     buttons: @Composable ColumnScope.() -> Unit = {},
+    content: @Composable () -> Unit = {},
 ) {
     BackHandler(enabled = onBackClick != null) {
         onBackClick?.invoke()
@@ -98,21 +98,20 @@ internal fun FlowStepPagePreview() = ElementPreview {
         title = "Title",
         subTitle = "Subtitle",
         iconVector = CompoundIcons.Computer(),
-        content = {
-            Box(
-                Modifier
-                    .fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "Content",
-                    style = ElementTheme.typography.fontHeadingXlBold
-                )
-            }
-        },
         buttons = {
             TextButton(text = "A button", onClick = { })
             Button(text = "Continue", onClick = { })
         }
-    )
+    ) {
+        Box(
+            Modifier
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "Content",
+                style = ElementTheme.typography.fontHeadingXlBold
+            )
+        }
+    }
 }

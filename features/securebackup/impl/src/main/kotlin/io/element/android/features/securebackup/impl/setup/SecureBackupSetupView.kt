@@ -52,9 +52,10 @@ fun SecureBackupSetupView(
         title = title(state),
         subTitle = subtitle(state),
         iconVector = CompoundIcons.KeySolid(),
-        content = { Content(state) },
         buttons = { Buttons(state, onFinish = onSuccess) },
-    )
+    ) {
+        Content(state = state)
+    }
 
     if (state.showSaveConfirmationDialog) {
         ConfirmationDialog(

@@ -64,7 +64,6 @@ fun LogoutView(
         subTitle = subtitle(state),
         iconVector = CompoundIcons.KeySolid(),
         modifier = modifier,
-        content = { Content(state) },
         buttons = {
             Buttons(
                 state = state,
@@ -74,7 +73,9 @@ fun LogoutView(
                 }
             )
         },
-    )
+    ) {
+        Content(state)
+    }
 
     LogoutActionDialog(
         state.logoutAction,
