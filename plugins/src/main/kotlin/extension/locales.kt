@@ -14,7 +14,7 @@ val locales = setOf(
     "in",
     "it",
     "ka",
-    "pt-rBR",
+    "pt",
     "ro",
     "ru",
     "sk",
