@@ -268,12 +268,16 @@ class TimelineItemContentMessageFactory @Inject constructor(
         }
         // Find and set as URLSpans any links present in the text
         LinkifyCompat.addLinks(this, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS or Linkify.EMAIL_ADDRESSES)
-        // Restore old spans if they don't conflict with the new ones
+        // Restore old spans, remove new ones if there is a conflict
         for ((urlSpan, location) in oldURLSpans) {
             val (start, end) = location
-            if (getSpans<URLSpan>(start, end).isEmpty()) {
-                setSpan(urlSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            val addedSpans = getSpans<URLSpan>(start, end).orEmpty()
+            if (addedSpans.isNotEmpty()) {
+                for (span in addedSpans) {
+                    removeSpan(span)
+                }
             }
+            setSpan(urlSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         return this
     }

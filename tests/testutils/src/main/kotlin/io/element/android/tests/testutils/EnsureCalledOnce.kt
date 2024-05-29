@@ -105,3 +105,9 @@ fun <T, R> ensureCalledOnceWithParam(param: T, block: (callback: EnsureCalledOnc
     block(callback)
     callback.assertSuccess()
 }
+
+fun <P1, P2> ensureCalledOnceWithTwoParams(param1: P1, param2: P2, block: (callback: EnsureCalledOnceWithTwoParams<P1, P2>) -> Unit) {
+    val callback = EnsureCalledOnceWithTwoParams(param1, param2)
+    block(callback)
+    callback.assertSuccess()
+}

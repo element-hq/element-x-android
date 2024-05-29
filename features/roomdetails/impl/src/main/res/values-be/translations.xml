@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_dm_details_block_alert_action">"Заблакіраваць"</string>
-  <string name="screen_dm_details_block_alert_description">"Заблакіраваныя карыстальнікі не змогуць адпраўляць вам паведамленні, і ўсе іх паведамленні будуць схаваны. Вы можаце разблакіраваць іх у любы час."</string>
-  <string name="screen_dm_details_block_user">"Заблакіраваць карыстальніка"</string>
-  <string name="screen_dm_details_unblock_alert_action">"Разблакіраваць"</string>
-  <string name="screen_dm_details_unblock_alert_description">"Вы зноў зможаце ўбачыць усе паведамленні."</string>
-  <string name="screen_dm_details_unblock_user">"Разблакіраваць карыстальніка"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Пры абнаўленні налад апавяшчэнняў адбылася памылка."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Ваш хатні сервер не падтрымлівае гэтую опцыю ў зашыфраваных пакоях, вы можаце не атрымаць апавяшчэнне ў некаторых пакоях."</string>
   <string name="screen_polls_history_title">"Апытанні"</string>
@@ -41,6 +35,9 @@
   <string name="screen_room_details_add_topic_title">"Дадаць тэму"</string>
   <string name="screen_room_details_already_a_member">"Ужо ўдзельнік"</string>
   <string name="screen_room_details_already_invited">"Ужо запрасілі"</string>
+  <string name="screen_room_details_badge_encrypted">"Зашыфравана"</string>
+  <string name="screen_room_details_badge_not_encrypted">"Не зашыфравана"</string>
+  <string name="screen_room_details_badge_public">"Публічны пакой"</string>
   <string name="screen_room_details_edit_room_title">"Рэдагаваць пакой"</string>
   <string name="screen_room_details_edition_error">"Адбылася невядомая памылка, і інфармацыю нельга было змяніць."</string>
   <string name="screen_room_details_edition_error_title">"Немагчыма абнавіць пакой"</string>
@@ -69,7 +66,7 @@
   <string name="screen_room_member_list_banning_user">"Блакіроўка %1$s"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d удзельнік"</item>
-    <item quantity="few">"%1$d удзельніка"</item>
+    <item quantity="few">"%1$d удзельнікі"</item>
     <item quantity="many">"%1$d удзельнікаў"</item>
   </plurals>
   <string name="screen_room_member_list_manage_member_ban">"Выдаліць і заблакіраваць удзельніка"</string>
@@ -117,5 +114,4 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Ролі"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Дэталі пакоя"</string>
   <string name="screen_room_roles_and_permissions_title">"Ролі і дазволы"</string>
-  <string name="screen_start_chat_error_starting_chat">"Пры спробе пачаць чат адбылася памылка"</string>
 </resources>

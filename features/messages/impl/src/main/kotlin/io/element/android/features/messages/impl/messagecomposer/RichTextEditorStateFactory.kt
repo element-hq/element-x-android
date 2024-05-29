@@ -25,13 +25,13 @@ import javax.inject.Inject
 
 interface RichTextEditorStateFactory {
     @Composable
-    fun create(): RichTextEditorState
+    fun remember(): RichTextEditorState
 }
 
 @ContributesBinding(AppScope::class)
 class DefaultRichTextEditorStateFactory @Inject constructor() : RichTextEditorStateFactory {
     @Composable
-    override fun create(): RichTextEditorState {
+    override fun remember(): RichTextEditorState {
         return rememberRichTextEditorState()
     }
 }

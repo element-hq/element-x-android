@@ -19,10 +19,10 @@ package io.element.android.features.call.utils
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
-import io.element.android.libraries.matrix.test.widget.FakeWidgetDriver
+import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver
 
 class FakeCallWidgetProvider(
-    private val widgetDriver: FakeWidgetDriver = FakeWidgetDriver(),
+    private val widgetDriver: FakeMatrixWidgetDriver = FakeMatrixWidgetDriver(),
     private val url: String = "https://call.element.io",
 ) : CallWidgetProvider {
     var getWidgetCalled = false

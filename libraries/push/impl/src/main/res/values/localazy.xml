@@ -46,7 +46,6 @@
     <item quantity="one">"%d room"</item>
     <item quantity="other">"%d rooms"</item>
   </plurals>
-  <string name="push_choose_distributor_dialog_title_android">"Choose how to receive notifications"</string>
   <string name="push_distributor_background_sync_android">"Background synchronization"</string>
   <string name="push_distributor_firebase_android">"Google Services"</string>
   <string name="push_no_valid_google_play_services_apk_android">"No valid Google Play Services found. Notifications may not work properly."</string>

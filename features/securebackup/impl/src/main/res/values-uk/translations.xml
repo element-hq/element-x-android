@@ -12,9 +12,9 @@
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Вимкнути"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Ви втратите зашифровані повідомлення, якщо вийдете з усіх пристроїв."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Ви впевнені, що хочете вимкнути резервне копіювання?"</string>
-  <string name="screen_key_backup_disable_description">"Вимкнення резервного копіювання призведе до видалення поточної резервної копії ключа шифрування та вимкнення інших функцій безпеки. В цьому випадку ви будете:"</string>
-  <string name="screen_key_backup_disable_description_point_1">"Не мати зашифрованої історії повідомлень на нових пристроях"</string>
-  <string name="screen_key_backup_disable_description_point_2">"Втратите доступ до зашифрованих повідомлень, якщо ви вийдете з усіх %1$s сеансів"</string>
+  <string name="screen_key_backup_disable_description">"Вимкнення резервного копіювання призведе до видалення поточної резервної копії ключа шифрування та вимкнення інших функцій безпеки. В такому разі ви:"</string>
+  <string name="screen_key_backup_disable_description_point_1">"Не матимете історії зашифрованих повідомлень на нових пристроях"</string>
+  <string name="screen_key_backup_disable_description_point_2">"Втратите доступ до зашифрованих повідомлень, якщо вийдете з усіх сеансів %1$s"</string>
   <string name="screen_key_backup_disable_title">"Ви впевнені, що хочете вимкнути резервне копіювання?"</string>
   <string name="screen_recovery_key_change_description">"Отримайте новий ключ відновлення, якщо ви втратили існуючий ключ. Після зміни ключа відновлення ваш старий більше не буде працювати."</string>
   <string name="screen_recovery_key_change_generate_key">"Згенерувати новий ключ відновлення"</string>

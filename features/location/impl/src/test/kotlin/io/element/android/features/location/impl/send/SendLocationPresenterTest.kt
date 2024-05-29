@@ -24,9 +24,9 @@ import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.aPermissionsState
 import io.element.android.features.location.impl.common.actions.FakeLocationActions
+import io.element.android.features.location.impl.common.permissions.FakePermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsEvents
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
-import io.element.android.features.location.impl.common.permissions.PermissionsPresenterFake
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.matrix.api.room.location.AssetType
@@ -45,7 +45,7 @@ class SendLocationPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
-    private val permissionsPresenterFake = PermissionsPresenterFake()
+    private val fakePermissionsPresenter = FakePermissionsPresenter()
     private val fakeMatrixRoom = FakeMatrixRoom()
     private val fakeAnalyticsService = FakeAnalyticsService()
     private val fakeMessageComposerContext = FakeMessageComposerContext()
@@ -53,7 +53,7 @@ class SendLocationPresenterTest {
     private val fakeBuildMeta = aBuildMeta(applicationName = "app name")
     private val sendLocationPresenter: SendLocationPresenter = SendLocationPresenter(
         permissionsPresenterFactory = object : PermissionsPresenter.Factory {
-            override fun create(permissions: List<String>): PermissionsPresenter = permissionsPresenterFake
+            override fun create(permissions: List<String>): PermissionsPresenter = fakePermissionsPresenter
         },
         room = fakeMatrixRoom,
         analyticsService = fakeAnalyticsService,
@@ -64,7 +64,7 @@ class SendLocationPresenterTest {
 
     @Test
     fun `initial state with permissions granted`() = runTest {
-        permissionsPresenterFake.givenState(
+        fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.AllGranted,
                 shouldShowRationale = false,
@@ -90,7 +90,7 @@ class SendLocationPresenterTest {
 
     @Test
     fun `initial state with permissions partially granted`() = runTest {
-        permissionsPresenterFake.givenState(
+        fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.SomeGranted,
                 shouldShowRationale = false,
@@ -116,7 +116,7 @@ class SendLocationPresenterTest {
 
     @Test
     fun `initial state with permissions denied`() = runTest {
-        permissionsPresenterFake.givenState(
+        fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,
@@ -142,7 +142,7 @@ class SendLocationPresenterTest {
 
     @Test
     fun `initial state with permissions denied once`() = runTest {
-        permissionsPresenterFake.givenState(
+        fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = true,
@@ -168,7 +168,7 @@ class SendLocationPresenterTest {
 
     @Test
     fun `rationale dialog dismiss`() = runTest {
-        permissionsPresenterFake.givenState(
+        fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = true,
@@ -199,7 +199,7 @@ class SendLocationPresenterTest {
 
     @Test
     fun `rationale dialog continue`() = runTest {
-        permissionsPresenterFake.givenState(
+        fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = true,
@@ -221,13 +221,13 @@ class SendLocationPresenterTest {
 
             // Continue the dialog sends permission request to the permissions presenter
             myLocationState.eventSink(SendLocationEvents.RequestPermissions)
-            assertThat(permissionsPresenterFake.events.last()).isEqualTo(PermissionsEvents.RequestPermissions)
+            assertThat(fakePermissionsPresenter.events.last()).isEqualTo(PermissionsEvents.RequestPermissions)
         }
     }
 
     @Test
     fun `permission denied dialog dismiss`() = runTest {
-        permissionsPresenterFake.givenState(
+        fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,
@@ -258,7 +258,7 @@ class SendLocationPresenterTest {
 
     @Test
     fun `share sender location`() = runTest {
-        permissionsPresenterFake.givenState(
+        fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.AllGranted,
                 shouldShowRationale = false,
@@ -314,7 +314,7 @@ class SendLocationPresenterTest {
 
     @Test
     fun `share pin location`() = runTest {
-        permissionsPresenterFake.givenState(
+        fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,
@@ -370,7 +370,7 @@ class SendLocationPresenterTest {
 
     @Test
     fun `composer context passes through analytics`() = runTest {
-        permissionsPresenterFake.givenState(
+        fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,
@@ -418,7 +418,7 @@ class SendLocationPresenterTest {
 
     @Test
     fun `open settings activity`() = runTest {
-        permissionsPresenterFake.givenState(
+        fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
                 shouldShowRationale = false,

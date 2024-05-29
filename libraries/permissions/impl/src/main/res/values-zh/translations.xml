@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_check_permission_description">"检查应用程序是否可以显示通知。"</string>
+  <string name="troubleshoot_notifications_test_check_permission_title">"检查权限"</string>
+</resources>

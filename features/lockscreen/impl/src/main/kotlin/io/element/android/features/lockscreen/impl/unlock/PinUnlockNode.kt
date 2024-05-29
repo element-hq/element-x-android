@@ -26,8 +26,6 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.libraries.architecture.NodeInputs
-import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
@@ -39,12 +37,6 @@ class PinUnlockNode @AssistedInject constructor(
     interface Callback : Plugin {
         fun onUnlock()
     }
-
-    data class Inputs(
-        val isInAppUnlock: Boolean
-    ) : NodeInputs
-
-    private val inputs: Inputs = inputs()
 
     private fun onUnlock() {
         plugins<Callback>().forEach {
@@ -62,7 +54,9 @@ class PinUnlockNode @AssistedInject constructor(
         }
         PinUnlockView(
             state = state,
-            isInAppUnlock = inputs.isInAppUnlock,
+            // UnlockNode is only used for in-app unlock, so we can safely set isInAppUnlock to true.
+            // It's set to false in PinUnlockActivity.
+            isInAppUnlock = true,
             modifier = modifier
         )
     }

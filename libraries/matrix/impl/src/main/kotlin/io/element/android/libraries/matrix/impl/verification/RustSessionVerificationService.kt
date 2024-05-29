@@ -30,8 +30,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -80,10 +80,14 @@ class RustSessionVerificationService(
     private val _sessionVerifiedStatus = MutableStateFlow<SessionVerifiedStatus>(SessionVerifiedStatus.Unknown)
     override val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus> = _sessionVerifiedStatus.asStateFlow()
 
-    override val isReady = isSyncServiceReady.stateIn(sessionCoroutineScope, SharingStarted.Eagerly, false)
+    /**
+     * The internal service that checks verification can only run after the initial sync.
+     * This [StateFlow] will notify consumers when the service is ready to be used.
+     */
+    private val isReady = isSyncServiceReady.stateIn(sessionCoroutineScope, SharingStarted.Eagerly, false)
 
-    override val canVerifySessionFlow = combine(sessionVerifiedStatus, isReady) { verificationStatus, isReady ->
-        isReady && verificationStatus == SessionVerifiedStatus.NotVerified
+    override val needsSessionVerification = sessionVerifiedStatus.map { verificationStatus ->
+        verificationStatus == SessionVerifiedStatus.NotVerified
     }
 
     init {

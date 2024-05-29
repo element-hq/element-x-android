@@ -87,10 +87,13 @@ internal fun RoomListSearchView(
     ) {
         Column(
             modifier = modifier
-                .applyIf(state.isSearchActive, ifTrue = {
-                    // Disable input interaction to underlying views
-                    pointerInput(Unit) {}
-                })
+                .applyIf(
+                    condition = state.isSearchActive,
+                    ifTrue = {
+                        // Disable input interaction to underlying views
+                        pointerInput(Unit) {}
+                    }
+                )
         ) {
             if (state.isSearchActive) {
                 RoomListSearchContent(

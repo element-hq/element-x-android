@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_dm_details_block_alert_action">"封鎖"</string>
+  <string name="screen_dm_details_block_user">"封鎖使用者"</string>
+  <string name="screen_dm_details_unblock_alert_action">"解除封鎖"</string>
+  <string name="screen_dm_details_unblock_user">"解除封鎖使用者"</string>
+</resources>

@@ -20,12 +20,14 @@
     <item quantity="other">"%d inbjudningar"</item>
   </plurals>
   <string name="notification_invite_body">"Bjöd in dig att chatta"</string>
+  <string name="notification_mentioned_you_body">"Nämnde dig: %1$s"</string>
   <string name="notification_new_messages">"Nya meddelanden"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d nytt meddelande"</item>
     <item quantity="other">"%d nya meddelanden"</item>
   </plurals>
   <string name="notification_reaction_body">"Reagerade med %1$s"</string>
+  <string name="notification_room_action_mark_as_read">"Markera som läst"</string>
   <string name="notification_room_action_quick_reply">"Snabbsvar"</string>
   <string name="notification_room_invite_body">"Bjöd in dig att gå med i rummet"</string>
   <string name="notification_sender_me">"Jag"</string>
@@ -43,7 +45,6 @@
     <item quantity="one">"%d rum"</item>
     <item quantity="other">"%d rum"</item>
   </plurals>
-  <string name="push_choose_distributor_dialog_title_android">"Välj hur du vill ta emot aviseringar"</string>
   <string name="push_distributor_background_sync_android">"Bakgrundssynkronisering"</string>
   <string name="push_distributor_firebase_android">"Google-tjänster"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Inga giltiga Google Play-tjänster hittades. Aviseringar kanske inte fungerar korrekt."</string>

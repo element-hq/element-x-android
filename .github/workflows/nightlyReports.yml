@@ -33,7 +33,7 @@ jobs:
         run: ./gradlew verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES
 
       - name: 📈 Generate kover report and verify coverage
-        run: ./gradlew :app:koverXmlReportGplayDebug :app:koverHtmlReportGplayDebug :app:koverVerifyGplayDebug $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew :app:koverXmlReportGplayDebug :app:koverHtmlReportGplayDebug :app:koverVerifyAll $CI_GRADLE_ARG_PROPERTIES
 
       - name: ✅ Upload kover report
         if: always()

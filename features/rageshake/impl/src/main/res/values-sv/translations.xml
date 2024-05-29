@@ -7,9 +7,11 @@
   <string name="screen_bug_report_editor_description">"Vänligen beskriv problemet. Vad gjorde du? Vad förväntade du dig skulle hända? Vad hände istället? Vänligen gå in i så mycket detaljer som möjligt."</string>
   <string name="screen_bug_report_editor_placeholder">"Beskriv problemet …"</string>
   <string name="screen_bug_report_editor_supporting">"Om möjligt, skriv beskrivningen på engelska."</string>
+  <string name="screen_bug_report_error_description_too_short">"Beskrivningen är för kort, vänligen ge mer information om vad som hände. Tack!"</string>
   <string name="screen_bug_report_include_crash_logs">"Skicka kraschloggar"</string>
   <string name="screen_bug_report_include_logs">"Tillåt loggar"</string>
   <string name="screen_bug_report_include_screenshot">"Skicka skärmdump"</string>
   <string name="screen_bug_report_logs_description">"Loggar kommer att inkluderas i ditt meddelande för att se till att allt fungerar korrekt. Om du vill skicka ditt meddelande utan loggar stänger du av den här inställningen."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s kraschade senast den användes. Vill du dela en kraschrapport med oss?"</string>
+  <string name="screen_bug_report_view_logs">"Se loggar"</string>
 </resources>

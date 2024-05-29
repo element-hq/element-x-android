@@ -14,6 +14,8 @@
   <string name="screen_change_account_provider_subtitle">"Använd en annan kontoleverantör, till exempel din egen privata server eller ett jobbkonto."</string>
   <string name="screen_change_account_provider_title">"Byt kontoleverantör"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Vi kunde inte nå den här hemservern. Kontrollera att du har angett hemserverns URL korrekt. Om URL:en är korrekt kontaktar du administratören för hemservern för ytterligare hjälp."</string>
+  <string name="screen_change_server_error_invalid_well_known">"Sliding Sync är inte tillgängligt på grund av ett problem i well-known-filen:
+%1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Den här servern stöder för närvarande inte sliding sync."</string>
   <string name="screen_change_server_form_header">"Hemserverns URL"</string>
   <string name="screen_change_server_form_notice">"Du kan bara ansluta till en befintlig server som stöder sliding sync. Din hemserveradministratör måste konfigurera det. %1$s"</string>
@@ -22,6 +24,7 @@
   <string name="screen_login_error_deactivated_account">"Detta konto har avaktiverats."</string>
   <string name="screen_login_error_invalid_credentials">"Felaktigt användarnamn och/eller lösenord"</string>
   <string name="screen_login_error_invalid_user_id">"Detta är inte en giltig användaridentifierare. Förväntat format: \'@användare:hemserver.org\'"</string>
+  <string name="screen_login_error_refresh_tokens">"Den här servern är konfigurerad för att använda uppdateringstokens. Dessa stöds inte när du använder lösenordsbaserad inloggning."</string>
   <string name="screen_login_error_unsupported_authentication">"Den valda hemservern stöder inte lösenord eller OIDC-inloggning. Kontakta administratören eller välj en annan hemserver."</string>
   <string name="screen_login_form_header">"Ange dina uppgifter"</string>
   <string name="screen_login_subtitle">"Matrix är ett öppet nätverk för säker, decentraliserad kommunikation."</string>

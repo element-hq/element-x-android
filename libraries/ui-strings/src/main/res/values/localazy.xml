@@ -34,6 +34,7 @@
   <string name="action_accept">"Accept"</string>
   <string name="action_add_to_timeline">"Add to timeline"</string>
   <string name="action_back">"Back"</string>
+  <string name="action_call">"Call"</string>
   <string name="action_cancel">"Cancel"</string>
   <string name="action_choose_photo">"Choose photo"</string>
   <string name="action_clear">"Clear"</string>
@@ -72,6 +73,7 @@
   <string name="action_load_more">"Load more"</string>
   <string name="action_manage_account">"Manage account"</string>
   <string name="action_manage_devices">"Manage devices"</string>
+  <string name="action_message">"Message"</string>
   <string name="action_next">"Next"</string>
   <string name="action_no">"No"</string>
   <string name="action_not_now">"Not now"</string>
@@ -117,6 +119,7 @@
   <string name="common_blocked_users">"Blocked users"</string>
   <string name="common_bubbles">"Bubbles"</string>
   <string name="common_call_invite">"Call in progress (unsupported)"</string>
+  <string name="common_call_started">"Call started"</string>
   <string name="common_chat_backup">"Chat backup"</string>
   <string name="common_copyright">"Copyright"</string>
   <string name="common_creating_room">"Creating room…"</string>
@@ -262,6 +265,7 @@
   <string name="screen_room_member_details_unblock_alert_action">"Unblock"</string>
   <string name="screen_room_member_details_unblock_alert_description">"You\'ll be able to see all messages from them again."</string>
   <string name="screen_room_member_details_unblock_user">"Unblock user"</string>
+  <string name="screen_room_title">"Chat"</string>
   <string name="screen_share_location_title">"Share location"</string>
   <string name="screen_share_my_location_action">"Share my location"</string>
   <string name="screen_share_open_apple_maps">"Open in Apple Maps"</string>

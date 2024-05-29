@@ -22,7 +22,13 @@ import io.element.android.libraries.matrix.test.A_FAILURE_REASON
 import kotlinx.coroutines.delay
 import java.io.File
 
-class FakeBugReporter(val mode: FakeBugReporterMode = FakeBugReporterMode.Success) : BugReporter {
+class FakeBugReporter(val mode: Mode = Mode.Success) : BugReporter {
+    enum class Mode {
+        Success,
+        Failure,
+        Cancel
+    }
+
     override suspend fun sendBugReport(
         withDevicesLogs: Boolean,
         withCrashLogs: Boolean,
@@ -37,12 +43,12 @@ class FakeBugReporter(val mode: FakeBugReporterMode = FakeBugReporterMode.Succes
         listener?.onProgress(50)
         delay(100)
         when (mode) {
-            FakeBugReporterMode.Success -> Unit
-            FakeBugReporterMode.Failure -> {
+            Mode.Success -> Unit
+            Mode.Failure -> {
                 listener?.onUploadFailed(A_FAILURE_REASON)
                 return
             }
-            FakeBugReporterMode.Cancel -> {
+            Mode.Cancel -> {
                 listener?.onUploadCancelled()
                 return
             }
@@ -63,10 +69,4 @@ class FakeBugReporter(val mode: FakeBugReporterMode = FakeBugReporterMode.Succes
     override fun saveLogCat() {
         // No op
     }
-}
-
-enum class FakeBugReporterMode {
-    Success,
-    Failure,
-    Cancel
 }

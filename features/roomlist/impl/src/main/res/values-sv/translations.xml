@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="confirm_recovery_key_banner_message">"Din chattsäkerhetskopia är för närvarande inte synkroniserad. Du måste ange din återställningsnyckel för att behålla åtkomsten till din chattsäkerhetskopia."</string>
+  <string name="confirm_recovery_key_banner_title">"Ange din återställningsnyckel"</string>
   <string name="screen_invites_decline_chat_message">"Är du säker på att du vill tacka nej till inbjudan att gå med%1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Avböj inbjudan"</string>
   <string name="screen_invites_decline_direct_chat_message">"Är du säker på att du vill avböja denna privata chatt med %1$s?"</string>
@@ -11,8 +13,14 @@
   <string name="screen_roomlist_a11y_create_message">"Skapa en ny konversation eller ett nytt rum"</string>
   <string name="screen_roomlist_empty_message">"Kom igång genom att skicka meddelanden till någon."</string>
   <string name="screen_roomlist_empty_title">"Inga chattar än."</string>
+  <string name="screen_roomlist_filter_favourites">"Favoriter"</string>
+  <string name="screen_roomlist_filter_low_priority">"Låg prioritet"</string>
   <string name="screen_roomlist_filter_people">"Personer"</string>
+  <string name="screen_roomlist_filter_rooms">"Rum"</string>
+  <string name="screen_roomlist_filter_unreads">"Olästa"</string>
   <string name="screen_roomlist_main_space_title">"Alla chattar"</string>
+  <string name="screen_roomlist_mark_as_read">"Markera som läst"</string>
+  <string name="screen_roomlist_mark_as_unread">"Markera som oläst"</string>
   <string name="session_verification_banner_message">"Det verkar som om du använder en ny enhet. Verifiera med en annan enhet för att komma åt dina krypterade meddelanden."</string>
   <string name="session_verification_banner_title">"Verifiera att det är du"</string>
 </resources>

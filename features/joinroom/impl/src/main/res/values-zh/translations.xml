@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_join_action">"加入聊天室"</string>
+  <string name="screen_join_room_knock_action">"加入房间"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s 尚不支持空间。您可以通过 Web 端访问空间"</string>
+  <string name="screen_join_room_space_not_supported_title">"空间尚不支持"</string>
+  <string name="screen_join_room_subtitle_knock">"点击下面的按钮，系统将通知房间管理员。获得批准后，您将能够加入对话。"</string>
+  <string name="screen_join_room_subtitle_no_preview">"只有聊天室成员才能查看消息历史记录。"</string>
+  <string name="screen_join_room_title_knock">"想加入这个房间吗？"</string>
+  <string name="screen_join_room_title_no_preview">"预览不可用"</string>
+</resources>

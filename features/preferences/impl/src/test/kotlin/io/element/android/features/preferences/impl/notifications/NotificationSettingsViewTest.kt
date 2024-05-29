@@ -19,6 +19,8 @@ package io.element.android.features.preferences.impl.notifications
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.architecture.AsyncAction
@@ -245,6 +247,43 @@ class NotificationSettingsViewTest {
             listOf(
                 NotificationSettingsEvents.RefreshSystemNotificationsEnabled,
                 NotificationSettingsEvents.ClearConfigurationMismatchError
+            )
+        )
+    }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `clicking on Push notification provider emits the expected event`() {
+        val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
+        rule.setNotificationSettingsView(
+            state = aValidNotificationSettingsState(
+                eventSink = eventsRecorder
+            ),
+        )
+        rule.clickOn(R.string.screen_advanced_settings_push_provider_android)
+        eventsRecorder.assertList(
+            listOf(
+                NotificationSettingsEvents.RefreshSystemNotificationsEnabled,
+                NotificationSettingsEvents.ChangePushProvider,
+            )
+        )
+    }
+
+    @Test
+    fun `clicking on a push provider emits the expected event`() {
+        val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
+        rule.setNotificationSettingsView(
+            state = aValidNotificationSettingsState(
+                eventSink = eventsRecorder,
+                showChangePushProviderDialog = true,
+                availablePushDistributors = listOf("P1", "P2")
+            ),
+        )
+        rule.onNodeWithText("P2").performClick()
+        eventsRecorder.assertList(
+            listOf(
+                NotificationSettingsEvents.RefreshSystemNotificationsEnabled,
+                NotificationSettingsEvents.SetPushProvider(1),
             )
         )
     }

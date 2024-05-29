@@ -48,7 +48,6 @@ import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
-import io.element.android.libraries.featureflag.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.indicator.impl.DefaultIndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.BackupState
@@ -73,6 +72,7 @@ import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.EventsRecorder
@@ -140,7 +140,7 @@ class RoomListPresenterTests {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.showAvatarIndicator).isTrue()
-            sessionVerificationService.givenCanVerifySession(false)
+            sessionVerificationService.givenNeedsSessionVerification(false)
             encryptionService.emitBackupState(BackupState.ENABLED)
             val finalState = awaitItem()
             assertThat(finalState.showAvatarIndicator).isFalse()
@@ -282,7 +282,7 @@ class RoomListPresenterTests {
             roomListService = roomListService,
             encryptionService = encryptionService,
             sessionVerificationService = FakeSessionVerificationService().apply {
-                givenCanVerifySession(false)
+                givenNeedsSessionVerification(false)
             },
             syncService = FakeSyncService(initialState = SyncState.Running)
         )

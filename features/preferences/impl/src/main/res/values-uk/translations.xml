@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Виберіть спосіб отримання сповіщень"</string>
   <string name="screen_advanced_settings_developer_mode">"Режим розробника"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Увімкніть доступ до функцій і можливостей для розробників."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Користувацька URL-адреса Element Call"</string>
@@ -15,7 +16,7 @@
   <string name="screen_blocked_users_unblock_alert_action">"Розблокувати"</string>
   <string name="screen_blocked_users_unblock_alert_description">"Ви знову зможете бачити всі повідомлення від них."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Розблокувати користувача"</string>
-  <string name="screen_blocked_users_unblocking">"Заблокування…"</string>
+  <string name="screen_blocked_users_unblocking">"Розблокування…"</string>
   <string name="screen_edit_profile_display_name">"Відображуване ім\'я"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Ваше відображуване ім\'я"</string>
   <string name="screen_edit_profile_error">"Була виявлена невідома помилка, і інформацію не вдалося змінити."</string>

@@ -30,7 +30,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
-import io.element.android.libraries.matrix.test.widget.FakeWidgetDriver
+import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import io.element.android.tests.testutils.WarmUpRule
@@ -68,7 +68,7 @@ class CallScreenPresenterTest {
 
     @Test
     fun `present - with CallType RoomCall loads URL and runs WidgetDriver`() = runTest {
-        val widgetDriver = FakeWidgetDriver()
+        val widgetDriver = FakeMatrixWidgetDriver()
         val widgetProvider = FakeCallWidgetProvider(widgetDriver)
         val presenter = createCallScreenPresenter(
             callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
@@ -91,7 +91,7 @@ class CallScreenPresenterTest {
 
     @Test
     fun `present - set message interceptor, send and receive messages`() = runTest {
-        val widgetDriver = FakeWidgetDriver()
+        val widgetDriver = FakeMatrixWidgetDriver()
         val presenter = createCallScreenPresenter(
             callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
             widgetDriver = widgetDriver,
@@ -119,7 +119,7 @@ class CallScreenPresenterTest {
     @Test
     fun `present - hang up event closes the screen and stops the widget driver`() = runTest(UnconfinedTestDispatcher()) {
         val navigator = FakeCallScreenNavigator()
-        val widgetDriver = FakeWidgetDriver()
+        val widgetDriver = FakeMatrixWidgetDriver()
         val presenter = createCallScreenPresenter(
             callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
             widgetDriver = widgetDriver,
@@ -149,7 +149,7 @@ class CallScreenPresenterTest {
     @Test
     fun `present - a received hang up message closes the screen and stops the widget driver`() = runTest(UnconfinedTestDispatcher()) {
         val navigator = FakeCallScreenNavigator()
-        val widgetDriver = FakeWidgetDriver()
+        val widgetDriver = FakeMatrixWidgetDriver()
         val presenter = createCallScreenPresenter(
             callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
             widgetDriver = widgetDriver,
@@ -178,7 +178,7 @@ class CallScreenPresenterTest {
     @Test
     fun `present - automatically starts the Matrix client sync when on RoomCall`() = runTest {
         val navigator = FakeCallScreenNavigator()
-        val widgetDriver = FakeWidgetDriver()
+        val widgetDriver = FakeMatrixWidgetDriver()
         val matrixClient = FakeMatrixClient()
         val presenter = createCallScreenPresenter(
             callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
@@ -201,7 +201,7 @@ class CallScreenPresenterTest {
     @Test
     fun `present - automatically stops the Matrix client sync on dispose`() = runTest {
         val navigator = FakeCallScreenNavigator()
-        val widgetDriver = FakeWidgetDriver()
+        val widgetDriver = FakeMatrixWidgetDriver()
         val matrixClient = FakeMatrixClient()
         val presenter = createCallScreenPresenter(
             callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
@@ -229,7 +229,7 @@ class CallScreenPresenterTest {
     private fun TestScope.createCallScreenPresenter(
         callType: CallType,
         navigator: CallScreenNavigator = FakeCallScreenNavigator(),
-        widgetDriver: FakeWidgetDriver = FakeWidgetDriver(),
+        widgetDriver: FakeMatrixWidgetDriver = FakeMatrixWidgetDriver(),
         widgetProvider: FakeCallWidgetProvider = FakeCallWidgetProvider(widgetDriver),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         matrixClientsProvider: FakeMatrixClientProvider = FakeMatrixClientProvider(),

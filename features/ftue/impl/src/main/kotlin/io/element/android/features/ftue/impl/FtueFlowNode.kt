@@ -32,7 +32,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.analytics.api.AnalyticsEntryPoint
-import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.impl.notifications.NotificationsOptInNode
 import io.element.android.features.ftue.impl.sessionverification.FtueSessionVerificationFlowNode
 import io.element.android.features.ftue.impl.state.DefaultFtueService
@@ -86,8 +85,6 @@ class FtueFlowNode @AssistedInject constructor(
         data object LockScreenSetup : NavTarget
     }
 
-    private val callback = plugins.filterIsInstance<FtueEntryPoint.Callback>().firstOrNull()
-
     override fun onBuilt() {
         super.onBuilt()
 
@@ -135,9 +132,8 @@ class FtueFlowNode @AssistedInject constructor(
                         lifecycleScope.launch { moveToNextStep() }
                     }
                 }
-                lockScreenEntryPoint.nodeBuilder(this, buildContext)
+                lockScreenEntryPoint.nodeBuilder(this, buildContext, LockScreenEntryPoint.Target.Setup)
                     .callback(callback)
-                    .target(LockScreenEntryPoint.Target.Setup)
                     .build()
             }
         }
@@ -157,7 +153,7 @@ class FtueFlowNode @AssistedInject constructor(
             FtueStep.LockscreenSetup -> {
                 backstack.newRoot(NavTarget.LockScreenSetup)
             }
-            null -> callback?.onFtueFlowFinished()
+            null -> Unit
         }
     }
 

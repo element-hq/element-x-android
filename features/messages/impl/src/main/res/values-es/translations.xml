@@ -41,4 +41,13 @@
     <item quantity="one">"%1$d cambio en la sala"</item>
     <item quantity="other">"%1$d cambios en la sala"</item>
   </plurals>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="one">"%1$s, %2$s y %3$d otro"</item>
+    <item quantity="other">"%1$s, %2$s y %3$d otros"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="one">"%1$s está escribiendo"</item>
+    <item quantity="other">"%1$s están escribiendo"</item>
+  </plurals>
+  <string name="screen_room_typing_two_members">"%1$s y %2$s"</string>
 </resources>

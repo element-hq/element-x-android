@@ -3,10 +3,10 @@
 
 [versions]
 # Project
-android_gradle_plugin = "8.3.2"
-kotlin = "1.9.23"
-ksp = "1.9.23-1.0.20"
-firebaseAppDistribution = "4.2.0"
+android_gradle_plugin = "8.4.1"
+kotlin = "1.9.24"
+ksp = "1.9.24-1.0.20"
+firebaseAppDistribution = "5.0.0"
 
 # AndroidX
 core = "1.13.0"
@@ -23,11 +23,11 @@ activity = "1.8.2"
 media3 = "1.3.1"
 
 # Compose
-compose_bom = "2024.04.01"
-composecompiler = "1.5.12"
+compose_bom = "2024.05.00"
+composecompiler = "1.5.14"
 
 # Coroutines
-coroutines = "1.8.0"
+coroutines = "1.8.1"
 
 # Accompanist
 accompanist = "0.34.0"
@@ -37,13 +37,13 @@ test_core = "1.5.0"
 
 #other
 coil = "2.6.0"
-datetime = "0.5.0"
+datetime = "0.6.0"
 dependencyAnalysis = "1.31.0"
 serialization_json = "1.6.3"
 showkase = "1.0.2"
 appyx = "1.4.0"
 sqldelight = "2.0.2"
-wysiwyg = "2.37.0"
+wysiwyg = "2.37.3"
 telephoto = "0.11.2"
 
 # DI
@@ -54,10 +54,9 @@ anvil = "2.4.9"
 autoservice = "1.1.1"
 
 # quality
-junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
-kover = "0.7.6"
+kover = "0.8.0"
 
 [libraries]
 # Project
@@ -68,14 +67,14 @@ kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 gms_google_services = "com.google.gms:google-services:4.4.1"
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:32.8.1"
+google_firebase_bom = "com.google.firebase:firebase-bom:33.0.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 
 # AndroidX
 androidx_core = { module = "androidx.core:core", version.ref = "core" }
 androidx_corektx = { module = "androidx.core:core-ktx", version.ref = "core" }
-androidx_annotationjvm = "androidx.annotation:annotation-jvm:1.7.1"
+androidx_annotationjvm = "androidx.annotation:annotation-jvm:1.8.0"
 androidx_datastore_preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 androidx_datastore_datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 androidx_exifinterface = "androidx.exifinterface:exifinterface:1.3.7"
@@ -96,7 +95,7 @@ androidx_activity_activity = { module = "androidx.activity:activity", version.re
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx_startup = "androidx.startup:startup-runtime:1.1.1"
 androidx_preference = "androidx.preference:preference:1.2.1"
-androidx_webkit = "androidx.webkit:webkit:1.10.0"
+androidx_webkit = "androidx.webkit:webkit:1.11.0"
 
 androidx_compose_bom = { module = "androidx.compose:compose-bom", version.ref = "compose_bom" }
 androidx_compose_material3 = "androidx.compose.material3:material3:1.2.1"
@@ -114,7 +113,6 @@ coroutines_test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 
 # Accompanist
 accompanist_permission = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
-accompanist_systemui = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 
 # Libraries
 squareup_seismic = "com.squareup:seismic:1.0.3"
@@ -135,13 +133,12 @@ test_corektx = { module = "androidx.test:core-ktx", version.ref = "test_core" }
 test_arch_core = "androidx.arch.core:core-testing:2.2.0"
 test_junit = "junit:junit:4.13.2"
 test_runner = "androidx.test:runner:1.5.2"
-test_junitext = "androidx.test.ext:junit:1.1.5"
-test_mockk = "io.mockk:mockk:1.13.10"
+test_mockk = "io.mockk:mockk:1.13.11"
 test_konsist = "com.lemonappdev:konsist:0.13.0"
 test_turbine = "app.cash.turbine:turbine:1.1.0"
 test_truth = "com.google.truth:truth:1.4.2"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.16"
-test_robolectric = "org.robolectric:robolectric:4.12.1"
+test_robolectric = "org.robolectric:robolectric:4.12.2"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
 
 # Others
@@ -157,9 +154,9 @@ showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
 jsoup = "org.jsoup:jsoup:1.17.2"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
-molecule-runtime = "app.cash.molecule:molecule-runtime:1.4.2"
+molecule-runtime = "app.cash.molecule:molecule-runtime:1.4.3"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.16"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.21"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
@@ -167,23 +164,23 @@ sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 sqlcipher = "net.zetetic:android-database-sqlcipher:4.5.4"
 sqlite = "androidx.sqlite:sqlite-ktx:2.4.0"
-unifiedpush = "com.github.UnifiedPush:android-connector:2.1.1"
+unifiedpush = "com.github.UnifiedPush:android-connector:2.4.0"
 otaliastudios_transcoder = "com.otaliastudios:transcoder:0.10.5"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.1"
-maplibre = "org.maplibre.gl:android-sdk:10.3.0"
+maplibre = "org.maplibre.gl:android-sdk:10.3.1"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:2.0.2"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:2.0.2"
 opusencoder = "io.element.android:opusencoder:1.1.0"
-kotlinpoet = "com.squareup:kotlinpoet:1.16.0"
+kotlinpoet = "com.squareup:kotlinpoet:1.17.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.1.18"
-sentry = "io.sentry:sentry-android:7.8.0"
+posthog = "com.posthog:posthog-android:3.3.0"
+sentry = "io.sentry:sentry-android:7.9.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
-matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.20.0"
+matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.21.0"
 
 # Emojibase
 matrix_emojibase_bindings = "io.element.android:emojibase-bindings:1.1.3"
@@ -204,7 +201,6 @@ google_autoservice_annotations = { module = "com.google.auto.service:auto-servic
 # value of `composecompiler` (which is used to set composeOptions.kotlinCompilerExtensionVersion.
 # See https://github.com/renovatebot/renovate/issues/18354
 android_composeCompiler = { module = "androidx.compose.compiler:compiler", version.ref = "composecompiler" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 appcompat = "androidx.appcompat:appcompat:1.6.1"
@@ -221,12 +217,11 @@ kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
 detekt = "io.gitlab.arturbosch.detekt:1.23.6"
-ktlint = "org.jlleitschuh.gradle.ktlint:12.1.0"
+ktlint = "org.jlleitschuh.gradle.ktlint:12.1.1"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
 dependencycheck = "org.owasp.dependencycheck:9.1.0"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
 paparazzi = "app.cash.paparazzi:1.3.3"
-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppDistribution" }
 knit = { id = "org.jetbrains.kotlinx.knit", version = "0.5.0" }

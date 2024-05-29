@@ -126,7 +126,7 @@ internal fun RoomListServiceInterface.syncIndicator(): Flow<RoomListServiceSyncI
         }
     }.buffer(Channel.UNLIMITED)
 
-internal fun RoomListServiceInterface.roomOrNull(roomId: String): RoomListItem? {
+internal suspend fun RoomListServiceInterface.roomOrNull(roomId: String): RoomListItem? {
     return try {
         room(roomId)
     } catch (exception: Exception) {

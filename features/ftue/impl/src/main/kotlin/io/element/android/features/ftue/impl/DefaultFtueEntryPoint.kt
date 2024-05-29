@@ -31,11 +31,6 @@ class DefaultFtueEntryPoint @Inject constructor() : FtueEntryPoint {
         val plugins = ArrayList<Plugin>()
 
         return object : FtueEntryPoint.NodeBuilder {
-            override fun callback(callback: FtueEntryPoint.Callback): FtueEntryPoint.NodeBuilder {
-                plugins += callback
-                return this
-            }
-
             override fun build(): Node {
                 return parentNode.createNode<FtueFlowNode>(buildContext, plugins)
             }

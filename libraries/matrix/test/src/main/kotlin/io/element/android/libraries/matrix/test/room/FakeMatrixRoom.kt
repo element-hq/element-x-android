@@ -55,7 +55,7 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
-import io.element.android.libraries.matrix.test.widget.FakeWidgetDriver
+import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
@@ -70,7 +70,6 @@ import java.io.File
 class FakeMatrixRoom(
     override val sessionId: SessionId = A_SESSION_ID,
     override val roomId: RoomId = A_ROOM_ID,
-    override val name: String? = null,
     override val displayName: String = "",
     override val topic: String? = null,
     override val avatarUrl: String? = null,
@@ -126,7 +125,7 @@ class FakeMatrixRoom(
     private var endPollResult = Result.success(Unit)
     private var progressCallbackValues = emptyList<Pair<Long, Long>>()
     private var generateWidgetWebViewUrlResult = Result.success("https://call.element.io")
-    private var getWidgetDriverResult: Result<MatrixWidgetDriver> = Result.success(FakeWidgetDriver())
+    private var getWidgetDriverResult: Result<MatrixWidgetDriver> = Result.success(FakeMatrixWidgetDriver())
     private var canUserTriggerRoomNotificationResult: Result<Boolean> = Result.success(true)
     private var canUserJoinCallResult: Result<Boolean> = Result.success(true)
     private var setIsFavoriteResult = Result.success(Unit)
@@ -736,6 +735,7 @@ data class EndPollInvocation(
 fun aRoomInfo(
     id: RoomId = A_ROOM_ID,
     name: String? = A_ROOM_NAME,
+    rawName: String? = name,
     topic: String? = "A topic",
     avatarUrl: String? = AN_AVATAR_URL,
     isDirect: Boolean = false,
@@ -760,6 +760,7 @@ fun aRoomInfo(
 ) = MatrixRoomInfo(
     id = id,
     name = name,
+    rawName = rawName,
     topic = topic,
     avatarUrl = avatarUrl,
     isDirect = isDirect,

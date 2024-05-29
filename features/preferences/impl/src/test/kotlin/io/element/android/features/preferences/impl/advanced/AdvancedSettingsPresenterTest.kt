@@ -21,8 +21,8 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.compound.theme.Theme
-import io.element.android.libraries.featureflag.test.InMemoryAppPreferencesStore
-import io.element.android.libraries.featureflag.test.InMemorySessionPreferencesStore
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
+import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import kotlinx.coroutines.test.runTest
@@ -41,7 +41,6 @@ class AdvancedSettingsPresenterTest {
         }.test {
             val initialState = awaitLastSequentialItem()
             assertThat(initialState.isDeveloperModeEnabled).isFalse()
-            assertThat(initialState.isRichTextEditorEnabled).isFalse()
             assertThat(initialState.showChangeThemeDialog).isFalse()
             assertThat(initialState.isSharePresenceEnabled).isTrue()
             assertThat(initialState.theme).isEqualTo(Theme.System)
@@ -60,21 +59,6 @@ class AdvancedSettingsPresenterTest {
             assertThat(awaitItem().isDeveloperModeEnabled).isTrue()
             initialState.eventSink.invoke(AdvancedSettingsEvents.SetDeveloperModeEnabled(false))
             assertThat(awaitItem().isDeveloperModeEnabled).isFalse()
-        }
-    }
-
-    @Test
-    fun `present - rich text editor on off`() = runTest {
-        val presenter = createAdvancedSettingsPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitLastSequentialItem()
-            assertThat(initialState.isRichTextEditorEnabled).isFalse()
-            initialState.eventSink.invoke(AdvancedSettingsEvents.SetRichTextEditorEnabled(true))
-            assertThat(awaitItem().isRichTextEditorEnabled).isTrue()
-            initialState.eventSink.invoke(AdvancedSettingsEvents.SetRichTextEditorEnabled(false))
-            assertThat(awaitItem().isRichTextEditorEnabled).isFalse()
         }
     }
 

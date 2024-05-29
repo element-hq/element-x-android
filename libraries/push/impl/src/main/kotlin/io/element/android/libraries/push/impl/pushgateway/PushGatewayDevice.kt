@@ -20,7 +20,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class PushGatewayDevice(
+data class PushGatewayDevice(
     /**
      * Required. The app_id given when the pusher was created.
      */

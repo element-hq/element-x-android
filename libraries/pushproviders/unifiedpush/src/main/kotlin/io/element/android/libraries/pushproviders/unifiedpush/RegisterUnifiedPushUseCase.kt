@@ -17,56 +17,41 @@
 package io.element.android.libraries.pushproviders.unifiedpush
 
 import android.content.Context
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.pushproviders.api.Distributor
-import io.element.android.libraries.pushproviders.api.PusherSubscriber
+import io.element.android.libraries.pushproviders.unifiedpush.registration.EndpointRegistrationHandler
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withTimeout
 import org.unifiedpush.android.connector.UnifiedPush
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
-class RegisterUnifiedPushUseCase @Inject constructor(
+interface RegisterUnifiedPushUseCase {
+    suspend fun execute(distributor: Distributor, clientSecret: String): Result<Unit>
+}
+
+@ContributesBinding(AppScope::class)
+class DefaultRegisterUnifiedPushUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val pusherSubscriber: PusherSubscriber,
-    private val unifiedPushStore: UnifiedPushStore,
-) {
-    sealed interface RegisterUnifiedPushResult {
-        data object Success : RegisterUnifiedPushResult
-        data object NeedToAskUserForDistributor : RegisterUnifiedPushResult
-        data object Error : RegisterUnifiedPushResult
-    }
-
-    suspend fun execute(matrixClient: MatrixClient, distributor: Distributor, clientSecret: String): RegisterUnifiedPushResult {
-        val distributorValue = distributor.value
-        if (distributorValue.isNotEmpty()) {
-            saveAndRegisterApp(distributorValue, clientSecret)
-            val endpoint = unifiedPushStore.getEndpoint(clientSecret) ?: return RegisterUnifiedPushResult.Error
-            val gateway = unifiedPushStore.getPushGateway(clientSecret) ?: return RegisterUnifiedPushResult.Error
-            pusherSubscriber.registerPusher(matrixClient, endpoint, gateway)
-            return RegisterUnifiedPushResult.Success
-        }
-
-        // TODO Below should never happen?
-        if (UnifiedPush.getDistributor(context).isNotEmpty()) {
-            registerApp(clientSecret)
-            return RegisterUnifiedPushResult.Success
-        }
-
-        val distributors = UnifiedPush.getDistributors(context)
-
-        return if (distributors.size == 1) {
-            saveAndRegisterApp(distributors.first(), clientSecret)
-            RegisterUnifiedPushResult.Success
-        } else {
-            RegisterUnifiedPushResult.NeedToAskUserForDistributor
-        }
-    }
-
-    private fun saveAndRegisterApp(distributor: String, clientSecret: String) {
-        UnifiedPush.saveDistributor(context, distributor)
-        registerApp(clientSecret)
-    }
-
-    private fun registerApp(clientSecret: String) {
+    private val endpointRegistrationHandler: EndpointRegistrationHandler,
+) : RegisterUnifiedPushUseCase {
+    override suspend fun execute(distributor: Distributor, clientSecret: String): Result<Unit> {
+        UnifiedPush.saveDistributor(context, distributor.value)
+        // This will trigger the callback
+        // VectorUnifiedPushMessagingReceiver.onNewEndpoint
         UnifiedPush.registerApp(context = context, instance = clientSecret)
+        // Wait for VectorUnifiedPushMessagingReceiver.onNewEndpoint to proceed
+        return runCatching {
+            withTimeout(30.seconds) {
+                val result = endpointRegistrationHandler.state
+                    .filter { it.clientSecret == clientSecret }
+                    .first()
+                    .result
+                result.getOrThrow()
+            }
+        }
     }
 }

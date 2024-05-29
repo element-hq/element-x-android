@@ -18,7 +18,6 @@ package io.element.android.features.call.utils
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.preferences.api.store.AppPreferencesStore
-import io.element.android.libraries.featureflag.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -27,7 +26,8 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.widget.FakeCallWidgetSettingsProvider
-import io.element.android.libraries.matrix.test.widget.FakeWidgetDriver
+import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -76,7 +76,7 @@ class DefaultCallWidgetProviderTest {
     fun `getWidget - returns a widget driver when all steps are successful`() = runTest {
         val room = FakeMatrixRoom().apply {
             givenGenerateWidgetWebViewUrlResult(Result.success("url"))
-            givenGetWidgetDriverResult(Result.success(FakeWidgetDriver()))
+            givenGetWidgetDriverResult(Result.success(FakeMatrixWidgetDriver()))
         }
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
@@ -89,7 +89,7 @@ class DefaultCallWidgetProviderTest {
     fun `getWidget - will use a custom base url if it exists`() = runTest {
         val room = FakeMatrixRoom().apply {
             givenGenerateWidgetWebViewUrlResult(Result.success("url"))
-            givenGetWidgetDriverResult(Result.success(FakeWidgetDriver()))
+            givenGetWidgetDriverResult(Result.success(FakeMatrixWidgetDriver()))
         }
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)

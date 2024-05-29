@@ -25,7 +25,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import com.freeletics.flowredux.compose.rememberStateAndDispatch
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.architecture.AsyncData
@@ -61,7 +60,7 @@ class VerifySelfSessionPresenter @Inject constructor(
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
         val stateAndDispatch = stateMachine.rememberStateAndDispatch()
         val skipVerification by sessionPreferencesStore.isSessionVerificationSkipped().collectAsState(initial = false)
-        val needsVerification by sessionVerificationService.canVerifySessionFlow.collectAsState(initial = true)
+        val needsVerification by sessionVerificationService.needsSessionVerification.collectAsState(initial = true)
         val verificationFlowStep by remember {
             derivedStateOf {
                 when {

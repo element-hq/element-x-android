@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_app_lock_biometric_authentication">"生物识别认证"</string>
+  <string name="screen_app_lock_biometric_unlock">"生物识别解锁"</string>
+  <string name="screen_app_lock_biometric_unlock_title_android">"使用生物识别解锁"</string>
+  <string name="screen_app_lock_forgot_pin">"忘记 PIN 码？"</string>
+  <string name="screen_app_lock_settings_change_pin">"更改 PIN 码"</string>
+  <string name="screen_app_lock_settings_enable_biometric_unlock">"允许生物识别解锁"</string>
+  <string name="screen_app_lock_settings_remove_pin">"移除 PIN 码"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_message">"您确定要删除 PIN 码吗？"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_title">"移除 PIN 码？"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_allow_title">"允许 %1$s"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_skip">"我宁愿使用 PIN 码"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"节省时间，用 %1$s 来解锁应用程序"</string>
+  <string name="screen_app_lock_setup_choose_pin">"选择 PIN 码"</string>
+  <string name="screen_app_lock_setup_confirm_pin">"确认 PIN 码"</string>
+  <string name="screen_app_lock_setup_pin_blacklisted_dialog_content">"出于安全原因，您不能选择这个 PIN 码"</string>
+  <string name="screen_app_lock_setup_pin_blacklisted_dialog_title">"选择不同的 PIN 码"</string>
+  <string name="screen_app_lock_setup_pin_context">"锁定 %1$s 以为聊天增加安全性。
+
+选择好记的 PIN 码。如果忘掉了这个 PIN 码，就不得不登出应用。"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"请输入两次相同的 PIN 码"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN 码不匹配"</string>
+  <string name="screen_app_lock_signout_alert_message">"您需要重新登录并创建新的 PIN 才能继续"</string>
+  <string name="screen_app_lock_signout_alert_title">"您正在登出"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="other">"还剩 %1$d 次解锁机会"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="other">"PIN 码错误。还剩 %1$d 次机会"</item>
+  </plurals>
+  <string name="screen_app_lock_use_biometric_android">"使用生物识别"</string>
+  <string name="screen_app_lock_use_pin_android">"使用 PIN 码"</string>
+  <string name="screen_signout_in_progress_dialog_content">"正在登出…"</string>
+</resources>

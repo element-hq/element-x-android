@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_subtitle">"Verifica este dispositivo para configurar la mensajería segura."</string>
+  <string name="screen_identity_confirmation_title">"Confirma que eres tú"</string>
+  <string name="screen_identity_confirmed_subtitle">"Ahora puedes leer o enviar mensajes de forma segura y cualquier persona con la que chatees también puede confiar en este dispositivo."</string>
+  <string name="screen_identity_confirmed_title">"Dispositivo verificado"</string>
   <string name="screen_session_verification_cancelled_subtitle">"Algo no fue bien. Se agotó el tiempo de espera de la solicitud o se rechazó."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Confirma que los emojis que aparecen a continuación coinciden con los que aparecen en tu otra sesión."</string>
   <string name="screen_session_verification_compare_emojis_title">"Comparar emojis"</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"Confirma que los números que aparecen a continuación coinciden con los mostrados en tu otra sesión."</string>
   <string name="screen_session_verification_compare_numbers_title">"Comparar números"</string>
   <string name="screen_session_verification_complete_subtitle">"Tu nueva sesión ya está verificada. Tienes acceso a tus mensajes cifrados y otros usuarios lo considerarán de confianza."</string>
+  <string name="screen_session_verification_enter_recovery_key">"Introduzca la clave de recuperación"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Demuestra que eres tú para acceder a tu historial de mensajes cifrados."</string>
   <string name="screen_session_verification_open_existing_session_title">"Abrir una sesión existente"</string>
   <string name="screen_session_verification_positive_button_canceled">"Reintentar la verificación"</string>

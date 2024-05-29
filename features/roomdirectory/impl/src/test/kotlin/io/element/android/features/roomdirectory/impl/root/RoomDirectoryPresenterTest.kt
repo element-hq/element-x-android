@@ -17,12 +17,8 @@
 package io.element.android.features.roomdirectory.impl.root
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.roomdirectory.impl.root.di.JoinRoom
-import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryList
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
-import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.roomdirectory.FakeRoomDirectoryList
 import io.element.android.libraries.matrix.test.roomdirectory.FakeRoomDirectoryService
 import io.element.android.libraries.matrix.test.roomdirectory.aRoomDescription
@@ -47,7 +43,6 @@ import org.junit.Test
             val initialState = awaitItem()
             assertThat(initialState.query).isEmpty()
             assertThat(initialState.displayEmptyState).isFalse()
-            assertThat(initialState.joinRoomAction).isEqualTo(AsyncAction.Uninitialized)
             assertThat(initialState.roomDescriptions).isEmpty()
             assertThat(initialState.displayLoadMoreIndicator).isTrue()
         }
@@ -136,46 +131,13 @@ import org.junit.Test
             .withNoParameter()
     }
 
-    @Test
-    fun `present - emit join room event`() = runTest {
-        val joinRoomSuccess = lambdaRecorder { _: RoomId ->
-            Result.success(Unit)
-        }
-        val joinRoomFailure = lambdaRecorder { roomId: RoomId ->
-            Result.failure<Unit>(RuntimeException("Failed to join room $roomId"))
-        }
-        val fakeJoinRoom = FakeJoinRoom(joinRoomSuccess)
-        val presenter = createRoomDirectoryPresenter(joinRoom = fakeJoinRoom)
-        presenter.test {
-            awaitItem().also { state ->
-                state.eventSink(RoomDirectoryEvents.JoinRoom(A_ROOM_ID))
-            }
-            awaitItem().also { state ->
-                assertThat(state.joinRoomAction).isEqualTo(AsyncAction.Success(A_ROOM_ID))
-                fakeJoinRoom.lambda = joinRoomFailure
-                state.eventSink(RoomDirectoryEvents.JoinRoom(A_ROOM_ID))
-            }
-            awaitItem().also { state ->
-                assertThat(state.joinRoomAction).isInstanceOf(AsyncAction.Failure::class.java)
-            }
-        }
-        assert(joinRoomSuccess)
-            .isCalledOnce()
-            .with(value(A_ROOM_ID))
-        assert(joinRoomFailure)
-            .isCalledOnce()
-            .with(value(A_ROOM_ID))
-    }
-
     private fun TestScope.createRoomDirectoryPresenter(
         roomDirectoryService: RoomDirectoryService = FakeRoomDirectoryService(
             createRoomDirectoryListFactory = { FakeRoomDirectoryList() }
         ),
-        joinRoom: JoinRoom = FakeJoinRoom { Result.success(Unit) },
     ): RoomDirectoryPresenter {
         return RoomDirectoryPresenter(
             dispatchers = testCoroutineDispatchers(),
-            joinRoom = joinRoom,
             roomDirectoryService = roomDirectoryService,
         )
     }

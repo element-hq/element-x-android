@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_join_action">"Alăturați-vă camerei"</string>
+  <string name="screen_join_room_knock_action">"Bateți pentru a vă alătura"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s nu suporta încă spații. Puteți accesa spațiile pe web."</string>
+  <string name="screen_join_room_space_not_supported_title">"Spațiile nu sunt încă suportate"</string>
+  <string name="screen_join_room_subtitle_knock">"Faceți clic pe butonul de mai jos și un administrator de cameră va fi notificat. Veți putea să vă alăturați conversației odată aprobată."</string>
+  <string name="screen_join_room_subtitle_no_preview">"Trebuie să fiți membru al acestei camere pentru a vizualiza istoricul mesajelor."</string>
+  <string name="screen_join_room_title_knock">"Doriți să vă alăturați acestei camere?"</string>
+  <string name="screen_join_room_title_no_preview">"Previzualizare indisponibilă"</string>
+</resources>

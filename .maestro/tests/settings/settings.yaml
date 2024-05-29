@@ -34,7 +34,7 @@ appId: ${MAESTRO_APP_ID}
 
 - tapOn:
     text: "Advanced settings"
-- assertVisible: "Rich text editor"
+- assertVisible: "View source"
 - back
 
 - tapOn:

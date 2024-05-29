@@ -15,8 +15,6 @@
   <string name="screen_qr_code_login_initial_state_item_2">"Klik pada avatar Anda"</string>
   <string name="screen_qr_code_login_initial_state_item_3">"Pilih %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"“Tautkan perangkat baru”"</string>
-  <string name="screen_qr_code_login_initial_state_item_4">"Pilih %1$s"</string>
-  <string name="screen_qr_code_login_initial_state_item_4_action">"“Tampilkan kode QR”"</string>
   <string name="screen_qr_code_login_initial_state_title">"Buka %1$s di perangkat lain untuk mendapatkan kode QR"</string>
   <string name="screen_qr_code_login_invalid_scan_state_description">"Gunakan kode QR yang ditampilkan di perangkat lain."</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Coba lagi"</string>

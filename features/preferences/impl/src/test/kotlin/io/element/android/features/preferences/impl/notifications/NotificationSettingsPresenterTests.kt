@@ -19,12 +19,20 @@ package io.element.android.features.preferences.impl.notifications
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
-import com.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
+import io.element.android.libraries.push.api.PushService
+import io.element.android.libraries.push.test.FakePushService
+import io.element.android.libraries.pushproviders.api.Distributor
+import io.element.android.libraries.pushproviders.api.PushProvider
+import io.element.android.libraries.pushproviders.test.FakePushProvider
+import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
+import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -230,14 +238,95 @@ class NotificationSettingsPresenterTests {
         }
     }
 
+    @Test
+    fun `present - change push provider`() = runTest {
+        val presenter = createNotificationSettingsPresenter(
+            pushService = createFakePushService(),
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitLastSequentialItem()
+            assertThat(initialState.currentPushDistributor).isEqualTo(AsyncData.Success("aDistributorName0"))
+            assertThat(initialState.availablePushDistributors).containsExactly("aDistributorName0", "aDistributorName1")
+            initialState.eventSink.invoke(NotificationSettingsEvents.ChangePushProvider)
+            val withDialog = awaitItem()
+            assertThat(withDialog.showChangePushProviderDialog).isTrue()
+            // Cancel
+            withDialog.eventSink(NotificationSettingsEvents.CancelChangePushProvider)
+            val withoutDialog = awaitItem()
+            assertThat(withoutDialog.showChangePushProviderDialog).isFalse()
+            withDialog.eventSink.invoke(NotificationSettingsEvents.ChangePushProvider)
+            assertThat(awaitItem().showChangePushProviderDialog).isTrue()
+            withDialog.eventSink(NotificationSettingsEvents.SetPushProvider(1))
+            val withNewProvider = awaitItem()
+            assertThat(withNewProvider.showChangePushProviderDialog).isFalse()
+            assertThat(withNewProvider.currentPushDistributor).isInstanceOf(AsyncData.Loading::class.java)
+            skipItems(1)
+            val lastItem = awaitItem()
+            assertThat(lastItem.currentPushDistributor).isEqualTo(AsyncData.Success("aDistributorName1"))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - change push provider error`() = runTest {
+        val presenter = createNotificationSettingsPresenter(
+            pushService = createFakePushService(
+                registerWithLambda = { _, _, _ ->
+                    Result.failure(Exception("An error"))
+                },
+            ),
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitLastSequentialItem()
+            initialState.eventSink.invoke(NotificationSettingsEvents.ChangePushProvider)
+            val withDialog = awaitItem()
+            assertThat(withDialog.showChangePushProviderDialog).isTrue()
+            withDialog.eventSink(NotificationSettingsEvents.SetPushProvider(1))
+            val withNewProvider = awaitItem()
+            assertThat(withNewProvider.showChangePushProviderDialog).isFalse()
+            assertThat(withNewProvider.currentPushDistributor).isInstanceOf(AsyncData.Loading::class.java)
+            val lastItem = awaitItem()
+            assertThat(lastItem.currentPushDistributor).isInstanceOf(AsyncData.Failure::class.java)
+        }
+    }
+
+    private fun createFakePushService(
+        registerWithLambda: suspend (MatrixClient, PushProvider, Distributor) -> Result<Unit> = { _, _, _ ->
+            Result.success(Unit)
+        }
+    ): PushService {
+        val pushProvider1 = FakePushProvider(
+            index = 0,
+            name = "aFakePushProvider0",
+            isAvailable = true,
+            distributors = listOf(Distributor("aDistributorValue0", "aDistributorName0")),
+        )
+        val pushProvider2 = FakePushProvider(
+            index = 1,
+            name = "aFakePushProvider1",
+            isAvailable = true,
+            distributors = listOf(Distributor("aDistributorValue1", "aDistributorName1")),
+        )
+        return FakePushService(
+            availablePushProviders = listOf(pushProvider1, pushProvider2),
+            registerWithLambda = registerWithLambda,
+        )
+    }
+
     private fun createNotificationSettingsPresenter(
-        notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService()
+        notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
+        pushService: PushService = FakePushService(),
     ): NotificationSettingsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
         return NotificationSettingsPresenter(
             notificationSettingsService = notificationSettingsService,
             userPushStoreFactory = FakeUserPushStoreFactory(),
             matrixClient = matrixClient,
+            pushService = pushService,
             systemNotificationsEnabledProvider = FakeSystemNotificationsEnabledProvider(),
         )
     }

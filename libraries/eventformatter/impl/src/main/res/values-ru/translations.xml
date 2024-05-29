@@ -30,7 +30,7 @@
   <string name="state_event_room_join_by_you">"Вы присоединились к комнате"</string>
   <string name="state_event_room_knock">"%1$s запросил присоединение"</string>
   <string name="state_event_room_knock_accepted">"%1$s разрешил %2$s присоединиться"</string>
-  <string name="state_event_room_knock_accepted_by_you">"%1$s разрешил вам присоединиться"</string>
+  <string name="state_event_room_knock_accepted_by_you">"Вы разрешили %1$s присоединиться"</string>
   <string name="state_event_room_knock_by_you">"Вы запросили присоединение"</string>
   <string name="state_event_room_knock_denied">"%1$s отклонил запрос %2$s на присоединение"</string>
   <string name="state_event_room_knock_denied_by_you">"Вы отклонили запрос %1$s на присоединение"</string>

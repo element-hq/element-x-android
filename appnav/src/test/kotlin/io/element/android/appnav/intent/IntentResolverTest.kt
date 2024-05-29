@@ -18,6 +18,7 @@ package io.element.android.appnav.intent
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import androidx.core.net.toUri
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.login.api.oidc.OidcAction
@@ -26,9 +27,13 @@ import io.element.android.features.login.impl.oidc.OidcUrlParser
 import io.element.android.libraries.deeplink.DeepLinkCreator
 import io.element.android.libraries.deeplink.DeeplinkData
 import io.element.android.libraries.deeplink.DeeplinkParser
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_THREAD_ID
+import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
+import io.element.android.tests.testutils.lambda.lambdaError
 import org.junit.Assert.assertThrows
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -163,8 +168,59 @@ class IntentResolverTest {
     }
 
     @Test
+    fun `test resolve external permalink`() {
+        val permalinkData = PermalinkData.UserLink(
+            userId = UserId("@alice:matrix.org")
+        )
+        val sut = createIntentResolver(
+            permalinkParserResult = { permalinkData }
+        )
+        val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
+            action = Intent.ACTION_VIEW
+            data = "https://matrix.to/#/@alice:matrix.org".toUri()
+        }
+        val result = sut.resolve(intent)
+        assertThat(result).isEqualTo(
+            ResolvedIntent.Permalink(
+                permalinkData = permalinkData
+            )
+        )
+    }
+
+    @Test
+    fun `test resolve external permalink, FallbackLink should be ignored`() {
+        val sut = createIntentResolver(
+            permalinkParserResult = { PermalinkData.FallbackLink(Uri.parse("https://matrix.org")) }
+        )
+        val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
+            action = Intent.ACTION_VIEW
+            data = "https://matrix.to/#/@alice:matrix.org".toUri()
+        }
+        val result = sut.resolve(intent)
+        assertThat(result).isNull()
+    }
+
+    @Test
+    fun `test resolve external permalink, invalid action`() {
+        val permalinkData = PermalinkData.UserLink(
+            userId = UserId("@alice:matrix.org")
+        )
+        val sut = createIntentResolver(
+            permalinkParserResult = { permalinkData }
+        )
+        val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
+            action = Intent.ACTION_SEND
+            data = "https://matrix.to/invalid".toUri()
+        }
+        val result = sut.resolve(intent)
+        assertThat(result).isNull()
+    }
+
+    @Test
     fun `test resolve invalid`() {
-        val sut = createIntentResolver()
+        val sut = createIntentResolver(
+            permalinkParserResult = { PermalinkData.FallbackLink(Uri.parse("https://matrix.org")) }
+        )
         val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
             action = Intent.ACTION_VIEW
             data = "io.element:/invalid".toUri()
@@ -173,11 +229,16 @@ class IntentResolverTest {
         assertThat(result).isNull()
     }
 
-    private fun createIntentResolver(): IntentResolver {
+    private fun createIntentResolver(
+        permalinkParserResult: () -> PermalinkData = { lambdaError() }
+    ): IntentResolver {
         return IntentResolver(
             deeplinkParser = DeeplinkParser(),
             oidcIntentResolver = DefaultOidcIntentResolver(
                 oidcUrlParser = OidcUrlParser()
+            ),
+            permalinkParser = FakePermalinkParser(
+                result = permalinkParserResult
             ),
         )
     }

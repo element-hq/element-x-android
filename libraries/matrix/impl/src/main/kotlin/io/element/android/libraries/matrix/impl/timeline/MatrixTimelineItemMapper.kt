@@ -31,7 +31,7 @@ class MatrixTimelineItemMapper(
     private val eventTimelineItemMapper: EventTimelineItemMapper = EventTimelineItemMapper(),
 ) {
     fun map(timelineItem: TimelineItem): MatrixTimelineItem = timelineItem.use {
-        val uniqueId = timelineItem.uniqueId().toString()
+        val uniqueId = timelineItem.uniqueId()
         val asEvent = it.asEvent()
         if (asEvent != null) {
             val eventTimelineItem = eventTimelineItemMapper.map(asEvent)

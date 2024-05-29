@@ -58,14 +58,22 @@ class UnifiedPushProvider @Inject constructor(
         return unifiedPushDistributorProvider.getDistributors()
     }
 
-    override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor) {
+    override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor): Result<Unit> {
         val clientSecret = pushClientSecret.getSecretForUser(matrixClient.sessionId)
-        registerUnifiedPushUseCase.execute(matrixClient, distributor, clientSecret)
+        return registerUnifiedPushUseCase.execute(distributor, clientSecret)
+            .onSuccess {
+                unifiedPushStore.setDistributorValue(matrixClient.sessionId, distributor.value)
+            }
     }
 
-    override suspend fun unregister(matrixClient: MatrixClient) {
+    override suspend fun getCurrentDistributor(matrixClient: MatrixClient): Distributor? {
+        val distributorValue = unifiedPushStore.getDistributorValue(matrixClient.sessionId)
+        return getDistributors().find { it.value == distributorValue }
+    }
+
+    override suspend fun unregister(matrixClient: MatrixClient): Result<Unit> {
         val clientSecret = pushClientSecret.getSecretForUser(matrixClient.sessionId)
-        unRegisterUnifiedPushUseCase.execute(clientSecret)
+        return unRegisterUnifiedPushUseCase.execute(matrixClient, clientSecret)
     }
 
     override suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig? {

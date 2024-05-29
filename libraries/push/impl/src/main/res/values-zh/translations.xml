@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="notification_channel_call">"通话"</string>
+  <string name="notification_channel_listening_for_events">"监听事件"</string>
+  <string name="notification_channel_noisy">"嘈杂通知"</string>
+  <string name="notification_channel_silent">"静默通知"</string>
+  <plurals name="notification_compat_summary_line_for_room">
+    <item quantity="other">"%1$s：%2$d 条消息"</item>
+  </plurals>
+  <plurals name="notification_compat_summary_title">
+    <item quantity="other">"%d 条通知"</item>
+  </plurals>
+  <string name="notification_fallback_content">"通知"</string>
+  <string name="notification_inline_reply_failed">"** 无法发送——请打开房间"</string>
+  <string name="notification_invitation_action_join">"加入"</string>
+  <string name="notification_invitation_action_reject">"拒绝"</string>
+  <plurals name="notification_invitations">
+    <item quantity="other">"%d 个邀请"</item>
+  </plurals>
+  <string name="notification_invite_body">"邀请您聊天"</string>
+  <string name="notification_mentioned_you_body">"提到了你：%1$s"</string>
+  <string name="notification_new_messages">"新消息"</string>
+  <plurals name="notification_new_messages_for_room">
+    <item quantity="other">"%d 条新消息"</item>
+  </plurals>
+  <string name="notification_reaction_body">"使用 %1$s 回应"</string>
+  <string name="notification_room_action_mark_as_read">"标记为已读"</string>
+  <string name="notification_room_action_quick_reply">"快速回复"</string>
+  <string name="notification_room_invite_body">"邀请你加入房间"</string>
+  <string name="notification_sender_me">"我"</string>
+  <string name="notification_test_push_notification_content">"您正在查看通知！点击我！"</string>
+  <string name="notification_ticker_text_dm">"%1$s：%2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
+  <plurals name="notification_unread_notified_messages">
+    <item quantity="other">"%d 条未读消息"</item>
+  </plurals>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s 和 %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%2$s 中的 %1$s"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"在 %2$s 和 %3$s 中的 %1$s"</string>
+  <plurals name="notification_unread_notified_messages_in_room_rooms">
+    <item quantity="other">"%d 个房间"</item>
+  </plurals>
+  <string name="push_distributor_background_sync_android">"后台同步"</string>
+  <string name="push_distributor_firebase_android">"谷歌服务"</string>
+  <string name="push_no_valid_google_play_services_apk_android">"找不到有效的 Google Play 服务。通知可能无法正常工作。"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"获取当前推送提供者的名称。"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"未选择任何推送提供者。"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"当前推送提供者：%1$s。"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"当前推送提供者"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"确保应用程序至少有一个推送提供者。"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"未找到推送提供者。"</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="other">"找到了 %1$d 个推送提供者：%2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"检测推送提供者"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"检查应用程序是否可以显示通知。"</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"通知未被点击。"</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"无法显示通知。"</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"通知已被点击！"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"显示通知"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"请点击通知继续测试。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"确保应用程序正在接收推送。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"错误：推送者拒绝了该请求。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"错误：%1$s。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"错误，无法测试推送。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"错误，等待推送超时。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"推送回路耗时%1$d 毫秒。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"测试推送回路"</string>
+</resources>

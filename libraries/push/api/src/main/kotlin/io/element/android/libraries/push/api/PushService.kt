@@ -21,8 +21,10 @@ import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 
 interface PushService {
-    // TODO Move away
-    fun notificationStyleChanged()
+    /**
+     * Return the current push provider, or null if none.
+     */
+    suspend fun getCurrentPushProvider(): PushProvider?
 
     /**
      * Return the list of push providers, available at compile time, and
@@ -35,7 +37,11 @@ interface PushService {
      *
      * The method has effect only if the [PushProvider] is different than the current one.
      */
-    suspend fun registerWith(matrixClient: MatrixClient, pushProvider: PushProvider, distributor: Distributor)
+    suspend fun registerWith(
+        matrixClient: MatrixClient,
+        pushProvider: PushProvider,
+        distributor: Distributor,
+    ): Result<Unit>
 
     /**
      * Return false in case of early error.

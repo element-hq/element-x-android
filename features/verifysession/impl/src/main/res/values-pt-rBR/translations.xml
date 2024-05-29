@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Criar uma nova chave de recuperação"</string>
+  <string name="screen_identity_confirmation_subtitle">"Verifica este dispositivo para configurar o envio seguro de mensagens."</string>
+  <string name="screen_identity_confirmation_title">"Confirma que és tu"</string>
+  <string name="screen_identity_confirmed_subtitle">"Agora podes ler ou enviar mensagens de forma segura, e qualquer pessoa com quem converses também pode confiar neste dispositivo."</string>
+  <string name="screen_identity_confirmed_title">"Dispositivo verificado"</string>
+  <string name="screen_identity_use_another_device">"Utilizar outro dispositivo"</string>
+  <string name="screen_identity_waiting_on_other_device">"A aguardar por outros dispositivos…"</string>
+  <string name="screen_session_verification_cancelled_subtitle">"Algo não bateu certo. O pedido ou demorou demasiado tempo ou foi rejeitado."</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"Confirma se os emojis abaixo correspondem aos apresentados na tua outra sessão."</string>
+  <string name="screen_session_verification_compare_emojis_title">"Compara os emojis"</string>
+  <string name="screen_session_verification_compare_numbers_subtitle">"Confirma se os números abaixo correspondem aos números apresentados na tua outra sessão."</string>
+  <string name="screen_session_verification_compare_numbers_title">"Comparar números"</string>
+  <string name="screen_session_verification_complete_subtitle">"A tua nova sessão está agora verificada, pelo que tem acesso às tuas mensagens cifradas e os outros utilizadores vão vê-la como de confiança."</string>
+  <string name="screen_session_verification_enter_recovery_key">"Insere a chave de recuperação"</string>
+  <string name="screen_session_verification_open_existing_session_subtitle">"Prova que és tu para acederes ao teu histórico de mensagens cifradas."</string>
+  <string name="screen_session_verification_open_existing_session_title">"Abrir sessão existente"</string>
+  <string name="screen_session_verification_positive_button_canceled">"Repetir verficiação"</string>
+  <string name="screen_session_verification_positive_button_initial">"Estou pronto"</string>
+  <string name="screen_session_verification_positive_button_verifying_ongoing">"A aguardar correspondência"</string>
+  <string name="screen_session_verification_ready_subtitle">"Compara um conjunto único de emojis."</string>
+  <string name="screen_session_verification_request_accepted_subtitle">"Compara os emojis únicos, certificando-te de que aparecem pela mesma ordem."</string>
+  <string name="screen_session_verification_they_dont_match">"Não correspondem"</string>
+  <string name="screen_session_verification_they_match">"Correspondem"</string>
+  <string name="screen_session_verification_waiting_to_accept_subtitle">"Para continuar, aceita o pedido de verificação na tua outra sessão."</string>
+  <string name="screen_session_verification_waiting_to_accept_title">"À aguardar a aceitação do pedido"</string>
+</resources>
