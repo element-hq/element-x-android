@@ -41,7 +41,8 @@ class RoomSyncSubscriber(
             RequiredState(key = EventType.STATE_ROOM_JOIN_RULES, value = ""),
             RequiredState(key = EventType.STATE_ROOM_POWER_LEVELS, value = ""),
         ),
-        timelineLimit = null
+        timelineLimit = null,
+        includeHeroes = true,
     )
 
     suspend fun subscribe(roomId: RoomId) = mutex.withLock {

@@ -52,6 +52,10 @@ sealed interface NotificationContent {
         data class CallInvite(
             val senderId: UserId,
         ) : MessageLike
+        data class CallNotify(
+            val senderId: UserId,
+            val type: CallNotifyType,
+        ) : MessageLike
 
         data object CallHangup : MessageLike
         data object CallCandidates : MessageLike
@@ -107,4 +111,9 @@ sealed interface NotificationContent {
         data object SpaceChild : StateEvent
         data object SpaceParent : StateEvent
     }
+}
+
+enum class CallNotifyType {
+    RING,
+    NOTIFY
 }
