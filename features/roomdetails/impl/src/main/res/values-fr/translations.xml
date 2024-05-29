@@ -35,6 +35,9 @@
   <string name="screen_room_details_add_topic_title">"Ajouter un sujet"</string>
   <string name="screen_room_details_already_a_member">"Déjà membre"</string>
   <string name="screen_room_details_already_invited">"Déjà invité(e)"</string>
+  <string name="screen_room_details_badge_encrypted">"Chiffré"</string>
+  <string name="screen_room_details_badge_not_encrypted">"Non chiffré"</string>
+  <string name="screen_room_details_badge_public">"Salon public"</string>
   <string name="screen_room_details_edit_room_title">"Modifier le salon"</string>
   <string name="screen_room_details_edition_error">"Une erreur inconnue s’est produite et les informations n’ont pas pu être modifiées."</string>
   <string name="screen_room_details_edition_error_title">"Impossible de mettre à jour le salon"</string>
@@ -85,7 +88,7 @@
   <string name="screen_room_notification_settings_allow_custom">"Autoriser les paramètres personnalisés"</string>
   <string name="screen_room_notification_settings_allow_custom_footnote">"L’activation de cette option annulera votre paramètre par défaut"</string>
   <string name="screen_room_notification_settings_custom_settings_title">"Prévenez-moi dans ce salon pour"</string>
-  <string name="screen_room_notification_settings_default_setting_footnote">"Vous pouvez le modifier dans votre %1$s."</string>
+  <string name="screen_room_notification_settings_default_setting_footnote">"Vous pouvez le modifier dans vos %1$s."</string>
   <string name="screen_room_notification_settings_default_setting_footnote_content_link">"paramètres globaux"</string>
   <string name="screen_room_notification_settings_default_setting_title">"Paramètre par défaut"</string>
   <string name="screen_room_notification_settings_edit_remove_setting">"Supprimer le paramètre personnalisé"</string>

@@ -23,7 +23,7 @@ import io.element.android.wysiwyg.compose.rememberRichTextEditorState
 
 class TestRichTextEditorStateFactory : RichTextEditorStateFactory {
     @Composable
-    override fun create(): RichTextEditorState {
+    override fun remember(): RichTextEditorState {
         return rememberRichTextEditorState("", fake = true)
     }
 }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"ეკრანის ანაბეჭდის დართვა"</string>
+  <string name="screen_bug_report_contact_me">"შეგიძლიათ, დამიკავშირდეთ თუ გაქვთ შემდგომი კითხვები."</string>
+  <string name="screen_bug_report_contact_me_title">"დამიკავშირდით"</string>
+  <string name="screen_bug_report_edit_screenshot">"ეკრანის ანაბეჭდის რედაქტირება"</string>
+  <string name="screen_bug_report_editor_description">"გთხოვთ, აღწეროთ პრობლემა. რა გააკეთე? რა შედეგს ელოდებოდით? რა მოხდა სინამდვილეში? გთხოვთ, ყველაფერი დაწვრილებით თქვათ."</string>
+  <string name="screen_bug_report_editor_placeholder">"აღწერეთ პრობლემა…"</string>
+  <string name="screen_bug_report_editor_supporting">"თუ შესაძლებელია, გთხოვთ, დაწეროთ აღწერა ინგლისურ ენაზე."</string>
+  <string name="screen_bug_report_include_crash_logs">"გაუმართაობის ჟურნალის გაგზავნა"</string>
+  <string name="screen_bug_report_include_logs">"ჟურნალების დაშვება"</string>
+  <string name="screen_bug_report_include_screenshot">"ეკრანის ანაბეჭდის გაგზავნა"</string>
+  <string name="screen_bug_report_logs_description">"ჟურნალები თქვენს შეტყობინებაში შევა იმაში დასარწმუნებლად, რომ ყველაფერი სწორად მუშაობს. ჟურნალების გარეშე გასაგზავნად გათიშეთ ეს პარამეტრი."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s ავარიულად გაითიშა ბოლოს გამოიყენებისას. გსურთ, გამოგვიგზავნოთ ავარიული გათიშვის ჟურნალი?"</string>
+</resources>

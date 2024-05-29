@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_unified_push_description">"Asigurați-vă că distribuitorii UnifiedPush sunt disponibili."</string>
+  <string name="troubleshoot_notifications_test_unified_push_failure">"Nu au fost găsiți distribuitori push."</string>
+  <plurals name="troubleshoot_notifications_test_unified_push_success">
+    <item quantity="one">"%1$d distribuitor găsit: %2$s."</item>
+    <item quantity="few">"%1$d distribuitori găsiți: %2$s."</item>
+    <item quantity="other">"%1$d distribuitori găsiți: %2$s."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_unified_push_title">"Verificați UnifiedPush"</string>
+</resources>

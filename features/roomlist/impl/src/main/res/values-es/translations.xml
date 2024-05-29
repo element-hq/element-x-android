@@ -13,8 +13,23 @@
   <string name="screen_roomlist_a11y_create_message">"Crear una nueva conversación o sala"</string>
   <string name="screen_roomlist_empty_message">"Empieza enviando un mensaje a alguien."</string>
   <string name="screen_roomlist_empty_title">"Aún no hay chats."</string>
+  <string name="screen_roomlist_filter_favourites">"Favoritos"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Puedes añadir un chat a tus favoritos en la configuración del chat.
+Por ahora, puedes deseleccionar los filtros para ver tus otros chats"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Aún no tienes chats favoritos"</string>
+  <string name="screen_roomlist_filter_low_priority">"Prioridad baja"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Puedes deseleccionar filtros para ver tus otros chats."</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"No tienes chats para esta selección"</string>
   <string name="screen_roomlist_filter_people">"Personas"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Todavía no tienes ningún mensaje directo"</string>
+  <string name="screen_roomlist_filter_rooms">"Salas"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Todavía no estás en ninguna sala"</string>
+  <string name="screen_roomlist_filter_unreads">"No leídos"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"¡Felicidades!
+¡No tienes ningún mensaje sin leer!"</string>
   <string name="screen_roomlist_main_space_title">"Todos los chats"</string>
+  <string name="screen_roomlist_mark_as_read">"Marcar como leído"</string>
+  <string name="screen_roomlist_mark_as_unread">"Marcar como no leído"</string>
   <string name="session_verification_banner_message">"Parece que estás usando un nuevo dispositivo. Verifica que eres tú para acceder a tus mensajes cifrados."</string>
   <string name="session_verification_banner_title">"Verifica que eres tú"</string>
 </resources>

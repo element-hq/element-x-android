@@ -153,6 +153,32 @@ val SemanticColors.bigCheckmarkBorderColor
 val SemanticColors.highlightedMessageBackgroundColor
     get() = if (isLight) LightColorTokens.colorGreen300 else DarkColorTokens.colorGreen300
 
+// Badge colors
+
+@OptIn(CoreColorToken::class)
+val SemanticColors.badgePositiveBackgroundColor
+    get() = if (isLight) LightColorTokens.colorAlphaGreen300 else DarkColorTokens.colorAlphaGreen300
+
+@OptIn(CoreColorToken::class)
+val SemanticColors.badgePositiveContentColor
+    get() = if (isLight) LightColorTokens.colorGreen1100 else DarkColorTokens.colorGreen1100
+
+@OptIn(CoreColorToken::class)
+val SemanticColors.badgeNeutralBackgroundColor
+    get() = if (isLight) LightColorTokens.colorAlphaGray300 else DarkColorTokens.colorAlphaGray300
+
+@OptIn(CoreColorToken::class)
+val SemanticColors.badgeNeutralContentColor
+    get() = if (isLight) LightColorTokens.colorGray1100 else DarkColorTokens.colorGray1100
+
+@OptIn(CoreColorToken::class)
+val SemanticColors.badgeNegativeBackgroundColor
+    get() = if (isLight) LightColorTokens.colorAlphaRed300 else DarkColorTokens.colorAlphaRed300
+
+@OptIn(CoreColorToken::class)
+val SemanticColors.badgeNegativeContentColor
+    get() = if (isLight) LightColorTokens.colorRed1100 else DarkColorTokens.colorRed1100
+
 @PreviewsDayNight
 @Composable
 internal fun ColorAliasesPreview() = ElementPreview {

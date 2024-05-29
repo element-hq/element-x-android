@@ -19,7 +19,6 @@ package io.element.android.features.preferences.impl.advanced
 import io.element.android.compound.theme.Theme
 
 data class AdvancedSettingsState(
-    val isRichTextEditorEnabled: Boolean,
     val isDeveloperModeEnabled: Boolean,
     val isSharePresenceEnabled: Boolean,
     val theme: Theme,

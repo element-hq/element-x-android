@@ -40,6 +40,10 @@ class PosthogAnalyticsProvider @Inject constructor(
     private var posthog: PostHogInterface? = null
     private var analyticsId: String? = null
 
+    private var pendingUserProperties: MutableMap<String, Any>? = null
+
+    private val userPropertiesLock = Any()
+
     override fun init() {
         posthog = createPosthog()
         posthog?.optIn()
@@ -57,10 +61,14 @@ class PosthogAnalyticsProvider @Inject constructor(
     }
 
     override fun capture(event: VectorAnalyticsEvent) {
-        posthog?.capture(
-            event = event.getName(),
-            properties = event.getProperties()?.keepOnlyNonNullValues().withExtraProperties(),
-        )
+        synchronized(userPropertiesLock) {
+            posthog?.capture(
+                event = event.getName(),
+                properties = event.getProperties()?.keepOnlyNonNullValues().withExtraProperties(),
+                userProperties = pendingUserProperties,
+            )
+            pendingUserProperties = null
+        }
     }
 
     override fun screen(screen: VectorAnalyticsScreen) {
@@ -71,10 +79,19 @@ class PosthogAnalyticsProvider @Inject constructor(
     }
 
     override fun updateUserProperties(userProperties: UserProperties) {
-//        posthog?.identify(
-//            REUSE_EXISTING_ID, userProperties.getProperties()?.toPostHogUserProperties(),
-//            IGNORED_OPTIONS
-//        )
+        synchronized(userPropertiesLock) {
+            // The pending properties will be sent with the following capture call
+            if (pendingUserProperties == null) {
+                pendingUserProperties = HashMap()
+            }
+            userProperties.getProperties()?.let {
+                pendingUserProperties?.putAll(it)
+            }
+            // We are not currently using `identify` in EAX, if it was the case
+            // we could have called identify to update the user properties.
+            // For now, we have to store them, and they will be updated when the next call
+            // to capture will happen.
+        }
     }
 
     override fun trackError(throwable: Throwable) {

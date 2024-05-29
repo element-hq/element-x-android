@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="confirm_recovery_key_banner_message">"A tua cópia de segurança das conversas está atualmente dessincronizada. Tens de inserir a tua chave de recuperação para manteres o acesso à cópia."</string>
+  <string name="confirm_recovery_key_banner_title">"Insere a tua chave de recuperação"</string>
+  <string name="screen_invites_decline_chat_message">"Tens a certeza que queres rejeitar o convite para %1$s?"</string>
+  <string name="screen_invites_decline_chat_title">"Rejeitar conite"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Tens a certeza que queres rejeitar esta conversa privada com %1$s?"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Rejeitar conversa"</string>
+  <string name="screen_invites_empty_list">"Sem convites"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) convidou-te"</string>
+  <string name="screen_migration_message">"Este processo só acontece uma única vez, obrigado por esperares."</string>
+  <string name="screen_migration_title">"A configurar a tua conta…"</string>
+  <string name="screen_roomlist_a11y_create_message">"Criar uma nova conversa ou sala"</string>
+  <string name="screen_roomlist_empty_message">"Começa por enviar uma mensagem a alguém."</string>
+  <string name="screen_roomlist_empty_title">"Ainda não tens conversas."</string>
+  <string name="screen_roomlist_filter_favourites">"Favoritas"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Podes adicionar uma conversa às tuas favoritas nas suas configurações.
+Por enquanto, podes anular a seleção dos filtros para veres as tuas outras conversas"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Ainda não tens nenhuma conversa favorita"</string>
+  <string name="screen_roomlist_filter_invites">"Convites"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Não tens nenhum convite pendente."</string>
+  <string name="screen_roomlist_filter_low_priority">"Prioridade baixa"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Podes anular a seleção dos filtros para veres as tuas outras conversas"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Não tens nenhuma conversa selecionada"</string>
+  <string name="screen_roomlist_filter_people">"Pessoas"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Ainda não tens nenhuma MD (mensagem direta)"</string>
+  <string name="screen_roomlist_filter_rooms">"Salas"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Ainda não estás em nenhuma sala"</string>
+  <string name="screen_roomlist_filter_unreads">"Por ler"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Parabéns!
+Não tens nenhuma mensagem por ler!"</string>
+  <string name="screen_roomlist_main_space_title">"Conversas"</string>
+  <string name="screen_roomlist_mark_as_read">"Marcar como lida"</string>
+  <string name="screen_roomlist_mark_as_unread">"Marcar como não lida"</string>
+  <string name="screen_roomlist_room_directory_button_title">"Consultar lista completa de salas"</string>
+  <string name="session_verification_banner_message">"Parece que estás a utilizar um novo dispositivo. Verifica-o com um outro para poderes aceder às tuas mensagens cifradas."</string>
+  <string name="session_verification_banner_title">"Verifica que és tu"</string>
+</resources>

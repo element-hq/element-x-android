@@ -1,0 +1,2 @@
+Main changes in this version: Add plain text editor based on Markdown input.
+Full changelog: https://github.com/element-hq/element-x-android/releases

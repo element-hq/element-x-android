@@ -49,7 +49,12 @@ fun UserProfileHeaderSection(
     openAvatarPreview: (url: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
         Box(modifier = Modifier.size(70.dp)) {
             Avatar(
                 avatarData = AvatarData(userId.value, userName, avatarUrl, AvatarSize.UserHeader),
@@ -65,6 +70,7 @@ fun UserProfileHeaderSection(
                 modifier = Modifier.clipToBounds(),
                 text = userName,
                 style = ElementTheme.typography.fontHeadingLgBold,
+                textAlign = TextAlign.Center,
             )
             Spacer(modifier = Modifier.height(6.dp))
         }

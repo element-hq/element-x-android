@@ -212,9 +212,7 @@ class PreferencesFlowNode @AssistedInject constructor(
                 createNode<EditUserProfileNode>(buildContext, listOf(inputs))
             }
             NavTarget.LockScreenSettings -> {
-                lockScreenEntryPoint.nodeBuilder(this, buildContext)
-                    .target(LockScreenEntryPoint.Target.Settings)
-                    .build()
+                lockScreenEntryPoint.nodeBuilder(this, buildContext, LockScreenEntryPoint.Target.Settings).build()
             }
             NavTarget.BlockedUsers -> {
                 createNode<BlockedUsersNode>(buildContext)

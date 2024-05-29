@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Vyberte, jak chcete přijímat oznámení"</string>
   <string name="screen_advanced_settings_developer_mode">"Vývojářský režim"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Povolením získáte přístup k funkcím a funkcím pro vývojáře."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Vlastní URL pro Element Call"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Nastavte vlastní URL pro Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Neplatné URL, ujistěte se, že jste uvedli protokol (http/https) a správnou adresu."</string>
+  <string name="screen_advanced_settings_push_provider_android">"Poskytovatel push oznámení"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Vypněte editor formátovaného textu pro ruční zadání Markdown."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Potvrzení o přečtení"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Pokud je vypnuto, potvrzení o přečtení se nikomu neodesílají. Stále budete dostávat potvrzení o přečtení od ostatních uživatelů."</string>

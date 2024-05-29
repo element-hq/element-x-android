@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"აქტივობები"</string>
+  <string name="emoji_picker_category_flags">"დროშები"</string>
+  <string name="emoji_picker_category_foods">"Საჭმელ-სასმელი"</string>
+  <string name="emoji_picker_category_nature">"ცხოველები &amp; ბუნება"</string>
+  <string name="emoji_picker_category_objects">"ობიექტები"</string>
+  <string name="emoji_picker_category_people">"ღიმილები &amp; ხალხი"</string>
+  <string name="emoji_picker_category_places">"მოგზაურობა და ადგილები"</string>
+  <string name="emoji_picker_category_symbols">"სიმბოლოები"</string>
+  <string name="screen_report_content_block_user">"მომხმარებლის დაბლოკვა"</string>
+  <string name="screen_report_content_block_user_hint">"შეამოწმეთ, გსურთ თუ არა ამ მომხმარებლის ყველა მიმდინარე და მომავალი შეტყობინების დამალვა"</string>
+  <string name="screen_report_content_explanation">"ეს შეტყობინება გაგზავნილი იქნება თქვენი სახლის სერვერის ადმინისტრატორისადმი. მას არ ექნება დაშიფვრული შეტყობინებების წაკითხვის შესაძლებლობა."</string>
+  <string name="screen_report_content_hint">"ამ კონტენტის დარეპორტების მიზეზი"</string>
+  <string name="screen_room_attachment_source_camera">"კამერა"</string>
+  <string name="screen_room_attachment_source_camera_photo">"ფოტოს გადაღება"</string>
+  <string name="screen_room_attachment_source_camera_video">"ვიდეოს ჩაწერა"</string>
+  <string name="screen_room_attachment_source_files">"დანართი"</string>
+  <string name="screen_room_attachment_source_gallery">"ფოტოსა და ვიდეოს ბიბლიოთეკა"</string>
+  <string name="screen_room_attachment_source_location">"ადგილმდებარეობა"</string>
+  <string name="screen_room_attachment_source_poll">"გამოკითხვა"</string>
+  <string name="screen_room_attachment_text_formatting">"ტექსტის ფორმატირება"</string>
+  <string name="screen_room_encrypted_history_banner">"შეტყობინებების ისტორია ამჟამად მიუწვდომელია."</string>
+  <string name="screen_room_invite_again_alert_message">"გსურთ მათი კვლავ მოწვევა?"</string>
+  <string name="screen_room_invite_again_alert_title">"თქვენ მარტო ხართ ამ ჩატში"</string>
+  <string name="screen_room_mentions_at_room_title">"ყველა"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"Ხელახლა გაგზავნა"</string>
+  <string name="screen_room_retry_send_menu_title">"თქვენი შეტყობინების გაგზავნა ვერ მოხერხდა"</string>
+  <string name="screen_room_timeline_add_reaction">"ემოჯის დამატება"</string>
+  <string name="screen_room_timeline_beginning_of_room">"ეს არის %1$s-ს დასაწყისი."</string>
+  <string name="screen_room_timeline_beginning_of_room_no_name">"ეს არის ამ საუბრის დასაწყისი."</string>
+  <string name="screen_room_timeline_less_reactions">"ნაკლების ჩვენება"</string>
+  <string name="screen_room_timeline_message_copied">"შეტყობინება დაკოპირდა"</string>
+  <string name="screen_room_timeline_no_permission_to_post">"თქვენ არ გაქვთ ამ ოთახში გამოქვეყნების ნებართვა"</string>
+  <string name="screen_room_timeline_reactions_show_less">"ნაკლების ჩვენება"</string>
+  <string name="screen_room_timeline_reactions_show_more">"მეტის ჩვენება"</string>
+  <string name="screen_room_timeline_read_marker_title">"ახალი"</string>
+  <plurals name="screen_room_timeline_state_changes">
+    <item quantity="one">"%1$dოთახის ცვლილება"</item>
+    <item quantity="other">"%1$dოთახის ცვლილებები"</item>
+  </plurals>
+</resources>

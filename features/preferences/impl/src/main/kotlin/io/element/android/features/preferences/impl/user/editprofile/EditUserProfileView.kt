@@ -25,12 +25,10 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -57,9 +55,8 @@ import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.EditableAvatarView
 import io.element.android.libraries.permissions.api.PermissionsView
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditUserProfileView(
     state: EditUserProfileState,
@@ -67,17 +64,12 @@ fun EditUserProfileView(
     onProfileEdited: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val coroutineScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
-    val itemActionsBottomSheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden,
-    )
+    val isAvatarActionsSheetVisible = remember { mutableStateOf(false) }
 
     fun onAvatarClicked() {
         focusManager.clearFocus()
-        coroutineScope.launch {
-            itemActionsBottomSheetState.show()
-        }
+        isAvatarActionsSheetVisible.value = true
     }
 
     Scaffold(
@@ -114,7 +106,7 @@ fun EditUserProfileView(
         ) {
             Spacer(modifier = Modifier.height(24.dp))
             EditableAvatarView(
-                userId = state.userId?.value,
+                matrixId = state.userId.value,
                 displayName = state.displayName,
                 avatarUrl = state.userAvatarUrl,
                 avatarSize = AvatarSize.RoomHeader,
@@ -122,14 +114,12 @@ fun EditUserProfileView(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             )
             Spacer(modifier = Modifier.height(16.dp))
-            state.userId?.let {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = it.value,
-                    style = ElementTheme.typography.fontBodyLgRegular,
-                    textAlign = TextAlign.Center,
-                )
-            }
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = state.userId.value,
+                style = ElementTheme.typography.fontBodyLgRegular,
+                textAlign = TextAlign.Center,
+            )
             Spacer(modifier = Modifier.height(40.dp))
             LabelledOutlinedTextField(
                 label = stringResource(R.string.screen_edit_profile_display_name),
@@ -142,7 +132,8 @@ fun EditUserProfileView(
 
         AvatarActionBottomSheet(
             actions = state.avatarActions,
-            modalBottomSheetState = itemActionsBottomSheetState,
+            isVisible = isAvatarActionsSheetVisible.value,
+            onDismiss = { isAvatarActionsSheetVisible.value = false },
             onActionSelected = { state.eventSink(EditUserProfileEvents.HandleAvatarAction(it)) }
         )
 

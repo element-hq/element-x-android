@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_permission_camera">"为了让应用程序使用相机，请在系统设置中授予权限。"</string>
+  <string name="dialog_permission_generic">"请在系统设置中授予权限。"</string>
+  <string name="dialog_permission_microphone">"为了让应用程序使用麦克风，请在系统设置中授予权限。"</string>
+  <string name="dialog_permission_notification">"为了让应用程序显示通知，请在系统设置中授予权限。"</string>
+</resources>

@@ -36,6 +36,7 @@
   <string name="action_accept">"Přijmout"</string>
   <string name="action_add_to_timeline">"Přidat na časovou osu"</string>
   <string name="action_back">"Zpět"</string>
+  <string name="action_call">"Hovor"</string>
   <string name="action_cancel">"Zrušit"</string>
   <string name="action_choose_photo">"Vybrat fotku"</string>
   <string name="action_clear">"Vymazat"</string>
@@ -74,6 +75,7 @@
   <string name="action_load_more">"Načíst více"</string>
   <string name="action_manage_account">"Spravovat účet"</string>
   <string name="action_manage_devices">"Spravovat zařízení"</string>
+  <string name="action_message">"Zpráva"</string>
   <string name="action_next">"Další"</string>
   <string name="action_no">"Ne"</string>
   <string name="action_not_now">"Teď ne"</string>
@@ -119,6 +121,7 @@
   <string name="common_blocked_users">"Blokovaní uživatelé"</string>
   <string name="common_bubbles">"Bubliny"</string>
   <string name="common_call_invite">"Probíhá hovor (nepodporováno)"</string>
+  <string name="common_call_started">"Hovor zahájen"</string>
   <string name="common_chat_backup">"Záloha chatu"</string>
   <string name="common_copyright">"Autorská práva"</string>
   <string name="common_creating_room">"Vytváření místnosti…"</string>
@@ -266,6 +269,7 @@
   <string name="screen_room_member_details_unblock_alert_action">"Odblokovat"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Znovu uvidíte všechny zprávy od nich."</string>
   <string name="screen_room_member_details_unblock_user">"Odblokovat uživatele"</string>
+  <string name="screen_room_title">"Chat"</string>
   <string name="screen_share_location_title">"Sdílet polohu"</string>
   <string name="screen_share_my_location_action">"Sdílet moji polohu"</string>
   <string name="screen_share_open_apple_maps">"Otevřít v Mapách Apple"</string>

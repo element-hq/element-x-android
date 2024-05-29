@@ -28,6 +28,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -38,6 +39,7 @@ import kotlinx.collections.immutable.toImmutableList
 
 internal fun aMessageEvent(
     eventId: EventId? = AN_EVENT_ID,
+    transactionId: TransactionId? = null,
     isMine: Boolean = true,
     isEditable: Boolean = true,
     content: TimelineItemEventContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, formattedBody = null, isEdited = false),
@@ -48,6 +50,7 @@ internal fun aMessageEvent(
 ) = TimelineItem.Event(
     id = eventId?.value.orEmpty(),
     eventId = eventId,
+    transactionId = transactionId,
     senderId = A_USER_ID,
     senderProfile = aProfileTimelineDetailsReady(displayName = A_USER_NAME),
     senderAvatar = AvatarData(A_USER_ID.value, A_USER_NAME, size = AvatarSize.TimelineSender),

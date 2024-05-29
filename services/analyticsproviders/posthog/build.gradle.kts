@@ -34,4 +34,10 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.di)
     implementation(projects.services.analyticsproviders.api)
+
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.test.truth)
+    testImplementation(libs.test.junit)
+    testImplementation(projects.tests.testutils)
+    testImplementation(libs.test.mockk)
 }

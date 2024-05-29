@@ -24,7 +24,7 @@ interface UserPushStore {
     suspend fun getPushProviderName(): String?
     suspend fun setPushProviderName(value: String)
     suspend fun getCurrentRegisteredPushKey(): String?
-    suspend fun setCurrentRegisteredPushKey(value: String)
+    suspend fun setCurrentRegisteredPushKey(value: String?)
 
     fun getNotificationEnabledForDevice(): Flow<Boolean>
     suspend fun setNotificationEnabledForDevice(enabled: Boolean)

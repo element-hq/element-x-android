@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Välj hur du vill ta emot aviseringar"</string>
   <string name="screen_advanced_settings_developer_mode">"Utvecklarläge"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Aktivera för att ha tillgång till funktionalitet för utvecklare."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Anpassad bas-URL för Element Call"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Ange en anpassad bas-URL för Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Ogiltig URL, se till att du inkluderar protokollet (http/https) och rätt adress."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Inaktivera rik-text-redigeraren för att skriva Markdown manuellt."</string>
+  <string name="screen_advanced_settings_send_read_receipts">"Läskvitton"</string>
+  <string name="screen_advanced_settings_send_read_receipts_description">"Om det är avstängt kommer dina läskvitton inte att skickas till någon. Du kommer fortfarande att få läskvitton från andra användare."</string>
+  <string name="screen_advanced_settings_share_presence">"Dela närvaro"</string>
+  <string name="screen_advanced_settings_share_presence_description">"Om det är avstängt kan du inte skicka eller ta emot läskvitton eller skrivnotiser"</string>
+  <string name="screen_advanced_settings_view_source_description">"Aktivera alternativet för att visa meddelandekälla i tidslinjen."</string>
   <string name="screen_blocked_users_unblock_alert_action">"Avblockera"</string>
   <string name="screen_blocked_users_unblock_alert_description">"Du kommer att kunna se alla meddelanden från dem igen."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Avblockera användare"</string>
+  <string name="screen_blocked_users_unblocking">"Avblockerar …"</string>
   <string name="screen_edit_profile_display_name">"Visningsnamn"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Ditt visningsnamn"</string>
   <string name="screen_edit_profile_error">"Ett okänt fel påträffades och informationen kunde inte ändras."</string>
@@ -31,6 +38,8 @@ Om du fortsätter kan vissa av dina inställningar ändras."</string>
   <string name="screen_notification_settings_enable_notifications">"Aktivera aviseringar på den här enheten"</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"Konfigurationen har inte korrigerats, vänligen pröva igen."</string>
   <string name="screen_notification_settings_group_chats">"Gruppchattar"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"Inbjudningar"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Din hemserver stöder inte det här alternativet i krypterade rum, du kanske inte aviseras i vissa rum."</string>
   <string name="screen_notification_settings_mentions_section_title">"Omnämnanden"</string>
   <string name="screen_notification_settings_mode_all">"Alla"</string>
   <string name="screen_notification_settings_mode_mentions">"Omnämnanden"</string>

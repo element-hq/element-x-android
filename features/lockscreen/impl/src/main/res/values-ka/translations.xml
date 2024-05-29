@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_app_lock_forgot_pin">"დაგავიწყდათ PIN?"</string>
+  <string name="screen_app_lock_settings_change_pin">"PIN კოდის შეცვლა"</string>
+  <string name="screen_app_lock_settings_enable_biometric_unlock">"ბიომეტრიული განბლოკვის დაშვება"</string>
+  <string name="screen_app_lock_settings_remove_pin">"პინ კოდის წაშლა"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_message">"დარწმუნებული ხართ, რომ გსურთ PIN-ის წაშლა?"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_title">"გსურთ PIN-ის წაშლა?"</string>
+  <string name="screen_app_lock_setup_confirm_pin">"დაადასტურეთ PIN"</string>
+  <string name="screen_app_lock_signout_alert_message">"გასაგრძელებლად საჭიროა ხელახლა შესვლა და ახალი PIN-ის შექმნა"</string>
+  <string name="screen_app_lock_signout_alert_title">"თქვენ ახლა გადიხართ…"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"თქვენ გაქვთ %1$d მცდელობა განსაბლოკად"</item>
+    <item quantity="other">"თქვენ გაქვთ %1$d მცდელობა განსაბლოკად"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"არასწორი PIN. თქვენ %1$d შანსი დაგრჩათ"</item>
+    <item quantity="other">"არასწორი PIN. თქვენ %1$d შანსი დაგრჩათ"</item>
+  </plurals>
+  <string name="screen_signout_in_progress_dialog_content">"გასვლა…"</string>
+</resources>

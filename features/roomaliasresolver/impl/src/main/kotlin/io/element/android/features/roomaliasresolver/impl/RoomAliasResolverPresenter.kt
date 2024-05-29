@@ -29,7 +29,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
-import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -46,7 +46,7 @@ class RoomAliasResolverPresenter @AssistedInject constructor(
     @Composable
     override fun present(): RoomAliasResolverState {
         val coroutineScope = rememberCoroutineScope()
-        val resolveState: MutableState<AsyncData<RoomId>> = remember { mutableStateOf(AsyncData.Uninitialized) }
+        val resolveState: MutableState<AsyncData<ResolvedRoomAlias>> = remember { mutableStateOf(AsyncData.Uninitialized) }
         LaunchedEffect(Unit) {
             resolveAlias(resolveState)
         }
@@ -64,7 +64,7 @@ class RoomAliasResolverPresenter @AssistedInject constructor(
         )
     }
 
-    private fun CoroutineScope.resolveAlias(resolveState: MutableState<AsyncData<RoomId>>) = launch {
+    private fun CoroutineScope.resolveAlias(resolveState: MutableState<AsyncData<ResolvedRoomAlias>>) = launch {
         suspend {
             matrixClient.resolveRoomAlias(roomAlias).getOrThrow()
         }.runCatchingUpdatingState(resolveState)

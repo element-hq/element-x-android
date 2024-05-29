@@ -96,6 +96,7 @@ class BugReportPresenter @Inject constructor(
                     if (formState.value.description.length < 10) {
                         sendingAction.value = AsyncAction.Failure(BugReportFormError.DescriptionTooShort)
                     } else {
+                        sendingAction.value = AsyncAction.Loading
                         appCoroutineScope.sendBugReport(formState.value, crashInfo.isNotEmpty(), uploadListener)
                     }
                 }

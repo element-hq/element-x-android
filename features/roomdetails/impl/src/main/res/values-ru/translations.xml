@@ -35,6 +35,9 @@
   <string name="screen_room_details_add_topic_title">"Добавить тему"</string>
   <string name="screen_room_details_already_a_member">"Уже зарегистрирован"</string>
   <string name="screen_room_details_already_invited">"Уже приглашены"</string>
+  <string name="screen_room_details_badge_encrypted">"Зашифровано"</string>
+  <string name="screen_room_details_badge_not_encrypted">"Не зашифровано"</string>
+  <string name="screen_room_details_badge_public">"Общественная комната"</string>
   <string name="screen_room_details_edit_room_title">"Редактировать комнату"</string>
   <string name="screen_room_details_edition_error">"Произошла неизвестная ошибка и информацию не удалось изменить."</string>
   <string name="screen_room_details_edition_error_title">"Не удалось обновить комнату"</string>

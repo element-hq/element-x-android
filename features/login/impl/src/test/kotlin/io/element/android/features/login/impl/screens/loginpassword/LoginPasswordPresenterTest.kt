@@ -30,7 +30,7 @@ import io.element.android.libraries.matrix.test.A_PASSWORD
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.A_USER_NAME
-import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
+import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -42,7 +42,7 @@ class LoginPasswordPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val authenticationService = FakeAuthenticationService()
+        val authenticationService = FakeMatrixAuthenticationService()
         val accountProviderDataSource = AccountProviderDataSource()
         val loginUserStory = DefaultLoginUserStory()
         val presenter = LoginPasswordPresenter(
@@ -63,7 +63,7 @@ class LoginPasswordPresenterTest {
 
     @Test
     fun `present - enter login and password`() = runTest {
-        val authenticationService = FakeAuthenticationService()
+        val authenticationService = FakeMatrixAuthenticationService()
         val accountProviderDataSource = AccountProviderDataSource()
         val loginUserStory = DefaultLoginUserStory()
         val presenter = LoginPasswordPresenter(
@@ -89,7 +89,7 @@ class LoginPasswordPresenterTest {
 
     @Test
     fun `present - submit`() = runTest {
-        val authenticationService = FakeAuthenticationService()
+        val authenticationService = FakeMatrixAuthenticationService()
         val accountProviderDataSource = AccountProviderDataSource()
         val loginUserStory = DefaultLoginUserStory().apply { setLoginFlowIsDone(false) }
         val presenter = LoginPasswordPresenter(
@@ -118,7 +118,7 @@ class LoginPasswordPresenterTest {
 
     @Test
     fun `present - submit with error`() = runTest {
-        val authenticationService = FakeAuthenticationService()
+        val authenticationService = FakeMatrixAuthenticationService()
         val accountProviderDataSource = AccountProviderDataSource()
         val loginUserStory = DefaultLoginUserStory()
         val presenter = LoginPasswordPresenter(
@@ -146,7 +146,7 @@ class LoginPasswordPresenterTest {
 
     @Test
     fun `present - clear error`() = runTest {
-        val authenticationService = FakeAuthenticationService()
+        val authenticationService = FakeMatrixAuthenticationService()
         val accountProviderDataSource = AccountProviderDataSource()
         val loginUserStory = DefaultLoginUserStory()
         val presenter = LoginPasswordPresenter(

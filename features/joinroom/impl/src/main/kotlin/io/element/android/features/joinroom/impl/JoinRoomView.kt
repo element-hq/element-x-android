@@ -66,6 +66,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun JoinRoomView(
     state: JoinRoomState,
     onBackPressed: () -> Unit,
+    onJoinSuccess: () -> Unit,
     onKnockSuccess: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -108,7 +109,11 @@ fun JoinRoomView(
             }
         )
     }
-
+    AsyncActionView(
+        async = state.joinAction,
+        onSuccess = { onJoinSuccess() },
+        onErrorDismiss = { state.eventSink(JoinRoomEvents.ClearError) },
+    )
     AsyncActionView(
         async = state.knockAction,
         onSuccess = { onKnockSuccess() },
@@ -323,6 +328,7 @@ internal fun JoinRoomViewPreview(@PreviewParameter(JoinRoomStateProvider::class)
     JoinRoomView(
         state = state,
         onBackPressed = { },
+        onJoinSuccess = { },
         onKnockSuccess = { },
     )
 }

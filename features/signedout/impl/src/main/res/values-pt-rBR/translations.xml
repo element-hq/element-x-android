@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signed_out_reason_1">"Alteraste a tua senha noutra sessão"</string>
+  <string name="screen_signed_out_reason_2">"Apagaste esta sessão a partir de outra"</string>
+  <string name="screen_signed_out_reason_3">"O administrador do teu servidor invalidou o teu acesso"</string>
+  <string name="screen_signed_out_subtitle">"A tua sessão pode ter sido terminada por um dos motivos indicados abaixo. Inicia sessão novamente para continuares a utilizar a %s."</string>
+  <string name="screen_signed_out_title">"Não tens sessão iniciada"</string>
+</resources>

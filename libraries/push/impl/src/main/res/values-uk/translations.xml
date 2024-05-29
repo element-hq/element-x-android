@@ -52,8 +52,8 @@
     <item quantity="few">"%d кімнати"</item>
     <item quantity="many">"%d кімнат"</item>
   </plurals>
-  <string name="push_choose_distributor_dialog_title_android">"Виберіть спосіб отримання сповіщень"</string>
   <string name="push_distributor_background_sync_android">"Фонова синхронізація"</string>
   <string name="push_distributor_firebase_android">"Сервіси Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Не знайдено дійсних сервісів Google Play. Сповіщення можуть не працювати належним чином."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Не вдається відобразити сповіщення."</string>
 </resources>

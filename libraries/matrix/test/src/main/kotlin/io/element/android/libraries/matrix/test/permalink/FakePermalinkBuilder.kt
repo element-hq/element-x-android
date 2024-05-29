@@ -20,9 +20,9 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 
 class FakePermalinkBuilder(
-    private val result: () -> Result<String> = { Result.failure(Exception("Not implemented")) }
+    private val result: (UserId) -> Result<String> = { Result.failure(Exception("Not implemented")) }
 ) : PermalinkBuilder {
     override fun permalinkForUser(userId: UserId): Result<String> {
-        return result()
+        return result(userId)
     }
 }

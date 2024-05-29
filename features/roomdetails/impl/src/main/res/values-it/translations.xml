@@ -24,6 +24,8 @@
   <string name="screen_room_change_role_confirm_demote_self_description">"Non potrai annullare questa modifica perché ti stai declassando, se sei l\'ultimo utente privilegiato nella stanza, sarà impossibile riottenere i privilegi."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Declassare te stesso?"</string>
   <string name="screen_room_change_role_invited_member_name">"%1$s (In attesa)"</string>
+  <string name="screen_room_change_role_invited_member_name_android">"(In attesa)"</string>
+  <string name="screen_room_change_role_moderators_admin_section_footer">"Gli amministratori hanno automaticamente i privilegi di moderatore"</string>
   <string name="screen_room_change_role_moderators_title">"Modifica moderatori"</string>
   <string name="screen_room_change_role_section_administrators">"Amministratori"</string>
   <string name="screen_room_change_role_section_moderators">"Moderatori"</string>
@@ -51,6 +53,7 @@
   <string name="screen_room_details_room_name_label">"Nome stanza"</string>
   <string name="screen_room_details_security_title">"Sicurezza"</string>
   <string name="screen_room_details_share_room_title">"Condividi stanza"</string>
+  <string name="screen_room_details_title">"Informazioni sulla stanza"</string>
   <string name="screen_room_details_topic_title">"Argomento"</string>
   <string name="screen_room_details_updating_room">"Aggiornamento della stanza…"</string>
   <string name="screen_room_member_list_ban_member_confirmation_action">"Escludi"</string>
