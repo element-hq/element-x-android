@@ -122,18 +122,18 @@ class TimelinePresenter @AssistedInject constructor(
                         newEventState.value = NewEventState.None
                     }
                 }
-                is TimelineEvents.PollAnswerSelected -> appScope.launch {
+                is TimelineEvents.SelectPollAnswer -> appScope.launch {
                     sendPollResponseAction.execute(
                         pollStartId = event.pollStartId,
                         answerId = event.answerId
                     )
                 }
-                is TimelineEvents.PollEndClicked -> appScope.launch {
+                is TimelineEvents.EndPoll -> appScope.launch {
                     endPollAction.execute(
                         pollStartId = event.pollStartId,
                     )
                 }
-                is TimelineEvents.PollEditClicked -> {
+                is TimelineEvents.EditPoll -> {
                     navigator.onEditPollClick(event.pollStartId)
                 }
                 is TimelineEvents.FocusOnEvent -> localScope.launch {

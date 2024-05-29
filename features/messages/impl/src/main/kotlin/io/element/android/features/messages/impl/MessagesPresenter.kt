@@ -424,7 +424,7 @@ class MessagesPresenter @AssistedInject constructor(
         event: TimelineItem.Event,
         timelineState: TimelineState,
     ) {
-        event.eventId?.let { timelineState.eventSink(TimelineEvents.PollEndClicked(it)) }
+        event.eventId?.let { timelineState.eventSink(TimelineEvents.EndPoll(it)) }
     }
 
     private suspend fun handleCopyLink(event: TimelineItem.Event) {

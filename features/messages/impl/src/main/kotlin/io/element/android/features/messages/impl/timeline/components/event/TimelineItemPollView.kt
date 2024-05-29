@@ -35,15 +35,15 @@ fun TimelineItemPollView(
     modifier: Modifier = Modifier,
 ) {
     fun onSelectAnswer(pollStartId: EventId, answerId: String) {
-        eventSink(TimelineEvents.PollAnswerSelected(pollStartId, answerId))
+        eventSink(TimelineEvents.SelectPollAnswer(pollStartId, answerId))
     }
 
     fun onPollEnd(pollStartId: EventId) {
-        eventSink(TimelineEvents.PollEndClicked(pollStartId))
+        eventSink(TimelineEvents.EndPoll(pollStartId))
     }
 
     fun onPollEdit(pollStartId: EventId) {
-        eventSink(TimelineEvents.PollEditClicked(pollStartId))
+        eventSink(TimelineEvents.EditPoll(pollStartId))
     }
 
     PollContentView(
