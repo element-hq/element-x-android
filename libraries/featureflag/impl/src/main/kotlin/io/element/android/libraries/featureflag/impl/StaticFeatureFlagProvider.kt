@@ -41,6 +41,7 @@ class StaticFeatureFlagProvider @Inject constructor() :
                 FeatureFlags.Mentions -> true
                 FeatureFlags.MarkAsUnread -> true
                 FeatureFlags.RoomDirectorySearch -> false
+                FeatureFlags.ShowBlockedUsersDetails -> false
             }
         } else {
             false

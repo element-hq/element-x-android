@@ -191,6 +191,7 @@ class MarkdownTextInputTest {
                 onTyping = onTyping,
                 onSuggestionReceived = onSuggestionReceived,
                 richTextEditorStyle = style,
+                onRichContentSelected = null,
             )
         }
     }

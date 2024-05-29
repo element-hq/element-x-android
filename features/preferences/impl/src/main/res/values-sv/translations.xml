@@ -15,6 +15,7 @@
   <string name="screen_blocked_users_unblock_alert_action">"Avblockera"</string>
   <string name="screen_blocked_users_unblock_alert_description">"Du kommer att kunna se alla meddelanden från dem igen."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Avblockera användare"</string>
+  <string name="screen_blocked_users_unblocking">"Avblockerar …"</string>
   <string name="screen_edit_profile_display_name">"Visningsnamn"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Ditt visningsnamn"</string>
   <string name="screen_edit_profile_error">"Ett okänt fel påträffades och informationen kunde inte ändras."</string>

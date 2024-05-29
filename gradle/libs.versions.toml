@@ -3,7 +3,7 @@
 
 [versions]
 # Project
-android_gradle_plugin = "8.4.0"
+android_gradle_plugin = "8.4.1"
 kotlin = "1.9.24"
 ksp = "1.9.24-1.0.20"
 firebaseAppDistribution = "5.0.0"
@@ -162,8 +162,7 @@ jsoup = "org.jsoup:jsoup:1.17.2"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:1.4.3"
 timber = "com.jakewharton.timber:timber:5.0.1"
-# TODO: revert this to a stable version containing the QR code login feature once it's released
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.20-qrlogin-SNAPSHOT"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.21"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
@@ -181,11 +180,11 @@ maplibre = "org.maplibre.gl:android-sdk:10.3.1"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:2.0.2"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:2.0.2"
 opusencoder = "io.element.android:opusencoder:1.1.0"
-kotlinpoet = "com.squareup:kotlinpoet:1.16.0"
+kotlinpoet = "com.squareup:kotlinpoet:1.17.0"
 zxing_cpp = "io.github.zxing-cpp:android:2.2.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.2.2"
+posthog = "com.posthog:posthog-android:3.3.0"
 sentry = "io.sentry:sentry-android:7.9.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.21.0"

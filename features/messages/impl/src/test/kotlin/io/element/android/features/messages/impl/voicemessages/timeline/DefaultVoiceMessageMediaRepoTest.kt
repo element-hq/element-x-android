@@ -21,7 +21,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.mxc.MxcTools
-import io.element.android.libraries.matrix.test.media.FakeMediaLoader
+import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -34,12 +34,12 @@ class DefaultVoiceMessageMediaRepoTest {
 
     @Test
     fun `cache miss - downloads and returns cached file successfully`() = runTest {
-        val fakeMediaLoader = FakeMediaLoader().apply {
+        val matrixMediaLoader = FakeMatrixMediaLoader().apply {
             path = temporaryFolder.createRustMediaFile().path
         }
         val repo = createDefaultVoiceMessageMediaRepo(
             temporaryFolder = temporaryFolder,
-            matrixMediaLoader = fakeMediaLoader,
+            matrixMediaLoader = matrixMediaLoader,
         )
 
         repo.getMediaFile().let { result ->
@@ -53,12 +53,12 @@ class DefaultVoiceMessageMediaRepoTest {
 
     @Test
     fun `cache miss - download fails`() = runTest {
-        val fakeMediaLoader = FakeMediaLoader().apply {
+        val matrixMediaLoader = FakeMatrixMediaLoader().apply {
             shouldFail = true
         }
         val repo = createDefaultVoiceMessageMediaRepo(
             temporaryFolder = temporaryFolder,
-            matrixMediaLoader = fakeMediaLoader,
+            matrixMediaLoader = matrixMediaLoader,
         )
 
         repo.getMediaFile().let { result ->
@@ -71,7 +71,7 @@ class DefaultVoiceMessageMediaRepoTest {
 
     @Test
     fun `cache miss - download succeeds but file move fails`() = runTest {
-        val fakeMediaLoader = FakeMediaLoader().apply {
+        val matrixMediaLoader = FakeMatrixMediaLoader().apply {
             path = temporaryFolder.createRustMediaFile().path
         }
         File(temporaryFolder.cachedFilePath).apply {
@@ -83,7 +83,7 @@ class DefaultVoiceMessageMediaRepoTest {
         }
         val repo = createDefaultVoiceMessageMediaRepo(
             temporaryFolder = temporaryFolder,
-            matrixMediaLoader = fakeMediaLoader,
+            matrixMediaLoader = matrixMediaLoader,
         )
 
         repo.getMediaFile().let { result ->
@@ -100,12 +100,12 @@ class DefaultVoiceMessageMediaRepoTest {
     @Test
     fun `cache hit - returns cached file successfully`() = runTest {
         temporaryFolder.createCachedFile()
-        val fakeMediaLoader = FakeMediaLoader().apply {
+        val matrixMediaLoader = FakeMatrixMediaLoader().apply {
             shouldFail = true // so that if we hit the media loader it will crash
         }
         val repo = createDefaultVoiceMessageMediaRepo(
             temporaryFolder = temporaryFolder,
-            matrixMediaLoader = fakeMediaLoader,
+            matrixMediaLoader = matrixMediaLoader,
         )
 
         repo.getMediaFile().let { result ->
@@ -135,7 +135,7 @@ class DefaultVoiceMessageMediaRepoTest {
 
 private fun createDefaultVoiceMessageMediaRepo(
     temporaryFolder: TemporaryFolder,
-    matrixMediaLoader: MatrixMediaLoader = FakeMediaLoader(),
+    matrixMediaLoader: MatrixMediaLoader = FakeMatrixMediaLoader(),
     mxcUri: String = MXC_URI,
 ) = DefaultVoiceMessageMediaRepo(
     cacheDir = temporaryFolder.root,

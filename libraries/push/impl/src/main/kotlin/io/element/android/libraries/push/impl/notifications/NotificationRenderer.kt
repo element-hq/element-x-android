@@ -18,7 +18,6 @@ package io.element.android.libraries.push.impl.notifications
 
 import coil.ImageLoader
 import io.element.android.libraries.core.log.logger.LoggerTag
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
@@ -33,20 +32,20 @@ private val loggerTag = LoggerTag("NotificationRenderer", LoggerTag.Notification
 class NotificationRenderer @Inject constructor(
     private val notificationIdProvider: NotificationIdProvider,
     private val notificationDisplayer: NotificationDisplayer,
-    private val notificationFactory: NotificationFactory,
+    private val notificationDataFactory: NotificationDataFactory,
 ) {
     suspend fun render(
         currentUser: MatrixUser,
         useCompleteNotificationFormat: Boolean,
-        eventsToProcess: List<ProcessedEvent<NotifiableEvent>>,
+        eventsToProcess: List<NotifiableEvent>,
         imageLoader: ImageLoader,
     ) {
         val groupedEvents = eventsToProcess.groupByType()
-        with(notificationFactory) {
-            val roomNotifications = groupedEvents.roomEvents.toNotifications(currentUser, imageLoader)
-            val invitationNotifications = groupedEvents.invitationEvents.toNotifications()
-            val simpleNotifications = groupedEvents.simpleEvents.toNotifications()
-            val fallbackNotifications = groupedEvents.fallbackEvents.toNotifications()
+        with(notificationDataFactory) {
+            val roomNotifications = toNotifications(groupedEvents.roomEvents, currentUser, imageLoader)
+            val invitationNotifications = toNotifications(groupedEvents.invitationEvents)
+            val simpleNotifications = toNotifications(groupedEvents.simpleEvents)
+            val fallbackNotifications = toNotifications(groupedEvents.fallbackEvents)
             val summaryNotification = createSummaryNotification(
                 currentUser = currentUser,
                 roomNotifications = roomNotifications,
@@ -65,101 +64,43 @@ class NotificationRenderer @Inject constructor(
                 )
             }
 
-            roomNotifications.forEach { wrapper ->
-                when (wrapper) {
-                    is RoomNotification.Removed -> {
-                        Timber.tag(loggerTag.value).d("Removing room messages notification ${wrapper.roomId}")
-                        notificationDisplayer.cancelNotificationMessage(
-                            tag = wrapper.roomId.value,
-                            id = notificationIdProvider.getRoomMessagesNotificationId(currentUser.userId)
-                        )
-                    }
-                    is RoomNotification.Message -> if (useCompleteNotificationFormat) {
-                        Timber.tag(loggerTag.value).d("Updating room messages notification ${wrapper.meta.roomId}")
-                        notificationDisplayer.showNotificationMessage(
-                            tag = wrapper.meta.roomId.value,
-                            id = notificationIdProvider.getRoomMessagesNotificationId(currentUser.userId),
-                            notification = wrapper.notification
-                        )
-                    }
-                }
-            }
-
-            invitationNotifications.forEach { wrapper ->
-                when (wrapper) {
-                    is OneShotNotification.Removed -> {
-                        Timber.tag(loggerTag.value).d("Removing invitation notification ${wrapper.key}")
-                        notificationDisplayer.cancelNotificationMessage(
-                            tag = wrapper.key,
-                            id = notificationIdProvider.getRoomInvitationNotificationId(currentUser.userId)
-                        )
-                    }
-                    is OneShotNotification.Append -> if (useCompleteNotificationFormat) {
-                        Timber.tag(loggerTag.value).d("Updating invitation notification ${wrapper.meta.key}")
-                        notificationDisplayer.showNotificationMessage(
-                            tag = wrapper.meta.key,
-                            id = notificationIdProvider.getRoomInvitationNotificationId(currentUser.userId),
-                            notification = wrapper.notification
-                        )
-                    }
-                }
-            }
-
-            simpleNotifications.forEach { wrapper ->
-                when (wrapper) {
-                    is OneShotNotification.Removed -> {
-                        Timber.tag(loggerTag.value).d("Removing simple notification ${wrapper.key}")
-                        notificationDisplayer.cancelNotificationMessage(
-                            tag = wrapper.key,
-                            id = notificationIdProvider.getRoomEventNotificationId(currentUser.userId)
-                        )
-                    }
-                    is OneShotNotification.Append -> if (useCompleteNotificationFormat) {
-                        Timber.tag(loggerTag.value).d("Updating simple notification ${wrapper.meta.key}")
-                        notificationDisplayer.showNotificationMessage(
-                            tag = wrapper.meta.key,
-                            id = notificationIdProvider.getRoomEventNotificationId(currentUser.userId),
-                            notification = wrapper.notification
-                        )
-                    }
-                }
-            }
-
-            /*
-            fallbackNotifications.forEach { wrapper ->
-                when (wrapper) {
-                    is OneShotNotification.Removed -> {
-                        Timber.tag(loggerTag.value).d("Removing fallback notification ${wrapper.key}")
-                        notificationDisplayer.cancelNotificationMessage(
-                            tag = wrapper.key,
-                            id = notificationIdProvider.getFallbackNotificationId(currentUser.userId)
-                        )
-                    }
-                    is OneShotNotification.Append -> if (useCompleteNotificationFormat) {
-                        Timber.tag(loggerTag.value).d("Updating fallback notification ${wrapper.meta.key}")
-                        notificationDisplayer.showNotificationMessage(
-                            tag = wrapper.meta.key,
-                            id = notificationIdProvider.getFallbackNotificationId(currentUser.userId),
-                            notification = wrapper.notification
-                        )
-                    }
-                }
-            }
-             */
-            val removedFallback = fallbackNotifications.filterIsInstance<OneShotNotification.Removed>()
-            val appendFallback = fallbackNotifications.filterIsInstance<OneShotNotification.Append>()
-            if (appendFallback.isEmpty() && removedFallback.isNotEmpty()) {
-                Timber.tag(loggerTag.value).d("Removing global fallback notification")
-                notificationDisplayer.cancelNotificationMessage(
-                    tag = "FALLBACK",
-                    id = notificationIdProvider.getFallbackNotificationId(currentUser.userId)
+            roomNotifications.forEach { notificationData ->
+                notificationDisplayer.showNotificationMessage(
+                    tag = notificationData.roomId.value,
+                    id = notificationIdProvider.getRoomMessagesNotificationId(currentUser.userId),
+                    notification = notificationData.notification
                 )
-            } else if (appendFallback.isNotEmpty()) {
+            }
+
+            invitationNotifications.forEach { notificationData ->
+                if (useCompleteNotificationFormat) {
+                    Timber.tag(loggerTag.value).d("Updating invitation notification ${notificationData.key}")
+                    notificationDisplayer.showNotificationMessage(
+                        tag = notificationData.key,
+                        id = notificationIdProvider.getRoomInvitationNotificationId(currentUser.userId),
+                        notification = notificationData.notification
+                    )
+                }
+            }
+
+            simpleNotifications.forEach { notificationData ->
+                if (useCompleteNotificationFormat) {
+                    Timber.tag(loggerTag.value).d("Updating simple notification ${notificationData.key}")
+                    notificationDisplayer.showNotificationMessage(
+                        tag = notificationData.key,
+                        id = notificationIdProvider.getRoomEventNotificationId(currentUser.userId),
+                        notification = notificationData.notification
+                    )
+                }
+            }
+
+            // Show only the first fallback notification
+            if (fallbackNotifications.isNotEmpty()) {
                 Timber.tag(loggerTag.value).d("Showing fallback notification")
                 notificationDisplayer.showNotificationMessage(
                     tag = "FALLBACK",
                     id = notificationIdProvider.getFallbackNotificationId(currentUser.userId),
-                    notification = appendFallback.first().notification
+                    notification = fallbackNotifications.first().notification
                 )
             }
 
@@ -174,39 +115,30 @@ class NotificationRenderer @Inject constructor(
             }
         }
     }
-
-    fun cancelAllNotifications() {
-        notificationDisplayer.cancelAllNotifications()
-    }
 }
 
-private fun List<ProcessedEvent<NotifiableEvent>>.groupByType(): GroupedNotificationEvents {
-    val roomIdToEventMap: MutableMap<RoomId, MutableList<ProcessedEvent<NotifiableMessageEvent>>> = LinkedHashMap()
-    val simpleEvents: MutableList<ProcessedEvent<SimpleNotifiableEvent>> = ArrayList()
-    val invitationEvents: MutableList<ProcessedEvent<InviteNotifiableEvent>> = ArrayList()
-    val fallbackEvents: MutableList<ProcessedEvent<FallbackNotifiableEvent>> = ArrayList()
-    forEach {
-        when (val event = it.event) {
-            is InviteNotifiableEvent -> invitationEvents.add(it.castedToEventType())
-            is NotifiableMessageEvent -> {
-                val roomEvents = roomIdToEventMap.getOrPut(event.roomId) { ArrayList() }
-                roomEvents.add(it.castedToEventType())
-            }
-            is SimpleNotifiableEvent -> simpleEvents.add(it.castedToEventType())
-            is FallbackNotifiableEvent -> {
-                fallbackEvents.add(it.castedToEventType())
-            }
+private fun List<NotifiableEvent>.groupByType(): GroupedNotificationEvents {
+    val roomEvents: MutableList<NotifiableMessageEvent> = mutableListOf()
+    val simpleEvents: MutableList<SimpleNotifiableEvent> = mutableListOf()
+    val invitationEvents: MutableList<InviteNotifiableEvent> = mutableListOf()
+    val fallbackEvents: MutableList<FallbackNotifiableEvent> = mutableListOf()
+    forEach { event ->
+        when (event) {
+            is InviteNotifiableEvent -> invitationEvents.add(event.castedToEventType())
+            is NotifiableMessageEvent -> roomEvents.add(event.castedToEventType())
+            is SimpleNotifiableEvent -> simpleEvents.add(event.castedToEventType())
+            is FallbackNotifiableEvent -> fallbackEvents.add(event.castedToEventType())
         }
     }
-    return GroupedNotificationEvents(roomIdToEventMap, simpleEvents, invitationEvents, fallbackEvents)
+    return GroupedNotificationEvents(roomEvents, simpleEvents, invitationEvents, fallbackEvents)
 }
 
 @Suppress("UNCHECKED_CAST")
-private fun <T : NotifiableEvent> ProcessedEvent<NotifiableEvent>.castedToEventType(): ProcessedEvent<T> = this as ProcessedEvent<T>
+private fun <T : NotifiableEvent> NotifiableEvent.castedToEventType(): T = this as T
 
 data class GroupedNotificationEvents(
-    val roomEvents: Map<RoomId, List<ProcessedEvent<NotifiableMessageEvent>>>,
-    val simpleEvents: List<ProcessedEvent<SimpleNotifiableEvent>>,
-    val invitationEvents: List<ProcessedEvent<InviteNotifiableEvent>>,
-    val fallbackEvents: List<ProcessedEvent<FallbackNotifiableEvent>>,
+    val roomEvents: List<NotifiableMessageEvent>,
+    val simpleEvents: List<SimpleNotifiableEvent>,
+    val invitationEvents: List<InviteNotifiableEvent>,
+    val fallbackEvents: List<FallbackNotifiableEvent>,
 )

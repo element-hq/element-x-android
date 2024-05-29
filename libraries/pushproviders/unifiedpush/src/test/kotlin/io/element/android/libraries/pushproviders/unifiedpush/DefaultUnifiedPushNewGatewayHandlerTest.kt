@@ -22,7 +22,7 @@ import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.test.A_SECRET
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
+import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.push.test.FakePusherSubscriber
 import io.element.android.libraries.pushproviders.api.PusherSubscriber
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
@@ -86,7 +86,7 @@ class DefaultUnifiedPushNewGatewayHandlerTest {
             pusherSubscriber = FakePusherSubscriber(
                 registerPusherResult = { _, _, _ -> Result.failure(IllegalStateException("an error")) }
             ),
-            matrixAuthenticationService = FakeAuthenticationService(matrixClientResult = { Result.success(aMatrixClient) }),
+            matrixAuthenticationService = FakeMatrixAuthenticationService(matrixClientResult = { Result.success(aMatrixClient) }),
         )
         val result = defaultUnifiedPushNewGatewayHandler.handle(
             endpoint = "aEndpoint",
@@ -114,7 +114,7 @@ class DefaultUnifiedPushNewGatewayHandlerTest {
             pusherSubscriber = FakePusherSubscriber(
                 registerPusherResult = lambda
             ),
-            matrixAuthenticationService = FakeAuthenticationService(matrixClientResult = { Result.success(aMatrixClient) }),
+            matrixAuthenticationService = FakeMatrixAuthenticationService(matrixClientResult = { Result.success(aMatrixClient) }),
         )
         val result = defaultUnifiedPushNewGatewayHandler.handle(
             endpoint = "aEndpoint",
@@ -131,7 +131,7 @@ class DefaultUnifiedPushNewGatewayHandlerTest {
         pusherSubscriber: PusherSubscriber = FakePusherSubscriber(),
         userPushStoreFactory: UserPushStoreFactory = FakeUserPushStoreFactory(),
         pushClientSecret: PushClientSecret = FakePushClientSecret(),
-        matrixAuthenticationService: MatrixAuthenticationService = FakeAuthenticationService()
+        matrixAuthenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService()
     ): DefaultUnifiedPushNewGatewayHandler {
         return DefaultUnifiedPushNewGatewayHandler(
             pusherSubscriber = pusherSubscriber,

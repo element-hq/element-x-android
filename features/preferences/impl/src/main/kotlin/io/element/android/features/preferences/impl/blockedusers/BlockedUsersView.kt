@@ -73,9 +73,9 @@ fun BlockedUsersView(
             LazyColumn(
                 modifier = Modifier.padding(padding)
             ) {
-                items(state.blockedUsers) { userId ->
+                items(state.blockedUsers) { matrixUser ->
                     BlockedUserItem(
-                        userId = userId,
+                        matrixUser = matrixUser,
                         onClick = { state.eventSink(BlockedUsersEvents.Unblock(it)) }
                     )
                 }
@@ -121,12 +121,12 @@ fun BlockedUsersView(
 
 @Composable
 private fun BlockedUserItem(
-    userId: UserId,
+    matrixUser: MatrixUser,
     onClick: (UserId) -> Unit,
 ) {
     MatrixUserRow(
-        modifier = Modifier.clickable { onClick(userId) },
-        matrixUser = MatrixUser(userId),
+        modifier = Modifier.clickable { onClick(matrixUser.userId) },
+        matrixUser = matrixUser,
     )
 }
 

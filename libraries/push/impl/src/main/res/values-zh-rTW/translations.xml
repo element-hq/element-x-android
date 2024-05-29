@@ -22,6 +22,7 @@
     <item quantity="other">"%d 則新訊息"</item>
   </plurals>
   <string name="notification_reaction_body">"回應 %1$s"</string>
+  <string name="notification_room_action_mark_as_read">"標為已讀"</string>
   <string name="notification_room_action_quick_reply">"快速回覆"</string>
   <string name="notification_room_invite_body">"邀請您加入聊天室"</string>
   <string name="notification_sender_me">"我"</string>

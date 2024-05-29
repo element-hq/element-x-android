@@ -19,11 +19,17 @@ package io.element.android.libraries.push.impl.notifications
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import io.element.android.features.preferences.api.store.SessionPreferencesStoreFactory
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
+import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -33,87 +39,69 @@ private val loggerTag = LoggerTag("NotificationBroadcastReceiver", LoggerTag.Not
  * Receives actions broadcast by notification (on click, on dismiss, inline replies, etc.).
  */
 class NotificationBroadcastReceiver : BroadcastReceiver() {
+    @Inject lateinit var appCoroutineScope: CoroutineScope
+    @Inject lateinit var matrixClientProvider: MatrixClientProvider
+    @Inject lateinit var sessionPreferencesStore: SessionPreferencesStoreFactory
     @Inject lateinit var defaultNotificationDrawerManager: DefaultNotificationDrawerManager
     @Inject lateinit var actionIds: NotificationActionIds
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || context == null) return
-        context.bindings<NotificationBroadcastReceiverBindings>().inject(this)
         val sessionId = intent.extras?.getString(KEY_SESSION_ID)?.let(::SessionId) ?: return
         val roomId = intent.getStringExtra(KEY_ROOM_ID)?.let(::RoomId)
         val eventId = intent.getStringExtra(KEY_EVENT_ID)?.let(::EventId)
+
+        context.bindings<NotificationBroadcastReceiverBindings>().inject(this)
+
         Timber.tag(loggerTag.value).d("onReceive: ${intent.action} ${intent.data} for: ${roomId?.value}/${eventId?.value}")
         when (intent.action) {
             actionIds.smartReply ->
                 handleSmartReply(intent, context)
             actionIds.dismissRoom -> if (roomId != null) {
-                defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId, doRender = false)
+                defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
             }
             actionIds.dismissSummary ->
-                defaultNotificationDrawerManager.clearAllMessagesEvents(sessionId, doRender = false)
+                defaultNotificationDrawerManager.clearAllMessagesEvents(sessionId)
             actionIds.dismissInvite -> if (roomId != null) {
-                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId, doRender = false)
+                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId)
             }
             actionIds.dismissEvent -> if (eventId != null) {
-                defaultNotificationDrawerManager.clearEvent(sessionId, eventId, doRender = false)
+                defaultNotificationDrawerManager.clearEvent(sessionId, eventId)
             }
             actionIds.markRoomRead -> if (roomId != null) {
-                defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId, doRender = true)
+                defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
                 handleMarkAsRead(sessionId, roomId)
             }
             actionIds.join -> if (roomId != null) {
-                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId, doRender = true)
+                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId)
                 handleJoinRoom(sessionId, roomId)
             }
             actionIds.reject -> if (roomId != null) {
-                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId, doRender = true)
+                defaultNotificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId)
                 handleRejectRoom(sessionId, roomId)
             }
         }
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    private fun handleJoinRoom(sessionId: SessionId, roomId: RoomId) {
-        /*
-        activeSessionHolder.getSafeActiveSession()?.let { session ->
-            val room = session.getRoom(roomId)
-            if (room != null) {
-                session.coroutineScope.launch {
-                    tryOrNull {
-                        session.roomService().joinRoom(room.roomId)
-                        analyticsTracker.capture(room.roomSummary().toAnalyticsJoinedRoom(JoinedRoom.Trigger.Notification))
-                    }
-                }
-            }
-        }
-         */
+    private fun handleJoinRoom(sessionId: SessionId, roomId: RoomId) = appCoroutineScope.launch {
+        val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return@launch
+        client.joinRoom(roomId)
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    private fun handleRejectRoom(sessionId: SessionId, roomId: RoomId) {
-        /*
-        activeSessionHolder.getSafeActiveSession()?.let { session ->
-            session.coroutineScope.launch {
-                tryOrNull { session.roomService().leaveRoom(roomId) }
-            }
-        }
-
-         */
+    private fun handleRejectRoom(sessionId: SessionId, roomId: RoomId) = appCoroutineScope.launch {
+        val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return@launch
+        client.getRoom(roomId)?.leave()
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    private fun handleMarkAsRead(sessionId: SessionId, roomId: RoomId) {
-        /*
-        activeSessionHolder.getActiveSession().let { session ->
-            val room = session.getRoom(roomId)
-            if (room != null) {
-                session.coroutineScope.launch {
-                    tryOrNull { room.readService().markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT, mainTimeLineOnly = false) }
-                }
-            }
+    private fun handleMarkAsRead(sessionId: SessionId, roomId: RoomId) = appCoroutineScope.launch {
+        val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return@launch
+        val isRenderReadReceiptsEnabled = sessionPreferencesStore.get(sessionId, this).isRenderReadReceiptsEnabled().first()
+        val receiptType = if (isRenderReadReceiptsEnabled) {
+            ReceiptType.READ
+        } else {
+            ReceiptType.READ_PRIVATE
         }
-
-         */
+        client.getRoom(roomId)?.markAsRead(receiptType = receiptType)
     }
 
     @Suppress("UNUSED_PARAMETER")

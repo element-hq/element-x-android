@@ -121,6 +121,7 @@
   <string name="common_blocked_users">"Blokovaní uživatelé"</string>
   <string name="common_bubbles">"Bubliny"</string>
   <string name="common_call_invite">"Probíhá hovor (nepodporováno)"</string>
+  <string name="common_call_started">"Hovor zahájen"</string>
   <string name="common_chat_backup">"Záloha chatu"</string>
   <string name="common_copyright">"Autorská práva"</string>
   <string name="common_creating_room">"Vytváření místnosti…"</string>

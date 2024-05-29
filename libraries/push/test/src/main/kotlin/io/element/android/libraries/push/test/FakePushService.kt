@@ -30,12 +30,14 @@ class FakePushService(
     },
 ) : PushService {
     override suspend fun getCurrentPushProvider(): PushProvider? {
-        return availablePushProviders.firstOrNull()
+        return registeredPushProvider ?: availablePushProviders.firstOrNull()
     }
 
     override fun getAvailablePushProviders(): List<PushProvider> {
         return availablePushProviders
     }
+
+    private var registeredPushProvider: PushProvider? = null
 
     override suspend fun registerWith(
         matrixClient: MatrixClient,
@@ -43,6 +45,11 @@ class FakePushService(
         distributor: Distributor,
     ): Result<Unit> = simulateLongTask {
         return registerWithLambda(matrixClient, pushProvider, distributor)
+            .also {
+                if (it.isSuccess) {
+                    registeredPushProvider = pushProvider
+                }
+            }
     }
 
     override suspend fun testPush(): Boolean = simulateLongTask {
