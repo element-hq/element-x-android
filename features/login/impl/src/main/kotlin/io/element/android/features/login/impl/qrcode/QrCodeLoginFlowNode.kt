@@ -116,7 +116,7 @@ class QrCodeLoginFlowNode @AssistedInject constructor(
                         }
                         is QrCodeLoginStep.Failed -> {
                             when (val error = step.error) {
-                                is QrLoginException.InvalidQrCode -> {
+                                is QrLoginException.OtherDeviceNotSignedIn -> {
                                     // Do nothing here, it'll be handled in the scan QR screen
                                 }
                                 is QrLoginException.Cancelled -> {

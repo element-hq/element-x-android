@@ -57,6 +57,7 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
+import io.element.android.libraries.matrix.api.auth.qrlogin.QrLoginException
 import io.element.android.libraries.qrcode.QrCodeCameraView
 
 @Composable
@@ -140,6 +141,7 @@ private fun ColumnScope.Buttons(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(2.dp),
                 ) {
+                    val error = state.authenticationAction.error
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
@@ -151,14 +153,22 @@ private fun ColumnScope.Buttons(
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = stringResource(R.string.screen_qr_code_login_invalid_scan_state_subtitle),
+                            text = when (error) {
+                                is QrLoginException.OtherDeviceNotSignedIn -> {
+                                    stringResource(R.string.screen_qr_code_login_device_not_signed_in_scan_state_title)
+                                }
+                                else -> stringResource(R.string.screen_qr_code_login_invalid_scan_state_subtitle)
+                            },
                             textAlign = TextAlign.Center,
                             color = MaterialTheme.colorScheme.error,
                             style = ElementTheme.typography.fontBodySmMedium,
                         )
                     }
                     Text(
-                        text = stringResource(R.string.screen_qr_code_login_invalid_scan_state_description),
+                        text = when (error) {
+                            is QrLoginException.OtherDeviceNotSignedIn -> stringResource(R.string.screen_qr_code_login_device_not_signed_in_scan_state_subtitle)
+                            else -> stringResource(R.string.screen_qr_code_login_invalid_scan_state_description)
+                        },
                         textAlign = TextAlign.Center,
                         style = ElementTheme.typography.fontBodySmRegular,
                         color = ElementTheme.colors.textSecondary,

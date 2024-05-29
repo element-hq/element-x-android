@@ -80,12 +80,12 @@ class QrCodeScanPresenter @Inject constructor(
     }
 
     @Composable
-    private fun ObserveQRCodeLoginFailures(onInvalidQrCodeError: (QrLoginException) -> Unit) {
-        LaunchedEffect(onInvalidQrCodeError) {
+    private fun ObserveQRCodeLoginFailures(onQrCodeLoginError: (QrLoginException) -> Unit) {
+        LaunchedEffect(onQrCodeLoginError) {
             qrCodeLoginManager.currentLoginStep
                 .onEach { state ->
-                    if (state is QrCodeLoginStep.Failed && state.error is QrLoginException.InvalidQrCode) {
-                        onInvalidQrCodeError(state.error)
+                    if (state is QrCodeLoginStep.Failed) {
+                        onQrCodeLoginError(state.error)
                         // The error was handled here, reset the login state
                         qrCodeLoginManager.reset()
                     }

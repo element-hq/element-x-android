@@ -83,7 +83,7 @@ class QrCodeScanPresenterTest {
     }
 
     @Test
-    fun `present - login failed with invalid QR format and we display it and recover from it`() = runTest {
+    fun `present - login failed with so we display the error and recover from it`() = runTest {
         val qrCodeLoginDataFactory = FakeMatrixQrCodeLoginDataFactory()
         val qrCodeLoginManager = FakeQrCodeLoginManager()
         val resetAction = lambdaRecorder<Unit> {
@@ -97,7 +97,7 @@ class QrCodeScanPresenterTest {
             // Skip initial item
             skipItems(1)
 
-            qrCodeLoginManager.currentLoginStep.value = QrCodeLoginStep.Failed(QrLoginException.InvalidQrCode)
+            qrCodeLoginManager.currentLoginStep.value = QrCodeLoginStep.Failed(QrLoginException.OtherDeviceNotSignedIn)
 
             val errorState = awaitItem()
             // The state for this screen is failure

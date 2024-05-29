@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrLoginException
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
+import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.auth.qrlogin.FakeQrCodeLoginData
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -63,7 +64,7 @@ class QrCodeLoginFlowNodeTest {
         assertThat(flowNode.currentNavTarget()).isEqualTo(QrCodeLoginFlowNode.NavTarget.Initial)
 
         // Only case when this doesn't happen, since it's handled by the already displayed UI
-        qrCodeLoginManager.currentLoginStep.value = QrCodeLoginStep.Failed(QrLoginException.InvalidQrCode)
+        qrCodeLoginManager.currentLoginStep.value = QrCodeLoginStep.Failed(QrLoginException.OtherDeviceNotSignedIn)
         assertThat(flowNode.currentNavTarget()).isEqualTo(QrCodeLoginFlowNode.NavTarget.Initial)
 
         qrCodeLoginManager.currentLoginStep.value = QrCodeLoginStep.Failed(QrLoginException.Expired)
@@ -108,7 +109,7 @@ class QrCodeLoginFlowNodeTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `startAuthentication - success marks the login flow as done`() = runTest {
-        val fakeAuthenticationService = FakeAuthenticationService(
+        val fakeAuthenticationService = FakeMatrixAuthenticationService(
             loginWithQrCodeResult = { _, progress ->
                 progress(QrCodeLoginStep.Finished)
                 Result.success(A_SESSION_ID)
@@ -138,7 +139,7 @@ class QrCodeLoginFlowNodeTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `startAuthentication - failure is correctly handled`() = runTest {
-        val fakeAuthenticationService = FakeAuthenticationService(
+        val fakeAuthenticationService = FakeMatrixAuthenticationService(
             loginWithQrCodeResult = { _, progress ->
                 progress(QrCodeLoginStep.Failed(QrLoginException.Unknown))
                 Result.failure(IllegalStateException("Failed"))
@@ -168,7 +169,7 @@ class QrCodeLoginFlowNodeTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `startAuthentication - then reset`() = runTest {
-        val fakeAuthenticationService = FakeAuthenticationService(
+        val fakeAuthenticationService = FakeMatrixAuthenticationService(
             loginWithQrCodeResult = { _, progress ->
                 progress(QrCodeLoginStep.Finished)
                 Result.success(A_SESSION_ID)

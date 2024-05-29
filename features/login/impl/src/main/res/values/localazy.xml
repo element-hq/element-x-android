@@ -39,6 +39,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Connection not secure"</string>
   <string name="screen_qr_code_login_device_code_subtitle">"You’ll be asked to enter the two digits shown on this device."</string>
   <string name="screen_qr_code_login_device_code_title">"Enter the number below on your other device"</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_subtitle">"Sign in to your other device and then try again, or use another device that’s already signed in."</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_title">"Other device not signed in"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"The sign in was cancelled on the other device."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Sign in request cancelled"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"The request on your other device was not accepted."</string>

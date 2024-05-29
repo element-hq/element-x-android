@@ -26,16 +26,20 @@ import org.matrix.rustcomponents.sdk.QrCodeDecodeException as RustQrCodeDecodeEx
 object QrErrorMapper {
     fun map(qrCodeDecodeException: RustQrCodeDecodeException): QrCodeDecodeException = when (qrCodeDecodeException) {
         is RustQrCodeDecodeException.Crypto -> {
-            val reason = when (qrCodeDecodeException.error) {
-                LoginQrCodeDecodeError.NOT_ENOUGH_DATA -> QrCodeDecodeException.Crypto.Reason.NOT_ENOUGH_DATA
-                LoginQrCodeDecodeError.NOT_UTF8 -> QrCodeDecodeException.Crypto.Reason.NOT_UTF8
-                LoginQrCodeDecodeError.URL_PARSE -> QrCodeDecodeException.Crypto.Reason.URL_PARSE
-                LoginQrCodeDecodeError.INVALID_MODE -> QrCodeDecodeException.Crypto.Reason.INVALID_MODE
-                LoginQrCodeDecodeError.INVALID_VERSION -> QrCodeDecodeException.Crypto.Reason.INVALID_VERSION
-                LoginQrCodeDecodeError.BASE64 -> QrCodeDecodeException.Crypto.Reason.BASE64
-                LoginQrCodeDecodeError.INVALID_PREFIX -> QrCodeDecodeException.Crypto.Reason.INVALID_PREFIX
-            }
-            QrCodeDecodeException.Crypto(qrCodeDecodeException.message, reason)
+            // We plan to restore it in the future when UniFFi can process them
+//            val reason = when (qrCodeDecodeException.error) {
+//                LoginQrCodeDecodeError.NOT_ENOUGH_DATA -> QrCodeDecodeException.Crypto.Reason.NOT_ENOUGH_DATA
+//                LoginQrCodeDecodeError.NOT_UTF8 -> QrCodeDecodeException.Crypto.Reason.NOT_UTF8
+//                LoginQrCodeDecodeError.URL_PARSE -> QrCodeDecodeException.Crypto.Reason.URL_PARSE
+//                LoginQrCodeDecodeError.INVALID_MODE -> QrCodeDecodeException.Crypto.Reason.INVALID_MODE
+//                LoginQrCodeDecodeError.INVALID_VERSION -> QrCodeDecodeException.Crypto.Reason.INVALID_VERSION
+//                LoginQrCodeDecodeError.BASE64 -> QrCodeDecodeException.Crypto.Reason.BASE64
+//                LoginQrCodeDecodeError.INVALID_PREFIX -> QrCodeDecodeException.Crypto.Reason.INVALID_PREFIX
+//            }
+            QrCodeDecodeException.Crypto(
+                qrCodeDecodeException.message.orEmpty(),
+//                reason
+            )
         }
     }
 
@@ -44,10 +48,10 @@ object QrErrorMapper {
         is RustHumanQrLoginException.ConnectionInsecure -> QrLoginException.ConnectionInsecure
         is RustHumanQrLoginException.Declined -> QrLoginException.Declined
         is RustHumanQrLoginException.Expired -> QrLoginException.Expired
-        is RustHumanQrLoginException.InvalidQrCode -> QrLoginException.InvalidQrCode
+        is RustHumanQrLoginException.OtherDeviceNotSignedIn -> QrLoginException.OtherDeviceNotSignedIn
         is RustHumanQrLoginException.LinkingNotSupported -> QrLoginException.LinkingNotSupported
         is RustHumanQrLoginException.Unknown -> QrLoginException.Unknown
-        is HumanQrLoginException.OidcMetadataInvalid -> QrLoginException.OidcMetadataInvalid
-        is HumanQrLoginException.SlidingSyncNotAvailable -> QrLoginException.SlidingSyncNotAvailable
+        is RustHumanQrLoginException.OidcMetadataInvalid -> QrLoginException.OidcMetadataInvalid
+        is RustHumanQrLoginException.SlidingSyncNotAvailable -> QrLoginException.SlidingSyncNotAvailable
     }
 }
