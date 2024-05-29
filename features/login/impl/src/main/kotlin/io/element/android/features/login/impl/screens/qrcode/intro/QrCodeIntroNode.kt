@@ -51,7 +51,7 @@ class QrCodeIntroNode @AssistedInject constructor(
         val state = presenter.present()
         QrCodeIntroView(
             state = state,
-            onBackClicked = ::onCancelClicked,
+            onBackClick = ::onCancelClicked,
             onContinue = ::onContinue,
             modifier = modifier
         )

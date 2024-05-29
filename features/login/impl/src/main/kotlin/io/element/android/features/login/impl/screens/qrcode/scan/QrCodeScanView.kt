@@ -63,7 +63,7 @@ import io.element.android.libraries.qrcode.QrCodeCameraView
 @Composable
 fun QrCodeScanView(
     state: QrCodeScanState,
-    onBackClicked: () -> Unit,
+    onBackClick: () -> Unit,
     onQrCodeDataReady: (MatrixQrCodeLoginData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -77,7 +77,7 @@ fun QrCodeScanView(
 
     FlowStepPage(
         modifier = modifier,
-        onBackClicked = onBackClicked,
+        onBackClick = onBackClick,
         iconStyle = BigIcon.Style.Default(CompoundIcons.Computer()),
         title = stringResource(R.string.screen_qr_code_login_scanning_state_title),
         content = { Content(state = state) },
@@ -113,7 +113,7 @@ private fun Content(
         ) {
             QrCodeCameraView(
                 modifier = Modifier.fillMaxSize(),
-                onQrCodeScanned = { state.eventSink.invoke(QrCodeScanEvents.QrCodeScanned(it)) },
+                onScanQrCode = { state.eventSink.invoke(QrCodeScanEvents.QrCodeScanned(it)) },
                 renderPreview = state.isScanning,
             )
         }
@@ -207,6 +207,6 @@ internal fun QrCodeScanViewPreview(@PreviewParameter(QrCodeScanStateProvider::cl
     QrCodeScanView(
         state = state,
         onQrCodeDataReady = {},
-        onBackClicked = {},
+        onBackClick = {},
     )
 }

@@ -23,7 +23,7 @@ import timber.log.Timber
 import zxingcpp.BarcodeReader
 
 internal class QRCodeAnalyzer(
-    private val onQrCodeScanned: (result: ByteArray?) -> Unit
+    private val onScanQrCode: (result: ByteArray?) -> Unit
 ) : ImageAnalysis.Analyzer {
     private val reader by lazy { BarcodeReader() }
 
@@ -31,7 +31,7 @@ internal class QRCodeAnalyzer(
         if (image.format in SUPPORTED_IMAGE_FORMATS) {
             try {
                 val bytes = reader.read(image).firstNotNullOfOrNull { it.bytes }
-                bytes?.let { onQrCodeScanned(it) }
+                bytes?.let { onScanQrCode(it) }
             } catch (e: Exception) {
                 Timber.w(e, "Error decoding QR code")
             } finally {

@@ -52,7 +52,7 @@ import kotlin.coroutines.suspendCoroutine
 
 @Composable
 fun QrCodeCameraView(
-    onQrCodeScanned: (ByteArray) -> Unit,
+    onScanQrCode: (ByteArray) -> Unit,
     modifier: Modifier = Modifier,
     renderPreview: Boolean = true,
 ) {
@@ -89,7 +89,7 @@ fun QrCodeCameraView(
                 QRCodeAnalyzer { result ->
                     result?.let {
                         Timber.d("QR code scanned!")
-                        onQrCodeScanned(it)
+                        onScanQrCode(it)
                     }
                 }
             )

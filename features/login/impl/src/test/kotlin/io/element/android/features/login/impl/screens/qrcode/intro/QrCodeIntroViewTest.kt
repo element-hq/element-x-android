@@ -87,7 +87,7 @@ class QrCodeIntroViewTest {
         setContent {
             QrCodeIntroView(
                 state = state,
-                onBackClicked = onBackClicked,
+                onBackClick = onBackClicked,
                 onContinue = onContinue,
             )
         }

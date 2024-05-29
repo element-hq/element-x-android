@@ -45,7 +45,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun QrCodeIntroView(
     state: QrCodeIntroState,
-    onBackClicked: () -> Unit,
+    onBackClick: () -> Unit,
     onContinue: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -57,7 +57,7 @@ fun QrCodeIntroView(
     }
     FlowStepPage(
         modifier = modifier,
-        onBackClicked = onBackClicked,
+        onBackClick = onBackClick,
         iconStyle = BigIcon.Style.Default(CompoundIcons.Computer()),
         title = stringResource(id = R.string.screen_qr_code_login_initial_state_title, state.desktopAppName),
         content = { Content(state = state) },
@@ -109,7 +109,7 @@ private fun ColumnScope.Buttons(
 internal fun QrCodeIntroViewPreview(@PreviewParameter(QrCodeIntroStateProvider::class) state: QrCodeIntroState) = ElementPreview {
     QrCodeIntroView(
         state = state,
-        onBackClicked = {},
+        onBackClick = {},
         onContinue = {},
     )
 }

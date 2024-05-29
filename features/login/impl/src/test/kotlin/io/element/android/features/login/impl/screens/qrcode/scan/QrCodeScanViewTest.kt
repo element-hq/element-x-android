@@ -43,7 +43,7 @@ class QrCodeScanViewTest {
         ensureCalledOnce { callback ->
             rule.setQrCodeScanView(
                 state = aQrCodeScanState(),
-                onBackClicked = callback
+                onBackClick = callback
             )
             rule.pressBackKey()
         }
@@ -62,13 +62,13 @@ class QrCodeScanViewTest {
 
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setQrCodeScanView(
         state: QrCodeScanState,
-        onBackClicked: () -> Unit = EnsureNeverCalled(),
+        onBackClick: () -> Unit = EnsureNeverCalled(),
         onQrCodeDataReady: (MatrixQrCodeLoginData) -> Unit = EnsureNeverCalledWithParam(),
     ) {
         setContent {
             QrCodeScanView(
                 state = state,
-                onBackClicked = onBackClicked,
+                onBackClick = onBackClick,
                 onQrCodeDataReady = onQrCodeDataReady
             )
         }

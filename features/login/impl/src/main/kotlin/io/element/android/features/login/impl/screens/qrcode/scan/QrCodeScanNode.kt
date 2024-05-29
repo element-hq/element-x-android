@@ -53,7 +53,7 @@ class QrCodeScanNode @AssistedInject constructor(
         QrCodeScanView(
             state = state,
             onQrCodeDataReady = ::onQrCodeDataReady,
-            onBackClicked = ::onCancelClicked,
+            onBackClick = ::onCancelClicked,
             modifier = modifier
         )
     }
