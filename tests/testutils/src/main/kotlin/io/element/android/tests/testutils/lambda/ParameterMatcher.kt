@@ -41,3 +41,12 @@ fun any() = object : ParameterMatcher {
     override fun match(param: Any?) = true
     override fun toString(): String = "any()"
 }
+
+/**
+ * A matcher that matches any non null value
+ * Can be used when we don't care about the value of a parameter, just about its nullability.
+ */
+fun nonNull() = object : ParameterMatcher {
+    override fun match(param: Any?) = param != null
+    override fun toString(): String = "nonNull()"
+}

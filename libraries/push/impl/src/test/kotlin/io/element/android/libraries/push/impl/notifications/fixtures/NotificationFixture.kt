@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.notifications
+package io.element.android.libraries.push.impl.notifications.fixtures
 
-data class ProcessedEvent<T>(
-    val type: Type,
-    val event: T
-) {
-    enum class Type {
-        KEEP,
-        REMOVE
-    }
-}
+import android.app.Notification
 
-fun <T> List<ProcessedEvent<T>>.onlyKeptEvents() = mapNotNull { processedEvent ->
-    processedEvent.event.takeIf { processedEvent.type == ProcessedEvent.Type.KEEP }
-}
+val A_NOTIFICATION = Notification()
