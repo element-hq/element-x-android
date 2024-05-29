@@ -91,11 +91,6 @@ class DefaultAnalyticsService @Inject constructor(
         analyticsStore.setAnalyticsId(analyticsId)
     }
 
-    override suspend fun onSignOut() {
-        // stop all providers
-        analyticsProviders.onEach { it.stop() }
-    }
-
     override suspend fun onSessionCreated(userId: String) {
         // Nothing to do
     }
