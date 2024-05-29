@@ -47,7 +47,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun UserProfileView(
     state: UserProfileState,
     onShareUser: () -> Unit,
-    onDmStarted: (RoomId) -> Unit,
+    onOpenDm: (RoomId) -> Unit,
     onStartCall: (RoomId) -> Unit,
     goBack: () -> Unit,
     openAvatarPreview: (username: String, url: String) -> Unit,
@@ -96,7 +96,7 @@ fun UserProfileView(
                         progressText = stringResource(CommonStrings.common_starting_chat),
                     )
                 },
-                onSuccess = onDmStarted,
+                onSuccess = onOpenDm,
                 errorMessage = { stringResource(R.string.screen_start_chat_error_starting_chat) },
                 onRetry = { state.eventSink(UserProfileEvents.StartDM) },
                 onErrorDismiss = { state.eventSink(UserProfileEvents.ClearStartDMState) },
@@ -114,7 +114,7 @@ internal fun UserProfileViewPreview(
         state = state,
         onShareUser = {},
         goBack = {},
-        onDmStarted = {},
+        onOpenDm = {},
         onStartCall = {},
         openAvatarPreview = { _, _ -> }
     )

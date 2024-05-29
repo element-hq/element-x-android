@@ -106,8 +106,8 @@ fun TextComposer(
     onDeleteVoiceMessage: () -> Unit,
     onError: (Throwable) -> Unit,
     onTyping: (Boolean) -> Unit,
-    onSuggestionReceived: (Suggestion?) -> Unit,
-    onRichContentSelected: ((Uri) -> Unit)?,
+    onReceiveSuggestion: (Suggestion?) -> Unit,
+    onSelectRichContent: ((Uri) -> Unit)?,
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
     subcomposing: Boolean = false,
@@ -116,15 +116,15 @@ fun TextComposer(
         is TextEditorState.Markdown -> state.state.text.value()
         is TextEditorState.Rich -> state.richTextEditorState.messageMarkdown
     }
-    val onSendClicked = {
+    val onSendClick = {
         onSendMessage()
     }
 
-    val onPlayVoiceMessageClicked = {
+    val onPlayVoiceMessageClick = {
         onVoicePlayerEvent(VoiceMessagePlayerEvent.Play)
     }
 
-    val onPauseVoiceMessageClicked = {
+    val onPauseVoiceMessageClick = {
         onVoicePlayerEvent(VoiceMessagePlayerEvent.Pause)
     }
 
@@ -169,7 +169,7 @@ fun TextComposer(
                         resolveRoomMentionDisplay = { TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor("@room", "#")) },
                         onError = onError,
                         onTyping = onTyping,
-                        onRichContentSelected = onRichContentSelected,
+                        onSelectRichContent = onSelectRichContent,
                     )
                 }
             }
@@ -188,9 +188,9 @@ fun TextComposer(
                         state = state.state,
                         subcomposing = subcomposing,
                         onTyping = onTyping,
-                        onSuggestionReceived = onSuggestionReceived,
+                        onReceiveSuggestion = onReceiveSuggestion,
                         richTextEditorStyle = style,
-                        onRichContentSelected = onRichContentSelected,
+                        onSelectRichContent = onSelectRichContent,
                     )
                 }
             }
@@ -201,7 +201,7 @@ fun TextComposer(
     val sendButton = @Composable {
         SendButton(
             canSendMessage = canSendMessage,
-            onClick = onSendClicked,
+            onClick = onSendClick,
             composerMode = composerMode,
         )
     }
@@ -251,8 +251,8 @@ fun TextComposer(
                     waveform = voiceMessageState.waveform,
                     playbackProgress = voiceMessageState.playbackProgress,
                     time = voiceMessageState.time,
-                    onPlayClick = onPlayVoiceMessageClicked,
-                    onPauseClick = onPauseVoiceMessageClicked,
+                    onPlayClick = onPlayVoiceMessageClick,
+                    onPauseClick = onPauseVoiceMessageClick,
                     onSeek = onSeekVoiceMessage,
                 )
             is VoiceMessageState.Recording ->
@@ -302,15 +302,15 @@ fun TextComposer(
         SoftKeyboardEffect(showTextFormatting, onRequestFocus) { it }
     }
 
-    val latestOnSuggestionReceived by rememberUpdatedState(onSuggestionReceived)
+    val latestOnReceiveSuggestion by rememberUpdatedState(onReceiveSuggestion)
     if (state is TextEditorState.Rich) {
         val menuAction = state.richTextEditorState.menuAction
         LaunchedEffect(menuAction) {
             if (menuAction is MenuAction.Suggestion) {
                 val suggestion = Suggestion(menuAction.suggestionPattern)
-                latestOnSuggestionReceived(suggestion)
+                latestOnReceiveSuggestion(suggestion)
             } else {
-                latestOnSuggestionReceived(null)
+                latestOnReceiveSuggestion(null)
             }
         }
     }
@@ -481,7 +481,7 @@ private fun TextInput(
     resolveMentionDisplay: (text: String, url: String) -> TextDisplay,
     onError: (Throwable) -> Unit,
     onTyping: (Boolean) -> Unit,
-    onRichContentSelected: ((Uri) -> Unit)?,
+    onSelectRichContent: ((Uri) -> Unit)?,
 ) {
     TextInputBox(
         composerMode = composerMode,
@@ -502,7 +502,7 @@ private fun TextInput(
             resolveMentionDisplay = resolveMentionDisplay,
             resolveRoomMentionDisplay = resolveRoomMentionDisplay,
             onError = onError,
-            onRichContentSelected = onRichContentSelected,
+            onRichContentSelected = onSelectRichContent,
             onTyping = onTyping,
         )
     }
@@ -842,8 +842,8 @@ private fun ATextComposer(
         onDeleteVoiceMessage = {},
         onError = {},
         onTyping = {},
-        onSuggestionReceived = {},
-        onRichContentSelected = null,
+        onReceiveSuggestion = {},
+        onSelectRichContent = null,
     )
 }
 

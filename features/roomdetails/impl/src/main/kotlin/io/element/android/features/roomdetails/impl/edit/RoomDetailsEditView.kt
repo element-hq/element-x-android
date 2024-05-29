@@ -63,14 +63,14 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun RoomDetailsEditView(
     state: RoomDetailsEditState,
-    onBackPressed: () -> Unit,
-    onRoomEdited: () -> Unit,
+    onBackClick: () -> Unit,
+    onRoomEditSuccess: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
     val isAvatarActionsSheetVisible = remember { mutableStateOf(false) }
 
-    fun onAvatarClicked() {
+    fun onAvatarClick() {
         focusManager.clearFocus()
         isAvatarActionsSheetVisible.value = true
     }
@@ -85,7 +85,7 @@ fun RoomDetailsEditView(
                         style = ElementTheme.typography.aliasScreenTitle,
                     )
                 },
-                navigationIcon = { BackButton(onClick = onBackPressed) },
+                navigationIcon = { BackButton(onClick = onBackClick) },
                 actions = {
                     TextButton(
                         text = stringResource(CommonStrings.action_save),
@@ -114,7 +114,7 @@ fun RoomDetailsEditView(
                 displayName = state.roomRawName,
                 avatarUrl = state.roomAvatarUrl,
                 avatarSize = AvatarSize.EditRoomDetails,
-                onAvatarClicked = ::onAvatarClicked,
+                onAvatarClick = ::onAvatarClick,
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(modifier = Modifier.height(60.dp))
@@ -160,7 +160,7 @@ fun RoomDetailsEditView(
         actions = state.avatarActions,
         isVisible = isAvatarActionsSheetVisible.value,
         onDismiss = { isAvatarActionsSheetVisible.value = false },
-        onActionSelected = { state.eventSink(RoomDetailsEditEvents.HandleAvatarAction(it)) }
+        onSelectAction = { state.eventSink(RoomDetailsEditEvents.HandleAvatarAction(it)) }
     )
 
     AsyncActionView(
@@ -170,7 +170,7 @@ fun RoomDetailsEditView(
                 progressText = stringResource(R.string.screen_room_details_updating_room),
             )
         },
-        onSuccess = { onRoomEdited() },
+        onSuccess = { onRoomEditSuccess() },
         errorMessage = { stringResource(R.string.screen_room_details_edition_error) },
         onErrorDismiss = { state.eventSink(RoomDetailsEditEvents.CancelSaveChanges) }
     )
@@ -209,7 +209,7 @@ private fun LabelledReadOnlyField(
 internal fun RoomDetailsEditViewPreview(@PreviewParameter(RoomDetailsEditStateProvider::class) state: RoomDetailsEditState) = ElementPreview {
     RoomDetailsEditView(
         state = state,
-        onBackPressed = {},
-        onRoomEdited = {},
+        onBackClick = {},
+        onRoomEditSuccess = {},
     )
 }

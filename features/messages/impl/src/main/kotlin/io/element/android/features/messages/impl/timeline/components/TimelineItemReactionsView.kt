@@ -42,9 +42,9 @@ fun TimelineItemReactionsView(
     reactionsState: TimelineItemReactions,
     isOutgoing: Boolean,
     userCanSendReaction: Boolean,
-    onReactionClicked: (emoji: String) -> Unit,
-    onReactionLongClicked: (emoji: String) -> Unit,
-    onMoreReactionsClicked: () -> Unit,
+    onReactionClick: (emoji: String) -> Unit,
+    onReactionLongClick: (emoji: String) -> Unit,
+    onMoreReactionsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var expanded: Boolean by rememberSaveable { mutableStateOf(false) }
@@ -54,9 +54,9 @@ fun TimelineItemReactionsView(
         userCanSendReaction = userCanSendReaction,
         expanded = expanded,
         isOutgoing = isOutgoing,
-        onReactionClick = onReactionClicked,
-        onReactionLongClick = onReactionLongClicked,
-        onMoreReactionsClick = onMoreReactionsClicked,
+        onReactionClick = onReactionClick,
+        onReactionLongClick = onReactionLongClick,
+        onMoreReactionsClick = onMoreReactionsClick,
         onToggleExpandClick = { expanded = !expanded },
     )
 }
@@ -179,8 +179,8 @@ private fun ContentToPreview(
         ),
         userCanSendReaction = true,
         isOutgoing = isOutgoing,
-        onReactionClicked = {},
-        onReactionLongClicked = {},
-        onMoreReactionsClicked = {},
+        onReactionClick = {},
+        onReactionLongClick = {},
+        onMoreReactionsClick = {},
     )
 }

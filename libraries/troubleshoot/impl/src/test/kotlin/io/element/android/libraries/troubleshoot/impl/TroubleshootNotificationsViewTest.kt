@@ -45,7 +45,7 @@ class TroubleshootNotificationsViewTest {
                 state = aTroubleshootNotificationsState(
                     eventSink = eventsRecorder
                 ),
-                onBackPressed = it,
+                onBackClick = it,
             )
             rule.pressBack()
         }
@@ -112,12 +112,12 @@ class TroubleshootNotificationsViewTest {
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setTroubleshootNotificationsView(
     state: TroubleshootNotificationsState,
-    onBackPressed: () -> Unit = EnsureNeverCalled(),
+    onBackClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         TroubleshootNotificationsView(
             state = state,
-            onBackPressed = onBackPressed,
+            onBackClick = onBackClick,
         )
     }
 }

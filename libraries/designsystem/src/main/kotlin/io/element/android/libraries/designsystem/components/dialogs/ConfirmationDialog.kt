@@ -34,7 +34,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun ConfirmationDialog(
     content: String,
-    onSubmitClicked: () -> Unit,
+    onSubmitClick: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     title: String? = null,
@@ -42,8 +42,8 @@ fun ConfirmationDialog(
     cancelText: String = stringResource(id = CommonStrings.action_cancel),
     destructiveSubmit: Boolean = false,
     thirdButtonText: String? = null,
-    onCancelClicked: () -> Unit = onDismiss,
-    onThirdButtonClicked: () -> Unit = {},
+    onCancelClick: () -> Unit = onDismiss,
+    onThirdButtonClick: () -> Unit = {},
     icon: @Composable (() -> Unit)? = null,
 ) {
     BasicAlertDialog(modifier = modifier, onDismissRequest = onDismiss) {
@@ -54,9 +54,9 @@ fun ConfirmationDialog(
             cancelText = cancelText,
             thirdButtonText = thirdButtonText,
             destructiveSubmit = destructiveSubmit,
-            onSubmitClicked = onSubmitClicked,
-            onCancelClicked = onCancelClicked,
-            onThirdButtonClicked = onThirdButtonClicked,
+            onSubmitClick = onSubmitClick,
+            onCancelClick = onCancelClick,
+            onThirdButtonClick = onThirdButtonClick,
             icon = icon,
         )
     }
@@ -67,11 +67,11 @@ private fun ConfirmationDialogContent(
     content: String,
     submitText: String,
     cancelText: String,
-    onSubmitClicked: () -> Unit,
-    onCancelClicked: () -> Unit,
+    onSubmitClick: () -> Unit,
+    onCancelClick: () -> Unit,
     title: String? = null,
     thirdButtonText: String? = null,
-    onThirdButtonClicked: () -> Unit = {},
+    onThirdButtonClick: () -> Unit = {},
     destructiveSubmit: Boolean = false,
     icon: @Composable (() -> Unit)? = null,
 ) {
@@ -79,11 +79,11 @@ private fun ConfirmationDialogContent(
         title = title,
         content = content,
         submitText = submitText,
-        onSubmitClicked = onSubmitClicked,
+        onSubmitClick = onSubmitClick,
         cancelText = cancelText,
-        onCancelClicked = onCancelClicked,
+        onCancelClick = onCancelClick,
         thirdButtonText = thirdButtonText,
-        onThirdButtonClicked = onThirdButtonClicked,
+        onThirdButtonClick = onThirdButtonClick,
         destructiveSubmit = destructiveSubmit,
         icon = icon,
     )
@@ -100,9 +100,9 @@ internal fun ConfirmationDialogContentPreview() =
                 submitText = "OK",
                 cancelText = "Cancel",
                 thirdButtonText = "Disable",
-                onSubmitClicked = {},
-                onCancelClicked = {},
-                onThirdButtonClicked = {},
+                onSubmitClick = {},
+                onCancelClick = {},
+                onThirdButtonClick = {},
             )
         }
     }
@@ -116,7 +116,7 @@ internal fun ConfirmationDialogPreview() = ElementPreview {
         submitText = "OK",
         cancelText = "Cancel",
         thirdButtonText = "Disable",
-        onSubmitClicked = {},
+        onSubmitClick = {},
         onDismiss = {}
     )
 }

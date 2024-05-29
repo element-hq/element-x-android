@@ -56,7 +56,7 @@ open class MediaViewerNode @AssistedInject constructor(
             MediaViewerView(
                 state = state,
                 modifier = modifier,
-                onBackPressed = this::navigateUp
+                onBackClick = this::navigateUp
             )
         }
     }

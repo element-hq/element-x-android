@@ -41,13 +41,13 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun CreateNewRecoveryKeyView(
     desktopApplicationName: String,
-    onBackClicked: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(title = {}, navigationIcon = { BackButton(onClick = onBackClicked) })
+            TopAppBar(title = {}, navigationIcon = { BackButton(onClick = onBackClick) })
         }
     ) { padding ->
         Column(
@@ -86,7 +86,7 @@ internal fun CreateNewRecoveryKeyViewPreview() {
     ElementPreview {
         CreateNewRecoveryKeyView(
             desktopApplicationName = "Element",
-            onBackClicked = {},
+            onBackClick = {},
         )
     }
 }

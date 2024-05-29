@@ -54,9 +54,6 @@ class FakeAnalyticsService(
     override suspend fun setAnalyticsId(analyticsId: String) {
     }
 
-    override suspend fun onSignOut() {
-    }
-
     override fun capture(event: VectorAnalyticsEvent) {
         capturedEvents += event
     }

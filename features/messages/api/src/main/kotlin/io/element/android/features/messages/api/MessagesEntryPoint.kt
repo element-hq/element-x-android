@@ -39,9 +39,9 @@ interface MessagesEntryPoint : FeatureEntryPoint {
     )
 
     interface Callback : Plugin {
-        fun onRoomDetailsClicked()
-        fun onUserDataClicked(userId: UserId)
-        fun onPermalinkClicked(data: PermalinkData)
+        fun onRoomDetailsClick()
+        fun onUserDataClick(userId: UserId)
+        fun onPermalinkClick(data: PermalinkData)
         fun onForwardedToSingleRoom(roomId: RoomId)
     }
 }

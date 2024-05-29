@@ -38,12 +38,12 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun AdvancedSettingsView(
     state: AdvancedSettingsState,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PreferencePage(
         modifier = modifier,
-        onBackPressed = onBackPressed,
+        onBackClick = onBackClick,
         title = stringResource(id = CommonStrings.common_advanced_settings)
     ) {
         ListItem(
@@ -87,7 +87,7 @@ fun AdvancedSettingsView(
         SingleSelectionDialog(
             options = getOptions(),
             initialSelection = themes.indexOf(state.theme),
-            onOptionSelected = {
+            onSelectOption = {
                 state.eventSink(
                     AdvancedSettingsEvents.SetTheme(
                         themes[it]
@@ -121,5 +121,5 @@ private fun Theme.toHumanReadable(): String {
 @Composable
 internal fun AdvancedSettingsViewPreview(@PreviewParameter(AdvancedSettingsStateProvider::class) state: AdvancedSettingsState) =
     ElementPreview {
-        AdvancedSettingsView(state = state, onBackPressed = { })
+        AdvancedSettingsView(state = state, onBackClick = { })
     }

@@ -10,10 +10,10 @@ firebaseAppDistribution = "5.0.0"
 
 # AndroidX
 core = "1.13.0"
-# Warning: there is an issue with 1.1.0, that I cannot repro on unit test.
+# Warning: there is an issue with 1.1.0 and 1.1.1, that I cannot repro on unit test.
 # To repro with the application:
-# Clear the cache of the application and run the app. Nearly each time, there is an infinite loading
-# Due to the DefaultMigrationStore not bahaving as expected.
+# Clear the storage of the application and run the app. Nearly each time, there is an infinite loading
+# due to the DefaultMigrationStore not behaving as expected.
 # Stick to 1.0.0 for now, and ensure that this scenario cannot be reproduced when upgrading the version.
 datastore = "1.0.0"
 constraintlayout = "2.1.4"
@@ -39,7 +39,7 @@ test_core = "1.5.0"
 #other
 coil = "2.6.0"
 datetime = "0.6.0"
-dependencyAnalysis = "1.31.0"
+dependencyAnalysis = "1.32.0"
 serialization_json = "1.6.3"
 showkase = "1.0.2"
 appyx = "1.4.0"
@@ -160,7 +160,7 @@ showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
 jsoup = "org.jsoup:jsoup:1.17.2"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
-molecule-runtime = "app.cash.molecule:molecule-runtime:1.4.3"
+molecule-runtime = "app.cash.molecule:molecule-runtime:2.0.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
 matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.22"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }

@@ -33,8 +33,8 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 @Composable
 fun ChangeServerView(
     state: ChangeServerState,
-    onLearnMoreClicked: () -> Unit,
-    onDone: () -> Unit,
+    onLearnMoreClick: () -> Unit,
+    onSuccess: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val eventSink = state.eventSink
@@ -53,8 +53,8 @@ fun ChangeServerView(
                 is ChangeServerError.SlidingSyncAlert -> {
                     SlidingSyncNotSupportedDialog(
                         modifier = modifier,
-                        onLearnMoreClicked = {
-                            onLearnMoreClicked()
+                        onLearnMoreClick = {
+                            onLearnMoreClick()
                             eventSink.invoke(ChangeServerEvents.ClearError)
                         },
                         onDismiss = {
@@ -66,9 +66,9 @@ fun ChangeServerView(
         }
         is AsyncData.Loading -> ProgressDialog()
         is AsyncData.Success -> {
-            val latestOnDone by rememberUpdatedState(onDone)
+            val latestOnSuccess by rememberUpdatedState(onSuccess)
             LaunchedEffect(state.changeServerAction) {
-                latestOnDone()
+                latestOnSuccess()
             }
         }
         AsyncData.Uninitialized -> Unit
@@ -80,7 +80,7 @@ fun ChangeServerView(
 internal fun ChangeServerViewPreview(@PreviewParameter(ChangeServerStateProvider::class) state: ChangeServerState) = ElementPreview {
     ChangeServerView(
         state = state,
-        onLearnMoreClicked = {},
-        onDone = {},
+        onLearnMoreClick = {},
+        onSuccess = {},
     )
 }

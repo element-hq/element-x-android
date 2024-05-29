@@ -68,10 +68,10 @@ class CreateRoomRootNode @AssistedInject constructor(
         CreateRoomRootView(
             state = state,
             modifier = modifier,
-            onClosePressed = this::navigateUp,
-            onNewRoomClicked = ::onCreateNewRoom,
+            onCloseClick = this::navigateUp,
+            onNewRoomClick = ::onCreateNewRoom,
             onOpenDM = ::onStartChatSuccess,
-            onInviteFriendsClicked = { invitePeople(activity) }
+            onInviteFriendsClick = { invitePeople(activity) }
         )
     }
 

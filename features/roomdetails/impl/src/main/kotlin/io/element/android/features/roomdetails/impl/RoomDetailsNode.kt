@@ -124,7 +124,7 @@ class RoomDetailsNode @AssistedInject constructor(
             lifecycleScope.onShareRoom(context)
         }
 
-        fun onActionClicked(action: RoomDetailsAction) {
+        fun onActionClick(action: RoomDetailsAction) {
             when (action) {
                 RoomDetailsAction.Edit -> onEditRoomDetails()
                 RoomDetailsAction.AddTopic -> onEditRoomDetails()
@@ -135,7 +135,7 @@ class RoomDetailsNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             goBack = this::navigateUp,
-            onActionClicked = ::onActionClicked,
+            onActionClick = ::onActionClick,
             onShareRoom = ::onShareRoom,
             openRoomMemberList = ::openRoomMemberList,
             openRoomNotificationSettings = ::openRoomNotificationSettings,
@@ -143,7 +143,7 @@ class RoomDetailsNode @AssistedInject constructor(
             openAvatarPreview = ::openAvatarPreview,
             openPollHistory = ::openPollHistory,
             openAdminSettings = this::openAdminSettings,
-            onJoinCallClicked = ::onJoinCall,
+            onJoinCallClick = ::onJoinCall,
         )
     }
 }

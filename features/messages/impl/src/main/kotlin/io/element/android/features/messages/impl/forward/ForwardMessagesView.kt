@@ -30,11 +30,11 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun ForwardMessagesView(
     state: ForwardMessagesState,
-    onForwardingSucceeded: (ImmutableList<RoomId>) -> Unit,
+    onForwardSuccess: (ImmutableList<RoomId>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (state.forwardingSucceeded != null) {
-        onForwardingSucceeded(state.forwardingSucceeded)
+        onForwardSuccess(state.forwardingSucceeded)
         return
     }
 
@@ -64,6 +64,6 @@ private fun ForwardingErrorDialog(onDismiss: () -> Unit, modifier: Modifier = Mo
 internal fun ForwardMessagesViewPreview(@PreviewParameter(ForwardMessagesStateProvider::class) state: ForwardMessagesState) = ElementPreview {
     ForwardMessagesView(
         state = state,
-        onForwardingSucceeded = {}
+        onForwardSuccess = {}
     )
 }

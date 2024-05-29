@@ -43,26 +43,27 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun SecureBackupSetupView(
     state: SecureBackupSetupState,
-    onDone: () -> Unit,
-    onBackClicked: () -> Unit,
+    onSuccess: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     FlowStepPage(
         modifier = modifier,
-        onBackClicked = onBackClicked.takeIf { state.canGoBack() },
+        onBackClick = onBackClick.takeIf { state.canGoBack() },
         title = title(state),
         subTitle = subtitle(state),
         iconStyle = BigIcon.Style.Default(CompoundIcons.KeySolid()),
-        content = { Content(state) },
-        buttons = { Buttons(state, onDone = onDone) },
-    )
+        buttons = { Buttons(state, onFinish = onSuccess) },
+    ) {
+        Content(state = state)
+    }
 
     if (state.showSaveConfirmationDialog) {
         ConfirmationDialog(
             title = stringResource(id = R.string.screen_recovery_key_setup_confirmation_title),
             content = stringResource(id = R.string.screen_recovery_key_setup_confirmation_description),
             submitText = stringResource(id = CommonStrings.action_continue),
-            onSubmitClicked = onDone,
+            onSubmitClick = onSuccess,
             onDismiss = {
                 state.eventSink.invoke(SecureBackupSetupEvents.DismissDialog)
             }
@@ -139,7 +140,7 @@ private fun Content(
 @Composable
 private fun ColumnScope.Buttons(
     state: SecureBackupSetupState,
-    onDone: () -> Unit,
+    onFinish: () -> Unit,
 ) {
     val context = LocalContext.current
     val chooserTitle = stringResource(id = R.string.screen_recovery_key_save_action)
@@ -150,7 +151,7 @@ private fun ColumnScope.Buttons(
                 text = stringResource(id = CommonStrings.action_done),
                 enabled = false,
                 modifier = Modifier.fillMaxWidth(),
-                onClick = onDone
+                onClick = onFinish
             )
         }
         is SetupState.Created,
@@ -173,7 +174,7 @@ private fun ColumnScope.Buttons(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     if (state.setupState is SetupState.CreatedAndSaved) {
-                        onDone()
+                        onFinish()
                     } else {
                         state.eventSink.invoke(SecureBackupSetupEvents.Done)
                     }
@@ -190,7 +191,7 @@ internal fun SecureBackupSetupViewPreview(
 ) = ElementPreview {
     SecureBackupSetupView(
         state = state,
-        onDone = {},
-        onBackClicked = {},
+        onSuccess = {},
+        onBackClick = {},
     )
 }

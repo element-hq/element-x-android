@@ -57,8 +57,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun BugReportView(
     state: BugReportState,
     onViewLogs: () -> Unit,
-    onDone: () -> Unit,
-    onBackPressed: () -> Unit,
+    onSuccess: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val eventSink = state.eventSink
@@ -66,7 +66,7 @@ fun BugReportView(
     Box(modifier = modifier) {
         PreferencePage(
             title = stringResource(id = CommonStrings.common_report_a_problem),
-            onBackPressed = onBackPressed
+            onBackClick = onBackClick
         ) {
             val isFormEnabled = state.sending !is AsyncAction.Loading
             var descriptionFieldState by textFieldState(
@@ -163,7 +163,7 @@ fun BugReportView(
             progressDialog = { },
             onSuccess = {
                 eventSink(BugReportEvents.ResetAll)
-                onDone()
+                onSuccess()
             },
             errorMessage = { error ->
                 when (error) {
@@ -181,8 +181,8 @@ fun BugReportView(
 internal fun BugReportViewPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreview {
     BugReportView(
         state = state,
-        onDone = {},
-        onBackPressed = {},
+        onSuccess = {},
+        onBackClick = {},
         onViewLogs = {},
     )
 }

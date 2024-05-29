@@ -52,9 +52,9 @@ import kotlinx.collections.immutable.persistentListOf
 fun WelcomeView(
     applicationName: String,
     modifier: Modifier = Modifier,
-    onContinueClicked: () -> Unit,
+    onContinueClick: () -> Unit,
 ) {
-    BackHandler(onBack = onContinueClicked)
+    BackHandler(onBack = onContinueClick)
     OnBoardingPage(
         modifier = modifier
             .systemBarsPadding()
@@ -90,7 +90,7 @@ fun WelcomeView(
             Button(
                 text = stringResource(CommonStrings.action_continue),
                 modifier = Modifier.fillMaxWidth(),
-                onClick = onContinueClicked
+                onClick = onContinueClick
             )
             Spacer(modifier = Modifier.height(32.dp))
         }
@@ -113,6 +113,6 @@ private fun listItems() = persistentListOf(
 @Composable
 internal fun WelcomeViewPreview() {
     ElementPreview {
-        WelcomeView(applicationName = "Element X", onContinueClicked = {})
+        WelcomeView(applicationName = "Element X", onContinueClick = {})
     }
 }

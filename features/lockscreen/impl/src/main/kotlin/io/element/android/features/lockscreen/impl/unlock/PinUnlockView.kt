@@ -192,7 +192,7 @@ private fun SignOutPrompt(
         ConfirmationDialog(
             title = stringResource(id = R.string.screen_app_lock_signout_alert_title),
             content = stringResource(id = R.string.screen_app_lock_signout_alert_message),
-            onSubmitClicked = onSignOut,
+            onSubmitClick = onSignOut,
             onDismiss = onDismiss,
         )
     } else {

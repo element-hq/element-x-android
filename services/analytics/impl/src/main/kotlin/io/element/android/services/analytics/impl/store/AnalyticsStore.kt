@@ -23,7 +23,9 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -41,44 +43,55 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
  * - did ask user consent (Boolean);
  * - analytics Id (String).
  */
-class AnalyticsStore @Inject constructor(
+interface AnalyticsStore {
+    val userConsentFlow: Flow<Boolean>
+    val didAskUserConsentFlow: Flow<Boolean>
+    val analyticsIdFlow: Flow<String>
+    suspend fun setUserConsent(newUserConsent: Boolean)
+    suspend fun setDidAskUserConsent(newValue: Boolean = true)
+    suspend fun setAnalyticsId(newAnalyticsId: String)
+    suspend fun reset()
+}
+
+@ContributesBinding(AppScope::class)
+class DefaultAnalyticsStore @Inject constructor(
     @ApplicationContext private val context: Context
-) {
+) : AnalyticsStore {
     private val userConsent = booleanPreferencesKey("user_consent")
     private val didAskUserConsent = booleanPreferencesKey("did_ask_user_consent")
     private val analyticsId = stringPreferencesKey("analytics_id")
 
-    val userConsentFlow: Flow<Boolean> = context.dataStore.data
+    override val userConsentFlow: Flow<Boolean> = context.dataStore.data
         .map { preferences -> preferences[userConsent].orFalse() }
         .distinctUntilChanged()
 
-    val didAskUserConsentFlow: Flow<Boolean> = context.dataStore.data
+    override val didAskUserConsentFlow: Flow<Boolean> = context.dataStore.data
         .map { preferences -> preferences[didAskUserConsent].orFalse() }
         .distinctUntilChanged()
 
-    val analyticsIdFlow: Flow<String> = context.dataStore.data
+    override val analyticsIdFlow: Flow<String> = context.dataStore.data
         .map { preferences -> preferences[analyticsId].orEmpty() }
         .distinctUntilChanged()
 
-    suspend fun setUserConsent(newUserConsent: Boolean) {
+    override suspend fun setUserConsent(newUserConsent: Boolean) {
         context.dataStore.edit { settings ->
             settings[userConsent] = newUserConsent
         }
     }
 
-    suspend fun setDidAskUserConsent(newValue: Boolean = true) {
+    override suspend fun setDidAskUserConsent(newValue: Boolean) {
         context.dataStore.edit { settings ->
             settings[didAskUserConsent] = newValue
         }
     }
 
-    suspend fun setAnalyticsId(newAnalyticsId: String) {
+    override suspend fun setAnalyticsId(newAnalyticsId: String) {
         context.dataStore.edit { settings ->
             settings[analyticsId] = newAnalyticsId
         }
     }
 
-    suspend fun reset() {
+    override suspend fun reset() {
         context.dataStore.edit {
             it.clear()
         }

@@ -34,13 +34,13 @@ import io.element.android.libraries.designsystem.theme.components.Button
 @Composable
 fun SecureBackupEnableView(
     state: SecureBackupEnableState,
-    onDone: () -> Unit,
-    onBackClicked: () -> Unit,
+    onSuccess: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     FlowStepPage(
         modifier = modifier,
-        onBackClicked = onBackClicked,
+        onBackClick = onBackClick,
         title = stringResource(id = R.string.screen_chat_backup_key_backup_action_enable),
         iconStyle = BigIcon.Style.Default(CompoundIcons.KeySolid()),
         buttons = { Buttons(state = state) }
@@ -48,7 +48,7 @@ fun SecureBackupEnableView(
     AsyncActionView(
         async = state.enableAction,
         progressDialog = { },
-        onSuccess = { onDone() },
+        onSuccess = { onSuccess() },
         onErrorDismiss = { state.eventSink.invoke(SecureBackupEnableEvents.DismissDialog) }
     )
 }
@@ -72,7 +72,7 @@ internal fun SecureBackupEnableViewPreview(
 ) = ElementPreview {
     SecureBackupEnableView(
         state = state,
-        onDone = {},
-        onBackClicked = {},
+        onSuccess = {},
+        onBackClick = {},
     )
 }
