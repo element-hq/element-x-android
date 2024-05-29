@@ -23,7 +23,7 @@
       bug_report_app_name: Identifier for the application (eg 'riot-web').
       Should correspond to a mapping configured in the configuration file for github issue reporting to work.
     -->
-    <string name="bug_report_app_name" translatable="false">element-x-android</string>
+    <string name="bug_report_app_name" translatable="false">parolla-android</string>
 
 
 </resources>

@@ -101,13 +101,13 @@ android {
 
     buildTypes {
         getByName("debug") {
-            resValue("string", "app_name", "Element X dbg")
+            resValue("string", "app_name", "Parolla Dbg")
             applicationIdSuffix = ".debug"
             signingConfig = signingConfigs.getByName("debug")
         }
 
         getByName("release") {
-            resValue("string", "app_name", "Element X")
+            resValue("string", "app_name", "Parolla")
             signingConfig = signingConfigs.getByName("debug")
 
             postprocessing {
@@ -124,7 +124,7 @@ android {
             initWith(release)
             applicationIdSuffix = ".nightly"
             versionNameSuffix = "-nightly"
-            resValue("string", "app_name", "Element X nightly")
+            resValue("string", "app_name", "Parolla nightly")
             matchingFallbacks += listOf("release")
             signingConfig = signingConfigs.getByName("nightly")
 
