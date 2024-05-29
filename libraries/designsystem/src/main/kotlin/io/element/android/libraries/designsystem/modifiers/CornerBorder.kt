@@ -30,6 +30,7 @@ import io.element.android.libraries.designsystem.text.toPx
 /**
  * Draw a border on corners around the content.
  */
+@Suppress("ModifierComposed")
 fun Modifier.cornerBorder(
     strokeWidth: Dp,
     color: Color,

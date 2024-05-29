@@ -22,11 +22,11 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 
 class FakeMatrixQrCodeLoginDataFactory(
     var parseQrCodeLoginDataResult: () -> Result<MatrixQrCodeLoginData> =
-        lambdaRecorder<Result<MatrixQrCodeLoginData>> { Result.success(FakeQrCodeLoginData()) },
+        lambdaRecorder<Result<MatrixQrCodeLoginData>> { Result.success(FakeMatrixQrCodeLoginData()) },
 ) : MatrixQrCodeLoginDataFactory {
     override fun parseQrCodeData(data: ByteArray): Result<MatrixQrCodeLoginData> {
         return parseQrCodeLoginDataResult()
     }
 }
 
-class FakeQrCodeLoginData : MatrixQrCodeLoginData
+class FakeMatrixQrCodeLoginData : MatrixQrCodeLoginData

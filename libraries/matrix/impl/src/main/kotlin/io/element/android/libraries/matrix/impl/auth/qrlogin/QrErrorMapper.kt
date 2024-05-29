@@ -18,8 +18,6 @@ package io.element.android.libraries.matrix.impl.auth.qrlogin
 
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeDecodeException
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrLoginException
-import org.matrix.rustcomponents.sdk.HumanQrLoginException
-import uniffi.matrix_sdk_crypto.LoginQrCodeDecodeError
 import org.matrix.rustcomponents.sdk.HumanQrLoginException as RustHumanQrLoginException
 import org.matrix.rustcomponents.sdk.QrCodeDecodeException as RustQrCodeDecodeException
 

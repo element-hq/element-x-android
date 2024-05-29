@@ -20,19 +20,19 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.test.A_SESSION_ID
-import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
-import io.element.android.libraries.matrix.test.auth.qrlogin.FakeQrCodeLoginData
+import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
+import io.element.android.libraries.matrix.test.auth.qrlogin.FakeMatrixQrCodeLoginData
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class DefaultQrCodeLoginManagerTest {
     @Test
     fun `authenticate - returns success if the login succeeded`() = runTest {
-        val authenticationService = FakeAuthenticationService(
+        val authenticationService = FakeMatrixAuthenticationService(
             loginWithQrCodeResult = { _, _ -> Result.success(A_SESSION_ID) }
         )
         val manager = DefaultQrCodeLoginManager(authenticationService)
-        val result = manager.authenticate(FakeQrCodeLoginData())
+        val result = manager.authenticate(FakeMatrixQrCodeLoginData())
 
         assertThat(result.isSuccess).isTrue()
         assertThat(result.getOrNull()).isEqualTo(A_SESSION_ID)
@@ -40,11 +40,11 @@ class DefaultQrCodeLoginManagerTest {
 
     @Test
     fun `authenticate - returns failure if the login failed`() = runTest {
-        val authenticationService = FakeAuthenticationService(
+        val authenticationService = FakeMatrixAuthenticationService(
             loginWithQrCodeResult = { _, _ -> Result.failure(IllegalStateException("Auth failed")) }
         )
         val manager = DefaultQrCodeLoginManager(authenticationService)
-        val result = manager.authenticate(FakeQrCodeLoginData())
+        val result = manager.authenticate(FakeMatrixQrCodeLoginData())
 
         assertThat(result.isFailure).isTrue()
         assertThat(result.exceptionOrNull()).isNotNull()
@@ -52,7 +52,7 @@ class DefaultQrCodeLoginManagerTest {
 
     @Test
     fun `authenticate - emits the auth steps`() = runTest {
-        val authenticationService = FakeAuthenticationService(
+        val authenticationService = FakeMatrixAuthenticationService(
             loginWithQrCodeResult = { _, progressListener ->
                 progressListener(QrCodeLoginStep.EstablishingSecureChannel("00"))
                 progressListener(QrCodeLoginStep.Starting)
@@ -63,7 +63,7 @@ class DefaultQrCodeLoginManagerTest {
         )
         val manager = DefaultQrCodeLoginManager(authenticationService)
         manager.currentLoginStep.test {
-            manager.authenticate(FakeQrCodeLoginData())
+            manager.authenticate(FakeMatrixQrCodeLoginData())
 
             assertThat(awaitItem()).isEqualTo(QrCodeLoginStep.Uninitialized)
             assertThat(awaitItem()).isEqualTo(QrCodeLoginStep.EstablishingSecureChannel("00"))

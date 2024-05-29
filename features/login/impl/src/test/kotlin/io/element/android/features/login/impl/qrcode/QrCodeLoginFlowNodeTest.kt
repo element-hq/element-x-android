@@ -28,9 +28,8 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrLoginException
 import io.element.android.libraries.matrix.test.A_SESSION_ID
-import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
-import io.element.android.libraries.matrix.test.auth.qrlogin.FakeQrCodeLoginData
+import io.element.android.libraries.matrix.test.auth.qrlogin.FakeMatrixQrCodeLoginData
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -126,7 +125,7 @@ class QrCodeLoginFlowNodeTest {
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
 
-        flowNode.run { startAuthentication(FakeQrCodeLoginData()) }
+        flowNode.run { startAuthentication(FakeMatrixQrCodeLoginData()) }
         assertThat(flowNode.isLoginInProgress()).isTrue()
 
         advanceUntilIdle()
@@ -156,7 +155,7 @@ class QrCodeLoginFlowNodeTest {
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
 
-        flowNode.run { startAuthentication(FakeQrCodeLoginData()) }
+        flowNode.run { startAuthentication(FakeMatrixQrCodeLoginData()) }
         assertThat(flowNode.isLoginInProgress()).isTrue()
 
         advanceUntilIdle()
@@ -186,7 +185,7 @@ class QrCodeLoginFlowNodeTest {
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
 
-        flowNode.run { startAuthentication(FakeQrCodeLoginData()) }
+        flowNode.run { startAuthentication(FakeMatrixQrCodeLoginData()) }
         assertThat(flowNode.isLoginInProgress()).isTrue()
         flowNode.reset()
 

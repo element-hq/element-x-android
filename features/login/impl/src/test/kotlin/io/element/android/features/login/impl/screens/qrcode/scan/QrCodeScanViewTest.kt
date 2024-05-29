@@ -22,7 +22,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
-import io.element.android.libraries.matrix.test.auth.qrlogin.FakeQrCodeLoginData
+import io.element.android.libraries.matrix.test.auth.qrlogin.FakeMatrixQrCodeLoginData
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.ensureCalledOnce
@@ -51,7 +51,7 @@ class QrCodeScanViewTest {
 
     @Test
     fun `on QR code data ready - calls the expected callback`() {
-        val data = FakeQrCodeLoginData()
+        val data = FakeMatrixQrCodeLoginData()
         ensureCalledOnceWithParam<MatrixQrCodeLoginData>(data) { callback ->
             rule.setQrCodeScanView(
                 state = aQrCodeScanState(authenticationAction = AsyncAction.Success(data)),

@@ -21,6 +21,8 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.meta.BuildType
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
@@ -34,31 +36,38 @@ class OnBoardingPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = OnBoardingPresenter(
-            aBuildMeta(
+            buildMeta = aBuildMeta(
                 applicationName = "A",
                 productionApplicationName = "B",
                 desktopApplicationName = "C",
-            )
+            ),
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.QrCodeLogin.name to true)),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.isDebugBuild).isTrue()
-            assertThat(initialState.canLoginWithQrCode).isTrue()
+            assertThat(initialState.canLoginWithQrCode).isFalse()
             assertThat(initialState.productionApplicationName).isEqualTo("B")
             assertThat(initialState.canCreateAccount).isFalse()
+
+            assertThat(awaitItem().canLoginWithQrCode).isTrue()
         }
     }
 
     @Test
     fun `present - initial state release`() = runTest {
-        val presenter = OnBoardingPresenter(aBuildMeta(buildType = BuildType.RELEASE))
+        val presenter = OnBoardingPresenter(
+            buildMeta = aBuildMeta(buildType = BuildType.RELEASE),
+            featureFlagService = FakeFeatureFlagService(),
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.isDebugBuild).isFalse()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 }
