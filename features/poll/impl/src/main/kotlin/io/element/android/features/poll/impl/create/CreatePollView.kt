@@ -102,7 +102,7 @@ fun CreatePollView(
             CreatePollTopAppBar(
                 mode = state.mode,
                 saveEnabled = state.canSave,
-                onBackPress = navBack,
+                onBackClick = navBack,
                 onSaveClick = { state.eventSink(CreatePollEvents.Save) }
             )
         },
@@ -219,7 +219,7 @@ fun CreatePollView(
 private fun CreatePollTopAppBar(
     mode: CreatePollState.Mode,
     saveEnabled: Boolean,
-    onBackPress: () -> Unit = {},
+    onBackClick: () -> Unit = {},
     onSaveClick: () -> Unit = {},
 ) {
     TopAppBar(
@@ -233,7 +233,7 @@ private fun CreatePollTopAppBar(
             )
         },
         navigationIcon = {
-            BackButton(onClick = onBackPress)
+            BackButton(onClick = onBackClick)
         },
         actions = {
             TextButton(
