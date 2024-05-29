@@ -75,11 +75,11 @@ fun PollHistoryView(
     }
 
     fun onSelectAnswer(pollStartId: EventId, answerId: String) {
-        state.eventSink(PollHistoryEvents.PollAnswerSelected(pollStartId, answerId))
+        state.eventSink(PollHistoryEvents.SelectPollAnswer(pollStartId, answerId))
     }
 
     fun onEndPoll(pollStartId: EventId) {
-        state.eventSink(PollHistoryEvents.PollEndClicked(pollStartId))
+        state.eventSink(PollHistoryEvents.EndPoll(pollStartId))
     }
 
     Scaffold(
@@ -111,7 +111,7 @@ fun PollHistoryView(
             }
             PollHistoryFilterButtons(
                 activeFilter = state.activeFilter,
-                onSelectFilter = { state.eventSink(PollHistoryEvents.OnFilterSelected(it)) },
+                onSelectFilter = { state.eventSink(PollHistoryEvents.SelectFilter(it)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
