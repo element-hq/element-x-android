@@ -174,6 +174,7 @@ internal fun SimpleAlertDialogContent(
 /**
  * Copy of M3's `AlertDialogContent` so we can use it for previews.
  */
+@Suppress("ContentTrailingLambda")
 @Composable
 internal fun AlertDialogContent(
     buttons: @Composable () -> Unit,
