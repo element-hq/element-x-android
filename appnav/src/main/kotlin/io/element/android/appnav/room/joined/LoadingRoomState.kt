@@ -16,6 +16,7 @@
 
 package io.element.android.appnav.room.joined
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
@@ -31,6 +32,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
+@Immutable
 sealed interface LoadingRoomState {
     data object Loading : LoadingRoomState
     data object Error : LoadingRoomState

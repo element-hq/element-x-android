@@ -17,8 +17,10 @@
 package io.element.android.libraries.matrix.api.core
 
 import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import kotlinx.parcelize.Parcelize
 
+@Immutable
 sealed interface RoomIdOrAlias : Parcelable {
     @Parcelize
     @JvmInline

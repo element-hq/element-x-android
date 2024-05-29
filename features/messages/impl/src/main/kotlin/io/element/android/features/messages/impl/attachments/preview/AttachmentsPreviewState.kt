@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.attachments.preview
 
+import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.attachments.Attachment
 
 data class AttachmentsPreviewState(
@@ -24,8 +25,11 @@ data class AttachmentsPreviewState(
     val eventSink: (AttachmentsPreviewEvents) -> Unit
 )
 
+@Immutable
 sealed interface SendActionState {
     data object Idle : SendActionState
+
+    @Immutable
     sealed interface Sending : SendActionState {
         data object Processing : Sending
         data class Uploading(val progress: Float) : Sending

@@ -16,8 +16,10 @@
 
 package io.element.android.features.messages.impl.sender
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 
+@Immutable
 sealed interface SenderNameMode {
     data class Timeline(val mainColor: Color) : SenderNameMode
     data object Reply : SenderNameMode
