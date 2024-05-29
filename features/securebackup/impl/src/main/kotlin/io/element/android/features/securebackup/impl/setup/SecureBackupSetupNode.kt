@@ -55,11 +55,11 @@ class SecureBackupSetupNode @AssistedInject constructor(
         val state = presenter.present()
         SecureBackupSetupView(
             state = state,
-            onDone = {
+            onSuccess = {
                 coroutineScope.postSuccessSnackbar()
                 navigateUp()
             },
-            onBackClicked = ::navigateUp,
+            onBackClick = ::navigateUp,
             modifier = modifier,
         )
     }

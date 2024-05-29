@@ -49,7 +49,7 @@ class TroubleshootNotificationsNode @AssistedInject constructor(
         val state = presenter.present()
         TroubleshootNotificationsView(
             state = state,
-            onBackPressed = ::onDone,
+            onBackClick = ::onDone,
             modifier = modifier,
         )
     }

@@ -58,7 +58,7 @@ class RoomDetailsEditViewTest {
                 aRoomDetailsEditState(
                     eventSink = eventsRecorder
                 ),
-                onBackPressed = callback,
+                onBackClick = callback,
             )
             rule.pressBack()
         }
@@ -230,14 +230,14 @@ class RoomDetailsEditViewTest {
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomDetailsEditView(
     state: RoomDetailsEditState,
-    onBackPressed: () -> Unit = EnsureNeverCalled(),
+    onBackClick: () -> Unit = EnsureNeverCalled(),
     onRoomEdited: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         RoomDetailsEditView(
             state = state,
-            onBackPressed = onBackPressed,
-            onRoomEdited = onRoomEdited,
+            onBackClick = onBackClick,
+            onRoomEditSuccess = onRoomEdited,
         )
     }
 }

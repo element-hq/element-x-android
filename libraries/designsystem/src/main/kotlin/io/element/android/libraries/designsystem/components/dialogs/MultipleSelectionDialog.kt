@@ -44,7 +44,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun MultipleSelectionDialog(
     options: ImmutableList<ListOption>,
-    onConfirmClicked: (List<Int>) -> Unit,
+    onConfirmClick: (List<Int>) -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     confirmButtonTitle: String = stringResource(CommonStrings.action_confirm),
@@ -70,7 +70,7 @@ fun MultipleSelectionDialog(
             subtitle = decoratedSubtitle,
             options = options,
             confirmButtonTitle = confirmButtonTitle,
-            onConfirmClicked = onConfirmClicked,
+            onConfirmClick = onConfirmClick,
             dismissButtonTitle = dismissButtonTitle,
             onDismissRequest = onDismissRequest,
             initialSelected = initialSelection,
@@ -82,7 +82,7 @@ fun MultipleSelectionDialog(
 private fun MultipleSelectionDialogContent(
     options: ImmutableList<ListOption>,
     confirmButtonTitle: String,
-    onConfirmClicked: (List<Int>) -> Unit,
+    onConfirmClick: (List<Int>) -> Unit,
     dismissButtonTitle: String,
     onDismissRequest: () -> Unit,
     title: String? = null,
@@ -97,11 +97,11 @@ private fun MultipleSelectionDialogContent(
         title = title,
         subtitle = subtitle,
         submitText = confirmButtonTitle,
-        onSubmitClicked = {
-            onConfirmClicked(selectedOptionIndexes.toList())
+        onSubmitClick = {
+            onConfirmClick(selectedOptionIndexes.toList())
         },
         cancelText = dismissButtonTitle,
-        onCancelClicked = onDismissRequest,
+        onCancelClick = onDismissRequest,
         applyPaddingToContents = false,
     ) {
         LazyColumn {
@@ -138,7 +138,7 @@ internal fun MultipleSelectionDialogContentPreview() {
             MultipleSelectionDialogContent(
                 title = "Dialog title",
                 options = options,
-                onConfirmClicked = {},
+                onConfirmClick = {},
                 onDismissRequest = {},
                 confirmButtonTitle = "Save",
                 dismissButtonTitle = "Cancel",
@@ -159,7 +159,7 @@ internal fun MultipleSelectionDialogPreview() = ElementPreview {
     MultipleSelectionDialog(
         title = "Dialog title",
         options = options,
-        onConfirmClicked = {},
+        onConfirmClick = {},
         onDismissRequest = {},
         confirmButtonTitle = "Save",
         dismissButtonTitle = "Cancel",

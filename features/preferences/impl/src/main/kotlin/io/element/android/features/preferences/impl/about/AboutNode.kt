@@ -36,7 +36,7 @@ class AboutNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: AboutPresenter,
 ) : Node(buildContext, plugins = plugins) {
-    private fun onElementLegalClicked(
+    private fun onElementLegalClick(
         activity: Activity,
         darkTheme: Boolean,
         elementLegal: ElementLegal,
@@ -51,9 +51,9 @@ class AboutNode @AssistedInject constructor(
         val state = presenter.present()
         AboutView(
             state = state,
-            onBackPressed = ::navigateUp,
-            onElementLegalClicked = { elementLegal ->
-                onElementLegalClicked(activity, isDark, elementLegal)
+            onBackClick = ::navigateUp,
+            onElementLegalClick = { elementLegal ->
+                onElementLegalClick(activity, isDark, elementLegal)
             },
             modifier = modifier
         )

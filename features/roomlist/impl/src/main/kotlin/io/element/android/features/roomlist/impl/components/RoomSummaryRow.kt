@@ -105,10 +105,10 @@ internal fun RoomSummaryRow(
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 InviteButtonsRow(
-                    onAcceptClicked = {
+                    onAcceptClick = {
                         eventSink(RoomListEvents.AcceptInvite(room))
                     },
-                    onDeclineClicked = {
+                    onDeclineClick = {
                         eventSink(RoomListEvents.DeclineInvite(room))
                     }
                 )
@@ -299,8 +299,8 @@ private fun InviteNameAndIndicatorRow(
 
 @Composable
 private fun InviteButtonsRow(
-    onAcceptClicked: () -> Unit,
-    onDeclineClicked: () -> Unit,
+    onAcceptClick: () -> Unit,
+    onDeclineClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -309,13 +309,13 @@ private fun InviteButtonsRow(
     ) {
         OutlinedButton(
             text = stringResource(CommonStrings.action_decline),
-            onClick = onDeclineClicked,
+            onClick = onDeclineClick,
             size = ButtonSize.Medium,
             modifier = Modifier.weight(1f),
         )
         Button(
             text = stringResource(CommonStrings.action_accept),
-            onClick = onAcceptClicked,
+            onClick = onAcceptClick,
             size = ButtonSize.Medium,
             modifier = Modifier.weight(1f),
         )

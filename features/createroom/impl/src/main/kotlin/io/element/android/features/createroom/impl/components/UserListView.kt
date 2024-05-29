@@ -44,8 +44,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun UserListView(
     state: UserListState,
-    onUserSelected: (MatrixUser) -> Unit,
-    onUserDeselected: (MatrixUser) -> Unit,
+    onSelectUser: (MatrixUser) -> Unit,
+    onDeselectUser: (MatrixUser) -> Unit,
     modifier: Modifier = Modifier,
     showBackButton: Boolean = true,
 ) {
@@ -59,17 +59,17 @@ fun UserListView(
             selectedUsers = state.selectedUsers,
             active = state.isSearchActive,
             showLoader = state.showSearchLoader,
-            isMultiSelectionEnabled = state.isMultiSelectionEnabled,
+            isMultiSelectionEnable = state.isMultiSelectionEnabled,
             showBackButton = showBackButton,
-            onActiveChanged = { state.eventSink(UserListEvents.OnSearchActiveChanged(it)) },
-            onTextChanged = { state.eventSink(UserListEvents.UpdateSearchQuery(it)) },
-            onUserSelected = {
+            onActiveChange = { state.eventSink(UserListEvents.OnSearchActiveChanged(it)) },
+            onTextChange = { state.eventSink(UserListEvents.UpdateSearchQuery(it)) },
+            onUserSelect = {
                 state.eventSink(UserListEvents.AddToSelection(it))
-                onUserSelected(it)
+                onSelectUser(it)
             },
-            onUserDeselected = {
+            onUserDeselect = {
                 state.eventSink(UserListEvents.RemoveFromSelection(it))
-                onUserDeselected(it)
+                onDeselectUser(it)
             },
         )
 
@@ -78,9 +78,9 @@ fun UserListView(
                 contentPadding = PaddingValues(16.dp),
                 selectedUsers = state.selectedUsers,
                 autoScroll = true,
-                onUserRemoved = {
+                onUserRemove = {
                     state.eventSink(UserListEvents.RemoveFromSelection(it))
-                    onUserDeselected(it)
+                    onDeselectUser(it)
                 },
             )
         }
@@ -102,10 +102,10 @@ fun UserListView(
                             onCheckedChange = {
                                 if (isSelected) {
                                     state.eventSink(UserListEvents.RemoveFromSelection(recentDirectRoom.matrixUser))
-                                    onUserDeselected(recentDirectRoom.matrixUser)
+                                    onDeselectUser(recentDirectRoom.matrixUser)
                                 } else {
                                     state.eventSink(UserListEvents.AddToSelection(recentDirectRoom.matrixUser))
-                                    onUserSelected(recentDirectRoom.matrixUser)
+                                    onSelectUser(recentDirectRoom.matrixUser)
                                 }
                             },
                             data = CheckableUserRowData.Resolved(
@@ -129,7 +129,7 @@ fun UserListView(
 internal fun UserListViewPreview(@PreviewParameter(UserListStateProvider::class) state: UserListState) = ElementPreview {
     UserListView(
         state = state,
-        onUserSelected = {},
-        onUserDeselected = {},
+        onSelectUser = {},
+        onDeselectUser = {},
     )
 }

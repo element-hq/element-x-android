@@ -50,7 +50,7 @@ class ConfigureRoomNode @AssistedInject constructor(
         fun onCreateRoomSuccess(roomId: RoomId)
     }
 
-    private fun onRoomCreated(roomId: RoomId) {
+    private fun onCreateRoomSuccess(roomId: RoomId) {
         plugins<Callback>().forEach { it.onCreateRoomSuccess(roomId) }
     }
 
@@ -60,8 +60,8 @@ class ConfigureRoomNode @AssistedInject constructor(
         ConfigureRoomView(
             state = state,
             modifier = modifier,
-            onBackPressed = this::navigateUp,
-            onRoomCreated = this::onRoomCreated,
+            onBackClick = this::navigateUp,
+            onCreateRoomSuccess = this::onCreateRoomSuccess,
         )
     }
 }

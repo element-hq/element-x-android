@@ -34,19 +34,19 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 @Composable
 fun LockScreenSettingsView(
     state: LockScreenSettingsState,
-    onChangePinClicked: () -> Unit,
-    onBackPressed: () -> Unit,
+    onChangePinClick: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PreferencePage(
         title = stringResource(id = io.element.android.libraries.ui.strings.R.string.common_screen_lock),
-        onBackPressed = onBackPressed,
+        onBackClick = onBackClick,
         modifier = modifier
     ) {
         PreferenceCategory(showTopDivider = false) {
             PreferenceText(
                 title = stringResource(id = R.string.screen_app_lock_settings_change_pin),
-                onClick = onChangePinClicked
+                onClick = onChangePinClick
             )
             PreferenceDivider()
             if (state.showRemovePinOption) {
@@ -74,7 +74,7 @@ fun LockScreenSettingsView(
         ConfirmationDialog(
             title = stringResource(id = R.string.screen_app_lock_settings_remove_pin_alert_title),
             content = stringResource(id = R.string.screen_app_lock_settings_remove_pin_alert_message),
-            onSubmitClicked = {
+            onSubmitClick = {
                 state.eventSink(LockScreenSettingsEvents.ConfirmRemovePin)
             },
             onDismiss = {
@@ -92,8 +92,8 @@ internal fun LockScreenSettingsViewPreview(
     ElementPreview {
         LockScreenSettingsView(
             state = state,
-            onChangePinClicked = {},
-            onBackPressed = {},
+            onChangePinClick = {},
+            onBackClick = {},
         )
     }
 }

@@ -49,7 +49,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun EmojiItem(
     item: Emoji,
     isSelected: Boolean,
-    onEmojiSelected: (Emoji) -> Unit,
+    onSelectEmoji: (Emoji) -> Unit,
     modifier: Modifier = Modifier,
     emojiSize: TextUnit = 20.sp,
 ) {
@@ -69,7 +69,7 @@ fun EmojiItem(
             .background(backgroundColor, CircleShape)
             .clickable(
                 enabled = true,
-                onClick = { onEmojiSelected(item) },
+                onClick = { onSelectEmoji(item) },
                 indication = rememberRipple(bounded = false, radius = emojiSize.toDp() / 2 + 10.dp),
                 interactionSource = remember { MutableInteractionSource() }
             )
@@ -102,7 +102,7 @@ internal fun EmojiItemPreview() = ElementPreview {
                     skins = null
                 ),
                 isSelected = isSelected,
-                onEmojiSelected = {},
+                onSelectEmoji = {},
             )
         }
     }

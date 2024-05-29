@@ -63,7 +63,7 @@ private fun BlockConfirmationDialog(
         title = stringResource(R.string.screen_dm_details_block_user),
         content = stringResource(R.string.screen_dm_details_block_alert_description),
         submitText = stringResource(R.string.screen_dm_details_block_alert_action),
-        onSubmitClicked = onBlockAction,
+        onSubmitClick = onBlockAction,
         onDismiss = onDismiss
     )
 }
@@ -77,7 +77,7 @@ private fun UnblockConfirmationDialog(
         title = stringResource(R.string.screen_dm_details_unblock_user),
         content = stringResource(R.string.screen_dm_details_unblock_alert_description),
         submitText = stringResource(R.string.screen_dm_details_unblock_alert_action),
-        onSubmitClicked = onUnblockAction,
+        onSubmitClick = onUnblockAction,
         onDismiss = onDismiss
     )
 }

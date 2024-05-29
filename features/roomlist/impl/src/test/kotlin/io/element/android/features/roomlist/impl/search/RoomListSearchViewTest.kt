@@ -47,7 +47,7 @@ class RoomListSearchViewTest {
                     isRoomDirectorySearchEnabled = true,
                     eventSink = eventsRecorder,
                 ),
-                onRoomDirectorySearchClicked = it,
+                onRoomDirectorySearchClick = it,
             )
             rule.clickOn(R.string.screen_roomlist_room_directory_button_title)
         }
@@ -57,15 +57,15 @@ class RoomListSearchViewTest {
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomListSearchView(
     state: RoomListSearchState,
     eventSink: (RoomListEvents) -> Unit = EventsRecorder(expectEvents = false),
-    onRoomClicked: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
-    onRoomDirectorySearchClicked: () -> Unit = EnsureNeverCalled(),
+    onRoomClick: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
+    onRoomDirectorySearchClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         RoomListSearchView(
             state = state,
             eventSink = eventSink,
-            onRoomClicked = onRoomClicked,
-            onRoomDirectorySearchClicked = onRoomDirectorySearchClicked,
+            onRoomClick = onRoomClick,
+            onRoomDirectorySearchClick = onRoomDirectorySearchClick,
         )
     }
 }

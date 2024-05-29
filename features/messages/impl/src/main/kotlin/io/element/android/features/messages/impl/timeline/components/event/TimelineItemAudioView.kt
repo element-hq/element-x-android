@@ -46,7 +46,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 @Composable
 fun TimelineItemAudioView(
     content: TimelineItemAudioContent,
-    onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit,
+    onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val iconSize = 32.dp
@@ -85,7 +85,7 @@ fun TimelineItemAudioView(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 onTextLayout = ContentAvoidingLayout.measureLastTextLine(
-                    onContentLayoutChanged = onContentLayoutChanged,
+                    onContentLayoutChange = onContentLayoutChange,
                     extraWidth = iconSize + spacing
                 )
             )
@@ -99,6 +99,6 @@ internal fun TimelineItemAudioViewPreview(@PreviewParameter(TimelineItemAudioCon
     ElementPreview {
         TimelineItemAudioView(
             content,
-            onContentLayoutChanged = {},
+            onContentLayoutChange = {},
         )
     }

@@ -41,7 +41,7 @@ class ViewFileNode @AssistedInject constructor(
     ) : NodeInputs
 
     interface Callback : Plugin {
-        fun onBackPressed()
+        fun onBackClick()
     }
 
     private val inputs: Inputs = inputs()
@@ -51,8 +51,8 @@ class ViewFileNode @AssistedInject constructor(
         name = inputs.name,
     )
 
-    private fun onBackPressed() {
-        plugins<Callback>().forEach { it.onBackPressed() }
+    private fun onBackClick() {
+        plugins<Callback>().forEach { it.onBackClick() }
     }
 
     @Composable
@@ -61,7 +61,7 @@ class ViewFileNode @AssistedInject constructor(
         ViewFileView(
             state = state,
             modifier = modifier,
-            onBackPressed = ::onBackPressed,
+            onBackClick = ::onBackClick,
         )
     }
 }

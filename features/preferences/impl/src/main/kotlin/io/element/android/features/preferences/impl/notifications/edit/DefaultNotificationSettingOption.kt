@@ -30,7 +30,7 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 @Composable
 fun DefaultNotificationSettingOption(
     mode: RoomNotificationMode,
-    onOptionSelected: (RoomNotificationMode) -> Unit,
+    onSelectOption: (RoomNotificationMode) -> Unit,
     displayMentionsOnlyDisclaimer: Boolean,
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
@@ -51,7 +51,7 @@ fun DefaultNotificationSettingOption(
         headlineContent = { Text(title) },
         supportingContent = subtitle?.let { { Text(it) } },
         trailingContent = ListItemContent.RadioButton(selected = isSelected),
-        onClick = { onOptionSelected(mode) },
+        onClick = { onSelectOption(mode) },
     )
 }
 
@@ -63,19 +63,19 @@ internal fun DefaultNotificationSettingOptionPreview() = ElementPreview {
             mode = RoomNotificationMode.ALL_MESSAGES,
             isSelected = true,
             displayMentionsOnlyDisclaimer = false,
-            onOptionSelected = {},
+            onSelectOption = {},
         )
         DefaultNotificationSettingOption(
             mode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
             isSelected = false,
             displayMentionsOnlyDisclaimer = false,
-            onOptionSelected = {},
+            onSelectOption = {},
         )
         DefaultNotificationSettingOption(
             mode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
             isSelected = false,
             displayMentionsOnlyDisclaimer = true,
-            onOptionSelected = {},
+            onSelectOption = {},
         )
     }
 }

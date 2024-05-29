@@ -49,14 +49,14 @@ class RolesAndPermissionsNode @AssistedInject constructor(
         override fun openEditRoomDetailsPermissions()
         override fun openMessagesAndContentPermissions()
         override fun openModerationPermissions()
-        override fun onBackPressed() {}
+        override fun onBackClick() {}
     }
 
     private val callback = plugins<Callback>().first()
 
     @Stable
     private val navigator = object : RolesAndPermissionsNavigator by callback {
-        override fun onBackPressed() {
+        override fun onBackClick() {
             navigateUp()
         }
     }
@@ -88,7 +88,7 @@ class RolesAndPermissionsNode @AssistedInject constructor(
 }
 
 interface RolesAndPermissionsNavigator {
-    fun onBackPressed() {}
+    fun onBackClick() {}
     fun openAdminList() {}
     fun openModeratorList() {}
     fun openEditRoomDetailsPermissions() {}

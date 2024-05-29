@@ -68,7 +68,7 @@ class RoomNotificationSettingsNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             onShowGlobalNotifications = this::openGlobalNotificationSettings,
-            onBackPressed = this::navigateUp,
+            onBackClick = this::navigateUp,
         )
     }
 }

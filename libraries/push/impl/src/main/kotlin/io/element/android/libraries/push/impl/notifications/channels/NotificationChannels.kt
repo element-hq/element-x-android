@@ -36,10 +36,9 @@ import javax.inject.Inject
 @SingleIn(AppScope::class)
 class NotificationChannels @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val notificationManager: NotificationManagerCompat,
     private val stringProvider: StringProvider,
 ) {
-    private val notificationManager = NotificationManagerCompat.from(context)
-
     init {
         createNotificationChannels()
     }

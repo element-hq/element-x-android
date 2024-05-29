@@ -89,7 +89,7 @@ class UserProfileNode @AssistedInject constructor(
             modifier = modifier,
             goBack = this::navigateUp,
             onShareUser = ::onShareUser,
-            onDmStarted = ::onStartDM,
+            onOpenDm = ::onStartDM,
             onStartCall = callback::onStartCall,
             openAvatarPreview = callback::openAvatarPreview,
         )

@@ -104,14 +104,14 @@ private fun CreateLinkWithTextDialog(
             TextFieldListItem(
                 placeholder = stringResource(id = CommonStrings.common_text),
                 text = linkText,
-                onTextChanged = { linkText = it },
+                onTextChange = { linkText = it },
             )
         }
         item {
             TextFieldListItem(
                 placeholder = stringResource(id = R.string.rich_text_editor_url_placeholder),
                 text = linkUrl,
-                onTextChanged = { linkUrl = it },
+                onTextChange = { linkUrl = it },
             )
         }
     }
@@ -142,7 +142,7 @@ private fun CreateLinkWithoutTextDialog(
             TextFieldListItem(
                 placeholder = stringResource(id = R.string.rich_text_editor_url_placeholder),
                 text = linkUrl,
-                onTextChanged = { linkUrl = it },
+                onTextChange = { linkUrl = it },
             )
         }
     }
@@ -167,7 +167,7 @@ private fun EditLinkDialog(
         onDismissRequest()
     }
 
-    fun onRemoveClicked() {
+    fun onRemoveClick() {
         onRemoveLinkRequest()
         onDismissRequest()
     }
@@ -182,7 +182,7 @@ private fun EditLinkDialog(
             TextFieldListItem(
                 placeholder = stringResource(id = R.string.rich_text_editor_url_placeholder),
                 text = linkUrl,
-                onTextChanged = { linkUrl = it },
+                onTextChange = { linkUrl = it },
             )
         }
         item {
@@ -193,7 +193,7 @@ private fun EditLinkDialog(
                         color = ElementTheme.colors.textCriticalPrimary
                     )
                 },
-                onClick = ::onRemoveClicked,
+                onClick = ::onRemoveClick,
             )
         }
     }

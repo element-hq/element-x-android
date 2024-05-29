@@ -14,10 +14,16 @@
   <string name="screen_roomlist_empty_message">"Kom igång genom att skicka meddelanden till någon."</string>
   <string name="screen_roomlist_empty_title">"Inga chattar än."</string>
   <string name="screen_roomlist_filter_favourites">"Favoriter"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Du har inga favoritchattar än"</string>
   <string name="screen_roomlist_filter_low_priority">"Låg prioritet"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Du har inga chattar för det här valet"</string>
   <string name="screen_roomlist_filter_people">"Personer"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Du har inga DM:er än"</string>
   <string name="screen_roomlist_filter_rooms">"Rum"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Du är inte i något rum än"</string>
   <string name="screen_roomlist_filter_unreads">"Olästa"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Grattis!
+Du har inga olästa meddelanden!"</string>
   <string name="screen_roomlist_main_space_title">"Alla chattar"</string>
   <string name="screen_roomlist_mark_as_read">"Markera som läst"</string>
   <string name="screen_roomlist_mark_as_unread">"Markera som oläst"</string>

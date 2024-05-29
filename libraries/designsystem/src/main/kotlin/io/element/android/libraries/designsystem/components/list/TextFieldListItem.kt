@@ -34,7 +34,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 fun TextFieldListItem(
     placeholder: String?,
     text: String,
-    onTextChanged: (String) -> Unit,
+    onTextChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     error: String? = null,
     maxLines: Int = 1,
@@ -45,7 +45,7 @@ fun TextFieldListItem(
 
     OutlinedTextField(
         value = text,
-        onValueChange = { onTextChanged(it) },
+        onValueChange = { onTextChange(it) },
         placeholder = placeholder?.let { @Composable { Text(it) } },
         colors = OutlinedTextFieldDefaults.colors(
             disabledBorderColor = Color.Transparent,
@@ -68,7 +68,7 @@ fun TextFieldListItem(
 fun TextFieldListItem(
     placeholder: String?,
     text: TextFieldValue,
-    onTextChanged: (TextFieldValue) -> Unit,
+    onTextChange: (TextFieldValue) -> Unit,
     modifier: Modifier = Modifier,
     error: String? = null,
     maxLines: Int = 1,
@@ -79,7 +79,7 @@ fun TextFieldListItem(
 
     OutlinedTextField(
         value = text,
-        onValueChange = { onTextChanged(it) },
+        onValueChange = { onTextChange(it) },
         placeholder = placeholder?.let { @Composable { Text(it) } },
         colors = OutlinedTextFieldDefaults.colors(
             disabledBorderColor = Color.Transparent,
@@ -105,7 +105,7 @@ internal fun TextFieldListItemEmptyPreview() {
         TextFieldListItem(
             placeholder = "Placeholder",
             text = "",
-            onTextChanged = {},
+            onTextChange = {},
         )
     }
 }
@@ -117,7 +117,7 @@ internal fun TextFieldListItemPreview() {
         TextFieldListItem(
             placeholder = "Placeholder",
             text = "Text",
-            onTextChanged = {},
+            onTextChange = {},
         )
     }
 }
@@ -129,7 +129,7 @@ internal fun TextFieldListItemTextFieldValuePreview() {
         TextFieldListItem(
             placeholder = "Placeholder",
             text = TextFieldValue("Text field value"),
-            onTextChanged = {},
+            onTextChange = {},
         )
     }
 }

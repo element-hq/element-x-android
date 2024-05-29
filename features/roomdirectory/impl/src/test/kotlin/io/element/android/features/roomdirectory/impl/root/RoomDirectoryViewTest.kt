@@ -54,7 +54,7 @@ class RoomDirectoryViewTest {
     }
 
     @Test
-    fun `clicking on room item then onResultClicked lambda is called once`() {
+    fun `clicking on room item then onResultClick lambda is called once`() {
         val eventsRecorder = EventsRecorder<RoomDirectoryEvents>()
         val state = aRoomDirectoryState(
             roomDescriptions = aRoomDescriptionList(),
@@ -64,7 +64,7 @@ class RoomDirectoryViewTest {
         ensureCalledOnceWithParam(clickedRoom) { callback ->
             rule.setRoomDirectoryView(
                 state = state,
-                onResultClicked = callback,
+                onResultClick = callback,
             )
             rule.onNodeWithText(clickedRoom.computedName).performClick()
         }
@@ -84,14 +84,14 @@ class RoomDirectoryViewTest {
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomDirectoryView(
     state: RoomDirectoryState,
-    onBackPressed: () -> Unit = EnsureNeverCalled(),
-    onResultClicked: (RoomDescription) -> Unit = EnsureNeverCalledWithParam(),
+    onBackClick: () -> Unit = EnsureNeverCalled(),
+    onResultClick: (RoomDescription) -> Unit = EnsureNeverCalledWithParam(),
 ) {
     setContent {
         RoomDirectoryView(
             state = state,
-            onResultClicked = onResultClicked,
-            onBackPressed = onBackPressed,
+            onResultClick = onResultClick,
+            onBackClick = onBackClick,
         )
     }
 }

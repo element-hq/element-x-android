@@ -42,8 +42,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun AddPeopleView(
     state: UserListState,
-    onBackPressed: () -> Unit,
-    onNextPressed: () -> Unit,
+    onBackClick: () -> Unit,
+    onNextClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -51,14 +51,14 @@ fun AddPeopleView(
         topBar = {
             AddPeopleViewTopBar(
                 hasSelectedUsers = state.selectedUsers.isNotEmpty(),
-                onBackPressed = {
+                onBackClick = {
                     if (state.isSearchActive) {
                         state.eventSink(UserListEvents.OnSearchActiveChanged(false))
                     } else {
-                        onBackPressed()
+                        onBackClick()
                     }
                 },
-                onNextPressed = onNextPressed,
+                onNextClick = onNextClick,
             )
         }
     ) { padding ->
@@ -69,8 +69,8 @@ fun AddPeopleView(
                 .consumeWindowInsets(padding),
             state = state,
             showBackButton = false,
-            onUserSelected = {},
-            onUserDeselected = {},
+            onSelectUser = {},
+            onDeselectUser = {},
         )
     }
 }
@@ -79,8 +79,8 @@ fun AddPeopleView(
 @Composable
 private fun AddPeopleViewTopBar(
     hasSelectedUsers: Boolean,
-    onBackPressed: () -> Unit,
-    onNextPressed: () -> Unit,
+    onBackClick: () -> Unit,
+    onNextClick: () -> Unit,
 ) {
     TopAppBar(
         title = {
@@ -89,12 +89,12 @@ private fun AddPeopleViewTopBar(
                 style = ElementTheme.typography.aliasScreenTitle
             )
         },
-        navigationIcon = { BackButton(onClick = onBackPressed) },
+        navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
             val textActionResId = if (hasSelectedUsers) CommonStrings.action_next else CommonStrings.action_skip
             TextButton(
                 text = stringResource(id = textActionResId),
-                onClick = onNextPressed,
+                onClick = onNextClick,
             )
         }
     )
@@ -105,7 +105,7 @@ private fun AddPeopleViewTopBar(
 internal fun AddPeopleViewPreview(@PreviewParameter(AddPeopleUserListStateProvider::class) state: UserListState) = ElementPreview {
     AddPeopleView(
         state = state,
-        onBackPressed = {},
-        onNextPressed = {},
+        onBackClick = {},
+        onNextClick = {},
     )
 }

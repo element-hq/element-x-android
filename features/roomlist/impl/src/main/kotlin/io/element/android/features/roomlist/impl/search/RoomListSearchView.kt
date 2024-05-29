@@ -72,8 +72,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 internal fun RoomListSearchView(
     state: RoomListSearchState,
     eventSink: (RoomListEvents) -> Unit,
-    onRoomClicked: (RoomId) -> Unit,
-    onRoomDirectorySearchClicked: () -> Unit,
+    onRoomClick: (RoomId) -> Unit,
+    onRoomDirectorySearchClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BackHandler(enabled = state.isSearchActive) {
@@ -87,17 +87,20 @@ internal fun RoomListSearchView(
     ) {
         Column(
             modifier = modifier
-                .applyIf(state.isSearchActive, ifTrue = {
-                    // Disable input interaction to underlying views
-                    pointerInput(Unit) {}
-                })
+                .applyIf(
+                    condition = state.isSearchActive,
+                    ifTrue = {
+                        // Disable input interaction to underlying views
+                        pointerInput(Unit) {}
+                    }
+                )
         ) {
             if (state.isSearchActive) {
                 RoomListSearchContent(
                     state = state,
-                    onRoomClicked = onRoomClicked,
+                    onRoomClick = onRoomClick,
                     eventSink = eventSink,
-                    onRoomDirectorySearchClicked = onRoomDirectorySearchClicked,
+                    onRoomDirectorySearchClick = onRoomDirectorySearchClick,
                 )
             }
         }
@@ -109,17 +112,17 @@ internal fun RoomListSearchView(
 private fun RoomListSearchContent(
     state: RoomListSearchState,
     eventSink: (RoomListEvents) -> Unit,
-    onRoomClicked: (RoomId) -> Unit,
-    onRoomDirectorySearchClicked: () -> Unit,
+    onRoomClick: (RoomId) -> Unit,
+    onRoomDirectorySearchClick: () -> Unit,
 ) {
     val borderColor = MaterialTheme.colorScheme.tertiary
     val strokeWidth = 1.dp
-    fun onBackButtonPressed() {
+    fun onBackButtonClick() {
         state.eventSink(RoomListSearchEvents.ToggleSearchVisibility)
     }
 
-    fun onRoomClicked(room: RoomListRoomSummary) {
-        onRoomClicked(room.roomId)
+    fun onRoomClick(room: RoomListRoomSummary) {
+        onRoomClick(room.roomId)
     }
     Scaffold(
         topBar = {
@@ -132,7 +135,7 @@ private fun RoomListSearchContent(
                         strokeWidth = strokeWidth.value
                     )
                 },
-                navigationIcon = { BackButton(onClick = ::onBackButtonPressed) },
+                navigationIcon = { BackButton(onClick = ::onBackButtonClick) },
                 title = {
                     val filter = state.query
                     val focusRequester = FocusRequester()
@@ -186,7 +189,7 @@ private fun RoomListSearchContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 24.dp, horizontal = 16.dp),
-                    onClick = onRoomDirectorySearchClicked
+                    onClick = onRoomDirectorySearchClick
                 )
             }
             LazyColumn(
@@ -198,7 +201,7 @@ private fun RoomListSearchContent(
                 ) { room ->
                     RoomSummaryRow(
                         room = room,
-                        onClick = ::onRoomClicked,
+                        onClick = ::onRoomClick,
                         eventSink = eventSink,
                     )
                 }
@@ -237,8 +240,8 @@ private fun RoomDirectorySearchButton(
 internal fun RoomListSearchContentPreview(@PreviewParameter(RoomListSearchStateProvider::class) state: RoomListSearchState) = ElementPreview {
     RoomListSearchContent(
         state = state,
-        onRoomClicked = {},
+        onRoomClick = {},
         eventSink = {},
-        onRoomDirectorySearchClicked = {},
+        onRoomDirectorySearchClick = {},
     )
 }

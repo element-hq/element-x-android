@@ -58,11 +58,6 @@ interface AnalyticsService : AnalyticsTracker, ErrorTracker {
     suspend fun setAnalyticsId(analyticsId: String)
 
     /**
-     * To be called when a session is destroyed.
-     */
-    suspend fun onSignOut()
-
-    /**
      * Reset the analytics service (will ask for user consent again).
      */
     suspend fun reset()

@@ -213,6 +213,7 @@ private fun TextFieldValueContentToPreview() {
     }
 }
 
+@Suppress("ModifierComposed")
 @OptIn(ExperimentalComposeUiApi::class)
 fun Modifier.autofill(autofillTypes: List<AutofillType>, onFill: (String) -> Unit) = composed {
     val autofillNode = AutofillNode(autofillTypes, onFill = onFill)

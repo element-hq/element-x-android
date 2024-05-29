@@ -46,7 +46,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 @Composable
 fun TimelineItemFileView(
     content: TimelineItemFileContent,
-    onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit,
+    onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val iconSize = 32.dp
@@ -86,7 +86,7 @@ fun TimelineItemFileView(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 onTextLayout = ContentAvoidingLayout.measureLastTextLine(
-                    onContentLayoutChanged = onContentLayoutChanged,
+                    onContentLayoutChange = onContentLayoutChange,
                     extraWidth = iconSize + spacing
                 )
             )
@@ -99,6 +99,6 @@ fun TimelineItemFileView(
 internal fun TimelineItemFileViewPreview(@PreviewParameter(TimelineItemFileContentProvider::class) content: TimelineItemFileContent) = ElementPreview {
     TimelineItemFileView(
         content,
-        onContentLayoutChanged = {},
+        onContentLayoutChange = {},
     )
 }

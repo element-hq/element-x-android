@@ -59,17 +59,17 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun CreateRoomRootView(
     state: CreateRoomRootState,
-    onClosePressed: () -> Unit,
-    onNewRoomClicked: () -> Unit,
+    onCloseClick: () -> Unit,
+    onNewRoomClick: () -> Unit,
     onOpenDM: (RoomId) -> Unit,
-    onInviteFriendsClicked: () -> Unit,
+    onInviteFriendsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier.fillMaxWidth(),
         topBar = {
             if (!state.userListState.isSearchActive) {
-                CreateRoomRootViewTopBar(onClosePressed = onClosePressed)
+                CreateRoomRootViewTopBar(onCloseClick = onCloseClick)
             }
         }
     ) { paddingValues ->
@@ -86,18 +86,18 @@ fun CreateRoomRootView(
                 state = state.userListState.copy(
                     recentDirectRooms = persistentListOf(),
                 ),
-                onUserSelected = {
+                onSelectUser = {
                     state.eventSink(CreateRoomRootEvents.StartDM(it))
                 },
-                onUserDeselected = { },
+                onDeselectUser = { },
             )
 
             if (!state.userListState.isSearchActive) {
                 CreateRoomActionButtonsList(
                     state = state,
-                    onNewRoomClicked = onNewRoomClicked,
-                    onInvitePeopleClicked = onInviteFriendsClicked,
-                    onDmClicked = onOpenDM,
+                    onNewRoomClick = onNewRoomClick,
+                    onInvitePeopleClick = onInviteFriendsClick,
+                    onDmClick = onOpenDM,
                 )
             }
         }
@@ -125,7 +125,7 @@ fun CreateRoomRootView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CreateRoomRootViewTopBar(
-    onClosePressed: () -> Unit,
+    onCloseClick: () -> Unit,
 ) {
     TopAppBar(
         title = {
@@ -137,7 +137,7 @@ private fun CreateRoomRootViewTopBar(
         navigationIcon = {
             BackButton(
                 imageVector = CompoundIcons.Close(),
-                onClick = onClosePressed,
+                onClick = onCloseClick,
             )
         }
     )
@@ -146,23 +146,23 @@ private fun CreateRoomRootViewTopBar(
 @Composable
 private fun CreateRoomActionButtonsList(
     state: CreateRoomRootState,
-    onNewRoomClicked: () -> Unit,
-    onInvitePeopleClicked: () -> Unit,
-    onDmClicked: (RoomId) -> Unit,
+    onNewRoomClick: () -> Unit,
+    onInvitePeopleClick: () -> Unit,
+    onDmClick: (RoomId) -> Unit,
 ) {
     LazyColumn {
         item {
             CreateRoomActionButton(
                 iconRes = CompoundDrawables.ic_compound_plus,
                 text = stringResource(id = R.string.screen_create_room_action_create_room),
-                onClick = onNewRoomClicked,
+                onClick = onNewRoomClick,
             )
         }
         item {
             CreateRoomActionButton(
                 iconRes = CompoundDrawables.ic_compound_share_android,
                 text = stringResource(id = CommonStrings.action_invite_friends_to_app, state.applicationName),
-                onClick = onInvitePeopleClicked,
+                onClick = onInvitePeopleClick,
             )
         }
         if (state.userListState.recentDirectRooms.isNotEmpty()) {
@@ -177,7 +177,7 @@ private fun CreateRoomActionButtonsList(
                     MatrixUserRow(
                         modifier = Modifier.clickable(
                             onClick = {
-                                onDmClicked(recentDirectRoom.roomId)
+                                onDmClick(recentDirectRoom.roomId)
                             }
                         ),
                         matrixUser = recentDirectRoom.matrixUser,
@@ -222,9 +222,9 @@ internal fun CreateRoomRootViewPreview(@PreviewParameter(CreateRoomRootStateProv
     ElementPreview {
         CreateRoomRootView(
             state = state,
-            onClosePressed = {},
-            onNewRoomClicked = {},
+            onCloseClick = {},
+            onNewRoomClick = {},
             onOpenDM = {},
-            onInviteFriendsClicked = {},
+            onInviteFriendsClick = {},
         )
     }

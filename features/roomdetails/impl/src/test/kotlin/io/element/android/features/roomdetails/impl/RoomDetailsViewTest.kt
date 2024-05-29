@@ -120,7 +120,7 @@ class RoomDetailsViewTest {
                     eventSink = EventsRecorder(expectEvents = false),
                     canInvite = true,
                 ),
-                onJoinCallClicked = callback,
+                onJoinCallClick = callback,
             )
             rule.clickOn(CommonStrings.action_call)
         }
@@ -134,7 +134,7 @@ class RoomDetailsViewTest {
                     eventSink = EventsRecorder(expectEvents = false),
                     roomTopic = RoomTopicState.CanAddTopic,
                 ),
-                onActionClicked = callback,
+                onActionClick = callback,
             )
             rule.clickOn(R.string.screen_room_details_add_topic_title)
         }
@@ -148,7 +148,7 @@ class RoomDetailsViewTest {
                     eventSink = EventsRecorder(expectEvents = false),
                     canEdit = true,
                 ),
-                onActionClicked = callback,
+                onActionClick = callback,
             )
             val menuContentDescription = rule.activity.getString(CommonStrings.a11y_user_menu)
             rule.onNodeWithContentDescription(menuContentDescription).performClick()
@@ -248,7 +248,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
         eventSink = EventsRecorder(expectEvents = false),
     ),
     goBack: () -> Unit = EnsureNeverCalled(),
-    onActionClicked: (RoomDetailsAction) -> Unit = EnsureNeverCalledWithParam(),
+    onActionClick: (RoomDetailsAction) -> Unit = EnsureNeverCalledWithParam(),
     onShareRoom: () -> Unit = EnsureNeverCalled(),
     openRoomMemberList: () -> Unit = EnsureNeverCalled(),
     openRoomNotificationSettings: () -> Unit = EnsureNeverCalled(),
@@ -256,13 +256,13 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
     openAvatarPreview: (name: String, url: String) -> Unit = EnsureNeverCalledWithTwoParams(),
     openPollHistory: () -> Unit = EnsureNeverCalled(),
     openAdminSettings: () -> Unit = EnsureNeverCalled(),
-    onJoinCallClicked: () -> Unit = EnsureNeverCalled(),
+    onJoinCallClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         RoomDetailsView(
             state = state,
             goBack = goBack,
-            onActionClicked = onActionClicked,
+            onActionClick = onActionClick,
             onShareRoom = onShareRoom,
             openRoomMemberList = openRoomMemberList,
             openRoomNotificationSettings = openRoomNotificationSettings,
@@ -270,7 +270,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
             openAvatarPreview = openAvatarPreview,
             openPollHistory = openPollHistory,
             openAdminSettings = openAdminSettings,
-            onJoinCallClicked = onJoinCallClicked,
+            onJoinCallClick = onJoinCallClick,
         )
     }
 }

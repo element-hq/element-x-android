@@ -52,7 +52,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 @Composable
 fun SetupPinView(
     state: SetupPinState,
-    onBackClicked: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -60,7 +60,7 @@ fun SetupPinView(
         topBar = {
             TopAppBar(
                 navigationIcon = {
-                    BackButton(onClick = onBackClicked)
+                    BackButton(onClick = onBackClick)
                 },
                 title = {}
             )
@@ -154,7 +154,7 @@ internal fun SetupPinViewPreview(@PreviewParameter(SetupPinStateProvider::class)
     ElementPreview {
         SetupPinView(
             state = state,
-            onBackClicked = {},
+            onBackClick = {},
         )
     }
 }

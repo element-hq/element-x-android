@@ -25,4 +25,7 @@ sealed interface NotificationSettingsEvents {
     data object FixConfigurationMismatch : NotificationSettingsEvents
     data object ClearConfigurationMismatchError : NotificationSettingsEvents
     data object ClearNotificationChangeError : NotificationSettingsEvents
+    data object ChangePushProvider : NotificationSettingsEvents
+    data object CancelChangePushProvider : NotificationSettingsEvents
+    data class SetPushProvider(val index: Int) : NotificationSettingsEvents
 }

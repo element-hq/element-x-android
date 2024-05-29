@@ -41,7 +41,7 @@ class RoomListContextMenuTest {
             RoomListContextMenu(
                 contextMenu = contextMenu,
                 eventSink = eventsRecorder,
-                onRoomSettingsClicked = EnsureNeverCalledWithParam(),
+                onRoomSettingsClick = EnsureNeverCalledWithParam(),
             )
         }
         rule.clickOn(R.string.screen_roomlist_mark_as_read)
@@ -61,7 +61,7 @@ class RoomListContextMenuTest {
             RoomListContextMenu(
                 contextMenu = contextMenu,
                 eventSink = eventsRecorder,
-                onRoomSettingsClicked = EnsureNeverCalledWithParam(),
+                onRoomSettingsClick = EnsureNeverCalledWithParam(),
             )
         }
         rule.clickOn(R.string.screen_roomlist_mark_as_unread)
@@ -81,7 +81,7 @@ class RoomListContextMenuTest {
             RoomListContextMenu(
                 contextMenu = contextMenu,
                 eventSink = eventsRecorder,
-                onRoomSettingsClicked = EnsureNeverCalledWithParam(),
+                onRoomSettingsClick = EnsureNeverCalledWithParam(),
             )
         }
         rule.clickOn(CommonStrings.action_leave_conversation)
@@ -101,7 +101,7 @@ class RoomListContextMenuTest {
             RoomListContextMenu(
                 contextMenu = contextMenu,
                 eventSink = eventsRecorder,
-                onRoomSettingsClicked = EnsureNeverCalledWithParam(),
+                onRoomSettingsClick = EnsureNeverCalledWithParam(),
             )
         }
         rule.clickOn(CommonStrings.action_leave_room)
@@ -122,7 +122,7 @@ class RoomListContextMenuTest {
             RoomListContextMenu(
                 contextMenu = contextMenu,
                 eventSink = eventsRecorder,
-                onRoomSettingsClicked = callback,
+                onRoomSettingsClick = callback,
             )
         }
         rule.clickOn(CommonStrings.common_settings)
@@ -139,7 +139,7 @@ class RoomListContextMenuTest {
             RoomListContextMenu(
                 contextMenu = contextMenu,
                 eventSink = eventsRecorder,
-                onRoomSettingsClicked = callback,
+                onRoomSettingsClick = callback,
             )
         }
         rule.clickOn(CommonStrings.common_favourite)

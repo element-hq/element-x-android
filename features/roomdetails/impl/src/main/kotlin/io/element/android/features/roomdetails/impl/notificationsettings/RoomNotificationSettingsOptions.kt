@@ -26,7 +26,7 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 fun RoomNotificationSettingsOptions(
     selected: RoomNotificationMode?,
     enabled: Boolean,
-    onOptionSelected: (RoomNotificationSettingsItem) -> Unit,
+    onSelectOption: (RoomNotificationSettingsItem) -> Unit,
     displayMentionsOnlyDisclaimer: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -36,7 +36,7 @@ fun RoomNotificationSettingsOptions(
             RoomNotificationSettingsOption(
                 roomNotificationSettingsItem = item,
                 isSelected = selected == item.mode,
-                onOptionSelected = onOptionSelected,
+                onSelectOption = onSelectOption,
                 displayMentionsOnlyDisclaimer = displayMentionsOnlyDisclaimer,
                 enabled = enabled
             )

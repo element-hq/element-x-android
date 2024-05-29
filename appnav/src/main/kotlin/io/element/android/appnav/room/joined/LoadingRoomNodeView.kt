@@ -46,7 +46,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun LoadingRoomNodeView(
     state: LoadingRoomState,
     hasNetworkConnection: Boolean,
-    onBackClicked: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -54,7 +54,7 @@ fun LoadingRoomNodeView(
         topBar = {
             Column {
                 ConnectivityIndicatorView(isOnline = hasNetworkConnection)
-                LoadingRoomTopBar(onBackClicked)
+                LoadingRoomTopBar(onBackClick)
             }
         },
         content = { padding ->
@@ -83,11 +83,11 @@ fun LoadingRoomNodeView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun LoadingRoomTopBar(
-    onBackClicked: () -> Unit,
+    onBackClick: () -> Unit,
 ) {
     TopAppBar(
         navigationIcon = {
-            BackButton(onClick = onBackClicked)
+            BackButton(onClick = onBackClick)
         },
         title = {
             IconTitlePlaceholdersRowMolecule(iconSize = AvatarSize.TimelineRoom.dp)
@@ -101,7 +101,7 @@ private fun LoadingRoomTopBar(
 internal fun LoadingRoomNodeViewPreview(@PreviewParameter(LoadingRoomStateProvider::class) state: LoadingRoomState) = ElementPreview {
     LoadingRoomNodeView(
         state = state,
-        onBackClicked = {},
+        onBackClick = {},
         hasNetworkConnection = false
     )
 }

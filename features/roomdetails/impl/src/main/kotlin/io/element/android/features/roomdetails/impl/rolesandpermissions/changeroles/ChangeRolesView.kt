@@ -91,7 +91,7 @@ fun ChangeRolesView(
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val updatedNavigateUp by rememberUpdatedState(newValue = navigateUp)
+    val latestNavigateUp by rememberUpdatedState(newValue = navigateUp)
     BackHandler(enabled = !state.isSearchActive) {
         state.eventSink(ChangeRolesEvent.Exit)
     }
@@ -150,7 +150,7 @@ fun ChangeRolesView(
                         searchResults = members,
                         selectedUsers = state.selectedUsers,
                         canRemoveMember = state.canChangeMemberRole,
-                        onSelectionToggled = { state.eventSink(ChangeRolesEvent.UserSelectionToggled(it.toMatrixUser())) },
+                        onToggleSelection = { state.eventSink(ChangeRolesEvent.UserSelectionToggled(it.toMatrixUser())) },
                         selectedUsersList = {},
                     )
                 }
@@ -166,12 +166,12 @@ fun ChangeRolesView(
                             searchResults = (state.searchResults as? SearchBarResultState.Results)?.results ?: MembersByRole(emptyList()),
                             selectedUsers = state.selectedUsers,
                             canRemoveMember = state.canChangeMemberRole,
-                            onSelectionToggled = { state.eventSink(ChangeRolesEvent.UserSelectionToggled(it.toMatrixUser())) },
+                            onToggleSelection = { state.eventSink(ChangeRolesEvent.UserSelectionToggled(it.toMatrixUser())) },
                             selectedUsersList = { users ->
                                 SelectedUsersRowList(
                                     contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
                                     selectedUsers = users,
-                                    onUserRemoved = {
+                                    onUserRemove = {
                                         state.eventSink(ChangeRolesEvent.UserSelectionToggled(it))
                                     },
                                     canDeselect = { state.canChangeMemberRole(it.userId) },
@@ -188,12 +188,12 @@ fun ChangeRolesView(
 
         AsyncActionView(
             async = state.exitState,
-            onSuccess = { updatedNavigateUp() },
+            onSuccess = { latestNavigateUp() },
             confirmationDialog = {
                 ConfirmationDialog(
                     title = stringResource(CommonStrings.dialog_unsaved_changes_title),
                     content = stringResource(CommonStrings.dialog_unsaved_changes_description_android),
-                    onSubmitClicked = { state.eventSink(ChangeRolesEvent.Exit) },
+                    onSubmitClick = { state.eventSink(ChangeRolesEvent.Exit) },
                     onDismiss = { state.eventSink(ChangeRolesEvent.CancelExit) }
                 )
             },
@@ -207,7 +207,7 @@ fun ChangeRolesView(
                     ConfirmationDialog(
                         title = stringResource(R.string.screen_room_change_role_confirm_add_admin_title),
                         content = stringResource(R.string.screen_room_change_role_confirm_add_admin_description),
-                        onSubmitClicked = { state.eventSink(ChangeRolesEvent.Save) },
+                        onSubmitClick = { state.eventSink(ChangeRolesEvent.Save) },
                         onDismiss = { state.eventSink(ChangeRolesEvent.ClearError) }
                     )
                 }
@@ -240,7 +240,7 @@ private fun SearchResultsList(
     searchResults: MembersByRole,
     selectedUsers: ImmutableList<MatrixUser>,
     canRemoveMember: (UserId) -> Boolean,
-    onSelectionToggled: (RoomMember) -> Unit,
+    onToggleSelection: (RoomMember) -> Unit,
     lazyListState: LazyListState,
     selectedUsersList: @Composable (ImmutableList<MatrixUser>) -> Unit,
 ) {
@@ -268,7 +268,7 @@ private fun SearchResultsList(
                 ListMemberItem(
                     roomMember = roomMember,
                     canRemoveMember = canRemoveMember,
-                    onSelectionToggled = onSelectionToggled,
+                    onToggleSelection = onToggleSelection,
                     selectedUsers = selectedUsers
                 )
             }
@@ -279,7 +279,7 @@ private fun SearchResultsList(
                 ListMemberItem(
                     roomMember = roomMember,
                     canRemoveMember = canRemoveMember,
-                    onSelectionToggled = onSelectionToggled,
+                    onToggleSelection = onToggleSelection,
                     selectedUsers = selectedUsers
                 )
             }
@@ -290,7 +290,7 @@ private fun SearchResultsList(
                 ListMemberItem(
                     roomMember = roomMember,
                     canRemoveMember = canRemoveMember,
-                    onSelectionToggled = onSelectionToggled,
+                    onToggleSelection = onToggleSelection,
                     selectedUsers = selectedUsers
                 )
             }
@@ -314,19 +314,19 @@ private fun ListSectionHeader(text: String) {
 private fun ListMemberItem(
     roomMember: RoomMember,
     canRemoveMember: (UserId) -> Boolean,
-    onSelectionToggled: (RoomMember) -> Unit,
+    onToggleSelection: (RoomMember) -> Unit,
     selectedUsers: ImmutableList<MatrixUser>,
 ) {
     val canToggle = canRemoveMember(roomMember.userId)
     val trailingContent: @Composable (() -> Unit) = {
         Checkbox(
             checked = selectedUsers.any { it.userId == roomMember.userId },
-            onCheckedChange = { onSelectionToggled(roomMember) },
+            onCheckedChange = { onToggleSelection(roomMember) },
             enabled = canToggle,
         )
     }
     MemberRow(
-        modifier = Modifier.clickable(enabled = canToggle, onClick = { onSelectionToggled(roomMember) }),
+        modifier = Modifier.clickable(enabled = canToggle, onClick = { onToggleSelection(roomMember) }),
         avatarData = AvatarData(roomMember.userId.value, roomMember.displayName, roomMember.avatarUrl, AvatarSize.UserListItem),
         name = roomMember.getBestName(),
         userId = roomMember.userId.value.takeIf { roomMember.displayName?.isNotBlank() == true },

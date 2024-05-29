@@ -52,7 +52,7 @@ fun EditableAvatarView(
     displayName: String?,
     avatarUrl: Uri?,
     avatarSize: AvatarSize,
-    onAvatarClicked: () -> Unit,
+    onAvatarClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -64,7 +64,7 @@ fun EditableAvatarView(
                 .size(avatarSize.dp)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
-                    onClick = onAvatarClicked,
+                    onClick = onAvatarClick,
                     indication = rememberRipple(bounded = false),
                 )
                 .testTag(TestTags.editAvatar)
@@ -113,7 +113,7 @@ internal fun EditableAvatarViewPreview(
         displayName = "A room",
         avatarUrl = uri,
         avatarSize = AvatarSize.EditRoomDetails,
-        onAvatarClicked = {},
+        onAvatarClick = {},
     )
 }
 

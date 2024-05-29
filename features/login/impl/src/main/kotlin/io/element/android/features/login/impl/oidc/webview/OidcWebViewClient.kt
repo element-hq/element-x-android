@@ -16,8 +16,6 @@
 
 package io.element.android.features.login.impl.oidc.webview
 
-import android.annotation.TargetApi
-import android.os.Build
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -25,7 +23,6 @@ import android.webkit.WebViewClient
 class OidcWebViewClient(
     private val eventListener: WebViewEventListener,
 ) : WebViewClient() {
-    @TargetApi(Build.VERSION_CODES.N)
     override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
         return shouldOverrideUrl(request.url.toString())
     }
@@ -36,7 +33,6 @@ class OidcWebViewClient(
     }
 
     private fun shouldOverrideUrl(url: String): Boolean {
-        // Timber.d("shouldOverrideUrl: $url")
         return eventListener.shouldOverrideUrlLoading(url)
     }
 }

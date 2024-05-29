@@ -39,7 +39,7 @@ fun Slider(
     valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
     // @IntRange(from = 0)
     steps: Int = 0,
-    onValueChangeFinished: (() -> Unit)? = null,
+    onValueChangeFinish: (() -> Unit)? = null,
     colors: SliderColors = SliderDefaults.colors(),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
@@ -50,7 +50,7 @@ fun Slider(
         enabled = enabled,
         valueRange = valueRange,
         steps = steps,
-        onValueChangeFinished = onValueChangeFinished,
+        onValueChangeFinished = onValueChangeFinish,
         colors = colors,
         interactionSource = interactionSource,
     )

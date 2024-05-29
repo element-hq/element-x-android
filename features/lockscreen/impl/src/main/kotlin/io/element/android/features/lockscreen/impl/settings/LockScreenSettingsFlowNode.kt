@@ -115,7 +115,7 @@ class LockScreenSettingsFlowNode @AssistedInject constructor(
             }
             NavTarget.Settings -> {
                 val callback = object : LockScreenSettingsNode.Callback {
-                    override fun onChangePinClicked() {
+                    override fun onChangePinClick() {
                         backstack.push(NavTarget.SetupPin)
                     }
                 }

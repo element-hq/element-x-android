@@ -63,15 +63,15 @@ fun AnalyticsOptInView(
 ) {
     val eventSink = state.eventSink
 
-    fun onTermsAccepted() {
+    fun onAcceptTerms() {
         eventSink(AnalyticsOptInEvents.EnableAnalytics(true))
     }
 
-    fun onTermsDeclined() {
+    fun onDeclineTerms() {
         eventSink(AnalyticsOptInEvents.EnableAnalytics(false))
     }
 
-    BackHandler(onBack = ::onTermsDeclined)
+    BackHandler(onBack = ::onDeclineTerms)
     HeaderFooterPage(
         modifier = modifier
             .fillMaxSize()
@@ -82,8 +82,8 @@ fun AnalyticsOptInView(
         content = { AnalyticsOptInContent() },
         footer = {
             AnalyticsOptInFooter(
-                onTermsAccepted = ::onTermsAccepted,
-                onTermsDeclined = ::onTermsDeclined,
+                onAcceptTerms = ::onAcceptTerms,
+                onDeclineTerms = ::onDeclineTerms,
             )
         }
     )
@@ -165,19 +165,19 @@ private fun AnalyticsOptInContent() {
 
 @Composable
 private fun AnalyticsOptInFooter(
-    onTermsAccepted: () -> Unit,
-    onTermsDeclined: () -> Unit,
+    onAcceptTerms: () -> Unit,
+    onDeclineTerms: () -> Unit,
 ) {
     ButtonColumnMolecule {
         Button(
             text = stringResource(id = CommonStrings.action_ok),
-            onClick = onTermsAccepted,
+            onClick = onAcceptTerms,
             modifier = Modifier.fillMaxWidth(),
         )
         TextButton(
             text = stringResource(id = CommonStrings.action_not_now),
             size = ButtonSize.Medium,
-            onClick = onTermsDeclined,
+            onClick = onDeclineTerms,
             modifier = Modifier.fillMaxWidth(),
         )
     }

@@ -30,14 +30,13 @@ internal fun MessagesViewWithTypingPreview(
 ) = ElementPreview {
     MessagesView(
         state = aMessagesState().copy(typingNotificationState = typingState),
-        onBackPressed = {},
-        onRoomDetailsClicked = {},
-        onEventClicked = { false },
-        //onPreviewAttachments = {},
-        onUserDataClicked = {},
-        onLinkClicked = {},
-        onSendLocationClicked = {},
-        onCreatePollClicked = {},
-        onJoinCallClicked = {},
+        onBackClick = {},
+        onRoomDetailsClick = {},
+        onEventClick = { false },
+        onUserDataClick = {},
+        onLinkClick = {},
+        onSendLocationClick = {},
+        onCreatePollClick = {},
+        onJoinCallClick = {},
     )
 }

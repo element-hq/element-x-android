@@ -50,9 +50,9 @@ class SearchAccountProviderNode @AssistedInject constructor(
         SearchAccountProviderView(
             state = state,
             modifier = modifier,
-            onBackPressed = ::navigateUp,
-            onLearnMoreClicked = { openLearnMorePage(context) },
-            onDone = ::onDone,
+            onBackClick = ::navigateUp,
+            onLearnMoreClick = { openLearnMorePage(context) },
+            onSuccess = ::onDone,
         )
     }
 }

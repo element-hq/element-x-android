@@ -29,7 +29,7 @@ internal fun PermissionDeniedDialog(
 ) {
     ConfirmationDialog(
         content = stringResource(CommonStrings.error_missing_location_auth_android, appName),
-        onSubmitClicked = onContinue,
+        onSubmitClick = onContinue,
         onDismiss = onDismiss,
         submitText = stringResource(CommonStrings.action_continue),
         cancelText = stringResource(CommonStrings.action_cancel),

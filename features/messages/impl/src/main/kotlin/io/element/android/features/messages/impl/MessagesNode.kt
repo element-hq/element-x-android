@@ -81,17 +81,17 @@ class MessagesNode @AssistedInject constructor(
     private val inputs = inputs<Inputs>()
 
     interface Callback : Plugin {
-        fun onRoomDetailsClicked()
-        fun onEventClicked(event: TimelineItem.Event): Boolean
-        fun onUserDataClicked(userId: UserId)
-        fun onPermalinkClicked(data: PermalinkData)
-        fun onShowEventDebugInfoClicked(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
-        fun onForwardEventClicked(eventId: EventId)
+        fun onRoomDetailsClick()
+        fun onEventClick(event: TimelineItem.Event): Boolean
+        fun onUserDataClick(userId: UserId)
+        fun onPermalinkClick(data: PermalinkData)
+        fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
+        fun onForwardEventClick(eventId: EventId)
         fun onReportMessage(eventId: EventId, senderId: UserId)
-        fun onSendLocationClicked()
-        fun onCreatePollClicked()
-        fun onEditPollClicked(eventId: EventId)
-        fun onJoinCallClicked(roomId: RoomId)
+        fun onSendLocationClick()
+        fun onCreatePollClick()
+        fun onEditPollClick(eventId: EventId)
+        fun onJoinCallClick(roomId: RoomId)
     }
 
     override fun onBuilt() {
@@ -107,19 +107,19 @@ class MessagesNode @AssistedInject constructor(
         )
     }
 
-    private fun onRoomDetailsClicked() {
-        callback?.onRoomDetailsClicked()
+    private fun onRoomDetailsClick() {
+        callback?.onRoomDetailsClick()
     }
 
-    private fun onEventClicked(event: TimelineItem.Event): Boolean {
-        return callback?.onEventClicked(event).orFalse()
+    private fun onEventClick(event: TimelineItem.Event): Boolean {
+        return callback?.onEventClick(event).orFalse()
     }
 
-    private fun onUserDataClicked(userId: UserId) {
-        callback?.onUserDataClicked(userId)
+    private fun onUserDataClick(userId: UserId) {
+        callback?.onUserDataClick(userId)
     }
 
-    private fun onLinkClicked(
+    private fun onLinkClick(
         context: Context,
         url: String,
         eventSink: (TimelineEvents) -> Unit,
@@ -128,10 +128,10 @@ class MessagesNode @AssistedInject constructor(
             is PermalinkData.UserLink -> {
                 // Open the room member profile, it will fallback to
                 // the user profile if the user is not in the room
-                callback?.onUserDataClicked(permalink.userId)
+                callback?.onUserDataClick(permalink.userId)
             }
             is PermalinkData.RoomLink -> {
-                handleRoomLinkClicked(permalink, eventSink)
+                handleRoomLinkClick(permalink, eventSink)
             }
             is PermalinkData.FallbackLink,
             is PermalinkData.RoomEmailInviteLink -> {
@@ -140,7 +140,7 @@ class MessagesNode @AssistedInject constructor(
         }
     }
 
-    private fun handleRoomLinkClicked(roomLink: PermalinkData.RoomLink, eventSink: (TimelineEvents) -> Unit) {
+    private fun handleRoomLinkClick(roomLink: PermalinkData.RoomLink, eventSink: (TimelineEvents) -> Unit) {
         if (room.matches(roomLink.roomIdOrAlias)) {
             val eventId = roomLink.eventId
             if (eventId != null) {
@@ -150,36 +150,36 @@ class MessagesNode @AssistedInject constructor(
                 context.toast("Already viewing this room!")
             }
         } else {
-            callback?.onPermalinkClicked(roomLink)
+            callback?.onPermalinkClick(roomLink)
         }
     }
 
-    override fun onShowEventDebugInfoClicked(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
-        callback?.onShowEventDebugInfoClicked(eventId, debugInfo)
+    override fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
+        callback?.onShowEventDebugInfoClick(eventId, debugInfo)
     }
 
-    override fun onForwardEventClicked(eventId: EventId) {
-        callback?.onForwardEventClicked(eventId)
+    override fun onForwardEventClick(eventId: EventId) {
+        callback?.onForwardEventClick(eventId)
     }
 
-    override fun onReportContentClicked(eventId: EventId, senderId: UserId) {
+    override fun onReportContentClick(eventId: EventId, senderId: UserId) {
         callback?.onReportMessage(eventId, senderId)
     }
 
-    override fun onEditPollClicked(eventId: EventId) {
-        callback?.onEditPollClicked(eventId)
+    override fun onEditPollClick(eventId: EventId) {
+        callback?.onEditPollClick(eventId)
     }
 
-    private fun onSendLocationClicked() {
-        callback?.onSendLocationClicked()
+    private fun onSendLocationClick() {
+        callback?.onSendLocationClick()
     }
 
-    private fun onCreatePollClicked() {
-        callback?.onCreatePollClicked()
+    private fun onCreatePollClick() {
+        callback?.onCreatePollClick()
     }
 
-    private fun onJoinCallClicked() {
-        callback?.onJoinCallClicked(room.roomId)
+    private fun onJoinCallClick() {
+        callback?.onJoinCallClick(room.roomId)
     }
 
     @Composable
@@ -191,14 +191,14 @@ class MessagesNode @AssistedInject constructor(
             val state = presenter.present()
             MessagesView(
                 state = state,
-                onBackPressed = this::navigateUp,
-                onRoomDetailsClicked = this::onRoomDetailsClicked,
-                onEventClicked = this::onEventClicked,
-                onUserDataClicked = this::onUserDataClicked,
-                onLinkClicked = { onLinkClicked(context, it, state.timelineState.eventSink) },
-                onSendLocationClicked = this::onSendLocationClicked,
-                onCreatePollClicked = this::onCreatePollClicked,
-                onJoinCallClicked = this::onJoinCallClicked,
+                onBackClick = this::navigateUp,
+                onRoomDetailsClick = this::onRoomDetailsClick,
+                onEventClick = this::onEventClick,
+                onUserDataClick = this::onUserDataClick,
+                onLinkClick = { onLinkClick(context, it, state.timelineState.eventSink) },
+                onSendLocationClick = this::onSendLocationClick,
+                onCreatePollClick = this::onCreatePollClick,
+                onJoinCallClick = this::onJoinCallClick,
                 modifier = modifier,
             )
 

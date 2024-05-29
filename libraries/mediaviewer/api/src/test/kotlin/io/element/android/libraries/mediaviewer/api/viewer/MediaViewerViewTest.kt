@@ -53,7 +53,7 @@ class MediaViewerViewTest {
                 aMediaViewerState(
                     eventSink = eventsRecorder
                 ),
-                onBackPressed = callback,
+                onBackClick = callback,
             )
             rule.pressBack()
         }
@@ -127,7 +127,7 @@ class MediaViewerViewTest {
                     mediaInfo = anImageMediaInfo(),
                     eventSink = eventsRecorder
                 ),
-                onBackPressed = callback,
+                onBackClick = callback,
             )
             val imageContentDescription = rule.activity.getString(CommonStrings.common_image)
             rule.onNodeWithContentDescription(imageContentDescription).performTouchInput { swipeDown() }
@@ -166,12 +166,12 @@ class MediaViewerViewTest {
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMediaViewerView(
     state: MediaViewerState,
-    onBackPressed: () -> Unit = EnsureNeverCalled(),
+    onBackClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         MediaViewerView(
             state = state,
-            onBackPressed = onBackPressed,
+            onBackClick = onBackClick,
         )
     }
 }

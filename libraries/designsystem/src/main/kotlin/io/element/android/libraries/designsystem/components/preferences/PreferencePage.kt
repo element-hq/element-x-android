@@ -44,7 +44,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 @Composable
 fun PreferencePage(
     title: String,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     snackbarHost: @Composable () -> Unit = {},
     content: @Composable ColumnScope.() -> Unit,
@@ -58,7 +58,7 @@ fun PreferencePage(
         topBar = {
             PreferenceTopAppBar(
                 title = title,
-                onBackPressed = onBackPressed,
+                onBackClick = onBackClick,
             )
         },
         snackbarHost = snackbarHost,
@@ -79,11 +79,11 @@ fun PreferencePage(
 @Composable
 private fun PreferenceTopAppBar(
     title: String,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
 ) {
     TopAppBar(
         navigationIcon = {
-            BackButton(onClick = onBackPressed)
+            BackButton(onClick = onBackClick)
         },
         title = {
             Text(
@@ -101,7 +101,7 @@ private fun PreferenceTopAppBar(
 internal fun PreferencePagePreview() = ElementPreview {
     PreferencePage(
         title = "Preference screen",
-        onBackPressed = {},
+        onBackClick = {},
     ) {
         PreferenceCategory(
             title = "Category title",

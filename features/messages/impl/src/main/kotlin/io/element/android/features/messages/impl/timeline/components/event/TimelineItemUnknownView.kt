@@ -29,14 +29,14 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun TimelineItemUnknownView(
     @Suppress("UNUSED_PARAMETER") content: TimelineItemUnknownContent,
-    onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit,
+    onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier
 ) {
     TimelineItemInformativeView(
         text = stringResource(id = CommonStrings.common_unsupported_event),
         iconDescription = stringResource(id = CommonStrings.dialog_title_warning),
         iconResourceId = CompoundDrawables.ic_compound_info_solid,
-        onContentLayoutChanged = onContentLayoutChanged,
+        onContentLayoutChange = onContentLayoutChange,
         modifier = modifier
     )
 }
@@ -46,6 +46,6 @@ fun TimelineItemUnknownView(
 internal fun TimelineItemUnknownViewPreview() = ElementPreview {
     TimelineItemUnknownView(
         content = TimelineItemUnknownContent,
-        onContentLayoutChanged = {},
+        onContentLayoutChange = {},
     )
 }

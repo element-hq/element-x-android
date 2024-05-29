@@ -89,7 +89,7 @@ private fun LeaveRoomConfirmationDialog(
         title = stringResource(if (isDm) CommonStrings.action_leave_conversation else CommonStrings.action_leave_room),
         content = stringResource(text),
         submitText = stringResource(CommonStrings.action_leave),
-        onSubmitClicked = { eventSink(LeaveRoomEvent.LeaveRoom(roomId)) },
+        onSubmitClick = { eventSink(LeaveRoomEvent.LeaveRoom(roomId)) },
         onDismiss = { eventSink(LeaveRoomEvent.HideConfirmation) },
     )
 }

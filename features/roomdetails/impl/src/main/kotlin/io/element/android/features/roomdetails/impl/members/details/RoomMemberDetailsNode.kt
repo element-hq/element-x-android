@@ -93,7 +93,7 @@ class RoomMemberDetailsNode @AssistedInject constructor(
             modifier = modifier,
             goBack = this::navigateUp,
             onShareUser = ::onShareUser,
-            onDmStarted = ::onStartDM,
+            onOpenDm = ::onStartDM,
             onStartCall = ::onStartCall,
             openAvatarPreview = callback::openAvatarPreview,
         )

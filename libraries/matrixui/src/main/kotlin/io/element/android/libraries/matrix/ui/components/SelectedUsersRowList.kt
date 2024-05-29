@@ -48,7 +48,7 @@ import kotlin.math.floor
 @Composable
 fun SelectedUsersRowList(
     selectedUsers: ImmutableList<MatrixUser>,
-    onUserRemoved: (MatrixUser) -> Unit,
+    onUserRemove: (MatrixUser) -> Unit,
     modifier: Modifier = Modifier,
     autoScroll: Boolean = false,
     canDeselect: (MatrixUser) -> Boolean = { true },
@@ -112,7 +112,7 @@ fun SelectedUsersRowList(
                     SelectedUser(
                         matrixUser = selectedUser,
                         canRemove = canDeselect(selectedUser),
-                        onUserRemoved = onUserRemoved,
+                        onUserRemove = onUserRemove,
                     )
                 },
                 measurePolicy = { measurables, constraints ->
@@ -137,7 +137,7 @@ internal fun SelectedUsersRowListPreview() = ElementPreview {
         // Two users that will be visible with no scrolling
         SelectedUsersRowList(
             selectedUsers = aMatrixUserList().take(2).toImmutableList(),
-            onUserRemoved = {},
+            onUserRemove = {},
             modifier = Modifier
                 .width(200.dp)
                 .border(1.dp, Color.Red)
@@ -147,7 +147,7 @@ internal fun SelectedUsersRowListPreview() = ElementPreview {
         for (i in 0..5) {
             SelectedUsersRowList(
                 selectedUsers = aMatrixUserList().take(6).toImmutableList(),
-                onUserRemoved = {},
+                onUserRemove = {},
                 modifier = Modifier
                     .width((200 + i * 20).dp)
                     .border(1.dp, Color.Red)

@@ -42,7 +42,7 @@ import kotlin.time.Duration.Companion.seconds
 fun SingleSelectionListItem(
     headline: String,
     options: ImmutableList<ListOption>,
-    onSelectionChanged: (Int) -> Unit,
+    onSelectionChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
     supportingText: String? = null,
     leadingContent: ListItemContent? = null,
@@ -86,9 +86,9 @@ fun SingleSelectionListItem(
         SingleSelectionDialog(
             title = headline,
             options = options,
-            onOptionSelected = { index ->
+            onSelectOption = { index ->
                 if (index != selectedIndex) {
-                    onSelectionChanged(index)
+                    onSelectionChange(index)
                     selectedIndex = index
                 }
                 // Delay hiding the dialog for a bit so the new state is displayed in it before being dismissed
@@ -110,7 +110,7 @@ internal fun SingleSelectionListItemPreview() {
         SingleSelectionListItem(
             headline = "Headline",
             options = listOptionOf("Option 1", "Option 2", "Option 3"),
-            onSelectionChanged = {},
+            onSelectionChange = {},
         )
     }
 }
@@ -123,7 +123,7 @@ internal fun SingleSelectionListItemUnselectedWithSupportingTextPreview() {
             headline = "Headline",
             options = listOptionOf("Option 1", "Option 2", "Option 3"),
             supportingText = "Supporting text",
-            onSelectionChanged = {},
+            onSelectionChange = {},
         )
     }
 }
@@ -136,7 +136,7 @@ internal fun SingleSelectionListItemSelectedInSupportingTextPreview() {
             headline = "Headline",
             options = listOptionOf("Option 1", "Option 2", "Option 3"),
             supportingText = "Supporting text",
-            onSelectionChanged = {},
+            onSelectionChange = {},
             selected = 1,
         )
     }
@@ -150,7 +150,7 @@ internal fun SingleSelectionListItemSelectedInTrailingContentPreview() {
             headline = "Headline",
             options = listOptionOf("Option 1", "Option 2", "Option 3"),
             supportingText = "Supporting text",
-            onSelectionChanged = {},
+            onSelectionChange = {},
             selected = 1,
             displayResultInTrailingContent = true,
         )
@@ -165,7 +165,7 @@ internal fun SingleSelectionListItemCustomFormattertPreview() {
             headline = "Headline",
             options = listOptionOf("Option 1", "Option 2", "Option 3"),
             supportingText = "Supporting text",
-            onSelectionChanged = {},
+            onSelectionChange = {},
             resultFormatter = { "Selected index: $it" },
             selected = 1,
             displayResultInTrailingContent = true,

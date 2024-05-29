@@ -29,19 +29,19 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun AboutView(
     state: AboutState,
-    onElementLegalClicked: (ElementLegal) -> Unit,
-    onBackPressed: () -> Unit,
+    onElementLegalClick: (ElementLegal) -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PreferencePage(
         modifier = modifier,
-        onBackPressed = onBackPressed,
+        onBackClick = onBackClick,
         title = stringResource(id = CommonStrings.common_about)
     ) {
         state.elementLegals.forEach { elementLegal ->
             PreferenceText(
                 title = stringResource(id = elementLegal.titleRes),
-                onClick = { onElementLegalClicked(elementLegal) }
+                onClick = { onElementLegalClick(elementLegal) }
             )
         }
     }
@@ -52,7 +52,7 @@ fun AboutView(
 internal fun AboutViewPreview(@PreviewParameter(AboutStateProvider::class) state: AboutState) = ElementPreview {
     AboutView(
         state = state,
-        onElementLegalClicked = {},
-        onBackPressed = {},
+        onElementLegalClick = {},
+        onBackClick = {},
     )
 }

@@ -58,6 +58,7 @@ import kotlin.math.roundToInt
  * @param modifier The modifier for the layout.
  * @param sheetContentKey The key for the sheet content. If the key changes, the sheet will be remeasured.
  */
+@Suppress("ContentTrailingLambda")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ExpandableBottomSheetScaffold(

@@ -20,6 +20,8 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.push.impl.notifications.DefaultNotificationDrawerManager
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 interface OnNotifiableEventReceived {
@@ -29,8 +31,11 @@ interface OnNotifiableEventReceived {
 @ContributesBinding(AppScope::class)
 class DefaultOnNotifiableEventReceived @Inject constructor(
     private val defaultNotificationDrawerManager: DefaultNotificationDrawerManager,
+    private val coroutineScope: CoroutineScope,
 ) : OnNotifiableEventReceived {
     override fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
-        defaultNotificationDrawerManager.onNotifiableEventReceived(notifiableEvent)
+        coroutineScope.launch {
+            defaultNotificationDrawerManager.onNotifiableEventReceived(notifiableEvent)
+        }
     }
 }

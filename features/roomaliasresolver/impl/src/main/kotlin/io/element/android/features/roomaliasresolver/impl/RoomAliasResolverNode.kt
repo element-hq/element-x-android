@@ -51,8 +51,8 @@ class RoomAliasResolverNode @AssistedInject constructor(
         val state = presenter.present()
         RoomAliasResolverView(
             state = state,
-            onAliasResolved = ::onAliasResolved,
-            onBackPressed = ::navigateUp,
+            onSuccess = ::onAliasResolved,
+            onBackClick = ::navigateUp,
             modifier = modifier
         )
     }

@@ -47,7 +47,7 @@ class RoomAliasResolverViewTest {
                 aRoomAliasResolverState(
                     eventSink = eventsRecorder,
                 ),
-                onBackPressed = it
+                onBackClick = it
             )
             rule.pressBack()
         }
@@ -84,14 +84,14 @@ class RoomAliasResolverViewTest {
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomAliasResolverView(
     state: RoomAliasResolverState,
-    onBackPressed: () -> Unit = EnsureNeverCalled(),
+    onBackClick: () -> Unit = EnsureNeverCalled(),
     onAliasResolved: (ResolvedRoomAlias) -> Unit = EnsureNeverCalledWithParam(),
 ) {
     setContent {
         RoomAliasResolverView(
             state = state,
-            onBackPressed = onBackPressed,
-            onAliasResolved = onAliasResolved,
+            onBackClick = onBackClick,
+            onSuccess = onAliasResolved,
         )
     }
 }

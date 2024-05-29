@@ -49,8 +49,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun ConfirmAccountProviderView(
     state: ConfirmAccountProviderState,
     onOidcDetails: (OidcDetails) -> Unit,
-    onLoginPasswordNeeded: () -> Unit,
-    onLearnMoreClicked: () -> Unit,
+    onNeedLoginPassword: () -> Unit,
+    onLearnMoreClick: () -> Unit,
     onChange: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -118,8 +118,8 @@ fun ConfirmAccountProviderView(
                         )
                     }
                     is ChangeServerError.SlidingSyncAlert -> {
-                        SlidingSyncNotSupportedDialog(onLearnMoreClicked = {
-                            onLearnMoreClicked()
+                        SlidingSyncNotSupportedDialog(onLearnMoreClick = {
+                            onLearnMoreClick()
                             eventSink(ConfirmAccountProviderEvents.ClearError)
                         }, onDismiss = {
                             eventSink(ConfirmAccountProviderEvents.ClearError)
@@ -131,7 +131,7 @@ fun ConfirmAccountProviderView(
             is AsyncData.Success -> {
                 when (val loginFlowState = state.loginFlow.data) {
                     is LoginFlow.OidcFlow -> onOidcDetails(loginFlowState.oidcDetails)
-                    LoginFlow.PasswordLogin -> onLoginPasswordNeeded()
+                    LoginFlow.PasswordLogin -> onNeedLoginPassword()
                 }
             }
             AsyncData.Uninitialized -> Unit
@@ -147,8 +147,8 @@ internal fun ConfirmAccountProviderViewPreview(
     ConfirmAccountProviderView(
         state = state,
         onOidcDetails = {},
-        onLoginPasswordNeeded = {},
-        onLearnMoreClicked = {},
+        onNeedLoginPassword = {},
+        onLearnMoreClick = {},
         onChange = {},
     )
 }

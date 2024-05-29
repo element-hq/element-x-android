@@ -67,7 +67,7 @@ fun ListDialog(
             cancelText = cancelText,
             submitText = submitText,
             onDismissRequest = onDismissRequest,
-            onSubmitClicked = onSubmit,
+            onSubmitClick = onSubmit,
             enabled = enabled,
             listItems = listItems,
         )
@@ -78,7 +78,7 @@ fun ListDialog(
 private fun ListDialogContent(
     listItems: LazyListScope.() -> Unit,
     onDismissRequest: () -> Unit,
-    onSubmitClicked: () -> Unit,
+    onSubmitClick: () -> Unit,
     cancelText: String,
     submitText: String,
     title: String? = null,
@@ -90,8 +90,8 @@ private fun ListDialogContent(
         subtitle = subtitle,
         cancelText = cancelText,
         submitText = submitText,
-        onCancelClicked = onDismissRequest,
-        onSubmitClicked = onSubmitClicked,
+        onCancelClick = onDismissRequest,
+        onSubmitClick = onSubmitClick,
         enabled = enabled,
         applyPaddingToContents = false,
     ) {
@@ -109,15 +109,15 @@ internal fun ListDialogContentPreview() {
             ListDialogContent(
                 listItems = {
                     item {
-                        TextFieldListItem(placeholder = "Text input", text = "", onTextChanged = {})
+                        TextFieldListItem(placeholder = "Text input", text = "", onTextChange = {})
                     }
                     item {
-                        TextFieldListItem(placeholder = "Another text input", text = "", onTextChanged = {})
+                        TextFieldListItem(placeholder = "Another text input", text = "", onTextChange = {})
                     }
                 },
                 title = "Dialog title",
                 onDismissRequest = {},
-                onSubmitClicked = {},
+                onSubmitClick = {},
                 cancelText = "Cancel",
                 submitText = "Save",
             )
@@ -131,10 +131,10 @@ internal fun ListDialogPreview() = ElementPreview {
     ListDialog(
         listItems = {
             item {
-                TextFieldListItem(placeholder = "Text input", text = "", onTextChanged = {})
+                TextFieldListItem(placeholder = "Text input", text = "", onTextChange = {})
             }
             item {
-                TextFieldListItem(placeholder = "Another text input", text = "", onTextChanged = {})
+                TextFieldListItem(placeholder = "Another text input", text = "", onTextChange = {})
             }
         },
         title = "Dialog title",

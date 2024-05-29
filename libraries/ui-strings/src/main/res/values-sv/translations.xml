@@ -181,6 +181,7 @@
   <string name="common_room">"Rum"</string>
   <string name="common_room_name">"Rumsnamn"</string>
   <string name="common_room_name_placeholder">"t.ex. ditt projektnamn"</string>
+  <string name="common_saving">"Sparar"</string>
   <string name="common_screen_lock">"Skärmlås"</string>
   <string name="common_search_for_someone">"Sök efter någon"</string>
   <string name="common_search_results">"Sökresultat"</string>

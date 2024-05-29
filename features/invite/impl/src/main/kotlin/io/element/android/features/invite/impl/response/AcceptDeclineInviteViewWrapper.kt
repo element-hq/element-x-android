@@ -30,14 +30,14 @@ class AcceptDeclineInviteViewWrapper @Inject constructor() : AcceptDeclineInvite
     @Composable
     override fun Render(
         state: AcceptDeclineInviteState,
-        onInviteAccepted: (RoomId) -> Unit,
-        onInviteDeclined: (RoomId) -> Unit,
+        onAcceptInvite: (RoomId) -> Unit,
+        onDeclineInvite: (RoomId) -> Unit,
         modifier: Modifier,
     ) {
         AcceptDeclineInviteView(
             state = state,
-            onInviteAccepted = onInviteAccepted,
-            onInviteDeclined = onInviteDeclined,
+            onAcceptInvite = onAcceptInvite,
+            onDeclineInvite = onDeclineInvite,
             modifier = modifier
         )
     }

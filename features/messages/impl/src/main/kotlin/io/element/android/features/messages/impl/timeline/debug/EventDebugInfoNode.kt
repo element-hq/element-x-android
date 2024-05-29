@@ -42,7 +42,7 @@ class EventDebugInfoNode @AssistedInject constructor(
 
     private val inputs = inputs<Inputs>()
 
-    private fun onBackPressed() {
+    private fun onBackClick() {
         navigateUp()
     }
 
@@ -53,7 +53,7 @@ class EventDebugInfoNode @AssistedInject constructor(
             model = timelineItemDebugInfo.model,
             originalJson = timelineItemDebugInfo.originalJson,
             latestEditedJson = timelineItemDebugInfo.latestEditedJson,
-            onBackPressed = ::onBackPressed
+            onBackClick = ::onBackClick
         )
     }
 }

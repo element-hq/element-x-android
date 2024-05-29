@@ -67,7 +67,7 @@ import kotlinx.coroutines.delay
 fun TimelineItemVoiceView(
     state: VoiceMessageState,
     content: TimelineItemVoiceContent,
-    onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit,
+    onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun playPause() {
@@ -81,7 +81,7 @@ fun TimelineItemVoiceView(
                 contentDescription = a11y
             }
             .onSizeChanged {
-                onContentLayoutChanged(
+                onContentLayoutChange(
                     ContentAvoidingLayoutData(
                         contentWidth = it.width,
                         contentHeight = it.height,
@@ -258,7 +258,7 @@ internal fun TimelineItemVoiceViewPreview(
     TimelineItemVoiceView(
         state = timelineItemVoiceViewParameters.state,
         content = timelineItemVoiceViewParameters.content,
-        onContentLayoutChanged = {},
+        onContentLayoutChange = {},
     )
 }
 
@@ -271,7 +271,7 @@ internal fun TimelineItemVoiceViewUnifiedPreview() = ElementPreview {
             TimelineItemVoiceView(
                 state = it.state,
                 content = it.content,
-                onContentLayoutChanged = {},
+                onContentLayoutChange = {},
             )
         }
     }

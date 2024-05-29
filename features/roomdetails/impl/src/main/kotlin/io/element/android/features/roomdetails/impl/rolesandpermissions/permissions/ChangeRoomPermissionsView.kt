@@ -52,7 +52,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun ChangeRoomPermissionsView(
     state: ChangeRoomPermissionsState,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BackHandler {
@@ -117,20 +117,20 @@ fun ChangeRoomPermissionsView(
 
     AsyncActionView(
         async = state.saveAction,
-        onSuccess = { onBackPressed() },
+        onSuccess = { onBackClick() },
         onErrorDismiss = { state.eventSink(ChangeRoomPermissionsEvent.ResetPendingActions) }
     )
 
     AsyncActionView(
         async = state.confirmExitAction,
-        onSuccess = { onBackPressed() },
+        onSuccess = { onBackClick() },
         confirmationDialog = {
             ConfirmationDialog(
                 title = stringResource(R.string.screen_room_change_role_unsaved_changes_title),
                 content = stringResource(R.string.screen_room_change_role_unsaved_changes_description),
                 submitText = stringResource(CommonStrings.action_save),
                 cancelText = stringResource(CommonStrings.action_discard),
-                onSubmitClicked = { state.eventSink(ChangeRoomPermissionsEvent.Save) },
+                onSubmitClick = { state.eventSink(ChangeRoomPermissionsEvent.Save) },
                 onDismiss = { state.eventSink(ChangeRoomPermissionsEvent.Exit) }
             )
         },
@@ -193,7 +193,7 @@ internal fun ChangeRoomPermissionsViewPreview(@PreviewParameter(ChangeRoomPermis
     ElementPreview {
         ChangeRoomPermissionsView(
             state = state,
-            onBackPressed = {},
+            onBackClick = {},
         )
     }
 }

@@ -41,12 +41,12 @@ fun TimelineItemInformativeView(
     text: String,
     iconDescription: String,
     @DrawableRes iconResourceId: Int,
-    onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit,
+    onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier.onSizeChanged { size ->
-            onContentLayoutChanged(
+            onContentLayoutChange(
                 ContentAvoidingLayoutData(
                     contentWidth = size.width,
                     contentHeight = size.height,
@@ -78,6 +78,6 @@ internal fun TimelineItemInformativeViewPreview() = ElementPreview {
         text = "Info",
         iconDescription = "",
         iconResourceId = CompoundDrawables.ic_compound_delete,
-        onContentLayoutChanged = {},
+        onContentLayoutChange = {},
     )
 }

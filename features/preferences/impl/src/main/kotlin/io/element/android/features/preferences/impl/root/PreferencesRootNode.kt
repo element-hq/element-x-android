@@ -44,7 +44,7 @@ class PreferencesRootNode @AssistedInject constructor(
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
         fun onOpenBugReport()
-        fun onSecureBackupClicked()
+        fun onSecureBackupClick()
         fun onOpenAnalytics()
         fun onOpenAbout()
         fun onOpenDeveloperSettings()
@@ -53,15 +53,15 @@ class PreferencesRootNode @AssistedInject constructor(
         fun onOpenAdvancedSettings()
         fun onOpenUserProfile(matrixUser: MatrixUser)
         fun onOpenBlockedUsers()
-        fun onSignOutClicked()
+        fun onSignOutClick()
     }
 
     private fun onOpenBugReport() {
         plugins<Callback>().forEach { it.onOpenBugReport() }
     }
 
-    private fun onSecureBackupClicked() {
-        plugins<Callback>().forEach { it.onSecureBackupClicked() }
+    private fun onSecureBackupClick() {
+        plugins<Callback>().forEach { it.onSecureBackupClick() }
     }
 
     private fun onOpenDeveloperSettings() {
@@ -80,7 +80,7 @@ class PreferencesRootNode @AssistedInject constructor(
         plugins<Callback>().forEach { it.onOpenAbout() }
     }
 
-    private fun onManageAccountClicked(
+    private fun onManageAccountClick(
         activity: Activity,
         url: String?,
         isDark: Boolean,
@@ -117,8 +117,8 @@ class PreferencesRootNode @AssistedInject constructor(
         plugins<Callback>().forEach { it.onOpenBlockedUsers() }
     }
 
-    private fun onSignOutClicked() {
-        plugins<Callback>().forEach { it.onSignOutClicked() }
+    private fun onSignOutClick() {
+        plugins<Callback>().forEach { it.onSignOutClick() }
     }
 
     @Composable
@@ -129,23 +129,23 @@ class PreferencesRootNode @AssistedInject constructor(
         PreferencesRootView(
             state = state,
             modifier = modifier,
-            onBackPressed = this::navigateUp,
+            onBackClick = this::navigateUp,
             onOpenRageShake = this::onOpenBugReport,
             onOpenAnalytics = this::onOpenAnalytics,
             onOpenAbout = this::onOpenAbout,
-            onSecureBackupClicked = this::onSecureBackupClicked,
+            onSecureBackupClick = this::onSecureBackupClick,
             onOpenDeveloperSettings = this::onOpenDeveloperSettings,
             onOpenAdvancedSettings = this::onOpenAdvancedSettings,
-            onManageAccountClicked = { onManageAccountClicked(activity, it, isDark) },
+            onManageAccountClick = { onManageAccountClick(activity, it, isDark) },
             onOpenNotificationSettings = this::onOpenNotificationSettings,
             onOpenLockScreenSettings = this::onOpenLockScreenSettings,
             onOpenUserProfile = this::onOpenUserProfile,
             onOpenBlockedUsers = this::onOpenBlockedUsers,
-            onSignOutClicked = {
+            onSignOutClick = {
                 if (state.directLogoutState.canDoDirectSignOut) {
                     state.directLogoutState.eventSink(DirectLogoutEvents.Logout(ignoreSdkError = false))
                 } else {
-                    onSignOutClicked()
+                    onSignOutClick()
                 }
             },
         )

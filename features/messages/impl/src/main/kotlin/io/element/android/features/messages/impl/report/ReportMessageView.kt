@@ -58,7 +58,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun ReportMessageView(
     state: ReportMessageState,
-    onBackClicked: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
@@ -66,7 +66,7 @@ fun ReportMessageView(
     AsyncActionView(
         async = state.result,
         progressDialog = {},
-        onSuccess = { onBackClicked() },
+        onSuccess = { onBackClick() },
         errorMessage = { stringResource(CommonStrings.error_unknown) },
         onErrorDismiss = { state.eventSink(ReportMessageEvents.ClearError) }
     )
@@ -81,7 +81,7 @@ fun ReportMessageView(
                     )
                 },
                 navigationIcon = {
-                    BackButton(onClick = onBackClicked)
+                    BackButton(onClick = onBackClick)
                 }
             )
         },
@@ -160,7 +160,7 @@ fun ReportMessageView(
 @Composable
 internal fun ReportMessageViewPreview(@PreviewParameter(ReportMessageStateProvider::class) state: ReportMessageState) = ElementPreview {
     ReportMessageView(
-        onBackClicked = {},
+        onBackClick = {},
         state = state,
     )
 }

@@ -99,7 +99,7 @@ internal fun AsyncActionViewPreview(
             ConfirmationDialog(
                 title = "Confirmation",
                 content = "Are you sure?",
-                onSubmitClicked = {},
+                onSubmitClick = {},
                 onDismiss = {},
             )
         },

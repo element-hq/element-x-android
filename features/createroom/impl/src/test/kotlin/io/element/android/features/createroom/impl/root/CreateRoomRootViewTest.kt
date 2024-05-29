@@ -54,7 +54,7 @@ class CreateRoomRootViewTest {
                 aCreateRoomRootState(
                     eventSink = eventsRecorder,
                 ),
-                onClosePressed = it
+                onCloseClick = it
             )
             rule.pressBack()
         }
@@ -68,7 +68,7 @@ class CreateRoomRootViewTest {
                 aCreateRoomRootState(
                     eventSink = eventsRecorder,
                 ),
-                onNewRoomClicked = it
+                onNewRoomClick = it
             )
             rule.clickOn(R.string.screen_create_room_action_create_room)
         }
@@ -84,7 +84,7 @@ class CreateRoomRootViewTest {
                     applicationName = "test",
                     eventSink = eventsRecorder,
                 ),
-                onInviteFriendsClicked = it
+                onInviteFriendsClick = it
             )
             val text = rule.activity.getString(CommonStrings.action_invite_friends_to_app, "test")
             rule.onNodeWithText(text).performClick()
@@ -114,18 +114,18 @@ class CreateRoomRootViewTest {
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setCreateRoomRootView(
     state: CreateRoomRootState,
-    onClosePressed: () -> Unit = EnsureNeverCalled(),
-    onNewRoomClicked: () -> Unit = EnsureNeverCalled(),
+    onCloseClick: () -> Unit = EnsureNeverCalled(),
+    onNewRoomClick: () -> Unit = EnsureNeverCalled(),
     onOpenDM: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
-    onInviteFriendsClicked: () -> Unit = EnsureNeverCalled(),
+    onInviteFriendsClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         CreateRoomRootView(
             state = state,
-            onClosePressed = onClosePressed,
-            onNewRoomClicked = onNewRoomClicked,
+            onCloseClick = onCloseClick,
+            onNewRoomClick = onNewRoomClick,
             onOpenDM = onOpenDM,
-            onInviteFriendsClicked = onInviteFriendsClicked,
+            onInviteFriendsClick = onInviteFriendsClick,
         )
     }
 }

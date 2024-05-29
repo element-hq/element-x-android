@@ -1,0 +1,3 @@
+Simplify notifications by removing the custom persistence layer.
+
+Bump minSdk to 24 (Android 7).

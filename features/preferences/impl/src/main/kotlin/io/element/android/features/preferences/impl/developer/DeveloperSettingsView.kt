@@ -39,12 +39,12 @@ fun DeveloperSettingsView(
     state: DeveloperSettingsState,
     onOpenShowkase: () -> Unit,
     onOpenConfigureTracing: () -> Unit,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PreferencePage(
         modifier = modifier,
-        onBackPressed = onBackPressed,
+        onBackClick = onBackClick,
         title = stringResource(id = CommonStrings.common_developer_options)
     ) {
         // Note: this is OK to hardcode strings in this debug screen.
@@ -141,6 +141,6 @@ internal fun DeveloperSettingsViewPreview(@PreviewParameter(DeveloperSettingsSta
         state = state,
         onOpenShowkase = {},
         onOpenConfigureTracing = {},
-        onBackPressed = {}
+        onBackClick = {}
     )
 }

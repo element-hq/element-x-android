@@ -38,8 +38,8 @@ class SecureBackupEnableNode @AssistedInject constructor(
         SecureBackupEnableView(
             state = state,
             modifier = modifier,
-            onDone = ::navigateUp,
-            onBackClicked = ::navigateUp,
+            onSuccess = ::navigateUp,
+            onBackClick = ::navigateUp,
         )
     }
 }

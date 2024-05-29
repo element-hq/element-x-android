@@ -54,7 +54,7 @@ class ShowLocationNode @AssistedInject constructor(
         ShowLocationView(
             state = presenter.present(),
             modifier = modifier,
-            onBackPressed = ::navigateUp
+            onBackClick = ::navigateUp
         )
     }
 }

@@ -80,7 +80,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun LoginPasswordView(
     state: LoginPasswordState,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     onWaitListError: (LoginFormState) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -103,7 +103,7 @@ fun LoginPasswordView(
         topBar = {
             TopAppBar(
                 title = {},
-                navigationIcon = { BackButton(onClick = onBackPressed) },
+                navigationIcon = { BackButton(onClick = onBackClick) },
             )
         }
     ) { padding ->
@@ -141,7 +141,7 @@ fun LoginPasswordView(
             // Submit
             Box(
                 modifier = Modifier
-                .padding(horizontal = 16.dp)
+                    .padding(horizontal = 16.dp)
             ) {
                 ButtonColumnMolecule {
                     Button(
@@ -201,11 +201,14 @@ private fun LoginForm(
                 .fillMaxWidth()
                 .onTabOrEnterKeyFocusNext(focusManager)
                 .testTag(TestTags.loginEmailUsername)
-                .autofill(autofillTypes = listOf(AutofillType.Username), onFill = {
-                    val sanitized = it.sanitize()
-                    loginFieldState = sanitized
-                    eventSink(LoginPasswordEvents.SetLogin(sanitized))
-                }),
+                .autofill(
+                    autofillTypes = listOf(AutofillType.Username),
+                    onFill = {
+                        val sanitized = it.sanitize()
+                        loginFieldState = sanitized
+                        eventSink(LoginPasswordEvents.SetLogin(sanitized))
+                    }
+                ),
             placeholder = {
                 Text(text = stringResource(CommonStrings.common_username))
             },
@@ -247,11 +250,14 @@ private fun LoginForm(
                 .fillMaxWidth()
                 .onTabOrEnterKeyFocusNext(focusManager)
                 .testTag(TestTags.loginPassword)
-                .autofill(autofillTypes = listOf(AutofillType.Password), onFill = {
-                    val sanitized = it.sanitize()
-                    passwordFieldState = sanitized
-                    eventSink(LoginPasswordEvents.SetPassword(sanitized))
-                }),
+                .autofill(
+                    autofillTypes = listOf(AutofillType.Password),
+                    onFill = {
+                        val sanitized = it.sanitize()
+                        passwordFieldState = sanitized
+                        eventSink(LoginPasswordEvents.SetPassword(sanitized))
+                    }
+                ),
             onValueChange = {
                 val sanitized = it.sanitize()
                 passwordFieldState = sanitized
@@ -304,7 +310,7 @@ private fun LoginErrorDialog(error: Throwable, onDismiss: () -> Unit) {
 internal fun LoginPasswordViewPreview(@PreviewParameter(LoginPasswordStateProvider::class) state: LoginPasswordState) = ElementPreview {
     LoginPasswordView(
         state = state,
-        onBackPressed = {},
+        onBackClick = {},
         onWaitListError = {},
     )
 }

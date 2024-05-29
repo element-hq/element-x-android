@@ -27,7 +27,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 internal fun SlidingSyncNotSupportedDialog(
-    onLearnMoreClicked: () -> Unit,
+    onLearnMoreClick: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -35,8 +35,8 @@ internal fun SlidingSyncNotSupportedDialog(
         modifier = modifier,
         onDismiss = onDismiss,
         submitText = stringResource(CommonStrings.action_learn_more),
-        onSubmitClicked = onLearnMoreClicked,
-        onCancelClicked = onDismiss,
+        onSubmitClick = onLearnMoreClick,
+        onCancelClick = onDismiss,
         title = stringResource(CommonStrings.dialog_title_error),
         content = stringResource(R.string.screen_change_server_error_no_sliding_sync_message),
     )
@@ -46,7 +46,7 @@ internal fun SlidingSyncNotSupportedDialog(
 @Composable
 internal fun SlidingSyncNotSupportedDialogPreview() = ElementPreview {
     SlidingSyncNotSupportedDialog(
-        onLearnMoreClicked = {},
+        onLearnMoreClick = {},
         onDismiss = {},
     )
 }

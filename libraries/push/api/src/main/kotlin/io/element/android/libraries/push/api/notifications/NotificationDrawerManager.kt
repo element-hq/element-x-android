@@ -21,5 +21,5 @@ import io.element.android.libraries.matrix.api.core.SessionId
 
 interface NotificationDrawerManager {
     fun clearMembershipNotificationForSession(sessionId: SessionId)
-    fun clearMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId, doRender: Boolean)
+    fun clearMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId)
 }

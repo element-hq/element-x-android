@@ -41,7 +41,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun SingleSelectionDialog(
     options: ImmutableList<ListOption>,
-    onOptionSelected: (Int) -> Unit,
+    onSelectOption: (Int) -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     title: String? = null,
@@ -65,7 +65,7 @@ fun SingleSelectionDialog(
             title = title,
             subtitle = decoratedSubtitle,
             options = options,
-            onOptionSelected = onOptionSelected,
+            onOptionClick = onSelectOption,
             dismissButtonTitle = dismissButtonTitle,
             onDismissRequest = onDismissRequest,
             initialSelection = initialSelection,
@@ -76,7 +76,7 @@ fun SingleSelectionDialog(
 @Composable
 private fun SingleSelectionDialogContent(
     options: ImmutableList<ListOption>,
-    onOptionSelected: (Int) -> Unit,
+    onOptionClick: (Int) -> Unit,
     dismissButtonTitle: String,
     onDismissRequest: () -> Unit,
     title: String? = null,
@@ -87,7 +87,7 @@ private fun SingleSelectionDialogContent(
         title = title,
         subtitle = subtitle,
         submitText = dismissButtonTitle,
-        onSubmitClicked = onDismissRequest,
+        onSubmitClick = onDismissRequest,
         applyPaddingToContents = false,
     ) {
         LazyColumn {
@@ -96,7 +96,7 @@ private fun SingleSelectionDialogContent(
                     headline = option.title,
                     supportingText = option.subtitle,
                     selected = index == initialSelection,
-                    onSelected = { onOptionSelected(index) },
+                    onSelect = { onOptionClick(index) },
                     compactLayout = true,
                     modifier = Modifier.padding(start = 8.dp)
                 )
@@ -118,7 +118,7 @@ internal fun SingleSelectionDialogContentPreview() {
             SingleSelectionDialogContent(
                 title = "Dialog title",
                 options = options,
-                onOptionSelected = {},
+                onOptionClick = {},
                 onDismissRequest = {},
                 dismissButtonTitle = "Cancel",
                 initialSelection = 0
@@ -138,7 +138,7 @@ internal fun SingleSelectionDialogPreview() = ElementPreview {
     SingleSelectionDialog(
         title = "Dialog title",
         options = options,
-        onOptionSelected = {},
+        onSelectOption = {},
         onDismissRequest = {},
         dismissButtonTitle = "Cancel",
         initialSelection = 0

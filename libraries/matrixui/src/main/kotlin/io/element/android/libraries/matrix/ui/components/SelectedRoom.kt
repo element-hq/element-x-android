@@ -50,7 +50,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun SelectedRoom(
     roomSummary: RoomSummaryDetails,
-    onRoomRemoved: (RoomSummaryDetails) -> Unit,
+    onRemoveRoom: (RoomSummaryDetails) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -78,7 +78,7 @@ fun SelectedRoom(
                 .clickable(
                     indication = rememberRipple(),
                     interactionSource = remember { MutableInteractionSource() },
-                    onClick = { onRoomRemoved(roomSummary) }
+                    onClick = { onRemoveRoom(roomSummary) }
                 ),
         ) {
             Icon(
@@ -98,6 +98,6 @@ internal fun SelectedRoomPreview(
 ) = ElementPreview {
     SelectedRoom(
         roomSummary = roomSummaryDetails,
-        onRoomRemoved = {},
+        onRemoveRoom = {},
     )
 }

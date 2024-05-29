@@ -44,7 +44,7 @@ fun ErrorDialog(
             title = title,
             content = content,
             submitText = submitText,
-            onSubmitClicked = onDismiss,
+            onSubmitClick = onDismiss,
         )
     }
 }
@@ -52,7 +52,7 @@ fun ErrorDialog(
 @Composable
 private fun ErrorDialogContent(
     content: String,
-    onSubmitClicked: () -> Unit,
+    onSubmitClick: () -> Unit,
     title: String = ErrorDialogDefaults.title,
     submitText: String = ErrorDialogDefaults.submitText,
 ) {
@@ -60,7 +60,7 @@ private fun ErrorDialogContent(
         title = title,
         content = content,
         submitText = submitText,
-        onSubmitClicked = onSubmitClicked,
+        onSubmitClick = onSubmitClick,
     )
 }
 
@@ -76,7 +76,7 @@ internal fun ErrorDialogContentPreview() {
         DialogPreview {
             ErrorDialogContent(
                 content = "Content",
-                onSubmitClicked = {},
+                onSubmitClick = {},
             )
         }
     }

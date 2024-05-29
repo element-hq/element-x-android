@@ -47,20 +47,20 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun SecureBackupRootView(
     state: SecureBackupRootState,
-    onBackPressed: () -> Unit,
-    onSetupClicked: () -> Unit,
-    onChangeClicked: () -> Unit,
-    onEnableClicked: () -> Unit,
-    onDisableClicked: () -> Unit,
-    onConfirmRecoveryKeyClicked: () -> Unit,
-    onLearnMoreClicked: () -> Unit,
+    onBackClick: () -> Unit,
+    onSetupClick: () -> Unit,
+    onChangeClick: () -> Unit,
+    onEnableClick: () -> Unit,
+    onDisableClick: () -> Unit,
+    onConfirmRecoveryKeyClick: () -> Unit,
+    onLearnMoreClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
 
     PreferencePage(
         modifier = modifier,
-        onBackPressed = onBackPressed,
+        onBackClick = onBackClick,
         title = stringResource(id = CommonStrings.common_chat_backup),
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) {
@@ -74,7 +74,7 @@ fun SecureBackupRootView(
         PreferenceText(
             title = stringResource(id = R.string.screen_chat_backup_key_backup_title),
             subtitleAnnotated = text,
-            onClick = onLearnMoreClicked,
+            onClick = onLearnMoreClick,
         )
 
         // Disable / Enable backup
@@ -87,13 +87,13 @@ fun SecureBackupRootView(
                             PreferenceText(
                                 title = stringResource(id = R.string.screen_chat_backup_key_backup_action_disable),
                                 tintColor = ElementTheme.colors.textCriticalPrimary,
-                                onClick = onDisableClicked,
+                                onClick = onDisableClick,
                             )
                         }
                         false -> {
                             PreferenceText(
                                 title = stringResource(id = R.string.screen_chat_backup_key_backup_action_enable),
-                                onClick = onEnableClicked,
+                                onClick = onEnableClick,
                             )
                         }
                     }
@@ -127,7 +127,7 @@ fun SecureBackupRootView(
 
                         PreferenceText(
                             title = stringResource(id = R.string.screen_chat_backup_key_backup_action_enable),
-                            onClick = onEnableClicked,
+                            onClick = onEnableClick,
                         )
                     }
                 }
@@ -140,7 +140,7 @@ fun SecureBackupRootView(
                 PreferenceText(
                     title = stringResource(id = R.string.screen_chat_backup_key_backup_action_disable),
                     tintColor = ElementTheme.colors.textCriticalPrimary,
-                    onClick = onDisableClicked,
+                    onClick = onDisableClick,
                 )
             }
             BackupState.DISABLING -> {
@@ -158,14 +158,14 @@ fun SecureBackupRootView(
                 PreferenceText(
                     title = stringResource(id = R.string.screen_chat_backup_recovery_action_setup),
                     subtitle = stringResource(id = R.string.screen_chat_backup_recovery_action_setup_description, state.appName),
-                    onClick = onSetupClicked,
+                    onClick = onSetupClick,
                     showEndBadge = true,
                 )
             }
             RecoveryState.ENABLED -> {
                 PreferenceText(
                     title = stringResource(id = R.string.screen_chat_backup_recovery_action_change),
-                    onClick = onChangeClicked,
+                    onClick = onChangeClick,
                 )
             }
             RecoveryState.INCOMPLETE ->
@@ -173,7 +173,7 @@ fun SecureBackupRootView(
                     title = stringResource(id = R.string.screen_chat_backup_recovery_action_confirm),
                     subtitle = stringResource(id = R.string.screen_chat_backup_recovery_action_confirm_description),
                     showEndBadge = true,
-                    onClick = onConfirmRecoveryKeyClicked,
+                    onClick = onConfirmRecoveryKeyClick,
                 )
         }
     }
@@ -186,12 +186,12 @@ internal fun SecureBackupRootViewPreview(
 ) = ElementPreview {
     SecureBackupRootView(
         state = state,
-        onBackPressed = {},
-        onSetupClicked = {},
-        onChangeClicked = {},
-        onEnableClicked = {},
-        onDisableClicked = {},
-        onConfirmRecoveryKeyClicked = {},
-        onLearnMoreClicked = {},
+        onBackClick = {},
+        onSetupClick = {},
+        onChangeClick = {},
+        onEnableClick = {},
+        onDisableClick = {},
+        onConfirmRecoveryKeyClick = {},
+        onLearnMoreClick = {},
     )
 }

@@ -28,7 +28,7 @@ class FakeNotificationDrawerManager : NotificationDrawerManager {
         clearMemberShipNotificationForSessionCallsCount.merge(sessionId.value, 1) { oldValue, value -> oldValue + value }
     }
 
-    override fun clearMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId, doRender: Boolean) {
+    override fun clearMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId) {
         val key = getMembershipNotificationKey(sessionId, roomId)
         clearMemberShipNotificationForRoomCallsCount.merge(key, 1) { oldValue, value -> oldValue + value }
     }

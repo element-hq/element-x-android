@@ -21,6 +21,11 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -52,7 +57,7 @@ class BlockedUsersPresenterTests {
             presenter.present()
         }.test {
             with(awaitItem()) {
-                assertThat(blockedUsers).isEqualTo(persistentListOf(A_USER_ID))
+                assertThat(blockedUsers).isEqualTo(persistentListOf(MatrixUser(A_USER_ID)))
                 assertThat(unblockUserAction).isEqualTo(AsyncAction.Uninitialized)
             }
         }
@@ -68,14 +73,39 @@ class BlockedUsersPresenterTests {
             presenter.present()
         }.test {
             with(awaitItem()) {
-                assertThat(blockedUsers).containsAtLeastElementsIn(persistentListOf(A_USER_ID))
-                assertThat(unblockUserAction).isEqualTo(AsyncAction.Uninitialized)
+                assertThat(blockedUsers).isEqualTo(listOf(MatrixUser(A_USER_ID)))
             }
-
             matrixClient.ignoredUsersFlow.value = persistentListOf(A_USER_ID, A_USER_ID_2)
+            skipItems(1)
             with(awaitItem()) {
-                assertThat(blockedUsers).isEqualTo(persistentListOf(A_USER_ID, A_USER_ID_2))
-                assertThat(unblockUserAction).isEqualTo(AsyncAction.Uninitialized)
+                assertThat(blockedUsers).isEqualTo(listOf(MatrixUser(A_USER_ID), MatrixUser(A_USER_ID_2)))
+            }
+        }
+    }
+
+    @Test
+    fun `present - blocked users list with data`() = runTest {
+        val alice = MatrixUser(A_USER_ID, displayName = "Alice", avatarUrl = "aliceAvatar")
+        val matrixClient = FakeMatrixClient().apply {
+            ignoredUsersFlow.value = persistentListOf(A_USER_ID, A_USER_ID_2)
+            givenGetProfileResult(A_USER_ID, Result.success(alice))
+            givenGetProfileResult(A_USER_ID_2, Result.failure(AN_EXCEPTION))
+        }
+        val presenter = aBlockedUsersPresenter(
+            matrixClient = matrixClient,
+            featureFlagService = FakeFeatureFlagService().apply {
+                setFeatureEnabled(FeatureFlags.ShowBlockedUsersDetails, true)
+            }
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            with(awaitItem()) {
+                assertThat(blockedUsers).isEqualTo(listOf(MatrixUser(A_USER_ID), MatrixUser(A_USER_ID_2)))
+            }
+            // Alice is resolved
+            with(awaitItem()) {
+                assertThat(blockedUsers).isEqualTo(listOf(alice, MatrixUser(A_USER_ID_2)))
             }
         }
     }
@@ -157,5 +187,9 @@ class BlockedUsersPresenterTests {
 
     private fun aBlockedUsersPresenter(
         matrixClient: FakeMatrixClient = FakeMatrixClient(),
-    ) = BlockedUsersPresenter(matrixClient)
+        featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
+    ) = BlockedUsersPresenter(
+        matrixClient = matrixClient,
+        featureFlagService = featureFlagService,
+    )
 }

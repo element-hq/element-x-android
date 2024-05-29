@@ -47,8 +47,8 @@ class AddPeopleNode @AssistedInject constructor(
         AddPeopleView(
             state = state,
             modifier = modifier,
-            onBackPressed = this::navigateUp,
-            onNextPressed = this::onContinue,
+            onBackClick = this::navigateUp,
+            onNextClick = this::onContinue,
         )
     }
 }

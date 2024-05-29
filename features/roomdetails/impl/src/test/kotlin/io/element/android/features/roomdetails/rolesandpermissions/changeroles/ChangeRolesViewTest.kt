@@ -297,12 +297,12 @@ class ChangeRolesViewTest {
 
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setChangeRolesContent(
         state: ChangeRolesState,
-        onBackPressed: () -> Unit = EnsureNeverCalled(),
+        onBackClick: () -> Unit = EnsureNeverCalled(),
     ) {
         setContent {
             ChangeRolesView(
                 state = state,
-                navigateUp = onBackPressed,
+                navigateUp = onBackClick,
             )
         }
     }

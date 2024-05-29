@@ -87,23 +87,23 @@ class SecureBackupFlowNode @AssistedInject constructor(
         return when (navTarget) {
             NavTarget.Root -> {
                 val callback = object : SecureBackupRootNode.Callback {
-                    override fun onSetupClicked() {
+                    override fun onSetupClick() {
                         backstack.push(NavTarget.Setup)
                     }
 
-                    override fun onChangeClicked() {
+                    override fun onChangeClick() {
                         backstack.push(NavTarget.Change)
                     }
 
-                    override fun onDisableClicked() {
+                    override fun onDisableClick() {
                         backstack.push(NavTarget.Disable)
                     }
 
-                    override fun onEnableClicked() {
+                    override fun onEnableClick() {
                         backstack.push(NavTarget.Enable)
                     }
 
-                    override fun onConfirmRecoveryKeyClicked() {
+                    override fun onConfirmRecoveryKeyClick() {
                         backstack.push(NavTarget.EnterRecoveryKey)
                     }
                 }

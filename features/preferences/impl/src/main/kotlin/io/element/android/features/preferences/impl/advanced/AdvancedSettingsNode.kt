@@ -38,7 +38,7 @@ class AdvancedSettingsNode @AssistedInject constructor(
         AdvancedSettingsView(
             state = state,
             modifier = modifier,
-            onBackPressed = ::navigateUp
+            onBackClick = ::navigateUp
         )
     }
 }

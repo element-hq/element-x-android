@@ -30,6 +30,6 @@ interface LogoutEntryPoint : FeatureEntryPoint {
     }
 
     interface Callback : Plugin {
-        fun onChangeRecoveryKeyClicked()
+        fun onChangeRecoveryKeyClick()
     }
 }

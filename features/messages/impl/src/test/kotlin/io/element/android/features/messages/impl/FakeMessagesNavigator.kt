@@ -33,19 +33,19 @@ class FakeMessagesNavigator : MessagesNavigator {
     var onEditPollClickedCount = 0
         private set
 
-    override fun onShowEventDebugInfoClicked(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
+    override fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
         onShowEventDebugInfoClickedCount++
     }
 
-    override fun onForwardEventClicked(eventId: EventId) {
+    override fun onForwardEventClick(eventId: EventId) {
         onForwardEventClickedCount++
     }
 
-    override fun onReportContentClicked(eventId: EventId, senderId: UserId) {
+    override fun onReportContentClick(eventId: EventId, senderId: UserId) {
         onReportContentClickedCount++
     }
 
-    override fun onEditPollClicked(eventId: EventId) {
+    override fun onEditPollClick(eventId: EventId) {
         onEditPollClickedCount++
     }
 }

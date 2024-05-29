@@ -57,22 +57,22 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun RoomInviteMembersView(
     state: RoomInviteMembersState,
-    onBackPressed: () -> Unit,
-    onSubmitPressed: (List<MatrixUser>) -> Unit,
+    onBackClick: () -> Unit,
+    onSubmitClick: (List<MatrixUser>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier,
         topBar = {
             RoomInviteMembersTopBar(
-                onBackPressed = {
+                onBackClick = {
                     if (state.isSearchActive) {
                         state.eventSink(RoomInviteMembersEvents.OnSearchActiveChanged(false))
                     } else {
-                        onBackPressed()
+                        onBackClick()
                     }
                 },
-                onSubmitPressed = { onSubmitPressed(state.selectedUsers) },
+                onSubmitClick = { onSubmitClick(state.selectedUsers) },
                 canSend = state.canInvite,
             )
         }
@@ -91,9 +91,9 @@ fun RoomInviteMembersView(
                 selectedUsers = state.selectedUsers,
                 state = state.searchResults,
                 active = state.isSearchActive,
-                onActiveChanged = { state.eventSink(RoomInviteMembersEvents.OnSearchActiveChanged(it)) },
-                onTextChanged = { state.eventSink(RoomInviteMembersEvents.UpdateSearchQuery(it)) },
-                onUserToggled = { state.eventSink(RoomInviteMembersEvents.ToggleUser(it)) },
+                onActiveChange = { state.eventSink(RoomInviteMembersEvents.OnSearchActiveChanged(it)) },
+                onTextChange = { state.eventSink(RoomInviteMembersEvents.UpdateSearchQuery(it)) },
+                onToggleUser = { state.eventSink(RoomInviteMembersEvents.ToggleUser(it)) },
             )
 
             if (!state.isSearchActive) {
@@ -101,7 +101,7 @@ fun RoomInviteMembersView(
                     modifier = Modifier.fillMaxWidth(),
                     selectedUsers = state.selectedUsers,
                     autoScroll = true,
-                    onUserRemoved = { state.eventSink(RoomInviteMembersEvents.ToggleUser(it)) },
+                    onUserRemove = { state.eventSink(RoomInviteMembersEvents.ToggleUser(it)) },
                     contentPadding = PaddingValues(16.dp),
                 )
             }
@@ -113,8 +113,8 @@ fun RoomInviteMembersView(
 @Composable
 private fun RoomInviteMembersTopBar(
     canSend: Boolean,
-    onBackPressed: () -> Unit,
-    onSubmitPressed: () -> Unit,
+    onBackClick: () -> Unit,
+    onSubmitClick: () -> Unit,
 ) {
     TopAppBar(
         title = {
@@ -123,11 +123,11 @@ private fun RoomInviteMembersTopBar(
                 style = ElementTheme.typography.aliasScreenTitle,
             )
         },
-        navigationIcon = { BackButton(onClick = onBackPressed) },
+        navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
             TextButton(
                 text = stringResource(CommonStrings.action_invite),
-                onClick = onSubmitPressed,
+                onClick = onSubmitClick,
                 enabled = canSend,
             )
         }
@@ -142,17 +142,17 @@ private fun RoomInviteMembersSearchBar(
     showLoader: Boolean,
     selectedUsers: ImmutableList<MatrixUser>,
     active: Boolean,
-    onActiveChanged: (Boolean) -> Unit,
-    onTextChanged: (String) -> Unit,
-    onUserToggled: (MatrixUser) -> Unit,
+    onActiveChange: (Boolean) -> Unit,
+    onTextChange: (String) -> Unit,
+    onToggleUser: (MatrixUser) -> Unit,
     modifier: Modifier = Modifier,
     placeHolderTitle: String = stringResource(CommonStrings.common_search_for_someone),
 ) {
     SearchBar(
         query = query,
-        onQueryChange = onTextChanged,
+        onQueryChange = onTextChange,
         active = active,
-        onActiveChange = onActiveChanged,
+        onActiveChange = onActiveChange,
         modifier = modifier,
         placeHolderTitle = placeHolderTitle,
         contentPrefix = {
@@ -161,7 +161,7 @@ private fun RoomInviteMembersSearchBar(
                     modifier = Modifier.fillMaxWidth(),
                     selectedUsers = selectedUsers,
                     autoScroll = true,
-                    onUserRemoved = onUserToggled,
+                    onUserRemove = onToggleUser,
                     contentPadding = PaddingValues(16.dp),
                 )
             }
@@ -210,7 +210,7 @@ private fun RoomInviteMembersSearchBar(
                         checked = invitableUser.isSelected,
                         enabled = enabled,
                         data = data,
-                        onCheckedChange = { onUserToggled(invitableUser.matrixUser) },
+                        onCheckedChange = { onToggleUser(invitableUser.matrixUser) },
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -228,7 +228,7 @@ private fun RoomInviteMembersSearchBar(
 internal fun RoomInviteMembersViewPreview(@PreviewParameter(RoomInviteMembersStateProvider::class) state: RoomInviteMembersState) = ElementPreview {
     RoomInviteMembersView(
         state = state,
-        onBackPressed = {},
-        onSubmitPressed = {},
+        onBackClick = {},
+        onSubmitClick = {},
     )
 }

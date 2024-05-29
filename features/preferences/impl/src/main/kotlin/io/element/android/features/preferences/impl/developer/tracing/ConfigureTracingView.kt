@@ -62,7 +62,7 @@ import kotlinx.collections.immutable.ImmutableMap
 @Composable
 fun ConfigureTracingView(
     state: ConfigureTracingState,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var showMenu by remember { mutableStateOf(false) }
@@ -75,7 +75,7 @@ fun ConfigureTracingView(
         topBar = {
             TopAppBar(
                 navigationIcon = {
-                    BackButton(onClick = onBackPressed)
+                    BackButton(onClick = onBackClick)
                 },
                 title = {
                     Text(
@@ -234,6 +234,6 @@ internal fun ConfigureTracingViewPreview(
 ) = ElementPreview {
     ConfigureTracingView(
         state = state,
-        onBackPressed = {},
+        onBackClick = {},
     )
 }

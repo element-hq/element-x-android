@@ -47,8 +47,8 @@ class EditUserProfileNode @AssistedInject constructor(
         val state = presenter.present()
         EditUserProfileView(
             state = state,
-            onBackPressed = ::navigateUp,
-            onProfileEdited = ::navigateUp,
+            onBackClick = ::navigateUp,
+            onEditProfileSuccess = ::navigateUp,
             modifier = modifier
         )
     }

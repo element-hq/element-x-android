@@ -53,7 +53,7 @@ fun AttachmentsPreviewView(
                 floatingActionButtonPosition = FabPosition.Start
             ) {
                 AttachmentPreviewContent(
-                    attachments = state.attachments,
+                    attachment = state.attachments.first(),
                 )
             }
         }
@@ -63,7 +63,9 @@ fun AttachmentsPreviewView(
 
 @Composable
 private fun AttachmentPreviewContent(
-    attachments: ImmutableList<Attachment>,
+    attachment: Attachment,
+    onSendClicked: () -> Unit,
+    onDismiss: () -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -75,21 +77,17 @@ private fun AttachmentPreviewContent(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            when (val attachment = attachments.first()) {
-                is Attachment.Media -> {
-                    val localMediaViewState = rememberLocalMediaViewState(
-                        zoomableState = rememberZoomableState(
-                            zoomSpec = ZoomSpec(maxZoomFactor = 4f, preventOverOrUnderZoom = false)
-                        )
-                    )
-                    LocalMediaView(
-                        modifier = Modifier.fillMaxSize(),
-                        localMedia = attachment.localMedia,
-                        localMediaViewState = localMediaViewState,
-                        onClick = {}
-                    )
-                }
-            }
+            val localMediaViewState = rememberLocalMediaViewState(
+                zoomableState = rememberZoomableState(
+                    zoomSpec = ZoomSpec(maxZoomFactor = 4f, preventOverOrUnderZoom = false)
+                )
+            )
+            LocalMediaView(
+                modifier = Modifier.fillMaxSize(),
+                localMedia = attachment.localMedia,
+                localMediaViewState = localMediaViewState,
+                onClick = {}
+            )
         }
     }
 }

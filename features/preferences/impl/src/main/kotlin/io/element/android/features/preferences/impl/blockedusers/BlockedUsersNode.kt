@@ -37,7 +37,7 @@ class BlockedUsersNode @AssistedInject constructor(
         val state = presenter.present()
         BlockedUsersView(
             state = state,
-            onBackPressed = ::navigateUp,
+            onBackClick = ::navigateUp,
             modifier = modifier,
         )
     }

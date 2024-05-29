@@ -37,7 +37,7 @@ class AnalyticsSettingsNode @AssistedInject constructor(
         val state = presenter.present()
         AnalyticsSettingsView(
             state = state,
-            onBackPressed = ::navigateUp,
+            onBackClick = ::navigateUp,
             modifier = modifier
         )
     }

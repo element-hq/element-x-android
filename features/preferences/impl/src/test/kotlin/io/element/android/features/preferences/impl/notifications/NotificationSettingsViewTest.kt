@@ -19,6 +19,8 @@ package io.element.android.features.preferences.impl.notifications
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.architecture.AsyncAction
@@ -50,7 +52,7 @@ class NotificationSettingsViewTest {
                 state = aValidNotificationSettingsState(
                     eventSink = eventsRecorder
                 ),
-                onBackPressed = it
+                onBackClick = it
             )
             rule.pressBack()
         }
@@ -66,7 +68,7 @@ class NotificationSettingsViewTest {
                 state = aValidNotificationSettingsState(
                     eventSink = eventsRecorder
                 ),
-                onTroubleshootNotificationsClicked = it
+                onTroubleshootNotificationsClick = it
             )
             rule.clickOn(R.string.troubleshoot_notifications_entry_point_title)
         }
@@ -248,20 +250,57 @@ class NotificationSettingsViewTest {
             )
         )
     }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `clicking on Push notification provider emits the expected event`() {
+        val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
+        rule.setNotificationSettingsView(
+            state = aValidNotificationSettingsState(
+                eventSink = eventsRecorder
+            ),
+        )
+        rule.clickOn(R.string.screen_advanced_settings_push_provider_android)
+        eventsRecorder.assertList(
+            listOf(
+                NotificationSettingsEvents.RefreshSystemNotificationsEnabled,
+                NotificationSettingsEvents.ChangePushProvider,
+            )
+        )
+    }
+
+    @Test
+    fun `clicking on a push provider emits the expected event`() {
+        val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
+        rule.setNotificationSettingsView(
+            state = aValidNotificationSettingsState(
+                eventSink = eventsRecorder,
+                showChangePushProviderDialog = true,
+                availablePushDistributors = listOf("P1", "P2")
+            ),
+        )
+        rule.onNodeWithText("P2").performClick()
+        eventsRecorder.assertList(
+            listOf(
+                NotificationSettingsEvents.RefreshSystemNotificationsEnabled,
+                NotificationSettingsEvents.SetPushProvider(1),
+            )
+        )
+    }
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setNotificationSettingsView(
     state: NotificationSettingsState,
     onOpenEditDefault: (isOneToOne: Boolean) -> Unit = EnsureNeverCalledWithParam(),
-    onTroubleshootNotificationsClicked: () -> Unit = EnsureNeverCalled(),
-    onBackPressed: () -> Unit = EnsureNeverCalled(),
+    onTroubleshootNotificationsClick: () -> Unit = EnsureNeverCalled(),
+    onBackClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         NotificationSettingsView(
             state = state,
             onOpenEditDefault = onOpenEditDefault,
-            onTroubleshootNotificationsClicked = onTroubleshootNotificationsClicked,
-            onBackPressed = onBackPressed,
+            onTroubleshootNotificationsClick = onTroubleshootNotificationsClick,
+            onBackClick = onBackClick,
         )
     }
 }

@@ -48,7 +48,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun WaitListView(
     state: WaitListState,
-    onCancelClicked: () -> Unit,
+    onCancelClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     OnLifecycleEvent { _, event ->
@@ -57,7 +57,7 @@ fun WaitListView(
             else -> Unit
         }
     }
-    WaitListContent(state, onCancelClicked, modifier)
+    WaitListContent(state, onCancelClick, modifier)
 }
 
 @Composable
@@ -81,7 +81,7 @@ private fun WaitListError(state: WaitListState) {
 @Composable
 private fun WaitListContent(
     state: WaitListState,
-    onCancelClicked: () -> Unit,
+    onCancelClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -109,7 +109,7 @@ private fun WaitListContent(
             title = title,
             subtitle = subtitle,
         ) {
-            OverallContent(state, onCancelClicked)
+            OverallContent(state, onCancelClick)
         }
         WaitListError(state)
     }
@@ -118,14 +118,14 @@ private fun WaitListContent(
 @Composable
 private fun OverallContent(
     state: WaitListState,
-    onCancelClicked: () -> Unit,
+    onCancelClick: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         if (state.loginAction !is AsyncData.Success) {
             CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.textOnSolidPrimary) {
                 TextButton(
                     text = stringResource(CommonStrings.action_cancel),
-                    onClick = onCancelClicked,
+                    onClick = onCancelClick,
                 )
             }
         }
@@ -147,6 +147,6 @@ private fun OverallContent(
 internal fun WaitListViewPreview(@PreviewParameter(WaitListStateProvider::class) state: WaitListState) = ElementPreview {
     WaitListView(
         state = state,
-        onCancelClicked = {},
+        onCancelClick = {},
     )
 }

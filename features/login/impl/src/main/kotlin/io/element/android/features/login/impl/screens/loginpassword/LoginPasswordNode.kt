@@ -47,7 +47,7 @@ class LoginPasswordNode @AssistedInject constructor(
         LoginPasswordView(
             state = state,
             modifier = modifier,
-            onBackPressed = ::navigateUp,
+            onBackClick = ::navigateUp,
             onWaitListError = ::onWaitListError,
         )
     }

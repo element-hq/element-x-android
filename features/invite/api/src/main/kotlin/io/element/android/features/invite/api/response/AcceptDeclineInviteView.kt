@@ -24,8 +24,8 @@ interface AcceptDeclineInviteView {
     @Composable
     fun Render(
         state: AcceptDeclineInviteState,
-        onInviteAccepted: (RoomId) -> Unit,
-        onInviteDeclined: (RoomId) -> Unit,
+        onAcceptInvite: (RoomId) -> Unit,
+        onDeclineInvite: (RoomId) -> Unit,
         modifier: Modifier,
     )
 }

@@ -33,7 +33,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun TimelineItemEncryptedView(
     content: TimelineItemEncryptedContent,
-    onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit,
+    onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val isMembershipUtd = (content.data as? UnableToDecryptContent.Data.MegolmV1AesSha2)?.utdCause == UtdCause.Membership
@@ -46,7 +46,7 @@ fun TimelineItemEncryptedView(
         text = stringResource(id = textId),
         iconDescription = stringResource(id = CommonStrings.dialog_title_warning),
         iconResourceId = iconId,
-        onContentLayoutChanged = onContentLayoutChanged,
+        onContentLayoutChange = onContentLayoutChange,
         modifier = modifier
     )
 }
@@ -58,6 +58,6 @@ internal fun TimelineItemEncryptedViewPreview(
 ) = ElementPreview {
     TimelineItemEncryptedView(
         content = content,
-        onContentLayoutChanged = {},
+        onContentLayoutChange = {},
     )
 }

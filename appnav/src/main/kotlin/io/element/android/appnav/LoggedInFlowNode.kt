@@ -229,31 +229,31 @@ class LoggedInFlowNode @AssistedInject constructor(
             }
             NavTarget.RoomList -> {
                 val callback = object : RoomListEntryPoint.Callback {
-                    override fun onRoomClicked(roomId: RoomId) {
+                    override fun onRoomClick(roomId: RoomId) {
                         backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
                     }
 
-                    override fun onSettingsClicked() {
+                    override fun onSettingsClick() {
                         backstack.push(NavTarget.Settings())
                     }
 
-                    override fun onCreateRoomClicked() {
+                    override fun onCreateRoomClick() {
                         backstack.push(NavTarget.CreateRoom)
                     }
 
-                    override fun onSessionConfirmRecoveryKeyClicked() {
+                    override fun onSessionConfirmRecoveryKeyClick() {
                         backstack.push(NavTarget.SecureBackup(initialElement = SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey))
                     }
 
-                    override fun onRoomSettingsClicked(roomId: RoomId) {
+                    override fun onRoomSettingsClick(roomId: RoomId) {
                         backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), initialElement = RoomNavigationTarget.Details))
                     }
 
-                    override fun onReportBugClicked() {
+                    override fun onReportBugClick() {
                         plugins<Callback>().forEach { it.onOpenBugReport() }
                     }
 
-                    override fun onRoomDirectorySearchClicked() {
+                    override fun onRoomDirectorySearchClick() {
                         backstack.push(NavTarget.RoomDirectorySearch)
                     }
                 }
@@ -272,7 +272,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                         coroutineScope.launch { attachRoom(roomId.toRoomIdOrAlias()) }
                     }
 
-                    override fun onPermalinkClicked(data: PermalinkData) {
+                    override fun onPermalinkClick(data: PermalinkData) {
                         when (data) {
                             is PermalinkData.UserLink -> {
                                 // Should not happen (handled by MessagesNode)
@@ -325,7 +325,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                         plugins<Callback>().forEach { it.onOpenBugReport() }
                     }
 
-                    override fun onSecureBackupClicked() {
+                    override fun onSecureBackupClick() {
                         backstack.push(NavTarget.SecureBackup())
                     }
 
@@ -363,7 +363,7 @@ class LoggedInFlowNode @AssistedInject constructor(
             NavTarget.RoomDirectorySearch -> {
                 roomDirectoryEntryPoint.nodeBuilder(this, buildContext)
                     .callback(object : RoomDirectoryEntryPoint.Callback {
-                        override fun onResultClicked(roomDescription: RoomDescription) {
+                        override fun onResultClick(roomDescription: RoomDescription) {
                             backstack.push(
                                 NavTarget.Room(
                                     roomIdOrAlias = roomDescription.roomId.toRoomIdOrAlias(),

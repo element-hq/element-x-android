@@ -184,7 +184,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoles
         RolesAndPermissionsView(
             state = state,
             rolesAndPermissionsNavigator = object : RolesAndPermissionsNavigator {
-                override fun onBackPressed() = goBack()
+                override fun onBackClick() = goBack()
                 override fun openAdminList() = openAdminList()
                 override fun openModeratorList() = openModeratorList()
                 override fun openEditRoomDetailsPermissions() = openPermissionScreens()

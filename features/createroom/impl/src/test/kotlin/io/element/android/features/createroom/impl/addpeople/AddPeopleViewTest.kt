@@ -47,7 +47,7 @@ class AddPeopleViewTest {
                 aUserListState(
                     eventSink = eventsRecorder,
                 ),
-                onBackPressed = it
+                onBackClick = it
             )
             rule.pressBack()
         }
@@ -75,7 +75,7 @@ class AddPeopleViewTest {
                 aUserListState(
                     eventSink = eventsRecorder,
                 ),
-                onNextPressed = it
+                onNextClick = it
             )
             rule.clickOn(CommonStrings.action_skip)
         }
@@ -85,14 +85,14 @@ class AddPeopleViewTest {
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setAddPeopleView(
     state: UserListState,
-    onBackPressed: () -> Unit = EnsureNeverCalled(),
-    onNextPressed: () -> Unit = EnsureNeverCalled(),
+    onBackClick: () -> Unit = EnsureNeverCalled(),
+    onNextClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         AddPeopleView(
             state = state,
-            onBackPressed = onBackPressed,
-            onNextPressed = onNextPressed,
+            onBackClick = onBackClick,
+            onNextClick = onNextClick,
         )
     }
 }

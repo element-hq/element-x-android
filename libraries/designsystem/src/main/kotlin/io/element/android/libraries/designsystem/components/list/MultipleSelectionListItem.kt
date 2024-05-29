@@ -41,7 +41,7 @@ import kotlinx.collections.immutable.toImmutableList
 fun MultipleSelectionListItem(
     headline: String,
     options: ImmutableList<ListOption>,
-    onSelectionChanged: (List<Int>) -> Unit,
+    onSelectionChange: (List<Int>) -> Unit,
     resultFormatter: (List<Int>) -> String?,
     modifier: Modifier = Modifier,
     supportingText: String? = null,
@@ -87,9 +87,9 @@ fun MultipleSelectionListItem(
         MultipleSelectionDialog(
             title = headline,
             options = options,
-            onConfirmClicked = { newSelectedIndexes ->
+            onConfirmClick = { newSelectedIndexes ->
                 if (newSelectedIndexes != selectedIndexes.toList()) {
-                    onSelectionChanged(newSelectedIndexes)
+                    onSelectionChange(newSelectedIndexes)
                     selectedIndexes.clear()
                     selectedIndexes.addAll(newSelectedIndexes)
                 }
@@ -109,7 +109,7 @@ internal fun MutipleSelectionListItemPreview() {
         MultipleSelectionListItem(
             headline = "Headline",
             options = options,
-            onSelectionChanged = {},
+            onSelectionChange = {},
             supportingText = "Supporting text",
             resultFormatter = { result -> formatResult(result, options) },
         )
@@ -125,7 +125,7 @@ internal fun MutipleSelectionListItemSelectedPreview() {
         MultipleSelectionListItem(
             headline = "Headline",
             options = options,
-            onSelectionChanged = {},
+            onSelectionChange = {},
             supportingText = "Supporting text",
             resultFormatter = {
                 val selectedValues = formatResult(it, options)
@@ -145,7 +145,7 @@ internal fun MutipleSelectionListItemSelectedTrailingContentPreview() {
         MultipleSelectionListItem(
             headline = "Headline",
             options = options,
-            onSelectionChanged = {},
+            onSelectionChange = {},
             supportingText = "Supporting text",
             resultFormatter = { selected.size.toString() },
             displayResultInTrailingContent = true,

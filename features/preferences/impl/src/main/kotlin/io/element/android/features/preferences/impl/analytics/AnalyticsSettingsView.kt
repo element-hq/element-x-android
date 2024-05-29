@@ -29,12 +29,12 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun AnalyticsSettingsView(
     state: AnalyticsSettingsState,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PreferencePage(
         modifier = modifier,
-        onBackPressed = onBackPressed,
+        onBackClick = onBackClick,
         title = stringResource(id = CommonStrings.common_analytics)
     ) {
         AnalyticsPreferencesView(
@@ -48,6 +48,6 @@ fun AnalyticsSettingsView(
 internal fun AnalyticsSettingsViewPreview(@PreviewParameter(AnalyticsSettingsStateProvider::class) state: AnalyticsSettingsState) = ElementPreview {
     AnalyticsSettingsView(
         state = state,
-        onBackPressed = {},
+        onBackClick = {},
     )
 }

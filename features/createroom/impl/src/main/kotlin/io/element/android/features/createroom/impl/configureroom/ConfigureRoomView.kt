@@ -65,14 +65,14 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun ConfigureRoomView(
     state: ConfigureRoomState,
-    onBackPressed: () -> Unit,
-    onRoomCreated: (RoomId) -> Unit,
+    onBackClick: () -> Unit,
+    onCreateRoomSuccess: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
     val isAvatarActionsSheetVisible = remember { mutableStateOf(false) }
 
-    fun onAvatarClicked() {
+    fun onAvatarClick() {
         focusManager.clearFocus()
         isAvatarActionsSheetVisible.value = true
     }
@@ -82,8 +82,8 @@ fun ConfigureRoomView(
         topBar = {
             ConfigureRoomToolbar(
                 isNextActionEnabled = state.isCreateButtonEnabled,
-                onBackPressed = onBackPressed,
-                onNextPressed = {
+                onBackClick = onBackClick,
+                onNextClick = {
                     focusManager.clearFocus()
                     state.eventSink(ConfigureRoomEvents.CreateRoom(state.config))
                 },
@@ -102,20 +102,20 @@ fun ConfigureRoomView(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 avatarUri = state.config.avatarUri,
                 roomName = state.config.roomName.orEmpty(),
-                onAvatarClick = ::onAvatarClicked,
-                onRoomNameChanged = { state.eventSink(ConfigureRoomEvents.RoomNameChanged(it)) },
+                onAvatarClick = ::onAvatarClick,
+                onChangeRoomName = { state.eventSink(ConfigureRoomEvents.RoomNameChanged(it)) },
             )
             RoomTopic(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 topic = state.config.topic.orEmpty(),
-                onTopicChanged = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
+                onTopicChange = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
             )
             if (state.config.invites.isNotEmpty()) {
                 SelectedUsersRowList(
                     modifier = Modifier.padding(bottom = 16.dp),
                     contentPadding = PaddingValues(horizontal = 24.dp),
                     selectedUsers = state.config.invites,
-                    onUserRemoved = {
+                    onUserRemove = {
                         focusManager.clearFocus()
                         state.eventSink(ConfigureRoomEvents.RemoveFromSelection(it))
                     },
@@ -124,7 +124,7 @@ fun ConfigureRoomView(
             RoomPrivacyOptions(
                 modifier = Modifier.padding(bottom = 40.dp),
                 selected = state.config.privacy,
-                onOptionSelected = {
+                onOptionClick = {
                     focusManager.clearFocus()
                     state.eventSink(ConfigureRoomEvents.RoomPrivacyChanged(it.privacy))
                 },
@@ -136,7 +136,7 @@ fun ConfigureRoomView(
         actions = state.avatarActions,
         isVisible = isAvatarActionsSheetVisible.value,
         onDismiss = { isAvatarActionsSheetVisible.value = false },
-        onActionSelected = { state.eventSink(ConfigureRoomEvents.HandleAvatarAction(it)) }
+        onSelectAction = { state.eventSink(ConfigureRoomEvents.HandleAvatarAction(it)) }
     )
 
     AsyncActionView(
@@ -146,7 +146,7 @@ fun ConfigureRoomView(
                 progressText = stringResource(CommonStrings.common_creating_room),
             )
         },
-        onSuccess = { onRoomCreated(it) },
+        onSuccess = { onCreateRoomSuccess(it) },
         errorMessage = { stringResource(R.string.screen_create_room_error_creating_room) },
         onRetry = { state.eventSink(ConfigureRoomEvents.CreateRoom(state.config)) },
         onErrorDismiss = { state.eventSink(ConfigureRoomEvents.CancelCreateRoom) },
@@ -161,8 +161,8 @@ fun ConfigureRoomView(
 @Composable
 private fun ConfigureRoomToolbar(
     isNextActionEnabled: Boolean,
-    onBackPressed: () -> Unit,
-    onNextPressed: () -> Unit,
+    onBackClick: () -> Unit,
+    onNextClick: () -> Unit,
 ) {
     TopAppBar(
         title = {
@@ -171,12 +171,12 @@ private fun ConfigureRoomToolbar(
                 style = ElementTheme.typography.aliasScreenTitle,
             )
         },
-        navigationIcon = { BackButton(onClick = onBackPressed) },
+        navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
             TextButton(
                 text = stringResource(CommonStrings.action_create),
                 enabled = isNextActionEnabled,
-                onClick = onNextPressed,
+                onClick = onNextClick,
             )
         }
     )
@@ -187,7 +187,7 @@ private fun RoomNameWithAvatar(
     avatarUri: Uri?,
     roomName: String,
     onAvatarClick: () -> Unit,
-    onRoomNameChanged: (String) -> Unit,
+    onChangeRoomName: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -205,7 +205,7 @@ private fun RoomNameWithAvatar(
             value = roomName,
             placeholder = stringResource(CommonStrings.common_room_name_placeholder),
             singleLine = true,
-            onValueChange = onRoomNameChanged,
+            onValueChange = onChangeRoomName,
         )
     }
 }
@@ -213,7 +213,7 @@ private fun RoomNameWithAvatar(
 @Composable
 private fun RoomTopic(
     topic: String,
-    onTopicChanged: (String) -> Unit,
+    onTopicChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LabelledTextField(
@@ -221,7 +221,7 @@ private fun RoomTopic(
         label = stringResource(R.string.screen_create_room_topic_label),
         value = topic,
         placeholder = stringResource(CommonStrings.common_topic_placeholder),
-        onValueChange = onTopicChanged,
+        onValueChange = onTopicChange,
         maxLines = 3,
         keyboardOptions = KeyboardOptions(
             capitalization = KeyboardCapitalization.Sentences,
@@ -232,7 +232,7 @@ private fun RoomTopic(
 @Composable
 private fun RoomPrivacyOptions(
     selected: RoomPrivacy?,
-    onOptionSelected: (RoomPrivacyItem) -> Unit,
+    onOptionClick: (RoomPrivacyItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val items = roomPrivacyItems()
@@ -241,7 +241,7 @@ private fun RoomPrivacyOptions(
             RoomPrivacyOption(
                 roomPrivacyItem = item,
                 isSelected = selected == item.privacy,
-                onOptionSelected = onOptionSelected,
+                onOptionClick = onOptionClick,
             )
         }
     }
@@ -252,7 +252,7 @@ private fun RoomPrivacyOptions(
 internal fun ConfigureRoomViewPreview(@PreviewParameter(ConfigureRoomStateProvider::class) state: ConfigureRoomState) = ElementPreview {
     ConfigureRoomView(
         state = state,
-        onBackPressed = {},
-        onRoomCreated = {},
+        onBackClick = {},
+        onCreateRoomSuccess = {},
     )
 }

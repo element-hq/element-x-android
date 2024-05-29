@@ -97,7 +97,7 @@ class ViewFolderRootNode @AssistedInject constructor(
             }
             is NavTarget.File -> {
                 val callback: ViewFileNode.Callback = object : ViewFileNode.Callback {
-                    override fun onBackPressed() {
+                    override fun onBackClick() {
                         backstack.pop()
                     }
                 }
@@ -115,7 +115,7 @@ class ViewFolderRootNode @AssistedInject constructor(
         inputs: ViewFolderNode.Inputs,
     ): Node {
         val callback: ViewFolderNode.Callback = object : ViewFolderNode.Callback {
-            override fun onBackPressed() {
+            override fun onBackClick() {
                 onDone()
             }
 

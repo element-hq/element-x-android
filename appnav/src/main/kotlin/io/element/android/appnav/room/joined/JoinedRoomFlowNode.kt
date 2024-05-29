@@ -121,14 +121,14 @@ class JoinedRoomFlowNode @AssistedInject constructor(
         }
     }
 
-    private fun loadingNode(buildContext: BuildContext, onBackClicked: () -> Unit) = node(buildContext) { modifier ->
+    private fun loadingNode(buildContext: BuildContext, onBackClick: () -> Unit) = node(buildContext) { modifier ->
         val loadingRoomState by loadingRoomStateStateFlow.collectAsState()
         val networkStatus by networkMonitor.connectivity.collectAsState()
         LoadingRoomNodeView(
             state = loadingRoomState,
             hasNetworkConnection = networkStatus == NetworkStatus.Online,
             modifier = modifier,
-            onBackClicked = onBackClicked
+            onBackClick = onBackClick
         )
     }
 

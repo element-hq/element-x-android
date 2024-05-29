@@ -53,7 +53,7 @@ class ChangeRoomPermissionsNode @AssistedInject constructor(
         ChangeRoomPermissionsView(
             modifier = modifier,
             state = state,
-            onBackPressed = this::navigateUp,
+            onBackClick = this::navigateUp,
         )
     }
 }

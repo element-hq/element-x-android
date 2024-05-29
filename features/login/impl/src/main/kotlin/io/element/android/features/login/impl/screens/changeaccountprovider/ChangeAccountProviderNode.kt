@@ -37,15 +37,15 @@ class ChangeAccountProviderNode @AssistedInject constructor(
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
         fun onDone()
-        fun onOtherClicked()
+        fun onOtherClick()
     }
 
     private fun onDone() {
         plugins<Callback>().forEach { it.onDone() }
     }
 
-    private fun onOtherClicked() {
-        plugins<Callback>().forEach { it.onOtherClicked() }
+    private fun onOtherClick() {
+        plugins<Callback>().forEach { it.onOtherClick() }
     }
 
     @Composable
@@ -55,10 +55,10 @@ class ChangeAccountProviderNode @AssistedInject constructor(
         ChangeAccountProviderView(
             state = state,
             modifier = modifier,
-            onBackPressed = ::navigateUp,
-            onLearnMoreClicked = { openLearnMorePage(context) },
-            onDone = ::onDone,
-            onOtherProviderClicked = ::onOtherClicked,
+            onBackClick = ::navigateUp,
+            onLearnMoreClick = { openLearnMorePage(context) },
+            onSuccess = ::onDone,
+            onOtherProviderClick = ::onOtherClick,
         )
     }
 }

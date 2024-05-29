@@ -91,6 +91,8 @@ sealed interface AsyncData<out T> {
     fun isSuccess(): Boolean = this is Success<T>
 
     fun isUninitialized(): Boolean = this == Uninitialized
+
+    fun isReady() = isSuccess() || isFailure()
 }
 
 suspend inline fun <T> MutableState<AsyncData<T>>.runCatchingUpdatingState(

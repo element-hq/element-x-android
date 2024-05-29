@@ -53,7 +53,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 fun ViewFolderView(
     state: ViewFolderState,
     onNavigateTo: (Item) -> Unit,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -61,7 +61,7 @@ fun ViewFolderView(
         topBar = {
             TopAppBar(
                 navigationIcon = {
-                    BackButton(onClick = onBackPressed)
+                    BackButton(onClick = onBackClick)
                 },
                 title = {
                     Text(
@@ -85,7 +85,7 @@ fun ViewFolderView(
                     ) { item ->
                         ItemRow(
                             item = item,
-                            onItemClicked = { onNavigateTo(item) },
+                            onItemClick = { onNavigateTo(item) },
                         )
                     }
                     if (state.content.none { it !is Item.Parent }) {
@@ -108,7 +108,7 @@ fun ViewFolderView(
 @Composable
 private fun ItemRow(
     item: Item,
-    onItemClicked: () -> Unit,
+    onItemClick: () -> Unit,
 ) {
     when (item) {
         Item.Parent -> {
@@ -121,7 +121,7 @@ private fun ItemRow(
                         style = ElementTheme.typography.fontBodyMdMedium,
                     )
                 },
-                onClick = onItemClicked,
+                onClick = onItemClick,
             )
         }
         is Item.Folder -> {
@@ -134,7 +134,7 @@ private fun ItemRow(
                         style = ElementTheme.typography.fontBodyMdMedium,
                     )
                 },
-                onClick = onItemClicked,
+                onClick = onItemClick,
             )
         }
         is Item.File -> {
@@ -148,7 +148,7 @@ private fun ItemRow(
                     )
                 },
                 trailingContent = ListItemContent.Text(item.formattedSize),
-                onClick = onItemClicked,
+                onClick = onItemClick,
             )
         }
     }
@@ -160,6 +160,6 @@ internal fun ViewFolderViewPreview(@PreviewParameter(ViewFolderStateProvider::cl
     ViewFolderView(
         state = state,
         onNavigateTo = {},
-        onBackPressed = {},
+        onBackClick = {},
     )
 }

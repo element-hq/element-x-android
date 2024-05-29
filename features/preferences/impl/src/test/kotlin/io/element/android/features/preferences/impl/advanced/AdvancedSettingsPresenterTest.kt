@@ -21,16 +21,8 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.compound.theme.Theme
-import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
-import io.element.android.libraries.push.api.PushService
-import io.element.android.libraries.push.test.FakePushService
-import io.element.android.libraries.pushproviders.api.Distributor
-import io.element.android.libraries.pushproviders.api.PushProvider
-import io.element.android.libraries.pushproviders.test.FakePushProvider
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import kotlinx.coroutines.test.runTest
@@ -108,93 +100,11 @@ class AdvancedSettingsPresenterTest {
         }
     }
 
-    @Test
-    fun `present - change push provider`() = runTest {
-        val presenter = createAdvancedSettingsPresenter(
-            pushService = createFakePushService(),
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitLastSequentialItem()
-            assertThat(initialState.currentPushDistributor).isEqualTo(AsyncAction.Success("aDistributorName0"))
-            assertThat(initialState.availablePushDistributors).containsExactly("aDistributorName0", "aDistributorName1")
-            initialState.eventSink.invoke(AdvancedSettingsEvents.ChangePushProvider)
-            val withDialog = awaitItem()
-            assertThat(withDialog.showChangePushProviderDialog).isTrue()
-            // Cancel
-            withDialog.eventSink(AdvancedSettingsEvents.CancelChangePushProvider)
-            val withoutDialog = awaitItem()
-            assertThat(withoutDialog.showChangePushProviderDialog).isFalse()
-            withDialog.eventSink.invoke(AdvancedSettingsEvents.ChangePushProvider)
-            assertThat(awaitItem().showChangePushProviderDialog).isTrue()
-            withDialog.eventSink(AdvancedSettingsEvents.SetPushProvider(1))
-            val withNewProvider = awaitItem()
-            assertThat(withNewProvider.showChangePushProviderDialog).isFalse()
-            assertThat(withNewProvider.currentPushDistributor).isEqualTo(AsyncAction.Loading)
-            val lastItem = awaitItem()
-            assertThat(lastItem.currentPushDistributor).isEqualTo(AsyncAction.Success("aDistributorName1"))
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - change push provider error`() = runTest {
-        val presenter = createAdvancedSettingsPresenter(
-            pushService = createFakePushService(
-                registerWithLambda = { _, _, _ ->
-                    Result.failure(Exception("An error"))
-                },
-            ),
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitLastSequentialItem()
-            initialState.eventSink.invoke(AdvancedSettingsEvents.ChangePushProvider)
-            val withDialog = awaitItem()
-            assertThat(withDialog.showChangePushProviderDialog).isTrue()
-            withDialog.eventSink(AdvancedSettingsEvents.SetPushProvider(1))
-            val withNewProvider = awaitItem()
-            assertThat(withNewProvider.showChangePushProviderDialog).isFalse()
-            assertThat(withNewProvider.currentPushDistributor).isEqualTo(AsyncAction.Loading)
-            val lastItem = awaitItem()
-            assertThat(lastItem.currentPushDistributor).isInstanceOf(AsyncAction.Failure::class.java)
-        }
-    }
-
-    private fun createFakePushService(
-        registerWithLambda: suspend (MatrixClient, PushProvider, Distributor) -> Result<Unit> = { _, _, _ ->
-            Result.success(Unit)
-        }
-    ): PushService {
-        val pushProvider1 = FakePushProvider(
-            index = 0,
-            name = "aFakePushProvider0",
-            isAvailable = true,
-            distributors = listOf(Distributor("aDistributorValue0", "aDistributorName0")),
-        )
-        val pushProvider2 = FakePushProvider(
-            index = 1,
-            name = "aFakePushProvider1",
-            isAvailable = true,
-            distributors = listOf(Distributor("aDistributorValue1", "aDistributorName1")),
-        )
-        return FakePushService(
-            availablePushProviders = listOf(pushProvider1, pushProvider2),
-            registerWithLambda = registerWithLambda,
-        )
-    }
-
     private fun createAdvancedSettingsPresenter(
         appPreferencesStore: InMemoryAppPreferencesStore = InMemoryAppPreferencesStore(),
         sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
-        matrixClient: MatrixClient = FakeMatrixClient(),
-        pushService: PushService = FakePushService(),
     ) = AdvancedSettingsPresenter(
         appPreferencesStore = appPreferencesStore,
         sessionPreferencesStore = sessionPreferencesStore,
-        matrixClient = matrixClient,
-        pushService = pushService,
     )
 }

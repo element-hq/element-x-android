@@ -43,5 +43,9 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
 
     testImplementation(libs.coroutines.test)
-    testImplementation(libs.test.mockk)
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.truth)
+    testImplementation(projects.libraries.sessionStorage.test)
+    testImplementation(projects.services.analyticsproviders.test)
+    testImplementation(projects.tests.testutils)
 }

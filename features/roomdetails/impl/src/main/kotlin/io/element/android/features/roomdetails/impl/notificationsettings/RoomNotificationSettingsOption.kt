@@ -31,7 +31,7 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 @Composable
 fun RoomNotificationSettingsOption(
     roomNotificationSettingsItem: RoomNotificationSettingsItem,
-    onOptionSelected: (RoomNotificationSettingsItem) -> Unit,
+    onSelectOption: (RoomNotificationSettingsItem) -> Unit,
     displayMentionsOnlyDisclaimer: Boolean,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -51,7 +51,7 @@ fun RoomNotificationSettingsOption(
         headlineContent = { Text(title) },
         supportingContent = subtitle?.let { { Text(it) } },
         trailingContent = ListItemContent.RadioButton(selected = isSelected),
-        onClick = { onOptionSelected(roomNotificationSettingsItem) },
+        onClick = { onSelectOption(roomNotificationSettingsItem) },
     )
 }
 
@@ -62,7 +62,7 @@ internal fun RoomNotificationSettingsOptionPreview() = ElementPreview {
         for ((index, item) in roomNotificationSettingsItems().withIndex()) {
             RoomNotificationSettingsOption(
                 roomNotificationSettingsItem = item,
-                onOptionSelected = {},
+                onSelectOption = {},
                 isSelected = index == 0,
                 enabled = index != 2,
                 displayMentionsOnlyDisclaimer = index == 1,

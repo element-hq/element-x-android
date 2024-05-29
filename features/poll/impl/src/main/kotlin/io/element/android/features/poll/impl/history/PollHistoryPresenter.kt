@@ -73,13 +73,13 @@ class PollHistoryPresenter @Inject constructor(
                 is PollHistoryEvents.LoadMore -> {
                     coroutineScope.loadMore(timeline)
                 }
-                is PollHistoryEvents.PollAnswerSelected -> appCoroutineScope.launch {
+                is PollHistoryEvents.SelectPollAnswer -> appCoroutineScope.launch {
                     sendPollResponseAction.execute(pollStartId = event.pollStartId, answerId = event.answerId)
                 }
-                is PollHistoryEvents.PollEndClicked -> appCoroutineScope.launch {
+                is PollHistoryEvents.EndPoll -> appCoroutineScope.launch {
                     endPollAction.execute(pollStartId = event.pollStartId)
                 }
-                is PollHistoryEvents.OnFilterSelected -> {
+                is PollHistoryEvents.SelectFilter -> {
                     activeFilter = event.filter
                 }
             }

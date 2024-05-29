@@ -47,7 +47,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun EditDefaultNotificationSettingView(
     state: EditDefaultNotificationSettingState,
     openRoomNotificationSettings: (roomId: RoomId) -> Unit,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val title = if (state.isOneToOne) {
@@ -57,7 +57,7 @@ fun EditDefaultNotificationSettingView(
     }
     PreferencePage(
         modifier = modifier,
-        onBackPressed = onBackPressed,
+        onBackClick = onBackClick,
         title = stringResource(id = title)
     ) {
         // Only ALL_MESSAGES and MENTIONS_AND_KEYWORDS_ONLY are valid global defaults.
@@ -79,7 +79,7 @@ fun EditDefaultNotificationSettingView(
                             mode = item,
                             isSelected = state.mode == item,
                             displayMentionsOnlyDisclaimer = state.displayMentionsOnlyDisclaimer,
-                            onOptionSelected = { state.eventSink(EditDefaultNotificationSettingStateEvents.SetNotificationMode(it)) }
+                            onSelectOption = { state.eventSink(EditDefaultNotificationSettingStateEvents.SetNotificationMode(it)) }
                         )
                     }
                 }
@@ -140,6 +140,6 @@ internal fun EditDefaultNotificationSettingViewPreview(
     EditDefaultNotificationSettingView(
         state = state,
         openRoomNotificationSettings = {},
-        onBackPressed = {},
+        onBackClick = {},
     )
 }

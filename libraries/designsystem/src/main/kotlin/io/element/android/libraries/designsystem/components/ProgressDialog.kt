@@ -67,7 +67,7 @@ fun ProgressDialog(
             modifier = modifier,
             text = text,
             isCancellable = isCancellable,
-            onCancelClicked = onDismissRequest,
+            onCancelClick = onDismissRequest,
             progressIndicator = {
                 when (type) {
                     is ProgressDialogType.Indeterminate -> {
@@ -98,7 +98,7 @@ private fun ProgressDialogContent(
     modifier: Modifier = Modifier,
     text: String? = null,
     isCancellable: Boolean = false,
-    onCancelClicked: () -> Unit = {},
+    onCancelClick: () -> Unit = {},
     progressIndicator: @Composable () -> Unit = {
         CircularProgressIndicator(
             color = MaterialTheme.colorScheme.primary
@@ -133,7 +133,7 @@ private fun ProgressDialogContent(
                 ) {
                     TextButton(
                         text = stringResource(id = CommonStrings.action_cancel),
-                        onClick = onCancelClicked,
+                        onClick = onCancelClick,
                     )
                 }
             }

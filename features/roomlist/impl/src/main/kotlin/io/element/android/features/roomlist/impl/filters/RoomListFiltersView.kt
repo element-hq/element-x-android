@@ -58,7 +58,7 @@ fun RoomListFiltersView(
     state: RoomListFiltersState,
     modifier: Modifier = Modifier
 ) {
-    fun onClearFiltersClicked() {
+    fun onClearFiltersClick() {
         state.eventSink(RoomListFiltersEvents.ClearSelectedFilters)
     }
 
@@ -83,7 +83,7 @@ fun RoomListFiltersView(
                         .testTag(TestTags.homeScreenClearFilters),
                     onClick = {
                         previousFilters.value = state.selectedFilters()
-                        onClearFiltersClicked()
+                        onClearFiltersClick()
                     }
                 )
             }

@@ -114,7 +114,7 @@ class PollHistoryViewTest {
         eventsRecorder.assertEmpty()
         rule.clickOn(CommonStrings.action_ok)
         eventsRecorder.assertSingle(
-            PollHistoryEvents.PollEndClicked(eventId)
+            PollHistoryEvents.EndPoll(eventId)
         )
     }
 
@@ -142,7 +142,7 @@ class PollHistoryViewTest {
         )
         rule.onNodeWithText(answer.text).performClick()
         eventsRecorder.assertSingle(
-            PollHistoryEvents.PollAnswerSelected(eventId, answer.id)
+            PollHistoryEvents.SelectPollAnswer(eventId, answer.id)
         )
     }
 
@@ -156,7 +156,7 @@ class PollHistoryViewTest {
         )
         rule.clickOn(R.string.screen_polls_history_filter_past)
         eventsRecorder.assertSingle(
-            PollHistoryEvents.OnFilterSelected(filter = PollHistoryFilter.PAST)
+            PollHistoryEvents.SelectFilter(filter = PollHistoryFilter.PAST)
         )
     }
 

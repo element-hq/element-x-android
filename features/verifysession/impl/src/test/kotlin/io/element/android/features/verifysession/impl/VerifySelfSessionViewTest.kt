@@ -222,7 +222,7 @@ class VerifySelfSessionViewTest {
             VerifySelfSessionView(
                 state = state,
                 onEnterRecoveryKey = onEnterRecoveryKey,
-                onFinished = onFinished,
+                onFinish = onFinished,
             )
         }
     }

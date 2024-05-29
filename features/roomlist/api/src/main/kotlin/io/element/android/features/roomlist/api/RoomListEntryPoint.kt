@@ -30,12 +30,12 @@ interface RoomListEntryPoint : FeatureEntryPoint {
     }
 
     interface Callback : Plugin {
-        fun onRoomClicked(roomId: RoomId)
-        fun onCreateRoomClicked()
-        fun onSettingsClicked()
-        fun onSessionConfirmRecoveryKeyClicked()
-        fun onRoomSettingsClicked(roomId: RoomId)
-        fun onReportBugClicked()
-        fun onRoomDirectorySearchClicked()
+        fun onRoomClick(roomId: RoomId)
+        fun onCreateRoomClick()
+        fun onSettingsClick()
+        fun onSessionConfirmRecoveryKeyClick()
+        fun onRoomSettingsClick(roomId: RoomId)
+        fun onReportBugClick()
+        fun onRoomDirectorySearchClick()
     }
 }

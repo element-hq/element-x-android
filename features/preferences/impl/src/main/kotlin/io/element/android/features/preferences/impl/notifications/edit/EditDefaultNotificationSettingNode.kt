@@ -58,7 +58,7 @@ class EditDefaultNotificationSettingNode @AssistedInject constructor(
         EditDefaultNotificationSettingView(
             state = state,
             openRoomNotificationSettings = { openRoomNotificationSettings(it) },
-            onBackPressed = ::navigateUp,
+            onBackClick = ::navigateUp,
             modifier = modifier,
         )
     }

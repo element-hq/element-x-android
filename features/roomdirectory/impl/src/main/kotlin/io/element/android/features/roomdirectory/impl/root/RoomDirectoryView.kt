@@ -67,19 +67,19 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun RoomDirectoryView(
     state: RoomDirectoryState,
-    onResultClicked: (RoomDescription) -> Unit,
-    onBackPressed: () -> Unit,
+    onResultClick: (RoomDescription) -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier,
         topBar = {
-            RoomDirectoryTopBar(onBackPressed = onBackPressed)
+            RoomDirectoryTopBar(onBackClick = onBackClick)
         },
         content = { padding ->
             RoomDirectoryContent(
                 state = state,
-                onResultClicked = onResultClicked,
+                onResultClick = onResultClick,
                 modifier = Modifier
                     .padding(padding)
                     .consumeWindowInsets(padding)
@@ -91,13 +91,13 @@ fun RoomDirectoryView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RoomDirectoryTopBar(
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     TopAppBar(
         modifier = modifier,
         navigationIcon = {
-            BackButton(onClick = onBackPressed)
+            BackButton(onClick = onBackClick)
         },
         title = {
             Text(
@@ -111,7 +111,7 @@ private fun RoomDirectoryTopBar(
 @Composable
 private fun RoomDirectoryContent(
     state: RoomDirectoryState,
-    onResultClicked: (RoomDescription) -> Unit,
+    onResultClick: (RoomDescription) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -125,7 +125,7 @@ private fun RoomDirectoryContent(
             roomDescriptions = state.roomDescriptions,
             displayLoadMoreIndicator = state.displayLoadMoreIndicator,
             displayEmptyState = state.displayEmptyState,
-            onResultClicked = onResultClicked,
+            onResultClick = onResultClick,
             onReachedLoadMore = { state.eventSink(RoomDirectoryEvents.LoadMore) },
         )
     }
@@ -136,7 +136,7 @@ private fun RoomDirectoryRoomList(
     roomDescriptions: ImmutableList<RoomDescription>,
     displayLoadMoreIndicator: Boolean,
     displayEmptyState: Boolean,
-    onResultClicked: (RoomDescription) -> Unit,
+    onResultClick: (RoomDescription) -> Unit,
     onReachedLoadMore: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -145,7 +145,7 @@ private fun RoomDirectoryRoomList(
             RoomDirectoryRoomRow(
                 roomDescription = roomDescription,
                 onClick = {
-                    onResultClicked(roomDescription)
+                    onResultClick(roomDescription)
                 },
             )
         }
@@ -287,7 +287,7 @@ private fun RoomDirectoryRoomRow(
 internal fun RoomDirectoryViewPreview(@PreviewParameter(RoomDirectoryStateProvider::class) state: RoomDirectoryState) = ElementPreview {
     RoomDirectoryView(
         state = state,
-        onResultClicked = {},
-        onBackPressed = {},
+        onResultClick = {},
+        onBackClick = {},
     )
 }

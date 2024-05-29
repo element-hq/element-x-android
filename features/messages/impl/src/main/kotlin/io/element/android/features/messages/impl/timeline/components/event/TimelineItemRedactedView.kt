@@ -29,14 +29,14 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun TimelineItemRedactedView(
     @Suppress("UNUSED_PARAMETER") content: TimelineItemRedactedContent,
-    onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit,
+    onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier
 ) {
     TimelineItemInformativeView(
         text = stringResource(id = CommonStrings.common_message_removed),
         iconDescription = stringResource(id = CommonStrings.common_message_removed),
         iconResourceId = CompoundDrawables.ic_compound_delete,
-        onContentLayoutChanged = onContentLayoutChanged,
+        onContentLayoutChange = onContentLayoutChange,
         modifier = modifier
     )
 }
@@ -46,6 +46,6 @@ fun TimelineItemRedactedView(
 internal fun TimelineItemRedactedViewPreview() = ElementPreview {
     TimelineItemRedactedView(
         TimelineItemRedactedContent,
-        onContentLayoutChanged = {},
+        onContentLayoutChange = {},
     )
 }

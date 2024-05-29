@@ -67,7 +67,7 @@ import io.element.android.wysiwyg.compose.EditorStyledText
 @Composable
 fun TimelineItemImageView(
     content: TimelineItemImageContent,
-    onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit,
+    onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val description = stringResource(CommonStrings.common_image)
@@ -115,7 +115,7 @@ fun TimelineItemImageView(
                     text = caption,
                     style = ElementRichTextEditorStyle.textStyle(),
                     releaseOnDetach = false,
-                    onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChanged = onContentLayoutChanged),
+                    onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChange = onContentLayoutChange),
                 )
             }
         }

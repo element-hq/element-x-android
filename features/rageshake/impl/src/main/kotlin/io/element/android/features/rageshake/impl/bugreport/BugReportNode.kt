@@ -51,8 +51,8 @@ class BugReportNode @AssistedInject constructor(
         BugReportView(
             state = state,
             modifier = modifier,
-            onBackPressed = { navigateUp() },
-            onDone = {
+            onBackClick = { navigateUp() },
+            onSuccess = {
                 activity?.toast(CommonStrings.common_report_submitted)
                 onDone()
             },
