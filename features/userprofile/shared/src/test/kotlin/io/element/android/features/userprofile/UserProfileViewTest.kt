@@ -226,7 +226,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setUserP
         UserProfileView(
             state = state,
             onShareUser = onShareUser,
-            onDmStarted = onDmStarted,
+            onOpenDm = onDmStarted,
             onStartCall = onStartCall,
             goBack = goBack,
             openAvatarPreview = openAvatarPreview,

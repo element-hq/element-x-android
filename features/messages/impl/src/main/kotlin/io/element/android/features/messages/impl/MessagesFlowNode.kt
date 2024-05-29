@@ -139,31 +139,31 @@ class MessagesFlowNode @AssistedInject constructor(
         return when (navTarget) {
             is NavTarget.Messages -> {
                 val callback = object : MessagesNode.Callback {
-                    override fun onRoomDetailsClicked() {
-                        callback?.onRoomDetailsClicked()
+                    override fun onRoomDetailsClick() {
+                        callback?.onRoomDetailsClick()
                     }
 
-                    override fun onEventClicked(event: TimelineItem.Event): Boolean {
-                        return processEventClicked(event)
+                    override fun onEventClick(event: TimelineItem.Event): Boolean {
+                        return processEventClick(event)
                     }
 
                     override fun onPreviewAttachments(attachments: ImmutableList<Attachment>) {
                         backstack.push(NavTarget.AttachmentPreview(attachments.first()))
                     }
 
-                    override fun onUserDataClicked(userId: UserId) {
-                        callback?.onUserDataClicked(userId)
+                    override fun onUserDataClick(userId: UserId) {
+                        callback?.onUserDataClick(userId)
                     }
 
-                    override fun onPermalinkClicked(data: PermalinkData) {
-                        callback?.onPermalinkClicked(data)
+                    override fun onPermalinkClick(data: PermalinkData) {
+                        callback?.onPermalinkClick(data)
                     }
 
-                    override fun onShowEventDebugInfoClicked(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
+                    override fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
                         backstack.push(NavTarget.EventDebugInfo(eventId, debugInfo))
                     }
 
-                    override fun onForwardEventClicked(eventId: EventId) {
+                    override fun onForwardEventClick(eventId: EventId) {
                         backstack.push(NavTarget.ForwardEvent(eventId))
                     }
 
@@ -171,19 +171,19 @@ class MessagesFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.ReportMessage(eventId, senderId))
                     }
 
-                    override fun onSendLocationClicked() {
+                    override fun onSendLocationClick() {
                         backstack.push(NavTarget.SendLocation)
                     }
 
-                    override fun onCreatePollClicked() {
+                    override fun onCreatePollClick() {
                         backstack.push(NavTarget.CreatePoll)
                     }
 
-                    override fun onEditPollClicked(eventId: EventId) {
+                    override fun onEditPollClick(eventId: EventId) {
                         backstack.push(NavTarget.EditPoll(eventId))
                     }
 
-                    override fun onJoinCallClicked(roomId: RoomId) {
+                    override fun onJoinCallClick(roomId: RoomId) {
                         val inputs = CallType.RoomCall(
                             sessionId = matrixClient.sessionId,
                             roomId = roomId,
@@ -250,7 +250,7 @@ class MessagesFlowNode @AssistedInject constructor(
         }
     }
 
-    private fun processEventClicked(event: TimelineItem.Event): Boolean {
+    private fun processEventClick(event: TimelineItem.Event): Boolean {
         return when (event.content) {
             is TimelineItemImageContent -> {
                 val navTarget = NavTarget.MediaViewer(

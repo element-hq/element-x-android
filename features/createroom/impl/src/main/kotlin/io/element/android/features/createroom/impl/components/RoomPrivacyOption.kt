@@ -41,7 +41,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 @Composable
 fun RoomPrivacyOption(
     roomPrivacyItem: RoomPrivacyItem,
-    onOptionSelected: (RoomPrivacyItem) -> Unit,
+    onOptionClick: (RoomPrivacyItem) -> Unit,
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
 ) {
@@ -50,7 +50,7 @@ fun RoomPrivacyOption(
             .fillMaxWidth()
             .selectable(
                 selected = isSelected,
-                onClick = { onOptionSelected(roomPrivacyItem) },
+                onClick = { onOptionClick(roomPrivacyItem) },
                 role = Role.RadioButton,
             )
             .padding(8.dp),
@@ -98,12 +98,12 @@ internal fun RoomPrivacyOptionPreview() = ElementPreview {
     Column {
         RoomPrivacyOption(
             roomPrivacyItem = aRoomPrivacyItem,
-            onOptionSelected = {},
+            onOptionClick = {},
             isSelected = true,
         )
         RoomPrivacyOption(
             roomPrivacyItem = aRoomPrivacyItem,
-            onOptionSelected = {},
+            onOptionClick = {},
             isSelected = false,
         )
     }

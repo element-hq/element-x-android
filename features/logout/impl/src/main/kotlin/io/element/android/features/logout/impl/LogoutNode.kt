@@ -38,8 +38,8 @@ class LogoutNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: LogoutPresenter,
 ) : Node(buildContext, plugins = plugins) {
-    private fun onChangeRecoveryKeyClicked() {
-        plugins<LogoutEntryPoint.Callback>().forEach { it.onChangeRecoveryKeyClicked() }
+    private fun onChangeRecoveryKeyClick() {
+        plugins<LogoutEntryPoint.Callback>().forEach { it.onChangeRecoveryKeyClick() }
     }
 
     private fun onSuccessLogout(activity: Activity, url: String?) {
@@ -55,9 +55,9 @@ class LogoutNode @AssistedInject constructor(
         val activity = LocalContext.current as Activity
         LogoutView(
             state = state,
-            onChangeRecoveryKeyClicked = ::onChangeRecoveryKeyClicked,
+            onChangeRecoveryKeyClick = ::onChangeRecoveryKeyClick,
             onSuccessLogout = { onSuccessLogout(activity, it) },
-            onBackClicked = ::navigateUp,
+            onBackClick = ::navigateUp,
             modifier = modifier,
         )
     }

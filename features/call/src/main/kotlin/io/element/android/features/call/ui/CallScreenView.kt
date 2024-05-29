@@ -81,12 +81,12 @@ internal fun CallScreenView(
                 .fillMaxSize(),
             url = state.urlState,
             userAgent = state.userAgent,
-            onPermissionsRequested = { request ->
+            onPermissionsRequest = { request ->
                 val androidPermissions = mapWebkitPermissions(request.resources)
                 val callback: RequestPermissionCallback = { request.grant(it) }
                 requestPermissions(androidPermissions.toTypedArray(), callback)
             },
-            onWebViewCreated = { webView ->
+            onWebViewCreate = { webView ->
                 val interceptor = WebViewWidgetMessageInterceptor(webView)
                 state.eventSink(CallScreenEvents.SetupMessageChannels(interceptor))
             }
@@ -98,8 +98,8 @@ internal fun CallScreenView(
 private fun CallWebView(
     url: AsyncData<String>,
     userAgent: String,
-    onPermissionsRequested: (PermissionRequest) -> Unit,
-    onWebViewCreated: (WebView) -> Unit,
+    onPermissionsRequest: (PermissionRequest) -> Unit,
+    onWebViewCreate: (WebView) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (LocalInspectionMode.current) {
@@ -111,8 +111,8 @@ private fun CallWebView(
             modifier = modifier,
             factory = { context ->
                 WebView(context).apply {
-                    onWebViewCreated(this)
-                    setup(userAgent, onPermissionsRequested)
+                    onWebViewCreate(this)
+                    setup(userAgent, onPermissionsRequest)
                 }
             },
             update = { webView ->

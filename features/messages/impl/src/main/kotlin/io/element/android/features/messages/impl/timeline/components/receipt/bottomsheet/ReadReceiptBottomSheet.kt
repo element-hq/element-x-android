@@ -47,7 +47,7 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun ReadReceiptBottomSheet(
     state: ReadReceiptBottomSheetState,
-    onUserDataClicked: (UserId) -> Unit,
+    onUserDataClick: (UserId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val isVisible = state.selectedEvent != null
@@ -69,11 +69,11 @@ internal fun ReadReceiptBottomSheet(
         ) {
             ReadReceiptBottomSheetContent(
                 state = state,
-                onUserDataClicked = {
+                onUserDataClick = {
                     coroutineScope.launch {
                         sheetState.hide()
                         state.eventSink(ReadReceiptBottomSheetEvents.Dismiss)
-                        onUserDataClicked.invoke(it)
+                        onUserDataClick.invoke(it)
                     }
                 },
             )
@@ -86,7 +86,7 @@ internal fun ReadReceiptBottomSheet(
 @Composable
 private fun ReadReceiptBottomSheetContent(
     state: ReadReceiptBottomSheetState,
-    onUserDataClicked: (UserId) -> Unit,
+    onUserDataClick: (UserId) -> Unit,
 ) {
     LazyColumn {
         item {
@@ -101,7 +101,7 @@ private fun ReadReceiptBottomSheetContent(
         ) {
             val userId = UserId(it.avatarData.id)
             MatrixUserRow(
-                modifier = Modifier.clickable { onUserDataClicked(userId) },
+                modifier = Modifier.clickable { onUserDataClick(userId) },
                 matrixUser = MatrixUser(
                     userId = userId,
                     displayName = it.avatarData.name,
@@ -127,7 +127,7 @@ internal fun ReadReceiptBottomSheetPreview(@PreviewParameter(ReadReceiptBottomSh
     Column {
         ReadReceiptBottomSheetContent(
             state = state,
-            onUserDataClicked = {},
+            onUserDataClick = {},
         )
     }
 }

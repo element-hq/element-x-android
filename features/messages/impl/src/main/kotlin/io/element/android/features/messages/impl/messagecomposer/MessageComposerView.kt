@@ -121,11 +121,11 @@ internal fun MessageComposerView(
         onVoicePlayerEvent = onVoicePlayerEvent,
         onSendVoiceMessage = onSendVoiceMessage,
         onDeleteVoiceMessage = onDeleteVoiceMessage,
-        onSuggestionReceived = ::onSuggestionReceived,
+        onReceiveSuggestion = ::onSuggestionReceived,
         onError = ::onError,
         onTyping = ::onTyping,
         currentUserId = state.currentUserId,
-        onRichContentSelected = ::sendUri,
+        onSelectRichContent = ::sendUri,
     )
 }
 

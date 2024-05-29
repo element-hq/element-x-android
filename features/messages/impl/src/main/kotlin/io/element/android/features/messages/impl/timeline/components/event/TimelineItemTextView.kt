@@ -39,9 +39,9 @@ import io.element.android.wysiwyg.compose.EditorStyledText
 @Composable
 fun TimelineItemTextView(
     content: TimelineItemTextBasedContent,
-    onLinkClicked: (String) -> Unit,
+    onLinkClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit = {},
+    onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit = {},
 ) {
     CompositionLocalProvider(
         LocalContentColor provides ElementTheme.colors.textPrimary,
@@ -53,9 +53,9 @@ fun TimelineItemTextView(
         Box(modifier.semantics { contentDescription = body.toString() }) {
             EditorStyledText(
                 text = body,
-                onLinkClickedListener = onLinkClicked,
+                onLinkClickedListener = onLinkClick,
                 style = ElementRichTextEditorStyle.textStyle(),
-                onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChanged = onContentLayoutChanged),
+                onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChange = onContentLayoutChange),
                 releaseOnDetach = false,
             )
         }
@@ -69,6 +69,6 @@ internal fun TimelineItemTextViewPreview(
 ) = ElementPreview {
     TimelineItemTextView(
         content = content,
-        onLinkClicked = {},
+        onLinkClick = {},
     )
 }

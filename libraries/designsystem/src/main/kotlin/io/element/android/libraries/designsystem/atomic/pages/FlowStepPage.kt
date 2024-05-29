@@ -41,7 +41,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 
 /**
  * A Page with:
- * - a top bar as TobAppBar with optional back button (displayed if [onBackClicked] is not null)
+ * - a top bar as TobAppBar with optional back button (displayed if [onBackClick] is not null)
  * - a header, as IconTitleSubtitleMolecule
  * - a content.
  * - a footer, as ButtonColumnMolecule
@@ -52,21 +52,21 @@ fun FlowStepPage(
     iconVector: ImageVector?,
     title: String,
     modifier: Modifier = Modifier,
-    onBackClicked: (() -> Unit)? = null,
+    onBackClick: (() -> Unit)? = null,
     subTitle: String? = null,
     content: @Composable () -> Unit = {},
     buttons: @Composable ColumnScope.() -> Unit = {},
 ) {
-    BackHandler(enabled = onBackClicked != null) {
-        onBackClicked?.invoke()
+    BackHandler(enabled = onBackClick != null) {
+        onBackClick?.invoke()
     }
     HeaderFooterPage(
         modifier = modifier,
         topBar = {
             TopAppBar(
                 navigationIcon = {
-                    if (onBackClicked != null) {
-                        BackButton(onClick = onBackClicked)
+                    if (onBackClick != null) {
+                        BackButton(onClick = onBackClick)
                     }
                 },
                 title = {},
@@ -94,7 +94,7 @@ fun FlowStepPage(
 @Composable
 internal fun FlowStepPagePreview() = ElementPreview {
     FlowStepPage(
-        onBackClicked = {},
+        onBackClick = {},
         title = "Title",
         subTitle = "Subtitle",
         iconVector = CompoundIcons.Computer(),

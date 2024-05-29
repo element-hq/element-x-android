@@ -66,9 +66,9 @@ private fun RetryDialogContent(
         title = title,
         content = content,
         submitText = retryText,
-        onSubmitClicked = onRetry,
+        onSubmitClick = onRetry,
         cancelText = dismissText,
-        onCancelClicked = onDismiss,
+        onCancelClick = onDismiss,
     )
 }
 

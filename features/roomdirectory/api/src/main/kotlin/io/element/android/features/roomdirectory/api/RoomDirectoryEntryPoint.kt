@@ -30,6 +30,6 @@ interface RoomDirectoryEntryPoint : FeatureEntryPoint {
     }
 
     interface Callback : Plugin {
-        fun onResultClicked(roomDescription: RoomDescription)
+        fun onResultClick(roomDescription: RoomDescription)
     }
 }

@@ -46,7 +46,7 @@ class AdvancedSettingsViewTest {
                 state = aAdvancedSettingsState(
                     eventSink = eventsRecorder
                 ),
-                onBackPressed = it
+                onBackClick = it
             )
             rule.pressBack()
         }
@@ -104,12 +104,12 @@ class AdvancedSettingsViewTest {
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setAdvancedSettingsView(
     state: AdvancedSettingsState,
-    onBackPressed: () -> Unit = EnsureNeverCalled(),
+    onBackClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         AdvancedSettingsView(
             state = state,
-            onBackPressed = onBackPressed,
+            onBackClick = onBackClick,
         )
     }
 }

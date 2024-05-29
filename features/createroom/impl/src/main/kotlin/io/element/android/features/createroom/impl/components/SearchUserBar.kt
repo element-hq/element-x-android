@@ -53,11 +53,11 @@ fun SearchUserBar(
     showLoader: Boolean,
     selectedUsers: ImmutableList<MatrixUser>,
     active: Boolean,
-    isMultiSelectionEnabled: Boolean,
-    onActiveChanged: (Boolean) -> Unit,
-    onTextChanged: (String) -> Unit,
-    onUserSelected: (MatrixUser) -> Unit,
-    onUserDeselected: (MatrixUser) -> Unit,
+    isMultiSelectionEnable: Boolean,
+    onActiveChange: (Boolean) -> Unit,
+    onTextChange: (String) -> Unit,
+    onUserSelect: (MatrixUser) -> Unit,
+    onUserDeselect: (MatrixUser) -> Unit,
     modifier: Modifier = Modifier,
     showBackButton: Boolean = true,
     placeHolderTitle: String = stringResource(CommonStrings.common_search_for_someone),
@@ -66,14 +66,14 @@ fun SearchUserBar(
 
     SearchBar(
         query = query,
-        onQueryChange = onTextChanged,
+        onQueryChange = onTextChange,
         active = active,
-        onActiveChange = onActiveChanged,
+        onActiveChange = onActiveChange,
         modifier = modifier,
         placeHolderTitle = placeHolderTitle,
         showBackButton = showBackButton,
         contentPrefix = {
-            if (isMultiSelectionEnabled && active && selectedUsers.isNotEmpty()) {
+            if (isMultiSelectionEnable && active && selectedUsers.isNotEmpty()) {
                 // We want the selected users to behave a bit like a top bar - when the list below is scrolled, the colour
                 // should change to indicate elevation.
 
@@ -96,7 +96,7 @@ fun SearchUserBar(
                     contentPadding = PaddingValues(16.dp),
                     selectedUsers = selectedUsers,
                     autoScroll = true,
-                    onUserRemoved = onUserDeselected,
+                    onUserRemove = onUserDeselect,
                     modifier = Modifier.background(appBarContainerColor)
                 )
             }
@@ -109,7 +109,7 @@ fun SearchUserBar(
         resultState = state,
         resultHandler = { users ->
             LazyColumn(state = columnState) {
-                if (isMultiSelectionEnabled) {
+                if (isMultiSelectionEnable) {
                     itemsIndexed(users) { index, searchResult ->
                         SearchMultipleUsersResultItem(
                             modifier = Modifier.fillMaxWidth(),
@@ -117,9 +117,9 @@ fun SearchUserBar(
                             isUserSelected = selectedUsers.contains(searchResult.matrixUser),
                             onCheckedChange = { checked ->
                                 if (checked) {
-                                    onUserSelected(searchResult.matrixUser)
+                                    onUserSelect(searchResult.matrixUser)
                                 } else {
-                                    onUserDeselected(searchResult.matrixUser)
+                                    onUserDeselect(searchResult.matrixUser)
                                 }
                             }
                         )
@@ -132,7 +132,7 @@ fun SearchUserBar(
                         SearchSingleUserResultItem(
                             modifier = Modifier.fillMaxWidth(),
                             searchResult = searchResult,
-                            onClick = { onUserSelected(searchResult.matrixUser) }
+                            onClick = { onUserSelect(searchResult.matrixUser) }
                         )
                         if (index < users.lastIndex) {
                             HorizontalDivider()

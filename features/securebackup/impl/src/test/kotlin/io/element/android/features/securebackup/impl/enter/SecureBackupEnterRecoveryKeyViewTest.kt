@@ -39,22 +39,22 @@ class SecureBackupEnterRecoveryKeyViewTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun `back key pressed - calls onBackClicked`() {
+    fun `back key pressed - calls onBackClick`() {
         ensureCalledOnce { callback ->
             rule.setSecureBackupEnterRecoveryKeyView(
                 aSecureBackupEnterRecoveryKeyState(),
-                onBackClicked = callback,
+                onBackClick = callback,
             )
             rule.pressBackKey()
         }
     }
 
     @Test
-    fun `back button clicked - calls onBackClicked`() {
+    fun `back button clicked - calls onBackClick`() {
         ensureCalledOnce { callback ->
             rule.setSecureBackupEnterRecoveryKeyView(
                 aSecureBackupEnterRecoveryKeyState(),
-                onBackClicked = callback,
+                onBackClick = callback,
             )
             rule.pressBack()
         }
@@ -95,14 +95,14 @@ class SecureBackupEnterRecoveryKeyViewTest {
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setSecureBackupEnterRecoveryKeyView(
         state: SecureBackupEnterRecoveryKeyState,
         onDone: () -> Unit = EnsureNeverCalled(),
-        onBackClicked: () -> Unit = EnsureNeverCalled(),
+        onBackClick: () -> Unit = EnsureNeverCalled(),
         onCreateNewRecoveryKey: () -> Unit = EnsureNeverCalled(),
     ) {
         rule.setContent {
             SecureBackupEnterRecoveryKeyView(
                 state = state,
-                onDone = onDone,
-                onBackClicked = onBackClicked,
+                onSuccess = onDone,
+                onBackClick = onBackClick,
                 onCreateNewRecoveryKey = onCreateNewRecoveryKey
             )
         }

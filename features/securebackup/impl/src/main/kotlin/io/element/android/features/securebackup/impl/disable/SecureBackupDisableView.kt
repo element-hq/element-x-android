@@ -43,13 +43,13 @@ import io.element.android.libraries.designsystem.theme.components.Text
 @Composable
 fun SecureBackupDisableView(
     state: SecureBackupDisableState,
-    onDone: () -> Unit,
-    onBackClicked: () -> Unit,
+    onSuccess: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     FlowStepPage(
         modifier = modifier,
-        onBackClicked = onBackClicked,
+        onBackClick = onBackClick,
         title = stringResource(id = R.string.screen_key_backup_disable_title),
         subTitle = stringResource(id = R.string.screen_key_backup_disable_description),
         iconVector = CompoundIcons.KeyOffSolid(),
@@ -68,7 +68,7 @@ fun SecureBackupDisableView(
         progressDialog = {},
         errorMessage = { it.message ?: it.toString() },
         onErrorDismiss = { state.eventSink.invoke(SecureBackupDisableEvents.DismissDialogs) },
-        onSuccess = { onDone() },
+        onSuccess = { onSuccess() },
     )
 }
 
@@ -79,7 +79,7 @@ private fun SecureBackupDisableConfirmationDialog(onConfirm: () -> Unit, onDismi
         content = stringResource(id = R.string.screen_key_backup_disable_confirmation_description),
         submitText = stringResource(id = R.string.screen_key_backup_disable_confirmation_action_turn_off),
         destructiveSubmit = true,
-        onSubmitClicked = onConfirm,
+        onSubmitClick = onConfirm,
         onDismiss = onDismiss,
     )
 }
@@ -135,7 +135,7 @@ internal fun SecureBackupDisableViewPreview(
 ) = ElementPreview {
     SecureBackupDisableView(
         state = state,
-        onDone = {},
-        onBackClicked = {},
+        onSuccess = {},
+        onBackClick = {},
     )
 }

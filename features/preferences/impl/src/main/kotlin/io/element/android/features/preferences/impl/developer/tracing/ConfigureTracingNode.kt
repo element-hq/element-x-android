@@ -37,7 +37,7 @@ class ConfigureTracingNode @AssistedInject constructor(
         val state = presenter.present()
         ConfigureTracingView(
             state = state,
-            onBackPressed = ::navigateUp,
+            onBackClick = ::navigateUp,
             modifier = modifier
         )
     }

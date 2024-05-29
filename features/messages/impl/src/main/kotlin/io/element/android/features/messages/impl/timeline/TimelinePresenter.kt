@@ -134,7 +134,7 @@ class TimelinePresenter @AssistedInject constructor(
                     )
                 }
                 is TimelineEvents.PollEditClicked -> {
-                    navigator.onEditPollClicked(event.pollStartId)
+                    navigator.onEditPollClick(event.pollStartId)
                 }
                 is TimelineEvents.FocusOnEvent -> localScope.launch {
                     focusedEventId.value = event.eventId

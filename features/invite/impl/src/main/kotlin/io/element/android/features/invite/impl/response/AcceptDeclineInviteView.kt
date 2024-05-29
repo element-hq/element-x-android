@@ -36,21 +36,21 @@ import kotlin.jvm.optionals.getOrNull
 @Composable
 fun AcceptDeclineInviteView(
     state: AcceptDeclineInviteState,
-    onInviteAccepted: (RoomId) -> Unit,
-    onInviteDeclined: (RoomId) -> Unit,
+    onAcceptInvite: (RoomId) -> Unit,
+    onDeclineInvite: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
         AsyncActionView(
             async = state.acceptAction,
-            onSuccess = onInviteAccepted,
+            onSuccess = onAcceptInvite,
             onErrorDismiss = {
                 state.eventSink(InternalAcceptDeclineInviteEvents.DismissAcceptError)
             },
         )
         AsyncActionView(
             async = state.declineAction,
-            onSuccess = onInviteDeclined,
+            onSuccess = onDeclineInvite,
             onErrorDismiss = {
                 state.eventSink(InternalAcceptDeclineInviteEvents.DismissDeclineError)
             },
@@ -59,10 +59,10 @@ fun AcceptDeclineInviteView(
                 if (invite != null) {
                     DeclineConfirmationDialog(
                         invite = invite,
-                        onConfirmClicked = {
+                        onConfirmClick = {
                             state.eventSink(InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite)
                         },
-                        onDismissClicked = {
+                        onDismissClick = {
                             state.eventSink(InternalAcceptDeclineInviteEvents.CancelDeclineInvite)
                         }
                     )
@@ -75,8 +75,8 @@ fun AcceptDeclineInviteView(
 @Composable
 private fun DeclineConfirmationDialog(
     invite: InviteData,
-    onConfirmClicked: () -> Unit,
-    onDismissClicked: () -> Unit,
+    onConfirmClick: () -> Unit,
+    onDismissClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val contentResource = if (invite.isDirect) {
@@ -97,8 +97,8 @@ private fun DeclineConfirmationDialog(
         title = stringResource(titleResource),
         submitText = stringResource(CommonStrings.action_decline),
         cancelText = stringResource(CommonStrings.action_cancel),
-        onSubmitClicked = onConfirmClicked,
-        onDismiss = onDismissClicked,
+        onSubmitClick = onConfirmClick,
+        onDismiss = onDismissClick,
     )
 }
 
@@ -108,7 +108,7 @@ internal fun AcceptDeclineInviteViewPreview(@PreviewParameter(AcceptDeclineInvit
     ElementPreview {
         AcceptDeclineInviteView(
             state = state,
-            onInviteAccepted = {},
-            onInviteDeclined = {},
+            onAcceptInvite = {},
+            onDeclineInvite = {},
         )
     }

@@ -34,11 +34,11 @@ class LockScreenSettingsNode @AssistedInject constructor(
     private val presenter: LockScreenSettingsPresenter,
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
-        fun onChangePinClicked()
+        fun onChangePinClick()
     }
 
-    private fun onChangePinClicked() {
-        plugins<Callback>().forEach { it.onChangePinClicked() }
+    private fun onChangePinClick() {
+        plugins<Callback>().forEach { it.onChangePinClick() }
     }
 
     @Composable
@@ -46,8 +46,8 @@ class LockScreenSettingsNode @AssistedInject constructor(
         val state = presenter.present()
         LockScreenSettingsView(
             state = state,
-            onBackPressed = this::navigateUp,
-            onChangePinClicked = this::onChangePinClicked,
+            onBackClick = this::navigateUp,
+            onChangePinClick = this::onChangePinClick,
             modifier = modifier,
         )
     }

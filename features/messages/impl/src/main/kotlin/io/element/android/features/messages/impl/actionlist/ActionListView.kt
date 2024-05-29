@@ -94,38 +94,38 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun ActionListView(
     state: ActionListState,
-    onActionSelected: (action: TimelineItemAction, TimelineItem.Event) -> Unit,
-    onEmojiReactionClicked: (String, TimelineItem.Event) -> Unit,
-    onCustomReactionClicked: (TimelineItem.Event) -> Unit,
+    onSelectAction: (action: TimelineItemAction, TimelineItem.Event) -> Unit,
+    onEmojiReactionClick: (String, TimelineItem.Event) -> Unit,
+    onCustomReactionClick: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val sheetState = rememberModalBottomSheetState()
     val coroutineScope = rememberCoroutineScope()
     val targetItem = (state.target as? ActionListState.Target.Success)?.event
 
-    fun onItemActionClicked(
+    fun onItemActionClick(
         itemAction: TimelineItemAction
     ) {
         if (targetItem == null) return
         sheetState.hide(coroutineScope) {
             state.eventSink(ActionListEvents.Clear)
-            onActionSelected(itemAction, targetItem)
+            onSelectAction(itemAction, targetItem)
         }
     }
 
-    fun onEmojiReactionClicked(emoji: String) {
+    fun onEmojiReactionClick(emoji: String) {
         if (targetItem == null) return
         sheetState.hide(coroutineScope) {
             state.eventSink(ActionListEvents.Clear)
-            onEmojiReactionClicked(emoji, targetItem)
+            onEmojiReactionClick(emoji, targetItem)
         }
     }
 
-    fun onCustomReactionClicked() {
+    fun onCustomReactionClick() {
         if (targetItem == null) return
         sheetState.hide(coroutineScope) {
             state.eventSink(ActionListEvents.Clear)
-            onCustomReactionClicked(targetItem)
+            onCustomReactionClick(targetItem)
         }
     }
 
@@ -141,9 +141,9 @@ fun ActionListView(
         ) {
             SheetContent(
                 state = state,
-                onActionClicked = ::onItemActionClicked,
-                onEmojiReactionClicked = ::onEmojiReactionClicked,
-                onCustomReactionClicked = ::onCustomReactionClicked,
+                onActionClick = ::onItemActionClick,
+                onEmojiReactionClick = ::onEmojiReactionClick,
+                onCustomReactionClick = ::onCustomReactionClick,
                 modifier = Modifier
                     .navigationBarsPadding()
                     .imePadding()
@@ -155,9 +155,9 @@ fun ActionListView(
 @Composable
 private fun SheetContent(
     state: ActionListState,
-    onActionClicked: (TimelineItemAction) -> Unit,
-    onEmojiReactionClicked: (String) -> Unit,
-    onCustomReactionClicked: () -> Unit,
+    onActionClick: (TimelineItemAction) -> Unit,
+    onEmojiReactionClick: (String) -> Unit,
+    onCustomReactionClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when (val target = state.target) {
@@ -188,8 +188,8 @@ private fun SheetContent(
                     item {
                         EmojiReactionsRow(
                             highlightedEmojis = target.event.reactionsState.highlightedKeys,
-                            onEmojiReactionClicked = onEmojiReactionClicked,
-                            onCustomReactionClicked = onCustomReactionClicked,
+                            onEmojiReactionClick = onEmojiReactionClick,
+                            onCustomReactionClick = onCustomReactionClick,
                             modifier = Modifier.fillMaxWidth(),
                         )
                         HorizontalDivider()
@@ -200,7 +200,7 @@ private fun SheetContent(
                 ) { action ->
                     ListItem(
                         modifier = Modifier.clickable {
-                            onActionClicked(action)
+                            onActionClick(action)
                         },
                         headlineContent = {
                             Text(text = stringResource(id = action.titleRes))
@@ -292,8 +292,8 @@ private val emojiRippleRadius = 24.dp
 @Composable
 private fun EmojiReactionsRow(
     highlightedEmojis: ImmutableList<String>,
-    onEmojiReactionClicked: (String) -> Unit,
-    onCustomReactionClicked: () -> Unit,
+    onEmojiReactionClick: (String) -> Unit,
+    onCustomReactionClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -310,7 +310,7 @@ private fun EmojiReactionsRow(
         )
         for (emoji in defaultEmojis) {
             val isHighlighted = highlightedEmojis.contains(emoji)
-            EmojiButton(emoji, isHighlighted, onEmojiReactionClicked)
+            EmojiButton(emoji, isHighlighted, onEmojiReactionClick)
         }
         Box(
             modifier = Modifier
@@ -325,7 +325,7 @@ private fun EmojiReactionsRow(
                     .size(24.dp)
                     .clickable(
                         enabled = true,
-                        onClick = onCustomReactionClicked,
+                        onClick = onCustomReactionClick,
                         indication = rememberRipple(bounded = false, radius = emojiRippleRadius),
                         interactionSource = remember { MutableInteractionSource() }
                     )
@@ -338,7 +338,7 @@ private fun EmojiReactionsRow(
 private fun EmojiButton(
     emoji: String,
     isHighlighted: Boolean,
-    onClicked: (String) -> Unit,
+    onClick: (String) -> Unit,
 ) {
     val backgroundColor = if (isHighlighted) {
         ElementTheme.colors.bgActionPrimaryRest
@@ -365,7 +365,7 @@ private fun EmojiButton(
             modifier = Modifier
                 .clickable(
                     enabled = true,
-                    onClick = { onClicked(emoji) },
+                    onClick = { onClick(emoji) },
                     indication = rememberRipple(bounded = false, radius = emojiRippleRadius),
                     interactionSource = remember { MutableInteractionSource() }
                 )
@@ -380,8 +380,8 @@ internal fun SheetContentPreview(
 ) = ElementPreview {
     SheetContent(
         state = state,
-        onActionClicked = {},
-        onEmojiReactionClicked = {},
-        onCustomReactionClicked = {},
+        onActionClick = {},
+        onEmojiReactionClick = {},
+        onCustomReactionClick = {},
     )
 }

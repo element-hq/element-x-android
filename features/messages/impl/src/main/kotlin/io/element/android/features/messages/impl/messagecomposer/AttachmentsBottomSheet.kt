@@ -48,8 +48,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 @Composable
 internal fun AttachmentsBottomSheet(
     state: MessageComposerState,
-    onSendLocationClicked: () -> Unit,
-    onCreatePollClicked: () -> Unit,
+    onSendLocationClick: () -> Unit,
+    onCreatePollClick: () -> Unit,
     enableTextFormatting: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -87,8 +87,8 @@ internal fun AttachmentsBottomSheet(
             AttachmentSourcePickerMenu(
                 state = state,
                 enableTextFormatting = enableTextFormatting,
-                onSendLocationClicked = onSendLocationClicked,
-                onCreatePollClicked = onCreatePollClicked,
+                onSendLocationClick = onSendLocationClick,
+                onCreatePollClick = onCreatePollClick,
             )
         }
     }
@@ -97,8 +97,8 @@ internal fun AttachmentsBottomSheet(
 @Composable
 private fun AttachmentSourcePickerMenu(
     state: MessageComposerState,
-    onSendLocationClicked: () -> Unit,
-    onCreatePollClicked: () -> Unit,
+    onSendLocationClick: () -> Unit,
+    onCreatePollClick: () -> Unit,
     enableTextFormatting: Boolean,
 ) {
     Column(
@@ -134,7 +134,7 @@ private fun AttachmentSourcePickerMenu(
             ListItem(
                 modifier = Modifier.clickable {
                     state.eventSink(MessageComposerEvents.PickAttachmentSource.Location)
-                    onSendLocationClicked()
+                    onSendLocationClick()
                 },
                 leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.LocationPin())),
                 headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_location)) },
@@ -145,7 +145,7 @@ private fun AttachmentSourcePickerMenu(
             ListItem(
                 modifier = Modifier.clickable {
                     state.eventSink(MessageComposerEvents.PickAttachmentSource.Poll)
-                    onCreatePollClicked()
+                    onCreatePollClick()
                 },
                 leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Polls())),
                 headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_poll)) },
@@ -170,8 +170,8 @@ internal fun AttachmentSourcePickerMenuPreview() = ElementPreview {
         state = aMessageComposerState(
             canShareLocation = true,
         ),
-        onSendLocationClicked = {},
-        onCreatePollClicked = {},
+        onSendLocationClick = {},
+        onCreatePollClick = {},
         enableTextFormatting = true,
     )
 }

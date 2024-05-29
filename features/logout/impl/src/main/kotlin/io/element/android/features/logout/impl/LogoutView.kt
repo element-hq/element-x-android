@@ -51,15 +51,15 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun LogoutView(
     state: LogoutState,
-    onChangeRecoveryKeyClicked: () -> Unit,
-    onBackClicked: () -> Unit,
+    onChangeRecoveryKeyClick: () -> Unit,
+    onBackClick: () -> Unit,
     onSuccessLogout: (logoutUrlResult: String?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val eventSink = state.eventSink
 
     FlowStepPage(
-        onBackClicked = onBackClicked,
+        onBackClick = onBackClick,
         title = title(state),
         subTitle = subtitle(state),
         iconVector = CompoundIcons.KeySolid(),
@@ -68,8 +68,8 @@ fun LogoutView(
         buttons = {
             Buttons(
                 state = state,
-                onChangeRecoveryKeyClicked = onChangeRecoveryKeyClicked,
-                onLogoutClicked = {
+                onChangeRecoveryKeyClick = onChangeRecoveryKeyClick,
+                onLogoutClick = {
                     eventSink(LogoutEvents.Logout(ignoreSdkError = false))
                 }
             )
@@ -78,10 +78,10 @@ fun LogoutView(
 
     LogoutActionDialog(
         state.logoutAction,
-        onConfirmClicked = {
+        onConfirmClick = {
             eventSink(LogoutEvents.Logout(ignoreSdkError = false))
         },
-        onForceLogoutClicked = {
+        onForceLogoutClick = {
             eventSink(LogoutEvents.Logout(ignoreSdkError = true))
         },
         onDismissDialog = {
@@ -124,15 +124,15 @@ private fun subtitle(state: LogoutState): String? {
 @Composable
 private fun ColumnScope.Buttons(
     state: LogoutState,
-    onLogoutClicked: () -> Unit,
-    onChangeRecoveryKeyClicked: () -> Unit,
+    onLogoutClick: () -> Unit,
+    onChangeRecoveryKeyClick: () -> Unit,
 ) {
     val logoutAction = state.logoutAction
     if (state.isLastDevice) {
         OutlinedButton(
             text = stringResource(id = CommonStrings.common_settings),
             modifier = Modifier.fillMaxWidth(),
-            onClick = onChangeRecoveryKeyClicked,
+            onClick = onChangeRecoveryKeyClick,
         )
     }
     val signOutSubmitRes = when {
@@ -147,7 +147,7 @@ private fun ColumnScope.Buttons(
         modifier = Modifier
             .fillMaxWidth()
             .testTag(TestTags.signOut),
-        onClick = onLogoutClicked,
+        onClick = onLogoutClick,
     )
 }
 
@@ -183,8 +183,8 @@ internal fun LogoutViewPreview(
 ) = ElementPreview {
     LogoutView(
         state,
-        onChangeRecoveryKeyClicked = {},
+        onChangeRecoveryKeyClick = {},
         onSuccessLogout = {},
-        onBackClicked = {},
+        onBackClick = {},
     )
 }

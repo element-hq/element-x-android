@@ -49,7 +49,7 @@ class BlockedUserViewTest {
                 aBlockedUsersState(
                     eventSink = eventsRecorder
                 ),
-                onBackClicked = callback,
+                onBackClick = callback,
             )
             rule.pressBack()
         }
@@ -98,12 +98,12 @@ class BlockedUserViewTest {
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setLogoutView(
     state: BlockedUsersState,
-    onBackClicked: () -> Unit = EnsureNeverCalled(),
+    onBackClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         BlockedUsersView(
             state = state,
-            onBackPressed = onBackClicked,
+            onBackClick = onBackClick,
         )
     }
 }

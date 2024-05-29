@@ -54,39 +54,39 @@ class RoomListNode @AssistedInject constructor(
         )
     }
 
-    private fun onRoomClicked(roomId: RoomId) {
-        plugins<RoomListEntryPoint.Callback>().forEach { it.onRoomClicked(roomId) }
+    private fun onRoomClick(roomId: RoomId) {
+        plugins<RoomListEntryPoint.Callback>().forEach { it.onRoomClick(roomId) }
     }
 
     private fun onOpenSettings() {
-        plugins<RoomListEntryPoint.Callback>().forEach { it.onSettingsClicked() }
+        plugins<RoomListEntryPoint.Callback>().forEach { it.onSettingsClick() }
     }
 
-    private fun onCreateRoomClicked() {
-        plugins<RoomListEntryPoint.Callback>().forEach { it.onCreateRoomClicked() }
+    private fun onCreateRoomClick() {
+        plugins<RoomListEntryPoint.Callback>().forEach { it.onCreateRoomClick() }
     }
 
-    private fun onSessionConfirmRecoveryKeyClicked() {
-        plugins<RoomListEntryPoint.Callback>().forEach { it.onSessionConfirmRecoveryKeyClicked() }
+    private fun onSessionConfirmRecoveryKeyClick() {
+        plugins<RoomListEntryPoint.Callback>().forEach { it.onSessionConfirmRecoveryKeyClick() }
     }
 
-    private fun onRoomSettingsClicked(roomId: RoomId) {
-        plugins<RoomListEntryPoint.Callback>().forEach { it.onRoomSettingsClicked(roomId) }
+    private fun onRoomSettingsClick(roomId: RoomId) {
+        plugins<RoomListEntryPoint.Callback>().forEach { it.onRoomSettingsClick(roomId) }
     }
 
-    private fun onMenuActionClicked(activity: Activity, roomListMenuAction: RoomListMenuAction) {
+    private fun onMenuActionClick(activity: Activity, roomListMenuAction: RoomListMenuAction) {
         when (roomListMenuAction) {
             RoomListMenuAction.InviteFriends -> {
                 inviteFriendsUseCase.execute(activity)
             }
             RoomListMenuAction.ReportBug -> {
-                plugins<RoomListEntryPoint.Callback>().forEach { it.onReportBugClicked() }
+                plugins<RoomListEntryPoint.Callback>().forEach { it.onReportBugClick() }
             }
         }
     }
 
-    private fun onRoomDirectorySearchClicked() {
-        plugins<RoomListEntryPoint.Callback>().forEach { it.onRoomDirectorySearchClicked() }
+    private fun onRoomDirectorySearchClick() {
+        plugins<RoomListEntryPoint.Callback>().forEach { it.onRoomDirectorySearchClick() }
     }
 
     @Composable
@@ -95,19 +95,19 @@ class RoomListNode @AssistedInject constructor(
         val activity = LocalContext.current as Activity
         RoomListView(
             state = state,
-            onRoomClicked = this::onRoomClicked,
-            onSettingsClicked = this::onOpenSettings,
-            onCreateRoomClicked = this::onCreateRoomClicked,
-            onConfirmRecoveryKeyClicked = this::onSessionConfirmRecoveryKeyClicked,
-            onRoomSettingsClicked = this::onRoomSettingsClicked,
-            onMenuActionClicked = { onMenuActionClicked(activity, it) },
-            onRoomDirectorySearchClicked = this::onRoomDirectorySearchClicked,
+            onRoomClick = this::onRoomClick,
+            onSettingsClick = this::onOpenSettings,
+            onCreateRoomClick = this::onCreateRoomClick,
+            onConfirmRecoveryKeyClick = this::onSessionConfirmRecoveryKeyClick,
+            onRoomSettingsClick = this::onRoomSettingsClick,
+            onMenuActionClick = { onMenuActionClick(activity, it) },
+            onRoomDirectorySearchClick = this::onRoomDirectorySearchClick,
             modifier = modifier,
         ) {
             acceptDeclineInviteView.Render(
                 state = state.acceptDeclineInviteState,
-                onInviteAccepted = this::onRoomClicked,
-                onInviteDeclined = { },
+                onAcceptInvite = this::onRoomClick,
+                onDeclineInvite = { },
                 modifier = Modifier
             )
         }
