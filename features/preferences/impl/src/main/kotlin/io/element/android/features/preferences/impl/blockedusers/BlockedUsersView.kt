@@ -51,7 +51,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun BlockedUsersView(
     state: BlockedUsersState,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
@@ -65,7 +65,7 @@ fun BlockedUsersView(
                         )
                     },
                     navigationIcon = {
-                        BackButton(onClick = onBackPressed)
+                        BackButton(onClick = onBackClick)
                     }
                 )
             }
@@ -110,7 +110,7 @@ fun BlockedUsersView(
                     title = stringResource(R.string.screen_blocked_users_unblock_alert_title),
                     content = stringResource(R.string.screen_blocked_users_unblock_alert_description),
                     submitText = stringResource(R.string.screen_blocked_users_unblock_alert_action),
-                    onSubmitClicked = { state.eventSink(BlockedUsersEvents.ConfirmUnblock) },
+                    onSubmitClick = { state.eventSink(BlockedUsersEvents.ConfirmUnblock) },
                     onDismiss = { state.eventSink(BlockedUsersEvents.Cancel) }
                 )
             }
@@ -136,7 +136,7 @@ internal fun BlockedUsersViewPreview(@PreviewParameter(BlockedUsersStatePreviewP
     ElementPreview {
         BlockedUsersView(
             state = state,
-            onBackPressed = {}
+            onBackClick = {}
         )
     }
 }

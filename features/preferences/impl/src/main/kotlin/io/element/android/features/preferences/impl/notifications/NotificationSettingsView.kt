@@ -56,8 +56,8 @@ import kotlinx.collections.immutable.toImmutableList
 fun NotificationSettingsView(
     state: NotificationSettingsState,
     onOpenEditDefault: (isOneToOne: Boolean) -> Unit,
-    onTroubleshootNotificationsClicked: () -> Unit,
-    onBackPressed: () -> Unit,
+    onTroubleshootNotificationsClick: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     OnLifecycleEvent { _, event ->
@@ -68,27 +68,27 @@ fun NotificationSettingsView(
     }
     PreferencePage(
         modifier = modifier,
-        onBackPressed = onBackPressed,
+        onBackClick = onBackClick,
         title = stringResource(id = R.string.screen_notification_settings_title)
     ) {
         when (state.matrixSettings) {
             is NotificationSettingsState.MatrixSettings.Invalid -> InvalidNotificationSettingsView(
                 showError = state.matrixSettings.fixFailed,
-                onContinueClicked = { state.eventSink(NotificationSettingsEvents.FixConfigurationMismatch) },
+                onContinueClick = { state.eventSink(NotificationSettingsEvents.FixConfigurationMismatch) },
                 onDismissError = { state.eventSink(NotificationSettingsEvents.ClearConfigurationMismatchError) },
             )
             NotificationSettingsState.MatrixSettings.Uninitialized -> return@PreferencePage
             is NotificationSettingsState.MatrixSettings.Valid -> NotificationSettingsContentView(
                 matrixSettings = state.matrixSettings,
                 state = state,
-                onNotificationsEnabledChanged = { state.eventSink(NotificationSettingsEvents.SetNotificationsEnabled(it)) },
-                onGroupChatsClicked = { onOpenEditDefault(false) },
-                onDirectChatsClicked = { onOpenEditDefault(true) },
-                onMentionNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetAtRoomNotificationsEnabled(it)) },
+                onNotificationsEnabledChange = { state.eventSink(NotificationSettingsEvents.SetNotificationsEnabled(it)) },
+                onGroupChatsClick = { onOpenEditDefault(false) },
+                onDirectChatsClick = { onOpenEditDefault(true) },
+                onMentionNotificationsChange = { state.eventSink(NotificationSettingsEvents.SetAtRoomNotificationsEnabled(it)) },
                 // TODO We are removing the call notification toggle until support for call notifications has been added
 //                onCallsNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetCallNotificationsEnabled(it)) },
-                onInviteForMeNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetInviteForMeNotificationsEnabled(it)) },
-                onTroubleshootNotificationsClicked = onTroubleshootNotificationsClicked,
+                onInviteForMeNotificationsChange = { state.eventSink(NotificationSettingsEvents.SetInviteForMeNotificationsEnabled(it)) },
+                onTroubleshootNotificationsClick = onTroubleshootNotificationsClick,
             )
         }
         AsyncActionView(
@@ -104,14 +104,14 @@ fun NotificationSettingsView(
 private fun NotificationSettingsContentView(
     matrixSettings: NotificationSettingsState.MatrixSettings.Valid,
     state: NotificationSettingsState,
-    onNotificationsEnabledChanged: (Boolean) -> Unit,
-    onGroupChatsClicked: () -> Unit,
-    onDirectChatsClicked: () -> Unit,
-    onMentionNotificationsChanged: (Boolean) -> Unit,
+    onNotificationsEnabledChange: (Boolean) -> Unit,
+    onGroupChatsClick: () -> Unit,
+    onDirectChatsClick: () -> Unit,
+    onMentionNotificationsChange: (Boolean) -> Unit,
     // TODO We are removing the call notification toggle until support for call notifications has been added
 //    onCallsNotificationsChanged: (Boolean) -> Unit,
-    onInviteForMeNotificationsChanged: (Boolean) -> Unit,
-    onTroubleshootNotificationsClicked: () -> Unit,
+    onInviteForMeNotificationsChange: (Boolean) -> Unit,
+    onTroubleshootNotificationsClick: () -> Unit,
 ) {
     val context = LocalContext.current
     val systemSettings: NotificationSettingsState.AppSettings = state.appSettings
@@ -132,7 +132,7 @@ private fun NotificationSettingsContentView(
     PreferenceSwitch(
         title = stringResource(id = R.string.screen_notification_settings_enable_notifications),
         isChecked = systemSettings.appNotificationsEnabled,
-        onCheckedChange = onNotificationsEnabledChanged
+        onCheckedChange = onNotificationsEnabledChange
     )
 
     if (systemSettings.appNotificationsEnabled) {
@@ -140,13 +140,13 @@ private fun NotificationSettingsContentView(
             PreferenceText(
                 title = stringResource(id = R.string.screen_notification_settings_group_chats),
                 subtitle = getTitleForRoomNotificationMode(mode = matrixSettings.defaultGroupNotificationMode),
-                onClick = onGroupChatsClicked
+                onClick = onGroupChatsClick
             )
 
             PreferenceText(
                 title = stringResource(id = R.string.screen_notification_settings_direct_chats),
                 subtitle = getTitleForRoomNotificationMode(mode = matrixSettings.defaultOneToOneNotificationMode),
-                onClick = onDirectChatsClicked
+                onClick = onDirectChatsClick
             )
         }
 
@@ -155,7 +155,7 @@ private fun NotificationSettingsContentView(
                 modifier = Modifier,
                 title = stringResource(id = R.string.screen_notification_settings_room_mention_label),
                 isChecked = matrixSettings.atRoomNotificationsEnabled,
-                onCheckedChange = onMentionNotificationsChanged
+                onCheckedChange = onMentionNotificationsChange
             )
         }
         PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_additional_settings_section_title)) {
@@ -171,14 +171,14 @@ private fun NotificationSettingsContentView(
                 modifier = Modifier,
                 title = stringResource(id = R.string.screen_notification_settings_invite_for_me_label),
                 isChecked = matrixSettings.inviteForMeNotificationsEnabled,
-                onCheckedChange = onInviteForMeNotificationsChanged
+                onCheckedChange = onInviteForMeNotificationsChange
             )
         }
         PreferenceCategory(title = stringResource(id = R.string.troubleshoot_notifications_entry_point_section)) {
             PreferenceText(
                 modifier = Modifier,
                 title = stringResource(id = R.string.troubleshoot_notifications_entry_point_title),
-                onClick = onTroubleshootNotificationsClicked
+                onClick = onTroubleshootNotificationsClick
             )
         }
         if (state.showAdvancedSettings) {
@@ -218,7 +218,7 @@ private fun NotificationSettingsContentView(
                         ListOption(title = it)
                     }.toImmutableList(),
                     initialSelection = state.availablePushDistributors.indexOf(state.currentPushDistributor.dataOrNull()),
-                    onOptionSelected = { index ->
+                    onSelectOption = { index ->
                         state.eventSink(
                             NotificationSettingsEvents.SetPushProvider(index)
                         )
@@ -242,14 +242,14 @@ private fun getTitleForRoomNotificationMode(mode: RoomNotificationMode?) =
 @Composable
 private fun InvalidNotificationSettingsView(
     showError: Boolean,
-    onContinueClicked: () -> Unit,
+    onContinueClick: () -> Unit,
     onDismissError: () -> Unit,
 ) {
     DialogLikeBannerMolecule(
         title = stringResource(R.string.screen_notification_settings_configuration_mismatch),
         content = stringResource(R.string.screen_notification_settings_configuration_mismatch_description),
-        onSubmitClicked = onContinueClicked,
-        onDismissClicked = null,
+        onSubmitClick = onContinueClick,
+        onDismissClick = null,
     )
 
     if (showError) {
@@ -266,8 +266,8 @@ private fun InvalidNotificationSettingsView(
 internal fun NotificationSettingsViewPreview(@PreviewParameter(NotificationSettingsStateProvider::class) state: NotificationSettingsState) = ElementPreview {
     NotificationSettingsView(
         state = state,
-        onBackPressed = {},
+        onBackClick = {},
         onOpenEditDefault = {},
-        onTroubleshootNotificationsClicked = {},
+        onTroubleshootNotificationsClick = {},
     )
 }

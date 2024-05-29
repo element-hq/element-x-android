@@ -143,7 +143,7 @@ class RoomListScreen(
 
     @Composable
     fun Content(modifier: Modifier = Modifier) {
-        fun onRoomClicked(roomId: RoomId) {
+        fun onRoomClick(roomId: RoomId) {
             Singleton.appScope.launch {
                 withContext(coroutineDispatchers.io) {
                     matrixClient.getRoom(roomId)!!.use { room ->
@@ -156,16 +156,16 @@ class RoomListScreen(
         val state = presenter.present()
         RoomListView(
             state = state,
-            onRoomClicked = ::onRoomClicked,
-            onSettingsClicked = {},
-            onConfirmRecoveryKeyClicked = {},
-            onCreateRoomClicked = {},
-            onRoomSettingsClicked = {},
-            onMenuActionClicked = {},
-            onRoomDirectorySearchClicked = {},
+            onRoomClick = ::onRoomClick,
+            onSettingsClick = {},
+            onConfirmRecoveryKeyClick = {},
+            onCreateRoomClick = {},
+            onRoomSettingsClick = {},
+            onMenuActionClick = {},
+            onRoomDirectorySearchClick = {},
             modifier = modifier,
             acceptDeclineInviteView = {
-                AcceptDeclineInviteView(state = state.acceptDeclineInviteState, onInviteAccepted = {}, onInviteDeclined = {})
+                AcceptDeclineInviteView(state = state.acceptDeclineInviteState, onAcceptInvite = {}, onDeclineInvite = {})
             }
         )
 

@@ -48,7 +48,7 @@ class DeveloperSettingsViewTest {
                 state = aDeveloperSettingsState(
                     eventSink = eventsRecorder
                 ),
-                onBackPressed = it
+                onBackClick = it
             )
             rule.pressBack()
         }
@@ -115,14 +115,14 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setDevel
     state: DeveloperSettingsState,
     onOpenShowkase: () -> Unit = EnsureNeverCalled(),
     onOpenConfigureTracing: () -> Unit = EnsureNeverCalled(),
-    onBackPressed: () -> Unit = EnsureNeverCalled()
+    onBackClick: () -> Unit = EnsureNeverCalled()
 ) {
     setContent {
         DeveloperSettingsView(
             state = state,
             onOpenShowkase = onOpenShowkase,
             onOpenConfigureTracing = onOpenConfigureTracing,
-            onBackPressed = onBackPressed,
+            onBackClick = onBackClick,
         )
     }
 }

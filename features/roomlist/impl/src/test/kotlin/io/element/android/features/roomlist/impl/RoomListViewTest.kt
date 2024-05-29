@@ -67,7 +67,7 @@ class RoomListViewTest {
                     contentState = aRoomsContentState(securityBannerState = SecurityBannerState.RecoveryKeyConfirmation),
                     eventSink = eventsRecorder,
                 ),
-                onConfirmRecoveryKeyClicked = callback,
+                onConfirmRecoveryKeyClick = callback,
             )
             rule.clickOn(CommonStrings.action_continue)
         }
@@ -82,7 +82,7 @@ class RoomListViewTest {
                     eventSink = eventsRecorder,
                     contentState = anEmptyContentState(),
                 ),
-                onCreateRoomClicked = callback,
+                onCreateRoomClick = callback,
             )
             rule.clickOn(CommonStrings.action_start_chat)
         }
@@ -100,7 +100,7 @@ class RoomListViewTest {
         ensureCalledOnceWithParam(room0.roomId) { callback ->
             rule.setRoomListView(
                 state = state,
-                onRoomClicked = callback,
+                onRoomClick = callback,
             )
             rule.onNodeWithText(room0.lastMessage!!.toString()).performClick()
         }
@@ -133,7 +133,7 @@ class RoomListViewTest {
         ensureCalledOnceWithParam(room0) { callback ->
             rule.setRoomListView(
                 state = state,
-                onRoomSettingsClicked = callback,
+                onRoomSettingsClick = callback,
             )
             rule.clickOn(CommonStrings.common_settings)
         }
@@ -160,24 +160,24 @@ class RoomListViewTest {
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomListView(
     state: RoomListState,
-    onRoomClicked: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
-    onSettingsClicked: () -> Unit = EnsureNeverCalled(),
-    onConfirmRecoveryKeyClicked: () -> Unit = EnsureNeverCalled(),
-    onCreateRoomClicked: () -> Unit = EnsureNeverCalled(),
-    onRoomSettingsClicked: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
-    onMenuActionClicked: (RoomListMenuAction) -> Unit = EnsureNeverCalledWithParam(),
-    onRoomDirectorySearchClicked: () -> Unit = EnsureNeverCalled(),
+    onRoomClick: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
+    onSettingsClick: () -> Unit = EnsureNeverCalled(),
+    onConfirmRecoveryKeyClick: () -> Unit = EnsureNeverCalled(),
+    onCreateRoomClick: () -> Unit = EnsureNeverCalled(),
+    onRoomSettingsClick: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
+    onMenuActionClick: (RoomListMenuAction) -> Unit = EnsureNeverCalledWithParam(),
+    onRoomDirectorySearchClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         RoomListView(
             state = state,
-            onRoomClicked = onRoomClicked,
-            onSettingsClicked = onSettingsClicked,
-            onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
-            onCreateRoomClicked = onCreateRoomClicked,
-            onRoomSettingsClicked = onRoomSettingsClicked,
-            onMenuActionClicked = onMenuActionClicked,
-            onRoomDirectorySearchClicked = onRoomDirectorySearchClicked,
+            onRoomClick = onRoomClick,
+            onSettingsClick = onSettingsClick,
+            onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
+            onCreateRoomClick = onCreateRoomClick,
+            onRoomSettingsClick = onRoomSettingsClick,
+            onMenuActionClick = onMenuActionClick,
+            onRoomDirectorySearchClick = onRoomDirectorySearchClick,
             acceptDeclineInviteView = { },
         )
     }

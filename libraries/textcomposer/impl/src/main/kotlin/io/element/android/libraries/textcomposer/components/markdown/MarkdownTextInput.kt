@@ -52,9 +52,9 @@ fun MarkdownTextInput(
     state: MarkdownTextEditorState,
     subcomposing: Boolean,
     onTyping: (Boolean) -> Unit,
-    onSuggestionReceived: (Suggestion?) -> Unit,
+    onReceiveSuggestion: (Suggestion?) -> Unit,
     richTextEditorStyle: RichTextEditorStyle,
-    onRichContentSelected: ((Uri) -> Unit)?,
+    onSelectRichContent: ((Uri) -> Unit)?,
 ) {
     val canUpdateState = !subcomposing
 
@@ -106,18 +106,18 @@ fun MarkdownTextInput(
                         state.lineCount = lineCount
 
                         state.currentMentionSuggestion = editable?.checkSuggestionNeeded()
-                        onSuggestionReceived(state.currentMentionSuggestion)
+                        onReceiveSuggestion(state.currentMentionSuggestion)
                     }
                     onSelectionChangeListener = { selStart, selEnd ->
                         state.selection = selStart..selEnd
                         state.currentMentionSuggestion = editableText.checkSuggestionNeeded()
-                        onSuggestionReceived(state.currentMentionSuggestion)
+                        onReceiveSuggestion(state.currentMentionSuggestion)
                     }
-                    if (onRichContentSelected != null) {
+                    if (onSelectRichContent != null) {
                         ViewCompat.setOnReceiveContentListener(
                             this,
                             arrayOf("image/*"),
-                            ReceiveUriContentListener { onRichContentSelected(it) }
+                            ReceiveUriContentListener { onSelectRichContent(it) }
                         )
                     }
                     state.requestFocusAction = { this.requestFocus() }
@@ -188,9 +188,9 @@ internal fun MarkdownTextInputPreview() {
             state = aMarkdownTextEditorState(),
             subcomposing = false,
             onTyping = {},
-            onSuggestionReceived = {},
+            onReceiveSuggestion = {},
             richTextEditorStyle = style,
-            onRichContentSelected = {},
+            onSelectRichContent = {},
         )
     }
 }

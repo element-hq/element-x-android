@@ -52,7 +52,7 @@ class NotificationSettingsViewTest {
                 state = aValidNotificationSettingsState(
                     eventSink = eventsRecorder
                 ),
-                onBackPressed = it
+                onBackClick = it
             )
             rule.pressBack()
         }
@@ -68,7 +68,7 @@ class NotificationSettingsViewTest {
                 state = aValidNotificationSettingsState(
                     eventSink = eventsRecorder
                 ),
-                onTroubleshootNotificationsClicked = it
+                onTroubleshootNotificationsClick = it
             )
             rule.clickOn(R.string.troubleshoot_notifications_entry_point_title)
         }
@@ -292,15 +292,15 @@ class NotificationSettingsViewTest {
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setNotificationSettingsView(
     state: NotificationSettingsState,
     onOpenEditDefault: (isOneToOne: Boolean) -> Unit = EnsureNeverCalledWithParam(),
-    onTroubleshootNotificationsClicked: () -> Unit = EnsureNeverCalled(),
-    onBackPressed: () -> Unit = EnsureNeverCalled(),
+    onTroubleshootNotificationsClick: () -> Unit = EnsureNeverCalled(),
+    onBackClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         NotificationSettingsView(
             state = state,
             onOpenEditDefault = onOpenEditDefault,
-            onTroubleshootNotificationsClicked = onTroubleshootNotificationsClicked,
-            onBackPressed = onBackPressed,
+            onTroubleshootNotificationsClick = onTroubleshootNotificationsClick,
+            onBackClick = onBackClick,
         )
     }
 }

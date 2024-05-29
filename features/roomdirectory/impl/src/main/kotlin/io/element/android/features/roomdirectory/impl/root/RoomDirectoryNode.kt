@@ -35,9 +35,9 @@ class RoomDirectoryNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: RoomDirectoryPresenter,
 ) : Node(buildContext, plugins = plugins) {
-    private fun onResultClicked(roomDescription: RoomDescription) {
+    private fun onResultClick(roomDescription: RoomDescription) {
         plugins<RoomDirectoryEntryPoint.Callback>().forEach {
-            it.onResultClicked(roomDescription)
+            it.onResultClick(roomDescription)
         }
     }
 
@@ -46,8 +46,8 @@ class RoomDirectoryNode @AssistedInject constructor(
         val state = presenter.present()
         RoomDirectoryView(
             state = state,
-            onResultClicked = ::onResultClicked,
-            onBackPressed = ::navigateUp,
+            onResultClick = ::onResultClick,
+            onBackClick = ::navigateUp,
             modifier = modifier
         )
     }

@@ -53,7 +53,7 @@ fun MentionSuggestionsPickerView(
     roomName: String?,
     roomAvatarData: AvatarData?,
     memberSuggestions: ImmutableList<ResolvedMentionSuggestion>,
-    onSuggestionSelected: (ResolvedMentionSuggestion) -> Unit,
+    onSelectSuggestion: (ResolvedMentionSuggestion) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -74,7 +74,7 @@ fun MentionSuggestionsPickerView(
                     roomId = roomId.value,
                     roomName = roomName,
                     roomAvatar = roomAvatarData,
-                    onSuggestionSelected = onSuggestionSelected,
+                    onSelectSuggestion = onSelectSuggestion,
                     modifier = Modifier.fillMaxWidth()
                 )
                 HorizontalDivider(modifier = Modifier.fillMaxWidth())
@@ -89,10 +89,10 @@ private fun RoomMemberSuggestionItemView(
     roomId: String,
     roomName: String?,
     roomAvatar: AvatarData?,
-    onSuggestionSelected: (ResolvedMentionSuggestion) -> Unit,
+    onSelectSuggestion: (ResolvedMentionSuggestion) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(modifier = modifier.clickable { onSuggestionSelected(memberSuggestion) }, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+    Row(modifier = modifier.clickable { onSelectSuggestion(memberSuggestion) }, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
         val avatarSize = AvatarSize.TimelineRoom
         val avatarData = when (memberSuggestion) {
             is ResolvedMentionSuggestion.AtRoom -> roomAvatar?.copy(size = avatarSize) ?: AvatarData(roomId, roomName, null, avatarSize)
@@ -164,7 +164,7 @@ internal fun MentionSuggestionsPickerViewPreview() {
                 ResolvedMentionSuggestion.Member(roomMember),
                 ResolvedMentionSuggestion.Member(roomMember.copy(userId = UserId("@bob:server.org"), displayName = "Bob")),
             ),
-            onSuggestionSelected = {}
+            onSelectSuggestion = {}
         )
     }
 }

@@ -163,7 +163,7 @@ class LoginFlowNode @AssistedInject constructor(
                         backstack.singleTop(NavTarget.ConfirmAccountProvider)
                     }
 
-                    override fun onOtherClicked() {
+                    override fun onOtherClick() {
                         backstack.push(NavTarget.SearchAccountProvider)
                     }
                 }
@@ -197,7 +197,7 @@ class LoginFlowNode @AssistedInject constructor(
                     loginFormState = navTarget.loginFormState,
                 )
                 val callback = object : WaitListNode.Callback {
-                    override fun onCancelClicked() {
+                    override fun onCancelClick() {
                         navigateUp()
                     }
                 }

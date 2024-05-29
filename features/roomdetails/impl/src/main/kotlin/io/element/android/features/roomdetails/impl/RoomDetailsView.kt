@@ -89,7 +89,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun RoomDetailsView(
     state: RoomDetailsState,
     goBack: () -> Unit,
-    onActionClicked: (RoomDetailsAction) -> Unit,
+    onActionClick: (RoomDetailsAction) -> Unit,
     onShareRoom: () -> Unit,
     openRoomMemberList: () -> Unit,
     openRoomNotificationSettings: () -> Unit,
@@ -97,7 +97,7 @@ fun RoomDetailsView(
     openAvatarPreview: (name: String, url: String) -> Unit,
     openPollHistory: () -> Unit,
     openAdminSettings: () -> Unit,
-    onJoinCallClicked: () -> Unit,
+    onJoinCallClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -106,7 +106,7 @@ fun RoomDetailsView(
             RoomDetailsTopBar(
                 goBack = goBack,
                 showEdit = state.canEdit,
-                onActionClicked = onActionClicked
+                onActionClick = onActionClick
             )
         },
     ) { padding ->
@@ -135,7 +135,7 @@ fun RoomDetailsView(
                         state = state,
                         onShareRoom = onShareRoom,
                         onInvitePeople = invitePeople,
-                        onCall = onJoinCallClicked,
+                        onCall = onJoinCallClick,
                     )
                 }
 
@@ -153,7 +153,7 @@ fun RoomDetailsView(
                         state = state,
                         onShareRoom = onShareRoom,
                         onInvitePeople = invitePeople,
-                        onCall = onJoinCallClicked,
+                        onCall = onJoinCallClick,
                     )
                 }
             }
@@ -162,7 +162,7 @@ fun RoomDetailsView(
             if (state.roomTopic !is RoomTopicState.Hidden) {
                 TopicSection(
                     roomTopic = state.roomTopic,
-                    onActionClicked = onActionClicked,
+                    onActionClick = onActionClick,
                 )
             }
 
@@ -226,7 +226,7 @@ fun RoomDetailsView(
 @Composable
 private fun RoomDetailsTopBar(
     goBack: () -> Unit,
-    onActionClicked: (RoomDetailsAction) -> Unit,
+    onActionClick: (RoomDetailsAction) -> Unit,
     showEdit: Boolean,
 ) {
     var showMenu by remember { mutableStateOf(false) }
@@ -249,7 +249,7 @@ private fun RoomDetailsTopBar(
                             // Explicitly close the menu before handling the action, as otherwise it stays open during the
                             // transition and renders really badly.
                             showMenu = false
-                            onActionClicked(RoomDetailsAction.Edit)
+                            onActionClick(RoomDetailsAction.Edit)
                         },
                     )
                 }
@@ -397,7 +397,7 @@ private fun BadgeList(
 @Composable
 private fun TopicSection(
     roomTopic: RoomTopicState,
-    onActionClicked: (RoomDetailsAction) -> Unit,
+    onActionClick: (RoomDetailsAction) -> Unit,
 ) {
     PreferenceCategory(
         title = stringResource(CommonStrings.common_topic),
@@ -407,7 +407,7 @@ private fun TopicSection(
             PreferenceText(
                 title = stringResource(R.string.screen_room_details_add_topic_title),
                 icon = Icons.Outlined.Add,
-                onClick = { onActionClicked(RoomDetailsAction.AddTopic) },
+                onClick = { onActionClick(RoomDetailsAction.AddTopic) },
             )
         } else if (roomTopic is RoomTopicState.ExistingTopic) {
             ClickableLinkText(
@@ -527,7 +527,7 @@ private fun ContentToPreview(state: RoomDetailsState) {
     RoomDetailsView(
         state = state,
         goBack = {},
-        onActionClicked = {},
+        onActionClick = {},
         onShareRoom = {},
         openRoomMemberList = {},
         openRoomNotificationSettings = {},
@@ -535,6 +535,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
         openAvatarPreview = { _, _ -> },
         openPollHistory = {},
         openAdminSettings = {},
-        onJoinCallClicked = {},
+        onJoinCallClick = {},
     )
 }

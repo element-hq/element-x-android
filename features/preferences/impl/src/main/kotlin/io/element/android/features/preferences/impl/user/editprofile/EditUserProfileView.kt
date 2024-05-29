@@ -60,14 +60,14 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun EditUserProfileView(
     state: EditUserProfileState,
-    onBackPressed: () -> Unit,
-    onProfileEdited: () -> Unit,
+    onBackClick: () -> Unit,
+    onEditProfileSuccess: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
     val isAvatarActionsSheetVisible = remember { mutableStateOf(false) }
 
-    fun onAvatarClicked() {
+    fun onAvatarClick() {
         focusManager.clearFocus()
         isAvatarActionsSheetVisible.value = true
     }
@@ -82,7 +82,7 @@ fun EditUserProfileView(
                         style = ElementTheme.typography.aliasScreenTitle,
                     )
                 },
-                navigationIcon = { BackButton(onClick = onBackPressed) },
+                navigationIcon = { BackButton(onClick = onBackClick) },
                 actions = {
                     TextButton(
                         text = stringResource(CommonStrings.action_save),
@@ -110,7 +110,7 @@ fun EditUserProfileView(
                 displayName = state.displayName,
                 avatarUrl = state.userAvatarUrl,
                 avatarSize = AvatarSize.RoomHeader,
-                onAvatarClicked = { onAvatarClicked() },
+                onAvatarClick = { onAvatarClick() },
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -134,7 +134,7 @@ fun EditUserProfileView(
             actions = state.avatarActions,
             isVisible = isAvatarActionsSheetVisible.value,
             onDismiss = { isAvatarActionsSheetVisible.value = false },
-            onActionSelected = { state.eventSink(EditUserProfileEvents.HandleAvatarAction(it)) }
+            onSelectAction = { state.eventSink(EditUserProfileEvents.HandleAvatarAction(it)) }
         )
 
         AsyncActionView(
@@ -144,7 +144,7 @@ fun EditUserProfileView(
                     progressText = stringResource(R.string.screen_edit_profile_updating_details),
                 )
             },
-            onSuccess = { onProfileEdited() },
+            onSuccess = { onEditProfileSuccess() },
             errorTitle = { stringResource(R.string.screen_edit_profile_error_title) },
             errorMessage = { stringResource(R.string.screen_edit_profile_error) },
             onErrorDismiss = { state.eventSink(EditUserProfileEvents.CancelSaveChanges) },
@@ -160,8 +160,8 @@ fun EditUserProfileView(
 internal fun EditUserProfileViewPreview(@PreviewParameter(EditUserProfileStateProvider::class) state: EditUserProfileState) =
     ElementPreview {
         EditUserProfileView(
-            onBackPressed = {},
-            onProfileEdited = {},
+            onBackClick = {},
+            onEditProfileSuccess = {},
             state = state,
         )
     }

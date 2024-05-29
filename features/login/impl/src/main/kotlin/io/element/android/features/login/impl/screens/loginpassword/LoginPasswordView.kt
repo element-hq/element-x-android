@@ -80,7 +80,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun LoginPasswordView(
     state: LoginPasswordState,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     onWaitListError: (LoginFormState) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -103,7 +103,7 @@ fun LoginPasswordView(
         topBar = {
             TopAppBar(
                 title = {},
-                navigationIcon = { BackButton(onClick = onBackPressed) },
+                navigationIcon = { BackButton(onClick = onBackClick) },
             )
         }
     ) { padding ->
@@ -310,7 +310,7 @@ private fun LoginErrorDialog(error: Throwable, onDismiss: () -> Unit) {
 internal fun LoginPasswordViewPreview(@PreviewParameter(LoginPasswordStateProvider::class) state: LoginPasswordState) = ElementPreview {
     LoginPasswordView(
         state = state,
-        onBackPressed = {},
+        onBackClick = {},
         onWaitListError = {},
     )
 }

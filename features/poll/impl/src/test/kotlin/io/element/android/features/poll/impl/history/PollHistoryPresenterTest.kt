@@ -99,12 +99,12 @@ class PollHistoryPresenterTest {
         }.test {
             awaitItem().also { state ->
                 assertThat(state.activeFilter).isEqualTo(PollHistoryFilter.ONGOING)
-                state.eventSink(PollHistoryEvents.OnFilterSelected(PollHistoryFilter.PAST))
+                state.eventSink(PollHistoryEvents.SelectFilter(PollHistoryFilter.PAST))
             }
             skipItems(1)
             awaitItem().also { state ->
                 assertThat(state.activeFilter).isEqualTo(PollHistoryFilter.PAST)
-                state.eventSink(PollHistoryEvents.OnFilterSelected(PollHistoryFilter.ONGOING))
+                state.eventSink(PollHistoryEvents.SelectFilter(PollHistoryFilter.ONGOING))
             }
             awaitItem().also { state ->
                 assertThat(state.activeFilter).isEqualTo(PollHistoryFilter.ONGOING)
@@ -125,10 +125,10 @@ class PollHistoryPresenterTest {
             presenter.present()
         }.test {
             val state = awaitItem()
-            state.eventSink(PollHistoryEvents.PollEndClicked(AN_EVENT_ID))
+            state.eventSink(PollHistoryEvents.EndPoll(AN_EVENT_ID))
             runCurrent()
             endPollAction.verifyExecutionCount(1)
-            state.eventSink(PollHistoryEvents.PollAnswerSelected(AN_EVENT_ID, "answer"))
+            state.eventSink(PollHistoryEvents.SelectPollAnswer(AN_EVENT_ID, "answer"))
             runCurrent()
             sendPollResponseAction.verifyExecutionCount(1)
             cancelAndConsumeRemainingEvents()

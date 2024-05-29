@@ -46,8 +46,8 @@ class SecureBackupEnterRecoveryKeyNode @AssistedInject constructor(
         SecureBackupEnterRecoveryKeyView(
             state = state,
             modifier = modifier,
-            onDone = callback::onEnterRecoveryKeySuccess,
-            onBackClicked = ::navigateUp,
+            onSuccess = callback::onEnterRecoveryKeySuccess,
+            onBackClick = ::navigateUp,
             onCreateNewRecoveryKey = callback::onCreateNewRecoveryKey
         )
     }

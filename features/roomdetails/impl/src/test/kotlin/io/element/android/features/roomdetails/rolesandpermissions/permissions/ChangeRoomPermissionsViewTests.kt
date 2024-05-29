@@ -161,7 +161,7 @@ class ChangeRoomPermissionsViewTests {
                     hasChanges = true,
                     saveAction = AsyncAction.Success(Unit),
                 ),
-                onBackPressed = callback
+                onBackClick = callback
             )
             rule.clickOn(CommonStrings.action_save)
         }
@@ -190,12 +190,12 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setChang
         section = ChangeRoomPermissionsSection.RoomDetails,
         eventSink = eventsRecorder,
     ),
-    onBackPressed: () -> Unit = EnsureNeverCalled(),
+    onBackClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         ChangeRoomPermissionsView(
             state = state,
-            onBackPressed = onBackPressed,
+            onBackClick = onBackClick,
         )
     }
 }
