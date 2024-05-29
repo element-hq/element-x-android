@@ -34,7 +34,6 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaView
 import io.element.android.libraries.mediaviewer.api.local.rememberLocalMediaViewState
-import kotlinx.collections.immutable.ImmutableList
 import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.rememberZoomableState
 
@@ -64,8 +63,6 @@ fun AttachmentsPreviewView(
 @Composable
 private fun AttachmentPreviewContent(
     attachment: Attachment,
-    onSendClicked: () -> Unit,
-    onDismiss: () -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -77,17 +74,21 @@ private fun AttachmentPreviewContent(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            val localMediaViewState = rememberLocalMediaViewState(
-                zoomableState = rememberZoomableState(
-                    zoomSpec = ZoomSpec(maxZoomFactor = 4f, preventOverOrUnderZoom = false)
-                )
-            )
-            LocalMediaView(
-                modifier = Modifier.fillMaxSize(),
-                localMedia = attachment.localMedia,
-                localMediaViewState = localMediaViewState,
-                onClick = {}
-            )
+            when (attachment) {
+                is Attachment.Media -> {
+                    val localMediaViewState = rememberLocalMediaViewState(
+                        zoomableState = rememberZoomableState(
+                            zoomSpec = ZoomSpec(maxZoomFactor = 4f, preventOverOrUnderZoom = false)
+                        )
+                    )
+                    LocalMediaView(
+                        modifier = Modifier.fillMaxSize(),
+                        localMedia = attachment.localMedia,
+                        localMediaViewState = localMediaViewState,
+                        onClick = {}
+                    )
+                }
+            }
         }
     }
 }
