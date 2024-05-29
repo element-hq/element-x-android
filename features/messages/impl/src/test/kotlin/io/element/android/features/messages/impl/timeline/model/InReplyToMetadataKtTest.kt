@@ -380,7 +380,7 @@ class InReplyToMetadataKtTest {
     fun `room membership content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
             anInReplyToDetailsReady(
-                eventContent = RoomMembershipContent(A_USER_ID, null)
+                eventContent = RoomMembershipContent(A_USER_ID, null, null)
             ).metadata()
         }.test {
             awaitItem().let {

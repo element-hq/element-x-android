@@ -49,8 +49,8 @@ fun SetupBiometricView(
         },
         footer = {
             SetupBiometricFooter(
-                onAllowClicked = { state.eventSink(SetupBiometricEvents.AllowBiometric) },
-                onSkipClicked = { state.eventSink(SetupBiometricEvents.UsePin) }
+                onAllowClick = { state.eventSink(SetupBiometricEvents.AllowBiometric) },
+                onSkipClick = { state.eventSink(SetupBiometricEvents.UsePin) }
             )
         },
     )
@@ -68,18 +68,18 @@ private fun SetupBiometricHeader() {
 
 @Composable
 private fun SetupBiometricFooter(
-    onAllowClicked: () -> Unit,
-    onSkipClicked: () -> Unit,
+    onAllowClick: () -> Unit,
+    onSkipClick: () -> Unit,
 ) {
     ButtonColumnMolecule {
         val biometricAuth = stringResource(id = R.string.screen_app_lock_biometric_authentication)
         Button(
             text = stringResource(id = R.string.screen_app_lock_setup_biometric_unlock_allow_title, biometricAuth),
-            onClick = onAllowClicked
+            onClick = onAllowClick
         )
         TextButton(
             text = stringResource(id = R.string.screen_app_lock_setup_biometric_unlock_skip),
-            onClick = onSkipClicked
+            onClick = onSkipClick
         )
     }
 }

@@ -52,7 +52,6 @@
     <item quantity="few">"%d пакоя"</item>
     <item quantity="many">"%d пакояў"</item>
   </plurals>
-  <string name="push_choose_distributor_dialog_title_android">"Выберыце спосаб атрымання апавяшчэнняў"</string>
   <string name="push_distributor_background_sync_android">"Фонавая сінхранізацыя"</string>
   <string name="push_distributor_firebase_android">"Сэрвісы Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Службы Google Play не знойдзены. Апавяшчэнні могуць не працаваць належным чынам."</string>

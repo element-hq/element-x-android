@@ -21,8 +21,7 @@ import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
@@ -48,7 +47,7 @@ class RoomAliasResolverViewTest {
                 aRoomAliasResolverState(
                     eventSink = eventsRecorder,
                 ),
-                onBackPressed = it
+                onBackClick = it
             )
             rule.pressBack()
         }
@@ -69,11 +68,12 @@ class RoomAliasResolverViewTest {
 
     @Test
     fun `success state invokes the expected Callback`() {
+        val result = aResolvedRoomAlias()
         val eventsRecorder = EventsRecorder<RoomAliasResolverEvents>(expectEvents = false)
-        ensureCalledOnceWithParam(A_ROOM_ID) {
+        ensureCalledOnceWithParam(result) {
             rule.setRoomAliasResolverView(
                 aRoomAliasResolverState(
-                    resolveState = AsyncData.Success(A_ROOM_ID),
+                    resolveState = AsyncData.Success(result),
                     eventSink = eventsRecorder,
                 ),
                 onAliasResolved = it,
@@ -84,14 +84,14 @@ class RoomAliasResolverViewTest {
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomAliasResolverView(
     state: RoomAliasResolverState,
-    onBackPressed: () -> Unit = EnsureNeverCalled(),
-    onAliasResolved: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
+    onBackClick: () -> Unit = EnsureNeverCalled(),
+    onAliasResolved: (ResolvedRoomAlias) -> Unit = EnsureNeverCalledWithParam(),
 ) {
     setContent {
         RoomAliasResolverView(
             state = state,
-            onBackPressed = onBackPressed,
-            onAliasResolved = onAliasResolved,
+            onBackClick = onBackClick,
+            onSuccess = onAliasResolved,
         )
     }
 }

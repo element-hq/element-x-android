@@ -49,7 +49,7 @@ class ShowLocationViewTest {
                 state = aShowLocationState(
                     eventSink = eventsRecorder
                 ),
-                onBackPressed = callback,
+                onBackClick = callback,
             )
             rule.pressBack()
         }
@@ -62,7 +62,7 @@ class ShowLocationViewTest {
             aShowLocationState(
                 eventSink = eventsRecorder
             ),
-            onBackPressed = EnsureNeverCalled(),
+            onBackClick = EnsureNeverCalled(),
         )
         val shareContentDescription = rule.activity.getString(CommonStrings.action_share)
         rule.onNodeWithContentDescription(shareContentDescription).performClick()
@@ -76,7 +76,7 @@ class ShowLocationViewTest {
             aShowLocationState(
                 eventSink = eventsRecorder
             ),
-            onBackPressed = EnsureNeverCalled(),
+            onBackClick = EnsureNeverCalled(),
         )
         rule.onNodeWithTag(TestTags.floatingActionButton.value).performClick()
         eventsRecorder.assertSingle(ShowLocationEvents.TrackMyLocation(true))
@@ -90,7 +90,7 @@ class ShowLocationViewTest {
                 permissionDialog = ShowLocationState.Dialog.PermissionDenied,
                 eventSink = eventsRecorder
             ),
-            onBackPressed = EnsureNeverCalled(),
+            onBackClick = EnsureNeverCalled(),
         )
         rule.clickOn(CommonStrings.action_continue)
         eventsRecorder.assertSingle(ShowLocationEvents.OpenAppSettings)
@@ -104,7 +104,7 @@ class ShowLocationViewTest {
                 permissionDialog = ShowLocationState.Dialog.PermissionDenied,
                 eventSink = eventsRecorder
             ),
-            onBackPressed = EnsureNeverCalled(),
+            onBackClick = EnsureNeverCalled(),
         )
         rule.clickOn(CommonStrings.action_cancel)
         eventsRecorder.assertSingle(ShowLocationEvents.DismissDialog)
@@ -118,7 +118,7 @@ class ShowLocationViewTest {
                 permissionDialog = ShowLocationState.Dialog.PermissionRationale,
                 eventSink = eventsRecorder
             ),
-            onBackPressed = EnsureNeverCalled(),
+            onBackClick = EnsureNeverCalled(),
         )
         rule.clickOn(CommonStrings.action_continue)
         eventsRecorder.assertSingle(ShowLocationEvents.RequestPermissions)
@@ -132,7 +132,7 @@ class ShowLocationViewTest {
                 permissionDialog = ShowLocationState.Dialog.PermissionRationale,
                 eventSink = eventsRecorder
             ),
-            onBackPressed = EnsureNeverCalled(),
+            onBackClick = EnsureNeverCalled(),
         )
         rule.clickOn(CommonStrings.action_cancel)
         eventsRecorder.assertSingle(ShowLocationEvents.DismissDialog)
@@ -141,14 +141,14 @@ class ShowLocationViewTest {
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setShowLocationView(
     state: ShowLocationState,
-    onBackPressed: () -> Unit = EnsureNeverCalled(),
+    onBackClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         // Simulate a LocalInspectionMode for MapLibreMap
         CompositionLocalProvider(LocalInspectionMode provides true) {
             ShowLocationView(
                 state = state,
-                onBackPressed = onBackPressed,
+                onBackClick = onBackClick,
             )
         }
     }

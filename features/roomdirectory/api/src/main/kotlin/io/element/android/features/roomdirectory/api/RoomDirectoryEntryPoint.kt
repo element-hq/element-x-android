@@ -20,7 +20,6 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
-import io.element.android.libraries.matrix.api.core.RoomId
 
 interface RoomDirectoryEntryPoint : FeatureEntryPoint {
     fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
@@ -31,7 +30,6 @@ interface RoomDirectoryEntryPoint : FeatureEntryPoint {
     }
 
     interface Callback : Plugin {
-        fun onRoomJoined(roomId: RoomId)
-        fun onResultClicked(roomDescription: RoomDescription)
+        fun onResultClick(roomDescription: RoomDescription)
     }
 }

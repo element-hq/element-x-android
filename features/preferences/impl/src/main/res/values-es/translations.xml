@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Elige cómo recibir las notificaciones"</string>
   <string name="screen_advanced_settings_developer_mode">"Modo desarrollador"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Habilita para tener acceso a características y funcionalidades para desarrolladores."</string>
   <string name="screen_advanced_settings_element_call_base_url">"URL base personalizada de Element Call"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Define una URL base personalizada para Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL no válida, asegúrate de incluir el protocolo (http/https) y la dirección correcta."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Desactiva el editor de texto enriquecido para escribir Markdown manualmente."</string>
+  <string name="screen_advanced_settings_send_read_receipts">"Confirmaciones de lectura"</string>
+  <string name="screen_advanced_settings_send_read_receipts_description">"Si se desactiva, las confirmaciones de lectura no se enviarán a nadie. Seguirás recibiendo confirmaciones de lectura de otros usuarios."</string>
+  <string name="screen_advanced_settings_share_presence">"Compartir presencia"</string>
+  <string name="screen_advanced_settings_share_presence_description">"Si se desactiva, no podrás enviar ni recibir confirmaciones de lectura ni notificaciones de escritura"</string>
   <string name="screen_advanced_settings_view_source_description">"Habilita la opción para ver el contenido en bruto del mensaje en la cronología."</string>
+  <string name="screen_blocked_users_empty">"No tienes usuarios bloqueados"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Desbloquear"</string>
   <string name="screen_blocked_users_unblock_alert_description">"Podrás ver todos sus mensajes de nuevo."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Desbloquear usuario"</string>
+  <string name="screen_blocked_users_unblocking">"Desbloqueando…"</string>
   <string name="screen_edit_profile_display_name">"Nombre público"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Tu nombre visible"</string>
   <string name="screen_edit_profile_error">"Se encontró un error desconocido y no se pudo cambiar la información."</string>

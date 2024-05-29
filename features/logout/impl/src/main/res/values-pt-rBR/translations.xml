@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signout_confirmation_dialog_content">"Tens a certeza que queres terminar a sessão?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Terminar sessão"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Terminar sessão"</string>
+  <string name="screen_signout_in_progress_dialog_content">"A terminar sessão…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"Estás prestes a terminar a tua última sessão. Se continuares, perderás o acesso às tuas mensagens cifradas."</string>
+  <string name="screen_signout_key_backup_disabled_title">"Desativaste a cópia de segurança"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"As tuas chaves ainda estavam a ser guardadas quando ficaste desligado. Volta a ligar-te para que as tuas chaves possam ser guardadas antes de encerrares a sessão."</string>
+  <string name="screen_signout_key_backup_offline_title">"As tuas chaves ainda estão a ser guardadas"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Por favor, aguarda a conclusão desta operação antes de terminares a sessão."</string>
+  <string name="screen_signout_key_backup_ongoing_title">"As tuas chaves ainda estão a ser guardadas"</string>
+  <string name="screen_signout_preference_item">"Terminar sessão"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"Estás prestes a terminar a tua última sessão. Se continuares, perderás o acesso às tuas mensagens cifradas."</string>
+  <string name="screen_signout_recovery_disabled_title">"Recuperação não configurada"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"Estás prestes a terminar a tua última sessão. Se continuares, poderás perder o acesso às tuas mensagens cifradas."</string>
+  <string name="screen_signout_save_recovery_key_title">"Guardaste a tua chave de recuperação?"</string>
+</resources>

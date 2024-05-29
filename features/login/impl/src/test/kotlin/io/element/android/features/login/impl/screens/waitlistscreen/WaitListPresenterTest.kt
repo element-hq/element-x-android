@@ -28,7 +28,7 @@ import io.element.android.libraries.matrix.test.A_HOMESERVER
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.A_USER_ID
-import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
+import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
@@ -41,7 +41,7 @@ class WaitListPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val authenticationService = FakeAuthenticationService().apply {
+        val authenticationService = FakeMatrixAuthenticationService().apply {
             givenHomeserver(A_HOMESERVER)
         }
         val loginUserStory = DefaultLoginUserStory()
@@ -63,7 +63,7 @@ class WaitListPresenterTest {
 
     @Test
     fun `present - attempt login with error`() = runTest {
-        val authenticationService = FakeAuthenticationService().apply {
+        val authenticationService = FakeMatrixAuthenticationService().apply {
             givenLoginError(A_THROWABLE)
         }
         val loginUserStory = DefaultLoginUserStory()
@@ -94,7 +94,7 @@ class WaitListPresenterTest {
 
     @Test
     fun `present - attempt login with success`() = runTest {
-        val authenticationService = FakeAuthenticationService()
+        val authenticationService = FakeMatrixAuthenticationService()
         val loginUserStory = DefaultLoginUserStory().apply { setLoginFlowIsDone(false) }
         val presenter = WaitListPresenter(
             LoginFormState.Default,

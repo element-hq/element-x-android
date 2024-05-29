@@ -65,7 +65,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun JoinRoomView(
     state: JoinRoomState,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
+    onJoinSuccess: () -> Unit,
     onKnockSuccess: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -77,7 +78,7 @@ fun JoinRoomView(
             containerColor = Color.Transparent,
             paddingValues = PaddingValues(16.dp),
             topBar = {
-                JoinRoomTopBar(onBackClicked = onBackPressed)
+                JoinRoomTopBar(onBackClick = onBackClick)
             },
             content = {
                 JoinRoomContent(
@@ -103,12 +104,16 @@ fun JoinRoomView(
                     onRetry = {
                         state.eventSink(JoinRoomEvents.RetryFetchingContent)
                     },
-                    onGoBack = onBackPressed,
+                    onGoBack = onBackClick,
                 )
             }
         )
     }
-
+    AsyncActionView(
+        async = state.joinAction,
+        onSuccess = { onJoinSuccess() },
+        onErrorDismiss = { state.eventSink(JoinRoomEvents.ClearError) },
+    )
     AsyncActionView(
         async = state.knockAction,
         onSuccess = { onKnockSuccess() },
@@ -307,11 +312,11 @@ private fun JoinRoomContent(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun JoinRoomTopBar(
-    onBackClicked: () -> Unit,
+    onBackClick: () -> Unit,
 ) {
     TopAppBar(
         navigationIcon = {
-            BackButton(onClick = onBackClicked)
+            BackButton(onClick = onBackClick)
         },
         title = {},
     )
@@ -322,7 +327,8 @@ private fun JoinRoomTopBar(
 internal fun JoinRoomViewPreview(@PreviewParameter(JoinRoomStateProvider::class) state: JoinRoomState) = ElementPreview {
     JoinRoomView(
         state = state,
-        onBackPressed = { },
+        onBackClick = { },
+        onJoinSuccess = { },
         onKnockSuccess = { },
     )
 }

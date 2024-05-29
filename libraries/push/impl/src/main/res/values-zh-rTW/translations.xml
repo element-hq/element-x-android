@@ -22,6 +22,7 @@
     <item quantity="other">"%d 則新訊息"</item>
   </plurals>
   <string name="notification_reaction_body">"回應 %1$s"</string>
+  <string name="notification_room_action_mark_as_read">"標為已讀"</string>
   <string name="notification_room_action_quick_reply">"快速回覆"</string>
   <string name="notification_room_invite_body">"邀請您加入聊天室"</string>
   <string name="notification_sender_me">"我"</string>
@@ -31,7 +32,6 @@
   <plurals name="notification_unread_notified_messages_in_room_rooms">
     <item quantity="other">"%d 個聊天室"</item>
   </plurals>
-  <string name="push_choose_distributor_dialog_title_android">"選擇接收通知的機制"</string>
   <string name="push_distributor_background_sync_android">"背景同步"</string>
   <string name="push_distributor_firebase_android">"Google 服務"</string>
 </resources>

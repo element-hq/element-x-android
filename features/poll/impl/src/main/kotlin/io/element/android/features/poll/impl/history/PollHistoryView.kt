@@ -74,12 +74,12 @@ fun PollHistoryView(
         state.eventSink(PollHistoryEvents.LoadMore)
     }
 
-    fun onAnswerSelected(pollStartId: EventId, answerId: String) {
-        state.eventSink(PollHistoryEvents.PollAnswerSelected(pollStartId, answerId))
+    fun onSelectAnswer(pollStartId: EventId, answerId: String) {
+        state.eventSink(PollHistoryEvents.SelectPollAnswer(pollStartId, answerId))
     }
 
-    fun onPollEnd(pollStartId: EventId) {
-        state.eventSink(PollHistoryEvents.PollEndClicked(pollStartId))
+    fun onEndPoll(pollStartId: EventId) {
+        state.eventSink(PollHistoryEvents.EndPoll(pollStartId))
     }
 
     Scaffold(
@@ -111,7 +111,7 @@ fun PollHistoryView(
             }
             PollHistoryFilterButtons(
                 activeFilter = state.activeFilter,
-                onFilterSelected = { state.eventSink(PollHistoryEvents.OnFilterSelected(it)) },
+                onSelectFilter = { state.eventSink(PollHistoryEvents.SelectFilter(it)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
@@ -128,9 +128,9 @@ fun PollHistoryView(
                     pollHistoryItems = pollHistoryItems,
                     hasMoreToLoad = state.hasMoreToLoad,
                     isLoading = state.isLoading,
-                    onAnswerSelected = ::onAnswerSelected,
-                    onPollEdit = onEditPoll,
-                    onPollEnd = ::onPollEnd,
+                    onSelectAnswer = ::onSelectAnswer,
+                    onEditPoll = onEditPoll,
+                    onEndPoll = ::onEndPoll,
                     onLoadMore = ::onLoadMore,
                     modifier = Modifier.fillMaxSize(),
                 )
@@ -143,7 +143,7 @@ fun PollHistoryView(
 @Composable
 private fun PollHistoryFilterButtons(
     activeFilter: PollHistoryFilter,
-    onFilterSelected: (PollHistoryFilter) -> Unit,
+    onSelectFilter: (PollHistoryFilter) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     SingleChoiceSegmentedButtonRow(modifier = modifier) {
@@ -152,7 +152,7 @@ private fun PollHistoryFilterButtons(
                 index = filter.ordinal,
                 count = PollHistoryFilter.entries.size,
                 selected = activeFilter == filter,
-                onClick = { onFilterSelected(filter) },
+                onClick = { onSelectFilter(filter) },
                 text = stringResource(filter.stringResource),
             )
         }
@@ -165,9 +165,9 @@ private fun PollHistoryList(
     pollHistoryItems: ImmutableList<PollHistoryItem>,
     hasMoreToLoad: Boolean,
     isLoading: Boolean,
-    onAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
-    onPollEdit: (pollStartId: EventId) -> Unit,
-    onPollEnd: (pollStartId: EventId) -> Unit,
+    onSelectAnswer: (pollStartId: EventId, answerId: String) -> Unit,
+    onEditPoll: (pollStartId: EventId) -> Unit,
+    onEndPoll: (pollStartId: EventId) -> Unit,
     onLoadMore: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -180,9 +180,9 @@ private fun PollHistoryList(
         items(pollHistoryItems) { pollHistoryItem ->
             PollHistoryItemRow(
                 pollHistoryItem = pollHistoryItem,
-                onAnswerSelected = onAnswerSelected,
-                onPollEdit = onPollEdit,
-                onPollEnd = onPollEnd,
+                onSelectAnswer = onSelectAnswer,
+                onEditPoll = onEditPoll,
+                onEndPoll = onEndPoll,
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
             )
         }
@@ -232,9 +232,9 @@ private fun LoadMoreButton(isLoading: Boolean, onClick: () -> Unit) {
 @Composable
 private fun PollHistoryItemRow(
     pollHistoryItem: PollHistoryItem,
-    onAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
-    onPollEdit: (pollStartId: EventId) -> Unit,
-    onPollEnd: (pollStartId: EventId) -> Unit,
+    onSelectAnswer: (pollStartId: EventId, answerId: String) -> Unit,
+    onEditPoll: (pollStartId: EventId) -> Unit,
+    onEndPoll: (pollStartId: EventId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Surface(
@@ -251,9 +251,9 @@ private fun PollHistoryItemRow(
             Spacer(modifier = Modifier.height(4.dp))
             PollContentView(
                 state = pollHistoryItem.state,
-                onAnswerSelected = onAnswerSelected,
-                onPollEdit = onPollEdit,
-                onPollEnd = onPollEnd,
+                onSelectAnswer = onSelectAnswer,
+                onEditPoll = onEditPoll,
+                onEndPoll = onEndPoll,
             )
         }
     }

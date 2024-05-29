@@ -38,14 +38,14 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun SecureBackupEnterRecoveryKeyView(
     state: SecureBackupEnterRecoveryKeyState,
-    onDone: () -> Unit,
-    onBackClicked: () -> Unit,
+    onSuccess: () -> Unit,
+    onBackClick: () -> Unit,
     onCreateNewRecoveryKey: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     AsyncActionView(
         async = state.submitAction,
-        onSuccess = { onDone() },
+        onSuccess = { onSuccess() },
         progressDialog = { },
         errorTitle = { stringResource(id = R.string.screen_recovery_key_confirm_error_title) },
         errorMessage = { stringResource(id = R.string.screen_recovery_key_confirm_error_content) },
@@ -54,13 +54,14 @@ fun SecureBackupEnterRecoveryKeyView(
 
     FlowStepPage(
         modifier = modifier,
-        onBackClicked = onBackClicked,
+        onBackClick = onBackClick,
         iconVector = CompoundIcons.KeySolid(),
         title = stringResource(id = R.string.screen_recovery_key_confirm_title),
         subTitle = stringResource(id = R.string.screen_recovery_key_confirm_description),
-        content = { Content(state = state) },
         buttons = { Buttons(state = state, onCreateRecoveryKey = onCreateNewRecoveryKey) }
-    )
+    ) {
+        Content(state = state)
+    }
 }
 
 @Composable
@@ -109,8 +110,8 @@ internal fun SecureBackupEnterRecoveryKeyViewPreview(
 ) = ElementPreview {
     SecureBackupEnterRecoveryKeyView(
         state = state,
-        onDone = {},
-        onBackClicked = {},
+        onSuccess = {},
+        onBackClick = {},
         onCreateNewRecoveryKey = {},
     )
 }

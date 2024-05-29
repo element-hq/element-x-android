@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Välj hur du vill ta emot aviseringar"</string>
   <string name="screen_advanced_settings_developer_mode">"Utvecklarläge"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Aktivera för att ha tillgång till funktionalitet för utvecklare."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Anpassad bas-URL för Element Call"</string>
@@ -14,6 +15,7 @@
   <string name="screen_blocked_users_unblock_alert_action">"Avblockera"</string>
   <string name="screen_blocked_users_unblock_alert_description">"Du kommer att kunna se alla meddelanden från dem igen."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Avblockera användare"</string>
+  <string name="screen_blocked_users_unblocking">"Avblockerar …"</string>
   <string name="screen_edit_profile_display_name">"Visningsnamn"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Ditt visningsnamn"</string>
   <string name="screen_edit_profile_error">"Ett okänt fel påträffades och informationen kunde inte ändras."</string>

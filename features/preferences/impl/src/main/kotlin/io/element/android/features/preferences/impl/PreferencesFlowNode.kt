@@ -115,8 +115,8 @@ class PreferencesFlowNode @AssistedInject constructor(
                         plugins<PreferencesEntryPoint.Callback>().forEach { it.onOpenBugReport() }
                     }
 
-                    override fun onSecureBackupClicked() {
-                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onSecureBackupClicked() }
+                    override fun onSecureBackupClick() {
+                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onSecureBackupClick() }
                     }
 
                     override fun onOpenAnalytics() {
@@ -151,7 +151,7 @@ class PreferencesFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.BlockedUsers)
                     }
 
-                    override fun onSignOutClicked() {
+                    override fun onSignOutClick() {
                         backstack.push(NavTarget.SignOut)
                     }
                 }
@@ -180,7 +180,7 @@ class PreferencesFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.EditDefaultNotificationSetting(isOneToOne))
                     }
 
-                    override fun onTroubleshootNotificationsClicked() {
+                    override fun onTroubleshootNotificationsClick() {
                         backstack.push(NavTarget.TroubleshootNotifications)
                     }
                 }
@@ -212,17 +212,15 @@ class PreferencesFlowNode @AssistedInject constructor(
                 createNode<EditUserProfileNode>(buildContext, listOf(inputs))
             }
             NavTarget.LockScreenSettings -> {
-                lockScreenEntryPoint.nodeBuilder(this, buildContext)
-                    .target(LockScreenEntryPoint.Target.Settings)
-                    .build()
+                lockScreenEntryPoint.nodeBuilder(this, buildContext, LockScreenEntryPoint.Target.Settings).build()
             }
             NavTarget.BlockedUsers -> {
                 createNode<BlockedUsersNode>(buildContext)
             }
             NavTarget.SignOut -> {
                 val callBack: LogoutEntryPoint.Callback = object : LogoutEntryPoint.Callback {
-                    override fun onChangeRecoveryKeyClicked() {
-                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onSecureBackupClicked() }
+                    override fun onChangeRecoveryKeyClick() {
+                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onSecureBackupClick() }
                     }
                 }
                 logoutEntryPoint.nodeBuilder(this, buildContext)

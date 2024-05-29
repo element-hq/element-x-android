@@ -17,15 +17,12 @@
 package io.element.android.features.roomdirectory.impl.root
 
 import io.element.android.features.roomdirectory.api.RoomDescription
-import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.collections.immutable.ImmutableList
 
 data class RoomDirectoryState(
     val query: String,
     val roomDescriptions: ImmutableList<RoomDescription>,
     val displayLoadMoreIndicator: Boolean,
-    val joinRoomAction: AsyncAction<RoomId>,
     val eventSink: (RoomDirectoryEvents) -> Unit
 ) {
     val displayEmptyState = roomDescriptions.isEmpty() && !displayLoadMoreIndicator

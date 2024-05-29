@@ -25,7 +25,6 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
@@ -39,6 +38,7 @@ import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
@@ -443,6 +443,23 @@ class RustMatrixClient(
         }
     }
 
+    override suspend fun joinRoomByIdOrAlias(
+        roomId: RoomId,
+        serverNames: List<String>,
+    ): Result<Unit> = withContext(sessionDispatcher) {
+        runCatching {
+            client.joinRoomByIdOrAlias(
+                roomIdOrAlias = roomId.value,
+                serverNames = serverNames,
+            ).destroy()
+            try {
+                awaitRoom(roomId, 10.seconds)
+            } catch (e: Exception) {
+                Timber.e(e, "Timeout waiting for the room to be available in the room list")
+            }
+        }
+    }
+
     override suspend fun knockRoom(roomId: RoomId): Result<Unit> {
         return Result.failure(NotImplementedError("Not yet implemented"))
     }
@@ -459,15 +476,22 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<RoomId> = withContext(sessionDispatcher) {
+    override suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<ResolvedRoomAlias> = withContext(sessionDispatcher) {
         runCatching {
-            client.resolveRoomAlias(roomAlias.value).roomId.let(::RoomId)
+            val result = client.resolveRoomAlias(roomAlias.value)
+            ResolvedRoomAlias(
+                roomId = RoomId(result.roomId),
+                servers = result.servers,
+            )
         }
     }
 
-    override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias): Result<RoomPreview> = withContext(sessionDispatcher) {
+    override suspend fun getRoomPreviewFromRoomId(roomId: RoomId, serverNames: List<String>): Result<RoomPreview> = withContext(sessionDispatcher) {
         runCatching {
-            client.getRoomPreview(roomIdOrAlias.identifier).let(RoomPreviewMapper::map)
+            client.getRoomPreviewFromRoomId(
+                roomId = roomId.value,
+                viaServers = serverNames,
+            ).let(RoomPreviewMapper::map)
         }
     }
 

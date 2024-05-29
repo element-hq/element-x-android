@@ -28,7 +28,6 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.matrix.api.core.RoomId
 
 @ContributesNode(SessionScope::class)
 class RoomDirectoryNode @AssistedInject constructor(
@@ -36,15 +35,9 @@ class RoomDirectoryNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val presenter: RoomDirectoryPresenter,
 ) : Node(buildContext, plugins = plugins) {
-    private fun onResultClicked(roomDescription: RoomDescription) {
+    private fun onResultClick(roomDescription: RoomDescription) {
         plugins<RoomDirectoryEntryPoint.Callback>().forEach {
-            it.onResultClicked(roomDescription)
-        }
-    }
-
-    private fun onRoomJoined(roomId: RoomId) {
-        plugins<RoomDirectoryEntryPoint.Callback>().forEach {
-            it.onRoomJoined(roomId)
+            it.onResultClick(roomDescription)
         }
     }
 
@@ -53,9 +46,8 @@ class RoomDirectoryNode @AssistedInject constructor(
         val state = presenter.present()
         RoomDirectoryView(
             state = state,
-            onRoomJoined = ::onRoomJoined,
-            onResultClicked = ::onResultClicked,
-            onBackPressed = ::navigateUp,
+            onResultClick = ::onResultClick,
+            onBackClick = ::navigateUp,
             modifier = modifier
         )
     }

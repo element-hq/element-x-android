@@ -44,9 +44,10 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.uiStrings)
     implementation(projects.features.invite.api)
     implementation(projects.features.roomdirectory.api)
-    implementation(projects.libraries.uiStrings)
+    implementation(projects.services.analytics.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

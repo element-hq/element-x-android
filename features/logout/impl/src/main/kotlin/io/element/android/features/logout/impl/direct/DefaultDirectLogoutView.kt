@@ -39,10 +39,10 @@ class DefaultDirectLogoutView @Inject constructor() : DirectLogoutView {
         val eventSink = state.eventSink
         LogoutActionDialog(
             state.logoutAction,
-            onConfirmClicked = {
+            onConfirmClick = {
                 eventSink(DirectLogoutEvents.Logout(ignoreSdkError = false))
             },
-            onForceLogoutClicked = {
+            onForceLogoutClick = {
                 eventSink(DirectLogoutEvents.Logout(ignoreSdkError = true))
             },
             onDismissDialog = {

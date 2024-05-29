@@ -41,6 +41,8 @@ class JoinRoomNode @AssistedInject constructor(
         inputs.roomId,
         inputs.roomIdOrAlias,
         inputs.roomDescription,
+        inputs.serverNames,
+        inputs.trigger,
     )
 
     @Composable
@@ -48,14 +50,15 @@ class JoinRoomNode @AssistedInject constructor(
         val state = presenter.present()
         JoinRoomView(
             state = state,
-            onBackPressed = ::navigateUp,
+            onBackClick = ::navigateUp,
+            onJoinSuccess = ::navigateUp,
             onKnockSuccess = ::navigateUp,
             modifier = modifier
         )
         acceptDeclineInviteView.Render(
             state = state.acceptDeclineInviteState,
-            onInviteAccepted = {},
-            onInviteDeclined = { navigateUp() },
+            onAcceptInvite = {},
+            onDeclineInvite = { navigateUp() },
             modifier = Modifier
         )
     }

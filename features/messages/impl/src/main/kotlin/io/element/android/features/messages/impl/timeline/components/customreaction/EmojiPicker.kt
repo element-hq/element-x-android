@@ -53,7 +53,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun EmojiPicker(
-    onEmojiSelected: (Emoji) -> Unit,
+    onSelectEmoji: (Emoji) -> Unit,
     emojibaseStore: EmojibaseStore,
     selectedEmojis: ImmutableSet<String>,
     modifier: Modifier = Modifier,
@@ -99,7 +99,7 @@ fun EmojiPicker(
                         modifier = Modifier.aspectRatio(1f),
                         item = item,
                         isSelected = selectedEmojis.contains(item.unicode),
-                        onEmojiSelected = onEmojiSelected,
+                        onSelectEmoji = onSelectEmoji,
                         emojiSize = 32.dp.toSp(),
                     )
                 }
@@ -112,7 +112,7 @@ fun EmojiPicker(
 @Composable
 internal fun EmojiPickerPreview() = ElementPreview {
     EmojiPicker(
-        onEmojiSelected = {},
+        onSelectEmoji = {},
         emojibaseStore = EmojibaseDatasource().load(LocalContext.current),
         selectedEmojis = persistentSetOf("😀", "😄", "😃"),
         modifier = Modifier.fillMaxWidth(),

@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.element.android.appconfig.MessageComposerConfig
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
@@ -66,7 +67,6 @@ import io.element.android.features.messages.impl.utils.messagesummary.MessageSum
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
-import io.element.android.features.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -113,7 +113,6 @@ class MessagesPresenter @AssistedInject constructor(
     private val messageSummaryFormatter: MessageSummaryFormatter,
     private val dispatchers: CoroutineDispatchers,
     private val clipboardHelper: ClipboardHelper,
-    private val appPreferencesStore: AppPreferencesStore,
     private val featureFlagsService: FeatureFlagService,
     private val htmlConverterProvider: HtmlConverterProvider,
     @Assisted private val navigator: MessagesNavigator,
@@ -171,16 +170,14 @@ class MessagesPresenter @AssistedInject constructor(
 
         val inviteProgress = remember { mutableStateOf<AsyncData<Unit>>(AsyncData.Uninitialized) }
         var showReinvitePrompt by remember { mutableStateOf(false) }
-        LaunchedEffect(hasDismissedInviteDialog, composerState.hasFocus, syncUpdateFlow.value) {
+        LaunchedEffect(hasDismissedInviteDialog, composerState.textEditorState.hasFocus(), syncUpdateFlow.value) {
             withContext(dispatchers.io) {
-                showReinvitePrompt = !hasDismissedInviteDialog && composerState.hasFocus && room.isDirect && room.activeMemberCount == 1L
+                showReinvitePrompt = !hasDismissedInviteDialog && composerState.textEditorState.hasFocus() && room.isDirect && room.activeMemberCount == 1L
             }
         }
         val networkConnectionStatus by networkMonitor.connectivity.collectAsState()
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
-
-        val enableTextFormatting by appPreferencesStore.isRichTextEditorEnabledFlow().collectAsState(initial = true)
 
         var enableVoiceMessages by remember { mutableStateOf(false) }
         LaunchedEffect(featureFlagsService) {
@@ -194,7 +191,7 @@ class MessagesPresenter @AssistedInject constructor(
                         action = event.action,
                         targetEvent = event.event,
                         composerState = composerState,
-                        enableTextFormatting = enableTextFormatting,
+                        enableTextFormatting = composerState.showTextFormatting,
                         timelineState = timelineState,
                     )
                 }
@@ -239,7 +236,7 @@ class MessagesPresenter @AssistedInject constructor(
             snackbarMessage = snackbarMessage,
             showReinvitePrompt = showReinvitePrompt,
             inviteProgress = inviteProgress.value,
-            enableTextFormatting = enableTextFormatting,
+            enableTextFormatting = MessageComposerConfig.ENABLE_RICH_TEXT_EDITING,
             enableVoiceMessages = enableVoiceMessages,
             appName = buildMeta.applicationName,
             callState = callState,
@@ -327,7 +324,7 @@ class MessagesPresenter @AssistedInject constructor(
         when (targetEvent.content) {
             is TimelineItemPollContent -> {
                 if (targetEvent.eventId == null) return
-                navigator.onEditPollClicked(targetEvent.eventId)
+                navigator.onEditPollClick(targetEvent.eventId)
             }
             else -> {
                 val composerMode = MessageComposerMode.Edit(
@@ -410,24 +407,24 @@ class MessagesPresenter @AssistedInject constructor(
     }
 
     private fun handleShowDebugInfoAction(event: TimelineItem.Event) {
-        navigator.onShowEventDebugInfoClicked(event.eventId, event.debugInfo)
+        navigator.onShowEventDebugInfoClick(event.eventId, event.debugInfo)
     }
 
     private fun handleForwardAction(event: TimelineItem.Event) {
         if (event.eventId == null) return
-        navigator.onForwardEventClicked(event.eventId)
+        navigator.onForwardEventClick(event.eventId)
     }
 
     private fun handleReportAction(event: TimelineItem.Event) {
         if (event.eventId == null) return
-        navigator.onReportContentClicked(event.eventId, event.senderId)
+        navigator.onReportContentClick(event.eventId, event.senderId)
     }
 
     private fun handleEndPollAction(
         event: TimelineItem.Event,
         timelineState: TimelineState,
     ) {
-        event.eventId?.let { timelineState.eventSink(TimelineEvents.PollEndClicked(it)) }
+        event.eventId?.let { timelineState.eventSink(TimelineEvents.EndPoll(it)) }
     }
 
     private suspend fun handleCopyLink(event: TimelineItem.Event) {

@@ -29,7 +29,7 @@ import io.element.android.features.login.impl.resolver.network.WellKnownBaseConf
 import io.element.android.features.login.impl.resolver.network.WellKnownSlidingSyncConfig
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
-import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
+import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.runTest
@@ -44,7 +44,7 @@ class SearchAccountProviderPresenterTest {
     fun `present - initial state`() = runTest {
         val fakeWellknownRequest = FakeWellknownRequest()
         val changeServerPresenter = ChangeServerPresenter(
-            FakeAuthenticationService(),
+            FakeMatrixAuthenticationService(),
             AccountProviderDataSource()
         )
         val presenter = SearchAccountProviderPresenter(
@@ -64,7 +64,7 @@ class SearchAccountProviderPresenterTest {
     fun `present - enter text no result`() = runTest {
         val fakeWellknownRequest = FakeWellknownRequest()
         val changeServerPresenter = ChangeServerPresenter(
-            FakeAuthenticationService(),
+            FakeMatrixAuthenticationService(),
             AccountProviderDataSource()
         )
         val presenter = SearchAccountProviderPresenter(
@@ -88,7 +88,7 @@ class SearchAccountProviderPresenterTest {
     fun `present - enter valid url no wellknown`() = runTest {
         val fakeWellknownRequest = FakeWellknownRequest()
         val changeServerPresenter = ChangeServerPresenter(
-            FakeAuthenticationService(),
+            FakeMatrixAuthenticationService(),
             AccountProviderDataSource()
         )
         val presenter = SearchAccountProviderPresenter(
@@ -123,7 +123,7 @@ class SearchAccountProviderPresenterTest {
             )
         )
         val changeServerPresenter = ChangeServerPresenter(
-            FakeAuthenticationService(),
+            FakeMatrixAuthenticationService(),
             AccountProviderDataSource()
         )
         val presenter = SearchAccountProviderPresenter(
@@ -158,7 +158,7 @@ class SearchAccountProviderPresenterTest {
             )
         )
         val changeServerPresenter = ChangeServerPresenter(
-            FakeAuthenticationService(),
+            FakeMatrixAuthenticationService(),
             AccountProviderDataSource()
         )
         val presenter = SearchAccountProviderPresenter(

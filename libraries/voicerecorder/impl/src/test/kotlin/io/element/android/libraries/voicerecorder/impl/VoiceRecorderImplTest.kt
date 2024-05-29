@@ -28,7 +28,7 @@ import io.element.android.libraries.voicerecorder.impl.audio.AudioConfig
 import io.element.android.libraries.voicerecorder.impl.audio.SampleRate
 import io.element.android.libraries.voicerecorder.impl.di.VoiceRecorderModule
 import io.element.android.libraries.voicerecorder.test.FakeAudioLevelCalculator
-import io.element.android.libraries.voicerecorder.test.FakeAudioRecorderFactory
+import io.element.android.libraries.voicerecorder.test.FakeAudioReaderFactory
 import io.element.android.libraries.voicerecorder.test.FakeEncoder
 import io.element.android.libraries.voicerecorder.test.FakeFileSystem
 import io.element.android.libraries.voicerecorder.test.FakeVoiceFileManager
@@ -136,7 +136,7 @@ class VoiceRecorderImplTest {
         return VoiceRecorderImpl(
             dispatchers = testCoroutineDispatchers(),
             timeSource = timeSource,
-            audioReaderFactory = FakeAudioRecorderFactory(
+            audioReaderFactory = FakeAudioReaderFactory(
                 audio = AUDIO,
             ),
             encoder = FakeEncoder(fakeFileSystem),

@@ -17,10 +17,12 @@
 package io.element.android.libraries.matrix.impl.notification
 
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.notification.CallNotifyType
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessageMapper
 import org.matrix.rustcomponents.sdk.MessageLikeEventContent
+import org.matrix.rustcomponents.sdk.NotifyType
 import org.matrix.rustcomponents.sdk.StateEventContent
 import org.matrix.rustcomponents.sdk.TimelineEvent
 import org.matrix.rustcomponents.sdk.TimelineEventType
@@ -79,6 +81,7 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
             MessageLikeEventContent.CallCandidates -> NotificationContent.MessageLike.CallCandidates
             MessageLikeEventContent.CallHangup -> NotificationContent.MessageLike.CallHangup
             MessageLikeEventContent.CallInvite -> NotificationContent.MessageLike.CallInvite(senderId)
+            is MessageLikeEventContent.CallNotify -> NotificationContent.MessageLike.CallNotify(senderId, notifyType.map())
             MessageLikeEventContent.KeyVerificationAccept -> NotificationContent.MessageLike.KeyVerificationAccept
             MessageLikeEventContent.KeyVerificationCancel -> NotificationContent.MessageLike.KeyVerificationCancel
             MessageLikeEventContent.KeyVerificationDone -> NotificationContent.MessageLike.KeyVerificationDone
@@ -96,4 +99,9 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
             is MessageLikeEventContent.Poll -> NotificationContent.MessageLike.Poll(senderId, question)
         }
     }
+}
+
+private fun NotifyType.map(): CallNotifyType = when (this) {
+    NotifyType.NOTIFY -> CallNotifyType.NOTIFY
+    NotifyType.RING -> CallNotifyType.RING
 }

@@ -50,16 +50,16 @@ fun RageshakeDetectionView(
     }
     when {
         state.takeScreenshot -> TakeScreenshot(
-            onScreenshotTaken = { eventSink(RageshakeDetectionEvents.ProcessScreenshot(it)) }
+            onScreenshot = { eventSink(RageshakeDetectionEvents.ProcessScreenshot(it)) }
         )
         state.showDialog -> {
             LaunchedEffect(Unit) {
                 context.vibrate()
             }
             RageshakeDialogContent(
-                onNoClicked = { eventSink(RageshakeDetectionEvents.Dismiss) },
-                onDisableClicked = { eventSink(RageshakeDetectionEvents.Disable) },
-                onYesClicked = onOpenBugReport
+                onNoClick = { eventSink(RageshakeDetectionEvents.Dismiss) },
+                onDisableClick = { eventSink(RageshakeDetectionEvents.Disable) },
+                onYesClick = onOpenBugReport
             )
         }
     }
@@ -67,22 +67,22 @@ fun RageshakeDetectionView(
 
 @Composable
 private fun TakeScreenshot(
-    onScreenshotTaken: (ImageResult) -> Unit
+    onScreenshot: (ImageResult) -> Unit
 ) {
     val view = LocalView.current
-    val latestOnScreenshotTaken by rememberUpdatedState(onScreenshotTaken)
+    val latestOnScreenshot by rememberUpdatedState(onScreenshot)
     LaunchedEffect(Unit) {
         view.screenshot {
-            latestOnScreenshotTaken(it)
+            latestOnScreenshot(it)
         }
     }
 }
 
 @Composable
 private fun RageshakeDialogContent(
-    onNoClicked: () -> Unit = { },
-    onDisableClicked: () -> Unit = { },
-    onYesClicked: () -> Unit = { },
+    onNoClick: () -> Unit = { },
+    onDisableClick: () -> Unit = { },
+    onYesClick: () -> Unit = { },
 ) {
     ConfirmationDialog(
         title = stringResource(id = CommonStrings.action_report_bug),
@@ -90,10 +90,10 @@ private fun RageshakeDialogContent(
         thirdButtonText = stringResource(id = CommonStrings.action_disable),
         submitText = stringResource(id = CommonStrings.action_yes),
         cancelText = stringResource(id = CommonStrings.action_no),
-        onCancelClicked = onNoClicked,
-        onThirdButtonClicked = onDisableClicked,
-        onSubmitClicked = onYesClicked,
-        onDismiss = onNoClicked,
+        onCancelClick = onNoClick,
+        onThirdButtonClick = onDisableClick,
+        onSubmitClick = onYesClick,
+        onDismiss = onNoClick,
     )
 }
 

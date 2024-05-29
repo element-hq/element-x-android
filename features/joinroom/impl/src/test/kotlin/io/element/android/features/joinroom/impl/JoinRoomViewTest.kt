@@ -45,7 +45,7 @@ class JoinRoomViewTest {
                 aJoinRoomState(
                     eventSink = eventsRecorder,
                 ),
-                onBackPressed = it
+                onBackClick = it
             )
             rule.pressBack()
         }
@@ -89,6 +89,34 @@ class JoinRoomViewTest {
         )
         rule.clickOn(CommonStrings.action_ok)
         eventsRecorder.assertSingle(JoinRoomEvents.ClearError)
+    }
+
+    @Test
+    fun `clicking on closing Join error emits the expected Event`() {
+        val eventsRecorder = EventsRecorder<JoinRoomEvents>()
+        rule.setJoinRoomView(
+            aJoinRoomState(
+                contentState = aLoadedContentState(joinAuthorisationStatus = JoinAuthorisationStatus.CanKnock),
+                joinAction = AsyncAction.Failure(Exception("Error")),
+                eventSink = eventsRecorder,
+            ),
+        )
+        rule.clickOn(CommonStrings.action_ok)
+        eventsRecorder.assertSingle(JoinRoomEvents.ClearError)
+    }
+
+    @Test
+    fun `when joining room is successful, the expected callback is invoked`() {
+        val eventsRecorder = EventsRecorder<JoinRoomEvents>(expectEvents = false)
+        ensureCalledOnce {
+            rule.setJoinRoomView(
+                aJoinRoomState(
+                    joinAction = AsyncAction.Success(Unit),
+                    eventSink = eventsRecorder,
+                ),
+                onJoinSuccess = it
+            )
+        }
     }
 
     @Test
@@ -139,7 +167,7 @@ class JoinRoomViewTest {
                     contentState = aLoadedContentState(roomType = RoomType.Space),
                     eventSink = eventsRecorder,
                 ),
-                onBackPressed = it
+                onBackClick = it
             )
             rule.clickOn(CommonStrings.action_go_back)
         }
@@ -148,13 +176,15 @@ class JoinRoomViewTest {
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setJoinRoomView(
     state: JoinRoomState,
-    onBackPressed: () -> Unit = EnsureNeverCalled(),
+    onBackClick: () -> Unit = EnsureNeverCalled(),
+    onJoinSuccess: () -> Unit = EnsureNeverCalled(),
     onKnockSuccess: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         JoinRoomView(
             state = state,
-            onBackPressed = onBackPressed,
+            onBackClick = onBackClick,
+            onJoinSuccess = onJoinSuccess,
             onKnockSuccess = onKnockSuccess,
         )
     }

@@ -25,7 +25,7 @@ import io.element.android.features.login.impl.accountprovider.AccountProviderDat
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.test.A_HOMESERVER
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
-import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
+import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -38,7 +38,7 @@ class ChangeServerPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = ChangeServerPresenter(
-            FakeAuthenticationService(),
+            FakeMatrixAuthenticationService(),
             AccountProviderDataSource()
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -51,7 +51,7 @@ class ChangeServerPresenterTest {
 
     @Test
     fun `present - change server ok`() = runTest {
-        val authenticationService = FakeAuthenticationService()
+        val authenticationService = FakeMatrixAuthenticationService()
         val presenter = ChangeServerPresenter(
             authenticationService,
             AccountProviderDataSource()
@@ -72,7 +72,7 @@ class ChangeServerPresenterTest {
 
     @Test
     fun `present - change server error`() = runTest {
-        val authenticationService = FakeAuthenticationService()
+        val authenticationService = FakeMatrixAuthenticationService()
         val presenter = ChangeServerPresenter(
             authenticationService,
             AccountProviderDataSource()

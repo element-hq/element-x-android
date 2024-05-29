@@ -16,17 +16,19 @@
 
 package io.element.android.x.info
 
+import android.content.Context
+import io.element.android.libraries.androidutils.system.getVersionCodeFromManifest
 import io.element.android.x.BuildConfig
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-fun logApplicationInfo() {
+fun logApplicationInfo(context: Context) {
     val appVersion = buildString {
         append(BuildConfig.VERSION_NAME)
         append(" (")
-        append(BuildConfig.VERSION_CODE)
+        append(context.getVersionCodeFromManifest())
         append(") - ")
         append(BuildConfig.BUILD_TYPE)
         append(" / ")

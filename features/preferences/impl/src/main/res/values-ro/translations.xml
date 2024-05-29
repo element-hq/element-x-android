@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Alegeți modul de primire a notificărilor"</string>
   <string name="screen_advanced_settings_developer_mode">"Modul dezvoltator"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Activați pentru a avea acces la funcționalități pentru dezvoltatori."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Adresa URL de bază Element Call"</string>
@@ -11,9 +12,11 @@
   <string name="screen_advanced_settings_share_presence">"Împărtășiți prezența"</string>
   <string name="screen_advanced_settings_share_presence_description">"Dacă dezactivată, nu veți putea trimite sau primi chitanțe de citire sau notificări de tastare."</string>
   <string name="screen_advanced_settings_view_source_description">"Activați opțiunea pentru a vizualiza sursa mesajelor."</string>
+  <string name="screen_blocked_users_empty">"Nu aveți utilizatori blocați"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Deblocați"</string>
   <string name="screen_blocked_users_unblock_alert_description">"La deblocarea utilizatorului, veți putea vedea din nou toate mesajele de la acesta."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Deblocați utilizatorul"</string>
+  <string name="screen_blocked_users_unblocking">"Se deblochează…"</string>
   <string name="screen_edit_profile_display_name">"Nume"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Numele dumneavoastra"</string>
   <string name="screen_edit_profile_error">"A fost întâlnită o eroare necunoscută și informațiile nu au putut fi modificate."</string>
@@ -49,4 +52,6 @@ Dacă continuați, unele dintre setările dumneavoastră pot fi modificate."</st
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"Setări de sistem"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Notificările de sistem sunt dezactivate"</string>
   <string name="screen_notification_settings_title">"Notificări"</string>
+  <string name="troubleshoot_notifications_entry_point_section">"Depanare"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"Depanați notificările"</string>
 </resources>

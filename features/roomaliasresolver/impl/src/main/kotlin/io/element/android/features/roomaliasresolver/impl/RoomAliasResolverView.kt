@@ -49,20 +49,20 @@ import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun RoomAliasResolverView(
     state: RoomAliasResolverState,
-    onBackPressed: () -> Unit,
-    onAliasResolved: (RoomId) -> Unit,
+    onBackClick: () -> Unit,
+    onSuccess: (ResolvedRoomAlias) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val latestOnAliasResolved by rememberUpdatedState(onAliasResolved)
+    val latestOnSuccess by rememberUpdatedState(onSuccess)
     LaunchedEffect(state.resolveState) {
         if (state.resolveState is AsyncData.Success) {
-            latestOnAliasResolved(state.resolveState.data)
+            latestOnSuccess(state.resolveState.data)
         }
     }
     Box(
@@ -73,7 +73,7 @@ fun RoomAliasResolverView(
             containerColor = Color.Transparent,
             paddingValues = PaddingValues(16.dp),
             topBar = {
-                RoomAliasResolverTopBar(onBackClicked = onBackPressed)
+                RoomAliasResolverTopBar(onBackClick = onBackClick)
             },
             content = {
                 RoomAliasResolverContent(state = state)
@@ -148,11 +148,11 @@ private fun RoomAliasResolverContent(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RoomAliasResolverTopBar(
-    onBackClicked: () -> Unit,
+    onBackClick: () -> Unit,
 ) {
     TopAppBar(
         navigationIcon = {
-            BackButton(onClick = onBackClicked)
+            BackButton(onClick = onBackClick)
         },
         title = {},
     )
@@ -163,7 +163,7 @@ private fun RoomAliasResolverTopBar(
 internal fun RoomAliasResolverViewPreview(@PreviewParameter(RoomAliasResolverStateProvider::class) state: RoomAliasResolverState) = ElementPreview {
     RoomAliasResolverView(
         state = state,
-        onAliasResolved = { },
-        onBackPressed = { }
+        onSuccess = { },
+        onBackClick = { }
     )
 }

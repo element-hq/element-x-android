@@ -19,33 +19,50 @@ package io.element.android.features.roomdetails.impl.edit
 import android.net.Uri
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.ui.media.AvatarAction
+import io.element.android.libraries.permissions.api.PermissionsState
 import io.element.android.libraries.permissions.api.aPermissionsState
-import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 open class RoomDetailsEditStateProvider : PreviewParameterProvider<RoomDetailsEditState> {
     override val values: Sequence<RoomDetailsEditState>
         get() = sequenceOf(
             aRoomDetailsEditState(),
-            aRoomDetailsEditState().copy(roomTopic = ""),
-            aRoomDetailsEditState().copy(roomAvatarUrl = Uri.parse("example://uri")),
-            aRoomDetailsEditState().copy(canChangeName = true, canChangeTopic = false, canChangeAvatar = true, saveButtonEnabled = false),
-            aRoomDetailsEditState().copy(canChangeName = false, canChangeTopic = true, canChangeAvatar = false, saveButtonEnabled = false),
-            aRoomDetailsEditState().copy(saveAction = AsyncAction.Loading),
-            aRoomDetailsEditState().copy(saveAction = AsyncAction.Failure(Throwable("Whelp")))
+            aRoomDetailsEditState(roomTopic = ""),
+            aRoomDetailsEditState(roomRawName = ""),
+            aRoomDetailsEditState(roomAvatarUrl = Uri.parse("example://uri")),
+            aRoomDetailsEditState(canChangeName = true, canChangeTopic = false, canChangeAvatar = true, saveButtonEnabled = false),
+            aRoomDetailsEditState(canChangeName = false, canChangeTopic = true, canChangeAvatar = false, saveButtonEnabled = false),
+            aRoomDetailsEditState(saveAction = AsyncAction.Loading),
+            aRoomDetailsEditState(saveAction = AsyncAction.Failure(Throwable("Whelp"))),
         )
 }
 
-fun aRoomDetailsEditState() = RoomDetailsEditState(
-    roomId = "a room id",
-    roomName = "Marketing",
-    canChangeName = true,
-    roomTopic = "a room topic that is quite long so should wrap onto multiple lines",
-    canChangeTopic = true,
-    roomAvatarUrl = null,
-    canChangeAvatar = true,
-    avatarActions = persistentListOf(),
-    saveButtonEnabled = true,
-    saveAction = AsyncAction.Uninitialized,
-    cameraPermissionState = aPermissionsState(showDialog = false),
-    eventSink = {}
+fun aRoomDetailsEditState(
+    roomId: RoomId = RoomId("!aRoomId:aDomain"),
+    roomRawName: String = "Marketing",
+    canChangeName: Boolean = true,
+    roomTopic: String = "a room topic that is quite long so should wrap onto multiple lines",
+    canChangeTopic: Boolean = true,
+    roomAvatarUrl: Uri? = null,
+    canChangeAvatar: Boolean = true,
+    avatarActions: List<AvatarAction> = emptyList(),
+    saveButtonEnabled: Boolean = true,
+    saveAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    cameraPermissionState: PermissionsState = aPermissionsState(showDialog = false),
+    eventSink: (RoomDetailsEditEvents) -> Unit = {},
+) = RoomDetailsEditState(
+    roomId = roomId,
+    roomRawName = roomRawName,
+    canChangeName = canChangeName,
+    roomTopic = roomTopic,
+    canChangeTopic = canChangeTopic,
+    roomAvatarUrl = roomAvatarUrl,
+    canChangeAvatar = canChangeAvatar,
+    avatarActions = avatarActions.toImmutableList(),
+    saveButtonEnabled = saveButtonEnabled,
+    saveAction = saveAction,
+    cameraPermissionState = cameraPermissionState,
+    eventSink = eventSink,
 )

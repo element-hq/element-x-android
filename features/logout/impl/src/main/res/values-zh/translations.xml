@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signout_confirmation_dialog_content">"确定要登出吗？"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"登出"</string>
+  <string name="screen_signout_confirmation_dialog_title">"登出"</string>
+  <string name="screen_signout_in_progress_dialog_content">"正在登出…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"您即将登出最后一个会话。如果现在登出，你将无法访问加密的消息。"</string>
+  <string name="screen_signout_key_backup_disabled_title">"您已关闭备份"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"当你离线时，你的密钥仍在备份中。重新连接，以便在登出之前备份密钥。"</string>
+  <string name="screen_signout_key_backup_offline_title">"您的密钥仍在备份中"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"请等待此操作完成后再登出。"</string>
+  <string name="screen_signout_key_backup_ongoing_title">"您的密钥仍在备份中"</string>
+  <string name="screen_signout_preference_item">"登出"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"您即将登出最后一个会话。如果现在登出，你将无法访问加密的消息。"</string>
+  <string name="screen_signout_recovery_disabled_title">"未设置恢复"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"您即将登出最后一个会话。如果现在登出，你将无法访问加密的消息。"</string>
+  <string name="screen_signout_save_recovery_key_title">"您保存了恢复密钥吗？"</string>
+</resources>

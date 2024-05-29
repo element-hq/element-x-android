@@ -27,6 +27,15 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        // Snapshot versions
+        maven {
+            url = URI("https://s01.oss.sonatype.org/content/repositories/snapshots")
+            content {
+                includeModule("org.matrix.rustcomponents", "sdk-android")
+                includeModule("io.element.android", "wysiwyg")
+                includeModule("io.element.android", "wysiwyg-compose")
+            }
+        }
         google()
         mavenCentral()
         maven { url = URI("https://oss.sonatype.org/content/repositories/snapshots/") }

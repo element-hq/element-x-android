@@ -45,7 +45,6 @@
     <item quantity="one">"%d rum"</item>
     <item quantity="other">"%d rum"</item>
   </plurals>
-  <string name="push_choose_distributor_dialog_title_android">"Välj hur du vill ta emot aviseringar"</string>
   <string name="push_distributor_background_sync_android">"Bakgrundssynkronisering"</string>
   <string name="push_distributor_firebase_android">"Google-tjänster"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Inga giltiga Google Play-tjänster hittades. Aviseringar kanske inte fungerar korrekt."</string>

@@ -94,12 +94,12 @@ class ForwardMessagesNode @AssistedInject constructor(
             val state = presenter.present()
             ForwardMessagesView(
                 state = state,
-                onForwardingSucceeded = ::onSucceeded,
+                onForwardSuccess = ::onForwardSuccess,
             )
         }
     }
 
-    private fun onSucceeded(roomIds: ImmutableList<RoomId>) {
+    private fun onForwardSuccess(roomIds: ImmutableList<RoomId>) {
         navigateUp()
         if (roomIds.size == 1) {
             val targetRoomId = roomIds.first()

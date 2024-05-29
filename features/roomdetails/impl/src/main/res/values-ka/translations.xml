@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"შეტყობინებების პარამეტრის განახლებისას მოხდა შეცდომა."</string>
+  <string name="screen_room_change_permissions_everyone">"ყველა"</string>
+  <string name="screen_room_details_add_topic_title">"თემის დამატება"</string>
+  <string name="screen_room_details_already_a_member">"უკვე წევრია"</string>
+  <string name="screen_room_details_already_invited">"უკვე მოწვეულია"</string>
+  <string name="screen_room_details_edit_room_title">"ოთახის რედაქტირება"</string>
+  <string name="screen_room_details_edition_error">"უცნობი შეცდომა მოხდა. ინფორმაციის შეცვლა ვერ მოხერხდა."</string>
+  <string name="screen_room_details_edition_error_title">"ოთახის განახლება შეუძლებელია"</string>
+  <string name="screen_room_details_encryption_enabled_subtitle">"შეტყობინებები დაცულია საკეტებით. მხოლოდ თქვენ და მიმღებებს გაქვთ მათი განშიფვრის უნიკალური გასაღებები."</string>
+  <string name="screen_room_details_encryption_enabled_title">"შეტყობინების დაშიფვრა ჩართულია"</string>
+  <string name="screen_room_details_error_loading_notification_settings">"შეტყობინებების პარამეტრების ჩატვირთვისას მოხდა შეცდომა."</string>
+  <string name="screen_room_details_error_muting">"ამ ოთახის დადუმება ვერ მოხერხდა. გთხოვთ, სცადოთ ხელახლა."</string>
+  <string name="screen_room_details_error_unmuting">"ამ ოთახის დადუმების მოხსნა ვერ მოხერხდა. გთხოვთ, სცადოთ ხელახლა."</string>
+  <string name="screen_room_details_invite_people_title">"ხალხის მოწვევა"</string>
+  <string name="screen_room_details_leave_room_title">"ოთახის დატოვება"</string>
+  <string name="screen_room_details_notification_mode_custom">"მორგებული"</string>
+  <string name="screen_room_details_notification_mode_default">"ნაგულისხმევი"</string>
+  <string name="screen_room_details_notification_title">"შეტყობინებები"</string>
+  <string name="screen_room_details_room_name_label">"ოთახის სახელი"</string>
+  <string name="screen_room_details_security_title">"უსაფრთხოება"</string>
+  <string name="screen_room_details_share_room_title">"ოთახის გაზიარება"</string>
+  <string name="screen_room_details_topic_title">"თემა"</string>
+  <string name="screen_room_details_updating_room">"ოთახის განახლება…"</string>
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"%1$d ადამიანი"</item>
+    <item quantity="other">"%1$d ადამიანი"</item>
+  </plurals>
+  <string name="screen_room_member_list_pending_header_title">"მომლოდინე"</string>
+  <string name="screen_room_member_list_room_members_header_title">"ოთახის წევრები"</string>
+  <string name="screen_room_notification_settings_allow_custom">"მორგებული პარამეტრის დაშვება"</string>
+  <string name="screen_room_notification_settings_allow_custom_footnote">"ამის ჩართვა უგულებელყოფს თქვენს ნაგულისხმევ პარამეტრს"</string>
+  <string name="screen_room_notification_settings_custom_settings_title">"ამ ჩატში ჩემი შეტყობინება:"</string>
+  <string name="screen_room_notification_settings_default_setting_footnote">"თქვენ შეგიძლიათ შეცვალოთ იგი თქვენს %1$s ."</string>
+  <string name="screen_room_notification_settings_default_setting_footnote_content_link">"გლობალური პარამეტრები"</string>
+  <string name="screen_room_notification_settings_default_setting_title">"Სტანდარტული პარამეტრები"</string>
+  <string name="screen_room_notification_settings_edit_remove_setting">"მორგებული პარამეტრის წაშლა"</string>
+  <string name="screen_room_notification_settings_error_loading_settings">"შეტყობინებების პარამეტრების ჩატვირთვისას მოხდა შეცდომა."</string>
+  <string name="screen_room_notification_settings_error_restoring_default">"ნაგულისხმევი რეჟიმის აღდგენა ვერ მოხერხდა, გთხოვთ, სცადოთ ხელახლა."</string>
+  <string name="screen_room_notification_settings_error_setting_mode">"რეჟიმის დაყენება ვერ მოხერხდა, გთხოვთ, სცადოთ ხელახლა."</string>
+  <string name="screen_room_notification_settings_mode_all_messages">"ყველა შეტყობინება"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"მხოლოდ ხსენებები და საკვანძო სიტყვები"</string>
+  <string name="screen_room_notification_settings_room_custom_settings_title">"ამ ოთახში, შემატყობინეთ:"</string>
+</resources>

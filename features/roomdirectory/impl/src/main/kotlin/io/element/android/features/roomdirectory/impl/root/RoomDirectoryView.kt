@@ -47,7 +47,6 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.features.roomdirectory.impl.R
-import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -61,7 +60,6 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
@@ -69,34 +67,23 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun RoomDirectoryView(
     state: RoomDirectoryState,
-    onResultClicked: (RoomDescription) -> Unit,
-    onRoomJoined: (RoomId) -> Unit,
-    onBackPressed: () -> Unit,
+    onResultClick: (RoomDescription) -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier,
         topBar = {
-            RoomDirectoryTopBar(onBackPressed = onBackPressed)
+            RoomDirectoryTopBar(onBackClick = onBackClick)
         },
         content = { padding ->
             RoomDirectoryContent(
                 state = state,
-                onResultClicked = onResultClicked,
+                onResultClick = onResultClick,
                 modifier = Modifier
-                        .padding(padding)
-                        .consumeWindowInsets(padding)
+                    .padding(padding)
+                    .consumeWindowInsets(padding)
             )
-        }
-    )
-    AsyncActionView(
-        async = state.joinRoomAction,
-        onSuccess = onRoomJoined,
-        onErrorDismiss = {
-            state.eventSink(RoomDirectoryEvents.JoinRoomDismissError)
-        },
-        errorMessage = {
-            stringResource(id = CommonStrings.error_unknown)
         }
     )
 }
@@ -104,13 +91,13 @@ fun RoomDirectoryView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RoomDirectoryTopBar(
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     TopAppBar(
         modifier = modifier,
         navigationIcon = {
-            BackButton(onClick = onBackPressed)
+            BackButton(onClick = onBackClick)
         },
         title = {
             Text(
@@ -124,7 +111,7 @@ private fun RoomDirectoryTopBar(
 @Composable
 private fun RoomDirectoryContent(
     state: RoomDirectoryState,
-    onResultClicked: (RoomDescription) -> Unit,
+    onResultClick: (RoomDescription) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -138,7 +125,7 @@ private fun RoomDirectoryContent(
             roomDescriptions = state.roomDescriptions,
             displayLoadMoreIndicator = state.displayLoadMoreIndicator,
             displayEmptyState = state.displayEmptyState,
-            onResultClicked = onResultClicked,
+            onResultClick = onResultClick,
             onReachedLoadMore = { state.eventSink(RoomDirectoryEvents.LoadMore) },
         )
     }
@@ -149,7 +136,7 @@ private fun RoomDirectoryRoomList(
     roomDescriptions: ImmutableList<RoomDescription>,
     displayLoadMoreIndicator: Boolean,
     displayEmptyState: Boolean,
-    onResultClicked: (RoomDescription) -> Unit,
+    onResultClick: (RoomDescription) -> Unit,
     onReachedLoadMore: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -158,7 +145,7 @@ private fun RoomDirectoryRoomList(
             RoomDirectoryRoomRow(
                 roomDescription = roomDescription,
                 onClick = {
-                    onResultClicked(roomDescription)
+                    onResultClick(roomDescription)
                 },
             )
         }
@@ -186,10 +173,10 @@ private fun RoomDirectoryRoomList(
 @Composable
 private fun LoadMoreIndicator(modifier: Modifier = Modifier) {
     Box(
-        modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(24.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(24.dp),
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(
@@ -259,14 +246,14 @@ private fun RoomDirectoryRoomRow(
 ) {
     Row(
         modifier = modifier
-                .fillMaxWidth()
-                .clickable(onClick = onClick)
-                .padding(
-                        top = 12.dp,
-                        bottom = 12.dp,
-                        start = 16.dp,
-                )
-                .height(IntrinsicSize.Min),
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(
+                top = 12.dp,
+                bottom = 12.dp,
+                start = 16.dp,
+            )
+            .height(IntrinsicSize.Min),
     ) {
         Avatar(
             avatarData = roomDescription.avatarData(AvatarSize.RoomDirectoryItem),
@@ -274,8 +261,8 @@ private fun RoomDirectoryRoomRow(
         )
         Column(
             modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 16.dp)
+                .weight(1f)
+                .padding(horizontal = 16.dp)
         ) {
             Text(
                 text = roomDescription.computedName,
@@ -300,8 +287,7 @@ private fun RoomDirectoryRoomRow(
 internal fun RoomDirectoryViewPreview(@PreviewParameter(RoomDirectoryStateProvider::class) state: RoomDirectoryState) = ElementPreview {
     RoomDirectoryView(
         state = state,
-        onResultClicked = {},
-        onRoomJoined = {},
-        onBackPressed = {},
+        onResultClick = {},
+        onBackClick = {},
     )
 }

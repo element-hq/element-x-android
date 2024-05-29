@@ -67,7 +67,7 @@ import org.maplibre.android.geometry.LatLng
 @Composable
 fun ShowLocationView(
     state: ShowLocationState,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when (state.permissionDialog) {
@@ -121,7 +121,7 @@ fun ShowLocationView(
                 },
                 navigationIcon = {
                     BackButton(
-                        onClick = onBackPressed,
+                        onClick = onBackClick,
                     )
                 },
                 actions = {
@@ -194,7 +194,7 @@ fun ShowLocationView(
 internal fun ShowLocationViewPreview(@PreviewParameter(ShowLocationStateProvider::class) state: ShowLocationState) = ElementPreview {
     ShowLocationView(
         state = state,
-        onBackPressed = {},
+        onBackClick = {},
     )
 }
 

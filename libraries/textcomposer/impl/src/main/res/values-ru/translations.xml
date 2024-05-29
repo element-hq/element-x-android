@@ -4,7 +4,7 @@
   <string name="rich_text_editor_bullet_list">"Переключить список маркеров"</string>
   <string name="rich_text_editor_close_formatting_options">"Закрыть параметры форматирования"</string>
   <string name="rich_text_editor_code_block">"Переключить блок кода"</string>
-  <string name="rich_text_editor_composer_placeholder">"Сообщение"</string>
+  <string name="rich_text_editor_composer_placeholder">"Сообщение…"</string>
   <string name="rich_text_editor_create_link">"Создать ссылку"</string>
   <string name="rich_text_editor_edit_link">"Редактировать ссылку"</string>
   <string name="rich_text_editor_format_bold">"Применить жирный шрифт"</string>

@@ -42,11 +42,11 @@ class WaitListNode @AssistedInject constructor(
     private val presenter = presenterFactory.create(inputs.loginFormState)
 
     interface Callback : Plugin {
-        fun onCancelClicked()
+        fun onCancelClick()
     }
 
-    private fun onCancelClicked() {
-        plugins<Callback>().forEach { it.onCancelClicked() }
+    private fun onCancelClick() {
+        plugins<Callback>().forEach { it.onCancelClick() }
     }
 
     @Composable
@@ -54,7 +54,7 @@ class WaitListNode @AssistedInject constructor(
         val state = presenter.present()
         WaitListView(
             state = state,
-            onCancelClicked = ::onCancelClicked,
+            onCancelClick = ::onCancelClick,
             modifier = modifier
         )
     }

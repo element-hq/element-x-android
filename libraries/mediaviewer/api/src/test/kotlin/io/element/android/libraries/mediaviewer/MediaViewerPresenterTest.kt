@@ -25,7 +25,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
-import io.element.android.libraries.matrix.test.media.FakeMediaLoader
+import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
 import io.element.android.libraries.matrix.test.media.aMediaSource
 import io.element.android.libraries.mediaviewer.api.local.anApkMediaInfo
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerEvents
@@ -51,9 +51,9 @@ class MediaViewerPresenterTest {
 
     @Test
     fun `present - download media success scenario`() = runTest {
-        val mediaLoader = FakeMediaLoader()
+        val matrixMediaLoader = FakeMatrixMediaLoader()
         val mediaActions = FakeLocalMediaActions()
-        val presenter = createMediaViewerPresenter(mediaLoader, mediaActions)
+        val presenter = createMediaViewerPresenter(matrixMediaLoader, mediaActions)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -71,10 +71,10 @@ class MediaViewerPresenterTest {
 
     @Test
     fun `present - check all actions `() = runTest {
-        val mediaLoader = FakeMediaLoader()
+        val matrixMediaLoader = FakeMatrixMediaLoader()
         val mediaActions = FakeLocalMediaActions()
         val snackbarDispatcher = SnackbarDispatcher()
-        val presenter = createMediaViewerPresenter(mediaLoader, mediaActions, snackbarDispatcher)
+        val presenter = createMediaViewerPresenter(matrixMediaLoader, mediaActions, snackbarDispatcher)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -118,13 +118,13 @@ class MediaViewerPresenterTest {
 
     @Test
     fun `present - download media failure then retry with success scenario`() = runTest {
-        val mediaLoader = FakeMediaLoader()
+        val matrixMediaLoader = FakeMatrixMediaLoader()
         val mediaActions = FakeLocalMediaActions()
-        val presenter = createMediaViewerPresenter(mediaLoader, mediaActions)
+        val presenter = createMediaViewerPresenter(matrixMediaLoader, mediaActions)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            mediaLoader.shouldFail = true
+            matrixMediaLoader.shouldFail = true
             val initialState = awaitItem()
             assertThat(initialState.downloadedMedia).isEqualTo(AsyncData.Uninitialized)
             assertThat(initialState.mediaInfo).isEqualTo(TESTED_MEDIA_INFO)
@@ -132,7 +132,7 @@ class MediaViewerPresenterTest {
             assertThat(loadingState.downloadedMedia).isInstanceOf(AsyncData.Loading::class.java)
             val failureState = awaitItem()
             assertThat(failureState.downloadedMedia).isInstanceOf(AsyncData.Failure::class.java)
-            mediaLoader.shouldFail = false
+            matrixMediaLoader.shouldFail = false
             failureState.eventSink(MediaViewerEvents.RetryLoading)
             // There is one recomposition because of the retry mechanism
             skipItems(1)
@@ -146,7 +146,7 @@ class MediaViewerPresenterTest {
     }
 
     private fun createMediaViewerPresenter(
-        mediaLoader: FakeMediaLoader,
+        matrixMediaLoader: FakeMatrixMediaLoader,
         localMediaActions: FakeLocalMediaActions,
         snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
         canShare: Boolean = true,
@@ -161,7 +161,7 @@ class MediaViewerPresenterTest {
                 canDownload = canDownload,
             ),
             localMediaFactory = localMediaFactory,
-            mediaLoader = mediaLoader,
+            mediaLoader = matrixMediaLoader,
             localMediaActions = localMediaActions,
             snackbarDispatcher = snackbarDispatcher,
         )
