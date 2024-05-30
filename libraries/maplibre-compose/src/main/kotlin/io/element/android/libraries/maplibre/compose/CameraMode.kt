@@ -19,7 +19,7 @@
 package io.element.android.libraries.maplibre.compose
 
 import androidx.compose.runtime.Immutable
-import com.mapbox.mapboxsdk.location.modes.CameraMode as InternalCameraMode
+import org.maplibre.android.location.modes.CameraMode as InternalCameraMode
 
 @Immutable
 public enum class CameraMode {

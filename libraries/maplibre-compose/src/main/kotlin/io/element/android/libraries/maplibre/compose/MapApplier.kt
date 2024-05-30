@@ -19,9 +19,9 @@
 package io.element.android.libraries.maplibre.compose
 
 import androidx.compose.runtime.AbstractApplier
-import com.mapbox.mapboxsdk.maps.MapboxMap
-import com.mapbox.mapboxsdk.maps.Style
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
+import org.maplibre.android.maps.MapLibreMap
+import org.maplibre.android.maps.Style
+import org.maplibre.android.plugins.annotation.SymbolManager
 
 internal interface MapNode {
     fun onAttached() {}
@@ -32,7 +32,7 @@ internal interface MapNode {
 private object MapNodeRoot : MapNode
 
 internal class MapApplier(
-    val map: MapboxMap,
+    val map: MapLibreMap,
     val style: Style,
     val symbolManager: SymbolManager,
 ) : AbstractApplier<MapNode>(MapNodeRoot) {

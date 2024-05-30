@@ -19,7 +19,7 @@
 package io.element.android.libraries.maplibre.compose
 
 import androidx.compose.runtime.Immutable
-import com.mapbox.mapboxsdk.style.layers.Property
+import org.maplibre.android.style.layers.Property
 
 @Immutable
 public enum class IconAnchor {

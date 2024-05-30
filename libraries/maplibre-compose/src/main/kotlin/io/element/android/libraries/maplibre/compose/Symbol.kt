@@ -26,10 +26,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import com.mapbox.mapboxsdk.geometry.LatLng
-import com.mapbox.mapboxsdk.plugins.annotation.Symbol
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
+import org.maplibre.android.geometry.LatLng
+import org.maplibre.android.plugins.annotation.Symbol
+import org.maplibre.android.plugins.annotation.SymbolManager
+import org.maplibre.android.plugins.annotation.SymbolOptions
 
 internal class SymbolNode(
     val symbolManager: SymbolManager,
@@ -85,7 +85,7 @@ public fun rememberSymbolState(
  * @param iconAnchor the anchor for the symbol image
  */
 @Composable
-@MapboxMapComposable
+@MapLibreMapComposable
 public fun Symbol(
     iconId: String,
     state: SymbolState = rememberSymbolState(),
