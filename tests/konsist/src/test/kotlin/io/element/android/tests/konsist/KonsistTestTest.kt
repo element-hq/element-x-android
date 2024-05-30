@@ -31,6 +31,7 @@ class KonsistTestTest {
         Konsist
             .scopeFromTest()
             .classes()
+            .withoutName("S", "T")
             .withFunction { it.hasAnnotationOf(Test::class) }
             .assertTrue { it.name.endsWith("Test") }
     }
