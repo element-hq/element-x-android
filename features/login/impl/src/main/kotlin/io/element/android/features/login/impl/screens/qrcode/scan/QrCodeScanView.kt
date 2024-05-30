@@ -99,7 +99,7 @@ private fun Content(
             Modifier.fillMaxWidth()
         }.then(
             Modifier
-                .padding(start = 20.dp, end = 20.dp, top = 50.dp)
+                .padding(start = 20.dp, end = 20.dp, top = 50.dp, bottom = 32.dp)
                 .squareSize()
                 .cornerBorder(
                     strokeWidth = 4.dp,
