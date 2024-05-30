@@ -27,7 +27,6 @@ import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.push
@@ -36,6 +35,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.login.api.LoginFlowType
 import io.element.android.features.login.api.oidc.OidcAction
 import io.element.android.features.login.api.oidc.OidcActionFlow
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
@@ -81,8 +81,7 @@ class LoginFlowNode @AssistedInject constructor(
     private var darkTheme: Boolean = false
 
     data class Inputs(
-        val isAccountCreation: Boolean,
-        val isQrCode: Boolean,
+        val flowType: LoginFlowType,
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
@@ -135,7 +134,7 @@ class LoginFlowNode @AssistedInject constructor(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Root -> {
-                if (plugins<Inputs>().first().isQrCode) {
+                if (inputs.flowType == LoginFlowType.SIGN_IN_QR_CODE) {
                     createNode<QrCodeLoginFlowNode>(buildContext)
                 } else {
                     resolve(NavTarget.ConfirmAccountProvider, buildContext)
@@ -143,7 +142,7 @@ class LoginFlowNode @AssistedInject constructor(
             }
             NavTarget.ConfirmAccountProvider -> {
                 val inputs = ConfirmAccountProviderNode.Inputs(
-                    isAccountCreation = inputs.isAccountCreation
+                    isAccountCreation = inputs.flowType == LoginFlowType.SIGN_UP,
                 )
                 val callback = object : ConfirmAccountProviderNode.Callback {
                     override fun onOidcDetails(oidcDetails: OidcDetails) {
