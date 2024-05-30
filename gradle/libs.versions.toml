@@ -180,7 +180,7 @@ kotlinpoet = "com.squareup:kotlinpoet:1.17.0"
 posthog = "com.posthog:posthog-android:3.3.0"
 sentry = "io.sentry:sentry-android:7.9.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
-matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.21.0"
+matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.23.0"
 
 # Emojibase
 matrix_emojibase_bindings = "io.element.android:emojibase-bindings:1.1.3"

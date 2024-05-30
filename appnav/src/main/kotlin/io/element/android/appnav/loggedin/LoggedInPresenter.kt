@@ -23,11 +23,13 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import im.vector.app.features.analytics.plan.CryptoSessionStateChange
+import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.SdkMetadata
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
@@ -46,6 +48,7 @@ class LoggedInPresenter @Inject constructor(
     private val sessionVerificationService: SessionVerificationService,
     private val analyticsService: AnalyticsService,
     private val encryptionService: EncryptionService,
+    private val sdkMetadata: SdkMetadata,
 ) : Presenter<LoggedInState> {
     @Composable
     override fun present(): LoggedInState {
@@ -90,6 +93,16 @@ class LoggedInPresenter @Inject constructor(
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
         LaunchedEffect(verificationState, recoveryState) {
             reportCryptoStatusToAnalytics(verificationState, recoveryState)
+        }
+
+        LaunchedEffect(Unit) {
+            analyticsService.updateSuperProperties(
+                SuperProperties(
+                    cryptoSDK = SuperProperties.CryptoSDK.Rust,
+                    appPlatform = SuperProperties.AppPlatform.EXA,
+                    cryptoSDKVersion = sdkMetadata.sdkGitSha,
+                )
+            )
         }
 
         return LoggedInState(
