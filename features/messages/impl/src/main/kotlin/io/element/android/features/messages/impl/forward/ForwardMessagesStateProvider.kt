@@ -17,34 +17,30 @@
 package io.element.android.features.messages.impl.forward
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 
 open class ForwardMessagesStateProvider : PreviewParameterProvider<ForwardMessagesState> {
     override val values: Sequence<ForwardMessagesState>
         get() = sequenceOf(
             aForwardMessagesState(),
             aForwardMessagesState(
-                isForwarding = true,
+                forwardAction = AsyncAction.Loading,
             ),
             aForwardMessagesState(
-                forwardingSucceeded = persistentListOf(RoomId("!room2:domain")),
+                forwardAction = AsyncAction.Success(
+                    listOf(RoomId("!room2:domain")),
+                )
             ),
             aForwardMessagesState(
-                error = Throwable("error"),
+                forwardAction = AsyncAction.Failure(Throwable("error")),
             ),
-            // Add other states here
         )
 }
 
 fun aForwardMessagesState(
-    isForwarding: Boolean = false,
-    error: Throwable? = null,
-    forwardingSucceeded: ImmutableList<RoomId>? = null,
+    forwardAction: AsyncAction<List<RoomId>> = AsyncAction.Uninitialized,
 ) = ForwardMessagesState(
-    isForwarding = isForwarding,
-    error = error,
-    forwardingSucceeded = forwardingSucceeded,
+    forwardAction = forwardAction,
     eventSink = {}
 )
