@@ -38,7 +38,6 @@ class NoopAnalyticsService @Inject constructor() : AnalyticsService {
     override suspend fun setDidAskUserConsent() = Unit
     override fun getAnalyticsId(): Flow<String> = flowOf("")
     override suspend fun setAnalyticsId(analyticsId: String) = Unit
-    override suspend fun onSignOut() = Unit
     override suspend fun reset() = Unit
     override fun capture(event: VectorAnalyticsEvent) = Unit
     override fun screen(screen: VectorAnalyticsScreen) = Unit
