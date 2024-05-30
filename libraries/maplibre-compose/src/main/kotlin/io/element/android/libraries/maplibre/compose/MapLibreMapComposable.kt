@@ -22,10 +22,10 @@ import androidx.compose.runtime.ComposableTargetMarker
 
 /**
  * An annotation that can be used to mark a composable function as being expected to be use in a
- * composable function that is also marked or inferred to be marked as a [MapboxMapComposable].
+ * composable function that is also marked or inferred to be marked as a [MapLibreMapComposable].
  *
- * This will produce build warnings when [MapboxMapComposable] composable functions are used outside
- * of a [MapboxMapComposable] content lambda, and vice versa.
+ * This will produce build warnings when [MapLibreMapComposable] composable functions are used outside
+ * of a [MapLibreMapComposable] content lambda, and vice versa.
  */
 @Retention(AnnotationRetention.BINARY)
 @ComposableTargetMarker(description = "MapLibre Map Composable")
@@ -36,4 +36,4 @@ import androidx.compose.runtime.ComposableTargetMarker
     AnnotationTarget.TYPE,
     AnnotationTarget.TYPE_PARAMETER,
 )
-public annotation class MapboxMapComposable
+public annotation class MapLibreMapComposable

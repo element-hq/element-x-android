@@ -144,7 +144,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setShowL
     onBackClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
-        // Simulate a LocalInspectionMode for MapboxMap
+        // Simulate a LocalInspectionMode for MapLibreMap
         CompositionLocalProvider(LocalInspectionMode provides true) {
             ShowLocationView(
                 state = state,

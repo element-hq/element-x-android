@@ -46,14 +46,14 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import com.mapbox.mapboxsdk.Mapbox
-import com.mapbox.mapboxsdk.maps.MapView
-import com.mapbox.mapboxsdk.maps.MapboxMap
-import com.mapbox.mapboxsdk.maps.Style
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.awaitCancellation
+import org.maplibre.android.MapLibre
+import org.maplibre.android.maps.MapLibreMap
+import org.maplibre.android.maps.MapView
+import org.maplibre.android.maps.Style
+import org.maplibre.android.plugins.annotation.SymbolManager
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -63,7 +63,7 @@ import kotlin.coroutines.suspendCoroutine
  * Heavily inspired by https://github.com/googlemaps/android-maps-compose
  *
  * @param styleUri a URI where to asynchronously fetch a style for the map
- * @param modifier Modifier to be applied to the MapboxMap
+ * @param modifier Modifier to be applied to the MapLibreMap
  * @param images images added to the map's style to be later used with [Symbol]
  * @param cameraPositionState the [CameraPositionState] to be used to control or observe the map's
  * camera state
@@ -73,7 +73,7 @@ import kotlin.coroutines.suspendCoroutine
  * @param content the content of the map
  */
 @Composable
-public fun MapboxMap(
+public fun MapLibreMap(
     styleUri: String,
     modifier: Modifier = Modifier,
     images: ImmutableMap<String, Int> = persistentMapOf(),
@@ -82,7 +82,7 @@ public fun MapboxMap(
     symbolManagerSettings: MapSymbolManagerSettings = DefaultMapSymbolManagerSettings,
     locationSettings: MapLocationSettings = DefaultMapLocationSettings,
     content: (
-        @Composable @MapboxMapComposable
+        @Composable @MapLibreMapComposable
         () -> Unit
     )? = null,
 ) {
@@ -99,7 +99,7 @@ public fun MapboxMap(
 
     val context = LocalContext.current
     val mapView = remember {
-        Mapbox.getInstance(context)
+        MapLibre.getInstance(context)
         MapView(context)
     }
 
@@ -168,13 +168,13 @@ private suspend inline fun CompositionContext.newComposition(
     }
 }
 
-private suspend inline fun MapView.awaitMap(): MapboxMap = suspendCoroutine { continuation ->
+private suspend inline fun MapView.awaitMap(): MapLibreMap = suspendCoroutine { continuation ->
     getMapAsync { map ->
         continuation.resume(map)
     }
 }
 
-private suspend inline fun MapboxMap.awaitStyle(
+private suspend inline fun MapLibreMap.awaitStyle(
     context: Context,
     styleUri: String,
     images: ImmutableMap<String, Int>,
@@ -227,7 +227,7 @@ private fun MapView.lifecycleObserver(previousState: MutableState<Lifecycle.Even
         when (event) {
             Lifecycle.Event.ON_CREATE -> {
                 // Skip calling mapView.onCreate if the lifecycle did not go through onDestroy - in
-                // this case the MapboxMap composable also doesn't leave the composition. So,
+                // this case the MapLibreMap composable also doesn't leave the composition. So,
                 // recreating the map does not restore state properly which must be avoided.
                 if (previousState.value != Lifecycle.Event.ON_STOP) {
                     this.onCreate(Bundle())
