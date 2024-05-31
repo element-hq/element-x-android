@@ -20,7 +20,7 @@ sealed interface RoomListFilter {
     companion object {
         /**
          * Create a filter that matches all the given filters.
-         * If not filters are provided, all the room will match.
+         * If no filters are provided, all the rooms will match.
          */
         fun all(vararg filters: RoomListFilter): RoomListFilter {
             return All(filters.toList())
