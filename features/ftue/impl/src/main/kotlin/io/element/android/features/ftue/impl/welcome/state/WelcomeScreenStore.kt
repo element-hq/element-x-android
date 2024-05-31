@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.mediaplayer.impl
+package io.element.android.features.ftue.impl.welcome.state
 
-import kotlinx.coroutines.test.runTest
-import org.junit.Test
-
-class MediaPlayerImplTest {
-    @Test
-    fun `default test`() = runTest {
-        // TODO
-    }
+interface WelcomeScreenStore {
+    fun isWelcomeScreenNeeded(): Boolean
+    fun setWelcomeScreenShown()
+    fun reset()
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2023 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.di
+package io.element.android.libraries.mediaplayer.impl
 
-import javax.inject.Qualifier
+import kotlinx.coroutines.test.runTest
+import org.junit.Test
 
-@Qualifier annotation class DefaultPreferences
+class DefaultMediaPlayerTest {
+    @Test
+    fun `default test`() = runTest {
+        // TODO
+    }
+}

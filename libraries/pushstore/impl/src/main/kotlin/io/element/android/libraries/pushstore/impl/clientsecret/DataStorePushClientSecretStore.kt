@@ -33,7 +33,7 @@ import javax.inject.Inject
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "push_client_secret_store")
 
 @ContributesBinding(AppScope::class)
-class PushClientSecretStoreDataStore @Inject constructor(
+class DataStorePushClientSecretStore @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : PushClientSecretStore {
     override suspend fun storeSecret(userId: SessionId, clientSecret: String) {

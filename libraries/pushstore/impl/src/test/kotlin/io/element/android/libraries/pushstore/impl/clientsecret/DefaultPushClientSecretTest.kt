@@ -28,12 +28,12 @@ private val A_USER_ID_1 = SessionId("@A_USER_ID_1:domain")
 
 private const val A_UNKNOWN_SECRET = "A_UNKNOWN_SECRET"
 
-internal class PushClientSecretImplTest {
+internal class DefaultPushClientSecretTest {
     @Test
     fun test() = runTest {
         val factory = FakePushClientSecretFactory()
         val store = InMemoryPushClientSecretStore()
-        val sut = PushClientSecretImpl(factory, store, NoOpSessionObserver())
+        val sut = DefaultPushClientSecret(factory, store, NoOpSessionObserver())
 
         val secret0 = factory.getSecretForUser(0)
         val secret1 = factory.getSecretForUser(1)

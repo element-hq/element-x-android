@@ -100,7 +100,7 @@ class MessageComposerPresenter @Inject constructor(
     private val mediaSender: MediaSender,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val analyticsService: AnalyticsService,
-    private val messageComposerContext: MessageComposerContextImpl,
+    private val messageComposerContext: DefaultMessageComposerContext,
     private val richTextEditorStateFactory: RichTextEditorStateFactory,
     private val currentSessionIdHolder: CurrentSessionIdHolder,
     private val permalinkParser: PermalinkParser,

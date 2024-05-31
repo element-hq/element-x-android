@@ -55,13 +55,13 @@ object SimplePlayerModule {
     @Provides
     fun simplePlayerProvider(
         @ApplicationContext context: Context,
-    ): SimplePlayer = SimplePlayerImpl(ExoPlayer.Builder(context).build())
+    ): SimplePlayer = DefaultSimplePlayer(ExoPlayer.Builder(context).build())
 }
 
 /**
  * Default implementation of [SimplePlayer] backed by a media3 [Player].
  */
-class SimplePlayerImpl(
+class DefaultSimplePlayer(
     private val p: Player
 ) : SimplePlayer {
     override fun addListener(listener: SimplePlayer.Listener) {

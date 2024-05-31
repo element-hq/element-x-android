@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.features.leaveroom.impl
+package io.element.android.libraries.pushstore.impl.clientsecret
 
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Binds
-import dagger.Module
-import io.element.android.features.leaveroom.api.LeaveRoomPresenter
-import io.element.android.libraries.di.SessionScope
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretFactory
+import java.util.UUID
+import javax.inject.Inject
 
-@Module
-@ContributesTo(SessionScope::class)
-interface LeaveRoomPresenterImplModule {
-    @Binds
-    fun leaveRoomPresenter(leaveRoomPresenter: LeaveRoomPresenterImpl): LeaveRoomPresenter
+@ContributesBinding(AppScope::class)
+class DefaultPushClientSecretFactory @Inject constructor() : PushClientSecretFactory {
+    override fun create(): String {
+        return UUID.randomUUID().toString()
+    }
 }

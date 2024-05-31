@@ -26,13 +26,14 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.libraries.di.AppScope
 
-class PermissionsPresenterImpl @AssistedInject constructor(
+@Suppress("unused")
+class DefaultPermissionsPresenter @AssistedInject constructor(
     @Assisted private val permissions: List<String>
 ) : PermissionsPresenter {
     @AssistedFactory
     @ContributesBinding(AppScope::class)
     interface Factory : PermissionsPresenter.Factory {
-        override fun create(permissions: List<String>): PermissionsPresenterImpl
+        override fun create(permissions: List<String>): DefaultPermissionsPresenter
     }
 
     @OptIn(ExperimentalPermissionsApi::class)

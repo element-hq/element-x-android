@@ -46,7 +46,7 @@ import javax.inject.Inject
 
 @ContributesBinding(scope = AppScope::class)
 @SingleIn(AppScope::class)
-class NetworkMonitorImpl @Inject constructor(
+class DefaultNetworkMonitor @Inject constructor(
     @ApplicationContext context: Context,
     appCoroutineScope: CoroutineScope,
 ) : NetworkMonitor {

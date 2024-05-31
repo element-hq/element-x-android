@@ -16,7 +16,7 @@
 
 package io.element.android.features.ftue.impl.welcome.state
 
-class FakeWelcomeScreenState : WelcomeScreenState {
+class InMemoryWelcomeScreenState : WelcomeScreenStore {
     private var isWelcomeScreenNeeded = true
 
     override fun isWelcomeScreenNeeded(): Boolean {

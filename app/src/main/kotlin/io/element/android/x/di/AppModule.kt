@@ -34,7 +34,6 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatch
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.CacheDirectory
-import io.element.android.libraries.di.DefaultPreferences
 import io.element.android.libraries.di.SingleIn
 import io.element.android.x.BuildConfig
 import io.element.android.x.R
@@ -97,8 +96,7 @@ object AppModule {
 
     @Provides
     @SingleIn(AppScope::class)
-    @DefaultPreferences
-    fun providesDefaultSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
+    fun providesSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
         return PreferenceManager.getDefaultSharedPreferences(context)
     }
 

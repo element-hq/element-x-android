@@ -44,13 +44,13 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.TestTimeSource
 
-class VoiceRecorderImplTest {
+class DefaultVoiceRecorderTest {
     private val fakeFileSystem = FakeFileSystem()
     private val timeSource = TestTimeSource()
 
     @Test
     fun `it emits the initial state`() = runTest {
-        val voiceRecorder = createVoiceRecorder()
+        val voiceRecorder = createDefaultVoiceRecorder()
         voiceRecorder.state.test {
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Idle)
         }
@@ -58,7 +58,7 @@ class VoiceRecorderImplTest {
 
     @Test
     fun `when recording, it emits the recording state`() = runTest {
-        val voiceRecorder = createVoiceRecorder()
+        val voiceRecorder = createDefaultVoiceRecorder()
         voiceRecorder.state.test {
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Idle)
 
@@ -73,7 +73,7 @@ class VoiceRecorderImplTest {
 
     @Test
     fun `when elapsed time reaches 30 minutes, it stops recording`() = runTest {
-        val voiceRecorder = createVoiceRecorder()
+        val voiceRecorder = createDefaultVoiceRecorder()
         voiceRecorder.state.test {
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Idle)
 
@@ -96,7 +96,7 @@ class VoiceRecorderImplTest {
 
     @Test
     fun `when stopped, it provides a file and duration`() = runTest {
-        val voiceRecorder = createVoiceRecorder()
+        val voiceRecorder = createDefaultVoiceRecorder()
         voiceRecorder.state.test {
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Idle)
 
@@ -119,7 +119,7 @@ class VoiceRecorderImplTest {
 
     @Test
     fun `when cancelled, it deletes the file`() = runTest {
-        val voiceRecorder = createVoiceRecorder()
+        val voiceRecorder = createDefaultVoiceRecorder()
         voiceRecorder.state.test {
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Idle)
 
@@ -131,9 +131,9 @@ class VoiceRecorderImplTest {
         }
     }
 
-    private fun TestScope.createVoiceRecorder(): VoiceRecorderImpl {
+    private fun TestScope.createDefaultVoiceRecorder(): DefaultVoiceRecorder {
         val fileConfig = VoiceRecorderModule.provideVoiceFileConfig()
-        return VoiceRecorderImpl(
+        return DefaultVoiceRecorder(
             dispatchers = testCoroutineDispatchers(),
             timeSource = timeSource,
             audioReaderFactory = FakeAudioReaderFactory(

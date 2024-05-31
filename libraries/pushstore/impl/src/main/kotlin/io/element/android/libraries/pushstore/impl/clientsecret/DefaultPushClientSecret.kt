@@ -29,7 +29,7 @@ import javax.inject.Inject
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class, boundType = PushClientSecret::class)
-class PushClientSecretImpl @Inject constructor(
+class DefaultPushClientSecret @Inject constructor(
     private val pushClientSecretFactory: PushClientSecretFactory,
     private val pushClientSecretStore: PushClientSecretStore,
     private val sessionObserver: SessionObserver,

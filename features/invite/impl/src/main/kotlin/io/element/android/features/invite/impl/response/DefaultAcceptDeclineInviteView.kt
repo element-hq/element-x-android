@@ -26,7 +26,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
-class AcceptDeclineInviteViewWrapper @Inject constructor() : AcceptDeclineInviteView {
+class DefaultAcceptDeclineInviteView @Inject constructor() : AcceptDeclineInviteView {
     @Composable
     override fun Render(
         state: AcceptDeclineInviteState,

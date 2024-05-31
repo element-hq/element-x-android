@@ -30,10 +30,10 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
 @RunWith(RobolectricTestRunner::class)
-class IntentProviderImplTest {
+class DefaultIntentProviderTest {
     @Test
     fun `test getViewRoomIntent with Session`() {
-        val sut = createIntentProviderImpl()
+        val sut = createDefaultIntentProvider()
         val result = sut.getViewRoomIntent(
             sessionId = A_SESSION_ID,
             roomId = null,
@@ -45,7 +45,7 @@ class IntentProviderImplTest {
 
     @Test
     fun `test getViewRoomIntent with Session and Room`() {
-        val sut = createIntentProviderImpl()
+        val sut = createDefaultIntentProvider()
         val result = sut.getViewRoomIntent(
             sessionId = A_SESSION_ID,
             roomId = A_ROOM_ID,
@@ -57,7 +57,7 @@ class IntentProviderImplTest {
 
     @Test
     fun `test getViewRoomIntent with Session, Room and Thread`() {
-        val sut = createIntentProviderImpl()
+        val sut = createDefaultIntentProvider()
         val result = sut.getViewRoomIntent(
             sessionId = A_SESSION_ID,
             roomId = A_ROOM_ID,
@@ -67,8 +67,8 @@ class IntentProviderImplTest {
         assertThat(result.data.toString()).isEqualTo("elementx://open/@alice:server.org/!aRoomId:domain/\$aThreadId")
     }
 
-    private fun createIntentProviderImpl(): IntentProviderImpl {
-        return IntentProviderImpl(
+    private fun createDefaultIntentProvider(): DefaultIntentProvider {
+        return DefaultIntentProvider(
             context = RuntimeEnvironment.getApplication() as Context,
             deepLinkCreator = DeepLinkCreator(),
         )
