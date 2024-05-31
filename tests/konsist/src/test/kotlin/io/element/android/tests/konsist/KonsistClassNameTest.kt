@@ -21,7 +21,9 @@ import com.bumble.appyx.core.node.Node
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.ext.list.withAllParentsOf
 import com.lemonappdev.konsist.api.ext.list.withNameContaining
+import com.lemonappdev.konsist.api.ext.list.withNameEndingWith
 import com.lemonappdev.konsist.api.ext.list.withoutName
+import com.lemonappdev.konsist.api.verify.assertEmpty
 import com.lemonappdev.konsist.api.verify.assertTrue
 import io.element.android.libraries.architecture.Presenter
 import org.junit.Test
@@ -80,5 +82,13 @@ class KonsistClassNameTest {
                 it.name.startsWith("Fake") &&
                     it.parents().any { parent -> parent.name.replace(".", "") == interfaceName }
             }
+    }
+
+    @Test
+    fun `Class implementing interface should have name not end with 'Impl' but start with 'Default'`() {
+        Konsist.scopeFromProject()
+            .classes()
+            .withNameEndingWith("Impl")
+            .assertEmpty(additionalMessage = "Class implementing interface should have name not end with 'Impl' but start with 'Default'")
     }
 }
