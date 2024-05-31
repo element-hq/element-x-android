@@ -28,7 +28,9 @@ import io.element.android.features.rageshake.test.crash.FakeCrashDataStore
 import io.element.android.features.rageshake.test.rageshake.FakeRageShake
 import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataStore
 import io.element.android.features.rageshake.test.screenshot.FakeScreenshotHolder
+import io.element.android.libraries.matrix.test.FakeSdkMetadata
 import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.apperror.api.AppErrorState
 import io.element.android.services.apperror.api.AppErrorStateService
 import io.element.android.services.apperror.impl.DefaultAppErrorStateService
@@ -99,6 +101,8 @@ class RootPresenterTest {
             crashDetectionPresenter = crashDetectionPresenter,
             rageshakeDetectionPresenter = rageshakeDetectionPresenter,
             appErrorStateService = appErrorService,
+            analyticsService = FakeAnalyticsService(),
+            sdkMetadata = FakeSdkMetadata("sha")
         )
     }
 }
