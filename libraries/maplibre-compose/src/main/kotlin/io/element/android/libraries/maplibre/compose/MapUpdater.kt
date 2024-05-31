@@ -26,17 +26,17 @@ import androidx.compose.runtime.ComposeNode
 import androidx.compose.runtime.currentComposer
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
-import com.mapbox.mapboxsdk.location.LocationComponentOptions
-import com.mapbox.mapboxsdk.location.OnCameraTrackingChangedListener
-import com.mapbox.mapboxsdk.location.engine.LocationEngineRequest
-import com.mapbox.mapboxsdk.maps.MapboxMap
-import com.mapbox.mapboxsdk.maps.Style
+import org.maplibre.android.location.LocationComponentActivationOptions
+import org.maplibre.android.location.LocationComponentOptions
+import org.maplibre.android.location.OnCameraTrackingChangedListener
+import org.maplibre.android.location.engine.LocationEngineRequest
+import org.maplibre.android.maps.MapLibreMap
+import org.maplibre.android.maps.Style
 
 private const val LOCATION_REQUEST_INTERVAL = 750L
 
 internal class MapPropertiesNode(
-    val map: MapboxMap,
+    val map: MapLibreMap,
     style: Style,
     context: Context,
     cameraPositionState: CameraPositionState,

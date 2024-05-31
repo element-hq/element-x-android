@@ -16,13 +16,10 @@
 
 package io.element.android.features.messages.impl.forward
 
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
-import kotlinx.collections.immutable.ImmutableList
 
 data class ForwardMessagesState(
-    // TODO Migrate to an Async
-    val isForwarding: Boolean,
-    val error: Throwable?,
-    val forwardingSucceeded: ImmutableList<RoomId>?,
+    val forwardAction: AsyncAction<List<RoomId>>,
     val eventSink: (ForwardMessagesEvents) -> Unit
 )
