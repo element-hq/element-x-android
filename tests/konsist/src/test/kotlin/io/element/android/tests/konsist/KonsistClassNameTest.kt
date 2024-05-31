@@ -20,9 +20,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.bumble.appyx.core.node.Node
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.ext.list.withAllParentsOf
+import com.lemonappdev.konsist.api.ext.list.withAnnotationNamed
 import com.lemonappdev.konsist.api.ext.list.withNameContaining
 import com.lemonappdev.konsist.api.ext.list.withNameEndingWith
 import com.lemonappdev.konsist.api.ext.list.withoutName
+import com.lemonappdev.konsist.api.ext.list.withoutNameStartingWith
 import com.lemonappdev.konsist.api.verify.assertEmpty
 import com.lemonappdev.konsist.api.verify.assertTrue
 import io.element.android.libraries.architecture.Presenter
@@ -91,5 +93,33 @@ class KonsistClassNameTest {
             .withNameEndingWith("Impl")
             .withoutName("MediaUploadHandlerImpl")
             .assertEmpty(additionalMessage = "Class implementing interface should have name not end with 'Impl' but start with 'Default'")
+    }
+
+    @Test
+    fun `Class with 'ContributeBinding' annotation should have allowed prefix`() {
+        Konsist.scopeFromProject()
+            .classes()
+            .withAnnotationNamed("ContributesBinding")
+            .withoutName(
+                "Factory",
+                "TimelineController",
+            )
+            .withoutNameStartingWith(
+                "Accompanist",
+                "AES",
+                "Android",
+                "Database",
+                "DBov",
+                "Default",
+                "DataStore",
+                "FileExtensionExtractor",
+                "KeyStore",
+                "Matrix",
+                "Noop",
+                "Preferences",
+                "Rust",
+                "SharedPreferences",
+            )
+            .assertEmpty()
     }
 }

@@ -20,14 +20,13 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.DefaultPreferences
 import io.element.android.libraries.di.SingleIn
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
 class AndroidWelcomeScreenState @Inject constructor(
-    @DefaultPreferences private val sharedPreferences: SharedPreferences,
+    private val sharedPreferences: SharedPreferences,
 ) : WelcomeScreenState {
     companion object {
         private const val IS_WELCOME_SCREEN_SHOWN = "is_welcome_screen_shown"

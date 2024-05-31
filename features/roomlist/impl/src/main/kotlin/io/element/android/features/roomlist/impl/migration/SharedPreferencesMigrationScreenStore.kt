@@ -22,13 +22,12 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.roomlist.api.migration.MigrationScreenStore
 import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.DefaultPreferences
 import io.element.android.libraries.matrix.api.core.SessionId
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class SharedPrefsMigrationScreenStore @Inject constructor(
-    @DefaultPreferences private val sharedPreferences: SharedPreferences,
+class SharedPreferencesMigrationScreenStore @Inject constructor(
+    private val sharedPreferences: SharedPreferences,
 ) : MigrationScreenStore {
     override fun isMigrationScreenNeeded(sessionId: SessionId): Boolean {
         return sharedPreferences.getBoolean(sessionId.toKey(), false).not()

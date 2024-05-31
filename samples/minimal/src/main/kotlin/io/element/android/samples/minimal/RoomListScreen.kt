@@ -31,7 +31,7 @@ import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryF
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersPresenter
 import io.element.android.features.roomlist.impl.filters.selection.DefaultFilterSelectionStrategy
 import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
-import io.element.android.features.roomlist.impl.migration.SharedPrefsMigrationScreenStore
+import io.element.android.features.roomlist.impl.migration.SharedPreferencesMigrationScreenStore
 import io.element.android.features.roomlist.impl.search.RoomListSearchDataSource
 import io.element.android.features.roomlist.impl.search.RoomListSearchPresenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -114,7 +114,7 @@ class RoomListScreen(
         featureFlagService = featureFlagService,
         migrationScreenPresenter = MigrationScreenPresenter(
             matrixClient = matrixClient,
-            migrationScreenStore = SharedPrefsMigrationScreenStore(context.getSharedPreferences("migration", Context.MODE_PRIVATE))
+            migrationScreenStore = SharedPreferencesMigrationScreenStore(context.getSharedPreferences("migration", Context.MODE_PRIVATE))
         ),
         searchPresenter = RoomListSearchPresenter(
             RoomListSearchDataSource(

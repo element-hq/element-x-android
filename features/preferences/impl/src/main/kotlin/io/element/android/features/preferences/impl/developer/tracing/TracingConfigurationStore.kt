@@ -20,7 +20,6 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.DefaultPreferences
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.Target
 import javax.inject.Inject
@@ -32,8 +31,8 @@ interface TracingConfigurationStore {
 }
 
 @ContributesBinding(AppScope::class)
-class SharedPrefTracingConfigurationStore @Inject constructor(
-    @DefaultPreferences private val sharedPreferences: SharedPreferences
+class SharedPreferencesTracingConfigurationStore @Inject constructor(
+    private val sharedPreferences: SharedPreferences
 ) : TracingConfigurationStore {
     override fun getLogLevel(target: Target): LogLevel? {
         return sharedPreferences.getString("$KEY_PREFIX${target.name}", null)
