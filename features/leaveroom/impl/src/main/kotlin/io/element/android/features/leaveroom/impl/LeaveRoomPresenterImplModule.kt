@@ -26,5 +26,5 @@ import io.element.android.libraries.di.SessionScope
 @ContributesTo(SessionScope::class)
 interface LeaveRoomPresenterImplModule {
     @Binds
-    fun leaveRoomPresenter(leaveRoomPresenter: LeaveRoomPresenterImpl): LeaveRoomPresenter
+    fun leaveRoomPresenter(leaveRoomPresenter: DefaultLeaveRoomPresenter): LeaveRoomPresenter
 }

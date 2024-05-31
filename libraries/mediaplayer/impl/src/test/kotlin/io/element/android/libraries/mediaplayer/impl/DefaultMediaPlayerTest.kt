@@ -19,7 +19,7 @@ package io.element.android.libraries.mediaplayer.impl
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class MediaPlayerImplTest {
+class DefaultMediaPlayerTest {
     @Test
     fun `default test`() = runTest {
         // TODO

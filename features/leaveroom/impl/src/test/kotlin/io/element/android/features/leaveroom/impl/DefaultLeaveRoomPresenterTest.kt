@@ -21,7 +21,6 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
-import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -37,13 +36,13 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
-class LeaveRoomPresenterImplTest {
+class DefaultLeaveRoomPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test
     fun `present - initial state hides all dialogs`() = runTest {
-        val presenter = createLeaveRoomPresenter()
+        val presenter = createDefaultLeaveRoomPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -56,7 +55,7 @@ class LeaveRoomPresenterImplTest {
 
     @Test
     fun `present - show generic confirmation`() = runTest {
-        val presenter = createLeaveRoomPresenter(
+        val presenter = createDefaultLeaveRoomPresenter(
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
@@ -76,7 +75,7 @@ class LeaveRoomPresenterImplTest {
 
     @Test
     fun `present - show private room confirmation`() = runTest {
-        val presenter = createLeaveRoomPresenter(
+        val presenter = createDefaultLeaveRoomPresenter(
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
@@ -96,7 +95,7 @@ class LeaveRoomPresenterImplTest {
 
     @Test
     fun `present - show last user in room confirmation`() = runTest {
-        val presenter = createLeaveRoomPresenter(
+        val presenter = createDefaultLeaveRoomPresenter(
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
@@ -116,7 +115,7 @@ class LeaveRoomPresenterImplTest {
 
     @Test
     fun `present - show DM confirmation`() = runTest {
-        val presenter = createLeaveRoomPresenter(
+        val presenter = createDefaultLeaveRoomPresenter(
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
@@ -137,7 +136,7 @@ class LeaveRoomPresenterImplTest {
     @Test
     fun `present - leaving a room leaves the room`() = runTest {
         val roomMembershipObserver = RoomMembershipObserver()
-        val presenter = createLeaveRoomPresenter(
+        val presenter = createDefaultLeaveRoomPresenter(
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
@@ -159,7 +158,7 @@ class LeaveRoomPresenterImplTest {
 
     @Test
     fun `present - show error if leave room fails`() = runTest {
-        val presenter = createLeaveRoomPresenter(
+        val presenter = createDefaultLeaveRoomPresenter(
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
@@ -183,7 +182,7 @@ class LeaveRoomPresenterImplTest {
 
     @Test
     fun `present - show progress indicator while leaving a room`() = runTest {
-        val presenter = createLeaveRoomPresenter(
+        val presenter = createDefaultLeaveRoomPresenter(
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
@@ -205,7 +204,7 @@ class LeaveRoomPresenterImplTest {
 
     @Test
     fun `present - hide error hides the error`() = runTest {
-        val presenter = createLeaveRoomPresenter(
+        val presenter = createDefaultLeaveRoomPresenter(
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
@@ -231,10 +230,10 @@ class LeaveRoomPresenterImplTest {
     }
 }
 
-private fun TestScope.createLeaveRoomPresenter(
+private fun TestScope.createDefaultLeaveRoomPresenter(
     client: MatrixClient = FakeMatrixClient(),
     roomMembershipObserver: RoomMembershipObserver = RoomMembershipObserver(),
-): LeaveRoomPresenter = LeaveRoomPresenterImpl(
+): DefaultLeaveRoomPresenter = DefaultLeaveRoomPresenter(
     client = client,
     roomMembershipObserver = roomMembershipObserver,
     dispatchers = testCoroutineDispatchers(false),

@@ -43,7 +43,7 @@ import kotlin.time.Duration.Companion.seconds
  */
 @ContributesBinding(RoomScope::class)
 @SingleIn(RoomScope::class)
-class MediaPlayerImpl @Inject constructor(
+class DefaultMediaPlayer @Inject constructor(
     private val player: SimplePlayer,
 ) : MediaPlayer {
     private val listener = object : SimplePlayer.Listener {

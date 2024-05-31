@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-class LeaveRoomPresenterImpl @Inject constructor(
+class DefaultLeaveRoomPresenter @Inject constructor(
     private val client: MatrixClient,
     private val roomMembershipObserver: RoomMembershipObserver,
     private val dispatchers: CoroutineDispatchers,

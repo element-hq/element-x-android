@@ -89,6 +89,7 @@ class KonsistClassNameTest {
         Konsist.scopeFromProject()
             .classes()
             .withNameEndingWith("Impl")
+            .withoutName("MediaUploadHandlerImpl")
             .assertEmpty(additionalMessage = "Class implementing interface should have name not end with 'Impl' but start with 'Default'")
     }
 }

@@ -40,7 +40,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import javax.inject.Inject
 
 @ContributesBinding(RoomScope::class)
-class MessageSummaryFormatterImpl @Inject constructor(
+class DefaultMessageSummaryFormatter @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : MessageSummaryFormatter {
     companion object {

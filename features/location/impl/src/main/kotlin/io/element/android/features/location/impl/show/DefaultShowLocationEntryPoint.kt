@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.pushstore.impl.clientsecret
+package io.element.android.features.location.impl.show
 
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.features.location.api.ShowLocationEntryPoint
+import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretFactory
-import java.util.UUID
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class PushClientSecretFactoryImpl @Inject constructor() : PushClientSecretFactory {
-    override fun create(): String {
-        return UUID.randomUUID().toString()
+class DefaultShowLocationEntryPoint @Inject constructor() : ShowLocationEntryPoint {
+    override fun createNode(parentNode: Node, buildContext: BuildContext, inputs: ShowLocationEntryPoint.Inputs): Node {
+        return parentNode.createNode<ShowLocationNode>(buildContext, listOf(inputs))
     }
 }

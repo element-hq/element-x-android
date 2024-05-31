@@ -31,7 +31,7 @@ import io.element.android.x.MainActivity
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class IntentProviderImpl @Inject constructor(
+class DefaultIntentProvider @Inject constructor(
     @ApplicationContext private val context: Context,
     private val deepLinkCreator: DeepLinkCreator,
 ) : IntentProvider {
