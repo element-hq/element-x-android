@@ -18,6 +18,7 @@ package io.element.android.services.analytics.test
 
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
+import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.AnalyticsProvider
@@ -68,6 +69,10 @@ class FakeAnalyticsService(
 
     override fun trackError(throwable: Throwable) {
         trackedErrors += throwable
+    }
+
+    override fun updateSuperProperties(updatedProperties: SuperProperties) {
+        // No op
     }
 
     override suspend fun reset() {

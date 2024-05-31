@@ -20,7 +20,7 @@ import com.posthog.PostHogInterface
 import com.squareup.anvil.annotations.ContributesMultibinding
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
-import im.vector.app.features.analytics.plan.Error
+import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.libraries.di.AppScope
 import io.element.android.services.analyticsproviders.api.AnalyticsProvider
@@ -41,6 +41,8 @@ class PosthogAnalyticsProvider @Inject constructor(
     private var analyticsId: String? = null
 
     private var pendingUserProperties: MutableMap<String, Any>? = null
+
+    private var superProperties: SuperProperties? = null
 
     private val userPropertiesLock = Any()
 
@@ -64,7 +66,7 @@ class PosthogAnalyticsProvider @Inject constructor(
         synchronized(userPropertiesLock) {
             posthog?.capture(
                 event = event.getName(),
-                properties = event.getProperties()?.keepOnlyNonNullValues().withExtraProperties(),
+                properties = event.getProperties()?.keepOnlyNonNullValues().withSuperProperties(),
                 userProperties = pendingUserProperties,
             )
             pendingUserProperties = null
@@ -74,7 +76,7 @@ class PosthogAnalyticsProvider @Inject constructor(
     override fun screen(screen: VectorAnalyticsScreen) {
         posthog?.screen(
             screenTitle = screen.getName(),
-            properties = screen.getProperties().withExtraProperties(),
+            properties = screen.getProperties().withSuperProperties(),
         )
     }
 
@@ -94,6 +96,14 @@ class PosthogAnalyticsProvider @Inject constructor(
         }
     }
 
+    override fun updateSuperProperties(updatedProperties: SuperProperties) {
+        this.superProperties = SuperProperties(
+            cryptoSDK = updatedProperties.cryptoSDK ?: this.superProperties?.cryptoSDK,
+            appPlatform = updatedProperties.appPlatform ?: this.superProperties?.appPlatform,
+            cryptoSDKVersion = updatedProperties.cryptoSDKVersion ?: superProperties?.cryptoSDKVersion
+        )
+    }
+
     override fun trackError(throwable: Throwable) {
         // Not implemented
     }
@@ -110,6 +120,17 @@ class PosthogAnalyticsProvider @Inject constructor(
 //            posthog?.identify(id, lateInitUserPropertiesFactory.createUserProperties()?.getProperties()?.toPostHogUserProperties(), IGNORED_OPTIONS)
         }
     }
+
+    private fun Map<String, Any>?.withSuperProperties(): Map<String, Any>? {
+        val withSuperProperties = this.orEmpty().toMutableMap()
+        val superProperties = this@PosthogAnalyticsProvider.superProperties?.getProperties()
+        superProperties?.forEach {
+            if (!withSuperProperties.containsKey(it.key)) {
+                withSuperProperties[it.key] = it.value
+            }
+        }
+        return withSuperProperties.takeIf { it.isEmpty().not() }
+    }
 }
 
 private fun Map<String, Any?>.keepOnlyNonNullValues(): Map<String, Any> {
@@ -121,15 +142,4 @@ private fun Map<String, Any?>.keepOnlyNonNullValues(): Map<String, Any> {
         }
     }
     return result
-}
-
-/**
- * Properties which will be added to all Events and Screens.
- */
-private val extraProperties: Map<String, Any> = mapOf(
-    "cryptoSDK" to Error.CryptoSDK.Rust
-)
-
-private fun Map<String, Any>?.withExtraProperties(): Map<String, Any> {
-    return orEmpty() + extraProperties
 }
