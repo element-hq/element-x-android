@@ -78,7 +78,7 @@ class KonsistClassNameTest {
             .assertTrue {
                 val interfaceName = it.name.replace("Fake", "")
                 it.name.startsWith("Fake") &&
-                    it.parents.any { parent -> parent.name.replace(".", "") == interfaceName }
+                    it.parents().any { parent -> parent.name.replace(".", "") == interfaceName }
             }
     }
 }
