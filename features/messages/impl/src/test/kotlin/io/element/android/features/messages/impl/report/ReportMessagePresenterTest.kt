@@ -37,7 +37,7 @@ class ReportMessagePresenterTest {
 
     @Test
     fun `presenter - initial state`() = runTest {
-        val presenter = aPresenter()
+        val presenter = createReportMessagePresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -50,7 +50,7 @@ class ReportMessagePresenterTest {
 
     @Test
     fun `presenter - update reason`() = runTest {
-        val presenter = aPresenter()
+        val presenter = createReportMessagePresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -64,7 +64,7 @@ class ReportMessagePresenterTest {
 
     @Test
     fun `presenter - toggle block user`() = runTest {
-        val presenter = aPresenter()
+        val presenter = createReportMessagePresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -82,7 +82,7 @@ class ReportMessagePresenterTest {
     @Test
     fun `presenter - handle successful report and block user`() = runTest {
         val room = FakeMatrixRoom()
-        val presenter = aPresenter(matrixRoom = room)
+        val presenter = createReportMessagePresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -99,7 +99,7 @@ class ReportMessagePresenterTest {
     @Test
     fun `presenter - handle successful report`() = runTest {
         val room = FakeMatrixRoom()
-        val presenter = aPresenter(matrixRoom = room)
+        val presenter = createReportMessagePresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -116,7 +116,7 @@ class ReportMessagePresenterTest {
         val room = FakeMatrixRoom().apply {
             givenReportContentResult(Result.failure(Exception("Failed to report content")))
         }
-        val presenter = aPresenter(matrixRoom = room)
+        val presenter = createReportMessagePresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -132,7 +132,7 @@ class ReportMessagePresenterTest {
         }
     }
 
-    private fun aPresenter(
+    private fun createReportMessagePresenter(
         inputs: ReportMessagePresenter.Inputs = ReportMessagePresenter.Inputs(AN_EVENT_ID, A_USER_ID),
         matrixRoom: MatrixRoom = FakeMatrixRoom(),
         snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),

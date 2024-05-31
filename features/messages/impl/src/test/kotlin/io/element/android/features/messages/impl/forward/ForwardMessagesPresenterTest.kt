@@ -20,6 +20,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -28,13 +29,11 @@ import io.element.android.libraries.matrix.test.room.aRoomSummaryDetails
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.LiveTimelineProvider
 import io.element.android.tests.testutils.WarmUpRule
-import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import java.lang.IllegalStateException
 
 class ForwardMessagesPresenterTest {
     @get:Rule
@@ -47,9 +46,7 @@ class ForwardMessagesPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.isForwarding).isFalse()
-            assertThat(initialState.error).isNull()
-            assertThat(initialState.forwardingSucceeded).isNull()
+            assertThat(initialState.forwardAction.isUninitialized()).isTrue()
         }
     }
 
@@ -70,11 +67,10 @@ class ForwardMessagesPresenterTest {
             val summary = aRoomSummaryDetails()
             presenter.onRoomSelected(listOf(summary.roomId))
             val forwardingState = awaitItem()
-            assertThat(forwardingState.isForwarding).isTrue()
+            assertThat(forwardingState.forwardAction.isLoading()).isTrue()
             val successfulForwardState = awaitItem()
-            assertThat(successfulForwardState.isForwarding).isFalse()
-            assertThat(successfulForwardState.forwardingSucceeded).isNotNull()
-            assert(forwardEventLambda).isCalledOnce()
+            assertThat(successfulForwardState.forwardAction).isEqualTo(AsyncAction.Success(listOf(summary.roomId)))
+            forwardEventLambda.assertions().isCalledOnce()
         }
     }
 
@@ -96,11 +92,11 @@ class ForwardMessagesPresenterTest {
             presenter.onRoomSelected(listOf(summary.roomId))
             skipItems(1)
             val failedForwardState = awaitItem()
-            assertThat(failedForwardState.error).isNotNull()
+            assertThat(failedForwardState.forwardAction.isFailure()).isTrue()
             // Then clear error
             failedForwardState.eventSink(ForwardMessagesEvents.ClearError)
-            assertThat(awaitItem().error).isNull()
-            assert(forwardEventLambda).isCalledOnce()
+            assertThat(awaitItem().forwardAction.isUninitialized()).isTrue()
+            forwardEventLambda.assertions().isCalledOnce()
         }
     }
 
@@ -111,6 +107,6 @@ class ForwardMessagesPresenterTest {
     ) = ForwardMessagesPresenter(
         eventId = eventId.value,
         timelineProvider = LiveTimelineProvider(fakeMatrixRoom),
-        matrixCoroutineScope = coroutineScope,
+        appCoroutineScope = coroutineScope,
     )
 }
