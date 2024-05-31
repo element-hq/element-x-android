@@ -21,13 +21,16 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
+import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
+import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.aRoomSummaryDetails
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -38,7 +41,7 @@ class RoomSelectPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = aPresenter()
+        val presenter = createRoomSelectPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -46,24 +49,18 @@ class RoomSelectPresenterTest {
             assertThat(initialState.selectedRooms).isEmpty()
             assertThat(initialState.resultState).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(initialState.isSearchActive).isFalse()
-            // Search is run automatically
-            val searchState = awaitItem()
-            assertThat(searchState.resultState).isInstanceOf(SearchBarResultState.NoResultsFound::class.java)
         }
     }
 
     @Test
     fun `present - toggle search active`() = runTest {
-        val presenter = aPresenter()
+        val presenter = createRoomSelectPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            skipItems(1)
-
             initialState.eventSink(RoomSelectEvents.ToggleSearchActive)
             assertThat(awaitItem().isSearchActive).isTrue()
-
             initialState.eventSink(RoomSelectEvents.ToggleSearchActive)
             assertThat(awaitItem().isSearchActive).isFalse()
         }
@@ -74,43 +71,59 @@ class RoomSelectPresenterTest {
         val roomListService = FakeRoomListService().apply {
             postAllRooms(listOf(RoomSummary.Filled(aRoomSummaryDetails())))
         }
-        val client = FakeMatrixClient(roomListService = roomListService)
-        val presenter = aPresenter(client = client)
+        val presenter = createRoomSelectPresenter(
+            roomListService = roomListService
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             assertThat(awaitItem().resultState as? SearchBarResultState.Results).isEqualTo(SearchBarResultState.Results(listOf(aRoomSummaryDetails())))
-
+            initialState.eventSink(RoomSelectEvents.ToggleSearchActive)
+            skipItems(1)
             initialState.eventSink(RoomSelectEvents.UpdateQuery("string not contained"))
+            assertThat(
+                roomListService.allRooms.currentFilter.value
+            ).isEqualTo(
+                RoomListFilter.NormalizedMatchRoomName("string not contained")
+            )
             assertThat(awaitItem().query).isEqualTo("string not contained")
+            roomListService.postAllRooms(
+                emptyList()
+            )
             assertThat(awaitItem().resultState).isInstanceOf(SearchBarResultState.NoResultsFound::class.java)
         }
     }
 
     @Test
     fun `present - select and remove a room`() = runTest {
-        val presenter = aPresenter()
+        val roomListService = FakeRoomListService().apply {
+            postAllRooms(listOf(RoomSummary.Filled(aRoomSummaryDetails())))
+        }
+        val presenter = createRoomSelectPresenter(
+            roomListService = roomListService,
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            skipItems(1)
             val summary = aRoomSummaryDetails()
-
             initialState.eventSink(RoomSelectEvents.SetSelectedRoom(summary))
             assertThat(awaitItem().selectedRooms).isEqualTo(persistentListOf(summary))
-
             initialState.eventSink(RoomSelectEvents.RemoveSelectedRoom)
             assertThat(awaitItem().selectedRooms).isEmpty()
+            cancel()
         }
     }
 
-    private fun aPresenter(
+    private fun TestScope.createRoomSelectPresenter(
         mode: RoomSelectMode = RoomSelectMode.Forward,
-        client: FakeMatrixClient = FakeMatrixClient(),
+        roomListService: RoomListService = FakeRoomListService(),
     ) = RoomSelectPresenter(
         mode = mode,
-        client = client,
+        dataSource = RoomSelectSearchDataSource(
+            roomListService = roomListService,
+            coroutineDispatchers = testCoroutineDispatchers(),
+        ),
     )
 }

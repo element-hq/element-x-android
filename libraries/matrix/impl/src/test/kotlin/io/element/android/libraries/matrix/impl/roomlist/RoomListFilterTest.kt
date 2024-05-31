@@ -136,4 +136,10 @@ class RoomListFilterTest {
         )
         assertThat(roomSummaries.filter(filter)).isEmpty()
     }
+
+    @Test
+    fun `Room list filter all with empty list`() = runTest {
+        val filter = RoomListFilter.all()
+        assertThat(roomSummaries.filter(filter)).isEqualTo(roomSummaries)
+    }
 }
