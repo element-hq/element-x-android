@@ -17,9 +17,11 @@
 package io.element.android.features.login.impl.screens.qrcode.confirmation
 
 import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import io.element.android.libraries.architecture.NodeInputs
 import kotlinx.parcelize.Parcelize
 
+@Immutable
 sealed interface QrCodeConfirmationStep : NodeInputs, Parcelable {
     @Parcelize
     data class DisplayCheckCode(val code: String) : QrCodeConfirmationStep
