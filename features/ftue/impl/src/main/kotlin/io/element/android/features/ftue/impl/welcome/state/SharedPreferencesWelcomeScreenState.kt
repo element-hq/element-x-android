@@ -25,9 +25,9 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-class AndroidWelcomeScreenState @Inject constructor(
+class SharedPreferencesWelcomeScreenState @Inject constructor(
     private val sharedPreferences: SharedPreferences,
-) : WelcomeScreenState {
+) : WelcomeScreenStore {
     companion object {
         private const val IS_WELCOME_SCREEN_SHOWN = "is_welcome_screen_shown"
     }
