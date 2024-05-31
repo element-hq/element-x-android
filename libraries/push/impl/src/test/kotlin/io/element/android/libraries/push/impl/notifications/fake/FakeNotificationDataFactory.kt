@@ -27,23 +27,22 @@ import io.element.android.libraries.push.impl.notifications.model.FallbackNotifi
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
+import io.element.android.tests.testutils.lambda.LambdaFiveParamsRecorder
 import io.element.android.tests.testutils.lambda.LambdaOneParamRecorder
-import io.element.android.tests.testutils.lambda.LambdaSixParamsRecorder
 import io.element.android.tests.testutils.lambda.LambdaThreeParamsRecorder
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 
 class FakeNotificationDataFactory(
     var messageEventToNotificationsResult: LambdaThreeParamsRecorder<List<NotifiableMessageEvent>, MatrixUser, ImageLoader, List<RoomNotification>> =
         lambdaRecorder { _, _, _ -> emptyList() },
-    var summaryToNotificationsResult: LambdaSixParamsRecorder<
+    var summaryToNotificationsResult: LambdaFiveParamsRecorder<
         MatrixUser,
         List<RoomNotification>,
         List<OneShotNotification>,
         List<OneShotNotification>,
         List<OneShotNotification>,
-        Boolean,
         SummaryNotification
-    > = lambdaRecorder { _, _, _, _, _, _ -> SummaryNotification.Update(A_NOTIFICATION) },
+    > = lambdaRecorder { _, _, _, _, _ -> SummaryNotification.Update(A_NOTIFICATION) },
     var inviteToNotificationsResult: LambdaOneParamRecorder<List<InviteNotifiableEvent>, List<OneShotNotification>> = lambdaRecorder { _ -> emptyList() },
     var simpleEventToNotificationsResult: LambdaOneParamRecorder<List<SimpleNotifiableEvent>, List<OneShotNotification>> = lambdaRecorder { _ -> emptyList() },
     var fallbackEventToNotificationsResult: LambdaOneParamRecorder<List<FallbackNotifiableEvent>, List<OneShotNotification>> =
@@ -75,7 +74,6 @@ class FakeNotificationDataFactory(
         invitationNotifications: List<OneShotNotification>,
         simpleNotifications: List<OneShotNotification>,
         fallbackNotifications: List<OneShotNotification>,
-        useCompleteNotificationFormat: Boolean
     ): SummaryNotification {
         return summaryToNotificationsResult(
             currentUser,
@@ -83,7 +81,6 @@ class FakeNotificationDataFactory(
             invitationNotifications,
             simpleNotifications,
             fallbackNotifications,
-            useCompleteNotificationFormat
         )
     }
 }

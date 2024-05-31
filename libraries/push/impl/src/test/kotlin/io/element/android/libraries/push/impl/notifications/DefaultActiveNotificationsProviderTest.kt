@@ -160,6 +160,7 @@ class DefaultActiveNotificationsProviderTest {
     private fun aStatusBarNotification(id: Int, groupId: String, tag: String? = null) = mockk<StatusBarNotification> {
         every { this@mockk.id } returns id
         every { this@mockk.tag } returns tag
+        @Suppress("DEPRECATION")
         every { this@mockk.notification } returns Notification.Builder(InstrumentationRegistry.getInstrumentation().targetContext).setGroup(groupId).build()
     }
 

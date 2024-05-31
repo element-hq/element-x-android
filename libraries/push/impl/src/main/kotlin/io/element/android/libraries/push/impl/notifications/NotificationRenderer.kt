@@ -52,7 +52,6 @@ class NotificationRenderer @Inject constructor(
                 invitationNotifications = invitationNotifications,
                 simpleNotifications = simpleNotifications,
                 fallbackNotifications = fallbackNotifications,
-                useCompleteNotificationFormat = useCompleteNotificationFormat
             )
 
             // Remove summary first to avoid briefly displaying it after dismissing the last notification
