@@ -80,7 +80,6 @@ jobs:
 
       # https://github.com/codecov/codecov-action
       - name: ☂️ Upload coverage reports to codecov
-        if: always()
         uses: codecov/codecov-action@v4
         with:
           fail_ci_if_error: true
