@@ -163,7 +163,7 @@ fun Project.setupKover() {
                             // Some options can't be tested at the moment
                             "io.element.android.features.preferences.impl.developer.DeveloperSettingsPresenter$*",
                             // Need an Activity to use rememberMultiplePermissionsState
-                            "io.element.android.features.location.impl.common.permissions.DefaultPermissionsPresenter$*",
+                            "io.element.android.features.location.impl.common.permissions.DefaultPermissionsPresenter",
                             "*Presenter\$present\$*",
                         )
                     }
