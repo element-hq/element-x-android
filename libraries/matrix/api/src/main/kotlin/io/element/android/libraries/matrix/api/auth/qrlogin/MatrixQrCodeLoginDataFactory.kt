@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.features.onboarding.impl
+package io.element.android.libraries.matrix.api.auth.qrlogin
 
-object OnBoardingConfig {
-    const val CAN_LOGIN_WITH_QR_CODE = false
-    const val CAN_CREATE_ACCOUNT = false
+interface MatrixQrCodeLoginDataFactory {
+    fun parseQrCodeData(data: ByteArray): Result<MatrixQrCodeLoginData>
 }

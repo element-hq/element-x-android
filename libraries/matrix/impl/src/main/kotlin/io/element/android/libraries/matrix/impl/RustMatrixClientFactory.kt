@@ -46,25 +46,11 @@ class RustMatrixClientFactory @Inject constructor(
     private val utdTracker: UtdTracker,
 ) {
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
-        val client = ClientBuilder()
-            .basePath(baseDirectory.absolutePath)
+        val client = getBaseClientBuilder()
             .homeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
             .passphrase(sessionData.passphrase)
-            .userAgent(userAgentProvider.provide())
-            .let {
-                // Sadly ClientBuilder.proxy() does not accept null :/
-                // Tracked by https://github.com/matrix-org/matrix-rust-sdk/issues/3159
-                val proxy = proxyProvider.provides()
-                if (proxy != null) {
-                    it.proxy(proxy)
-                } else {
-                    it
-                }
-            }
-            .addRootCertificates(userCertificatesProvider.provides())
             // FIXME Quick and dirty fix for stopping version requests on startup https://github.com/matrix-org/matrix-rust-sdk/pull/1376
-            .serverVersions(listOf("v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"))
             .use { it.build() }
 
         client.restoreSession(sessionData.toSession())
@@ -83,6 +69,24 @@ class RustMatrixClientFactory @Inject constructor(
             baseCacheDirectory = cacheDirectory,
             clock = clock,
         )
+    }
+
+    internal fun getBaseClientBuilder(): ClientBuilder {
+        return ClientBuilder()
+            .basePath(baseDirectory.absolutePath)
+            .userAgent(userAgentProvider.provide())
+            .addRootCertificates(userCertificatesProvider.provides())
+            .serverVersions(listOf("v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"))
+            .let {
+                // Sadly ClientBuilder.proxy() does not accept null :/
+                // Tracked by https://github.com/matrix-org/matrix-rust-sdk/issues/3159
+                val proxy = proxyProvider.provides()
+                if (proxy != null) {
+                    it.proxy(proxy)
+                } else {
+                    it
+                }
+            }
     }
 }
 

@@ -25,12 +25,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
-import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
+import io.element.android.libraries.designsystem.components.BigIcon
+import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -49,7 +49,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FlowStepPage(
-    iconVector: ImageVector?,
+    iconStyle: BigIcon.Style,
     title: String,
     modifier: Modifier = Modifier,
     onBackClick: (() -> Unit)? = null,
@@ -73,10 +73,10 @@ fun FlowStepPage(
             )
         },
         header = {
-            IconTitleSubtitleMolecule(
-                iconImageVector = iconVector,
+            PageTitle(
                 title = title,
-                subTitle = subTitle,
+                subtitle = subTitle,
+                iconStyle = iconStyle,
             )
         },
         content = content,
@@ -97,7 +97,7 @@ internal fun FlowStepPagePreview() = ElementPreview {
         onBackClick = {},
         title = "Title",
         subTitle = "Subtitle",
-        iconVector = CompoundIcons.Computer(),
+        iconStyle = BigIcon.Style.Default(CompoundIcons.Computer()),
         buttons = {
             TextButton(text = "A button", onClick = { })
             Button(text = "Continue", onClick = { })
