@@ -16,8 +16,10 @@
 
 package io.element.android.libraries.push.impl.notifications
 
+import android.app.Notification
 import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationManagerCompat
+import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
@@ -157,8 +159,8 @@ class DefaultActiveNotificationsProviderTest {
 
     private fun aStatusBarNotification(id: Int, groupId: String, tag: String? = null) = mockk<StatusBarNotification> {
         every { this@mockk.id } returns id
-        every { this@mockk.groupKey } returns groupId
         every { this@mockk.tag } returns tag
+        every { this@mockk.notification } returns Notification.Builder(InstrumentationRegistry.getInstrumentation().targetContext).setGroup(groupId).build()
     }
 
     private fun createActiveNotificationsProvider(
