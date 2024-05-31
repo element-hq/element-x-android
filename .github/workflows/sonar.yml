@@ -36,7 +36,7 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Build projects
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleDebug assembleDebugUnitTest
       - name: 🔊 Publish results to Sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
