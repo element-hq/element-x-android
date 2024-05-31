@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -150,6 +151,7 @@ internal fun SimpleAlertDialogContent(
                 Text(
                     text = titleText,
                     style = ElementTheme.typography.fontHeadingSmMedium,
+                    textAlign = TextAlign.Center,
                 )
             }
         },

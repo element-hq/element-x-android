@@ -33,6 +33,7 @@ import io.element.android.features.logout.impl.tools.isBackingUp
 import io.element.android.features.logout.impl.ui.LogoutActionDialog
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
+import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -62,7 +63,7 @@ fun LogoutView(
         onBackClick = onBackClick,
         title = title(state),
         subTitle = subtitle(state),
-        iconVector = CompoundIcons.KeySolid(),
+        iconStyle = BigIcon.Style.Default(CompoundIcons.KeySolid()),
         modifier = modifier,
         buttons = {
             Buttons(

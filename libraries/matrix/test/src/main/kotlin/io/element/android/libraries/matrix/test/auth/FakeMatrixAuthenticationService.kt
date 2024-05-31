@@ -20,9 +20,13 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
+import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.sessionstorage.api.LoggedInState
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,7 +36,9 @@ import kotlinx.coroutines.flow.flowOf
 val A_OIDC_DATA = OidcDetails(url = "a-url")
 
 class FakeMatrixAuthenticationService(
-    private val matrixClientResult: ((SessionId) -> Result<MatrixClient>)? = null
+    var matrixClientResult: ((SessionId) -> Result<MatrixClient>)? = null,
+    var loginWithQrCodeResult: (qrCodeData: MatrixQrCodeLoginData, progress: (QrCodeLoginStep) -> Unit) -> Result<SessionId> =
+        lambdaRecorder<MatrixQrCodeLoginData, (QrCodeLoginStep) -> Unit, Result<SessionId>> { _, _ -> Result.success(A_SESSION_ID) },
 ) : MatrixAuthenticationService {
     private val homeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
     private var oidcError: Throwable? = null
@@ -50,8 +56,8 @@ class FakeMatrixAuthenticationService(
     override suspend fun getLatestSessionId(): SessionId? = getLatestSessionIdLambda()
 
     override suspend fun restoreSession(sessionId: SessionId): Result<MatrixClient> {
-        if (matrixClientResult != null) {
-            return matrixClientResult.invoke(sessionId)
+        matrixClientResult?.let {
+            return it.invoke(sessionId)
         }
         return if (matrixClient != null) {
             Result.success(matrixClient!!)
@@ -86,6 +92,10 @@ class FakeMatrixAuthenticationService(
 
     override suspend fun loginWithOidc(callbackUrl: String): Result<SessionId> = simulateLongTask {
         loginError?.let { Result.failure(it) } ?: Result.success(A_USER_ID)
+    }
+
+    override suspend fun loginWithQrCode(qrCodeData: MatrixQrCodeLoginData, progress: (QrCodeLoginStep) -> Unit): Result<SessionId> = simulateLongTask {
+        loginWithQrCodeResult(qrCodeData, progress)
     }
 
     fun givenOidcError(throwable: Throwable?) {

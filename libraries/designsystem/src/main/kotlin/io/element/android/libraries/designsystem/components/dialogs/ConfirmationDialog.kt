@@ -44,6 +44,7 @@ fun ConfirmationDialog(
     thirdButtonText: String? = null,
     onCancelClick: () -> Unit = onDismiss,
     onThirdButtonClick: () -> Unit = {},
+    icon: @Composable (() -> Unit)? = null,
 ) {
     BasicAlertDialog(modifier = modifier, onDismissRequest = onDismiss) {
         ConfirmationDialogContent(
@@ -56,6 +57,7 @@ fun ConfirmationDialog(
             onSubmitClick = onSubmitClick,
             onCancelClick = onCancelClick,
             onThirdButtonClick = onThirdButtonClick,
+            icon = icon,
         )
     }
 }
