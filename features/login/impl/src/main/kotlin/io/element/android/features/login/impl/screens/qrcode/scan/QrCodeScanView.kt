@@ -155,7 +155,7 @@ private fun ColumnScope.Buttons(
                         Text(
                             text = when (error) {
                                 is QrLoginException.OtherDeviceNotSignedIn -> {
-                                    stringResource(R.string.screen_qr_code_login_device_not_signed_in_scan_state_title)
+                                    stringResource(R.string.screen_qr_code_login_device_not_signed_in_scan_state_subtitle)
                                 }
                                 else -> stringResource(R.string.screen_qr_code_login_invalid_scan_state_subtitle)
                             },
@@ -166,7 +166,7 @@ private fun ColumnScope.Buttons(
                     }
                     Text(
                         text = when (error) {
-                            is QrLoginException.OtherDeviceNotSignedIn -> stringResource(R.string.screen_qr_code_login_device_not_signed_in_scan_state_subtitle)
+                            is QrLoginException.OtherDeviceNotSignedIn -> stringResource(R.string.screen_qr_code_login_device_not_signed_in_scan_state_description)
                             else -> stringResource(R.string.screen_qr_code_login_invalid_scan_state_description)
                         },
                         textAlign = TextAlign.Center,
