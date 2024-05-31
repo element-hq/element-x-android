@@ -26,7 +26,6 @@ import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.nonNull
-import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -35,7 +34,7 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class DefaultSummaryGroupMessageCreatorTest {
     @Test
-    fun `process notifications with complete format`() = runTest {
+    fun `process notifications`() = runTest {
         val notificationCreator = FakeNotificationCreator()
         val summaryCreator = DefaultSummaryGroupMessageCreator(
             stringProvider = FakeStringProvider(),
@@ -57,47 +56,11 @@ class DefaultSummaryGroupMessageCreatorTest {
             invitationNotifications = emptyList(),
             simpleNotifications = emptyList(),
             fallbackNotifications = emptyList(),
-            useCompleteNotificationFormat = true,
         )
 
         notificationCreator.createSummaryListNotificationResult.assertions()
             .isCalledOnce()
-            .with(any(), nonNull(), any(), any(), any())
-
-        // Set from the events included
-        @Suppress("DEPRECATION")
-        assertThat(result.priority).isEqualTo(NotificationCompat.PRIORITY_DEFAULT)
-    }
-
-    @Test
-    fun `process notifications without complete format`() = runTest {
-        val notificationCreator = FakeNotificationCreator()
-        val summaryCreator = DefaultSummaryGroupMessageCreator(
-            stringProvider = FakeStringProvider(),
-            notificationCreator = notificationCreator,
-        )
-
-        val result = summaryCreator.createSummaryNotification(
-            currentUser = aMatrixUser(),
-            roomNotifications = listOf(
-                RoomNotification(
-                    notification = Notification(),
-                    roomId = A_ROOM_ID,
-                    summaryLine = "",
-                    messageCount = 1,
-                    latestTimestamp = A_FAKE_TIMESTAMP + 10,
-                    shouldBing = true,
-                )
-            ),
-            invitationNotifications = emptyList(),
-            simpleNotifications = emptyList(),
-            fallbackNotifications = emptyList(),
-            useCompleteNotificationFormat = false,
-        )
-
-        notificationCreator.createSummaryListNotificationResult.assertions()
-            .isCalledOnce()
-            .with(any(), value(null), any(), any(), any())
+            .with(any(), nonNull(), any(), any())
 
         // Set from the events included
         @Suppress("DEPRECATION")

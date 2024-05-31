@@ -57,7 +57,6 @@ interface NotificationDataFactory {
         invitationNotifications: List<OneShotNotification>,
         simpleNotifications: List<OneShotNotification>,
         fallbackNotifications: List<OneShotNotification>,
-        useCompleteNotificationFormat: Boolean
     ): SummaryNotification
 }
 
@@ -149,7 +148,6 @@ class DefaultNotificationDataFactory @Inject constructor(
         invitationNotifications: List<OneShotNotification>,
         simpleNotifications: List<OneShotNotification>,
         fallbackNotifications: List<OneShotNotification>,
-        useCompleteNotificationFormat: Boolean
     ): SummaryNotification {
         return when {
             roomNotifications.isEmpty() && invitationNotifications.isEmpty() && simpleNotifications.isEmpty() -> SummaryNotification.Removed
@@ -160,7 +158,6 @@ class DefaultNotificationDataFactory @Inject constructor(
                     invitationNotifications = invitationNotifications,
                     simpleNotifications = simpleNotifications,
                     fallbackNotifications = fallbackNotifications,
-                    useCompleteNotificationFormat = useCompleteNotificationFormat
                 )
             )
         }

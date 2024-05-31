@@ -192,7 +192,6 @@ class DefaultNotificationCreatorTest {
         val matrixUser = aMatrixUser()
         val result = sut.createSummaryListNotification(
             currentUser = matrixUser,
-            style = null,
             compatSummary = "compatSummary",
             noisy = false,
             lastMessageTimestamp = 123_456L,
@@ -208,7 +207,6 @@ class DefaultNotificationCreatorTest {
         val matrixUser = aMatrixUser()
         val result = sut.createSummaryListNotification(
             currentUser = matrixUser,
-            style = null,
             compatSummary = "compatSummary",
             noisy = true,
             lastMessageTimestamp = 123_456L,
