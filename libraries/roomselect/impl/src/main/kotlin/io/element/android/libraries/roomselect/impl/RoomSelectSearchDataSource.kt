@@ -34,6 +34,10 @@ import javax.inject.Inject
 
 private const val PAGE_SIZE = 30
 
+/**
+ * DataSource for RoomSummaryDetails that can be filtered by a search query,
+ * and which only includes rooms the user has joined.
+ */
 class RoomSelectSearchDataSource @Inject constructor(
     roomListService: RoomListService,
     coroutineDispatchers: CoroutineDispatchers,
