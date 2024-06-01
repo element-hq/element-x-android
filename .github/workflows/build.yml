@@ -9,7 +9,7 @@ on:
 
 # Enrich gradle.properties for CI/CD
 env:
-  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx7g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.incremental=false -XX:+UseParallelGC
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx7g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.incremental=false -XX:+UseG1GC -Dkotlin.daemon.jvm.options="-Xmx3g"
   CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 8 -Dsonar.gradle.skipCompile=true
 
 jobs:
