@@ -35,7 +35,6 @@ anvil {
 }
 
 dependencies {
-    implementation(projects.appnav)
     implementation(projects.appconfig)
     implementation(projects.anvilannotations)
     implementation(projects.libraries.architecture)
