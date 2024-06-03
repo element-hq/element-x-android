@@ -33,3 +33,5 @@ value class ThreadId(val value: String) : Serializable {
 
     override fun toString(): String = value
 }
+
+fun ThreadId.asEventId(): EventId = EventId(value)

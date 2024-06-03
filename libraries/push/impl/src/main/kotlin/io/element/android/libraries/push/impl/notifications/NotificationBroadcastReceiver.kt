@@ -19,6 +19,7 @@ package io.element.android.libraries.push.impl.notifications
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import androidx.core.app.RemoteInput
 import io.element.android.features.preferences.api.store.SessionPreferencesStoreFactory
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
@@ -26,11 +27,19 @@ import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.matrix.api.core.asEventId
+import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
+import io.element.android.libraries.push.impl.R
+import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
+import io.element.android.libraries.push.impl.push.OnNotifiableEventReceived
+import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.UUID
 import javax.inject.Inject
 
 private val loggerTag = LoggerTag("NotificationBroadcastReceiver", LoggerTag.NotificationLoggerTag)
@@ -44,19 +53,23 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     @Inject lateinit var sessionPreferencesStore: SessionPreferencesStoreFactory
     @Inject lateinit var defaultNotificationDrawerManager: DefaultNotificationDrawerManager
     @Inject lateinit var actionIds: NotificationActionIds
+    @Inject lateinit var systemClock: SystemClock
+    @Inject lateinit var onNotifiableEventReceived: OnNotifiableEventReceived
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || context == null) return
         val sessionId = intent.extras?.getString(KEY_SESSION_ID)?.let(::SessionId) ?: return
         val roomId = intent.getStringExtra(KEY_ROOM_ID)?.let(::RoomId)
+        val threadId = intent.getStringExtra(KEY_THREAD_ID)?.let(::ThreadId)
         val eventId = intent.getStringExtra(KEY_EVENT_ID)?.let(::EventId)
 
         context.bindings<NotificationBroadcastReceiverBindings>().inject(this)
 
         Timber.tag(loggerTag.value).d("onReceive: ${intent.action} ${intent.data} for: ${roomId?.value}/${eventId?.value}")
         when (intent.action) {
-            actionIds.smartReply ->
-                handleSmartReply(intent, context)
+            actionIds.smartReply -> if (roomId != null) {
+                handleSmartReply(sessionId, roomId, threadId, intent, context)
+            }
             actionIds.dismissRoom -> if (roomId != null) {
                 defaultNotificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
             }
@@ -104,113 +117,84 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         client.getRoom(roomId)?.markAsRead(receiptType = receiptType)
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    private fun handleSmartReply(intent: Intent, context: Context) {
-        /*
+    private fun handleSmartReply(
+        sessionId: SessionId,
+        roomId: RoomId,
+        threadId: ThreadId?,
+        intent: Intent,
+        context: Context
+    ) = appCoroutineScope.launch {
         val message = getReplyMessage(intent)
-        val sessionId = intent.getStringExtra(KEY_SESSION_ID)?.let(::SessionId)
-        val roomId = intent.getStringExtra(KEY_ROOM_ID)?.let(::RoomId)
-        val threadId = intent.getStringExtra(KEY_THREAD_ID)?.let(::ThreadId)
 
-        if (message.isNullOrBlank() || roomId == null) {
+        if (message.isNullOrBlank()) {
             // ignore this event
             // Can this happen? should we update notification?
-            return
+            return@launch
         }
-        activeSessionHolder.getActiveSession().let { session ->
-            session.getRoom(roomId)?.let { room ->
-                sendMatrixEvent(message, threadId, session, room, context)
-            }
+        val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return@launch
+        client.getRoom(roomId)?.let { room ->
+            sendMatrixEvent(
+                sessionId = sessionId,
+                roomId = roomId,
+                threadId = threadId,
+                room = room,
+                message = message,
+                context = context,
+            )
         }
-         */
     }
 
-    /*
-    private fun sendMatrixEvent(message: String, threadId: String?, session: Session, room: Room, context: Context?) {
+    private suspend fun sendMatrixEvent(
+        sessionId: SessionId,
+        roomId: RoomId,
+        threadId: ThreadId?,
+        room: MatrixRoom,
+        message: String,
+        context: Context,
+    ) {
+        // Create a new event to be displayed in the notification drawer, right now
+        val notifiableMessageEvent = NotifiableMessageEvent(
+            sessionId = sessionId,
+            roomId = roomId,
+            // Generate a Fake event id
+            eventId = EventId("\$" + UUID.randomUUID().toString()),
+            editedEventId = null,
+            canBeReplaced = false,
+            senderId = sessionId,
+            noisy = false,
+            timestamp = systemClock.epochMillis(),
+            senderDisambiguatedDisplayName = room.getUpdatedMember(sessionId).getOrNull()?.disambiguatedDisplayName
+                ?: context.getString(R.string.notification_sender_me),
+            body = message,
+            imageUriString = null,
+            threadId = threadId,
+            roomName = room.displayName,
+            roomIsDirect = room.isDirect,
+            outGoingMessage = true,
+        )
+        onNotifiableEventReceived.onNotifiableEventReceived(notifiableMessageEvent)
+
         if (threadId != null) {
-            room.relationService().replyInThread(
-                    rootThreadEventId = threadId,
-                    replyInThreadText = message,
+            room.liveTimeline.replyMessage(
+                eventId = threadId.asEventId(),
+                body = message,
+                htmlBody = null,
+                mentions = emptyList()
             )
         } else {
-            room.sendService().sendTextMessage(message)
-        }
-
-        // Create a new event to be displayed in the notification drawer, right now
-
-        val notifiableMessageEvent = NotifiableMessageEvent(
-                // Generate a Fake event id
-                eventId = UUID.randomUUID().toString(),
-                editedEventId = null,
-                noisy = false,
-                timestamp = clock.epochMillis(),
-                senderName = session.roomService().getRoomMember(session.myUserId, room.roomId)?.displayName
-                        ?: context?.getString(R.string.notification_sender_me),
-                senderId = session.myUserId,
+            room.liveTimeline.sendMessage(
                 body = message,
-                imageUriString = null,
-                roomId = room.roomId,
-                threadId = threadId,
-                roomName = room.roomSummary()?.displayName ?: room.roomId,
-                roomIsDirect = room.roomSummary()?.isDirect == true,
-                outGoingMessage = true,
-                canBeReplaced = false
-        )
-
-        notificationDrawerManager.updateEvents { it.onNotifiableEventReceived(notifiableMessageEvent) }
-
-        /*
-        // TODO Error cannot be managed the same way than in Riot
-
-        val event = Event(mxMessage, session.credentials.userId, roomId)
-        room.storeOutgoingEvent(event)
-        room.sendEvent(event, object : MatrixCallback<Void?> {
-            override fun onSuccess(info: Void?) {
-                Timber.v("Send message : onSuccess ")
-            }
-
-            override fun onNetworkError(e: Exception) {
-                Timber.e(e, "Send message : onNetworkError")
-                onSmartReplyFailed(e.localizedMessage)
-            }
-
-            override fun onMatrixError(e: MatrixError) {
-                Timber.v("Send message : onMatrixError " + e.message)
-                if (e is MXCryptoError) {
-                    Toast.makeText(context, e.detailedErrorDescription, Toast.LENGTH_SHORT).show()
-                    onSmartReplyFailed(e.detailedErrorDescription)
-                } else {
-                    Toast.makeText(context, e.localizedMessage, Toast.LENGTH_SHORT).show()
-                    onSmartReplyFailed(e.localizedMessage)
-                }
-            }
-
-            override fun onUnexpectedError(e: Exception) {
-                Timber.e(e, "Send message : onUnexpectedError " + e.message)
-                onSmartReplyFailed(e.message)
-            }
-
-
-            fun onSmartReplyFailed(reason: String?) {
-                val notifiableMessageEvent = NotifiableMessageEvent(
-                        event.eventId,
-                        false,
-                        clock.epochMillis(),
-                        session.myUser?.displayname
-                                ?: context?.getString(R.string.notification_sender_me),
-                        session.myUserId,
-                        message,
-                        roomId,
-                        room.getRoomDisplayName(context),
-                        room.isDirect)
-                notifiableMessageEvent.outGoingMessage = true
-                notifiableMessageEvent.outGoingMessageFailed = true
-
-                VectorApp.getInstance().notificationDrawerManager.onNotifiableEventReceived(notifiableMessageEvent)
-                VectorApp.getInstance().notificationDrawerManager.refreshNotificationDrawer(null)
-            }
-        })
-     */
+                htmlBody = null,
+                mentions = emptyList()
+            )
+        }.onFailure {
+            Timber.e(it, "Failed to send smart reply message")
+            onNotifiableEventReceived.onNotifiableEventReceived(
+                notifiableMessageEvent.copy(
+                    outGoingMessageFailed = true
+                )
+            )
+        }
     }
 
     private fun getReplyMessage(intent: Intent?): String? {
@@ -222,7 +206,6 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         }
         return null
     }
-     */
 
     companion object {
         const val KEY_SESSION_ID = "sessionID"
