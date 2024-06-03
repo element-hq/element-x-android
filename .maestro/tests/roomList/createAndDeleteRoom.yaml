@@ -15,6 +15,7 @@ appId: ${MAESTRO_APP_ID}
 - inputText: "aRoomTopic"
 - tapOn: "Create"
 - takeScreenshot: build/maestro/320-createAndDeleteRoom
+- runFlow: room/call.yaml
 - tapOn: "aRoomName"
 - tapOn: "Invite"
 # assert there's 1 member and 1 invitee
