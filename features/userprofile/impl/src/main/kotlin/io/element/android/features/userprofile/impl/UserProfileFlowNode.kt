@@ -83,8 +83,8 @@ class UserProfileFlowNode @AssistedInject constructor(
                         plugins<UserProfileEntryPoint.Callback>().forEach { it.onOpenRoom(roomId) }
                     }
 
-                    override fun onStartCall(roomId: RoomId) {
-                        ElementCallActivity.start(context, CallType.RoomCall(sessionId = sessionIdHolder.current, roomId = roomId))
+                    override fun onStartCall(dmRoomId: RoomId) {
+                        ElementCallActivity.start(context, CallType.RoomCall(sessionId = sessionIdHolder.current, roomId = dmRoomId))
                     }
                 }
                 val params = UserProfileNode.UserProfileInputs(userId = inputs<UserProfileEntryPoint.Params>().userId)

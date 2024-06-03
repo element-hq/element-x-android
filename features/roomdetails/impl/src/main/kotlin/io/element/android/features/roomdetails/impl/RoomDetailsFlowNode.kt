@@ -194,8 +194,8 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                         plugins<RoomDetailsEntryPoint.Callback>().forEach { it.onOpenRoom(roomId) }
                     }
 
-                    override fun onStartCall(roomId: RoomId) {
-                        ElementCallActivity.start(context, CallType.RoomCall(roomId = roomId, sessionId = room.sessionId))
+                    override fun onStartCall(dmRoomId: RoomId) {
+                        ElementCallActivity.start(context, CallType.RoomCall(sessionId = room.sessionId, roomId = dmRoomId))
                     }
                 }
                 val plugins = listOf(RoomMemberDetailsNode.RoomMemberDetailsInput(navTarget.roomMemberId), callback)
