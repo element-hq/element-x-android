@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    id("io.element.android-compose-library")
-}
 
-android {
-    namespace = "io.element.android.services.analytics.test"
-}
+package io.element.android.services.analytics.test
 
-dependencies {
-    implementation(projects.services.analytics.api)
-    implementation(projects.libraries.core)
-    implementation(projects.tests.testutils)
-    implementation(libs.coroutines.core)
+import androidx.compose.runtime.Composable
+import im.vector.app.features.analytics.plan.MobileScreen
+import io.element.android.services.analytics.api.ScreenTracker
+import io.element.android.tests.testutils.lambda.lambdaError
+
+class FakeScreenTracker(
+    private val trackScreenLambda: (MobileScreen.ScreenName) -> Unit = { lambdaError() }
+) : ScreenTracker {
+    @Composable
+    override fun TrackScreen(screen: MobileScreen.ScreenName) {
+        trackScreenLambda(screen)
+    }
 }
