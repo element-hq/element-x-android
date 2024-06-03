@@ -426,7 +426,7 @@ class MessageComposerPresenterTest {
 
             assert(replyMessageLambda)
                 .isCalledOnce()
-                .with(any(), value(A_REPLY), value(A_REPLY), any())
+                .with(any(), value(A_REPLY), value(A_REPLY), any(), value(false))
 
             assertThat(analyticsService.capturedEvents).containsExactly(
                 Composer(
@@ -956,7 +956,7 @@ class MessageComposerPresenterTest {
 
             assert(replyMessageLambda)
                 .isCalledOnce()
-                .with(any(), any(), any(), value(listOf(Mention.User(A_USER_ID_2))))
+                .with(any(), any(), any(), value(listOf(Mention.User(A_USER_ID_2))), value(false))
 
             // Check intentional mentions on edit message
             skipItems(1)
