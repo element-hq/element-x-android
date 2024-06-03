@@ -395,7 +395,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - reply message`() = runTest {
-        val replyMessageLambda = lambdaRecorder { _: EventId, _: String, _: String?, _: List<Mention> ->
+        val replyMessageLambda = lambdaRecorder { _: EventId, _: String, _: String?, _: List<Mention>, _: Boolean ->
             Result.success(Unit)
         }
         val timeline = FakeTimeline().apply {
@@ -909,7 +909,7 @@ class MessageComposerPresenterTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - send messages with intentional mentions`() = runTest {
-        val replyMessageLambda = lambdaRecorder { _: EventId, _: String, _: String?, _: List<Mention> ->
+        val replyMessageLambda = lambdaRecorder { _: EventId, _: String, _: String?, _: List<Mention>, _: Boolean ->
             Result.success(Unit)
         }
         val editMessageLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String, _: String?, _: List<Mention> ->

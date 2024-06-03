@@ -179,7 +179,8 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
                 eventId = threadId.asEventId(),
                 body = message,
                 htmlBody = null,
-                mentions = emptyList()
+                mentions = emptyList(),
+                fromNotification = true,
             )
         } else {
             room.liveTimeline.sendMessage(
