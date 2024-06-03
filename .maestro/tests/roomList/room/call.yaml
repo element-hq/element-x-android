@@ -3,7 +3,9 @@ appId: ${MAESTRO_APP_ID}
 - takeScreenshot: build/maestro/540-Call
 - tapOn: "Start a call"
 ## Checking that the call is started (Webview)
-- assertVisible: "You"
+- extendedWaitUntil:
+    visible: "You"
+    timeout: 10000
 - takeScreenshot: build/maestro/541-Call
 ## Click on the Webview end call button
 - tapOn: "End call"
