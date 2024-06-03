@@ -210,7 +210,7 @@ google_autoservice_annotations = { module = "com.google.auto.service:auto-servic
 android_composeCompiler = { module = "androidx.compose.compiler:compiler", version.ref = "composecompiler" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
-appcompat = "androidx.appcompat:appcompat:1.6.1"
+appcompat = "androidx.appcompat:appcompat:1.7.0"
 
 [bundles]
 
