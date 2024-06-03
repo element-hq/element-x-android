@@ -154,9 +154,9 @@ class NotificationChannels @Inject constructor(
                 .setSound(
                     ringtoneUri,
                     AudioAttributes.Builder()
-                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                         .setLegacyStreamType(AudioManager.STREAM_RING)
-                        .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+                        .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
                         .build()
                 )
                 .setDescription(stringProvider.getString(R.string.notification_channel_ringing_calls))
@@ -188,7 +188,7 @@ class NotificationChannels @Inject constructor(
         private const val SILENT_NOTIFICATION_CHANNEL_ID = "DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID_V2"
         private const val NOISY_NOTIFICATION_CHANNEL_ID = "DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID"
         private const val CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID_V2"
-        private const val RINGING_CALL_NOTIFICATION_CHANNEL_ID = "RINGING_CALL_NOTIFICATION_CHANNEL_ID"
+        private const val RINGING_CALL_NOTIFICATION_CHANNEL_ID = "RINGING_CALL_NOTIFICATION_CHANNEL_ID_v002"
 
         @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
         private fun supportNotificationChannels() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O

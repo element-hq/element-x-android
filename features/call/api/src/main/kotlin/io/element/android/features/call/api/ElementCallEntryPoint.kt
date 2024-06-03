@@ -22,7 +22,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 interface ElementCallEntryPoint {
     fun startCall(callType: CallType)
     fun getPendingIntent(callType: CallType): PendingIntent
-    fun startIncomingRingingCallService(
+    fun handleIncomingCall(
         callType: CallType.RoomCall,
         senderId: UserId,
         senderName: String?,

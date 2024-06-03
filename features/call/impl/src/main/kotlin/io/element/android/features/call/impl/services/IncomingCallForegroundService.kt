@@ -16,7 +16,6 @@
 
 package io.element.android.features.call.impl.services
 
-import android.Manifest.permission.FOREGROUND_SERVICE_PHONE_CALL
 import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -25,7 +24,6 @@ import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
 import android.os.Parcelable
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.IntentCompat
 import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.call.impl.di.CallBindings
@@ -89,7 +87,7 @@ class IncomingCallForegroundService : Service() {
 
             // TODO: set right id
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                startForeground(1, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL)
+                startForeground(239478, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL)
             } else {
                 startForeground(1, notification)
             }
@@ -119,7 +117,7 @@ class DeclineCallBroadcastReceiver : BroadcastReceiver() {
 }
 
 @Parcelize
-internal data class CallNotificationData(
+data class CallNotificationData(
     val sessionId: SessionId,
     val roomId: RoomId,
     val senderId: UserId,

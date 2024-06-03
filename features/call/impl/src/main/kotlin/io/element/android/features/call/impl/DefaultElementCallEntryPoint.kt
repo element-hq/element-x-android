@@ -18,14 +18,14 @@ package io.element.android.features.call.impl
 
 import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
-import androidx.core.app.PendingIntentCompat
+import android.os.Build
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.call.impl.services.CallNotificationData
 import io.element.android.features.call.impl.services.IncomingCallForegroundService
-import io.element.android.features.call.impl.ui.ElementCallActivity
+import io.element.android.features.call.impl.utils.CallIntegrationManager
+import io.element.android.features.call.impl.utils.IntentProvider
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.core.UserId
@@ -34,6 +34,7 @@ import javax.inject.Inject
 @ContributesBinding(AppScope::class)
 class DefaultElementCallEntryPoint @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val callIntegrationManager: CallIntegrationManager,
 ) : ElementCallEntryPoint {
     companion object {
         const val EXTRA_CALL_TYPE = "EXTRA_CALL_TYPE"
@@ -41,14 +42,14 @@ class DefaultElementCallEntryPoint @Inject constructor(
     }
 
     override fun startCall(callType: CallType) {
-        context.startActivity(createIntent(callType))
+        context.startActivity(IntentProvider.createIntent(context, callType))
     }
 
     override fun getPendingIntent(callType: CallType): PendingIntent {
-        return PendingIntentCompat.getActivity(context, REQUEST_CODE, createIntent(callType), PendingIntent.FLAG_UPDATE_CURRENT, false)!!
+        return IntentProvider.getPendingIntent(context, callType)
     }
 
-    override fun startIncomingRingingCallService(
+    override fun handleIncomingCall(
         callType: CallType.RoomCall,
         senderId: UserId,
         senderName: String?,
@@ -65,11 +66,10 @@ class DefaultElementCallEntryPoint @Inject constructor(
             timestamp = timestamp,
             notificationChannelId = notificationChannelId,
         )
-        IncomingCallForegroundService.start(context, incomingCallNotificationData)
-    }
-
-    private fun createIntent(callType: CallType): Intent = Intent(context, ElementCallActivity::class.java).apply {
-        putExtra(EXTRA_CALL_TYPE, callType)
-        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_USER_ACTION)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            callIntegrationManager.registerIncomingCall(notificationData = incomingCallNotificationData)
+        } else {
+            IncomingCallForegroundService.start(context, incomingCallNotificationData)
+        }
     }
 }
