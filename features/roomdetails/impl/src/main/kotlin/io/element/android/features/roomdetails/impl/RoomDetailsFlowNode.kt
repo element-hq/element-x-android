@@ -28,6 +28,7 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.call.CallType
 import io.element.android.features.call.ui.ElementCallActivity
@@ -53,6 +54,8 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
@@ -62,6 +65,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
     @ApplicationContext private val context: Context,
     private val pollHistoryEntryPoint: PollHistoryEntryPoint,
     private val room: MatrixRoom,
+    private val analyticsService: AnalyticsService,
 ) : BaseFlowNode<RoomDetailsFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<RoomDetailsEntryPoint.Params>().first().initialElement.toNavTarget(),
@@ -142,6 +146,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                             sessionId = room.sessionId,
                             roomId = room.roomId,
                         )
+                        analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
                         ElementCallActivity.start(context, inputs)
                     }
                 }
