@@ -26,6 +26,7 @@ import androidx.core.app.NotificationCompat.MessagingStyle
 import androidx.core.app.Person
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.IconCompat
 import coil.ImageLoader
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.NotificationConfig
@@ -36,8 +37,8 @@ import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
 import io.element.android.libraries.push.impl.R
-import io.element.android.libraries.push.impl.notifications.NotificationBitmapLoader
 import io.element.android.libraries.push.impl.notifications.RoomEventGroupInfo
 import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels
 import io.element.android.libraries.push.impl.notifications.debug.annotateForDebug
@@ -51,6 +52,7 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableMess
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 interface NotificationCreator {
     /**
@@ -418,6 +420,34 @@ class DefaultNotificationCreator @Inject constructor(
                 }
             }
         }
+    }
+
+    suspend fun createRingingCallNotification(
+        senderName: String,
+        largeIconUrl: String?,
+        content: String,
+        imageLoader: ImageLoader,
+        timestamp: Long,
+    ): Notification {
+        val largeIcon = bitmapLoader.getRoomBitmap(largeIconUrl, imageLoader)
+        val channelId = notificationChannels.getChannelForIncomingCall(ring = true)
+        val caller = Person.Builder()
+            .setName(senderName)
+            .setIcon(largeIcon?.let { IconCompat.createWithBitmap(it) })
+            .setImportant(true)
+            .build()
+        return NotificationCompat.Builder(context, channelId)
+            .setSmallIcon(CommonDrawables.ic_notification_small)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_CALL)
+            .setContentTitle(senderName)
+            .setContentText(content)
+            .setStyle(MessagingStyle(caller))
+            .addPerson(caller)
+            .setAutoCancel(true)
+            .setWhen(timestamp)
+            .setTimeoutAfter(15.seconds.inWholeMilliseconds)
+            .build()
     }
 
     private suspend fun messagingStyleFromCurrentUser(

@@ -17,11 +17,15 @@
 package io.element.android.libraries.push.impl.push
 
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.push.impl.notifications.NotifiableEventResolver
+import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels
+import io.element.android.libraries.push.impl.notifications.model.NotifiableCallEvent
 import io.element.android.libraries.push.impl.test.DefaultTestPush
 import io.element.android.libraries.push.impl.troubleshoot.DiagnosticPushHandler
 import io.element.android.libraries.pushproviders.api.PushData
@@ -44,6 +48,8 @@ class DefaultPushHandler @Inject constructor(
     private val buildMeta: BuildMeta,
     private val matrixAuthenticationService: MatrixAuthenticationService,
     private val diagnosticPushHandler: DiagnosticPushHandler,
+    private val elementCallEntryPoint: ElementCallEntryPoint,
+    private val notificationChannels: NotificationChannels,
 ) : PushHandler {
     /**
      * Called when message is received.
@@ -93,11 +99,24 @@ class DefaultPushHandler @Inject constructor(
             val userPushStore = userPushStoreFactory.getOrCreate(userId)
             if (userPushStore.getNotificationEnabledForDevice().first()) {
                 val notifiableEvent = notifiableEventResolver.resolveEvent(userId, pushData.roomId, pushData.eventId)
-                if (notifiableEvent == null) {
-                    Timber.w("Unable to get a notification data")
-                    return
+                when (notifiableEvent) {
+                    null -> Timber.tag(loggerTag.value).w("Unable to get a notification data")
+                    is NotifiableCallEvent -> {
+                        if (notifiableEvent.shouldRing) {
+                            elementCallEntryPoint.startIncomingRingingCallService(
+                                callType = CallType.RoomCall(notifiableEvent.sessionId, notifiableEvent.roomId),
+                                senderId = notifiableEvent.senderId,
+                                senderName = notifiableEvent.senderDisambiguatedDisplayName,
+                                avatarUrl = notifiableEvent.imageUriString,
+                                timestamp = notifiableEvent.timestamp,
+                                notificationChannelId = notificationChannels.getChannelForIncomingCall(ring = true),
+                            )
+                        } else {
+                            onNotifiableEventReceived.onNotifiableEventReceived(notifiableEvent)
+                        }
+                    }
+                    else -> onNotifiableEventReceived.onNotifiableEventReceived(notifiableEvent)
                 }
-                onNotifiableEventReceived.onNotifiableEventReceived(notifiableEvent)
             } else {
                 // TODO We need to check if this is an incoming call
                 Timber.tag(loggerTag.value).i("Notification are disabled for this device, ignore push.")

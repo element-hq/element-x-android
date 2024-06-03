@@ -49,6 +49,7 @@ import io.element.android.libraries.matrix.ui.messages.toPlainText
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
+import io.element.android.libraries.push.impl.notifications.model.NotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -150,8 +151,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
             }
             NotificationContent.MessageLike.CallAnswer,
             NotificationContent.MessageLike.CallCandidates,
-            NotificationContent.MessageLike.CallHangup,
-            is NotificationContent.MessageLike.CallNotify -> { // TODO CallNotify will be handled separately in the future
+            NotificationContent.MessageLike.CallHangup -> { // TODO CallNotify will be handled separately in the future
                 Timber.tag(loggerTag.value).d("Ignoring notification for call ${content.javaClass.simpleName}")
                 null
             }
@@ -170,6 +170,23 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     roomIsDirect = isDirect,
                     roomAvatarPath = roomAvatarUrl,
                     senderAvatarPath = senderAvatarUrl,
+                )
+            }
+            is NotificationContent.MessageLike.CallNotify -> {
+                NotifiableCallEvent(
+                    sessionId = userId,
+                    roomId = roomId,
+                    eventId = eventId,
+                    editedEventId = null,
+                    canBeReplaced = true,
+                    timestamp = this.timestamp,
+                    isRedacted = false,
+                    isUpdated = false,
+                    description = stringProvider.getString(CommonStrings.common_call_invite),
+                    senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
+                    imageUriString = fetchImageIfPresent(client)?.toString(),
+                    callNotifyType = content.type,
+                    senderId = content.senderId,
                 )
             }
             NotificationContent.MessageLike.KeyVerificationAccept,

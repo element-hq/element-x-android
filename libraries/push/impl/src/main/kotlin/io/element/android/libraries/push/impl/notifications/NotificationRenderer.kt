@@ -21,6 +21,7 @@ import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
+import io.element.android.libraries.push.impl.notifications.model.NotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
@@ -127,6 +128,7 @@ private fun List<NotifiableEvent>.groupByType(): GroupedNotificationEvents {
             is NotifiableMessageEvent -> roomEvents.add(event.castedToEventType())
             is SimpleNotifiableEvent -> simpleEvents.add(event.castedToEventType())
             is FallbackNotifiableEvent -> fallbackEvents.add(event.castedToEventType())
+            is NotifiableCallEvent -> TODO("NotifiableCallEvent is not supported")
         }
     }
     return GroupedNotificationEvents(roomEvents, simpleEvents, invitationEvents, fallbackEvents)

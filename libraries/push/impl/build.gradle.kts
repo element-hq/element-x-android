@@ -55,6 +55,7 @@ dependencies {
     implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.troubleshoot.api)
+    implementation(projects.features.call.api)
     api(projects.libraries.pushproviders.api)
     api(projects.libraries.pushstore.api)
     api(projects.libraries.push.api)

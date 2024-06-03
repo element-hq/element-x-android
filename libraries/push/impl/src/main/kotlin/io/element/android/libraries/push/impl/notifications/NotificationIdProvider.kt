@@ -41,6 +41,10 @@ class NotificationIdProvider @Inject constructor() {
         return getOffset(sessionId) + FALLBACK_NOTIFICATION_ID
     }
 
+    fun getCallNotificationId(sessionId: SessionId): Int {
+        return getOffset(sessionId) + ROOM_CALL_NOTIFICATION_ID
+    }
+
     private fun getOffset(sessionId: SessionId): Int {
         // Compute a int from a string with a low risk of collision.
         return abs(sessionId.value.hashCode() % 100_000) * 10
@@ -52,5 +56,6 @@ class NotificationIdProvider @Inject constructor() {
         private const val ROOM_MESSAGES_NOTIFICATION_ID = 1
         private const val ROOM_EVENT_NOTIFICATION_ID = 2
         private const val ROOM_INVITATION_NOTIFICATION_ID = 3
+        private const val ROOM_CALL_NOTIFICATION_ID = 3
     }
 }

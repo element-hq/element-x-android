@@ -332,5 +332,10 @@ interface MatrixRoom : Closeable {
      */
     suspend fun getPermalinkFor(eventId: EventId): Result<String>
 
+    /**
+     * Send an Element Call started notification if needed.
+     */
+    suspend fun sendCallNotificationIfNeeded(): Result<Unit>
+
     override fun close() = destroy()
 }

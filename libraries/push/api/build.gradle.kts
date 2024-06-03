@@ -24,6 +24,7 @@ android {
 dependencies {
     implementation(libs.androidx.corektx)
     implementation(libs.coroutines.core)
+    implementation(libs.coil.compose)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.pushproviders.api)
 }

@@ -30,8 +30,8 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.call.CallType
-import io.element.android.features.call.ui.ElementCallActivity
+import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.SendLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationEntryPoint
@@ -80,6 +80,7 @@ class MessagesFlowNode @AssistedInject constructor(
     private val sendLocationEntryPoint: SendLocationEntryPoint,
     private val showLocationEntryPoint: ShowLocationEntryPoint,
     private val createPollEntryPoint: CreatePollEntryPoint,
+    private val elementCallEntryPoint: ElementCallEntryPoint,
 ) : BaseFlowNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Messages,
@@ -184,11 +185,11 @@ class MessagesFlowNode @AssistedInject constructor(
                     }
 
                     override fun onJoinCallClick(roomId: RoomId) {
-                        val inputs = CallType.RoomCall(
+                        val callType = CallType.RoomCall(
                             sessionId = matrixClient.sessionId,
                             roomId = roomId,
                         )
-                        ElementCallActivity.start(context, inputs)
+                        elementCallEntryPoint.startCall(callType)
                     }
                 }
                 val inputs = MessagesNode.Inputs(

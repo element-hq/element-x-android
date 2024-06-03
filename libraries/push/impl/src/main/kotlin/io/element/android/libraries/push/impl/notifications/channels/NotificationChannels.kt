@@ -19,8 +19,12 @@ package io.element.android.libraries.push.impl.notifications.channels
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.media.AudioAttributes
+import android.media.AudioManager
+import android.media.RingtoneManager
 import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
+import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import io.element.android.libraries.di.AppScope
@@ -123,18 +127,42 @@ class NotificationChannels @Inject constructor(
                 }
         )
 
+        // Register a channel for incoming and in progress call notifications with no ringing
         notificationManager.createNotificationChannel(
             NotificationChannel(
                 CALL_NOTIFICATION_CHANNEL_ID,
                 stringProvider.getString(R.string.notification_channel_call).ifEmpty { "Call" },
-                NotificationManager.IMPORTANCE_HIGH
+                NotificationManager.IMPORTANCE_DEFAULT
             )
                 .apply {
                     description = stringProvider.getString(R.string.notification_channel_call)
-                    setSound(null, null)
+                    enableVibration(true)
                     enableLights(true)
                     lightColor = accentColor
                 }
+        )
+
+        // Register a channel for incoming call notifications which will ring the device when received
+        val ringtoneUri = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE)
+        notificationManager.createNotificationChannel(
+            NotificationChannelCompat.Builder(
+                RINGING_CALL_NOTIFICATION_CHANNEL_ID,
+                NotificationManagerCompat.IMPORTANCE_MAX,
+            )
+                .setName(stringProvider.getString(R.string.notification_channel_ringing_calls).ifEmpty { "Ringing call" })
+                .setVibrationEnabled(true)
+                .setSound(
+                    ringtoneUri,
+                    AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .setLegacyStreamType(AudioManager.STREAM_RING)
+                        .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+                        .build()
+                )
+                .setDescription(stringProvider.getString(R.string.notification_channel_ringing_calls))
+                .setLightsEnabled(true)
+                .setLightColor(accentColor)
+                .build()
         )
     }
 
@@ -142,9 +170,8 @@ class NotificationChannels @Inject constructor(
         return notificationManager.getNotificationChannel(channelId)
     }
 
-    fun getChannelForIncomingCall(fromBg: Boolean): NotificationChannel? {
-        val notificationChannel = if (fromBg) CALL_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
-        return getChannel(notificationChannel)
+    fun getChannelForIncomingCall(ring: Boolean): String {
+        return if (ring) RINGING_CALL_NOTIFICATION_CHANNEL_ID else CALL_NOTIFICATION_CHANNEL_ID
     }
 
     fun getChannelIdForMessage(noisy: Boolean): String {
@@ -161,6 +188,7 @@ class NotificationChannels @Inject constructor(
         private const val SILENT_NOTIFICATION_CHANNEL_ID = "DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID_V2"
         private const val NOISY_NOTIFICATION_CHANNEL_ID = "DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID"
         private const val CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID_V2"
+        private const val RINGING_CALL_NOTIFICATION_CHANNEL_ID = "RINGING_CALL_NOTIFICATION_CHANNEL_ID"
 
         @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
         private fun supportNotificationChannels() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
