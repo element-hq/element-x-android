@@ -11,9 +11,11 @@
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Злучэнне небяспечнае"</string>
   <string name="screen_qr_code_login_device_code_subtitle">"Вам будзе прапанавана ўвесці дзве лічбы, паказаныя на гэтай прыладзе."</string>
   <string name="screen_qr_code_login_device_code_title">"Увядзіце наступны нумар на іншай прыладзе."</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_description">"Увайдзіце ў сістэму на іншай прыладзе і паспрабуйце яшчэ раз, або выкарыстоўвайце іншую прыладу на якой ужо выкананы ўваход."</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_subtitle">"Другая прылада не ўвайшла ў сістэму"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Уваход быў адменены на іншай прыладзе."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Запыт на ўваход скасаваны"</string>
-  <string name="screen_qr_code_login_error_declined_subtitle">"Запыт на іншай прыладзе не быў прыняты."</string>
+  <string name="screen_qr_code_login_error_declined_subtitle">"Уваход на іншай прыладзе быў адхілены."</string>
   <string name="screen_qr_code_login_error_declined_title">"Уваход адхілены"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"Тэрмін уваходу скончыўся. Калі ласка, паспрабуйце яшчэ раз."</string>
   <string name="screen_qr_code_login_error_expired_title">"Уваход у сістэму не быў завершаны своечасова"</string>

@@ -30,8 +30,8 @@
   </plurals>
   <plurals name="screen_app_lock_subtitle_wrong_pin">
     <item quantity="one">"Няправільны PIN-код. У вас застаўся %1$d шанец"</item>
-    <item quantity="few">"Няправільны PIN-код. У вас застаўася %1$d шанца"</item>
-    <item quantity="many">"Няправільны PIN-код. У вас застаўася %1$d шанцаў"</item>
+    <item quantity="few">"Няправільны PIN-код. У вас засталася %1$d шанцы"</item>
+    <item quantity="many">"Няправільны PIN-код. У вас засталася %1$d шанцаў"</item>
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"Выкарыстоўваць біяметрыю"</string>
   <string name="screen_app_lock_use_pin_android">"Выкарыстоўваць PIN-код"</string>

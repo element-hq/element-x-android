@@ -11,9 +11,11 @@
   <string name="screen_qr_code_login_connection_note_secure_state_title">"La connexion n’est pas sécurisée"</string>
   <string name="screen_qr_code_login_device_code_subtitle">"Il vous sera demandé de saisir les deux chiffres affichés sur cet appareil."</string>
   <string name="screen_qr_code_login_device_code_title">"Saisissez le nombre ci-dessous sur votre autre appareil"</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_description">"Connectez-vous à votre autre appareil, puis réessayez, ou utilisez un autre appareil déjà connecté."</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_subtitle">"Autre appareil non connecté"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"La connexion a été annulée sur l’autre appareil."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Demande de connexion annulée"</string>
-  <string name="screen_qr_code_login_error_declined_subtitle">"La demande sur l’autre appareil n’a pas été acceptée."</string>
+  <string name="screen_qr_code_login_error_declined_subtitle">"La connexion a été refusée sur l’autre appareil."</string>
   <string name="screen_qr_code_login_error_declined_title">"Connexion refusée"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"Connexion expirée. Veuillez essayer à nouveau."</string>
   <string name="screen_qr_code_login_error_expired_title">"La connexion a pris trop de temps."</string>

@@ -11,9 +11,11 @@
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Pripojenie nie je bezpečené"</string>
   <string name="screen_qr_code_login_device_code_subtitle">"Budete požiadaní o zadanie dvoch číslic zobrazených na tomto zariadení."</string>
   <string name="screen_qr_code_login_device_code_title">"Zadajte nižšie uvedené číslo na vašom druhom zariadení"</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_description">"Prihláste sa do svojho druhého zariadenia a skúste to znova alebo použite iné zariadenie, ktoré už je prihlásené."</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_subtitle">"Druhé zariadenie nie je prihlásené"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Prihlásenie bolo zrušené na druhom zariadení."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Žiadosť o prihlásenie bola zrušená"</string>
-  <string name="screen_qr_code_login_error_declined_subtitle">"Žiadosť na vašom druhom zariadení nebola prijatá."</string>
+  <string name="screen_qr_code_login_error_declined_subtitle">"Prihlásenie bolo zamietnuté na druhom zariadení."</string>
   <string name="screen_qr_code_login_error_declined_title">"Prihlásenie bolo odmietnuté"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"Platnosť prihlásenia vypršala. Skúste to prosím znova."</string>
   <string name="screen_qr_code_login_error_expired_title">"Prihlásenie nebolo včas dokončené"</string>

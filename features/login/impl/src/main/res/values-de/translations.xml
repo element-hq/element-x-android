@@ -39,11 +39,12 @@
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Die Verbindung ist nicht sicher"</string>
   <string name="screen_qr_code_login_device_code_subtitle">"Du wirst aufgefordert, die beiden unten abgebildeten Ziffern einzugeben."</string>
   <string name="screen_qr_code_login_device_code_title">"Trage die unten angezeigte Zahl auf einem anderen Device ein"</string>
+  <string name="screen_qr_code_login_initial_state_button_title">"Bereit zum Scannen"</string>
   <string name="screen_qr_code_login_initial_state_item_1">"%1$s auf einem Desktop-Gerät öffnen"</string>
   <string name="screen_qr_code_login_initial_state_item_2">"Klick auf deinen Avatar"</string>
   <string name="screen_qr_code_login_initial_state_item_3">"Wähle %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"\"Neues Gerät verknüpfen\""</string>
-  <string name="screen_qr_code_login_initial_state_item_4">"Befolge die angezeigten Anweisungen"</string>
+  <string name="screen_qr_code_login_initial_state_item_4">"Scanne den QR-Code mit diesem Gerät"</string>
   <string name="screen_qr_code_login_initial_state_title">"Öffne %1$s auf einem anderen Gerät, um den QR-Code zu erhalten"</string>
   <string name="screen_qr_code_login_invalid_scan_state_description">"Verwende den QR-Code, der auf dem anderen Gerät angezeigt wird."</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Erneut versuchen"</string>
