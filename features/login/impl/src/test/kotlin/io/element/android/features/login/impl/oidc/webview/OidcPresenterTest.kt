@@ -26,7 +26,7 @@ import io.element.android.features.login.api.oidc.OidcAction
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.auth.A_OIDC_DATA
-import io.element.android.libraries.matrix.test.auth.FakeAuthenticationService
+import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -41,7 +41,7 @@ class OidcPresenterTest {
     fun `present - initial state`() = runTest {
         val presenter = OidcPresenter(
             A_OIDC_DATA,
-            FakeAuthenticationService(),
+            FakeMatrixAuthenticationService(),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -56,7 +56,7 @@ class OidcPresenterTest {
     fun `present - go back`() = runTest {
         val presenter = OidcPresenter(
             A_OIDC_DATA,
-            FakeAuthenticationService(),
+            FakeMatrixAuthenticationService(),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -72,7 +72,7 @@ class OidcPresenterTest {
 
     @Test
     fun `present - go back with failure`() = runTest {
-        val authenticationService = FakeAuthenticationService()
+        val authenticationService = FakeMatrixAuthenticationService()
         val presenter = OidcPresenter(
             A_OIDC_DATA,
             authenticationService,
@@ -95,7 +95,7 @@ class OidcPresenterTest {
     fun `present - user cancels from webview`() = runTest {
         val presenter = OidcPresenter(
             A_OIDC_DATA,
-            FakeAuthenticationService(),
+            FakeMatrixAuthenticationService(),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -113,7 +113,7 @@ class OidcPresenterTest {
     fun `present - login success`() = runTest {
         val presenter = OidcPresenter(
             A_OIDC_DATA,
-            FakeAuthenticationService(),
+            FakeMatrixAuthenticationService(),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -128,7 +128,7 @@ class OidcPresenterTest {
 
     @Test
     fun `present - login error`() = runTest {
-        val authenticationService = FakeAuthenticationService()
+        val authenticationService = FakeMatrixAuthenticationService()
         val presenter = OidcPresenter(
             A_OIDC_DATA,
             authenticationService,

@@ -26,16 +26,16 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 
 @Composable
 internal fun ConfirmRecoveryKeyBanner(
-    onContinueClicked: () -> Unit,
-    onDismissClicked: () -> Unit,
+    onContinueClick: () -> Unit,
+    onDismissClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     DialogLikeBannerMolecule(
         modifier = modifier,
         title = stringResource(R.string.confirm_recovery_key_banner_title),
         content = stringResource(R.string.confirm_recovery_key_banner_message),
-        onSubmitClicked = onContinueClicked,
-        onDismissClicked = onDismissClicked,
+        onSubmitClick = onContinueClick,
+        onDismissClick = onDismissClick,
     )
 }
 
@@ -43,7 +43,7 @@ internal fun ConfirmRecoveryKeyBanner(
 @Composable
 internal fun ConfirmRecoveryKeyBannerPreview() = ElementPreview {
     ConfirmRecoveryKeyBanner(
-        onContinueClicked = {},
-        onDismissClicked = {},
+        onContinueClick = {},
+        onDismissClick = {},
     )
 }

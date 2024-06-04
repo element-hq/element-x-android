@@ -26,7 +26,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 fun RadioButtonListItem(
     headline: String,
     selected: Boolean,
-    onSelected: () -> Unit,
+    onSelect: () -> Unit,
     modifier: Modifier = Modifier,
     supportingText: String? = null,
     trailingContent: ListItemContent? = null,
@@ -42,6 +42,6 @@ fun RadioButtonListItem(
         trailingContent = trailingContent,
         style = style,
         enabled = enabled,
-        onClick = onSelected,
+        onClick = onSelect,
     )
 }

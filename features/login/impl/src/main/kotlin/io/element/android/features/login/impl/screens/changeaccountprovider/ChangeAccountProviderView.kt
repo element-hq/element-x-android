@@ -55,10 +55,10 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 @Composable
 fun ChangeAccountProviderView(
     state: ChangeAccountProviderState,
-    onBackPressed: () -> Unit,
-    onLearnMoreClicked: () -> Unit,
-    onDone: () -> Unit,
-    onOtherProviderClicked: () -> Unit,
+    onBackClick: () -> Unit,
+    onLearnMoreClick: () -> Unit,
+    onSuccess: () -> Unit,
+    onOtherProviderClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -66,7 +66,7 @@ fun ChangeAccountProviderView(
         topBar = {
             TopAppBar(
                 title = {},
-                navigationIcon = { BackButton(onClick = onBackPressed) }
+                navigationIcon = { BackButton(onClick = onBackClick) }
             )
         }
     ) { padding ->
@@ -111,14 +111,14 @@ fun ChangeAccountProviderView(
                         url = "",
                         title = stringResource(id = R.string.screen_change_account_provider_other),
                     ),
-                    onClick = onOtherProviderClicked
+                    onClick = onOtherProviderClick
                 )
                 Spacer(Modifier.height(32.dp))
             }
             ChangeServerView(
                 state = state.changeServerState,
-                onLearnMoreClicked = onLearnMoreClicked,
-                onDone = onDone,
+                onLearnMoreClick = onLearnMoreClick,
+                onSuccess = onSuccess,
             )
         }
     }
@@ -129,9 +129,9 @@ fun ChangeAccountProviderView(
 internal fun ChangeAccountProviderViewPreview(@PreviewParameter(ChangeAccountProviderStateProvider::class) state: ChangeAccountProviderState) = ElementPreview {
     ChangeAccountProviderView(
         state = state,
-        onBackPressed = { },
-        onLearnMoreClicked = { },
-        onDone = { },
-        onOtherProviderClicked = { },
+        onBackClick = { },
+        onLearnMoreClick = { },
+        onSuccess = { },
+        onOtherProviderClick = { },
     )
 }

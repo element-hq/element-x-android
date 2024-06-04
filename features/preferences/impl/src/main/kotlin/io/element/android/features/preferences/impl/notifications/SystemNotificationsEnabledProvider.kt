@@ -16,11 +16,9 @@
 
 package io.element.android.features.preferences.impl.notifications
 
-import android.content.Context
 import androidx.core.app.NotificationManagerCompat
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
 import javax.inject.Inject
 
@@ -29,11 +27,11 @@ interface SystemNotificationsEnabledProvider {
 }
 
 @SingleIn(AppScope::class)
-@ContributesBinding(AppScope::class, boundType = SystemNotificationsEnabledProvider::class)
+@ContributesBinding(AppScope::class)
 class DefaultSystemNotificationsEnabledProvider @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val notificationManager: NotificationManagerCompat,
 ) : SystemNotificationsEnabledProvider {
     override fun notificationsEnabled(): Boolean {
-        return NotificationManagerCompat.from(context).areNotificationsEnabled()
+        return notificationManager.areNotificationsEnabled()
     }
 }

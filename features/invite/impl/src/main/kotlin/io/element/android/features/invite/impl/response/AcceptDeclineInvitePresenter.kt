@@ -112,7 +112,7 @@ class AcceptDeclineInvitePresenter @Inject constructor(
                 trigger = JoinedRoom.Trigger.Invite,
             )
                 .onSuccess {
-                    notificationDrawerManager.clearMembershipNotificationForRoom(client.sessionId, roomId, doRender = true)
+                    notificationDrawerManager.clearMembershipNotificationForRoom(client.sessionId, roomId)
                 }
                 .map { roomId }
         }
@@ -122,7 +122,7 @@ class AcceptDeclineInvitePresenter @Inject constructor(
         suspend {
             client.getRoom(roomId)?.use {
                 it.leave().getOrThrow()
-                notificationDrawerManager.clearMembershipNotificationForRoom(client.sessionId, roomId, doRender = true)
+                notificationDrawerManager.clearMembershipNotificationForRoom(client.sessionId, roomId)
             }
             roomId
         }.runCatchingUpdatingState(declinedAction)

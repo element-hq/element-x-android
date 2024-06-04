@@ -111,6 +111,7 @@
   <string name="common_analytics">"Analysdata"</string>
   <string name="common_appearance">"Utseende"</string>
   <string name="common_audio">"Ljud"</string>
+  <string name="common_blocked_users">"Blockerade användare"</string>
   <string name="common_bubbles">"Bubblor"</string>
   <string name="common_chat_backup">"Chattsäkerhetskopia"</string>
   <string name="common_copyright">"Upphovsrätt"</string>
@@ -127,7 +128,9 @@
   <string name="common_enter_your_pin">"Ange din PIN-kod"</string>
   <string name="common_error">"Fel"</string>
   <string name="common_everyone">"Alla"</string>
+  <string name="common_failed">"Misslyckades"</string>
   <string name="common_favourite">"Favorit"</string>
+  <string name="common_favourited">"Favoriter"</string>
   <string name="common_file">"Fil"</string>
   <string name="common_file_saved_on_disk_android">"Fil sparad i Download"</string>
   <string name="common_forward_message">"Vidarebefordra meddelande"</string>
@@ -152,6 +155,7 @@
   <string name="common_mute">"Tysta"</string>
   <string name="common_no_results">"Inga resultat"</string>
   <string name="common_offline">"Frånkopplad"</string>
+  <string name="common_or">"eller"</string>
   <string name="common_password">"Lösenord"</string>
   <string name="common_people">"Personer"</string>
   <string name="common_permalink">"Permalänk"</string>
@@ -177,6 +181,7 @@
   <string name="common_room">"Rum"</string>
   <string name="common_room_name">"Rumsnamn"</string>
   <string name="common_room_name_placeholder">"t.ex. ditt projektnamn"</string>
+  <string name="common_saving">"Sparar"</string>
   <string name="common_screen_lock">"Skärmlås"</string>
   <string name="common_search_for_someone">"Sök efter någon"</string>
   <string name="common_search_results">"Sökresultat"</string>

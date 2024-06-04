@@ -27,7 +27,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
-import io.element.android.features.messages.impl.messagecomposer.MessageComposerContextImpl
+import io.element.android.features.messages.impl.messagecomposer.DefaultMessageComposerContext
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
@@ -1049,7 +1049,7 @@ class MessageComposerPresenterTest {
         MediaSender(mediaPreProcessor, room),
         snackbarDispatcher,
         analyticsService,
-        MessageComposerContextImpl(),
+        DefaultMessageComposerContext(),
         TestRichTextEditorStateFactory(),
         currentSessionIdHolder = CurrentSessionIdHolder(FakeMatrixClient(A_SESSION_ID)),
         permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionPresenter),

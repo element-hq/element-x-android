@@ -2,7 +2,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_notification_optin_subtitle">"Du kan ändra dina inställningar senare."</string>
   <string name="screen_notification_optin_title">"Tillåt aviseringar och missa aldrig ett meddelande"</string>
-  <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Försök igen"</string>
   <string name="screen_welcome_bullet_1">"Samtal, omröstningar, sökning och mer kommer att läggas till senare i år."</string>
   <string name="screen_welcome_bullet_2">"Meddelandehistorik för krypterade rum är inte tillgänglig än."</string>
   <string name="screen_welcome_bullet_3">"Vi vill gärna höra från dig, låt oss veta vad du tycker via inställningssidan."</string>

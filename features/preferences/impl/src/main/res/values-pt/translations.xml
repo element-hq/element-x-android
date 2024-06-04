@@ -6,6 +6,7 @@
   <string name="screen_advanced_settings_element_call_base_url">"URL base para Element Call personalizado"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Define um URL base para a Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL inválido, certifica-te de que incluis o protocolo (http/https) e o endereço correto."</string>
+  <string name="screen_advanced_settings_push_provider_android">"Fornecedor de envio"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Desativa o editor de texto rico para poderes escrever Markdown manualmente."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Recibos de leitura"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Se desativada, os teus recibos de leitura não serão enviados a ninguém. Continuas a receber recibos de leitura de outros utilizadores."</string>

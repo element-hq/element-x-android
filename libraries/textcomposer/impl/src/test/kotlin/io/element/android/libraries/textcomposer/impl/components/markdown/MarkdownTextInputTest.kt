@@ -189,8 +189,9 @@ class MarkdownTextInputTest {
                 state = state,
                 subcomposing = subcomposing,
                 onTyping = onTyping,
-                onSuggestionReceived = onSuggestionReceived,
+                onReceiveSuggestion = onSuggestionReceived,
                 richTextEditorStyle = style,
+                onSelectRichContent = null,
             )
         }
     }

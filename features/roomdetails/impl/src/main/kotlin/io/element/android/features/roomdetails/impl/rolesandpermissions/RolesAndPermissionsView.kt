@@ -61,7 +61,7 @@ fun RolesAndPermissionsView(
     PreferencePage(
         modifier = modifier,
         title = stringResource(R.string.screen_room_roles_and_permissions_title),
-        onBackPressed = rolesAndPermissionsNavigator::onBackPressed,
+        onBackClick = rolesAndPermissionsNavigator::onBackClick,
     ) {
         ListSectionHeader(title = stringResource(R.string.screen_room_roles_and_permissions_roles_header), hasDivider = false)
         ListItem(
@@ -113,7 +113,7 @@ fun RolesAndPermissionsView(
                 content = stringResource(R.string.screen_room_roles_and_permissions_reset_confirm_description),
                 submitText = stringResource(CommonStrings.action_reset),
                 destructiveSubmit = true,
-                onSubmitClicked = { state.eventSink(RolesAndPermissionsEvents.ResetPermissions) },
+                onSubmitClick = { state.eventSink(RolesAndPermissionsEvents.ResetPermissions) },
                 onDismiss = { state.eventSink(RolesAndPermissionsEvents.CancelPendingAction) },
             )
         },

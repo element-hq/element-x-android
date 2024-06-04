@@ -35,12 +35,14 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.login.api.LoginFlowType
 import io.element.android.features.login.api.oidc.OidcAction
 import io.element.android.features.login.api.oidc.OidcActionFlow
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.oidc.CustomTabAvailabilityChecker
 import io.element.android.features.login.impl.oidc.customtab.CustomTabHandler
 import io.element.android.features.login.impl.oidc.webview.OidcNode
+import io.element.android.features.login.impl.qrcode.QrCodeLoginFlowNode
 import io.element.android.features.login.impl.screens.changeaccountprovider.ChangeAccountProviderNode
 import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderNode
 import io.element.android.features.login.impl.screens.loginpassword.LoginFormState
@@ -69,7 +71,7 @@ class LoginFlowNode @AssistedInject constructor(
     private val oidcActionFlow: OidcActionFlow,
 ) : BaseFlowNode<LoginFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.ConfirmAccountProvider,
+        initialElement = NavTarget.Root,
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -79,7 +81,7 @@ class LoginFlowNode @AssistedInject constructor(
     private var darkTheme: Boolean = false
 
     data class Inputs(
-        val isAccountCreation: Boolean,
+        val flowType: LoginFlowType,
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
@@ -108,6 +110,9 @@ class LoginFlowNode @AssistedInject constructor(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
+        data object Root : NavTarget
+
+        @Parcelize
         data object ConfirmAccountProvider : NavTarget
 
         @Parcelize
@@ -128,9 +133,16 @@ class LoginFlowNode @AssistedInject constructor(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
+            NavTarget.Root -> {
+                if (inputs.flowType == LoginFlowType.SIGN_IN_QR_CODE) {
+                    createNode<QrCodeLoginFlowNode>(buildContext)
+                } else {
+                    resolve(NavTarget.ConfirmAccountProvider, buildContext)
+                }
+            }
             NavTarget.ConfirmAccountProvider -> {
                 val inputs = ConfirmAccountProviderNode.Inputs(
-                    isAccountCreation = inputs.isAccountCreation
+                    isAccountCreation = inputs.flowType == LoginFlowType.SIGN_UP,
                 )
                 val callback = object : ConfirmAccountProviderNode.Callback {
                     override fun onOidcDetails(oidcDetails: OidcDetails) {
@@ -163,7 +175,7 @@ class LoginFlowNode @AssistedInject constructor(
                         backstack.singleTop(NavTarget.ConfirmAccountProvider)
                     }
 
-                    override fun onOtherClicked() {
+                    override fun onOtherClick() {
                         backstack.push(NavTarget.SearchAccountProvider)
                     }
                 }
@@ -197,7 +209,7 @@ class LoginFlowNode @AssistedInject constructor(
                     loginFormState = navTarget.loginFormState,
                 )
                 val callback = object : WaitListNode.Callback {
-                    override fun onCancelClicked() {
+                    override fun onCancelClick() {
                         navigateUp()
                     }
                 }

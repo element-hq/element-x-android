@@ -19,6 +19,7 @@ package io.element.android.services.analytics.impl
 import com.squareup.anvil.annotations.ContributesBinding
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
+import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
@@ -91,11 +92,6 @@ class DefaultAnalyticsService @Inject constructor(
         analyticsStore.setAnalyticsId(analyticsId)
     }
 
-    override suspend fun onSignOut() {
-        // stop all providers
-        analyticsProviders.onEach { it.stop() }
-    }
-
     override suspend fun onSessionCreated(userId: String) {
         // Nothing to do
     }
@@ -151,6 +147,10 @@ class DefaultAnalyticsService @Inject constructor(
         } else {
             pendingUserProperties = userProperties
         }
+    }
+
+    override fun updateSuperProperties(updatedProperties: SuperProperties) {
+        this.analyticsProviders.onEach { it.updateSuperProperties(updatedProperties) }
     }
 
     override fun trackError(throwable: Throwable) {

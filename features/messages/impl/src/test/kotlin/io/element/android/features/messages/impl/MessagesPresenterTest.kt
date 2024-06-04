@@ -27,7 +27,7 @@ import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactory
-import io.element.android.features.messages.impl.messagecomposer.MessageComposerContextImpl
+import io.element.android.features.messages.impl.messagecomposer.DefaultMessageComposerContext
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagesummary.FakeMessageSummaryFormatter
 import io.element.android.features.messages.impl.textcomposer.TestRichTextEditorStateFactory
@@ -793,7 +793,7 @@ class MessagesPresenterTest {
             mediaSender = mediaSender,
             snackbarDispatcher = SnackbarDispatcher(),
             analyticsService = analyticsService,
-            messageComposerContext = MessageComposerContextImpl(),
+            messageComposerContext = DefaultMessageComposerContext(),
             richTextEditorStateFactory = TestRichTextEditorStateFactory(),
             permissionsPresenterFactory = permissionsPresenterFactory,
             currentSessionIdHolder = CurrentSessionIdHolder(FakeMatrixClient(A_SESSION_ID)),

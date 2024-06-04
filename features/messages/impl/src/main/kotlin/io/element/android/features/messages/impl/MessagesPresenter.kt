@@ -324,7 +324,7 @@ class MessagesPresenter @AssistedInject constructor(
         when (targetEvent.content) {
             is TimelineItemPollContent -> {
                 if (targetEvent.eventId == null) return
-                navigator.onEditPollClicked(targetEvent.eventId)
+                navigator.onEditPollClick(targetEvent.eventId)
             }
             else -> {
                 val composerMode = MessageComposerMode.Edit(
@@ -407,24 +407,24 @@ class MessagesPresenter @AssistedInject constructor(
     }
 
     private fun handleShowDebugInfoAction(event: TimelineItem.Event) {
-        navigator.onShowEventDebugInfoClicked(event.eventId, event.debugInfo)
+        navigator.onShowEventDebugInfoClick(event.eventId, event.debugInfo)
     }
 
     private fun handleForwardAction(event: TimelineItem.Event) {
         if (event.eventId == null) return
-        navigator.onForwardEventClicked(event.eventId)
+        navigator.onForwardEventClick(event.eventId)
     }
 
     private fun handleReportAction(event: TimelineItem.Event) {
         if (event.eventId == null) return
-        navigator.onReportContentClicked(event.eventId, event.senderId)
+        navigator.onReportContentClick(event.eventId, event.senderId)
     }
 
     private fun handleEndPollAction(
         event: TimelineItem.Event,
         timelineState: TimelineState,
     ) {
-        event.eventId?.let { timelineState.eventSink(TimelineEvents.PollEndClicked(it)) }
+        event.eventId?.let { timelineState.eventSink(TimelineEvents.EndPoll(it)) }
     }
 
     private suspend fun handleCopyLink(event: TimelineItem.Event) {

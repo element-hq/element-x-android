@@ -19,6 +19,7 @@ package io.element.android.services.analytics.noop
 import com.squareup.anvil.annotations.ContributesBinding
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
+import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
@@ -38,10 +39,10 @@ class NoopAnalyticsService @Inject constructor() : AnalyticsService {
     override suspend fun setDidAskUserConsent() = Unit
     override fun getAnalyticsId(): Flow<String> = flowOf("")
     override suspend fun setAnalyticsId(analyticsId: String) = Unit
-    override suspend fun onSignOut() = Unit
     override suspend fun reset() = Unit
     override fun capture(event: VectorAnalyticsEvent) = Unit
     override fun screen(screen: VectorAnalyticsScreen) = Unit
     override fun updateUserProperties(userProperties: UserProperties) = Unit
     override fun trackError(throwable: Throwable) = Unit
+    override fun updateSuperProperties(updatedProperties: SuperProperties) = Unit
 }

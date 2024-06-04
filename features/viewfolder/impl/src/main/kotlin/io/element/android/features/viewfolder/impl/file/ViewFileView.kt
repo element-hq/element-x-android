@@ -62,7 +62,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun ViewFileView(
     state: ViewFileState,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -70,7 +70,7 @@ fun ViewFileView(
         topBar = {
             TopAppBar(
                 navigationIcon = {
-                    BackButton(onClick = onBackPressed)
+                    BackButton(onClick = onBackClick)
                 },
                 title = {
                     Text(
@@ -247,6 +247,6 @@ private val colorError = Color(0xFFFF6B68)
 internal fun ViewFileViewPreview(@PreviewParameter(ViewFileStateProvider::class) state: ViewFileState) = ElementPreview {
     ViewFileView(
         state = state,
-        onBackPressed = {},
+        onBackClick = {},
     )
 }

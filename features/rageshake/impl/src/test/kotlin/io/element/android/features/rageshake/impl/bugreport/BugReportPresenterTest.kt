@@ -144,7 +144,7 @@ class BugReportPresenterTest {
     @Test
     fun `present - send success`() = runTest {
         val presenter = createPresenter(
-            FakeBugReporter(mode = FakeBugReporterMode.Success),
+            FakeBugReporter(mode = FakeBugReporter.Mode.Success),
             FakeCrashDataStore(crashData = A_CRASH_DATA, appHasCrashed = true),
             FakeScreenshotHolder(screenshotUri = A_SCREENSHOT_URI),
         )
@@ -170,7 +170,7 @@ class BugReportPresenterTest {
     @Test
     fun `present - send failure`() = runTest {
         val presenter = createPresenter(
-            FakeBugReporter(mode = FakeBugReporterMode.Failure),
+            FakeBugReporter(mode = FakeBugReporter.Mode.Failure),
             FakeCrashDataStore(crashData = A_CRASH_DATA, appHasCrashed = true),
             FakeScreenshotHolder(screenshotUri = A_SCREENSHOT_URI),
         )
@@ -219,7 +219,7 @@ class BugReportPresenterTest {
     @Test
     fun `present - send cancel`() = runTest {
         val presenter = createPresenter(
-            FakeBugReporter(mode = FakeBugReporterMode.Cancel),
+            FakeBugReporter(mode = FakeBugReporter.Mode.Cancel),
             FakeCrashDataStore(crashData = A_CRASH_DATA, appHasCrashed = true),
             FakeScreenshotHolder(screenshotUri = A_SCREENSHOT_URI),
         )

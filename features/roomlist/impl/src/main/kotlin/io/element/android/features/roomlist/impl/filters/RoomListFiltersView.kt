@@ -16,6 +16,9 @@
 
 package io.element.android.features.roomlist.impl.filters
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,13 +34,15 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -53,7 +58,7 @@ fun RoomListFiltersView(
     state: RoomListFiltersState,
     modifier: Modifier = Modifier
 ) {
-    fun onClearFiltersClicked() {
+    fun onClearFiltersClick() {
         state.eventSink(RoomListFiltersEvents.ClearSelectedFilters)
     }
 
@@ -62,6 +67,7 @@ fun RoomListFiltersView(
     }
 
     val lazyListState = rememberLazyListState()
+    val previousFilters = remember { mutableStateOf(listOf<RoomListFilter>()) }
     LazyRow(
         contentPadding = PaddingValues(start = 8.dp, end = 16.dp),
         modifier = modifier.fillMaxWidth(),
@@ -75,26 +81,28 @@ fun RoomListFiltersView(
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .testTag(TestTags.homeScreenClearFilters),
-                    onClick = ::onClearFiltersClicked
+                    onClick = {
+                        previousFilters.value = state.selectedFilters()
+                        onClearFiltersClick()
+                    }
                 )
             }
         }
-        for (filterWithSelection in state.filterSelectionStates) {
+        state.filterSelectionStates.forEachIndexed { i, filterWithSelection ->
             item(filterWithSelection.filter) {
+                val zIndex = (if (previousFilters.value.contains(filterWithSelection.filter)) state.filterSelectionStates.size else 0) - i.toFloat()
                 RoomListFilterView(
-                    modifier = Modifier.animateItemPlacement(),
+                    modifier = Modifier
+                        .animateItemPlacement()
+                        .zIndex(zIndex),
                     roomListFilter = filterWithSelection.filter,
                     selected = filterWithSelection.isSelected,
-                    onClick = ::onToggleFilter,
+                    onClick = {
+                        previousFilters.value = state.selectedFilters()
+                        onToggleFilter(it)
+                    },
                 )
             }
-        }
-    }
-    LaunchedEffect(state.filterSelectionStates) {
-        // Checking for canScrollBackward is necessary for the itemPlacementAnimation to work correctly.
-        // We don't want the itemPlacementAnimation to be triggered when clearing the filters.
-        if (!state.hasAnyFilterSelected || lazyListState.canScrollBackward) {
-            lazyListState.animateScrollToItem(0)
         }
     }
 }
@@ -126,16 +134,27 @@ private fun RoomListFilterView(
     onClick: (RoomListFilter) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val background = animateColorAsState(
+        targetValue = if (selected) ElementTheme.colors.bgActionPrimaryRest else ElementTheme.colors.bgCanvasDefault,
+        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+        label = "chip background colour",
+    )
+    val textColour = animateColorAsState(
+        targetValue = if (selected) ElementTheme.colors.textOnSolidPrimary else ElementTheme.colors.textPrimary,
+        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+        label = "chip text colour",
+    )
+
     FilterChip(
         selected = selected,
         onClick = { onClick(roomListFilter) },
         modifier = modifier.height(36.dp),
         shape = CircleShape,
         colors = FilterChipDefaults.filterChipColors(
-            containerColor = ElementTheme.colors.bgCanvasDefault,
-            selectedContainerColor = ElementTheme.colors.bgActionPrimaryRest,
-            labelColor = ElementTheme.colors.textPrimary,
-            selectedLabelColor = ElementTheme.colors.textOnSolidPrimary,
+            containerColor = background.value,
+            selectedContainerColor = background.value,
+            labelColor = textColour.value,
+            selectedLabelColor = textColour.value
         ),
         label = {
             Text(text = stringResource(id = roomListFilter.stringResource))

@@ -18,27 +18,27 @@ package io.element.android.libraries.push.impl.troubleshoot
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.push.impl.notifications.fake.MockkNotificationCreator
-import io.element.android.libraries.push.impl.notifications.fake.MockkNotificationDisplayer
+import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationCreator
+import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationDisplayer
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class NotificationTestTest {
-    private val mockkNotificationCreator = MockkNotificationCreator().apply {
-        givenCreateDiagnosticNotification()
-    }
-    private val mockkNotificationDisplayer = MockkNotificationDisplayer().apply {
-        givenDisplayDiagnosticNotificationResult(true)
-    }
+    private val notificationCreator = FakeNotificationCreator()
+    private val fakeNotificationDisplayer = FakeNotificationDisplayer(
+        displayDiagnosticNotificationResult = lambdaRecorder { _ -> true },
+        dismissDiagnosticNotificationResult = lambdaRecorder { -> }
+    )
 
     private val notificationClickHandler = NotificationClickHandler()
 
     @Test
     fun `test NotificationTest notification cannot be displayed`() = runTest {
-        mockkNotificationDisplayer.givenDisplayDiagnosticNotificationResult(false)
+        fakeNotificationDisplayer.displayDiagnosticNotificationResult = lambdaRecorder { _ -> false }
         val sut = createNotificationTest()
         launch {
             sut.run(this)
@@ -81,8 +81,8 @@ class NotificationTestTest {
 
     private fun createNotificationTest(): NotificationTest {
         return NotificationTest(
-            notificationCreator = mockkNotificationCreator.instance,
-            notificationDisplayer = mockkNotificationDisplayer.instance,
+            notificationCreator = notificationCreator,
+            notificationDisplayer = fakeNotificationDisplayer,
             notificationClickHandler = notificationClickHandler,
             stringProvider = FakeStringProvider(),
         )

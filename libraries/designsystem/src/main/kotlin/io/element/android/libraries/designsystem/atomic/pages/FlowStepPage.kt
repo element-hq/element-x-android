@@ -25,12 +25,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
-import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
+import io.element.android.libraries.designsystem.components.BigIcon
+import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -41,7 +41,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 
 /**
  * A Page with:
- * - a top bar as TobAppBar with optional back button (displayed if [onBackClicked] is not null)
+ * - a top bar as TobAppBar with optional back button (displayed if [onBackClick] is not null)
  * - a header, as IconTitleSubtitleMolecule
  * - a content.
  * - a footer, as ButtonColumnMolecule
@@ -49,34 +49,34 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FlowStepPage(
-    iconVector: ImageVector?,
+    iconStyle: BigIcon.Style,
     title: String,
     modifier: Modifier = Modifier,
-    onBackClicked: (() -> Unit)? = null,
+    onBackClick: (() -> Unit)? = null,
     subTitle: String? = null,
-    content: @Composable () -> Unit = {},
     buttons: @Composable ColumnScope.() -> Unit = {},
+    content: @Composable () -> Unit = {},
 ) {
-    BackHandler(enabled = onBackClicked != null) {
-        onBackClicked?.invoke()
+    BackHandler(enabled = onBackClick != null) {
+        onBackClick?.invoke()
     }
     HeaderFooterPage(
         modifier = modifier,
         topBar = {
             TopAppBar(
                 navigationIcon = {
-                    if (onBackClicked != null) {
-                        BackButton(onClick = onBackClicked)
+                    if (onBackClick != null) {
+                        BackButton(onClick = onBackClick)
                     }
                 },
                 title = {},
             )
         },
         header = {
-            IconTitleSubtitleMolecule(
-                iconImageVector = iconVector,
+            PageTitle(
                 title = title,
-                subTitle = subTitle,
+                subtitle = subTitle,
+                iconStyle = iconStyle,
             )
         },
         content = content,
@@ -94,25 +94,24 @@ fun FlowStepPage(
 @Composable
 internal fun FlowStepPagePreview() = ElementPreview {
     FlowStepPage(
-        onBackClicked = {},
+        onBackClick = {},
         title = "Title",
         subTitle = "Subtitle",
-        iconVector = CompoundIcons.Computer(),
-        content = {
-            Box(
-                Modifier
-                    .fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "Content",
-                    style = ElementTheme.typography.fontHeadingXlBold
-                )
-            }
-        },
+        iconStyle = BigIcon.Style.Default(CompoundIcons.Computer()),
         buttons = {
             TextButton(text = "A button", onClick = { })
             Button(text = "Continue", onClick = { })
         }
-    )
+    ) {
+        Box(
+            Modifier
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "Content",
+                style = ElementTheme.typography.fontHeadingXlBold
+            )
+        }
+    }
 }

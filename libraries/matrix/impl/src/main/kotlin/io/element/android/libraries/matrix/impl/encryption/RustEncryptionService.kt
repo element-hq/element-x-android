@@ -190,4 +190,12 @@ internal class RustEncryptionService(
             it.mapRecoveryException()
         }
     }
+
+    override suspend fun deviceCurve25519(): String? {
+        return service.curve25519Key()
+    }
+
+    override suspend fun deviceEd25519(): String? {
+        return service.ed25519Key()
+    }
 }

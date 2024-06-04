@@ -51,7 +51,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun AvatarActionBottomSheet(
     actions: ImmutableList<AvatarAction>,
     isVisible: Boolean,
-    onActionSelected: (action: AvatarAction) -> Unit,
+    onSelectAction: (action: AvatarAction) -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -64,8 +64,8 @@ fun AvatarActionBottomSheet(
         sheetState.hide(coroutineScope, then = { onDismiss() })
     }
 
-    fun onItemActionClicked(itemAction: AvatarAction) {
-        onActionSelected(itemAction)
+    fun onItemActionClick(itemAction: AvatarAction) {
+        onSelectAction(itemAction)
         sheetState.hide(coroutineScope, then = { onDismiss() })
     }
 
@@ -79,7 +79,7 @@ fun AvatarActionBottomSheet(
         ) {
             AvatarActionBottomSheetContent(
                 actions = actions,
-                onActionClicked = ::onItemActionClicked,
+                onActionClick = ::onItemActionClick,
                 modifier = Modifier
                     .navigationBarsPadding()
                     .imePadding()
@@ -92,7 +92,7 @@ fun AvatarActionBottomSheet(
 private fun AvatarActionBottomSheetContent(
     actions: ImmutableList<AvatarAction>,
     modifier: Modifier = Modifier,
-    onActionClicked: (AvatarAction) -> Unit = { },
+    onActionClick: (AvatarAction) -> Unit = { },
 ) {
     LazyColumn(
         modifier = modifier.fillMaxWidth()
@@ -101,7 +101,7 @@ private fun AvatarActionBottomSheetContent(
             items = actions,
         ) { action ->
             ListItem(
-                modifier = Modifier.clickable { onActionClicked(action) },
+                modifier = Modifier.clickable { onActionClick(action) },
                 headlineContent = {
                     Text(
                         text = stringResource(action.titleResId),
@@ -125,7 +125,7 @@ internal fun AvatarActionBottomSheetPreview() = ElementPreview {
     AvatarActionBottomSheet(
         actions = persistentListOf(AvatarAction.TakePhoto, AvatarAction.ChoosePhoto, AvatarAction.Remove),
         isVisible = true,
-        onActionSelected = { },
+        onSelectAction = { },
         onDismiss = { },
     )
 }

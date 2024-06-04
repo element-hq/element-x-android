@@ -34,18 +34,18 @@ class WelcomeNode @AssistedInject constructor(
     private val buildMeta: BuildMeta,
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
-        fun onContinueClicked()
+        fun onContinueClick()
     }
 
-    private fun onContinueClicked() {
-        plugins.filterIsInstance<Callback>().forEach { it.onContinueClicked() }
+    private fun onContinueClick() {
+        plugins.filterIsInstance<Callback>().forEach { it.onContinueClick() }
     }
 
     @Composable
     override fun View(modifier: Modifier) {
         WelcomeView(
             applicationName = buildMeta.applicationName,
-            onContinueClicked = ::onContinueClicked,
+            onContinueClick = ::onContinueClick,
             modifier = modifier
         )
     }

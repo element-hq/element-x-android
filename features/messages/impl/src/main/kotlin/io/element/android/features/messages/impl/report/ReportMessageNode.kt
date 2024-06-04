@@ -52,7 +52,7 @@ class ReportMessageNode @AssistedInject constructor(
         val state = presenter.present()
         ReportMessageView(
             state = state,
-            onBackClicked = ::navigateUp,
+            onBackClick = ::navigateUp,
             modifier = modifier
         )
     }

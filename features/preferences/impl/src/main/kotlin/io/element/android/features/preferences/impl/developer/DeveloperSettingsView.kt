@@ -39,16 +39,19 @@ fun DeveloperSettingsView(
     state: DeveloperSettingsState,
     onOpenShowkase: () -> Unit,
     onOpenConfigureTracing: () -> Unit,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PreferencePage(
         modifier = modifier,
-        onBackPressed = onBackPressed,
+        onBackClick = onBackClick,
         title = stringResource(id = CommonStrings.common_developer_options)
     ) {
         // Note: this is OK to hardcode strings in this debug screen.
-        PreferenceCategory(title = "Feature flags") {
+        PreferenceCategory(
+            title = "Feature flags",
+            showTopDivider = false,
+        ) {
             FeatureListContent(state)
         }
         ElementCallCategory(state = state)
@@ -67,14 +70,14 @@ fun DeveloperSettingsView(
         RageshakePreferencesView(
             state = state.rageshakeState,
         )
-        PreferenceCategory(title = "Crash", showDivider = false) {
+        PreferenceCategory(title = "Crash", showTopDivider = false) {
             PreferenceText(
                 title = "Crash the app 💥",
                 onClick = { error("This crash is a test.") }
             )
         }
         val cache = state.cacheSize
-        PreferenceCategory(title = "Cache", showDivider = false) {
+        PreferenceCategory(title = "Cache", showTopDivider = false) {
             PreferenceText(
                 title = "Clear cache",
                 currentValue = cache.dataOrNull(),
@@ -93,11 +96,12 @@ fun DeveloperSettingsView(
 private fun ElementCallCategory(
     state: DeveloperSettingsState,
 ) {
-    PreferenceCategory(title = "Element Call", showDivider = true) {
+    PreferenceCategory(title = "Element Call", showTopDivider = true) {
         val callUrlState = state.customElementCallBaseUrlState
         fun isUsingDefaultUrl(value: String?): Boolean {
             return value.isNullOrEmpty() || value == callUrlState.defaultUrl
         }
+
         val supportingText = if (isUsingDefaultUrl(callUrlState.baseUrl)) {
             stringResource(R.string.screen_advanced_settings_element_call_base_url_description)
         } else {
@@ -137,6 +141,6 @@ internal fun DeveloperSettingsViewPreview(@PreviewParameter(DeveloperSettingsSta
         state = state,
         onOpenShowkase = {},
         onOpenConfigureTracing = {},
-        onBackPressed = {}
+        onBackClick = {}
     )
 }

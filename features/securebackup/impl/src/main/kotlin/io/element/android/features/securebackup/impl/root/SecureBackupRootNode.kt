@@ -40,34 +40,34 @@ class SecureBackupRootNode @AssistedInject constructor(
     plugins = plugins
 ) {
     interface Callback : Plugin {
-        fun onSetupClicked()
-        fun onChangeClicked()
-        fun onDisableClicked()
-        fun onEnableClicked()
-        fun onConfirmRecoveryKeyClicked()
+        fun onSetupClick()
+        fun onChangeClick()
+        fun onDisableClick()
+        fun onEnableClick()
+        fun onConfirmRecoveryKeyClick()
     }
 
-    private fun onSetupClicked() {
-        plugins<Callback>().forEach { it.onSetupClicked() }
+    private fun onSetupClick() {
+        plugins<Callback>().forEach { it.onSetupClick() }
     }
 
-    private fun onChangeClicked() {
-        plugins<Callback>().forEach { it.onChangeClicked() }
+    private fun onChangeClick() {
+        plugins<Callback>().forEach { it.onChangeClick() }
     }
 
-    private fun onDisableClicked() {
-        plugins<Callback>().forEach { it.onDisableClicked() }
+    private fun onDisableClick() {
+        plugins<Callback>().forEach { it.onDisableClick() }
     }
 
-    private fun onEnableClicked() {
-        plugins<Callback>().forEach { it.onEnableClicked() }
+    private fun onEnableClick() {
+        plugins<Callback>().forEach { it.onEnableClick() }
     }
 
-    private fun onConfirmRecoveryKeyClicked() {
-        plugins<Callback>().forEach { it.onConfirmRecoveryKeyClicked() }
+    private fun onConfirmRecoveryKeyClick() {
+        plugins<Callback>().forEach { it.onConfirmRecoveryKeyClick() }
     }
 
-    private fun onLearnMoreClicked(uriHandler: UriHandler) {
+    private fun onLearnMoreClick(uriHandler: UriHandler) {
         uriHandler.openUri(SecureBackupConfig.LEARN_MORE_URL)
     }
 
@@ -77,13 +77,13 @@ class SecureBackupRootNode @AssistedInject constructor(
         val uriHandler = LocalUriHandler.current
         SecureBackupRootView(
             state = state,
-            onBackPressed = ::navigateUp,
-            onSetupClicked = ::onSetupClicked,
-            onChangeClicked = ::onChangeClicked,
-            onEnableClicked = ::onEnableClicked,
-            onDisableClicked = ::onDisableClicked,
-            onConfirmRecoveryKeyClicked = ::onConfirmRecoveryKeyClicked,
-            onLearnMoreClicked = { onLearnMoreClicked(uriHandler) },
+            onBackClick = ::navigateUp,
+            onSetupClick = ::onSetupClick,
+            onChangeClick = ::onChangeClick,
+            onEnableClick = ::onEnableClick,
+            onDisableClick = ::onDisableClick,
+            onConfirmRecoveryKeyClick = ::onConfirmRecoveryKeyClick,
+            onLearnMoreClick = { onLearnMoreClick(uriHandler) },
             modifier = modifier,
         )
     }

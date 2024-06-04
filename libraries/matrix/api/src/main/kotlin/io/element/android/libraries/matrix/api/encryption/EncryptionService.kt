@@ -50,4 +50,16 @@ interface EncryptionService {
      * Wait for backup upload steady state.
      */
     fun waitForBackupUploadSteadyState(): Flow<BackupUploadState>
+
+    /**
+     * Get the public curve25519 key of our own device in base64. This is usually what is
+     * called the identity key of the device.
+     */
+    suspend fun deviceCurve25519(): String?
+
+    /**
+     * Get the public ed25519 key of our own device. This is usually what is
+     * called the fingerprint of the device.
+     */
+    suspend fun deviceEd25519(): String?
 }

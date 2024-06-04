@@ -18,14 +18,26 @@ package io.element.android.features.preferences.impl.notifications
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 open class NotificationSettingsStateProvider : PreviewParameterProvider<NotificationSettingsState> {
     override val values: Sequence<NotificationSettingsState>
         get() = sequenceOf(
+            aValidNotificationSettingsState(systemNotificationsEnabled = false),
             aValidNotificationSettingsState(),
             aValidNotificationSettingsState(changeNotificationSettingAction = AsyncAction.Loading),
             aValidNotificationSettingsState(changeNotificationSettingAction = AsyncAction.Failure(Throwable("error"))),
+            aValidNotificationSettingsState(
+                availablePushDistributors = listOf("Firebase"),
+                changeNotificationSettingAction = AsyncAction.Failure(Throwable("error")),
+            ),
+            aValidNotificationSettingsState(availablePushDistributors = listOf("Firebase")),
+            aValidNotificationSettingsState(showChangePushProviderDialog = true),
+            aValidNotificationSettingsState(currentPushDistributor = AsyncData.Loading()),
+            aValidNotificationSettingsState(currentPushDistributor = AsyncData.Failure(Exception("Failed to change distributor"))),
             aInvalidNotificationSettingsState(),
             aInvalidNotificationSettingsState(fixFailed = true),
         )
@@ -36,7 +48,11 @@ fun aValidNotificationSettingsState(
     atRoomNotificationsEnabled: Boolean = true,
     callNotificationsEnabled: Boolean = true,
     inviteForMeNotificationsEnabled: Boolean = true,
+    systemNotificationsEnabled: Boolean = true,
     appNotificationEnabled: Boolean = true,
+    currentPushDistributor: AsyncData<String> = AsyncData.Success("Firebase"),
+    availablePushDistributors: List<String> = listOf("Firebase", "ntfy"),
+    showChangePushProviderDialog: Boolean = false,
     eventSink: (NotificationSettingsEvents) -> Unit = {},
 ) = NotificationSettingsState(
     matrixSettings = NotificationSettingsState.MatrixSettings.Valid(
@@ -47,10 +63,13 @@ fun aValidNotificationSettingsState(
         defaultOneToOneNotificationMode = RoomNotificationMode.ALL_MESSAGES,
     ),
     appSettings = NotificationSettingsState.AppSettings(
-        systemNotificationsEnabled = false,
+        systemNotificationsEnabled = systemNotificationsEnabled,
         appNotificationsEnabled = appNotificationEnabled,
     ),
     changeNotificationSettingAction = changeNotificationSettingAction,
+    currentPushDistributor = currentPushDistributor,
+    availablePushDistributors = availablePushDistributors.toImmutableList(),
+    showChangePushProviderDialog = showChangePushProviderDialog,
     eventSink = eventSink,
 )
 
@@ -66,5 +85,8 @@ fun aInvalidNotificationSettingsState(
         appNotificationsEnabled = true,
     ),
     changeNotificationSettingAction = AsyncAction.Uninitialized,
+    currentPushDistributor = AsyncData.Uninitialized,
+    availablePushDistributors = persistentListOf(),
+    showChangePushProviderDialog = false,
     eventSink = eventSink,
 )

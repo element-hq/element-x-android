@@ -21,5 +21,8 @@ object NotificationConfig {
     const val SUPPORT_MARK_AS_READ_ACTION = false
 
     // TODO EAx Implement and set to true at some point
+    const val SUPPORT_JOIN_DECLINE_INVITE = false
+
+    // TODO EAx Implement and set to true at some point
     const val SUPPORT_QUICK_REPLY_ACTION = false
 }

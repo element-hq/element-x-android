@@ -82,6 +82,7 @@ import org.matrix.rustcomponents.sdk.TypingNotificationsListener
 import org.matrix.rustcomponents.sdk.UserPowerLevelUpdate
 import org.matrix.rustcomponents.sdk.WidgetCapabilities
 import org.matrix.rustcomponents.sdk.WidgetCapabilitiesProvider
+import org.matrix.rustcomponents.sdk.getElementCallRequiredPermissions
 import org.matrix.rustcomponents.sdk.use
 import uniffi.matrix_sdk.RoomPowerLevelChanges
 import java.io.File
@@ -581,7 +582,7 @@ class RustMatrixRoom(
             room = innerRoom,
             widgetCapabilitiesProvider = object : WidgetCapabilitiesProvider {
                 override fun acquireCapabilities(capabilities: WidgetCapabilities): WidgetCapabilities {
-                    return capabilities
+                    return getElementCallRequiredPermissions(sessionId.value)
                 }
             },
         )

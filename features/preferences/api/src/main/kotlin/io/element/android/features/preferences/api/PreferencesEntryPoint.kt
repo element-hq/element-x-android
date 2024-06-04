@@ -45,7 +45,7 @@ interface PreferencesEntryPoint : FeatureEntryPoint {
 
     interface Callback : Plugin {
         fun onOpenBugReport()
-        fun onSecureBackupClicked()
+        fun onSecureBackupClick()
         fun onOpenRoomNotificationSettings(roomId: RoomId)
     }
 }

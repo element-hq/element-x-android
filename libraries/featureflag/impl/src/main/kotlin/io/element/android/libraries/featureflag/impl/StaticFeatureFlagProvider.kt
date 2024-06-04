@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.featureflag.impl
 
+import io.element.android.appconfig.OnBoardingConfig
 import io.element.android.libraries.featureflag.api.Feature
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import kotlinx.coroutines.flow.Flow
@@ -41,6 +42,8 @@ class StaticFeatureFlagProvider @Inject constructor() :
                 FeatureFlags.Mentions -> true
                 FeatureFlags.MarkAsUnread -> true
                 FeatureFlags.RoomDirectorySearch -> false
+                FeatureFlags.ShowBlockedUsersDetails -> false
+                FeatureFlags.QrCodeLogin -> OnBoardingConfig.CAN_LOGIN_WITH_QR_CODE
             }
         } else {
             false

@@ -17,11 +17,11 @@
 package io.element.android.features.preferences.impl.blockedusers
 
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
 data class BlockedUsersState(
-    val blockedUsers: ImmutableList<UserId>,
+    val blockedUsers: ImmutableList<MatrixUser>,
     val unblockUserAction: AsyncAction<Unit>,
     val eventSink: (BlockedUsersEvents) -> Unit,
 )
