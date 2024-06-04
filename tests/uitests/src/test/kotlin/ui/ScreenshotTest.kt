@@ -53,10 +53,7 @@ import java.util.Locale
 open class ScreenshotTest {
     @get:Rule
     val paparazzi = Paparazzi(
-        environment = detectEnvironment().run {
-            // Workaround to work with API 34 (https://github.com/cashapp/paparazzi/issues/1025)
-            copy(compileSdkVersion = 33, platformDir = platformDir.replace("34", "33"))
-        },
+        environment = detectEnvironment(),
         maxPercentDifference = 0.01,
         renderingMode = SessionParams.RenderingMode.NORMAL,
     )
