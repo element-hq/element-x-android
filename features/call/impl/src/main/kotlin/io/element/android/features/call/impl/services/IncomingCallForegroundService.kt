@@ -24,18 +24,23 @@ import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
 import android.os.Parcelable
+import androidx.core.app.ServiceCompat
 import androidx.core.content.IntentCompat
 import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.call.impl.di.CallBindings
 import io.element.android.features.call.impl.notifications.RingingCallNotificationCreator
+import io.element.android.features.call.impl.utils.CallIntegrationManager
 import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
@@ -48,6 +53,10 @@ class IncomingCallForegroundService : Service() {
             intent.putExtra(NOTIFICATION_DATA, callNotificationData)
             context.startService(intent)
         }
+
+        internal fun stop(context: Context) {
+            context.stopService(Intent(context, IncomingCallForegroundService::class.java))
+        }
     }
 
     @Inject
@@ -56,9 +65,14 @@ class IncomingCallForegroundService : Service() {
     @Inject
     lateinit var ringingCallNotificationCreator: RingingCallNotificationCreator
 
+    @Inject
+    lateinit var callIntegrationManager: CallIntegrationManager
+
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
+
+    private var timedOutCallJob: Job? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -72,34 +86,20 @@ class IncomingCallForegroundService : Service() {
             stopSelf()
             return super.onStartCommand(intent, flags, startId)
         }
-        coroutineScope.launch {
-            val notification = ringingCallNotificationCreator.createNotification(
-                sessionId = notificationData.sessionId,
-                roomId = notificationData.roomId,
-                senderDisplayName = notificationData.senderName ?: notificationData.senderId.value,
-                avatarUrl = notificationData.avatarUrl,
-                notificationChannelId = notificationData.notificationChannelId,
-                timestamp = notificationData.timestamp
-            ) ?: run {
-                stopSelf()
-                return@launch
-            }
+        timedOutCallJob = coroutineScope.launch {
+            callIntegrationManager.registerIncomingCall(notificationData)
+            showIncomingCallNotification(notificationData)
 
-            // TODO: set right id
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                startForeground(239478, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL)
-            } else {
-                startForeground(1, notification)
-            }
             // Wait for the call to end
             delay(ElementCallConfig.RINGING_CALL_DURATION_SECONDS.seconds)
-            stopSelf()
+            callIntegrationManager.incomingCallTimedOut()
         }
 
         return super.onStartCommand(intent, flags, startId)
     }
 
     override fun stopService(name: Intent?): Boolean {
+        timedOutCallJob?.cancel()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             stopForeground(STOP_FOREGROUND_REMOVE)
         } else {
@@ -108,11 +108,39 @@ class IncomingCallForegroundService : Service() {
         }
         return super.stopService(name)
     }
+
+    private suspend fun showIncomingCallNotification(notificationData: CallNotificationData) {
+        val notification = ringingCallNotificationCreator.createNotification(
+            sessionId = notificationData.sessionId,
+            roomId = notificationData.roomId,
+            eventId = notificationData.eventId,
+            senderId = notificationData.senderId,
+            roomName = notificationData.roomName,
+            senderDisplayName = notificationData.senderName ?: notificationData.senderId.value,
+            avatarUrl = notificationData.avatarUrl,
+            notificationChannelId = notificationData.notificationChannelId,
+            timestamp = notificationData.timestamp
+        ) ?: return
+        val serviceType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL
+        } else {
+            0
+        }
+        // TODO: set right id
+        runCatching {
+            ServiceCompat.startForeground(this, 1, notification, serviceType)
+        }.onFailure {
+            Timber.e(it, "Failed to start foreground service for incoming calls")
+        }
+    }
 }
 
 class DeclineCallBroadcastReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent?) {
-        context?.stopService(Intent(context, IncomingCallForegroundService::class.java))
+    @Inject
+    lateinit var callIntegrationManager: CallIntegrationManager
+    override fun onReceive(context: Context, intent: Intent?) {
+        context.bindings<CallBindings>().inject(this)
+        callIntegrationManager.hungUpCall()
     }
 }
 
@@ -120,7 +148,9 @@ class DeclineCallBroadcastReceiver : BroadcastReceiver() {
 data class CallNotificationData(
     val sessionId: SessionId,
     val roomId: RoomId,
+    val eventId: EventId,
     val senderId: UserId,
+    val roomName: String?,
     val senderName: String?,
     val avatarUrl: String?,
     val notificationChannelId: String,

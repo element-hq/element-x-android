@@ -48,6 +48,7 @@ import io.element.android.libraries.push.impl.notifications.factories.action.Qui
 import io.element.android.libraries.push.impl.notifications.factories.action.RejectInvitationActionFactory
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
+import io.element.android.libraries.push.impl.notifications.model.NotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
@@ -80,6 +81,10 @@ interface NotificationCreator {
 
     fun createFallbackNotification(
         fallbackNotifiableEvent: FallbackNotifiableEvent,
+    ): Notification
+
+    fun createCallNotification(
+        callNotifiableEvent: NotifiableCallEvent,
     ): Notification
 
     /**
@@ -324,6 +329,27 @@ class DefaultNotificationCreator @Inject constructor(
                 )
             )
             .setPriority(NotificationCompat.PRIORITY_LOW)
+            .build()
+    }
+
+    override fun createCallNotification(callNotifiableEvent: NotifiableCallEvent): Notification {
+        val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
+        val smallIcon = CommonDrawables.ic_notification_small
+        val roomName = callNotifiableEvent.roomName ?: callNotifiableEvent.roomId.value
+
+        val channelId = notificationChannels.getChannelForIncomingCall(ring = false)
+        return NotificationCompat.Builder(context, channelId)
+            .setOnlyAlertOnce(true)
+            .setContentTitle(roomName.annotateForDebug(7))
+            .setContentText(callNotifiableEvent.description.orEmpty().annotateForDebug(8))
+            .setGroup(callNotifiableEvent.sessionId.value)
+            .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
+            .setSmallIcon(smallIcon)
+            .setColor(accentColor)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntentFactory.createOpenRoomPendingIntent(callNotifiableEvent.sessionId, callNotifiableEvent.roomId))
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setLights(accentColor, 500, 500)
             .build()
     }
 

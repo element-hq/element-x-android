@@ -127,12 +127,14 @@ class NotificationChannels @Inject constructor(
                 }
         )
 
+        notificationManager.deleteNotificationChannel(CALL_NOTIFICATION_CHANNEL_ID_v2)
+
         // Register a channel for incoming and in progress call notifications with no ringing
         notificationManager.createNotificationChannel(
             NotificationChannel(
-                CALL_NOTIFICATION_CHANNEL_ID,
+                CALL_NOTIFICATION_CHANNEL_ID_v3,
                 stringProvider.getString(R.string.notification_channel_call).ifEmpty { "Call" },
-                NotificationManager.IMPORTANCE_DEFAULT
+                NotificationManager.IMPORTANCE_HIGH
             )
                 .apply {
                     description = stringProvider.getString(R.string.notification_channel_call)
@@ -149,14 +151,14 @@ class NotificationChannels @Inject constructor(
                 RINGING_CALL_NOTIFICATION_CHANNEL_ID,
                 NotificationManagerCompat.IMPORTANCE_MAX,
             )
-                .setName(stringProvider.getString(R.string.notification_channel_ringing_calls).ifEmpty { "Ringing call" })
+                .setName(stringProvider.getString(R.string.notification_channel_ringing_calls).ifEmpty { "Ringing calls" })
                 .setVibrationEnabled(true)
                 .setSound(
                     ringtoneUri,
                     AudioAttributes.Builder()
                         .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                         .setLegacyStreamType(AudioManager.STREAM_RING)
-                        .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+                        .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
                         .build()
                 )
                 .setDescription(stringProvider.getString(R.string.notification_channel_ringing_calls))
@@ -171,7 +173,7 @@ class NotificationChannels @Inject constructor(
     }
 
     fun getChannelForIncomingCall(ring: Boolean): String {
-        return if (ring) RINGING_CALL_NOTIFICATION_CHANNEL_ID else CALL_NOTIFICATION_CHANNEL_ID
+        return if (ring) RINGING_CALL_NOTIFICATION_CHANNEL_ID else CALL_NOTIFICATION_CHANNEL_ID_v3
     }
 
     fun getChannelIdForMessage(noisy: Boolean): String {
@@ -187,8 +189,9 @@ class NotificationChannels @Inject constructor(
         private const val LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID = "LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID"
         private const val SILENT_NOTIFICATION_CHANNEL_ID = "DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID_V2"
         private const val NOISY_NOTIFICATION_CHANNEL_ID = "DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID"
-        private const val CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID_V2"
-        private const val RINGING_CALL_NOTIFICATION_CHANNEL_ID = "RINGING_CALL_NOTIFICATION_CHANNEL_ID_v002"
+        private const val CALL_NOTIFICATION_CHANNEL_ID_v2 = "CALL_NOTIFICATION_CHANNEL_ID_V2"
+        private const val CALL_NOTIFICATION_CHANNEL_ID_v3 = "CALL_NOTIFICATION_CHANNEL_ID_V2"
+        private const val RINGING_CALL_NOTIFICATION_CHANNEL_ID = "RINGING_CALL_NOTIFICATION_CHANNEL_ID"
 
         @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
         private fun supportNotificationChannels() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O

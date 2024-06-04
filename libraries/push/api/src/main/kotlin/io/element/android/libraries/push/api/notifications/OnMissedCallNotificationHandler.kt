@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package io.element.android.features.call.api
+package io.element.android.libraries.push.api.notifications
 
-import android.app.PendingIntent
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 
-interface ElementCallEntryPoint {
-    fun startCall(callType: CallType)
-    fun getPendingIntent(callType: CallType): PendingIntent
-    fun handleIncomingCall(
-        callType: CallType.RoomCall,
+interface OnMissedCallNotificationHandler {
+    fun addMissedCallNotification(
+        sessionId: SessionId,
+        roomId: RoomId,
         eventId: EventId,
         senderId: UserId,
         roomName: String?,
         senderName: String?,
-        avatarUrl: String?,
         timestamp: Long,
-        notificationChannelId: String,
+        avatarUrl: String?,
     )
 }

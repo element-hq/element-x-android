@@ -36,17 +36,24 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.media.AudioManager
+import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
+import androidx.core.app.PendingIntentCompat
 import androidx.core.app.Person
 import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.call.api.CallType
+import io.element.android.features.call.impl.services.CallNotificationData
 import io.element.android.features.call.impl.services.DeclineCallBroadcastReceiver
+import io.element.android.features.call.impl.ui.IncomingCallActivity
 import io.element.android.features.call.impl.utils.IntentProvider
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClientProvider
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
 import javax.inject.Inject
@@ -61,6 +68,9 @@ class RingingCallNotificationCreator @Inject constructor(
     suspend fun createNotification(
         sessionId: SessionId,
         roomId: RoomId,
+        eventId: EventId,
+        senderId: UserId,
+        roomName: String?,
         senderDisplayName: String,
         avatarUrl: String?,
         notificationChannelId: String,
@@ -76,13 +86,27 @@ class RingingCallNotificationCreator @Inject constructor(
             .build()
         val answerIntent = IntentProvider.getPendingIntent(context, CallType.RoomCall(sessionId, roomId))
         // TODO: user right request codes
-        val declineIntent = PendingIntent.getBroadcast(
+        val declineIntent = PendingIntentCompat.getBroadcast(
             context,
             1,
             Intent(context, DeclineCallBroadcastReceiver::class.java),
-            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+            PendingIntent.FLAG_CANCEL_CURRENT,
+            false,
+        )!!
+        val fullScreenIntent = PendingIntentCompat.getActivity(
+            context,
+            2,
+            Intent(context, IncomingCallActivity::class.java).apply {
+                putExtra(
+                    IncomingCallActivity.EXTRA_NOTIFICATION_DATA,
+                    CallNotificationData(sessionId, roomId, eventId, senderId, roomName, senderDisplayName, avatarUrl, notificationChannelId, timestamp)
+                )
+            },
+            PendingIntent.FLAG_CANCEL_CURRENT,
+            false
         )
         // TODO: make this open the call
+        val ringtoneUri = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE)
         return NotificationCompat.Builder(context, notificationChannelId)
             .setSmallIcon(CommonDrawables.ic_notification_small)
             .setPriority(NotificationCompat.PRIORITY_MAX)
@@ -93,9 +117,10 @@ class RingingCallNotificationCreator @Inject constructor(
             .setWhen(timestamp)
             .setOngoing(true)
             .setShowWhen(false)
+            .setSound(ringtoneUri, AudioManager.STREAM_RING)
             .setTimeoutAfter(ElementCallConfig.RINGING_CALL_DURATION_SECONDS.seconds.inWholeMilliseconds)
             .setContentIntent(answerIntent)
-            .setFullScreenIntent(answerIntent, true)
+            .setFullScreenIntent(fullScreenIntent, true)
             .build()
             .apply {
                 flags = flags.or(Notification.FLAG_INSISTENT)

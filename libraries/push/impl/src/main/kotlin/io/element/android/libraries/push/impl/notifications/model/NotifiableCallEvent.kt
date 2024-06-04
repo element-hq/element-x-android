@@ -32,6 +32,7 @@ data class NotifiableCallEvent(
     override val canBeReplaced: Boolean,
     override val isRedacted: Boolean,
     override val isUpdated: Boolean,
+    val roomName: String?,
     val senderId: UserId,
     val senderDisambiguatedDisplayName: String?,
     val imageUriString: String? = null,
@@ -42,7 +43,6 @@ data class NotifiableCallEvent(
         run {
             val timeout = 10.seconds.inWholeMilliseconds
             val elapsed = System.currentTimeMillis() - timestamp
-            // Only ring if the type is RING and the elapsed time is less than the timeout
             // Only ring if the type is RING and the elapsed time is less than the timeout
             callNotifyType == CallNotifyType.RING && elapsed < timeout
         }

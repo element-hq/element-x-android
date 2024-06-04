@@ -31,6 +31,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.impl.data.WidgetMessage
+import io.element.android.features.call.impl.utils.CallIntegrationManager
 import io.element.android.features.call.impl.utils.CallWidgetProvider
 import io.element.android.features.call.impl.utils.WidgetMessageInterceptor
 import io.element.android.features.call.impl.utils.WidgetMessageSerializer
@@ -63,6 +64,7 @@ class CallScreenPresenter @AssistedInject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val matrixClientsProvider: MatrixClientProvider,
     private val appCoroutineScope: CoroutineScope,
+    private val callIntegrationManager: CallIntegrationManager,
 ) : Presenter<CallScreenState> {
     @AssistedFactory
     interface Factory {
@@ -82,6 +84,10 @@ class CallScreenPresenter @AssistedInject constructor(
 
         LaunchedEffect(Unit) {
             loadUrl(callType, urlState, callWidgetDriver)
+
+            if (callType is CallType.RoomCall) {
+                callIntegrationManager.joinedCall(callType.sessionId, callType.roomId)
+            }
         }
 
         HandleMatrixClientSyncState()
@@ -120,6 +126,14 @@ class CallScreenPresenter @AssistedInject constructor(
                         }
                     }
                     .launchIn(this)
+            }
+        }
+
+        DisposableEffect(Unit) {
+            onDispose {
+                if (callType is CallType.RoomCall) {
+                    callIntegrationManager.hungUpCall()
+                }
             }
         }
 
@@ -182,12 +196,6 @@ class CallScreenPresenter @AssistedInject constructor(
             val client = (callType as? CallType.RoomCall)?.sessionId?.let {
                 matrixClientsProvider.getOrNull(it)
             } ?: return@DisposableEffect onDispose { }
-
-            val roomId = callType.roomId
-            coroutineScope.launch {
-                client.getRoom(roomId)?.sendCallNotificationIfNeeded()
-            }
-
             coroutineScope.launch {
                 client.syncService().syncState
                     .onEach { state ->

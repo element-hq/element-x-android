@@ -28,6 +28,7 @@ import io.element.android.features.call.impl.utils.CallIntegrationManager
 import io.element.android.features.call.impl.utils.IntentProvider
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import javax.inject.Inject
 
@@ -51,7 +52,9 @@ class DefaultElementCallEntryPoint @Inject constructor(
 
     override fun handleIncomingCall(
         callType: CallType.RoomCall,
+        eventId: EventId,
         senderId: UserId,
+        roomName: String?,
         senderName: String?,
         avatarUrl: String?,
         timestamp: Long,
@@ -60,7 +63,9 @@ class DefaultElementCallEntryPoint @Inject constructor(
         val incomingCallNotificationData = CallNotificationData(
             sessionId = callType.sessionId,
             roomId = callType.roomId,
+            eventId = eventId,
             senderId = senderId,
+            roomName = roomName,
             senderName = senderName,
             avatarUrl = avatarUrl,
             timestamp = timestamp,

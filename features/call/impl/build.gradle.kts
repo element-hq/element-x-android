@@ -48,7 +48,6 @@ dependencies {
     implementation(projects.services.toolbox.api)
     implementation(libs.androidx.webkit)
     implementation(libs.coil.compose)
-    implementation("androidx.core:core-telecom:1.0.0-alpha03")
     implementation(libs.serialization.json)
     api(projects.features.call.api)
     ksp(libs.showkase.processor)

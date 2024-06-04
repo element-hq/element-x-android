@@ -102,10 +102,13 @@ class DefaultPushHandler @Inject constructor(
                 when (notifiableEvent) {
                     null -> Timber.tag(loggerTag.value).w("Unable to get a notification data")
                     is NotifiableCallEvent -> {
+                        Timber.i("## handleInternal() : Incoming call. Should ring: ${notifiableEvent.shouldRing}")
                         if (notifiableEvent.shouldRing) {
                             elementCallEntryPoint.handleIncomingCall(
                                 callType = CallType.RoomCall(notifiableEvent.sessionId, notifiableEvent.roomId),
+                                eventId = notifiableEvent.eventId,
                                 senderId = notifiableEvent.senderId,
+                                roomName = notifiableEvent.roomName,
                                 senderName = notifiableEvent.senderDisambiguatedDisplayName,
                                 avatarUrl = notifiableEvent.imageUriString,
                                 timestamp = notifiableEvent.timestamp,
