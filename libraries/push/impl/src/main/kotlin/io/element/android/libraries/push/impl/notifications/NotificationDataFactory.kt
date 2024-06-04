@@ -50,10 +50,12 @@ interface NotificationDataFactory {
     @JvmName("toNotificationSimpleEvents")
     @Suppress("INAPPLICABLE_JVM_NAME")
     fun toNotifications(simpleEvents: List<SimpleNotifiableEvent>): List<OneShotNotification>
-    @JvmName("toNotificationCallEvents")
+    @JvmName("toNotificationFallbackEvents")
     @Suppress("INAPPLICABLE_JVM_NAME")
     fun toNotifications(fallback: List<FallbackNotifiableEvent>): List<OneShotNotification>
-    fun toNotifications(callEvents: List<NotifiableCallEvent>): List<OneShotNotification>
+    @JvmName("toNotificationCallEvents")
+    @Suppress("INAPPLICABLE_JVM_NAME")
+    suspend fun toNotifications(callEvents: List<NotifiableCallEvent>, imageLoader: ImageLoader): List<OneShotNotification>
 
     fun createSummaryNotification(
         currentUser: MatrixUser,
@@ -134,7 +136,7 @@ class DefaultNotificationDataFactory @Inject constructor(
         }
     }
 
-    @JvmName("toNotificationCallEvents")
+    @JvmName("toNotificationFallbackEvents")
     @Suppress("INAPPLICABLE_JVM_NAME")
     override fun toNotifications(fallback: List<FallbackNotifiableEvent>): List<OneShotNotification> {
         return fallback.map { event ->
@@ -148,11 +150,13 @@ class DefaultNotificationDataFactory @Inject constructor(
         }
     }
 
-    override fun toNotifications(callEvents: List<NotifiableCallEvent>): List<OneShotNotification> {
+    @JvmName("toNotificationCallEvents")
+    @Suppress("INAPPLICABLE_JVM_NAME")
+    override suspend fun toNotifications(callEvents: List<NotifiableCallEvent>, imageLoader: ImageLoader): List<OneShotNotification> {
         return callEvents.map { event ->
             OneShotNotification(
                 key = event.eventId.value,
-                notification = notificationCreator.createCallNotification(event),
+                notification = notificationCreator.createCallNotification(event, imageLoader),
                 summaryLine = event.description.orEmpty(),
                 isNoisy = true,
                 timestamp = event.timestamp,

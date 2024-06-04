@@ -185,7 +185,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     isUpdated = false,
                     description = stringProvider.getString(CommonStrings.common_call_started),
                     senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
-                    imageUriString = fetchImageIfPresent(client)?.toString(),
+                    roomAvatarUrl = roomAvatarUrl,
                     callNotifyType = content.type,
                     senderId = content.senderId,
                 )

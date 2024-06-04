@@ -129,7 +129,7 @@ class IncomingCallActivity : AppCompatActivity() {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 20.dp, end = 20.dp, top = 64.dp)
+                        .padding(start = 20.dp, end = 20.dp, top = 120.dp)
                         .weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {

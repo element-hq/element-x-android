@@ -47,7 +47,7 @@ class NotificationRenderer @Inject constructor(
             val invitationNotifications = toNotifications(groupedEvents.invitationEvents)
             val simpleNotifications = toNotifications(groupedEvents.simpleEvents)
             val fallbackNotifications = toNotifications(groupedEvents.fallbackEvents)
-            val callNotifications = toNotifications(groupedEvents.callEvent)
+            val callNotifications = toNotifications(groupedEvents.callEvent, imageLoader)
             val summaryNotification = createSummaryNotification(
                 currentUser = currentUser,
                 roomNotifications = roomNotifications,

@@ -26,7 +26,6 @@ import androidx.core.app.NotificationCompat.MessagingStyle
 import androidx.core.app.Person
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.drawable.IconCompat
 import coil.ImageLoader
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.NotificationConfig
@@ -53,7 +52,6 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableMess
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
 
 interface NotificationCreator {
     /**
@@ -83,8 +81,9 @@ interface NotificationCreator {
         fallbackNotifiableEvent: FallbackNotifiableEvent,
     ): Notification
 
-    fun createCallNotification(
+    suspend fun createCallNotification(
         callNotifiableEvent: NotifiableCallEvent,
+        imageLoader: ImageLoader,
     ): Notification
 
     /**
@@ -141,7 +140,6 @@ class DefaultNotificationCreator @Inject constructor(
             NotificationCompat.Builder(context, existingNotification)
         } else {
             NotificationCompat.Builder(context, channelId)
-                .setOnlyAlertOnce(roomInfo.isUpdated)
                 // A category allows groups of notifications to be ranked and filtered – per user or system settings.
                 // For example, alarm notifications should display before promo notifications, or message from known contact
                 // that can be displayed in not disturb mode if white listed (the later will need compat28.x)
@@ -332,9 +330,10 @@ class DefaultNotificationCreator @Inject constructor(
             .build()
     }
 
-    override fun createCallNotification(callNotifiableEvent: NotifiableCallEvent): Notification {
+    override suspend fun createCallNotification(callNotifiableEvent: NotifiableCallEvent, imageLoader: ImageLoader): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         val smallIcon = CommonDrawables.ic_notification_small
+        val largeIcon = bitmapLoader.getRoomBitmap(callNotifiableEvent.roomAvatarUrl, imageLoader)
         val roomName = callNotifiableEvent.roomName ?: callNotifiableEvent.roomId.value
 
         val channelId = notificationChannels.getChannelForIncomingCall(ring = false)
@@ -345,6 +344,7 @@ class DefaultNotificationCreator @Inject constructor(
             .setGroup(callNotifiableEvent.sessionId.value)
             .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
             .setSmallIcon(smallIcon)
+            .setLargeIcon(largeIcon)
             .setColor(accentColor)
             .setAutoCancel(true)
             .setContentIntent(pendingIntentFactory.createOpenRoomPendingIntent(callNotifiableEvent.sessionId, callNotifiableEvent.roomId))
@@ -371,7 +371,6 @@ class DefaultNotificationCreator @Inject constructor(
             .setWhen(lastMessageTimestamp)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setSmallIcon(smallIcon)
-            // set content text to support devices running API level < 24
             .setGroup(currentUser.userId.value)
             // set this notification as the summary for the group
             .setGroupSummary(true)
@@ -446,34 +445,6 @@ class DefaultNotificationCreator @Inject constructor(
                 }
             }
         }
-    }
-
-    suspend fun createRingingCallNotification(
-        senderName: String,
-        largeIconUrl: String?,
-        content: String,
-        imageLoader: ImageLoader,
-        timestamp: Long,
-    ): Notification {
-        val largeIcon = bitmapLoader.getRoomBitmap(largeIconUrl, imageLoader)
-        val channelId = notificationChannels.getChannelForIncomingCall(ring = true)
-        val caller = Person.Builder()
-            .setName(senderName)
-            .setIcon(largeIcon?.let { IconCompat.createWithBitmap(it) })
-            .setImportant(true)
-            .build()
-        return NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(CommonDrawables.ic_notification_small)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setCategory(NotificationCompat.CATEGORY_CALL)
-            .setContentTitle(senderName)
-            .setContentText(content)
-            .setStyle(MessagingStyle(caller))
-            .addPerson(caller)
-            .setAutoCancel(true)
-            .setWhen(timestamp)
-            .setTimeoutAfter(15.seconds.inWholeMilliseconds)
-            .build()
     }
 
     private suspend fun messagingStyleFromCurrentUser(

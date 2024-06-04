@@ -35,7 +35,7 @@ data class NotifiableCallEvent(
     val roomName: String?,
     val senderId: UserId,
     val senderDisambiguatedDisplayName: String?,
-    val imageUriString: String? = null,
+    val roomAvatarUrl: String? = null,
     val callNotifyType: CallNotifyType,
     val timestamp: Long,
 ) : NotifiableEvent {

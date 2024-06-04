@@ -58,7 +58,7 @@ class DefaultOnMissedCallNotificationHandler @Inject constructor(
                 senderDisambiguatedDisplayName = senderName,
                 description = stringProvider.getString(CommonStrings.common_call_started),
                 timestamp = timestamp,
-                imageUriString = avatarUrl,
+                roomAvatarUrl = avatarUrl,
                 canBeReplaced = false,
                 isRedacted = false,
                 isUpdated = false,
