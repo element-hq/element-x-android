@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.impl
 
-import io.element.android.appconfig.TimelineConfig
 import io.element.android.libraries.androidutils.file.getSizeOfFiles
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -42,7 +41,6 @@ import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import io.element.android.libraries.matrix.api.roomlist.awaitLoaded
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
@@ -56,17 +54,12 @@ import io.element.android.libraries.matrix.impl.notification.RustNotificationSer
 import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
 import io.element.android.libraries.matrix.impl.oidc.toRustAction
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
-import io.element.android.libraries.matrix.impl.room.MatrixRoomInfoMapper
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
-import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
-import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
-import io.element.android.libraries.matrix.impl.room.map
+import io.element.android.libraries.matrix.impl.room.RustRoomFactory
 import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewMapper
 import io.element.android.libraries.matrix.impl.roomdirectory.RustRoomDirectoryService
 import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
-import io.element.android.libraries.matrix.impl.roomlist.fullRoomWithTimeline
-import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
@@ -102,14 +95,10 @@ import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.BackupState
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
-import org.matrix.rustcomponents.sdk.FilterTimelineEventType
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
-import org.matrix.rustcomponents.sdk.Room
-import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.TaskHandle
-import org.matrix.rustcomponents.sdk.TimelineEventTypeFilter
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
@@ -150,7 +139,6 @@ class RustMatrixClient(
     private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
     private val notificationSettingsService = RustNotificationSettingsService(client, dispatchers)
         .apply { start() }
-    private val roomSyncSubscriber = RoomSyncSubscriber(innerRoomListService, dispatchers)
     private val encryptionService = RustEncryptionService(
         client = client,
         syncService = rustSyncService,
@@ -237,15 +225,18 @@ class RustMatrixClient(
         sessionCoroutineScope = sessionCoroutineScope,
     )
 
-    private val eventFilters = TimelineConfig.excludedEvents
-        .takeIf { it.isNotEmpty() }
-        ?.let { listStateEventType ->
-            TimelineEventTypeFilter.exclude(
-                listStateEventType.map { stateEventType ->
-                    FilterTimelineEventType.State(stateEventType.map())
-                }
-            )
-        }
+    private val roomFactory = RustRoomFactory(
+        roomListService = roomListService,
+        innerRoomListService = innerRoomListService,
+        sessionId = sessionId,
+        notificationSettingsService = notificationSettingsService,
+        sessionCoroutineScope = sessionCoroutineScope,
+        dispatchers = dispatchers,
+        systemClock = clock,
+        roomContentForwarder = RoomContentForwarder(innerRoomListService),
+        isKeyBackupEnabled = { client.encryption().use { it.backupState() == BackupState.ENABLED } },
+        getSessionData = { sessionStore.getSession(sessionId.value)!! },
+    )
 
     override val mediaLoader: MatrixMediaLoader = RustMediaLoader(
         baseCacheDirectory = baseCacheDirectory,
@@ -254,8 +245,6 @@ class RustMatrixClient(
     )
 
     private val roomMembershipObserver = RoomMembershipObserver()
-
-    private val roomContentForwarder = RoomContentForwarder(innerRoomListService)
 
     private val clientDelegateTaskHandle: TaskHandle? = client.setDelegate(clientDelegate)
 
@@ -287,31 +276,8 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun getRoom(roomId: RoomId): MatrixRoom? = withContext(sessionDispatcher) {
-        // Check if already in memory...
-        var cachedPairOfRoom = pairOfRoom(roomId)
-        if (cachedPairOfRoom == null) {
-            // ... otherwise, lets wait for the SS to load all rooms and check again.
-            roomListService.allRooms.awaitLoaded()
-            cachedPairOfRoom = pairOfRoom(roomId)
-        }
-        cachedPairOfRoom?.let { (roomListItem, fullRoom) ->
-            RustMatrixRoom(
-                sessionId = sessionId,
-                isKeyBackupEnabled = client.encryption().backupState() == BackupState.ENABLED,
-                roomListItem = roomListItem,
-                innerRoom = fullRoom,
-                innerTimeline = fullRoom.timeline(),
-                roomNotificationSettingsService = notificationSettingsService,
-                sessionCoroutineScope = sessionCoroutineScope,
-                coroutineDispatchers = dispatchers,
-                systemClock = clock,
-                roomContentForwarder = roomContentForwarder,
-                sessionData = sessionStore.getSession(sessionId.value)!!,
-                roomSyncSubscriber = roomSyncSubscriber,
-                matrixRoomInfoMapper = MatrixRoomInfoMapper(),
-            )
-        }
+    override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
+        return roomFactory.create(roomId)
     }
 
     /**
@@ -327,18 +293,6 @@ class RustMatrixClient(
                     roomSummaries.map { it.identifier() }.contains(roomId.value)
                 }
                 .first()
-        }
-    }
-
-    private suspend fun pairOfRoom(roomId: RoomId): Pair<RoomListItem, Room>? {
-        val cachedRoomListItem = innerRoomListService.roomOrNull(roomId.value)
-        val fullRoom = cachedRoomListItem?.fullRoomWithTimeline(filter = eventFilters)
-        return if (cachedRoomListItem == null || fullRoom == null) {
-            Timber.d("No room cached for $roomId")
-            null
-        } else {
-            Timber.d("Found room cached for $roomId")
-            Pair(cachedRoomListItem, fullRoom)
         }
     }
 
