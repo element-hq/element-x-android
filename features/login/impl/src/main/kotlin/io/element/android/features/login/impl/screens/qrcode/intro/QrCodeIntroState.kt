@@ -19,6 +19,7 @@ package io.element.android.features.login.impl.screens.qrcode.intro
 import io.element.android.libraries.permissions.api.PermissionsState
 
 data class QrCodeIntroState(
+    val appName: String,
     val desktopAppName: String,
     val cameraPermissionState: PermissionsState,
     val canContinue: Boolean,

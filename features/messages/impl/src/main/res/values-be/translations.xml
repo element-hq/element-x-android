@@ -33,7 +33,7 @@
   <string name="screen_room_timeline_beginning_of_room_no_name">"Гэта пачатак гэтай размовы."</string>
   <string name="screen_room_timeline_less_reactions">"Паказаць менш"</string>
   <string name="screen_room_timeline_message_copied">"Паведамленне скапіравана"</string>
-  <string name="screen_room_timeline_no_permission_to_post">"У вас няма дазволу публікаваць паведамленні ў гэтым пакоі"</string>
+  <string name="screen_room_timeline_no_permission_to_post">"У Вас няма дазволу на публікацыю ў гэтым пакоі"</string>
   <string name="screen_room_timeline_reactions_show_less">"Паказаць менш"</string>
   <string name="screen_room_timeline_reactions_show_more">"Паказаць больш"</string>
   <string name="screen_room_timeline_read_marker_title">"Новы"</string>

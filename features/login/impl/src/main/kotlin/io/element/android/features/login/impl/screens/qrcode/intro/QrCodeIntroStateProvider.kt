@@ -31,6 +31,7 @@ open class QrCodeIntroStateProvider : PreviewParameterProvider<QrCodeIntroState>
 }
 
 fun aQrCodeIntroState(
+    appName: String = "AppName",
     desktopAppName: String = "Element",
     cameraPermissionState: PermissionsState = aPermissionsState(
         showDialog = false,
@@ -39,6 +40,7 @@ fun aQrCodeIntroState(
     canContinue: Boolean = false,
     eventSink: (QrCodeIntroEvents) -> Unit = {},
 ) = QrCodeIntroState(
+    appName = appName,
     desktopAppName = desktopAppName,
     cameraPermissionState = cameraPermissionState,
     canContinue = canContinue,

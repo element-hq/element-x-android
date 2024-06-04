@@ -35,7 +35,8 @@ class QrCodeIntroPresenterTest {
             presenter.present()
         }.test {
             awaitItem().run {
-                assertThat(desktopAppName).isEmpty()
+                assertThat(appName).isEqualTo("AppName")
+                assertThat(desktopAppName).isEqualTo("DesktopAppName")
                 assertThat(cameraPermissionState.permission).isEqualTo("android.permission.POST_NOTIFICATIONS")
                 assertThat(canContinue).isFalse()
             }
@@ -69,7 +70,10 @@ class QrCodeIntroPresenterTest {
     }
 
     private fun createQrCodeIntroPresenter(
-        buildMeta: BuildMeta = aBuildMeta(),
+        buildMeta: BuildMeta = aBuildMeta(
+            applicationName = "AppName",
+            desktopApplicationName = "DesktopAppName",
+        ),
         permissionsPresenterFactory: FakePermissionsPresenterFactory = FakePermissionsPresenterFactory(),
     ): QrCodeIntroPresenter {
         return QrCodeIntroPresenter(

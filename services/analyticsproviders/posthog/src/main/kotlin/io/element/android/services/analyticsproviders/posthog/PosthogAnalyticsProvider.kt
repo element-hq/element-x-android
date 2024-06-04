@@ -47,7 +47,7 @@ class PosthogAnalyticsProvider @Inject constructor(
     private val userPropertiesLock = Any()
 
     override fun init() {
-        posthog = createPosthog()
+        posthog = postHogFactory.createPosthog()
         posthog?.optIn()
         // Timber.e("PostHog distinctId: ${posthog?.distinctId()}")
         identifyPostHog()
@@ -107,8 +107,6 @@ class PosthogAnalyticsProvider @Inject constructor(
     override fun trackError(throwable: Throwable) {
         // Not implemented
     }
-
-    private fun createPosthog(): PostHogInterface = postHogFactory.createPosthog()
 
     private fun identifyPostHog() {
         val id = analyticsId ?: return

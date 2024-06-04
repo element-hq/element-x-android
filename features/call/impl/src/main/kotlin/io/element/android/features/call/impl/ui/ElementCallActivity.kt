@@ -29,26 +29,26 @@ import android.webkit.PermissionRequest
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.core.content.IntentCompat
-import com.bumble.appyx.core.integrationpoint.NodeComponentActivity
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.isDark
 import io.element.android.compound.theme.mapToTheme
-import io.element.android.features.call.impl.services.CallForegroundService
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.impl.DefaultElementCallEntryPoint
 import io.element.android.features.call.impl.di.CallBindings
+import io.element.android.features.call.impl.services.CallForegroundService
 import io.element.android.features.call.impl.utils.CallIntentDataParser
 import io.element.android.features.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.architecture.bindings
 import javax.inject.Inject
 
-class ElementCallActivity : NodeComponentActivity(), CallScreenNavigator {
+class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
     @Inject lateinit var callIntentDataParser: CallIntentDataParser
     @Inject lateinit var presenterFactory: CallScreenPresenter.Factory
     @Inject lateinit var appPreferencesStore: AppPreferencesStore
@@ -105,13 +105,11 @@ class ElementCallActivity : NodeComponentActivity(), CallScreenNavigator {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-
         updateUiMode(newConfig)
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-
         setCallType(intent)
     }
 
