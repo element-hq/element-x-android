@@ -44,8 +44,8 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.call.impl.di.CallBindings
-import io.element.android.features.call.impl.services.CallNotificationData
-import io.element.android.features.call.impl.utils.CallIntegrationManager
+import io.element.android.features.call.impl.notifications.CallNotificationData
+import io.element.android.features.call.impl.utils.ActiveCallManager
 import io.element.android.features.call.impl.utils.CallState
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -63,8 +63,14 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
+/**
+ * Activity that's displayed as a full screen intent when an incoming call is received.
+ */
 class IncomingCallActivity : AppCompatActivity() {
     companion object {
+        /**
+         * Extra key for the notification data.
+         */
         const val EXTRA_NOTIFICATION_DATA = "EXTRA_NOTIFICATION_DATA"
     }
 
@@ -72,13 +78,14 @@ class IncomingCallActivity : AppCompatActivity() {
     lateinit var elementCallEntryPoint: ElementCallEntryPoint
 
     @Inject
-    lateinit var callIntegrationManager: CallIntegrationManager
+    lateinit var activeCallManager: ActiveCallManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         applicationContext.bindings<CallBindings>().inject(this)
 
+        // Set flags so it can be displayed in the lock screen
         window.addFlags(
             WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
                 WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON or
@@ -96,11 +103,12 @@ class IncomingCallActivity : AppCompatActivity() {
                 )
             }
         } else {
+            // No data, finish the activity
             finish()
             return
         }
 
-        callIntegrationManager.activeCall
+        activeCallManager.activeCall
             .filter { it?.callState !is CallState.Ringing }
             .onEach { finish() }
             .launchIn(lifecycleScope)
@@ -111,7 +119,7 @@ class IncomingCallActivity : AppCompatActivity() {
     }
 
     private fun onCancel() {
-        callIntegrationManager.hungUpCall()
+        activeCallManager.hungUpCall()
     }
     
     @Composable

@@ -31,7 +31,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.impl.data.WidgetMessage
-import io.element.android.features.call.impl.utils.CallIntegrationManager
+import io.element.android.features.call.impl.utils.ActiveCallManager
 import io.element.android.features.call.impl.utils.CallWidgetProvider
 import io.element.android.features.call.impl.utils.WidgetMessageInterceptor
 import io.element.android.features.call.impl.utils.WidgetMessageSerializer
@@ -40,7 +40,6 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.MatrixClientProvider
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
@@ -64,7 +63,7 @@ class CallScreenPresenter @AssistedInject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val matrixClientsProvider: MatrixClientProvider,
     private val appCoroutineScope: CoroutineScope,
-    private val callIntegrationManager: CallIntegrationManager,
+    private val activeCallManager: ActiveCallManager,
 ) : Presenter<CallScreenState> {
     @AssistedFactory
     interface Factory {
@@ -86,7 +85,7 @@ class CallScreenPresenter @AssistedInject constructor(
             loadUrl(callType, urlState, callWidgetDriver)
 
             if (callType is CallType.RoomCall) {
-                callIntegrationManager.joinedCall(callType.sessionId, callType.roomId)
+                activeCallManager.joinedCall(callType.sessionId, callType.roomId)
             }
         }
 
@@ -132,7 +131,7 @@ class CallScreenPresenter @AssistedInject constructor(
         DisposableEffect(Unit) {
             onDispose {
                 if (callType is CallType.RoomCall) {
-                    callIntegrationManager.hungUpCall()
+                    activeCallManager.hungUpCall()
                 }
             }
         }

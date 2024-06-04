@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.api.notifications
+package io.element.android.features.call.impl.notifications
 
+import android.os.Parcelable
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
+import kotlinx.parcelize.Parcelize
 
-/**
- * Handles missed calls by creating a new notification.
- */
-interface OnMissedCallNotificationHandler {
-    fun addMissedCallNotification(
-        sessionId: SessionId,
-        roomId: RoomId,
-        eventId: EventId,
-        senderId: UserId,
-        roomName: String?,
-        senderName: String?,
-        timestamp: Long,
-        avatarUrl: String?,
-    )
-}
+@Parcelize
+data class CallNotificationData(
+    val sessionId: SessionId,
+    val roomId: RoomId,
+    val eventId: EventId,
+    val senderId: UserId,
+    val roomName: String?,
+    val senderName: String?,
+    val avatarUrl: String?,
+    val notificationChannelId: String,
+    val timestamp: Long,
+) : Parcelable

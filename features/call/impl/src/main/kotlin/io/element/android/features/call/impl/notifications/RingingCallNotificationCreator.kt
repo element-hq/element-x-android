@@ -43,7 +43,6 @@ import androidx.core.app.PendingIntentCompat
 import androidx.core.app.Person
 import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.call.api.CallType
-import io.element.android.features.call.impl.services.CallNotificationData
 import io.element.android.features.call.impl.services.DeclineCallBroadcastReceiver
 import io.element.android.features.call.impl.ui.IncomingCallActivity
 import io.element.android.features.call.impl.utils.IntentProvider
@@ -59,12 +58,27 @@ import io.element.android.libraries.push.api.notifications.NotificationBitmapLoa
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
+/**
+ * Creates a notification for a ringing call.
+ */
 class RingingCallNotificationCreator @Inject constructor(
     @ApplicationContext private val context: Context,
     private val matrixClientProvider: MatrixClientProvider,
     private val imageLoaderHolder: ImageLoaderHolder,
     private val notificationBitmapLoader: NotificationBitmapLoader,
 ) {
+    companion object {
+        /**
+         * Request code for the decline action.
+         */
+        const val DECLINE_REQUEST_CODE = 1
+
+        /**
+         * Request code for the full screen intent.
+         */
+        const val FULL_SCREEN_INTENT_REQUEST_CODE = 2
+    }
+
     suspend fun createNotification(
         sessionId: SessionId,
         roomId: RoomId,
@@ -79,23 +93,26 @@ class RingingCallNotificationCreator @Inject constructor(
         val matrixClient = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return null
         val imageLoader = imageLoaderHolder.get(matrixClient)
         val largeIcon = notificationBitmapLoader.getUserIcon(avatarUrl, imageLoader)
+
         val caller = Person.Builder()
             .setName(senderDisplayName)
             .setIcon(largeIcon)
             .setImportant(true)
             .build()
+
         val answerIntent = IntentProvider.getPendingIntent(context, CallType.RoomCall(sessionId, roomId))
-        // TODO: user right request codes
+
         val declineIntent = PendingIntentCompat.getBroadcast(
             context,
-            1,
+            DECLINE_REQUEST_CODE,
             Intent(context, DeclineCallBroadcastReceiver::class.java),
             PendingIntent.FLAG_CANCEL_CURRENT,
             false,
         )!!
+
         val fullScreenIntent = PendingIntentCompat.getActivity(
             context,
-            2,
+            FULL_SCREEN_INTENT_REQUEST_CODE,
             Intent(context, IncomingCallActivity::class.java).apply {
                 putExtra(
                     IncomingCallActivity.EXTRA_NOTIFICATION_DATA,
@@ -105,7 +122,7 @@ class RingingCallNotificationCreator @Inject constructor(
             PendingIntent.FLAG_CANCEL_CURRENT,
             false
         )
-        // TODO: make this open the call
+
         val ringtoneUri = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE)
         return NotificationCompat.Builder(context, notificationChannelId)
             .setSmallIcon(CommonDrawables.ic_notification_small)
@@ -120,6 +137,7 @@ class RingingCallNotificationCreator @Inject constructor(
             .setSound(ringtoneUri, AudioManager.STREAM_RING)
             .setTimeoutAfter(ElementCallConfig.RINGING_CALL_DURATION_SECONDS.seconds.inWholeMilliseconds)
             .setContentIntent(answerIntent)
+            .setDeleteIntent(declineIntent)
             .setFullScreenIntent(fullScreenIntent, true)
             .build()
             .apply {

@@ -17,43 +17,46 @@
 package io.element.android.features.call.impl.services
 
 import android.app.Service
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
-import android.os.Parcelable
 import androidx.core.app.ServiceCompat
 import androidx.core.content.IntentCompat
 import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.call.impl.di.CallBindings
+import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.notifications.RingingCallNotificationCreator
-import io.element.android.features.call.impl.utils.CallIntegrationManager
+import io.element.android.features.call.impl.utils.ActiveCallManager
 import io.element.android.libraries.architecture.bindings
-import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
+/**
+ * A foreground service that shows a notification for an incoming call.
+ */
 class IncomingCallForegroundService : Service() {
     companion object {
         private const val NOTIFICATION_DATA = "NOTIFICATION_DATA"
 
+        /**
+         * Starts the service to handle an incoming call.
+         */
         internal fun start(context: Context, callNotificationData: CallNotificationData) {
             val intent = Intent(context, IncomingCallForegroundService::class.java)
             intent.putExtra(NOTIFICATION_DATA, callNotificationData)
             context.startService(intent)
         }
 
+        /**
+         * Stops the service.
+         */
         internal fun stop(context: Context) {
             context.stopService(Intent(context, IncomingCallForegroundService::class.java))
         }
@@ -66,7 +69,7 @@ class IncomingCallForegroundService : Service() {
     lateinit var ringingCallNotificationCreator: RingingCallNotificationCreator
 
     @Inject
-    lateinit var callIntegrationManager: CallIntegrationManager
+    lateinit var activeCallManager: ActiveCallManager
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -87,12 +90,12 @@ class IncomingCallForegroundService : Service() {
             return super.onStartCommand(intent, flags, startId)
         }
         timedOutCallJob = coroutineScope.launch {
-            callIntegrationManager.registerIncomingCall(notificationData)
+            activeCallManager.registerIncomingCall(notificationData)
             showIncomingCallNotification(notificationData)
 
             // Wait for the call to end
             delay(ElementCallConfig.RINGING_CALL_DURATION_SECONDS.seconds)
-            callIntegrationManager.incomingCallTimedOut()
+            activeCallManager.incomingCallTimedOut()
         }
 
         return super.onStartCommand(intent, flags, startId)
@@ -134,25 +137,3 @@ class IncomingCallForegroundService : Service() {
         }
     }
 }
-
-class DeclineCallBroadcastReceiver : BroadcastReceiver() {
-    @Inject
-    lateinit var callIntegrationManager: CallIntegrationManager
-    override fun onReceive(context: Context, intent: Intent?) {
-        context.bindings<CallBindings>().inject(this)
-        callIntegrationManager.hungUpCall()
-    }
-}
-
-@Parcelize
-data class CallNotificationData(
-    val sessionId: SessionId,
-    val roomId: RoomId,
-    val eventId: EventId,
-    val senderId: UserId,
-    val roomName: String?,
-    val senderName: String?,
-    val avatarUrl: String?,
-    val notificationChannelId: String,
-    val timestamp: Long,
-) : Parcelable

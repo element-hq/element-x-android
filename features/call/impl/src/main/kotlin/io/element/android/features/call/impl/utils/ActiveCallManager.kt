@@ -17,7 +17,7 @@
 package io.element.android.features.call.impl.utils
 
 import android.content.Context
-import io.element.android.features.call.impl.services.CallNotificationData
+import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.services.IncomingCallForegroundService
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
@@ -33,8 +33,11 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * Manages the active call state.
+ */
 @SingleIn(AppScope::class)
-class CallIntegrationManager @Inject constructor(
+class ActiveCallManager @Inject constructor(
     @ApplicationContext private val context: Context,
     private val coroutineScope: CoroutineScope,
     private val matrixClientProvider: MatrixClientProvider,
@@ -43,6 +46,12 @@ class CallIntegrationManager @Inject constructor(
     private val _activeCall = MutableStateFlow<ActiveCall?>(null)
     val activeCall: StateFlow<ActiveCall?> = _activeCall
 
+    /**
+     * Registers an incoming call if there isn't an existing active call by starting an [IncomingCallForegroundService]
+     * that will post the incoming call notification.
+     *
+     * @param notificationData The data for the incoming call notification.
+     */
     fun registerIncomingCall(notificationData: CallNotificationData) {
         if (activeCall.value != null) {
             Timber.w("Already have an active call, ignoring incoming call: $notificationData")
@@ -56,6 +65,9 @@ class CallIntegrationManager @Inject constructor(
         IncomingCallForegroundService.start(context, notificationData)
     }
 
+    /**
+     * Called when the incoming call timed out. It'll stop the [IncomingCallForegroundService] and add a 'missed call' notification.
+     */
     fun incomingCallTimedOut() {
         val previousActiveCall = activeCall.value ?: return
         val notificationData = (previousActiveCall.callState as? CallState.Ringing)?.notificationData ?: return
@@ -75,11 +87,20 @@ class CallIntegrationManager @Inject constructor(
         )
     }
 
+    /**
+     * Hangs up the active call and stops the [IncomingCallForegroundService].
+     */
     fun hungUpCall() {
         _activeCall.value = null
         IncomingCallForegroundService.stop(context)
     }
 
+    /**
+     * Called when the user joins a call. It'll stop the [IncomingCallForegroundService] if it's started and update the active call state.
+     *
+     * @param sessionId The session ID of the call.
+     * @param roomId The room ID of the call.
+     */
     fun joinedCall(sessionId: SessionId, roomId: RoomId) {
         IncomingCallForegroundService.stop(context)
 
@@ -98,13 +119,26 @@ class CallIntegrationManager @Inject constructor(
     }
 }
 
+/**
+ * Represents an active call.
+ */
 data class ActiveCall(
     val sessionId: SessionId,
     val roomId: RoomId,
     val callState: CallState,
 )
 
+/**
+ * Represents the state of an active call.
+ */
 sealed interface CallState {
+    /**
+     * The call is in a ringing state.
+     * @param notificationData The data for the incoming call notification.
+     */
     data class Ringing(val notificationData: CallNotificationData) : CallState
+    /**
+     * The call is in an in-call state.
+     */
     data object InCall : CallState
 }

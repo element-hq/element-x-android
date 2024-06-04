@@ -22,9 +22,9 @@ import android.os.Build
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
-import io.element.android.features.call.impl.services.CallNotificationData
+import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.services.IncomingCallForegroundService
-import io.element.android.features.call.impl.utils.CallIntegrationManager
+import io.element.android.features.call.impl.utils.ActiveCallManager
 import io.element.android.features.call.impl.utils.IntentProvider
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
@@ -35,7 +35,7 @@ import javax.inject.Inject
 @ContributesBinding(AppScope::class)
 class DefaultElementCallEntryPoint @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val callIntegrationManager: CallIntegrationManager,
+    private val activeCallManager: ActiveCallManager,
 ) : ElementCallEntryPoint {
     companion object {
         const val EXTRA_CALL_TYPE = "EXTRA_CALL_TYPE"
@@ -46,7 +46,7 @@ class DefaultElementCallEntryPoint @Inject constructor(
         context.startActivity(IntentProvider.createIntent(context, callType))
     }
 
-    override fun getPendingIntent(callType: CallType): PendingIntent {
+    override fun getCallPendingIntent(callType: CallType): PendingIntent {
         return IntentProvider.getPendingIntent(context, callType)
     }
 
@@ -72,7 +72,7 @@ class DefaultElementCallEntryPoint @Inject constructor(
             notificationChannelId = notificationChannelId,
         )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            callIntegrationManager.registerIncomingCall(notificationData = incomingCallNotificationData)
+            activeCallManager.registerIncomingCall(notificationData = incomingCallNotificationData)
         } else {
             IncomingCallForegroundService.start(context, incomingCallNotificationData)
         }
