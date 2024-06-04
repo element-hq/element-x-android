@@ -121,13 +121,11 @@ class ElementCallActivity : NodeComponentActivity(), CallScreenNavigator {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-
         updateUiMode(newConfig)
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-
         setCallType(intent)
     }
 
