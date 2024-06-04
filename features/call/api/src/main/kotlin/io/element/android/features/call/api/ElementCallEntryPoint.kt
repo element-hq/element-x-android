@@ -16,7 +16,6 @@
 
 package io.element.android.features.call.api
 
-import android.app.PendingIntent
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 
@@ -29,12 +28,6 @@ interface ElementCallEntryPoint {
      * @param callType The type of call to start.
      */
     fun startCall(callType: CallType)
-
-    /**
-     * Get a pending intent for the call screen given call type.
-     * @param callType The type of call to get the pending intent for.
-     */
-    fun getCallPendingIntent(callType: CallType): PendingIntent
 
     /**
      * Handle an incoming call.

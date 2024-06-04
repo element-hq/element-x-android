@@ -14,28 +14,31 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.api.notifications
+package io.element.android.features.call.test
 
+import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 
-/**
- * Handles missed calls by creating a new notification.
- */
-interface OnMissedCallNotificationHandler {
-    /**
-     * Adds a missed call notification.
-     */
-    fun addMissedCallNotification(
-        sessionId: SessionId,
-        roomId: RoomId,
+class FakeElementCallEntryPoint(
+    var startCallResult: (CallType) -> Unit = {},
+    var handleIncomingCallResult: (CallType.RoomCall, EventId, UserId, String?, String?, String?, String) -> Unit = { _, _, _, _, _, _, _ -> }
+) : ElementCallEntryPoint {
+    override fun startCall(callType: CallType) {
+        startCallResult(callType)
+    }
+
+    override fun handleIncomingCall(
+        callType: CallType.RoomCall,
         eventId: EventId,
         senderId: UserId,
-        senderName: String?,
         roomName: String?,
-        timestamp: Long,
+        senderName: String?,
         avatarUrl: String?,
-    )
+        timestamp: Long,
+        notificationChannelId: String
+    ) {
+        handleIncomingCallResult(callType, eventId, senderId, roomName, senderName, avatarUrl, notificationChannelId)
+    }
 }

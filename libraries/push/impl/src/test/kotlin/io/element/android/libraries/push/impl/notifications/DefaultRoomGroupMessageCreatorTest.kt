@@ -212,7 +212,7 @@ fun createRoomGroupMessageCreator(
     sdkIntProvider: BuildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(Build.VERSION_CODES.O),
 ): RoomGroupMessageCreator {
     val context = RuntimeEnvironment.getApplication() as Context
-    val bitmapLoader = NotificationBitmapLoader(
+    val bitmapLoader = DefaultNotificationBitmapLoader(
         context = RuntimeEnvironment.getApplication(),
         sdkIntProvider = sdkIntProvider,
     )

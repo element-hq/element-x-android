@@ -16,7 +16,6 @@
 
 package io.element.android.features.call.impl
 
-import android.app.PendingIntent
 import android.content.Context
 import android.os.Build
 import com.squareup.anvil.annotations.ContributesBinding
@@ -44,10 +43,6 @@ class DefaultElementCallEntryPoint @Inject constructor(
 
     override fun startCall(callType: CallType) {
         context.startActivity(IntentProvider.createIntent(context, callType))
-    }
-
-    override fun getCallPendingIntent(callType: CallType): PendingIntent {
-        return IntentProvider.getPendingIntent(context, callType)
     }
 
     override fun handleIncomingCall(

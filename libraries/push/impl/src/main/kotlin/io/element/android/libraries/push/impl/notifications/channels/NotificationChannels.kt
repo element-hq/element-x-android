@@ -27,6 +27,7 @@ import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
@@ -34,15 +35,48 @@ import io.element.android.libraries.push.impl.R
 import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
 
+/* ==========================================================================================
+ * IDs for channels
+ * ========================================================================================== */
+private const val LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID = "LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID"
+private const val SILENT_NOTIFICATION_CHANNEL_ID = "DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID_V2"
+private const val NOISY_NOTIFICATION_CHANNEL_ID = "DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID"
+private const val CALL_NOTIFICATION_CHANNEL_ID_v2 = "CALL_NOTIFICATION_CHANNEL_ID_V2"
+private const val CALL_NOTIFICATION_CHANNEL_ID_v3 = "CALL_NOTIFICATION_CHANNEL_ID_V2"
+private const val RINGING_CALL_NOTIFICATION_CHANNEL_ID = "RINGING_CALL_NOTIFICATION_CHANNEL_ID"
+
 /**
  * on devices >= android O, we need to define a channel for each notifications.
  */
+interface NotificationChannels {
+    /**
+     * Get the channel for incoming call.
+     * @param ring true if the device should ring when receiving the call.
+     */
+    fun getChannelForIncomingCall(ring: Boolean): String
+
+    /**
+     * Get the channel for messages.
+     * @param noisy true if the notification should have sound and vibration.
+     */
+    fun getChannelIdForMessage(noisy: Boolean): String
+
+    /**
+     * Get the channel for test notifications.
+     */
+    fun getChannelIdForTest(): String
+}
+
+@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
+private fun supportNotificationChannels() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+
 @SingleIn(AppScope::class)
-class NotificationChannels @Inject constructor(
+@ContributesBinding(AppScope::class)
+class DefaultNotificationChannels @Inject constructor(
     @ApplicationContext private val context: Context,
     private val notificationManager: NotificationManagerCompat,
     private val stringProvider: StringProvider,
-) {
+) : NotificationChannels {
     init {
         createNotificationChannels()
     }
@@ -172,28 +206,13 @@ class NotificationChannels @Inject constructor(
         return notificationManager.getNotificationChannel(channelId)
     }
 
-    fun getChannelForIncomingCall(ring: Boolean): String {
+    override fun getChannelForIncomingCall(ring: Boolean): String {
         return if (ring) RINGING_CALL_NOTIFICATION_CHANNEL_ID else CALL_NOTIFICATION_CHANNEL_ID_v3
     }
 
-    fun getChannelIdForMessage(noisy: Boolean): String {
+    override fun getChannelIdForMessage(noisy: Boolean): String {
         return if (noisy) NOISY_NOTIFICATION_CHANNEL_ID else SILENT_NOTIFICATION_CHANNEL_ID
     }
 
-    fun getChannelIdForTest(): String = NOISY_NOTIFICATION_CHANNEL_ID
-
-    companion object {
-        /* ==========================================================================================
-         * IDs for channels
-         * ========================================================================================== */
-        private const val LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID = "LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID"
-        private const val SILENT_NOTIFICATION_CHANNEL_ID = "DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID_V2"
-        private const val NOISY_NOTIFICATION_CHANNEL_ID = "DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID"
-        private const val CALL_NOTIFICATION_CHANNEL_ID_v2 = "CALL_NOTIFICATION_CHANNEL_ID_V2"
-        private const val CALL_NOTIFICATION_CHANNEL_ID_v3 = "CALL_NOTIFICATION_CHANNEL_ID_V2"
-        private const val RINGING_CALL_NOTIFICATION_CHANNEL_ID = "RINGING_CALL_NOTIFICATION_CHANNEL_ID"
-
-        @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
-        private fun supportNotificationChannels() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-    }
+    override fun getChannelIdForTest(): String = NOISY_NOTIFICATION_CHANNEL_ID
 }

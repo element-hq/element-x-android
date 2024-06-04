@@ -19,6 +19,7 @@
 package io.element.android.libraries.push.impl.push
 
 import app.cash.turbine.test
+import io.element.android.features.call.test.FakeElementCallEntryPoint
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.EventId
@@ -31,6 +32,8 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.push.impl.notifications.FakeNotifiableEventResolver
+import io.element.android.libraries.push.impl.notifications.channels.FakeNotificationChannels
+import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.test.DefaultTestPush
@@ -249,6 +252,8 @@ class DefaultPushHandlerTest {
         buildMeta: BuildMeta = aBuildMeta(),
         matrixAuthenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
         diagnosticPushHandler: DiagnosticPushHandler = DiagnosticPushHandler(),
+        elementCallEntryPoint: FakeElementCallEntryPoint = FakeElementCallEntryPoint(),
+        notificationChannels: FakeNotificationChannels = FakeNotificationChannels(),
     ): DefaultPushHandler {
         return DefaultPushHandler(
             onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventReceived),
@@ -263,6 +268,8 @@ class DefaultPushHandlerTest {
             buildMeta = buildMeta,
             matrixAuthenticationService = matrixAuthenticationService,
             diagnosticPushHandler = diagnosticPushHandler,
+            elementCallEntryPoint = elementCallEntryPoint,
+            notificationChannels = notificationChannels,
         )
     }
 }

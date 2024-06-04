@@ -86,6 +86,7 @@ class IncomingCallActivity : AppCompatActivity() {
         applicationContext.bindings<CallBindings>().inject(this)
 
         // Set flags so it can be displayed in the lock screen
+        @Suppress("DEPRECATION")
         window.addFlags(
             WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
                 WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON or

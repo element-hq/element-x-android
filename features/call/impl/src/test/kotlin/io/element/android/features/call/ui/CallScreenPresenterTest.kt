@@ -24,6 +24,7 @@ import io.element.android.features.call.api.CallType
 import io.element.android.features.call.impl.ui.CallScreenEvents
 import io.element.android.features.call.impl.ui.CallScreenNavigator
 import io.element.android.features.call.impl.ui.CallScreenPresenter
+import io.element.android.features.call.utils.FakeActiveCallManager
 import io.element.android.features.call.utils.FakeCallWidgetProvider
 import io.element.android.features.call.utils.FakeWidgetMessageInterceptor
 import io.element.android.libraries.architecture.AsyncData
@@ -236,6 +237,7 @@ class CallScreenPresenterTest {
         widgetProvider: FakeCallWidgetProvider = FakeCallWidgetProvider(widgetDriver),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         matrixClientsProvider: FakeMatrixClientProvider = FakeMatrixClientProvider(),
+        activeCallManager: FakeActiveCallManager = FakeActiveCallManager(),
     ): CallScreenPresenter {
         val userAgentProvider = object : UserAgentProvider {
             override fun provide(): String {
@@ -244,14 +246,15 @@ class CallScreenPresenterTest {
         }
         val clock = SystemClock { 0 }
         return CallScreenPresenter(
-            callType,
-            navigator,
-            widgetProvider,
-            userAgentProvider,
-            clock,
-            dispatchers,
-            matrixClientsProvider,
-            this,
+            callType = callType,
+            navigator = navigator,
+            callWidgetProvider = widgetProvider,
+            userAgentProvider = userAgentProvider,
+            clock = clock,
+            dispatchers = dispatchers,
+            matrixClientsProvider = matrixClientsProvider,
+            appCoroutineScope = this,
+            activeCallManager = activeCallManager,
         )
     }
 }

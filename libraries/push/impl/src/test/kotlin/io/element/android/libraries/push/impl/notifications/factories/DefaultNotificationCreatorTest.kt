@@ -33,6 +33,7 @@ import io.element.android.libraries.push.api.notifications.NotificationBitmapLoa
 import io.element.android.libraries.push.impl.notifications.DefaultNotificationBitmapLoader
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds
 import io.element.android.libraries.push.impl.notifications.RoomEventGroupInfo
+import io.element.android.libraries.push.impl.notifications.channels.DefaultNotificationChannels
 import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels
 import io.element.android.libraries.push.impl.notifications.factories.action.AcceptInvitationActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.MarkAsReadActionFactory
@@ -328,5 +329,5 @@ fun createNotificationCreator(
 
 fun createNotificationChannels(): NotificationChannels {
     val context = RuntimeEnvironment.getApplication()
-    return NotificationChannels(context, NotificationManagerCompat.from(context), FakeStringProvider(""))
+    return DefaultNotificationChannels(context, NotificationManagerCompat.from(context), FakeStringProvider(""))
 }

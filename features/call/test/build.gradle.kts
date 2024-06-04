@@ -15,17 +15,18 @@
  */
 
 plugins {
-    id("io.element.android-library")
+    id("io.element.android-compose-library")
     id("kotlin-parcelize")
 }
 
 android {
-    namespace = "io.element.android.features.call.api"
+    namespace = "io.element.android.features.call.test"
 }
 
 dependencies {
-    implementation(projects.anvilannotations)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
+
+    api(projects.features.call.api)
     implementation(projects.libraries.matrix.api)
 }

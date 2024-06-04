@@ -17,6 +17,7 @@
 package io.element.android.features.call.impl.utils
 
 import android.content.Context
+import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.services.IncomingCallForegroundService
 import io.element.android.libraries.di.AppScope
@@ -36,28 +37,53 @@ import javax.inject.Inject
 /**
  * Manages the active call state.
  */
+interface ActiveCallManager {
+    /**
+     * The active call state flow, which will be updated when the active call changes.
+     */
+    val activeCall: StateFlow<ActiveCall?>
+
+    /**
+     * Registers an incoming call if there isn't an existing active call and posts a [CallState.Ringing] notification.
+     * @param notificationData The data for the incoming call notification.
+     */
+    fun registerIncomingCall(notificationData: CallNotificationData)
+
+    /**
+     * Called when the incoming call timed out. It will remove the active call and remove any associated UI, adding a 'missed call' notification.
+     */
+    fun incomingCallTimedOut()
+
+    /**
+     * Hangs up the active call and removes any associated UI.
+     */
+    fun hungUpCall()
+
+    /**
+     * Called when the user joins a call. It will remove any existing UI and set the call state as [CallState.InCall].
+     *
+     * @param sessionId The session ID of the user joining the call.
+     * @param roomId The room ID of the call.
+     */
+    fun joinedCall(sessionId: SessionId, roomId: RoomId)
+}
+
 @SingleIn(AppScope::class)
-class ActiveCallManager @Inject constructor(
+@ContributesBinding(AppScope::class)
+class DefaultActiveCallManager @Inject constructor(
     @ApplicationContext private val context: Context,
     private val coroutineScope: CoroutineScope,
     private val matrixClientProvider: MatrixClientProvider,
     private val onMissedCallNotificationHandler: OnMissedCallNotificationHandler,
-) {
-    private val _activeCall = MutableStateFlow<ActiveCall?>(null)
-    val activeCall: StateFlow<ActiveCall?> = _activeCall
+) : ActiveCallManager {
+    override val activeCall = MutableStateFlow<ActiveCall?>(null)
 
-    /**
-     * Registers an incoming call if there isn't an existing active call by starting an [IncomingCallForegroundService]
-     * that will post the incoming call notification.
-     *
-     * @param notificationData The data for the incoming call notification.
-     */
-    fun registerIncomingCall(notificationData: CallNotificationData) {
+    override fun registerIncomingCall(notificationData: CallNotificationData) {
         if (activeCall.value != null) {
             Timber.w("Already have an active call, ignoring incoming call: $notificationData")
             return
         }
-        _activeCall.value = ActiveCall(
+        activeCall.value = ActiveCall(
             sessionId = notificationData.sessionId,
             roomId = notificationData.roomId,
             callState = CallState.Ringing(notificationData),
@@ -65,13 +91,10 @@ class ActiveCallManager @Inject constructor(
         IncomingCallForegroundService.start(context, notificationData)
     }
 
-    /**
-     * Called when the incoming call timed out. It'll stop the [IncomingCallForegroundService] and add a 'missed call' notification.
-     */
-    fun incomingCallTimedOut() {
+    override fun incomingCallTimedOut() {
         val previousActiveCall = activeCall.value ?: return
         val notificationData = (previousActiveCall.callState as? CallState.Ringing)?.notificationData ?: return
-        _activeCall.value = null
+        activeCall.value = null
 
         IncomingCallForegroundService.stop(context)
 
@@ -87,24 +110,15 @@ class ActiveCallManager @Inject constructor(
         )
     }
 
-    /**
-     * Hangs up the active call and stops the [IncomingCallForegroundService].
-     */
-    fun hungUpCall() {
-        _activeCall.value = null
+    override fun hungUpCall() {
+        activeCall.value = null
         IncomingCallForegroundService.stop(context)
     }
 
-    /**
-     * Called when the user joins a call. It'll stop the [IncomingCallForegroundService] if it's started and update the active call state.
-     *
-     * @param sessionId The session ID of the call.
-     * @param roomId The room ID of the call.
-     */
-    fun joinedCall(sessionId: SessionId, roomId: RoomId) {
+    override fun joinedCall(sessionId: SessionId, roomId: RoomId) {
         IncomingCallForegroundService.stop(context)
 
-        _activeCall.value = ActiveCall(
+        activeCall.value = ActiveCall(
             sessionId = sessionId,
             roomId = roomId,
             callState = CallState.InCall,
