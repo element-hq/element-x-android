@@ -200,7 +200,7 @@ class DefaultBugReporterTest {
             withScreenshot = true,
             problemDescription = "a bug occurred",
             canContact = true,
-            listener = FakeBugReporterListener(),
+            listener = NoopBugReporterListener(),
         )
         val request = server.takeRequest()
 
@@ -242,7 +242,7 @@ class DefaultBugReporterTest {
             withScreenshot = true,
             problemDescription = "a bug occurred",
             canContact = true,
-            listener = FakeBugReporterListener(),
+            listener = NoopBugReporterListener(),
         )
         val request = server.takeRequest()
 
