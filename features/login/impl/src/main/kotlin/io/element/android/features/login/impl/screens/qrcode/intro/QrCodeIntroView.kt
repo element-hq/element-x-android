@@ -66,7 +66,7 @@ fun QrCodeIntroView(
 
     PermissionsView(
         title = stringResource(R.string.screen_qr_code_login_no_camera_permission_state_title),
-        content = stringResource(R.string.screen_qr_code_login_no_camera_permission_state_description),
+        content = stringResource(R.string.screen_qr_code_login_no_camera_permission_state_description, state.appName),
         icon = { Icon(imageVector = CompoundIcons.TakePhotoSolid(), contentDescription = null) },
         state = state.cameraPermissionState,
     )
