@@ -25,7 +25,7 @@ interface BugReporter {
      * @param withDevicesLogs true to include the device log
      * @param withCrashLogs true to include the crash logs
      * @param withScreenshot true to include the screenshot
-     * @param theBugDescription the bug description
+     * @param problemDescription the bug description
      * @param canContact true if the user opt in to be contacted directly
      * @param listener the listener
      */
@@ -33,9 +33,9 @@ interface BugReporter {
         withDevicesLogs: Boolean,
         withCrashLogs: Boolean,
         withScreenshot: Boolean,
-        theBugDescription: String,
+        problemDescription: String,
         canContact: Boolean = false,
-        listener: BugReporterListener?
+        listener: BugReporterListener
     )
 
     /**
