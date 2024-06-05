@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.notifications
+package io.element.android.libraries.push.api.notifications
 
 import io.element.android.libraries.matrix.api.core.SessionId
-import javax.inject.Inject
 import kotlin.math.abs
 
-class NotificationIdProvider @Inject constructor() {
+object NotificationIdProvider {
     fun getSummaryNotificationId(sessionId: SessionId): Int {
         return getOffset(sessionId) + SUMMARY_NOTIFICATION_ID
     }
@@ -45,17 +44,26 @@ class NotificationIdProvider @Inject constructor() {
         return getOffset(sessionId) + ROOM_CALL_NOTIFICATION_ID
     }
 
+    fun getForegroundServiceNotificationId(type: ForegroundServiceType): Int {
+        return type.id * 10 + FOREGROUND_SERVICE_NOTIFICATION_ID
+    }
+
     private fun getOffset(sessionId: SessionId): Int {
         // Compute a int from a string with a low risk of collision.
         return abs(sessionId.value.hashCode() % 100_000) * 10
     }
 
-    companion object {
-        private const val FALLBACK_NOTIFICATION_ID = -1
-        private const val SUMMARY_NOTIFICATION_ID = 0
-        private const val ROOM_MESSAGES_NOTIFICATION_ID = 1
-        private const val ROOM_EVENT_NOTIFICATION_ID = 2
-        private const val ROOM_INVITATION_NOTIFICATION_ID = 3
-        private const val ROOM_CALL_NOTIFICATION_ID = 3
-    }
+    private const val FALLBACK_NOTIFICATION_ID = -1
+    private const val SUMMARY_NOTIFICATION_ID = 0
+    private const val ROOM_MESSAGES_NOTIFICATION_ID = 1
+    private const val ROOM_EVENT_NOTIFICATION_ID = 2
+    private const val ROOM_INVITATION_NOTIFICATION_ID = 3
+    private const val ROOM_CALL_NOTIFICATION_ID = 3
+
+    private const val FOREGROUND_SERVICE_NOTIFICATION_ID = 4
+}
+
+enum class ForegroundServiceType(val id: Int) {
+    INCOMING_CALL(1),
+    ONGOING_CALL(2),
 }

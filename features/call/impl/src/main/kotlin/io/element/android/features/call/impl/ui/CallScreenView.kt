@@ -34,8 +34,8 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.call.impl.utils.WebViewWidgetMessageInterceptor
 import io.element.android.features.call.impl.R
+import io.element.android.features.call.impl.utils.WebViewWidgetMessageInterceptor
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview

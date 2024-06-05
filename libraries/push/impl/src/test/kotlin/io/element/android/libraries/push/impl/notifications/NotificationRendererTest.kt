@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.element.android.libraries.push.impl.notifications.fake.FakeActiveNotificationsProvider
 import io.element.android.libraries.push.impl.notifications.fake.FakeImageLoader
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationCreator
@@ -61,10 +62,9 @@ class NotificationRendererTest {
         activeNotificationsProvider = FakeActiveNotificationsProvider(),
         stringProvider = FakeStringProvider(),
     )
-    private val notificationIdProvider = NotificationIdProvider()
+    private val notificationIdProvider = NotificationIdProvider
 
     private val notificationRenderer = NotificationRenderer(
-        notificationIdProvider = notificationIdProvider,
         notificationDisplayer = notificationDisplayer,
         notificationDataFactory = notificationDataFactory,
     )

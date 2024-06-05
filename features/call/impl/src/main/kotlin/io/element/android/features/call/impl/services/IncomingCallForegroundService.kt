@@ -30,6 +30,8 @@ import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.notifications.RingingCallNotificationCreator
 import io.element.android.features.call.impl.utils.ActiveCallManager
 import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.push.api.notifications.ForegroundServiceType
+import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -129,9 +131,13 @@ class IncomingCallForegroundService : Service() {
         } else {
             0
         }
-        // TODO: set right id
         runCatching {
-            ServiceCompat.startForeground(this, 1, notification, serviceType)
+            ServiceCompat.startForeground(
+                this,
+                NotificationIdProvider.getForegroundServiceNotificationId(ForegroundServiceType.INCOMING_CALL),
+                notification,
+                serviceType
+            )
         }.onFailure {
             Timber.e(it, "Failed to start foreground service for incoming calls")
         }

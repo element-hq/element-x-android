@@ -16,7 +16,6 @@
 
 package io.element.android.features.messages.impl
 
-import android.content.Context
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -58,7 +57,6 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.architecture.overlay.Overlay
 import io.element.android.libraries.architecture.overlay.operation.show
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
@@ -78,7 +76,6 @@ import kotlinx.parcelize.Parcelize
 class MessagesFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    @ApplicationContext private val context: Context,
     private val matrixClient: MatrixClient,
     private val sendLocationEntryPoint: SendLocationEntryPoint,
     private val showLocationEntryPoint: ShowLocationEntryPoint,

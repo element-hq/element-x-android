@@ -33,7 +33,6 @@ import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationSer
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.push.impl.notifications.FakeNotifiableEventResolver
 import io.element.android.libraries.push.impl.notifications.channels.FakeNotificationChannels
-import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.test.DefaultTestPush

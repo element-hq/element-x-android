@@ -41,8 +41,11 @@ import javax.inject.Inject
 private const val LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID = "LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID"
 private const val SILENT_NOTIFICATION_CHANNEL_ID = "DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID_V2"
 private const val NOISY_NOTIFICATION_CHANNEL_ID = "DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID"
-private const val CALL_NOTIFICATION_CHANNEL_ID_v2 = "CALL_NOTIFICATION_CHANNEL_ID_V2"
-private const val CALL_NOTIFICATION_CHANNEL_ID_v3 = "CALL_NOTIFICATION_CHANNEL_ID_V2"
+
+// Legacy channel
+private const val CALL_NOTIFICATION_CHANNEL_ID_V2 = "CALL_NOTIFICATION_CHANNEL_ID_V2"
+
+private const val CALL_NOTIFICATION_CHANNEL_ID_V3 = "CALL_NOTIFICATION_CHANNEL_ID_V3"
 private const val RINGING_CALL_NOTIFICATION_CHANNEL_ID = "RINGING_CALL_NOTIFICATION_CHANNEL_ID"
 
 /**
@@ -161,12 +164,12 @@ class DefaultNotificationChannels @Inject constructor(
                 }
         )
 
-        notificationManager.deleteNotificationChannel(CALL_NOTIFICATION_CHANNEL_ID_v2)
+        notificationManager.deleteNotificationChannel(CALL_NOTIFICATION_CHANNEL_ID_V2)
 
         // Register a channel for incoming and in progress call notifications with no ringing
         notificationManager.createNotificationChannel(
             NotificationChannel(
-                CALL_NOTIFICATION_CHANNEL_ID_v3,
+                CALL_NOTIFICATION_CHANNEL_ID_V3,
                 stringProvider.getString(R.string.notification_channel_call).ifEmpty { "Call" },
                 NotificationManager.IMPORTANCE_HIGH
             )
@@ -202,12 +205,8 @@ class DefaultNotificationChannels @Inject constructor(
         )
     }
 
-    private fun getChannel(channelId: String): NotificationChannel? {
-        return notificationManager.getNotificationChannel(channelId)
-    }
-
     override fun getChannelForIncomingCall(ring: Boolean): String {
-        return if (ring) RINGING_CALL_NOTIFICATION_CHANNEL_ID else CALL_NOTIFICATION_CHANNEL_ID_v3
+        return if (ring) RINGING_CALL_NOTIFICATION_CHANNEL_ID else CALL_NOTIFICATION_CHANNEL_ID_V3
     }
 
     override fun getChannelIdForMessage(noisy: Boolean): String {

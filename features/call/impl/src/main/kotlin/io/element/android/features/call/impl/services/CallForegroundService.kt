@@ -29,7 +29,12 @@ import androidx.core.graphics.drawable.IconCompat
 import io.element.android.features.call.impl.R
 import io.element.android.features.call.impl.ui.ElementCallActivity
 import io.element.android.libraries.designsystem.utils.CommonDrawables
+import io.element.android.libraries.push.api.notifications.ForegroundServiceType
+import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 
+/**
+ * A foreground service that shows a notification for an ongoing call while the UI is in background.
+ */
 class CallForegroundService : Service() {
     companion object {
         fun start(context: Context) {
@@ -70,7 +75,7 @@ class CallForegroundService : Service() {
             .setContentText(getString(R.string.call_foreground_service_message_android))
             .setContentIntent(pendingIntent)
             .build()
-        startForeground(1, notification)
+        startForeground(NotificationIdProvider.getForegroundServiceNotificationId(ForegroundServiceType.ONGOING_CALL), notification)
     }
 
     override fun onDestroy() {

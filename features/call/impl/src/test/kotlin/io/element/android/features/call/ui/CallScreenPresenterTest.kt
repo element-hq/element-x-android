@@ -37,6 +37,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
+import io.element.android.services.analytics.api.ScreenTracker
 import io.element.android.services.analytics.test.FakeScreenTracker
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import io.element.android.tests.testutils.WarmUpRule

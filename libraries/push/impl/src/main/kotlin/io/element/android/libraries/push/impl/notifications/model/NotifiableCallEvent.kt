@@ -47,4 +47,3 @@ data class NotifiableCallEvent(
             callNotifyType == CallNotifyType.RING && elapsed < timeout
         }
 }
-

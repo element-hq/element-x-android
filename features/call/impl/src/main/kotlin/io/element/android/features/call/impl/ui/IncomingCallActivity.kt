@@ -94,7 +94,7 @@ class IncomingCallActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
         )
 
-        val notificationData = intent?.let {IntentCompat.getParcelableExtra(it, EXTRA_NOTIFICATION_DATA, CallNotificationData::class.java) }
+        val notificationData = intent?.let { IntentCompat.getParcelableExtra(it, EXTRA_NOTIFICATION_DATA, CallNotificationData::class.java) }
         if (notificationData != null) {
             setContent {
                 IncomingCallScreen(
@@ -122,7 +122,7 @@ class IncomingCallActivity : AppCompatActivity() {
     private fun onCancel() {
         activeCallManager.hungUpCall()
     }
-    
+
     @Composable
     private fun IncomingCallScreen(
         notificationData: CallNotificationData,
@@ -147,7 +147,7 @@ class IncomingCallActivity : AppCompatActivity() {
                             id = notificationData.senderId.value,
                             name = notificationData.senderName,
                             url = notificationData.avatarUrl,
-                            size = AvatarSize.RoomHeader, // TODO create own
+                            size = AvatarSize.IncomingCall,
                         )
                     )
                     Spacer(modifier = Modifier.height(20.dp))
@@ -189,7 +189,7 @@ class IncomingCallActivity : AppCompatActivity() {
             }
         }
     }
-    
+
     @Composable
     @Preview
     internal fun IncomingCallScreenPreview() {

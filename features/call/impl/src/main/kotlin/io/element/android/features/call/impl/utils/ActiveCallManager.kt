@@ -30,10 +30,6 @@ import io.element.android.libraries.push.api.notifications.OnMissedCallNotificat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -155,6 +151,7 @@ sealed interface CallState {
      * @param notificationData The data for the incoming call notification.
      */
     data class Ringing(val notificationData: CallNotificationData) : CallState
+
     /**
      * The call is in an in-call state.
      */
