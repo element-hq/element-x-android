@@ -105,4 +105,14 @@ interface MatrixClient : Closeable {
     suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>>
     suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<ResolvedRoomAlias>
     suspend fun getRoomPreviewFromRoomId(roomId: RoomId, serverNames: List<String>): Result<RoomPreview>
+
+    /**
+     * Enables or disables the sending queue, according to the given parameter.
+     *
+     * The sending queue automatically disables itself whenever sending an
+     * event with it failed (e.g., sending an event via the Timeline,
+     * so it's required to manually re-enable it as soon as
+     * connectivity is back on the device.
+     */
+    suspend fun enableSendingQueue(enable: Boolean)
 }

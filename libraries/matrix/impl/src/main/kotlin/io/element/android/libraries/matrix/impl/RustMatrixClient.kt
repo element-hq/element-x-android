@@ -551,6 +551,10 @@ class RustMatrixClient(
         }.distinctUntilChanged()
     }
 
+    override suspend fun enableSendingQueue(enable: Boolean) = withContext(sessionDispatcher){
+        client.enableSendingQueue(enable)
+    }
+
     private suspend fun File.getCacheSize(
         includeCryptoDb: Boolean = false,
     ): Long = withContext(sessionDispatcher) {
@@ -590,6 +594,9 @@ class RustMatrixClient(
             true
         }
     }
+
+
+
 }
 
 private val defaultRoomCreationPowerLevels = PowerLevels(
