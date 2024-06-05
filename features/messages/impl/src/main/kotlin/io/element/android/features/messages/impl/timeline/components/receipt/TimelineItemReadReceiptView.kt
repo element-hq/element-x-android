@@ -91,7 +91,6 @@ fun TimelineItemReadReceiptView(
                     )
                 }
             }
-            LocalEventSendState.Canceled -> Unit
             is LocalEventSendState.SendingFailed -> {
                 // Error? The timestamp is already displayed in red
             }
