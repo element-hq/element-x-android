@@ -45,6 +45,7 @@ dependencies {
     implementation(projects.libraries.network)
     implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.push.api)
+    implementation(projects.libraries.uiStrings)
     implementation(projects.services.analytics.api)
     implementation(projects.services.toolbox.api)
     implementation(libs.androidx.webkit)

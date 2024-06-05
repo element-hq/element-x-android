@@ -34,6 +34,7 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -58,6 +59,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -172,7 +174,7 @@ class IncomingCallActivity : AppCompatActivity() {
                             contentColor = ElementTheme.colors.iconOnSolidPrimary,
                         )
                     ) {
-                        Icon(imageVector = CompoundIcons.VideoCallSolid(), contentDescription = "Accept call")
+                        Icon(imageVector = CompoundIcons.VideoCallSolid(), contentDescription = stringResource(CommonStrings.action_accept))
                     }
 
                     FilledIconButton(
@@ -183,7 +185,7 @@ class IncomingCallActivity : AppCompatActivity() {
                             contentColor = ElementTheme.colors.iconOnSolidPrimary,
                         )
                     ) {
-                        Icon(imageVector = CompoundIcons.Close(), contentDescription = "Reject call")
+                        Icon(imageVector = CompoundIcons.Close(), contentDescription = stringResource(CommonStrings.action_decline))
                     }
                 }
             }
@@ -204,7 +206,7 @@ class IncomingCallActivity : AppCompatActivity() {
                     senderName = "Bob",
                     avatarUrl = null,
                     notificationChannelId = "incoming_call",
-                    timestamp = System.currentTimeMillis()
+                    timestamp = 0L,
                 ),
                 onAnswer = {},
                 onCancel = {},
