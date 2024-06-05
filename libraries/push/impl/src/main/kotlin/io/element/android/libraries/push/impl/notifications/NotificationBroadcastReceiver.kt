@@ -49,22 +49,37 @@ private val loggerTag = LoggerTag("NotificationBroadcastReceiver", LoggerTag.Not
  * Receives actions broadcast by notification (on click, on dismiss, inline replies, etc.).
  */
 class NotificationBroadcastReceiver : BroadcastReceiver() {
-    @Inject lateinit var appCoroutineScope: CoroutineScope
-    @Inject lateinit var matrixClientProvider: MatrixClientProvider
-    @Inject lateinit var sessionPreferencesStore: SessionPreferencesStoreFactory
-    @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
-    @Inject lateinit var actionIds: NotificationActionIds
-    @Inject lateinit var systemClock: SystemClock
-    @Inject lateinit var onNotifiableEventReceived: OnNotifiableEventReceived
+    @Inject lateinit var notificationBroadcastReceiverHandler: NotificationBroadcastReceiverHandler
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || context == null) return
-        val sessionId = intent.extras?.getString(KEY_SESSION_ID)?.let(::SessionId) ?: return
-        val roomId = intent.getStringExtra(KEY_ROOM_ID)?.let(::RoomId)
-        val threadId = intent.getStringExtra(KEY_THREAD_ID)?.let(::ThreadId)
-        val eventId = intent.getStringExtra(KEY_EVENT_ID)?.let(::EventId)
-
         context.bindings<NotificationBroadcastReceiverBindings>().inject(this)
+        notificationBroadcastReceiverHandler.onReceive(context, intent)
+    }
+
+    companion object {
+        const val KEY_SESSION_ID = "sessionID"
+        const val KEY_ROOM_ID = "roomID"
+        const val KEY_THREAD_ID = "threadID"
+        const val KEY_EVENT_ID = "eventID"
+        const val KEY_TEXT_REPLY = "key_text_reply"
+    }
+}
+
+class NotificationBroadcastReceiverHandler @Inject constructor(
+    private val appCoroutineScope: CoroutineScope,
+    private val matrixClientProvider: MatrixClientProvider,
+    private val sessionPreferencesStore: SessionPreferencesStoreFactory,
+    private val notificationDrawerManager: NotificationDrawerManager,
+    private val actionIds: NotificationActionIds,
+    private val systemClock: SystemClock,
+    private val onNotifiableEventReceived: OnNotifiableEventReceived,
+) {
+    fun onReceive(context: Context, intent: Intent) {
+        val sessionId = intent.extras?.getString(NotificationBroadcastReceiver.KEY_SESSION_ID)?.let(::SessionId) ?: return
+        val roomId = intent.getStringExtra(NotificationBroadcastReceiver.KEY_ROOM_ID)?.let(::RoomId)
+        val threadId = intent.getStringExtra(NotificationBroadcastReceiver.KEY_THREAD_ID)?.let(::ThreadId)
+        val eventId = intent.getStringExtra(NotificationBroadcastReceiver.KEY_EVENT_ID)?.let(::EventId)
 
         Timber.tag(loggerTag.value).d("onReceive: ${intent.action} ${intent.data} for: ${roomId?.value}/${eventId?.value}")
         when (intent.action) {
@@ -203,17 +218,9 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
         if (intent != null) {
             val remoteInput = RemoteInput.getResultsFromIntent(intent)
             if (remoteInput != null) {
-                return remoteInput.getCharSequence(KEY_TEXT_REPLY)?.toString()
+                return remoteInput.getCharSequence(NotificationBroadcastReceiver.KEY_TEXT_REPLY)?.toString()
             }
         }
         return null
-    }
-
-    companion object {
-        const val KEY_SESSION_ID = "sessionID"
-        const val KEY_ROOM_ID = "roomID"
-        const val KEY_THREAD_ID = "threadID"
-        const val KEY_EVENT_ID = "eventID"
-        const val KEY_TEXT_REPLY = "key_text_reply"
     }
 }
