@@ -42,7 +42,6 @@ dependencies {
     implementation(projects.appconfig)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
-    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
@@ -62,6 +61,7 @@ dependencies {
     testImplementation(libs.test.robolectric)
     testImplementation(libs.androidx.compose.ui.test.junit)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.mediaupload.test)
     testImplementation(projects.tests.testutils)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 
