@@ -115,4 +115,10 @@ interface MatrixClient : Closeable {
      * connectivity is back on the device.
      */
     suspend fun enableSendingQueue(enable: Boolean)
+
+    /**
+     * Returns the current status of the sending queue as a [StateFlow].
+     * If true, the sending queue is enabled.
+     */
+    fun sendingQueueStatus(): StateFlow<Boolean>
 }

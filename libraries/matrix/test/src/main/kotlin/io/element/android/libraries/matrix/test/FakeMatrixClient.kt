@@ -305,4 +305,7 @@ class FakeMatrixClient(
     }
 
     override suspend fun enableSendingQueue(enable: Boolean) = enableSendingQueueLambda(enable)
+
+    var sendingQueueStatusFlow = MutableStateFlow(true)
+    override fun sendingQueueStatus(): StateFlow<Boolean> = sendingQueueStatusFlow
 }
