@@ -183,7 +183,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     timestamp = this.timestamp,
                     isRedacted = false,
                     isUpdated = false,
-                    description = stringProvider.getString(CommonStrings.common_call_started),
+                    description = stringProvider.getString(R.string.notification_incoming_call),
                     senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
                     roomAvatarUrl = roomAvatarUrl,
                     callNotifyType = content.type,

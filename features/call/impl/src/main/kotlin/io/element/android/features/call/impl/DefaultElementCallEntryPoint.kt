@@ -17,12 +17,10 @@
 package io.element.android.features.call.impl
 
 import android.content.Context
-import android.os.Build
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.call.impl.notifications.CallNotificationData
-import io.element.android.features.call.impl.services.IncomingCallForegroundService
 import io.element.android.features.call.impl.utils.ActiveCallManager
 import io.element.android.features.call.impl.utils.IntentProvider
 import io.element.android.libraries.di.AppScope
@@ -66,10 +64,6 @@ class DefaultElementCallEntryPoint @Inject constructor(
             timestamp = timestamp,
             notificationChannelId = notificationChannelId,
         )
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            activeCallManager.registerIncomingCall(notificationData = incomingCallNotificationData)
-        } else {
-            IncomingCallForegroundService.start(context, incomingCallNotificationData)
-        }
+        activeCallManager.registerIncomingCall(notificationData = incomingCallNotificationData)
     }
 }

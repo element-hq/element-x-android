@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.notifications.fake
+package io.element.android.libraries.push.test.notifications
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable

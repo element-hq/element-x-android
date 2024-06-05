@@ -23,13 +23,14 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.push.impl.notifications.fake.FakeActiveNotificationsProvider
-import io.element.android.libraries.push.impl.notifications.fake.FakeImageLoader
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationCreator
 import io.element.android.libraries.push.impl.notifications.fake.FakeRoomGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.fake.FakeSummaryGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aSimpleNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.anInviteNotifiableEvent
+import io.element.android.libraries.push.impl.notifications.fixtures.anNotifiableCallEvent
+import io.element.android.libraries.push.test.notifications.FakeImageLoader
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -37,6 +38,8 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 private val MY_AVATAR_URL: String? = null
+
+private val A_CALL_EVENT = anNotifiableCallEvent(roomId = A_ROOM_ID)
 private val AN_INVITATION_EVENT = anInviteNotifiableEvent(roomId = A_ROOM_ID)
 private val A_SIMPLE_EVENT = aSimpleNotifiableEvent(eventId = AN_EVENT_ID)
 private val A_MESSAGE_EVENT = aNotifiableMessageEvent(eventId = AN_EVENT_ID, roomId = A_ROOM_ID)
@@ -82,6 +85,26 @@ class NotificationDataFactoryTest {
         val roomInvitation = listOf(A_SIMPLE_EVENT)
 
         val result = toNotifications(roomInvitation)
+
+        assertThat(result).isEqualTo(
+            listOf(
+                OneShotNotification(
+                    notification = expectedNotification,
+                    key = AN_EVENT_ID.value,
+                    summaryLine = A_SIMPLE_EVENT.description,
+                    isNoisy = A_SIMPLE_EVENT.noisy,
+                    timestamp = AN_INVITATION_EVENT.timestamp
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `given a call event when mapping to notification then it's added`() = testWith(notificationDataFactory) {
+        val expectedNotification = notificationCreator.createCallNotificationResult(A_CALL_EVENT, FakeImageLoader().getImageLoader())
+        val callEvent = listOf(A_SIMPLE_EVENT)
+
+        val result = toNotifications(callEvent)
 
         assertThat(result).isEqualTo(
             listOf(

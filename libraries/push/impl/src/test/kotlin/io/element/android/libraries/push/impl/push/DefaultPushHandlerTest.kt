@@ -19,12 +19,15 @@
 package io.element.android.libraries.push.impl.push
 
 import app.cash.turbine.test
+import io.element.android.features.call.api.CallType
 import io.element.android.features.call.test.FakeElementCallEntryPoint
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.notification.CallNotifyType
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SECRET
@@ -34,6 +37,7 @@ import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.push.impl.notifications.FakeNotifiableEventResolver
 import io.element.android.libraries.push.impl.notifications.channels.FakeNotificationChannels
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
+import io.element.android.libraries.push.impl.notifications.fixtures.anNotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.test.DefaultTestPush
 import io.element.android.libraries.push.impl.troubleshoot.DiagnosticPushHandler
@@ -49,6 +53,7 @@ import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import java.time.Instant
 
 class DefaultPushHandlerTest {
     @Test
@@ -221,6 +226,83 @@ class DefaultPushHandlerTest {
             onNotifiableEventReceived.assertions()
                 .isNeverCalled()
         }
+
+    @Test
+    fun `when ringing call PushData is received, the incoming call will be handled`() = runTest {
+        val aPushData = PushData(
+            eventId = AN_EVENT_ID,
+            roomId = A_ROOM_ID,
+            unread = 0,
+            clientSecret = A_SECRET,
+        )
+        val handleIncomingCallLambda = lambdaRecorder<CallType.RoomCall, EventId, UserId, String?, String?, String?, String, Unit> { _, _, _, _, _, _, _ -> }
+        val elementCallEntryPoint = FakeElementCallEntryPoint(handleIncomingCallResult = handleIncomingCallLambda)
+        val defaultPushHandler = createDefaultPushHandler(
+            elementCallEntryPoint = elementCallEntryPoint,
+            notifiableEventResult = { _, _, _ -> anNotifiableCallEvent(callNotifyType = CallNotifyType.RING, timestamp = Instant.now().toEpochMilli()) },
+            incrementPushCounterResult = {},
+            pushClientSecret = FakePushClientSecret(
+                getUserIdFromSecretResult = { A_USER_ID }
+            ),
+        )
+        defaultPushHandler.handle(aPushData)
+
+        handleIncomingCallLambda.assertions().isCalledOnce()
+    }
+
+    @Test
+    fun `when notify call PushData is received, the incoming call will be treated as a normal notification`() = runTest {
+        val aPushData = PushData(
+            eventId = AN_EVENT_ID,
+            roomId = A_ROOM_ID,
+            unread = 0,
+            clientSecret = A_SECRET,
+        )
+        val onNotifiableEventReceived = lambdaRecorder<NotifiableEvent, Unit> {}
+        val handleIncomingCallLambda = lambdaRecorder<CallType.RoomCall, EventId, UserId, String?, String?, String?, String, Unit> { _, _, _, _, _, _, _ -> }
+        val elementCallEntryPoint = FakeElementCallEntryPoint(handleIncomingCallResult = handleIncomingCallLambda)
+        val defaultPushHandler = createDefaultPushHandler(
+            elementCallEntryPoint = elementCallEntryPoint,
+            onNotifiableEventReceived = onNotifiableEventReceived,
+            notifiableEventResult = { _, _, _ -> anNotifiableCallEvent(callNotifyType = CallNotifyType.NOTIFY) },
+            incrementPushCounterResult = {},
+            pushClientSecret = FakePushClientSecret(
+                getUserIdFromSecretResult = { A_USER_ID }
+            ),
+        )
+        defaultPushHandler.handle(aPushData)
+
+        handleIncomingCallLambda.assertions().isNeverCalled()
+        onNotifiableEventReceived.assertions().isCalledOnce()
+    }
+
+    @Test
+    fun `when ringing call PushData is received but it's too old, the incoming call will be treated as a non-ringing notification`() = runTest {
+        val aPushData = PushData(
+            eventId = AN_EVENT_ID,
+            roomId = A_ROOM_ID,
+            unread = 0,
+            clientSecret = A_SECRET,
+        )
+        val onNotifiableEventReceived = lambdaRecorder<NotifiableEvent, Unit> {}
+        val handleIncomingCallLambda = lambdaRecorder<CallType.RoomCall, EventId, UserId, String?, String?, String?, String, Unit> { _, _, _, _, _, _, _ -> }
+        val elementCallEntryPoint = FakeElementCallEntryPoint(handleIncomingCallResult = handleIncomingCallLambda)
+        val defaultPushHandler = createDefaultPushHandler(
+            elementCallEntryPoint = elementCallEntryPoint,
+            onNotifiableEventReceived = onNotifiableEventReceived,
+            notifiableEventResult = { _, _, _ ->
+                anNotifiableCallEvent(callNotifyType = CallNotifyType.RING, timestamp = Instant.now().minusSeconds(10).toEpochMilli())
+            },
+            incrementPushCounterResult = {},
+            pushClientSecret = FakePushClientSecret(
+                getUserIdFromSecretResult = { A_USER_ID }
+            ),
+        )
+        defaultPushHandler.handle(aPushData)
+
+        handleIncomingCallLambda.assertions().isNeverCalled()
+        onNotifiableEventReceived.assertions().isCalledOnce()
+    }
 
     @Test
     fun `when diagnostic PushData is received, the diagnostic push handler is informed `() =

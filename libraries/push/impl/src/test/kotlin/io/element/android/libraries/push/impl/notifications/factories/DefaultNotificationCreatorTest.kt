@@ -39,10 +39,11 @@ import io.element.android.libraries.push.impl.notifications.factories.action.Acc
 import io.element.android.libraries.push.impl.notifications.factories.action.MarkAsReadActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.QuickReplyActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.RejectInvitationActionFactory
-import io.element.android.libraries.push.impl.notifications.fake.FakeImageLoader
+import io.element.android.libraries.push.impl.notifications.fixtures.anNotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
+import io.element.android.libraries.push.test.notifications.FakeImageLoader
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
@@ -182,6 +183,18 @@ class DefaultNotificationCreatorTest {
                 isUpdated = false,
                 roomName = "roomName",
             )
+        )
+        result.commonAssertions(
+            expectedCategory = null,
+        )
+    }
+
+    @Test
+    fun `test createCallNotification`() = runTest {
+        val sut = createNotificationCreator()
+        val result = sut.createCallNotification(
+            anNotifiableCallEvent(),
+            FakeImageLoader().getImageLoader(),
         )
         result.commonAssertions(
             expectedCategory = null,

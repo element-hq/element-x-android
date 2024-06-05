@@ -19,6 +19,7 @@ package io.element.android.libraries.push.impl.notifications
 import android.content.Context
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.api.notification.CallNotifyType
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
@@ -47,6 +48,7 @@ import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationMediaRepo
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
+import io.element.android.libraries.push.impl.notifications.model.NotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
@@ -476,6 +478,68 @@ class DefaultNotifiableEventResolverTest {
             isRedacted = false,
             isUpdated = false
         )
+        assertThat(result).isEqualTo(expectedResult)
+    }
+
+    @Test
+    fun `resolve CallNotify - ringing`() = runTest {
+        val sut = createDefaultNotifiableEventResolver(
+            notificationResult = Result.success(
+                createNotificationData(
+                    content = NotificationContent.MessageLike.CallNotify(
+                        A_USER_ID_2,
+                        CallNotifyType.RING
+                    )
+                )
+            )
+        )
+        val expectedResult = NotifiableCallEvent(
+            sessionId = A_SESSION_ID,
+            roomId = A_ROOM_ID,
+            eventId = AN_EVENT_ID,
+            senderId = A_USER_ID_2,
+            roomName = null,
+            editedEventId = null,
+            description = "Incoming call",
+            timestamp = A_TIMESTAMP,
+            canBeReplaced = true,
+            isRedacted = false,
+            isUpdated = false,
+            senderDisambiguatedDisplayName = "Bob",
+            callNotifyType = CallNotifyType.RING,
+        )
+        val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
+        assertThat(result).isEqualTo(expectedResult)
+    }
+
+    @Test
+    fun `resolve CallNotify - notify`() = runTest {
+        val sut = createDefaultNotifiableEventResolver(
+            notificationResult = Result.success(
+                createNotificationData(
+                    content = NotificationContent.MessageLike.CallNotify(
+                        A_USER_ID_2,
+                        CallNotifyType.NOTIFY
+                    )
+                )
+            )
+        )
+        val expectedResult = NotifiableCallEvent(
+            sessionId = A_SESSION_ID,
+            roomId = A_ROOM_ID,
+            eventId = AN_EVENT_ID,
+            senderId = A_USER_ID_2,
+            roomName = null,
+            editedEventId = null,
+            description = "Incoming call",
+            timestamp = A_TIMESTAMP,
+            canBeReplaced = true,
+            isRedacted = false,
+            isUpdated = false,
+            senderDisambiguatedDisplayName = "Bob",
+            callNotifyType = CallNotifyType.NOTIFY,
+        )
+        val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
         assertThat(result).isEqualTo(expectedResult)
     }
 

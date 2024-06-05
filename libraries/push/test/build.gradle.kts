@@ -24,7 +24,13 @@ android {
 
 dependencies {
     api(projects.libraries.push.api)
+    implementation(projects.libraries.push.impl)
     implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.matrixui)
     implementation(projects.libraries.pushproviders.api)
     implementation(projects.tests.testutils)
+    implementation(libs.androidx.core)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.test)
+    implementation(libs.test.robolectric)
 }

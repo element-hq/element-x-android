@@ -21,10 +21,14 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.notification.CallNotifyType
+import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
+import io.element.android.libraries.push.impl.notifications.model.NotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 
@@ -95,4 +99,30 @@ fun aNotifiableMessageEvent(
     canBeReplaced = false,
     isRedacted = isRedacted,
     imageUriString = null
+)
+
+fun anNotifiableCallEvent(
+    sessionId: SessionId = A_SESSION_ID,
+    roomId: RoomId = A_ROOM_ID,
+    eventId: EventId = AN_EVENT_ID,
+    senderId: UserId = A_USER_ID_2,
+    senderName: String? = null,
+    roomAvatarUrl: String? = AN_AVATAR_URL,
+    callNotifyType: CallNotifyType = CallNotifyType.NOTIFY,
+    timestamp: Long = 0L,
+) = NotifiableCallEvent(
+    sessionId = sessionId,
+    eventId = eventId,
+    roomId = roomId,
+    roomName = "a room name",
+    editedEventId = null,
+    description = "description",
+    timestamp = timestamp,
+    canBeReplaced = false,
+    isRedacted = false,
+    isUpdated = false,
+    senderDisambiguatedDisplayName = senderName,
+    senderId = senderId,
+    roomAvatarUrl = roomAvatarUrl,
+    callNotifyType = callNotifyType,
 )

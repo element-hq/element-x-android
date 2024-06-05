@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.CallNotifyType
+import java.time.Instant
 import kotlin.time.Duration.Companion.seconds
 
 data class NotifiableCallEvent(
@@ -42,7 +43,7 @@ data class NotifiableCallEvent(
     val shouldRing: Boolean = // Only ring if the type is RING and the elapsed time is less than the timeout
         run {
             val timeout = 10.seconds.inWholeMilliseconds
-            val elapsed = System.currentTimeMillis() - timestamp
+            val elapsed = Instant.now().toEpochMilli() - timestamp
             // Only ring if the type is RING and the elapsed time is less than the timeout
             callNotifyType == CallNotifyType.RING && elapsed < timeout
         }
