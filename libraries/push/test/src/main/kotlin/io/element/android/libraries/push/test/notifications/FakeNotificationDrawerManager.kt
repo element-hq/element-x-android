@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.push.test.notifications
 
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
@@ -23,6 +24,15 @@ import io.element.android.libraries.push.api.notifications.NotificationDrawerMan
 class FakeNotificationDrawerManager : NotificationDrawerManager {
     private val clearMemberShipNotificationForSessionCallsCount = mutableMapOf<String, Int>()
     private val clearMemberShipNotificationForRoomCallsCount = mutableMapOf<String, Int>()
+
+    override fun clearAllMessagesEvents(sessionId: SessionId) {
+    }
+
+    override fun clearMessagesForRoom(sessionId: SessionId, roomId: RoomId) {
+    }
+
+    override fun clearEvent(sessionId: SessionId, eventId: EventId) {
+    }
 
     override fun clearMembershipNotificationForSession(sessionId: SessionId) {
         clearMemberShipNotificationForSessionCallsCount.merge(sessionId.value, 1) { oldValue, value -> oldValue + value }
