@@ -105,6 +105,7 @@ fun RoomSelectView(
                     Text(
                         text = when (state.mode) {
                             RoomSelectMode.Forward -> stringResource(CommonStrings.common_forward_message)
+                            RoomSelectMode.Share -> stringResource(CommonStrings.common_send_to)
                         },
                         style = ElementTheme.typography.aliasScreenTitle
                     )

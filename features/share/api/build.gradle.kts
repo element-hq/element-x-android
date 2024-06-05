@@ -14,9 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.roomselect.api
+plugins {
+    id("io.element.android-library")
+    id("kotlin-parcelize")
+}
 
-enum class RoomSelectMode {
-    Forward,
-    Share,
+android {
+    namespace = "io.element.android.features.share.api"
+}
+
+dependencies {
+    implementation(projects.libraries.architecture)
+    implementation(projects.libraries.matrix.api)
 }
