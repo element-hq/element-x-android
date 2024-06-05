@@ -76,8 +76,6 @@ import io.element.android.features.messages.impl.timeline.components.reactionsum
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryView
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheet
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
-import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuEvents
-import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMessageMenu
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerEvents
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessagePermissionRationaleDialog
@@ -215,11 +213,7 @@ fun MessagesView(
                 onMessageLongClick = ::onMessageLongClick,
                 onUserDataClick = onUserDataClick,
                 onLinkClick = onLinkClick,
-                onTimestampClick = { event ->
-                    if (event.localSendState is LocalEventSendState.SendingFailed) {
-                        state.retrySendMenuState.eventSink(RetrySendMenuEvents.EventSelected(event))
-                    }
-                },
+                onTimestampClick = { /* no-op */ },
                 onReactionClick = ::onEmojiReactionClick,
                 onReactionLongClick = ::onEmojiReactionLongClick,
                 onMoreReactionsClick = ::onMoreReactionsClick,
@@ -260,7 +254,6 @@ fun MessagesView(
     )
 
     ReactionSummaryView(state = state.reactionSummaryState)
-    RetrySendMessageMenu(state = state.retrySendMenuState)
     ReadReceiptBottomSheet(
         state = state.readReceiptBottomSheetState,
         onUserDataClick = onUserDataClick,

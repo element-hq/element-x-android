@@ -46,7 +46,6 @@ import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryPresenter
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetPresenter
-import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuPresenter
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
@@ -106,7 +105,6 @@ class MessagesPresenter @AssistedInject constructor(
     private val actionListPresenter: ActionListPresenter,
     private val customReactionPresenter: CustomReactionPresenter,
     private val reactionSummaryPresenter: ReactionSummaryPresenter,
-    private val retrySendMenuPresenter: RetrySendMenuPresenter,
     private val readReceiptBottomSheetPresenter: ReadReceiptBottomSheetPresenter,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
@@ -139,7 +137,6 @@ class MessagesPresenter @AssistedInject constructor(
         val actionListState = actionListPresenter.present()
         val customReactionState = customReactionPresenter.present()
         val reactionSummaryState = reactionSummaryPresenter.present()
-        val retryState = retrySendMenuPresenter.present()
         val readReceiptBottomSheetState = readReceiptBottomSheetPresenter.present()
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
@@ -230,7 +227,6 @@ class MessagesPresenter @AssistedInject constructor(
             actionListState = actionListState,
             customReactionState = customReactionState,
             reactionSummaryState = reactionSummaryState,
-            retrySendMenuState = retryState,
             readReceiptBottomSheetState = readReceiptBottomSheetState,
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
             snackbarMessage = snackbarMessage,
