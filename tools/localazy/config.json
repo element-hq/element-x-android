@@ -238,7 +238,8 @@
     {
       "name" : ":features:call:impl",
       "includeRegex" : [
-        "call_.*"
+        "call_.*",
+        "screen_incoming_call.*"
       ]
     },
     {
