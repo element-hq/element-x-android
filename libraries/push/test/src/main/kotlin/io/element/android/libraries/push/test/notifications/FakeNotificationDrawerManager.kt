@@ -29,7 +29,6 @@ class FakeNotificationDrawerManager(
     private val clearMembershipNotificationForSessionLambda: (SessionId) -> Unit = { lambdaError() },
     private val clearMembershipNotificationForRoomLambda: (SessionId, RoomId) -> Unit = { _, _ -> lambdaError() }
 ) : NotificationDrawerManager {
-
     override fun clearAllMessagesEvents(sessionId: SessionId) {
         clearAllMessagesEventsLambda(sessionId)
     }

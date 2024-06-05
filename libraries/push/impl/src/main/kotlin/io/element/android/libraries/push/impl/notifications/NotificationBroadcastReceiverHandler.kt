@@ -153,8 +153,8 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
             senderId = sessionId,
             noisy = false,
             timestamp = systemClock.epochMillis(),
-            senderDisambiguatedDisplayName = room.getUpdatedMember(sessionId)
-                .getOrNull()?.disambiguatedDisplayName
+            senderDisambiguatedDisplayName = room.getUpdatedMember(sessionId).getOrNull()
+                ?.disambiguatedDisplayName
                 ?: stringProvider.getString(R.string.notification_sender_me),
             body = message,
             imageUriString = null,

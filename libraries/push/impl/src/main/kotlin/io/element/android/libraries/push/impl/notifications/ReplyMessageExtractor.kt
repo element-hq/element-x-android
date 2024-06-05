@@ -30,6 +30,7 @@ interface ReplyMessageExtractor {
 class AndroidReplyMessageExtractor @Inject constructor() : ReplyMessageExtractor {
     override fun getReplyMessage(intent: Intent): String? {
         return RemoteInput.getResultsFromIntent(intent)
-            ?.getCharSequence(NotificationBroadcastReceiver.KEY_TEXT_REPLY)?.toString()
+            ?.getCharSequence(NotificationBroadcastReceiver.KEY_TEXT_REPLY)
+            ?.toString()
     }
 }
