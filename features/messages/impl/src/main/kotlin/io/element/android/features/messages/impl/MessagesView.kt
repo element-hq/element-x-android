@@ -103,7 +103,6 @@ import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import timber.log.Timber
@@ -213,7 +212,6 @@ fun MessagesView(
                 onMessageLongClick = ::onMessageLongClick,
                 onUserDataClick = onUserDataClick,
                 onLinkClick = onLinkClick,
-                onTimestampClick = { /* no-op */ },
                 onReactionClick = ::onEmojiReactionClick,
                 onReactionLongClick = ::onEmojiReactionLongClick,
                 onMoreReactionsClick = ::onMoreReactionsClick,
@@ -314,7 +312,6 @@ private fun MessagesViewContent(
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     onMessageLongClick: (TimelineItem.Event) -> Unit,
-    onTimestampClick: (TimelineItem.Event) -> Unit,
     onSendLocationClick: () -> Unit,
     onCreatePollClick: () -> Unit,
     forceJumpToBottomVisibility: Boolean,
@@ -381,7 +378,6 @@ private fun MessagesViewContent(
                     onLinkClick = onLinkClick,
                     onMessageClick = onMessageClick,
                     onMessageLongClick = onMessageLongClick,
-                    onTimestampClick = onTimestampClick,
                     onSwipeToReply = onSwipeToReply,
                     onReactionClick = onReactionClick,
                     onReactionLongClick = onReactionLongClick,

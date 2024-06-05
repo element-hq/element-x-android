@@ -16,61 +16,34 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.isEdited
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.ui.strings.CommonStrings
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TimelineEventTimestampView(
-    event: TimelineItem.Event,
-    onClick: () -> Unit,
-    onLongClick: () -> Unit,
+    formattedTime: String,
+    isMessageEdited: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val formattedTime = event.sentTime
-    val hasMessageSendingFailed = event.localSendState is LocalEventSendState.SendingFailed
-    val isMessageEdited = event.content.isEdited()
-    val tint = if (hasMessageSendingFailed) MaterialTheme.colorScheme.error else null
-    val clickModifier = if (hasMessageSendingFailed) {
-        Modifier.combinedClickable(
-            onClick = onClick,
-            onLongClick = onLongClick,
-            indication = rememberRipple(bounded = false),
-            interactionSource = remember { MutableInteractionSource() }
-        )
-    } else {
-        Modifier
-    }
     Row(
         modifier = Modifier
-            .then(clickModifier)
-            // Add extra padding for touch target size
             .padding(PaddingValues(start = TimelineEventTimestampViewDefaults.spacing))
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
@@ -79,37 +52,25 @@ fun TimelineEventTimestampView(
             Text(
                 stringResource(CommonStrings.common_edited_suffix),
                 style = ElementTheme.typography.fontBodyXsRegular,
-                color = tint ?: MaterialTheme.colorScheme.secondary,
+                color = MaterialTheme.colorScheme.secondary,
             )
             Spacer(modifier = Modifier.width(4.dp))
         }
         Text(
             formattedTime,
             style = ElementTheme.typography.fontBodyXsRegular,
-            color = tint ?: MaterialTheme.colorScheme.secondary,
+            color = MaterialTheme.colorScheme.secondary,
         )
-        if (hasMessageSendingFailed && tint != null) {
-            Spacer(modifier = Modifier.width(2.dp))
-            Icon(
-                imageVector = CompoundIcons.Error(),
-                contentDescription = stringResource(id = CommonStrings.common_sending_failed),
-                tint = tint,
-                modifier = Modifier.size(15.dp, 18.dp),
-            )
-        }
     }
 }
 
 @PreviewsDayNight
 @Composable
 internal fun TimelineEventTimestampViewPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) = ElementPreview {
-    TimelineEventTimestampView(
-        event = event,
-        onClick = {},
-        onLongClick = {},
-    )
+    TimelineEventTimestampView(formattedTime = event.sentTime, isMessageEdited = event.content.isEdited())
 }
 
 object TimelineEventTimestampViewDefaults {
     val spacing = 16.dp
 }
+

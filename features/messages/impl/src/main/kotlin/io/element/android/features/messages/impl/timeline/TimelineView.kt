@@ -83,7 +83,6 @@ fun TimelineView(
     onLinkClick: (String) -> Unit,
     onMessageClick: (TimelineItem.Event) -> Unit,
     onMessageLongClick: (TimelineItem.Event) -> Unit,
-    onTimestampClick: (TimelineItem.Event) -> Unit,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     onReactionClick: (emoji: String, TimelineItem.Event) -> Unit,
     onReactionLongClick: (emoji: String, TimelineItem.Event) -> Unit,
@@ -147,7 +146,6 @@ fun TimelineView(
                         onReactionLongClick = onReactionLongClick,
                         onMoreReactionsClick = onMoreReactionsClick,
                         onReadReceiptClick = onReadReceiptClick,
-                        onTimestampClick = onTimestampClick,
                         eventSink = state.eventSink,
                         onSwipeToReply = onSwipeToReply,
                     )
@@ -243,8 +241,8 @@ private fun BoxScope.TimelineScrollHelper(
         // Use inverse of canAutoScroll otherwise we might briefly see the before the scroll animation is triggered
         isVisible = !canAutoScroll || forceJumpToBottomVisibility || !isLive,
         modifier = Modifier
-            .align(Alignment.BottomEnd)
-            .padding(end = 24.dp, bottom = 12.dp),
+                .align(Alignment.BottomEnd)
+                .padding(end = 24.dp, bottom = 12.dp),
         onClick = { jumpToBottom() },
     )
 }
@@ -271,8 +269,8 @@ private fun JumpToBottomButton(
         ) {
             Icon(
                 modifier = Modifier
-                    .size(24.dp)
-                    .rotate(90f),
+                        .size(24.dp)
+                        .rotate(90f),
                 imageVector = CompoundIcons.ArrowRight(),
                 contentDescription = stringResource(id = CommonStrings.a11y_jump_to_bottom)
             )
@@ -299,7 +297,6 @@ internal fun TimelineViewPreview(
             onLinkClick = {},
             onMessageClick = {},
             onMessageLongClick = {},
-            onTimestampClick = {},
             onSwipeToReply = {},
             onReactionClick = { _, _ -> },
             onReactionLongClick = { _, _ -> },
