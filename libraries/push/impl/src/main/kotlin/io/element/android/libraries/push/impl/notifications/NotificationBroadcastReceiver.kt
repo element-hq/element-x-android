@@ -35,6 +35,7 @@ import io.element.android.libraries.push.api.notifications.NotificationDrawerMan
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.push.OnNotifiableEventReceived
+import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
@@ -54,7 +55,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || context == null) return
         context.bindings<NotificationBroadcastReceiverBindings>().inject(this)
-        notificationBroadcastReceiverHandler.onReceive(context, intent)
+        notificationBroadcastReceiverHandler.onReceive(intent)
     }
 
     companion object {
@@ -74,8 +75,9 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
     private val actionIds: NotificationActionIds,
     private val systemClock: SystemClock,
     private val onNotifiableEventReceived: OnNotifiableEventReceived,
+    private val stringProvider: StringProvider,
 ) {
-    fun onReceive(context: Context, intent: Intent) {
+    fun onReceive(intent: Intent) {
         val sessionId = intent.extras?.getString(NotificationBroadcastReceiver.KEY_SESSION_ID)?.let(::SessionId) ?: return
         val roomId = intent.getStringExtra(NotificationBroadcastReceiver.KEY_ROOM_ID)?.let(::RoomId)
         val threadId = intent.getStringExtra(NotificationBroadcastReceiver.KEY_THREAD_ID)?.let(::ThreadId)
@@ -84,7 +86,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
         Timber.tag(loggerTag.value).d("onReceive: ${intent.action} ${intent.data} for: ${roomId?.value}/${eventId?.value}")
         when (intent.action) {
             actionIds.smartReply -> if (roomId != null) {
-                handleSmartReply(sessionId, roomId, threadId, intent, context)
+                handleSmartReply(sessionId, roomId, threadId, intent)
             }
             actionIds.dismissRoom -> if (roomId != null) {
                 notificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
@@ -138,7 +140,6 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
         roomId: RoomId,
         threadId: ThreadId?,
         intent: Intent,
-        context: Context
     ) = appCoroutineScope.launch {
         val message = getReplyMessage(intent)
 
@@ -155,7 +156,6 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
                 threadId = threadId,
                 room = room,
                 message = message,
-                context = context,
             )
         }
     }
@@ -166,7 +166,6 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
         threadId: ThreadId?,
         room: MatrixRoom,
         message: String,
-        context: Context,
     ) {
         // Create a new event to be displayed in the notification drawer, right now
         val notifiableMessageEvent = NotifiableMessageEvent(
@@ -180,7 +179,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
             noisy = false,
             timestamp = systemClock.epochMillis(),
             senderDisambiguatedDisplayName = room.getUpdatedMember(sessionId).getOrNull()?.disambiguatedDisplayName
-                ?: context.getString(R.string.notification_sender_me),
+                ?: stringProvider.getString(R.string.notification_sender_me),
             body = message,
             imageUriString = null,
             threadId = threadId,
