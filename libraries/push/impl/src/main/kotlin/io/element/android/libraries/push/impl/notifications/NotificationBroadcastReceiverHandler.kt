@@ -54,7 +54,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
     private val stringProvider: StringProvider,
 ) {
     fun onReceive(intent: Intent) {
-        val sessionId = intent.extras?.getString(NotificationBroadcastReceiver.KEY_SESSION_ID)?.let(::SessionId) ?: return
+        val sessionId = intent.getStringExtra(NotificationBroadcastReceiver.KEY_SESSION_ID)?.let(::SessionId) ?: return
         val roomId = intent.getStringExtra(NotificationBroadcastReceiver.KEY_ROOM_ID)?.let(::RoomId)
         val threadId = intent.getStringExtra(NotificationBroadcastReceiver.KEY_THREAD_ID)?.let(::ThreadId)
         val eventId = intent.getStringExtra(NotificationBroadcastReceiver.KEY_EVENT_ID)?.let(::EventId)
