@@ -26,6 +26,7 @@ import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Composer
+import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.DefaultMessageComposerContext
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
@@ -768,10 +769,15 @@ class MessageComposerPresenterTest {
             val showTextFormatting = awaitItem()
             assertThat(showTextFormatting.showAttachmentSourcePicker).isFalse()
             assertThat(showTextFormatting.showTextFormatting).isTrue()
+            assertThat(analyticsService.capturedEvents).containsExactly(
+                Interaction(index = null, interactionType = null, name = Interaction.Name.MobileRoomComposerFormattingEnabled)
+            )
+            analyticsService.capturedEvents.clear()
             showTextFormatting.eventSink(MessageComposerEvents.ToggleTextFormatting(false))
             skipItems(1)
             val finished = awaitItem()
             assertThat(finished.showTextFormatting).isFalse()
+            assertThat(analyticsService.capturedEvents).isEmpty()
         }
     }
 

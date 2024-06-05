@@ -27,6 +27,7 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
@@ -51,6 +52,8 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
@@ -60,6 +63,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
     private val pollHistoryEntryPoint: PollHistoryEntryPoint,
     private val elementCallEntryPoint: ElementCallEntryPoint,
     private val room: MatrixRoom,
+    private val analyticsService: AnalyticsService,
 ) : BaseFlowNode<RoomDetailsFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<RoomDetailsEntryPoint.Params>().first().initialElement.toNavTarget(),
@@ -140,6 +144,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                             sessionId = room.sessionId,
                             roomId = room.roomId,
                         )
+                        analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
                         elementCallEntryPoint.startCall(inputs)
                     }
                 }
@@ -187,8 +192,8 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                         plugins<RoomDetailsEntryPoint.Callback>().forEach { it.onOpenRoom(roomId) }
                     }
 
-                    override fun onStartCall(roomId: RoomId) {
-                        elementCallEntryPoint.startCall(CallType.RoomCall(roomId = roomId, sessionId = room.sessionId))
+                    override fun onStartCall(dmRoomId: RoomId) {
+                        elementCallEntryPoint.startCall(CallType.RoomCall(roomId = dmRoomId, sessionId = room.sessionId))
                     }
                 }
                 val plugins = listOf(RoomMemberDetailsNode.RoomMemberDetailsInput(navTarget.roomMemberId), callback)

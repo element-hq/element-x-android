@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.impl.data.WidgetMessage
 import io.element.android.features.call.impl.utils.ActiveCallManager
@@ -43,6 +44,7 @@ import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
+import io.element.android.services.analytics.api.ScreenTracker
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
@@ -62,6 +64,7 @@ class CallScreenPresenter @AssistedInject constructor(
     private val clock: SystemClock,
     private val dispatchers: CoroutineDispatchers,
     private val matrixClientsProvider: MatrixClientProvider,
+    private val screenTracker: ScreenTracker,
     private val appCoroutineScope: CoroutineScope,
     private val activeCallManager: ActiveCallManager,
 ) : Presenter<CallScreenState> {
@@ -86,6 +89,15 @@ class CallScreenPresenter @AssistedInject constructor(
 
             if (callType is CallType.RoomCall) {
                 activeCallManager.joinedCall(callType.sessionId, callType.roomId)
+            }
+        }
+
+        when (callType) {
+            is CallType.ExternalUrl -> {
+                // No analytics yet for external calls
+            }
+            is CallType.RoomCall -> {
+                screenTracker.TrackScreen(screen = MobileScreen.ScreenName.RoomCall)
             }
         }
 

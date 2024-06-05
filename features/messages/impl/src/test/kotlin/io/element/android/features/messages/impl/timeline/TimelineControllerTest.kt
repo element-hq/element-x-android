@@ -175,6 +175,10 @@ class TimelineControllerTest {
         sut.activeTimelineFlow().test {
             sut.focusOnEvent(AN_EVENT_ID)
             awaitItem().also { state ->
+                assertThat(state).isEqualTo(liveTimeline)
+            }
+            sut.focusOnEvent(AN_EVENT_ID)
+            awaitItem().also { state ->
                 assertThat(state).isEqualTo(detachedTimeline)
             }
             sut.invokeOnCurrentTimeline {
