@@ -69,6 +69,16 @@ class FakeTimeline(
         mentions: List<Mention>,
     ): Result<Unit> = sendMessageLambda(body, htmlBody, mentions)
 
+    var redactEventLambda: (eventId: EventId?, transactionId: TransactionId?, reason: String?) -> Result<Boolean> = { _, _, _ ->
+        Result.success(true)
+    }
+
+    override suspend fun redactEvent(
+        eventId: EventId?,
+        transactionId: TransactionId?,
+        reason: String?
+    ): Result<Boolean> = redactEventLambda(eventId, transactionId, reason)
+
     var editMessageLambda: (
         originalEventId: EventId?,
         transactionId: TransactionId?,
@@ -216,11 +226,7 @@ class FakeTimeline(
     var forwardEventLambda: (eventId: EventId, roomIds: List<RoomId>) -> Result<Unit> = { _, _ -> Result.success(Unit) }
     override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> = forwardEventLambda(eventId, roomIds)
 
-    var retrySendMessageLambda: (transactionId: TransactionId) -> Result<Unit> = { Result.success(Unit) }
-    override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> = retrySendMessageLambda(transactionId)
-
-    var cancelSendLambda: (transactionId: TransactionId) -> Result<Unit> = { Result.success(Unit) }
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> = cancelSendLambda(transactionId)
+    override suspend fun cancelSend(transactionId: TransactionId): Result<Boolean> = redactEvent(null, transactionId, null)
 
     var sendLocationLambda: (
         body: String,

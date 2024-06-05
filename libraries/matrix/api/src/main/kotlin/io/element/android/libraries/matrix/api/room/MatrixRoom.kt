@@ -160,7 +160,7 @@ interface MatrixRoom : Closeable {
 
     suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit>
 
-    suspend fun cancelSend(transactionId: TransactionId): Result<Unit>
+    suspend fun cancelSend(transactionId: TransactionId): Result<Boolean>
 
     suspend fun leave(): Result<Unit>
 

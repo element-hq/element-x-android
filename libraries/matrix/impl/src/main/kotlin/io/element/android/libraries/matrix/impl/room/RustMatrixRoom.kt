@@ -435,10 +435,10 @@ class RustMatrixRoom(
     }
 
     override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> {
-        return liveTimeline.retrySendMessage(transactionId)
+        return Result.failure(UnsupportedOperationException("Not supported"))
     }
 
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> {
+    override suspend fun cancelSend(transactionId: TransactionId): Result<Boolean> {
         return liveTimeline.cancelSend(transactionId)
     }
 
