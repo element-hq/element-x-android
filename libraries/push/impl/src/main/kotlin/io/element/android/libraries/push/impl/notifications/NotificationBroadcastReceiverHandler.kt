@@ -17,7 +17,6 @@
 package io.element.android.libraries.push.impl.notifications
 
 import android.content.Intent
-import androidx.core.app.RemoteInput
 import io.element.android.features.preferences.api.store.SessionPreferencesStoreFactory
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.MatrixClientProvider
@@ -52,6 +51,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
     private val systemClock: SystemClock,
     private val onNotifiableEventReceived: OnNotifiableEventReceived,
     private val stringProvider: StringProvider,
+    private val replyMessageExtractor: ReplyMessageExtractor,
 ) {
     fun onReceive(intent: Intent) {
         val sessionId = intent.getStringExtra(NotificationBroadcastReceiver.KEY_SESSION_ID)?.let(::SessionId) ?: return
@@ -117,8 +117,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
         threadId: ThreadId?,
         intent: Intent,
     ) = appCoroutineScope.launch {
-        val message = getReplyMessage(intent)
-
+        val message = replyMessageExtractor.getReplyMessage(intent)
         if (message.isNullOrBlank()) {
             // ignore this event
             // Can this happen? should we update notification?
@@ -188,15 +187,5 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
                 )
             )
         }
-    }
-
-    private fun getReplyMessage(intent: Intent?): String? {
-        if (intent != null) {
-            val remoteInput = RemoteInput.getResultsFromIntent(intent)
-            if (remoteInput != null) {
-                return remoteInput.getCharSequence(NotificationBroadcastReceiver.KEY_TEXT_REPLY)?.toString()
-            }
-        }
-        return null
     }
 }
