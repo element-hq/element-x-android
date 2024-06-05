@@ -20,6 +20,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.features.call.CallType
 import io.element.android.features.call.utils.FakeCallWidgetProvider
 import io.element.android.features.call.utils.FakeWidgetMessageInterceptor
@@ -32,9 +33,13 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
+import io.element.android.services.analytics.api.ScreenTracker
+import io.element.android.services.analytics.test.FakeScreenTracker
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilTimeout
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancelAndJoin
@@ -53,16 +58,20 @@ class CallScreenPresenterTest {
 
     @Test
     fun `present - with CallType ExternalUrl just loads the URL`() = runTest {
-        val presenter = createCallScreenPresenter(CallType.ExternalUrl("https://call.element.io"))
+        val analyticsLambda = lambdaRecorder<MobileScreen.ScreenName, Unit> { }
+        val presenter = createCallScreenPresenter(
+            callType = CallType.ExternalUrl("https://call.element.io"),
+            screenTracker = FakeScreenTracker(analyticsLambda)
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             // Wait until the URL is loaded
             skipItems(1)
-
             val initialState = awaitItem()
             assertThat(initialState.urlState).isEqualTo(AsyncData.Success("https://call.element.io"))
             assertThat(initialState.isInWidgetMode).isFalse()
+            analyticsLambda.assertions().isNeverCalled()
         }
     }
 
@@ -70,22 +79,29 @@ class CallScreenPresenterTest {
     fun `present - with CallType RoomCall loads URL and runs WidgetDriver`() = runTest {
         val widgetDriver = FakeMatrixWidgetDriver()
         val widgetProvider = FakeCallWidgetProvider(widgetDriver)
+        val analyticsLambda = lambdaRecorder<MobileScreen.ScreenName, Unit> { }
         val presenter = createCallScreenPresenter(
             callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
             widgetDriver = widgetDriver,
             widgetProvider = widgetProvider,
+            screenTracker = FakeScreenTracker(analyticsLambda)
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             // Wait until the URL is loaded
             skipItems(1)
-
             val initialState = awaitItem()
             assertThat(initialState.urlState).isInstanceOf(AsyncData.Success::class.java)
             assertThat(initialState.isInWidgetMode).isTrue()
             assertThat(widgetProvider.getWidgetCalled).isTrue()
             assertThat(widgetDriver.runCalledCount).isEqualTo(1)
+            // Called several times because of the recomposition
+            analyticsLambda.assertions().isCalledExactly(2)
+                .withSequence(
+                    listOf(value(MobileScreen.ScreenName.RoomCall)),
+                    listOf(value(MobileScreen.ScreenName.RoomCall))
+                )
         }
     }
 
@@ -95,6 +111,7 @@ class CallScreenPresenterTest {
         val presenter = createCallScreenPresenter(
             callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
             widgetDriver = widgetDriver,
+            screenTracker = FakeScreenTracker {},
         )
         val messageInterceptor = FakeWidgetMessageInterceptor()
         moleculeFlow(RecompositionMode.Immediate) {
@@ -125,6 +142,7 @@ class CallScreenPresenterTest {
             widgetDriver = widgetDriver,
             navigator = navigator,
             dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+            screenTracker = FakeScreenTracker {},
         )
         val messageInterceptor = FakeWidgetMessageInterceptor()
         moleculeFlow(RecompositionMode.Immediate) {
@@ -155,6 +173,7 @@ class CallScreenPresenterTest {
             widgetDriver = widgetDriver,
             navigator = navigator,
             dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+            screenTracker = FakeScreenTracker {},
         )
         val messageInterceptor = FakeWidgetMessageInterceptor()
         moleculeFlow(RecompositionMode.Immediate) {
@@ -185,7 +204,8 @@ class CallScreenPresenterTest {
             widgetDriver = widgetDriver,
             navigator = navigator,
             dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
-            matrixClientsProvider = FakeMatrixClientProvider(getClient = { Result.success(matrixClient) })
+            matrixClientsProvider = FakeMatrixClientProvider(getClient = { Result.success(matrixClient) }),
+            screenTracker = FakeScreenTracker {},
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -208,7 +228,8 @@ class CallScreenPresenterTest {
             widgetDriver = widgetDriver,
             navigator = navigator,
             dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
-            matrixClientsProvider = FakeMatrixClientProvider(getClient = { Result.success(matrixClient) })
+            matrixClientsProvider = FakeMatrixClientProvider(getClient = { Result.success(matrixClient) }),
+            screenTracker = FakeScreenTracker {},
         )
         val hasRun = Mutex(true)
         val job = launch {
@@ -233,6 +254,7 @@ class CallScreenPresenterTest {
         widgetProvider: FakeCallWidgetProvider = FakeCallWidgetProvider(widgetDriver),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         matrixClientsProvider: FakeMatrixClientProvider = FakeMatrixClientProvider(),
+        screenTracker: ScreenTracker = FakeScreenTracker(),
     ): CallScreenPresenter {
         val userAgentProvider = object : UserAgentProvider {
             override fun provide(): String {
@@ -241,14 +263,15 @@ class CallScreenPresenterTest {
         }
         val clock = SystemClock { 0 }
         return CallScreenPresenter(
-            callType,
-            navigator,
-            widgetProvider,
-            userAgentProvider,
-            clock,
-            dispatchers,
-            matrixClientsProvider,
-            this,
+            callType = callType,
+            navigator = navigator,
+            callWidgetProvider = widgetProvider,
+            userAgentProvider = userAgentProvider,
+            clock = clock,
+            dispatchers = dispatchers,
+            matrixClientsProvider = matrixClientsProvider,
+            screenTracker = screenTracker,
+            appCoroutineScope = this,
         )
     }
 }

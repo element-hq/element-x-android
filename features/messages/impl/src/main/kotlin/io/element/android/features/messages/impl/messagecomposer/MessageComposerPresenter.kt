@@ -36,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
 import im.vector.app.features.analytics.plan.Composer
+import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.mentions.MentionSuggestionsProcessor
@@ -68,6 +69,7 @@ import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.textcomposer.model.rememberMarkdownTextEditorState
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CancellationException
@@ -388,6 +390,9 @@ class MessageComposerPresenter @Inject constructor(
                 is MessageComposerEvents.ToggleTextFormatting -> {
                     showAttachmentSourcePicker = false
                     showTextFormatting = event.enabled
+                    if (showTextFormatting) {
+                        analyticsService.captureInteraction(Interaction.Name.MobileRoomComposerFormattingEnabled)
+                    }
                 }
                 is MessageComposerEvents.Error -> {
                     analyticsService.trackError(event.error)
