@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.call.impl.services
+package io.element.android.features.call.impl.receivers
 
 import android.content.BroadcastReceiver
 import android.content.Context

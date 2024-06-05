@@ -17,7 +17,7 @@
 package io.element.android.features.call.impl.di
 
 import com.squareup.anvil.annotations.ContributesTo
-import io.element.android.features.call.impl.services.DeclineCallBroadcastReceiver
+import io.element.android.features.call.impl.receivers.DeclineCallBroadcastReceiver
 import io.element.android.features.call.impl.services.IncomingCallForegroundService
 import io.element.android.features.call.impl.ui.ElementCallActivity
 import io.element.android.features.call.impl.ui.IncomingCallActivity

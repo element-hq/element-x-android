@@ -27,6 +27,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- Permissions for call foreground services -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_PHONE_CALL" />
     <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
@@ -92,7 +94,7 @@
             android:exported="false"
             android:foregroundServiceType="phoneCall" />
 
-        <receiver android:name=".services.DeclineCallBroadcastReceiver"
+        <receiver android:name=".receivers.DeclineCallBroadcastReceiver"
             android:exported="false"
             android:enabled="true" />
 

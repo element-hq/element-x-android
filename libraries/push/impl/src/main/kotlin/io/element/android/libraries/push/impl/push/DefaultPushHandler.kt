@@ -97,35 +97,37 @@ class DefaultPushHandler @Inject constructor(
                 return
             }
             val userPushStore = userPushStoreFactory.getOrCreate(userId)
-            if (userPushStore.getNotificationEnabledForDevice().first()) {
+            val areNotificationsEnabled = userPushStore.getNotificationEnabledForDevice().first()
+            if (areNotificationsEnabled) {
                 val notifiableEvent = notifiableEventResolver.resolveEvent(userId, pushData.roomId, pushData.eventId)
                 when (notifiableEvent) {
                     null -> Timber.tag(loggerTag.value).w("Unable to get a notification data")
-                    is NotifiableCallEvent -> {
-                        Timber.i("## handleInternal() : Incoming call. Should ring: ${notifiableEvent.shouldRing}")
-                        if (notifiableEvent.shouldRing) {
-                            elementCallEntryPoint.handleIncomingCall(
-                                callType = CallType.RoomCall(notifiableEvent.sessionId, notifiableEvent.roomId),
-                                eventId = notifiableEvent.eventId,
-                                senderId = notifiableEvent.senderId,
-                                roomName = notifiableEvent.roomName,
-                                senderName = notifiableEvent.senderDisambiguatedDisplayName,
-                                avatarUrl = notifiableEvent.roomAvatarUrl,
-                                timestamp = notifiableEvent.timestamp,
-                                notificationChannelId = notificationChannels.getChannelForIncomingCall(ring = true),
-                            )
-                        } else {
-                            onNotifiableEventReceived.onNotifiableEventReceived(notifiableEvent)
-                        }
-                    }
+                    is NotifiableCallEvent -> handleRingingCallEvent(notifiableEvent)
                     else -> onNotifiableEventReceived.onNotifiableEventReceived(notifiableEvent)
                 }
             } else {
-                // TODO We need to check if this is an incoming call
                 Timber.tag(loggerTag.value).i("Notification are disabled for this device, ignore push.")
             }
         } catch (e: Exception) {
             Timber.tag(loggerTag.value).e(e, "## handleInternal() failed")
+        }
+    }
+
+    private fun handleRingingCallEvent(notifiableEvent: NotifiableCallEvent) {
+        Timber.i("## handleInternal() : Incoming call. Should ring: ${notifiableEvent.shouldRing}")
+        if (notifiableEvent.shouldRing) {
+            elementCallEntryPoint.handleIncomingCall(
+                callType = CallType.RoomCall(notifiableEvent.sessionId, notifiableEvent.roomId),
+                eventId = notifiableEvent.eventId,
+                senderId = notifiableEvent.senderId,
+                roomName = notifiableEvent.roomName,
+                senderName = notifiableEvent.senderDisambiguatedDisplayName,
+                avatarUrl = notifiableEvent.roomAvatarUrl,
+                timestamp = notifiableEvent.timestamp,
+                notificationChannelId = notificationChannels.getChannelForIncomingCall(ring = true),
+            )
+        } else {
+            onNotifiableEventReceived.onNotifiableEventReceived(notifiableEvent)
         }
     }
 }

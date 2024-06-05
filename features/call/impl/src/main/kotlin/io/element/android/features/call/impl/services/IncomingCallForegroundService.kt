@@ -23,6 +23,7 @@ import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.ServiceCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.IntentCompat
 import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.call.impl.di.CallBindings
@@ -53,7 +54,7 @@ class IncomingCallForegroundService : Service() {
         internal fun start(context: Context, callNotificationData: CallNotificationData) {
             val intent = Intent(context, IncomingCallForegroundService::class.java)
             intent.putExtra(NOTIFICATION_DATA, callNotificationData)
-            context.startService(intent)
+            ContextCompat.startForegroundService(context, intent)
         }
 
         /**
@@ -122,7 +123,7 @@ class IncomingCallForegroundService : Service() {
             senderId = notificationData.senderId,
             roomName = notificationData.roomName,
             senderDisplayName = notificationData.senderName ?: notificationData.senderId.value,
-            avatarUrl = notificationData.avatarUrl,
+            roomAvatarUrl = notificationData.avatarUrl,
             notificationChannelId = notificationData.notificationChannelId,
             timestamp = notificationData.timestamp
         ) ?: return

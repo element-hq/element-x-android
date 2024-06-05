@@ -151,7 +151,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
             }
             NotificationContent.MessageLike.CallAnswer,
             NotificationContent.MessageLike.CallCandidates,
-            NotificationContent.MessageLike.CallHangup -> { // TODO CallNotify will be handled separately in the future
+            NotificationContent.MessageLike.CallHangup -> {
                 Timber.tag(loggerTag.value).d("Ignoring notification for call ${content.javaClass.simpleName}")
                 null
             }

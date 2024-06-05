@@ -19,18 +19,22 @@ package io.element.android.features.call.impl.services
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.PendingIntentCompat
+import androidx.core.app.ServiceCompat
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.IconCompat
 import io.element.android.features.call.impl.R
 import io.element.android.features.call.impl.ui.ElementCallActivity
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.push.api.notifications.ForegroundServiceType
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
+import timber.log.Timber
 
 /**
  * A foreground service that shows a notification for an ongoing call while the UI is in background.
@@ -39,11 +43,7 @@ class CallForegroundService : Service() {
     companion object {
         fun start(context: Context) {
             val intent = Intent(context, CallForegroundService::class.java)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context.startForegroundService(intent)
-            } else {
-                context.startService(intent)
-            }
+            ContextCompat.startForegroundService(context, intent)
         }
 
         fun stop(context: Context) {
@@ -75,7 +75,17 @@ class CallForegroundService : Service() {
             .setContentText(getString(R.string.call_foreground_service_message_android))
             .setContentIntent(pendingIntent)
             .build()
-        startForeground(NotificationIdProvider.getForegroundServiceNotificationId(ForegroundServiceType.ONGOING_CALL), notification)
+        val notificationId = NotificationIdProvider.getForegroundServiceNotificationId(ForegroundServiceType.ONGOING_CALL)
+        val serviceType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL
+        } else {
+            0
+        }
+        runCatching {
+            ServiceCompat.startForeground(this, notificationId, notification, serviceType)
+        }.onFailure {
+            Timber.e(it, "Failed to start ongoing call foreground service")
+        }
     }
 
     override fun onDestroy() {

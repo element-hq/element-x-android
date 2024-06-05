@@ -79,7 +79,7 @@ class RingingCallNotificationCreatorTest {
         senderId = A_USER_ID_2,
         roomName = "Room",
         senderDisplayName = "Johnnie Murphy",
-        avatarUrl = "https://example.com/avatar.jpg",
+        roomAvatarUrl = "https://example.com/avatar.jpg",
         notificationChannelId = "channelId",
         timestamp = 0L,
     )
