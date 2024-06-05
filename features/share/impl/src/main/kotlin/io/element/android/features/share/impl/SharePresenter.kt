@@ -104,7 +104,7 @@ class SharePresenter @AssistedInject constructor(
                 }
             )
             if (!result) {
-                throw Exception("Failed to handle incoming share intent")
+                error("Failed to handle incoming share intent")
             }
             roomIds
         }.runCatchingUpdatingState(shareActionState)

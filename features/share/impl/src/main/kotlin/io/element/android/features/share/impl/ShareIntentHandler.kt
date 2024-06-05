@@ -102,18 +102,17 @@ class DefaultShareIntentHandler @Inject constructor(
         }
         val resInfoList: List<ResolveInfo> = context.packageManager.queryIntentActivitiesCompat(data, PackageManager.MATCH_DEFAULT_ONLY)
         uriList.forEach {
-            for (resolveInfo in resInfoList) {
+            resInfoList.forEach resolve@{ resolveInfo ->
                 val packageName: String = resolveInfo.activityInfo.packageName
                 // Replace implicit intent by an explicit to fix crash on some devices like Xiaomi.
                 // see https://juejin.cn/post/7031736325422186510
                 try {
                     context.grantUriPermission(packageName, it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 } catch (e: Exception) {
-                    continue
+                    return@resolve
                 }
                 data.action = null
                 data.component = ComponentName(packageName, resolveInfo.activityInfo.name)
-                break
             }
         }
         return uriList.map { uri ->
