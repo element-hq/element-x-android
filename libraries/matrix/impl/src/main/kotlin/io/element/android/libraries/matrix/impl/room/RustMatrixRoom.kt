@@ -324,12 +324,6 @@ class RustMatrixRoom(
         return liveTimeline.sendMessage(body, htmlBody, mentions)
     }
 
-    override suspend fun redactEvent(eventId: EventId, reason: String?) = withContext(roomDispatcher) {
-        runCatching {
-            innerRoom.redact(eventId.value, reason)
-        }
-    }
-
     override suspend fun leave(): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
             innerRoom.leave()

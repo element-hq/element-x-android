@@ -304,11 +304,9 @@ class MessagesPresenter @AssistedInject constructor(
     }
 
     private suspend fun handleActionRedact(event: TimelineItem.Event) {
-        if (event.failedToSend) {
-            // If the message hasn't been sent yet, just cancel it
-            event.transactionId?.let { room.cancelSend(it) }
-        } else if (event.eventId != null) {
-            room.redactEvent(event.eventId)
+        timelineController.invokeOnCurrentTimeline {
+            redactEvent(eventId = event.eventId, transactionId = event.transactionId, reason = null)
+                .onFailure { Timber.e(it) }
         }
     }
 
