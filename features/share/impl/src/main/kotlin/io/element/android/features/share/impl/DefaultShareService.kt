@@ -37,8 +37,19 @@ class DefaultShareService @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : ShareService {
     override fun observeFeatureFlag(coroutineScope: CoroutineScope) {
-        val shareActivityComponent = context
-            .packageManager
+        val shareActivityComponent = getShareActivityComponent()
+            ?: return Unit.also {
+                Timber.w("ShareActivity not found")
+            }
+        featureFlagService.isFeatureEnabledFlow(FeatureFlags.IncomingShare)
+            .onEach { enabled ->
+                shareActivityComponent.enableOrDisable(enabled)
+            }
+            .launchIn(coroutineScope)
+    }
+
+    private fun getShareActivityComponent(): ComponentName? {
+        return context.packageManager
             .getPackageInfo(
                 context.packageName,
                 PackageManager.GET_ACTIVITIES or PackageManager.MATCH_DISABLED_COMPONENTS
@@ -51,26 +62,22 @@ class DefaultShareService @Inject constructor(
                     shareActivityInfo.name,
                 )
             }
-            ?: return Unit.also {
-                Timber.w("ShareActivity not found")
-            }
-        featureFlagService.isFeatureEnabledFlow(FeatureFlags.IncomingShare)
-            .onEach { enabled ->
-                val state = if (enabled) {
-                    PackageManager.COMPONENT_ENABLED_STATE_DEFAULT
-                } else {
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED
-                }
-                try {
-                    context.packageManager.setComponentEnabledSetting(
-                        shareActivityComponent,
-                        state,
-                        PackageManager.DONT_KILL_APP,
-                    )
-                } catch (e: Exception) {
-                    Timber.e(e, "Failed to enable or disable the component")
-                }
-            }
-            .launchIn(coroutineScope)
+    }
+
+    private fun ComponentName.enableOrDisable(enabled: Boolean) {
+        val state = if (enabled) {
+            PackageManager.COMPONENT_ENABLED_STATE_DEFAULT
+        } else {
+            PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+        }
+        try {
+            context.packageManager.setComponentEnabledSetting(
+                this,
+                state,
+                PackageManager.DONT_KILL_APP,
+            )
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to enable or disable the component")
+        }
     }
 }
