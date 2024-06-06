@@ -21,17 +21,6 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.os.Build
-import android.os.Parcelable
-
-inline fun <reified T> Intent.getParcelableExtraCompat(key: String): T? = when {
-    Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> getParcelableExtra(key, T::class.java)
-    else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T?
-}
-
-inline fun <reified T : Parcelable> Intent.getParcelableArrayListExtraCompat(key: String): ArrayList<T>? = when {
-    Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> getParcelableArrayListExtra(key, T::class.java)
-    else -> @Suppress("DEPRECATION") getParcelableArrayListExtra<T>(key)
-}
 
 fun PackageManager.queryIntentActivitiesCompat(data: Intent, flags: Int): List<ResolveInfo> {
     return when {

@@ -23,9 +23,8 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Build
+import androidx.core.content.IntentCompat
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.androidutils.compat.getParcelableArrayListExtraCompat
-import io.element.android.libraries.androidutils.compat.getParcelableExtraCompat
 import io.element.android.libraries.androidutils.compat.queryIntentActivitiesCompat
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAny
@@ -102,10 +101,11 @@ class DefaultShareIntentHandler @Inject constructor(
     private fun getIncomingUris(intent: Intent, type: String): List<ShareIntentHandler.UriToShare> {
         val uriList = mutableListOf<Uri>()
         if (intent.action == Intent.ACTION_SEND) {
-            intent.getParcelableExtraCompat<Uri>(Intent.EXTRA_STREAM)?.let { uriList.add(it) }
+            IntentCompat.getParcelableExtra(intent, Intent.EXTRA_STREAM, Uri::class.java)
+                ?.let { uriList.add(it) }
         } else if (intent.action == Intent.ACTION_SEND_MULTIPLE) {
-            val extraUriList: List<Uri>? = intent.getParcelableArrayListExtraCompat(Intent.EXTRA_STREAM)
-            extraUriList?.let { uriList.addAll(it) }
+            IntentCompat.getParcelableArrayListExtra(intent, Intent.EXTRA_STREAM, Uri::class.java)
+                ?.let { uriList.addAll(it) }
         }
         val resInfoList: List<ResolveInfo> = context.packageManager.queryIntentActivitiesCompat(intent, PackageManager.MATCH_DEFAULT_ONLY)
         uriList.forEach { uri ->
