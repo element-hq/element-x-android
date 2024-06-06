@@ -96,4 +96,11 @@ enum class FeatureFlags(
         defaultValue = true,
         isFinished = false,
     ),
+    IncomingShare(
+        key = "feature.incomingShare",
+        title = "Incoming Share support",
+        description = "Allow the application to receive data from other applications",
+        defaultValue = true,
+        isFinished = false,
+    ),
 }

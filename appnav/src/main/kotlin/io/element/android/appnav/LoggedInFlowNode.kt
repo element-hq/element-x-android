@@ -16,6 +16,7 @@
 
 package io.element.android.appnav
 
+import android.content.Intent
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
@@ -54,6 +55,7 @@ import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
+import io.element.android.features.share.api.ShareEntryPoint
 import io.element.android.features.userprofile.api.UserProfileEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
@@ -98,6 +100,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val networkMonitor: NetworkMonitor,
     private val ftueService: FtueService,
     private val roomDirectoryEntryPoint: RoomDirectoryEntryPoint,
+    private val shareEntryPoint: ShareEntryPoint,
     private val matrixClient: MatrixClient,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
@@ -219,6 +222,9 @@ class LoggedInFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object RoomDirectorySearch : NavTarget
+
+        @Parcelize
+        data class IncomingShare(val intent: Intent) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -375,6 +381,20 @@ class LoggedInFlowNode @AssistedInject constructor(
                     })
                     .build()
             }
+            is NavTarget.IncomingShare -> {
+                shareEntryPoint.nodeBuilder(this, buildContext)
+                    .callback(object : ShareEntryPoint.Callback {
+                        override fun onDone(roomIds: List<RoomId>) {
+                            navigateUp()
+                            if (roomIds.size == 1) {
+                                val targetRoomId = roomIds.first()
+                                backstack.push(NavTarget.Room(targetRoomId.toRoomIdOrAlias()))
+                            }
+                        }
+                    })
+                    .params(ShareEntryPoint.Params(intent = navTarget.intent))
+                    .build()
+            }
         }
     }
 
@@ -410,6 +430,17 @@ class LoggedInFlowNode @AssistedInject constructor(
                 NavTarget.UserProfile(
                     userId = userId,
                 )
+            )
+        }
+    }
+
+    internal suspend fun attachIncomingShare(intent: Intent) {
+        waitForNavTargetAttached { navTarget ->
+            navTarget is NavTarget.RoomList
+        }
+        attachChild<Node> {
+            backstack.push(
+                NavTarget.IncomingShare(intent)
             )
         }
     }

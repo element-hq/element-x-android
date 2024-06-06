@@ -31,29 +31,33 @@ open class RoomSelectStateProvider : PreviewParameterProvider<RoomSelectState> {
         get() = sequenceOf(
             aRoomSelectState(),
             aRoomSelectState(query = "Test", isSearchActive = true),
-            aRoomSelectState(resultState = SearchBarResultState.Results(aForwardMessagesRoomList())),
+            aRoomSelectState(resultState = SearchBarResultState.Results(aRoomSelectRoomList())),
             aRoomSelectState(
-                resultState = SearchBarResultState.Results(aForwardMessagesRoomList()),
+                resultState = SearchBarResultState.Results(aRoomSelectRoomList()),
                 query = "Test",
                 isSearchActive = true,
             ),
             aRoomSelectState(
-                resultState = SearchBarResultState.Results(aForwardMessagesRoomList()),
+                resultState = SearchBarResultState.Results(aRoomSelectRoomList()),
                 query = "Test",
                 isSearchActive = true,
                 selectedRooms = persistentListOf(aRoomSummaryDetails(roomId = RoomId("!room2:domain")))
             ),
-            // Add other states here
+            aRoomSelectState(
+                mode = RoomSelectMode.Share,
+                resultState = SearchBarResultState.Results(aRoomSelectRoomList()),
+            ),
         )
 }
 
 private fun aRoomSelectState(
+    mode: RoomSelectMode = RoomSelectMode.Forward,
     resultState: SearchBarResultState<ImmutableList<RoomSummaryDetails>> = SearchBarResultState.Initial(),
     query: String = "",
     isSearchActive: Boolean = false,
     selectedRooms: ImmutableList<RoomSummaryDetails> = persistentListOf(),
 ) = RoomSelectState(
-    mode = RoomSelectMode.Forward,
+    mode = mode,
     resultState = resultState,
     query = query,
     isSearchActive = isSearchActive,
@@ -61,7 +65,7 @@ private fun aRoomSelectState(
     eventSink = {}
 )
 
-private fun aForwardMessagesRoomList() = persistentListOf(
+private fun aRoomSelectRoomList() = persistentListOf(
     aRoomSummaryDetails(),
     aRoomSummaryDetails(
         roomId = RoomId("!room2:domain"),
