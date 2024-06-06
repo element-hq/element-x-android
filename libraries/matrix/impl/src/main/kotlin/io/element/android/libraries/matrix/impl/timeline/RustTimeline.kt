@@ -265,6 +265,7 @@ class RustTimeline(
         messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()).use { content ->
             runCatching {
                 inner.send(content)
+                Unit
             }
         }
     }
@@ -292,6 +293,7 @@ class RustTimeline(
                 runCatching {
                     transactionId?.let { cancelSend(it) }
                     inner.send(messageEventContentFromParts(body, htmlBody))
+                    Unit
                 }
             }
         }
@@ -412,13 +414,13 @@ class RustTimeline(
 
     override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> = withContext(dispatcher) {
         runCatching {
-            inner.retrySend(transactionId.value)
+//            inner.retrySend(transactionId.value)
         }
     }
 
     override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> = withContext(dispatcher) {
         runCatching {
-            inner.cancelSend(transactionId.value)
+//            inner.cancelSend(transactionId.value)
         }
     }
 

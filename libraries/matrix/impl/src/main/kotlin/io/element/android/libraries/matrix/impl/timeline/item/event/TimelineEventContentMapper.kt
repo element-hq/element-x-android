@@ -103,7 +103,7 @@ class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMap
             StickerContent(
                 body = kind.body,
                 info = kind.info.map(),
-                url = kind.url,
+                url = kind.source.url(),
             )
         }
         is TimelineItemContentKind.Poll -> {
