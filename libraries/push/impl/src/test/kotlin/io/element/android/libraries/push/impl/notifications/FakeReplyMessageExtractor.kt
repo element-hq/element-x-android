@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.push
+package io.element.android.libraries.push.impl.notifications
 
-import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
-import io.element.android.tests.testutils.lambda.lambdaError
+import android.content.Intent
 
-class FakeOnNotifiableEventReceived(
-    private val onNotifiableEventReceivedResult: (NotifiableEvent) -> Unit = { lambdaError() },
-) : OnNotifiableEventReceived {
-    override fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
-        onNotifiableEventReceivedResult(notifiableEvent)
+class FakeReplyMessageExtractor(
+    private val result: String? = null,
+) : ReplyMessageExtractor {
+    override fun getReplyMessage(intent: Intent): String? {
+        return result
     }
 }
