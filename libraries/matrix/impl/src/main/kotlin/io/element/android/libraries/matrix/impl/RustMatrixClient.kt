@@ -552,8 +552,9 @@ class RustMatrixClient(
         }.distinctUntilChanged()
     }
 
-    override suspend fun enableSendingQueue(enable: Boolean) = withContext(sessionDispatcher) {
-        client.enableSendingQueue(enable)
+    override suspend fun setSendingQueueEnabled(enabled: Boolean) = withContext(sessionDispatcher) {
+        Timber.i("setSendingQueueEnabled($enabled)")
+        client.enableSendingQueue(enabled)
     }
 
     override fun sendingQueueStatus(): StateFlow<Boolean> = mxCallbackFlow {
