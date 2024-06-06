@@ -72,6 +72,7 @@ dependencies {
     testImplementation(libs.coil.test)
     testImplementation(libs.coroutines.test)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.libraries.push.test)
     testImplementation(projects.libraries.pushproviders.test)
     testImplementation(projects.libraries.pushstore.test)

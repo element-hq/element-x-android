@@ -20,16 +20,13 @@ import io.element.android.libraries.core.meta.BuildMeta
 import javax.inject.Inject
 
 /**
- * Util class for creating notifications.
- * Note: Cannot inject ColorProvider in the constructor, because it requires an Activity
+ * Util class for creating notifications action Ids, using the application id.
  */
-
 data class NotificationActionIds @Inject constructor(
     private val buildMeta: BuildMeta,
 ) {
     val join = "${buildMeta.applicationId}.NotificationActions.JOIN_ACTION"
     val reject = "${buildMeta.applicationId}.NotificationActions.REJECT_ACTION"
-    val quickLaunch = "${buildMeta.applicationId}.NotificationActions.QUICK_LAUNCH_ACTION"
     val markRoomRead = "${buildMeta.applicationId}.NotificationActions.MARK_ROOM_READ_ACTION"
     val smartReply = "${buildMeta.applicationId}.NotificationActions.SMART_REPLY_ACTION"
     val dismissSummary = "${buildMeta.applicationId}.NotificationActions.DISMISS_SUMMARY_ACTION"
@@ -37,5 +34,4 @@ data class NotificationActionIds @Inject constructor(
     val dismissInvite = "${buildMeta.applicationId}.NotificationActions.DISMISS_INVITE_NOTIF_ACTION"
     val dismissEvent = "${buildMeta.applicationId}.NotificationActions.DISMISS_EVENT_NOTIF_ACTION"
     val diagnostic = "${buildMeta.applicationId}.NotificationActions.DIAGNOSTIC"
-    val push = "${buildMeta.applicationId}.PUSH"
 }

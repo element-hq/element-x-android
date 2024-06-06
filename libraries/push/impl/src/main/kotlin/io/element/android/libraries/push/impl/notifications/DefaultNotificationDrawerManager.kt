@@ -123,7 +123,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
     /**
      * Clear all known message events for a [sessionId].
      */
-    fun clearAllMessagesEvents(sessionId: SessionId) {
+    override fun clearAllMessagesEvents(sessionId: SessionId) {
         notificationManager.cancel(null, NotificationIdProvider.getRoomMessagesNotificationId(sessionId))
         clearSummaryNotificationIfNeeded(sessionId)
     }
@@ -141,7 +141,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
      * Used to ignore events related to that room (no need to display notification) and clean any existing notification on this room.
      * Can also be called when a notification for this room is dismissed by the user.
      */
-    fun clearMessagesForRoom(sessionId: SessionId, roomId: RoomId) {
+    override fun clearMessagesForRoom(sessionId: SessionId, roomId: RoomId) {
         notificationManager.cancel(roomId.value, NotificationIdProvider.getRoomMessagesNotificationId(sessionId))
         clearSummaryNotificationIfNeeded(sessionId)
     }
@@ -164,7 +164,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
     /**
      * Clear the notifications for a single event.
      */
-    fun clearEvent(sessionId: SessionId, eventId: EventId) {
+    override fun clearEvent(sessionId: SessionId, eventId: EventId) {
         val id = NotificationIdProvider.getRoomEventNotificationId(sessionId)
         notificationManager.cancel(eventId.value, id)
         clearSummaryNotificationIfNeeded(sessionId)
