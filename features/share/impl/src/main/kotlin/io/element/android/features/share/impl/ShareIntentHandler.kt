@@ -46,6 +46,11 @@ interface ShareIntentHandler {
         val mimeType: String,
     )
 
+    /**
+     * This methods aims to handle incoming share intents.
+     *
+     * @return true if it can handle the intent data, false otherwise
+     */
     suspend fun handleIncomingShareIntent(
         intent: Intent,
         onUris: suspend (List<UriToShare>) -> Boolean,
@@ -57,11 +62,6 @@ interface ShareIntentHandler {
 class DefaultShareIntentHandler @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : ShareIntentHandler {
-    /**
-     * This methods aims to handle incoming share intents.
-     *
-     * @return true if it can handle the intent data, false otherwise
-     */
     override suspend fun handleIncomingShareIntent(
         intent: Intent,
         onUris: suspend (List<ShareIntentHandler.UriToShare>) -> Boolean,
