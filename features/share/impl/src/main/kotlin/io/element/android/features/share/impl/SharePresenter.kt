@@ -75,21 +75,25 @@ class SharePresenter @AssistedInject constructor(
             val result = shareIntentHandler.handleIncomingShareIntent(
                 intent,
                 onUris = { filesToShare ->
-                    roomIds
-                        .map { roomId ->
-                            val room = matrixClient.getRoom(roomId) ?: return@map false
-                            val mediaSender = MediaSender(preProcessor = mediaPreProcessor, room = room)
-                            filesToShare
-                                .map { fileToShare ->
-                                    mediaSender.sendMedia(
-                                        uri = fileToShare.uri,
-                                        mimeType = fileToShare.mimeType,
-                                        compressIfPossible = true,
-                                    ).isSuccess
-                                }
-                                .all { it }
-                        }
-                        .all { it }
+                    if (filesToShare.isEmpty()) {
+                        false
+                    } else {
+                        roomIds
+                            .map { roomId ->
+                                val room = matrixClient.getRoom(roomId) ?: return@map false
+                                val mediaSender = MediaSender(preProcessor = mediaPreProcessor, room = room)
+                                filesToShare
+                                    .map { fileToShare ->
+                                        mediaSender.sendMedia(
+                                            uri = fileToShare.uri,
+                                            mimeType = fileToShare.mimeType,
+                                            compressIfPossible = true,
+                                        ).isSuccess
+                                    }
+                                    .all { it }
+                            }
+                            .all { it }
+                    }
                 },
                 onPlainText = { text ->
                     roomIds
