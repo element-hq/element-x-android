@@ -27,6 +27,8 @@ import org.matrix.rustcomponents.sdk.RoomListService
 import org.matrix.rustcomponents.sdk.RoomSubscription
 import timber.log.Timber
 
+private const val DEFAULT_TIMELINE_LIMIT = 20u
+
 class RoomSyncSubscriber(
     private val roomListService: RoomListService,
     private val dispatchers: CoroutineDispatchers,
@@ -41,8 +43,9 @@ class RoomSyncSubscriber(
             RequiredState(key = EventType.STATE_ROOM_JOIN_RULES, value = ""),
             RequiredState(key = EventType.STATE_ROOM_POWER_LEVELS, value = ""),
         ),
-        timelineLimit = null,
-        includeHeroes = true,
+        timelineLimit = DEFAULT_TIMELINE_LIMIT,
+        // We don't need heroes here as they're already included in the `all_rooms` list
+        includeHeroes = false,
     )
 
     suspend fun subscribe(roomId: RoomId) = mutex.withLock {
