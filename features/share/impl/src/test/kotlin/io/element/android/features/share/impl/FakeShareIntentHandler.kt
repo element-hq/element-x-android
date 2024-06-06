@@ -21,15 +21,15 @@ import android.content.Intent
 class FakeShareIntentHandler(
     private val onIncomingShareIntent: suspend (
         Intent,
-        suspend (List<DefaultShareIntentHandler.FileToShare>) -> Boolean,
+        suspend (List<ShareIntentHandler.UriToShare>) -> Boolean,
         suspend (String) -> Boolean,
     ) -> Boolean = { _, _, _ -> false },
 ) : ShareIntentHandler {
     override suspend fun handleIncomingShareIntent(
         intent: Intent,
-        onFiles: suspend (List<DefaultShareIntentHandler.FileToShare>) -> Boolean,
+        onUris: suspend (List<ShareIntentHandler.UriToShare>) -> Boolean,
         onPlainText: suspend (String) -> Boolean,
     ): Boolean {
-        return onIncomingShareIntent(intent, onFiles, onPlainText)
+        return onIncomingShareIntent(intent, onUris, onPlainText)
     }
 }

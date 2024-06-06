@@ -41,9 +41,14 @@ import timber.log.Timber
 import javax.inject.Inject
 
 interface ShareIntentHandler {
+    data class UriToShare(
+        val uri: Uri,
+        val mimeType: String,
+    )
+
     suspend fun handleIncomingShareIntent(
         intent: Intent,
-        onFiles: suspend (List<DefaultShareIntentHandler.FileToShare>) -> Boolean,
+        onUris: suspend (List<UriToShare>) -> Boolean,
         onPlainText: suspend (String) -> Boolean,
     ): Boolean
 }
@@ -52,11 +57,6 @@ interface ShareIntentHandler {
 class DefaultShareIntentHandler @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : ShareIntentHandler {
-    data class FileToShare(
-        val uri: Uri,
-        val mimeType: String,
-    )
-
     /**
      * This methods aims to handle incoming share intents.
      *
@@ -64,7 +64,7 @@ class DefaultShareIntentHandler @Inject constructor(
      */
     override suspend fun handleIncomingShareIntent(
         intent: Intent,
-        onFiles: suspend (List<FileToShare>) -> Boolean,
+        onUris: suspend (List<ShareIntentHandler.UriToShare>) -> Boolean,
         onPlainText: suspend (String) -> Boolean,
     ): Boolean {
         val type = intent.resolveType(context) ?: return false
@@ -78,7 +78,7 @@ class DefaultShareIntentHandler @Inject constructor(
                 type.isMimeTypeText() ||
                 type.isMimeTypeAny() -> {
                 val files = getIncomingFiles(intent, type)
-                val result = onFiles(files)
+                val result = onUris(files)
                 revokeUriPermissions(files.map { it.uri })
                 result
             }
@@ -99,32 +99,32 @@ class DefaultShareIntentHandler @Inject constructor(
      * Use this function to retrieve files which are shared from another application or internally
      * by using android.intent.action.SEND or android.intent.action.SEND_MULTIPLE actions.
      */
-    private fun getIncomingFiles(data: Intent, type: String): List<FileToShare> {
+    private fun getIncomingFiles(intent: Intent, type: String): List<ShareIntentHandler.UriToShare> {
         val uriList = mutableListOf<Uri>()
-        if (data.action == Intent.ACTION_SEND) {
-            data.getParcelableExtraCompat<Uri>(Intent.EXTRA_STREAM)?.let { uriList.add(it) }
-        } else if (data.action == Intent.ACTION_SEND_MULTIPLE) {
-            val extraUriList: List<Uri>? = data.getParcelableArrayListExtraCompat(Intent.EXTRA_STREAM)
+        if (intent.action == Intent.ACTION_SEND) {
+            intent.getParcelableExtraCompat<Uri>(Intent.EXTRA_STREAM)?.let { uriList.add(it) }
+        } else if (intent.action == Intent.ACTION_SEND_MULTIPLE) {
+            val extraUriList: List<Uri>? = intent.getParcelableArrayListExtraCompat(Intent.EXTRA_STREAM)
             extraUriList?.let { uriList.addAll(it) }
         }
-        val resInfoList: List<ResolveInfo> = context.packageManager.queryIntentActivitiesCompat(data, PackageManager.MATCH_DEFAULT_ONLY)
-        uriList.forEach {
+        val resInfoList: List<ResolveInfo> = context.packageManager.queryIntentActivitiesCompat(intent, PackageManager.MATCH_DEFAULT_ONLY)
+        uriList.forEach { uri ->
             resInfoList.forEach resolve@{ resolveInfo ->
                 val packageName: String = resolveInfo.activityInfo.packageName
                 // Replace implicit intent by an explicit to fix crash on some devices like Xiaomi.
                 // see https://juejin.cn/post/7031736325422186510
                 try {
-                    context.grantUriPermission(packageName, it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 } catch (e: Exception) {
                     Timber.w(e, "Unable to grant Uri permission")
                     return@resolve
                 }
-                data.action = null
-                data.component = ComponentName(packageName, resolveInfo.activityInfo.name)
+                intent.action = null
+                intent.component = ComponentName(packageName, resolveInfo.activityInfo.name)
             }
         }
         return uriList.map { uri ->
-            FileToShare(
+            ShareIntentHandler.UriToShare(
                 uri = uri,
                 mimeType = type
             )

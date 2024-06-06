@@ -126,7 +126,7 @@ class SharePresenterTest {
             shareIntentHandler = FakeShareIntentHandler { _, onFile, _ ->
                 onFile(
                     listOf(
-                        DefaultShareIntentHandler.FileToShare(
+                        ShareIntentHandler.UriToShare(
                             uri = Uri.parse("content://image.jpg"),
                             mimeType = MimeTypes.Jpeg,
                         )
