@@ -74,7 +74,7 @@ class SharePresenter @AssistedInject constructor(
         suspend {
             val result = shareIntentHandler.handleIncomingShareIntent(
                 intent,
-                onFile = { filesToShare ->
+                onFiles = { filesToShare ->
                     roomIds
                         .map { roomId ->
                             val room = matrixClient.getRoom(roomId) ?: return@map false

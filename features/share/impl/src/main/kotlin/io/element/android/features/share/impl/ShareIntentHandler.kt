@@ -22,6 +22,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
+import android.os.Build
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.androidutils.compat.getParcelableArrayListExtraCompat
 import io.element.android.libraries.androidutils.compat.getParcelableExtraCompat
@@ -36,12 +37,13 @@ import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeText
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import timber.log.Timber
 import javax.inject.Inject
 
 interface ShareIntentHandler {
     suspend fun handleIncomingShareIntent(
         intent: Intent,
-        onFile: suspend (List<DefaultShareIntentHandler.FileToShare>) -> Boolean,
+        onFiles: suspend (List<DefaultShareIntentHandler.FileToShare>) -> Boolean,
         onPlainText: suspend (String) -> Boolean,
     ): Boolean
 }
@@ -62,7 +64,7 @@ class DefaultShareIntentHandler @Inject constructor(
      */
     override suspend fun handleIncomingShareIntent(
         intent: Intent,
-        onFile: suspend (List<FileToShare>) -> Boolean,
+        onFiles: suspend (List<FileToShare>) -> Boolean,
         onPlainText: suspend (String) -> Boolean,
     ): Boolean {
         val type = intent.resolveType(context) ?: return false
@@ -74,7 +76,12 @@ class DefaultShareIntentHandler @Inject constructor(
                 type.isMimeTypeApplication() ||
                 type.isMimeTypeFile() ||
                 type.isMimeTypeText() ||
-                type.isMimeTypeAny() -> onFile(getIncomingFiles(intent, type))
+                type.isMimeTypeAny() -> {
+                val files = getIncomingFiles(intent, type)
+                val result = onFiles(files)
+                revokeUriPermissions(files.map { it.uri })
+                result
+            }
             else -> false
         }
     }
@@ -109,6 +116,7 @@ class DefaultShareIntentHandler @Inject constructor(
                 try {
                     context.grantUriPermission(packageName, it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 } catch (e: Exception) {
+                    Timber.w(e, "Unable to grant Uri permission")
                     return@resolve
                 }
                 data.action = null
@@ -120,6 +128,20 @@ class DefaultShareIntentHandler @Inject constructor(
                 uri = uri,
                 mimeType = type
             )
+        }
+    }
+
+    private fun revokeUriPermissions(uris: List<Uri>) {
+        uris.forEach { uri ->
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.revokeUriPermission(context.packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                } else {
+                    context.revokeUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
+            } catch (e: Exception) {
+                Timber.w(e, "Unable to revoke Uri permission")
+            }
         }
     }
 }

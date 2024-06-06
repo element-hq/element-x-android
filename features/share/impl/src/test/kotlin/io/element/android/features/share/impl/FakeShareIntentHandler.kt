@@ -27,9 +27,9 @@ class FakeShareIntentHandler(
 ) : ShareIntentHandler {
     override suspend fun handleIncomingShareIntent(
         intent: Intent,
-        onFile: suspend (List<DefaultShareIntentHandler.FileToShare>) -> Boolean,
+        onFiles: suspend (List<DefaultShareIntentHandler.FileToShare>) -> Boolean,
         onPlainText: suspend (String) -> Boolean,
     ): Boolean {
-        return onIncomingShareIntent(intent, onFile, onPlainText)
+        return onIncomingShareIntent(intent, onFiles, onPlainText)
     }
 }
