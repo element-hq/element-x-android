@@ -49,7 +49,7 @@ class SharePresenter @AssistedInject constructor(
     private val shareActionState: MutableState<AsyncAction<List<RoomId>>> = mutableStateOf(AsyncAction.Uninitialized)
 
     fun onRoomSelected(roomIds: List<RoomId>) {
-        appCoroutineScope.share(intent, roomIds, shareActionState)
+        appCoroutineScope.share(intent, roomIds)
     }
 
     @Composable
@@ -69,7 +69,6 @@ class SharePresenter @AssistedInject constructor(
     private fun CoroutineScope.share(
         intent: Intent,
         roomIds: List<RoomId>,
-        shareActionState: MutableState<AsyncAction<List<RoomId>>>,
     ) = launch {
         suspend {
             val result = shareIntentHandler.handleIncomingShareIntent(
