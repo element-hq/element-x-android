@@ -38,6 +38,7 @@ import io.element.android.features.poll.api.actions.EndPollAction
 import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -85,6 +86,7 @@ class TimelinePresenter @AssistedInject constructor(
         val lastReadReceiptId = rememberSaveable { mutableStateOf<EventId?>(null) }
 
         val timelineItems by timelineItemsFactory.collectItemsAsState()
+        val roomInfo by room.roomInfoFlow.collectAsState(initial = null)
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
 
@@ -196,6 +198,7 @@ class TimelinePresenter @AssistedInject constructor(
                     isDm = room.isDm,
                     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
                     userHasPermissionToSendReaction = userHasPermissionToSendReaction,
+                    isCallOngoing = roomInfo?.hasRoomCall.orFalse(),
                 )
             }
         }

@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
@@ -86,6 +87,13 @@ class ActionListPresenter @Inject constructor(
         val canRedact = timelineItem.isMine && userCanRedactOwn || !timelineItem.isMine && userCanRedactOther
         val actions =
             when (timelineItem.content) {
+                is TimelineItemCallNotifyContent -> {
+                    if (isDeveloperModeEnabled) {
+                        listOf(TimelineItemAction.ViewSource)
+                    } else {
+                        emptyList()
+                    }
+                }
                 is TimelineItemRedactedContent -> {
                     if (isDeveloperModeEnabled) {
                         listOf(TimelineItemAction.ViewSource)

@@ -232,4 +232,5 @@ internal fun aTimelineRoomInfo(
     name = name,
     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
     userHasPermissionToSendReaction = true,
+    isCallOngoing = false,
 )

@@ -89,6 +89,7 @@ fun TimelineView(
     onReactionLongClick: (emoji: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
+    onJoinCallClick: () -> Unit,
     modifier: Modifier = Modifier,
     forceJumpToBottomVisibility: Boolean = false
 ) {
@@ -150,6 +151,7 @@ fun TimelineView(
                         onTimestampClick = onTimestampClick,
                         eventSink = state.eventSink,
                         onSwipeToReply = onSwipeToReply,
+                        onJoinCallClick = onJoinCallClick,
                     )
                 }
             }
@@ -305,6 +307,7 @@ internal fun TimelineViewPreview(
             onReactionLongClick = { _, _ -> },
             onMoreReactionsClick = {},
             onReadReceiptClick = {},
+            onJoinCallClick = {},
             forceJumpToBottomVisibility = true,
         )
     }

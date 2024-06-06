@@ -23,6 +23,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
@@ -754,6 +755,39 @@ class ActionListPresenterTest {
                         TimelineItemAction.Forward,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Redact,
+                    )
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - compute for call notify`() = runTest {
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                isMine = true,
+                content = TimelineItemCallNotifyContent(),
+            )
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    canRedactOwn = true,
+                    canRedactOther = false,
+                    canSendMessage = true,
+                    canSendReaction = true,
+                )
+            )
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    event = messageEvent,
+                    displayEmojiReactions = false,
+                    actions = persistentListOf(
+                        TimelineItemAction.ViewSource
                     )
                 )
             )
