@@ -44,6 +44,7 @@ class StaticFeatureFlagProvider @Inject constructor() :
                 FeatureFlags.RoomDirectorySearch -> false
                 FeatureFlags.ShowBlockedUsersDetails -> false
                 FeatureFlags.QrCodeLogin -> OnBoardingConfig.CAN_LOGIN_WITH_QR_CODE
+                FeatureFlags.IncomingShare -> true
             }
         } else {
             false
