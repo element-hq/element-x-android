@@ -77,9 +77,9 @@ class DefaultShareIntentHandler @Inject constructor(
                 type.isMimeTypeFile() ||
                 type.isMimeTypeText() ||
                 type.isMimeTypeAny() -> {
-                val files = getIncomingFiles(intent, type)
-                val result = onUris(files)
-                revokeUriPermissions(files.map { it.uri })
+                val uris = getIncomingUris(intent, type)
+                val result = onUris(uris)
+                revokeUriPermissions(uris.map { it.uri })
                 result
             }
             else -> false
@@ -99,7 +99,7 @@ class DefaultShareIntentHandler @Inject constructor(
      * Use this function to retrieve files which are shared from another application or internally
      * by using android.intent.action.SEND or android.intent.action.SEND_MULTIPLE actions.
      */
-    private fun getIncomingFiles(intent: Intent, type: String): List<ShareIntentHandler.UriToShare> {
+    private fun getIncomingUris(intent: Intent, type: String): List<ShareIntentHandler.UriToShare> {
         val uriList = mutableListOf<Uri>()
         if (intent.action == Intent.ACTION_SEND) {
             intent.getParcelableExtraCompat<Uri>(Intent.EXTRA_STREAM)?.let { uriList.add(it) }
