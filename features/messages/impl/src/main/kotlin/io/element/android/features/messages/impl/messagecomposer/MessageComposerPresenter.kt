@@ -36,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
 import im.vector.app.features.analytics.plan.Composer
+import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.mentions.MentionSuggestionsProcessor
@@ -62,12 +63,13 @@ import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
 import io.element.android.libraries.textcomposer.mentions.rememberMentionSpanProvider
-import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.TextEditorState
+import io.element.android.libraries.textcomposer.model.rememberMarkdownTextEditorState
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CancellationException
@@ -100,7 +102,7 @@ class MessageComposerPresenter @Inject constructor(
     private val mediaSender: MediaSender,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val analyticsService: AnalyticsService,
-    private val messageComposerContext: MessageComposerContextImpl,
+    private val messageComposerContext: DefaultMessageComposerContext,
     private val richTextEditorStateFactory: RichTextEditorStateFactory,
     private val currentSessionIdHolder: CurrentSessionIdHolder,
     private val permalinkParser: PermalinkParser,
@@ -132,7 +134,7 @@ class MessageComposerPresenter @Inject constructor(
         if (isTesting) {
             richTextEditorState.isReadyToProcessActions = true
         }
-        val markdownTextEditorState = remember { MarkdownTextEditorState(initialText = null, initialFocus = false) }
+        val markdownTextEditorState = rememberMarkdownTextEditorState(initialText = null, initialFocus = false)
 
         var isMentionsEnabled by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
@@ -388,6 +390,9 @@ class MessageComposerPresenter @Inject constructor(
                 is MessageComposerEvents.ToggleTextFormatting -> {
                     showAttachmentSourcePicker = false
                     showTextFormatting = event.enabled
+                    if (showTextFormatting) {
+                        analyticsService.captureInteraction(Interaction.Name.MobileRoomComposerFormattingEnabled)
+                    }
                 }
                 is MessageComposerEvents.Error -> {
                     analyticsService.trackError(event.error)

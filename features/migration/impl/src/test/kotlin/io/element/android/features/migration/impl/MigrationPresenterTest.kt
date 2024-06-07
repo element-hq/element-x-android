@@ -37,7 +37,7 @@ class MigrationPresenterTest {
 
     @Test
     fun `present - no migration should occurs if ApplicationMigrationVersion is the last one`() = runTest {
-        val migrations = (1..10).map { FakeMigration(it) }
+        val migrations = (1..10).map { FakeAppMigration(it) }
         val store = InMemoryMigrationStore(migrations.maxOf { it.order })
         val presenter = createPresenter(
             migrationStore = store,
@@ -57,7 +57,7 @@ class MigrationPresenterTest {
     @Test
     fun `present - testing all migrations`() = runTest {
         val store = InMemoryMigrationStore(0)
-        val migrations = (1..10).map { FakeMigration(it) }
+        val migrations = (1..10).map { FakeAppMigration(it) }
         val presenter = createPresenter(
             migrationStore = store,
             migrations = migrations.toSet(),
@@ -81,13 +81,13 @@ class MigrationPresenterTest {
 
 private fun createPresenter(
     migrationStore: MigrationStore = InMemoryMigrationStore(0),
-    migrations: Set<AppMigration> = setOf(FakeMigration(1)),
+    migrations: Set<AppMigration> = setOf(FakeAppMigration(1)),
 ) = MigrationPresenter(
     migrationStore = migrationStore,
     migrations = migrations,
 )
 
-private class FakeMigration(
+private class FakeAppMigration(
     override val order: Int,
     var migrateLambda: LambdaNoParamRecorder<Unit> = lambdaRecorder { -> },
 ) : AppMigration {

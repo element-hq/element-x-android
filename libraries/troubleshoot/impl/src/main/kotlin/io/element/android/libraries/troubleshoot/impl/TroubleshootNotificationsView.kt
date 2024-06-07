@@ -44,7 +44,7 @@ import io.element.android.libraries.troubleshoot.api.test.NotificationTroublesho
 @Composable
 fun TroubleshootNotificationsView(
     state: TroubleshootNotificationsState,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     OnLifecycleEvent { _, event ->
@@ -60,7 +60,7 @@ fun TroubleshootNotificationsView(
 
     PreferencePage(
         modifier = modifier,
-        onBackPressed = onBackPressed,
+        onBackClick = onBackClick,
         title = stringResource(id = R.string.troubleshoot_notifications_screen_title),
     ) {
         TroubleshootNotificationsContent(state)
@@ -70,7 +70,7 @@ fun TroubleshootNotificationsView(
 @Composable
 private fun TroubleshootTestView(
     testState: NotificationTroubleshootTestState,
-    onQuickFixClicked: () -> Unit,
+    onQuickFixClick: () -> Unit,
 ) {
     if ((testState.status as? Status.Idle)?.visible == false) return
     ListItem(
@@ -119,7 +119,7 @@ private fun TroubleshootTestView(
             trailingContent = ListItemContent.Custom {
                 Button(
                     text = stringResource(id = R.string.troubleshoot_notifications_screen_quick_fix_action),
-                    onClick = onQuickFixClicked
+                    onClick = onQuickFixClick
                 )
             }
         )
@@ -135,7 +135,7 @@ private fun TroubleshootNotificationsContent(state: TroubleshootNotificationsSta
         is AsyncAction.Failure -> {
             TestSuiteView(
                 testSuiteState = state.testSuiteState,
-                onQuickFixClicked = {
+                onQuickFixClick = {
                     state.eventSink(TroubleshootNotificationsEvents.QuickFix(it))
                 }
             )
@@ -199,13 +199,13 @@ private fun RunTestButton(state: TroubleshootNotificationsState) {
 @Composable
 private fun TestSuiteView(
     testSuiteState: TroubleshootTestSuiteState,
-    onQuickFixClicked: (Int) -> Unit,
+    onQuickFixClick: (Int) -> Unit,
 ) {
     testSuiteState.tests.forEachIndexed { index, testState ->
         TroubleshootTestView(
             testState = testState,
-            onQuickFixClicked = {
-                onQuickFixClicked(index)
+            onQuickFixClick = {
+                onQuickFixClick(index)
             },
         )
     }
@@ -218,6 +218,6 @@ internal fun TroubleshootNotificationsViewPreview(
 ) = ElementPreview {
     TroubleshootNotificationsView(
         state = state,
-        onBackPressed = {},
+        onBackClick = {},
     )
 }

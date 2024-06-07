@@ -6,6 +6,7 @@
   <string name="screen_advanced_settings_element_call_base_url">"Базовый URL сервера звонков Element"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Задайте свой сервер Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Адрес указан неверно, удостоверьтесь, что вы указали протокол (http/https) и правильный адрес."</string>
+  <string name="screen_advanced_settings_push_provider_android">"Поставщик push-уведомлений"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Отключить редактор форматированного текста и включить Markdown."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Уведомления о прочтении"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Если этот параметр выключен, ваш статус о прочтении не будет отображаться. Вы по-прежнему будете видеть статус о прочтении от других пользователей."</string>

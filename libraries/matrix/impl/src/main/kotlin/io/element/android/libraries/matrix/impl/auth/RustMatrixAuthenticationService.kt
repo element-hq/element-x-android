@@ -25,8 +25,13 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
+import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
+import io.element.android.libraries.matrix.impl.auth.qrlogin.QrErrorMapper
+import io.element.android.libraries.matrix.impl.auth.qrlogin.SdkQrCodeLoginData
+import io.element.android.libraries.matrix.impl.auth.qrlogin.toStep
 import io.element.android.libraries.matrix.impl.certificates.UserCertificatesProvider
 import io.element.android.libraries.matrix.impl.exception.mapClientException
 import io.element.android.libraries.matrix.impl.keys.PassphraseGenerator
@@ -36,11 +41,16 @@ import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionStore
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.HumanQrLoginException
 import org.matrix.rustcomponents.sdk.OidcAuthenticationData
+import org.matrix.rustcomponents.sdk.QrCodeDecodeException
+import org.matrix.rustcomponents.sdk.QrLoginProgress
+import org.matrix.rustcomponents.sdk.QrLoginProgressListener
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
@@ -196,5 +206,44 @@ class RustMatrixAuthenticationService @Inject constructor(
                 failure.mapAuthenticationException()
             }
         }
+    }
+
+    override suspend fun loginWithQrCode(qrCodeData: MatrixQrCodeLoginData, progress: (QrCodeLoginStep) -> Unit) =
+        withContext(coroutineDispatchers.io) {
+            runCatching {
+                val client = rustMatrixClientFactory.getBaseClientBuilder()
+                    .passphrase(pendingPassphrase)
+                    .buildWithQrCode(
+                        qrCodeData = (qrCodeData as SdkQrCodeLoginData).rustQrCodeData,
+                        oidcConfiguration = oidcConfiguration,
+                        progressListener = object : QrLoginProgressListener {
+                            override fun onUpdate(state: QrLoginProgress) {
+                                Timber.d("QR Code login progress: $state")
+                                progress(state.toStep())
+                            }
+                        }
+                    )
+                client.use { rustClient ->
+                    val sessionData = rustClient.session()
+                        .toSessionData(
+                            isTokenValid = true,
+                            loginType = LoginType.QR,
+                            passphrase = pendingPassphrase,
+                        )
+                    sessionStore.storeData(sessionData)
+                    SessionId(sessionData.userId)
+                }
+            }.mapFailure {
+                when (it) {
+                    is QrCodeDecodeException -> QrErrorMapper.map(it)
+                    is HumanQrLoginException -> QrErrorMapper.map(it)
+                    else -> it
+                }
+            }.onFailure { throwable ->
+                if (throwable is CancellationException) {
+                    throw throwable
+                }
+                Timber.e(throwable, "Failed to login with QR code")
+            }
     }
 }

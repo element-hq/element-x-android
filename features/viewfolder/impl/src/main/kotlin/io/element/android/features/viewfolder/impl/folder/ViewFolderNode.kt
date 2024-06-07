@@ -42,7 +42,7 @@ class ViewFolderNode @AssistedInject constructor(
     ) : NodeInputs
 
     interface Callback : Plugin {
-        fun onBackPressed()
+        fun onBackClick()
         fun onNavigateTo(item: Item)
     }
 
@@ -53,8 +53,8 @@ class ViewFolderNode @AssistedInject constructor(
         path = inputs.path,
     )
 
-    private fun onBackPressed() {
-        plugins<Callback>().forEach { it.onBackPressed() }
+    private fun onBackClick() {
+        plugins<Callback>().forEach { it.onBackClick() }
     }
 
     private fun onNavigateTo(item: Item) {
@@ -68,7 +68,7 @@ class ViewFolderNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             onNavigateTo = ::onNavigateTo,
-            onBackPressed = ::onBackPressed,
+            onBackClick = ::onBackClick,
         )
     }
 }

@@ -53,7 +53,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun SelectedUser(
     matrixUser: MatrixUser,
     canRemove: Boolean,
-    onUserRemoved: (MatrixUser) -> Unit,
+    onUserRemove: (MatrixUser) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -83,7 +83,7 @@ fun SelectedUser(
                     .clickable(
                         indication = rememberRipple(),
                         interactionSource = remember { MutableInteractionSource() },
-                        onClick = { onUserRemoved(matrixUser) }
+                        onClick = { onUserRemove(matrixUser) }
                     ),
             ) {
                 Icon(
@@ -103,7 +103,7 @@ internal fun SelectedUserPreview() = ElementPreview {
     SelectedUser(
         aMatrixUser(displayName = "John Doe"),
         canRemove = true,
-        onUserRemoved = {},
+        onUserRemove = {},
     )
 }
 
@@ -113,6 +113,6 @@ internal fun SelectedUserCannotRemovePreview() = ElementPreview {
     SelectedUser(
         aMatrixUser(),
         canRemove = false,
-        onUserRemoved = {},
+        onUserRemove = {},
     )
 }

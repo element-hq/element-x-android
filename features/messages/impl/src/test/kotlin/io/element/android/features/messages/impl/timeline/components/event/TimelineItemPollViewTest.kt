@@ -57,7 +57,7 @@ class TimelineItemPollViewTest {
         }
         val answer = content.answerItems[answerIndex].answer
         rule.onNode(hasText(answer.text)).performClick()
-        eventsRecorder.assertSingle(TimelineEvents.PollAnswerSelected(content.eventId!!, answer.id))
+        eventsRecorder.assertSingle(TimelineEvents.SelectPollAnswer(content.eventId!!, answer.id))
     }
 
     @Test
@@ -74,7 +74,7 @@ class TimelineItemPollViewTest {
             )
         }
         rule.clickOn(CommonStrings.action_edit_poll)
-        eventsRecorder.assertSingle(TimelineEvents.PollEditClicked(content.eventId!!))
+        eventsRecorder.assertSingle(TimelineEvents.EditPoll(content.eventId!!))
     }
 
     @Test
@@ -93,6 +93,6 @@ class TimelineItemPollViewTest {
         // A confirmation dialog should be shown
         eventsRecorder.assertEmpty()
         rule.pressTag(TestTags.dialogPositive.value)
-        eventsRecorder.assertSingle(TimelineEvents.PollEndClicked(content.eventId!!))
+        eventsRecorder.assertSingle(TimelineEvents.EndPoll(content.eventId!!))
     }
 }

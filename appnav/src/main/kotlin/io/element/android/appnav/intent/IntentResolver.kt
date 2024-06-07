@@ -30,6 +30,7 @@ sealed interface ResolvedIntent {
     data class Navigation(val deeplinkData: DeeplinkData) : ResolvedIntent
     data class Oidc(val oidcAction: OidcAction) : ResolvedIntent
     data class Permalink(val permalinkData: PermalinkData) : ResolvedIntent
+    data class IncomingShare(val intent: Intent) : ResolvedIntent
 }
 
 class IntentResolver @Inject constructor(
@@ -55,6 +56,10 @@ class IntentResolver @Inject constructor(
             ?.let { permalinkParser.parse(it) }
             ?.takeIf { it !is PermalinkData.FallbackLink }
         if (permalinkData != null) return ResolvedIntent.Permalink(permalinkData)
+
+        if (intent.action == Intent.ACTION_SEND || intent.action == Intent.ACTION_SEND_MULTIPLE) {
+            return ResolvedIntent.IncomingShare(intent)
+        }
 
         // Unknown intent
         Timber.w("Unknown intent")

@@ -30,8 +30,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun LogoutActionDialog(
     state: AsyncAction<String?>,
-    onConfirmClicked: () -> Unit,
-    onForceLogoutClicked: () -> Unit,
+    onConfirmClick: () -> Unit,
+    onForceLogoutClick: () -> Unit,
     onDismissDialog: () -> Unit,
     onSuccessLogout: (String?) -> Unit,
 ) {
@@ -40,7 +40,7 @@ fun LogoutActionDialog(
             Unit
         AsyncAction.Confirming ->
             LogoutConfirmationDialog(
-                onSubmitClicked = onConfirmClicked,
+                onSubmitClick = onConfirmClick,
                 onDismiss = onDismissDialog
             )
         is AsyncAction.Loading ->
@@ -50,7 +50,7 @@ fun LogoutActionDialog(
                 title = stringResource(id = CommonStrings.dialog_title_error),
                 content = stringResource(id = CommonStrings.error_unknown),
                 retryText = stringResource(id = CommonStrings.action_signout_anyway),
-                onRetry = onForceLogoutClicked,
+                onRetry = onForceLogoutClick,
                 onDismiss = onDismissDialog,
             )
         is AsyncAction.Success -> {

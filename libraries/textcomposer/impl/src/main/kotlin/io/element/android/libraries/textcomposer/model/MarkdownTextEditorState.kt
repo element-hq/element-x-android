@@ -16,14 +16,19 @@
 
 package io.element.android.libraries.textcomposer.model
 
+import android.os.Parcelable
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.SaverScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.core.text.getSpans
 import io.element.android.libraries.matrix.api.core.UserId
@@ -33,6 +38,7 @@ import io.element.android.libraries.textcomposer.components.markdown.StableCharS
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
+import kotlinx.parcelize.Parcelize
 
 @Stable
 class MarkdownTextEditorState(
@@ -119,4 +125,39 @@ class MarkdownTextEditorState(
             }
         }
     }
+
+    @Parcelize
+    data class SavedState(
+        val text: CharSequence,
+        val selectionStart: Int,
+        val selectionEnd: Int,
+    ) : Parcelable
+}
+
+object MarkdownTextEditorStateSaver : Saver<MarkdownTextEditorState, MarkdownTextEditorState.SavedState> {
+    override fun restore(value: MarkdownTextEditorState.SavedState): MarkdownTextEditorState {
+        return MarkdownTextEditorState(
+            initialText = "",
+            initialFocus = false,
+        ).apply {
+            text.update(value.text, true)
+            selection = value.selectionStart..value.selectionEnd
+        }
+    }
+
+    override fun SaverScope.save(value: MarkdownTextEditorState): MarkdownTextEditorState.SavedState {
+        return MarkdownTextEditorState.SavedState(
+            text = value.text.value(),
+            selectionStart = value.selection.first,
+            selectionEnd = value.selection.last,
+        )
+    }
+}
+
+@Composable
+fun rememberMarkdownTextEditorState(
+    initialText: String? = null,
+    initialFocus: Boolean = false,
+): MarkdownTextEditorState {
+    return rememberSaveable(saver = MarkdownTextEditorStateSaver) { MarkdownTextEditorState(initialText, initialFocus) }
 }

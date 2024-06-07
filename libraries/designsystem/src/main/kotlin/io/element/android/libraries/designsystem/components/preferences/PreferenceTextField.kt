@@ -114,7 +114,7 @@ private fun TextFieldDialog(
             TextFieldListItem(
                 placeholder = placeholder.orEmpty(),
                 text = textFieldContents,
-                onTextChanged = {
+                onTextChange = {
                     error = if (!validation(it.text)) onValidationErrorMessage else null
                     textFieldContents = it
                 },

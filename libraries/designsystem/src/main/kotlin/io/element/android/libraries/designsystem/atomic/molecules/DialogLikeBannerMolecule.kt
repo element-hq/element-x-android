@@ -45,8 +45,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun DialogLikeBannerMolecule(
     title: String,
     content: String,
-    onSubmitClicked: () -> Unit,
-    onDismissClicked: (() -> Unit)?,
+    onSubmitClick: () -> Unit,
+    onDismissClick: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
@@ -68,9 +68,9 @@ fun DialogLikeBannerMolecule(
                         color = MaterialTheme.colorScheme.primary,
                         textAlign = TextAlign.Start,
                     )
-                    if (onDismissClicked != null) {
+                    if (onDismissClick != null) {
                         Icon(
-                            modifier = Modifier.clickable(onClick = onDismissClicked),
+                            modifier = Modifier.clickable(onClick = onDismissClick),
                             imageVector = CompoundIcons.Close(),
                             contentDescription = stringResource(CommonStrings.action_close)
                         )
@@ -86,7 +86,7 @@ fun DialogLikeBannerMolecule(
                     text = stringResource(CommonStrings.action_continue),
                     size = ButtonSize.Medium,
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = onSubmitClicked,
+                    onClick = onSubmitClick,
                 )
             }
         }
@@ -99,7 +99,7 @@ internal fun DialogLikeBannerMoleculePreview() = ElementPreview {
     DialogLikeBannerMolecule(
         title = "Title",
         content = "Content",
-        onSubmitClicked = {},
-        onDismissClicked = {}
+        onSubmitClick = {},
+        onDismissClick = {}
     )
 }

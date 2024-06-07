@@ -51,13 +51,13 @@ import io.element.android.libraries.matrix.api.core.RoomId
 @Composable
 fun RoomListView(
     state: RoomListState,
-    onRoomClicked: (RoomId) -> Unit,
-    onSettingsClicked: () -> Unit,
-    onConfirmRecoveryKeyClicked: () -> Unit,
-    onCreateRoomClicked: () -> Unit,
-    onRoomSettingsClicked: (roomId: RoomId) -> Unit,
-    onMenuActionClicked: (RoomListMenuAction) -> Unit,
-    onRoomDirectorySearchClicked: () -> Unit,
+    onRoomClick: (RoomId) -> Unit,
+    onSettingsClick: () -> Unit,
+    onConfirmRecoveryKeyClick: () -> Unit,
+    onCreateRoomClick: () -> Unit,
+    onRoomSettingsClick: (roomId: RoomId) -> Unit,
+    onMenuActionClick: (RoomListMenuAction) -> Unit,
+    onRoomDirectorySearchClick: () -> Unit,
     modifier: Modifier = Modifier,
     acceptDeclineInviteView: @Composable () -> Unit,
 ) {
@@ -70,7 +70,7 @@ fun RoomListView(
                 RoomListContextMenu(
                     contextMenu = state.contextMenu,
                     eventSink = state.eventSink,
-                    onRoomSettingsClicked = onRoomSettingsClicked,
+                    onRoomSettingsClick = onRoomSettingsClick,
                 )
             }
 
@@ -78,19 +78,19 @@ fun RoomListView(
 
             RoomListScaffold(
                 state = state,
-                onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
-                onRoomClicked = onRoomClicked,
-                onOpenSettings = onSettingsClicked,
-                onCreateRoomClicked = onCreateRoomClicked,
-                onMenuActionClicked = onMenuActionClicked,
+                onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
+                onRoomClick = onRoomClick,
+                onOpenSettings = onSettingsClick,
+                onCreateRoomClick = onCreateRoomClick,
+                onMenuActionClick = onMenuActionClick,
                 modifier = Modifier.padding(top = topPadding),
             )
             // This overlaid view will only be visible when state.displaySearchResults is true
             RoomListSearchView(
                 state = state.searchState,
                 eventSink = state.eventSink,
-                onRoomClicked = onRoomClicked,
-                onRoomDirectorySearchClicked = onRoomDirectorySearchClicked,
+                onRoomClick = onRoomClick,
+                onRoomDirectorySearchClick = onRoomDirectorySearchClick,
                 modifier = Modifier
                     .statusBarsPadding()
                     .padding(top = topPadding)
@@ -106,15 +106,15 @@ fun RoomListView(
 @Composable
 private fun RoomListScaffold(
     state: RoomListState,
-    onConfirmRecoveryKeyClicked: () -> Unit,
-    onRoomClicked: (RoomId) -> Unit,
+    onConfirmRecoveryKeyClick: () -> Unit,
+    onRoomClick: (RoomId) -> Unit,
     onOpenSettings: () -> Unit,
-    onCreateRoomClicked: () -> Unit,
-    onMenuActionClicked: (RoomListMenuAction) -> Unit,
+    onCreateRoomClick: () -> Unit,
+    onMenuActionClick: (RoomListMenuAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    fun onRoomClicked(room: RoomListRoomSummary) {
-        onRoomClicked(room.roomId)
+    fun onRoomClick(room: RoomListRoomSummary) {
+        onRoomClick(room.roomId)
     }
 
     val appBarState = rememberTopAppBarState()
@@ -129,7 +129,7 @@ private fun RoomListScaffold(
                 showAvatarIndicator = state.showAvatarIndicator,
                 areSearchResultsDisplayed = state.searchState.isSearchActive,
                 onToggleSearch = { state.eventSink(RoomListEvents.ToggleSearchResults) },
-                onMenuActionClicked = onMenuActionClicked,
+                onMenuActionClick = onMenuActionClick,
                 onOpenSettings = onOpenSettings,
                 scrollBehavior = scrollBehavior,
                 displayMenuItems = state.displayActions,
@@ -142,9 +142,9 @@ private fun RoomListScaffold(
                 contentState = state.contentState,
                 filtersState = state.filtersState,
                 eventSink = state.eventSink,
-                onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
-                onRoomClicked = ::onRoomClicked,
-                onCreateRoomClicked = onCreateRoomClicked,
+                onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
+                onRoomClick = ::onRoomClick,
+                onCreateRoomClick = onCreateRoomClick,
                 modifier = Modifier
                     .padding(padding)
                     .consumeWindowInsets(padding)
@@ -155,7 +155,7 @@ private fun RoomListScaffold(
                 FloatingActionButton(
                     // FIXME align on Design system theme
                     containerColor = MaterialTheme.colorScheme.primary,
-                    onClick = onCreateRoomClicked
+                    onClick = onCreateRoomClick
                 ) {
                     Icon(
                         // Note cannot use Icons.Outlined.EditSquare, it does not exist :/
@@ -176,13 +176,13 @@ internal fun RoomListRoomSummary.contentType() = displayType.ordinal
 internal fun RoomListViewPreview(@PreviewParameter(RoomListStateProvider::class) state: RoomListState) = ElementPreview {
     RoomListView(
         state = state,
-        onRoomClicked = {},
-        onSettingsClicked = {},
-        onConfirmRecoveryKeyClicked = {},
-        onCreateRoomClicked = {},
-        onRoomSettingsClicked = {},
-        onMenuActionClicked = {},
-        onRoomDirectorySearchClicked = {},
+        onRoomClick = {},
+        onSettingsClick = {},
+        onConfirmRecoveryKeyClick = {},
+        onCreateRoomClick = {},
+        onRoomSettingsClick = {},
+        onMenuActionClick = {},
+        onRoomDirectorySearchClick = {},
         acceptDeclineInviteView = {},
     )
 }

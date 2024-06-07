@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 plugins {
-    id("io.element.android-library")
+    id("io.element.android-compose-library")
 }
 
 android {
@@ -24,5 +24,6 @@ android {
 dependencies {
     implementation(projects.services.analytics.api)
     implementation(projects.libraries.core)
+    implementation(projects.tests.testutils)
     implementation(libs.coroutines.core)
 }

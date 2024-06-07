@@ -35,8 +35,8 @@
   <string name="screen_room_details_add_topic_title">"Дадаць тэму"</string>
   <string name="screen_room_details_already_a_member">"Ужо ўдзельнік"</string>
   <string name="screen_room_details_already_invited">"Ужо запрасілі"</string>
-  <string name="screen_room_details_badge_encrypted">"Зашыфравана"</string>
-  <string name="screen_room_details_badge_not_encrypted">"Не зашыфравана"</string>
+  <string name="screen_room_details_badge_encrypted">"Зашыфраваны"</string>
+  <string name="screen_room_details_badge_not_encrypted">"Не зашыфраваны"</string>
   <string name="screen_room_details_badge_public">"Публічны пакой"</string>
   <string name="screen_room_details_edit_room_title">"Рэдагаваць пакой"</string>
   <string name="screen_room_details_edition_error">"Адбылася невядомая памылка, і інфармацыю нельга было змяніць."</string>
@@ -46,7 +46,7 @@
   <string name="screen_room_details_error_loading_notification_settings">"Пры загрузцы налад апавяшчэнняў адбылася памылка."</string>
   <string name="screen_room_details_error_muting">"Не атрымалася адключыць гук у гэтым пакоі, паўтарыце спробу."</string>
   <string name="screen_room_details_error_unmuting">"Не ўдалося ўключыць гук у гэтым пакоі. Паўтарыце спробу."</string>
-  <string name="screen_room_details_invite_people_title">"Запрасіць карыстальникаў"</string>
+  <string name="screen_room_details_invite_people_title">"Запрасіць карыстальнікаў"</string>
   <string name="screen_room_details_leave_conversation_title">"Пакінуць размову"</string>
   <string name="screen_room_details_leave_room_title">"Пакінуць пакой"</string>
   <string name="screen_room_details_notification_mode_custom">"Уласныя"</string>
@@ -66,7 +66,7 @@
   <string name="screen_room_member_list_banning_user">"Блакіроўка %1$s"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d удзельнік"</item>
-    <item quantity="few">"%1$d удзельніка"</item>
+    <item quantity="few">"%1$d удзельнікі"</item>
     <item quantity="many">"%1$d удзельнікаў"</item>
   </plurals>
   <string name="screen_room_member_list_manage_member_ban">"Выдаліць і заблакіраваць удзельніка"</string>
@@ -77,7 +77,7 @@
   <string name="screen_room_member_list_manage_member_unban_action">"Разблакіраваць"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Яны змогуць зноў далучыцца да гэтага пакоя, калі іх запросяць."</string>
   <string name="screen_room_member_list_manage_member_unban_title">"Разблакіраваць удзельніка"</string>
-  <string name="screen_room_member_list_manage_member_user_info">"Інфармацыя пра ўдзельніка"</string>
+  <string name="screen_room_member_list_manage_member_user_info">"Прагляд профілю"</string>
   <string name="screen_room_member_list_mode_banned">"Заблакіраваны"</string>
   <string name="screen_room_member_list_mode_members">"Удзельнікі"</string>
   <string name="screen_room_member_list_pending_header_title">"У чаканні"</string>

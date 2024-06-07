@@ -17,52 +17,48 @@
 package io.element.android.libraries.push.impl.notifications
 
 import android.app.Notification
-import androidx.core.app.NotificationCompat
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.R
-import io.element.android.libraries.push.impl.notifications.debug.annotateForDebug
 import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
 import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
+
+interface SummaryGroupMessageCreator {
+    fun createSummaryNotification(
+        currentUser: MatrixUser,
+        roomNotifications: List<RoomNotification>,
+        invitationNotifications: List<OneShotNotification>,
+        simpleNotifications: List<OneShotNotification>,
+        fallbackNotifications: List<OneShotNotification>,
+    ): Notification
+}
 
 /**
  * ======== Build summary notification =========
  * On Android 7.0 (API level 24) and higher, the system automatically builds a summary for
  * your group using snippets of text from each notification. The user can expand this
  * notification to see each separate notification.
- * To support older versions, which cannot show a nested group of notifications,
- * you must create an extra notification that acts as the summary.
- * This appears as the only notification and the system hides all the others.
- * So this summary should include a snippet from all the other notifications,
- * which the user can tap to open your app.
  * The behavior of the group summary may vary on some device types such as wearables.
  * To ensure the best experience on all devices and versions, always include a group summary when you create a group
  * https://developer.android.com/training/notify-user/group
  */
-class SummaryGroupMessageCreator @Inject constructor(
+@ContributesBinding(AppScope::class)
+class DefaultSummaryGroupMessageCreator @Inject constructor(
     private val stringProvider: StringProvider,
     private val notificationCreator: NotificationCreator,
-) {
-    fun createSummaryNotification(
+) : SummaryGroupMessageCreator {
+    override fun createSummaryNotification(
         currentUser: MatrixUser,
-        roomNotifications: List<RoomNotification.Message.Meta>,
-        invitationNotifications: List<OneShotNotification.Append.Meta>,
-        simpleNotifications: List<OneShotNotification.Append.Meta>,
-        fallbackNotifications: List<OneShotNotification.Append.Meta>,
-        useCompleteNotificationFormat: Boolean
+        roomNotifications: List<RoomNotification>,
+        invitationNotifications: List<OneShotNotification>,
+        simpleNotifications: List<OneShotNotification>,
+        fallbackNotifications: List<OneShotNotification>,
     ): Notification {
-        val summaryInboxStyle = NotificationCompat.InboxStyle().also { style ->
-            roomNotifications.forEach { style.addLine(it.summaryLine.annotateForDebug(40)) }
-            invitationNotifications.forEach { style.addLine(it.summaryLine.annotateForDebug(41)) }
-            simpleNotifications.forEach { style.addLine(it.summaryLine.annotateForDebug(42)) }
-            fallbackNotifications.forEach { style.addLine(it.summaryLine) }
-        }
-
         val summaryIsNoisy = roomNotifications.any { it.shouldBing } ||
             invitationNotifications.any { it.isNoisy } ||
             simpleNotifications.any { it.isNoisy }
-
-        val messageCount = roomNotifications.fold(initial = 0) { acc, current -> acc + current.messageCount }
 
         val lastMessageTimestamp = roomNotifications.lastOrNull()?.latestTimestamp
             ?: invitationNotifications.lastOrNull()?.timestamp
@@ -71,109 +67,9 @@ class SummaryGroupMessageCreator @Inject constructor(
         // FIXME roomIdToEventMap.size is not correct, this is the number of rooms
         val nbEvents = roomNotifications.size + simpleNotifications.size
         val sumTitle = stringProvider.getQuantityString(R.plurals.notification_compat_summary_title, nbEvents, nbEvents)
-        summaryInboxStyle.setBigContentTitle(sumTitle.annotateForDebug(43))
-            // .setSummaryText(stringProvider.getQuantityString(R.plurals.notification_unread_notified_messages, nbEvents, nbEvents).annotateForDebug(44))
-            // Use account name now, for multi-session
-            .setSummaryText(currentUser.userId.value.annotateForDebug(44))
-        return if (useCompleteNotificationFormat) {
-            notificationCreator.createSummaryListNotification(
-                currentUser,
-                summaryInboxStyle,
-                sumTitle,
-                noisy = summaryIsNoisy,
-                lastMessageTimestamp = lastMessageTimestamp
-            )
-        } else {
-            processSimpleGroupSummary(
-                currentUser,
-                summaryIsNoisy,
-                messageCount,
-                simpleNotifications.size,
-                invitationNotifications.size,
-                roomNotifications.size,
-                lastMessageTimestamp
-            )
-        }
-    }
-
-    private fun processSimpleGroupSummary(
-        currentUser: MatrixUser,
-        summaryIsNoisy: Boolean,
-        messageEventsCount: Int,
-        simpleEventsCount: Int,
-        invitationEventsCount: Int,
-        roomCount: Int,
-        lastMessageTimestamp: Long
-    ): Notification {
-        // Add the simple events as message (?)
-        val messageNotificationCount = messageEventsCount + simpleEventsCount
-
-        val privacyTitle = if (invitationEventsCount > 0) {
-            val invitationsStr = stringProvider.getQuantityString(
-                R.plurals.notification_invitations,
-                invitationEventsCount,
-                invitationEventsCount
-            )
-            if (messageNotificationCount > 0) {
-                // Invitation and message
-                val messageStr = stringProvider.getQuantityString(
-                    R.plurals.notification_new_messages_for_room,
-                    messageNotificationCount,
-                    messageNotificationCount
-                )
-                if (roomCount > 1) {
-                    // In several rooms
-                    val roomStr = stringProvider.getQuantityString(
-                        R.plurals.notification_unread_notified_messages_in_room_rooms,
-                        roomCount,
-                        roomCount
-                    )
-                    stringProvider.getString(
-                        R.string.notification_unread_notified_messages_in_room_and_invitation,
-                        messageStr,
-                        roomStr,
-                        invitationsStr
-                    )
-                } else {
-                    // In one room
-                    stringProvider.getString(
-                        R.string.notification_unread_notified_messages_and_invitation,
-                        messageStr,
-                        invitationsStr
-                    )
-                }
-            } else {
-                // Only invitation
-                invitationsStr
-            }
-        } else {
-            // No invitation, only messages
-            val messageStr = stringProvider.getQuantityString(
-                R.plurals.notification_new_messages_for_room,
-                messageNotificationCount,
-                messageNotificationCount
-            )
-            if (roomCount > 1) {
-                // In several rooms
-                val roomStr = stringProvider.getQuantityString(
-                    R.plurals.notification_unread_notified_messages_in_room_rooms,
-                    roomCount,
-                    roomCount
-                )
-                stringProvider.getString(
-                    R.string.notification_unread_notified_messages_in_room,
-                    messageStr,
-                    roomStr
-                )
-            } else {
-                // In one room
-                messageStr
-            }
-        }
         return notificationCreator.createSummaryListNotification(
-            currentUser = currentUser,
-            style = null,
-            compatSummary = privacyTitle,
+            currentUser,
+            sumTitle,
             noisy = summaryIsNoisy,
             lastMessageTimestamp = lastMessageTimestamp
         )

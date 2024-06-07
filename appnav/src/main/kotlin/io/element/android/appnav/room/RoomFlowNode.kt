@@ -217,7 +217,7 @@ class RoomFlowNode @AssistedInject constructor(
         LoadingRoomNodeView(
             state = LoadingRoomState.Loading,
             hasNetworkConnection = networkStatus == NetworkStatus.Online,
-            onBackClicked = { navigateUp() },
+            onBackClick = { navigateUp() },
             modifier = modifier,
         )
     }

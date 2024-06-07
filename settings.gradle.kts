@@ -36,19 +36,21 @@ dependencyResolutionManagement {
                 includeModule("io.element.android", "wysiwyg-compose")
             }
         }
+        // To have immediate access to Rust SDK versions without a sync with Maven Central
+        maven {
+            url = URI("https://s01.oss.sonatype.org/content/repositories/releases")
+            content {
+                includeModule("org.matrix.rustcomponents", "sdk-android")
+            }
+        }
         google()
         mavenCentral()
-        maven { url = URI("https://oss.sonatype.org/content/repositories/snapshots/") }
         maven {
             url = URI("https://www.jitpack.io")
             content {
                 includeModule("com.github.UnifiedPush", "android-connector")
                 includeModule("com.github.matrix-org", "matrix-analytics-events")
             }
-        }
-        // To have immediate access to Rust SDK versions
-        maven {
-            url = URI("https://s01.oss.sonatype.org/content/repositories/releases")
         }
         flatDir {
             dirs("libraries/matrix/libs")

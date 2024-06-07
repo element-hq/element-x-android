@@ -73,7 +73,7 @@ fun EventDebugInfoView(
     model: String,
     originalJson: String?,
     latestEditedJson: String?,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     isTest: Boolean = false,
 ) {
@@ -87,7 +87,7 @@ fun EventDebugInfoView(
                         style = ElementTheme.typography.aliasScreenTitle,
                     )
                 },
-                navigationIcon = { BackButton(onClick = onBackPressed) }
+                navigationIcon = { BackButton(onClick = onBackClick) }
             )
         },
         modifier = modifier
@@ -190,6 +190,6 @@ internal fun EventDebugInfoViewPreview() = ElementPreview {
         model = "Rust(\n\tModel()\n)",
         originalJson = "{\"name\": \"original\"}",
         latestEditedJson = "{\"name\": \"edited\"}",
-        onBackPressed = { }
+        onBackClick = { }
     )
 }

@@ -22,26 +22,79 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.MessagingStyle
+import androidx.core.app.Person
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import coil.ImageLoader
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.appconfig.NotificationConfig
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.utils.CommonDrawables
+import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.impl.R
+import io.element.android.libraries.push.impl.notifications.NotificationBitmapLoader
 import io.element.android.libraries.push.impl.notifications.RoomEventGroupInfo
 import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels
 import io.element.android.libraries.push.impl.notifications.debug.annotateForDebug
+import io.element.android.libraries.push.impl.notifications.factories.action.AcceptInvitationActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.MarkAsReadActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.QuickReplyActionFactory
+import io.element.android.libraries.push.impl.notifications.factories.action.RejectInvitationActionFactory
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
+import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
 
-class NotificationCreator @Inject constructor(
+interface NotificationCreator {
+    /**
+     * Create a notification for a Room.
+     */
+    suspend fun createMessagesListNotification(
+        roomInfo: RoomEventGroupInfo,
+        threadId: ThreadId?,
+        largeIcon: Bitmap?,
+        lastMessageTimestamp: Long,
+        tickerText: String,
+        currentUser: MatrixUser,
+        existingNotification: Notification?,
+        imageLoader: ImageLoader,
+        events: List<NotifiableMessageEvent>,
+    ): Notification
+
+    fun createRoomInvitationNotification(
+        inviteNotifiableEvent: InviteNotifiableEvent
+    ): Notification
+
+    fun createSimpleEventNotification(
+        simpleNotifiableEvent: SimpleNotifiableEvent,
+    ): Notification
+
+    fun createFallbackNotification(
+        fallbackNotifiableEvent: FallbackNotifiableEvent,
+    ): Notification
+
+    /**
+     * Create the summary notification.
+     */
+    fun createSummaryListNotification(
+        currentUser: MatrixUser,
+        compatSummary: String,
+        noisy: Boolean,
+        lastMessageTimestamp: Long
+    ): Notification
+
+    fun createDiagnosticNotification(): Notification
+}
+
+@ContributesBinding(AppScope::class)
+class DefaultNotificationCreator @Inject constructor(
     @ApplicationContext private val context: Context,
     private val notificationChannels: NotificationChannels,
     private val stringProvider: StringProvider,
@@ -49,17 +102,23 @@ class NotificationCreator @Inject constructor(
     private val pendingIntentFactory: PendingIntentFactory,
     private val markAsReadActionFactory: MarkAsReadActionFactory,
     private val quickReplyActionFactory: QuickReplyActionFactory,
-) {
+    private val bitmapLoader: NotificationBitmapLoader,
+    private val acceptInvitationActionFactory: AcceptInvitationActionFactory,
+    private val rejectInvitationActionFactory: RejectInvitationActionFactory
+) : NotificationCreator {
     /**
      * Create a notification for a Room.
      */
-    fun createMessagesListNotification(
-        messageStyle: NotificationCompat.MessagingStyle,
+    override suspend fun createMessagesListNotification(
         roomInfo: RoomEventGroupInfo,
         threadId: ThreadId?,
         largeIcon: Bitmap?,
         lastMessageTimestamp: Long,
-        tickerText: String
+        tickerText: String,
+        currentUser: MatrixUser,
+        existingNotification: Notification?,
+        imageLoader: ImageLoader,
+        events: List<NotifiableMessageEvent>,
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
@@ -71,17 +130,39 @@ class NotificationCreator @Inject constructor(
         val smallIcon = CommonDrawables.ic_notification_small
 
         val channelId = notificationChannels.getChannelIdForMessage(roomInfo.shouldBing)
-        return NotificationCompat.Builder(context, channelId)
+        val builder = if (existingNotification != null) {
+            NotificationCompat.Builder(context, existingNotification)
+        } else {
+            NotificationCompat.Builder(context, channelId)
+                .setOnlyAlertOnce(roomInfo.isUpdated)
+                // A category allows groups of notifications to be ranked and filtered – per user or system settings.
+                // For example, alarm notifications should display before promo notifications, or message from known contact
+                // that can be displayed in not disturb mode if white listed (the later will need compat28.x)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                // ID of the corresponding shortcut, for conversation features under API 30+
+                .setShortcutId(roomInfo.roomId.value)
+                // Auto-bundling is enabled for 4 or more notifications on API 24+ (N+)
+                // devices and all Wear devices. But we want a custom grouping, so we specify the groupID
+                .setGroup(roomInfo.sessionId.value)
+                // In order to avoid notification making sound twice (due to the summary notification)
+                .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
+                // Remove notification after opening it or using an action
+                .setAutoCancel(true)
+        }
+
+        val messagingStyle = existingNotification?.let {
+            MessagingStyle.extractMessagingStyleFromNotification(it)
+        } ?: messagingStyleFromCurrentUser(roomInfo.sessionId, currentUser, imageLoader, roomInfo.roomDisplayName, !roomInfo.isDirect)
+
+        messagingStyle.addMessagesFromEvents(events, imageLoader)
+
+        return builder
+            .setNumber(events.size)
             .setOnlyAlertOnce(roomInfo.isUpdated)
             .setWhen(lastMessageTimestamp)
             // MESSAGING_STYLE sets title and content for API 16 and above devices.
-            .setStyle(messageStyle)
-            // A category allows groups of notifications to be ranked and filtered – per user or system settings.
-            // For example, alarm notifications should display before promo notifications, or message from known contact
-            // that can be displayed in not disturb mode if white listed (the later will need compat28.x)
-            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-            // ID of the corresponding shortcut, for conversation features under API 30+
-            .setShortcutId(roomInfo.roomId.value)
+            .setStyle(messagingStyle)
+            // Not needed anymore?
             // Title for API < 16 devices.
             .setContentTitle(roomInfo.roomDisplayName.annotateForDebug(1))
             // Content for API < 16 devices.
@@ -90,15 +171,10 @@ class NotificationCreator @Inject constructor(
             .setSubText(
                 stringProvider.getQuantityString(
                     R.plurals.notification_new_messages_for_room,
-                    messageStyle.messages.size,
-                    messageStyle.messages.size
+                    messagingStyle.messages.size,
+                    messagingStyle.messages.size
                 ).annotateForDebug(3)
             )
-            // Auto-bundling is enabled for 4 or more notifications on API 24+ (N+)
-            // devices and all Wear devices. But we want a custom grouping, so we specify the groupID
-            .setGroup(roomInfo.sessionId.value)
-            // In order to avoid notification making sound twice (due to the summary notification)
-            .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
             .setSmallIcon(smallIcon)
             // Set primary color (important for Wear 2.0 Notifications).
             .setColor(accentColor)
@@ -118,7 +194,8 @@ class NotificationCreator @Inject constructor(
                 } else {
                     priority = NotificationCompat.PRIORITY_LOW
                 }
-
+                // Clear existing actions since we might be updating an existing notification
+                clearActions()
                 // Add actions and notification intents
                 // Mark room as read
                 addAction(markAsReadActionFactory.create(roomInfo))
@@ -134,11 +211,11 @@ class NotificationCreator @Inject constructor(
                 }
                 setDeleteIntent(pendingIntentFactory.createDismissRoomPendingIntent(roomInfo.sessionId, roomInfo.roomId))
             }
-            .setTicker(tickerText.annotateForDebug(4))
+            .setTicker(tickerText)
             .build()
     }
 
-    fun createRoomInvitationNotification(
+    override fun createRoomInvitationNotification(
         inviteNotifiableEvent: InviteNotifiableEvent
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
@@ -152,10 +229,11 @@ class NotificationCreator @Inject constructor(
             .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
             .setSmallIcon(smallIcon)
             .setColor(accentColor)
-            // TODO removed for now, will be added back later
-//            .addAction(rejectInvitationActionFactory.create(inviteNotifiableEvent))
-//            .addAction(acceptInvitationActionFactory.create(inviteNotifiableEvent))
             .apply {
+                if (NotificationConfig.SUPPORT_JOIN_DECLINE_INVITE) {
+                    addAction(rejectInvitationActionFactory.create(inviteNotifiableEvent))
+                    addAction(acceptInvitationActionFactory.create(inviteNotifiableEvent))
+                }
                 // Build the pending intent for when the notification is clicked
                 setContentIntent(pendingIntentFactory.createOpenRoomPendingIntent(inviteNotifiableEvent.sessionId, inviteNotifiableEvent.roomId))
 
@@ -182,7 +260,7 @@ class NotificationCreator @Inject constructor(
             .build()
     }
 
-    fun createSimpleEventNotification(
+    override fun createSimpleEventNotification(
         simpleNotifiableEvent: SimpleNotifiableEvent,
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
@@ -212,12 +290,11 @@ class NotificationCreator @Inject constructor(
                 } else {
                     priority = NotificationCompat.PRIORITY_LOW
                 }
-                setAutoCancel(true)
             }
             .build()
     }
 
-    fun createFallbackNotification(
+    override fun createFallbackNotification(
         fallbackNotifiableEvent: FallbackNotifiableEvent,
     ): Notification {
         val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
@@ -244,19 +321,15 @@ class NotificationCreator @Inject constructor(
                     fallbackNotifiableEvent.eventId
                 )
             )
-            .apply {
-                priority = NotificationCompat.PRIORITY_LOW
-                setAutoCancel(true)
-            }
+            .setPriority(NotificationCompat.PRIORITY_LOW)
             .build()
     }
 
     /**
      * Create the summary notification.
      */
-    fun createSummaryListNotification(
+    override fun createSummaryListNotification(
         currentUser: MatrixUser,
-        style: NotificationCompat.InboxStyle?,
         compatSummary: String,
         noisy: Boolean,
         lastMessageTimestamp: Long
@@ -268,12 +341,9 @@ class NotificationCreator @Inject constructor(
             .setOnlyAlertOnce(true)
             // used in compat < N, after summary is built based on child notifications
             .setWhen(lastMessageTimestamp)
-            .setStyle(style)
-            .setContentTitle(currentUser.userId.value.annotateForDebug(9))
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setSmallIcon(smallIcon)
             // set content text to support devices running API level < 24
-            .setContentText(compatSummary.annotateForDebug(10))
             .setGroup(currentUser.userId.value)
             // set this notification as the summary for the group
             .setGroupSummary(true)
@@ -298,7 +368,7 @@ class NotificationCreator @Inject constructor(
             .build()
     }
 
-    fun createDiagnosticNotification(): Notification {
+    override fun createDiagnosticNotification(): Notification {
         val intent = pendingIntentFactory.createTestPendingIntent()
         return NotificationCompat.Builder(context, notificationChannels.getChannelIdForTest())
             .setContentTitle(buildMeta.applicationName)
@@ -314,6 +384,61 @@ class NotificationCreator @Inject constructor(
             .build()
     }
 
+    private suspend fun MessagingStyle.addMessagesFromEvents(
+        events: List<NotifiableMessageEvent>,
+        imageLoader: ImageLoader,
+    ) {
+        events.forEach { event ->
+            val senderPerson = if (event.outGoingMessage) {
+                null
+            } else {
+                Person.Builder()
+                    .setName(event.senderDisambiguatedDisplayName?.annotateForDebug(70))
+                    .setIcon(bitmapLoader.getUserIcon(event.senderAvatarPath, imageLoader))
+                    .setKey(event.senderId.value)
+                    .build()
+            }
+            when {
+                event.isSmartReplyError() -> addMessage(
+                    stringProvider.getString(R.string.notification_inline_reply_failed),
+                    event.timestamp,
+                    senderPerson
+                )
+                else -> {
+                    val message = MessagingStyle.Message(
+                        event.body?.annotateForDebug(71),
+                        event.timestamp,
+                        senderPerson
+                    ).also { message ->
+                        event.imageUri?.let {
+                            message.setData("image/", it)
+                        }
+                    }
+                    addMessage(message)
+                }
+            }
+        }
+    }
+
+    private suspend fun messagingStyleFromCurrentUser(
+        sessionId: SessionId,
+        user: MatrixUser,
+        imageLoader: ImageLoader,
+        roomName: String,
+        roomIsGroup: Boolean
+    ): MessagingStyle {
+        return MessagingStyle(
+            Person.Builder()
+            .setName(user.displayName?.annotateForDebug(50))
+            .setIcon(bitmapLoader.getUserIcon(user.avatarUrl, imageLoader))
+            .setKey(sessionId.value)
+            .build()
+        ).also {
+            it.conversationTitle = roomName.takeIf { roomIsGroup }
+            it.isGroupConversation = roomIsGroup
+        }
+    }
+
     private fun getBitmap(@DrawableRes drawableRes: Int): Bitmap? {
         val drawable = ResourcesCompat.getDrawable(context.resources, drawableRes, null) ?: return null
         val canvas = Canvas()
@@ -324,3 +449,5 @@ class NotificationCreator @Inject constructor(
         return bitmap
     }
 }
+
+fun NotifiableMessageEvent.isSmartReplyError() = outGoingMessage && outGoingMessageFailed

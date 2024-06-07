@@ -52,9 +52,9 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun PollContentView(
     state: PollContentState,
-    onAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
-    onPollEdit: (pollStartId: EventId) -> Unit,
-    onPollEnd: (pollStartId: EventId) -> Unit,
+    onSelectAnswer: (pollStartId: EventId, answerId: String) -> Unit,
+    onEditPoll: (pollStartId: EventId) -> Unit,
+    onEndPoll: (pollStartId: EventId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PollContentView(
@@ -65,9 +65,9 @@ fun PollContentView(
         isPollEditable = state.isPollEditable,
         isPollEnded = state.isPollEnded,
         isMine = state.isMine,
-        onPollEdit = onPollEdit,
-        onAnswerSelected = onAnswerSelected,
-        onPollEnd = onPollEnd,
+        onEditPoll = onEditPoll,
+        onSelectAnswer = onSelectAnswer,
+        onEndPoll = onEndPoll,
         modifier = modifier,
     )
 }
@@ -81,23 +81,23 @@ fun PollContentView(
     isPollEditable: Boolean,
     isPollEnded: Boolean,
     isMine: Boolean,
-    onAnswerSelected: (pollStartId: EventId, answerId: String) -> Unit,
-    onPollEdit: (pollStartId: EventId) -> Unit,
-    onPollEnd: (pollStartId: EventId) -> Unit,
+    onSelectAnswer: (pollStartId: EventId, answerId: String) -> Unit,
+    onEditPoll: (pollStartId: EventId) -> Unit,
+    onEndPoll: (pollStartId: EventId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val votesCount = remember(answerItems) { answerItems.sumOf { it.votesCount } }
 
-    fun onAnswerSelected(pollAnswer: PollAnswer) {
-        eventId?.let { onAnswerSelected(it, pollAnswer.id) }
+    fun onSelectAnswer(pollAnswer: PollAnswer) {
+        eventId?.let { onSelectAnswer(it, pollAnswer.id) }
     }
 
-    fun onPollEdit() {
-        eventId?.let { onPollEdit(it) }
+    fun onEditPoll() {
+        eventId?.let { onEditPoll(it) }
     }
 
-    fun onPollEnd() {
-        eventId?.let { onPollEnd(it) }
+    fun onEndPoll() {
+        eventId?.let { onEndPoll(it) }
     }
 
     var showConfirmation: Boolean by remember { mutableStateOf(false) }
@@ -105,8 +105,8 @@ fun PollContentView(
     if (showConfirmation) {
         ConfirmationDialog(
             content = stringResource(id = CommonStrings.common_poll_end_confirmation),
-            onSubmitClicked = {
-                onPollEnd()
+            onSubmitClick = {
+                onEndPoll()
                 showConfirmation = false
             },
             onDismiss = { showConfirmation = false },
@@ -119,7 +119,7 @@ fun PollContentView(
     ) {
         PollTitle(title = question, isPollEnded = isPollEnded)
 
-        PollAnswers(answerItems = answerItems, onAnswerSelected = ::onAnswerSelected)
+        PollAnswers(answerItems = answerItems, onSelectAnswer = ::onSelectAnswer)
 
         if (isPollEnded || pollKind == PollKind.Disclosed) {
             DisclosedPollBottomNotice(votesCount = votesCount)
@@ -131,8 +131,8 @@ fun PollContentView(
             CreatorView(
                 isPollEnded = isPollEnded,
                 isPollEditable = isPollEditable,
-                onPollEdit = ::onPollEdit,
-                onPollEnd = { showConfirmation = true },
+                onEditPoll = ::onEditPoll,
+                onEndPoll = { showConfirmation = true },
                 modifier = Modifier.fillMaxWidth(),
             )
         }
@@ -170,7 +170,7 @@ private fun PollTitle(
 @Composable
 private fun PollAnswers(
     answerItems: ImmutableList<PollAnswerItem>,
-    onAnswerSelected: (PollAnswer) -> Unit,
+    onSelectAnswer: (PollAnswer) -> Unit,
 ) {
     Column(
         modifier = Modifier.selectableGroup(),
@@ -183,7 +183,7 @@ private fun PollAnswers(
                     .selectable(
                         selected = it.isSelected,
                         enabled = it.isEnabled,
-                        onClick = { onAnswerSelected(it.answer) },
+                        onClick = { onSelectAnswer(it.answer) },
                         role = Role.RadioButton,
                     ),
             )
@@ -219,21 +219,21 @@ private fun ColumnScope.UndisclosedPollBottomNotice() {
 private fun CreatorView(
     isPollEnded: Boolean,
     isPollEditable: Boolean,
-    onPollEdit: () -> Unit,
-    onPollEnd: () -> Unit,
+    onEditPoll: () -> Unit,
+    onEndPoll: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     when {
         isPollEditable ->
             Button(
                 text = stringResource(id = CommonStrings.action_edit_poll),
-                onClick = onPollEdit,
+                onClick = onEditPoll,
                 modifier = modifier,
             )
         !isPollEnded ->
             Button(
                 text = stringResource(id = CommonStrings.action_end_poll),
-                onClick = onPollEnd,
+                onClick = onEndPoll,
                 modifier = modifier,
             )
     }
@@ -250,9 +250,9 @@ internal fun PollContentViewUndisclosedPreview() = ElementPreview {
         isPollEnded = false,
         isPollEditable = false,
         isMine = false,
-        onAnswerSelected = { _, _ -> },
-        onPollEdit = {},
-        onPollEnd = {},
+        onSelectAnswer = { _, _ -> },
+        onEditPoll = {},
+        onEndPoll = {},
     )
 }
 
@@ -267,9 +267,9 @@ internal fun PollContentViewDisclosedPreview() = ElementPreview {
         isPollEnded = false,
         isPollEditable = false,
         isMine = false,
-        onAnswerSelected = { _, _ -> },
-        onPollEdit = {},
-        onPollEnd = {},
+        onSelectAnswer = { _, _ -> },
+        onEditPoll = {},
+        onEndPoll = {},
     )
 }
 
@@ -284,9 +284,9 @@ internal fun PollContentViewEndedPreview() = ElementPreview {
         isPollEnded = true,
         isPollEditable = false,
         isMine = false,
-        onAnswerSelected = { _, _ -> },
-        onPollEdit = {},
-        onPollEnd = {},
+        onSelectAnswer = { _, _ -> },
+        onEditPoll = {},
+        onEndPoll = {},
     )
 }
 
@@ -301,9 +301,9 @@ internal fun PollContentViewCreatorEditablePreview() = ElementPreview {
         isPollEnded = false,
         isPollEditable = true,
         isMine = true,
-        onAnswerSelected = { _, _ -> },
-        onPollEdit = {},
-        onPollEnd = {},
+        onSelectAnswer = { _, _ -> },
+        onEditPoll = {},
+        onEndPoll = {},
     )
 }
 
@@ -318,9 +318,9 @@ internal fun PollContentViewCreatorPreview() = ElementPreview {
         isPollEnded = false,
         isPollEditable = false,
         isMine = true,
-        onAnswerSelected = { _, _ -> },
-        onPollEdit = {},
-        onPollEnd = {},
+        onSelectAnswer = { _, _ -> },
+        onEditPoll = {},
+        onEndPoll = {},
     )
 }
 
@@ -335,8 +335,8 @@ internal fun PollContentViewCreatorEndedPreview() = ElementPreview {
         isPollEnded = true,
         isPollEditable = false,
         isMine = true,
-        onAnswerSelected = { _, _ -> },
-        onPollEdit = {},
-        onPollEnd = {},
+        onSelectAnswer = { _, _ -> },
+        onEditPoll = {},
+        onEndPoll = {},
     )
 }

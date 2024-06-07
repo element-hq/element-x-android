@@ -33,8 +33,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.mapbox.mapboxsdk.camera.CameraPosition
-import com.mapbox.mapboxsdk.geometry.LatLng
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.compound.tokens.generated.TypographyTokens
@@ -56,18 +54,20 @@ import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.maplibre.compose.CameraMode
 import io.element.android.libraries.maplibre.compose.CameraMoveStartedReason
 import io.element.android.libraries.maplibre.compose.IconAnchor
-import io.element.android.libraries.maplibre.compose.MapboxMap
+import io.element.android.libraries.maplibre.compose.MapLibreMap
 import io.element.android.libraries.maplibre.compose.Symbol
 import io.element.android.libraries.maplibre.compose.rememberCameraPositionState
 import io.element.android.libraries.maplibre.compose.rememberSymbolState
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableMap
+import org.maplibre.android.camera.CameraPosition
+import org.maplibre.android.geometry.LatLng
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShowLocationView(
     state: ShowLocationState,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when (state.permissionDialog) {
@@ -121,7 +121,7 @@ fun ShowLocationView(
                 },
                 navigationIcon = {
                     BackButton(
-                        onClick = onBackPressed,
+                        onClick = onBackClick,
                     )
                 },
                 actions = {
@@ -166,7 +166,7 @@ fun ShowLocationView(
                 )
             }
 
-            MapboxMap(
+            MapLibreMap(
                 styleUri = rememberTileStyleUrl(),
                 modifier = Modifier.fillMaxSize(),
                 images = mapOf(PIN_ID to CommonDrawables.pin).toImmutableMap(),
@@ -194,7 +194,7 @@ fun ShowLocationView(
 internal fun ShowLocationViewPreview(@PreviewParameter(ShowLocationStateProvider::class) state: ShowLocationState) = ElementPreview {
     ShowLocationView(
         state = state,
-        onBackPressed = {},
+        onBackClick = {},
     )
 }
 

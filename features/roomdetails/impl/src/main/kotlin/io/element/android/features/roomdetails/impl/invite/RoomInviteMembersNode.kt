@@ -65,8 +65,8 @@ class RoomInviteMembersNode @AssistedInject constructor(
         RoomInviteMembersView(
             state = state,
             modifier = modifier,
-            onBackPressed = { navigateUp() },
-            onSubmitPressed = { users ->
+            onBackClick = { navigateUp() },
+            onSubmitClick = { users ->
                 navigateUp()
 
                 coroutineScope.launch {

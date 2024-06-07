@@ -82,7 +82,7 @@ fun RoomSelectView(
         if (isForwarding) return
         SelectedRooms(
             selectedRooms = selectedRooms,
-            onRoomRemoved = ::onRoomRemoved,
+            onRemoveRoom = ::onRoomRemoved,
             modifier = Modifier.padding(vertical = 16.dp)
         )
     }
@@ -105,6 +105,7 @@ fun RoomSelectView(
                     Text(
                         text = when (state.mode) {
                             RoomSelectMode.Forward -> stringResource(CommonStrings.common_forward_message)
+                            RoomSelectMode.Share -> stringResource(CommonStrings.common_send_to)
                         },
                         style = ElementTheme.typography.aliasScreenTitle
                     )
@@ -192,7 +193,7 @@ fun RoomSelectView(
 @Composable
 private fun SelectedRooms(
     selectedRooms: ImmutableList<RoomSummaryDetails>,
-    onRoomRemoved: (RoomSummaryDetails) -> Unit,
+    onRemoveRoom: (RoomSummaryDetails) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyRow(
@@ -201,7 +202,7 @@ private fun SelectedRooms(
         horizontalArrangement = Arrangement.spacedBy(32.dp)
     ) {
         items(selectedRooms, key = { it.roomId.value }) { roomSummary ->
-            SelectedRoom(roomSummary = roomSummary, onRoomRemoved = onRoomRemoved)
+            SelectedRoom(roomSummary = roomSummary, onRemoveRoom = onRemoveRoom)
         }
     }
 }

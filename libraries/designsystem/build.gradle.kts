@@ -36,7 +36,9 @@ android {
 
     dependencies {
         api(libs.compound)
-        // Should not be there, but this is a POC
+
+        implementation(libs.androidx.compose.material3.windowsizeclass)
+        implementation(libs.androidx.compose.material3.adaptive)
         implementation(libs.coil.compose)
         implementation(libs.vanniktech.blurhash)
         implementation(projects.libraries.architecture)

@@ -16,9 +16,13 @@
 
 package io.element.android.libraries.textcomposer.components.markdown
 
+import android.content.ClipData
 import android.graphics.Color
+import android.net.Uri
 import android.text.Editable
+import android.text.InputType
 import android.text.Selection
+import android.view.View
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -26,6 +30,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.text.getSpans
+import androidx.core.view.ContentInfoCompat
+import androidx.core.view.OnReceiveContentListener
+import androidx.core.view.ViewCompat
 import androidx.core.view.setPadding
 import androidx.core.widget.addTextChangedListener
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -45,10 +52,35 @@ fun MarkdownTextInput(
     state: MarkdownTextEditorState,
     subcomposing: Boolean,
     onTyping: (Boolean) -> Unit,
-    onSuggestionReceived: (Suggestion?) -> Unit,
+    onReceiveSuggestion: (Suggestion?) -> Unit,
     richTextEditorStyle: RichTextEditorStyle,
+    onSelectRichContent: ((Uri) -> Unit)?,
 ) {
     val canUpdateState = !subcomposing
+
+    // Copied from io.element.android.wysiwyg.internal.utils.UriContentListener
+    class ReceiveUriContentListener(
+        private val onContent: (uri: Uri) -> Unit,
+    ) : OnReceiveContentListener {
+        override fun onReceiveContent(view: View, payload: ContentInfoCompat): ContentInfoCompat? {
+            val split = payload.partition { item -> item.uri != null }
+            val uriContent = split.first
+            val remaining = split.second
+
+            if (uriContent != null) {
+                val clip: ClipData = uriContent.clip
+                for (i in 0 until clip.itemCount) {
+                    val uri = clip.getItemAt(i).uri
+                    // ... app-specific logic to handle the URI ...
+                    onContent(uri)
+                }
+            }
+            // Return anything that we didn't handle ourselves. This preserves the default platform
+            // behavior for text and anything else for which we are not implementing custom handling.
+            return remaining
+        }
+    }
+
     AndroidView(
         modifier = Modifier
             .padding(top = 6.dp, bottom = 6.dp)
@@ -58,9 +90,15 @@ fun MarkdownTextInput(
                 tag = TestTags.plainTextEditor.value // Needed for UI tests
                 setPadding(0)
                 setBackgroundColor(Color.TRANSPARENT)
-                setText(state.text.value())
+                val text = state.text.value()
+                setText(text)
+                inputType = InputType.TYPE_CLASS_TEXT or
+                    InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or
+                    InputType.TYPE_TEXT_FLAG_MULTI_LINE or
+                    InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
                 if (canUpdateState) {
-                    setSelection(state.selection.first, state.selection.last)
+                    val textRange = 0..text.length
+                    setSelection(state.selection.first.coerceIn(textRange), state.selection.last.coerceIn(textRange))
                     setOnFocusChangeListener { _, hasFocus ->
                         state.hasFocus = hasFocus
                     }
@@ -70,12 +108,19 @@ fun MarkdownTextInput(
                         state.lineCount = lineCount
 
                         state.currentMentionSuggestion = editable?.checkSuggestionNeeded()
-                        onSuggestionReceived(state.currentMentionSuggestion)
+                        onReceiveSuggestion(state.currentMentionSuggestion)
                     }
                     onSelectionChangeListener = { selStart, selEnd ->
                         state.selection = selStart..selEnd
                         state.currentMentionSuggestion = editableText.checkSuggestionNeeded()
-                        onSuggestionReceived(state.currentMentionSuggestion)
+                        onReceiveSuggestion(state.currentMentionSuggestion)
+                    }
+                    if (onSelectRichContent != null) {
+                        ViewCompat.setOnReceiveContentListener(
+                            this,
+                            arrayOf("image/*"),
+                            ReceiveUriContentListener { onSelectRichContent(it) }
+                        )
                     }
                     state.requestFocusAction = { this.requestFocus() }
                 }
@@ -145,8 +190,9 @@ internal fun MarkdownTextInputPreview() {
             state = aMarkdownTextEditorState(),
             subcomposing = false,
             onTyping = {},
-            onSuggestionReceived = {},
+            onReceiveSuggestion = {},
             richTextEditorStyle = style,
+            onSelectRichContent = {},
         )
     }
 }

@@ -88,7 +88,7 @@ fun RoomListTopBar(
     showAvatarIndicator: Boolean,
     areSearchResultsDisplayed: Boolean,
     onToggleSearch: () -> Unit,
-    onMenuActionClicked: (RoomListMenuAction) -> Unit,
+    onMenuActionClick: (RoomListMenuAction) -> Unit,
     onOpenSettings: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     displayMenuItems: Boolean,
@@ -101,8 +101,8 @@ fun RoomListTopBar(
         showAvatarIndicator = showAvatarIndicator,
         areSearchResultsDisplayed = areSearchResultsDisplayed,
         onOpenSettings = onOpenSettings,
-        onSearchClicked = onToggleSearch,
-        onMenuActionClicked = onMenuActionClicked,
+        onSearchClick = onToggleSearch,
+        onMenuActionClick = onMenuActionClick,
         scrollBehavior = scrollBehavior,
         displayMenuItems = displayMenuItems,
         displayFilters = displayFilters,
@@ -119,8 +119,8 @@ private fun DefaultRoomListTopBar(
     areSearchResultsDisplayed: Boolean,
     scrollBehavior: TopAppBarScrollBehavior,
     onOpenSettings: () -> Unit,
-    onSearchClicked: () -> Unit,
-    onMenuActionClicked: (RoomListMenuAction) -> Unit,
+    onSearchClick: () -> Unit,
+    onMenuActionClick: (RoomListMenuAction) -> Unit,
     displayMenuItems: Boolean,
     displayFilters: Boolean,
     filtersState: RoomListFiltersState,
@@ -211,7 +211,7 @@ private fun DefaultRoomListTopBar(
                     actions = {
                         if (displayMenuItems) {
                             IconButton(
-                                onClick = onSearchClicked,
+                                onClick = onSearchClick,
                             ) {
                                 Icon(
                                     imageVector = CompoundIcons.Search(),
@@ -236,7 +236,7 @@ private fun DefaultRoomListTopBar(
                                         DropdownMenuItem(
                                             onClick = {
                                                 showMenu = false
-                                                onMenuActionClicked(RoomListMenuAction.InviteFriends)
+                                                onMenuActionClick(RoomListMenuAction.InviteFriends)
                                             },
                                             text = { Text(stringResource(id = CommonStrings.action_invite)) },
                                             leadingIcon = {
@@ -252,7 +252,7 @@ private fun DefaultRoomListTopBar(
                                         DropdownMenuItem(
                                             onClick = {
                                                 showMenu = false
-                                                onMenuActionClicked(RoomListMenuAction.ReportBug)
+                                                onMenuActionClick(RoomListMenuAction.ReportBug)
                                             },
                                             text = { Text(stringResource(id = CommonStrings.common_report_a_problem)) },
                                             leadingIcon = {
@@ -324,11 +324,11 @@ internal fun DefaultRoomListTopBarPreview() = ElementPreview {
         areSearchResultsDisplayed = false,
         scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState()),
         onOpenSettings = {},
-        onSearchClicked = {},
+        onSearchClick = {},
         displayMenuItems = true,
         displayFilters = true,
         filtersState = aRoomListFiltersState(),
-        onMenuActionClicked = {},
+        onMenuActionClick = {},
     )
 }
 
@@ -342,10 +342,10 @@ internal fun DefaultRoomListTopBarWithIndicatorPreview() = ElementPreview {
         areSearchResultsDisplayed = false,
         scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState()),
         onOpenSettings = {},
-        onSearchClicked = {},
+        onSearchClick = {},
         displayMenuItems = true,
         displayFilters = true,
         filtersState = aRoomListFiltersState(),
-        onMenuActionClicked = {},
+        onMenuActionClick = {},
     )
 }

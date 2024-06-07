@@ -16,6 +16,7 @@
 
 package io.element.android.appnav
 
+import android.content.Intent
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
@@ -54,6 +55,7 @@ import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
+import io.element.android.features.share.api.ShareEntryPoint
 import io.element.android.features.userprofile.api.UserProfileEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
@@ -98,6 +100,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val networkMonitor: NetworkMonitor,
     private val ftueService: FtueService,
     private val roomDirectoryEntryPoint: RoomDirectoryEntryPoint,
+    private val shareEntryPoint: ShareEntryPoint,
     private val matrixClient: MatrixClient,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
@@ -219,6 +222,9 @@ class LoggedInFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object RoomDirectorySearch : NavTarget
+
+        @Parcelize
+        data class IncomingShare(val intent: Intent) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -229,31 +235,31 @@ class LoggedInFlowNode @AssistedInject constructor(
             }
             NavTarget.RoomList -> {
                 val callback = object : RoomListEntryPoint.Callback {
-                    override fun onRoomClicked(roomId: RoomId) {
+                    override fun onRoomClick(roomId: RoomId) {
                         backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
                     }
 
-                    override fun onSettingsClicked() {
+                    override fun onSettingsClick() {
                         backstack.push(NavTarget.Settings())
                     }
 
-                    override fun onCreateRoomClicked() {
+                    override fun onCreateRoomClick() {
                         backstack.push(NavTarget.CreateRoom)
                     }
 
-                    override fun onSessionConfirmRecoveryKeyClicked() {
+                    override fun onSessionConfirmRecoveryKeyClick() {
                         backstack.push(NavTarget.SecureBackup(initialElement = SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey))
                     }
 
-                    override fun onRoomSettingsClicked(roomId: RoomId) {
+                    override fun onRoomSettingsClick(roomId: RoomId) {
                         backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), initialElement = RoomNavigationTarget.Details))
                     }
 
-                    override fun onReportBugClicked() {
+                    override fun onReportBugClick() {
                         plugins<Callback>().forEach { it.onOpenBugReport() }
                     }
 
-                    override fun onRoomDirectorySearchClicked() {
+                    override fun onRoomDirectorySearchClick() {
                         backstack.push(NavTarget.RoomDirectorySearch)
                     }
                 }
@@ -272,7 +278,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                         coroutineScope.launch { attachRoom(roomId.toRoomIdOrAlias()) }
                     }
 
-                    override fun onPermalinkClicked(data: PermalinkData) {
+                    override fun onPermalinkClick(data: PermalinkData) {
                         when (data) {
                             is PermalinkData.UserLink -> {
                                 // Should not happen (handled by MessagesNode)
@@ -325,7 +331,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                         plugins<Callback>().forEach { it.onOpenBugReport() }
                     }
 
-                    override fun onSecureBackupClicked() {
+                    override fun onSecureBackupClick() {
                         backstack.push(NavTarget.SecureBackup())
                     }
 
@@ -363,7 +369,7 @@ class LoggedInFlowNode @AssistedInject constructor(
             NavTarget.RoomDirectorySearch -> {
                 roomDirectoryEntryPoint.nodeBuilder(this, buildContext)
                     .callback(object : RoomDirectoryEntryPoint.Callback {
-                        override fun onResultClicked(roomDescription: RoomDescription) {
+                        override fun onResultClick(roomDescription: RoomDescription) {
                             backstack.push(
                                 NavTarget.Room(
                                     roomIdOrAlias = roomDescription.roomId.toRoomIdOrAlias(),
@@ -373,6 +379,20 @@ class LoggedInFlowNode @AssistedInject constructor(
                             )
                         }
                     })
+                    .build()
+            }
+            is NavTarget.IncomingShare -> {
+                shareEntryPoint.nodeBuilder(this, buildContext)
+                    .callback(object : ShareEntryPoint.Callback {
+                        override fun onDone(roomIds: List<RoomId>) {
+                            navigateUp()
+                            if (roomIds.size == 1) {
+                                val targetRoomId = roomIds.first()
+                                backstack.push(NavTarget.Room(targetRoomId.toRoomIdOrAlias()))
+                            }
+                        }
+                    })
+                    .params(ShareEntryPoint.Params(intent = navTarget.intent))
                     .build()
             }
         }
@@ -410,6 +430,17 @@ class LoggedInFlowNode @AssistedInject constructor(
                 NavTarget.UserProfile(
                     userId = userId,
                 )
+            )
+        }
+    }
+
+    internal suspend fun attachIncomingShare(intent: Intent) {
+        waitForNavTargetAttached { navTarget ->
+            navTarget is NavTarget.RoomList
+        }
+        attachChild<Node> {
+            backstack.push(
+                NavTarget.IncomingShare(intent)
             )
         }
     }

@@ -84,7 +84,7 @@ import kotlin.time.Duration
 @Composable
 fun MediaViewerView(
     state: MediaViewerState,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -99,9 +99,9 @@ fun MediaViewerView(
             showOverlay = showOverlay,
             state = state,
             onDismiss = {
-                onBackPressed()
+                onBackClick()
             },
-            onShowOverlayChanged = {
+            onShowOverlayChange = {
                 showOverlay = it
             }
         )
@@ -109,7 +109,7 @@ fun MediaViewerView(
             MediaViewerTopBar(
                 actionsEnabled = state.downloadedMedia is AsyncData.Success,
                 mimeType = state.mediaInfo.mimeType,
-                onBackPressed = onBackPressed,
+                onBackClick = onBackClick,
                 canDownload = state.canDownload,
                 canShare = state.canShare,
                 eventSink = state.eventSink
@@ -123,7 +123,7 @@ private fun MediaViewerPage(
     showOverlay: Boolean,
     state: MediaViewerState,
     onDismiss: () -> Unit,
-    onShowOverlayChanged: (Boolean) -> Unit,
+    onShowOverlayChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun onRetry() {
@@ -135,7 +135,7 @@ private fun MediaViewerPage(
     }
 
     val currentShowOverlay by rememberUpdatedState(showOverlay)
-    val currentOnShowOverlayChanged by rememberUpdatedState(onShowOverlayChanged)
+    val currentOnShowOverlayChange by rememberUpdatedState(onShowOverlayChange)
     val flickState = rememberFlickToDismissState(dismissThresholdRatio = 0.1f, rotateOnDrag = false)
 
     DismissFlickEffects(
@@ -145,7 +145,7 @@ private fun MediaViewerPage(
             onDismiss()
         },
         onDragging = {
-            currentOnShowOverlayChanged(false)
+            currentOnShowOverlayChange(false)
         }
     )
 
@@ -171,7 +171,7 @@ private fun MediaViewerPage(
 
                 LaunchedEffect(playableState) {
                     if (playableState is PlayableState.Playable) {
-                        currentOnShowOverlayChanged(playableState.isShowingControls)
+                        currentOnShowOverlayChange(playableState.isShowingControls)
                     }
                 }
 
@@ -182,7 +182,7 @@ private fun MediaViewerPage(
                     mediaInfo = state.mediaInfo,
                     onClick = {
                         if (playableState is PlayableState.NotPlayable) {
-                            currentOnShowOverlayChanged(!currentShowOverlay)
+                            currentOnShowOverlayChange(!currentShowOverlay)
                         }
                     },
                 )
@@ -263,7 +263,7 @@ private fun MediaViewerTopBar(
     canDownload: Boolean,
     canShare: Boolean,
     mimeType: String,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     eventSink: (MediaViewerEvents) -> Unit,
 ) {
     TopAppBar(
@@ -271,7 +271,7 @@ private fun MediaViewerTopBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color.Transparent.copy(0.6f),
         ),
-        navigationIcon = { BackButton(onClick = onBackPressed) },
+        navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
             IconButton(
                 enabled = actionsEnabled,
@@ -386,6 +386,6 @@ private fun backgroundColorFor(flickState: FlickToDismissState): Color {
 internal fun MediaViewerViewPreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) = ElementPreviewDark {
     MediaViewerView(
         state = state,
-        onBackPressed = {}
+        onBackClick = {}
     )
 }

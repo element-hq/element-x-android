@@ -20,7 +20,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class PushGatewayNotifyBody(
+data class PushGatewayNotifyBody(
     /**
      * Required. Information about the push notification
      */

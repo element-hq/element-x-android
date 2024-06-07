@@ -21,9 +21,6 @@ import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 
 interface PushService {
-    // TODO Move away
-    fun notificationStyleChanged()
-
     /**
      * Return the current push provider, or null if none.
      */

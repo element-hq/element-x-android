@@ -48,7 +48,7 @@ class DeveloperSettingsViewTest {
                 state = aDeveloperSettingsState(
                     eventSink = eventsRecorder
                 ),
-                onBackPressed = it
+                onBackClick = it
             )
             rule.pressBack()
         }
@@ -82,6 +82,7 @@ class DeveloperSettingsViewTest {
         }
     }
 
+    @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking on configure tracing invokes the expected callback`() {
         val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>(expectEvents = false)
@@ -96,7 +97,7 @@ class DeveloperSettingsViewTest {
         }
     }
 
-    @Config(qualifiers = "h1024dp")
+    @Config(qualifiers = "h1500dp")
     @Test
     fun `clicking on clear cache emits the expected event`() {
         val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>()
@@ -114,14 +115,14 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setDevel
     state: DeveloperSettingsState,
     onOpenShowkase: () -> Unit = EnsureNeverCalled(),
     onOpenConfigureTracing: () -> Unit = EnsureNeverCalled(),
-    onBackPressed: () -> Unit = EnsureNeverCalled()
+    onBackClick: () -> Unit = EnsureNeverCalled()
 ) {
     setContent {
         DeveloperSettingsView(
             state = state,
             onOpenShowkase = onOpenShowkase,
             onOpenConfigureTracing = onOpenConfigureTracing,
-            onBackPressed = onBackPressed,
+            onBackClick = onBackClick,
         )
     }
 }

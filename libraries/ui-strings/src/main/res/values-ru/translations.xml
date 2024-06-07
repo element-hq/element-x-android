@@ -75,6 +75,7 @@
   <string name="action_load_more">"Загрузить еще"</string>
   <string name="action_manage_account">"Настройки аккаунта"</string>
   <string name="action_manage_devices">"Управление устройствами"</string>
+  <string name="action_message">"Сообщение"</string>
   <string name="action_next">"Далее"</string>
   <string name="action_no">"Нет"</string>
   <string name="action_not_now">"Не сейчас"</string>
@@ -120,6 +121,7 @@
   <string name="common_blocked_users">"Заблокированные пользователи"</string>
   <string name="common_bubbles">"Пузыри"</string>
   <string name="common_call_invite">"Выполняется звонок (не поддерживается)"</string>
+  <string name="common_call_started">"Звонок начат"</string>
   <string name="common_chat_backup">"Резервная копия чатов"</string>
   <string name="common_copyright">"Авторское право"</string>
   <string name="common_creating_room">"Создание комнаты…"</string>
