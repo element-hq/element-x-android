@@ -28,6 +28,8 @@ import io.element.android.features.rageshake.test.crash.FakeCrashDataStore
 import io.element.android.features.rageshake.test.rageshake.FakeRageShake
 import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataStore
 import io.element.android.features.rageshake.test.screenshot.FakeScreenshotHolder
+import io.element.android.features.share.api.ShareService
+import io.element.android.features.share.test.FakeShareService
 import io.element.android.libraries.matrix.test.FakeSdkMetadata
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.services.analytics.test.FakeAnalyticsService
@@ -35,6 +37,8 @@ import io.element.android.services.apperror.api.AppErrorState
 import io.element.android.services.apperror.api.AppErrorStateService
 import io.element.android.services.apperror.impl.DefaultAppErrorStateService
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -52,6 +56,22 @@ class RootPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.crashDetectionState.crashDetected).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - check that share service is invoked`() = runTest {
+        val lambda = lambdaRecorder<CoroutineScope, Unit> { _ -> }
+        val presenter = createRootPresenter(
+            shareService = FakeShareService {
+                lambda(it)
+            }
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(2)
+            lambda.assertions().isCalledOnce()
         }
     }
 
@@ -79,7 +99,8 @@ class RootPresenterTest {
     }
 
     private fun createRootPresenter(
-        appErrorService: AppErrorStateService = DefaultAppErrorStateService()
+        appErrorService: AppErrorStateService = DefaultAppErrorStateService(),
+        shareService: ShareService = FakeShareService {},
     ): RootPresenter {
         val crashDataStore = FakeCrashDataStore()
         val rageshakeDataStore = FakeRageshakeDataStore()
@@ -102,6 +123,7 @@ class RootPresenterTest {
             rageshakeDetectionPresenter = rageshakeDetectionPresenter,
             appErrorStateService = appErrorService,
             analyticsService = FakeAnalyticsService(),
+            shareService = shareService,
             sdkMetadata = FakeSdkMetadata("sha")
         )
     }
