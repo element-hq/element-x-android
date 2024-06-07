@@ -35,6 +35,7 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
 import io.element.android.libraries.push.impl.R
@@ -47,7 +48,6 @@ import io.element.android.libraries.push.impl.notifications.factories.action.Qui
 import io.element.android.libraries.push.impl.notifications.factories.action.RejectInvitationActionFactory
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
-import io.element.android.libraries.push.impl.notifications.model.NotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
@@ -79,11 +79,6 @@ interface NotificationCreator {
 
     fun createFallbackNotification(
         fallbackNotifiableEvent: FallbackNotifiableEvent,
-    ): Notification
-
-    suspend fun createCallNotification(
-        callNotifiableEvent: NotifiableCallEvent,
-        imageLoader: ImageLoader,
     ): Notification
 
     /**
@@ -135,7 +130,12 @@ class DefaultNotificationCreator @Inject constructor(
 
         val smallIcon = CommonDrawables.ic_notification_small
 
-        val channelId = notificationChannels.getChannelIdForMessage(roomInfo.shouldBing)
+        val containsMissedCall = events.any { it.type == EventType.CALL_NOTIFY }
+        val channelId = if (containsMissedCall) {
+            notificationChannels.getChannelForIncomingCall(false)
+        } else {
+            notificationChannels.getChannelIdForMessage(noisy = roomInfo.shouldBing)
+        }
         val builder = if (existingNotification != null) {
             NotificationCompat.Builder(context, existingNotification)
         } else {
@@ -215,6 +215,11 @@ class DefaultNotificationCreator @Inject constructor(
                     setLargeIcon(largeIcon)
                 }
                 setDeleteIntent(pendingIntentFactory.createDismissRoomPendingIntent(roomInfo.sessionId, roomInfo.roomId))
+
+                // If any of the events are of call notify type it means a missed call, set the category to the right value
+                if (events.any { it.type == EventType.CALL_NOTIFY }) {
+                    setCategory(NotificationCompat.CATEGORY_MISSED_CALL)
+                }
             }
             .setTicker(tickerText)
             .build()
@@ -327,29 +332,6 @@ class DefaultNotificationCreator @Inject constructor(
                 )
             )
             .setPriority(NotificationCompat.PRIORITY_LOW)
-            .build()
-    }
-
-    override suspend fun createCallNotification(callNotifiableEvent: NotifiableCallEvent, imageLoader: ImageLoader): Notification {
-        val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
-        val smallIcon = CommonDrawables.ic_notification_small
-        val largeIcon = bitmapLoader.getRoomBitmap(callNotifiableEvent.roomAvatarUrl, imageLoader)
-        val roomName = callNotifiableEvent.roomName ?: callNotifiableEvent.roomId.value
-
-        val channelId = notificationChannels.getChannelForIncomingCall(ring = false)
-        return NotificationCompat.Builder(context, channelId)
-            .setOnlyAlertOnce(true)
-            .setContentTitle(roomName.annotateForDebug(7))
-            .setContentText(callNotifiableEvent.description.orEmpty().annotateForDebug(8))
-            .setGroup(callNotifiableEvent.sessionId.value)
-            .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
-            .setSmallIcon(smallIcon)
-            .setLargeIcon(largeIcon)
-            .setColor(accentColor)
-            .setAutoCancel(true)
-            .setContentIntent(pendingIntentFactory.createOpenRoomPendingIntent(callNotifiableEvent.sessionId, callNotifiableEvent.roomId))
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setLights(accentColor, 500, 500)
             .build()
     }
 

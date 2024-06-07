@@ -19,14 +19,13 @@ package io.element.android.libraries.push.impl.notifications
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
-import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.push.impl.notifications.fake.FakeActiveNotificationsProvider
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationDataFactory
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationDisplayer
+import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.test.notifications.FakeImageLoaderHolder
 import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
-import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
@@ -46,7 +45,7 @@ class DefaultOnMissedCallNotificationHandlerTest {
     fun `addMissedCallNotification - should add missed call notification`() = runTest {
         val childScope = CoroutineScope(coroutineContext + SupervisorJob())
         val dataFactory = FakeNotificationDataFactory(
-            callEventToNotificationsResult = lambdaRecorder { _, _ -> emptyList() }
+            messageEventToNotificationsResult = lambdaRecorder { _, _, _ -> emptyList() }
         )
         val defaultOnMissedCallNotificationHandler = DefaultOnMissedCallNotificationHandler(
             defaultNotificationDrawerManager = DefaultNotificationDrawerManager(
@@ -61,24 +60,18 @@ class DefaultOnMissedCallNotificationHandlerTest {
                 imageLoaderHolder = FakeImageLoaderHolder(),
                 activeNotificationsProvider = FakeActiveNotificationsProvider(),
             ),
-            coroutineScope = childScope,
-            stringProvider = FakeStringProvider(),
+            notifiableEventResolver = FakeNotifiableEventResolver(notifiableEventResult = { _, _, _ -> aNotifiableMessageEvent() }),
         )
 
         defaultOnMissedCallNotificationHandler.addMissedCallNotification(
             sessionId = A_SESSION_ID,
             roomId = A_ROOM_ID,
             eventId = AN_EVENT_ID,
-            senderId = A_USER_ID_2,
-            senderName = "senderName",
-            roomName = "roomName",
-            timestamp = 0L,
-            avatarUrl = "avatarUrl"
         )
 
         runCurrent()
 
-        dataFactory.callEventToNotificationsResult.assertions().isCalledOnce()
+        dataFactory.messageEventToNotificationsResult.assertions().isCalledOnce()
 
         // Cancel the coroutine scope so the test can finish
         childScope.cancel()

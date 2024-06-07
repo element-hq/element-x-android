@@ -24,6 +24,7 @@ import io.element.android.features.call.impl.utils.ActiveCall
 import io.element.android.features.call.impl.utils.CallState
 import io.element.android.features.call.impl.utils.DefaultActiveCallManager
 import io.element.android.features.call.test.aCallNotificationData
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -84,7 +85,7 @@ class DefaultActiveCallManagerTest {
 
     @Test
     fun `incomingCallTimedOut - when there isn't an active call does nothing`() = runTest {
-        val addMissedCallNotificationLambda = lambdaRecorder<SessionId, RoomId, Unit> { _, _ -> }
+        val addMissedCallNotificationLambda = lambdaRecorder<SessionId, RoomId, EventId, Unit> { _, _, _ -> }
         val manager = createActiveCallManager(
             onMissedCallNotificationHandler = FakeOnMissedCallNotificationHandler(addMissedCallNotificationLambda = addMissedCallNotificationLambda)
         )
@@ -94,9 +95,10 @@ class DefaultActiveCallManagerTest {
         addMissedCallNotificationLambda.assertions().isNeverCalled()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `incomingCallTimedOut - when there is an active call removes it and adds a missed call notification`() = runTest {
-        val addMissedCallNotificationLambda = lambdaRecorder<SessionId, RoomId, Unit> { _, _ -> }
+        val addMissedCallNotificationLambda = lambdaRecorder<SessionId, RoomId, EventId, Unit> { _, _, _ -> }
         val manager = createActiveCallManager(
             onMissedCallNotificationHandler = FakeOnMissedCallNotificationHandler(addMissedCallNotificationLambda = addMissedCallNotificationLambda)
         )
@@ -106,6 +108,9 @@ class DefaultActiveCallManagerTest {
 
         manager.incomingCallTimedOut()
         assertThat(manager.activeCall.value).isNull()
+
+        runCurrent()
+
         addMissedCallNotificationLambda.assertions().isCalledOnce()
 
         asserServiceStopped()

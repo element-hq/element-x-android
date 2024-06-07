@@ -22,14 +22,15 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.CallNotifyType
+import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
-import io.element.android.libraries.push.impl.notifications.model.NotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
+import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 
 fun aSimpleNotifiableEvent(
@@ -83,6 +84,7 @@ fun aNotifiableMessageEvent(
     threadId: ThreadId? = null,
     isRedacted: Boolean = false,
     timestamp: Long = 0,
+    type: String = EventType.MESSAGE,
 ) = NotifiableMessageEvent(
     sessionId = sessionId,
     eventId = eventId,
@@ -98,7 +100,8 @@ fun aNotifiableMessageEvent(
     roomIsDirect = false,
     canBeReplaced = false,
     isRedacted = isRedacted,
-    imageUriString = null
+    imageUriString = null,
+    type = type,
 )
 
 fun anNotifiableCallEvent(
@@ -108,9 +111,10 @@ fun anNotifiableCallEvent(
     senderId: UserId = A_USER_ID_2,
     senderName: String? = null,
     roomAvatarUrl: String? = AN_AVATAR_URL,
+    senderAvatarUrl: String? = AN_AVATAR_URL,
     callNotifyType: CallNotifyType = CallNotifyType.NOTIFY,
     timestamp: Long = 0L,
-) = NotifiableCallEvent(
+) = NotifiableRingingCallEvent(
     sessionId = sessionId,
     eventId = eventId,
     roomId = roomId,
@@ -124,5 +128,6 @@ fun anNotifiableCallEvent(
     senderDisambiguatedDisplayName = senderName,
     senderId = senderId,
     roomAvatarUrl = roomAvatarUrl,
+    senderAvatarUrl = senderAvatarUrl,
     callNotifyType = callNotifyType,
 )

@@ -25,7 +25,7 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.push.impl.notifications.NotifiableEventResolver
 import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels
-import io.element.android.libraries.push.impl.notifications.model.NotifiableCallEvent
+import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
 import io.element.android.libraries.push.impl.test.DefaultTestPush
 import io.element.android.libraries.push.impl.troubleshoot.DiagnosticPushHandler
 import io.element.android.libraries.pushproviders.api.PushData
@@ -102,7 +102,7 @@ class DefaultPushHandler @Inject constructor(
                 val notifiableEvent = notifiableEventResolver.resolveEvent(userId, pushData.roomId, pushData.eventId)
                 when (notifiableEvent) {
                     null -> Timber.tag(loggerTag.value).w("Unable to get a notification data")
-                    is NotifiableCallEvent -> handleRingingCallEvent(notifiableEvent)
+                    is NotifiableRingingCallEvent -> handleRingingCallEvent(notifiableEvent)
                     else -> onNotifiableEventReceived.onNotifiableEventReceived(notifiableEvent)
                 }
             } else {
@@ -113,21 +113,17 @@ class DefaultPushHandler @Inject constructor(
         }
     }
 
-    private fun handleRingingCallEvent(notifiableEvent: NotifiableCallEvent) {
-        Timber.i("## handleInternal() : Incoming call. Should ring: ${notifiableEvent.shouldRing}")
-        if (notifiableEvent.shouldRing) {
-            elementCallEntryPoint.handleIncomingCall(
-                callType = CallType.RoomCall(notifiableEvent.sessionId, notifiableEvent.roomId),
-                eventId = notifiableEvent.eventId,
-                senderId = notifiableEvent.senderId,
-                roomName = notifiableEvent.roomName,
-                senderName = notifiableEvent.senderDisambiguatedDisplayName,
-                avatarUrl = notifiableEvent.roomAvatarUrl,
-                timestamp = notifiableEvent.timestamp,
-                notificationChannelId = notificationChannels.getChannelForIncomingCall(ring = true),
-            )
-        } else {
-            onNotifiableEventReceived.onNotifiableEventReceived(notifiableEvent)
-        }
+    private fun handleRingingCallEvent(notifiableEvent: NotifiableRingingCallEvent) {
+        Timber.i("## handleInternal() : Incoming call.")
+        elementCallEntryPoint.handleIncomingCall(
+            callType = CallType.RoomCall(notifiableEvent.sessionId, notifiableEvent.roomId),
+            eventId = notifiableEvent.eventId,
+            senderId = notifiableEvent.senderId,
+            roomName = notifiableEvent.roomName,
+            senderName = notifiableEvent.senderDisambiguatedDisplayName,
+            avatarUrl = notifiableEvent.roomAvatarUrl,
+            timestamp = notifiableEvent.timestamp,
+            notificationChannelId = notificationChannels.getChannelForIncomingCall(ring = true),
+        )
     }
 }

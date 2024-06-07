@@ -21,50 +21,21 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.notification.CallNotifyType
 import io.element.android.libraries.push.api.notifications.OnMissedCallNotificationHandler
-import io.element.android.libraries.push.impl.notifications.model.NotifiableCallEvent
-import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.services.toolbox.api.strings.StringProvider
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultOnMissedCallNotificationHandler @Inject constructor(
     private val defaultNotificationDrawerManager: DefaultNotificationDrawerManager,
-    private val coroutineScope: CoroutineScope,
-    private val stringProvider: StringProvider,
+    private val notifiableEventResolver: NotifiableEventResolver,
 ) : OnMissedCallNotificationHandler {
-    override fun addMissedCallNotification(
+    override suspend fun addMissedCallNotification(
         sessionId: SessionId,
         roomId: RoomId,
         eventId: EventId,
-        senderId: UserId,
-        senderName: String?,
-        roomName: String?,
-        timestamp: Long,
-        avatarUrl: String?,
     ) {
-        coroutineScope.launch {
-            val notifiableCallEvent = NotifiableCallEvent(
-                sessionId = sessionId,
-                roomId = roomId,
-                roomName = roomName,
-                eventId = eventId,
-                editedEventId = null,
-                senderId = senderId,
-                senderDisambiguatedDisplayName = senderName,
-                description = stringProvider.getString(CommonStrings.common_call_started),
-                timestamp = timestamp,
-                roomAvatarUrl = avatarUrl,
-                canBeReplaced = false,
-                isRedacted = false,
-                isUpdated = false,
-                callNotifyType = CallNotifyType.NOTIFY,
-            )
-            defaultNotificationDrawerManager.onNotifiableEventReceived(notifiableCallEvent)
-        }
+        // Resolve the event and add a notification for it, at this point it should no longer be a ringing one
+        val notifiableEvent = notifiableEventResolver.resolveEvent(sessionId, roomId, eventId)
+        notifiableEvent?.let { defaultNotificationDrawerManager.onNotifiableEventReceived(it) }
     }
 }

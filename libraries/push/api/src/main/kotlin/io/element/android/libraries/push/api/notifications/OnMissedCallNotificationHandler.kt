@@ -19,7 +19,6 @@ package io.element.android.libraries.push.api.notifications
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.core.UserId
 
 /**
  * Handles missed calls by creating a new notification.
@@ -28,14 +27,9 @@ interface OnMissedCallNotificationHandler {
     /**
      * Adds a missed call notification.
      */
-    fun addMissedCallNotification(
+    suspend fun addMissedCallNotification(
         sessionId: SessionId,
         roomId: RoomId,
         eventId: EventId,
-        senderId: UserId,
-        senderName: String?,
-        roomName: String?,
-        timestamp: Long,
-        avatarUrl: String?,
     )
 }

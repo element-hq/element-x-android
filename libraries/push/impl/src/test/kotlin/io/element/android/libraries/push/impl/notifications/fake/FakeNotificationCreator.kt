@@ -26,14 +26,12 @@ import io.element.android.libraries.push.impl.notifications.factories.Notificati
 import io.element.android.libraries.push.impl.notifications.fixtures.A_NOTIFICATION
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
-import io.element.android.libraries.push.impl.notifications.model.NotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.tests.testutils.lambda.LambdaFourParamsRecorder
 import io.element.android.tests.testutils.lambda.LambdaListAnyParamsRecorder
 import io.element.android.tests.testutils.lambda.LambdaNoParamRecorder
 import io.element.android.tests.testutils.lambda.LambdaOneParamRecorder
-import io.element.android.tests.testutils.lambda.LambdaTwoParamsRecorder
 import io.element.android.tests.testutils.lambda.lambdaAnyRecorder
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 
@@ -44,7 +42,6 @@ class FakeNotificationCreator(
     var createFallbackNotificationResult: LambdaOneParamRecorder<FallbackNotifiableEvent, Notification> = lambdaRecorder { _ -> A_NOTIFICATION },
     var createSummaryListNotificationResult: LambdaFourParamsRecorder<MatrixUser, String, Boolean, Long, Notification> =
         lambdaRecorder { _, _, _, _ -> A_NOTIFICATION },
-    var createCallNotificationResult: LambdaTwoParamsRecorder<NotifiableCallEvent, ImageLoader, Notification> = lambdaRecorder { _, _ -> A_NOTIFICATION },
     var createDiagnosticNotificationResult: LambdaNoParamRecorder<Notification> = lambdaRecorder { -> A_NOTIFICATION },
 ) : NotificationCreator {
     override suspend fun createMessagesListNotification(
@@ -82,10 +79,6 @@ class FakeNotificationCreator(
         lastMessageTimestamp: Long
     ): Notification {
         return createSummaryListNotificationResult(currentUser, compatSummary, noisy, lastMessageTimestamp)
-    }
-
-    override suspend fun createCallNotification(callNotifiableEvent: NotifiableCallEvent, imageLoader: ImageLoader): Notification {
-        return createCallNotificationResult(callNotifiableEvent, imageLoader)
     }
 
     override fun createDiagnosticNotification(): Notification {

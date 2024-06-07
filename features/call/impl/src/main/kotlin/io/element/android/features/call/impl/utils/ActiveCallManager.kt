@@ -98,16 +98,13 @@ class DefaultActiveCallManager @Inject constructor(
 
         IncomingCallForegroundService.stop(context)
 
-        onMissedCallNotificationHandler.addMissedCallNotification(
-            sessionId = previousActiveCall.sessionId,
-            roomId = previousActiveCall.roomId,
-            eventId = notificationData.eventId,
-            senderId = notificationData.senderId,
-            roomName = notificationData.roomName,
-            senderName = notificationData.senderName ?: notificationData.senderId.value,
-            timestamp = notificationData.timestamp,
-            avatarUrl = notificationData.avatarUrl,
-        )
+        coroutineScope.launch {
+            onMissedCallNotificationHandler.addMissedCallNotification(
+                sessionId = previousActiveCall.sessionId,
+                roomId = previousActiveCall.roomId,
+                eventId = notificationData.eventId,
+            )
+        }
     }
 
     override fun hungUpCall() {

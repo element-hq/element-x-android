@@ -39,7 +39,6 @@ import io.element.android.libraries.push.impl.notifications.factories.action.Acc
 import io.element.android.libraries.push.impl.notifications.factories.action.MarkAsReadActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.QuickReplyActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.RejectInvitationActionFactory
-import io.element.android.libraries.push.impl.notifications.fixtures.anNotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
@@ -183,18 +182,6 @@ class DefaultNotificationCreatorTest {
                 isUpdated = false,
                 roomName = "roomName",
             )
-        )
-        result.commonAssertions(
-            expectedCategory = null,
-        )
-    }
-
-    @Test
-    fun `test createCallNotification`() = runTest {
-        val sut = createNotificationCreator()
-        val result = sut.createCallNotification(
-            anNotifiableCallEvent(),
-            FakeImageLoader().getImageLoader(),
         )
         result.commonAssertions(
             expectedCategory = null,

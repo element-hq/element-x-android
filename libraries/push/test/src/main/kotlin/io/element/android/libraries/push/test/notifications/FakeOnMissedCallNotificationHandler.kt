@@ -19,22 +19,16 @@ package io.element.android.libraries.push.test.notifications
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.push.api.notifications.OnMissedCallNotificationHandler
 
 class FakeOnMissedCallNotificationHandler(
-    var addMissedCallNotificationLambda: (SessionId, RoomId) -> Unit = { _, _ -> }
+    var addMissedCallNotificationLambda: (SessionId, RoomId, EventId) -> Unit = { _, _, _ -> }
 ) : OnMissedCallNotificationHandler {
-    override fun addMissedCallNotification(
+    override suspend fun addMissedCallNotification(
         sessionId: SessionId,
         roomId: RoomId,
         eventId: EventId,
-        senderId: UserId,
-        senderName: String?,
-        roomName: String?,
-        timestamp: Long,
-        avatarUrl: String?
     ) {
-        addMissedCallNotificationLambda(sessionId, roomId)
+        addMissedCallNotificationLambda(sessionId, roomId, eventId)
     }
 }

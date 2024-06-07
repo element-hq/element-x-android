@@ -31,7 +31,6 @@ import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
-import io.element.android.libraries.push.impl.notifications.model.NotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.services.toolbox.api.strings.StringProvider
@@ -53,9 +52,6 @@ interface NotificationDataFactory {
     @JvmName("toNotificationFallbackEvents")
     @Suppress("INAPPLICABLE_JVM_NAME")
     fun toNotifications(fallback: List<FallbackNotifiableEvent>): List<OneShotNotification>
-    @JvmName("toNotificationCallEvents")
-    @Suppress("INAPPLICABLE_JVM_NAME")
-    suspend fun toNotifications(callEvents: List<NotifiableCallEvent>, imageLoader: ImageLoader): List<OneShotNotification>
 
     fun createSummaryNotification(
         currentUser: MatrixUser,
@@ -146,20 +142,6 @@ class DefaultNotificationDataFactory @Inject constructor(
                 summaryLine = event.description.orEmpty(),
                 isNoisy = false,
                 timestamp = event.timestamp
-            )
-        }
-    }
-
-    @JvmName("toNotificationCallEvents")
-    @Suppress("INAPPLICABLE_JVM_NAME")
-    override suspend fun toNotifications(callEvents: List<NotifiableCallEvent>, imageLoader: ImageLoader): List<OneShotNotification> {
-        return callEvents.map { event ->
-            OneShotNotification(
-                key = event.eventId.value,
-                notification = notificationCreator.createCallNotification(event, imageLoader),
-                summaryLine = event.description.orEmpty(),
-                isNoisy = true,
-                timestamp = event.timestamp,
             )
         }
     }

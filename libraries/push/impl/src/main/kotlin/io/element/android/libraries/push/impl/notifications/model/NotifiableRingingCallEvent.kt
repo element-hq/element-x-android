@@ -24,7 +24,7 @@ import io.element.android.libraries.matrix.api.notification.CallNotifyType
 import java.time.Instant
 import kotlin.time.Duration.Companion.seconds
 
-data class NotifiableCallEvent(
+data class NotifiableRingingCallEvent(
     override val sessionId: SessionId,
     override val roomId: RoomId,
     override val eventId: EventId,
@@ -36,15 +36,17 @@ data class NotifiableCallEvent(
     val roomName: String?,
     val senderId: UserId,
     val senderDisambiguatedDisplayName: String?,
+    val senderAvatarUrl: String?,
     val roomAvatarUrl: String? = null,
     val callNotifyType: CallNotifyType,
     val timestamp: Long,
 ) : NotifiableEvent {
-    val shouldRing: Boolean = // Only ring if the type is RING and the elapsed time is less than the timeout
-        run {
+    companion object {
+        fun shouldRing(callNotifyType: CallNotifyType, timestamp: Long): Boolean {
             val timeout = 10.seconds.inWholeMilliseconds
             val elapsed = Instant.now().toEpochMilli() - timestamp
             // Only ring if the type is RING and the elapsed time is less than the timeout
-            callNotifyType == CallNotifyType.RING && elapsed < timeout
+            return callNotifyType == CallNotifyType.RING && elapsed < timeout
         }
+    }
 }

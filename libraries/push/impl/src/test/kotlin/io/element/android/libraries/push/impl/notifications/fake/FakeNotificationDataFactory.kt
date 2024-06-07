@@ -25,13 +25,11 @@ import io.element.android.libraries.push.impl.notifications.SummaryNotification
 import io.element.android.libraries.push.impl.notifications.fixtures.A_NOTIFICATION
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
-import io.element.android.libraries.push.impl.notifications.model.NotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.tests.testutils.lambda.LambdaFiveParamsRecorder
 import io.element.android.tests.testutils.lambda.LambdaOneParamRecorder
 import io.element.android.tests.testutils.lambda.LambdaThreeParamsRecorder
-import io.element.android.tests.testutils.lambda.LambdaTwoParamsRecorder
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 
 class FakeNotificationDataFactory(
@@ -49,8 +47,6 @@ class FakeNotificationDataFactory(
     var simpleEventToNotificationsResult: LambdaOneParamRecorder<List<SimpleNotifiableEvent>, List<OneShotNotification>> = lambdaRecorder { _ -> emptyList() },
     var fallbackEventToNotificationsResult: LambdaOneParamRecorder<List<FallbackNotifiableEvent>, List<OneShotNotification>> =
         lambdaRecorder { _ -> emptyList() },
-    var callEventToNotificationsResult: LambdaTwoParamsRecorder<List<NotifiableCallEvent>, ImageLoader, List<OneShotNotification>> =
-        lambdaRecorder { _, _ -> emptyList() },
 ) : NotificationDataFactory {
     override suspend fun toNotifications(messages: List<NotifiableMessageEvent>, currentUser: MatrixUser, imageLoader: ImageLoader): List<RoomNotification> {
         return messageEventToNotificationsResult(messages, currentUser, imageLoader)
@@ -72,12 +68,6 @@ class FakeNotificationDataFactory(
     @Suppress("INAPPLICABLE_JVM_NAME")
     override fun toNotifications(fallback: List<FallbackNotifiableEvent>): List<OneShotNotification> {
         return fallbackEventToNotificationsResult(fallback)
-    }
-
-    @JvmName("toNotificationCallEvents")
-    @Suppress("INAPPLICABLE_JVM_NAME")
-    override suspend fun toNotifications(callEvents: List<NotifiableCallEvent>, imageLoader: ImageLoader): List<OneShotNotification> {
-        return callEventToNotificationsResult(callEvents, imageLoader)
     }
 
     override fun createSummaryNotification(

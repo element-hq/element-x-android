@@ -22,9 +22,9 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
-import io.element.android.libraries.push.impl.notifications.model.NotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
+import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import timber.log.Timber
 import javax.inject.Inject
@@ -47,7 +47,6 @@ class NotificationRenderer @Inject constructor(
             val invitationNotifications = toNotifications(groupedEvents.invitationEvents)
             val simpleNotifications = toNotifications(groupedEvents.simpleEvents)
             val fallbackNotifications = toNotifications(groupedEvents.fallbackEvents)
-            val callNotifications = toNotifications(groupedEvents.callEvent, imageLoader)
             val summaryNotification = createSummaryNotification(
                 currentUser = currentUser,
                 roomNotifications = roomNotifications,
@@ -95,14 +94,6 @@ class NotificationRenderer @Inject constructor(
                 }
             }
 
-            callNotifications.forEach { notificationData ->
-                notificationDisplayer.showNotificationMessage(
-                    tag = notificationData.key,
-                    id = NotificationIdProvider.getCallNotificationId(currentUser.userId),
-                    notification = notificationData.notification
-                )
-            }
-
             // Show only the first fallback notification
             if (fallbackNotifications.isNotEmpty()) {
                 Timber.tag(loggerTag.value).d("Showing fallback notification")
@@ -131,17 +122,17 @@ private fun List<NotifiableEvent>.groupByType(): GroupedNotificationEvents {
     val simpleEvents: MutableList<SimpleNotifiableEvent> = mutableListOf()
     val invitationEvents: MutableList<InviteNotifiableEvent> = mutableListOf()
     val fallbackEvents: MutableList<FallbackNotifiableEvent> = mutableListOf()
-    val callEvents: MutableList<NotifiableCallEvent> = mutableListOf()
     forEach { event ->
         when (event) {
             is InviteNotifiableEvent -> invitationEvents.add(event.castedToEventType())
             is NotifiableMessageEvent -> roomEvents.add(event.castedToEventType())
             is SimpleNotifiableEvent -> simpleEvents.add(event.castedToEventType())
             is FallbackNotifiableEvent -> fallbackEvents.add(event.castedToEventType())
-            is NotifiableCallEvent -> callEvents.add(event.castedToEventType())
+            // Nothing should be done for ringing call events as they're not handled here
+            is NotifiableRingingCallEvent -> {}
         }
     }
-    return GroupedNotificationEvents(roomEvents, simpleEvents, invitationEvents, fallbackEvents, callEvents)
+    return GroupedNotificationEvents(roomEvents, simpleEvents, invitationEvents, fallbackEvents)
 }
 
 @Suppress("UNCHECKED_CAST")
@@ -152,5 +143,4 @@ data class GroupedNotificationEvents(
     val simpleEvents: List<SimpleNotifiableEvent>,
     val invitationEvents: List<InviteNotifiableEvent>,
     val fallbackEvents: List<FallbackNotifiableEvent>,
-    val callEvent: List<NotifiableCallEvent>,
 )

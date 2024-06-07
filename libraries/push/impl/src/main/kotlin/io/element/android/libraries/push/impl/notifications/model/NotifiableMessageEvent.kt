@@ -51,9 +51,9 @@ data class NotifiableMessageEvent(
     val outGoingMessage: Boolean = false,
     val outGoingMessageFailed: Boolean = false,
     override val isRedacted: Boolean = false,
-    override val isUpdated: Boolean = false
-) : NotifiableEvent {
+    override val isUpdated: Boolean = false,
     val type: String = EventType.MESSAGE
+) : NotifiableEvent {
     override val description: String = body ?: ""
 
     // Example of value:
@@ -71,7 +71,7 @@ fun NotifiableEvent.shouldIgnoreEventInRoom(appNavigationState: AppNavigationSta
         null -> false
         else -> {
             // Never ignore ringing call notifications
-            if (this is NotifiableCallEvent) {
+            if (this is NotifiableRingingCallEvent) {
                 false
             } else {
                 appNavigationState.isInForeground &&

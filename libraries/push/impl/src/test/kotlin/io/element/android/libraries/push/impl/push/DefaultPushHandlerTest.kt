@@ -28,6 +28,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.CallNotifyType
+import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SECRET
@@ -264,35 +265,7 @@ class DefaultPushHandlerTest {
         val defaultPushHandler = createDefaultPushHandler(
             elementCallEntryPoint = elementCallEntryPoint,
             onNotifiableEventReceived = onNotifiableEventReceived,
-            notifiableEventResult = { _, _, _ -> anNotifiableCallEvent(callNotifyType = CallNotifyType.NOTIFY) },
-            incrementPushCounterResult = {},
-            pushClientSecret = FakePushClientSecret(
-                getUserIdFromSecretResult = { A_USER_ID }
-            ),
-        )
-        defaultPushHandler.handle(aPushData)
-
-        handleIncomingCallLambda.assertions().isNeverCalled()
-        onNotifiableEventReceived.assertions().isCalledOnce()
-    }
-
-    @Test
-    fun `when ringing call PushData is received but it's too old, the incoming call will be treated as a non-ringing notification`() = runTest {
-        val aPushData = PushData(
-            eventId = AN_EVENT_ID,
-            roomId = A_ROOM_ID,
-            unread = 0,
-            clientSecret = A_SECRET,
-        )
-        val onNotifiableEventReceived = lambdaRecorder<NotifiableEvent, Unit> {}
-        val handleIncomingCallLambda = lambdaRecorder<CallType.RoomCall, EventId, UserId, String?, String?, String?, String, Unit> { _, _, _, _, _, _, _ -> }
-        val elementCallEntryPoint = FakeElementCallEntryPoint(handleIncomingCallResult = handleIncomingCallLambda)
-        val defaultPushHandler = createDefaultPushHandler(
-            elementCallEntryPoint = elementCallEntryPoint,
-            onNotifiableEventReceived = onNotifiableEventReceived,
-            notifiableEventResult = { _, _, _ ->
-                anNotifiableCallEvent(callNotifyType = CallNotifyType.RING, timestamp = Instant.now().minusSeconds(10).toEpochMilli())
-            },
+            notifiableEventResult = { _, _, _ -> aNotifiableMessageEvent(type = EventType.CALL_NOTIFY) },
             incrementPushCounterResult = {},
             pushClientSecret = FakePushClientSecret(
                 getUserIdFromSecretResult = { A_USER_ID }

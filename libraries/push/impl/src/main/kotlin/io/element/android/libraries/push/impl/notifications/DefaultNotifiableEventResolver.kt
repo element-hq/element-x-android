@@ -36,6 +36,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
@@ -49,9 +50,9 @@ import io.element.android.libraries.matrix.ui.messages.toPlainText
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
-import io.element.android.libraries.push.impl.notifications.model.NotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
+import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -173,22 +174,42 @@ class DefaultNotifiableEventResolver @Inject constructor(
                 )
             }
             is NotificationContent.MessageLike.CallNotify -> {
-                NotifiableCallEvent(
-                    sessionId = userId,
-                    roomId = roomId,
-                    eventId = eventId,
-                    roomName = roomDisplayName,
-                    editedEventId = null,
-                    canBeReplaced = true,
-                    timestamp = this.timestamp,
-                    isRedacted = false,
-                    isUpdated = false,
-                    description = stringProvider.getString(R.string.notification_incoming_call),
-                    senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
-                    roomAvatarUrl = roomAvatarUrl,
-                    callNotifyType = content.type,
-                    senderId = content.senderId,
-                )
+                if (NotifiableRingingCallEvent.shouldRing(content.type, timestamp)) {
+                    NotifiableRingingCallEvent(
+                        sessionId = userId,
+                        roomId = roomId,
+                        eventId = eventId,
+                        roomName = roomDisplayName,
+                        editedEventId = null,
+                        canBeReplaced = true,
+                        timestamp = this.timestamp,
+                        isRedacted = false,
+                        isUpdated = false,
+                        description = stringProvider.getString(R.string.notification_incoming_call),
+                        senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
+                        roomAvatarUrl = roomAvatarUrl,
+                        callNotifyType = content.type,
+                        senderId = content.senderId,
+                        senderAvatarUrl = senderAvatarUrl,
+                    )
+                } else {
+                    // Create a simple message notification event
+                    buildNotifiableMessageEvent(
+                        sessionId = userId,
+                        senderId = content.senderId,
+                        roomId = roomId,
+                        eventId = eventId,
+                        noisy = true,
+                        timestamp = this.timestamp,
+                        senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
+                        body = "☎️ ${stringProvider.getString(R.string.notification_incoming_call)}",
+                        roomName = roomDisplayName,
+                        roomIsDirect = isDirect,
+                        roomAvatarPath = roomAvatarUrl,
+                        senderAvatarPath = senderAvatarUrl,
+                        type = EventType.CALL_NOTIFY,
+                    )
+                }
             }
             NotificationContent.MessageLike.KeyVerificationAccept,
             NotificationContent.MessageLike.KeyVerificationCancel,
@@ -352,7 +373,8 @@ private fun buildNotifiableMessageEvent(
     outGoingMessage: Boolean = false,
     outGoingMessageFailed: Boolean = false,
     isRedacted: Boolean = false,
-    isUpdated: Boolean = false
+    isUpdated: Boolean = false,
+    type: String = EventType.MESSAGE,
 ) = NotifiableMessageEvent(
     sessionId = sessionId,
     senderId = senderId,
@@ -374,5 +396,6 @@ private fun buildNotifiableMessageEvent(
     outGoingMessage = outGoingMessage,
     outGoingMessageFailed = outGoingMessageFailed,
     isRedacted = isRedacted,
-    isUpdated = isUpdated
+    isUpdated = isUpdated,
+    type = type,
 )
