@@ -1,3 +1,30 @@
+Changes in Element X v0.4.14 (2024-06-07)
+=========================================
+
+Features ✨
+----------
+ - Add support for incoming share (text or files) from other apps ([#1980](https://github.com/element-hq/element-x-android/issues/1980))
+
+Bugfixes 🐛
+----------
+ - Render selected/deselected room list filters on top ([#2809](https://github.com/element-hq/element-x-android/issues/2809))
+ - Set auto captilization, multiline and autocompletion flags for the markdown EditText. ([#2896](https://github.com/element-hq/element-x-android/issues/2896))
+ - Restore Markdown text input contents when returning to the room screen. ([#2898](https://github.com/element-hq/element-x-android/issues/2898))
+ - Fixed sending rich content from android keyboards on the markdown text input ([#2917](https://github.com/element-hq/element-x-android/issues/2917))
+ - Fix crash when restoring the selection values in the plain text editor. ([#2959](https://github.com/element-hq/element-x-android/issues/2959))
+
+Other changes
+-------------
+ - BugReporting | Add public device keys to rageshakes ([#2893](https://github.com/element-hq/element-x-android/issues/2893))
+ - Move push provider setting to the "Notifications" screen and display it only when several push provider are available. ([#2912](https://github.com/element-hq/element-x-android/issues/2912))
+ - Simplify notifications by removing the custom persistence layer.
+ - Bump minSdk to 24 (Android 7). ([#2924](https://github.com/element-hq/element-x-android/issues/2924))
+ - Add a feature flag ShowBlockedUsersDetails, disabled by default to render display name and avatar of blocked users in the blocked users list. ([#2930](https://github.com/element-hq/element-x-android/issues/2930))
+ - Be more specific with the widget permissions ([#2932](https://github.com/element-hq/element-x-android/issues/2932))
+ - Analytics | Add support for SuperProperties ([#2953](https://github.com/element-hq/element-x-android/issues/2953))
+ - Track when the user starts a room call and when they enable formatting options on the message composer ([#2969](https://github.com/element-hq/element-x-android/issues/2969))
+
+
 Changes in Element X v0.4.13 (2024-05-22)
 =========================================
 
