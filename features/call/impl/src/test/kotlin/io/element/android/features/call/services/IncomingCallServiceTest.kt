@@ -20,7 +20,7 @@ import android.content.Intent
 import androidx.test.platform.app.InstrumentationRegistry
 import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.notifications.RingingCallNotificationCreator
-import io.element.android.features.call.impl.services.IncomingCallForegroundService
+import io.element.android.features.call.impl.services.IncomingCallService
 import io.element.android.features.call.test.aCallNotificationData
 import io.element.android.features.call.utils.FakeActiveCallManager
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
@@ -36,7 +36,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class IncomingCallForegroundServiceTest {
+class IncomingCallServiceTest {
     @Test
     fun `onStartCommand - with no intent just returns`() = runTest {
         val registerIncomingCallLambda = lambdaRecorder<CallNotificationData, Unit> {}
@@ -88,7 +88,7 @@ class IncomingCallForegroundServiceTest {
 
     private fun TestScope.createService(
         fakeActiveCallManager: FakeActiveCallManager = FakeActiveCallManager(),
-    ) = IncomingCallForegroundService().apply {
+    ) = IncomingCallService().apply {
         coroutineScope = this@createService
         ringingCallNotificationCreator = RingingCallNotificationCreator(
             context = InstrumentationRegistry.getInstrumentation().targetContext,

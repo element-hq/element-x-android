@@ -16,14 +16,14 @@
 
 package io.element.android.features.call.impl.services
 
+import android.Manifest
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ServiceInfo
-import android.os.Build
+import android.content.pm.PackageManager
 import android.os.IBinder
-import androidx.core.app.ServiceCompat
-import androidx.core.content.ContextCompat
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.IntentCompat
 import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.call.impl.di.CallBindings
@@ -44,7 +44,7 @@ import kotlin.time.Duration.Companion.seconds
 /**
  * A foreground service that shows a notification for an incoming call.
  */
-class IncomingCallForegroundService : Service() {
+class IncomingCallService : Service() {
     companion object {
         private const val NOTIFICATION_DATA = "NOTIFICATION_DATA"
 
@@ -52,16 +52,16 @@ class IncomingCallForegroundService : Service() {
          * Starts the service to handle an incoming call.
          */
         internal fun start(context: Context, callNotificationData: CallNotificationData) {
-            val intent = Intent(context, IncomingCallForegroundService::class.java)
+            val intent = Intent(context, IncomingCallService::class.java)
             intent.putExtra(NOTIFICATION_DATA, callNotificationData)
-            ContextCompat.startForegroundService(context, intent)
+            context.startService(intent)
         }
 
         /**
          * Stops the service.
          */
         internal fun stop(context: Context) {
-            context.stopService(Intent(context, IncomingCallForegroundService::class.java))
+            context.stopService(Intent(context, IncomingCallService::class.java))
         }
     }
 
@@ -106,12 +106,6 @@ class IncomingCallForegroundService : Service() {
 
     override fun stopService(name: Intent?): Boolean {
         timedOutCallJob?.cancel()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            stopForeground(STOP_FOREGROUND_REMOVE)
-        } else {
-            @Suppress("DEPRECATION")
-            stopForeground(true)
-        }
         return super.stopService(name)
     }
 
@@ -127,18 +121,13 @@ class IncomingCallForegroundService : Service() {
             notificationChannelId = notificationData.notificationChannelId,
             timestamp = notificationData.timestamp
         ) ?: return
-        val serviceType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            ServiceInfo.FOREGROUND_SERVICE_TYPE_PHONE_CALL
-        } else {
-            0
-        }
         runCatching {
-            ServiceCompat.startForeground(
-                this,
-                NotificationIdProvider.getForegroundServiceNotificationId(ForegroundServiceType.INCOMING_CALL),
-                notification,
-                serviceType
-            )
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+                NotificationManagerCompat.from(this).notify(
+                    NotificationIdProvider.getForegroundServiceNotificationId(ForegroundServiceType.INCOMING_CALL),
+                    notification,
+                )
+            }
         }.onFailure {
             Timber.e(it, "Failed to start foreground service for incoming calls")
         }

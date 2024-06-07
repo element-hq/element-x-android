@@ -19,7 +19,7 @@ package io.element.android.features.call.utils
 import android.content.Intent
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.call.impl.services.IncomingCallForegroundService
+import io.element.android.features.call.impl.services.IncomingCallService
 import io.element.android.features.call.impl.utils.ActiveCall
 import io.element.android.features.call.impl.utils.CallState
 import io.element.android.features.call.impl.utils.DefaultActiveCallManager
@@ -169,13 +169,13 @@ class DefaultActiveCallManagerTest {
     )
 
     private fun assertServiceStarted() {
-        val expectedIntent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, IncomingCallForegroundService::class.java)
+        val expectedIntent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, IncomingCallService::class.java)
         val intent = Shadows.shadowOf(RuntimeEnvironment.getApplication()).nextStartedService
         assertThat(intent.component).isEqualTo(expectedIntent.component)
     }
 
     private fun asserServiceStopped() {
-        val expectedIntent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, IncomingCallForegroundService::class.java)
+        val expectedIntent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, IncomingCallService::class.java)
         val intent = Shadows.shadowOf(RuntimeEnvironment.getApplication()).nextStoppedService
         assertThat(intent.component).isEqualTo(expectedIntent.component)
     }

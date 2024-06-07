@@ -19,7 +19,7 @@ package io.element.android.features.call.impl.utils
 import android.content.Context
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.call.impl.notifications.CallNotificationData
-import io.element.android.features.call.impl.services.IncomingCallForegroundService
+import io.element.android.features.call.impl.services.IncomingCallService
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
@@ -88,7 +88,10 @@ class DefaultActiveCallManager @Inject constructor(
             roomId = notificationData.roomId,
             callState = CallState.Ringing(notificationData),
         )
-        IncomingCallForegroundService.start(context, notificationData)
+
+
+
+        IncomingCallService.start(context, notificationData)
     }
 
     override fun incomingCallTimedOut() {
@@ -96,7 +99,7 @@ class DefaultActiveCallManager @Inject constructor(
         val notificationData = (previousActiveCall.callState as? CallState.Ringing)?.notificationData ?: return
         activeCall.value = null
 
-        IncomingCallForegroundService.stop(context)
+        IncomingCallService.stop(context)
 
         coroutineScope.launch {
             onMissedCallNotificationHandler.addMissedCallNotification(
@@ -109,11 +112,11 @@ class DefaultActiveCallManager @Inject constructor(
 
     override fun hungUpCall() {
         activeCall.value = null
-        IncomingCallForegroundService.stop(context)
+        IncomingCallService.stop(context)
     }
 
     override fun joinedCall(sessionId: SessionId, roomId: RoomId) {
-        IncomingCallForegroundService.stop(context)
+        IncomingCallService.stop(context)
 
         activeCall.value = ActiveCall(
             sessionId = sessionId,
