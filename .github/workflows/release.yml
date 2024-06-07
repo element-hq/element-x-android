@@ -15,7 +15,7 @@ jobs:
     name: Create App Bundle (Gplay)
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ github.ref == 'refs/head/main' && format('build-release-main-gplay-{0}', github.sha) }}
+      group: ${{ format('build-release-main-gplay-{0}', github.sha) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
@@ -43,7 +43,7 @@ jobs:
     name: Create APKs (FDroid)
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ github.ref == 'refs/head/main' && format('build-release-main-fdroid-{0}', github.sha) }}
+      group: ${{ format('build-release-main-fdroid-{0}', github.sha) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
