@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_qr_code_login_invalid_scan_state_retry_button">"再試一次"</string>
   <string name="screen_welcome_bullet_1">"通話、投票、搜尋等更多功能將在今年登場。"</string>
   <string name="screen_welcome_bullet_2">"在這次的更新，您無法查看聊天室內被加密的歷史訊息。"</string>
   <string name="screen_welcome_bullet_3">"我們很樂意聽取您的意見，請到設定頁面告訴我們您的想法。"</string>

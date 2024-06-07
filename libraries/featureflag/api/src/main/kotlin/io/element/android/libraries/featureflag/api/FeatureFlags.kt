@@ -89,4 +89,18 @@ enum class FeatureFlags(
         defaultValue = false,
         isFinished = false,
     ),
+    QrCodeLogin(
+        key = "feature.qrCodeLogin",
+        title = "Enable login using QR code",
+        description = "Allow the user to login using the QR code flow",
+        defaultValue = true,
+        isFinished = false,
+    ),
+    IncomingShare(
+        key = "feature.incomingShare",
+        title = "Incoming Share support",
+        description = "Allow the application to receive data from other applications",
+        defaultValue = true,
+        isFinished = false,
+    ),
 }

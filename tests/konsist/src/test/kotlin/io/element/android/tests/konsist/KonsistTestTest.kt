@@ -27,10 +27,11 @@ import org.junit.Test
 
 class KonsistTestTest {
     @Test
-    fun `Classes name containing @Test must end with 'Test''`() {
+    fun `Classes name containing @Test must end with 'Test'`() {
         Konsist
             .scopeFromTest()
             .classes()
+            .withoutName("S", "T")
             .withFunction { it.hasAnnotationOf(Test::class) }
             .assertTrue { it.name.endsWith("Test") }
     }

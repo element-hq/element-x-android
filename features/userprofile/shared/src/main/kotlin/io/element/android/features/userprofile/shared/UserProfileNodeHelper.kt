@@ -32,7 +32,7 @@ class UserProfileNodeHelper(
     interface Callback : NodeInputs {
         fun openAvatarPreview(username: String, avatarUrl: String)
         fun onStartDM(roomId: RoomId)
-        fun onStartCall(roomId: RoomId)
+        fun onStartCall(dmRoomId: RoomId)
     }
 
     fun onShareUser(

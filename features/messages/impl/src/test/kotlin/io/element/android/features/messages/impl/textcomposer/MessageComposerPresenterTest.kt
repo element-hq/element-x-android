@@ -26,8 +26,9 @@ import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Composer
+import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
-import io.element.android.features.messages.impl.messagecomposer.MessageComposerContextImpl
+import io.element.android.features.messages.impl.messagecomposer.DefaultMessageComposerContext
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
@@ -394,7 +395,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - reply message`() = runTest {
-        val replyMessageLambda = lambdaRecorder { _: EventId, _: String, _: String?, _: List<Mention> ->
+        val replyMessageLambda = lambdaRecorder { _: EventId, _: String, _: String?, _: List<Mention>, _: Boolean ->
             Result.success(Unit)
         }
         val timeline = FakeTimeline().apply {
@@ -425,7 +426,7 @@ class MessageComposerPresenterTest {
 
             assert(replyMessageLambda)
                 .isCalledOnce()
-                .with(any(), value(A_REPLY), value(A_REPLY), any())
+                .with(any(), value(A_REPLY), value(A_REPLY), any(), value(false))
 
             assertThat(analyticsService.capturedEvents).containsExactly(
                 Composer(
@@ -768,10 +769,15 @@ class MessageComposerPresenterTest {
             val showTextFormatting = awaitItem()
             assertThat(showTextFormatting.showAttachmentSourcePicker).isFalse()
             assertThat(showTextFormatting.showTextFormatting).isTrue()
+            assertThat(analyticsService.capturedEvents).containsExactly(
+                Interaction(index = null, interactionType = null, name = Interaction.Name.MobileRoomComposerFormattingEnabled)
+            )
+            analyticsService.capturedEvents.clear()
             showTextFormatting.eventSink(MessageComposerEvents.ToggleTextFormatting(false))
             skipItems(1)
             val finished = awaitItem()
             assertThat(finished.showTextFormatting).isFalse()
+            assertThat(analyticsService.capturedEvents).isEmpty()
         }
     }
 
@@ -903,7 +909,7 @@ class MessageComposerPresenterTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - send messages with intentional mentions`() = runTest {
-        val replyMessageLambda = lambdaRecorder { _: EventId, _: String, _: String?, _: List<Mention> ->
+        val replyMessageLambda = lambdaRecorder { _: EventId, _: String, _: String?, _: List<Mention>, _: Boolean ->
             Result.success(Unit)
         }
         val editMessageLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String, _: String?, _: List<Mention> ->
@@ -950,7 +956,7 @@ class MessageComposerPresenterTest {
 
             assert(replyMessageLambda)
                 .isCalledOnce()
-                .with(any(), any(), any(), value(listOf(Mention.User(A_USER_ID_2))))
+                .with(any(), any(), any(), value(listOf(Mention.User(A_USER_ID_2))), value(false))
 
             // Check intentional mentions on edit message
             skipItems(1)
@@ -1049,7 +1055,7 @@ class MessageComposerPresenterTest {
         MediaSender(mediaPreProcessor, room),
         snackbarDispatcher,
         analyticsService,
-        MessageComposerContextImpl(),
+        DefaultMessageComposerContext(),
         TestRichTextEditorStateFactory(),
         currentSessionIdHolder = CurrentSessionIdHolder(FakeMatrixClient(A_SESSION_ID)),
         permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionPresenter),

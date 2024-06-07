@@ -30,6 +30,7 @@
   <string name="screen_login_subtitle">"Matrix — це відкрита мережа для безпечної, децентралізованої комунікації."</string>
   <string name="screen_login_title">"З поверненням!"</string>
   <string name="screen_login_title_with_homeserver">"Увійти в %1$s"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Спробуйте ще раз"</string>
   <string name="screen_server_confirmation_change_server">"Змінити провайдера облікового запису"</string>
   <string name="screen_server_confirmation_message_login_element_dot_io">"Приватний сервер для співробітників Element."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix — це відкрита мережа для безпечної, децентралізованої комунікації."</string>

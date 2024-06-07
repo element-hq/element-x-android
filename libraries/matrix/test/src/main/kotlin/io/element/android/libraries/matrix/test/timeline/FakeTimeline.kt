@@ -104,7 +104,8 @@ class FakeTimeline(
         body: String,
         htmlBody: String?,
         mentions: List<Mention>,
-    ) -> Result<Unit> = { _, _, _, _ ->
+        fromNotification: Boolean,
+    ) -> Result<Unit> = { _, _, _, _, _ ->
         Result.success(Unit)
     }
 
@@ -113,11 +114,13 @@ class FakeTimeline(
         body: String,
         htmlBody: String?,
         mentions: List<Mention>,
+        fromNotification: Boolean,
     ): Result<Unit> = replyMessageLambda(
         eventId,
         body,
         htmlBody,
-        mentions
+        mentions,
+        fromNotification,
     )
 
     var sendImageLambda: (

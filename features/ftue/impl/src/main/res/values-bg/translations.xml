@@ -2,7 +2,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_notification_optin_subtitle">"Можете да промените настройките си по-късно."</string>
   <string name="screen_notification_optin_title">"Разрешете известията и никога не пропускайте съобщение"</string>
-  <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Повторен опит"</string>
   <string name="screen_welcome_bullet_2">"Хронологията на съобщенията за шифровани стаи все още не е налична."</string>
   <string name="screen_welcome_title">"Добре дошли в %1$s!"</string>
 </resources>

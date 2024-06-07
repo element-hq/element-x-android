@@ -22,7 +22,6 @@ import androidx.core.content.edit
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.di.DefaultPreferences
 import io.element.android.libraries.matrix.api.core.UserId
 import javax.inject.Inject
 
@@ -36,9 +35,9 @@ interface UnifiedPushStore {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultUnifiedPushStore @Inject constructor(
+class SharedPreferencesUnifiedPushStore @Inject constructor(
     @ApplicationContext val context: Context,
-    @DefaultPreferences private val defaultPrefs: SharedPreferences,
+    private val sharedPreferences: SharedPreferences,
 ) : UnifiedPushStore {
     /**
      * Retrieves the UnifiedPush Endpoint.
@@ -47,7 +46,7 @@ class DefaultUnifiedPushStore @Inject constructor(
      * @return the UnifiedPush Endpoint or null if not received
      */
     override fun getEndpoint(clientSecret: String): String? {
-        return defaultPrefs.getString(PREFS_ENDPOINT_OR_TOKEN + clientSecret, null)
+        return sharedPreferences.getString(PREFS_ENDPOINT_OR_TOKEN + clientSecret, null)
     }
 
     /**
@@ -57,7 +56,7 @@ class DefaultUnifiedPushStore @Inject constructor(
      * @param endpoint the endpoint to store
      */
     override fun storeUpEndpoint(clientSecret: String, endpoint: String?) {
-        defaultPrefs.edit {
+        sharedPreferences.edit {
             putString(PREFS_ENDPOINT_OR_TOKEN + clientSecret, endpoint)
         }
     }
@@ -69,7 +68,7 @@ class DefaultUnifiedPushStore @Inject constructor(
      * @return the Push Gateway or null if not defined
      */
     override fun getPushGateway(clientSecret: String): String? {
-        return defaultPrefs.getString(PREFS_PUSH_GATEWAY + clientSecret, null)
+        return sharedPreferences.getString(PREFS_PUSH_GATEWAY + clientSecret, null)
     }
 
     /**
@@ -79,17 +78,17 @@ class DefaultUnifiedPushStore @Inject constructor(
      * @param gateway the push gateway to store
      */
     override fun storePushGateway(clientSecret: String, gateway: String?) {
-        defaultPrefs.edit {
+        sharedPreferences.edit {
             putString(PREFS_PUSH_GATEWAY + clientSecret, gateway)
         }
     }
 
     override fun getDistributorValue(userId: UserId): String? {
-        return defaultPrefs.getString(PREFS_DISTRIBUTOR + userId, null)
+        return sharedPreferences.getString(PREFS_DISTRIBUTOR + userId, null)
     }
 
     override fun setDistributorValue(userId: UserId, value: String) {
-        defaultPrefs.edit {
+        sharedPreferences.edit {
             putString(PREFS_DISTRIBUTOR + userId, value)
         }
     }

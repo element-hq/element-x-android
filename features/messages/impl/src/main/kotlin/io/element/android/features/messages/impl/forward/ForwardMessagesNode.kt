@@ -36,7 +36,6 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.roomselect.api.RoomSelectEntryPoint
 import io.element.android.libraries.roomselect.api.RoomSelectMode
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
@@ -99,7 +98,7 @@ class ForwardMessagesNode @AssistedInject constructor(
         }
     }
 
-    private fun onForwardSuccess(roomIds: ImmutableList<RoomId>) {
+    private fun onForwardSuccess(roomIds: List<RoomId>) {
         navigateUp()
         if (roomIds.size == 1) {
             val targetRoomId = roomIds.first()

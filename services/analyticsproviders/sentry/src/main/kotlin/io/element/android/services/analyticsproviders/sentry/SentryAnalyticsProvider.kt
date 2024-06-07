@@ -20,6 +20,7 @@ import android.content.Context
 import com.squareup.anvil.annotations.ContributesMultibinding
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
+import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
@@ -65,6 +66,9 @@ class SentryAnalyticsProvider @Inject constructor(
     }
 
     override fun updateUserProperties(userProperties: UserProperties) {
+    }
+
+    override fun updateSuperProperties(updatedProperties: SuperProperties) {
     }
 
     override fun trackError(throwable: Throwable) {

@@ -17,45 +17,25 @@
 package io.element.android.features.messages.impl.forward
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import io.element.android.libraries.designsystem.components.ProgressDialog
-import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
-import io.element.android.libraries.designsystem.components.dialogs.ErrorDialogDefaults
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.RoomId
-import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun ForwardMessagesView(
     state: ForwardMessagesState,
-    onForwardSuccess: (ImmutableList<RoomId>) -> Unit,
-    modifier: Modifier = Modifier,
+    onForwardSuccess: (List<RoomId>) -> Unit,
 ) {
-    if (state.forwardingSucceeded != null) {
-        onForwardSuccess(state.forwardingSucceeded)
-        return
-    }
-
-    if (state.isForwarding) {
-        ProgressDialog(modifier)
-    }
-
-    if (state.error != null) {
-        ForwardingErrorDialog(
-            modifier = modifier,
-            onDismiss = { state.eventSink(ForwardMessagesEvents.ClearError) },
-        )
-    }
-}
-
-@Composable
-private fun ForwardingErrorDialog(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
-    ErrorDialog(
-        content = ErrorDialogDefaults.title,
-        onDismiss = onDismiss,
-        modifier = modifier,
+    AsyncActionView(
+        async = state.forwardAction,
+        onSuccess = {
+            onForwardSuccess(it)
+        },
+        onErrorDismiss = {
+            state.eventSink(ForwardMessagesEvents.ClearError)
+        },
     )
 }
 

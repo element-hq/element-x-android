@@ -20,7 +20,7 @@ import android.content.Context
 import android.system.Os
 import androidx.preference.PreferenceManager
 import androidx.startup.Initializer
-import io.element.android.features.preferences.impl.developer.tracing.SharedPrefTracingConfigurationStore
+import io.element.android.features.preferences.impl.developer.tracing.SharedPreferencesTracingConfigurationStore
 import io.element.android.features.preferences.impl.developer.tracing.TargetLogLevelMapBuilder
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
@@ -38,7 +38,7 @@ class TracingInitializer : Initializer<Unit> {
         Timber.plant(tracingService.createTimberTree())
         val tracingConfiguration = if (BuildConfig.DEBUG) {
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-            val store = SharedPrefTracingConfigurationStore(prefs)
+            val store = SharedPreferencesTracingConfigurationStore(prefs)
             val builder = TargetLogLevelMapBuilder(store)
             TracingConfiguration(
                 filterConfiguration = TracingFilterConfigurations.custom(builder.getCurrentMap()),

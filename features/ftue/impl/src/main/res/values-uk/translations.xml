@@ -2,7 +2,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_notification_optin_subtitle">"Ви можете змінити свої налаштування пізніше."</string>
   <string name="screen_notification_optin_title">"Дозволити сповіщення і ніколи не пропускати повідомлення"</string>
-  <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Спробуйте ще раз"</string>
   <string name="screen_welcome_bullet_1">"Дзвінки, опитування, пошук тощо будуть додані пізніше цього року."</string>
   <string name="screen_welcome_bullet_2">"Історія повідомлень для зашифрованих кімнат ще недоступна."</string>
   <string name="screen_welcome_bullet_3">"Ми хотіли б почути вас, розкажіть нам ваші враження та ідеї щодо застосунку на сторінці налаштувань."</string>

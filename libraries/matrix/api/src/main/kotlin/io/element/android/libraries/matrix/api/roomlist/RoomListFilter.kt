@@ -20,6 +20,7 @@ sealed interface RoomListFilter {
     companion object {
         /**
          * Create a filter that matches all the given filters.
+         * If no filters are provided, all the rooms will match.
          */
         fun all(vararg filters: RoomListFilter): RoomListFilter {
             return All(filters.toList())
@@ -35,6 +36,7 @@ sealed interface RoomListFilter {
 
     /**
      * A filter that matches all the given filters.
+     * If [filters] is empty, all the room will match.
      */
     data class All(
         val filters: List<RoomListFilter>

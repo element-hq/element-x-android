@@ -21,12 +21,13 @@ import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.tests.testutils.lambda.LambdaOneParamRecorder
 import io.element.android.tests.testutils.lambda.LambdaTwoParamsRecorder
+import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.CoroutineScope
 
 class FakeSessionPreferencesStoreFactory(
-    var getLambda: LambdaTwoParamsRecorder<SessionId, CoroutineScope, SessionPreferencesStore> = lambdaRecorder { _, _ -> throw NotImplementedError() },
-    var removeLambda: LambdaOneParamRecorder<SessionId, Unit> = lambdaRecorder { _ -> },
+    val getLambda: LambdaTwoParamsRecorder<SessionId, CoroutineScope, SessionPreferencesStore> = lambdaRecorder { _, _ -> lambdaError() },
+    val removeLambda: LambdaOneParamRecorder<SessionId, Unit> = lambdaRecorder { _ -> lambdaError() },
 ) : SessionPreferencesStoreFactory {
     override fun get(sessionId: SessionId, sessionCoroutineScope: CoroutineScope): SessionPreferencesStore {
         return getLambda(sessionId, sessionCoroutineScope)

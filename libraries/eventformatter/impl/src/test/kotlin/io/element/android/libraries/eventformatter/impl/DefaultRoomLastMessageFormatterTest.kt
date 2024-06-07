@@ -50,6 +50,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.media.aMediaSource
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.timeline.aPollContent
 import io.element.android.libraries.matrix.test.timeline.aProfileChangeMessageContent
@@ -106,7 +107,7 @@ class DefaultRoomLastMessageFormatterTest {
     fun `Sticker content`() {
         val body = "body"
         val info = ImageInfo(null, null, null, null, null, null, null)
-        val message = createRoomEvent(false, null, StickerContent(body, info, "url"))
+        val message = createRoomEvent(false, null, StickerContent(body, info, aMediaSource(url = "url")))
         val result = formatter.format(message, false)
         assertThat(result).isEqualTo(body)
     }

@@ -20,7 +20,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.core.mimetype.MimeTypes
-import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
 import javax.inject.Inject
@@ -44,7 +43,7 @@ class TimelineItemContentStickerFactory @Inject constructor(
 
         return TimelineItemStickerContent(
             body = content.body,
-            mediaSource = MediaSource(content.url),
+            mediaSource = content.source,
             thumbnailSource = content.info.thumbnailSource,
             mimeType = content.info.mimetype ?: MimeTypes.OctetStream,
             blurhash = content.info.blurhash,

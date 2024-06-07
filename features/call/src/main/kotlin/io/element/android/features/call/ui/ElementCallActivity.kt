@@ -31,12 +31,12 @@ import android.webkit.PermissionRequest
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.core.content.IntentCompat
-import com.bumble.appyx.core.integrationpoint.NodeComponentActivity
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.isDark
@@ -49,7 +49,7 @@ import io.element.android.features.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.architecture.bindings
 import javax.inject.Inject
 
-class ElementCallActivity : NodeComponentActivity(), CallScreenNavigator {
+class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
     companion object {
         private const val EXTRA_CALL_WIDGET_SETTINGS = "EXTRA_CALL_WIDGET_SETTINGS"
 
@@ -121,13 +121,11 @@ class ElementCallActivity : NodeComponentActivity(), CallScreenNavigator {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-
         updateUiMode(newConfig)
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-
         setCallType(intent)
     }
 

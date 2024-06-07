@@ -54,8 +54,8 @@ interface RoomListService {
     ): DynamicRoomList
 
     /**
-     * returns a [DynamicRoomList] object of all rooms we want to display.
-     * This will exclude some rooms like the invites, or spaces.
+     * Returns a [DynamicRoomList] object of all rooms we want to display.
+     * If you want to get a filtered room list, consider using [createRoomList].
      */
     val allRooms: DynamicRoomList
 

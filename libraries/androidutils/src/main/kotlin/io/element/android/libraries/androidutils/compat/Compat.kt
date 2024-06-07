@@ -16,9 +16,21 @@
 
 package io.element.android.libraries.androidutils.compat
 
+import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.os.Build
+
+fun PackageManager.queryIntentActivitiesCompat(data: Intent, flags: Int): List<ResolveInfo> {
+    return when {
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> queryIntentActivities(
+            data,
+            PackageManager.ResolveInfoFlags.of(flags.toLong())
+        )
+        else -> @Suppress("DEPRECATION") queryIntentActivities(data, flags)
+    }
+}
 
 fun PackageManager.getApplicationInfoCompat(packageName: String, flags: Int): ApplicationInfo {
     return when {

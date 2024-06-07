@@ -23,6 +23,7 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.PollEnd
+import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.libraries.sessionstorage.test.observer.NoOpSessionObserver
@@ -255,6 +256,23 @@ class DefaultAnalyticsServiceTest {
         updateUserPropertiesLambda.assertions().isCalledOnce().with(value(aUserProperty))
     }
 
+    @Test
+    fun `when super properties are updated, updateSuperProperties is sent to the provider`() = runCancellableScopeTest {
+        val updateSuperPropertiesLambda = lambdaRecorder<SuperProperties, Unit> { _ -> }
+        val sut = createDefaultAnalyticsService(
+            coroutineScope = it,
+            analyticsProviders = setOf(
+                FakeAnalyticsProvider(
+                    initLambda = { },
+                    updateSuperPropertiesLambda = updateSuperPropertiesLambda,
+                )
+            ),
+            analyticsStore = FakeAnalyticsStore(defaultUserConsent = true),
+        )
+        sut.updateSuperProperties(aSuperProperty)
+        updateSuperPropertiesLambda.assertions().isCalledOnce().with(value(aSuperProperty))
+    }
+
     private suspend fun createDefaultAnalyticsService(
         coroutineScope: CoroutineScope,
         analyticsProviders: Set<@JvmSuppressWildcards AnalyticsProvider> = setOf(
@@ -279,6 +297,11 @@ class DefaultAnalyticsServiceTest {
         private val aScreen = MobileScreen(screenName = MobileScreen.ScreenName.User)
         private val aUserProperty = UserProperties(
             ftueUseCaseSelection = UserProperties.FtueUseCaseSelection.WorkMessaging,
+        )
+        private val aSuperProperty = SuperProperties(
+            appPlatform = SuperProperties.AppPlatform.EXA,
+            cryptoSDK = SuperProperties.CryptoSDK.Rust,
+            cryptoSDKVersion = "0.0"
         )
         private val anError = Exception("a reason")
         private const val AN_ID = "anId"

@@ -57,7 +57,13 @@ interface Timeline : AutoCloseable {
 
     suspend fun enterSpecialMode(eventId: EventId?): Result<Unit>
 
-    suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
+    suspend fun replyMessage(
+        eventId: EventId,
+        body: String,
+        htmlBody: String?,
+        mentions: List<Mention>,
+        fromNotification: Boolean = false,
+    ): Result<Unit>
 
     suspend fun sendImage(
         file: File,

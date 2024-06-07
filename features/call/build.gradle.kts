@@ -35,7 +35,6 @@ anvil {
 }
 
 dependencies {
-    implementation(projects.appnav)
     implementation(projects.appconfig)
     implementation(projects.anvilannotations)
     implementation(projects.libraries.architecture)
@@ -44,6 +43,7 @@ dependencies {
     implementation(projects.libraries.matrix.impl)
     implementation(projects.libraries.network)
     implementation(projects.libraries.preferences.api)
+    implementation(projects.services.analytics.api)
     implementation(projects.services.toolbox.api)
     implementation(libs.androidx.webkit)
     implementation(libs.serialization.json)
@@ -57,5 +57,6 @@ dependencies {
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.services.analytics.test)
     testImplementation(projects.tests.testutils)
 }

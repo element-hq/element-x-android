@@ -22,14 +22,14 @@ import io.element.android.libraries.push.impl.notifications.OneShotNotification
 import io.element.android.libraries.push.impl.notifications.RoomNotification
 import io.element.android.libraries.push.impl.notifications.SummaryGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.fixtures.A_NOTIFICATION
-import io.element.android.tests.testutils.lambda.LambdaSixParamsRecorder
+import io.element.android.tests.testutils.lambda.LambdaFiveParamsRecorder
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 
 class FakeSummaryGroupMessageCreator(
-    var createSummaryNotificationResult: LambdaSixParamsRecorder<
-        MatrixUser, List<RoomNotification>, List<OneShotNotification>, List<OneShotNotification>, List<OneShotNotification>, Boolean, Notification
+    var createSummaryNotificationResult: LambdaFiveParamsRecorder<
+        MatrixUser, List<RoomNotification>, List<OneShotNotification>, List<OneShotNotification>, List<OneShotNotification>, Notification
     > =
-        lambdaRecorder { _, _, _, _, _, _ -> A_NOTIFICATION }
+        lambdaRecorder { _, _, _, _, _ -> A_NOTIFICATION }
 ) : SummaryGroupMessageCreator {
     override fun createSummaryNotification(
         currentUser: MatrixUser,
@@ -37,7 +37,6 @@ class FakeSummaryGroupMessageCreator(
         invitationNotifications: List<OneShotNotification>,
         simpleNotifications: List<OneShotNotification>,
         fallbackNotifications: List<OneShotNotification>,
-        useCompleteNotificationFormat: Boolean
     ): Notification {
         return createSummaryNotificationResult(
             currentUser,
@@ -45,7 +44,6 @@ class FakeSummaryGroupMessageCreator(
             invitationNotifications,
             simpleNotifications,
             fallbackNotifications,
-            useCompleteNotificationFormat
         )
     }
 }

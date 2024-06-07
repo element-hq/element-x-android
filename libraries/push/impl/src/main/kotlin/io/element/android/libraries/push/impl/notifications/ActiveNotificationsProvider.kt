@@ -44,7 +44,7 @@ class DefaultActiveNotificationsProvider @Inject constructor(
     }
 
     override fun getNotificationsForSession(sessionId: SessionId): List<StatusBarNotification> {
-        return notificationManager.activeNotifications.filter { it.groupKey == sessionId.value }
+        return notificationManager.activeNotifications.filter { it.notification.group == sessionId.value }
     }
 
     override fun getMembershipNotificationForSession(sessionId: SessionId): List<StatusBarNotification> {

@@ -19,7 +19,6 @@ package io.element.android.features.messages.impl.timeline.model
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.res.stringResource
-import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
@@ -113,7 +112,7 @@ internal fun InReplyToDetails.Ready.metadata(): InReplyToMetadata? = when (event
     }
     is StickerContent -> InReplyToMetadata.Thumbnail(
         AttachmentThumbnailInfo(
-            thumbnailSource = MediaSource(eventContent.url),
+            thumbnailSource = eventContent.source,
             textContent = eventContent.body,
             type = AttachmentThumbnailType.Image,
             blurHash = eventContent.info.blurhash,

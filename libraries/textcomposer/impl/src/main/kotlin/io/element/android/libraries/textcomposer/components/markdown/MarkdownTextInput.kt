@@ -90,13 +90,15 @@ fun MarkdownTextInput(
                 tag = TestTags.plainTextEditor.value // Needed for UI tests
                 setPadding(0)
                 setBackgroundColor(Color.TRANSPARENT)
-                setText(state.text.value())
+                val text = state.text.value()
+                setText(text)
                 inputType = InputType.TYPE_CLASS_TEXT or
                     InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or
                     InputType.TYPE_TEXT_FLAG_MULTI_LINE or
                     InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
                 if (canUpdateState) {
-                    setSelection(state.selection.first, state.selection.last)
+                    val textRange = 0..text.length
+                    setSelection(state.selection.first.coerceIn(textRange), state.selection.last.coerceIn(textRange))
                     setOnFocusChangeListener { _, hasFocus ->
                         state.hasFocus = hasFocus
                     }

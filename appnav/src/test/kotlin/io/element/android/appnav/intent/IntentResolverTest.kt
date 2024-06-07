@@ -209,11 +209,31 @@ class IntentResolverTest {
             permalinkParserResult = { permalinkData }
         )
         val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
-            action = Intent.ACTION_SEND
+            action = Intent.ACTION_BATTERY_LOW
             data = "https://matrix.to/invalid".toUri()
         }
         val result = sut.resolve(intent)
         assertThat(result).isNull()
+    }
+
+    @Test
+    fun `test incoming share simple`() {
+        val sut = createIntentResolver()
+        val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
+            action = Intent.ACTION_SEND
+        }
+        val result = sut.resolve(intent)
+        assertThat(result).isEqualTo(ResolvedIntent.IncomingShare(intent = intent))
+    }
+
+    @Test
+    fun `test incoming share multiple`() {
+        val sut = createIntentResolver()
+        val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
+            action = Intent.ACTION_SEND_MULTIPLE
+        }
+        val result = sut.resolve(intent)
+        assertThat(result).isEqualTo(ResolvedIntent.IncomingShare(intent = intent))
     }
 
     @Test

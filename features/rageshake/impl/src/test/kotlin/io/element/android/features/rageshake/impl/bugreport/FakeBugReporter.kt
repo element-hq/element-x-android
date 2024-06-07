@@ -33,29 +33,29 @@ class FakeBugReporter(val mode: Mode = Mode.Success) : BugReporter {
         withDevicesLogs: Boolean,
         withCrashLogs: Boolean,
         withScreenshot: Boolean,
-        theBugDescription: String,
+        problemDescription: String,
         canContact: Boolean,
-        listener: BugReporterListener?,
+        listener: BugReporterListener,
     ) {
         delay(100)
-        listener?.onProgress(0)
+        listener.onProgress(0)
         delay(100)
-        listener?.onProgress(50)
+        listener.onProgress(50)
         delay(100)
         when (mode) {
             Mode.Success -> Unit
             Mode.Failure -> {
-                listener?.onUploadFailed(A_FAILURE_REASON)
+                listener.onUploadFailed(A_FAILURE_REASON)
                 return
             }
             Mode.Cancel -> {
-                listener?.onUploadCancelled()
+                listener.onUploadCancelled()
                 return
             }
         }
-        listener?.onProgress(100)
+        listener.onProgress(100)
         delay(100)
-        listener?.onUploadSucceed()
+        listener.onUploadSucceed()
     }
 
     override fun logDirectory(): File {

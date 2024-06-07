@@ -18,4 +18,5 @@ package io.element.android.libraries.roomselect.api
 
 enum class RoomSelectMode {
     Forward,
+    Share,
 }

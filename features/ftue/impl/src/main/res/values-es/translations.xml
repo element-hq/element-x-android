@@ -2,7 +2,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_notification_optin_subtitle">"Puedes cambiar la configuración más tarde."</string>
   <string name="screen_notification_optin_title">"Activa las notificaciones y nunca te pierdas un mensaje"</string>
-  <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Inténtalo de nuevo"</string>
   <string name="screen_welcome_bullet_1">"Las llamadas, las encuestas, la búsqueda y más se agregarán más adelante este año."</string>
   <string name="screen_welcome_bullet_2">"El historial de mensajes de las salas cifradas aún no está disponible."</string>
   <string name="screen_welcome_bullet_3">"Nos encantaría saber de ti, haznos saber lo que piensas a través de la página de configuración."</string>

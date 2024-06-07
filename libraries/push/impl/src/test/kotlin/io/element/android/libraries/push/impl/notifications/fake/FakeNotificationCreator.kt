@@ -18,7 +18,6 @@ package io.element.android.libraries.push.impl.notifications.fake
 
 import android.app.Notification
 import android.graphics.Bitmap
-import androidx.core.app.NotificationCompat
 import coil.ImageLoader
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -29,7 +28,7 @@ import io.element.android.libraries.push.impl.notifications.model.FallbackNotifi
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
-import io.element.android.tests.testutils.lambda.LambdaFiveParamsRecorder
+import io.element.android.tests.testutils.lambda.LambdaFourParamsRecorder
 import io.element.android.tests.testutils.lambda.LambdaListAnyParamsRecorder
 import io.element.android.tests.testutils.lambda.LambdaNoParamRecorder
 import io.element.android.tests.testutils.lambda.LambdaOneParamRecorder
@@ -41,8 +40,8 @@ class FakeNotificationCreator(
     var createRoomInvitationNotificationResult: LambdaOneParamRecorder<InviteNotifiableEvent, Notification> = lambdaRecorder { _ -> A_NOTIFICATION },
     var createSimpleNotificationResult: LambdaOneParamRecorder<SimpleNotifiableEvent, Notification> = lambdaRecorder { _ -> A_NOTIFICATION },
     var createFallbackNotificationResult: LambdaOneParamRecorder<FallbackNotifiableEvent, Notification> = lambdaRecorder { _ -> A_NOTIFICATION },
-    var createSummaryListNotificationResult: LambdaFiveParamsRecorder<MatrixUser, NotificationCompat.InboxStyle?, String, Boolean, Long, Notification> =
-        lambdaRecorder { _, _, _, _, _ -> A_NOTIFICATION },
+    var createSummaryListNotificationResult: LambdaFourParamsRecorder<MatrixUser, String, Boolean, Long, Notification> =
+        lambdaRecorder { _, _, _, _ -> A_NOTIFICATION },
     var createDiagnosticNotificationResult: LambdaNoParamRecorder<Notification> = lambdaRecorder { -> A_NOTIFICATION },
 ) : NotificationCreator {
     override suspend fun createMessagesListNotification(
@@ -75,12 +74,11 @@ class FakeNotificationCreator(
 
     override fun createSummaryListNotification(
         currentUser: MatrixUser,
-        style: NotificationCompat.InboxStyle?,
         compatSummary: String,
         noisy: Boolean,
         lastMessageTimestamp: Long
     ): Notification {
-        return createSummaryListNotificationResult(currentUser, style, compatSummary, noisy, lastMessageTimestamp)
+        return createSummaryListNotificationResult(currentUser, compatSummary, noisy, lastMessageTimestamp)
     }
 
     override fun createDiagnosticNotification(): Notification {

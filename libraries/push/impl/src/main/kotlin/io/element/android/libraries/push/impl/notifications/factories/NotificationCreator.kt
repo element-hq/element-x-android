@@ -85,7 +85,6 @@ interface NotificationCreator {
      */
     fun createSummaryListNotification(
         currentUser: MatrixUser,
-        style: NotificationCompat.InboxStyle?,
         compatSummary: String,
         noisy: Boolean,
         lastMessageTimestamp: Long
@@ -331,7 +330,6 @@ class DefaultNotificationCreator @Inject constructor(
      */
     override fun createSummaryListNotification(
         currentUser: MatrixUser,
-        style: NotificationCompat.InboxStyle?,
         compatSummary: String,
         noisy: Boolean,
         lastMessageTimestamp: Long
@@ -343,12 +341,9 @@ class DefaultNotificationCreator @Inject constructor(
             .setOnlyAlertOnce(true)
             // used in compat < N, after summary is built based on child notifications
             .setWhen(lastMessageTimestamp)
-            .setStyle(style)
-            .setContentTitle(currentUser.userId.value.annotateForDebug(9))
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setSmallIcon(smallIcon)
             // set content text to support devices running API level < 24
-            .setContentText(compatSummary.annotateForDebug(10))
             .setGroup(currentUser.userId.value)
             // set this notification as the summary for the group
             .setGroupSummary(true)

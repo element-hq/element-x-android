@@ -18,15 +18,13 @@ package io.element.android.features.messages.impl.forward
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.timeline.TimelineProvider
@@ -38,7 +36,7 @@ import kotlinx.coroutines.launch
 
 class ForwardMessagesPresenter @AssistedInject constructor(
     @Assisted eventId: String,
-    private val matrixCoroutineScope: CoroutineScope,
+    private val appCoroutineScope: CoroutineScope,
     private val timelineProvider: TimelineProvider,
 ) : Presenter<ForwardMessagesState> {
     private val eventId: EventId = EventId(eventId)
@@ -48,28 +46,22 @@ class ForwardMessagesPresenter @AssistedInject constructor(
         fun create(eventId: String): ForwardMessagesPresenter
     }
 
-    private val forwardingActionState: MutableState<AsyncData<ImmutableList<RoomId>>> = mutableStateOf(AsyncData.Uninitialized)
+    private val forwardingActionState: MutableState<AsyncAction<List<RoomId>>> = mutableStateOf(AsyncAction.Uninitialized)
 
     fun onRoomSelected(roomIds: List<RoomId>) {
-        matrixCoroutineScope.forwardEvent(eventId, roomIds.toPersistentList(), forwardingActionState)
+        appCoroutineScope.forwardEvent(eventId, roomIds.toPersistentList(), forwardingActionState)
     }
 
     @Composable
     override fun present(): ForwardMessagesState {
-        val forwardingSucceeded by remember {
-            derivedStateOf { forwardingActionState.value.dataOrNull() }
-        }
-
         fun handleEvents(event: ForwardMessagesEvents) {
             when (event) {
-                ForwardMessagesEvents.ClearError -> forwardingActionState.value = AsyncData.Uninitialized
+                ForwardMessagesEvents.ClearError -> forwardingActionState.value = AsyncAction.Uninitialized
             }
         }
 
         return ForwardMessagesState(
-            isForwarding = forwardingActionState.value.isLoading(),
-            error = (forwardingActionState.value as? AsyncData.Failure)?.error,
-            forwardingSucceeded = forwardingSucceeded,
+            forwardAction = forwardingActionState.value,
             eventSink = { handleEvents(it) }
         )
     }
@@ -77,12 +69,11 @@ class ForwardMessagesPresenter @AssistedInject constructor(
     private fun CoroutineScope.forwardEvent(
         eventId: EventId,
         roomIds: ImmutableList<RoomId>,
-        isForwardMessagesState: MutableState<AsyncData<ImmutableList<RoomId>>>,
+        isForwardMessagesState: MutableState<AsyncAction<List<RoomId>>>,
     ) = launch {
-        isForwardMessagesState.value = AsyncData.Loading()
-        timelineProvider.getActiveTimeline().forwardEvent(eventId, roomIds).fold(
-            { isForwardMessagesState.value = AsyncData.Success(roomIds) },
-            { isForwardMessagesState.value = AsyncData.Failure(it) }
-        )
+        suspend {
+            timelineProvider.getActiveTimeline().forwardEvent(eventId, roomIds).getOrThrow()
+            roomIds
+        }.runCatchingUpdatingState(isForwardMessagesState)
     }
 }

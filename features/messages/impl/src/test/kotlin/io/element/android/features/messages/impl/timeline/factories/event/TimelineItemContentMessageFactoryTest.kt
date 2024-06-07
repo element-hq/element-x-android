@@ -66,6 +66,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.media.aMediaSource
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractorWithoutValidation
@@ -706,9 +707,10 @@ class TimelineItemContentMessageFactoryTest {
         return StickerContent(
             body = body,
             info = inImageInfo,
-            url = inUrl
+            source = aMediaSource(url = inUrl),
         )
     }
+
     private fun createTimelineItemContentStickerFactory() = TimelineItemContentStickerFactory(
         fileSizeFormatter = FakeFileSizeFormatter(),
         fileExtensionExtractor = FileExtensionExtractorWithoutValidation()

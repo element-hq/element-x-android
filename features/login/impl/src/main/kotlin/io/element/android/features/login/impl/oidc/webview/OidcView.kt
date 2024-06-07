@@ -89,6 +89,6 @@ fun OidcView(
 internal fun OidcViewPreview(@PreviewParameter(OidcStateProvider::class) state: OidcState) = ElementPreview {
     OidcView(
         state = state,
-        onNavigateBack = { },
+        onNavigateBack = {},
     )
 }

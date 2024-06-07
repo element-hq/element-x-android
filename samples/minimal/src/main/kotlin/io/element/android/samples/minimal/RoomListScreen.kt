@@ -22,8 +22,8 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import io.element.android.features.invite.impl.response.AcceptDeclineInvitePresenter
 import io.element.android.features.invite.impl.response.AcceptDeclineInviteView
-import io.element.android.features.leaveroom.impl.LeaveRoomPresenterImpl
-import io.element.android.features.networkmonitor.impl.NetworkMonitorImpl
+import io.element.android.features.leaveroom.impl.DefaultLeaveRoomPresenter
+import io.element.android.features.networkmonitor.impl.DefaultNetworkMonitor
 import io.element.android.features.roomlist.impl.RoomListPresenter
 import io.element.android.features.roomlist.impl.RoomListView
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
@@ -31,7 +31,7 @@ import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryF
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersPresenter
 import io.element.android.features.roomlist.impl.filters.selection.DefaultFilterSelectionStrategy
 import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
-import io.element.android.features.roomlist.impl.migration.SharedPrefsMigrationScreenStore
+import io.element.android.features.roomlist.impl.migration.SharedPreferencesMigrationScreenStore
 import io.element.android.features.roomlist.impl.search.RoomListSearchDataSource
 import io.element.android.features.roomlist.impl.search.RoomListSearchPresenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -97,9 +97,9 @@ class RoomListScreen(
     )
     private val presenter = RoomListPresenter(
         client = matrixClient,
-        networkMonitor = NetworkMonitorImpl(context, Singleton.appScope),
+        networkMonitor = DefaultNetworkMonitor(context, Singleton.appScope),
         snackbarDispatcher = SnackbarDispatcher(),
-        leaveRoomPresenter = LeaveRoomPresenterImpl(matrixClient, RoomMembershipObserver(), coroutineDispatchers),
+        leaveRoomPresenter = DefaultLeaveRoomPresenter(matrixClient, RoomMembershipObserver(), coroutineDispatchers),
         roomListDataSource = RoomListDataSource(
             roomListService = matrixClient.roomListService,
             roomListRoomSummaryFactory = roomListRoomSummaryFactory,
@@ -114,7 +114,7 @@ class RoomListScreen(
         featureFlagService = featureFlagService,
         migrationScreenPresenter = MigrationScreenPresenter(
             matrixClient = matrixClient,
-            migrationScreenStore = SharedPrefsMigrationScreenStore(context.getSharedPreferences("migration", Context.MODE_PRIVATE))
+            migrationScreenStore = SharedPreferencesMigrationScreenStore(context.getSharedPreferences("migration", Context.MODE_PRIVATE))
         ),
         searchPresenter = RoomListSearchPresenter(
             RoomListSearchDataSource(

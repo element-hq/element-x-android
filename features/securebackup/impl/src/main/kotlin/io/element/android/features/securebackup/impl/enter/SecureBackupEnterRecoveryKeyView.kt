@@ -28,6 +28,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.securebackup.impl.R
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyView
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
+import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -55,7 +56,7 @@ fun SecureBackupEnterRecoveryKeyView(
     FlowStepPage(
         modifier = modifier,
         onBackClick = onBackClick,
-        iconVector = CompoundIcons.KeySolid(),
+        iconStyle = BigIcon.Style.Default(CompoundIcons.KeySolid()),
         title = stringResource(id = R.string.screen_recovery_key_confirm_title),
         subTitle = stringResource(id = R.string.screen_recovery_key_confirm_description),
         buttons = { Buttons(state = state, onCreateRecoveryKey = onCreateNewRecoveryKey) }

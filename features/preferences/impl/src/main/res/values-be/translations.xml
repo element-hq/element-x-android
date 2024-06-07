@@ -3,8 +3,8 @@
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Выберыце спосаб атрымання апавяшчэнняў"</string>
   <string name="screen_advanced_settings_developer_mode">"Рэжым распрацоўшчыка"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Падайце распрацоўнікам доступ да функцый і функцыянальным магчымасцям."</string>
-  <string name="screen_advanced_settings_element_call_base_url">"Базавы URL сервера званкоў Element"</string>
-  <string name="screen_advanced_settings_element_call_base_url_description">"Задайце свой сервер Element Call."</string>
+  <string name="screen_advanced_settings_element_call_base_url">"Карыстальніцкі URL сервера Element Call"</string>
+  <string name="screen_advanced_settings_element_call_base_url_description">"Усталюйце карыстальніцкі асноўны URL для Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Адрас пазначаны няправільна, пераканайцеся, што вы ўказалі пратакол (http/https) і правільны адрас."</string>
   <string name="screen_advanced_settings_push_provider_android">"Пастаўшчык push-апавяшчэнняў"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Адключыць рэдактар фарматаванага тэксту і ўключыць Markdown."</string>
@@ -25,7 +25,7 @@
   <string name="screen_edit_profile_title">"Рэдагаваць профіль"</string>
   <string name="screen_edit_profile_updating_details">"Абнаўленне профілю…"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Дадатковыя налады"</string>
-  <string name="screen_notification_settings_calls_label">"Аўдыё і відэа званкі"</string>
+  <string name="screen_notification_settings_calls_label">"Аўдыя і відэа званкі"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Неадпаведнасць канфігурацыі"</string>
   <string name="screen_notification_settings_configuration_mismatch_description">"Мы спрасцілі налады апавяшчэнняў, каб спрасціць пошук опцый. Некаторыя карыстальніцкія наладкі, абраныя вамі раней, не адлюстроўваюцца ў дадзеным меню, але яны ўсё яшчэ актыўныя.
 

@@ -115,7 +115,7 @@ class InReplyToMetadataKtTest {
                 eventContent = StickerContent(
                     body = "body",
                     info = anImageInfo(),
-                    url = "url"
+                    source = aMediaSource(url = "url")
                 )
             ).metadata()
         }.test {

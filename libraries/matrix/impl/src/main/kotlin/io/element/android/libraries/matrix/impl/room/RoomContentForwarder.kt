@@ -49,7 +49,13 @@ class RoomContentForwarder(
         toRoomIds: List<RoomId>,
         timeoutMs: Long = 5000L
     ) {
-        val content = fromTimeline.getTimelineEventContentByEventId(eventId.value)
+        val content = fromTimeline
+            .getEventTimelineItemByEventId(eventId.value)
+            .content()
+            .asMessage()
+            ?.content()
+            ?: throw ForwardEventException(toRoomIds)
+
         val targetSlidingSyncRooms = toRoomIds.mapNotNull { roomId -> roomListService.roomOrNull(roomId.value) }
         val targetRooms = targetSlidingSyncRooms.map { slidingSyncRoom ->
             slidingSyncRoom.use { it.fullRoomWithTimeline(null) }

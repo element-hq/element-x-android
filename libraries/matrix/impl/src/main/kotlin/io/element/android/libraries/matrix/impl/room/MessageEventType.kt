@@ -24,6 +24,7 @@ fun MessageEventType.map(): MessageLikeEventType = when (this) {
     MessageEventType.CALL_INVITE -> MessageLikeEventType.CALL_INVITE
     MessageEventType.CALL_HANGUP -> MessageLikeEventType.CALL_HANGUP
     MessageEventType.CALL_CANDIDATES -> MessageLikeEventType.CALL_CANDIDATES
+    MessageEventType.CALL_NOTIFY -> MessageLikeEventType.CALL_NOTIFY
     MessageEventType.KEY_VERIFICATION_READY -> MessageLikeEventType.KEY_VERIFICATION_READY
     MessageEventType.KEY_VERIFICATION_START -> MessageLikeEventType.KEY_VERIFICATION_START
     MessageEventType.KEY_VERIFICATION_CANCEL -> MessageLikeEventType.KEY_VERIFICATION_CANCEL
@@ -49,6 +50,7 @@ fun MessageLikeEventType.map(): MessageEventType = when (this) {
     MessageLikeEventType.CALL_INVITE -> MessageEventType.CALL_INVITE
     MessageLikeEventType.CALL_HANGUP -> MessageEventType.CALL_HANGUP
     MessageLikeEventType.CALL_CANDIDATES -> MessageEventType.CALL_CANDIDATES
+    MessageLikeEventType.CALL_NOTIFY -> MessageEventType.CALL_NOTIFY
     MessageLikeEventType.KEY_VERIFICATION_READY -> MessageEventType.KEY_VERIFICATION_READY
     MessageLikeEventType.KEY_VERIFICATION_START -> MessageEventType.KEY_VERIFICATION_START
     MessageLikeEventType.KEY_VERIFICATION_CANCEL -> MessageEventType.KEY_VERIFICATION_CANCEL

@@ -63,7 +63,7 @@ class DefaultBugReporterTest {
             withDevicesLogs = true,
             withCrashLogs = true,
             withScreenshot = true,
-            theBugDescription = "a bug occurred",
+            problemDescription = "a bug occurred",
             canContact = true,
             listener = object : BugReporterListener {
                 override fun onUploadCancelled() {
@@ -130,7 +130,7 @@ class DefaultBugReporterTest {
             withDevicesLogs = true,
             withCrashLogs = true,
             withScreenshot = true,
-            theBugDescription = "a bug occurred",
+            problemDescription = "a bug occurred",
             canContact = true,
             listener = object : BugReporterListener {
                 override fun onUploadCancelled() {}
@@ -198,9 +198,9 @@ class DefaultBugReporterTest {
             withDevicesLogs = true,
             withCrashLogs = true,
             withScreenshot = true,
-            theBugDescription = "a bug occurred",
+            problemDescription = "a bug occurred",
             canContact = true,
-            listener = null
+            listener = NoopBugReporterListener(),
         )
         val request = server.takeRequest()
 
@@ -240,9 +240,9 @@ class DefaultBugReporterTest {
             withDevicesLogs = true,
             withCrashLogs = true,
             withScreenshot = true,
-            theBugDescription = "a bug occurred",
+            problemDescription = "a bug occurred",
             canContact = true,
-            listener = null
+            listener = NoopBugReporterListener(),
         )
         val request = server.takeRequest()
 
@@ -308,7 +308,7 @@ class DefaultBugReporterTest {
             withDevicesLogs = true,
             withCrashLogs = true,
             withScreenshot = true,
-            theBugDescription = "a bug occurred",
+            problemDescription = "a bug occurred",
             canContact = true,
             listener = object : BugReporterListener {
                 override fun onUploadCancelled() {

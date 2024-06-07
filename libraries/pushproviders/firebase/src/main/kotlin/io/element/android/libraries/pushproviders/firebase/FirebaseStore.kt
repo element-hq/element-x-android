@@ -20,7 +20,6 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.DefaultPreferences
 import javax.inject.Inject
 
 /**
@@ -32,15 +31,15 @@ interface FirebaseStore {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultFirebaseStore @Inject constructor(
-    @DefaultPreferences private val sharedPrefs: SharedPreferences,
+class SharedPreferencesFirebaseStore @Inject constructor(
+    private val sharedPreferences: SharedPreferences,
 ) : FirebaseStore {
     override fun getFcmToken(): String? {
-        return sharedPrefs.getString(PREFS_KEY_FCM_TOKEN, null)
+        return sharedPreferences.getString(PREFS_KEY_FCM_TOKEN, null)
     }
 
     override fun storeFcmToken(token: String?) {
-        sharedPrefs.edit {
+        sharedPreferences.edit {
             putString(PREFS_KEY_FCM_TOKEN, token)
         }
     }

@@ -87,7 +87,13 @@ class KonsistArchitectureTest {
             .withAnnotationOf(Composable::class)
             .assertTrue(additionalMessage = "Consider adding the @Immutable or @Stable annotation to the sealed interface") {
                 it.parameters.all { param ->
-                    param.type.fullyQualifiedName !in forbiddenInterfacesForComposableParameter
+                    val type = param.type.text
+                    return@all if (type.startsWith("@") || type.startsWith("(") || type.startsWith("suspend")) {
+                        true
+                    } else {
+                        val fullyQualifiedName = param.type.declaration.packagee?.fullyQualifiedName + "." + type
+                        fullyQualifiedName !in forbiddenInterfacesForComposableParameter
+                    }
                 }
             }
     }

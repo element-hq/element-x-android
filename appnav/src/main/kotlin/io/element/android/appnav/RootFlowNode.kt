@@ -283,6 +283,19 @@ class RootFlowNode @AssistedInject constructor(
             is ResolvedIntent.Navigation -> navigateTo(resolvedIntent.deeplinkData)
             is ResolvedIntent.Oidc -> onOidcAction(resolvedIntent.oidcAction)
             is ResolvedIntent.Permalink -> navigateTo(resolvedIntent.permalinkData)
+            is ResolvedIntent.IncomingShare -> onIncomingShare(resolvedIntent.intent)
+        }
+    }
+
+    private suspend fun onIncomingShare(intent: Intent) {
+        // Is there a session already?
+        val latestSessionId = authenticationService.getLatestSessionId()
+        if (latestSessionId == null) {
+            // No session, open login
+            switchToNotLoggedInFlow()
+        } else {
+            attachSession(latestSessionId)
+                .attachIncomingShare(intent)
         }
     }
 

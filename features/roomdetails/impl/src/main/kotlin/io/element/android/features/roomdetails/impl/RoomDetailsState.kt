@@ -16,6 +16,7 @@
 
 package io.element.android.features.roomdetails.impl
 
+import androidx.compose.runtime.Immutable
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.userprofile.shared.UserProfileState
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -45,11 +46,13 @@ data class RoomDetailsState(
     val eventSink: (RoomDetailsEvent) -> Unit
 )
 
+@Immutable
 sealed interface RoomDetailsType {
     data object Room : RoomDetailsType
     data class Dm(val roomMember: RoomMember) : RoomDetailsType
 }
 
+@Immutable
 sealed interface RoomTopicState {
     data object Hidden : RoomTopicState
     data object CanAddTopic : RoomTopicState

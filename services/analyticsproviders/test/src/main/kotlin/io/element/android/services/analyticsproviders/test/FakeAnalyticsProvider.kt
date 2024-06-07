@@ -18,6 +18,7 @@ package io.element.android.services.analyticsproviders.test
 
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
+import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.services.analyticsproviders.api.AnalyticsProvider
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -29,6 +30,7 @@ class FakeAnalyticsProvider(
     private val captureLambda: (VectorAnalyticsEvent) -> Unit = { lambdaError() },
     private val screenLambda: (VectorAnalyticsScreen) -> Unit = { lambdaError() },
     private val updateUserPropertiesLambda: (UserProperties) -> Unit = { lambdaError() },
+    private val updateSuperPropertiesLambda: (SuperProperties) -> Unit = { lambdaError() },
     private val trackErrorLambda: (Throwable) -> Unit = { lambdaError() }
 ) : AnalyticsProvider {
     override fun init() = initLambda()
@@ -37,4 +39,5 @@ class FakeAnalyticsProvider(
     override fun screen(screen: VectorAnalyticsScreen) = screenLambda(screen)
     override fun updateUserProperties(userProperties: UserProperties) = updateUserPropertiesLambda(userProperties)
     override fun trackError(throwable: Throwable) = trackErrorLambda(throwable)
+    override fun updateSuperProperties(updatedProperties: SuperProperties) = updateSuperPropertiesLambda(updatedProperties)
 }
