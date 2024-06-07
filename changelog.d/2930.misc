@@ -1,1 +1,0 @@
-Add a feature flag ShowBlockedUsersDetails, disabled by default to render display name and avatar of blocked users in the blocked users list.
