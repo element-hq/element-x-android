@@ -660,6 +660,9 @@ class DefaultNotifiableEventResolverTest {
             notificationMediaRepoFactory = notificationMediaRepoFactory,
             context = context,
             permalinkParser = FakePermalinkParser(),
+            callNotificationEventResolver = DefaultCallNotificationEventResolver(
+                stringProvider = AndroidStringProvider(context.resources)
+            ),
         )
     }
 

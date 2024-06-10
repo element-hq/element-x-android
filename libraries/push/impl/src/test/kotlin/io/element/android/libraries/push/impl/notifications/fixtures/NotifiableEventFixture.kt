@@ -104,7 +104,7 @@ fun aNotifiableMessageEvent(
     type = type,
 )
 
-fun anNotifiableCallEvent(
+fun aNotifiableCallEvent(
     sessionId: SessionId = A_SESSION_ID,
     roomId: RoomId = A_ROOM_ID,
     eventId: EventId = AN_EVENT_ID,
