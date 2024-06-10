@@ -27,6 +27,7 @@ import io.element.android.features.call.test.aCallNotificationData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -39,10 +40,12 @@ import io.element.android.libraries.push.test.notifications.FakeImageLoaderHolde
 import io.element.android.libraries.push.test.notifications.FakeOnMissedCallNotificationHandler
 import io.element.android.libraries.push.test.notifications.push.FakeNotificationBitmapLoader
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -77,9 +80,14 @@ class DefaultActiveCallManagerTest {
         verify { notificationManagerCompat.notify(notificationId, any()) }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `registerIncomingCall - when there is an already active call does nothing`() = runTest {
-        val manager = createActiveCallManager()
+    fun `registerIncomingCall - when there is an already active call adds missed call notification`() = runTest {
+        val addMissedCallNotificationLambda = lambdaRecorder<SessionId, RoomId, EventId, Unit> { _, _, _ -> }
+        val onMissedCallNotificationHandler = FakeOnMissedCallNotificationHandler(addMissedCallNotificationLambda = addMissedCallNotificationLambda)
+        val manager = createActiveCallManager(
+            onMissedCallNotificationHandler = onMissedCallNotificationHandler,
+        )
 
         // Register existing call
         val callNotificationData = aCallNotificationData()
@@ -91,6 +99,12 @@ class DefaultActiveCallManagerTest {
 
         assertThat(manager.activeCall.value).isEqualTo(activeCall)
         assertThat(manager.activeCall.value?.roomId).isNotEqualTo(A_ROOM_ID_2)
+
+        advanceTimeBy(1)
+
+        addMissedCallNotificationLambda.assertions()
+            .isCalledOnce()
+            .with(value(A_SESSION_ID), value(A_ROOM_ID_2), value(AN_EVENT_ID))
     }
 
     @Test
@@ -119,12 +133,10 @@ class DefaultActiveCallManagerTest {
         assertThat(manager.activeCall.value).isNotNull()
 
         manager.incomingCallTimedOut()
+        advanceTimeBy(1)
+
         assertThat(manager.activeCall.value).isNull()
-
-        runCurrent()
-
         addMissedCallNotificationLambda.assertions().isCalledOnce()
-
         verify { notificationManagerCompat.cancel(notificationId) }
     }
 
