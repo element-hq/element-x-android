@@ -37,8 +37,8 @@ import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationSer
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.push.impl.notifications.FakeNotifiableEventResolver
 import io.element.android.libraries.push.impl.notifications.channels.FakeNotificationChannels
+import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
-import io.element.android.libraries.push.impl.notifications.fixtures.anNotifiableCallEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.test.DefaultTestPush
 import io.element.android.libraries.push.impl.troubleshoot.DiagnosticPushHandler
@@ -240,7 +240,7 @@ class DefaultPushHandlerTest {
         val elementCallEntryPoint = FakeElementCallEntryPoint(handleIncomingCallResult = handleIncomingCallLambda)
         val defaultPushHandler = createDefaultPushHandler(
             elementCallEntryPoint = elementCallEntryPoint,
-            notifiableEventResult = { _, _, _ -> anNotifiableCallEvent(callNotifyType = CallNotifyType.RING, timestamp = Instant.now().toEpochMilli()) },
+            notifiableEventResult = { _, _, _ -> aNotifiableCallEvent(callNotifyType = CallNotifyType.RING, timestamp = Instant.now().toEpochMilli()) },
             incrementPushCounterResult = {},
             pushClientSecret = FakePushClientSecret(
                 getUserIdFromSecretResult = { A_USER_ID }

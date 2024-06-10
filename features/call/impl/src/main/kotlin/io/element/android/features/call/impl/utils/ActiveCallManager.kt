@@ -89,6 +89,7 @@ class DefaultActiveCallManager @Inject constructor(
 
     override fun registerIncomingCall(notificationData: CallNotificationData) {
         if (activeCall.value != null) {
+            displayMissedCallNotification(notificationData)
             Timber.w("Already have an active call, ignoring incoming call: $notificationData")
             return
         }
@@ -99,7 +100,6 @@ class DefaultActiveCallManager @Inject constructor(
         )
 
         timedOutCallJob = coroutineScope.launch {
-            registerIncomingCall(notificationData)
             showIncomingCallNotification(notificationData)
 
             // Wait for the call to end
@@ -115,13 +115,7 @@ class DefaultActiveCallManager @Inject constructor(
 
         cancelIncomingCallNotification()
 
-        coroutineScope.launch {
-            onMissedCallNotificationHandler.addMissedCallNotification(
-                sessionId = previousActiveCall.sessionId,
-                roomId = previousActiveCall.roomId,
-                eventId = notificationData.eventId,
-            )
-        }
+        displayMissedCallNotification(notificationData)
     }
 
     override fun hungUpCall() {
@@ -173,6 +167,16 @@ class DefaultActiveCallManager @Inject constructor(
 
     private fun cancelIncomingCallNotification() {
         notificationManagerCompat.cancel(NotificationIdProvider.getForegroundServiceNotificationId(ForegroundServiceType.INCOMING_CALL))
+    }
+
+    private fun displayMissedCallNotification(notificationData: CallNotificationData) {
+        coroutineScope.launch {
+            onMissedCallNotificationHandler.addMissedCallNotification(
+                sessionId = notificationData.sessionId,
+                roomId = notificationData.roomId,
+                eventId = notificationData.eventId,
+            )
+        }
     }
 }
 
