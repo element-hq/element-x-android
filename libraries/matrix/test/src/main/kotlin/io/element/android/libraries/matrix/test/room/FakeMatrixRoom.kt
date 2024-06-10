@@ -86,6 +86,7 @@ class FakeMatrixRoom(
     override val liveTimeline: Timeline = FakeTimeline(),
     private var roomPermalinkResult: () -> Result<String> = { Result.success("room link") },
     private var eventPermalinkResult: (EventId) -> Result<String> = { Result.success("event link") },
+    var sendCallNotificationIfNeededResult: () -> Result<Unit> = { Result.success(Unit) },
     canRedactOwn: Boolean = false,
     canRedactOther: Boolean = false,
 ) : MatrixRoom {
@@ -527,6 +528,10 @@ class FakeMatrixRoom(
         languageTag: String?,
         theme: String?,
     ): Result<String> = generateWidgetWebViewUrlResult
+
+    override suspend fun sendCallNotificationIfNeeded(): Result<Unit> {
+        return sendCallNotificationIfNeededResult()
+    }
 
     override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver> = getWidgetDriverResult
 

@@ -36,6 +36,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
@@ -51,6 +52,7 @@ import io.element.android.libraries.push.impl.notifications.model.FallbackNotifi
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
+import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -150,8 +152,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
             }
             NotificationContent.MessageLike.CallAnswer,
             NotificationContent.MessageLike.CallCandidates,
-            NotificationContent.MessageLike.CallHangup,
-            is NotificationContent.MessageLike.CallNotify -> { // TODO CallNotify will be handled separately in the future
+            NotificationContent.MessageLike.CallHangup -> {
                 Timber.tag(loggerTag.value).d("Ignoring notification for call ${content.javaClass.simpleName}")
                 null
             }
@@ -171,6 +172,44 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     roomAvatarPath = roomAvatarUrl,
                     senderAvatarPath = senderAvatarUrl,
                 )
+            }
+            is NotificationContent.MessageLike.CallNotify -> {
+                if (NotifiableRingingCallEvent.shouldRing(content.type, timestamp)) {
+                    NotifiableRingingCallEvent(
+                        sessionId = userId,
+                        roomId = roomId,
+                        eventId = eventId,
+                        roomName = roomDisplayName,
+                        editedEventId = null,
+                        canBeReplaced = true,
+                        timestamp = this.timestamp,
+                        isRedacted = false,
+                        isUpdated = false,
+                        description = stringProvider.getString(R.string.notification_incoming_call),
+                        senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
+                        roomAvatarUrl = roomAvatarUrl,
+                        callNotifyType = content.type,
+                        senderId = content.senderId,
+                        senderAvatarUrl = senderAvatarUrl,
+                    )
+                } else {
+                    // Create a simple message notification event
+                    buildNotifiableMessageEvent(
+                        sessionId = userId,
+                        senderId = content.senderId,
+                        roomId = roomId,
+                        eventId = eventId,
+                        noisy = true,
+                        timestamp = this.timestamp,
+                        senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
+                        body = "☎️ ${stringProvider.getString(R.string.notification_incoming_call)}",
+                        roomName = roomDisplayName,
+                        roomIsDirect = isDirect,
+                        roomAvatarPath = roomAvatarUrl,
+                        senderAvatarPath = senderAvatarUrl,
+                        type = EventType.CALL_NOTIFY,
+                    )
+                }
             }
             NotificationContent.MessageLike.KeyVerificationAccept,
             NotificationContent.MessageLike.KeyVerificationCancel,
@@ -334,7 +373,8 @@ private fun buildNotifiableMessageEvent(
     outGoingMessage: Boolean = false,
     outGoingMessageFailed: Boolean = false,
     isRedacted: Boolean = false,
-    isUpdated: Boolean = false
+    isUpdated: Boolean = false,
+    type: String = EventType.MESSAGE,
 ) = NotifiableMessageEvent(
     sessionId = sessionId,
     senderId = senderId,
@@ -356,5 +396,6 @@ private fun buildNotifiableMessageEvent(
     outGoingMessage = outGoingMessage,
     outGoingMessageFailed = outGoingMessageFailed,
     isRedacted = isRedacted,
-    isUpdated = isUpdated
+    isUpdated = isUpdated,
+    type = type,
 )

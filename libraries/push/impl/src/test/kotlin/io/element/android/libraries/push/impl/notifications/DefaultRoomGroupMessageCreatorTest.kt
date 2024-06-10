@@ -25,8 +25,8 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.push.impl.notifications.factories.createNotificationCreator
-import io.element.android.libraries.push.impl.notifications.fake.FakeImageLoader
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
+import io.element.android.libraries.push.test.notifications.FakeImageLoader
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
@@ -212,7 +212,7 @@ fun createRoomGroupMessageCreator(
     sdkIntProvider: BuildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(Build.VERSION_CODES.O),
 ): RoomGroupMessageCreator {
     val context = RuntimeEnvironment.getApplication() as Context
-    val bitmapLoader = NotificationBitmapLoader(
+    val bitmapLoader = DefaultNotificationBitmapLoader(
         context = RuntimeEnvironment.getApplication(),
         sdkIntProvider = sdkIntProvider,
     )
