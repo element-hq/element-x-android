@@ -26,7 +26,6 @@
   <string name="screen_room_invite_again_alert_title">"Du är ensam i den här chatten"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Meddela hela rummet"</string>
   <string name="screen_room_mentions_at_room_title">"Alla"</string>
-  <string name="screen_room_retry_send_menu_send_again_action">"Skicka igen"</string>
   <string name="screen_room_retry_send_menu_title">"Ditt meddelande kunde inte skickas"</string>
   <string name="screen_room_timeline_add_reaction">"Lägg till emoji"</string>
   <string name="screen_room_timeline_beginning_of_room">"Det här är början på %1$s."</string>

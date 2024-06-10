@@ -3,6 +3,7 @@
   <string name="notification_channel_call">"Hovor"</string>
   <string name="notification_channel_listening_for_events">"Naslouchání událostem"</string>
   <string name="notification_channel_noisy">"Hlasitá oznámení"</string>
+  <string name="notification_channel_ringing_calls">"Vyzvánění hovorů"</string>
   <string name="notification_channel_silent">"Tichá oznámení"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d zpráva"</item>

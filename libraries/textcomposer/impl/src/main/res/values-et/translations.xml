@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"Lisa manus"</string>
+  <string name="rich_text_editor_bullet_list">"Lülita mummudega loend sisse/välja"</string>
+  <string name="rich_text_editor_close_formatting_options">"Sulge vorminduse valikud"</string>
+  <string name="rich_text_editor_code_block">"Lülita lähtekoodi lõik sisse/välja"</string>
+  <string name="rich_text_editor_composer_placeholder">"Sõnum…"</string>
+  <string name="rich_text_editor_create_link">"Lisa link"</string>
+  <string name="rich_text_editor_edit_link">"Muuda linki"</string>
+  <string name="rich_text_editor_format_bold">"Kasuta paksu kirja"</string>
+  <string name="rich_text_editor_format_italic">"Kasuta kaldkirja"</string>
+  <string name="rich_text_editor_format_strikethrough">"Kasuta läbikriipsutatud kirja"</string>
+  <string name="rich_text_editor_format_underline">"Kasuta allajoonitud kirja"</string>
+  <string name="rich_text_editor_full_screen_toggle">"Lülita täisekraanivaade sisse/välja"</string>
+  <string name="rich_text_editor_indent">"Lisa taandrida"</string>
+  <string name="rich_text_editor_inline_code">"Kuva lähtekoodi lõiguna"</string>
+  <string name="rich_text_editor_link">"Lisa link"</string>
+  <string name="rich_text_editor_numbered_list">"Lülita nummerdatud loend sisse/välja"</string>
+  <string name="rich_text_editor_open_compose_options">"Ava vorminduse valikud"</string>
+  <string name="rich_text_editor_quote">"Lülita tsiteerimine sisse/välja"</string>
+  <string name="rich_text_editor_remove_link">"Eemalda link"</string>
+  <string name="rich_text_editor_unindent">"Eemalda taandrida"</string>
+  <string name="rich_text_editor_url_placeholder">"Link"</string>
+</resources>

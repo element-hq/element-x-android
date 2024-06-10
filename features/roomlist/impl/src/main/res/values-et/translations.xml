@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="confirm_recovery_key_banner_title">"Sisesta oma taastevõti"</string>
+  <string name="screen_roomlist_filter_people">"Inimesed"</string>
+  <string name="session_verification_banner_message">"Tundub, et kasutad uut seadet. Oma krüptitud sõnumite lugemiseks verifitseeri ta mõne muu oma seadmega."</string>
+  <string name="session_verification_banner_title">"Verifitseeri, et see oled sina"</string>
+</resources>

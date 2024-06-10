@@ -26,7 +26,6 @@
   <string name="screen_room_invite_again_alert_title">"V tomto rozhovore ste sami"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Informovať celú miestnosť"</string>
   <string name="screen_room_mentions_at_room_title">"Všetci"</string>
-  <string name="screen_room_retry_send_menu_send_again_action">"Odoslať znova"</string>
   <string name="screen_room_retry_send_menu_title">"Vašu správu sa nepodarilo odoslať"</string>
   <string name="screen_room_timeline_add_reaction">"Pridať emoji"</string>
   <string name="screen_room_timeline_beginning_of_room">"Toto je začiatok %1$s."</string>

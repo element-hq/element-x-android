@@ -32,6 +32,7 @@
   <string name="action_accept">"接受"</string>
   <string name="action_add_to_timeline">"添加到时间线"</string>
   <string name="action_back">"返回"</string>
+  <string name="action_call">"呼叫"</string>
   <string name="action_cancel">"取消"</string>
   <string name="action_choose_photo">"选择照片"</string>
   <string name="action_clear">"清除"</string>
@@ -70,6 +71,7 @@
   <string name="action_load_more">"载入更多"</string>
   <string name="action_manage_account">"管理账户"</string>
   <string name="action_manage_devices">"管理设备"</string>
+  <string name="action_message">"发送消息给"</string>
   <string name="action_next">"下一步"</string>
   <string name="action_no">"否"</string>
   <string name="action_not_now">"以后再说"</string>
@@ -115,6 +117,7 @@
   <string name="common_blocked_users">"已屏蔽用户"</string>
   <string name="common_bubbles">"气泡"</string>
   <string name="common_call_invite">"通话进行中（不支持）"</string>
+  <string name="common_call_started">"通话已开始"</string>
   <string name="common_chat_backup">"聊天记录备份"</string>
   <string name="common_copyright">"版权"</string>
   <string name="common_creating_room">"正在创建房间…"</string>
@@ -159,7 +162,7 @@
   <string name="common_offline">"离线"</string>
   <string name="common_or">"或"</string>
   <string name="common_password">"密码"</string>
-  <string name="common_people">"人"</string>
+  <string name="common_people">"用户"</string>
   <string name="common_permalink">"固定链接"</string>
   <string name="common_permission">"权限"</string>
   <string name="common_please_wait">"请稍候……"</string>

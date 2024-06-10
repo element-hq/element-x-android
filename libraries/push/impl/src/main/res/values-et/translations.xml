@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="notification_channel_call">"Kõne"</string>
+  <string name="notification_channel_listening_for_events">"Kontrollime, kas on uusi sündmusi"</string>
+  <string name="notification_channel_noisy">"Lärmakad teavitused"</string>
+  <string name="notification_channel_silent">"Vaiksed teavitused"</string>
+  <plurals name="notification_compat_summary_line_for_room">
+    <item quantity="one">"%1$s: %2$d sõnum"</item>
+    <item quantity="other">"%1$s: %2$d sõnumit"</item>
+  </plurals>
+  <plurals name="notification_compat_summary_title">
+    <item quantity="one">"%d teavitus"</item>
+    <item quantity="other">"%d teavitust"</item>
+  </plurals>
+  <string name="notification_fallback_content">"Teavitus"</string>
+  <string name="notification_inline_reply_failed">"** Saatmine ei õnnestunud - palun ava jututoa täisvaade"</string>
+  <string name="notification_invitation_action_join">"Liitu"</string>
+  <string name="notification_invitation_action_reject">"Lükka tagasi"</string>
+  <plurals name="notification_invitations">
+    <item quantity="one">"%d kutse"</item>
+    <item quantity="other">"%d kutset"</item>
+  </plurals>
+  <string name="notification_invite_body">"Kutse osalema vestluses"</string>
+  <string name="notification_mentioned_you_body">"Mainis sind: %1$s"</string>
+  <string name="notification_new_messages">"Uued sõnumid"</string>
+  <plurals name="notification_new_messages_for_room">
+    <item quantity="one">"%d uus sõnum"</item>
+    <item quantity="other">"%d uut sõnumit"</item>
+  </plurals>
+  <string name="notification_room_action_quick_reply">"Kiirvastus"</string>
+  <string name="notification_sender_me">"Mina"</string>
+  <string name="notification_test_push_notification_content">"See ongi teavitus! Klõpsi mind!"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <plurals name="notification_unread_notified_messages">
+    <item quantity="one">"%d lugemata sõnum, millele on teavitus saadetud"</item>
+    <item quantity="other">"%d lugemata sõnumit, millele on teavitus saadetud"</item>
+  </plurals>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s ja %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%1$s jututoas %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s jututoas %2$s ning kutse jututuppa %3$s"</string>
+  <plurals name="notification_unread_notified_messages_in_room_rooms">
+    <item quantity="one">"%d jututuba"</item>
+    <item quantity="other">"%d jututuba"</item>
+  </plurals>
+  <string name="push_distributor_background_sync_android">"Sünkroniseerimine taustal"</string>
+  <string name="push_distributor_firebase_android">"Google\'i teenused"</string>
+  <string name="push_no_valid_google_play_services_apk_android">"Google Play Services taustateenust ei leidu. Teavitused ei pruugi toimida korrektselt."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Viga: %1$s."</string>
+</resources>

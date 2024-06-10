@@ -26,7 +26,6 @@
   <string name="screen_room_invite_again_alert_title">"Du bist allein in diesem Chat"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Alle Mitglieder benachrichtigen"</string>
   <string name="screen_room_mentions_at_room_title">"Alle"</string>
-  <string name="screen_room_retry_send_menu_send_again_action">"Erneut senden"</string>
   <string name="screen_room_retry_send_menu_title">"Deine Nachricht konnte nicht gesendet werden"</string>
   <string name="screen_room_timeline_add_reaction">"Emoji hinzufügen"</string>
   <string name="screen_room_timeline_beginning_of_room">"Dies ist der Anfang von %1$s."</string>

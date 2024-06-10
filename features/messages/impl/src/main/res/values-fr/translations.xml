@@ -26,7 +26,6 @@
   <string name="screen_room_invite_again_alert_title">"Vous êtes seul dans ce salon"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Notifier tout le salon"</string>
   <string name="screen_room_mentions_at_room_title">"Tout le monde"</string>
-  <string name="screen_room_retry_send_menu_send_again_action">"Envoyer à nouveau"</string>
   <string name="screen_room_retry_send_menu_title">"Votre message n’a pas pu être envoyé"</string>
   <string name="screen_room_timeline_add_reaction">"Ajouter un émoji"</string>
   <string name="screen_room_timeline_beginning_of_room">"Ceci est le début de %1$s."</string>
