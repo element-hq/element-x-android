@@ -90,10 +90,6 @@
             android:exported="false"
             android:foregroundServiceType="phoneCall" />
 
-        <service android:name=".services.IncomingCallService"
-            android:enabled="true"
-            android:exported="false" />
-
         <receiver android:name=".receivers.DeclineCallBroadcastReceiver"
             android:exported="false"
             android:enabled="true" />

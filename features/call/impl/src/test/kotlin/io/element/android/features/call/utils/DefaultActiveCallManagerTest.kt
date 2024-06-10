@@ -16,10 +16,10 @@
 
 package io.element.android.features.call.utils
 
-import android.content.Intent
+import androidx.core.app.NotificationManagerCompat
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.call.impl.services.IncomingCallService
+import io.element.android.features.call.impl.notifications.RingingCallNotificationCreator
 import io.element.android.features.call.impl.utils.ActiveCall
 import io.element.android.features.call.impl.utils.CallState
 import io.element.android.features.call.impl.utils.DefaultActiveCallManager
@@ -33,8 +33,14 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.push.api.notifications.ForegroundServiceType
+import io.element.android.libraries.push.api.notifications.NotificationIdProvider
+import io.element.android.libraries.push.test.notifications.FakeImageLoaderHolder
 import io.element.android.libraries.push.test.notifications.FakeOnMissedCallNotificationHandler
+import io.element.android.libraries.push.test.notifications.push.FakeNotificationBitmapLoader
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
@@ -42,14 +48,16 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
-import org.robolectric.Shadows
 
 @RunWith(RobolectricTestRunner::class)
 class DefaultActiveCallManagerTest {
+    private val notificationId = NotificationIdProvider.getForegroundServiceNotificationId(ForegroundServiceType.INCOMING_CALL)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `registerIncomingCall - sets the incoming call as active`() = runTest {
-        val manager = createActiveCallManager()
+        val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
+        val manager = createActiveCallManager(notificationManagerCompat = notificationManagerCompat)
 
         assertThat(manager.activeCall.value).isNull()
 
@@ -64,7 +72,9 @@ class DefaultActiveCallManagerTest {
             )
         )
 
-        assertServiceStarted()
+        runCurrent()
+
+        verify { notificationManagerCompat.notify(notificationId, any()) }
     }
 
     @Test
@@ -98,9 +108,11 @@ class DefaultActiveCallManagerTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `incomingCallTimedOut - when there is an active call removes it and adds a missed call notification`() = runTest {
+        val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
         val addMissedCallNotificationLambda = lambdaRecorder<SessionId, RoomId, EventId, Unit> { _, _, _ -> }
         val manager = createActiveCallManager(
-            onMissedCallNotificationHandler = FakeOnMissedCallNotificationHandler(addMissedCallNotificationLambda = addMissedCallNotificationLambda)
+            onMissedCallNotificationHandler = FakeOnMissedCallNotificationHandler(addMissedCallNotificationLambda = addMissedCallNotificationLambda),
+            notificationManagerCompat = notificationManagerCompat,
         )
 
         manager.registerIncomingCall(aCallNotificationData())
@@ -113,12 +125,13 @@ class DefaultActiveCallManagerTest {
 
         addMissedCallNotificationLambda.assertions().isCalledOnce()
 
-        asserServiceStopped()
+        verify { notificationManagerCompat.cancel(notificationId) }
     }
 
     @Test
     fun `hungUpCall - removes existing call`() = runTest {
-        val manager = createActiveCallManager()
+        val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
+        val manager = createActiveCallManager(notificationManagerCompat = notificationManagerCompat)
 
         manager.registerIncomingCall(aCallNotificationData())
         assertThat(manager.activeCall.value).isNotNull()
@@ -126,12 +139,13 @@ class DefaultActiveCallManagerTest {
         manager.hungUpCall()
         assertThat(manager.activeCall.value).isNull()
 
-        asserServiceStopped()
+        verify { notificationManagerCompat.cancel(notificationId) }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `joinedCall - register an ongoing call and tries sending the call notify event`() = runTest {
+        val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
         val sendCallNotifyLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
         val room = FakeMatrixRoom(sendCallNotificationIfNeededResult = sendCallNotifyLambda)
         val client = FakeMatrixClient().apply {
@@ -139,6 +153,7 @@ class DefaultActiveCallManagerTest {
         }
         val manager = createActiveCallManager(
             matrixClientProvider = FakeMatrixClientProvider(getClient = { Result.success(client) }),
+            notificationManagerCompat = notificationManagerCompat,
         )
         assertThat(manager.activeCall.value).isNull()
 
@@ -154,29 +169,23 @@ class DefaultActiveCallManagerTest {
         runCurrent()
 
         sendCallNotifyLambda.assertions().isCalledOnce()
-
-        asserServiceStopped()
+        verify { notificationManagerCompat.cancel(notificationId) }
     }
 
     private fun TestScope.createActiveCallManager(
         matrixClientProvider: FakeMatrixClientProvider = FakeMatrixClientProvider(),
         onMissedCallNotificationHandler: FakeOnMissedCallNotificationHandler = FakeOnMissedCallNotificationHandler(),
+        notificationManagerCompat: NotificationManagerCompat = mockk(relaxed = true),
     ) = DefaultActiveCallManager(
-        context = InstrumentationRegistry.getInstrumentation().targetContext,
         coroutineScope = this,
         matrixClientProvider = matrixClientProvider,
         onMissedCallNotificationHandler = onMissedCallNotificationHandler,
+        ringingCallNotificationCreator = RingingCallNotificationCreator(
+            context = InstrumentationRegistry.getInstrumentation().targetContext,
+            matrixClientProvider = matrixClientProvider,
+            imageLoaderHolder = FakeImageLoaderHolder(),
+            notificationBitmapLoader = FakeNotificationBitmapLoader(),
+        ),
+        notificationManagerCompat = notificationManagerCompat,
     )
-
-    private fun assertServiceStarted() {
-        val expectedIntent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, IncomingCallService::class.java)
-        val intent = Shadows.shadowOf(RuntimeEnvironment.getApplication()).nextStartedService
-        assertThat(intent.component).isEqualTo(expectedIntent.component)
-    }
-
-    private fun asserServiceStopped() {
-        val expectedIntent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, IncomingCallService::class.java)
-        val intent = Shadows.shadowOf(RuntimeEnvironment.getApplication()).nextStoppedService
-        assertThat(intent.component).isEqualTo(expectedIntent.component)
-    }
 }

@@ -16,23 +16,29 @@
 
 package io.element.android.features.call.impl.utils
 
-import android.content.Context
+import android.annotation.SuppressLint
+import androidx.core.app.NotificationManagerCompat
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.call.impl.notifications.CallNotificationData
-import io.element.android.features.call.impl.services.IncomingCallService
+import io.element.android.features.call.impl.notifications.RingingCallNotificationCreator
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.push.api.notifications.ForegroundServiceType
+import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.element.android.libraries.push.api.notifications.OnMissedCallNotificationHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * Manages the active call state.
@@ -71,11 +77,14 @@ interface ActiveCallManager {
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultActiveCallManager @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val coroutineScope: CoroutineScope,
     private val matrixClientProvider: MatrixClientProvider,
     private val onMissedCallNotificationHandler: OnMissedCallNotificationHandler,
+    private val ringingCallNotificationCreator: RingingCallNotificationCreator,
+    private val notificationManagerCompat: NotificationManagerCompat,
 ) : ActiveCallManager {
+    private var timedOutCallJob: Job? = null
+
     override val activeCall = MutableStateFlow<ActiveCall?>(null)
 
     override fun registerIncomingCall(notificationData: CallNotificationData) {
@@ -89,9 +98,14 @@ class DefaultActiveCallManager @Inject constructor(
             callState = CallState.Ringing(notificationData),
         )
 
+        timedOutCallJob = coroutineScope.launch {
+            registerIncomingCall(notificationData)
+            showIncomingCallNotification(notificationData)
 
-
-        IncomingCallService.start(context, notificationData)
+            // Wait for the call to end
+            delay(ElementCallConfig.RINGING_CALL_DURATION_SECONDS.seconds)
+            incomingCallTimedOut()
+        }
     }
 
     override fun incomingCallTimedOut() {
@@ -99,7 +113,7 @@ class DefaultActiveCallManager @Inject constructor(
         val notificationData = (previousActiveCall.callState as? CallState.Ringing)?.notificationData ?: return
         activeCall.value = null
 
-        IncomingCallService.stop(context)
+        cancelIncomingCallNotification()
 
         coroutineScope.launch {
             onMissedCallNotificationHandler.addMissedCallNotification(
@@ -111,12 +125,14 @@ class DefaultActiveCallManager @Inject constructor(
     }
 
     override fun hungUpCall() {
+        cancelIncomingCallNotification()
+        timedOutCallJob?.cancel()
         activeCall.value = null
-        IncomingCallService.stop(context)
     }
 
     override fun joinedCall(sessionId: SessionId, roomId: RoomId) {
-        IncomingCallService.stop(context)
+        cancelIncomingCallNotification()
+        timedOutCallJob?.cancel()
 
         activeCall.value = ActiveCall(
             sessionId = sessionId,
@@ -130,6 +146,33 @@ class DefaultActiveCallManager @Inject constructor(
                 ?.getRoom(roomId)
                 ?.sendCallNotificationIfNeeded()
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    private suspend fun showIncomingCallNotification(notificationData: CallNotificationData) {
+        val notification = ringingCallNotificationCreator.createNotification(
+            sessionId = notificationData.sessionId,
+            roomId = notificationData.roomId,
+            eventId = notificationData.eventId,
+            senderId = notificationData.senderId,
+            roomName = notificationData.roomName,
+            senderDisplayName = notificationData.senderName ?: notificationData.senderId.value,
+            roomAvatarUrl = notificationData.avatarUrl,
+            notificationChannelId = notificationData.notificationChannelId,
+            timestamp = notificationData.timestamp
+        ) ?: return
+        runCatching {
+            notificationManagerCompat.notify(
+                NotificationIdProvider.getForegroundServiceNotificationId(ForegroundServiceType.INCOMING_CALL),
+                notification,
+            )
+        }.onFailure {
+            Timber.e(it, "Failed to publish notification for incoming call")
+        }
+    }
+
+    private fun cancelIncomingCallNotification() {
+        notificationManagerCompat.cancel(NotificationIdProvider.getForegroundServiceNotificationId(ForegroundServiceType.INCOMING_CALL))
     }
 }
 

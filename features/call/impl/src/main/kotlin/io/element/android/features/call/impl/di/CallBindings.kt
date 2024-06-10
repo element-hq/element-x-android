@@ -18,7 +18,6 @@ package io.element.android.features.call.impl.di
 
 import com.squareup.anvil.annotations.ContributesTo
 import io.element.android.features.call.impl.receivers.DeclineCallBroadcastReceiver
-import io.element.android.features.call.impl.services.IncomingCallService
 import io.element.android.features.call.impl.ui.ElementCallActivity
 import io.element.android.features.call.impl.ui.IncomingCallActivity
 import io.element.android.libraries.di.AppScope
@@ -28,5 +27,4 @@ interface CallBindings {
     fun inject(callActivity: ElementCallActivity)
     fun inject(callActivity: IncomingCallActivity)
     fun inject(declineCallBroadcastReceiver: DeclineCallBroadcastReceiver)
-    fun inject(incomingCallService: IncomingCallService)
 }
