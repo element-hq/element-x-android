@@ -59,6 +59,7 @@ import io.element.android.features.messages.impl.sender.SenderName
 import io.element.android.features.messages.impl.sender.SenderNameMode
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
@@ -264,6 +265,9 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
         }
         is TimelineItemLegacyCallInviteContent -> {
             content = { ContentForBody(textContent) }
+        }
+        is TimelineItemCallNotifyContent -> {
+            content = { ContentForBody(stringResource(CommonStrings.common_call_started)) }
         }
     }
     Row(modifier = modifier) {
