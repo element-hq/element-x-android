@@ -10,7 +10,7 @@ on:
 # Enrich gradle.properties for CI/CD
 env:
   GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx7g -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -XX:MaxMetaspaceSize=512m -Dkotlin.incremental=false -XX:+UseG1GC
-  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 8 --warn -Dsonar.gradle.skipCompile=true
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 8 -Dsonar.gradle.skipCompile=true
 
 jobs:
   sonar:
