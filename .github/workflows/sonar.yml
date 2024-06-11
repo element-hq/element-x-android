@@ -36,6 +36,8 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
+      - name: Print free RAM
+        run: free -h
       - name: Build projects
         run: ./gradlew assembleDebug $CI_GRADLE_ARG_PROPERTIES
       - name: Build library fixtures
