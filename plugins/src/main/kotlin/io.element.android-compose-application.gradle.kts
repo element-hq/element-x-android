@@ -47,9 +47,11 @@ dependencies {
 
 tasks.register("logMemoryUsage") {
     doFirst {
+        val freeMemory = Runtime.getRuntime().freeMemory() / 1024 / 1024
         val maxMemory = Runtime.getRuntime().maxMemory() / 1024 / 1024
-        val currentMemory = Runtime.getRuntime().totalMemory() / 1024 / 1024
-        logger.warn("Memory usage: $currentMemory/$maxMemory MB")
+        val totalMemory = Runtime.getRuntime().totalMemory() / 1024 / 1024
+        val usedMemory = totalMemory - freeMemory
+        logger.warn("Memory usage: $usedMemory/$maxMemory MB")
     }
 }
 
