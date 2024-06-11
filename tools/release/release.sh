@@ -397,7 +397,7 @@ else
     transactionId=$(openssl rand -hex 16)
     # Element Android internal
     matrixRoomId="!LiSLXinTDCsepePiYW:matrix.org"
-    curl -X PUT --data "${\"msgtype\":\"m.text\",\"body\":\"${message}\"}" -H "Authorization: Bearer ${elementBotToken}" https://matrix-client.matrix.org/_matrix/client/r0/rooms/${matrixRoomId}/send/m.room.message/\$local."${transactionId}"
+    curl -X PUT --data "{\"msgtype\":\"m.text\",\"body\":\"${message}\"}" -H "Authorization: Bearer ${elementBotToken}" https://matrix-client.matrix.org/_matrix/client/r0/rooms/${matrixRoomId}/send/m.room.message/\$local."${transactionId}"
   else
     printf "Message not sent, please send it manually!\n"
   fi
