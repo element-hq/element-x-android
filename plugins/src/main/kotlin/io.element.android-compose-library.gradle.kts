@@ -45,17 +45,15 @@ dependencies {
     coreLibraryDesugaring(libs.android.desugar)
 }
 
-tasks.register("logMemoryUsage") {
-    doFirst {
+
+tasks.withType(KotlinCompilationTask::class.java) {
+    logger.warn("Configuring Kotlin compilation task $path:$name")
+    doLast {
         val freeMemory = Runtime.getRuntime().freeMemory() / 1024 / 1024
         val maxMemory = Runtime.getRuntime().maxMemory() / 1024 / 1024
         val totalMemory = Runtime.getRuntime().totalMemory() / 1024 / 1024
         val usedMemory = totalMemory - freeMemory
         logger.warn("Memory usage: $usedMemory/$maxMemory MB")
+        logger.warn("Free disk space: ${File(".").freeSpace / 1024 / 1024} MB")
     }
-}
-
-tasks.withType(KotlinCompilationTask::class.java) {
-    logger.warn("Configuring Kotlin compilation task $path:$name")
-    finalizedBy("logMemoryUsage")
 }
