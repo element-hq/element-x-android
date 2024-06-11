@@ -26,6 +26,7 @@
   <string name="screen_room_invite_again_alert_title">"聊天中只有你一个人"</string>
   <string name="screen_room_mentions_at_room_subtitle">"通知整个房间"</string>
   <string name="screen_room_mentions_at_room_title">"所有人"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"重新发送"</string>
   <string name="screen_room_retry_send_menu_title">"消息发送失败"</string>
   <string name="screen_room_timeline_add_reaction">"添加表情符号"</string>
   <string name="screen_room_timeline_beginning_of_room">"这是 %1$s 聊天室的开始。"</string>

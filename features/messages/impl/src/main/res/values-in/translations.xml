@@ -26,6 +26,7 @@
   <string name="screen_room_invite_again_alert_title">"Anda sendirian di obrolan ini"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Beri tahu seluruh ruangan"</string>
   <string name="screen_room_mentions_at_room_title">"Semua orang"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"Kirim ulang"</string>
   <string name="screen_room_retry_send_menu_title">"Pesan Anda gagal dikirim"</string>
   <string name="screen_room_timeline_add_reaction">"Tambahkan emoji"</string>
   <string name="screen_room_timeline_beginning_of_room">"Ini adalah awal dari %1$s."</string>

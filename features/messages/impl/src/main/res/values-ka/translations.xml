@@ -24,6 +24,7 @@
   <string name="screen_room_invite_again_alert_message">"გსურთ მათი კვლავ მოწვევა?"</string>
   <string name="screen_room_invite_again_alert_title">"თქვენ მარტო ხართ ამ ჩატში"</string>
   <string name="screen_room_mentions_at_room_title">"ყველა"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"Ხელახლა გაგზავნა"</string>
   <string name="screen_room_retry_send_menu_title">"თქვენი შეტყობინების გაგზავნა ვერ მოხერხდა"</string>
   <string name="screen_room_timeline_add_reaction">"ემოჯის დამატება"</string>
   <string name="screen_room_timeline_beginning_of_room">"ეს არის %1$s-ს დასაწყისი."</string>

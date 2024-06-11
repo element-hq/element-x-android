@@ -26,6 +26,7 @@
   <string name="screen_room_invite_again_alert_title">"Egyedül van ebben a csevegésben"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Az egész szoba értesítése"</string>
   <string name="screen_room_mentions_at_room_title">"Mindenki"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"Újraküldés"</string>
   <string name="screen_room_retry_send_menu_title">"Az üzenet elküldése sikertelen"</string>
   <string name="screen_room_timeline_add_reaction">"Emodzsi hozzáadása"</string>
   <string name="screen_room_timeline_beginning_of_room">"Ez a(z) %1$s kezdete."</string>

@@ -22,6 +22,7 @@
   <string name="screen_room_invite_again_alert_title">"此聊天室只有您一個人"</string>
   <string name="screen_room_mentions_at_room_subtitle">"通知整個聊天室"</string>
   <string name="screen_room_mentions_at_room_title">"所有人"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"重傳"</string>
   <string name="screen_room_retry_send_menu_title">"無法傳送您的訊息"</string>
   <string name="screen_room_timeline_add_reaction">"新增表情符號"</string>
   <string name="screen_room_timeline_less_reactions">"較少"</string>

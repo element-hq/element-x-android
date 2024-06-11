@@ -26,6 +26,7 @@
   <string name="screen_room_invite_again_alert_title">"Вы адзін у гэтым чаце"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Апавясціць увесь пакой"</string>
   <string name="screen_room_mentions_at_room_title">"Усе"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"Адправіць зноў"</string>
   <string name="screen_room_retry_send_menu_title">"Не ўдалося адправіць ваша паведамленне"</string>
   <string name="screen_room_timeline_add_reaction">"Дадаць эмодзі"</string>
   <string name="screen_room_timeline_beginning_of_room">"Гэта пачатак %1$s."</string>

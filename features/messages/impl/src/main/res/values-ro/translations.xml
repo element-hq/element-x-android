@@ -26,6 +26,7 @@
   <string name="screen_room_invite_again_alert_title">"Sunteți singur în această cameră"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Notificați întreaga cameră"</string>
   <string name="screen_room_mentions_at_room_title">"Toți"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"Trimiteți din nou"</string>
   <string name="screen_room_retry_send_menu_title">"Mesajul dvs. nu a putut fi trimis"</string>
   <string name="screen_room_timeline_add_reaction">"Adăugați emoji"</string>
   <string name="screen_room_timeline_beginning_of_room">"Acesta este începutul conversației %1$s."</string>
