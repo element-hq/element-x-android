@@ -19,7 +19,6 @@ package io.element.android.features.call.utils
 import io.element.android.features.call.impl.utils.CallWidgetProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver
 
 class FakeCallWidgetProvider(
@@ -35,8 +34,13 @@ class FakeCallWidgetProvider(
         clientId: String,
         languageTag: String?,
         theme: String?
-    ): Result<Pair<MatrixWidgetDriver, String>> {
+    ): Result<CallWidgetProvider.GetWidgetResult> {
         getWidgetCalled = true
-        return Result.success(widgetDriver to url)
+        return Result.success(
+            CallWidgetProvider.GetWidgetResult(
+                driver = widgetDriver,
+                url = url,
+            )
+        )
     }
 }
