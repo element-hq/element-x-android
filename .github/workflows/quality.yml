@@ -198,7 +198,7 @@ jobs:
         uses: ludeeus/action-shellcheck@2.0.0
         with:
           scandir: ./tools
-          severity: error
+          severity: warning
 
   upload_reports:
     name: Project Check Suite
