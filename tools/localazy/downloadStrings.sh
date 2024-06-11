@@ -51,7 +51,7 @@ fi
 
 set +e
 echo "Moving files from values-id to values-in..."
-find . -type d -name 'values-id' -execdir mv {}/translations.xml {}/../values-in/translations.xml \;
+find . -type d -name 'values-id' -execdir mv {}/translations.xml {}/../values-in/translations.xml 2> /dev/null \;
 
 echo "Deleting all the folders values-id..."
 find . -type d -name 'values-id' -exec rm -rf {} 2> /dev/null \;
