@@ -17,6 +17,7 @@
 /**
  * This will generate the plugin "io.element.android-compose-library", used in android library with compose modules.
  */
+import com.android.build.gradle.internal.lint.AndroidLintAnalysisTask
 import extension.androidConfig
 import extension.commonDependencies
 import extension.composeConfig
@@ -49,11 +50,26 @@ dependencies {
 tasks.withType(KotlinCompilationTask::class.java) {
     logger.warn("Configuring Kotlin compilation task $path:$name")
     doLast {
+        logResourcesUsage(memory = true, disk = false)
+    }
+}
+
+tasks.withType(AndroidLintAnalysisTask::class.java) {
+    logger.warn("Configuring Android Lint task $path:$name")
+    doLast {
+        logResourcesUsage(memory = true, disk = false)
+    }
+}
+
+private fun Task.logResourcesUsage(memory: Boolean, disk: Boolean) {
+    if (memory) {
         val freeMemory = Runtime.getRuntime().freeMemory() / 1024 / 1024
         val maxMemory = Runtime.getRuntime().maxMemory() / 1024 / 1024
         val totalMemory = Runtime.getRuntime().totalMemory() / 1024 / 1024
         val usedMemory = totalMemory - freeMemory
         logger.warn("Memory usage: $usedMemory/$totalMemory (max: $maxMemory) MB")
+    }
+    if (disk) {
         logger.warn("Free disk space: ${rootDir.freeSpace / 1024 / 1024} MB")
     }
 }
