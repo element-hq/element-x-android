@@ -48,7 +48,7 @@ tasks.withType(KotlinCompilationTask::class.java) {
         val maxMemory = Runtime.getRuntime().maxMemory() / 1024 / 1024
         val totalMemory = Runtime.getRuntime().totalMemory() / 1024 / 1024
         val usedMemory = totalMemory - freeMemory
-        logger.warn("Memory usage: $usedMemory/$maxMemory MB")
-        logger.warn("Free disk space: ${File(".").freeSpace / 1024 / 1024} MB")
+        logger.warn("Memory usage: $usedMemory/$totalMemory (max: $maxMemory) MB")
+        logger.warn("Free disk space: ${rootDir.freeSpace / 1024 / 1024} MB")
     }
 }
