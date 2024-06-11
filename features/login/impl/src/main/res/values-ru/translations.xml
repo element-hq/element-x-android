@@ -39,9 +39,11 @@
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Соединение не защищено"</string>
   <string name="screen_qr_code_login_device_code_subtitle">"Вам нужно будет ввести две цифры, показанные на этом устройстве."</string>
   <string name="screen_qr_code_login_device_code_title">"Введите показанный номер на своем другом устройстве"</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_description">"Войдите на другое устройство и повторите попытку или используйте другое устройство, на котором уже выполнен вход."</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_subtitle">"На другом устройстве вход не выполнен."</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Вход на другом устройстве был отменен."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Запрос на вход отменен"</string>
-  <string name="screen_qr_code_login_error_declined_subtitle">"Запрос не был принят на другом устройстве."</string>
+  <string name="screen_qr_code_login_error_declined_subtitle">"Вход в систему был отклонен на другом устройстве."</string>
   <string name="screen_qr_code_login_error_declined_title">"Вход отклонен"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"Срок действия входа истек. Пожалуйста, попробуйте еще раз."</string>
   <string name="screen_qr_code_login_error_expired_title">"Вход в систему не был выполнен вовремя"</string>

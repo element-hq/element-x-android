@@ -85,6 +85,7 @@
   <string name="action_quick_reply">"Rychlá odpověď"</string>
   <string name="action_quote">"Citovat"</string>
   <string name="action_react">"Reagovat"</string>
+  <string name="action_reject">"Odmítnout"</string>
   <string name="action_remove">"Odstranit"</string>
   <string name="action_reply">"Odpovědět"</string>
   <string name="action_reply_in_thread">"Odpovědět ve vlákně"</string>
@@ -201,6 +202,7 @@
   <string name="common_search_results">"Výsledky hledání"</string>
   <string name="common_security">"Zabezpečení"</string>
   <string name="common_seen_by">"Viděno"</string>
+  <string name="common_send_to">"Odeslat do"</string>
   <string name="common_sending">"Odesílání…"</string>
   <string name="common_sending_failed">"Odeslání se nezdařilo"</string>
   <string name="common_sent">"Odesláno"</string>
@@ -257,6 +259,7 @@
   <string name="invite_friends_text">"Ahoj, ozvi se mi na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Zatřeste zařízením pro nahlášení chyby"</string>
+  <string name="screen_incoming_call_subtitle_android">"Příchozí Element Call"</string>
   <string name="screen_media_picker_error_failed_selection">"Výběr média se nezdařil, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>

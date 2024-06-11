@@ -35,6 +35,9 @@
   <string name="screen_room_details_add_topic_title">"添加主题"</string>
   <string name="screen_room_details_already_a_member">"已经是成员"</string>
   <string name="screen_room_details_already_invited">"已邀请"</string>
+  <string name="screen_room_details_badge_encrypted">"加密的"</string>
+  <string name="screen_room_details_badge_not_encrypted">"未加密的"</string>
+  <string name="screen_room_details_badge_public">"公开房间"</string>
   <string name="screen_room_details_edit_room_title">"编辑聊天室"</string>
   <string name="screen_room_details_edition_error">"出现未知错误，无法更改信息。"</string>
   <string name="screen_room_details_edition_error_title">"无法更新聊天室"</string>

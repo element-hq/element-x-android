@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_conversation_alert_subtitle">"Kas sa oled kindel, et soovid sellest vestlusest lahkuda? See vestlus pole avalik ja uuesti liitumiseks vajad kutset."</string>
+  <string name="leave_room_alert_empty_subtitle">"Kas sa oled kindel, et soovid sellest jututoast lahkuda? Sa oled siin viimane osaleja ja peale sinu lahkumist ei saa keegi enam liituda, isegi sina mitte."</string>
+  <string name="leave_room_alert_private_subtitle">"Kas sa oled kindel, et soovid sellest jututoast lahkuda? See jututuba pole avalik ja uuesti liitumiseks vajad kutset."</string>
+  <string name="leave_room_alert_subtitle">"Kas sa oled kindel, et soovid sellest jututoast lahkuda?"</string>
+</resources>

@@ -197,6 +197,7 @@
   <string name="common_search_results">"Résultats de la recherche"</string>
   <string name="common_security">"Sécurité"</string>
   <string name="common_seen_by">"Vu par"</string>
+  <string name="common_send_to">"Envoyer vers"</string>
   <string name="common_sending">"Envoi en cours…"</string>
   <string name="common_sending_failed">"Échec de l’envoi"</string>
   <string name="common_sent">"Envoyé"</string>

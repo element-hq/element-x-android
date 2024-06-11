@@ -3,6 +3,7 @@
   <string name="notification_channel_call">"Пазваніць"</string>
   <string name="notification_channel_listening_for_events">"Праслухоўванне падзей"</string>
   <string name="notification_channel_noisy">"Шумныя апавяшчэнні"</string>
+  <string name="notification_channel_ringing_calls">"Званкі"</string>
   <string name="notification_channel_silent">"Ціхія апавяшчэнні"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d паведамленне"</item>
@@ -15,6 +16,7 @@
     <item quantity="many">"%d апавяшчэнняў"</item>
   </plurals>
   <string name="notification_fallback_content">"Апавяшчэнне"</string>
+  <string name="notification_incoming_call">"Уваходны званок"</string>
   <string name="notification_inline_reply_failed">"** Не атрымалася даслаць - калі ласка, адкрыйце пакой"</string>
   <string name="notification_invitation_action_join">"Далучыцца"</string>
   <string name="notification_invitation_action_reject">"Адхіліць"</string>
