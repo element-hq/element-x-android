@@ -36,10 +36,12 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
-      - name: Print free RAM
-        run: free -h
-      - name: Build projects
-        run: ./gradlew assembleDebug $CI_GRADLE_ARG_PROPERTIES
+      - name: Build Gplay Debug
+        run: ./gradlew :app:assembleGplayDebug $CI_GRADLE_ARG_PROPERTIES
+      - name: Build Fdroid Debug
+        run: ./gradlew :app:assembleFdroidDebug $CI_GRADLE_ARG_PROPERTIES
+      - name: Build Sample
+        run: ./gradlew :samples:minimal:assembleDebug $CI_GRADLE_ARG_PROPERTIES
       - name: Build library fixtures
         run: ./gradlew assembleDebug createFullJarDebugTestFixtures $CI_GRADLE_ARG_PROPERTIES
       - name: Build app fixtures

@@ -88,6 +88,10 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
+      - name: Build Gplay Debug
+        run: ./gradlew :app:assembleGplayDebug $CI_GRADLE_ARG_PROPERTIES
+      - name: Build Fdroid Debug
+        run: ./gradlew :app:assembleFdroidDebug $CI_GRADLE_ARG_PROPERTIES
       - name: Run lint
         run: ./gradlew :app:lintGplayDebug :app:lintFdroidDebug $CI_GRADLE_ARG_PROPERTIES
       - name: Upload reports
