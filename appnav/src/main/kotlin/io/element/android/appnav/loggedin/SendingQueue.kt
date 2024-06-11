@@ -41,7 +41,6 @@ class SendingQueue @Inject constructor(
     private val matrixClient: MatrixClient,
     private val networkMonitor: NetworkMonitor,
 ) {
-
     private val retryCount = AtomicInteger(0)
 
     fun launchIn(coroutineScope: CoroutineScope) {

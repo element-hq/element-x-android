@@ -29,7 +29,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class) class SendingQueueTest {
-
     private val matrixClient = FakeMatrixClient()
     private val networkMonitor = FakeNetworkMonitor()
     private val sut = SendingQueue(matrixClient, networkMonitor)
@@ -77,5 +76,4 @@ import org.junit.Test
                 listOf(value(true)),
             )
     }
-
 }

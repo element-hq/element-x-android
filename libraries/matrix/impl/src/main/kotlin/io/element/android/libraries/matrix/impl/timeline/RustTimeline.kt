@@ -263,9 +263,8 @@ class RustTimeline(
 
     override suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> = withContext(dispatcher) {
         messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()).use { content ->
-            runCatching {
+            runCatching<Unit> {
                 inner.send(content)
-                Unit
             }
         }
     }
@@ -298,7 +297,7 @@ class RustTimeline(
         mentions: List<Mention>,
     ): Result<Unit> =
         withContext(dispatcher) {
-            runCatching {
+            runCatching<Unit> {
                 when {
                     originalEventId != null -> {
                         val editedEvent = specialModeEventTimelineItem ?: inner.getEventTimelineItemByEventId(originalEventId.value)
@@ -314,7 +313,6 @@ class RustTimeline(
                         inner.getEventTimelineItemByTransactionId(transactionId.value).use {
                             inner.redactEvent(item = it, reason = null)
                         }
-                        Unit
                     }
                     else -> {
                         error("Either originalEventId or transactionId must be non null")

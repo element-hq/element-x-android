@@ -162,5 +162,4 @@ interface Timeline : AutoCloseable {
         waveform: List<Float>,
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler>
-
 }
