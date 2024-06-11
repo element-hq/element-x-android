@@ -32,6 +32,7 @@ class DefaultCallWidgetProvider @Inject constructor(
     private val matrixClientsProvider: MatrixClientProvider,
     private val appPreferencesStore: AppPreferencesStore,
     private val callWidgetSettingsProvider: CallWidgetSettingsProvider,
+    private val elementCallBaseUrlProvider: ElementCallBaseUrlProvider,
 ) : CallWidgetProvider {
     override suspend fun getWidget(
         sessionId: SessionId,
@@ -41,7 +42,9 @@ class DefaultCallWidgetProvider @Inject constructor(
         theme: String?,
     ): Result<CallWidgetProvider.GetWidgetResult> = runCatching {
         val room = matrixClientsProvider.getOrRestore(sessionId).getOrThrow().getRoom(roomId) ?: error("Room not found")
-        val baseUrl = appPreferencesStore.getCustomElementCallBaseUrlFlow().firstOrNull() ?: ElementCallConfig.DEFAULT_BASE_URL
+        val baseUrl = appPreferencesStore.getCustomElementCallBaseUrlFlow().firstOrNull()
+            ?: elementCallBaseUrlProvider.provides(sessionId)
+            ?: ElementCallConfig.DEFAULT_BASE_URL
         val widgetSettings = callWidgetSettingsProvider.provide(baseUrl, encrypted = room.isEncrypted)
         val callUrl = room.generateWidgetWebViewUrl(widgetSettings, clientId, languageTag, theme).getOrThrow()
         CallWidgetProvider.GetWidgetResult(
