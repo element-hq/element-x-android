@@ -83,6 +83,7 @@
   <string name="action_quick_reply">"Quick reply"</string>
   <string name="action_quote">"Quote"</string>
   <string name="action_react">"React"</string>
+  <string name="action_reject">"Reject"</string>
   <string name="action_remove">"Remove"</string>
   <string name="action_reply">"Reply"</string>
   <string name="action_reply_in_thread">"Reply in thread"</string>
@@ -197,6 +198,7 @@
   <string name="common_search_results">"Search results"</string>
   <string name="common_security">"Security"</string>
   <string name="common_seen_by">"Seen by"</string>
+  <string name="common_send_to">"Send to"</string>
   <string name="common_sending">"Sending…"</string>
   <string name="common_sending_failed">"Sending failed"</string>
   <string name="common_sent">"Sent"</string>
@@ -253,6 +255,7 @@
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
+  <string name="screen_incoming_call_subtitle_android">"Incoming Element Call"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Failed uploading media, please try again."</string>

@@ -85,6 +85,7 @@
   <string name="action_quick_reply">"Хуткі адказ"</string>
   <string name="action_quote">"Цытата"</string>
   <string name="action_react">"Рэакцыя"</string>
+  <string name="action_reject">"Адхіліць"</string>
   <string name="action_remove">"Выдаліць"</string>
   <string name="action_reply">"Адказаць"</string>
   <string name="action_reply_in_thread">"Адказаць у гутаркі"</string>
@@ -162,7 +163,7 @@
   <string name="common_message_layout">"Выгляд паведамлення"</string>
   <string name="common_message_removed">"Паведамленне выдалена"</string>
   <string name="common_modern">"Сучасны"</string>
-  <string name="common_mute">"Адключыць гук"</string>
+  <string name="common_mute">"Адкл. гук"</string>
   <string name="common_no_results">"Вынікаў няма"</string>
   <string name="common_no_room_name">"Няма назвы пакоя"</string>
   <string name="common_offline">"Па-за сеткай"</string>
@@ -201,6 +202,7 @@
   <string name="common_search_results">"Вынікі пошуку"</string>
   <string name="common_security">"Бяспека"</string>
   <string name="common_seen_by">"Прагледжана"</string>
+  <string name="common_send_to">"Адправіць"</string>
   <string name="common_sending">"Адпраўка…"</string>
   <string name="common_sending_failed">"Памылка адпраўкі"</string>
   <string name="common_sent">"Адпраўлена"</string>
@@ -226,7 +228,7 @@
   <string name="common_unable_to_invite_message">"Не ўдалося адправіць запрашэнні аднаму або некалькім карыстальнікам."</string>
   <string name="common_unable_to_invite_title">"Немагчыма адправіць запрашэнне(я)"</string>
   <string name="common_unlock">"Разблакіраваць"</string>
-  <string name="common_unmute">"Уключыць гук"</string>
+  <string name="common_unmute">"Укл. гук"</string>
   <string name="common_unsupported_event">"Падзея не падтрымліваецца"</string>
   <string name="common_username">"Імя карыстальніка"</string>
   <string name="common_verification_cancelled">"Праверка адменена"</string>
@@ -235,7 +237,7 @@
   <string name="common_video">"Відэа"</string>
   <string name="common_voice_message">"Галасавое паведамленне"</string>
   <string name="common_waiting">"Чакаем…"</string>
-  <string name="common_waiting_for_decryption_key">"Чакаю гэтага паведамлення"</string>
+  <string name="common_waiting_for_decryption_key">"Чакаю гэта паведамленне"</string>
   <string name="dialog_title_confirmation">"Пацвярджэнне"</string>
   <string name="dialog_title_error">"Памылка"</string>
   <string name="dialog_title_success">"Поспех"</string>
@@ -257,6 +259,7 @@
   <string name="invite_friends_text">"Гэй, пагавары са мной у %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Паведаміць аб памылцы з дапамогай Rageshake"</string>
+  <string name="screen_incoming_call_subtitle_android">"Уваходны званок Element Call"</string>
   <string name="screen_media_picker_error_failed_selection">"Не ўдалося выбраць носьбіт, паўтарыце спробу."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не атрымалася загрузіць медыяфайлы, паспрабуйце яшчэ раз."</string>

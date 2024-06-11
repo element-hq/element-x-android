@@ -85,6 +85,7 @@
   <string name="action_quick_reply">"Быстрый ответ"</string>
   <string name="action_quote">"Цитата"</string>
   <string name="action_react">"Реакция"</string>
+  <string name="action_reject">"Отклонить"</string>
   <string name="action_remove">"Удалить"</string>
   <string name="action_reply">"Ответить"</string>
   <string name="action_reply_in_thread">"Ответить в теме"</string>
@@ -203,6 +204,7 @@
   <string name="common_search_results">"Результаты поиска"</string>
   <string name="common_security">"Безопасность"</string>
   <string name="common_seen_by">"Просмотрено"</string>
+  <string name="common_send_to">"Отправить"</string>
   <string name="common_sending">"Отправка…"</string>
   <string name="common_sending_failed">"Сбой отправки"</string>
   <string name="common_sent">"Отправлено"</string>
@@ -259,6 +261,7 @@
   <string name="invite_friends_text">"Привет, поговори со мной по %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Встряхните устройство, чтобы сообщить об ошибке"</string>
+  <string name="screen_incoming_call_subtitle_android">"Входящий вызов Element"</string>
   <string name="screen_media_picker_error_failed_selection">"Не удалось выбрать носитель, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не удалось загрузить медиафайлы, попробуйте еще раз."</string>

@@ -25,11 +25,27 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.catch
+import org.matrix.rustcomponents.sdk.PaginationStatusListener
 import org.matrix.rustcomponents.sdk.Timeline
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
 import org.matrix.rustcomponents.sdk.TimelineListener
 import timber.log.Timber
+import uniffi.matrix_sdk_ui.LiveBackPaginationStatus
+
+internal fun Timeline.liveBackPaginationStatus(): Flow<LiveBackPaginationStatus> = callbackFlow {
+    val listener = object : PaginationStatusListener {
+        override fun onUpdate(status: LiveBackPaginationStatus) {
+            trySend(status)
+        }
+    }
+    val result = subscribeToBackPaginationStatus(listener)
+    awaitClose {
+        result.cancelAndDestroy()
+    }
+}.catch {
+    Timber.d(it, "liveBackPaginationStatus() failed")
+}.buffer(Channel.UNLIMITED)
 
 internal fun Timeline.timelineDiffFlow(onInitialList: suspend (List<TimelineItem>) -> Unit): Flow<List<TimelineDiff>> =
     callbackFlow {

@@ -27,6 +27,7 @@ import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.eventformatter.impl.mode.RenderingMode
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.CallNotifyContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
@@ -111,6 +112,8 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 prefixIfNeeded(sp.getString(CommonStrings.common_unsupported_event), senderDisambiguatedDisplayName, isDmRoom)
             }
             is LegacyCallInviteContent -> sp.getString(CommonStrings.common_call_invite)
+            is CallNotifyContent -> sp.getString(CommonStrings.common_call_started)
+            else -> null
         }?.take(MAX_SAFE_LENGTH)
     }
 

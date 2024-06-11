@@ -590,6 +590,10 @@ class RustMatrixRoom(
         innerRoom.matrixToEventPermalink(eventId.value)
     }
 
+    override suspend fun sendCallNotificationIfNeeded(): Result<Unit> = runCatching {
+        innerRoom.sendCallNotificationIfNeeded()
+    }
+
     private fun createTimeline(
         timeline: InnerTimeline,
         isLive: Boolean,

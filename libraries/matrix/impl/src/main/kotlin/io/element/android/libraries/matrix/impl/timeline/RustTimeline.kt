@@ -79,6 +79,7 @@ import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk_ui.EventItemOrigin
+import uniffi.matrix_sdk_ui.LiveBackPaginationStatus
 import java.io.File
 import java.util.Date
 import java.util.concurrent.atomic.AtomicBoolean
@@ -153,6 +154,21 @@ class RustTimeline(
 
             launch {
                 fetchMembers()
+            }
+
+            if (isLive) {
+                // When timeline is live, we need to listen to the back pagination status as
+                // sdk can automatically paginate backwards.
+                inner.liveBackPaginationStatus()
+                    .onEach { backPaginationStatus ->
+                        updatePaginationStatus(Timeline.PaginationDirection.BACKWARDS) {
+                            when (backPaginationStatus) {
+                                is LiveBackPaginationStatus.Idle -> it.copy(isPaginating = false, hasMoreToLoad = !backPaginationStatus.hitStartOfTimeline)
+                                is LiveBackPaginationStatus.Paginating -> it.copy(isPaginating = true, hasMoreToLoad = true)
+                            }
+                        }
+                    }
+                    .launchIn(this)
             }
         }
     }
@@ -333,13 +349,28 @@ class RustTimeline(
         }
     }
 
-    override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> = withContext(dispatcher) {
+    override suspend fun replyMessage(
+        eventId: EventId,
+        body: String,
+        htmlBody: String?,
+        mentions: List<Mention>,
+        fromNotification: Boolean,
+    ): Result<Unit> = withContext(dispatcher) {
         runCatching {
-            val inReplyTo = specialModeEventTimelineItem ?: inner.getEventTimelineItemByEventId(eventId.value)
-            inReplyTo.use { eventTimelineItem ->
-                inner.sendReply(messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()), eventTimelineItem)
+            val msg = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map())
+            if (fromNotification) {
+                // When replying from a notification, do not interfere with `specialModeEventTimelineItem`
+                val inReplyTo = inner.getEventTimelineItemByEventId(eventId.value)
+                inReplyTo.use { eventTimelineItem ->
+                    inner.sendReply(msg, eventTimelineItem)
+                }
+            } else {
+                val inReplyTo = specialModeEventTimelineItem ?: inner.getEventTimelineItemByEventId(eventId.value)
+                inReplyTo.use { eventTimelineItem ->
+                    inner.sendReply(msg, eventTimelineItem)
+                }
+                specialModeEventTimelineItem = null
             }
-            specialModeEventTimelineItem = null
         }
     }
 

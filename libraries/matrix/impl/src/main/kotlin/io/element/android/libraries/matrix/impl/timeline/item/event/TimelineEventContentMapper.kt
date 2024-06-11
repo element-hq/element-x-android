@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.impl.timeline.item.event
 
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.event.CallNotifyContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
@@ -103,7 +104,7 @@ class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMap
             StickerContent(
                 body = kind.body,
                 info = kind.info.map(),
-                url = kind.url,
+                source = kind.source.map(),
             )
         }
         is TimelineItemContentKind.Poll -> {
@@ -125,6 +126,7 @@ class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMap
             )
         }
         is TimelineItemContentKind.CallInvite -> LegacyCallInviteContent
+        is TimelineItemContentKind.CallNotify -> CallNotifyContent
         else -> UnknownContent
     }
 }

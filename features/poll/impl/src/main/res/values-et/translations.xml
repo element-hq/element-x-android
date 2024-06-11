@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"Lisa veel üks valik"</string>
+  <string name="screen_create_poll_anonymous_desc">"Näita tulemusi alles pärast küsitluse lõppu"</string>
+  <string name="screen_create_poll_anonymous_headline">"Peida hääled"</string>
+  <string name="screen_create_poll_answer_hint">"Valik %1$d"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Sinu muudatused jäävad salvestamata. Kas oled kindel, et soovid tagasi minna?"</string>
+  <string name="screen_create_poll_question_desc">"Küsimus või teema"</string>
+  <string name="screen_create_poll_question_hint">"Mis on küsitluse teema?"</string>
+  <string name="screen_create_poll_title">"Loo küsitlus"</string>
+  <string name="screen_edit_poll_delete_confirmation">"Kas sa oled kindel, et soovid selle küsitluse kustutada?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Kustuta küsitlus"</string>
+  <string name="screen_edit_poll_title">"Muuda küsitlust"</string>
+  <string name="screen_polls_history_empty_ongoing">"Ei leia ühtegi käimasolevat küsitlust."</string>
+  <string name="screen_polls_history_empty_past">"Ei leia ühtegi varasemat küsitlust."</string>
+  <string name="screen_polls_history_filter_ongoing">"Käimasolev küsitlus"</string>
+  <string name="screen_polls_history_filter_past">"Varasem küsitlus"</string>
+  <string name="screen_polls_history_title">"Küsitlused"</string>
+</resources>

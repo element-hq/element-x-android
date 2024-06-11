@@ -48,6 +48,7 @@ import io.element.android.features.messages.impl.timeline.components.reactionsum
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetPresenter
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
@@ -386,6 +387,7 @@ class MessagesPresenter @AssistedInject constructor(
             is TimelineItemStateContent,
             is TimelineItemEncryptedContent,
             is TimelineItemLegacyCallInviteContent,
+            is TimelineItemCallNotifyContent,
             is TimelineItemUnknownContent -> null
         }
         val composerMode = MessageComposerMode.Reply(

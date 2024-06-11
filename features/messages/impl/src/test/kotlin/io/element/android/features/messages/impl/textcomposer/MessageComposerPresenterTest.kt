@@ -395,7 +395,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - reply message`() = runTest {
-        val replyMessageLambda = lambdaRecorder { _: EventId, _: String, _: String?, _: List<Mention> ->
+        val replyMessageLambda = lambdaRecorder { _: EventId, _: String, _: String?, _: List<Mention>, _: Boolean ->
             Result.success(Unit)
         }
         val timeline = FakeTimeline().apply {
@@ -426,7 +426,7 @@ class MessageComposerPresenterTest {
 
             assert(replyMessageLambda)
                 .isCalledOnce()
-                .with(any(), value(A_REPLY), value(A_REPLY), any())
+                .with(any(), value(A_REPLY), value(A_REPLY), any(), value(false))
 
             assertThat(analyticsService.capturedEvents).containsExactly(
                 Composer(
@@ -909,7 +909,7 @@ class MessageComposerPresenterTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - send messages with intentional mentions`() = runTest {
-        val replyMessageLambda = lambdaRecorder { _: EventId, _: String, _: String?, _: List<Mention> ->
+        val replyMessageLambda = lambdaRecorder { _: EventId, _: String, _: String?, _: List<Mention>, _: Boolean ->
             Result.success(Unit)
         }
         val editMessageLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String, _: String?, _: List<Mention> ->
@@ -956,7 +956,7 @@ class MessageComposerPresenterTest {
 
             assert(replyMessageLambda)
                 .isCalledOnce()
-                .with(any(), any(), any(), value(listOf(Mention.User(A_USER_ID_2))))
+                .with(any(), any(), any(), value(listOf(Mention.User(A_USER_ID_2))), value(false))
 
             // Check intentional mentions on edit message
             skipItems(1)

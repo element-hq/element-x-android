@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.api.timeline.item.event
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.ImageInfo
+import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
 import kotlinx.collections.immutable.ImmutableList
@@ -40,7 +41,7 @@ data object RedactedContent : EventContent
 data class StickerContent(
     val body: String,
     val info: ImageInfo,
-    val url: String
+    val source: MediaSource,
 ) : EventContent
 
 data class PollContent(
@@ -101,5 +102,7 @@ data class FailedToParseStateContent(
 ) : EventContent
 
 data object LegacyCallInviteContent : EventContent
+
+data object CallNotifyContent : EventContent
 
 data object UnknownContent : EventContent

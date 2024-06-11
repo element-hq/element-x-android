@@ -35,6 +35,7 @@ class AppMigration02Test {
         val sessionPreferencesStore = InMemorySessionPreferencesStore(isSessionVerificationSkipped = false)
         val sessionPreferencesStoreFactory = FakeSessionPreferencesStoreFactory(
             getLambda = lambdaRecorder { _, _, -> sessionPreferencesStore },
+            removeLambda = lambdaRecorder { _ -> }
         )
         val migration = AppMigration02(sessionStore = sessionStore, sessionPreferenceStoreFactory = sessionPreferencesStoreFactory)
 

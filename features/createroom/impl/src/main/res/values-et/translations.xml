@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Uus jututuba"</string>
+  <string name="screen_create_room_add_people_title">"Kutsu osalejaid"</string>
+  <string name="screen_create_room_private_option_description">"Sõnumid siin jututoas on krüptitud ja seda ei saa hiljem välja lülitada."</string>
+  <string name="screen_create_room_public_option_description">"Sõnumid pole krüptitud ja neid saavad kõik lugeda. Soovi korral saad hiljem krüptimise sisse lülitada."</string>
+  <string name="screen_create_room_room_name_label">"Jututoa nimi"</string>
+  <string name="screen_create_room_title">"Loo jututuba"</string>
+</resources>
