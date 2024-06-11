@@ -11,6 +11,7 @@ on:
 env:
   GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx7g -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -XX:MaxMetaspaceSize=512m -Dkotlin.incremental=false -XX:+UseG1GC
   CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 8 -Dsonar.gradle.skipCompile=true
+  GROUP: ${{ format('sonar-{0}', github.ref) }}
 
 jobs:
   sonar:
@@ -18,9 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
-      group: ${{ github.ref == 'refs/heads/main' && format('sonar-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('sonar-develop-{0}', github.sha) || format('sonar-{0}', github.ref) }}
-      cancel-in-progress: true
+      group: ${{ format('sonar-{0}', github.ref) }}
+      cancel-in-progress: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
     steps:
+      - name: Print concurrency group
+        run: "echo Concurrency group: $GROUP"
       - uses: actions/checkout@v4
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
