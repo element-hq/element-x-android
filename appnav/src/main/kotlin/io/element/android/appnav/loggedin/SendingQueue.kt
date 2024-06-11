@@ -16,6 +16,7 @@
 
 package io.element.android.appnav.loggedin
 
+import androidx.annotation.VisibleForTesting
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.di.SessionScope
@@ -30,8 +31,10 @@ import timber.log.Timber
 import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
 
-private const val MIN_RETRY_DELAY = 250L
-private const val MAX_RETRY_DELAY = 5000L
+private const val SENDING_QUEUE_MIN_RETRY_DELAY = 250L
+
+@VisibleForTesting
+const val SENDING_QUEUE_MAX_RETRY_DELAY = 5000L
 
 @SingleIn(SessionScope::class)
 class SendingQueue @Inject constructor(
@@ -41,7 +44,7 @@ class SendingQueue @Inject constructor(
 
     private val retryCount = AtomicInteger(0)
 
-    fun setupWith(coroutineScope: CoroutineScope) {
+    fun launchIn(coroutineScope: CoroutineScope) {
         combine(
             networkMonitor.connectivity,
             matrixClient.sendingQueueStatus(),
@@ -50,7 +53,8 @@ class SendingQueue @Inject constructor(
         }.onEach { (networkStatus, isSendingQueueEnabled) ->
             Timber.d("Network status: $networkStatus, isSendingQueueEnabled: $isSendingQueueEnabled")
             if (networkStatus == NetworkStatus.Online && !isSendingQueueEnabled) {
-                val retryDelay = (MIN_RETRY_DELAY * retryCount.incrementAndGet()).coerceIn(MIN_RETRY_DELAY, MAX_RETRY_DELAY)
+                val retryDelay =
+                    (SENDING_QUEUE_MIN_RETRY_DELAY * retryCount.incrementAndGet()).coerceIn(SENDING_QUEUE_MIN_RETRY_DELAY, SENDING_QUEUE_MAX_RETRY_DELAY)
                 Timber.d("Retry enabling sending queue in $retryDelay ms")
                 delay(retryDelay)
             } else {

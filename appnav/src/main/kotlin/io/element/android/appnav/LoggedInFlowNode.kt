@@ -160,7 +160,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     }
 
     private fun setupSendingQueue() {
-        sendingQueue.setupWith(lifecycleScope)
+        sendingQueue.launchIn(lifecycleScope)
     }
 
     @OptIn(FlowPreview::class)

@@ -300,11 +300,11 @@ class FakeMatrixClient(
 
     override fun getRoomInfoFlow(roomId: RoomId) = getRoomInfoFlowLambda(roomId)
 
-    var enableSendingQueueLambda = lambdaRecorder(ensureNeverCalled = true) { enable: Boolean ->
+    var setSendingQueueEnabledLambda = lambdaRecorder(ensureNeverCalled = true) { _: Boolean ->
         // no-op
     }
 
-    override suspend fun setSendingQueueEnabled(enable: Boolean) = enableSendingQueueLambda(enable)
+    override suspend fun setSendingQueueEnabled(enabled: Boolean) = setSendingQueueEnabledLambda(enabled)
 
     var sendingQueueStatusFlow = MutableStateFlow(true)
     override fun sendingQueueStatus(): StateFlow<Boolean> = sendingQueueStatusFlow
