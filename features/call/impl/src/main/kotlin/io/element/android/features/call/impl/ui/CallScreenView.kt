@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.viewinterop.AndroidView
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.call.impl.R
@@ -76,9 +77,9 @@ internal fun CallScreenView(
         }
         CallWebView(
             modifier = Modifier
-                .padding(padding)
-                .consumeWindowInsets(padding)
-                .fillMaxSize(),
+                    .padding(padding)
+                    .consumeWindowInsets(padding)
+                    .fillMaxSize(),
             url = state.urlState,
             userAgent = state.userAgent,
             onPermissionsRequest = { request ->
@@ -157,16 +158,11 @@ private fun WebView.setup(
 
 @PreviewsDayNight
 @Composable
-internal fun CallScreenViewPreview() {
-    ElementPreview {
-        CallScreenView(
-            state = CallScreenState(
-                urlState = AsyncData.Success("https://call.element.io/some-actual-call?with=parameters"),
-                isInWidgetMode = false,
-                userAgent = "",
-                eventSink = {},
-            ),
-            requestPermissions = { _, _ -> },
-        )
-    }
+internal fun CallScreenViewPreview(
+    @PreviewParameter(CallScreenStateProvider::class) state: CallScreenState,
+) = ElementPreview {
+    CallScreenView(
+        state = state,
+        requestPermissions = { _, _ -> },
+    )
 }
