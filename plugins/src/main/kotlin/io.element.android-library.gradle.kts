@@ -20,6 +20,7 @@
 import extension.androidConfig
 import extension.commonDependencies
 import org.gradle.accessors.dm.LibrariesForLibs
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 val libs = the<LibrariesForLibs>()
 plugins {
@@ -38,4 +39,17 @@ android {
 dependencies {
     commonDependencies(libs)
     coreLibraryDesugaring(libs.android.desugar)
+}
+
+tasks.register("logMemoryUsage") {
+    doFirst {
+        val maxMemory = Runtime.getRuntime().maxMemory() / 1024 / 1024
+        val currentMemory = Runtime.getRuntime().totalMemory() / 1024 / 1024
+        logger.warn("Memory usage: $currentMemory/$maxMemory MB")
+    }
+}
+
+tasks.withType(KotlinCompilationTask::class.java) {
+    logger.warn("Configuring Kotlin compilation task $path:$name")
+    finalizedBy("logMemoryUsage")
 }
