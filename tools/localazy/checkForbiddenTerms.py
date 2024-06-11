@@ -16,6 +16,8 @@ forbiddenTerms = {
         "screen_server_confirmation_message_login_element_dot_io",
         # "Be in your element", will probably be changed on the forks, so we can ignore.
         "screen_onboarding_welcome_title",
+        # Contains "Element Call"
+        "screen_incoming_call_subtitle_android",
     ]
 }
 
