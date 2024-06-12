@@ -22,6 +22,7 @@ import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
+import io.element.android.features.roomlist.impl.utils.FullScreenIntentPermissionsState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -75,6 +76,7 @@ sealed interface RoomListContentState {
     data object Empty : RoomListContentState
     data class Rooms(
         val securityBannerState: SecurityBannerState,
+        val fullScreenIntentPermissionsState: FullScreenIntentPermissionsState,
         val summaries: ImmutableList<RoomListRoomSummary>,
     ) : RoomListContentState
 }

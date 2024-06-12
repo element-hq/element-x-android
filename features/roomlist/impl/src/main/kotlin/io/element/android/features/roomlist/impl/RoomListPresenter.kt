@@ -40,13 +40,13 @@ import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
-import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.migration.MigrationScreenState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchEvents
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
+import io.element.android.features.roomlist.impl.utils.FullScreenIntentPermissionsPresenter
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -62,6 +62,7 @@ import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.toPersistentList
@@ -93,6 +94,7 @@ class RoomListPresenter @Inject constructor(
     private val sessionPreferencesStore: SessionPreferencesStore,
     private val analyticsService: AnalyticsService,
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
+    private val fullScreenIntentPermissionsPresenter: FullScreenIntentPermissionsPresenter,
 ) : Presenter<RoomListState> {
     private val encryptionService: EncryptionService = client.encryptionService()
     private val syncService: SyncService = client.syncService()
@@ -214,6 +216,7 @@ class RoomListPresenter @Inject constructor(
                 val securityBannerState by securityBannerState(securityBannerDismissed)
                 RoomListContentState.Rooms(
                     securityBannerState = securityBannerState,
+                    fullScreenIntentPermissionsState = fullScreenIntentPermissionsPresenter.present(),
                     summaries = roomSummaries.dataOrNull().orEmpty().toPersistentList()
                 )
             }

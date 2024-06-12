@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.api.store
+package io.element.android.libraries.preferences.test
 
-import io.element.android.libraries.matrix.api.core.SessionId
-import kotlinx.coroutines.CoroutineScope
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
+import java.io.File
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory as AndroidPreferenceDataStoreFactory
 
-interface SessionPreferencesStoreFactory {
-    fun get(sessionId: SessionId, sessionCoroutineScope: CoroutineScope): SessionPreferencesStore
-    fun remove(sessionId: SessionId)
+class FakePreferenceDataStoreFactory : PreferenceDataStoreFactory {
+    override fun create(name: String): DataStore<Preferences> {
+        return AndroidPreferenceDataStoreFactory.create { File.createTempFile("test", ".preferences_pb") }
+    }
 }

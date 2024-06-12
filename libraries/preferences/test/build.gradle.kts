@@ -23,8 +23,9 @@ android {
 
     dependencies {
         api(projects.libraries.preferences.api)
-        implementation(libs.coroutines.core)
         implementation(projects.libraries.matrix.api)
         implementation(projects.tests.testutils)
+        implementation(libs.coroutines.core)
+        implementation(libs.androidx.datastore.preferences)
     }
 }

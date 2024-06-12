@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.libraries.preferences.api.store
 
-android {
-    namespace = "io.element.android.libraries.preferences.api"
-}
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 
-dependencies {
-    implementation(libs.coroutines.core)
-    implementation(projects.libraries.matrix.api)
-    implementation(libs.androidx.datastore.preferences)
+/**
+ * Factory used to create a [DataStore] for preferences.
+ *
+ * It's a wrapper around AndroidX's `PreferenceDataStoreFactory` to make testing easier.
+ */
+interface PreferenceDataStoreFactory {
+    fun create(name: String): DataStore<Preferences>
 }

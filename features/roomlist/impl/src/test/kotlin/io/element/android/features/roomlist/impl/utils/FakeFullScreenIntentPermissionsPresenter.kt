@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.features.roomlist.impl.utils
 
-android {
-    namespace = "io.element.android.libraries.preferences.api"
-}
+import androidx.compose.runtime.Composable
 
-dependencies {
-    implementation(libs.coroutines.core)
-    implementation(projects.libraries.matrix.api)
-    implementation(libs.androidx.datastore.preferences)
+class FakeFullScreenIntentPermissionsPresenter : FullScreenIntentPermissionsPresenter {
+    @Composable
+    override fun present(): FullScreenIntentPermissionsState {
+        return FullScreenIntentPermissionsState(
+            permissionGranted = true,
+            shouldDisplay = false,
+            dismissFullScreenIntentBanner = {},
+            openFullScreenIntentSettings = {},
+        )
+    }
 }

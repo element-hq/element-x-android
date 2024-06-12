@@ -18,13 +18,13 @@ package io.element.android.features.call.impl.utils
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.ElementCallConfig
-import io.element.android.features.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 

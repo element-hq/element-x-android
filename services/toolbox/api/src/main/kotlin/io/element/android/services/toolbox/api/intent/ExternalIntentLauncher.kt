@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.services.toolbox.api.intent
 
-android {
-    namespace = "io.element.android.libraries.preferences.api"
-}
+import android.content.Intent
 
-dependencies {
-    implementation(libs.coroutines.core)
-    implementation(projects.libraries.matrix.api)
-    implementation(libs.androidx.datastore.preferences)
+/**
+ * Used to launch external intents from anywhere in the app.
+ */
+interface ExternalIntentLauncher {
+    fun launch(intent: Intent)
 }

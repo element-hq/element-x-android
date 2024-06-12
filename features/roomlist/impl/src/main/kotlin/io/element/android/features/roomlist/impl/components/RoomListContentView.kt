@@ -57,6 +57,7 @@ import io.element.android.features.roomlist.impl.filters.aRoomListFiltersState
 import io.element.android.features.roomlist.impl.filters.selection.FilterSelectionState
 import io.element.android.features.roomlist.impl.migration.MigrationScreenView
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.libraries.designsystem.atomic.molecules.DialogLikeBannerMolecule
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -193,16 +194,27 @@ private fun RoomsViewList(
         // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80
         contentPadding = PaddingValues(bottom = 80.dp)
     ) {
-        when (state.securityBannerState) {
-            SecurityBannerState.RecoveryKeyConfirmation -> {
-                item {
-                    ConfirmRecoveryKeyBanner(
-                        onContinueClick = onConfirmRecoveryKeyClick,
-                        onDismissClick = { eventSink(RoomListEvents.DismissRecoveryKeyPrompt) }
-                    )
+        if (state.securityBannerState != SecurityBannerState.None) {
+            when (state.securityBannerState) {
+                SecurityBannerState.RecoveryKeyConfirmation -> {
+                    item {
+                        ConfirmRecoveryKeyBanner(
+                            onContinueClick = onConfirmRecoveryKeyClick,
+                            onDismissClick = { eventSink(RoomListEvents.DismissRecoveryKeyPrompt) }
+                        )
+                    }
                 }
+                else -> Unit
             }
-            else -> Unit
+        } else if (state.fullScreenIntentPermissionsState.shouldDisplay) {
+            item {
+                DialogLikeBannerMolecule(
+                    title = stringResource(R.string.full_screen_intent_banner_title),
+                    content = stringResource(R.string.full_screen_intent_banner_message),
+                    onDismissClick = state.fullScreenIntentPermissionsState.dismissFullScreenIntentBanner,
+                    onSubmitClick = state.fullScreenIntentPermissionsState.openFullScreenIntentSettings,
+                )
+            }
         }
 
         // Note: do not use a key for the LazyColumn, or the scroll will not behave as expected if a room

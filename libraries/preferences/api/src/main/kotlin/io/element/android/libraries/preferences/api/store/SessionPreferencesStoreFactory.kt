@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.libraries.preferences.api.store
 
-android {
-    namespace = "io.element.android.libraries.preferences.api"
-}
+import io.element.android.libraries.matrix.api.core.SessionId
+import kotlinx.coroutines.CoroutineScope
 
-dependencies {
-    implementation(libs.coroutines.core)
-    implementation(projects.libraries.matrix.api)
-    implementation(libs.androidx.datastore.preferences)
+interface SessionPreferencesStoreFactory {
+    fun get(sessionId: SessionId, sessionCoroutineScope: CoroutineScope): SessionPreferencesStore
+    fun remove(sessionId: SessionId)
 }

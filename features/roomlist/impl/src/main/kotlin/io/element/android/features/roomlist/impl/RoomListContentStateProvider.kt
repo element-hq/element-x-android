@@ -18,6 +18,7 @@ package io.element.android.features.roomlist.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
+import io.element.android.features.roomlist.impl.utils.FullScreenIntentPermissionsState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -35,8 +36,10 @@ open class RoomListContentStateProvider : PreviewParameterProvider<RoomListConte
 internal fun aRoomsContentState(
     securityBannerState: SecurityBannerState = SecurityBannerState.None,
     summaries: ImmutableList<RoomListRoomSummary> = aRoomListRoomSummaryList(),
+    fullScreenIntentPermissionsState: FullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(),
 ) = RoomListContentState.Rooms(
     securityBannerState = securityBannerState,
+    fullScreenIntentPermissionsState = fullScreenIntentPermissionsState,
     summaries = summaries,
 )
 
@@ -45,3 +48,15 @@ internal fun aMigrationContentState() = RoomListContentState.Migration
 internal fun aSkeletonContentState() = RoomListContentState.Skeleton(16)
 
 internal fun anEmptyContentState() = RoomListContentState.Empty
+
+internal fun aFullScreenIntentPermissionsState(
+    permissionGranted: Boolean = true,
+    shouldDisplay: Boolean = false,
+    openFullScreenIntentSettings: () -> Unit = {},
+    dismissFullScreenIntentBanner: () -> Unit = {},
+) = FullScreenIntentPermissionsState(
+    permissionGranted = permissionGranted,
+    shouldDisplay = shouldDisplay,
+    openFullScreenIntentSettings = openFullScreenIntentSettings,
+    dismissFullScreenIntentBanner = dismissFullScreenIntentBanner,
+)

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.api.store
+package io.element.android.libraries.preferences.api.store
 
 import kotlinx.coroutines.flow.Flow
 

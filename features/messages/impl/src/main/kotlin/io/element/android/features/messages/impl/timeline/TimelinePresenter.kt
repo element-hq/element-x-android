@@ -36,7 +36,6 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
 import io.element.android.features.poll.api.actions.EndPollAction
 import io.element.android.features.poll.api.actions.SendPollResponseAction
-import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -47,6 +46,7 @@ import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.combine

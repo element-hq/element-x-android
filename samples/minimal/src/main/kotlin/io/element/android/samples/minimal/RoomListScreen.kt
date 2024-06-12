@@ -34,6 +34,8 @@ import io.element.android.features.roomlist.impl.migration.MigrationScreenPresen
 import io.element.android.features.roomlist.impl.migration.SharedPreferencesMigrationScreenStore
 import io.element.android.features.roomlist.impl.search.RoomListSearchDataSource
 import io.element.android.features.roomlist.impl.search.RoomListSearchPresenter
+import io.element.android.features.roomlist.impl.utils.FullScreenIntentPermissionsPresenter
+import io.element.android.features.roomlist.impl.utils.FullScreenIntentPermissionsState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.impl.DateFormatters
 import io.element.android.libraries.dateformatter.impl.DefaultLastMessageTimestampFormatter
@@ -139,6 +141,17 @@ class RoomListScreen(
             notificationDrawerManager = FakeNotificationDrawerManager(),
         ),
         analyticsService = NoopAnalyticsService(),
+        fullScreenIntentPermissionsPresenter = object : FullScreenIntentPermissionsPresenter {
+            @Composable
+            override fun present(): FullScreenIntentPermissionsState {
+                return FullScreenIntentPermissionsState(
+                    permissionGranted = true,
+                    shouldDisplay = false,
+                    dismissFullScreenIntentBanner = {},
+                    openFullScreenIntentSettings = {}
+                )
+            }
+        },
     )
 
     @Composable

@@ -259,7 +259,6 @@
   <string name="invite_friends_text">"Ahoj, ozvi se mi na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Zatřeste zařízením pro nahlášení chyby"</string>
-  <string name="screen_incoming_call_subtitle_android">"Příchozí Element Call"</string>
   <string name="screen_media_picker_error_failed_selection">"Výběr média se nezdařil, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
