@@ -29,7 +29,6 @@ import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.architecture.runUpdatingStateNoSuccess
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
