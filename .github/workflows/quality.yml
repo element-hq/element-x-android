@@ -187,6 +187,19 @@ jobs:
       - name: Run Knit
         run: ./gradlew knitCheck $CI_GRADLE_ARG_PROPERTIES
 
+  # Note: to auto fix issues you can use the following command:
+  # shellcheck -f diff <files> | git apply
+  shellcheck:
+    name: Check shell scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run shellcheck
+        uses: ludeeus/action-shellcheck@2.0.0
+        with:
+          scandir: ./tools
+          severity: warning
+
   upload_reports:
     name: Project Check Suite
     runs-on: ubuntu-latest

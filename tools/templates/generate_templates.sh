@@ -22,6 +22,6 @@ echo "Zipping the contents of the 'files' directory..."
 mkdir -p tmp
 
 rm -f ./tmp/file_templates.zip
-pushd ./tools/templates/files
+pushd ./tools/templates/files || exit
 zip -r ../../../tmp/file_templates.zip .
-popd
+popd || exit

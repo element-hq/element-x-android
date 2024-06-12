@@ -8,11 +8,11 @@ read -p "Do you want to build the Rust SDK from local source (yes/no) default to
 buildLocal=${buildLocal:-yes}
 
 date=$(gdate +%Y%m%d%H%M%S)
-elementPwd=`pwd`
+elementPwd=$(pwd)
 
 # Ask for the Rust SDK local source path
 # if folder rustSdk/ exists, use it as default
-if [ ${buildLocal} == "yes" ]; then
+if [ "${buildLocal}" == "yes" ]; then
     read -p "Please enter the path to the Rust SDK local source, default to ../matrix-rust-sdk" rustSdkPath
     rustSdkPath=${rustSdkPath:-../matrix-rust-sdk/}
     if [ ! -d "${rustSdkPath}" ]; then
@@ -25,9 +25,9 @@ else
     read -p "Please enter the Rust SDK branch, default to main " rustSdkBranch
     rustSdkBranch=${rustSdkBranch:-main}
     cd ..
-    git clone ${rustSdkUrl} matrix-rust-sdk-$date
-    cd matrix-rust-sdk-$date
-    git checkout ${rustSdkBranch}
+    git clone "${rustSdkUrl}" matrix-rust-sdk-"$date"
+    cd matrix-rust-sdk-"$date"
+    git checkout "${rustSdkBranch}"
     rustSdkPath=$(pwd)
     cd "${elementPwd}"
 fi
@@ -39,7 +39,7 @@ git status
 read -p "Will build with this version of the Rust SDK ^. Is it correct (yes/no) default to yes? " sdkCorrect
 sdkCorrect=${sdkCorrect:-yes}
 
-if [ ${sdkCorrect} != "yes" ]; then
+if [ "${sdkCorrect}" != "yes" ]; then
     exit 0
 fi
 
@@ -67,17 +67,17 @@ printf "\nBuilding the SDK for aarch64-linux-android...\n\n"
 cd "${elementPwd}"
 mv ./libraries/rustsdk/sdk-android-debug.aar ./libraries/rustsdk/matrix-rust-sdk.aar
 mkdir -p ./libraries/rustsdk/sdks
-cp ./libraries/rustsdk/matrix-rust-sdk.aar ./libraries/rustsdk/sdks/matrix-rust-sdk-${date}.aar
+cp ./libraries/rustsdk/matrix-rust-sdk.aar ./libraries/rustsdk/sdks/matrix-rust-sdk-"${date}".aar
 
 
-if [ ${buildApp} == "yes" ]; then
+if [ "${buildApp}" == "yes" ]; then
     printf "\nBuilding the application...\n\n"
     ./gradlew assembleDebug
 fi
 
-if [ ${buildLocal} == "no" ]; then
+if [ "${buildLocal}" == "no" ]; then
     printf "\nCleaning up...\n\n"
-    rm -rf ../matrix-rust-sdk-$date
+    rm -rf ../matrix-rust-sdk-"$date"
 fi
 
 printf "\nDone!\n"
