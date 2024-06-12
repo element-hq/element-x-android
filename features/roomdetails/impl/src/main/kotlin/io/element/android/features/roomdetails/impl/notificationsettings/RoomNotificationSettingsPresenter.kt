@@ -95,7 +95,7 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
 
         fun handleEvents(event: RoomNotificationSettingsEvents) {
             when (event) {
-                is RoomNotificationSettingsEvents.RoomNotificationModeChanged -> {
+                is RoomNotificationSettingsEvents.ChangeRoomNotificationMode -> {
                     localCoroutineScope.setRoomNotificationMode(event.mode, pendingRoomNotificationMode, pendingSetDefault, setNotificationSettingAction)
                 }
                 is RoomNotificationSettingsEvents.SetNotificationMode -> {
