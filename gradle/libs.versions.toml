@@ -24,7 +24,7 @@ media3 = "1.3.1"
 camera = "1.3.3"
 
 # Compose
-compose_bom = "2024.05.00"
+compose_bom = "2024.06.00"
 composecompiler = "1.5.14"
 
 # Coroutines
