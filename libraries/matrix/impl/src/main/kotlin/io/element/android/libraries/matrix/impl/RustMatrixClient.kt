@@ -95,10 +95,11 @@ import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.BackupState
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
+import org.matrix.rustcomponents.sdk.ClientException
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
-import org.matrix.rustcomponents.sdk.SendingQueueStatusListener
+import org.matrix.rustcomponents.sdk.SendQueueRoomErrorListener
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
@@ -554,20 +555,18 @@ class RustMatrixClient(
         }.distinctUntilChanged()
     }
 
-    override suspend fun setSendingQueueEnabled(enabled: Boolean) = withContext(sessionDispatcher) {
-        Timber.i("setSendingQueueEnabled($enabled)")
-        client.enableSendingQueue(enabled)
+    override suspend fun setAllSendQueuesEnabled(enabled: Boolean) = withContext(sessionDispatcher) {
+        Timber.i("setAllSendQueuesEnabled($enabled)")
+        client.enableAllSendQueues(enabled)
     }
 
-    override fun sendingQueueStatus(): StateFlow<Boolean> = mxCallbackFlow {
-        client.subscribeToSendingQueueStatus(object : SendingQueueStatusListener {
-            override fun onValue(newValue: Boolean) {
-                channel.trySend(newValue)
+    override fun sendQueueDisabledFlow(): Flow<RoomId> = mxCallbackFlow {
+        client.subscribeToSendQueueStatus(object : SendQueueRoomErrorListener {
+            override fun onError(roomId: String, error: ClientException) {
+                trySend(RoomId(roomId))
             }
         })
-    }
-        .buffer(Channel.UNLIMITED)
-        .stateIn(sessionCoroutineScope, started = SharingStarted.Eagerly, initialValue = true)
+    }.buffer(Channel.UNLIMITED)
 
     private suspend fun File.getCacheSize(
         includeCryptoDb: Boolean = false,

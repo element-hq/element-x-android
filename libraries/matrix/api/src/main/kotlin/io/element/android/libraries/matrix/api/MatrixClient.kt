@@ -114,11 +114,11 @@ interface MatrixClient : Closeable {
      * so it's required to manually re-enable it as soon as
      * connectivity is back on the device.
      */
-    suspend fun setSendingQueueEnabled(enabled: Boolean)
+    suspend fun setAllSendQueuesEnabled(enabled: Boolean)
 
     /**
-     * Returns the current status of the sending queue as a [StateFlow].
-     * If true, the sending queue is enabled.
+     * Returns a flow of room IDs that have send queue being disabled.
+     * This flow will emit a new value whenever the send queue is disabled for a room.
      */
-    fun sendingQueueStatus(): StateFlow<Boolean>
+    fun sendQueueDisabledFlow(): Flow<RoomId>
 }

@@ -335,5 +335,7 @@ interface MatrixRoom : Closeable {
      */
     suspend fun sendCallNotificationIfNeeded(): Result<Unit>
 
+    suspend fun setSendQueueEnabled(enabled: Boolean)
+
     override fun close() = destroy()
 }

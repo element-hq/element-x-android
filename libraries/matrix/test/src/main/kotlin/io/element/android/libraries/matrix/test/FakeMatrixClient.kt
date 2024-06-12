@@ -54,8 +54,10 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import java.util.Optional
@@ -300,12 +302,12 @@ class FakeMatrixClient(
 
     override fun getRoomInfoFlow(roomId: RoomId) = getRoomInfoFlowLambda(roomId)
 
-    var setSendingQueueEnabledLambda = lambdaRecorder(ensureNeverCalled = true) { _: Boolean ->
+    var setAllSendQueuesEnabledLambda = lambdaRecorder(ensureNeverCalled = true) { _: Boolean ->
         // no-op
     }
 
-    override suspend fun setSendingQueueEnabled(enabled: Boolean) = setSendingQueueEnabledLambda(enabled)
+    override suspend fun setAllSendQueuesEnabled(enabled: Boolean) = setAllSendQueuesEnabledLambda(enabled)
 
-    var sendingQueueStatusFlow = MutableStateFlow(true)
-    override fun sendingQueueStatus(): StateFlow<Boolean> = sendingQueueStatusFlow
+    var sendQueueDisabledFlow = emptyFlow<RoomId>()
+    override fun sendQueueDisabledFlow(): Flow<RoomId> = sendQueueDisabledFlow
 }

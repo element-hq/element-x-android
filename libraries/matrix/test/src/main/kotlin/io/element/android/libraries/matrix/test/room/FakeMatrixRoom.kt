@@ -525,6 +525,9 @@ class FakeMatrixRoom(
         return sendCallNotificationIfNeededResult()
     }
 
+    var setSendQueueEnabledLambda = { _: Boolean -> }
+    override suspend fun setSendQueueEnabled(enabled: Boolean) = setSendQueueEnabledLambda(enabled)
+
     override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver> = getWidgetDriverResult
 
     fun givenRoomMembersState(state: MatrixRoomMembersState) {

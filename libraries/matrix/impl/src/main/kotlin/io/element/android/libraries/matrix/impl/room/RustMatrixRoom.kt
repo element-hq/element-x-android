@@ -84,6 +84,7 @@ import org.matrix.rustcomponents.sdk.WidgetCapabilities
 import org.matrix.rustcomponents.sdk.WidgetCapabilitiesProvider
 import org.matrix.rustcomponents.sdk.getElementCallRequiredPermissions
 import org.matrix.rustcomponents.sdk.use
+import timber.log.Timber
 import uniffi.matrix_sdk.RoomPowerLevelChanges
 import java.io.File
 import org.matrix.rustcomponents.sdk.Room as InnerRoom
@@ -592,6 +593,11 @@ class RustMatrixRoom(
 
     override suspend fun sendCallNotificationIfNeeded(): Result<Unit> = runCatching {
         innerRoom.sendCallNotificationIfNeeded()
+    }
+
+    override suspend fun setSendQueueEnabled(enabled: Boolean) = withContext(roomDispatcher) {
+        Timber.d("setSendQueuesEnabled: $enabled")
+        innerRoom.enableSendQueue(enabled)
     }
 
     private fun createTimeline(
