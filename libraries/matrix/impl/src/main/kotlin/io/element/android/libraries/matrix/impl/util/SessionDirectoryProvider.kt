@@ -17,10 +17,15 @@
 package io.element.android.libraries.matrix.impl.util
 
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.sessionstorage.api.SessionStore
+import java.io.File
+import javax.inject.Inject
 
-class SessionDirectoryNameProvider {
-    // Rust sanitises the user ID replacing invalid characters with an _
-    fun provides(sessionId: SessionId): String {
-        return sessionId.value.replace(":", "_")
+class SessionDirectoryProvider @Inject constructor(
+    private val sessionStore: SessionStore,
+) {
+    suspend fun provides(sessionId: SessionId): File? {
+        val path = sessionStore.getSession(sessionId.value)?.sessionPath ?: return null
+        return File(path)
     }
 }
