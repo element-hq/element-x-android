@@ -98,6 +98,7 @@ import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
+import org.matrix.rustcomponents.sdk.SendingQueueStatusListener
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
@@ -550,6 +551,21 @@ class RustMatrixClient(
             }
         }.distinctUntilChanged()
     }
+
+    override suspend fun setSendingQueueEnabled(enabled: Boolean) = withContext(sessionDispatcher) {
+        Timber.i("setSendingQueueEnabled($enabled)")
+        client.enableSendingQueue(enabled)
+    }
+
+    override fun sendingQueueStatus(): StateFlow<Boolean> = mxCallbackFlow {
+        client.subscribeToSendingQueueStatus(object : SendingQueueStatusListener {
+            override fun onValue(newValue: Boolean) {
+                channel.trySend(newValue)
+            }
+        })
+    }
+        .buffer(Channel.UNLIMITED)
+        .stateIn(sessionCoroutineScope, started = SharingStarted.Eagerly, initialValue = true)
 
     private suspend fun File.getCacheSize(
         includeCryptoDb: Boolean = false,

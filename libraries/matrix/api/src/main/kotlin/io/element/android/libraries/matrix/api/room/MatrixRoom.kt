@@ -130,8 +130,6 @@ interface MatrixRoom : Closeable {
 
     suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
 
-    suspend fun redactEvent(eventId: EventId, reason: String? = null): Result<Unit>
-
     suspend fun sendImage(
         file: File,
         thumbnailFile: File?,
@@ -160,7 +158,7 @@ interface MatrixRoom : Closeable {
 
     suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit>
 
-    suspend fun cancelSend(transactionId: TransactionId): Result<Unit>
+    suspend fun cancelSend(transactionId: TransactionId): Result<Boolean>
 
     suspend fun leave(): Result<Unit>
 

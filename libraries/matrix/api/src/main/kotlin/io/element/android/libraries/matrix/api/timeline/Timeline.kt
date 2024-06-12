@@ -83,6 +83,8 @@ interface Timeline : AutoCloseable {
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler>
 
+    suspend fun redactEvent(eventId: EventId?, transactionId: TransactionId?, reason: String?): Result<Boolean>
+
     suspend fun sendAudio(file: File, audioInfo: AudioInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
 
     suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
@@ -91,9 +93,7 @@ interface Timeline : AutoCloseable {
 
     suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit>
 
-    suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit>
-
-    suspend fun cancelSend(transactionId: TransactionId): Result<Unit>
+    suspend fun cancelSend(transactionId: TransactionId): Result<Boolean>
 
     /**
      * Share a location message in the room.

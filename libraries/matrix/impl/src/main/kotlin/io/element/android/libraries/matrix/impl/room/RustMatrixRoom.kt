@@ -324,12 +324,6 @@ class RustMatrixRoom(
         return liveTimeline.sendMessage(body, htmlBody, mentions)
     }
 
-    override suspend fun redactEvent(eventId: EventId, reason: String?) = withContext(roomDispatcher) {
-        runCatching {
-            innerRoom.redact(eventId.value, reason)
-        }
-    }
-
     override suspend fun leave(): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
             innerRoom.leave()
@@ -435,10 +429,10 @@ class RustMatrixRoom(
     }
 
     override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> {
-        return liveTimeline.retrySendMessage(transactionId)
+        return Result.failure(UnsupportedOperationException("Not supported"))
     }
 
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> {
+    override suspend fun cancelSend(transactionId: TransactionId): Result<Boolean> {
         return liveTimeline.cancelSend(transactionId)
     }
 

@@ -48,6 +48,7 @@ import io.element.android.libraries.matrix.test.roomdirectory.FakeRoomDirectoryS
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -298,4 +299,13 @@ class FakeMatrixClient(
     }
 
     override fun getRoomInfoFlow(roomId: RoomId) = getRoomInfoFlowLambda(roomId)
+
+    var setSendingQueueEnabledLambda = lambdaRecorder(ensureNeverCalled = true) { _: Boolean ->
+        // no-op
+    }
+
+    override suspend fun setSendingQueueEnabled(enabled: Boolean) = setSendingQueueEnabledLambda(enabled)
+
+    var sendingQueueStatusFlow = MutableStateFlow(true)
+    override fun sendingQueueStatus(): StateFlow<Boolean> = sendingQueueStatusFlow
 }

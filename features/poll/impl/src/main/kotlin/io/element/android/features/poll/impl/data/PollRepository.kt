@@ -68,8 +68,12 @@ class PollRepository @Inject constructor(
 
     suspend fun deletePoll(
         pollStartId: EventId,
-    ): Result<Unit> =
-        room.redactEvent(
-            eventId = pollStartId,
-        )
+    ): Result<Boolean> =
+        timelineProvider
+            .getActiveTimeline()
+            .redactEvent(
+                eventId = pollStartId,
+                transactionId = null,
+                reason = null,
+            )
 }
