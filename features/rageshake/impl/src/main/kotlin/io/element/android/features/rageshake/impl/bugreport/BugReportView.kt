@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,6 +29,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -51,6 +54,7 @@ import io.element.android.libraries.designsystem.preview.debugPlaceholderBackgro
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.OutlinedTextField
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -68,6 +72,7 @@ fun BugReportView(
             title = stringResource(id = CommonStrings.common_report_a_problem),
             onBackClick = onBackClick
         ) {
+            val keyboardController = LocalSoftwareKeyboardController.current
             val isFormEnabled = state.sending !is AsyncAction.Loading
             var descriptionFieldState by textFieldState(
                 stateValue = state.formState.description
@@ -76,7 +81,8 @@ fun BugReportView(
             PreferenceRow {
                 OutlinedTextField(
                     value = descriptionFieldState,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth()
+                        .onTabOrEnterKeyFocusNext(LocalFocusManager.current),
                     enabled = isFormEnabled,
                     label = {
                         Text(text = stringResource(id = R.string.screen_bug_report_editor_placeholder))
@@ -91,8 +97,11 @@ fun BugReportView(
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.Sentences,
                         keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next
+                        imeAction = ImeAction.Next,
                     ),
+                    keyboardActions = KeyboardActions(onNext = {
+                        keyboardController?.hide()
+                    }),
                     minLines = 3,
                     isError = state.isDescriptionInError,
                 )
