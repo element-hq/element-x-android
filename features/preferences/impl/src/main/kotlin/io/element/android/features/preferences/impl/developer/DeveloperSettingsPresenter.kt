@@ -79,10 +79,12 @@ class DeveloperSettingsPresenter @Inject constructor(
         LaunchedEffect(Unit) {
             FeatureFlags.entries
                 .filter { it.isFinished.not() }
-                .apply {
+                .run {
                     // Never display room directory search in release builds for Play Store
                     if (buildMeta.flavorDescription == "GooglePlay" && buildMeta.buildType == BuildType.RELEASE) {
                         filterNot { it.key == FeatureFlags.RoomDirectorySearch.key }
+                    } else {
+                        this
                     }
                 }
                 .forEach { feature ->
