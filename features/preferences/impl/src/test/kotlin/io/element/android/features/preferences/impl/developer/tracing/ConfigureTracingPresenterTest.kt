@@ -22,6 +22,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.Target
+import io.element.android.libraries.matrix.api.tracing.TracingFilterConfigurations
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.waitForPredicate
 import kotlinx.coroutines.test.runTest
@@ -37,7 +38,7 @@ class ConfigureTracingPresenterTest {
         val store = InMemoryTracingConfigurationStore()
         val presenter = ConfigureTracingPresenter(
             store,
-            TargetLogLevelMapBuilder(store),
+            TargetLogLevelMapBuilder(store, TracingFilterConfigurations.debug),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -54,7 +55,7 @@ class ConfigureTracingPresenterTest {
         store.givenLogLevel(LogLevel.ERROR)
         val presenter = ConfigureTracingPresenter(
             store,
-            TargetLogLevelMapBuilder(store),
+            TargetLogLevelMapBuilder(store, TracingFilterConfigurations.debug),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -70,7 +71,7 @@ class ConfigureTracingPresenterTest {
         val store = InMemoryTracingConfigurationStore()
         val presenter = ConfigureTracingPresenter(
             store,
-            TargetLogLevelMapBuilder(store),
+            TargetLogLevelMapBuilder(store, TracingFilterConfigurations.debug),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -89,7 +90,7 @@ class ConfigureTracingPresenterTest {
         val store = InMemoryTracingConfigurationStore()
         val presenter = ConfigureTracingPresenter(
             store,
-            TargetLogLevelMapBuilder(store),
+            TargetLogLevelMapBuilder(store, TracingFilterConfigurations.debug),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
