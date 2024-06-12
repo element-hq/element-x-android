@@ -32,6 +32,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
+import io.element.android.libraries.core.coroutine.suspendWithMinimumDuration
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
@@ -171,7 +172,7 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
         pendingDefaultState: MutableState<Boolean?>,
         action: MutableState<AsyncAction<Unit>>
     ) = launch {
-        suspend {
+        suspendWithMinimumDuration {
             pendingModeState.value = mode
             pendingDefaultState.value = false
             val result = notificationSettingsService.setRoomNotificationMode(room.roomId, mode)
@@ -187,7 +188,7 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
         action: MutableState<AsyncAction<Unit>>,
         pendingDefaultState: MutableState<Boolean?>
     ) = launch {
-        suspend {
+        suspendWithMinimumDuration {
             pendingDefaultState.value = true
             val result = notificationSettingsService.restoreDefaultRoomNotificationMode(room.roomId)
             if (result.isFailure) {
