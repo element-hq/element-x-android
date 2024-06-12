@@ -46,7 +46,7 @@ class DefaultElementCallBaseUrlProvider @Inject constructor(
         } catch (e: HttpException) {
             Timber.w(e, "Failed to fetch wellknown data")
             // Ignore Http 404, but re-throws any other exceptions
-            if (e.code() != HttpURLConnection.HTTP_NOT_FOUND /* 404 */) {
+            if (e.code() != HttpURLConnection.HTTP_NOT_FOUND) {
                 throw e
             }
             null

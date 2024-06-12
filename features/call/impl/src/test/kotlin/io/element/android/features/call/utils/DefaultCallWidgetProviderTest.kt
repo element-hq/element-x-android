@@ -116,9 +116,9 @@ class DefaultCallWidgetProviderTest {
     @Test
     fun `getWidget - will use a wellknown base url if it exists`() = runTest {
         val aCustomUrl = "https://custom.element.io"
-        val provideLambda = lambdaRecorder<SessionId, String?> { String -> aCustomUrl }
+        val providesLambda = lambdaRecorder<SessionId, String?> { _ -> aCustomUrl }
         val elementCallBaseUrlProvider = FakeElementCallBaseUrlProvider { sessionId ->
-            provideLambda(sessionId)
+            providesLambda(sessionId)
         }
         val room = FakeMatrixRoom().apply {
             givenGenerateWidgetWebViewUrlResult(Result.success("url"))
@@ -135,7 +135,7 @@ class DefaultCallWidgetProviderTest {
         )
         provider.getWidget(A_SESSION_ID, A_ROOM_ID, "clientId", "languageTag", "theme")
         assertThat(settingsProvider.providedBaseUrls).containsExactly(aCustomUrl)
-        provideLambda.assertions()
+        providesLambda.assertions()
             .isCalledOnce()
             .with(value(A_SESSION_ID))
     }
