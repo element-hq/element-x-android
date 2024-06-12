@@ -25,7 +25,6 @@ class TargetLogLevelMapBuilder @Inject constructor(
     private val tracingConfigurationStore: TracingConfigurationStore,
     private val defaultConfig: TracingFilterConfiguration,
 ) {
-
     fun getDefaultMap(): Map<Target, LogLevel> {
         return Target.entries.associateWith { target ->
             defaultConfig.getLogLevel(target)
