@@ -326,9 +326,7 @@ class RustTimeline(
                         specialModeEventTimelineItem = null
                     }
                     transactionId != null -> {
-                        inner.getEventTimelineItemByTransactionId(transactionId.value).use {
-                            inner.redactEvent(item = it, reason = null)
-                        }
+                        error("Editing local echo is not supported yet.")
                     }
                     else -> {
                         error("Either originalEventId or transactionId must be non null")
