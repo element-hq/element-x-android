@@ -18,13 +18,13 @@ package io.element.android.features.preferences.impl.developer.tracing
 
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.Target
-import io.element.android.libraries.matrix.api.tracing.TracingFilterConfigurations
+import io.element.android.libraries.matrix.api.tracing.TracingFilterConfiguration
 import javax.inject.Inject
 
 class TargetLogLevelMapBuilder @Inject constructor(
     private val tracingConfigurationStore: TracingConfigurationStore,
+    private val defaultConfig: TracingFilterConfiguration,
 ) {
-    private val defaultConfig = TracingFilterConfigurations.debug
 
     fun getDefaultMap(): Map<Target, LogLevel> {
         return Target.entries.associateWith { target ->
