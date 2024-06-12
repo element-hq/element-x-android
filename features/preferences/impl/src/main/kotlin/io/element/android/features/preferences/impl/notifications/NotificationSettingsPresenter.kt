@@ -29,7 +29,8 @@ import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.runCatchingUpdatingState
+import io.element.android.libraries.architecture.runUpdatingState
+import io.element.android.libraries.architecture.runUpdatingStateNoSuccess
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
@@ -74,7 +75,7 @@ class NotificationSettingsPresenter @Inject constructor(
 
         LaunchedEffect(Unit) {
             fetchSettings(matrixSettings)
-            observeNotificationSettings(matrixSettings)
+            observeNotificationSettings(matrixSettings, changeNotificationSettingAction)
         }
 
         // List of PushProvider -> Distributor
@@ -172,11 +173,15 @@ class NotificationSettingsPresenter @Inject constructor(
     }
 
     @OptIn(FlowPreview::class)
-    private fun CoroutineScope.observeNotificationSettings(target: MutableState<NotificationSettingsState.MatrixSettings>) {
+    private fun CoroutineScope.observeNotificationSettings(
+        target: MutableState<NotificationSettingsState.MatrixSettings>,
+        changeNotificationSettingAction: MutableState<AsyncAction<Unit>>,
+    ) {
         notificationSettingsService.notificationSettingsChangeFlow
             .debounce(0.5.seconds)
             .onEach {
                 fetchSettings(target)
+                changeNotificationSettingAction.value = AsyncAction.Uninitialized
             }
             .launchIn(this)
     }
@@ -238,21 +243,21 @@ class NotificationSettingsPresenter @Inject constructor(
     }
 
     private fun CoroutineScope.setAtRoomNotificationsEnabled(enabled: Boolean, action: MutableState<AsyncAction<Unit>>) = launch {
-        suspend {
-            notificationSettingsService.setRoomMentionEnabled(enabled).getOrThrow()
-        }.runCatchingUpdatingState(action)
+        action.runUpdatingStateNoSuccess {
+            notificationSettingsService.setRoomMentionEnabled(enabled)
+        }
     }
 
     private fun CoroutineScope.setCallNotificationsEnabled(enabled: Boolean, action: MutableState<AsyncAction<Unit>>) = launch {
-        suspend {
-            notificationSettingsService.setCallEnabled(enabled).getOrThrow()
-        }.runCatchingUpdatingState(action)
+        action.runUpdatingStateNoSuccess {
+            notificationSettingsService.setCallEnabled(enabled)
+        }
     }
 
     private fun CoroutineScope.setInviteForMeNotificationsEnabled(enabled: Boolean, action: MutableState<AsyncAction<Unit>>) = launch {
-        suspend {
-            notificationSettingsService.setInviteForMeEnabled(enabled).getOrThrow()
-        }.runCatchingUpdatingState(action)
+        action.runUpdatingStateNoSuccess {
+            notificationSettingsService.setInviteForMeEnabled(enabled)
+        }
     }
 
     private fun CoroutineScope.setNotificationsEnabled(userPushStore: UserPushStore, enabled: Boolean) = launch {
