@@ -39,7 +39,6 @@ import org.junit.Test
 
     @Test
     fun `test network status online and sending queue failed`() = runTest {
-
         val sendQueueDisabledFlow = MutableSharedFlow<RoomId>(replay = 1)
         val setAllSendQueuesEnabledLambda = lambdaRecorder { _: Boolean -> }
         matrixClient.sendQueueDisabledFlow = sendQueueDisabledFlow
@@ -62,12 +61,10 @@ import org.junit.Test
         assert(setRoomSendQueueEnabledLambda)
             .isCalledOnce()
             .with(value(true))
-
     }
 
     @Test
     fun `test network status offline and sending queue failed`() = runTest {
-
         val sendQueueDisabledFlow = MutableSharedFlow<RoomId>(replay = 1)
 
         val setAllSendQueuesEnabledLambda = lambdaRecorder { _: Boolean -> }
@@ -91,12 +88,10 @@ import org.junit.Test
 
         assert(setRoomSendQueueEnabledLambda)
             .isNeverCalled()
-
     }
 
     @Test
     fun `test network status getting offline and online`() = runTest {
-
         val setEnableSendingQueueLambda = lambdaRecorder { _: Boolean -> }
         matrixClient.setAllSendQueuesEnabledLambda = setEnableSendingQueueLambda
 

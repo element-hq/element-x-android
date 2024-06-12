@@ -21,7 +21,7 @@ import org.matrix.rustcomponents.sdk.OidcConfiguration
 import java.io.File
 import javax.inject.Inject
 
-class OidConfigurationProvider @Inject constructor(
+class OidcConfigurationProvider @Inject constructor(
     private val baseDirectory: File,
 ) {
     fun get(): OidcConfiguration = OidcConfiguration(

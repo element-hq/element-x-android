@@ -69,7 +69,7 @@ class RustMatrixAuthenticationService @Inject constructor(
     private val passphraseGenerator: PassphraseGenerator,
     userCertificatesProvider: UserCertificatesProvider,
     proxyProvider: ProxyProvider,
-    private val oidConfigurationProvider: OidConfigurationProvider,
+    private val oidcConfigurationProvider: OidcConfigurationProvider,
 ) : MatrixAuthenticationService {
     // Passphrase which will be used for new sessions. Existing sessions will use the passphrase
     // stored in the SessionData.
@@ -81,7 +81,7 @@ class RustMatrixAuthenticationService @Inject constructor(
         proxy = proxyProvider.provides(),
         userAgent = userAgentProvider.provide(),
         additionalRootCertificates = userCertificatesProvider.provides(),
-        oidcConfiguration = oidConfigurationProvider.get(),
+        oidcConfiguration = oidcConfigurationProvider.get(),
         customSlidingSyncProxy = null,
         sessionDelegate = null,
         crossProcessRefreshLockId = null,
@@ -220,7 +220,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                     .passphrase(pendingPassphrase)
                     .buildWithQrCode(
                         qrCodeData = (qrCodeData as SdkQrCodeLoginData).rustQrCodeData,
-                        oidcConfiguration = oidConfigurationProvider.get(),
+                        oidcConfiguration = oidcConfigurationProvider.get(),
                         progressListener = object : QrLoginProgressListener {
                             override fun onUpdate(state: QrLoginProgress) {
                                 Timber.d("QR Code login progress: $state")

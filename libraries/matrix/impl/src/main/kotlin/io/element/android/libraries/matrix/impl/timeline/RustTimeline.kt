@@ -281,7 +281,6 @@ class RustTimeline(
         messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()).use { content ->
             runCatching<Unit> {
                 inner.send(content)
-                Unit
             }
         }
     }

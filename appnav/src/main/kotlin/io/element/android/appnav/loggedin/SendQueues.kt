@@ -38,7 +38,6 @@ class SendQueues @Inject constructor(
     private val matrixClient: MatrixClient,
     private val networkMonitor: NetworkMonitor,
 ) {
-
     fun launchIn(coroutineScope: CoroutineScope) {
         networkMonitor.connectivity
             .onEach { networkStatus ->
@@ -55,6 +54,7 @@ class SendQueues @Inject constructor(
                         room.setSendQueueEnabled(enabled = true)
                     }
                 }
-            }.launchIn(coroutineScope)
+            }
+            .launchIn(coroutineScope)
     }
 }
