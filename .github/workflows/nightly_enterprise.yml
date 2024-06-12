@@ -1,0 +1,53 @@
+name: Build and release Enterprise nightly application
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Every nights at 4
+    - cron: "0 4 * * *"
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx6g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.incremental=false -XX:+UseG1GC
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace --no-daemon -Dsonar.gradle.skipCompile=true
+
+jobs:
+  nightly:
+    name: Build and publish Enterprise nightly bundle to Firebase
+    runs-on: ubuntu-latest
+    if: ${{ github.repository == 'element-hq/element-x-android' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+            submodules: 'true'
+      - name: Use JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
+      - name: Install towncrier
+        run: |
+          python3 -m pip install towncrier
+      - name: Prepare changelog file
+        run: |
+          mv towncrier.toml towncrier.toml.bak
+          sed 's/CHANGES\.md/CHANGES_NIGHTLY\.md/' towncrier.toml.bak > towncrier.toml
+          rm towncrier.toml.bak
+          yes n | towncrier build --version nightly
+      - name: Build and upload Nightly application
+        run: |
+          ./gradlew assembleGplayNightly appDistributionUploadGplayNightly $CI_GRADLE_ARG_PROPERTIES
+        env:
+          ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
+          ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
+          ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: ${{ secrets.MAPTILER_DARK_MAP_ID }}
+          ELEMENT_ANDROID_NIGHTLY_KEYID: ${{ secrets.ELEMENT_ANDROID_NIGHTLY_KEYID }}
+          ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD: ${{ secrets.ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD }}
+          ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD: ${{ secrets.ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD }}
+          FIREBASE_TOKEN: ${{ secrets.ELEMENT_ANDROID_NIGHTLY_FIREBASE_TOKEN }}
+      - name: Additionally upload Nightly APK to browserstack for testing
+        continue-on-error: true # don't block anything by this upload failing (for now)
+        run: |
+          curl -u "$BROWSERSTACK_USERNAME:$BROWSERSTACK_PASSWORD" -X POST "https://api-cloud.browserstack.com/app-automate/upload" -F "file=@app/build/outputs/apk/gplay/nightly/app-gplay-universal-nightly.apk" -F "custom_id=element-x-android-nightly"
+        env:
+          BROWSERSTACK_USERNAME: ${{ secrets.ELEMENT_ANDROID_BROWSERSTACK_USERNAME }}
+          BROWSERSTACK_PASSWORD: ${{ secrets.ELEMENT_ANDROID_BROWSERSTACK_ACCESS_KEY }}
