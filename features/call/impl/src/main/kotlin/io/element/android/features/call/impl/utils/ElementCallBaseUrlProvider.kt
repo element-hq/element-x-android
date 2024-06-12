@@ -44,11 +44,11 @@ class DefaultElementCallBaseUrlProvider @Inject constructor(
         try {
             callWellknownAPI.getCallWellKnown().widgetUrl
         } catch (e: HttpException) {
-            Timber.w(e, "Failed to fetch wellknown data")
             // Ignore Http 404, but re-throws any other exceptions
             if (e.code() != HttpURLConnection.HTTP_NOT_FOUND) {
                 throw e
             }
+            Timber.w(e, "Failed to fetch wellknown data")
             null
         }
     }
