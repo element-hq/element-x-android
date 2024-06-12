@@ -63,6 +63,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatch
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -444,41 +445,25 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action redact`() = runTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
-        val matrixRoom = FakeMatrixRoom()
-        val presenter = createMessagesPresenter(matrixRoom = matrixRoom, coroutineDispatchers = coroutineDispatchers)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            skipItems(1)
-            val initialState = awaitItem()
-            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Redact, aMessageEvent()))
-            assertThat(matrixRoom.redactEventEventIdParam).isEqualTo(AN_EVENT_ID)
-            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
-        }
-    }
 
-    @Test
-    fun `present - handle action redact message in error, in this case the message is just cancelled`() = runTest {
-        val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
-        val matrixRoom = FakeMatrixRoom()
+        val liveTimeline = FakeTimeline()
+        val matrixRoom = FakeMatrixRoom(liveTimeline = liveTimeline)
+
+        val redactEventLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String? -> Result.success(true) }
+        liveTimeline.redactEventLambda = redactEventLambda
+
         val presenter = createMessagesPresenter(matrixRoom = matrixRoom, coroutineDispatchers = coroutineDispatchers)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
             val initialState = awaitItem()
-            initialState.eventSink.invoke(
-                MessagesEvents.HandleAction(
-                    action = TimelineItemAction.Redact,
-                    event = aMessageEvent(
-                        transactionId = A_TRANSACTION_ID,
-                        sendState = LocalEventSendState.SendingFailed("Failed to send message")
-                    )
-                )
-            )
-            assertThat(matrixRoom.cancelSendCount).isEqualTo(1)
-            assertThat(matrixRoom.redactEventEventIdParam).isNull()
+            val messageEvent = aMessageEvent()
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Redact, messageEvent))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assert(redactEventLambda)
+                .isCalledOnce()
+                .with(value(messageEvent.eventId), value(messageEvent.transactionId), value(null))
         }
     }
 
