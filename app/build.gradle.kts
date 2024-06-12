@@ -17,6 +17,7 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.android.build.api.variant.FilterConfiguration.FilterType.ABI
+import extension.allEnterpriseImpl
 import extension.allFeaturesImpl
 import extension.allLibrariesImpl
 import extension.allServicesImpl
@@ -46,7 +47,11 @@ android {
     namespace = "io.element.android.x"
 
     defaultConfig {
-        applicationId = "io.element.android.x"
+        if (isEnterpriseBuild) {
+            applicationId = "io.element.enterprise"
+        } else {
+            applicationId = "io.element.android.x"
+        }
         targetSdk = Versions.targetSdk
         versionCode = Versions.versionCode
         versionName = Versions.versionName
@@ -170,6 +175,20 @@ android {
             buildConfigField("String", "FLAVOR_DESCRIPTION", "\"FDroid\"")
         }
     }
+
+    packaging {
+        resources.pickFirsts.addAll(
+            listOf(
+                "kotlin/annotation/annotation.kotlin_builtins",
+                "kotlin/collections/collections.kotlin_builtins",
+                "kotlin/coroutines/coroutines.kotlin_builtins",
+                "kotlin/internal/internal.kotlin_builtins",
+                "kotlin/kotlin.kotlin_builtins",
+                "kotlin/ranges/ranges.kotlin_builtins",
+                "kotlin/reflect/reflect.kotlin_builtins",
+            )
+        )
+    }
 }
 
 androidComponents {
@@ -222,6 +241,7 @@ knit {
 dependencies {
     allLibrariesImpl()
     allServicesImpl()
+    allEnterpriseImpl(rootDir, logger)
     allFeaturesImpl(rootDir, logger)
     implementation(projects.features.migration.api)
     implementation(projects.anvilannotations)

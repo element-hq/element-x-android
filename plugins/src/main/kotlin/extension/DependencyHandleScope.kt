@@ -130,6 +130,11 @@ fun DependencyHandlerScope.allServicesImpl() {
     implementation(project(":services:toolbox:impl"))
 }
 
+fun DependencyHandlerScope.allEnterpriseImpl(rootDir: File, logger: Logger) {
+    val enterpriseDir = File(rootDir, "enterprise")
+    addImplementationProjects(enterpriseDir, ":enterprise", "impl", logger)
+}
+
 fun DependencyHandlerScope.allFeaturesApi(rootDir: File, logger: Logger) {
     val featuresDir = File(rootDir, "features")
     addImplementationProjects(featuresDir, ":features", "api", logger)
