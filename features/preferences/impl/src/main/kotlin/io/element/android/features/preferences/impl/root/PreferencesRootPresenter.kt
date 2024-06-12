@@ -25,8 +25,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import io.element.android.features.logout.api.direct.DirectLogoutPresenter
+import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -46,12 +46,12 @@ class PreferencesRootPresenter @Inject constructor(
     private val matrixClient: MatrixClient,
     private val sessionVerificationService: SessionVerificationService,
     private val analyticsService: AnalyticsService,
-    private val buildType: BuildType,
     private val versionFormatter: VersionFormatter,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val featureFlagService: FeatureFlagService,
     private val indicatorService: IndicatorService,
     private val directLogoutPresenter: DirectLogoutPresenter,
+    private val showDeveloperSettingsProvider: ShowDeveloperSettingsProvider,
 ) : Presenter<PreferencesRootState> {
     @Composable
     override fun present(): PreferencesRootState {
@@ -97,7 +97,16 @@ class PreferencesRootPresenter @Inject constructor(
             initAccountManagementUrl(accountManagementUrl, devicesManagementUrl)
         }
 
-        val showDeveloperSettings = buildType != BuildType.RELEASE
+        val showDeveloperSettings by showDeveloperSettingsProvider.showDeveloperSettings.collectAsState()
+
+        fun handleEvent(event: PreferencesRootEvents) {
+            when (event) {
+                is PreferencesRootEvents.EnableDeveloperSettingsClicked -> {
+                    showDeveloperSettingsProvider.unlockDeveloperSettings()
+                }
+            }
+        }
+
         return PreferencesRootState(
             myUser = matrixUser.value,
             version = versionFormatter.get(),
@@ -113,6 +122,7 @@ class PreferencesRootPresenter @Inject constructor(
             showBlockedUsersItem = showBlockedUsersItem,
             directLogoutState = directLogoutState,
             snackbarMessage = snackbarMessage,
+            eventSink = ::handleEvent,
         )
     }
 
