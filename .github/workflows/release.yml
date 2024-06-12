@@ -39,6 +39,36 @@ jobs:
           path: |
             app/build/outputs/bundle/gplayRelease/app-gplay-release.aab
 
+  enterprise:
+    name: Create App Bundle Enterprise
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ format('build-release-main-gplay-{0}', github.sha) }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+      - name: Use JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
+      - name: Configure gradle
+        uses: gradle/actions/setup-gradle@v3
+      - name: Create Enterprise app bundle
+        env:
+          ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
+          ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
+          ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: ${{ secrets.MAPTILER_DARK_MAP_ID }}
+        run: ./gradlew bundleGplayRelease $CI_GRADLE_ARG_PROPERTIES
+      - name: Upload bundle as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: elementx-enterprise-app-gplay-bundle-unsigned
+          path: |
+            app/build/outputs/bundle/gplayRelease/app-gplay-release.aab
+
   fdroid:
     name: Create APKs (FDroid)
     runs-on: ubuntu-latest
