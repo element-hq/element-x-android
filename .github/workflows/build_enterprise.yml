@@ -1,0 +1,64 @@
+name: Enterprise APK Build
+
+on:
+  workflow_dispatch:
+  pull_request:
+  merge_group:
+  push:
+    branches: [ develop ]
+
+# Enrich gradle.properties for CI/CD
+env:
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx7g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.incremental=false -XX:+UseG1GC
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -Dsonar.gradle.skipCompile=true
+
+jobs:
+  build:
+    name: Build Enterprise APKs
+    runs-on: ubuntu-latest
+    # Skip for `main`
+    if: github.ref != 'refs/heads/main'
+    strategy:
+      matrix:
+        variant: [debug, release, nightly]
+      fail-fast: false
+    # Allow all jobs on develop. Just one per PR.
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/develop' && format('build-develop-enterprise-{0}-{1}', matrix.variant, github.sha) || format('build-enterprise-{0}-{1}', matrix.variant, github.ref)  }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+          # Ensure we are building the branch and not the branch after being merged on develop
+          # https://github.com/actions/checkout/issues/881
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
+      - name: Use JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
+      - name: Configure gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
+      - name: Assemble debug Gplay Enterprise APK
+        if: ${{ matrix.variant == 'debug' }}
+        env:
+          ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
+          ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
+          ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: ${{ secrets.MAPTILER_DARK_MAP_ID }}
+        run: ./gradlew :app:assembleGplayDebug -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
+      - name: Upload debug Enterprise APKs
+        if: ${{ matrix.variant == 'debug' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: elementx-enterprise-debug
+          path: |
+            app/build/outputs/apk/gplay/debug/*-universal-debug.apk
+      - name: Compile release sources
+        if: ${{ matrix.variant == 'release' }}
+        run: ./gradlew compileReleaseSources -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
+      - name: Compile nightly sources
+        if: ${{ matrix.variant == 'nightly' }}
+        run: ./gradlew compileGplayNightlySources -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
