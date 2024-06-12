@@ -19,7 +19,6 @@ package io.element.android.libraries.pushproviders.firebase
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
@@ -31,11 +30,10 @@ import io.element.android.libraries.pushproviders.api.PusherSubscriber
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStore
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
-import io.element.android.libraries.sessionstorage.api.LoginType
-import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.impl.memory.InMemoryMultiSessionsStore
 import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
+import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.test.runTest
@@ -163,24 +161,6 @@ class DefaultFirebaseNewTokenHandlerTest {
             userPushStoreFactory = userPushStoreFactory,
             matrixAuthenticationService = matrixAuthenticationService,
             firebaseStore = firebaseStore
-        )
-    }
-
-    private fun aSessionData(
-        sessionId: SessionId,
-    ): SessionData {
-        return SessionData(
-            userId = sessionId.value,
-            deviceId = "aDeviceId",
-            accessToken = "anAccessToken",
-            refreshToken = "aRefreshToken",
-            homeserverUrl = "aHomeserverUrl",
-            oidcData = null,
-            slidingSyncProxy = null,
-            loginTimestamp = null,
-            isTokenValid = true,
-            loginType = LoginType.UNKNOWN,
-            passphrase = null,
         )
     }
 }

@@ -72,6 +72,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 class MessagesViewTest {
@@ -295,6 +296,7 @@ class MessagesViewTest {
     }
 
     @Test
+    @Config(qualifiers = "h1024dp")
     fun `clicking on the sender of an Event invoke expected callback`() {
         val eventsRecorder = EventsRecorder<MessagesEvents>(expectEvents = false)
         val state = aMessagesState(
