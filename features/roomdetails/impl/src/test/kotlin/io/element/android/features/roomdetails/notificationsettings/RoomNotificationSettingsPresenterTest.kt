@@ -119,6 +119,7 @@ class RoomNotificationSettingsPresenterTest {
                 it.roomNotificationSettings.dataOrNull()?.isDefault == false
             }.last()
             assertThat(defaultState.roomNotificationSettings.dataOrNull()?.isDefault).isFalse()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
