@@ -32,17 +32,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.viewinterop.AndroidView
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.call.impl.R
 import io.element.android.features.call.impl.utils.WebViewWidgetMessageInterceptor
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.ui.strings.CommonStrings
 
 typealias RequestPermissionCallback = (Array<String>) -> Unit
 
@@ -91,6 +95,17 @@ internal fun CallScreenView(
                 state.eventSink(CallScreenEvents.SetupMessageChannels(interceptor))
             }
         )
+        when (state.urlState) {
+            AsyncData.Uninitialized,
+            is AsyncData.Loading ->
+                ProgressDialog(text = stringResource(id = CommonStrings.common_please_wait))
+            is AsyncData.Failure ->
+                ErrorDialog(
+                    content = state.urlState.error.message.orEmpty(),
+                    onDismiss = { state.eventSink(CallScreenEvents.Hangup) },
+                )
+            is AsyncData.Success -> Unit
+        }
     }
 }
 
@@ -157,16 +172,11 @@ private fun WebView.setup(
 
 @PreviewsDayNight
 @Composable
-internal fun CallScreenViewPreview() {
-    ElementPreview {
-        CallScreenView(
-            state = CallScreenState(
-                urlState = AsyncData.Success("https://call.element.io/some-actual-call?with=parameters"),
-                isInWidgetMode = false,
-                userAgent = "",
-                eventSink = {},
-            ),
-            requestPermissions = { _, _ -> },
-        )
-    }
+internal fun CallScreenViewPreview(
+    @PreviewParameter(CallScreenStateProvider::class) state: CallScreenState,
+) = ElementPreview {
+    CallScreenView(
+        state = state,
+        requestPermissions = { _, _ -> },
+    )
 }

@@ -54,6 +54,7 @@ dependencies {
     implementation(projects.services.toolbox.api)
     implementation(libs.androidx.webkit)
     implementation(libs.coil.compose)
+    implementation(libs.network.retrofit)
     implementation(libs.serialization.json)
     api(projects.features.call.api)
     ksp(libs.showkase.processor)

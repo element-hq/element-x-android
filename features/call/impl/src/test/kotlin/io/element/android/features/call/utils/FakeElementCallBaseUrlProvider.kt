@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.call.impl.utils
+package io.element.android.features.call.utils
 
-import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.features.call.impl.utils.ElementCallBaseUrlProvider
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
+import io.element.android.tests.testutils.lambda.lambdaError
 
-interface CallWidgetProvider {
-    suspend fun getWidget(
-        sessionId: SessionId,
-        roomId: RoomId,
-        clientId: String,
-        languageTag: String? = null,
-        theme: String? = null,
-    ): Result<GetWidgetResult>
-
-    data class GetWidgetResult(
-        val driver: MatrixWidgetDriver,
-        val url: String,
-    )
+class FakeElementCallBaseUrlProvider(
+    private val providesLambda: (SessionId) -> String? = { lambdaError() }
+) : ElementCallBaseUrlProvider {
+    override suspend fun provides(sessionId: SessionId): String? {
+        return providesLambda(sessionId)
+    }
 }
