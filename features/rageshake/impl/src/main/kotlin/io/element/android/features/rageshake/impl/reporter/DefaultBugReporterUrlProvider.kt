@@ -24,8 +24,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultBugReporterUrlProvider @Inject constructor(
-) : BugReporterUrlProvider {
+class DefaultBugReporterUrlProvider @Inject constructor() : BugReporterUrlProvider {
     override fun provide(): HttpUrl {
         return RageshakeConfig.BUG_REPORT_URL.toHttpUrl()
     }
