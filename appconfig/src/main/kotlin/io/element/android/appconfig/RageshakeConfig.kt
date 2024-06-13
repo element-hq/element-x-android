@@ -19,4 +19,8 @@ package io.element.android.appconfig
 object RageshakeConfig {
     const val BUG_REPORT_URL = "https://riot.im/bugreports/submit"
     const val BUG_REPORT_APP_NAME = "element-x-android"
+    /**
+     * The maximum size of the upload request. Default value is just below CloudFlare's max request size.
+     */
+    const val MAX_LOG_UPLOAD_SIZE = 50 * 1024 * 1024L
 }
