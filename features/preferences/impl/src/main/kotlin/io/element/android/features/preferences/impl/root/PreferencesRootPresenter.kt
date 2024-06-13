@@ -101,7 +101,7 @@ class PreferencesRootPresenter @Inject constructor(
 
         fun handleEvent(event: PreferencesRootEvents) {
             when (event) {
-                is PreferencesRootEvents.EnableDeveloperSettingsClicked -> {
+                is PreferencesRootEvents.OnVersionInfoClick -> {
                     showDeveloperSettingsProvider.unlockDeveloperSettings()
                 }
             }

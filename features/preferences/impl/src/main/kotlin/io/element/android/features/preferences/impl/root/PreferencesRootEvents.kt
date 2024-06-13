@@ -17,5 +17,5 @@
 package io.element.android.features.preferences.impl.root
 
 sealed interface PreferencesRootEvents {
-    data object EnableDeveloperSettingsClicked : PreferencesRootEvents
+    data object OnVersionInfoClick : PreferencesRootEvents
 }

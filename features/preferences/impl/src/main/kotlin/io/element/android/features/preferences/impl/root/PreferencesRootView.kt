@@ -113,7 +113,7 @@ fun PreferencesRootView(
             version = state.version,
             deviceId = state.deviceId,
             onClick = if (!state.showDeveloperSettings) {
-                { state.eventSink(PreferencesRootEvents.EnableDeveloperSettingsClicked) }
+                { state.eventSink(PreferencesRootEvents.OnVersionInfoClick) }
             } else {
                 null
             }

@@ -114,10 +114,10 @@ class PreferencesRootPresenterTest {
         }.test {
             skipItems(1)
             val loadedState = awaitItem()
-            assertThat(loadedState.showDeveloperSettings).isFalse()
 
             repeat(times = ShowDeveloperSettingsProvider.DEVELOPER_SETTINGS_COUNTER) {
-                loadedState.eventSink(PreferencesRootEvents.EnableDeveloperSettingsClicked)
+                assertThat(loadedState.showDeveloperSettings).isFalse()
+                loadedState.eventSink(PreferencesRootEvents.OnVersionInfoClick)
             }
 
             assertThat(awaitItem().showDeveloperSettings).isTrue()
