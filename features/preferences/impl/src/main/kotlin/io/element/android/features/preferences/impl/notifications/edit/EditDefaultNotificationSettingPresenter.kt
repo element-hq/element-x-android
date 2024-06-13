@@ -29,7 +29,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.runCatchingUpdatingState
+import io.element.android.libraries.architecture.runUpdatingStateNoSuccess
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
@@ -73,7 +73,7 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
         val localCoroutineScope = rememberCoroutineScope()
         LaunchedEffect(Unit) {
             fetchSettings(mode)
-            observeNotificationSettings(mode)
+            observeNotificationSettings(mode, changeNotificationSettingAction)
             observeRoomSummaries(roomsWithUserDefinedMode)
             displayMentionsOnlyDisclaimer = !notificationSettingsService.canHomeServerPushEncryptedEventsToDevice().getOrDefault(true)
         }
@@ -102,11 +102,15 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
     }
 
     @OptIn(FlowPreview::class)
-    private fun CoroutineScope.observeNotificationSettings(mode: MutableState<RoomNotificationMode?>) {
+    private fun CoroutineScope.observeNotificationSettings(
+        mode: MutableState<RoomNotificationMode?>,
+        changeNotificationSettingAction: MutableState<AsyncAction<Unit>>,
+    ) {
         notificationSettingsService.notificationSettingsChangeFlow
             .debounce(0.5.seconds)
             .onEach {
                 fetchSettings(mode)
+                changeNotificationSettingAction.value = AsyncAction.Uninitialized
             }
             .launchIn(this)
     }
@@ -139,10 +143,12 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
     }
 
     private fun CoroutineScope.setDefaultNotificationMode(mode: RoomNotificationMode, action: MutableState<AsyncAction<Unit>>) = launch {
-        suspend {
+        action.runUpdatingStateNoSuccess {
             // On modern clients, we don't have different settings for encrypted and non-encrypted rooms (Legacy clients did).
-            notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = true, mode = mode, isOneToOne = isOneToOne).getOrThrow()
-            notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = false, mode = mode, isOneToOne = isOneToOne).getOrThrow()
-        }.runCatchingUpdatingState(action)
+            notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = true, mode = mode, isOneToOne = isOneToOne)
+                .map {
+                    notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = false, mode = mode, isOneToOne = isOneToOne)
+                }
+        }
     }
 }
