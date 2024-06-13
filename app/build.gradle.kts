@@ -109,6 +109,7 @@ android {
     } else {
         "Element X"
     }
+    logger.warnInBox("Building $baseAppName")
 
     buildTypes {
         getByName("debug") {
