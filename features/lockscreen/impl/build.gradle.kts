@@ -58,6 +58,6 @@ dependencies {
     testImplementation(projects.libraries.cryptography.test)
     testImplementation(projects.libraries.cryptography.impl)
     testImplementation(projects.libraries.featureflag.test)
-    implementation(projects.libraries.sessionStorage.test)
-    implementation(projects.services.appnavstate.test)
+    testImplementation(projects.libraries.sessionStorage.test)
+    testImplementation(projects.services.appnavstate.test)
 }
