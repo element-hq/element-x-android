@@ -16,7 +16,6 @@
 
 package io.element.android.features.roomlist.impl
 
-import FakeFullScreenIntentPermissionsPresenter
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
@@ -48,6 +47,7 @@ import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.fullscreenintent.test.FakeFullScreenIntentPermissionsPresenter
 import io.element.android.libraries.indicator.impl.DefaultIndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.BackupState

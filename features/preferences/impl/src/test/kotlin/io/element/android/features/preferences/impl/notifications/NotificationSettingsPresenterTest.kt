@@ -16,12 +16,12 @@
 
 package io.element.android.features.preferences.impl.notifications
 
-import FakeFullScreenIntentPermissionsPresenter
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.fullscreenintent.test.FakeFullScreenIntentPermissionsPresenter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.test.A_THROWABLE
