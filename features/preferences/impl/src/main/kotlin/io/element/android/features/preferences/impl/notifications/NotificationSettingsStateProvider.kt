@@ -41,7 +41,7 @@ open class NotificationSettingsStateProvider : PreviewParameterProvider<Notifica
             aValidNotificationSettingsState(currentPushDistributor = AsyncData.Failure(Exception("Failed to change distributor"))),
             aInvalidNotificationSettingsState(),
             aInvalidNotificationSettingsState(fixFailed = true),
-            aValidNotificationSettingsState(fullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(shouldDisplay = true)),
+            aValidNotificationSettingsState(fullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(permissionGranted = false)),
         )
 }
 
