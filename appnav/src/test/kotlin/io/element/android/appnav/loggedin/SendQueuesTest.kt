@@ -51,7 +51,7 @@ import org.junit.Test
         sut.launchIn(backgroundScope)
 
         sendQueueDisabledFlow.emit(room.roomId)
-        advanceTimeBy(SENDING_QUEUE_RETRY_DELAY)
+        advanceTimeBy(SEND_QUEUES_RETRY_DELAY_MILLIS)
         runCurrent()
 
         assert(setAllSendQueuesEnabledLambda)
@@ -79,7 +79,7 @@ import org.junit.Test
         sut.launchIn(backgroundScope)
 
         sendQueueDisabledFlow.emit(room.roomId)
-        advanceTimeBy(SENDING_QUEUE_RETRY_DELAY)
+        advanceTimeBy(SEND_QUEUES_RETRY_DELAY_MILLIS)
         runCurrent()
 
         assert(setAllSendQueuesEnabledLambda)
@@ -96,11 +96,11 @@ import org.junit.Test
         matrixClient.setAllSendQueuesEnabledLambda = setEnableSendingQueueLambda
 
         sut.launchIn(backgroundScope)
-        advanceTimeBy(SENDING_QUEUE_RETRY_DELAY)
+        advanceTimeBy(SEND_QUEUES_RETRY_DELAY_MILLIS)
         networkMonitor.connectivity.value = NetworkStatus.Offline
-        advanceTimeBy(SENDING_QUEUE_RETRY_DELAY)
+        advanceTimeBy(SEND_QUEUES_RETRY_DELAY_MILLIS)
         networkMonitor.connectivity.value = NetworkStatus.Online
-        advanceTimeBy(SENDING_QUEUE_RETRY_DELAY)
+        advanceTimeBy(SEND_QUEUES_RETRY_DELAY_MILLIS)
 
         assert(setEnableSendingQueueLambda)
             .isCalledExactly(3)

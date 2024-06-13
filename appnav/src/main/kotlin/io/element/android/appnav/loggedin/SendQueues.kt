@@ -31,7 +31,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @VisibleForTesting
-const val SENDING_QUEUE_RETRY_DELAY = 1500L
+const val SEND_QUEUES_RETRY_DELAY_MILLIS = 1500L
 
 @SingleIn(SessionScope::class)
 class SendQueues @Inject constructor(
@@ -49,7 +49,7 @@ class SendQueues @Inject constructor(
             .onEach { roomId: RoomId ->
                 Timber.d("Send queue disabled for room $roomId")
                 if (networkMonitor.connectivity.value == NetworkStatus.Online) {
-                    delay(SENDING_QUEUE_RETRY_DELAY)
+                    delay(SEND_QUEUES_RETRY_DELAY_MILLIS)
                     matrixClient.getRoom(roomId)?.use { room ->
                         room.setSendQueueEnabled(enabled = true)
                     }
