@@ -16,6 +16,9 @@
 
 package io.element.android.features.enterprise.api
 
+import io.element.android.libraries.matrix.api.core.SessionId
+
 interface EnterpriseService {
-    suspend fun isEnterpriseUser(): Boolean
+    val isEnterpriseBuild: Boolean
+    suspend fun isEnterpriseUser(sessionId: SessionId): Boolean
 }

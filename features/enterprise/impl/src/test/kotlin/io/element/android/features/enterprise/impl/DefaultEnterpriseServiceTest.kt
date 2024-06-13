@@ -16,13 +16,21 @@
 
 package io.element.android.features.enterprise.impl
 
-import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.enterprise.api.EnterpriseService
-import io.element.android.libraries.di.SessionScope
-import javax.inject.Inject
+import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.test.A_SESSION_ID
+import kotlinx.coroutines.test.runTest
+import org.junit.Test
 
-@ContributesBinding(SessionScope::class)
-class DefaultEnterpriseService @Inject constructor(
-) : EnterpriseService {
-    override suspend fun isEnterpriseUser(): Boolean = false
+class DefaultEnterpriseServiceTest {
+    @Test
+    fun `isEnterpriseBuild is false`() {
+        val defaultEnterpriseService = DefaultEnterpriseService()
+        assertThat(defaultEnterpriseService.isEnterpriseBuild).isFalse()
+    }
+
+    @Test
+    fun `isEnterpriseUser always return false`() = runTest {
+        val defaultEnterpriseService = DefaultEnterpriseService()
+        assertThat(defaultEnterpriseService.isEnterpriseUser(A_SESSION_ID)).isFalse()
+    }
 }
