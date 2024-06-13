@@ -20,6 +20,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.call.impl.wellknown.CallWellknownAPI
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.network.RetrofitFactory
 import kotlinx.coroutines.withContext
@@ -32,15 +33,20 @@ interface ElementCallBaseUrlProvider {
     suspend fun provides(sessionId: SessionId): String?
 }
 
+@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultElementCallBaseUrlProvider @Inject constructor(
     private val retrofitFactory: RetrofitFactory,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : ElementCallBaseUrlProvider {
+    private val apiCache = mutableMapOf<SessionId, CallWellknownAPI>()
+
     override suspend fun provides(sessionId: SessionId): String? = withContext(coroutineDispatchers.io) {
         val domain = sessionId.value.substringAfter(":")
-        val callWellknownAPI = retrofitFactory.create("https://$domain")
-            .create(CallWellknownAPI::class.java)
+        val callWellknownAPI = apiCache.getOrPut(sessionId) {
+            retrofitFactory.create("https://$domain")
+                .create(CallWellknownAPI::class.java)
+        }
         try {
             callWellknownAPI.getCallWellKnown().widgetUrl
         } catch (e: HttpException) {
