@@ -57,7 +57,6 @@ import io.element.android.features.roomlist.impl.filters.aRoomListFiltersState
 import io.element.android.features.roomlist.impl.filters.selection.FilterSelectionState
 import io.element.android.features.roomlist.impl.migration.MigrationScreenView
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
-import io.element.android.libraries.designsystem.atomic.molecules.DialogLikeBannerMolecule
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -208,12 +207,7 @@ private fun RoomsViewList(
             }
         } else if (state.fullScreenIntentPermissionsState.shouldDisplayBanner) {
             item {
-                DialogLikeBannerMolecule(
-                    title = stringResource(R.string.full_screen_intent_banner_title),
-                    content = stringResource(R.string.full_screen_intent_banner_message),
-                    onDismissClick = state.fullScreenIntentPermissionsState.dismissFullScreenIntentBanner,
-                    onSubmitClick = state.fullScreenIntentPermissionsState.openFullScreenIntentSettings,
-                )
+                FullScreenIntentPermissionBanner(state = state.fullScreenIntentPermissionsState)
             }
         }
 
