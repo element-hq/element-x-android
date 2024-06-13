@@ -21,6 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -73,6 +74,9 @@ class NotificationSettingsPresenter @Inject constructor(
         val matrixSettings: MutableState<NotificationSettingsState.MatrixSettings> = remember {
             mutableStateOf(NotificationSettingsState.MatrixSettings.Uninitialized)
         }
+
+        // Used to force a recomposition
+        var refreshFullScreenIntentSettings by remember { mutableIntStateOf(0) }
 
         LaunchedEffect(Unit) {
             fetchSettings(matrixSettings)
@@ -151,6 +155,7 @@ class NotificationSettingsPresenter @Inject constructor(
                 NotificationSettingsEvents.FixConfigurationMismatch -> localCoroutineScope.fixConfigurationMismatch(matrixSettings)
                 NotificationSettingsEvents.RefreshSystemNotificationsEnabled -> {
                     systemNotificationsEnabled.value = systemNotificationsEnabledProvider.notificationsEnabled()
+                    refreshFullScreenIntentSettings++
                 }
                 NotificationSettingsEvents.ClearNotificationChangeError -> changeNotificationSettingAction.value = AsyncAction.Uninitialized
                 NotificationSettingsEvents.ChangePushProvider -> showChangePushProviderDialog = true
@@ -169,7 +174,7 @@ class NotificationSettingsPresenter @Inject constructor(
             currentPushDistributor = currentDistributorName,
             availablePushDistributors = distributorNames,
             showChangePushProviderDialog = showChangePushProviderDialog,
-            fullScreenIntentPermissionsState = fullScreenIntentPermissionsPresenter.present(),
+            fullScreenIntentPermissionsState = key(refreshFullScreenIntentSettings) { fullScreenIntentPermissionsPresenter.present() },
             eventSink = ::handleEvents
         )
     }

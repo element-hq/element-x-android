@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.fullscreenintent.impl
 
-import android.Manifest
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -26,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.core.app.NotificationManagerCompat
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import com.squareup.anvil.annotations.ContributesBinding
@@ -34,8 +34,6 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsPresenter
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
-import io.element.android.libraries.permissions.api.PermissionsPresenter
-import io.element.android.libraries.permissions.noop.NoopPermissionsPresenter
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import io.element.android.services.toolbox.api.intent.ExternalIntentLauncher
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
@@ -49,16 +47,11 @@ class DefaultFullScreenIntentPermissionsPresenter @Inject constructor(
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
     private val externalIntentLauncher: ExternalIntentLauncher,
     private val buildMeta: BuildMeta,
-    permissionsPresenterFactory: PermissionsPresenter.Factory,
+    private val notificationManagerCompat: NotificationManagerCompat,
     preferencesDataStoreFactory: PreferenceDataStoreFactory,
 ) : FullScreenIntentPermissionsPresenter {
     companion object {
         private const val PREF_KEY_FULL_SCREEN_INTENT_BANNER_DISMISSED = "PREF_KEY_FULL_SCREEN_INTENT_BANNER_DISMISSED"
-    }
-    private val permissionsPresenter = if (buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
-        permissionsPresenterFactory.create(permission = Manifest.permission.USE_FULL_SCREEN_INTENT)
-    } else {
-        NoopPermissionsPresenter(isGranted = true)
     }
 
     private val dataStore = preferencesDataStoreFactory.create("full_screen_intent_permissions")
@@ -76,7 +69,7 @@ class DefaultFullScreenIntentPermissionsPresenter @Inject constructor(
     @Composable
     override fun present(): FullScreenIntentPermissionsState {
         val coroutineScope = rememberCoroutineScope()
-        val isGranted = permissionsPresenter.present().permissionGranted
+        val isGranted = notificationManagerCompat.canUseFullScreenIntent()
         val isBannerDismissed by isFullScreenIntentBannerDismissed.collectAsState(initial = true)
         return FullScreenIntentPermissionsState(
             permissionGranted = isGranted,

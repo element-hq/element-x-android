@@ -271,6 +271,32 @@ class NotificationSettingsPresenterTest {
     }
 
     @Test
+    fun `present - RefreshSystemNotificationsEnabled also refreshes fullScreenIntentState`() = runTest {
+        val fullScreenIntentPermissionsPresenter = FakeFullScreenIntentPermissionsPresenter().apply {
+            state = state.copy(permissionGranted = false)
+        }
+        val presenter = createNotificationSettingsPresenter(
+            pushService = createFakePushService(),
+            fullScreenIntentPermissionsPresenter = fullScreenIntentPermissionsPresenter,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitLastSequentialItem()
+            assertThat(initialState.fullScreenIntentPermissionsState.permissionGranted).isFalse()
+
+            // Change the notification settings
+            fullScreenIntentPermissionsPresenter.state = fullScreenIntentPermissionsPresenter.state.copy(permissionGranted = true)
+            // Check it's not changed unless we refresh
+            expectNoEvents()
+
+            // Refresh
+            initialState.eventSink.invoke(NotificationSettingsEvents.RefreshSystemNotificationsEnabled)
+            assertThat(awaitItem().fullScreenIntentPermissionsState.permissionGranted).isTrue()
+        }
+    }
+
+    @Test
     fun `present - change push provider error`() = runTest {
         val presenter = createNotificationSettingsPresenter(
             pushService = createFakePushService(
@@ -321,6 +347,7 @@ class NotificationSettingsPresenterTest {
     private fun createNotificationSettingsPresenter(
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
         pushService: PushService = FakePushService(),
+        fullScreenIntentPermissionsPresenter: FakeFullScreenIntentPermissionsPresenter = FakeFullScreenIntentPermissionsPresenter()
     ): NotificationSettingsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
         return NotificationSettingsPresenter(
@@ -329,7 +356,7 @@ class NotificationSettingsPresenterTest {
             matrixClient = matrixClient,
             pushService = pushService,
             systemNotificationsEnabledProvider = FakeSystemNotificationsEnabledProvider(),
-            fullScreenIntentPermissionsPresenter = FakeFullScreenIntentPermissionsPresenter(),
+            fullScreenIntentPermissionsPresenter = fullScreenIntentPermissionsPresenter,
         )
     }
 }

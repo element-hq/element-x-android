@@ -21,13 +21,14 @@ import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermiss
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 
 class FakeFullScreenIntentPermissionsPresenter : FullScreenIntentPermissionsPresenter {
+    var state = FullScreenIntentPermissionsState(
+        permissionGranted = true,
+        shouldDisplayBanner = false,
+        dismissFullScreenIntentBanner = {},
+        openFullScreenIntentSettings = {},
+    )
     @Composable
     override fun present(): FullScreenIntentPermissionsState {
-        return FullScreenIntentPermissionsState(
-            permissionGranted = true,
-            shouldDisplayBanner = false,
-            dismissFullScreenIntentBanner = {},
-            openFullScreenIntentSettings = {},
-        )
+        return state
     }
 }

@@ -51,6 +51,7 @@ dependencies {
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.libraries.testtags)
     testImplementation(libs.test.robolectric)
+    testImplementation(libs.test.mockk)
     testImplementation(libs.androidx.compose.ui.test.junit)
     testImplementation(projects.services.toolbox.test)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
