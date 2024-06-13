@@ -30,6 +30,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
 import io.element.android.libraries.matrix.impl.analytics.UtdTracker
+import io.element.android.libraries.matrix.impl.auth.OidcConfigurationProvider
 import io.element.android.libraries.matrix.impl.auth.RustMatrixAuthenticationService
 import io.element.android.libraries.network.useragent.SimpleUserAgentProvider
 import io.element.android.libraries.sessionstorage.api.LoggedInState
@@ -66,6 +67,7 @@ class MainActivity : ComponentActivity() {
             passphraseGenerator = NullPassphraseGenerator(),
             userCertificatesProvider = userCertificatesProvider,
             proxyProvider = proxyProvider,
+            oidcConfigurationProvider = OidcConfigurationProvider(baseDirectory),
         )
     }
 

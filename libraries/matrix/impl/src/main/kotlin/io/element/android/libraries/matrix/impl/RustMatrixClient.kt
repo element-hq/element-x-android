@@ -63,7 +63,7 @@ import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
-import io.element.android.libraries.matrix.impl.util.SessionDirectoryNameProvider
+import io.element.android.libraries.matrix.impl.util.SessionDirectoryProvider
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
@@ -95,9 +95,11 @@ import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.BackupState
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
+import org.matrix.rustcomponents.sdk.ClientException
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
+import org.matrix.rustcomponents.sdk.SendQueueRoomErrorListener
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
@@ -151,7 +153,7 @@ class RustMatrixClient(
         sessionDispatcher = sessionDispatcher,
     )
 
-    private val sessionDirectoryNameProvider = SessionDirectoryNameProvider()
+    private val sessionDirectoryProvider = SessionDirectoryProvider(sessionStore)
 
     private val isLoggingOut = AtomicBoolean(false)
 
@@ -171,6 +173,7 @@ class RustMatrixClient(
                             isTokenValid = false,
                             loginType = existingData.loginType,
                             passphrase = existingData.passphrase,
+                            sessionPath = existingData.sessionPath,
                         )
                         sessionStore.updateData(newData)
                         Timber.d("Removed session data with token: '...$anonymizedToken'.")
@@ -198,6 +201,7 @@ class RustMatrixClient(
                     isTokenValid = true,
                     loginType = existingData.loginType,
                     passphrase = existingData.passphrase,
+                    sessionPath = existingData.sessionPath,
                 )
                 sessionStore.updateData(newData)
                 Timber.d("Saved new session data with token: '...$anonymizedToken'.")
@@ -482,7 +486,7 @@ class RustMatrixClient(
 
     override suspend fun clearCache() {
         close()
-        baseDirectory.deleteSessionDirectory(deleteCryptoDb = false)
+        deleteSessionDirectory(deleteCryptoDb = false)
     }
 
     override suspend fun logout(ignoreSdkError: Boolean): String? = doLogout(
@@ -512,7 +516,7 @@ class RustMatrixClient(
                 }
             }
             close()
-            baseDirectory.deleteSessionDirectory(deleteCryptoDb = true)
+            deleteSessionDirectory(deleteCryptoDb = true)
             if (removeSession) {
                 sessionStore.removeSession(sessionId.value)
             }
@@ -551,11 +555,23 @@ class RustMatrixClient(
         }.distinctUntilChanged()
     }
 
+    override suspend fun setAllSendQueuesEnabled(enabled: Boolean) = withContext(sessionDispatcher) {
+        Timber.i("setAllSendQueuesEnabled($enabled)")
+        client.enableAllSendQueues(enabled)
+    }
+
+    override fun sendQueueDisabledFlow(): Flow<RoomId> = mxCallbackFlow {
+        client.subscribeToSendQueueStatus(object : SendQueueRoomErrorListener {
+            override fun onError(roomId: String, error: ClientException) {
+                trySend(RoomId(roomId))
+            }
+        })
+    }.buffer(Channel.UNLIMITED)
+
     private suspend fun File.getCacheSize(
         includeCryptoDb: Boolean = false,
     ): Long = withContext(sessionDispatcher) {
-        val sessionDirectoryName = sessionDirectoryNameProvider.provides(sessionId)
-        val sessionDirectory = File(this@getCacheSize, sessionDirectoryName)
+        val sessionDirectory = sessionDirectoryProvider.provides(sessionId) ?: return@withContext 0L
         if (includeCryptoDb) {
             sessionDirectory.getSizeOfFiles()
         } else {
@@ -571,11 +587,10 @@ class RustMatrixClient(
         }
     }
 
-    private suspend fun File.deleteSessionDirectory(
+    private suspend fun deleteSessionDirectory(
         deleteCryptoDb: Boolean = false,
     ): Boolean = withContext(sessionDispatcher) {
-        val sessionDirectoryName = sessionDirectoryNameProvider.provides(sessionId)
-        val sessionDirectory = File(this@deleteSessionDirectory, sessionDirectoryName)
+        val sessionDirectory = sessionDirectoryProvider.provides(sessionId) ?: return@withContext false
         if (deleteCryptoDb) {
             // Delete the folder and all its content
             sessionDirectory.deleteRecursively()

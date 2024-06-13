@@ -62,7 +62,7 @@ class ActionListPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            val messageEvent = aMessageEvent(isMine = true, content = TimelineItemRedactedContent)
+            val messageEvent = aMessageEvent(isMine = true, isEditable = false, content = TimelineItemRedactedContent)
             initialState.eventSink.invoke(
                 ActionListEvents.ComputeForMessage(
                     event = messageEvent,
@@ -96,7 +96,11 @@ class ActionListPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            val messageEvent = aMessageEvent(isMine = false, content = TimelineItemRedactedContent)
+            val messageEvent = aMessageEvent(
+                isMine = false,
+                isEditable = false,
+                content = TimelineItemRedactedContent
+            )
             initialState.eventSink.invoke(
                 ActionListEvents.ComputeForMessage(
                     event = messageEvent,
@@ -132,6 +136,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = false,
+                isEditable = false,
                 content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = null)
             )
             initialState.eventSink.invoke(
@@ -174,6 +179,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = false,
+                isEditable = false,
                 content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = null)
             )
             initialState.eventSink.invoke(
@@ -215,6 +221,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = false,
+                isEditable = false,
                 content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = null)
             )
             initialState.eventSink.invoke(
@@ -256,6 +263,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = false,
+                isEditable = false,
                 content = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, isEdited = false, formattedBody = null)
             )
             initialState.eventSink.invoke(
@@ -382,6 +390,7 @@ class ActionListPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
                 isMine = true,
+                isEditable = false,
                 content = aTimelineItemImageContent(),
             )
             initialState.eventSink.invoke(

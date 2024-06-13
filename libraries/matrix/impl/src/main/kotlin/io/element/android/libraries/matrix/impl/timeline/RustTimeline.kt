@@ -279,8 +279,28 @@ class RustTimeline(
 
     override suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> = withContext(dispatcher) {
         messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()).use { content ->
-            runCatching {
+            runCatching<Unit> {
                 inner.send(content)
+            }
+        }
+    }
+
+    override suspend fun redactEvent(eventId: EventId?, transactionId: TransactionId?, reason: String?): Result<Boolean> = withContext(dispatcher) {
+        runCatching {
+            when {
+                eventId != null -> {
+                    inner.getEventTimelineItemByEventId(eventId.value).use {
+                        inner.redactEvent(item = it, reason = reason)
+                    }
+                }
+                transactionId != null -> {
+                    inner.getEventTimelineItemByTransactionId(transactionId.value).use {
+                        inner.redactEvent(item = it, reason = reason)
+                    }
+                }
+                else -> {
+                    error("Either eventId or transactionId must be non-null")
+                }
             }
         }
     }
@@ -293,21 +313,24 @@ class RustTimeline(
         mentions: List<Mention>,
     ): Result<Unit> =
         withContext(dispatcher) {
-            if (originalEventId != null) {
-                runCatching {
-                    val editedEvent = specialModeEventTimelineItem ?: inner.getEventTimelineItemByEventId(originalEventId.value)
-                    editedEvent.use {
-                        inner.edit(
-                            newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
-                            editItem = it,
-                        )
+            runCatching<Unit> {
+                when {
+                    originalEventId != null -> {
+                        val editedEvent = specialModeEventTimelineItem ?: inner.getEventTimelineItemByEventId(originalEventId.value)
+                        editedEvent.use {
+                            inner.edit(
+                                newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
+                                editItem = it,
+                            )
+                        }
+                        specialModeEventTimelineItem = null
                     }
-                    specialModeEventTimelineItem = null
-                }
-            } else {
-                runCatching {
-                    transactionId?.let { cancelSend(it) }
-                    inner.send(messageEventContentFromParts(body, htmlBody))
+                    transactionId != null -> {
+                        error("Editing local echo is not supported yet.")
+                    }
+                    else -> {
+                        error("Either originalEventId or transactionId must be non null")
+                    }
                 }
             }
         }
@@ -426,17 +449,7 @@ class RustTimeline(
         }
     }
 
-    override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> = withContext(dispatcher) {
-        runCatching {
-            inner.retrySend(transactionId.value)
-        }
-    }
-
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> = withContext(dispatcher) {
-        runCatching {
-            inner.cancelSend(transactionId.value)
-        }
-    }
+    override suspend fun cancelSend(transactionId: TransactionId): Result<Boolean> = redactEvent(eventId = null, transactionId = transactionId, reason = null)
 
     override suspend fun sendLocation(
         body: String,

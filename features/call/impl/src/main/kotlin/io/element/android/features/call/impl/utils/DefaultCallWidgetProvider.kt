@@ -23,7 +23,6 @@ import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
-import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
@@ -33,6 +32,7 @@ class DefaultCallWidgetProvider @Inject constructor(
     private val matrixClientsProvider: MatrixClientProvider,
     private val appPreferencesStore: AppPreferencesStore,
     private val callWidgetSettingsProvider: CallWidgetSettingsProvider,
+    private val elementCallBaseUrlProvider: ElementCallBaseUrlProvider,
 ) : CallWidgetProvider {
     override suspend fun getWidget(
         sessionId: SessionId,
@@ -40,11 +40,16 @@ class DefaultCallWidgetProvider @Inject constructor(
         clientId: String,
         languageTag: String?,
         theme: String?,
-    ): Result<Pair<MatrixWidgetDriver, String>> = runCatching {
+    ): Result<CallWidgetProvider.GetWidgetResult> = runCatching {
         val room = matrixClientsProvider.getOrRestore(sessionId).getOrThrow().getRoom(roomId) ?: error("Room not found")
-        val baseUrl = appPreferencesStore.getCustomElementCallBaseUrlFlow().firstOrNull() ?: ElementCallConfig.DEFAULT_BASE_URL
+        val baseUrl = appPreferencesStore.getCustomElementCallBaseUrlFlow().firstOrNull()
+            ?: elementCallBaseUrlProvider.provides(sessionId)
+            ?: ElementCallConfig.DEFAULT_BASE_URL
         val widgetSettings = callWidgetSettingsProvider.provide(baseUrl, encrypted = room.isEncrypted)
         val callUrl = room.generateWidgetWebViewUrl(widgetSettings, clientId, languageTag, theme).getOrThrow()
-        room.getWidgetDriver(widgetSettings).getOrThrow() to callUrl
+        CallWidgetProvider.GetWidgetResult(
+            driver = room.getWidgetDriver(widgetSettings).getOrThrow(),
+            url = callUrl
+        )
     }
 }

@@ -188,13 +188,13 @@ class CallScreenPresenter @AssistedInject constructor(
                     inputs.url
                 }
                 is CallType.RoomCall -> {
-                    val (driver, url) = callWidgetProvider.getWidget(
+                    val result = callWidgetProvider.getWidget(
                         sessionId = inputs.sessionId,
                         roomId = inputs.roomId,
                         clientId = UUID.randomUUID().toString(),
                     ).getOrThrow()
-                    callWidgetDriver.value = driver
-                    url
+                    callWidgetDriver.value = result.driver
+                    result.url
                 }
             }
         }

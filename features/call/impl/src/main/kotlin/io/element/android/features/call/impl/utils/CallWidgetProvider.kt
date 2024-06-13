@@ -27,5 +27,10 @@ interface CallWidgetProvider {
         clientId: String,
         languageTag: String? = null,
         theme: String? = null,
-    ): Result<Pair<MatrixWidgetDriver, String>>
+    ): Result<GetWidgetResult>
+
+    data class GetWidgetResult(
+        val driver: MatrixWidgetDriver,
+        val url: String,
+    )
 }

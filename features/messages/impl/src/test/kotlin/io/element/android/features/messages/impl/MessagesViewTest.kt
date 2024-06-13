@@ -52,8 +52,6 @@ import io.element.android.features.messages.impl.timeline.components.customreact
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvents
 import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
-import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuEvents
-import io.element.android.features.messages.impl.timeline.components.retrysendmenu.aRetrySendMenuState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.matrix.api.core.UserId
@@ -74,6 +72,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 class MessagesViewTest {
@@ -143,22 +142,6 @@ class MessagesViewTest {
         // Cannot perform click on "Text", it's not detected. Use tag instead
         rule.onAllNodesWithTag(TestTags.messageBubble.value).onFirst().performClick()
         callback.assertSuccess()
-    }
-
-    @Test
-    fun `clicking on an Event timestamp in error emits the expected Event`() {
-        val eventsRecorder = EventsRecorder<RetrySendMenuEvents>()
-        val state = aMessagesState(
-            retrySendMenuState = aRetrySendMenuState(
-                eventSink = eventsRecorder
-            ),
-        )
-        val timelineItem = state.timelineState.timelineItems[1] as TimelineItem.Event
-        rule.setMessagesView(
-            state = state,
-        )
-        rule.onAllNodesWithText(timelineItem.sentTime)[1].performClick()
-        eventsRecorder.assertSingle(RetrySendMenuEvents.EventSelected(timelineItem))
     }
 
     @Test
@@ -313,6 +296,7 @@ class MessagesViewTest {
     }
 
     @Test
+    @Config(qualifiers = "h1024dp")
     fun `clicking on the sender of an Event invoke expected callback`() {
         val eventsRecorder = EventsRecorder<MessagesEvents>(expectEvents = false)
         val state = aMessagesState(

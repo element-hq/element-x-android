@@ -22,7 +22,6 @@ import io.element.android.libraries.matrix.api.core.EventId
 @Immutable
 sealed interface LocalEventSendState {
     data object NotSentYet : LocalEventSendState
-    data object Canceled : LocalEventSendState
 
     data class SendingFailed(
         val error: String

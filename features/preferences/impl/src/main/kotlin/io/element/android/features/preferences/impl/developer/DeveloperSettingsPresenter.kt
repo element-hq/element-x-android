@@ -35,6 +35,8 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.featureflag.api.Feature
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -52,6 +54,7 @@ class DeveloperSettingsPresenter @Inject constructor(
     private val clearCacheUseCase: ClearCacheUseCase,
     private val rageshakePresenter: RageshakePreferencesPresenter,
     private val appPreferencesStore: AppPreferencesStore,
+    private val buildMeta: BuildMeta,
 ) : Presenter<DeveloperSettingsState> {
     @Composable
     override fun present(): DeveloperSettingsState {
@@ -76,6 +79,14 @@ class DeveloperSettingsPresenter @Inject constructor(
         LaunchedEffect(Unit) {
             FeatureFlags.entries
                 .filter { it.isFinished.not() }
+                .run {
+                    // Never display room directory search in release builds for Play Store
+                    if (buildMeta.flavorDescription == "GooglePlay" && buildMeta.buildType == BuildType.RELEASE) {
+                        filterNot { it.key == FeatureFlags.RoomDirectorySearch.key }
+                    } else {
+                        this
+                    }
+                }
                 .forEach { feature ->
                     features[feature.key] = feature
                     enabledFeatures[feature.key] = featureFlagService.isFeatureEnabled(feature)

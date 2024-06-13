@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.impl.util
+package io.element.android.features.call.utils
 
+import io.element.android.features.call.impl.utils.ElementCallBaseUrlProvider
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.tests.testutils.lambda.lambdaError
 
-class SessionDirectoryNameProvider {
-    // Rust sanitises the user ID replacing invalid characters with an _
-    fun provides(sessionId: SessionId): String {
-        return sessionId.value.replace(":", "_")
+class FakeElementCallBaseUrlProvider(
+    private val providesLambda: (SessionId) -> String? = { lambdaError() }
+) : ElementCallBaseUrlProvider {
+    override suspend fun provides(sessionId: SessionId): String? {
+        return providesLambda(sessionId)
     }
 }

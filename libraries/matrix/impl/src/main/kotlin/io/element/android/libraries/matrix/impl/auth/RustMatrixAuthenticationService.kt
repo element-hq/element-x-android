@@ -54,6 +54,7 @@ import org.matrix.rustcomponents.sdk.QrLoginProgressListener
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
+import java.util.UUID
 import javax.inject.Inject
 import org.matrix.rustcomponents.sdk.AuthenticationService as RustAuthenticationService
 
@@ -68,17 +69,19 @@ class RustMatrixAuthenticationService @Inject constructor(
     private val passphraseGenerator: PassphraseGenerator,
     userCertificatesProvider: UserCertificatesProvider,
     proxyProvider: ProxyProvider,
+    private val oidcConfigurationProvider: OidcConfigurationProvider,
 ) : MatrixAuthenticationService {
     // Passphrase which will be used for new sessions. Existing sessions will use the passphrase
     // stored in the SessionData.
     private val pendingPassphrase = getDatabasePassphrase()
+    private val sessionPath = File(baseDirectory, UUID.randomUUID().toString()).absolutePath
     private val authService: RustAuthenticationService = RustAuthenticationService(
-        basePath = baseDirectory.absolutePath,
+        sessionPath = sessionPath,
         passphrase = pendingPassphrase,
         proxy = proxyProvider.provides(),
         userAgent = userAgentProvider.provide(),
         additionalRootCertificates = userCertificatesProvider.provides(),
-        oidcConfiguration = oidcConfiguration,
+        oidcConfiguration = oidcConfigurationProvider.get(),
         customSlidingSyncProxy = null,
         sessionDelegate = null,
         crossProcessRefreshLockId = null,
@@ -148,6 +151,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                         isTokenValid = true,
                         loginType = LoginType.PASSWORD,
                         passphrase = pendingPassphrase,
+                        sessionPath = sessionPath,
                     )
                 }
                 sessionStore.storeData(sessionData)
@@ -196,6 +200,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                         isTokenValid = true,
                         loginType = LoginType.OIDC,
                         passphrase = pendingPassphrase,
+                        sessionPath = sessionPath,
                     )
                 }
                 pendingOidcAuthenticationData?.close()
@@ -211,11 +216,11 @@ class RustMatrixAuthenticationService @Inject constructor(
     override suspend fun loginWithQrCode(qrCodeData: MatrixQrCodeLoginData, progress: (QrCodeLoginStep) -> Unit) =
         withContext(coroutineDispatchers.io) {
             runCatching {
-                val client = rustMatrixClientFactory.getBaseClientBuilder()
+                val client = rustMatrixClientFactory.getBaseClientBuilder(sessionPath)
                     .passphrase(pendingPassphrase)
                     .buildWithQrCode(
                         qrCodeData = (qrCodeData as SdkQrCodeLoginData).rustQrCodeData,
-                        oidcConfiguration = oidcConfiguration,
+                        oidcConfiguration = oidcConfigurationProvider.get(),
                         progressListener = object : QrLoginProgressListener {
                             override fun onUpdate(state: QrLoginProgress) {
                                 Timber.d("QR Code login progress: $state")
@@ -229,6 +234,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                             isTokenValid = true,
                             loginType = LoginType.QR,
                             passphrase = pendingPassphrase,
+                            sessionPath = sessionPath,
                         )
                     sessionStore.storeData(sessionData)
                     SessionId(sessionData.userId)

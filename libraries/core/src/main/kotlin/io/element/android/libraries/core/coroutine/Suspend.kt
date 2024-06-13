@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.components.retrysendmenu
+package io.element.android.libraries.core.coroutine
 
-import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import kotlinx.coroutines.delay
+import kotlin.system.measureTimeMillis
 
-sealed interface RetrySendMenuEvents {
-    data class EventSelected(val event: TimelineItem.Event) : RetrySendMenuEvents
-    data object Retry : RetrySendMenuEvents
-    data object Remove : RetrySendMenuEvents
-    data object Dismiss : RetrySendMenuEvents
+fun suspendWithMinimumDuration(
+    minimumDurationMillis: Long = 500,
+    block: suspend () -> Unit
+) = suspend {
+    val duration = measureTimeMillis {
+        block()
+    }
+    delay(minimumDurationMillis - duration)
 }

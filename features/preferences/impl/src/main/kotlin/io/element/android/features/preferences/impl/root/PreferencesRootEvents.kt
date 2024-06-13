@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.components.retrysendmenu
+package io.element.android.features.preferences.impl.root
 
-import androidx.compose.runtime.Immutable
-import io.element.android.features.messages.impl.timeline.model.TimelineItem
-
-@Immutable
-data class RetrySendMenuState(
-    val selectedEvent: TimelineItem.Event?,
-    val eventSink: (RetrySendMenuEvents) -> Unit,
-)
+sealed interface PreferencesRootEvents {
+    data object OnVersionInfoClick : PreferencesRootEvents
+}
