@@ -17,18 +17,16 @@
 package io.element.android.features.rageshake.impl.reporter
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.rageshake.impl.R
+import io.element.android.appconfig.RageshakeConfig
 import io.element.android.libraries.di.AppScope
-import io.element.android.services.toolbox.api.strings.StringProvider
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultBugReporterUrlProvider @Inject constructor(
-    private val stringProvider: StringProvider
 ) : BugReporterUrlProvider {
     override fun provide(): HttpUrl {
-        return stringProvider.getString(R.string.bug_report_url).toHttpUrl()
+        return RageshakeConfig.BUG_REPORT_URL.toHttpUrl()
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.rageshake.impl.reporter
+package io.element.android.appconfig
 
-import com.google.common.truth.Truth.assertThat
-import io.element.android.appconfig.RageshakeConfig
-import okhttp3.HttpUrl.Companion.toHttpUrl
-import org.junit.Test
-
-class DefaultBugReporterUrlProviderTest {
-    @Test
-    fun `test DefaultBugReporterUrlProvider`() {
-        val sut = DefaultBugReporterUrlProvider()
-        val result = sut.provide()
-        assertThat(result).isEqualTo(RageshakeConfig.BUG_REPORT_URL.toHttpUrl())
-    }
+object RageshakeConfig {
+    const val BUG_REPORT_URL = "https://riot.im/bugreports/submit"
+    const val BUG_REPORT_APP_NAME = "element-x-android"
 }
