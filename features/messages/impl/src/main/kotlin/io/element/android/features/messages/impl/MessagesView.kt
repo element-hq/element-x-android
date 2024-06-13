@@ -74,8 +74,6 @@ import io.element.android.features.messages.impl.timeline.components.reactionsum
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryView
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheet
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
-import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuEvents
-import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMessageMenu
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerEvents
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessagePermissionRationaleDialog
@@ -103,7 +101,6 @@ import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import timber.log.Timber
@@ -212,11 +209,6 @@ fun MessagesView(
                 onMessageLongClick = ::onMessageLongClick,
                 onUserDataClick = onUserDataClick,
                 onLinkClick = onLinkClick,
-                onTimestampClick = { event ->
-                    if (event.localSendState is LocalEventSendState.SendingFailed) {
-                        state.retrySendMenuState.eventSink(RetrySendMenuEvents.EventSelected(event))
-                    }
-                },
                 onReactionClick = ::onEmojiReactionClick,
                 onReactionLongClick = ::onEmojiReactionLongClick,
                 onMoreReactionsClick = ::onMoreReactionsClick,
@@ -258,7 +250,6 @@ fun MessagesView(
     )
 
     ReactionSummaryView(state = state.reactionSummaryState)
-    RetrySendMessageMenu(state = state.retrySendMenuState)
     ReadReceiptBottomSheet(
         state = state.readReceiptBottomSheetState,
         onUserDataClick = onUserDataClick,
@@ -319,7 +310,6 @@ private fun MessagesViewContent(
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     onMessageLongClick: (TimelineItem.Event) -> Unit,
-    onTimestampClick: (TimelineItem.Event) -> Unit,
     onSendLocationClick: () -> Unit,
     onCreatePollClick: () -> Unit,
     onJoinCallClick: () -> Unit,
@@ -387,7 +377,6 @@ private fun MessagesViewContent(
                     onLinkClick = onLinkClick,
                     onMessageClick = onMessageClick,
                     onMessageLongClick = onMessageLongClick,
-                    onTimestampClick = onTimestampClick,
                     onSwipeToReply = onSwipeToReply,
                     onReactionClick = onReactionClick,
                     onReactionLongClick = onReactionLongClick,

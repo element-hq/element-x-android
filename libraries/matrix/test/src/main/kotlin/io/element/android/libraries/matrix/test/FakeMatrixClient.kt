@@ -48,13 +48,16 @@ import io.element.android.libraries.matrix.test.roomdirectory.FakeRoomDirectoryS
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import java.util.Optional
@@ -298,4 +301,13 @@ class FakeMatrixClient(
     }
 
     override fun getRoomInfoFlow(roomId: RoomId) = getRoomInfoFlowLambda(roomId)
+
+    var setAllSendQueuesEnabledLambda = lambdaRecorder(ensureNeverCalled = true) { _: Boolean ->
+        // no-op
+    }
+
+    override suspend fun setAllSendQueuesEnabled(enabled: Boolean) = setAllSendQueuesEnabledLambda(enabled)
+
+    var sendQueueDisabledFlow = emptyFlow<RoomId>()
+    override fun sendQueueDisabledFlow(): Flow<RoomId> = sendQueueDisabledFlow
 }

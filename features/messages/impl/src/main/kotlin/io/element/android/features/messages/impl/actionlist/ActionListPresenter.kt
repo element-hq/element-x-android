@@ -181,7 +181,7 @@ class ActionListPresenter @Inject constructor(
                             add(TimelineItemAction.Forward)
                         }
                     }
-                    if (timelineItem.isMine && timelineItem.isTextMessage) {
+                    if (timelineItem.isEditable) {
                         add(TimelineItemAction.Edit)
                     }
                     if (timelineItem.content.canBeCopied()) {

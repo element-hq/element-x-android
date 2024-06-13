@@ -84,6 +84,7 @@ import org.matrix.rustcomponents.sdk.WidgetCapabilities
 import org.matrix.rustcomponents.sdk.WidgetCapabilitiesProvider
 import org.matrix.rustcomponents.sdk.getElementCallRequiredPermissions
 import org.matrix.rustcomponents.sdk.use
+import timber.log.Timber
 import uniffi.matrix_sdk.RoomPowerLevelChanges
 import java.io.File
 import org.matrix.rustcomponents.sdk.Room as InnerRoom
@@ -324,12 +325,6 @@ class RustMatrixRoom(
         return liveTimeline.sendMessage(body, htmlBody, mentions)
     }
 
-    override suspend fun redactEvent(eventId: EventId, reason: String?) = withContext(roomDispatcher) {
-        runCatching {
-            innerRoom.redact(eventId.value, reason)
-        }
-    }
-
     override suspend fun leave(): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
             innerRoom.leave()
@@ -435,10 +430,10 @@ class RustMatrixRoom(
     }
 
     override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> {
-        return liveTimeline.retrySendMessage(transactionId)
+        return Result.failure(UnsupportedOperationException("Not supported"))
     }
 
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> {
+    override suspend fun cancelSend(transactionId: TransactionId): Result<Boolean> {
         return liveTimeline.cancelSend(transactionId)
     }
 
@@ -598,6 +593,11 @@ class RustMatrixRoom(
 
     override suspend fun sendCallNotificationIfNeeded(): Result<Unit> = runCatching {
         innerRoom.sendCallNotificationIfNeeded()
+    }
+
+    override suspend fun setSendQueueEnabled(enabled: Boolean) = withContext(roomDispatcher) {
+        Timber.d("setSendQueuesEnabled: $enabled")
+        innerRoom.enableSendQueue(enabled)
     }
 
     private fun createTimeline(

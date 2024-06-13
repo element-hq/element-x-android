@@ -287,7 +287,8 @@ class DefaultBugReporterTest {
         oidcData = null,
         refreshToken = null,
         slidingSyncProxy = null,
-        passphrase = null
+        passphrase = null,
+        sessionPath = "session",
     )
     @Test
     fun `test sendBugReport error`() = runTest {

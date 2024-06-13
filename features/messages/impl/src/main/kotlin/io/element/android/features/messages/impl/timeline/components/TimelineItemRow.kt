@@ -54,7 +54,6 @@ internal fun TimelineItemRow(
     onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
-    onTimestampClick: (TimelineItem.Event) -> Unit,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     onJoinCallClick: () -> Unit,
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
@@ -118,7 +117,6 @@ internal fun TimelineItemRow(
                             onReactionLongClick = onReactionLongClick,
                             onMoreReactionsClick = onMoreReactionsClick,
                             onReadReceiptClick = onReadReceiptClick,
-                            onTimestampClick = onTimestampClick,
                             onSwipeToReply = { onSwipeToReply(timelineItem) },
                             eventSink = eventSink,
                         )
@@ -137,7 +135,6 @@ internal fun TimelineItemRow(
                     inReplyToClick = inReplyToClick,
                     onUserDataClick = onUserDataClick,
                     onLinkClick = onLinkClick,
-                    onTimestampClick = onTimestampClick,
                     onReactionClick = onReactionClick,
                     onReactionLongClick = onReactionLongClick,
                     onMoreReactionsClick = onMoreReactionsClick,
