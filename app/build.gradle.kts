@@ -104,15 +104,21 @@ android {
         }
     }
 
+    val baseAppName = if (isEnterpriseBuild) {
+        "Element Enterprise"
+    } else {
+        "Element X"
+    }
+
     buildTypes {
         getByName("debug") {
-            resValue("string", "app_name", "Element X dbg")
+            resValue("string", "app_name", "$baseAppName dbg")
             applicationIdSuffix = ".debug"
             signingConfig = signingConfigs.getByName("debug")
         }
 
         getByName("release") {
-            resValue("string", "app_name", "Element X")
+            resValue("string", "app_name", baseAppName)
             signingConfig = signingConfigs.getByName("debug")
 
             postprocessing {
@@ -129,7 +135,7 @@ android {
             initWith(release)
             applicationIdSuffix = ".nightly"
             versionNameSuffix = "-nightly"
-            resValue("string", "app_name", "Element X nightly")
+            resValue("string", "app_name", "$baseAppName nightly")
             matchingFallbacks += listOf("release")
             signingConfig = signingConfigs.getByName("nightly")
 
