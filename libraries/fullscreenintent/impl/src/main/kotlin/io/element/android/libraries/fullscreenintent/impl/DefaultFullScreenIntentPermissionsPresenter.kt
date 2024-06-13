@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist.impl.utils
+package io.element.android.libraries.fullscreenintent.impl
 
 import android.Manifest
 import android.content.ActivityNotFoundException
@@ -29,9 +29,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsPresenter
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.noop.NoopPermissionsPresenter
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
@@ -41,8 +43,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-interface FullScreenIntentPermissionsPresenter : Presenter<FullScreenIntentPermissionsState>
-
+@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultFullScreenIntentPermissionsPresenter @Inject constructor(
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
@@ -79,7 +80,7 @@ class DefaultFullScreenIntentPermissionsPresenter @Inject constructor(
         val isBannerDismissed by isFullScreenIntentBannerDismissed.collectAsState(initial = true)
         return FullScreenIntentPermissionsState(
             permissionGranted = isGranted,
-            shouldDisplay = !isBannerDismissed && !isGranted,
+            shouldDisplayBanner = !isBannerDismissed && !isGranted,
             dismissFullScreenIntentBanner = {
                 coroutineScope.launch {
                     dismissFullScreenIntentBanner()
@@ -105,10 +106,3 @@ class DefaultFullScreenIntentPermissionsPresenter @Inject constructor(
         }
     }
 }
-
-data class FullScreenIntentPermissionsState(
-    val permissionGranted: Boolean,
-    val shouldDisplay: Boolean,
-    val dismissFullScreenIntentBanner: () -> Unit,
-    val openFullScreenIntentSettings: () -> Unit,
-)

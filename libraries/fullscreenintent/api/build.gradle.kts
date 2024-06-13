@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist.impl.utils
+plugins {
+    id("io.element.android-library")
+}
 
-import androidx.compose.runtime.Composable
+android {
+    namespace = "io.element.android.libraries.fullscreenintent.api"
+}
 
-class FakeFullScreenIntentPermissionsPresenter : FullScreenIntentPermissionsPresenter {
-    @Composable
-    override fun present(): FullScreenIntentPermissionsState {
-        return FullScreenIntentPermissionsState(
-            permissionGranted = true,
-            shouldDisplay = false,
-            dismissFullScreenIntentBanner = {},
-            openFullScreenIntentSettings = {},
-        )
-    }
+dependencies {
+    implementation(projects.libraries.architecture)
+    implementation(projects.libraries.permissions.api)
+    implementation(projects.libraries.preferences.api)
 }

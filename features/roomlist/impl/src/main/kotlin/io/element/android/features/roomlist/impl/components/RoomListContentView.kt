@@ -206,7 +206,7 @@ private fun RoomsViewList(
                 }
                 else -> Unit
             }
-        } else if (state.fullScreenIntentPermissionsState.shouldDisplay) {
+        } else if (state.fullScreenIntentPermissionsState.shouldDisplayBanner) {
             item {
                 DialogLikeBannerMolecule(
                     title = stringResource(R.string.full_screen_intent_banner_title),

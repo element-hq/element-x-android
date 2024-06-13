@@ -18,7 +18,7 @@ package io.element.android.features.roomlist.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
-import io.element.android.features.roomlist.impl.utils.FullScreenIntentPermissionsState
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -56,7 +56,7 @@ internal fun aFullScreenIntentPermissionsState(
     dismissFullScreenIntentBanner: () -> Unit = {},
 ) = FullScreenIntentPermissionsState(
     permissionGranted = permissionGranted,
-    shouldDisplay = shouldDisplay,
+    shouldDisplayBanner = shouldDisplay,
     openFullScreenIntentSettings = openFullScreenIntentSettings,
     dismissFullScreenIntentBanner = dismissFullScreenIntentBanner,
 )

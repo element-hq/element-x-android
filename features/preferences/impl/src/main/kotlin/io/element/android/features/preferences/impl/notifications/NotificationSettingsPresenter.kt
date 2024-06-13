@@ -30,6 +30,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsPresenter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
@@ -54,6 +55,7 @@ class NotificationSettingsPresenter @Inject constructor(
     private val matrixClient: MatrixClient,
     private val pushService: PushService,
     private val systemNotificationsEnabledProvider: SystemNotificationsEnabledProvider,
+    private val fullScreenIntentPermissionsPresenter: FullScreenIntentPermissionsPresenter,
 ) : Presenter<NotificationSettingsState> {
     @Composable
     override fun present(): NotificationSettingsState {
@@ -167,6 +169,7 @@ class NotificationSettingsPresenter @Inject constructor(
             currentPushDistributor = currentDistributorName,
             availablePushDistributors = distributorNames,
             showChangePushProviderDialog = showChangePushProviderDialog,
+            fullScreenIntentPermissionsState = fullScreenIntentPermissionsPresenter.present(),
             eventSink = ::handleEvents
         )
     }

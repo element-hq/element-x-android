@@ -16,6 +16,7 @@
 
 package io.element.android.features.roomlist.impl
 
+import FakeFullScreenIntentPermissionsPresenter
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
@@ -38,7 +39,6 @@ import io.element.android.features.roomlist.impl.model.createRoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchEvents
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.features.roomlist.impl.search.aRoomListSearchState
-import io.element.android.features.roomlist.impl.utils.FakeFullScreenIntentPermissionsPresenter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.test.A_FORMATTED_DATE

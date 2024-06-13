@@ -16,6 +16,7 @@
 
 package io.element.android.features.preferences.impl.notifications
 
+import FakeFullScreenIntentPermissionsPresenter
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
@@ -328,6 +329,7 @@ class NotificationSettingsPresenterTest {
             matrixClient = matrixClient,
             pushService = pushService,
             systemNotificationsEnabledProvider = FakeSystemNotificationsEnabledProvider(),
+            fullScreenIntentPermissionsPresenter = FakeFullScreenIntentPermissionsPresenter(),
         )
     }
 }

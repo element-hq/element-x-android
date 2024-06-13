@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.roomlist.impl.utils
+package io.element.android.libraries.fullscreenintent.test
 
 import android.content.Intent
 import android.os.Build
@@ -23,6 +23,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.fullscreenintent.impl.DefaultFullScreenIntentPermissionsPresenter
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
@@ -37,7 +38,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class FullScreenIntentPermissionsPresenterTest {
+class DefaultFullScreenIntentPermissionsPresenterTest {
     @Test
     fun `shouldDisplay - is true when permission is not granted and banner is not dismissed`() = runTest {
         val presenter = createPresenter(
@@ -50,7 +51,7 @@ class FullScreenIntentPermissionsPresenterTest {
         }.test {
             skipItems(1)
             val initialItem = awaitItem()
-            assertThat(initialItem.shouldDisplay).isTrue()
+            assertThat(initialItem.shouldDisplayBanner).isTrue()
         }
     }
 
@@ -67,7 +68,7 @@ class FullScreenIntentPermissionsPresenterTest {
         }.test {
             skipItems(1)
             val initialItem = awaitItem()
-            assertThat(initialItem.shouldDisplay).isFalse()
+            assertThat(initialItem.shouldDisplayBanner).isFalse()
         }
     }
 
@@ -83,7 +84,7 @@ class FullScreenIntentPermissionsPresenterTest {
         }.test {
             skipItems(1)
             val initialItem = awaitItem()
-            assertThat(initialItem.shouldDisplay).isFalse()
+            assertThat(initialItem.shouldDisplayBanner).isFalse()
         }
     }
 
@@ -99,7 +100,7 @@ class FullScreenIntentPermissionsPresenterTest {
 
             runCurrent()
 
-            assertThat(awaitItem().shouldDisplay).isFalse()
+            assertThat(awaitItem().shouldDisplayBanner).isFalse()
         }
     }
 
@@ -127,7 +128,7 @@ class FullScreenIntentPermissionsPresenterTest {
         externalIntentLauncher: ExternalIntentLauncher = FakeExternalIntentLauncher(),
         buildMeta: BuildMeta = aBuildMeta(),
         permissionsPresenter: FakePermissionsPresenter = FakePermissionsPresenter(),
-    ) = FullScreenIntentPermissionsPresenter(
+    ) = DefaultFullScreenIntentPermissionsPresenter(
         buildVersionSdkIntProvider = buildVersionSdkIntProvider,
         externalIntentLauncher = externalIntentLauncher,
         buildMeta = buildMeta,

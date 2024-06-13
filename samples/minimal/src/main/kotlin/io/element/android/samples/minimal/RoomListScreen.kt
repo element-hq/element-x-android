@@ -34,8 +34,6 @@ import io.element.android.features.roomlist.impl.migration.MigrationScreenPresen
 import io.element.android.features.roomlist.impl.migration.SharedPreferencesMigrationScreenStore
 import io.element.android.features.roomlist.impl.search.RoomListSearchDataSource
 import io.element.android.features.roomlist.impl.search.RoomListSearchPresenter
-import io.element.android.features.roomlist.impl.utils.FullScreenIntentPermissionsPresenter
-import io.element.android.features.roomlist.impl.utils.FullScreenIntentPermissionsState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.impl.DateFormatters
 import io.element.android.libraries.dateformatter.impl.DefaultLastMessageTimestampFormatter
@@ -47,6 +45,8 @@ import io.element.android.libraries.eventformatter.impl.RoomMembershipContentFor
 import io.element.android.libraries.eventformatter.impl.StateContentFormatter
 import io.element.android.libraries.featureflag.impl.DefaultFeatureFlagService
 import io.element.android.libraries.featureflag.impl.StaticFeatureFlagProvider
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsPresenter
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.indicator.impl.DefaultIndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -146,7 +146,7 @@ class RoomListScreen(
             override fun present(): FullScreenIntentPermissionsState {
                 return FullScreenIntentPermissionsState(
                     permissionGranted = true,
-                    shouldDisplay = false,
+                    shouldDisplayBanner = false,
                     dismissFullScreenIntentBanner = {},
                     openFullScreenIntentSettings = {}
                 )
