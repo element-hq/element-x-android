@@ -33,7 +33,7 @@ Learn more about why we are building Element X in our blog post: [https://elemen
 
 ## Screenshots
 
-Here are some early screenshots of the application:
+Here are some screenshots of the application:
 
 <!--
 Commands run before taking the screenshots:
@@ -49,9 +49,9 @@ And to exit demo mode:
 adb shell am broadcast -a com.android.systemui.demo -e command exit
 -->
 
-|<img src=./docs/images-lfs/screen_1_light.png width=280 />|<img src=./docs/images-lfs/screen_2_light.png width=280 />|<img src=./docs/images-lfs/screen_3_light.png width=280 />|<img src=./docs/images-lfs/screen_4_light.png width=280 />|
+|<img src="./docs/images-lfs/screen_1_light.png" width="280" />|<img src="./docs/images-lfs/screen_2_light.png" width="280" />|<img src="./docs/images-lfs/screen_3_light.png" width="280" />|<img src="./docs/images-lfs/screen_4_light.png" width="280" />|
 |-|-|-|-|
-|<img src=./docs/images-lfs/screen_1_dark.png width=280 />|<img src=./docs/images-lfs/screen_2_dark.png width=280 />|<img src=./docs/images-lfs/screen_3_dark.png width=280 />|<img src=./docs/images-lfs/screen_4_dark.png width=280 />|
+|<img src="./docs/images-lfs/screen_1_dark.png" width="280" />|<img src="./docs/images-lfs/screen_2_dark.png" width="280" />|<img src="./docs/images-lfs/screen_3_dark.png" width="280" />|<img src="./docs/images-lfs/screen_4_dark.png" width="280" />|
 
 ## Translations
 
