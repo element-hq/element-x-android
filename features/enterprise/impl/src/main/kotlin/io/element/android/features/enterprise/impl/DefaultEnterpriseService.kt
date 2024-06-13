@@ -24,7 +24,8 @@ import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultEnterpriseService @Inject constructor(
-    override val isEnterpriseBuild: Boolean = false
 ) : EnterpriseService {
+    override val isEnterpriseBuild = false
+
     override suspend fun isEnterpriseUser(sessionId: SessionId) = false
 }
