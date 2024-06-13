@@ -61,11 +61,13 @@ class CallScreenPresenterTest {
     val warmUpRule = WarmUpRule()
 
     @Test
-    fun `present - with CallType ExternalUrl just loads the URL`() = runTest {
-        val analyticsLambda = lambdaRecorder<MobileScreen.ScreenName, Unit> { }
+    fun `present - with CallType ExternalUrl just loads the URL and sets the call as active`() = runTest {
+        val analyticsLambda = lambdaRecorder<MobileScreen.ScreenName, Unit> {}
+        val joinedCallLambda = lambdaRecorder<CallType, Unit> {}
         val presenter = createCallScreenPresenter(
             callType = CallType.ExternalUrl("https://call.element.io"),
-            screenTracker = FakeScreenTracker(analyticsLambda)
+            screenTracker = FakeScreenTracker(analyticsLambda),
+            activeCallManager = FakeActiveCallManager(joinedCallResult = joinedCallLambda),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -76,25 +78,29 @@ class CallScreenPresenterTest {
             assertThat(initialState.urlState).isEqualTo(AsyncData.Success("https://call.element.io"))
             assertThat(initialState.isInWidgetMode).isFalse()
             analyticsLambda.assertions().isNeverCalled()
+            joinedCallLambda.assertions().isCalledOnce()
         }
     }
 
     @Test
-    fun `present - with CallType RoomCall loads URL and runs WidgetDriver`() = runTest {
+    fun `present - with CallType RoomCall sets call as active, loads URL and runs WidgetDriver`() = runTest {
         val widgetDriver = FakeMatrixWidgetDriver()
         val widgetProvider = FakeCallWidgetProvider(widgetDriver)
-        val analyticsLambda = lambdaRecorder<MobileScreen.ScreenName, Unit> { }
+        val analyticsLambda = lambdaRecorder<MobileScreen.ScreenName, Unit> {}
+        val joinedCallLambda = lambdaRecorder<CallType, Unit> {}
         val presenter = createCallScreenPresenter(
             callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
             widgetDriver = widgetDriver,
             widgetProvider = widgetProvider,
-            screenTracker = FakeScreenTracker(analyticsLambda)
+            screenTracker = FakeScreenTracker(analyticsLambda),
+            activeCallManager = FakeActiveCallManager(joinedCallResult = joinedCallLambda),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             // Wait until the URL is loaded
             skipItems(1)
+            joinedCallLambda.assertions().isCalledOnce()
             val initialState = awaitItem()
             assertThat(initialState.urlState).isInstanceOf(AsyncData.Success::class.java)
             assertThat(initialState.isInWidgetMode).isTrue()

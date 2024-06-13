@@ -20,13 +20,11 @@ import android.annotation.SuppressLint
 import androidx.core.app.NotificationManagerCompat
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.ElementCallConfig
+import io.element.android.features.call.api.CallType
 import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.notifications.RingingCallNotificationCreator
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
-import io.element.android.libraries.matrix.api.MatrixClientProvider
-import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.notifications.ForegroundServiceType
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.element.android.libraries.push.api.notifications.OnMissedCallNotificationHandler
@@ -62,23 +60,22 @@ interface ActiveCallManager {
 
     /**
      * Hangs up the active call and removes any associated UI.
+     * @param callType The type of call that the user hung up, either an external url one or a room one.
      */
-    fun hungUpCall()
+    fun hungUpCall(callType: CallType)
 
     /**
      * Called when the user joins a call. It will remove any existing UI and set the call state as [CallState.InCall].
      *
-     * @param sessionId The session ID of the user joining the call.
-     * @param roomId The room ID of the call.
+     * @param callType The type of call that the user joined, either an external url one or a room one.
      */
-    fun joinedCall(sessionId: SessionId, roomId: RoomId)
+    fun joinedCall(callType: CallType)
 }
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultActiveCallManager @Inject constructor(
     private val coroutineScope: CoroutineScope,
-    private val matrixClientProvider: MatrixClientProvider,
     private val onMissedCallNotificationHandler: OnMissedCallNotificationHandler,
     private val ringingCallNotificationCreator: RingingCallNotificationCreator,
     private val notificationManagerCompat: NotificationManagerCompat,
@@ -94,15 +91,17 @@ class DefaultActiveCallManager @Inject constructor(
             return
         }
         activeCall.value = ActiveCall(
-            sessionId = notificationData.sessionId,
-            roomId = notificationData.roomId,
+            callType = CallType.RoomCall(
+                sessionId = notificationData.sessionId,
+                roomId = notificationData.roomId,
+            ),
             callState = CallState.Ringing(notificationData),
         )
 
         timedOutCallJob = coroutineScope.launch {
             showIncomingCallNotification(notificationData)
 
-            // Wait for the call to end
+            // Wait for the ringing call to time out
             delay(ElementCallConfig.RINGING_CALL_DURATION_SECONDS.seconds)
             incomingCallTimedOut()
         }
@@ -118,28 +117,24 @@ class DefaultActiveCallManager @Inject constructor(
         displayMissedCallNotification(notificationData)
     }
 
-    override fun hungUpCall() {
+    override fun hungUpCall(callType: CallType) {
+        if (activeCall.value?.callType != callType) {
+            Timber.w("Call type $callType does not match the active call type, ignoring")
+            return
+        }
         cancelIncomingCallNotification()
         timedOutCallJob?.cancel()
         activeCall.value = null
     }
 
-    override fun joinedCall(sessionId: SessionId, roomId: RoomId) {
+    override fun joinedCall(callType: CallType) {
         cancelIncomingCallNotification()
         timedOutCallJob?.cancel()
 
         activeCall.value = ActiveCall(
-            sessionId = sessionId,
-            roomId = roomId,
+            callType = callType,
             callState = CallState.InCall,
         )
-        // Send call notification to the room
-        coroutineScope.launch {
-            matrixClientProvider.getOrRestore(sessionId)
-                .getOrNull()
-                ?.getRoom(roomId)
-                ?.sendCallNotificationIfNeeded()
-        }
     }
 
     @SuppressLint("MissingPermission")
@@ -184,8 +179,7 @@ class DefaultActiveCallManager @Inject constructor(
  * Represents an active call.
  */
 data class ActiveCall(
-    val sessionId: SessionId,
-    val roomId: RoomId,
+    val callType: CallType,
     val callState: CallState,
 )
 
