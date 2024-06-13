@@ -47,10 +47,10 @@ android {
     namespace = "io.element.android.x"
 
     defaultConfig {
-        if (isEnterpriseBuild) {
-            applicationId = "io.element.enterprise"
+        applicationId = if (isEnterpriseBuild) {
+            "io.element.enterprise"
         } else {
-            applicationId = "io.element.android.x"
+            "io.element.android.x"
         }
         targetSdk = Versions.targetSdk
         versionCode = Versions.versionCode
