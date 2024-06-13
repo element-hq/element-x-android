@@ -33,6 +33,18 @@ jobs:
       - name: Search for invalid screenshot files
         run: ./tools/test/checkInvalidScreenshots.py
 
+  checkDependencies:
+    name: Search for invalid dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+      - name: Search for invalid dependencies
+        run: ./tools/dependencies/checkDependencies.py
+
   # Code checks
   konsist:
     name: Konsist tests
