@@ -67,7 +67,6 @@ dependencies {
     // `testOptions { unitTests.isIncludeAndroidResources = true }` in the app build.gradle.kts file
     // implementation(projects.app)
     implementation(projects.appnav)
-    implementation(projects.features.call)
     allLibrariesImpl()
     allServicesImpl()
     allFeaturesImpl(rootDir, logger)
