@@ -51,7 +51,8 @@ fun ProgressDialog(
     modifier: Modifier = Modifier,
     text: String? = null,
     type: ProgressDialogType = ProgressDialogType.Indeterminate,
-    isCancellable: Boolean = false,
+    properties: DialogProperties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
+    showCancelButton: Boolean = false,
     onDismissRequest: () -> Unit = {},
 ) {
     DisposableEffect(Unit) {
@@ -61,12 +62,12 @@ fun ProgressDialog(
     }
     Dialog(
         onDismissRequest = onDismissRequest,
-        properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)
+        properties = properties,
     ) {
         ProgressDialogContent(
             modifier = modifier,
             text = text,
-            isCancellable = isCancellable,
+            isCancellable = showCancelButton,
             onCancelClick = onDismissRequest,
             progressIndicator = {
                 when (type) {
@@ -152,5 +153,5 @@ internal fun ProgressDialogContentPreview() = ElementThemedPreview {
 @PreviewsDayNight
 @Composable
 internal fun ProgressDialogPreview() = ElementPreview {
-    ProgressDialog(text = "test dialog content", isCancellable = true)
+    ProgressDialog(text = "test dialog content", showCancelButton = true)
 }

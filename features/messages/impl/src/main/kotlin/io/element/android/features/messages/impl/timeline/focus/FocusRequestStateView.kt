@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.window.DialogProperties
 import io.element.android.features.messages.impl.timeline.FocusRequestState
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
@@ -49,7 +50,11 @@ fun FocusRequestStateView(
             )
         }
         FocusRequestState.Fetching -> {
-            ProgressDialog(modifier = modifier, onDismissRequest = onClearFocusRequestState)
+            ProgressDialog(
+                modifier = modifier,
+                properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true),
+                onDismissRequest = onClearFocusRequestState,
+            )
         }
         else -> Unit
     }
