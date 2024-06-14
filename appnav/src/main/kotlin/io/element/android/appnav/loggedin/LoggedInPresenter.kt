@@ -55,27 +55,29 @@ class LoggedInPresenter @Inject constructor(
 
         LaunchedEffect(isVerified) {
             if (isVerified) {
-                // Ensure pusher is registered
+                Timber.d("Ensure pusher is registered")
                 val currentPushProvider = pushService.getCurrentPushProvider()
                 val result = if (currentPushProvider == null) {
-                    // Register with the first available push provider
+                    Timber.d("Register with the first available push provider")
                     val pushProvider = pushService.getAvailablePushProviders().firstOrNull() ?: return@LaunchedEffect
                     val distributor = pushProvider.getDistributors().firstOrNull() ?: return@LaunchedEffect
                     pushService.registerWith(matrixClient, pushProvider, distributor)
                 } else {
                     val currentPushDistributor = currentPushProvider.getCurrentDistributor(matrixClient)
                     if (currentPushDistributor == null) {
-                        // Register with the first available distributor
+                        Timber.d("Register with the first available distributor")
                         val distributor = currentPushProvider.getDistributors().firstOrNull() ?: return@LaunchedEffect
                         pushService.registerWith(matrixClient, currentPushProvider, distributor)
                     } else {
-                        // Re-register with the current distributor
+                        Timber.d("Re-register with the current distributor")
                         pushService.registerWith(matrixClient, currentPushProvider, currentPushDistributor)
                     }
                 }
                 result.onFailure {
                     Timber.e(it, "Failed to register pusher")
                 }
+            } else {
+                Timber.w("Session is not verified, not registering pusher")
             }
         }
 
