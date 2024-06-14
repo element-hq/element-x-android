@@ -47,13 +47,10 @@ import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class LoggedInPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
@@ -66,6 +63,8 @@ class LoggedInPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.showSyncSpinner).isFalse()
+            assertThat(initialState.pusherRegistrationState.isUninitialized()).isTrue()
+            skipItems(1)
         }
     }
 
@@ -106,7 +105,7 @@ class LoggedInPresenterTest {
             encryptionService.emitRecoveryState(RecoveryState.INCOMPLETE)
             verificationService.emitVerifiedStatus(SessionVerifiedStatus.Verified)
 
-            skipItems(4)
+            skipItems(6)
 
             assertThat(analyticsService.capturedEvents.size).isEqualTo(1)
             assertThat(analyticsService.capturedEvents[0]).isInstanceOf(CryptoSessionStateChange::class.java)
@@ -133,6 +132,9 @@ class LoggedInPresenterTest {
             presenter.present()
         }.test {
             skipItems(1)
+            val finalState = awaitItem()
+            assertThat(finalState.pusherRegistrationState.errorOrNull())
+                .isInstanceOf(PusherRegistrationFailure.AccountNotVerified::class.java)
             lambda.assertions()
                 .isNeverCalled()
         }
@@ -156,7 +158,8 @@ class LoggedInPresenterTest {
             presenter.present()
         }.test {
             skipItems(2)
-            advanceUntilIdle()
+            val finalState = awaitItem()
+            assertThat(finalState.pusherRegistrationState.isSuccess()).isTrue()
             lambda.assertions()
                 .isCalledOnce()
                 .with(
@@ -188,7 +191,8 @@ class LoggedInPresenterTest {
             presenter.present()
         }.test {
             skipItems(2)
-            advanceUntilIdle()
+            val finalState = awaitItem()
+            assertThat(finalState.pusherRegistrationState.isFailure()).isTrue()
             lambda.assertions()
                 .isCalledOnce()
                 .with(
@@ -233,7 +237,8 @@ class LoggedInPresenterTest {
             presenter.present()
         }.test {
             skipItems(2)
-            advanceUntilIdle()
+            val finalState = awaitItem()
+            assertThat(finalState.pusherRegistrationState.isSuccess()).isTrue()
             lambda.assertions()
                 .isCalledOnce()
                 .with(
@@ -277,7 +282,8 @@ class LoggedInPresenterTest {
             presenter.present()
         }.test {
             skipItems(2)
-            advanceUntilIdle()
+            val finalState = awaitItem()
+            assertThat(finalState.pusherRegistrationState.isSuccess()).isTrue()
             lambda.assertions()
                 .isCalledOnce()
                 .with(
@@ -317,7 +323,9 @@ class LoggedInPresenterTest {
             presenter.present()
         }.test {
             skipItems(2)
-            advanceUntilIdle()
+            val finalState = awaitItem()
+            assertThat(finalState.pusherRegistrationState.errorOrNull())
+                .isInstanceOf(PusherRegistrationFailure.NoDistributorsAvailable::class.java)
             lambda.assertions()
                 .isNeverCalled()
         }
@@ -343,7 +351,9 @@ class LoggedInPresenterTest {
             presenter.present()
         }.test {
             skipItems(2)
-            advanceUntilIdle()
+            val finalState = awaitItem()
+            assertThat(finalState.pusherRegistrationState.errorOrNull())
+                .isInstanceOf(PusherRegistrationFailure.NoProvidersAvailable::class.java)
             lambda.assertions()
                 .isNeverCalled()
         }
@@ -374,7 +384,9 @@ class LoggedInPresenterTest {
             presenter.present()
         }.test {
             skipItems(2)
-            advanceUntilIdle()
+            val finalState = awaitItem()
+            assertThat(finalState.pusherRegistrationState.errorOrNull())
+                .isInstanceOf(PusherRegistrationFailure.NoDistributorsAvailable::class.java)
             lambda.assertions()
                 .isNeverCalled()
         }

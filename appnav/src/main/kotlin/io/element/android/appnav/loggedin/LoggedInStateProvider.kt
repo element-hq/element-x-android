@@ -17,6 +17,7 @@
 package io.element.android.appnav.loggedin
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.AsyncData
 
 open class LoggedInStateProvider : PreviewParameterProvider<LoggedInState> {
     override val values: Sequence<LoggedInState>
@@ -31,4 +32,5 @@ fun aLoggedInState(
     showSyncSpinner: Boolean = true,
 ) = LoggedInState(
     showSyncSpinner = showSyncSpinner,
+    pusherRegistrationState = AsyncData.Uninitialized,
 )

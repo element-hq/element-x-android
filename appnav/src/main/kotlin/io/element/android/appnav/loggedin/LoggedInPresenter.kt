@@ -18,14 +18,17 @@ package io.element.android.appnav.loggedin
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import im.vector.app.features.analytics.plan.CryptoSessionStateChange
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -55,13 +58,16 @@ class LoggedInPresenter @Inject constructor(
         val isVerified by remember {
             sessionVerificationService.sessionVerifiedStatus.map { it == SessionVerifiedStatus.Verified }
         }.collectAsState(initial = false)
-
+        val pusherRegistrationState = remember<MutableState<AsyncData<Unit>>> { mutableStateOf(AsyncData.Uninitialized) }
         if (isVerified) {
             LaunchedEffect(Unit) {
-                ensurePusherIsRegistered()
+                ensurePusherIsRegistered(pusherRegistrationState)
+            }
+        } else {
+            LaunchedEffect(Unit) {
+                pusherRegistrationState.value = AsyncData.Failure(PusherRegistrationFailure.AccountNotVerified())
             }
         }
-
         val syncIndicator by matrixClient.roomListService.syncIndicator.collectAsState()
         val networkStatus by networkMonitor.connectivity.collectAsState()
         val showSyncSpinner by remember {
@@ -77,25 +83,32 @@ class LoggedInPresenter @Inject constructor(
 
         return LoggedInState(
             showSyncSpinner = showSyncSpinner,
+            pusherRegistrationState = pusherRegistrationState.value,
         )
     }
 
-    private suspend fun ensurePusherIsRegistered() {
+    private suspend fun ensurePusherIsRegistered(pusherRegistrationState: MutableState<AsyncData<Unit>>) {
         Timber.tag(pusherTag.value).d("Ensure pusher is registered")
         val currentPushProvider = pushService.getCurrentPushProvider()
         val result = if (currentPushProvider == null) {
             Timber.tag(pusherTag.value).d("Register with the first available push provider")
             val pushProvider = pushService.getAvailablePushProviders().firstOrNull()
-                ?: return Unit.also { Timber.tag(pusherTag.value).w("No push provider available") }
+                ?: return Unit
+                    .also { Timber.tag(pusherTag.value).w("No push providers available") }
+                    .also { pusherRegistrationState.value = AsyncData.Failure(PusherRegistrationFailure.NoProvidersAvailable()) }
             val distributor = pushProvider.getDistributors().firstOrNull()
-                ?: return Unit.also { Timber.tag(pusherTag.value).w("No distributor available") }
+                ?: return Unit
+                    .also { Timber.tag(pusherTag.value).w("No distributors available") }
+                    .also { pusherRegistrationState.value = AsyncData.Failure(PusherRegistrationFailure.NoDistributorsAvailable()) }
             pushService.registerWith(matrixClient, pushProvider, distributor)
         } else {
             val currentPushDistributor = currentPushProvider.getCurrentDistributor(matrixClient)
             if (currentPushDistributor == null) {
                 Timber.tag(pusherTag.value).d("Register with the first available distributor")
                 val distributor = currentPushProvider.getDistributors().firstOrNull()
-                    ?: return Unit.also { Timber.tag(pusherTag.value).w("No distributor available") }
+                    ?: return Unit
+                        .also { Timber.tag(pusherTag.value).w("No distributors available") }
+                        .also { pusherRegistrationState.value = AsyncData.Failure(PusherRegistrationFailure.NoDistributorsAvailable()) }
                 pushService.registerWith(matrixClient, currentPushProvider, distributor)
             } else {
                 Timber.tag(pusherTag.value).d("Re-register with the current distributor")
@@ -105,9 +118,11 @@ class LoggedInPresenter @Inject constructor(
         result.fold(
             onSuccess = {
                 Timber.tag(pusherTag.value).d("Pusher registered")
+                pusherRegistrationState.value = AsyncData.Success(Unit)
             },
             onFailure = {
                 Timber.tag(pusherTag.value).e(it, "Failed to register pusher")
+                pusherRegistrationState.value = AsyncData.Failure(PusherRegistrationFailure.RegistrationFailure(it))
             }
         )
     }
