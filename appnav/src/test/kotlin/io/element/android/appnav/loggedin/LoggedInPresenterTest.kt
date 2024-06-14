@@ -24,21 +24,36 @@ import im.vector.app.features.analytics.plan.CryptoSessionStateChange
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.push.test.FakePushService
+import io.element.android.libraries.pushproviders.api.Distributor
+import io.element.android.libraries.pushproviders.api.PushProvider
+import io.element.android.libraries.pushproviders.test.FakePushProvider
+import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
+import io.element.android.tests.testutils.lambda.any
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class LoggedInPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
@@ -107,17 +122,304 @@ class LoggedInPresenterTest {
         }
     }
 
+    @Test
+    fun `present - ensure default pusher is not registered if session is not verified`() = runTest {
+        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
+            Result.success(Unit)
+        }
+        val pushService = createFakePushService(registerWithLambda = lambda)
+        val presenter = createLoggedInPresenter(pushService = pushService)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            lambda.assertions()
+                .isNeverCalled()
+        }
+    }
+
+    @Test
+    fun `present - ensure default pusher is registered with default provider`() = runTest {
+        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
+            Result.success(Unit)
+        }
+        val sessionVerificationService = FakeSessionVerificationService()
+        sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
+        val pushService = createFakePushService(
+            registerWithLambda = lambda,
+        )
+        val presenter = createLoggedInPresenter(
+            pushService = pushService,
+            sessionVerificationService = sessionVerificationService,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(2)
+            advanceUntilIdle()
+            lambda.assertions()
+                .isCalledOnce()
+                .with(
+                    // MatrixClient
+                    any(),
+                    // PushProvider with highest priority (lower index)
+                    value(pushService.getAvailablePushProviders()[0]),
+                    // First distributor
+                    value(pushService.getAvailablePushProviders()[0].getDistributors()[0]),
+                )
+        }
+    }
+
+    @Test
+    fun `present - ensure default pusher is registered with default provider - fail to register`() = runTest {
+        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
+            Result.failure(AN_EXCEPTION)
+        }
+        val sessionVerificationService = FakeSessionVerificationService()
+        sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
+        val pushService = createFakePushService(
+            registerWithLambda = lambda,
+        )
+        val presenter = createLoggedInPresenter(
+            pushService = pushService,
+            sessionVerificationService = sessionVerificationService,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(2)
+            advanceUntilIdle()
+            lambda.assertions()
+                .isCalledOnce()
+                .with(
+                    // MatrixClient
+                    any(),
+                    // PushProvider with highest priority (lower index)
+                    value(pushService.getAvailablePushProviders()[0]),
+                    // First distributor
+                    value(pushService.getAvailablePushProviders()[0].getDistributors()[0]),
+                )
+        }
+    }
+
+    @Test
+    fun `present - ensure current provider is registered with current distributor`() = runTest {
+        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
+            Result.success(Unit)
+        }
+        val sessionVerificationService = FakeSessionVerificationService()
+        sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
+        val distributor = Distributor("aDistributorValue1", "aDistributorName1")
+        val pushProvider = FakePushProvider(
+            index = 1,
+            name = "aFakePushProvider0",
+            isAvailable = true,
+            distributors = listOf(
+                Distributor("aDistributorValue0", "aDistributorName0"),
+                distributor,
+            ),
+            currentDistributor = { distributor },
+        )
+        val pushService = createFakePushService(
+            pushProvider1 = pushProvider,
+            currentPushProvider = { pushProvider },
+            registerWithLambda = lambda,
+        )
+        val presenter = createLoggedInPresenter(
+            pushService = pushService,
+            sessionVerificationService = sessionVerificationService,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(2)
+            advanceUntilIdle()
+            lambda.assertions()
+                .isCalledOnce()
+                .with(
+                    // MatrixClient
+                    any(),
+                    // Current push provider
+                    value(pushProvider),
+                    // Current distributor
+                    value(distributor),
+                )
+        }
+    }
+
+    @Test
+    fun `present - if current push provider does not have current distributor, the first one is used`() = runTest {
+        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
+            Result.success(Unit)
+        }
+        val sessionVerificationService = FakeSessionVerificationService()
+        sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
+        val pushProvider = FakePushProvider(
+            index = 0,
+            name = "aFakePushProvider0",
+            isAvailable = true,
+            distributors = listOf(
+                Distributor("aDistributorValue0", "aDistributorName0"),
+                Distributor("aDistributorValue1", "aDistributorName1"),
+            ),
+            currentDistributor = { null },
+        )
+        val pushService = createFakePushService(
+            pushProvider0 = pushProvider,
+            currentPushProvider = { pushProvider },
+            registerWithLambda = lambda,
+        )
+        val presenter = createLoggedInPresenter(
+            pushService = pushService,
+            sessionVerificationService = sessionVerificationService,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(2)
+            advanceUntilIdle()
+            lambda.assertions()
+                .isCalledOnce()
+                .with(
+                    // MatrixClient
+                    any(),
+                    // PushProvider with highest priority (lower index)
+                    value(pushService.getAvailablePushProviders()[0]),
+                    // First distributor
+                    value(pushService.getAvailablePushProviders()[0].getDistributors()[0]),
+                )
+        }
+    }
+
+    @Test
+    fun `present - if current push provider does not have distributors, nothing happen`() = runTest {
+        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
+            Result.success(Unit)
+        }
+        val sessionVerificationService = FakeSessionVerificationService()
+        sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
+        val pushProvider = FakePushProvider(
+            index = 0,
+            name = "aFakePushProvider0",
+            isAvailable = true,
+            distributors = emptyList(),
+        )
+        val pushService = createFakePushService(
+            pushProvider0 = pushProvider,
+            currentPushProvider = { pushProvider },
+            registerWithLambda = lambda,
+        )
+        val presenter = createLoggedInPresenter(
+            pushService = pushService,
+            sessionVerificationService = sessionVerificationService,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(2)
+            advanceUntilIdle()
+            lambda.assertions()
+                .isNeverCalled()
+        }
+    }
+
+    @Test
+    fun `present - case no push provider available provider`() = runTest {
+        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
+            Result.success(Unit)
+        }
+        val sessionVerificationService = FakeSessionVerificationService()
+        sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
+        val pushService = createFakePushService(
+            pushProvider0 = null,
+            pushProvider1 = null,
+            registerWithLambda = lambda,
+        )
+        val presenter = createLoggedInPresenter(
+            pushService = pushService,
+            sessionVerificationService = sessionVerificationService,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(2)
+            advanceUntilIdle()
+            lambda.assertions()
+                .isNeverCalled()
+        }
+    }
+
+    @Test
+    fun `present - case one push provider but no distributor available`() = runTest {
+        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
+            Result.success(Unit)
+        }
+        val sessionVerificationService = FakeSessionVerificationService()
+        sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
+        val pushService = createFakePushService(
+            pushProvider0 = FakePushProvider(
+                index = 1,
+                name = "aFakePushProvider1",
+                isAvailable = true,
+                distributors = emptyList(),
+            ),
+            pushProvider1 = null,
+            registerWithLambda = lambda,
+        )
+        val presenter = createLoggedInPresenter(
+            pushService = pushService,
+            sessionVerificationService = sessionVerificationService,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(2)
+            advanceUntilIdle()
+            lambda.assertions()
+                .isNeverCalled()
+        }
+    }
+
+    private fun createFakePushService(
+        pushProvider0: PushProvider? = FakePushProvider(
+            index = 0,
+            name = "aFakePushProvider0",
+            isAvailable = true,
+            distributors = listOf(Distributor("aDistributorValue0", "aDistributorName0")),
+            currentDistributor = { null },
+        ),
+        pushProvider1: PushProvider? = FakePushProvider(
+            index = 1,
+            name = "aFakePushProvider1",
+            isAvailable = true,
+            distributors = listOf(Distributor("aDistributorValue1", "aDistributorName1")),
+            currentDistributor = { null },
+        ),
+        registerWithLambda: suspend (MatrixClient, PushProvider, Distributor) -> Result<Unit> = { _, _, _ ->
+            Result.success(Unit)
+        },
+        currentPushProvider: () -> PushProvider? = { null },
+    ): PushService {
+        return FakePushService(
+            availablePushProviders = listOfNotNull(pushProvider0, pushProvider1),
+            registerWithLambda = registerWithLambda,
+            currentPushProvider = currentPushProvider,
+        )
+    }
+
     private fun createLoggedInPresenter(
         roomListService: RoomListService = FakeRoomListService(),
         networkStatus: NetworkStatus = NetworkStatus.Offline,
-        analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
-        encryptionService: FakeEncryptionService = FakeEncryptionService(),
+        analyticsService: AnalyticsService = FakeAnalyticsService(),
+        sessionVerificationService: SessionVerificationService = FakeSessionVerificationService(),
+        encryptionService: EncryptionService = FakeEncryptionService(),
+        pushService: PushService = FakePushService(),
     ): LoggedInPresenter {
         return LoggedInPresenter(
             matrixClient = FakeMatrixClient(roomListService = roomListService),
             networkMonitor = FakeNetworkMonitor(networkStatus),
-            pushService = FakePushService(),
-            sessionVerificationService = FakeSessionVerificationService(),
+            pushService = pushService,
+            sessionVerificationService = sessionVerificationService,
             analyticsService = analyticsService,
             encryptionService = encryptionService
         )

@@ -28,9 +28,10 @@ class FakePushService(
     private val registerWithLambda: suspend (MatrixClient, PushProvider, Distributor) -> Result<Unit> = { _, _, _ ->
         Result.success(Unit)
     },
+    private val currentPushProvider: () -> PushProvider? = { availablePushProviders.firstOrNull() },
 ) : PushService {
     override suspend fun getCurrentPushProvider(): PushProvider? {
-        return registeredPushProvider ?: availablePushProviders.firstOrNull()
+        return registeredPushProvider ?: currentPushProvider()
     }
 
     override fun getAvailablePushProviders(): List<PushProvider> {
