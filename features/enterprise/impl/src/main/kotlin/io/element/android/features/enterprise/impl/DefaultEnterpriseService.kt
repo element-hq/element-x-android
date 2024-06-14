@@ -23,8 +23,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
-class DefaultEnterpriseService @Inject constructor(
-) : EnterpriseService {
+class DefaultEnterpriseService @Inject constructor() : EnterpriseService {
     override val isEnterpriseBuild = false
 
     override suspend fun isEnterpriseUser(sessionId: SessionId) = false
