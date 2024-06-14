@@ -102,9 +102,14 @@ class LoggedInPresenter @Inject constructor(
                 pushService.registerWith(matrixClient, currentPushProvider, currentPushDistributor)
             }
         }
-        result.onFailure {
-            Timber.tag(pusherTag.value).e(it, "Failed to register pusher")
-        }
+        result.fold(
+            onSuccess = {
+                Timber.tag(pusherTag.value).d("Pusher registered")
+            },
+            onFailure = {
+                Timber.tag(pusherTag.value).e(it, "Failed to register pusher")
+            }
+        )
     }
 
     private fun reportCryptoStatusToAnalytics(verificationState: SessionVerifiedStatus, recoveryState: RecoveryState) {
