@@ -27,6 +27,7 @@ import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
@@ -38,6 +39,8 @@ import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
 import javax.inject.Inject
+
+private val pusherTag = LoggerTag("Pusher", LoggerTag.PushLoggerTag)
 
 class LoggedInPresenter @Inject constructor(
     private val matrixClient: MatrixClient,
@@ -78,29 +81,29 @@ class LoggedInPresenter @Inject constructor(
     }
 
     private suspend fun ensurePusherIsRegistered() {
-        Timber.d("Ensure pusher is registered")
+        Timber.tag(pusherTag.value).d("Ensure pusher is registered")
         val currentPushProvider = pushService.getCurrentPushProvider()
         val result = if (currentPushProvider == null) {
-            Timber.d("Register with the first available push provider")
+            Timber.tag(pusherTag.value).d("Register with the first available push provider")
             val pushProvider = pushService.getAvailablePushProviders().firstOrNull()
-                ?: return Unit.also { Timber.w("No push provider available") }
+                ?: return Unit.also { Timber.tag(pusherTag.value).w("No push provider available") }
             val distributor = pushProvider.getDistributors().firstOrNull()
-                ?: return Unit.also { Timber.w("No distributor available") }
+                ?: return Unit.also { Timber.tag(pusherTag.value).w("No distributor available") }
             pushService.registerWith(matrixClient, pushProvider, distributor)
         } else {
             val currentPushDistributor = currentPushProvider.getCurrentDistributor(matrixClient)
             if (currentPushDistributor == null) {
-                Timber.d("Register with the first available distributor")
+                Timber.tag(pusherTag.value).d("Register with the first available distributor")
                 val distributor = currentPushProvider.getDistributors().firstOrNull()
-                    ?: return Unit.also { Timber.w("No distributor available") }
+                    ?: return Unit.also { Timber.tag(pusherTag.value).w("No distributor available") }
                 pushService.registerWith(matrixClient, currentPushProvider, distributor)
             } else {
-                Timber.d("Re-register with the current distributor")
+                Timber.tag(pusherTag.value).d("Re-register with the current distributor")
                 pushService.registerWith(matrixClient, currentPushProvider, currentPushDistributor)
             }
         }
         result.onFailure {
-            Timber.e(it, "Failed to register pusher")
+            Timber.tag(pusherTag.value).e(it, "Failed to register pusher")
         }
     }
 
