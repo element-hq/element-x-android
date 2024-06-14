@@ -7,7 +7,7 @@ import subprocess
 def getProjectDependencies():
     print("=> Computing dependencies...")
     command = subprocess.run(
-        ["./gradlew :app:dependencies |grep project"],
+        ["./gradlew :app:dependencies"],
         shell=True,
         capture_output=True,
         text=True,
@@ -16,7 +16,7 @@ def getProjectDependencies():
     # Remove the trailing info like "(*)"
     result = list(map(lambda x: x.split(" (")[0], data.split("\n")))
     # Filter out comment line
-    result = list(filter(lambda x: "---" in x, result))
+    result = list(filter(lambda x: "--- project" in x, result))
     return result
 
 
