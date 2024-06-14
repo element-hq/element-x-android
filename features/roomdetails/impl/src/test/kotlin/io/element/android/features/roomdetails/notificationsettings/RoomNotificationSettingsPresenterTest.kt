@@ -115,9 +115,8 @@ class RoomNotificationSettingsPresenterTest {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(RoomNotificationSettingsEvents.SetNotificationMode(false))
-            val defaultState = consumeItemsUntilPredicate {
-                it.roomNotificationSettings.dataOrNull()?.isDefault == false
-            }.last()
+            skipItems(3)
+            val defaultState = awaitItem()
             assertThat(defaultState.roomNotificationSettings.dataOrNull()?.isDefault).isFalse()
         }
     }
