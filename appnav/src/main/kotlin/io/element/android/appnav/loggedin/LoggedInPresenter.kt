@@ -53,11 +53,9 @@ class LoggedInPresenter @Inject constructor(
             sessionVerificationService.sessionVerifiedStatus.map { it == SessionVerifiedStatus.Verified }
         }.collectAsState(initial = false)
 
-        LaunchedEffect(isVerified) {
-            if (isVerified) {
+        if (isVerified) {
+            LaunchedEffect(Unit) {
                 ensurePusherIsRegistered()
-            } else {
-                Timber.w("Session is not verified, not registering pusher")
             }
         }
 
