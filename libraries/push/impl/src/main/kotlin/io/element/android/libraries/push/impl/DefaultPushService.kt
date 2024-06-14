@@ -51,7 +51,7 @@ class DefaultPushService @Inject constructor(
         pushProvider: PushProvider,
         distributor: Distributor,
     ): Result<Unit> {
-        Timber.d("Registering with ${pushProvider.name}/${distributor.name}}")
+        Timber.d("Registering with ${pushProvider.name}/${distributor.name}")
         val userPushStore = userPushStoreFactory.getOrCreate(matrixClient.sessionId)
         val currentPushProviderName = userPushStore.getPushProviderName()
         val currentPushProvider = pushProviders.find { it.name == currentPushProviderName }
