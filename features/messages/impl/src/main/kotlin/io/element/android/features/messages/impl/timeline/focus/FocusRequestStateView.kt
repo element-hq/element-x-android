@@ -49,7 +49,7 @@ fun FocusRequestStateView(
                 modifier = modifier,
             )
         }
-        FocusRequestState.Fetching -> {
+        is FocusRequestState.Loading -> {
             ProgressDialog(
                 modifier = modifier,
                 properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true),
