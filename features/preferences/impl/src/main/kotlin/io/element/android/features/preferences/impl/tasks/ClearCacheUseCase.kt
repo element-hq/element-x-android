@@ -66,9 +66,9 @@ class DefaultClearCacheUseCase @Inject constructor(
         ftueService.reset()
         // Clear migration screen store
         migrationScreenStore.reset()
-        // Ensure the app is restarted
-        defaultCacheIndexProvider.onClearedCache(matrixClient.sessionId)
         // Ensure any error will be displayed again
         pushService.setIgnoreRegistrationError(matrixClient.sessionId, false)
+        // Ensure the app is restarted
+        defaultCacheIndexProvider.onClearedCache(matrixClient.sessionId)
     }
 }
