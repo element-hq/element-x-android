@@ -34,5 +34,6 @@ fun aLoggedInState(
 ) = LoggedInState(
     showSyncSpinner = showSyncSpinner,
     pusherRegistrationState = pusherRegistrationState,
+    ignoreRegistrationError = false,
     eventSink = {},
 )

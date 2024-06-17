@@ -25,7 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialogWithDoNotShowAgain
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.exception.isNetworkError
@@ -52,11 +52,12 @@ fun LoggedInView(
         is AsyncData.Success -> Unit
         is AsyncData.Failure -> {
             state.pusherRegistrationState.errorOrNull()
+                ?.takeIf { !state.ignoreRegistrationError }
                 ?.getReason()
                 ?.let { reason ->
-                    ErrorDialog(
+                    ErrorDialogWithDoNotShowAgain(
                         content = stringResource(id = CommonStrings.common_error_registering_pusher_android, reason),
-                        onDismiss = { state.eventSink(LoggedInEvents.CloseErrorDialog) },
+                        onDismiss = { state.eventSink(LoggedInEvents.CloseErrorDialog(it)) },
                     )
                 }
         }

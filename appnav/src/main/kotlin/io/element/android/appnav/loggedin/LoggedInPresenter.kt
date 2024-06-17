@@ -24,6 +24,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import im.vector.app.features.analytics.plan.CryptoSessionStateChange
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.features.networkmonitor.api.NetworkMonitor
@@ -41,6 +42,7 @@ import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.pushproviders.api.RegistrationFailure
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -56,8 +58,12 @@ class LoggedInPresenter @Inject constructor(
 ) : Presenter<LoggedInState> {
     @Composable
     override fun present(): LoggedInState {
+        val coroutineScope = rememberCoroutineScope()
         val isVerified by remember {
             sessionVerificationService.sessionVerifiedStatus.map { it == SessionVerifiedStatus.Verified }
+        }.collectAsState(initial = false)
+        val ignoreRegistrationError by remember {
+            pushService.ignoreRegistrationError(matrixClient.sessionId)
         }.collectAsState(initial = false)
         val pusherRegistrationState = remember<MutableState<AsyncData<Unit>>> { mutableStateOf(AsyncData.Uninitialized) }
         if (isVerified) {
@@ -84,13 +90,21 @@ class LoggedInPresenter @Inject constructor(
 
         fun handleEvent(event: LoggedInEvents) {
             when (event) {
-                LoggedInEvents.CloseErrorDialog -> pusherRegistrationState.value = AsyncData.Uninitialized
+                is LoggedInEvents.CloseErrorDialog -> {
+                    pusherRegistrationState.value = AsyncData.Uninitialized
+                    if (event.doNotShowAgain) {
+                        coroutineScope.launch {
+                            pushService.setIgnoreRegistrationError(matrixClient.sessionId, true)
+                        }
+                    }
+                }
             }
         }
 
         return LoggedInState(
             showSyncSpinner = showSyncSpinner,
             pusherRegistrationState = pusherRegistrationState.value,
+            ignoreRegistrationError = ignoreRegistrationError,
             eventSink = ::handleEvent
         )
     }

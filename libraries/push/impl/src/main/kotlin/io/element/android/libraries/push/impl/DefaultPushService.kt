@@ -19,12 +19,14 @@ package io.element.android.libraries.push.impl
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.GetCurrentPushProvider
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.push.impl.test.TestPush
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
+import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -70,6 +72,14 @@ class DefaultPushService @Inject constructor(
         userPushStore.setPushProviderName(pushProvider.name)
         // Then try to register
         return pushProvider.registerWith(matrixClient, distributor)
+    }
+
+    override fun ignoreRegistrationError(sessionId: SessionId): Flow<Boolean> {
+        return userPushStoreFactory.getOrCreate(sessionId).ignoreRegistrationError()
+    }
+
+    override suspend fun setIgnoreRegistrationError(sessionId: SessionId, ignore: Boolean) {
+        userPushStoreFactory.getOrCreate(sessionId).setIgnoreRegistrationError(ignore)
     }
 
     override suspend fun testPush(): Boolean {

@@ -17,10 +17,13 @@
 package io.element.android.libraries.push.test
 
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.tests.testutils.simulateLongTask
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakePushService(
     private val testPushBlock: suspend () -> Boolean = { true },
@@ -51,6 +54,16 @@ class FakePushService(
                     registeredPushProvider = pushProvider
                 }
             }
+    }
+
+    private val ignoreRegistrationError = MutableStateFlow(false)
+
+    override fun ignoreRegistrationError(sessionId: SessionId): Flow<Boolean> {
+        return ignoreRegistrationError
+    }
+
+    override suspend fun setIgnoreRegistrationError(sessionId: SessionId, ignore: Boolean) {
+        ignoreRegistrationError.value = ignore
     }
 
     override suspend fun testPush(): Boolean = simulateLongTask {

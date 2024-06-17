@@ -17,5 +17,5 @@
 package io.element.android.appnav.loggedin
 
 sealed interface LoggedInEvents {
-    data object CloseErrorDialog : LoggedInEvents
+    data class CloseErrorDialog(val doNotShowAgain: Boolean) : LoggedInEvents
 }

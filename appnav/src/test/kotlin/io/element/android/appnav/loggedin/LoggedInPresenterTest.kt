@@ -64,6 +64,7 @@ class LoggedInPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.showSyncSpinner).isFalse()
             assertThat(initialState.pusherRegistrationState.isUninitialized()).isTrue()
+            assertThat(initialState.ignoreRegistrationError).isFalse()
             skipItems(1)
         }
     }
@@ -356,6 +357,12 @@ class LoggedInPresenterTest {
                 .isInstanceOf(PusherRegistrationFailure.NoProvidersAvailable::class.java)
             lambda.assertions()
                 .isNeverCalled()
+            // Reset the error and do not show again
+            finalState.eventSink(LoggedInEvents.CloseErrorDialog(doNotShowAgain = true))
+            skipItems(1)
+            val lastState = awaitItem()
+            assertThat(lastState.pusherRegistrationState.isUninitialized()).isTrue()
+            assertThat(lastState.ignoreRegistrationError).isTrue()
         }
     }
 
@@ -390,7 +397,7 @@ class LoggedInPresenterTest {
             lambda.assertions()
                 .isNeverCalled()
             // Reset the error
-            finalState.eventSink(LoggedInEvents.CloseErrorDialog)
+            finalState.eventSink(LoggedInEvents.CloseErrorDialog(doNotShowAgain = false))
             val lastState = awaitItem()
             assertThat(lastState.pusherRegistrationState.isUninitialized()).isTrue()
         }

@@ -17,8 +17,10 @@
 package io.element.android.libraries.push.api
 
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
+import kotlinx.coroutines.flow.Flow
 
 interface PushService {
     /**
@@ -42,6 +44,9 @@ interface PushService {
         pushProvider: PushProvider,
         distributor: Distributor,
     ): Result<Unit>
+
+    fun ignoreRegistrationError(sessionId: SessionId): Flow<Boolean>
+    suspend fun setIgnoreRegistrationError(sessionId: SessionId, ignore: Boolean)
 
     /**
      * Return false in case of early error.
