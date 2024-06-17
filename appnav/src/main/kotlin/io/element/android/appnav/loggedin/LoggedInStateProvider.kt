@@ -22,15 +22,17 @@ import io.element.android.libraries.architecture.AsyncData
 open class LoggedInStateProvider : PreviewParameterProvider<LoggedInState> {
     override val values: Sequence<LoggedInState>
         get() = sequenceOf(
-            aLoggedInState(false),
-            aLoggedInState(true),
-            // Add other state here
+            aLoggedInState(),
+            aLoggedInState(showSyncSpinner = true),
+            aLoggedInState(pusherRegistrationState = AsyncData.Failure(PusherRegistrationFailure.NoProvidersAvailable())),
         )
 }
 
 fun aLoggedInState(
-    showSyncSpinner: Boolean = true,
+    showSyncSpinner: Boolean = false,
+    pusherRegistrationState: AsyncData<Unit> = AsyncData.Uninitialized,
 ) = LoggedInState(
     showSyncSpinner = showSyncSpinner,
-    pusherRegistrationState = AsyncData.Uninitialized,
+    pusherRegistrationState = pusherRegistrationState,
+    eventSink = {},
 )

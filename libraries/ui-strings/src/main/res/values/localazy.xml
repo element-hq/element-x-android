@@ -135,6 +135,9 @@
   <string name="common_encryption_enabled">"Encryption enabled"</string>
   <string name="common_enter_your_pin">"Enter your PIN"</string>
   <string name="common_error">"Error"</string>
+  <string name="common_error_registering_pusher_android">"An error occurred, you may not receive notifications for new messages. Please troubleshoot notifications from the settings.
+
+Reason: %1$s."</string>
   <string name="common_everyone">"Everyone"</string>
   <string name="common_failed">"Failed"</string>
   <string name="common_favourite">"Favourite"</string>

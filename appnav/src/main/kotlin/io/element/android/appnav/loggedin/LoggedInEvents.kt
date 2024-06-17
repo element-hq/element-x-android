@@ -16,19 +16,6 @@
 
 package io.element.android.appnav.loggedin
 
-import io.element.android.libraries.matrix.api.exception.ClientException
-
-sealed class PusherRegistrationFailure : Exception() {
-    class AccountNotVerified : PusherRegistrationFailure()
-    class NoProvidersAvailable : PusherRegistrationFailure()
-    class NoDistributorsAvailable : PusherRegistrationFailure()
-
-    /**
-     * @param clientException the failure that occurred.
-     * @param isRegisteringAgain true if the server should already have a the same pusher registered.
-     */
-    class RegistrationFailure(
-        val clientException: ClientException,
-        val isRegisteringAgain: Boolean,
-    ) : PusherRegistrationFailure()
+sealed interface LoggedInEvents {
+    data object CloseErrorDialog : LoggedInEvents
 }

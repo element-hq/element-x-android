@@ -389,6 +389,10 @@ class LoggedInPresenterTest {
                 .isInstanceOf(PusherRegistrationFailure.NoDistributorsAvailable::class.java)
             lambda.assertions()
                 .isNeverCalled()
+            // Reset the error
+            finalState.eventSink(LoggedInEvents.CloseErrorDialog)
+            val lastState = awaitItem()
+            assertThat(lastState.pusherRegistrationState.isUninitialized()).isTrue()
         }
     }
 

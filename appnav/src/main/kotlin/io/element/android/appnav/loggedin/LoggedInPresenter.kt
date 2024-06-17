@@ -38,6 +38,7 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.push.api.PushService
+import io.element.android.libraries.pushproviders.api.RegistrationFailure
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
@@ -81,9 +82,16 @@ class LoggedInPresenter @Inject constructor(
             reportCryptoStatusToAnalytics(verificationState, recoveryState)
         }
 
+        fun handleEvent(event: LoggedInEvents) {
+            when (event) {
+                LoggedInEvents.CloseErrorDialog -> pusherRegistrationState.value = AsyncData.Uninitialized
+            }
+        }
+
         return LoggedInState(
             showSyncSpinner = showSyncSpinner,
             pusherRegistrationState = pusherRegistrationState.value,
+            eventSink = ::handleEvent
         )
     }
 
@@ -122,7 +130,13 @@ class LoggedInPresenter @Inject constructor(
             },
             onFailure = {
                 Timber.tag(pusherTag.value).e(it, "Failed to register pusher")
-                pusherRegistrationState.value = AsyncData.Failure(PusherRegistrationFailure.RegistrationFailure(it))
+                if (it is RegistrationFailure) {
+                    pusherRegistrationState.value = AsyncData.Failure(
+                        PusherRegistrationFailure.RegistrationFailure(it.clientException, it.isRegisteringAgain)
+                    )
+                } else {
+                    pusherRegistrationState.value = AsyncData.Failure(it)
+                }
             }
         )
     }
