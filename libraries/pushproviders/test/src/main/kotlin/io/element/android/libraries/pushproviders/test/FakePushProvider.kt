@@ -31,7 +31,6 @@ class FakePushProvider(
     private val registerWithResult: (MatrixClient, Distributor) -> Result<Unit> = { _, _ -> lambdaError() },
     private val unregisterWithResult: (MatrixClient) -> Result<Unit> = { lambdaError() },
 ) : PushProvider {
-
     override fun getDistributors(): List<Distributor> = distributors
 
     override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor): Result<Unit> {
