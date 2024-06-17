@@ -25,14 +25,12 @@ import io.element.android.tests.testutils.lambda.lambdaError
 class FakePushProvider(
     override val index: Int = 0,
     override val name: String = "aFakePushProvider",
-    private val isAvailable: Boolean = true,
     private val distributors: List<Distributor> = listOf(Distributor("aDistributorValue", "aDistributorName")),
     private val currentDistributor: () -> Distributor? = { distributors.firstOrNull() },
     private val currentUserPushConfig: CurrentUserPushConfig? = null,
     private val registerWithResult: (MatrixClient, Distributor) -> Result<Unit> = { _, _ -> lambdaError() },
     private val unregisterWithResult: (MatrixClient) -> Result<Unit> = { lambdaError() },
 ) : PushProvider {
-    override fun isAvailable(): Boolean = isAvailable
 
     override fun getDistributors(): List<Distributor> = distributors
 

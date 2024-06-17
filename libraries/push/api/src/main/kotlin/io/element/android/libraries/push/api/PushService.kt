@@ -29,8 +29,7 @@ interface PushService {
     suspend fun getCurrentPushProvider(): PushProvider?
 
     /**
-     * Return the list of push providers, available at compile time, and
-     * available at runtime, sorted by index.
+     * Return the list of push providers, available at compile time, sorted by index.
      */
     fun getAvailablePushProviders(): List<PushProvider>
 

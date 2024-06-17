@@ -44,7 +44,6 @@ class DefaultPushService @Inject constructor(
 
     override fun getAvailablePushProviders(): List<PushProvider> {
         return pushProviders
-            .filter { it.isAvailable() }
             .sortedBy { it.index }
     }
 

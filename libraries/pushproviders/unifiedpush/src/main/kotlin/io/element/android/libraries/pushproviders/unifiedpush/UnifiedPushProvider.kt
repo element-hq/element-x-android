@@ -43,17 +43,6 @@ class UnifiedPushProvider @Inject constructor(
     override val index = UnifiedPushConfig.INDEX
     override val name = UnifiedPushConfig.NAME
 
-    override fun isAvailable(): Boolean {
-        val isAvailable = getDistributors().isNotEmpty()
-        return if (isAvailable) {
-            Timber.tag(loggerTag.value).d("UnifiedPush is available")
-            true
-        } else {
-            Timber.tag(loggerTag.value).w("UnifiedPush is not available")
-            false
-        }
-    }
-
     override fun getDistributors(): List<Distributor> {
         return unifiedPushDistributorProvider.getDistributors()
     }
