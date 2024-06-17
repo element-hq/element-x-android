@@ -44,6 +44,15 @@ interface PushService {
         distributor: Distributor,
     ): Result<Unit>
 
+    /**
+     * Store the given push provider as the current one, but do not register.
+     * To be used when there is no distributor available.
+     */
+    suspend fun selectPushProvider(
+        matrixClient: MatrixClient,
+        pushProvider: PushProvider,
+    )
+
     fun ignoreRegistrationError(sessionId: SessionId): Flow<Boolean>
     suspend fun setIgnoreRegistrationError(sessionId: SessionId, ignore: Boolean)
 

@@ -113,14 +113,21 @@ class LoggedInPresenter @Inject constructor(
         Timber.tag(pusherTag.value).d("Ensure pusher is registered")
         val currentPushProvider = pushService.getCurrentPushProvider()
         val result = if (currentPushProvider == null) {
-            Timber.tag(pusherTag.value).d("Register with the first available push provider")
-            val pushProvider = pushService.getAvailablePushProviders().firstOrNull()
+            Timber.tag(pusherTag.value).d("Register with the first available push provider with at least one distributor")
+            val pushProvider = pushService.getAvailablePushProviders()
+                .firstOrNull { it.getDistributors().isNotEmpty() }
+                // Else fallback to the first available push provider (the list should never be empty)
+                ?: pushService.getAvailablePushProviders().firstOrNull()
                 ?: return Unit
                     .also { Timber.tag(pusherTag.value).w("No push providers available") }
                     .also { pusherRegistrationState.value = AsyncData.Failure(PusherRegistrationFailure.NoProvidersAvailable()) }
             val distributor = pushProvider.getDistributors().firstOrNull()
                 ?: return Unit
                     .also { Timber.tag(pusherTag.value).w("No distributors available") }
+                    .also {
+                        // In this case, consider the push provider is chosen.
+                        pushService.selectPushProvider(matrixClient, pushProvider)
+                    }
                     .also { pusherRegistrationState.value = AsyncData.Failure(PusherRegistrationFailure.NoDistributorsAvailable()) }
             pushService.registerWith(matrixClient, pushProvider, distributor)
         } else {

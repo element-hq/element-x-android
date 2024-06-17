@@ -73,6 +73,15 @@ class DefaultPushService @Inject constructor(
         return pushProvider.registerWith(matrixClient, distributor)
     }
 
+    override suspend fun selectPushProvider(
+        matrixClient: MatrixClient,
+        pushProvider: PushProvider,
+    ) {
+        Timber.d("Select ${pushProvider.name}")
+        val userPushStore = userPushStoreFactory.getOrCreate(matrixClient.sessionId)
+        userPushStore.setPushProviderName(pushProvider.name)
+    }
+
     override fun ignoreRegistrationError(sessionId: SessionId): Flow<Boolean> {
         return userPushStoreFactory.getOrCreate(sessionId).ignoreRegistrationError()
     }

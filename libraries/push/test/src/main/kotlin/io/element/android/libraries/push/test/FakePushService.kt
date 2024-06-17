@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
+import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,6 +33,7 @@ class FakePushService(
         Result.success(Unit)
     },
     private val currentPushProvider: () -> PushProvider? = { availablePushProviders.firstOrNull() },
+    private val selectPushProviderLambda: suspend (MatrixClient, PushProvider) -> Unit = { _, _ -> lambdaError() }
 ) : PushService {
     override suspend fun getCurrentPushProvider(): PushProvider? {
         return registeredPushProvider ?: currentPushProvider()
@@ -54,6 +56,10 @@ class FakePushService(
                     registeredPushProvider = pushProvider
                 }
             }
+    }
+
+    override suspend fun selectPushProvider(matrixClient: MatrixClient, pushProvider: PushProvider) {
+        selectPushProviderLambda(matrixClient, pushProvider)
     }
 
     private val ignoreRegistrationError = MutableStateFlow(false)
