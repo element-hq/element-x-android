@@ -45,6 +45,7 @@ import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.lambda.any
+import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.test.runTest
@@ -368,16 +369,19 @@ class LoggedInPresenterTest {
         val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
             Result.success(Unit)
         }
+        val selectPushProviderLambda = lambdaRecorder<MatrixClient, PushProvider, Unit> { _, _ -> }
         val sessionVerificationService = FakeSessionVerificationService()
         sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
+        val pushProvider = FakePushProvider(
+            index = 1,
+            name = "aFakePushProvider1",
+            distributors = emptyList(),
+        )
         val pushService = createFakePushService(
-            pushProvider0 = FakePushProvider(
-                index = 1,
-                name = "aFakePushProvider1",
-                distributors = emptyList(),
-            ),
+            pushProvider0 = pushProvider,
             pushProvider1 = null,
             registerWithLambda = lambda,
+            selectPushProviderLambda = selectPushProviderLambda,
         )
         val presenter = createLoggedInPresenter(
             pushService = pushService,
@@ -392,6 +396,14 @@ class LoggedInPresenterTest {
                 .isInstanceOf(PusherRegistrationFailure.NoDistributorsAvailable::class.java)
             lambda.assertions()
                 .isNeverCalled()
+            selectPushProviderLambda.assertions()
+                .isCalledOnce()
+                .with(
+                    // MatrixClient
+                    any(),
+                    // PushProvider
+                    value(pushProvider),
+                )
             // Reset the error
             finalState.eventSink(LoggedInEvents.CloseErrorDialog(doNotShowAgain = false))
             val lastState = awaitItem()
@@ -415,12 +427,14 @@ class LoggedInPresenterTest {
         registerWithLambda: suspend (MatrixClient, PushProvider, Distributor) -> Result<Unit> = { _, _, _ ->
             Result.success(Unit)
         },
+        selectPushProviderLambda: (MatrixClient, PushProvider) -> Unit = { _, _ -> lambdaError() },
         currentPushProvider: () -> PushProvider? = { null },
     ): PushService {
         return FakePushService(
             availablePushProviders = listOfNotNull(pushProvider0, pushProvider1),
             registerWithLambda = registerWithLambda,
             currentPushProvider = currentPushProvider,
+            selectPushProviderLambda = selectPushProviderLambda,
         )
     }
 
