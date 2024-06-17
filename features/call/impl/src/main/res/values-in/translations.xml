@@ -3,4 +3,5 @@
   <string name="call_foreground_service_channel_title_android">"Panggilan berlangsung"</string>
   <string name="call_foreground_service_message_android">"Ketuk untuk kembali ke panggilan"</string>
   <string name="call_foreground_service_title_android">"☎️ Panggilan sedang berlangsung"</string>
+  <string name="screen_incoming_call_subtitle_android">"Element Call Masuk"</string>
 </resources>

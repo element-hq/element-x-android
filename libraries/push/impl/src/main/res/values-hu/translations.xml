@@ -3,6 +3,7 @@
   <string name="notification_channel_call">"Hívás"</string>
   <string name="notification_channel_listening_for_events">"Események figyelése"</string>
   <string name="notification_channel_noisy">"Zajos értesítések"</string>
+  <string name="notification_channel_ringing_calls">"Csörgő hívások"</string>
   <string name="notification_channel_silent">"Csendes értesítések"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d üzenet"</item>
@@ -13,6 +14,7 @@
     <item quantity="other">"%d értesítés"</item>
   </plurals>
   <string name="notification_fallback_content">"Értesítés"</string>
+  <string name="notification_incoming_call">"Bejövő hívás"</string>
   <string name="notification_inline_reply_failed">"** Nem sikerült elküldeni – nyissa meg a szobát"</string>
   <string name="notification_invitation_action_join">"Csatlakozás"</string>
   <string name="notification_invitation_action_reject">"Elutasítás"</string>
