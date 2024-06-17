@@ -44,7 +44,7 @@ class DefaultClearCacheUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
     private val matrixClient: MatrixClient,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val defaultCacheIndexProvider: DefaultCacheService,
+    private val defaultCacheService: DefaultCacheService,
     private val okHttpClient: Provider<OkHttpClient>,
     private val ftueService: FtueService,
     private val migrationScreenStore: MigrationScreenStore,
@@ -69,6 +69,6 @@ class DefaultClearCacheUseCase @Inject constructor(
         // Ensure any error will be displayed again
         pushService.setIgnoreRegistrationError(matrixClient.sessionId, false)
         // Ensure the app is restarted
-        defaultCacheIndexProvider.onClearedCache(matrixClient.sessionId)
+        defaultCacheService.onClearedCache(matrixClient.sessionId)
     }
 }
