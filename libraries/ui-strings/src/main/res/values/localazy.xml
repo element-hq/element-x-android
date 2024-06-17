@@ -129,6 +129,7 @@
   <string name="common_decryption_error">"Decryption error"</string>
   <string name="common_developer_options">"Developer options"</string>
   <string name="common_direct_chat">"Direct chat"</string>
+  <string name="common_do_not_show_this_again">"Do not show this again"</string>
   <string name="common_edited_suffix">"(edited)"</string>
   <string name="common_editing">"Editing"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
