@@ -257,11 +257,12 @@
   <string name="error_missing_microphone_voice_rationale_android">"%1$s не имеет разрешения на доступ к вашему микрофону. Разрешите доступ к записи голосового сообщения."</string>
   <string name="error_some_messages_have_not_been_sent">"Некоторые сообщения не были отправлены"</string>
   <string name="error_unknown">"Извините, произошла ошибка"</string>
+  <string name="full_screen_intent_banner_message">"Чтобы никогда не пропустить важный звонок, измените настройки, чтобы разрешить полноэкранные уведомления, когда ваш телефон заблокирован."</string>
+  <string name="full_screen_intent_banner_title">"Улучшите качество звонков"</string>
   <string name="invite_friends_rich_title">"🔐️ Присоединяйтесь ко мне в %1$s"</string>
   <string name="invite_friends_text">"Привет, поговори со мной по %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Встряхните устройство, чтобы сообщить об ошибке"</string>
-  <string name="screen_incoming_call_subtitle_android">"Входящий вызов Element"</string>
   <string name="screen_media_picker_error_failed_selection">"Не удалось выбрать носитель, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не удалось загрузить медиафайлы, попробуйте еще раз."</string>

@@ -255,7 +255,6 @@
   <string name="invite_friends_text">"Alô! Fala comigo na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Agita o dispositivo em fúria para comunicar um problema"</string>
-  <string name="screen_incoming_call_subtitle_android">"A receber chamada da Element "</string>
   <string name="screen_media_picker_error_failed_selection">"Falha ao selecionar multimédia, por favor tente novamente."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Falha ao processar multimédia para carregamento, por favor tente novamente."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Falhar ao carregar multimédia, por favor tente novamente."</string>

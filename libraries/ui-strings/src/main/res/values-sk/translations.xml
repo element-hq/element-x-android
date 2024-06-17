@@ -255,11 +255,12 @@
   <string name="error_missing_microphone_voice_rationale_android">"%1$s nemá povolenie na prístup k vášmu mikrofónu. Povoľte prístup na nahrávanie hlasovej správy."</string>
   <string name="error_some_messages_have_not_been_sent">"Niektoré správy neboli odoslané"</string>
   <string name="error_unknown">"Prepáčte, vyskytla sa chyba"</string>
+  <string name="full_screen_intent_banner_message">"Aby ste už nikdy nezmeškali dôležitý hovor, zmeňte svoje nastavenia a povoľte upozornenia na celú obrazovku, keď je váš telefón uzamknutý."</string>
+  <string name="full_screen_intent_banner_title">"Vylepšite svoj zážitok z hovoru"</string>
   <string name="invite_friends_rich_title">"🔐️ Pripojte sa ku mne na %1$s"</string>
   <string name="invite_friends_text">"Ahoj, porozprávajte sa so mnou na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Zúrivo potriasť pre nahlásenie chyby"</string>
-  <string name="screen_incoming_call_subtitle_android">"Prichádzajúci hovor Element Call"</string>
   <string name="screen_media_picker_error_failed_selection">"Nepodarilo sa vybrať médium, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nepodarilo sa nahrať médiá, skúste to prosím znova."</string>
