@@ -24,7 +24,7 @@ open class LoggedInStateProvider : PreviewParameterProvider<LoggedInState> {
         get() = sequenceOf(
             aLoggedInState(),
             aLoggedInState(showSyncSpinner = true),
-            aLoggedInState(pusherRegistrationState = AsyncData.Failure(PusherRegistrationFailure.NoProvidersAvailable())),
+            aLoggedInState(pusherRegistrationState = AsyncData.Failure(PusherRegistrationFailure.NoDistributorsAvailable())),
         )
 }
 
