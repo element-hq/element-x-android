@@ -31,6 +31,8 @@ import io.element.android.libraries.preferences.test.InMemorySessionPreferencesS
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -192,6 +194,51 @@ class DefaultFtueServiceTest {
 
         // Cleanup
         coroutineScope.cancel()
+    }
+
+    @Test
+    fun `reset do the expected actions S`() = runTest {
+        val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
+        val resetAnalyticsLambda = lambdaRecorder<Unit> { }
+        val analyticsService = FakeAnalyticsService(
+            resetLambda = resetAnalyticsLambda
+        )
+        val resetPermissionLambda = lambdaRecorder<String, Unit> { }
+        val permissionStateProvider = FakePermissionStateProvider(
+            resetPermissionLambda = resetPermissionLambda
+        )
+        val service = createDefaultFtueService(
+            coroutineScope = coroutineScope,
+            sdkIntVersion = Build.VERSION_CODES.S,
+            permissionStateProvider = permissionStateProvider,
+            analyticsService = analyticsService,
+        )
+        service.reset()
+        resetAnalyticsLambda.assertions().isCalledOnce()
+        resetPermissionLambda.assertions().isNeverCalled()
+    }
+
+    @Test
+    fun `reset do the expected actions TIRAMISU`() = runTest {
+        val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
+        val resetLambda = lambdaRecorder<Unit> { }
+        val analyticsService = FakeAnalyticsService(
+            resetLambda = resetLambda
+        )
+        val resetPermissionLambda = lambdaRecorder<String, Unit> { }
+        val permissionStateProvider = FakePermissionStateProvider(
+            resetPermissionLambda = resetPermissionLambda
+        )
+        val service = createDefaultFtueService(
+            coroutineScope = coroutineScope,
+            sdkIntVersion = Build.VERSION_CODES.TIRAMISU,
+            permissionStateProvider = permissionStateProvider,
+            analyticsService = analyticsService,
+        )
+        service.reset()
+        resetLambda.assertions().isCalledOnce()
+        resetPermissionLambda.assertions().isCalledOnce()
+            .with(value("android.permission.POST_NOTIFICATIONS"))
     }
 
     private fun createDefaultFtueService(
