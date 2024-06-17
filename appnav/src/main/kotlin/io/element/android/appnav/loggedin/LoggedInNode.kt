@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
+import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
@@ -35,11 +36,22 @@ class LoggedInNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins
 ) {
+    interface Callback : Plugin {
+        fun navigateToNotificationTroubleshoot()
+    }
+
+    private fun navigateToNotificationTroubleshoot() {
+        plugins<Callback>().forEach {
+            it.navigateToNotificationTroubleshoot()
+        }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val loggedInState = loggedInPresenter.present()
         LoggedInView(
             state = loggedInState,
+            navigateToNotificationTroubleshoot = ::navigateToNotificationTroubleshoot,
             modifier = modifier
         )
     }

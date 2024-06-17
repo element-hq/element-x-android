@@ -47,6 +47,8 @@ fun ErrorDialogWithDoNotShowAgain(
     modifier: Modifier = Modifier,
     title: String = ErrorDialogDefaults.title,
     submitText: String = ErrorDialogDefaults.submitText,
+    cancelText: String? = null,
+    onCancel: () -> Unit = {},
 ) {
     var doNotShowAgain by remember { mutableStateOf(false) }
     BasicAlertDialog(
@@ -56,7 +58,9 @@ fun ErrorDialogWithDoNotShowAgain(
         SimpleAlertDialogContent(
             title = title,
             submitText = submitText,
+            cancelText = cancelText,
             onSubmitClick = { onDismiss(doNotShowAgain) },
+            onCancelClick = onCancel,
         ) {
             Column {
                 Text(
