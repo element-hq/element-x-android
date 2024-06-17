@@ -217,7 +217,7 @@ class LoggedInPresenterTest {
         sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
         val distributor = Distributor("aDistributorValue1", "aDistributorName1")
         val pushProvider = FakePushProvider(
-            index = 1,
+            index = 0,
             name = "aFakePushProvider0",
             distributors = listOf(
                 Distributor("aDistributorValue0", "aDistributorName0"),
@@ -373,8 +373,8 @@ class LoggedInPresenterTest {
         val sessionVerificationService = FakeSessionVerificationService()
         sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
         val pushProvider = FakePushProvider(
-            index = 1,
-            name = "aFakePushProvider1",
+            index = 0,
+            name = "aFakePushProvider",
             distributors = emptyList(),
         )
         val pushService = createFakePushService(
@@ -408,6 +408,51 @@ class LoggedInPresenterTest {
             finalState.eventSink(LoggedInEvents.CloseErrorDialog(doNotShowAgain = false))
             val lastState = awaitItem()
             assertThat(lastState.pusherRegistrationState.isUninitialized()).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - case two push providers but first one does not have distributor - second one will be used`() = runTest {
+        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
+            Result.success(Unit)
+        }
+        val sessionVerificationService = FakeSessionVerificationService()
+        sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
+        val pushProvider0 = FakePushProvider(
+            index = 0,
+            name = "aFakePushProvider0",
+            distributors = emptyList(),
+        )
+        val distributor = Distributor("aDistributorValue1", "aDistributorName1")
+        val pushProvider1 = FakePushProvider(
+            index = 1,
+            name = "aFakePushProvider1",
+            distributors = listOf(distributor),
+        )
+        val pushService = createFakePushService(
+            pushProvider0 = pushProvider0,
+            pushProvider1 = pushProvider1,
+            registerWithLambda = lambda,
+        )
+        val presenter = createLoggedInPresenter(
+            pushService = pushService,
+            sessionVerificationService = sessionVerificationService,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(2)
+            val finalState = awaitItem()
+            assertThat(finalState.pusherRegistrationState.isSuccess()).isTrue()
+            lambda.assertions().isCalledOnce()
+                .with(
+                    // MatrixClient
+                    any(),
+                    // PushProvider with the distributor
+                    value(pushProvider1),
+                    // First distributor of second push provider
+                    value(distributor),
+                )
         }
     }
 
