@@ -218,7 +218,6 @@ class LoggedInPresenterTest {
         val pushProvider = FakePushProvider(
             index = 1,
             name = "aFakePushProvider0",
-            isAvailable = true,
             distributors = listOf(
                 Distributor("aDistributorValue0", "aDistributorName0"),
                 distributor,
@@ -263,7 +262,6 @@ class LoggedInPresenterTest {
         val pushProvider = FakePushProvider(
             index = 0,
             name = "aFakePushProvider0",
-            isAvailable = true,
             distributors = listOf(
                 Distributor("aDistributorValue0", "aDistributorName0"),
                 Distributor("aDistributorValue1", "aDistributorName1"),
@@ -308,7 +306,6 @@ class LoggedInPresenterTest {
         val pushProvider = FakePushProvider(
             index = 0,
             name = "aFakePushProvider0",
-            isAvailable = true,
             distributors = emptyList(),
         )
         val pushService = createFakePushService(
@@ -377,7 +374,6 @@ class LoggedInPresenterTest {
             pushProvider0 = FakePushProvider(
                 index = 1,
                 name = "aFakePushProvider1",
-                isAvailable = true,
                 distributors = emptyList(),
             ),
             pushProvider1 = null,
@@ -407,14 +403,12 @@ class LoggedInPresenterTest {
         pushProvider0: PushProvider? = FakePushProvider(
             index = 0,
             name = "aFakePushProvider0",
-            isAvailable = true,
             distributors = listOf(Distributor("aDistributorValue0", "aDistributorName0")),
             currentDistributor = { null },
         ),
         pushProvider1: PushProvider? = FakePushProvider(
             index = 1,
             name = "aFakePushProvider1",
-            isAvailable = true,
             distributors = listOf(Distributor("aDistributorValue1", "aDistributorName1")),
             currentDistributor = { null },
         ),

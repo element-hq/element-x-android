@@ -302,13 +302,11 @@ class NotificationSettingsPresenterTest {
         val pushProvider1 = FakePushProvider(
             index = 0,
             name = "aFakePushProvider0",
-            isAvailable = true,
             distributors = listOf(Distributor("aDistributorValue0", "aDistributorName0")),
         )
         val pushProvider2 = FakePushProvider(
             index = 1,
             name = "aFakePushProvider1",
-            isAvailable = true,
             distributors = listOf(Distributor("aDistributorValue1", "aDistributorName1")),
         )
         return FakePushService(
