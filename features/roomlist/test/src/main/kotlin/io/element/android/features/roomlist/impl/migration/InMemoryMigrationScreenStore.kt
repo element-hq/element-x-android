@@ -19,7 +19,9 @@ package io.element.android.features.roomlist.impl.migration
 import io.element.android.features.roomlist.api.migration.MigrationScreenStore
 import io.element.android.libraries.matrix.api.core.SessionId
 
-class InMemoryMigrationScreenStore : MigrationScreenStore {
+class InMemoryMigrationScreenStore(
+    private val resetLambda: () -> Unit = { }
+) : MigrationScreenStore {
     private val store = mutableMapOf<SessionId, Boolean>()
 
     override fun isMigrationScreenNeeded(sessionId: SessionId): Boolean {
@@ -33,5 +35,6 @@ class InMemoryMigrationScreenStore : MigrationScreenStore {
 
     override fun reset() {
         store.clear()
+        resetLambda()
     }
 }

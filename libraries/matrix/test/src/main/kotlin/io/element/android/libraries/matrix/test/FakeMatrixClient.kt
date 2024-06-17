@@ -48,6 +48,7 @@ import io.element.android.libraries.matrix.test.roomdirectory.FakeRoomDirectoryS
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.collections.immutable.ImmutableList
@@ -80,6 +81,7 @@ class FakeMatrixClient(
     private val accountManagementUrlString: Result<String?> = Result.success(null),
     private val resolveRoomAliasResult: (RoomAlias) -> Result<ResolvedRoomAlias> = { Result.success(ResolvedRoomAlias(A_ROOM_ID, emptyList())) },
     private val getRoomPreviewFromRoomIdResult: (RoomId, List<String>) -> Result<RoomPreview> = { _, _ -> Result.failure(AN_EXCEPTION) },
+    private val clearCacheLambda: () -> Unit = { lambdaError() },
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -161,6 +163,7 @@ class FakeMatrixClient(
     }
 
     override suspend fun clearCache() {
+        clearCacheLambda()
     }
 
     override suspend fun logout(ignoreSdkError: Boolean): String? = simulateLongTask {
