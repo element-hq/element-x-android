@@ -59,13 +59,13 @@ interface ActiveCallManager {
     fun incomingCallTimedOut()
 
     /**
-     * Hangs up the active call and removes any associated UI.
+     * Called when the active call has been hung up. It will remove any existing UI and the active call.
      * @param callType The type of call that the user hung up, either an external url one or a room one.
      */
     fun hungUpCall(callType: CallType)
 
     /**
-     * Called when the user joins a call. It will remove any existing UI and set the call state as [CallState.InCall].
+     * Called after the user joined a call. It will remove any existing UI and set the call state as [CallState.InCall].
      *
      * @param callType The type of call that the user joined, either an external url one or a room one.
      */
