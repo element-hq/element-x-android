@@ -108,7 +108,7 @@ class LoggedInPresenterTest {
             encryptionService.emitRecoveryState(RecoveryState.UNKNOWN)
             encryptionService.emitRecoveryState(RecoveryState.INCOMPLETE)
             verificationService.emitVerifiedStatus(SessionVerifiedStatus.Verified)
-            skipItems(4)
+            skipItems(2)
             assertThat(analyticsService.capturedEvents.size).isEqualTo(1)
             assertThat(analyticsService.capturedEvents[0]).isInstanceOf(CryptoSessionStateChange::class.java)
             assertThat(analyticsService.capturedUserProperties.size).isEqualTo(1)

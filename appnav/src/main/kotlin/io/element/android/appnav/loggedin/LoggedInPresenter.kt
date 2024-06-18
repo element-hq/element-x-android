@@ -41,6 +41,7 @@ import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatu
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.pushproviders.api.RegistrationFailure
 import io.element.android.services.analytics.api.AnalyticsService
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -86,10 +87,13 @@ class LoggedInPresenter @Inject constructor(
                 networkStatus == NetworkStatus.Online && syncIndicator == RoomListService.SyncIndicator.Show
             }
         }
-        val verificationState by sessionVerificationService.sessionVerifiedStatus.collectAsState()
-        val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
-        LaunchedEffect(verificationState, recoveryState) {
-            reportCryptoStatusToAnalytics(verificationState, recoveryState)
+        LaunchedEffect(Unit) {
+            combine(
+                sessionVerificationService.sessionVerifiedStatus,
+                encryptionService.recoveryStateStateFlow
+            ) { verificationState, recoveryState ->
+                reportCryptoStatusToAnalytics(verificationState, recoveryState)
+            }.launchIn(this)
         }
 
         fun handleEvent(event: LoggedInEvents) {
