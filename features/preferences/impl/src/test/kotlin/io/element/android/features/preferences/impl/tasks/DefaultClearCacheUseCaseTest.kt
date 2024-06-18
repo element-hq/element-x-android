@@ -22,8 +22,11 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.ftue.test.FakeFtueService
 import io.element.android.features.preferences.impl.DefaultCacheService
 import io.element.android.features.roomlist.impl.migration.InMemoryMigrationScreenStore
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.push.test.FakePushService
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.runTest
 import okhttp3.OkHttpClient
@@ -48,6 +51,10 @@ class DefaultClearCacheUseCaseTest {
         val migrationScreenStore = InMemoryMigrationScreenStore(
             resetLambda = resetMigrationLambda,
         )
+        val setIgnoreRegistrationErrorLambda = lambdaRecorder<SessionId, Boolean, Unit> { _, _ -> }
+        val pushService = FakePushService(
+            setIgnoreRegistrationErrorLambda = setIgnoreRegistrationErrorLambda
+        )
         val sut = DefaultClearCacheUseCase(
             context = InstrumentationRegistry.getInstrumentation().context,
             matrixClient = matrixClient,
@@ -55,13 +62,16 @@ class DefaultClearCacheUseCaseTest {
             defaultCacheService = defaultCacheService,
             okHttpClient = { OkHttpClient.Builder().build() },
             ftueService = ftueService,
-            migrationScreenStore = migrationScreenStore
+            migrationScreenStore = migrationScreenStore,
+            pushService = pushService,
         )
         defaultCacheService.clearedCacheEventFlow.test {
             sut.invoke()
             clearCacheLambda.assertions().isCalledOnce()
             resetFtueLambda.assertions().isCalledOnce()
             resetMigrationLambda.assertions().isCalledOnce()
+            setIgnoreRegistrationErrorLambda.assertions().isCalledOnce()
+                .with(value(matrixClient.sessionId), value(false))
             assertThat(awaitItem()).isEqualTo(matrixClient.sessionId)
         }
     }

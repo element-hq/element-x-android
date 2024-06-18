@@ -33,7 +33,8 @@ class FakePushService(
         Result.success(Unit)
     },
     private val currentPushProvider: () -> PushProvider? = { availablePushProviders.firstOrNull() },
-    private val selectPushProviderLambda: suspend (MatrixClient, PushProvider) -> Unit = { _, _ -> lambdaError() }
+    private val selectPushProviderLambda: suspend (MatrixClient, PushProvider) -> Unit = { _, _ -> lambdaError() },
+    private val setIgnoreRegistrationErrorLambda: (SessionId, Boolean) -> Unit = { _, _ -> lambdaError() },
 ) : PushService {
     override suspend fun getCurrentPushProvider(): PushProvider? {
         return registeredPushProvider ?: currentPushProvider()
@@ -70,6 +71,7 @@ class FakePushService(
 
     override suspend fun setIgnoreRegistrationError(sessionId: SessionId, ignore: Boolean) {
         ignoreRegistrationError.value = ignore
+        setIgnoreRegistrationErrorLambda(sessionId, ignore)
     }
 
     override suspend fun testPush(): Boolean = simulateLongTask {
