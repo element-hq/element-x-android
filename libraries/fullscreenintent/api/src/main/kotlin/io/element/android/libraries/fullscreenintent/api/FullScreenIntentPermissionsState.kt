@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.api.store
+package io.element.android.libraries.fullscreenintent.api
 
-import kotlinx.coroutines.flow.Flow
-
-interface AppPreferencesStore {
-    suspend fun setDeveloperModeEnabled(enabled: Boolean)
-    fun isDeveloperModeEnabledFlow(): Flow<Boolean>
-
-    suspend fun setCustomElementCallBaseUrl(string: String?)
-    fun getCustomElementCallBaseUrlFlow(): Flow<String?>
-
-    suspend fun setTheme(theme: String)
-    fun getThemeFlow(): Flow<String?>
-
-    suspend fun reset()
-}
+data class FullScreenIntentPermissionsState(
+    val permissionGranted: Boolean,
+    val shouldDisplayBanner: Boolean,
+    val dismissFullScreenIntentBanner: () -> Unit,
+    val openFullScreenIntentSettings: () -> Unit,
+)

@@ -33,8 +33,8 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeCopied
 import io.element.android.features.messages.impl.timeline.model.event.canReact
-import io.element.android.features.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

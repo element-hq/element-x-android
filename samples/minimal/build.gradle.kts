@@ -54,6 +54,7 @@ dependencies {
     implementation(projects.libraries.network)
     implementation(projects.libraries.dateformatter.impl)
     implementation(projects.libraries.eventformatter.impl)
+    implementation(projects.libraries.fullscreenintent.impl)
     implementation(projects.libraries.preferences.impl)
     implementation(projects.libraries.indicator.impl)
     implementation(projects.features.invite.impl)

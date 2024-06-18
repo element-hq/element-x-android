@@ -16,9 +16,9 @@
 
 package io.element.android.libraries.preferences.test
 
-import io.element.android.features.preferences.api.store.SessionPreferencesStore
-import io.element.android.features.preferences.api.store.SessionPreferencesStoreFactory
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStoreFactory
 import io.element.android.tests.testutils.lambda.LambdaOneParamRecorder
 import io.element.android.tests.testutils.lambda.LambdaTwoParamsRecorder
 import io.element.android.tests.testutils.lambda.lambdaError

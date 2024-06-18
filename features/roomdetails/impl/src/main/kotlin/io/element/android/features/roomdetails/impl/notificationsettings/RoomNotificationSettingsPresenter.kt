@@ -130,7 +130,7 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
             setNotificationSettingAction = setNotificationSettingAction.value,
             restoreDefaultAction = restoreDefaultAction.value,
             displayMentionsOnlyDisclaimer = shouldDisplayMentionsOnlyDisclaimer,
-            eventSink = ::handleEvents,
+            eventSink = { handleEvents(it) },
         )
     }
 
