@@ -31,6 +31,7 @@ interface MatrixAuthenticationService {
     /**
      * Restore a session from a [sessionId].
      * Do not restore anything it the access token is not valid anymore.
+     * Generally this method should not be used directly, prefer using [MatrixClientProvider.getOrRestore] instead.
      */
     suspend fun restoreSession(sessionId: SessionId): Result<MatrixClient>
     fun getHomeserverDetails(): StateFlow<MatrixHomeServerDetails?>
