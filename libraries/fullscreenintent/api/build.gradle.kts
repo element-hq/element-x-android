@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.api.store
+plugins {
+    id("io.element.android-library")
+}
 
-import io.element.android.libraries.matrix.api.core.SessionId
-import kotlinx.coroutines.CoroutineScope
+android {
+    namespace = "io.element.android.libraries.fullscreenintent.api"
+}
 
-interface SessionPreferencesStoreFactory {
-    fun get(sessionId: SessionId, sessionCoroutineScope: CoroutineScope): SessionPreferencesStore
-    fun remove(sessionId: SessionId)
+dependencies {
+    implementation(projects.libraries.architecture)
+    implementation(projects.libraries.permissions.api)
+    implementation(projects.libraries.preferences.api)
 }

@@ -118,6 +118,7 @@ class RoomNotificationSettingsPresenterTest {
             skipItems(3)
             val defaultState = awaitItem()
             assertThat(defaultState.roomNotificationSettings.dataOrNull()?.isDefault).isFalse()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 

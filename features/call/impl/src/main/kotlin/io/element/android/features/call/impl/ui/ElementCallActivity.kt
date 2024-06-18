@@ -44,8 +44,8 @@ import io.element.android.features.call.impl.DefaultElementCallEntryPoint
 import io.element.android.features.call.impl.di.CallBindings
 import io.element.android.features.call.impl.services.CallForegroundService
 import io.element.android.features.call.impl.utils.CallIntentDataParser
-import io.element.android.features.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import javax.inject.Inject
 
 class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
