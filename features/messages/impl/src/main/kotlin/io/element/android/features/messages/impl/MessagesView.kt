@@ -292,7 +292,7 @@ private fun AttachmentStateView(
                     is AttachmentsState.Sending.Processing -> ProgressDialogType.Indeterminate
                 },
                 text = stringResource(id = CommonStrings.common_sending),
-                isCancellable = true,
+                showCancelButton = true,
                 onDismissRequest = onCancel,
             )
         }
