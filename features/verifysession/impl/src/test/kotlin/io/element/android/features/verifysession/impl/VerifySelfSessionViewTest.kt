@@ -218,7 +218,7 @@ class VerifySelfSessionViewTest {
         onEnterRecoveryKey: () -> Unit = EnsureNeverCalled(),
         onFinished: () -> Unit = EnsureNeverCalled(),
     ) {
-        rule.setContent {
+        setContent {
             VerifySelfSessionView(
                 state = state,
                 onEnterRecoveryKey = onEnterRecoveryKey,
