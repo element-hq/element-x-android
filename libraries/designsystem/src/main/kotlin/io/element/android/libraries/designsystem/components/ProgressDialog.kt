@@ -67,7 +67,7 @@ fun ProgressDialog(
         ProgressDialogContent(
             modifier = modifier,
             text = text,
-            isCancellable = showCancelButton,
+            showCancelButton = showCancelButton,
             onCancelClick = onDismissRequest,
             progressIndicator = {
                 when (type) {
@@ -98,7 +98,7 @@ sealed interface ProgressDialogType {
 private fun ProgressDialogContent(
     modifier: Modifier = Modifier,
     text: String? = null,
-    isCancellable: Boolean = false,
+    showCancelButton: Boolean = false,
     onCancelClick: () -> Unit = {},
     progressIndicator: @Composable () -> Unit = {
         CircularProgressIndicator(
@@ -126,7 +126,7 @@ private fun ProgressDialogContent(
                     color = MaterialTheme.colorScheme.primary,
                 )
             }
-            if (isCancellable) {
+            if (showCancelButton) {
                 Spacer(modifier = Modifier.height(24.dp))
                 Box(
                     modifier = Modifier.fillMaxWidth(),
@@ -146,7 +146,7 @@ private fun ProgressDialogContent(
 @Composable
 internal fun ProgressDialogContentPreview() = ElementThemedPreview {
     DialogPreview {
-        ProgressDialogContent(text = "test dialog content", isCancellable = true)
+        ProgressDialogContent(text = "test dialog content", showCancelButton = true)
     }
 }
 
