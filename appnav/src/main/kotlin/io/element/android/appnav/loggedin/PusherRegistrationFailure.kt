@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,21 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.pushproviders.api
+package io.element.android.appnav.loggedin
 
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.exception.ClientException
 
-interface PusherSubscriber {
-    /**
-     * Register a pusher. Note that failure will be a [RegistrationFailure].
-     */
-    suspend fun registerPusher(matrixClient: MatrixClient, pushKey: String, gateway: String): Result<Unit>
+sealed class PusherRegistrationFailure : Exception() {
+    class AccountNotVerified : PusherRegistrationFailure()
+    class NoProvidersAvailable : PusherRegistrationFailure()
+    class NoDistributorsAvailable : PusherRegistrationFailure()
 
     /**
-     * Unregister a pusher.
+     * @param clientException the failure that occurred.
+     * @param isRegisteringAgain true if the server should already have a the same pusher registered.
      */
-    suspend fun unregisterPusher(matrixClient: MatrixClient, pushKey: String, gateway: String): Result<Unit>
+    class RegistrationFailure(
+        val clientException: ClientException,
+        val isRegisteringAgain: Boolean,
+    ) : PusherRegistrationFailure()
 }
-
-class RegistrationFailure(
-    val clientException: ClientException,
-    val isRegisteringAgain: Boolean
-) : Exception(clientException)

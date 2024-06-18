@@ -67,6 +67,7 @@ dependencies {
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.push.test)
+    testImplementation(projects.libraries.pushproviders.test)
     testImplementation(projects.features.networkmonitor.test)
     testImplementation(projects.features.login.impl)
     testImplementation(projects.tests.testutils)

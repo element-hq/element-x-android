@@ -38,12 +38,10 @@ class FirebasePushProvider @Inject constructor(
     override val index = FirebaseConfig.INDEX
     override val name = FirebaseConfig.NAME
 
-    override fun isAvailable(): Boolean {
-        return isPlayServiceAvailable.isAvailable()
-    }
-
     override fun getDistributors(): List<Distributor> {
-        return listOf(firebaseDistributor)
+        return listOfNotNull(
+            firebaseDistributor.takeIf { isPlayServiceAvailable.isAvailable() }
+        )
     }
 
     override suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor): Result<Unit> {

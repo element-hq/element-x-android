@@ -44,6 +44,7 @@ import io.element.android.features.preferences.impl.root.PreferencesRootNode
 import io.element.android.features.preferences.impl.user.editprofile.EditUserProfileNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.appyx.canPop
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -190,7 +191,11 @@ class PreferencesFlowNode @AssistedInject constructor(
                 notificationTroubleShootEntryPoint.nodeBuilder(this, buildContext)
                     .callback(object : NotificationTroubleShootEntryPoint.Callback {
                         override fun onDone() {
-                            backstack.pop()
+                            if (backstack.canPop()) {
+                                backstack.pop()
+                            } else {
+                                navigateUp()
+                            }
                         }
                     })
                     .build()

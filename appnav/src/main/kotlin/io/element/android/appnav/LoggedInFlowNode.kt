@@ -238,7 +238,12 @@ class LoggedInFlowNode @AssistedInject constructor(
         return when (navTarget) {
             NavTarget.Placeholder -> createNode<PlaceholderNode>(buildContext)
             NavTarget.LoggedInPermanent -> {
-                createNode<LoggedInNode>(buildContext)
+                val callback = object : LoggedInNode.Callback {
+                    override fun navigateToNotificationTroubleshoot() {
+                        backstack.push(NavTarget.Settings(PreferencesEntryPoint.InitialTarget.NotificationTroubleshoot))
+                    }
+                }
+                createNode<LoggedInNode>(buildContext, listOf(callback))
             }
             NavTarget.RoomList -> {
                 val callback = object : RoomListEntryPoint.Callback {
