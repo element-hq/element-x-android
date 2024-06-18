@@ -45,7 +45,6 @@ import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerL
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
@@ -746,7 +745,6 @@ fun aRoomInfo(
     canonicalAlias: RoomAlias? = null,
     alternativeAliases: List<String> = emptyList(),
     currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,
-    latestEvent: EventTimelineItem? = null,
     inviter: RoomMember? = null,
     activeMembersCount: Long = 1,
     invitedMembersCount: Long = 0,
@@ -771,7 +769,6 @@ fun aRoomInfo(
     canonicalAlias = canonicalAlias,
     alternativeAliases = alternativeAliases.toImmutableList(),
     currentUserMembership = currentUserMembership,
-    latestEvent = latestEvent,
     inviter = inviter,
     activeMembersCount = activeMembersCount,
     invitedMembersCount = invitedMembersCount,

@@ -111,7 +111,7 @@ class RustMatrixRoom(
 
     override val roomInfoFlow: Flow<MatrixRoomInfo> = mxCallbackFlow {
         launch {
-            val initial = innerRoom.roomInfo().use(matrixRoomInfoMapper::map)
+            val initial = innerRoom.roomInfo().let(matrixRoomInfoMapper::map)
             channel.trySend(initial)
         }
         innerRoom.subscribeToRoomInfoUpdates(object : RoomInfoListener {
@@ -199,7 +199,7 @@ class RustMatrixRoom(
     }
 
     override val displayName: String
-        get() = runCatching { innerRoom.displayName() }.getOrDefault("")
+        get() = runCatching { innerRoom.displayName() ?: "" }.getOrDefault("")
 
     override val topic: String?
         get() = runCatching { innerRoom.topic() }.getOrDefault(null)
