@@ -72,6 +72,7 @@ import org.matrix.rustcomponents.sdk.FormattedBody
 import org.matrix.rustcomponents.sdk.MessageFormat
 import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
+import org.matrix.rustcomponents.sdk.TimelineChange
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
 import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
@@ -143,14 +144,14 @@ class RustTimeline(
 
     init {
         roomCoroutineScope.launch(dispatcher) {
-            inner.timelineDiffFlow { initialList ->
-                postItems(initialList)
-            }.onEach { diffs ->
-                if (diffs.any { diff -> diff.eventOrigin() == EventItemOrigin.SYNC }) {
-                    onNewSyncedEvent()
+            inner.timelineDiffFlow()
+                .onEach { diffs ->
+                    if (diffs.any { diff -> diff.eventOrigin() == EventItemOrigin.SYNC }) {
+                        onNewSyncedEvent()
+                    }
+                    postDiffs(diffs)
                 }
-                postDiffs(diffs)
-            }.launchIn(this)
+                .launchIn(this)
 
             launch {
                 fetchMembers()
@@ -273,8 +274,19 @@ class RustTimeline(
     }
 
     private suspend fun postDiffs(diffs: List<TimelineDiff>) {
+        val diffsToProcess = diffs.toMutableList()
+        if (!isInit.get()) {
+            val resetDiff = diffsToProcess.firstOrNull { it.change() == TimelineChange.RESET }
+            if (resetDiff != null) {
+                // Keep using the postItems logic so we can post the timelineItems asap.
+                postItems(resetDiff.reset() ?: emptyList())
+                diffsToProcess.remove(resetDiff)
+            }
+        }
         initLatch.await()
-        timelineDiffProcessor.postDiffs(diffs)
+        if (diffsToProcess.isNotEmpty()) {
+            timelineDiffProcessor.postDiffs(diffsToProcess)
+        }
     }
 
     override suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> = withContext(dispatcher) {

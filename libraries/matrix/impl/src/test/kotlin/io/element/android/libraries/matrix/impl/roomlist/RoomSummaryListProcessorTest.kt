@@ -170,7 +170,7 @@ class RoomSummaryListProcessorTest {
 
         override suspend fun applyInput(input: RoomListInput) = Unit
 
-        override suspend fun room(roomId: String): RoomListItem {
+        override fun room(roomId: String): RoomListItem {
             return RoomListItem(Pointer.NULL)
         }
 
