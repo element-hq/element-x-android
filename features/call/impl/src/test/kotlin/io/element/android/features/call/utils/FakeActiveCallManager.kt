@@ -16,18 +16,17 @@
 
 package io.element.android.features.call.utils
 
+import io.element.android.features.call.api.CallType
 import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.utils.ActiveCall
 import io.element.android.features.call.impl.utils.ActiveCallManager
-import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeActiveCallManager(
     var registerIncomingCallResult: (CallNotificationData) -> Unit = {},
     var incomingCallTimedOutResult: () -> Unit = {},
-    var hungUpCallResult: () -> Unit = {},
-    var joinedCallResult: (SessionId, RoomId) -> Unit = { _, _ -> },
+    var hungUpCallResult: (CallType) -> Unit = {},
+    var joinedCallResult: (CallType) -> Unit = {},
 ) : ActiveCallManager {
     override val activeCall = MutableStateFlow<ActiveCall?>(null)
 
@@ -39,12 +38,12 @@ class FakeActiveCallManager(
         incomingCallTimedOutResult()
     }
 
-    override fun hungUpCall() {
-        hungUpCallResult()
+    override fun hungUpCall(callType: CallType) {
+        hungUpCallResult(callType)
     }
 
-    override fun joinedCall(sessionId: SessionId, roomId: RoomId) {
-        joinedCallResult(sessionId, roomId)
+    override fun joinedCall(callType: CallType) {
+        joinedCallResult(callType)
     }
 
     fun setActiveCall(value: ActiveCall?) {

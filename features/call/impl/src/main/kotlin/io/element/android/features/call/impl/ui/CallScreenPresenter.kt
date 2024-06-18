@@ -40,14 +40,15 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.services.analytics.api.ScreenTracker
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -75,6 +76,7 @@ class CallScreenPresenter @AssistedInject constructor(
 
     private val isInWidgetMode = callType is CallType.RoomCall
     private val userAgent = userAgentProvider.provide()
+    private var notifiedCallStart = false
 
     @Composable
     override fun present(): CallScreenState {
@@ -84,11 +86,14 @@ class CallScreenPresenter @AssistedInject constructor(
         val messageInterceptor = remember { mutableStateOf<WidgetMessageInterceptor?>(null) }
         var isJoinedCall by rememberSaveable { mutableStateOf(false) }
 
-        LaunchedEffect(Unit) {
-            loadUrl(callType, urlState, callWidgetDriver)
-
-            if (callType is CallType.RoomCall) {
-                activeCallManager.joinedCall(callType.sessionId, callType.roomId)
+        DisposableEffect(Unit) {
+            coroutineScope.launch {
+                // Sets the call as joined
+                activeCallManager.joinedCall(callType)
+                loadUrl(callType, urlState, callWidgetDriver)
+            }
+            onDispose {
+                activeCallManager.hungUpCall(callType)
             }
         }
 
@@ -140,14 +145,6 @@ class CallScreenPresenter @AssistedInject constructor(
             }
         }
 
-        DisposableEffect(Unit) {
-            onDispose {
-                if (callType is CallType.RoomCall) {
-                    activeCallManager.hungUpCall()
-                }
-            }
-        }
-
         fun handleEvents(event: CallScreenEvents) {
             when (event) {
                 is CallScreenEvents.Hangup -> {
@@ -173,15 +170,15 @@ class CallScreenPresenter @AssistedInject constructor(
             urlState = urlState.value,
             userAgent = userAgent,
             isInWidgetMode = isInWidgetMode,
-            eventSink = ::handleEvents,
+            eventSink = { handleEvents(it) },
         )
     }
 
-    private fun CoroutineScope.loadUrl(
+    private suspend fun loadUrl(
         inputs: CallType,
         urlState: MutableState<AsyncData<String>>,
         callWidgetDriver: MutableState<MatrixWidgetDriver?>,
-    ) = launch {
+    ) {
         urlState.runCatchingUpdatingState {
             when (inputs) {
                 is CallType.ExternalUrl -> {
@@ -209,12 +206,13 @@ class CallScreenPresenter @AssistedInject constructor(
             } ?: return@DisposableEffect onDispose { }
             coroutineScope.launch {
                 client.syncService().syncState
-                    .onEach { state ->
-                        if (state != SyncState.Running) {
+                    .collect { state ->
+                        if (state == SyncState.Running) {
+                            client.notifyCallStartIfNeeded(callType.roomId)
+                        } else {
                             client.syncService().startSync()
                         }
                     }
-                    .collect()
             }
             onDispose {
                 // We can't use the local coroutine scope here because it will be disposed before this effect
@@ -226,6 +224,13 @@ class CallScreenPresenter @AssistedInject constructor(
                     }
                 }
             }
+        }
+    }
+
+    private suspend fun MatrixClient.notifyCallStartIfNeeded(roomId: RoomId) {
+        if (!notifiedCallStart) {
+            getRoom(roomId)?.sendCallNotificationIfNeeded()
+                ?.onSuccess { notifiedCallStart = true }
         }
     }
 

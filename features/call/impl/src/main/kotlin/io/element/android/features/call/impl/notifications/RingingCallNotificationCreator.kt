@@ -84,11 +84,24 @@ class RingingCallNotificationCreator @Inject constructor(
             .build()
 
         val answerIntent = IntentProvider.getPendingIntent(context, CallType.RoomCall(sessionId, roomId))
+        val notificationData = CallNotificationData(
+            sessionId = sessionId,
+            roomId = roomId,
+            eventId = eventId,
+            senderId = senderId,
+            roomName = roomName,
+            senderName = senderDisplayName,
+            avatarUrl = roomAvatarUrl,
+            notificationChannelId = notificationChannelId,
+            timestamp = timestamp
+        )
 
         val declineIntent = PendingIntentCompat.getBroadcast(
             context,
             DECLINE_REQUEST_CODE,
-            Intent(context, DeclineCallBroadcastReceiver::class.java),
+            Intent(context, DeclineCallBroadcastReceiver::class.java).apply {
+                putExtra(DeclineCallBroadcastReceiver.EXTRA_NOTIFICATION_DATA, notificationData)
+            },
             PendingIntent.FLAG_CANCEL_CURRENT,
             false,
         )!!
@@ -97,10 +110,7 @@ class RingingCallNotificationCreator @Inject constructor(
             context,
             FULL_SCREEN_INTENT_REQUEST_CODE,
             Intent(context, IncomingCallActivity::class.java).apply {
-                putExtra(
-                    IncomingCallActivity.EXTRA_NOTIFICATION_DATA,
-                    CallNotificationData(sessionId, roomId, eventId, senderId, roomName, senderDisplayName, roomAvatarUrl, notificationChannelId, timestamp)
-                )
+                putExtra(IncomingCallActivity.EXTRA_NOTIFICATION_DATA, notificationData)
             },
             PendingIntent.FLAG_CANCEL_CURRENT,
             false

@@ -91,6 +91,7 @@ class IncomingCallActivity : AppCompatActivity() {
     }
 
     private fun onCancel() {
-        activeCallManager.hungUpCall()
+        val activeCall = activeCallManager.activeCall.value ?: return
+        activeCallManager.hungUpCall(callType = activeCall.callType)
     }
 }
