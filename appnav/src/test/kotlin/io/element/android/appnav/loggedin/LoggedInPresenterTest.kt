@@ -18,6 +18,7 @@ package io.element.android.appnav.loggedin
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
+import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.CryptoSessionStateChange
@@ -25,12 +26,14 @@ import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
@@ -66,7 +69,6 @@ class LoggedInPresenterTest {
             assertThat(initialState.showSyncSpinner).isFalse()
             assertThat(initialState.pusherRegistrationState.isUninitialized()).isTrue()
             assertThat(initialState.ignoreRegistrationError).isFalse()
-            skipItems(1)
         }
     }
 
@@ -106,16 +108,12 @@ class LoggedInPresenterTest {
             encryptionService.emitRecoveryState(RecoveryState.UNKNOWN)
             encryptionService.emitRecoveryState(RecoveryState.INCOMPLETE)
             verificationService.emitVerifiedStatus(SessionVerifiedStatus.Verified)
-
-            skipItems(6)
-
+            skipItems(4)
             assertThat(analyticsService.capturedEvents.size).isEqualTo(1)
             assertThat(analyticsService.capturedEvents[0]).isInstanceOf(CryptoSessionStateChange::class.java)
-
             assertThat(analyticsService.capturedUserProperties.size).isEqualTo(1)
             assertThat(analyticsService.capturedUserProperties[0].recoveryState).isEqualTo(UserProperties.RecoveryState.Incomplete)
             assertThat(analyticsService.capturedUserProperties[0].verificationState).isEqualTo(UserProperties.VerificationState.Verified)
-
             // ensure a sync status change does not trigger a new capture
             roomListService.postSyncIndicator(RoomListService.SyncIndicator.Show)
             skipItems(1)
@@ -129,12 +127,17 @@ class LoggedInPresenterTest {
             Result.success(Unit)
         }
         val pushService = createFakePushService(registerWithLambda = lambda)
-        val presenter = createLoggedInPresenter(pushService = pushService)
+        val verificationService = FakeSessionVerificationService(
+            initialSessionVerifiedStatus = SessionVerifiedStatus.NotVerified
+        )
+        val presenter = createLoggedInPresenter(
+            pushService = pushService,
+            sessionVerificationService = verificationService,
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val finalState = awaitItem()
+            val finalState = awaitFirstItem()
             assertThat(finalState.pusherRegistrationState.errorOrNull())
                 .isInstanceOf(PusherRegistrationFailure.AccountNotVerified::class.java)
             lambda.assertions()
@@ -147,8 +150,9 @@ class LoggedInPresenterTest {
         val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
             Result.success(Unit)
         }
-        val sessionVerificationService = FakeSessionVerificationService()
-        sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
+        val sessionVerificationService = FakeSessionVerificationService(
+            initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
+        )
         val pushService = createFakePushService(
             registerWithLambda = lambda,
         )
@@ -159,8 +163,7 @@ class LoggedInPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(2)
-            val finalState = awaitItem()
+            val finalState = awaitFirstItem()
             assertThat(finalState.pusherRegistrationState.isSuccess()).isTrue()
             lambda.assertions()
                 .isCalledOnce()
@@ -180,8 +183,9 @@ class LoggedInPresenterTest {
         val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
             Result.failure(AN_EXCEPTION)
         }
-        val sessionVerificationService = FakeSessionVerificationService()
-        sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
+        val sessionVerificationService = FakeSessionVerificationService(
+            initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
+        )
         val pushService = createFakePushService(
             registerWithLambda = lambda,
         )
@@ -192,8 +196,7 @@ class LoggedInPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(2)
-            val finalState = awaitItem()
+            val finalState = awaitFirstItem()
             assertThat(finalState.pusherRegistrationState.isFailure()).isTrue()
             lambda.assertions()
                 .isCalledOnce()
@@ -213,8 +216,9 @@ class LoggedInPresenterTest {
         val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
             Result.success(Unit)
         }
-        val sessionVerificationService = FakeSessionVerificationService()
-        sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
+        val sessionVerificationService = FakeSessionVerificationService(
+            initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
+        )
         val distributor = Distributor("aDistributorValue1", "aDistributorName1")
         val pushProvider = FakePushProvider(
             index = 0,
@@ -237,8 +241,7 @@ class LoggedInPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(2)
-            val finalState = awaitItem()
+            val finalState = awaitFirstItem()
             assertThat(finalState.pusherRegistrationState.isSuccess()).isTrue()
             lambda.assertions()
                 .isCalledOnce()
@@ -258,8 +261,9 @@ class LoggedInPresenterTest {
         val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
             Result.success(Unit)
         }
-        val sessionVerificationService = FakeSessionVerificationService()
-        sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
+        val sessionVerificationService = FakeSessionVerificationService(
+            initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
+        )
         val pushProvider = FakePushProvider(
             index = 0,
             name = "aFakePushProvider0",
@@ -281,8 +285,7 @@ class LoggedInPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(2)
-            val finalState = awaitItem()
+            val finalState = awaitFirstItem()
             assertThat(finalState.pusherRegistrationState.isSuccess()).isTrue()
             lambda.assertions()
                 .isCalledOnce()
@@ -302,8 +305,9 @@ class LoggedInPresenterTest {
         val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
             Result.success(Unit)
         }
-        val sessionVerificationService = FakeSessionVerificationService()
-        sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
+        val sessionVerificationService = FakeSessionVerificationService(
+            initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
+        )
         val pushProvider = FakePushProvider(
             index = 0,
             name = "aFakePushProvider0",
@@ -321,8 +325,7 @@ class LoggedInPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(2)
-            val finalState = awaitItem()
+            val finalState = awaitFirstItem()
             assertThat(finalState.pusherRegistrationState.errorOrNull())
                 .isInstanceOf(PusherRegistrationFailure.NoDistributorsAvailable::class.java)
             lambda.assertions()
@@ -335,12 +338,13 @@ class LoggedInPresenterTest {
         val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
             Result.success(Unit)
         }
-        val sessionVerificationService = FakeSessionVerificationService()
-        sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
+        val sessionVerificationService = FakeSessionVerificationService(SessionVerifiedStatus.Verified)
+        val setIgnoreRegistrationErrorLambda = lambdaRecorder<SessionId, Boolean, Unit> { _, _ -> }
         val pushService = createFakePushService(
             pushProvider0 = null,
             pushProvider1 = null,
             registerWithLambda = lambda,
+            setIgnoreRegistrationErrorLambda = setIgnoreRegistrationErrorLambda,
         )
         val presenter = createLoggedInPresenter(
             pushService = pushService,
@@ -349,8 +353,7 @@ class LoggedInPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(2)
-            val finalState = awaitItem()
+            val finalState = awaitFirstItem()
             assertThat(finalState.pusherRegistrationState.errorOrNull())
                 .isInstanceOf(PusherRegistrationFailure.NoProvidersAvailable::class.java)
             lambda.assertions()
@@ -358,6 +361,14 @@ class LoggedInPresenterTest {
             // Reset the error and do not show again
             finalState.eventSink(LoggedInEvents.CloseErrorDialog(doNotShowAgain = true))
             skipItems(1)
+            setIgnoreRegistrationErrorLambda.assertions()
+                .isCalledOnce()
+                .with(
+                    // SessionId
+                    value(A_SESSION_ID),
+                    // Ignore
+                    value(true),
+                )
             val lastState = awaitItem()
             assertThat(lastState.pusherRegistrationState.isUninitialized()).isTrue()
             assertThat(lastState.ignoreRegistrationError).isTrue()
@@ -370,8 +381,9 @@ class LoggedInPresenterTest {
             Result.success(Unit)
         }
         val selectPushProviderLambda = lambdaRecorder<MatrixClient, PushProvider, Unit> { _, _ -> }
-        val sessionVerificationService = FakeSessionVerificationService()
-        sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
+        val sessionVerificationService = FakeSessionVerificationService(
+            initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
+        )
         val pushProvider = FakePushProvider(
             index = 0,
             name = "aFakePushProvider",
@@ -390,8 +402,7 @@ class LoggedInPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(2)
-            val finalState = awaitItem()
+            val finalState = awaitFirstItem()
             assertThat(finalState.pusherRegistrationState.errorOrNull())
                 .isInstanceOf(PusherRegistrationFailure.NoDistributorsAvailable::class.java)
             lambda.assertions()
@@ -416,8 +427,9 @@ class LoggedInPresenterTest {
         val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
             Result.success(Unit)
         }
-        val sessionVerificationService = FakeSessionVerificationService()
-        sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
+        val sessionVerificationService = FakeSessionVerificationService(
+            initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
+        )
         val pushProvider0 = FakePushProvider(
             index = 0,
             name = "aFakePushProvider0",
@@ -441,8 +453,7 @@ class LoggedInPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(2)
-            val finalState = awaitItem()
+            val finalState = awaitFirstItem()
             assertThat(finalState.pusherRegistrationState.isSuccess()).isTrue()
             lambda.assertions().isCalledOnce()
                 .with(
@@ -474,13 +485,20 @@ class LoggedInPresenterTest {
         },
         selectPushProviderLambda: (MatrixClient, PushProvider) -> Unit = { _, _ -> lambdaError() },
         currentPushProvider: () -> PushProvider? = { null },
+        setIgnoreRegistrationErrorLambda: (SessionId, Boolean) -> Unit = { _, _ -> lambdaError() },
     ): PushService {
         return FakePushService(
             availablePushProviders = listOfNotNull(pushProvider0, pushProvider1),
             registerWithLambda = registerWithLambda,
             currentPushProvider = currentPushProvider,
             selectPushProviderLambda = selectPushProviderLambda,
+            setIgnoreRegistrationErrorLambda = setIgnoreRegistrationErrorLambda,
         )
+    }
+
+    private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
+        skipItems(1)
+        return awaitItem()
     }
 
     private fun createLoggedInPresenter(

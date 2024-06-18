@@ -41,7 +41,8 @@ import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatu
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.pushproviders.api.RegistrationFailure
 import io.element.android.services.analytics.api.AnalyticsService
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -59,21 +60,24 @@ class LoggedInPresenter @Inject constructor(
     @Composable
     override fun present(): LoggedInState {
         val coroutineScope = rememberCoroutineScope()
-        val isVerified by remember {
-            sessionVerificationService.sessionVerifiedStatus.map { it == SessionVerifiedStatus.Verified }
-        }.collectAsState(initial = false)
         val ignoreRegistrationError by remember {
             pushService.ignoreRegistrationError(matrixClient.sessionId)
         }.collectAsState(initial = false)
         val pusherRegistrationState = remember<MutableState<AsyncData<Unit>>> { mutableStateOf(AsyncData.Uninitialized) }
-        if (isVerified) {
-            LaunchedEffect(Unit) {
-                ensurePusherIsRegistered(pusherRegistrationState)
-            }
-        } else {
-            LaunchedEffect(Unit) {
-                pusherRegistrationState.value = AsyncData.Failure(PusherRegistrationFailure.AccountNotVerified())
-            }
+        LaunchedEffect(Unit) {
+            sessionVerificationService.sessionVerifiedStatus
+                .onEach { sessionVerifiedStatus ->
+                    when (sessionVerifiedStatus) {
+                        SessionVerifiedStatus.Unknown -> Unit
+                        SessionVerifiedStatus.Verified -> {
+                            ensurePusherIsRegistered(pusherRegistrationState)
+                        }
+                        SessionVerifiedStatus.NotVerified -> {
+                            pusherRegistrationState.value = AsyncData.Failure(PusherRegistrationFailure.AccountNotVerified())
+                        }
+                    }
+                }
+                .launchIn(this)
         }
         val syncIndicator by matrixClient.roomListService.syncIndicator.collectAsState()
         val networkStatus by networkMonitor.connectivity.collectAsState()
@@ -116,7 +120,7 @@ class LoggedInPresenter @Inject constructor(
             Timber.tag(pusherTag.value).d("Register with the first available push provider with at least one distributor")
             val pushProvider = pushService.getAvailablePushProviders()
                 .firstOrNull { it.getDistributors().isNotEmpty() }
-                // Else fallback to the first available push provider (the list should never be empty)
+            // Else fallback to the first available push provider (the list should never be empty)
                 ?: pushService.getAvailablePushProviders().firstOrNull()
                 ?: return Unit
                     .also { Timber.tag(pusherTag.value).w("No push providers available") }
