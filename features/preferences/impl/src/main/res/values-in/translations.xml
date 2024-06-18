@@ -6,6 +6,7 @@
   <string name="screen_advanced_settings_element_call_base_url">"URL dasar Element Call khusus"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Tetapkan URL dasar khusus untuk Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL tidak valid, pastikan Anda menyertakan protokol (http/https) dan alamat yang benar."</string>
+  <string name="screen_advanced_settings_push_provider_android">"Penyedia notifikasi dorongan"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Nonaktifkan penyunting teks kaya untuk mengetik Markdown secara manual."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Laporan dibaca"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Jika dimatikan, laporan dibaca Anda tidak akan dikirim kepada siapa pun. Anda masih akan menerima laporan dibaca dari pengguna lain."</string>

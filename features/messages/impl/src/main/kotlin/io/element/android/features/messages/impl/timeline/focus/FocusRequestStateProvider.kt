@@ -24,7 +24,9 @@ import io.element.android.libraries.matrix.api.room.errors.FocusEventException
 open class FocusRequestStateProvider : PreviewParameterProvider<FocusRequestState> {
     override val values: Sequence<FocusRequestState>
         get() = sequenceOf(
-            FocusRequestState.Fetching,
+            FocusRequestState.Loading(
+                eventId = EventId("\$anEventId"),
+            ),
             FocusRequestState.Failure(
                 FocusEventException.EventNotFound(
                     eventId = EventId("\$anEventId"),

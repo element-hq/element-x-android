@@ -19,7 +19,6 @@ package io.element.android.features.call.utils
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.call.impl.utils.DefaultCallWidgetProvider
 import io.element.android.features.call.impl.utils.ElementCallBaseUrlProvider
-import io.element.android.features.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
@@ -30,6 +29,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.widget.FakeCallWidgetSettingsProvider
 import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value

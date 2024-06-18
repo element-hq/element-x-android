@@ -21,6 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,6 +31,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingStateNoSuccess
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsPresenter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
@@ -54,6 +56,7 @@ class NotificationSettingsPresenter @Inject constructor(
     private val matrixClient: MatrixClient,
     private val pushService: PushService,
     private val systemNotificationsEnabledProvider: SystemNotificationsEnabledProvider,
+    private val fullScreenIntentPermissionsPresenter: FullScreenIntentPermissionsPresenter,
 ) : Presenter<NotificationSettingsState> {
     @Composable
     override fun present(): NotificationSettingsState {
@@ -71,6 +74,9 @@ class NotificationSettingsPresenter @Inject constructor(
         val matrixSettings: MutableState<NotificationSettingsState.MatrixSettings> = remember {
             mutableStateOf(NotificationSettingsState.MatrixSettings.Uninitialized)
         }
+
+        // Used to force a recomposition
+        var refreshFullScreenIntentSettings by remember { mutableIntStateOf(0) }
 
         LaunchedEffect(Unit) {
             fetchSettings(matrixSettings)
@@ -149,6 +155,7 @@ class NotificationSettingsPresenter @Inject constructor(
                 NotificationSettingsEvents.FixConfigurationMismatch -> localCoroutineScope.fixConfigurationMismatch(matrixSettings)
                 NotificationSettingsEvents.RefreshSystemNotificationsEnabled -> {
                     systemNotificationsEnabled.value = systemNotificationsEnabledProvider.notificationsEnabled()
+                    refreshFullScreenIntentSettings++
                 }
                 NotificationSettingsEvents.ClearNotificationChangeError -> changeNotificationSettingAction.value = AsyncAction.Uninitialized
                 NotificationSettingsEvents.ChangePushProvider -> showChangePushProviderDialog = true
@@ -167,6 +174,7 @@ class NotificationSettingsPresenter @Inject constructor(
             currentPushDistributor = currentDistributorName,
             availablePushDistributors = distributorNames,
             showChangePushProviderDialog = showChangePushProviderDialog,
+            fullScreenIntentPermissionsState = key(refreshFullScreenIntentSettings) { fullScreenIntentPermissionsPresenter.present() },
             eventSink = ::handleEvents
         )
     }

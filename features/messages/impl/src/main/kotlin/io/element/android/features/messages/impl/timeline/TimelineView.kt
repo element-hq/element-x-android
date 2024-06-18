@@ -100,6 +100,14 @@ fun TimelineView(
         state.eventSink(TimelineEvents.OnScrollFinished(firstVisibleIndex))
     }
 
+    fun onFocusEventRender() {
+        state.eventSink(TimelineEvents.OnFocusEventRender)
+    }
+
+    fun onJumpToLive() {
+        state.eventSink(TimelineEvents.JumpToLive)
+    }
+
     val context = LocalContext.current
     val lazyListState = rememberLazyListState()
     // Disable reverse layout when TalkBack is enabled to avoid incorrect ordering issues seen in the current Compose UI version
@@ -167,8 +175,8 @@ fun TimelineView(
                 isLive = state.isLive,
                 focusRequestState = state.focusRequestState,
                 onScrollFinishAt = ::onScrollFinishAt,
-                onClearFocusRequestState = ::clearFocusRequestState,
-                onJumpToLive = { state.eventSink(TimelineEvents.JumpToLive) },
+                onJumpToLive = ::onJumpToLive,
+                onFocusEventRender = ::onFocusEventRender,
             )
         }
     }
@@ -182,9 +190,9 @@ private fun BoxScope.TimelineScrollHelper(
     isLive: Boolean,
     forceJumpToBottomVisibility: Boolean,
     focusRequestState: FocusRequestState,
-    onClearFocusRequestState: () -> Unit,
     onScrollFinishAt: (Int) -> Unit,
     onJumpToLive: () -> Unit,
+    onFocusEventRender: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val isScrollFinished by remember { derivedStateOf { !lazyListState.isScrollInProgress } }
@@ -212,15 +220,15 @@ private fun BoxScope.TimelineScrollHelper(
         }
     }
 
-    val latestOnClearFocusRequestState by rememberUpdatedState(onClearFocusRequestState)
+    val latestOnFocusEventRender by rememberUpdatedState(onFocusEventRender)
     LaunchedEffect(focusRequestState) {
-        if (focusRequestState is FocusRequestState.Cached) {
+        if (focusRequestState is FocusRequestState.Success && focusRequestState.isIndexed) {
             if (abs(lazyListState.firstVisibleItemIndex - focusRequestState.index) < 10) {
                 lazyListState.animateScrollToItem(focusRequestState.index)
             } else {
                 lazyListState.scrollToItem(focusRequestState.index)
             }
-            latestOnClearFocusRequestState()
+            latestOnFocusEventRender()
         }
     }
 
@@ -243,8 +251,8 @@ private fun BoxScope.TimelineScrollHelper(
         // Use inverse of canAutoScroll otherwise we might briefly see the before the scroll animation is triggered
         isVisible = !canAutoScroll || forceJumpToBottomVisibility || !isLive,
         modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = 24.dp, bottom = 12.dp),
+            .align(Alignment.BottomEnd)
+            .padding(end = 24.dp, bottom = 12.dp),
         onClick = { jumpToBottom() },
     )
 }
@@ -271,8 +279,8 @@ private fun JumpToBottomButton(
         ) {
             Icon(
                 modifier = Modifier
-                        .size(24.dp)
-                        .rotate(90f),
+                    .size(24.dp)
+                    .rotate(90f),
                 imageVector = CompoundIcons.ArrowRight(),
                 contentDescription = stringResource(id = CommonStrings.a11y_jump_to_bottom)
             )

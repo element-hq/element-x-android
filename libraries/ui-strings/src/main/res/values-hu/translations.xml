@@ -83,6 +83,7 @@
   <string name="action_quick_reply">"Gyors válasz"</string>
   <string name="action_quote">"Idézet"</string>
   <string name="action_react">"Reakció"</string>
+  <string name="action_reject">"Elutasítás"</string>
   <string name="action_remove">"Eltávolítás"</string>
   <string name="action_reply">"Válasz"</string>
   <string name="action_reply_in_thread">"Válasz az üzenetszálban"</string>
@@ -119,6 +120,7 @@
   <string name="common_blocked_users">"Letiltott felhasználók"</string>
   <string name="common_bubbles">"Buborékok"</string>
   <string name="common_call_invite">"Folyamatban lévő hívás (nem támogatott)"</string>
+  <string name="common_call_started">"A hívás elindult"</string>
   <string name="common_chat_backup">"Csevegés biztonsági mentése"</string>
   <string name="common_copyright">"Szerzői jogok"</string>
   <string name="common_creating_room">"Szoba létrehozása…"</string>
@@ -196,6 +198,7 @@
   <string name="common_search_results">"Keresési találatok"</string>
   <string name="common_security">"Biztonság"</string>
   <string name="common_seen_by">"Látta"</string>
+  <string name="common_send_to">"Címzett"</string>
   <string name="common_sending">"Küldés…"</string>
   <string name="common_sending_failed">"A küldés sikertelen"</string>
   <string name="common_sent">"Elküldve"</string>

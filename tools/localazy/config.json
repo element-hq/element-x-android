@@ -137,6 +137,7 @@
         "screen_roomlist_.*",
         "session_verification_banner_.*",
         "confirm_recovery_key_banner_.*",
+        "full_screen_intent_banner_.*",
         "screen_migration_.*",
         "screen_invites_.*"
       ]
@@ -220,6 +221,7 @@
         "screen_edit_profile_.*",
         "screen_notification_settings_.*",
         "screen_blocked_users_.*",
+        "full_screen_intent_banner_.*",
         "troubleshoot_notifications_entry_point_.*"
       ]
     },

@@ -87,6 +87,7 @@ import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk.RoomPowerLevelChanges
 import java.io.File
+import kotlin.coroutines.cancellation.CancellationException
 import org.matrix.rustcomponents.sdk.Room as InnerRoom
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
@@ -183,6 +184,10 @@ class RustMatrixRoom(
             }
         }.mapFailure {
             it.toFocusEventException()
+        }.onFailure {
+            if (it is CancellationException) {
+                throw it
+            }
         }
     }
 

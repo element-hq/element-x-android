@@ -29,20 +29,36 @@ data class TimelineState(
     val renderReadReceipts: Boolean,
     val newEventState: NewEventState,
     val isLive: Boolean,
-    val focusedEventId: EventId?,
     val focusRequestState: FocusRequestState,
     val eventSink: (TimelineEvents) -> Unit,
 ) {
     val hasAnyEvent = timelineItems.any { it is TimelineItem.Event }
+    val focusedEventId = focusRequestState.eventId()
 }
 
 @Immutable
 sealed interface FocusRequestState {
     data object None : FocusRequestState
-    data class Cached(val index: Int) : FocusRequestState
-    data object Fetching : FocusRequestState
-    data object Fetched : FocusRequestState
+    data class Loading(val eventId: EventId) : FocusRequestState
+    data class Success(
+        val eventId: EventId,
+        val index: Int = -1,
+        // This is used to know if the event has been rendered yet.
+        val rendered: Boolean = false,
+    ) : FocusRequestState {
+        val isIndexed
+            get() = index != -1
+    }
+
     data class Failure(val throwable: Throwable) : FocusRequestState
+
+    fun eventId(): EventId? {
+        return when (this) {
+            is Loading -> eventId
+            is Success -> eventId
+            else -> null
+        }
+    }
 }
 
 @Immutable

@@ -3,4 +3,5 @@
   <string name="call_foreground_service_channel_title_android">"Folyamatban lévő hívás"</string>
   <string name="call_foreground_service_message_android">"Koppintson a híváshoz való visszatéréshez"</string>
   <string name="call_foreground_service_title_android">"☎️ Hívás folyamatban"</string>
+  <string name="screen_incoming_call_subtitle_android">"Bejövő Element hívás"</string>
 </resources>

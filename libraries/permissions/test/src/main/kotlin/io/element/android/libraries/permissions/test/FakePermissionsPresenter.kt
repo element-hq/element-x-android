@@ -41,7 +41,7 @@ class FakePermissionsPresenter(
     }
 
     fun setPermissionDenied() {
-        state.value = state.value.copy(permissionAlreadyDenied = true)
+        state.value = state.value.copy(permissionGranted = false, permissionAlreadyDenied = true)
     }
 
     @Composable

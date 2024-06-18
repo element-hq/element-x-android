@@ -16,7 +16,7 @@
 
 package io.element.android.libraries.preferences.test
 
-import io.element.android.features.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
