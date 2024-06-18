@@ -120,11 +120,9 @@ class RoomSummaryListProcessor(
 
     private suspend fun buildAndCacheRoomSummaryForIdentifier(identifier: String): RoomSummary {
         val builtRoomSummary = roomListService.roomOrNull(identifier)?.use { roomListItem ->
-            roomListItem.roomInfo().use { roomInfo ->
-                RoomSummary.Filled(
-                    details = roomSummaryDetailsFactory.create(roomInfo)
-                )
-            }
+            RoomSummary.Filled(
+                details = roomSummaryDetailsFactory.create(roomListItem)
+            )
         } ?: buildEmptyRoomSummary()
         roomSummariesByIdentifier[builtRoomSummary.identifier()] = builtRoomSummary
         return builtRoomSummary

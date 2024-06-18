@@ -20,7 +20,6 @@ import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 
@@ -41,7 +40,6 @@ data class MatrixRoomInfo(
     val canonicalAlias: RoomAlias?,
     val alternativeAliases: ImmutableList<String>,
     val currentUserMembership: CurrentUserMembership,
-    val latestEvent: EventTimelineItem?,
     val inviter: RoomMember?,
     val activeMembersCount: Long,
     val invitedMembersCount: Long,
