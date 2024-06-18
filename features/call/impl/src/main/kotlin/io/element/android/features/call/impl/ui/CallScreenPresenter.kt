@@ -40,7 +40,9 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
@@ -74,6 +76,7 @@ class CallScreenPresenter @AssistedInject constructor(
 
     private val isInWidgetMode = callType is CallType.RoomCall
     private val userAgent = userAgentProvider.provide()
+    private var notifiedCallStart = false
 
     @Composable
     override fun present(): CallScreenState {
@@ -202,14 +205,10 @@ class CallScreenPresenter @AssistedInject constructor(
                 matrixClientsProvider.getOrNull(it)
             } ?: return@DisposableEffect onDispose { }
             coroutineScope.launch {
-                var notifiedCall = false
                 client.syncService().syncState
                     .collect { state ->
                         if (state == SyncState.Running) {
-                            if (!notifiedCall) {
-                                client.getRoom(callType.roomId)?.sendCallNotificationIfNeeded()
-                                    ?.onSuccess { notifiedCall = true }
-                            }
+                            client.notifyCallStartIfNeeded(callType.roomId)
                         } else {
                             client.syncService().startSync()
                         }
@@ -225,6 +224,13 @@ class CallScreenPresenter @AssistedInject constructor(
                     }
                 }
             }
+        }
+    }
+
+    private suspend fun MatrixClient.notifyCallStartIfNeeded(roomId: RoomId) {
+        if (!notifiedCallStart) {
+            getRoom(roomId)?.sendCallNotificationIfNeeded()
+                ?.onSuccess { notifiedCallStart = true }
         }
     }
 

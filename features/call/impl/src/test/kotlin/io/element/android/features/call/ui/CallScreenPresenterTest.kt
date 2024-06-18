@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
+import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.services.analytics.api.ScreenTracker
@@ -83,12 +84,18 @@ class CallScreenPresenterTest {
     }
 
     @Test
-    fun `present - with CallType RoomCall sets call as active, loads URL and runs WidgetDriver`() = runTest {
+    fun `present - with CallType RoomCall sets call as active, loads URL, runs WidgetDriver and notifies the other clients a call started`() = runTest {
+        val sendCallNotificationIfNeededLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val fakeRoom = FakeMatrixRoom(sendCallNotificationIfNeededResult = sendCallNotificationIfNeededLambda)
+        val client = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, fakeRoom)
+        }
         val widgetDriver = FakeMatrixWidgetDriver()
         val widgetProvider = FakeCallWidgetProvider(widgetDriver)
         val analyticsLambda = lambdaRecorder<MobileScreen.ScreenName, Unit> {}
         val joinedCallLambda = lambdaRecorder<CallType, Unit> {}
         val presenter = createCallScreenPresenter(
+            matrixClientsProvider = FakeMatrixClientProvider(getClient = { Result.success(client) }),
             callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
             widgetDriver = widgetDriver,
             widgetProvider = widgetProvider,
@@ -112,6 +119,7 @@ class CallScreenPresenterTest {
                     listOf(value(MobileScreen.ScreenName.RoomCall)),
                     listOf(value(MobileScreen.ScreenName.RoomCall))
                 )
+            sendCallNotificationIfNeededLambda.assertions().isCalledOnce()
         }
     }
 
