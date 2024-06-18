@@ -98,7 +98,7 @@ class SecureBackupEnterRecoveryKeyViewTest {
         onBackClick: () -> Unit = EnsureNeverCalled(),
         onCreateNewRecoveryKey: () -> Unit = EnsureNeverCalled(),
     ) {
-        rule.setContent {
+        setContent {
             SecureBackupEnterRecoveryKeyView(
                 state = state,
                 onSuccess = onDone,
