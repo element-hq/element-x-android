@@ -43,7 +43,6 @@ class NotificationChannelsTest {
         createNotificationChannels(notificationManager = notificationManager)
 
         verify { notificationManager.createNotificationChannel(any<NotificationChannelCompat>()) }
-        verify { notificationManager.createNotificationChannel(any<NotificationChannel>()) }
         verify { notificationManager.deleteNotificationChannel(any<String>()) }
     }
 

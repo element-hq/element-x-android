@@ -16,8 +16,6 @@
 
 package io.element.android.libraries.push.impl.notifications.channels
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Context
 import android.media.AudioAttributes
 import android.media.AudioManager
@@ -121,49 +119,46 @@ class DefaultNotificationChannels @Inject constructor(
          * intrude.
          */
         notificationManager.createNotificationChannel(
-            NotificationChannel(
+            NotificationChannelCompat.Builder(
                 NOISY_NOTIFICATION_CHANNEL_ID,
-                stringProvider.getString(R.string.notification_channel_noisy).ifEmpty { "Noisy notifications" },
-                NotificationManager.IMPORTANCE_DEFAULT
+                NotificationManagerCompat.IMPORTANCE_DEFAULT
             )
-                .apply {
-                    description = stringProvider.getString(R.string.notification_channel_noisy)
-                    enableVibration(true)
-                    enableLights(true)
-                    lightColor = accentColor
-                }
+                .setName(stringProvider.getString(R.string.notification_channel_noisy).ifEmpty { "Noisy notifications" })
+                .setDescription(stringProvider.getString(R.string.notification_channel_noisy))
+                .setVibrationEnabled(true)
+                .setLightsEnabled(true)
+                .setLightColor(accentColor)
+                .build()
         )
 
         /**
          * Low notification importance: shows everywhere, but is not intrusive.
          */
         notificationManager.createNotificationChannel(
-            NotificationChannel(
+            NotificationChannelCompat.Builder(
                 SILENT_NOTIFICATION_CHANNEL_ID,
-                stringProvider.getString(R.string.notification_channel_silent).ifEmpty { "Silent notifications" },
-                NotificationManager.IMPORTANCE_LOW
+                NotificationManagerCompat.IMPORTANCE_LOW
             )
-                .apply {
-                    description = stringProvider.getString(R.string.notification_channel_silent)
-                    setSound(null, null)
-                    enableLights(true)
-                    lightColor = accentColor
-                }
+                .setName(stringProvider.getString(R.string.notification_channel_silent).ifEmpty { "Silent notifications" })
+                .setDescription(stringProvider.getString(R.string.notification_channel_silent))
+                .setSound(null, null)
+                .setLightsEnabled(true)
+                .setLightColor(accentColor)
+                .build()
         )
 
         // Register a channel for incoming and in progress call notifications with no ringing
         notificationManager.createNotificationChannel(
-            NotificationChannel(
+            NotificationChannelCompat.Builder(
                 CALL_NOTIFICATION_CHANNEL_ID,
-                stringProvider.getString(R.string.notification_channel_call).ifEmpty { "Call" },
-                NotificationManager.IMPORTANCE_HIGH
+                NotificationManagerCompat.IMPORTANCE_HIGH
             )
-                .apply {
-                    description = stringProvider.getString(R.string.notification_channel_call)
-                    enableVibration(true)
-                    enableLights(true)
-                    lightColor = accentColor
-                }
+                .setName(stringProvider.getString(R.string.notification_channel_call).ifEmpty { "Call" })
+                .setDescription(stringProvider.getString(R.string.notification_channel_call))
+                .setVibrationEnabled(true)
+                .setLightsEnabled(true)
+                .setLightColor(accentColor)
+                .build()
         )
 
         // Register a channel for incoming call notifications which will ring the device when received
