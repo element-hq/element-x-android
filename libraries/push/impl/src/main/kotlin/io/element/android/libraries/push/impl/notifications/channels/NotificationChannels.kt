@@ -38,7 +38,6 @@ import javax.inject.Inject
 /* ==========================================================================================
  * IDs for channels
  * ========================================================================================== */
-private const val LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID = "LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID"
 internal const val SILENT_NOTIFICATION_CHANNEL_ID = "DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID_V2"
 internal const val NOISY_NOTIFICATION_CHANNEL_ID = "DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID"
 internal const val CALL_NOTIFICATION_CHANNEL_ID_V3 = "CALL_NOTIFICATION_CHANNEL_ID_V3"
@@ -110,6 +109,7 @@ class DefaultNotificationChannels @Inject constructor(
             "DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID",
             "CALL_NOTIFICATION_CHANNEL_ID",
             "CALL_NOTIFICATION_CHANNEL_ID_V2",
+            "LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID",
         )) {
             notificationManager.getNotificationChannel(channelId)?.let {
                 notificationManager.deleteNotificationChannel(channelId)
@@ -148,19 +148,6 @@ class DefaultNotificationChannels @Inject constructor(
                     setSound(null, null)
                     enableLights(true)
                     lightColor = accentColor
-                }
-        )
-
-        notificationManager.createNotificationChannel(
-            NotificationChannel(
-                LISTENING_FOR_EVENTS_NOTIFICATION_CHANNEL_ID,
-                stringProvider.getString(R.string.notification_channel_listening_for_events).ifEmpty { "Listening for events" },
-                NotificationManager.IMPORTANCE_MIN
-            )
-                .apply {
-                    description = stringProvider.getString(R.string.notification_channel_listening_for_events)
-                    setSound(null, null)
-                    setShowBadge(false)
                 }
         )
 
