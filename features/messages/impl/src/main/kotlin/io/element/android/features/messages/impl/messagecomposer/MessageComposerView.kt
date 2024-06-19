@@ -125,7 +125,6 @@ internal fun MessageComposerView(
         onError = ::onError,
         onTyping = ::onTyping,
         currentUserId = state.currentUserId,
-        displayNameForUserId = state.displayNameForUserId,
         onSelectRichContent = ::sendUri,
     )
 }

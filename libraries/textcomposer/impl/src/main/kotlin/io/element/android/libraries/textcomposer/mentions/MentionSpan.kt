@@ -21,7 +21,9 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.Typeface
 import android.text.style.ReplacementSpan
+import androidx.core.text.getSpans
 import io.element.android.libraries.core.extensions.orEmpty
+import io.element.android.wysiwyg.view.spans.CustomMentionSpan
 import kotlin.math.min
 import kotlin.math.roundToInt
 
@@ -97,5 +99,20 @@ class MentionSpan(
     enum class Type {
         USER,
         ROOM,
+    }
+}
+
+fun CharSequence.getMentionSpans(): List<MentionSpan> {
+    return if (this is android.text.Spanned) {
+        val customMentionSpans = getSpans<CustomMentionSpan>()
+        if (customMentionSpans.isNotEmpty()) {
+            // If we have custom mention spans created by the RTE, we need to extract the provided spans and filter them
+            customMentionSpans.map { it.providedSpan }.filterIsInstance<MentionSpan>()
+        } else {
+            // Otherwise try to get the spans directly
+            getSpans<MentionSpan>().toList()
+        }
+    } else {
+        emptyList()
     }
 }

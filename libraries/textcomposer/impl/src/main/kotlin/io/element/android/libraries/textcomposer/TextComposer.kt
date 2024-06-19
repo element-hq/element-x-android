@@ -58,6 +58,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import io.element.android.libraries.matrix.ui.messages.LocalUserProfileCache
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.textcomposer.components.ComposerOptionsButton
@@ -108,7 +109,6 @@ fun TextComposer(
     onTyping: (Boolean) -> Unit,
     onReceiveSuggestion: (Suggestion?) -> Unit,
     onSelectRichContent: ((Uri) -> Unit)?,
-    displayNameForUserId: (UserId) -> String?,
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
     subcomposing: Boolean = false,
@@ -147,6 +147,8 @@ fun TextComposer(
         }
     }
 
+    val userProfileCache = LocalUserProfileCache.current
+
     val placeholder = if (composerMode.inThread) {
         stringResource(id = CommonStrings.action_reply_in_thread)
     } else {
@@ -169,7 +171,7 @@ fun TextComposer(
                         resolveMentionDisplay = { text, url ->
                             val permalinkData = permalinkParser.parse(url)
                             if (permalinkData is PermalinkData.UserLink) {
-                                val displayNameOrId = displayNameForUserId(permalinkData.userId) ?: permalinkData.userId.value
+                                val displayNameOrId = userProfileCache.getDisplayName(permalinkData.userId) ?: permalinkData.userId.value
                                 TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor(displayNameOrId, url))
                             } else {
                                 TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor(text, url))
@@ -853,7 +855,6 @@ private fun ATextComposer(
         onTyping = {},
         onReceiveSuggestion = {},
         onSelectRichContent = null,
-        displayNameForUserId = { null },
     )
 }
 

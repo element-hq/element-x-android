@@ -17,28 +17,35 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import android.text.SpannableString
+import android.text.Spanned
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.core.text.getSpans
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
-import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
-import io.element.android.features.messages.impl.timeline.di.rememberPresenter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContentProvider
-import io.element.android.features.messages.impl.voicemessages.timeline.TextMessageState
-import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.ui.messages.LocalUserProfileCache
+import io.element.android.libraries.matrix.ui.messages.UserProfileCache
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
+import io.element.android.libraries.textcomposer.mentions.MentionSpan
+import io.element.android.libraries.textcomposer.mentions.getMentionSpans
 import io.element.android.wysiwyg.compose.EditorStyledText
+import io.element.android.wysiwyg.view.spans.CustomMentionSpan
 
 @Composable
 fun TimelineItemTextView(
@@ -51,13 +58,7 @@ fun TimelineItemTextView(
         LocalContentColor provides ElementTheme.colors.textPrimary,
         LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular
     ) {
-        val presenterFactories = LocalTimelineItemPresenterFactories.current
-        val presenter: Presenter<TextMessageState> = presenterFactories.rememberPresenter(content = content)
-
-        val state = presenter.present()
-        val formattedBody = state.formattedText
-        val body = SpannableString(formattedBody ?: state.text)
-
+        val body = getTextWithResolvedMentions(content)
         Box(modifier.semantics { contentDescription = body.toString() }) {
             EditorStyledText(
                 text = body,
@@ -68,6 +69,38 @@ fun TimelineItemTextView(
             )
         }
     }
+}
+
+@Composable
+private fun getTextWithResolvedMentions(content: TimelineItemTextBasedContent): CharSequence {
+    val userProfileCache = LocalUserProfileCache.current
+    val lastCacheUpdate by userProfileCache.lastCacheUpdate.collectAsState()
+    val formattedBody = remember(content.htmlBody, lastCacheUpdate) {
+        updateMentionSpans(content.formattedBody, userProfileCache)
+        SpannableString(content.formattedBody ?: content.body)
+    }
+
+    return formattedBody
+}
+
+private fun updateMentionSpans(text: CharSequence?, cache: UserProfileCache): Boolean {
+    var changedContents = false
+    if (text != null) {
+        for (mentionSpan in text.getMentionSpans()) {
+            when (mentionSpan.type) {
+                MentionSpan.Type.USER -> {
+                    val displayName = cache.getDisplayName(UserId(mentionSpan.rawValue)) ?: mentionSpan.rawValue
+                    if (mentionSpan.text != displayName) {
+                        changedContents = true
+                        mentionSpan.text = displayName
+                    }
+                }
+                // Nothing yet for room mentions
+                else -> Unit
+            }
+        }
+    }
+    return changedContents
 }
 
 @PreviewsDayNight
