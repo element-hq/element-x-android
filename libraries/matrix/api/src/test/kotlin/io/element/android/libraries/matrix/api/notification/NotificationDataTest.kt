@@ -17,9 +17,8 @@
 package io.element.android.libraries.matrix.api.notification
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.test.AN_EVENT_ID
-import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.notification.aNotificationData
 import org.junit.Test
 
 class NotificationDataTest {
@@ -48,26 +47,5 @@ class NotificationDataTest {
             senderIsNameAmbiguous = true,
         )
         assertThat(sut.getDisambiguatedDisplayName(A_USER_ID)).isEqualTo("Alice (@alice:server.org)")
-    }
-
-    private fun aNotificationData(
-        senderDisplayName: String?,
-        senderIsNameAmbiguous: Boolean,
-    ): NotificationData {
-        return NotificationData(
-            eventId = AN_EVENT_ID,
-            roomId = A_ROOM_ID,
-            senderAvatarUrl = null,
-            senderDisplayName = senderDisplayName,
-            senderIsNameAmbiguous = senderIsNameAmbiguous,
-            roomAvatarUrl = null,
-            roomDisplayName = null,
-            isDirect = false,
-            isEncrypted = false,
-            isNoisy = false,
-            timestamp = 0L,
-            content = NotificationContent.MessageLike.RoomEncrypted,
-            hasMention = false,
-        )
     }
 }

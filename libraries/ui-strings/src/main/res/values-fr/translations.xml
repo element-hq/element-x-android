@@ -83,6 +83,7 @@
   <string name="action_quick_reply">"Réponse rapide"</string>
   <string name="action_quote">"Citer"</string>
   <string name="action_react">"Réagissez"</string>
+  <string name="action_reject">"Rejeter"</string>
   <string name="action_remove">"Supprimer"</string>
   <string name="action_reply">"Répondre"</string>
   <string name="action_reply_in_thread">"Répondre dans le fil de discussion"</string>
@@ -197,6 +198,7 @@
   <string name="common_search_results">"Résultats de la recherche"</string>
   <string name="common_security">"Sécurité"</string>
   <string name="common_seen_by">"Vu par"</string>
+  <string name="common_send_to">"Envoyer vers"</string>
   <string name="common_sending">"Envoi en cours…"</string>
   <string name="common_sending_failed">"Échec de l’envoi"</string>
   <string name="common_sent">"Envoyé"</string>
@@ -249,6 +251,8 @@
   <string name="error_missing_microphone_voice_rationale_android">"%1$s n’a pas l’autorisation d’accéder au microphone. Autorisez l’accès pour enregistrer un message."</string>
   <string name="error_some_messages_have_not_been_sent">"Certains messages n’ont pas été envoyés"</string>
   <string name="error_unknown">"Désolé, une erreur s’est produite"</string>
+  <string name="full_screen_intent_banner_message">"Afin de ne jamais manquer un appel important, veuillez modifier vos paramètres pour autoriser les notifications en plein écran lorsque votre appareil est verrouillé."</string>
+  <string name="full_screen_intent_banner_title">"Améliorez votre expérience d’appel"</string>
   <string name="invite_friends_rich_title">"🔐️ Rejoignez-moi sur %1$s"</string>
   <string name="invite_friends_text">"Salut, parle-moi sur %1$s : %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>

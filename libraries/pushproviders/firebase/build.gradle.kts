@@ -63,6 +63,7 @@ dependencies {
     testImplementation(projects.libraries.push.test)
     testImplementation(projects.libraries.pushstore.test)
     testImplementation(projects.libraries.sessionStorage.implMemory)
+    testImplementation(projects.libraries.sessionStorage.test)
     testImplementation(projects.tests.testutils)
     testImplementation(projects.services.toolbox.test)
 }

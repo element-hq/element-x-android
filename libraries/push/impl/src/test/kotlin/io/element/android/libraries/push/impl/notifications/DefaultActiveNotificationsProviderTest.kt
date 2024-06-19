@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
+import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test
@@ -33,6 +34,8 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class DefaultActiveNotificationsProviderTest {
+    private val notificationIdProvider = NotificationIdProvider
+
     @Test
     fun `getAllNotifications with no active notifications returns empty list`() {
         val activeNotificationsProvider = createActiveNotificationsProvider(activeNotifications = emptyList())
@@ -43,7 +46,6 @@ class DefaultActiveNotificationsProviderTest {
 
     @Test
     fun `getAllNotifications with active notifications returns all`() {
-        val notificationIdProvider = NotificationIdProvider()
         val activeNotifications = listOf(
             aStatusBarNotification(id = notificationIdProvider.getRoomMessagesNotificationId(A_SESSION_ID), groupId = A_SESSION_ID.value),
             aStatusBarNotification(id = notificationIdProvider.getSummaryNotificationId(A_SESSION_ID), groupId = A_SESSION_ID.value),
@@ -57,7 +59,6 @@ class DefaultActiveNotificationsProviderTest {
 
     @Test
     fun `getNotificationsForSession returns only notifications for that session id`() {
-        val notificationIdProvider = NotificationIdProvider()
         val activeNotifications = listOf(
             aStatusBarNotification(id = notificationIdProvider.getRoomMessagesNotificationId(A_SESSION_ID), groupId = A_SESSION_ID.value),
             aStatusBarNotification(id = notificationIdProvider.getSummaryNotificationId(A_SESSION_ID_2), groupId = A_SESSION_ID_2.value),
@@ -71,7 +72,6 @@ class DefaultActiveNotificationsProviderTest {
 
     @Test
     fun `getMembershipNotificationsForSession returns only membership notifications for that session id`() {
-        val notificationIdProvider = NotificationIdProvider()
         val activeNotifications = listOf(
             aStatusBarNotification(id = notificationIdProvider.getRoomMessagesNotificationId(A_SESSION_ID), groupId = A_SESSION_ID.value,),
             aStatusBarNotification(id = notificationIdProvider.getSummaryNotificationId(A_SESSION_ID_2), groupId = A_SESSION_ID_2.value),
@@ -89,7 +89,6 @@ class DefaultActiveNotificationsProviderTest {
 
     @Test
     fun `getMessageNotificationsForRoom returns only message notifications for those session and room ids`() {
-        val notificationIdProvider = NotificationIdProvider()
         val activeNotifications = listOf(
             aStatusBarNotification(
                 id = notificationIdProvider.getRoomMessagesNotificationId(A_SESSION_ID),
@@ -117,7 +116,6 @@ class DefaultActiveNotificationsProviderTest {
 
     @Test
     fun `getMembershipNotificationsForRoom returns only membership notifications for those session and room ids`() {
-        val notificationIdProvider = NotificationIdProvider()
         val activeNotifications = listOf(
             aStatusBarNotification(
                 id = notificationIdProvider.getRoomMessagesNotificationId(A_SESSION_ID),
@@ -145,7 +143,6 @@ class DefaultActiveNotificationsProviderTest {
 
     @Test
     fun `getSummaryNotification returns only the summary notification for that session id if it exists`() {
-        val notificationIdProvider = NotificationIdProvider()
         val activeNotifications = listOf(
             aStatusBarNotification(id = notificationIdProvider.getRoomMessagesNotificationId(A_SESSION_ID), groupId = A_SESSION_ID.value),
             aStatusBarNotification(id = notificationIdProvider.getSummaryNotificationId(A_SESSION_ID), groupId = A_SESSION_ID.value),
@@ -172,7 +169,6 @@ class DefaultActiveNotificationsProviderTest {
         }
         return DefaultActiveNotificationsProvider(
             notificationManager = notificationManager,
-            notificationIdProvider = NotificationIdProvider(),
         )
     }
 }

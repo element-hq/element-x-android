@@ -20,12 +20,14 @@ import androidx.compose.runtime.Composable
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.api.PermissionsState
 
-class NoopPermissionsPresenter : PermissionsPresenter {
+class NoopPermissionsPresenter(
+    private val isGranted: Boolean = false,
+) : PermissionsPresenter {
     @Composable
     override fun present(): PermissionsState {
         return PermissionsState(
             permission = "",
-            permissionGranted = false,
+            permissionGranted = isGranted,
             shouldShowRationale = false,
             showDialog = false,
             permissionAlreadyAsked = false,

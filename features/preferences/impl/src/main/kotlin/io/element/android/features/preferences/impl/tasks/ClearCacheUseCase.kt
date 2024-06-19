@@ -29,6 +29,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.push.api.PushService
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import javax.inject.Inject
@@ -43,10 +44,11 @@ class DefaultClearCacheUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
     private val matrixClient: MatrixClient,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val defaultCacheIndexProvider: DefaultCacheService,
+    private val defaultCacheService: DefaultCacheService,
     private val okHttpClient: Provider<OkHttpClient>,
     private val ftueService: FtueService,
     private val migrationScreenStore: MigrationScreenStore,
+    private val pushService: PushService,
 ) : ClearCacheUseCase {
     override suspend fun invoke() = withContext(coroutineDispatchers.io) {
         // Clear Matrix cache
@@ -64,7 +66,9 @@ class DefaultClearCacheUseCase @Inject constructor(
         ftueService.reset()
         // Clear migration screen store
         migrationScreenStore.reset()
+        // Ensure any error will be displayed again
+        pushService.setIgnoreRegistrationError(matrixClient.sessionId, false)
         // Ensure the app is restarted
-        defaultCacheIndexProvider.onClearedCache(matrixClient.sessionId)
+        defaultCacheService.onClearedCache(matrixClient.sessionId)
     }
 }

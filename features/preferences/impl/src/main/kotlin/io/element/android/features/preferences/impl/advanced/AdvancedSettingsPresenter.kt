@@ -25,9 +25,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.mapToTheme
-import io.element.android.features.preferences.api.store.AppPreferencesStore
-import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

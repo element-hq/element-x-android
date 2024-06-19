@@ -74,7 +74,7 @@ class MatrixClientsHolder @Inject constructor(private val authenticationService:
         // Not ideal but should only happens in case of process recreation. This ensure we restore all the active sessions before restoring the node graphs.
         runBlocking {
             sessionIds.forEach { sessionId ->
-                restore(sessionId)
+                getOrRestore(sessionId)
             }
         }
     }

@@ -8,14 +8,14 @@ on:
 # Enrich gradle.properties for CI/CD
 env:
   GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx6g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.incremental=false -XX:+UseG1GC
-  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 8 --no-daemon -Dsonar.gradle.skipCompile=true
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace --no-daemon -Dsonar.gradle.skipCompile=true
 
 jobs:
   gplay:
     name: Create App Bundle (Gplay)
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ github.ref == 'refs/head/main' && format('build-release-main-gplay-{0}', github.sha) }}
+      group: ${{ format('build-release-main-gplay-{0}', github.sha) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
@@ -43,7 +43,7 @@ jobs:
     name: Create APKs (FDroid)
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ github.ref == 'refs/head/main' && format('build-release-main-fdroid-{0}', github.sha) }}
+      group: ${{ format('build-release-main-fdroid-{0}', github.sha) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4

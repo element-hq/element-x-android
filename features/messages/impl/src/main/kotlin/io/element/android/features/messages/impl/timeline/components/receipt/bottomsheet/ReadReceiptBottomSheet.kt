@@ -123,7 +123,6 @@ private fun ReadReceiptBottomSheetContent(
 @PreviewsDayNight
 @Composable
 internal fun ReadReceiptBottomSheetPreview(@PreviewParameter(ReadReceiptBottomSheetStateProvider::class) state: ReadReceiptBottomSheetState) = ElementPreview {
-    // TODO restore RetrySendMessageMenuBottomSheet once the issue with bottom sheet not being previewable is fixed
     Column {
         ReadReceiptBottomSheetContent(
             state = state,

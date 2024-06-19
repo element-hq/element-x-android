@@ -19,6 +19,7 @@ package io.element.android.features.preferences.impl.notifications
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -40,6 +41,7 @@ open class NotificationSettingsStateProvider : PreviewParameterProvider<Notifica
             aValidNotificationSettingsState(currentPushDistributor = AsyncData.Failure(Exception("Failed to change distributor"))),
             aInvalidNotificationSettingsState(),
             aInvalidNotificationSettingsState(fixFailed = true),
+            aValidNotificationSettingsState(fullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(permissionGranted = false)),
         )
 }
 
@@ -53,6 +55,7 @@ fun aValidNotificationSettingsState(
     currentPushDistributor: AsyncData<String> = AsyncData.Success("Firebase"),
     availablePushDistributors: List<String> = listOf("Firebase", "ntfy"),
     showChangePushProviderDialog: Boolean = false,
+    fullScreenIntentPermissionsState: FullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(),
     eventSink: (NotificationSettingsEvents) -> Unit = {},
 ) = NotificationSettingsState(
     matrixSettings = NotificationSettingsState.MatrixSettings.Valid(
@@ -70,6 +73,7 @@ fun aValidNotificationSettingsState(
     currentPushDistributor = currentPushDistributor,
     availablePushDistributors = availablePushDistributors.toImmutableList(),
     showChangePushProviderDialog = showChangePushProviderDialog,
+    fullScreenIntentPermissionsState = fullScreenIntentPermissionsState,
     eventSink = eventSink,
 )
 
@@ -88,5 +92,18 @@ fun aInvalidNotificationSettingsState(
     currentPushDistributor = AsyncData.Uninitialized,
     availablePushDistributors = persistentListOf(),
     showChangePushProviderDialog = false,
+    fullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(),
     eventSink = eventSink,
+)
+
+internal fun aFullScreenIntentPermissionsState(
+    permissionGranted: Boolean = true,
+    shouldDisplay: Boolean = false,
+    openFullScreenIntentSettings: () -> Unit = {},
+    dismissFullScreenIntentBanner: () -> Unit = {},
+) = FullScreenIntentPermissionsState(
+    permissionGranted = permissionGranted,
+    shouldDisplayBanner = shouldDisplay,
+    openFullScreenIntentSettings = openFullScreenIntentSettings,
+    dismissFullScreenIntentBanner = dismissFullScreenIntentBanner,
 )

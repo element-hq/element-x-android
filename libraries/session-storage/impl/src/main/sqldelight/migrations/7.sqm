@@ -1,0 +1,4 @@
+-- Migrate DB from version 7
+-- Add sessionPath so we can track the anonymized path for the session files dir
+
+ALTER TABLE SessionData ADD COLUMN sessionPath TEXT NOT NULL DEFAULT "";

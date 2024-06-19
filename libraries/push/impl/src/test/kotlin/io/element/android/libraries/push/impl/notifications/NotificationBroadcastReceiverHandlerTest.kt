@@ -18,8 +18,6 @@ package io.element.android.libraries.push.impl.notifications
 
 import android.content.Intent
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.preferences.api.store.SessionPreferencesStore
-import io.element.android.features.preferences.api.store.SessionPreferencesStoreFactory
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -38,6 +36,8 @@ import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStoreFactory
 import io.element.android.libraries.preferences.test.FakeSessionPreferencesStoreFactory
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager

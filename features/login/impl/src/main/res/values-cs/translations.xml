@@ -43,7 +43,7 @@
   <string name="screen_qr_code_login_device_not_signed_in_scan_state_subtitle">"Druhé zařízení není přihlášeno"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Přihlášení bylo na druhém zařízení zrušeno."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Žádost o přihlášení zrušena"</string>
-  <string name="screen_qr_code_login_error_declined_subtitle">"Požadavek na vašem druhém zařízení nebyl přijat."</string>
+  <string name="screen_qr_code_login_error_declined_subtitle">"Přihlášení bylo na druhém zařízení odmítnuto."</string>
   <string name="screen_qr_code_login_error_declined_title">"Přihlášení odmítnuto"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"Platnost přihlášení vypršela. Zkuste to prosím znovu."</string>
   <string name="screen_qr_code_login_error_expired_title">"Přihlášení nebylo dokončeno včas"</string>

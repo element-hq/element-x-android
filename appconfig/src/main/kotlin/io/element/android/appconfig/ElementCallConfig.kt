@@ -17,5 +17,13 @@
 package io.element.android.appconfig
 
 object ElementCallConfig {
+    /**
+     * The default base URL for the Element Call service.
+     */
     const val DEFAULT_BASE_URL = "https://call.element.io"
+
+    /**
+     * The default duration of a ringing call in seconds before it's automatically dismissed.
+     */
+    const val RINGING_CALL_DURATION_SECONDS = 15
 }

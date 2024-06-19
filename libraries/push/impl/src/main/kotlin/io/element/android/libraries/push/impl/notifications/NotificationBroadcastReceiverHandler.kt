@@ -17,7 +17,6 @@
 package io.element.android.libraries.push.impl.notifications
 
 import android.content.Intent
-import io.element.android.features.preferences.api.store.SessionPreferencesStoreFactory
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
@@ -27,6 +26,7 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.asEventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStoreFactory
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent

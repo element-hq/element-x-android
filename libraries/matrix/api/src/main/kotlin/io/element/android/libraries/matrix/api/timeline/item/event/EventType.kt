@@ -72,6 +72,7 @@ object EventType {
     const val CALL_NEGOTIATE = "m.call.negotiate"
     const val CALL_REJECT = "m.call.reject"
     const val CALL_HANGUP = "m.call.hangup"
+    const val CALL_NOTIFY = "m.call.notify"
 
     // This type is not processed by the client, just sent to the server
     const val CALL_REPLACES = "m.call.replaces"
@@ -94,6 +95,7 @@ object EventType {
             type == CALL_SELECT_ANSWER ||
             type == CALL_NEGOTIATE ||
             type == CALL_REJECT ||
-            type == CALL_REPLACES
+            type == CALL_REPLACES ||
+            type == CALL_NOTIFY
     }
 }

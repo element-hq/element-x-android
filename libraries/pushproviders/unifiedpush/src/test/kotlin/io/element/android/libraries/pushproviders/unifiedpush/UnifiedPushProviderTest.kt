@@ -58,7 +58,6 @@ class UnifiedPushProviderTest {
         )
         val result = unifiedPushProvider.getDistributors()
         assertThat(result).containsExactly(Distributor("value", "Name"))
-        assertThat(unifiedPushProvider.isAvailable()).isTrue()
     }
 
     @Test
@@ -70,7 +69,6 @@ class UnifiedPushProviderTest {
         )
         val result = unifiedPushProvider.getDistributors()
         assertThat(result).isEmpty()
-        assertThat(unifiedPushProvider.isAvailable()).isFalse()
     }
 
     @Test

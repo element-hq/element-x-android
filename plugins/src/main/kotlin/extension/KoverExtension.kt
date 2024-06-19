@@ -108,7 +108,7 @@ fun Project.setupKover() {
                         "*Presenter\$present\$*",
                         // Forked from compose
                         "io.element.android.libraries.designsystem.theme.components.bottomsheet.*",
-                        // Test presenter
+                        // Test presenters
                         "io.element.android.features.leaveroom.fake.FakeLeaveRoomPresenter",
                     )
                     annotatedBy(
@@ -158,13 +158,15 @@ fun Project.setupKover() {
                     }
                     excludes {
                         classes(
-                            "*Fake*Presenter",
+                            "*Fake*Presenter*",
                             "io.element.android.appnav.loggedin.LoggedInPresenter$*",
                             // Some options can't be tested at the moment
                             "io.element.android.features.preferences.impl.developer.DeveloperSettingsPresenter$*",
                             // Need an Activity to use rememberMultiplePermissionsState
                             "io.element.android.features.location.impl.common.permissions.DefaultPermissionsPresenter",
                             "*Presenter\$present\$*",
+                            // Too small to be > 85% tested
+                            "io.element.android.libraries.fullscreenintent.impl.DefaultFullScreenIntentPermissionsPresenter",
                         )
                     }
                 }

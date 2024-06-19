@@ -29,6 +29,7 @@ import io.element.android.features.poll.impl.aPollTimelineItems
 import io.element.android.features.poll.impl.anOngoingPollContent
 import io.element.android.features.poll.impl.data.PollRepository
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
@@ -39,6 +40,7 @@ import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.LiveTimelineProvider
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -455,47 +457,53 @@ import org.junit.Test
     @Test
     fun `delete confirms`() = runTest {
         val presenter = createCreatePollPresenter(mode = CreatePollMode.EditPoll(pollEventId))
+        val redactEventLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String? -> Result.success(true) }
+        timeline.redactEventLambda = redactEventLambda
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             awaitDefaultItem()
             awaitPollLoaded().eventSink(CreatePollEvents.Delete(confirmed = false))
             awaitDeleteConfirmation()
-            assertThat(fakeMatrixRoom.redactEventEventIdParam).isNull()
+            assert(redactEventLambda).isNeverCalled()
         }
     }
 
     @Test
     fun `delete can be cancelled`() = runTest {
         val presenter = createCreatePollPresenter(mode = CreatePollMode.EditPoll(pollEventId))
+        val redactEventLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String? -> Result.success(true) }
+        timeline.redactEventLambda = redactEventLambda
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             awaitDefaultItem()
             awaitPollLoaded().eventSink(CreatePollEvents.Delete(confirmed = false))
-            assertThat(fakeMatrixRoom.redactEventEventIdParam).isNull()
             awaitDeleteConfirmation().eventSink(CreatePollEvents.HideConfirmation)
             awaitPollLoaded().apply {
                 assertThat(showDeleteConfirmation).isFalse()
             }
-            assertThat(fakeMatrixRoom.redactEventEventIdParam).isNull()
+            assert(redactEventLambda).isNeverCalled()
         }
     }
 
     @Test
     fun `delete can be confirmed`() = runTest {
         val presenter = createCreatePollPresenter(mode = CreatePollMode.EditPoll(pollEventId))
+        val redactEventLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String? -> Result.success(true) }
+        timeline.redactEventLambda = redactEventLambda
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             awaitDefaultItem()
             awaitPollLoaded().eventSink(CreatePollEvents.Delete(confirmed = false))
-            assertThat(fakeMatrixRoom.redactEventEventIdParam).isNull()
             awaitDeleteConfirmation().eventSink(CreatePollEvents.Delete(confirmed = true))
             awaitPollLoaded().apply {
                 assertThat(showDeleteConfirmation).isFalse()
             }
-            assertThat(fakeMatrixRoom.redactEventEventIdParam).isEqualTo(pollEventId)
+            assert(redactEventLambda)
+                .isCalledOnce()
+                .with(value(pollEventId), value(null), any())
         }
     }
 

@@ -19,8 +19,12 @@ package io.element.android.features.securebackup.impl.enter
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performImeAction
+import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.securebackup.impl.R
+import io.element.android.features.securebackup.impl.setup.views.aFormattedRecoveryKey
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -33,6 +37,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 class SecureBackupEnterRecoveryKeyViewTest {
@@ -61,6 +66,7 @@ class SecureBackupEnterRecoveryKeyViewTest {
     }
 
     @Test
+    @Config(qualifiers = "h1024dp")
     fun `tapping on Continue when key is valid - calls expected action`() {
         val recorder = EventsRecorder<SecureBackupEnterRecoveryKeyEvents>()
         rule.setSecureBackupEnterRecoveryKeyView(
@@ -72,6 +78,31 @@ class SecureBackupEnterRecoveryKeyViewTest {
     }
 
     @Test
+    fun `entering a char emits the expected event`() {
+        val recorder = EventsRecorder<SecureBackupEnterRecoveryKeyEvents>()
+        val keyValue = aFormattedRecoveryKey()
+        rule.setSecureBackupEnterRecoveryKeyView(
+            aSecureBackupEnterRecoveryKeyState(isSubmitEnabled = true, eventSink = recorder),
+        )
+        rule.onNodeWithText(keyValue).performTextInput("X")
+        recorder.assertSingle(
+            SecureBackupEnterRecoveryKeyEvents.OnRecoveryKeyChange("X$keyValue")
+        )
+    }
+
+    @Test
+    fun `validating from keyboard emits the expected event`() {
+        val recorder = EventsRecorder<SecureBackupEnterRecoveryKeyEvents>()
+        val keyValue = aFormattedRecoveryKey()
+        rule.setSecureBackupEnterRecoveryKeyView(
+            aSecureBackupEnterRecoveryKeyState(isSubmitEnabled = true, eventSink = recorder),
+        )
+        rule.onNodeWithText(keyValue).performImeAction()
+        recorder.assertSingle(SecureBackupEnterRecoveryKeyEvents.Submit)
+    }
+
+    @Test
+    @Config(qualifiers = "h1024dp")
     fun `tapping on Lost your recovery key - calls onCreateNewRecoveryKey`() {
         ensureCalledOnce { callback ->
             rule.setSecureBackupEnterRecoveryKeyView(
@@ -98,7 +129,7 @@ class SecureBackupEnterRecoveryKeyViewTest {
         onBackClick: () -> Unit = EnsureNeverCalled(),
         onCreateNewRecoveryKey: () -> Unit = EnsureNeverCalled(),
     ) {
-        rule.setContent {
+        setContent {
             SecureBackupEnterRecoveryKeyView(
                 state = state,
                 onSuccess = onDone,

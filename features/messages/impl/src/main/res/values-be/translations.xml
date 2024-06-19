@@ -36,7 +36,7 @@
   <string name="screen_room_timeline_no_permission_to_post">"У Вас няма дазволу на публікацыю ў гэтым пакоі"</string>
   <string name="screen_room_timeline_reactions_show_less">"Паказаць менш"</string>
   <string name="screen_room_timeline_reactions_show_more">"Паказаць больш"</string>
-  <string name="screen_room_timeline_read_marker_title">"Новы"</string>
+  <string name="screen_room_timeline_read_marker_title">"Новае"</string>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d змена ў пакоі"</item>
     <item quantity="few">"%1$d змены ў пакоі"</item>

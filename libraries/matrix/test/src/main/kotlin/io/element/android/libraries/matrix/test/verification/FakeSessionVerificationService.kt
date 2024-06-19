@@ -24,8 +24,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class FakeSessionVerificationService : SessionVerificationService {
-    private val _sessionVerifiedStatus = MutableStateFlow<SessionVerifiedStatus>(SessionVerifiedStatus.Unknown)
+class FakeSessionVerificationService(
+    initialSessionVerifiedStatus: SessionVerifiedStatus = SessionVerifiedStatus.Unknown,
+) : SessionVerificationService {
+    private val _sessionVerifiedStatus = MutableStateFlow(initialSessionVerifiedStatus)
     private var _verificationFlowState = MutableStateFlow<VerificationFlowState>(VerificationFlowState.Initial)
     private var _needsSessionVerification = MutableStateFlow(true)
     var shouldFail = false

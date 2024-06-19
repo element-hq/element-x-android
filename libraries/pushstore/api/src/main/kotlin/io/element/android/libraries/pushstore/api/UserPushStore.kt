@@ -29,6 +29,9 @@ interface UserPushStore {
     fun getNotificationEnabledForDevice(): Flow<Boolean>
     suspend fun setNotificationEnabledForDevice(enabled: Boolean)
 
+    fun ignoreRegistrationError(): Flow<Boolean>
+    suspend fun setIgnoreRegistrationError(ignore: Boolean)
+
     /**
      * Return true if Pin code is disabled, or if user set the settings to see full notification content.
      */

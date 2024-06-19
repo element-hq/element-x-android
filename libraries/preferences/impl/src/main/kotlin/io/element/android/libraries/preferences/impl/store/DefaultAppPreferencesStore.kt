@@ -24,11 +24,11 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

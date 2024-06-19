@@ -31,8 +31,6 @@ import io.element.android.features.messages.impl.timeline.components.reactionsum
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
-import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
-import io.element.android.features.messages.impl.timeline.components.retrysendmenu.aRetrySendMenuState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.typing.aTypingNotificationState
@@ -110,7 +108,6 @@ fun aMessagesState(
         // Render a focused event for an event with sender information displayed
         focusedEventIndex = 2,
     ),
-    retrySendMenuState: RetrySendMenuState = aRetrySendMenuState(),
     readReceiptBottomSheetState: ReadReceiptBottomSheetState = aReadReceiptBottomSheetState(),
     actionListState: ActionListState = anActionListState(),
     customReactionState: CustomReactionState = aCustomReactionState(),
@@ -132,7 +129,6 @@ fun aMessagesState(
     voiceMessageComposerState = voiceMessageComposerState,
     typingNotificationState = aTypingNotificationState(),
     timelineState = timelineState,
-    retrySendMenuState = retrySendMenuState,
     readReceiptBottomSheetState = readReceiptBottomSheetState,
     actionListState = actionListState,
     customReactionState = customReactionState,

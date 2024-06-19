@@ -29,18 +29,20 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
+import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
+import io.element.android.libraries.push.impl.notifications.DefaultNotificationBitmapLoader
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds
-import io.element.android.libraries.push.impl.notifications.NotificationBitmapLoader
 import io.element.android.libraries.push.impl.notifications.RoomEventGroupInfo
+import io.element.android.libraries.push.impl.notifications.channels.DefaultNotificationChannels
 import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels
 import io.element.android.libraries.push.impl.notifications.factories.action.AcceptInvitationActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.MarkAsReadActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.QuickReplyActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.RejectInvitationActionFactory
-import io.element.android.libraries.push.impl.notifications.fake.FakeImageLoader
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
+import io.element.android.libraries.push.test.notifications.FakeImageLoader
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
@@ -284,7 +286,7 @@ fun createNotificationCreator(
     context: Context = RuntimeEnvironment.getApplication(),
     buildMeta: BuildMeta = aBuildMeta(),
     notificationChannels: NotificationChannels = createNotificationChannels(),
-    bitmapLoader: NotificationBitmapLoader = NotificationBitmapLoader(context, FakeBuildVersionSdkIntProvider(Build.VERSION_CODES.R)),
+    bitmapLoader: NotificationBitmapLoader = DefaultNotificationBitmapLoader(context, FakeBuildVersionSdkIntProvider(Build.VERSION_CODES.R)),
 ): NotificationCreator {
     return DefaultNotificationCreator(
         context = context,
@@ -327,5 +329,5 @@ fun createNotificationCreator(
 
 fun createNotificationChannels(): NotificationChannels {
     val context = RuntimeEnvironment.getApplication()
-    return NotificationChannels(context, NotificationManagerCompat.from(context), FakeStringProvider(""))
+    return DefaultNotificationChannels(context, NotificationManagerCompat.from(context), FakeStringProvider(""))
 }

@@ -27,8 +27,11 @@ import io.element.android.features.rageshake.impl.preferences.DefaultRageshakePr
 import io.element.android.features.rageshake.test.rageshake.FakeRageShake
 import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataStore
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
@@ -69,6 +72,19 @@ class DeveloperSettingsPresenterTest {
             val state = awaitLastSequentialItem()
             val numberOfModifiableFeatureFlags = FeatureFlags.entries.count { it.isFinished.not() }
             assertThat(state.features).hasSize(numberOfModifiableFeatureFlags)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - ensures Room directory search is not present on release Google Play builds`() = runTest {
+        val buildMeta = aBuildMeta(buildType = BuildType.RELEASE, flavorDescription = "GooglePlay")
+        val presenter = createDeveloperSettingsPresenter(buildMeta = buildMeta)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val state = awaitLastSequentialItem()
+            assertThat(state.features).doesNotContain(FeatureFlags.RoomDirectorySearch)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -150,6 +166,7 @@ class DeveloperSettingsPresenterTest {
         clearCacheUseCase: FakeClearCacheUseCase = FakeClearCacheUseCase(),
         rageshakePresenter: DefaultRageshakePreferencesPresenter = DefaultRageshakePreferencesPresenter(FakeRageShake(), FakeRageshakeDataStore()),
         preferencesStore: InMemoryAppPreferencesStore = InMemoryAppPreferencesStore(),
+        buildMeta: BuildMeta = aBuildMeta(),
     ): DeveloperSettingsPresenter {
         return DeveloperSettingsPresenter(
             featureFlagService = featureFlagService,
@@ -157,6 +174,7 @@ class DeveloperSettingsPresenterTest {
             clearCacheUseCase = clearCacheUseCase,
             rageshakePresenter = rageshakePresenter,
             appPreferencesStore = preferencesStore,
+            buildMeta = buildMeta,
         )
     }
 }

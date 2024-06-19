@@ -41,9 +41,9 @@ echo
 echo "Search for forbidden patterns in Kotlin source files..."
 
 # list all Kotlin folders of the project.
-allKotlinDirs=`find . -type d |grep -v build |grep -v \.git |grep -v \.gradle |grep kotlin$`
+allKotlinDirs=$(find . -type d |grep -v build |grep -v \.git |grep -v \.gradle |grep kotlin$)
 
-${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_code.txt $allKotlinDirs
+${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_code.txt "$allKotlinDirs"
 
 resultForbiddenStringInCode=$?
 
@@ -51,9 +51,9 @@ echo
 echo "Search for forbidden patterns in XML resource files..."
 
 # list all res folders of the project.
-allResDirs=`find . -type d |grep -v build |grep -v \.git |grep -v \.gradle |grep /res$`
+allResDirs=$(find . -type d |grep -v build |grep -v \.git |grep -v \.gradle |grep /res$)
 
-${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_xml.txt $allResDirs
+${searchForbiddenStringsScript} ./tools/check/forbidden_strings_in_xml.txt "$allResDirs"
 
 resultForbiddenStringInXml=$?
 

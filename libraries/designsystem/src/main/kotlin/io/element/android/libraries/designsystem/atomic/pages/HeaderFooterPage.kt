@@ -22,7 +22,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,6 +41,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
  * @param modifier Classical modifier.
  * @param paddingValues padding values to apply to the content.
  * @param containerColor color of the container. Set to [Color.Transparent] if you provide a background in the [modifier].
+ * @param isScrollable if the whole content should be scrollable.
  * @param background optional background component.
  * @param topBar optional topBar.
  * @param header optional header.
@@ -50,6 +53,7 @@ fun HeaderFooterPage(
     modifier: Modifier = Modifier,
     paddingValues: PaddingValues = PaddingValues(20.dp),
     containerColor: Color = MaterialTheme.colorScheme.background,
+    isScrollable: Boolean = false,
     background: @Composable () -> Unit = {},
     topBar: @Composable () -> Unit = {},
     header: @Composable () -> Unit = {},
@@ -63,25 +67,53 @@ fun HeaderFooterPage(
     ) { padding ->
         Box {
             background()
-            Column(
-                modifier = Modifier
-                    .padding(paddingValues = paddingValues)
-                    .padding(padding)
-                    .consumeWindowInsets(padding)
-            ) {
-                // Header
-                header()
-                // Content
+            if (isScrollable) {
+                // Render in a LazyColumn
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(paddingValues = paddingValues)
+                        .padding(padding)
+                        .consumeWindowInsets(padding)
+                        .imePadding()
+                ) {
+                    // Header
+                    item {
+                        header()
+                    }
+                    // Content
+                    item {
+                        content()
+                    }
+                    // Footer
+                    item {
+                        Box(modifier = Modifier.padding(horizontal = 16.dp)) {
+                            footer()
+                        }
+                    }
+                }
+            } else {
+                // Render in a Column
                 Column(
                     modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth(),
+                        .padding(paddingValues = paddingValues)
+                        .padding(padding)
+                        .consumeWindowInsets(padding)
+                        .imePadding()
                 ) {
-                    content()
-                }
-                // Footer
-                Box(modifier = Modifier.padding(horizontal = 16.dp)) {
-                    footer()
+                    // Header
+                    header()
+                    // Content
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                    ) {
+                        content()
+                    }
+                    // Footer
+                    Box(modifier = Modifier.padding(horizontal = 16.dp)) {
+                        footer()
+                    }
                 }
             }
         }

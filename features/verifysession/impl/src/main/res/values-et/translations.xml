@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_subtitle">"Krüptitud sõnumivahetuse tagamiseks verifitseeri see seade."</string>
+  <string name="screen_identity_confirmation_title">"Kinnita, et see oled sina"</string>
+  <string name="screen_identity_confirmed_subtitle">"Nüüd saad saata või lugeda sõnumeid turvaliselt ning kõik sinu vestluspartnerid võivad usaldada seda seadet."</string>
+  <string name="screen_identity_confirmed_title">"Seade on verifitseeritud"</string>
+  <string name="screen_identity_use_another_device">"Kasuta mõnda muud seadet"</string>
+</resources>

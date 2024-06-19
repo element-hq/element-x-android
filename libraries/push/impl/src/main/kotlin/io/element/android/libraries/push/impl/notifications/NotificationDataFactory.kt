@@ -49,6 +49,8 @@ interface NotificationDataFactory {
     @JvmName("toNotificationSimpleEvents")
     @Suppress("INAPPLICABLE_JVM_NAME")
     fun toNotifications(simpleEvents: List<SimpleNotifiableEvent>): List<OneShotNotification>
+    @JvmName("toNotificationFallbackEvents")
+    @Suppress("INAPPLICABLE_JVM_NAME")
     fun toNotifications(fallback: List<FallbackNotifiableEvent>): List<OneShotNotification>
 
     fun createSummaryNotification(
@@ -130,6 +132,8 @@ class DefaultNotificationDataFactory @Inject constructor(
         }
     }
 
+    @JvmName("toNotificationFallbackEvents")
+    @Suppress("INAPPLICABLE_JVM_NAME")
     override fun toNotifications(fallback: List<FallbackNotifiableEvent>): List<OneShotNotification> {
         return fallback.map { event ->
             OneShotNotification(

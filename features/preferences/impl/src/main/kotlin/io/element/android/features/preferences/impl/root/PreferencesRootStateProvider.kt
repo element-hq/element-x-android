@@ -23,6 +23,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 fun aPreferencesRootState(
     myUser: MatrixUser,
+    eventSink: (PreferencesRootEvents) -> Unit = { _ -> },
 ) = PreferencesRootState(
     myUser = myUser,
     version = "Version 1.1 (1)",
@@ -38,4 +39,5 @@ fun aPreferencesRootState(
     showBlockedUsersItem = true,
     snackbarMessage = SnackbarMessage(CommonStrings.common_verification_complete),
     directLogoutState = aDirectLogoutState(),
+    eventSink = eventSink,
 )

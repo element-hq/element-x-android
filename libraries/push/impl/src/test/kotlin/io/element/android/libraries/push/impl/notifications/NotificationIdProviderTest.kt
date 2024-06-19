@@ -19,12 +19,13 @@ package io.element.android.libraries.push.impl.notifications
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
+import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import org.junit.Test
 
 class NotificationIdProviderTest {
     @Test
     fun `test notification id provider`() {
-        val sut = NotificationIdProvider()
+        val sut = NotificationIdProvider
         val offsetForASessionId = 305_410
         assertThat(sut.getSummaryNotificationId(A_SESSION_ID)).isEqualTo(offsetForASessionId + 0)
         assertThat(sut.getRoomMessagesNotificationId(A_SESSION_ID)).isEqualTo(offsetForASessionId + 1)

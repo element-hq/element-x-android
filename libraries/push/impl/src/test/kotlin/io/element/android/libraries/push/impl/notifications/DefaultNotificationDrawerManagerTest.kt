@@ -28,12 +28,13 @@ import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
+import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.element.android.libraries.push.impl.notifications.fake.FakeActiveNotificationsProvider
-import io.element.android.libraries.push.impl.notifications.fake.FakeImageLoaderHolder
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationCreator
 import io.element.android.libraries.push.impl.notifications.fake.FakeRoomGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.fake.FakeSummaryGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
+import io.element.android.libraries.push.test.notifications.FakeImageLoaderHolder
 import io.element.android.services.appnavstate.api.AppNavigationState
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import io.element.android.services.appnavstate.api.NavigationState
@@ -164,7 +165,7 @@ class DefaultNotificationDrawerManagerTest {
         val notificationManager = mockk<NotificationManagerCompat> {
             every { cancel(any(), any()) } returns Unit
         }
-        val summaryId = NotificationIdProvider().getSummaryNotificationId(A_SESSION_ID)
+        val summaryId = NotificationIdProvider.getSummaryNotificationId(A_SESSION_ID)
         val activeNotificationsProvider = FakeActiveNotificationsProvider(
             mutableListOf(
                 mockk {
@@ -198,7 +199,6 @@ class DefaultNotificationDrawerManagerTest {
         return DefaultNotificationDrawerManager(
             notificationManager = notificationManager,
             notificationRenderer = NotificationRenderer(
-                notificationIdProvider = NotificationIdProvider(),
                 notificationDisplayer = DefaultNotificationDisplayer(context, NotificationManagerCompat.from(context)),
                 notificationDataFactory = DefaultNotificationDataFactory(
                     notificationCreator = FakeNotificationCreator(),
@@ -208,7 +208,6 @@ class DefaultNotificationDrawerManagerTest {
                     stringProvider = FakeStringProvider(),
                 ),
             ),
-            notificationIdProvider = NotificationIdProvider(),
             appNavigationStateService = appNavigationStateService,
             coroutineScope = this,
             matrixClientProvider = matrixClientProvider,

@@ -23,11 +23,11 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.lockscreen.api.LockScreenService
-import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.permissions.api.PermissionStateProvider
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.CoroutineScope

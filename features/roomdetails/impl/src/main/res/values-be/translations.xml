@@ -78,7 +78,7 @@
   <string name="screen_room_member_list_manage_member_unban_message">"Яны змогуць зноў далучыцца да гэтага пакоя, калі іх запросяць."</string>
   <string name="screen_room_member_list_manage_member_unban_title">"Разблакіраваць удзельніка"</string>
   <string name="screen_room_member_list_manage_member_user_info">"Прагляд профілю"</string>
-  <string name="screen_room_member_list_mode_banned">"Заблакіраваны"</string>
+  <string name="screen_room_member_list_mode_banned">"Заблакіраваныя"</string>
   <string name="screen_room_member_list_mode_members">"Удзельнікі"</string>
   <string name="screen_room_member_list_pending_header_title">"У чаканні"</string>
   <string name="screen_room_member_list_removing_user">"Выдаленне %1$s …"</string>

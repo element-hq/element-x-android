@@ -495,11 +495,11 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
             initialState.eventSink.invoke(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
             awaitItem().also { state ->
                 assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
-                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Fetching)
+                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Loading(AN_EVENT_ID))
             }
             skipItems(2)
             awaitItem().also { state ->
-                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Fetched)
+                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Success(AN_EVENT_ID))
                 assertThat(state.timelineItems).isNotEmpty()
             }
             initialState.eventSink.invoke(TimelineEvents.JumpToLive)
@@ -539,7 +539,7 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
             initialState.eventSink.invoke(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
             awaitItem().also { state ->
                 assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
-                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Cached(0))
+                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Success(AN_EVENT_ID, 0))
             }
         }
     }
@@ -562,7 +562,7 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
             initialState.eventSink(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
             awaitItem().also { state ->
                 assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
-                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Fetching)
+                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Loading(AN_EVENT_ID))
             }
             awaitItem().also { state ->
                 assertThat(state.focusRequestState).isInstanceOf(FocusRequestState.Failure::class.java)

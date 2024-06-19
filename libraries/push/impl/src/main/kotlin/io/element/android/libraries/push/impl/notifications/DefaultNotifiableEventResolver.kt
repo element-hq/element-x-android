@@ -36,6 +36,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
@@ -77,6 +78,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
     private val notificationMediaRepoFactory: NotificationMediaRepo.Factory,
     @ApplicationContext private val context: Context,
     private val permalinkParser: PermalinkParser,
+    private val callNotificationEventResolver: CallNotificationEventResolver,
 ) : NotifiableEventResolver {
     override suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): NotifiableEvent? {
         // Restore session
@@ -150,8 +152,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
             }
             NotificationContent.MessageLike.CallAnswer,
             NotificationContent.MessageLike.CallCandidates,
-            NotificationContent.MessageLike.CallHangup,
-            is NotificationContent.MessageLike.CallNotify -> { // TODO CallNotify will be handled separately in the future
+            NotificationContent.MessageLike.CallHangup -> {
                 Timber.tag(loggerTag.value).d("Ignoring notification for call ${content.javaClass.simpleName}")
                 null
             }
@@ -171,6 +172,9 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     roomAvatarPath = roomAvatarUrl,
                     senderAvatarPath = senderAvatarUrl,
                 )
+            }
+            is NotificationContent.MessageLike.CallNotify -> {
+                callNotificationEventResolver.resolveEvent(userId, this)
             }
             NotificationContent.MessageLike.KeyVerificationAccept,
             NotificationContent.MessageLike.KeyVerificationCancel,
@@ -310,7 +314,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
 }
 
 @Suppress("LongParameterList")
-private fun buildNotifiableMessageEvent(
+internal fun buildNotifiableMessageEvent(
     sessionId: SessionId,
     senderId: UserId,
     roomId: RoomId,
@@ -334,7 +338,8 @@ private fun buildNotifiableMessageEvent(
     outGoingMessage: Boolean = false,
     outGoingMessageFailed: Boolean = false,
     isRedacted: Boolean = false,
-    isUpdated: Boolean = false
+    isUpdated: Boolean = false,
+    type: String = EventType.MESSAGE,
 ) = NotifiableMessageEvent(
     sessionId = sessionId,
     senderId = senderId,
@@ -356,5 +361,6 @@ private fun buildNotifiableMessageEvent(
     outGoingMessage = outGoingMessage,
     outGoingMessageFailed = outGoingMessageFailed,
     isRedacted = isRedacted,
-    isUpdated = isUpdated
+    isUpdated = isUpdated,
+    type = type,
 )

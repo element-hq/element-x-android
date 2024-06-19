@@ -37,6 +37,6 @@ class StableCharSequence(initialText: CharSequence = "") {
     fun needsDisplaying(): Boolean = needsDisplaying
 
     override fun toString(): String {
-        return "ImmutableCharSequence(value='$value', needsDisplaying=$needsDisplaying)"
+        return "StableCharSequence(value='$value', needsDisplaying=$needsDisplaying)"
     }
 }

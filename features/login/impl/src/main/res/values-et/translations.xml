@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_account_provider_change">"Muuda teenusepakkujat"</string>
+  <string name="screen_account_provider_form_hint">"Koduserveri aadress"</string>
+  <string name="screen_account_provider_form_notice">"Sisesta otsingusõna või domeeni nimi."</string>
+  <string name="screen_account_provider_form_subtitle">"Otsi äriühingut, kogukonda või võrgus leiduvat Matrixi serverit."</string>
+  <string name="screen_account_provider_form_title">"Leia teenusepakkuja"</string>
+  <string name="screen_account_provider_signin_title">"Sa oled sisse logimas %s teenusesse"</string>
+  <string name="screen_account_provider_signup_title">"Sa oled loomas kasutajakontot %s teenuses"</string>
+  <string name="screen_change_server_form_header">"Koduserveri url"</string>
+  <string name="screen_change_server_subtitle">"Mis on sinu koduserveri aadress?"</string>
+  <string name="screen_change_server_title">"Vali oma server"</string>
+  <string name="screen_login_error_deactivated_account">"Konto on kasutusest eemaldatud."</string>
+  <string name="screen_login_error_invalid_credentials">"Vigane kasutajanimi ja/või salasõna"</string>
+  <string name="screen_login_error_invalid_user_id">"See ei ole korrektne kasutajanimi. Õige vorming on: „@kasutaja:koduserver.ee“"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Proovi uuesti"</string>
+  <string name="screen_qr_code_login_no_camera_permission_state_description">"Jätkamiseks pead lubama, et %1$s saab kasutada sinu nutiseadme kaamerat"</string>
+  <string name="screen_qr_code_login_no_camera_permission_state_title">"QR-koodi lugemiseks luba kaamerat kasutada"</string>
+  <string name="screen_qr_code_login_scanning_state_title">"Skaneeri QR-koodi"</string>
+  <string name="screen_qr_code_login_start_over_button">"Alusta uuesti"</string>
+  <string name="screen_qr_code_login_unknown_error_description">"Tekkis ootamatu viga. Palun proovi uuesti."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Ootame sinu teise seadme järgi"</string>
+  <string name="screen_qr_code_login_verify_code_subtitle">"Sinu teenusepakkuja võib sisselogimisel eeldada selle verifitseerimiskoodi kasutamist."</string>
+  <string name="screen_qr_code_login_verify_code_title">"Sinu verifitseerimiskood"</string>
+  <string name="screen_waitlist_message_success">"Tere tulemast rakendusse %1$s!"</string>
+</resources>

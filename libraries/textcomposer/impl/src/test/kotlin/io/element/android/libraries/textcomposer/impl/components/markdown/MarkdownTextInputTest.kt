@@ -183,7 +183,7 @@ class MarkdownTextInputTest {
         onTyping: (Boolean) -> Unit = {},
         onSuggestionReceived: (Suggestion?) -> Unit = {},
     ) {
-        rule.setContent {
+        setContent {
             val style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.hasFocus)
             MarkdownTextInput(
                 state = state,

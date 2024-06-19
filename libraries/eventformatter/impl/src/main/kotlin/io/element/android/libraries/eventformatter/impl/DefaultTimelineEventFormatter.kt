@@ -21,6 +21,7 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
 import io.element.android.libraries.eventformatter.impl.mode.RenderingMode
+import io.element.android.libraries.matrix.api.timeline.item.event.CallNotifyContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
@@ -62,6 +63,9 @@ class DefaultTimelineEventFormatter @Inject constructor(
             }
             is LegacyCallInviteContent -> {
                 sp.getString(CommonStrings.common_call_invite)
+            }
+            is CallNotifyContent -> {
+                sp.getString(CommonStrings.common_call_started)
             }
             RedactedContent,
             is StickerContent,

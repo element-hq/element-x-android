@@ -36,5 +36,6 @@ fun aSessionData(
         isTokenValid = isTokenValid,
         loginType = LoginType.UNKNOWN,
         passphrase = null,
+        sessionPath = "/a/path/to/a/session",
     )
 }

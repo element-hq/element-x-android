@@ -1,0 +1,1 @@
+Improve how active calls work by also taking into account external url calls and waiting for the sync process to start before sending the `m.call.notify` event.

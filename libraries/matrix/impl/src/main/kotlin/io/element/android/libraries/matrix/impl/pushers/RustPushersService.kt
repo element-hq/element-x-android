@@ -17,9 +17,11 @@
 package io.element.android.libraries.matrix.impl.pushers
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
 import io.element.android.libraries.matrix.api.pusher.UnsetHttpPusherData
+import io.element.android.libraries.matrix.impl.exception.mapClientException
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.HttpPusherData
@@ -52,6 +54,7 @@ class RustPushersService(
                     lang = setHttpPusherData.lang
                 )
             }
+                .mapFailure { it.mapClientException() }
         }
     }
 

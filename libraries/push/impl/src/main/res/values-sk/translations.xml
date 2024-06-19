@@ -3,6 +3,7 @@
   <string name="notification_channel_call">"Zavolať"</string>
   <string name="notification_channel_listening_for_events">"Počúvanie udalostí"</string>
   <string name="notification_channel_noisy">"Hlasité oznámenia"</string>
+  <string name="notification_channel_ringing_calls">"Vyzváňanie hovorov"</string>
   <string name="notification_channel_silent">"Tiché oznámenia"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d správa"</item>
@@ -15,6 +16,7 @@
     <item quantity="other">"%d oznámení"</item>
   </plurals>
   <string name="notification_fallback_content">"Oznámenie"</string>
+  <string name="notification_incoming_call">"Prichádzajúci hovor"</string>
   <string name="notification_inline_reply_failed">"** Nepodarilo sa odoslať - prosím otvorte miestnosť"</string>
   <string name="notification_invitation_action_join">"Pripojiť sa"</string>
   <string name="notification_invitation_action_reject">"Zamietnuť"</string>

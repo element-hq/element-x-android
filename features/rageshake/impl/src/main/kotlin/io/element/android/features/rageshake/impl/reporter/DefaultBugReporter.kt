@@ -21,12 +21,11 @@ import android.os.Build
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.appconfig.ApplicationConfig
+import io.element.android.appconfig.RageshakeConfig
 import io.element.android.features.rageshake.api.crash.CrashDataStore
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.features.rageshake.api.reporter.BugReporterListener
 import io.element.android.features.rageshake.api.screenshot.ScreenshotHolder
-import io.element.android.features.rageshake.impl.R
 import io.element.android.libraries.androidutils.file.compressFile
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -139,7 +138,7 @@ class DefaultBugReporter @Inject constructor(
                 // build the multi part request
                 val builder = BugReporterMultipartBody.Builder()
                     .addFormDataPart("text", bugDescription)
-                    .addFormDataPart("app", context.getString(R.string.bug_report_app_name))
+                    .addFormDataPart("app", RageshakeConfig.BUG_REPORT_APP_NAME)
                     .addFormDataPart("user_agent", userAgentProvider.provide())
                     .addFormDataPart("user_id", userId?.toString() ?: "undefined")
                     .addFormDataPart("can_contact", canContact.toString())
@@ -178,7 +177,7 @@ class DefaultBugReporter @Inject constructor(
                         val requestBody = file.asRequestBody(MimeTypes.OctetStream.toMediaTypeOrNull())
                         totalUploadedSize += requestBody.contentLength()
                         // If we are about to upload more than the max request size, stop here
-                        if (totalUploadedSize > ApplicationConfig.MAX_LOG_UPLOAD_SIZE) {
+                        if (totalUploadedSize > RageshakeConfig.MAX_LOG_UPLOAD_SIZE) {
                             Timber.e("Could not upload file ${file.name} because it would exceed the max request size")
                             break
                         }
@@ -375,7 +374,7 @@ class DefaultBugReporter @Inject constructor(
             val separator = System.lineSeparator()
             logcatProcess.inputStream
                 .reader()
-                .buffered(ApplicationConfig.MAX_LOG_UPLOAD_SIZE.toInt())
+                .buffered(RageshakeConfig.MAX_LOG_UPLOAD_SIZE.toInt())
                 .forEachLine { line ->
                     streamWriter.append(line)
                     streamWriter.append(separator)

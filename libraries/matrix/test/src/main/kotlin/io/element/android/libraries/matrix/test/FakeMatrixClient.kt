@@ -48,13 +48,17 @@ import io.element.android.libraries.matrix.test.roomdirectory.FakeRoomDirectoryS
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import io.element.android.tests.testutils.lambda.lambdaError
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import java.util.Optional
@@ -77,6 +81,7 @@ class FakeMatrixClient(
     private val accountManagementUrlString: Result<String?> = Result.success(null),
     private val resolveRoomAliasResult: (RoomAlias) -> Result<ResolvedRoomAlias> = { Result.success(ResolvedRoomAlias(A_ROOM_ID, emptyList())) },
     private val getRoomPreviewFromRoomIdResult: (RoomId, List<String>) -> Result<RoomPreview> = { _, _ -> Result.failure(AN_EXCEPTION) },
+    private val clearCacheLambda: () -> Unit = { lambdaError() },
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -158,6 +163,7 @@ class FakeMatrixClient(
     }
 
     override suspend fun clearCache() {
+        clearCacheLambda()
     }
 
     override suspend fun logout(ignoreSdkError: Boolean): String? = simulateLongTask {
@@ -298,4 +304,13 @@ class FakeMatrixClient(
     }
 
     override fun getRoomInfoFlow(roomId: RoomId) = getRoomInfoFlowLambda(roomId)
+
+    var setAllSendQueuesEnabledLambda = lambdaRecorder(ensureNeverCalled = true) { _: Boolean ->
+        // no-op
+    }
+
+    override suspend fun setAllSendQueuesEnabled(enabled: Boolean) = setAllSendQueuesEnabledLambda(enabled)
+
+    var sendQueueDisabledFlow = emptyFlow<RoomId>()
+    override fun sendQueueDisabledFlow(): Flow<RoomId> = sendQueueDisabledFlow
 }

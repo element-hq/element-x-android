@@ -136,6 +136,18 @@ private fun NotificationSettingsContentView(
     )
 
     if (systemSettings.appNotificationsEnabled) {
+        if (!state.fullScreenIntentPermissionsState.permissionGranted) {
+            PreferenceCategory {
+                PreferenceText(
+                    icon = CompoundIcons.VoiceCall(),
+                    title = stringResource(id = R.string.full_screen_intent_banner_title),
+                    subtitle = stringResource(R.string.full_screen_intent_banner_message,),
+                    onClick = {
+                        state.fullScreenIntentPermissionsState.openFullScreenIntentSettings()
+                    }
+                )
+            }
+        }
         PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_notification_section_title)) {
             PreferenceText(
                 title = stringResource(id = R.string.screen_notification_settings_group_chats),

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Tegevused"</string>
+  <string name="emoji_picker_category_flags">"Lipud"</string>
+  <string name="emoji_picker_category_foods">"Toit ja jook"</string>
+  <string name="emoji_picker_category_nature">"Loomad ja loodus"</string>
+  <string name="emoji_picker_category_objects">"Esemed"</string>
+  <string name="emoji_picker_category_people">"Emotikonid ja inimesed"</string>
+  <string name="emoji_picker_category_places">"Reisimine ja kohad"</string>
+  <string name="emoji_picker_category_symbols">"Sümbolid"</string>
+  <string name="screen_report_content_explanation">"Teade selle sõnumi kohta edastatakse sinu koduserveri haldajale. Haldajal ei ole võimalik lugeda krüptitud sõnumite sisu."</string>
+  <string name="screen_report_content_hint">"Sellest sisust teatamise põhjus"</string>
+  <string name="screen_room_attachment_source_camera">"Kaamera"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Tee pilt"</string>
+  <string name="screen_room_attachment_source_camera_video">"Salvesta video"</string>
+  <string name="screen_room_attachment_source_files">"Manus"</string>
+  <string name="screen_room_attachment_source_gallery">"Fotode ja videote galerii"</string>
+  <string name="screen_room_attachment_source_location">"Asukoht"</string>
+  <string name="screen_room_attachment_source_poll">"Küsitlus"</string>
+  <string name="screen_room_attachment_text_formatting">"Tekstivorming"</string>
+  <string name="screen_room_encrypted_history_banner">"Sõnumite ajalugu pole hetkel saadaval"</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"Selle jututoa sõnumite ajalugu pole hetkel saadaval. Verifitseeri see seade ja näed tervet oma sõnumiteajalugu."</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Teavita kogu jututuba"</string>
+  <string name="screen_room_mentions_at_room_title">"Kõik"</string>
+  <string name="screen_room_timeline_beginning_of_room">"See on %1$s jututoa algus."</string>
+  <string name="screen_room_timeline_beginning_of_room_no_name">"See on antud vestluse algus."</string>
+  <string name="screen_room_timeline_read_marker_title">"Uus"</string>
+  <plurals name="screen_room_timeline_state_changes">
+    <item quantity="one">"%1$d jututoa muudatus"</item>
+    <item quantity="other">"%1$d jututoa muudatust"</item>
+  </plurals>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="one">"%1$s, %2$s ja veel %3$d huviline"</item>
+    <item quantity="other">"%1$s, %2$s ja veel %3$d huvilist"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="one">"%1$s kirjutab"</item>
+    <item quantity="other">"%1$s kirjutavad"</item>
+  </plurals>
+</resources>

@@ -149,7 +149,7 @@ private fun RoomSpecificNotificationSettingsView(
                         enabled = !state.displayIsDefault.orTrue(),
                         displayMentionsOnlyDisclaimer = state.displayMentionsOnlyDisclaimer,
                         onSelectOption = {
-                            state.eventSink(RoomNotificationSettingsEvents.RoomNotificationModeChanged(it.mode))
+                            state.eventSink(RoomNotificationSettingsEvents.ChangeRoomNotificationMode(it.mode))
                         },
                     )
                 }

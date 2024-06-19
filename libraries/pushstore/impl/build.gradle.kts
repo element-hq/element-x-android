@@ -44,6 +44,7 @@ dependencies {
 
     testImplementation(libs.test.junit)
     testImplementation(libs.test.mockk)
+    testImplementation(libs.test.robolectric)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(libs.coroutines.test)

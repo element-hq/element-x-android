@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Vali kuidas sa soovid saada teavitusi"</string>
+  <string name="screen_advanced_settings_developer_mode">"Arendaja valikud"</string>
+  <string name="screen_advanced_settings_developer_mode_description">"Selle eelistuse sisselülitamisel lisanduvad rakendusse arendaja tööks vajalikud valikud."</string>
+  <string name="screen_advanced_settings_element_call_base_url_validation_error">"Vigane url. Palun vaata, et url algaks protokolliga (http/https) ning aadress ise oleks ka õige."</string>
+  <string name="screen_advanced_settings_push_provider_android">"Tõuketeavituste pakkuja"</string>
+  <string name="screen_advanced_settings_rich_text_editor_description">"Kui soovid Markdown-vormingut käsitsi lisada, siis lülita vormindatud teksti toimeti välja."</string>
+  <string name="screen_advanced_settings_send_read_receipts">"Lugemisteatised"</string>
+  <string name="screen_advanced_settings_send_read_receipts_description">"Kui lülitad selle valiku välja, siis mitte keegi enam ei saa sinult lugemisteatisi. Küll aga saad sina teiste kasutajate lugemisteatisi."</string>
+  <string name="screen_advanced_settings_share_presence">"Jaga oma olekut"</string>
+  <string name="screen_advanced_settings_share_presence_description">"Kui see eelistus on välja lülitatud, siis sa ei saa ega saada ei lugemisteatisi ega kirjutamise teavitusi"</string>
+  <string name="screen_advanced_settings_view_source_description">"Selle eelistuse sisselülitamisel on võimalik ajajoonel vaadata sõnumite lähtekoodi."</string>
+  <string name="screen_blocked_users_empty">"Sa pole ühtegi kasutajat blokeerinud"</string>
+  <string name="screen_blocked_users_unblocking">"Eemaldame blokeeringu…"</string>
+  <string name="screen_edit_profile_display_name">"Kuvatav nimi"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"Sinu kuvatav nimi"</string>
+  <string name="screen_edit_profile_error">"Tekkis tundmatu viga ning teavet ei õnnestunud muuta."</string>
+  <string name="screen_edit_profile_error_title">"Profiili uuendamine ei õnnestunud"</string>
+  <string name="screen_edit_profile_title">"Muuda profiili"</string>
+  <string name="screen_edit_profile_updating_details">"Profiil on muutmisel…"</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"Täiendavad seadistused"</string>
+  <string name="screen_notification_settings_calls_label">"Hääl- ja videokõned"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"Eelistused ei sobi omavahel"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"Et eelistusi oleks kergem leida, me oleme lihtsustanud teavituste seadistusi. Kuigi mõned varem valitud eelistused pole siin näha, siis nad kehtivad jätkuvalt.
+
+Kui sa jätkad muutmist, siis võivad muutuda ka need peidetud eelistused."</string>
+  <string name="screen_notification_settings_direct_chats">"Otsevestlused"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Kohandatud seadistused eraldi igale vestlusele"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Teavituste seadistamisel tekkis viga"</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"Kõikide sõnumite korral"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Mainimiste ja võtmesõnade alusel"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"Otsevestluste puhul teavita mind"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"Jututubades teavita mind"</string>
+  <string name="screen_notification_settings_enable_notifications">"Lülita teavitused selles seadmes sisse"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"Seadistus on veel parandamata, palun proovi uuesti."</string>
+  <string name="screen_notification_settings_group_chats">"Rühmavestlused"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"Kutsed"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Sinu koduserver ei toeta seda funktsionaalsust krüptitud jututubades ja seega ei pruugi kõik teavitused sinuni jõuda."</string>
+  <string name="screen_notification_settings_mentions_section_title">"Mainimised"</string>
+  <string name="screen_notification_settings_mode_all">"Kõik"</string>
+  <string name="screen_notification_settings_mode_mentions">"Mainimiste alusel"</string>
+  <string name="screen_notification_settings_notification_section_title">"Teavita mind"</string>
+  <string name="screen_notification_settings_room_mention_label">"Teavita mind @jututoa puhul"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"Teavituste saamiseks palun muuda oma %1$s."</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"süsteemi seadistusi"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"Süsteemi teavitused on välja lülitatud"</string>
+  <string name="screen_notification_settings_title">"Teavitused"</string>
+</resources>

@@ -51,7 +51,8 @@ fun ProgressDialog(
     modifier: Modifier = Modifier,
     text: String? = null,
     type: ProgressDialogType = ProgressDialogType.Indeterminate,
-    isCancellable: Boolean = false,
+    properties: DialogProperties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
+    showCancelButton: Boolean = false,
     onDismissRequest: () -> Unit = {},
 ) {
     DisposableEffect(Unit) {
@@ -61,12 +62,12 @@ fun ProgressDialog(
     }
     Dialog(
         onDismissRequest = onDismissRequest,
-        properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)
+        properties = properties,
     ) {
         ProgressDialogContent(
             modifier = modifier,
             text = text,
-            isCancellable = isCancellable,
+            showCancelButton = showCancelButton,
             onCancelClick = onDismissRequest,
             progressIndicator = {
                 when (type) {
@@ -97,7 +98,7 @@ sealed interface ProgressDialogType {
 private fun ProgressDialogContent(
     modifier: Modifier = Modifier,
     text: String? = null,
-    isCancellable: Boolean = false,
+    showCancelButton: Boolean = false,
     onCancelClick: () -> Unit = {},
     progressIndicator: @Composable () -> Unit = {
         CircularProgressIndicator(
@@ -125,7 +126,7 @@ private fun ProgressDialogContent(
                     color = MaterialTheme.colorScheme.primary,
                 )
             }
-            if (isCancellable) {
+            if (showCancelButton) {
                 Spacer(modifier = Modifier.height(24.dp))
                 Box(
                     modifier = Modifier.fillMaxWidth(),
@@ -145,12 +146,12 @@ private fun ProgressDialogContent(
 @Composable
 internal fun ProgressDialogContentPreview() = ElementThemedPreview {
     DialogPreview {
-        ProgressDialogContent(text = "test dialog content", isCancellable = true)
+        ProgressDialogContent(text = "test dialog content", showCancelButton = true)
     }
 }
 
 @PreviewsDayNight
 @Composable
 internal fun ProgressDialogPreview() = ElementPreview {
-    ProgressDialog(text = "test dialog content", isCancellable = true)
+    ProgressDialog(text = "test dialog content", showCancelButton = true)
 }

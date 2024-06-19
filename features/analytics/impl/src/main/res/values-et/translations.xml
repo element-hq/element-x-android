@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_analytics_prompt_data_usage">"Me ei salvesta ega profileeri sinu isiklikke andmeid"</string>
+  <string name="screen_analytics_prompt_help_us_improve">"Võimalike rakenduse vigade leidmiseks palun jaga anonüümset kasutusteavet."</string>
+  <string name="screen_analytics_prompt_read_terms">"Sa võid lugeda meie kasutustingimusi %1$s"</string>
+  <string name="screen_analytics_prompt_read_terms_content_link">"siin"</string>
+  <string name="screen_analytics_prompt_settings">"Selle valiku saad igal ajal välja lülitada"</string>
+  <string name="screen_analytics_prompt_third_party_sharing">"Me ei jaga andmeid kolmandate osapooltega"</string>
+  <string name="screen_analytics_prompt_title">"Aita parandada %1$s rakendust"</string>
+</resources>

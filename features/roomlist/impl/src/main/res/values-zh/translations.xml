@@ -22,7 +22,7 @@
   <string name="screen_roomlist_filter_low_priority">"低优先级"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"您可以取消选择过滤器以查看其他对话"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"您没有关于此选项的聊天"</string>
-  <string name="screen_roomlist_filter_people">"人"</string>
+  <string name="screen_roomlist_filter_people">"用户"</string>
   <string name="screen_roomlist_filter_people_empty_state_title">"目前您还没有私信"</string>
   <string name="screen_roomlist_filter_rooms">"聊天室"</string>
   <string name="screen_roomlist_filter_rooms_empty_state_title">"您尚未进入任何聊天室"</string>

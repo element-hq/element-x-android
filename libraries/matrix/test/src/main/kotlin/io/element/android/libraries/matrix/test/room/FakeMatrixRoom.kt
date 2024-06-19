@@ -45,7 +45,6 @@ import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerL
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
@@ -86,6 +85,7 @@ class FakeMatrixRoom(
     override val liveTimeline: Timeline = FakeTimeline(),
     private var roomPermalinkResult: () -> Result<String> = { Result.success("room link") },
     private var eventPermalinkResult: (EventId) -> Result<String> = { Result.success("event link") },
+    var sendCallNotificationIfNeededResult: () -> Result<Unit> = { Result.success(Unit) },
     canRedactOwn: Boolean = false,
     canRedactOther: Boolean = false,
 ) : MatrixRoom {
@@ -112,7 +112,7 @@ class FakeMatrixRoom(
     private var updateUserRoleResult = Result.success(Unit)
     private var toggleReactionResult = Result.success(Unit)
     private var retrySendMessageResult = Result.success(Unit)
-    private var cancelSendResult = Result.success(Unit)
+    private var cancelSendResult = Result.success(true)
     private var forwardEventResult = Result.success(Unit)
     private var reportContentResult = Result.success(Unit)
     private var kickUserResult = Result.success(Unit)
@@ -281,7 +281,7 @@ class FakeMatrixRoom(
         return retrySendMessageResult
     }
 
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> {
+    override suspend fun cancelSend(transactionId: TransactionId): Result<Boolean> {
         cancelSendCount++
         return cancelSendResult
     }
@@ -292,14 +292,6 @@ class FakeMatrixRoom(
 
     override suspend fun getPermalinkFor(eventId: EventId): Result<String> {
         return eventPermalinkResult(eventId)
-    }
-
-    var redactEventEventIdParam: EventId? = null
-        private set
-
-    override suspend fun redactEvent(eventId: EventId, reason: String?): Result<Unit> {
-        redactEventEventIdParam = eventId
-        return Result.success(Unit)
     }
 
     override suspend fun leave(): Result<Unit> {
@@ -528,6 +520,13 @@ class FakeMatrixRoom(
         theme: String?,
     ): Result<String> = generateWidgetWebViewUrlResult
 
+    override suspend fun sendCallNotificationIfNeeded(): Result<Unit> {
+        return sendCallNotificationIfNeededResult()
+    }
+
+    var setSendQueueEnabledLambda = { _: Boolean -> }
+    override suspend fun setSendQueueEnabled(enabled: Boolean) = setSendQueueEnabledLambda(enabled)
+
     override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver> = getWidgetDriverResult
 
     fun givenRoomMembersState(state: MatrixRoomMembersState) {
@@ -626,7 +625,7 @@ class FakeMatrixRoom(
         retrySendMessageResult = result
     }
 
-    fun givenCancelSendResult(result: Result<Unit>) {
+    fun givenCancelSendResult(result: Result<Boolean>) {
         cancelSendResult = result
     }
 
@@ -746,7 +745,6 @@ fun aRoomInfo(
     canonicalAlias: RoomAlias? = null,
     alternativeAliases: List<String> = emptyList(),
     currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,
-    latestEvent: EventTimelineItem? = null,
     inviter: RoomMember? = null,
     activeMembersCount: Long = 1,
     invitedMembersCount: Long = 0,
@@ -771,7 +769,6 @@ fun aRoomInfo(
     canonicalAlias = canonicalAlias,
     alternativeAliases = alternativeAliases.toImmutableList(),
     currentUserMembership = currentUserMembership,
-    latestEvent = latestEvent,
     inviter = inviter,
     activeMembersCount = activeMembersCount,
     invitedMembersCount = invitedMembersCount,

@@ -18,14 +18,17 @@ package io.element.android.libraries.push.impl
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.PushConfig
+import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
 import io.element.android.libraries.matrix.api.pusher.UnsetHttpPusherData
 import io.element.android.libraries.pushproviders.api.PusherSubscriber
+import io.element.android.libraries.pushproviders.api.RegistrationFailure
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import timber.log.Timber
@@ -50,7 +53,8 @@ class DefaultPusherSubscriber @Inject constructor(
         gateway: String,
     ): Result<Unit> {
         val userDataStore = userPushStoreFactory.getOrCreate(matrixClient.sessionId)
-        if (userDataStore.getCurrentRegisteredPushKey() == pushKey) {
+        val isRegisteringAgain = userDataStore.getCurrentRegisteredPushKey() == pushKey
+        if (isRegisteringAgain) {
             Timber.tag(loggerTag.value)
                 .d("Unnecessary to register again the same pusher, but do it in case the pusher has been removed from the server")
         }
@@ -61,8 +65,14 @@ class DefaultPusherSubscriber @Inject constructor(
             .onSuccess {
                 userDataStore.setCurrentRegisteredPushKey(pushKey)
             }
-            .onFailure { throwable ->
+            .mapFailure { throwable ->
                 Timber.tag(loggerTag.value).e(throwable, "Unable to register the pusher")
+                if (throwable is ClientException) {
+                    // It should always be the case.
+                    RegistrationFailure(throwable, isRegisteringAgain = isRegisteringAgain)
+                } else {
+                    throwable
+                }
             }
     }
 

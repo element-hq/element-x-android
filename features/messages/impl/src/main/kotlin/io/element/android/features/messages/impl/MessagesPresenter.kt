@@ -46,9 +46,9 @@ import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryPresenter
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetPresenter
-import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuPresenter
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
@@ -106,7 +106,6 @@ class MessagesPresenter @AssistedInject constructor(
     private val actionListPresenter: ActionListPresenter,
     private val customReactionPresenter: CustomReactionPresenter,
     private val reactionSummaryPresenter: ReactionSummaryPresenter,
-    private val retrySendMenuPresenter: RetrySendMenuPresenter,
     private val readReceiptBottomSheetPresenter: ReadReceiptBottomSheetPresenter,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
@@ -139,7 +138,6 @@ class MessagesPresenter @AssistedInject constructor(
         val actionListState = actionListPresenter.present()
         val customReactionState = customReactionPresenter.present()
         val reactionSummaryState = reactionSummaryPresenter.present()
-        val retryState = retrySendMenuPresenter.present()
         val readReceiptBottomSheetState = readReceiptBottomSheetPresenter.present()
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
@@ -230,7 +228,6 @@ class MessagesPresenter @AssistedInject constructor(
             actionListState = actionListState,
             customReactionState = customReactionState,
             reactionSummaryState = reactionSummaryState,
-            retrySendMenuState = retryState,
             readReceiptBottomSheetState = readReceiptBottomSheetState,
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
             snackbarMessage = snackbarMessage,
@@ -308,11 +305,9 @@ class MessagesPresenter @AssistedInject constructor(
     }
 
     private suspend fun handleActionRedact(event: TimelineItem.Event) {
-        if (event.failedToSend) {
-            // If the message hasn't been sent yet, just cancel it
-            event.transactionId?.let { room.cancelSend(it) }
-        } else if (event.eventId != null) {
-            room.redactEvent(event.eventId)
+        timelineController.invokeOnCurrentTimeline {
+            redactEvent(eventId = event.eventId, transactionId = event.transactionId, reason = null)
+                .onFailure { Timber.e(it) }
         }
     }
 
@@ -392,6 +387,7 @@ class MessagesPresenter @AssistedInject constructor(
             is TimelineItemStateContent,
             is TimelineItemEncryptedContent,
             is TimelineItemLegacyCallInviteContent,
+            is TimelineItemCallNotifyContent,
             is TimelineItemUnknownContent -> null
         }
         val composerMode = MessageComposerMode.Reply(

@@ -39,6 +39,20 @@
   <string name="screen_qr_code_login_connection_note_secure_state_title">"A kapcsolat nem biztonságos"</string>
   <string name="screen_qr_code_login_device_code_subtitle">"A rendszer kérni fogja, hogy adja meg az alábbi két számjegyet az eszközén."</string>
   <string name="screen_qr_code_login_device_code_title">"Adja meg az alábbi számot a másik eszközén"</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_description">"Jelentkezzen be a másik eszközére, majd próbálja újra, vagy használjon egy másik eszközt, amelyre már bejelentkezett."</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_subtitle">"Más eszköz nincs bejelentkezve"</string>
+  <string name="screen_qr_code_login_error_cancelled_subtitle">"A bejelentkezés megszakadt a másik eszközön."</string>
+  <string name="screen_qr_code_login_error_cancelled_title">"Bejelentkezési kérés törölve"</string>
+  <string name="screen_qr_code_login_error_declined_subtitle">"A bejelentkezés el lett utasítva a másik eszközön."</string>
+  <string name="screen_qr_code_login_error_declined_title">"A bejelentkezés elutasítva"</string>
+  <string name="screen_qr_code_login_error_expired_subtitle">"A bejelentkezés lejárt. Próbálja újra."</string>
+  <string name="screen_qr_code_login_error_expired_title">"A bejelentkezés nem fejeződött be időben"</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"A másik eszköz nem támogatja a %s QR-kóddal történő bejelentkezést.
+
+Próbáljon meg kézileg bejelentkezni, vagy olvassa be a QR-kódot egy másik eszközzel."</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_title">"A QR-kód nem támogatott"</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"A fiókszolgáltatója nem támogatja az %1$s-et."</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"Az %1$s nem támogatott"</string>
   <string name="screen_qr_code_login_initial_state_button_title">"Készen áll a beolvasásra"</string>
   <string name="screen_qr_code_login_initial_state_item_1">"Nyissa meg az %1$set egy asztali eszközön"</string>
   <string name="screen_qr_code_login_initial_state_item_2">"Kattintson a profilképére"</string>

@@ -45,6 +45,8 @@ import io.element.android.libraries.eventformatter.impl.RoomMembershipContentFor
 import io.element.android.libraries.eventformatter.impl.StateContentFormatter
 import io.element.android.libraries.featureflag.impl.DefaultFeatureFlagService
 import io.element.android.libraries.featureflag.impl.StaticFeatureFlagProvider
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsPresenter
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.indicator.impl.DefaultIndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -139,6 +141,17 @@ class RoomListScreen(
             notificationDrawerManager = FakeNotificationDrawerManager(),
         ),
         analyticsService = NoopAnalyticsService(),
+        fullScreenIntentPermissionsPresenter = object : FullScreenIntentPermissionsPresenter {
+            @Composable
+            override fun present(): FullScreenIntentPermissionsState {
+                return FullScreenIntentPermissionsState(
+                    permissionGranted = true,
+                    shouldDisplayBanner = false,
+                    dismissFullScreenIntentBanner = {},
+                    openFullScreenIntentSettings = {}
+                )
+            }
+        },
     )
 
     @Composable

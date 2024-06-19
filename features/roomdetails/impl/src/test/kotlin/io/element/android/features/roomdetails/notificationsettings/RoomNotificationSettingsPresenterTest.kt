@@ -55,7 +55,7 @@ class RoomNotificationSettingsPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            awaitItem().eventSink(RoomNotificationSettingsEvents.RoomNotificationModeChanged(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY))
+            awaitItem().eventSink(RoomNotificationSettingsEvents.ChangeRoomNotificationMode(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY))
             val updatedState = consumeItemsUntilPredicate {
                 it.roomNotificationSettings.dataOrNull()?.mode == RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
             }.last()
@@ -115,10 +115,10 @@ class RoomNotificationSettingsPresenterTest {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(RoomNotificationSettingsEvents.SetNotificationMode(false))
-            val defaultState = consumeItemsUntilPredicate {
-                it.roomNotificationSettings.dataOrNull()?.isDefault == false
-            }.last()
+            skipItems(3)
+            val defaultState = awaitItem()
             assertThat(defaultState.roomNotificationSettings.dataOrNull()?.isDefault).isFalse()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -129,7 +129,7 @@ class RoomNotificationSettingsPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(RoomNotificationSettingsEvents.RoomNotificationModeChanged(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY))
+            initialState.eventSink(RoomNotificationSettingsEvents.ChangeRoomNotificationMode(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY))
             initialState.eventSink(RoomNotificationSettingsEvents.SetNotificationMode(true))
             val defaultState = consumeItemsUntilPredicate {
                 it.roomNotificationSettings.dataOrNull()?.mode == RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
@@ -148,7 +148,7 @@ class RoomNotificationSettingsPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(RoomNotificationSettingsEvents.RoomNotificationModeChanged(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY))
+            initialState.eventSink(RoomNotificationSettingsEvents.ChangeRoomNotificationMode(RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY))
             initialState.eventSink(RoomNotificationSettingsEvents.SetNotificationMode(true))
             val failedState = consumeItemsUntilPredicate {
                 it.restoreDefaultAction.isFailure()

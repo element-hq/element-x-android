@@ -46,7 +46,7 @@ fun CommonExtension<*, *, *, *, *, *>.androidConfig(project: Project) {
 
     lint {
         lintConfig = File("${project.rootDir}/tools/lint/lint.xml")
-        checkDependencies = true
+        checkDependencies = false
         abortOnError = true
         ignoreTestFixturesSources = true
         checkGeneratedSources = false

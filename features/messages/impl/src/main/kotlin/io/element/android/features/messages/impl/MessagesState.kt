@@ -23,7 +23,6 @@ import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
-import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
 import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.libraries.architecture.AsyncData
@@ -47,7 +46,6 @@ data class MessagesState(
     val actionListState: ActionListState,
     val customReactionState: CustomReactionState,
     val reactionSummaryState: ReactionSummaryState,
-    val retrySendMenuState: RetrySendMenuState,
     val readReceiptBottomSheetState: ReadReceiptBottomSheetState,
     val hasNetworkConnection: Boolean,
     val snackbarMessage: SnackbarMessage?,

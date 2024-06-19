@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_notification_optin_subtitle">"Sa võid seadistusi hiljem alati muuta."</string>
+  <string name="screen_notification_optin_title">"Luba teavitused ja kunagi ei jää sul sõnumid märkamata"</string>
+  <string name="screen_welcome_bullet_1">"Kõned, küsitlused, otsing ja palju muud lisanduvad hiljem selle aasta jooksul."</string>
+  <string name="screen_welcome_bullet_2">"Krüptitud jututubade sõnumite ajalugu pole veel saadaval."</string>
+  <string name="screen_welcome_bullet_3">"Me soovime teada mida sa arvad. Seadistuste lehel olevast valikust võid saata meile oma kommentaare."</string>
+  <string name="screen_welcome_button">"Alustame!"</string>
+  <string name="screen_welcome_subtitle">"Sa peaksid teadma alljärgnevat:"</string>
+  <string name="screen_welcome_title">"Tere tulemast rakendusse %1$s!"</string>
+</resources>

@@ -70,7 +70,10 @@ private fun Content(desktopApplicationName: String) {
         add(AnnotatedString(stringResource(R.string.screen_create_new_recovery_key_list_item_2)))
         add(
             annotatedTextWithBold(
-                text = stringResource(R.string.screen_create_new_recovery_key_list_item_3),
+                text = stringResource(
+                    id = R.string.screen_create_new_recovery_key_list_item_3,
+                    stringResource(R.string.screen_create_new_recovery_key_list_item_3_reset_all)
+                ),
                 boldText = stringResource(R.string.screen_create_new_recovery_key_list_item_3_reset_all)
             )
         )

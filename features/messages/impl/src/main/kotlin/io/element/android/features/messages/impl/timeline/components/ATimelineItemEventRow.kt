@@ -45,6 +45,5 @@ internal fun ATimelineItemEventRow(
     onMoreReactionsClick = {},
     onReadReceiptClick = {},
     onSwipeToReply = {},
-    onTimestampClick = {},
     eventSink = {},
 )

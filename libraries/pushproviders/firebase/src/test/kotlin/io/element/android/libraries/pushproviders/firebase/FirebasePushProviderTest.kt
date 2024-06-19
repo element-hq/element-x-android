@@ -38,10 +38,21 @@ class FirebasePushProviderTest {
     }
 
     @Test
-    fun `getDistributors return the unique distributor`() {
-        val firebasePushProvider = createFirebasePushProvider()
+    fun `getDistributors return the unique distributor if available`() {
+        val firebasePushProvider = createFirebasePushProvider(
+            isPlayServiceAvailable = FakeIsPlayServiceAvailable(isAvailable = true)
+        )
         val result = firebasePushProvider.getDistributors()
         assertThat(result).containsExactly(Distributor("Firebase", "Firebase"))
+    }
+
+    @Test
+    fun `getDistributors return empty list if service is not available`() {
+        val firebasePushProvider = createFirebasePushProvider(
+            isPlayServiceAvailable = FakeIsPlayServiceAvailable(isAvailable = false)
+        )
+        val result = firebasePushProvider.getDistributors()
+        assertThat(result).isEmpty()
     }
 
     @Test
@@ -49,22 +60,6 @@ class FirebasePushProviderTest {
         val firebasePushProvider = createFirebasePushProvider()
         val result = firebasePushProvider.getCurrentDistributor(FakeMatrixClient())
         assertThat(result).isEqualTo(Distributor("Firebase", "Firebase"))
-    }
-
-    @Test
-    fun `isAvailable true`() {
-        val firebasePushProvider = createFirebasePushProvider(
-            isPlayServiceAvailable = FakeIsPlayServiceAvailable(isAvailable = true)
-        )
-        assertThat(firebasePushProvider.isAvailable()).isTrue()
-    }
-
-    @Test
-    fun `isAvailable false`() {
-        val firebasePushProvider = createFirebasePushProvider(
-            isPlayServiceAvailable = FakeIsPlayServiceAvailable(isAvailable = false)
-        )
-        assertThat(firebasePushProvider.isAvailable()).isFalse()
     }
 
     @Test

@@ -144,6 +144,7 @@ class DatabaseSessionStoreTest {
             isTokenValid = 1,
             loginType = null,
             passphrase = "aPassphrase",
+            sessionPath = "sessionPath",
         )
         val secondSessionData = SessionData(
             userId = "userId",
@@ -157,6 +158,7 @@ class DatabaseSessionStoreTest {
             isTokenValid = 1,
             loginType = null,
             passphrase = "aPassphraseAltered",
+            sessionPath = "sessionPath",
         )
         assertThat(firstSessionData.userId).isEqualTo(secondSessionData.userId)
         assertThat(firstSessionData.loginTimestamp).isNotEqualTo(secondSessionData.loginTimestamp)
@@ -193,6 +195,7 @@ class DatabaseSessionStoreTest {
             isTokenValid = 1,
             loginType = null,
             passphrase = "aPassphrase",
+            sessionPath = "sessionPath",
         )
         val secondSessionData = SessionData(
             userId = "userIdUnknown",
@@ -206,6 +209,7 @@ class DatabaseSessionStoreTest {
             isTokenValid = 1,
             loginType = null,
             passphrase = "aPassphraseAltered",
+            sessionPath = "sessionPath",
         )
         assertThat(firstSessionData.userId).isNotEqualTo(secondSessionData.userId)
 

@@ -51,9 +51,9 @@ data class NotifiableMessageEvent(
     val outGoingMessage: Boolean = false,
     val outGoingMessageFailed: Boolean = false,
     override val isRedacted: Boolean = false,
-    override val isUpdated: Boolean = false
-) : NotifiableEvent {
+    override val isUpdated: Boolean = false,
     val type: String = EventType.MESSAGE
+) : NotifiableEvent {
     override val description: String = body ?: ""
 
     // Example of value:
@@ -69,9 +69,16 @@ fun NotifiableEvent.shouldIgnoreEventInRoom(appNavigationState: AppNavigationSta
     val currentSessionId = appNavigationState.navigationState.currentSessionId() ?: return false
     return when (val currentRoomId = appNavigationState.navigationState.currentRoomId()) {
         null -> false
-        else -> appNavigationState.isInForeground &&
-            sessionId == currentSessionId &&
-            roomId == currentRoomId &&
-            (this as? NotifiableMessageEvent)?.threadId == appNavigationState.navigationState.currentThreadId()
+        else -> {
+            // Never ignore ringing call notifications
+            if (this is NotifiableRingingCallEvent) {
+                false
+            } else {
+                appNavigationState.isInForeground &&
+                    sessionId == currentSessionId &&
+                    roomId == currentRoomId &&
+                    (this as? NotifiableMessageEvent)?.threadId == appNavigationState.navigationState.currentThreadId()
+            }
+        }
     }
 }
