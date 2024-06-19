@@ -1,5 +1,0 @@
-Fix tracing configuration in debug and nightlies:
-
-- Debug will now write the logs to disk too.
-- Nightly will be able to customise tracing filters.
-- Improved the configure tracing and bug report screens.

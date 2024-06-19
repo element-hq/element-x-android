@@ -1,3 +1,26 @@
+Changes in Element X v0.4.15 (2024-06-19)
+=========================================
+
+Features ✨
+----------
+ - Ringing call notifications and full screen ringing screen for DMs when the device is locked. ([#2894](https://github.com/element-hq/element-x-android/issues/2894))
+
+Bugfixes 🐛
+----------
+ - Improve UX on notification setting changes. ([#1647](https://github.com/element-hq/element-x-android/issues/1647))
+ - Fix tracing configuration in debug and nightlies:
+ - Debug will now write the logs to disk too.
+ - Nightly will be able to customise tracing filters.
+ - Improved the configure tracing and bug report screens. ([#3016](https://github.com/element-hq/element-x-android/issues/3016))
+
+Other changes
+-------------
+ - Allow cancelling jump to event in timeline. ([#2876](https://github.com/element-hq/element-x-android/issues/2876))
+ - Make Element Call widget URL configurable ([#3009](https://github.com/element-hq/element-x-android/issues/3009))
+ - Enable hidden access to developer options in release mode apps. ([#3020](https://github.com/element-hq/element-x-android/issues/3020))
+ - Improve how active calls work by also taking into account external url calls and waiting for the sync process to start before sending the `m.call.notify` event. ([#3029](https://github.com/element-hq/element-x-android/issues/3029))
+
+
 Changes in Element X v0.4.14 (2024-06-07)
 =========================================
 
