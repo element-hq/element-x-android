@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.push.impl.notifications.channels
 
-import android.app.NotificationChannel
 import android.os.Build
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
