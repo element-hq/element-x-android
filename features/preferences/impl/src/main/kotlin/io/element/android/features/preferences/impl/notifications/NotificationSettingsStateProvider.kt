@@ -42,6 +42,7 @@ open class NotificationSettingsStateProvider : PreviewParameterProvider<Notifica
             aInvalidNotificationSettingsState(),
             aInvalidNotificationSettingsState(fixFailed = true),
             aValidNotificationSettingsState(fullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(permissionGranted = false)),
+            aValidNotificationSettingsState(appNotificationEnabled = false),
         )
 }
 
