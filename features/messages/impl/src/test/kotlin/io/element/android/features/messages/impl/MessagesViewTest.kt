@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl
 
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
@@ -52,8 +53,14 @@ import io.element.android.features.messages.impl.timeline.components.customreact
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvents
 import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
+import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
+import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
+import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactory
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.voicemessages.timeline.TextMessageState
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -470,7 +477,14 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
 ) {
     setContent {
         // Cannot use the RichTextEditor, so simulate a LocalInspectionMode
-        CompositionLocalProvider(LocalInspectionMode provides true) {
+        CompositionLocalProvider(
+            LocalInspectionMode provides true,
+            LocalTimelineItemPresenterFactories provides TimelineItemPresenterFactories(
+                mapOf(
+                    TimelineItemTextBasedContent::class.java to FakeTextMessagesPresenterFactory
+                )
+            )
+        ) {
             MessagesView(
                 state = state,
                 onBackClick = onBackClick,
@@ -484,5 +498,18 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
                 onJoinCallClick = onJoinCallClick,
             )
         }
+    }
+}
+
+private object FakeTextMessagesPresenterFactory : TimelineItemPresenterFactory<TimelineItemTextBasedContent, TextMessageState> {
+    override fun create(content: TimelineItemTextBasedContent): Presenter<TextMessageState> {
+        return FakeTextMessagesPresenter
+    }
+}
+
+private object FakeTextMessagesPresenter : Presenter<TextMessageState> {
+    @Composable
+    override fun present(): TextMessageState {
+        return TextMessageState("", null)
     }
 }

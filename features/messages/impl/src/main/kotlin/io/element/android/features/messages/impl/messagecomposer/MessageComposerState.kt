@@ -39,6 +39,7 @@ data class MessageComposerState(
     val attachmentsState: AttachmentsState,
     val memberSuggestions: ImmutableList<ResolvedMentionSuggestion>,
     val currentUserId: UserId,
+    val displayNameForUserId: (UserId) -> String?,
     val eventSink: (MessageComposerEvents) -> Unit,
 )
 

@@ -124,7 +124,7 @@ class MarkdownTextEditorStateTest {
         val markdown = state.getMessageMarkdown(permalinkBuilder = permalinkBuilder)
 
         assertThat(markdown).isEqualTo(
-            "Hello [@Alice](https://matrix.to/#/@alice:matrix.org) and everyone in @room"
+            "Hello [@alice:matrix.org](https://matrix.to/#/@alice:matrix.org) and everyone in @room"
         )
     }
 

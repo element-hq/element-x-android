@@ -29,8 +29,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
+import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
+import io.element.android.features.messages.impl.timeline.di.rememberPresenter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContentProvider
+import io.element.android.features.messages.impl.voicemessages.timeline.TextMessageState
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
@@ -47,8 +51,12 @@ fun TimelineItemTextView(
         LocalContentColor provides ElementTheme.colors.textPrimary,
         LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular
     ) {
-        val formattedBody = content.formattedBody
-        val body = SpannableString(formattedBody ?: content.body)
+        val presenterFactories = LocalTimelineItemPresenterFactories.current
+        val presenter: Presenter<TextMessageState> = presenterFactories.rememberPresenter(content = content)
+
+        val state = presenter.present()
+        val formattedBody = state.formattedText
+        val body = SpannableString(formattedBody ?: state.text)
 
         Box(modifier.semantics { contentDescription = body.toString() }) {
             EditorStyledText(

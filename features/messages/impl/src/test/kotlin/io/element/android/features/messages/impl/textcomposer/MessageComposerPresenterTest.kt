@@ -33,6 +33,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.timeline.TimelineController
+import io.element.android.features.messages.impl.utils.FakeUserProfileCache
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -1062,6 +1063,7 @@ class MessageComposerPresenterTest {
         permalinkParser = FakePermalinkParser(),
         permalinkBuilder = permalinkBuilder,
         timelineController = TimelineController(room),
+        profileCache = FakeUserProfileCache(),
     ).apply {
         isTesting = true
         showTextFormatting = isRichTextEditorEnabled

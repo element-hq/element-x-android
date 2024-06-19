@@ -108,6 +108,7 @@ fun TextComposer(
     onTyping: (Boolean) -> Unit,
     onReceiveSuggestion: (Suggestion?) -> Unit,
     onSelectRichContent: ((Uri) -> Unit)?,
+    displayNameForUserId: (UserId) -> String?,
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
     subcomposing: Boolean = false,
@@ -165,7 +166,15 @@ fun TextComposer(
                         placeholder = placeholder,
                         composerMode = composerMode,
                         onResetComposerMode = onResetComposerMode,
-                        resolveMentionDisplay = { text, url -> TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor(text, url)) },
+                        resolveMentionDisplay = { text, url ->
+                            val permalinkData = permalinkParser.parse(url)
+                            if (permalinkData is PermalinkData.UserLink) {
+                                val text = displayNameForUserId(permalinkData.userId) ?: permalinkData.userId.value
+                                TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor(text, url))
+                            } else {
+                                TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor(text, url))
+                            }
+                        },
                         resolveRoomMentionDisplay = { TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor("@room", "#")) },
                         onError = onError,
                         onTyping = onTyping,
@@ -844,6 +853,7 @@ private fun ATextComposer(
         onTyping = {},
         onReceiveSuggestion = {},
         onSelectRichContent = null,
+        displayNameForUserId = { null },
     )
 }
 

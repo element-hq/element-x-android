@@ -58,5 +58,6 @@ fun aMessageComposerState(
     attachmentsState = attachmentsState,
     memberSuggestions = memberSuggestions,
     currentUserId = UserId("@alice:localhost"),
+    displayNameForUserId = { null },
     eventSink = {},
 )
