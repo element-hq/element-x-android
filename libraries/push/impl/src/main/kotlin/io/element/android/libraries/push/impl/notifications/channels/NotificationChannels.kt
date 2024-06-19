@@ -40,7 +40,7 @@ import javax.inject.Inject
  * ========================================================================================== */
 internal const val SILENT_NOTIFICATION_CHANNEL_ID = "DEFAULT_SILENT_NOTIFICATION_CHANNEL_ID_V2"
 internal const val NOISY_NOTIFICATION_CHANNEL_ID = "DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID"
-internal const val CALL_NOTIFICATION_CHANNEL_ID_V3 = "CALL_NOTIFICATION_CHANNEL_ID_V3"
+internal const val CALL_NOTIFICATION_CHANNEL_ID = "CALL_NOTIFICATION_CHANNEL_ID_V3"
 internal const val RINGING_CALL_NOTIFICATION_CHANNEL_ID = "RINGING_CALL_NOTIFICATION_CHANNEL_ID"
 
 /**
@@ -154,7 +154,7 @@ class DefaultNotificationChannels @Inject constructor(
         // Register a channel for incoming and in progress call notifications with no ringing
         notificationManager.createNotificationChannel(
             NotificationChannel(
-                CALL_NOTIFICATION_CHANNEL_ID_V3,
+                CALL_NOTIFICATION_CHANNEL_ID,
                 stringProvider.getString(R.string.notification_channel_call).ifEmpty { "Call" },
                 NotificationManager.IMPORTANCE_HIGH
             )
@@ -191,7 +191,7 @@ class DefaultNotificationChannels @Inject constructor(
     }
 
     override fun getChannelForIncomingCall(ring: Boolean): String {
-        return if (ring) RINGING_CALL_NOTIFICATION_CHANNEL_ID else CALL_NOTIFICATION_CHANNEL_ID_V3
+        return if (ring) RINGING_CALL_NOTIFICATION_CHANNEL_ID else CALL_NOTIFICATION_CHANNEL_ID
     }
 
     override fun getChannelIdForMessage(noisy: Boolean): String {

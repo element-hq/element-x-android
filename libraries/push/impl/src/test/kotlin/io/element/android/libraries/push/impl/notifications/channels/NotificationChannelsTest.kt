@@ -55,7 +55,7 @@ class NotificationChannelsTest {
         assertThat(ringingChannel).isEqualTo(RINGING_CALL_NOTIFICATION_CHANNEL_ID)
 
         val normalChannel = notificationChannels.getChannelForIncomingCall(ring = false)
-        assertThat(normalChannel).isEqualTo(CALL_NOTIFICATION_CHANNEL_ID_V3)
+        assertThat(normalChannel).isEqualTo(CALL_NOTIFICATION_CHANNEL_ID)
     }
 
     @Test
