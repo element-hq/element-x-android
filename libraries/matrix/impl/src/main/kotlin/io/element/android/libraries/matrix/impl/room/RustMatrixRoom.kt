@@ -41,6 +41,7 @@ import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.StateEventType
+import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
@@ -49,6 +50,7 @@ import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
+import io.element.android.libraries.matrix.impl.room.draft.into
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.room.powerlevels.RoomPowerLevelsMapper
@@ -603,6 +605,21 @@ class RustMatrixRoom(
     override suspend fun setSendQueueEnabled(enabled: Boolean) = withContext(roomDispatcher) {
         Timber.d("setSendQueuesEnabled: $enabled")
         innerRoom.enableSendQueue(enabled)
+    }
+
+    override suspend fun saveComposerDraft(composerDraft: ComposerDraft): Result<Unit> = runCatching {
+        Timber.d("saveComposerDraft: $composerDraft into $roomId")
+        innerRoom.saveComposerDraft(composerDraft.into())
+    }
+
+    override suspend fun loadComposerDraft(): Result<ComposerDraft?> = runCatching {
+        Timber.d("loadComposerDraft for $roomId")
+        innerRoom.loadComposerDraft()?.into()
+    }
+
+    override suspend fun clearComposerDraft(): Result<Unit> = runCatching {
+        Timber.d("clearComposerDraft: for $roomId")
+        innerRoom.clearComposerDraft()
     }
 
     private fun createTimeline(
