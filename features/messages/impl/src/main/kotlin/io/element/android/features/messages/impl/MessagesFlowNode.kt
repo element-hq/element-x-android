@@ -74,6 +74,8 @@ import io.element.android.libraries.matrix.ui.messages.LocalUserProfileCache
 import io.element.android.libraries.matrix.ui.messages.UserProfileCache
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
+import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanProvider
+import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.ImmutableList
@@ -93,6 +95,7 @@ class MessagesFlowNode @AssistedInject constructor(
     private val analyticsService: AnalyticsService,
     private val room: MatrixRoom,
     private val userProfileCache: UserProfileCache,
+    mentionSpanProviderFactory: MentionSpanProvider.Factory,
 ) : BaseFlowNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Messages,
@@ -147,6 +150,8 @@ class MessagesFlowNode @AssistedInject constructor(
     }
 
     private val callback = plugins<MessagesEntryPoint.Callback>().firstOrNull()
+
+    private val mentionSpanProvider = mentionSpanProviderFactory.create(room.sessionId.value)
 
     override fun onBuilt() {
         super.onBuilt()
@@ -367,8 +372,11 @@ class MessagesFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
+        mentionSpanProvider.updateStyles()
+
         CompositionLocalProvider(
             LocalUserProfileCache provides userProfileCache,
+            LocalMentionSpanProvider provides mentionSpanProvider,
         ) {
             BackstackWithOverlayBox(modifier)
         }

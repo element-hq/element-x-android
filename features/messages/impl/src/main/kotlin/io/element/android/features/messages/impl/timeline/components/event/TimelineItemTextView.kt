@@ -17,7 +17,6 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import android.text.SpannableString
-import android.text.Spanned
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -30,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.core.text.getSpans
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
@@ -45,7 +43,6 @@ import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.getMentionSpans
 import io.element.android.wysiwyg.compose.EditorStyledText
-import io.element.android.wysiwyg.view.spans.CustomMentionSpan
 
 @Composable
 fun TimelineItemTextView(

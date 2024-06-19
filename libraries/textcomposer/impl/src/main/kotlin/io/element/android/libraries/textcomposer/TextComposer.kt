@@ -51,7 +51,6 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
@@ -72,7 +71,7 @@ import io.element.android.libraries.textcomposer.components.VoiceMessageRecordin
 import io.element.android.libraries.textcomposer.components.markdown.MarkdownTextInput
 import io.element.android.libraries.textcomposer.components.markdown.aMarkdownTextEditorState
 import io.element.android.libraries.textcomposer.components.textInputRoundedCornerShape
-import io.element.android.libraries.textcomposer.mentions.rememberMentionSpanProvider
+import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanProvider
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.TextEditorState
@@ -95,7 +94,6 @@ fun TextComposer(
     permalinkParser: PermalinkParser,
     composerMode: MessageComposerMode,
     enableVoiceMessages: Boolean,
-    currentUserId: UserId,
     onRequestFocus: () -> Unit,
     onSendMessage: () -> Unit,
     onResetComposerMode: () -> Unit,
@@ -158,10 +156,7 @@ fun TextComposer(
         is TextEditorState.Rich -> {
             remember(state.richTextEditorState, subcomposing, composerMode, onResetComposerMode, onError) {
                 @Composable {
-                    val mentionSpanProvider = rememberMentionSpanProvider(
-                        currentUserId = currentUserId,
-                        permalinkParser = permalinkParser,
-                    )
+                    val mentionSpanProvider = LocalMentionSpanProvider.current
                     TextInput(
                         state = state.richTextEditorState,
                         subcomposing = subcomposing,
@@ -530,7 +525,6 @@ internal fun TextComposerSimplePreview() = ElementPreview {
                     voiceMessageState = VoiceMessageState.Idle,
                     composerMode = MessageComposerMode.Normal,
                     enableVoiceMessages = true,
-                    currentUserId = UserId("@alice:localhost"),
                 )
             },
             {
@@ -539,7 +533,6 @@ internal fun TextComposerSimplePreview() = ElementPreview {
                     voiceMessageState = VoiceMessageState.Idle,
                     composerMode = MessageComposerMode.Normal,
                     enableVoiceMessages = true,
-                    currentUserId = UserId("@alice:localhost")
                 )
             },
             {
@@ -553,7 +546,6 @@ internal fun TextComposerSimplePreview() = ElementPreview {
                     voiceMessageState = VoiceMessageState.Idle,
                     composerMode = MessageComposerMode.Normal,
                     enableVoiceMessages = true,
-                    currentUserId = UserId("@alice:localhost")
                 )
             },
             {
@@ -562,7 +554,6 @@ internal fun TextComposerSimplePreview() = ElementPreview {
                     voiceMessageState = VoiceMessageState.Idle,
                     composerMode = MessageComposerMode.Normal,
                     enableVoiceMessages = true,
-                    currentUserId = UserId("@alice:localhost")
                 )
             }
         )
@@ -579,7 +570,6 @@ internal fun TextComposerFormattingPreview() = ElementPreview {
             showTextFormatting = true,
             composerMode = MessageComposerMode.Normal,
             enableVoiceMessages = true,
-            currentUserId = UserId("@alice:localhost")
         )
     }, {
         ATextComposer(
@@ -588,7 +578,6 @@ internal fun TextComposerFormattingPreview() = ElementPreview {
             showTextFormatting = true,
             composerMode = MessageComposerMode.Normal,
             enableVoiceMessages = true,
-            currentUserId = UserId("@alice:localhost")
         )
     }, {
         ATextComposer(
@@ -601,7 +590,6 @@ internal fun TextComposerFormattingPreview() = ElementPreview {
             showTextFormatting = true,
             composerMode = MessageComposerMode.Normal,
             enableVoiceMessages = true,
-            currentUserId = UserId("@alice:localhost")
         )
     }))
 }
@@ -615,7 +603,6 @@ internal fun TextComposerEditPreview() = ElementPreview {
             voiceMessageState = VoiceMessageState.Idle,
             composerMode = MessageComposerMode.Edit(EventId("$1234"), "Some text", TransactionId("1234")),
             enableVoiceMessages = true,
-            currentUserId = UserId("@alice:localhost")
         )
     }))
 }
@@ -629,7 +616,6 @@ internal fun MarkdownTextComposerEditPreview() = ElementPreview {
             voiceMessageState = VoiceMessageState.Idle,
             composerMode = MessageComposerMode.Edit(EventId("$1234"), "Some text", TransactionId("1234")),
             enableVoiceMessages = true,
-            currentUserId = UserId("@alice:localhost")
         )
     }))
 }
@@ -653,7 +639,6 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                             "To preview larger textfields and long lines with overflow"
                     ),
                     enableVoiceMessages = true,
-                    currentUserId = UserId("@alice:localhost")
                 )
             },
             {
@@ -670,7 +655,6 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                             "To preview larger textfields and long lines with overflow"
                     ),
                     enableVoiceMessages = true,
-                    currentUserId = UserId("@alice:localhost")
                 )
             },
             {
@@ -690,7 +674,6 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                         defaultContent = "image.jpg"
                     ),
                     enableVoiceMessages = true,
-                    currentUserId = UserId("@alice:localhost")
                 )
             },
             {
@@ -710,7 +693,6 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                         defaultContent = "video.mp4"
                     ),
                     enableVoiceMessages = true,
-                    currentUserId = UserId("@alice:localhost")
                 )
             },
             {
@@ -730,7 +712,6 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                         defaultContent = "logs.txt"
                     ),
                     enableVoiceMessages = true,
-                    currentUserId = UserId("@alice:localhost")
                 )
             },
             {
@@ -750,7 +731,6 @@ internal fun TextComposerReplyPreview() = ElementPreview {
                         defaultContent = "Shared location"
                     ),
                     enableVoiceMessages = true,
-                    currentUserId = UserId("@alice:localhost")
                 )
             }
         )
@@ -768,7 +748,6 @@ internal fun TextComposerVoicePreview() = ElementPreview {
         voiceMessageState = voiceMessageState,
         composerMode = MessageComposerMode.Normal,
         enableVoiceMessages = true,
-        currentUserId = UserId("@alice:localhost")
     )
     PreviewColumn(items = persistentListOf({
         VoicePreview(voiceMessageState = VoiceMessageState.Recording(61.seconds, createFakeWaveform()))
@@ -829,7 +808,6 @@ private fun ATextComposer(
     voiceMessageState: VoiceMessageState,
     composerMode: MessageComposerMode,
     enableVoiceMessages: Boolean,
-    currentUserId: UserId,
     showTextFormatting: Boolean = false,
 ) {
     TextComposer(
@@ -841,7 +819,6 @@ private fun ATextComposer(
         },
         composerMode = composerMode,
         enableVoiceMessages = enableVoiceMessages,
-        currentUserId = currentUserId,
         onRequestFocus = {},
         onSendMessage = {},
         onResetComposerMode = {},

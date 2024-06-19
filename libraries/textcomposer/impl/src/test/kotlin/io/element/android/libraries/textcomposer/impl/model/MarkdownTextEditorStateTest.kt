@@ -151,7 +151,7 @@ class MarkdownTextEditorStateTest {
         currentSessionId: SessionId = A_SESSION_ID,
         permalinkParser: FakePermalinkParser = FakePermalinkParser(),
     ): MentionSpanProvider {
-        return MentionSpanProvider(currentSessionId, permalinkParser)
+        return MentionSpanProvider(currentSessionId.value, permalinkParser)
     }
 
     private fun aMarkdownTextWithMentions(): CharSequence {

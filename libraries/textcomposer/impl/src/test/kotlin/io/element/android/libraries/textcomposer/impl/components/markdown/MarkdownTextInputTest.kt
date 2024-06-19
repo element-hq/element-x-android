@@ -164,7 +164,7 @@ class MarkdownTextInputTest {
             editor = it.findEditor()
             state.insertMention(
                 ResolvedMentionSuggestion.Member(roomMember = aRoomMember()),
-                MentionSpanProvider(currentSessionId = A_SESSION_ID, permalinkParser = permalinkParser),
+                MentionSpanProvider(currentSessionId = A_SESSION_ID.value, permalinkParser = permalinkParser),
                 permalinkBuilder,
             )
         }

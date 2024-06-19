@@ -228,6 +228,7 @@ Compose:
       - LocalCameraPositionState
       - LocalTimelineItemPresenterFactories
       - LocalUserProfileCache
+      - LocalMentionSpanProvider
   CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:
