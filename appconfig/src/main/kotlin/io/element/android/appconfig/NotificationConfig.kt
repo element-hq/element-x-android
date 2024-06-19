@@ -16,6 +16,9 @@
 
 package io.element.android.appconfig
 
+import android.graphics.Color
+import androidx.annotation.ColorInt
+
 object NotificationConfig {
     // TODO EAx Implement and set to true at some point
     const val SUPPORT_MARK_AS_READ_ACTION = false
@@ -25,4 +28,7 @@ object NotificationConfig {
 
     // TODO EAx Implement and set to true at some point
     const val SUPPORT_QUICK_REPLY_ACTION = false
+
+    @ColorInt
+    val NOTIFICATION_ACCENT_COLOR: Int = Color.parseColor("#FF368BD6")
 }

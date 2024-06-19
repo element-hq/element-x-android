@@ -24,8 +24,8 @@ import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.appconfig.NotificationConfig
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn
@@ -89,7 +89,7 @@ class DefaultNotificationChannels @Inject constructor(
             return
         }
 
-        val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
+        val accentColor = NotificationConfig.NOTIFICATION_ACCENT_COLOR
 
         // Migration - the noisy channel was deleted and recreated when sound preference was changed (id was DEFAULT_NOISY_NOTIFICATION_CHANNEL_ID_BASE
         // + currentTimeMillis).
