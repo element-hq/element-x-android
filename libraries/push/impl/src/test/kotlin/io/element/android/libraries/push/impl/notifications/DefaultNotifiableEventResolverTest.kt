@@ -18,12 +18,15 @@ package io.element.android.libraries.push.impl.notifications
 
 import android.content.Context
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.api.notification.CallNotifyType
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
@@ -48,7 +51,9 @@ import io.element.android.libraries.push.impl.notifications.fake.FakeNotificatio
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
+import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
+import io.element.android.services.toolbox.impl.systemclock.DefaultSystemClock
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import kotlinx.coroutines.test.runTest
@@ -58,6 +63,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
+@Suppress("LargeClass")
 @RunWith(RobolectricTestRunner::class)
 class DefaultNotifiableEventResolverTest {
     @Test
@@ -480,6 +486,109 @@ class DefaultNotifiableEventResolverTest {
     }
 
     @Test
+    fun `resolve CallNotify - ringing`() = runTest {
+        val timestamp = DefaultSystemClock().epochMillis()
+        val sut = createDefaultNotifiableEventResolver(
+            notificationResult = Result.success(
+                createNotificationData(
+                    content = NotificationContent.MessageLike.CallNotify(
+                        A_USER_ID_2,
+                        CallNotifyType.RING
+                    ),
+                    timestamp = timestamp,
+                )
+            )
+        )
+        val expectedResult = NotifiableRingingCallEvent(
+            sessionId = A_SESSION_ID,
+            roomId = A_ROOM_ID,
+            eventId = AN_EVENT_ID,
+            senderId = A_USER_ID_2,
+            roomName = null,
+            editedEventId = null,
+            description = "Incoming call",
+            timestamp = timestamp,
+            canBeReplaced = true,
+            isRedacted = false,
+            isUpdated = false,
+            senderDisambiguatedDisplayName = "Bob",
+            senderAvatarUrl = null,
+            callNotifyType = CallNotifyType.RING,
+        )
+        val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
+        assertThat(result).isEqualTo(expectedResult)
+    }
+
+    @Test
+    fun `resolve CallNotify - ring but timed out displays the same as notify`() = runTest {
+        val sut = createDefaultNotifiableEventResolver(
+            notificationResult = Result.success(
+                createNotificationData(
+                    content = NotificationContent.MessageLike.CallNotify(
+                        A_USER_ID_2,
+                        CallNotifyType.RING
+                    ),
+                    timestamp = 0L,
+                )
+            )
+        )
+        val expectedResult = NotifiableMessageEvent(
+            sessionId = A_SESSION_ID,
+            eventId = AN_EVENT_ID,
+            editedEventId = null,
+            noisy = true,
+            timestamp = 0L,
+            senderDisambiguatedDisplayName = "Bob",
+            senderId = UserId("@bob:server.org"),
+            body = "☎\uFE0F Incoming call",
+            roomId = A_ROOM_ID,
+            threadId = null,
+            roomName = null,
+            roomIsDirect = false,
+            canBeReplaced = false,
+            isRedacted = false,
+            imageUriString = null,
+            type = EventType.CALL_NOTIFY,
+        )
+        val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
+        assertThat(result).isEqualTo(expectedResult)
+    }
+
+    @Test
+    fun `resolve CallNotify - notify`() = runTest {
+        val sut = createDefaultNotifiableEventResolver(
+            notificationResult = Result.success(
+                createNotificationData(
+                    content = NotificationContent.MessageLike.CallNotify(
+                        A_USER_ID_2,
+                        CallNotifyType.NOTIFY
+                    )
+                )
+            )
+        )
+        val expectedResult = NotifiableMessageEvent(
+            sessionId = A_SESSION_ID,
+            eventId = AN_EVENT_ID,
+            editedEventId = null,
+            noisy = true,
+            timestamp = A_TIMESTAMP,
+            senderDisambiguatedDisplayName = "Bob",
+            senderId = UserId("@bob:server.org"),
+            body = "☎\uFE0F Incoming call",
+            roomId = A_ROOM_ID,
+            threadId = null,
+            roomName = null,
+            roomIsDirect = false,
+            canBeReplaced = false,
+            isRedacted = false,
+            imageUriString = null,
+            type = EventType.CALL_NOTIFY,
+        )
+        val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
+        assertThat(result).isEqualTo(expectedResult)
+    }
+
+    @Test
     fun `resolve null cases`() {
         testNull(NotificationContent.MessageLike.CallAnswer)
         testNull(NotificationContent.MessageLike.CallHangup)
@@ -551,6 +660,9 @@ class DefaultNotifiableEventResolverTest {
             notificationMediaRepoFactory = notificationMediaRepoFactory,
             context = context,
             permalinkParser = FakePermalinkParser(),
+            callNotificationEventResolver = DefaultCallNotificationEventResolver(
+                stringProvider = AndroidStringProvider(context.resources)
+            ),
         )
     }
 
@@ -558,6 +670,7 @@ class DefaultNotifiableEventResolverTest {
         content: NotificationContent,
         isDirect: Boolean = false,
         hasMention: Boolean = false,
+        timestamp: Long = A_TIMESTAMP,
     ): NotificationData {
         return NotificationData(
             eventId = AN_EVENT_ID,
@@ -570,7 +683,7 @@ class DefaultNotifiableEventResolverTest {
             isDirect = isDirect,
             isEncrypted = false,
             isNoisy = false,
-            timestamp = A_TIMESTAMP,
+            timestamp = timestamp,
             content = content,
             hasMention = hasMention,
         )

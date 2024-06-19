@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="call_foreground_service_channel_title_android">"Probíhající hovor"</string>
+  <string name="call_foreground_service_message_android">"Klepněte pro návrat k hovoru"</string>
+  <string name="call_foreground_service_title_android">"☎️ Probíhá hovor"</string>
+  <string name="screen_incoming_call_subtitle_android">"Příchozí Element Call"</string>
+</resources>

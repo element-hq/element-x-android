@@ -83,6 +83,7 @@
   <string name="action_quick_reply">"Resposta rápida"</string>
   <string name="action_quote">"Citação"</string>
   <string name="action_react">"Reagir"</string>
+  <string name="action_reject">"Rejeitar"</string>
   <string name="action_remove">"Remover"</string>
   <string name="action_reply">"Responder"</string>
   <string name="action_reply_in_thread">"Responder ao tópico"</string>
@@ -197,6 +198,7 @@
   <string name="common_search_results">"Resultados da pesquisa"</string>
   <string name="common_security">"Segurança"</string>
   <string name="common_seen_by">"Vista por"</string>
+  <string name="common_send_to">"Enviar para"</string>
   <string name="common_sending">"A enviar…"</string>
   <string name="common_sending_failed">"Falha no envio"</string>
   <string name="common_sent">"Enviada"</string>

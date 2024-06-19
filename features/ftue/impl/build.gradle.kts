@@ -50,7 +50,6 @@ dependencies {
     implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.permissions.noop)
     implementation(projects.services.toolbox.api)
-    implementation(projects.services.toolbox.test)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
@@ -63,6 +62,7 @@ dependencies {
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.features.lockscreen.test)
+    testImplementation(projects.services.toolbox.test)
     testImplementation(projects.tests.testutils)
 
     ksp(libs.showkase.processor)

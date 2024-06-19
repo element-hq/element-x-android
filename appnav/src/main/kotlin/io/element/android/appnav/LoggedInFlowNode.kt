@@ -41,6 +41,7 @@ import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.appnav.loggedin.LoggedInNode
+import io.element.android.appnav.loggedin.SendQueues
 import io.element.android.appnav.room.RoomFlowNode
 import io.element.android.appnav.room.RoomNavigationTarget
 import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
@@ -102,6 +103,7 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val roomDirectoryEntryPoint: RoomDirectoryEntryPoint,
     private val shareEntryPoint: ShareEntryPoint,
     private val matrixClient: MatrixClient,
+    private val sendingQueue: SendQueues,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
@@ -157,6 +159,11 @@ class LoggedInFlowNode @AssistedInject constructor(
             }
         )
         observeSyncStateAndNetworkStatus()
+        setupSendingQueue()
+    }
+
+    private fun setupSendingQueue() {
+        sendingQueue.launchIn(lifecycleScope)
     }
 
     @OptIn(FlowPreview::class)
@@ -231,7 +238,12 @@ class LoggedInFlowNode @AssistedInject constructor(
         return when (navTarget) {
             NavTarget.Placeholder -> createNode<PlaceholderNode>(buildContext)
             NavTarget.LoggedInPermanent -> {
-                createNode<LoggedInNode>(buildContext)
+                val callback = object : LoggedInNode.Callback {
+                    override fun navigateToNotificationTroubleshoot() {
+                        backstack.push(NavTarget.Settings(PreferencesEntryPoint.InitialTarget.NotificationTroubleshoot))
+                    }
+                }
+                createNode<LoggedInNode>(buildContext, listOf(callback))
             }
             NavTarget.RoomList -> {
                 val callback = object : RoomListEntryPoint.Callback {

@@ -22,6 +22,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import javax.inject.Inject
 
 interface ActiveNotificationsProvider {
@@ -37,7 +38,6 @@ interface ActiveNotificationsProvider {
 @ContributesBinding(AppScope::class)
 class DefaultActiveNotificationsProvider @Inject constructor(
     private val notificationManager: NotificationManagerCompat,
-    private val notificationIdProvider: NotificationIdProvider,
 ) : ActiveNotificationsProvider {
     override fun getAllNotifications(): List<StatusBarNotification> {
         return notificationManager.activeNotifications
@@ -48,22 +48,22 @@ class DefaultActiveNotificationsProvider @Inject constructor(
     }
 
     override fun getMembershipNotificationForSession(sessionId: SessionId): List<StatusBarNotification> {
-        val notificationId = notificationIdProvider.getRoomInvitationNotificationId(sessionId)
+        val notificationId = NotificationIdProvider.getRoomInvitationNotificationId(sessionId)
         return getNotificationsForSession(sessionId).filter { it.id == notificationId }
     }
 
     override fun getMessageNotificationsForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification> {
-        val notificationId = notificationIdProvider.getRoomMessagesNotificationId(sessionId)
+        val notificationId = NotificationIdProvider.getRoomMessagesNotificationId(sessionId)
         return getNotificationsForSession(sessionId).filter { it.id == notificationId && it.tag == roomId.value }
     }
 
     override fun getMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification> {
-        val notificationId = notificationIdProvider.getRoomInvitationNotificationId(sessionId)
+        val notificationId = NotificationIdProvider.getRoomInvitationNotificationId(sessionId)
         return getNotificationsForSession(sessionId).filter { it.id == notificationId && it.tag == roomId.value }
     }
 
     override fun getSummaryNotification(sessionId: SessionId): StatusBarNotification? {
-        val summaryId = notificationIdProvider.getSummaryNotificationId(sessionId)
+        val summaryId = NotificationIdProvider.getSummaryNotificationId(sessionId)
         return getNotificationsForSession(sessionId).find { it.id == summaryId }
     }
 

@@ -126,6 +126,24 @@ suspend inline fun <T> MutableState<AsyncAction<T>>.runUpdatingState(
 )
 
 /**
+ * Run the given block and update the state accordingly, using only Loading and Failure states.
+ * It's up to the caller to manage the Success state.
+ */
+@OptIn(ExperimentalContracts::class)
+inline fun <T> MutableState<AsyncAction<T>>.runUpdatingStateNoSuccess(
+    resultBlock: () -> Result<Unit>,
+): Result<Unit> {
+    contract {
+        callsInPlace(resultBlock, InvocationKind.EXACTLY_ONCE)
+    }
+    value = AsyncAction.Loading
+    return resultBlock()
+        .onFailure { failure ->
+            value = AsyncAction.Failure(failure)
+        }
+}
+
+/**
  * Calls the specified [Result]-returning function [resultBlock]
  * encapsulating its progress and return value into an [AsyncAction] while
  * posting its updates to the MutableState [state].

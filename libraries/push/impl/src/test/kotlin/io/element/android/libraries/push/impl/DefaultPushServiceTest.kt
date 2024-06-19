@@ -19,6 +19,7 @@ package io.element.android.libraries.push.impl
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.push.api.GetCurrentPushProvider
 import io.element.android.libraries.push.impl.test.FakeTestPush
@@ -33,6 +34,7 @@ import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushSto
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -203,6 +205,20 @@ class DefaultPushServiceTest {
         )
         val result = defaultPushService.getAvailablePushProviders()
         assertThat(result).containsExactly(aPushProvider1, aPushProvider2, aPushProvider3).inOrder()
+    }
+
+    @Test
+    fun `test setIgnoreRegistrationError is sent to the store`() = runTest {
+        val userPushStore = FakeUserPushStore().apply {
+        }
+        val defaultPushService = createDefaultPushService(
+            userPushStoreFactory = FakeUserPushStoreFactory(
+                userPushStore = { userPushStore },
+            ),
+        )
+        assertThat(defaultPushService.ignoreRegistrationError(A_SESSION_ID).first()).isFalse()
+        defaultPushService.setIgnoreRegistrationError(A_SESSION_ID, true)
+        assertThat(defaultPushService.ignoreRegistrationError(A_SESSION_ID).first()).isTrue()
     }
 
     private fun createDefaultPushService(

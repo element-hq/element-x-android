@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- TODO Delete those 2 strings (replaced by action_sign_out) -->
-    <!--string name="screen_signout_confirmation_dialog_submit">"Sign out"</string>
-    <string name="screen_signout_preference_item">"Sign out"</string-->
-</resources>

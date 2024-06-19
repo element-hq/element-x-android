@@ -31,6 +31,8 @@ import io.element.android.libraries.preferences.test.InMemorySessionPreferencesS
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -44,9 +46,9 @@ class DefaultFtueServiceTest {
             givenVerifiedStatus(SessionVerifiedStatus.Unknown)
         }
         val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
-        val state = createState(coroutineScope, sessionVerificationService)
+        val service = createDefaultFtueService(coroutineScope, sessionVerificationService)
 
-        state.state.test {
+        service.state.test {
             // Verification state is unknown, we don't display the flow yet
             assertThat(awaitItem()).isEqualTo(FtueState.Unknown)
 
@@ -67,7 +69,7 @@ class DefaultFtueServiceTest {
         val lockScreenService = FakeLockScreenService()
         val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
 
-        val state = createState(
+        val service = createDefaultFtueService(
             coroutineScope = coroutineScope,
             sessionVerificationService = sessionVerificationService,
             analyticsService = analyticsService,
@@ -79,9 +81,9 @@ class DefaultFtueServiceTest {
         analyticsService.setDidAskUserConsent()
         permissionStateProvider.setPermissionGranted()
         lockScreenService.setIsPinSetup(true)
-        state.updateState()
+        service.updateState()
 
-        assertThat(state.state.value).isEqualTo(FtueState.Complete)
+        assertThat(service.state.value).isEqualTo(FtueState.Complete)
 
         // Cleanup
         coroutineScope.cancel()
@@ -97,7 +99,7 @@ class DefaultFtueServiceTest {
         val lockScreenService = FakeLockScreenService()
         val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
 
-        val state = createState(
+        val service = createDefaultFtueService(
             coroutineScope = coroutineScope,
             sessionVerificationService = sessionVerificationService,
             analyticsService = analyticsService,
@@ -107,23 +109,23 @@ class DefaultFtueServiceTest {
         val steps = mutableListOf<FtueStep?>()
 
         // Session verification
-        steps.add(state.getNextStep(steps.lastOrNull()))
+        steps.add(service.getNextStep(steps.lastOrNull()))
         sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.NotVerified)
 
         // Notifications opt in
-        steps.add(state.getNextStep(steps.lastOrNull()))
+        steps.add(service.getNextStep(steps.lastOrNull()))
         permissionStateProvider.setPermissionGranted()
 
         // Entering PIN code
-        steps.add(state.getNextStep(steps.lastOrNull()))
+        steps.add(service.getNextStep(steps.lastOrNull()))
         lockScreenService.setIsPinSetup(true)
 
         // Analytics opt in
-        steps.add(state.getNextStep(steps.lastOrNull()))
+        steps.add(service.getNextStep(steps.lastOrNull()))
         analyticsService.setDidAskUserConsent()
 
         // Final step (null)
-        steps.add(state.getNextStep(steps.lastOrNull()))
+        steps.add(service.getNextStep(steps.lastOrNull()))
 
         assertThat(steps).containsExactly(
             FtueStep.SessionVerification,
@@ -145,7 +147,7 @@ class DefaultFtueServiceTest {
         val analyticsService = FakeAnalyticsService()
         val permissionStateProvider = FakePermissionStateProvider(permissionGranted = false)
         val lockScreenService = FakeLockScreenService()
-        val state = createState(
+        val service = createDefaultFtueService(
             coroutineScope = coroutineScope,
             sessionVerificationService = sessionVerificationService,
             analyticsService = analyticsService,
@@ -158,10 +160,10 @@ class DefaultFtueServiceTest {
         permissionStateProvider.setPermissionGranted()
         lockScreenService.setIsPinSetup(true)
 
-        assertThat(state.getNextStep()).isEqualTo(FtueStep.AnalyticsOptIn)
+        assertThat(service.getNextStep()).isEqualTo(FtueStep.AnalyticsOptIn)
 
         analyticsService.setDidAskUserConsent()
-        assertThat(state.getNextStep(null)).isNull()
+        assertThat(service.getNextStep(null)).isNull()
 
         // Cleanup
         coroutineScope.cancel()
@@ -174,7 +176,7 @@ class DefaultFtueServiceTest {
         val analyticsService = FakeAnalyticsService()
         val lockScreenService = FakeLockScreenService()
 
-        val state = createState(
+        val service = createDefaultFtueService(
             sdkIntVersion = Build.VERSION_CODES.M,
             sessionVerificationService = sessionVerificationService,
             coroutineScope = coroutineScope,
@@ -185,16 +187,61 @@ class DefaultFtueServiceTest {
         sessionVerificationService.givenVerifiedStatus(SessionVerifiedStatus.Verified)
         lockScreenService.setIsPinSetup(true)
 
-        assertThat(state.getNextStep()).isEqualTo(FtueStep.AnalyticsOptIn)
+        assertThat(service.getNextStep()).isEqualTo(FtueStep.AnalyticsOptIn)
 
         analyticsService.setDidAskUserConsent()
-        assertThat(state.getNextStep(null)).isNull()
+        assertThat(service.getNextStep(null)).isNull()
 
         // Cleanup
         coroutineScope.cancel()
     }
 
-    private fun createState(
+    @Test
+    fun `reset do the expected actions S`() = runTest {
+        val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
+        val resetAnalyticsLambda = lambdaRecorder<Unit> { }
+        val analyticsService = FakeAnalyticsService(
+            resetLambda = resetAnalyticsLambda
+        )
+        val resetPermissionLambda = lambdaRecorder<String, Unit> { }
+        val permissionStateProvider = FakePermissionStateProvider(
+            resetPermissionLambda = resetPermissionLambda
+        )
+        val service = createDefaultFtueService(
+            coroutineScope = coroutineScope,
+            sdkIntVersion = Build.VERSION_CODES.S,
+            permissionStateProvider = permissionStateProvider,
+            analyticsService = analyticsService,
+        )
+        service.reset()
+        resetAnalyticsLambda.assertions().isCalledOnce()
+        resetPermissionLambda.assertions().isNeverCalled()
+    }
+
+    @Test
+    fun `reset do the expected actions TIRAMISU`() = runTest {
+        val coroutineScope = CoroutineScope(coroutineContext + SupervisorJob())
+        val resetLambda = lambdaRecorder<Unit> { }
+        val analyticsService = FakeAnalyticsService(
+            resetLambda = resetLambda
+        )
+        val resetPermissionLambda = lambdaRecorder<String, Unit> { }
+        val permissionStateProvider = FakePermissionStateProvider(
+            resetPermissionLambda = resetPermissionLambda
+        )
+        val service = createDefaultFtueService(
+            coroutineScope = coroutineScope,
+            sdkIntVersion = Build.VERSION_CODES.TIRAMISU,
+            permissionStateProvider = permissionStateProvider,
+            analyticsService = analyticsService,
+        )
+        service.reset()
+        resetLambda.assertions().isCalledOnce()
+        resetPermissionLambda.assertions().isCalledOnce()
+            .with(value("android.permission.POST_NOTIFICATIONS"))
+    }
+
+    private fun createDefaultFtueService(
         coroutineScope: CoroutineScope,
         sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
         analyticsService: AnalyticsService = FakeAnalyticsService(),

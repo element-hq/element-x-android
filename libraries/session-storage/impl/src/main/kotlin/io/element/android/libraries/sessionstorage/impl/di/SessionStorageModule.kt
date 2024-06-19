@@ -32,7 +32,9 @@ import io.element.encrypteddb.passphrase.RandomSecretPassphraseProvider
 object SessionStorageModule {
     @Provides
     @SingleIn(AppScope::class)
-    fun provideMatrixDatabase(@ApplicationContext context: Context): SessionDatabase {
+    fun provideMatrixDatabase(
+        @ApplicationContext context: Context,
+    ): SessionDatabase {
         val name = "session_database"
         val secretFile = context.getDatabasePath("$name.key")
 

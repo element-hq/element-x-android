@@ -103,4 +103,6 @@ data class FailedToParseStateContent(
 
 data object LegacyCallInviteContent : EventContent
 
+data object CallNotifyContent : EventContent
+
 data object UnknownContent : EventContent

@@ -2,6 +2,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="leave_conversation_alert_subtitle">"Вы ўпэўнены, што хочаце пакінуць гэту размову? Гэта размова не з\'яўляецца публічнай, і вы не зможаце далучыцца зноў без запрашэння."</string>
   <string name="leave_room_alert_empty_subtitle">"Вы ўпэўнены, што хочаце пакінуць гэты пакой? Вы тут адзіны карыстальнік. Калі вы выйдзеце, ніхто не зможа далучыцца ў будучыні, у тым ліку і вы."</string>
-  <string name="leave_room_alert_private_subtitle">"Вы ўпэўнены, што жхочаце пакінуць гэты пакой? Гэты пакой не агульнадаступны, і вы не зможаце далучыцца да яго зноў без запрашэння."</string>
+  <string name="leave_room_alert_private_subtitle">"Вы ўпэўнены, што хочаце пакінуць гэты пакой? Гэты пакой не агульнадаступны, і вы не зможаце далучыцца да яго зноў без запрашэння."</string>
   <string name="leave_room_alert_subtitle">"Вы ўпэўнены, што хочаце пакінуць пакой?"</string>
 </resources>

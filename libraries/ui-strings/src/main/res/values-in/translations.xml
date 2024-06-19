@@ -32,6 +32,7 @@
   <string name="action_accept">"Terima"</string>
   <string name="action_add_to_timeline">"Tambahkan ke lini masa"</string>
   <string name="action_back">"Kembali"</string>
+  <string name="action_call">"Panggil"</string>
   <string name="action_cancel">"Batal"</string>
   <string name="action_choose_photo">"Pilih foto"</string>
   <string name="action_clear">"Hapus"</string>
@@ -70,6 +71,7 @@
   <string name="action_load_more">"Muat lainnya"</string>
   <string name="action_manage_account">"Kelola akun"</string>
   <string name="action_manage_devices">"Kelola perangkat"</string>
+  <string name="action_message">"Kirim pesan"</string>
   <string name="action_next">"Berikutnya"</string>
   <string name="action_no">"Tidak"</string>
   <string name="action_not_now">"Jangan sekarang"</string>
@@ -79,6 +81,7 @@
   <string name="action_quick_reply">"Balas cepat"</string>
   <string name="action_quote">"Kutip"</string>
   <string name="action_react">"Bereaksi"</string>
+  <string name="action_reject">"Tolak"</string>
   <string name="action_remove">"Hapus"</string>
   <string name="action_reply">"Balas"</string>
   <string name="action_reply_in_thread">"Balas dalam utas"</string>
@@ -115,6 +118,7 @@
   <string name="common_blocked_users">"Pengguna yang diblokir"</string>
   <string name="common_bubbles">"Gelembung"</string>
   <string name="common_call_invite">"Panggilan sedang berjalan (tidak didukung)"</string>
+  <string name="common_call_started">"Panggilan dimulai"</string>
   <string name="common_chat_backup">"Pencadangan percakapan"</string>
   <string name="common_copyright">"Hak cipta"</string>
   <string name="common_creating_room">"Membuat ruangan…"</string>
@@ -155,12 +159,14 @@
   <string name="common_modern">"Modern"</string>
   <string name="common_mute">"Bisukan"</string>
   <string name="common_no_results">"Tidak ada hasil"</string>
+  <string name="common_no_room_name">"Tidak ada nama ruangan"</string>
   <string name="common_offline">"Luring"</string>
   <string name="common_or">"atau"</string>
   <string name="common_password">"Kata sandi"</string>
   <string name="common_people">"Orang"</string>
   <string name="common_permalink">"Tautan Permanen"</string>
   <string name="common_permission">"Perizinan"</string>
+  <string name="common_please_wait">"Mohon tunggu…"</string>
   <string name="common_poll_end_confirmation">"Apakah Anda yakin ingin mengakhiri pemungutan suara ini?"</string>
   <string name="common_poll_summary">"Pemungutan suara: %1$s"</string>
   <string name="common_poll_total_votes">"Total suara: %1$s"</string>
@@ -188,6 +194,7 @@
   <string name="common_search_results">"Hasil pencarian"</string>
   <string name="common_security">"Keamanan"</string>
   <string name="common_seen_by">"Dilihat oleh"</string>
+  <string name="common_send_to">"Kirim ke"</string>
   <string name="common_sending">"Mengirim…"</string>
   <string name="common_sending_failed">"Pengiriman gagal"</string>
   <string name="common_sent">"Terkirim"</string>
@@ -209,6 +216,7 @@
   <string name="common_topic">"Topik"</string>
   <string name="common_topic_placeholder">"Tentang apa ruangan ini?"</string>
   <string name="common_unable_to_decrypt">"Tidak dapat mendekripsi"</string>
+  <string name="common_unable_to_decrypt_no_access">"Anda tidak memiliki akses ke pesan ini"</string>
   <string name="common_unable_to_invite_message">"Undangan tidak dapat dikirim ke satu atau beberapa pengguna."</string>
   <string name="common_unable_to_invite_title">"Tidak dapat mengirim undangan"</string>
   <string name="common_unlock">"Buka kunci"</string>
@@ -233,6 +241,7 @@
   <string name="error_failed_loading_messages">"Gagal memuat pesan"</string>
   <string name="error_failed_locating_user">"%1$s tidak dapat mengakses lokasi Anda. Silakan coba lagi nanti."</string>
   <string name="error_failed_uploading_voice_message">"Gagal mengunggah pesan suara Anda."</string>
+  <string name="error_message_not_found">"Pesan tidak ditemukan"</string>
   <string name="error_missing_location_auth_android">"%1$s tidak memiliki izin untuk mengakses lokasi Anda. Anda dapat mengaktifkan akses di Pengaturan."</string>
   <string name="error_missing_location_rationale_android">"%1$s tidak memiliki izin untuk mengakses lokasi Anda. Aktifkan akses di bawah ini."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s tidak memiliki izin untuk mengakses mikrofon. Aktifkan akses untuk merekam pesan suara."</string>
@@ -254,6 +263,7 @@
   <string name="screen_room_member_details_unblock_alert_action">"Buka blokir"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Anda akan dapat melihat semua pesan dari mereka lagi."</string>
   <string name="screen_room_member_details_unblock_user">"Buka blokir pengguna"</string>
+  <string name="screen_room_title">"Obrolan"</string>
   <string name="screen_share_location_title">"Bagikan lokasi"</string>
   <string name="screen_share_my_location_action">"Bagikan lokasi saya"</string>
   <string name="screen_share_open_apple_maps">"Buka di Apple Maps"</string>

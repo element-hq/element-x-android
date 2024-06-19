@@ -85,6 +85,7 @@
   <string name="action_quick_reply">"Rýchla odpoveď"</string>
   <string name="action_quote">"Citovať"</string>
   <string name="action_react">"Reagovať"</string>
+  <string name="action_reject">"Odmietnuť"</string>
   <string name="action_remove">"Odstrániť"</string>
   <string name="action_reply">"Odpovedať"</string>
   <string name="action_reply_in_thread">"Odpovedať vo vlákne"</string>
@@ -201,6 +202,7 @@
   <string name="common_search_results">"Výsledky hľadania"</string>
   <string name="common_security">"Bezpečnosť"</string>
   <string name="common_seen_by">"Videné"</string>
+  <string name="common_send_to">"Odoslať"</string>
   <string name="common_sending">"Odosiela sa…"</string>
   <string name="common_sending_failed">"Odoslanie zlyhalo"</string>
   <string name="common_sent">"Odoslané"</string>
@@ -253,6 +255,8 @@
   <string name="error_missing_microphone_voice_rationale_android">"%1$s nemá povolenie na prístup k vášmu mikrofónu. Povoľte prístup na nahrávanie hlasovej správy."</string>
   <string name="error_some_messages_have_not_been_sent">"Niektoré správy neboli odoslané"</string>
   <string name="error_unknown">"Prepáčte, vyskytla sa chyba"</string>
+  <string name="full_screen_intent_banner_message">"Aby ste už nikdy nezmeškali dôležitý hovor, zmeňte svoje nastavenia a povoľte upozornenia na celú obrazovku, keď je váš telefón uzamknutý."</string>
+  <string name="full_screen_intent_banner_title">"Vylepšite svoj zážitok z hovoru"</string>
   <string name="invite_friends_rich_title">"🔐️ Pripojte sa ku mne na %1$s"</string>
   <string name="invite_friends_text">"Ahoj, porozprávajte sa so mnou na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>

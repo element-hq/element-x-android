@@ -18,8 +18,8 @@ package io.element.android.libraries.push.impl.notifications.fake
 
 import android.app.Notification
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.element.android.libraries.push.impl.notifications.NotificationDisplayer
-import io.element.android.libraries.push.impl.notifications.NotificationIdProvider
 import io.element.android.tests.testutils.lambda.LambdaNoParamRecorder
 import io.element.android.tests.testutils.lambda.LambdaOneParamRecorder
 import io.element.android.tests.testutils.lambda.LambdaThreeParamsRecorder
@@ -51,7 +51,7 @@ class FakeNotificationDisplayer(
 
     fun verifySummaryCancelled(times: Int = 1) {
         cancelNotificationMessageResult.assertions().isCalledExactly(times).withSequence(
-            listOf(value(null), value(NotificationIdProvider().getSummaryNotificationId(A_SESSION_ID)))
+            listOf(value(null), value(NotificationIdProvider.getSummaryNotificationId(A_SESSION_ID)))
         )
     }
 }

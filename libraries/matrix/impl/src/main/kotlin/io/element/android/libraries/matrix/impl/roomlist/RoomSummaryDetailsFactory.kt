@@ -23,12 +23,13 @@ import io.element.android.libraries.matrix.impl.notificationsettings.RoomNotific
 import io.element.android.libraries.matrix.impl.room.map
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.room.message.RoomMessageFactory
-import org.matrix.rustcomponents.sdk.RoomInfo
+import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.use
 
 class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFactory = RoomMessageFactory()) {
-    fun create(roomInfo: RoomInfo): RoomSummaryDetails {
-        val latestRoomMessage = roomInfo.latestEvent?.use {
+    suspend fun create(roomListItem: RoomListItem): RoomSummaryDetails {
+        val roomInfo = roomListItem.roomInfo()
+        val latestRoomMessage = roomListItem.latestEvent()?.use {
             roomMessageFactory.create(it)
         }
         return RoomSummaryDetails(

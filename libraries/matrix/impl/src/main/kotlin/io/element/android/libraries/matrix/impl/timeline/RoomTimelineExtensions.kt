@@ -17,7 +17,6 @@
 package io.element.android.libraries.matrix.impl.timeline
 
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
-import io.element.android.libraries.matrix.impl.util.destroyAll
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
@@ -25,13 +24,28 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.catch
+import org.matrix.rustcomponents.sdk.PaginationStatusListener
 import org.matrix.rustcomponents.sdk.Timeline
 import org.matrix.rustcomponents.sdk.TimelineDiff
-import org.matrix.rustcomponents.sdk.TimelineItem
 import org.matrix.rustcomponents.sdk.TimelineListener
 import timber.log.Timber
+import uniffi.matrix_sdk_ui.LiveBackPaginationStatus
 
-internal fun Timeline.timelineDiffFlow(onInitialList: suspend (List<TimelineItem>) -> Unit): Flow<List<TimelineDiff>> =
+internal fun Timeline.liveBackPaginationStatus(): Flow<LiveBackPaginationStatus> = callbackFlow {
+    val listener = object : PaginationStatusListener {
+        override fun onUpdate(status: LiveBackPaginationStatus) {
+            trySend(status)
+        }
+    }
+    val result = subscribeToBackPaginationStatus(listener)
+    awaitClose {
+        result.cancelAndDestroy()
+    }
+}.catch {
+    Timber.d(it, "liveBackPaginationStatus() failed")
+}.buffer(Channel.UNLIMITED)
+
+internal fun Timeline.timelineDiffFlow(): Flow<List<TimelineDiff>> =
     callbackFlow {
         val listener = object : TimelineListener {
             override fun onUpdate(diff: List<TimelineDiff>) {
@@ -39,16 +53,10 @@ internal fun Timeline.timelineDiffFlow(onInitialList: suspend (List<TimelineItem
             }
         }
         Timber.d("Open timelineDiffFlow for TimelineInterface ${this@timelineDiffFlow}")
-        val result = addListener(listener)
-        try {
-            onInitialList(result.items)
-        } catch (exception: Exception) {
-            Timber.d(exception, "Catch failure in timelineDiffFlow of TimelineInterface ${this@timelineDiffFlow}")
-        }
+        val taskHandle = addListener(listener)
         awaitClose {
             Timber.d("Close timelineDiffFlow for TimelineInterface ${this@timelineDiffFlow}")
-            result.itemsStream.cancelAndDestroy()
-            result.items.destroyAll()
+            taskHandle.cancelAndDestroy()
         }
     }.catch {
         Timber.d(it, "timelineDiffFlow() failed")
@@ -59,8 +67,7 @@ internal suspend fun Timeline.runWithTimelineListenerRegistered(action: suspend 
     try {
         action()
     } finally {
-        result.itemsStream.cancelAndDestroy()
-        result.items.destroyAll()
+        result.cancelAndDestroy()
     }
 }
 

@@ -84,8 +84,10 @@ import org.matrix.rustcomponents.sdk.WidgetCapabilities
 import org.matrix.rustcomponents.sdk.WidgetCapabilitiesProvider
 import org.matrix.rustcomponents.sdk.getElementCallRequiredPermissions
 import org.matrix.rustcomponents.sdk.use
+import timber.log.Timber
 import uniffi.matrix_sdk.RoomPowerLevelChanges
 import java.io.File
+import kotlin.coroutines.cancellation.CancellationException
 import org.matrix.rustcomponents.sdk.Room as InnerRoom
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
@@ -109,7 +111,7 @@ class RustMatrixRoom(
 
     override val roomInfoFlow: Flow<MatrixRoomInfo> = mxCallbackFlow {
         launch {
-            val initial = innerRoom.roomInfo().use(matrixRoomInfoMapper::map)
+            val initial = innerRoom.roomInfo().let(matrixRoomInfoMapper::map)
             channel.trySend(initial)
         }
         innerRoom.subscribeToRoomInfoUpdates(object : RoomInfoListener {
@@ -182,6 +184,10 @@ class RustMatrixRoom(
             }
         }.mapFailure {
             it.toFocusEventException()
+        }.onFailure {
+            if (it is CancellationException) {
+                throw it
+            }
         }
     }
 
@@ -193,7 +199,7 @@ class RustMatrixRoom(
     }
 
     override val displayName: String
-        get() = runCatching { innerRoom.displayName() }.getOrDefault("")
+        get() = runCatching { innerRoom.displayName() ?: "" }.getOrDefault("")
 
     override val topic: String?
         get() = runCatching { innerRoom.topic() }.getOrDefault(null)
@@ -324,12 +330,6 @@ class RustMatrixRoom(
         return liveTimeline.sendMessage(body, htmlBody, mentions)
     }
 
-    override suspend fun redactEvent(eventId: EventId, reason: String?) = withContext(roomDispatcher) {
-        runCatching {
-            innerRoom.redact(eventId.value, reason)
-        }
-    }
-
     override suspend fun leave(): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
             innerRoom.leave()
@@ -435,10 +435,10 @@ class RustMatrixRoom(
     }
 
     override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> {
-        return liveTimeline.retrySendMessage(transactionId)
+        return Result.failure(UnsupportedOperationException("Not supported"))
     }
 
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> {
+    override suspend fun cancelSend(transactionId: TransactionId): Result<Boolean> {
         return liveTimeline.cancelSend(transactionId)
     }
 
@@ -594,6 +594,15 @@ class RustMatrixRoom(
 
     override suspend fun getPermalinkFor(eventId: EventId): Result<String> = runCatching {
         innerRoom.matrixToEventPermalink(eventId.value)
+    }
+
+    override suspend fun sendCallNotificationIfNeeded(): Result<Unit> = runCatching {
+        innerRoom.sendCallNotificationIfNeeded()
+    }
+
+    override suspend fun setSendQueueEnabled(enabled: Boolean) = withContext(roomDispatcher) {
+        Timber.d("setSendQueuesEnabled: $enabled")
+        innerRoom.enableSendQueue(enabled)
     }
 
     private fun createTimeline(

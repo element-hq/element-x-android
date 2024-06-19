@@ -30,6 +30,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.libraries.designsystem.text.toPx
@@ -53,8 +54,8 @@ internal fun TimelineItemRow(
     onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
-    onTimestampClick: (TimelineItem.Event) -> Unit,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
+    onJoinCallClick: () -> Unit,
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -78,37 +79,48 @@ internal fun TimelineItemRow(
                 )
             }
             is TimelineItem.Event -> {
-                if (timelineItem.content is TimelineItemStateContent || timelineItem.content is TimelineItemLegacyCallInviteContent) {
-                    TimelineItemStateEventRow(
-                        event = timelineItem,
-                        renderReadReceipts = renderReadReceipts,
-                        isLastOutgoingMessage = isLastOutgoingMessage,
-                        isHighlighted = timelineItem.isEvent(focusedEventId),
-                        onClick = { onClick(timelineItem) },
-                        onReadReceiptsClick = onReadReceiptClick,
-                        onLongClick = { onLongClick(timelineItem) },
-                        eventSink = eventSink,
-                    )
-                } else {
-                    TimelineItemEventRow(
-                        event = timelineItem,
-                        timelineRoomInfo = timelineRoomInfo,
-                        renderReadReceipts = renderReadReceipts,
-                        isLastOutgoingMessage = isLastOutgoingMessage,
-                        isHighlighted = timelineItem.isEvent(focusedEventId),
-                        onClick = { onClick(timelineItem) },
-                        onLongClick = { onLongClick(timelineItem) },
-                        onUserDataClick = onUserDataClick,
-                        onLinkClick = onLinkClick,
-                        inReplyToClick = inReplyToClick,
-                        onReactionClick = onReactionClick,
-                        onReactionLongClick = onReactionLongClick,
-                        onMoreReactionsClick = onMoreReactionsClick,
-                        onReadReceiptClick = onReadReceiptClick,
-                        onTimestampClick = onTimestampClick,
-                        onSwipeToReply = { onSwipeToReply(timelineItem) },
-                        eventSink = eventSink,
-                    )
+                when (timelineItem.content) {
+                    is TimelineItemStateContent, is TimelineItemLegacyCallInviteContent -> {
+                        TimelineItemStateEventRow(
+                            event = timelineItem,
+                            renderReadReceipts = renderReadReceipts,
+                            isLastOutgoingMessage = isLastOutgoingMessage,
+                            isHighlighted = timelineItem.isEvent(focusedEventId),
+                            onClick = { onClick(timelineItem) },
+                            onReadReceiptsClick = onReadReceiptClick,
+                            onLongClick = { onLongClick(timelineItem) },
+                            eventSink = eventSink,
+                        )
+                    }
+                    is TimelineItemCallNotifyContent -> {
+                        TimelineItemCallNotifyView(
+                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                            event = timelineItem,
+                            isCallOngoing = timelineRoomInfo.isCallOngoing,
+                            onLongClick = onLongClick,
+                            onJoinCallClick = onJoinCallClick,
+                        )
+                    }
+                    else -> {
+                        TimelineItemEventRow(
+                            event = timelineItem,
+                            timelineRoomInfo = timelineRoomInfo,
+                            renderReadReceipts = renderReadReceipts,
+                            isLastOutgoingMessage = isLastOutgoingMessage,
+                            isHighlighted = timelineItem.isEvent(focusedEventId),
+                            onClick = { onClick(timelineItem) },
+                            onLongClick = { onLongClick(timelineItem) },
+                            onUserDataClick = onUserDataClick,
+                            onLinkClick = onLinkClick,
+                            inReplyToClick = inReplyToClick,
+                            onReactionClick = onReactionClick,
+                            onReactionLongClick = onReactionLongClick,
+                            onMoreReactionsClick = onMoreReactionsClick,
+                            onReadReceiptClick = onReadReceiptClick,
+                            onSwipeToReply = { onSwipeToReply(timelineItem) },
+                            eventSink = eventSink,
+                        )
+                    }
                 }
             }
             is TimelineItem.GroupedEvents -> {
@@ -123,7 +135,6 @@ internal fun TimelineItemRow(
                     inReplyToClick = inReplyToClick,
                     onUserDataClick = onUserDataClick,
                     onLinkClick = onLinkClick,
-                    onTimestampClick = onTimestampClick,
                     onReactionClick = onReactionClick,
                     onReactionLongClick = onReactionLongClick,
                     onMoreReactionsClick = onMoreReactionsClick,

@@ -16,6 +16,11 @@
 
 package io.element.android.appnav.loggedin
 
+import io.element.android.libraries.architecture.AsyncData
+
 data class LoggedInState(
     val showSyncSpinner: Boolean,
+    val pusherRegistrationState: AsyncData<Unit>,
+    val ignoreRegistrationError: Boolean,
+    val eventSink: (LoggedInEvents) -> Unit,
 )

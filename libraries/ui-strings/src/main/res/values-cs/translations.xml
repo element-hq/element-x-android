@@ -85,6 +85,7 @@
   <string name="action_quick_reply">"Rychlá odpověď"</string>
   <string name="action_quote">"Citovat"</string>
   <string name="action_react">"Reagovat"</string>
+  <string name="action_reject">"Odmítnout"</string>
   <string name="action_remove">"Odstranit"</string>
   <string name="action_reply">"Odpovědět"</string>
   <string name="action_reply_in_thread">"Odpovědět ve vlákně"</string>
@@ -201,6 +202,7 @@
   <string name="common_search_results">"Výsledky hledání"</string>
   <string name="common_security">"Zabezpečení"</string>
   <string name="common_seen_by">"Viděno"</string>
+  <string name="common_send_to">"Odeslat do"</string>
   <string name="common_sending">"Odesílání…"</string>
   <string name="common_sending_failed">"Odeslání se nezdařilo"</string>
   <string name="common_sent">"Odesláno"</string>
@@ -253,6 +255,8 @@
   <string name="error_missing_microphone_voice_rationale_android">"%1$s nemá oprávnění k přístupu k mikrofonu. Povolte přístup k nahrávání hlasové zprávy."</string>
   <string name="error_some_messages_have_not_been_sent">"Některé zprávy nebyly odeslány"</string>
   <string name="error_unknown">"Omlouváme se, došlo k chybě"</string>
+  <string name="full_screen_intent_banner_message">"Abyste nikdy nezmeškali důležitý hovor, změňte nastavení tak, abyste povolili oznámení na celé obrazovce, když je telefon uzamčen."</string>
+  <string name="full_screen_intent_banner_title">"Vylepšete si zážitek z volání"</string>
   <string name="invite_friends_rich_title">"🔐️ Připojte se ke mně na %1$s"</string>
   <string name="invite_friends_text">"Ahoj, ozvi se mi na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>

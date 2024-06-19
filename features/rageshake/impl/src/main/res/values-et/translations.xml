@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"Lisa ekraanitõmmis"</string>
+  <string name="screen_bug_report_contact_me">"Kui sul on täiendavaid küsimusi, siis võid minuga ühendust võtta."</string>
+  <string name="screen_bug_report_contact_me_title">"Võta minuga ühendust"</string>
+  <string name="screen_bug_report_edit_screenshot">"Muuda ekraanitõmmist"</string>
+  <string name="screen_bug_report_editor_description">"Palun kirjelda juhtunut. Mida sina tegid? Mis sinu arvates pidi juhtuma? Mis tegelikult juhtus? Palun kirjelda kõike seda võimalikult üksikasjalikult."</string>
+  <string name="screen_bug_report_editor_placeholder">"Palun kirjelda probleemi…"</string>
+  <string name="screen_bug_report_editor_supporting">"Kui vähegi võimalik, siis kirjuta inglise keeles."</string>
+  <string name="screen_bug_report_error_description_too_short">"Kirjeldus on liiga lühike. Palun jaga täpsemat teavet selle kohta, mis juhtus. Tänud juba ette!"</string>
+  <string name="screen_bug_report_include_crash_logs">"Saada krahhilogid"</string>
+  <string name="screen_bug_report_include_logs">"Luba logide saatmine"</string>
+  <string name="screen_bug_report_include_screenshot">"Saada ekraanitõmmis"</string>
+  <string name="screen_bug_report_logs_description">"Tõhusama veaotsingu nimel lisame sinu veateatele logid. Kui sa seda ei soovi, siis lülita antud valik välja."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s jooksis kokku viimatu kui seda kasutasid. Kas tahaksid selle kohta meile aruande saata?"</string>
+  <string name="screen_bug_report_view_logs">"Vaata logisid"</string>
+</resources>

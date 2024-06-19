@@ -52,6 +52,7 @@ fun FlowStepPage(
     iconStyle: BigIcon.Style,
     title: String,
     modifier: Modifier = Modifier,
+    isScrollable: Boolean = false,
     onBackClick: (() -> Unit)? = null,
     subTitle: String? = null,
     buttons: @Composable ColumnScope.() -> Unit = {},
@@ -62,6 +63,7 @@ fun FlowStepPage(
     }
     HeaderFooterPage(
         modifier = modifier,
+        isScrollable = isScrollable,
         topBar = {
             TopAppBar(
                 navigationIcon = {

@@ -19,10 +19,10 @@ package io.element.android.libraries.preferences.impl.store
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
-import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.coroutines.CoroutineScope
 
 @Module

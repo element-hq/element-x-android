@@ -46,7 +46,7 @@ class RustMatrixClientFactory @Inject constructor(
     private val utdTracker: UtdTracker,
 ) {
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
-        val client = getBaseClientBuilder()
+        val client = getBaseClientBuilder(sessionData.sessionPath)
             .homeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
             .passphrase(sessionData.passphrase)
@@ -71,9 +71,9 @@ class RustMatrixClientFactory @Inject constructor(
         )
     }
 
-    internal fun getBaseClientBuilder(): ClientBuilder {
+    internal fun getBaseClientBuilder(sessionPath: String): ClientBuilder {
         return ClientBuilder()
-            .basePath(baseDirectory.absolutePath)
+            .sessionPath(sessionPath)
             .userAgent(userAgentProvider.provide())
             .addRootCertificates(userCertificatesProvider.provides())
             .serverVersions(listOf("v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"))

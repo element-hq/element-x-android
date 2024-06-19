@@ -55,6 +55,7 @@ fun SecureBackupEnterRecoveryKeyView(
 
     FlowStepPage(
         modifier = modifier,
+        isScrollable = true,
         onBackClick = onBackClick,
         iconStyle = BigIcon.Style.Default(CompoundIcons.KeySolid()),
         title = stringResource(id = R.string.screen_recovery_key_confirm_title),
@@ -70,7 +71,7 @@ private fun Content(
     state: SecureBackupEnterRecoveryKeyState,
 ) {
     RecoveryKeyView(
-        modifier = Modifier.padding(top = 52.dp),
+        modifier = Modifier.padding(top = 52.dp, bottom = 32.dp),
         state = state.recoveryKeyViewState,
         onClick = null,
         onChange = {

@@ -23,13 +23,13 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.push.impl.notifications.fake.FakeActiveNotificationsProvider
-import io.element.android.libraries.push.impl.notifications.fake.FakeImageLoader
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationCreator
 import io.element.android.libraries.push.impl.notifications.fake.FakeRoomGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.fake.FakeSummaryGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aSimpleNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.anInviteNotifiableEvent
+import io.element.android.libraries.push.test.notifications.FakeImageLoader
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -37,6 +37,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 private val MY_AVATAR_URL: String? = null
+
 private val AN_INVITATION_EVENT = anInviteNotifiableEvent(roomId = A_ROOM_ID)
 private val A_SIMPLE_EVENT = aSimpleNotifiableEvent(eventId = AN_EVENT_ID)
 private val A_MESSAGE_EVENT = aNotifiableMessageEvent(eventId = AN_EVENT_ID, roomId = A_ROOM_ID)

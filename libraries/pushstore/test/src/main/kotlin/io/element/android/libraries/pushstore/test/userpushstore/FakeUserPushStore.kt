@@ -25,6 +25,7 @@ class FakeUserPushStore(
 ) : UserPushStore {
     private var currentRegisteredPushKey: String? = null
     private val notificationEnabledForDevice = MutableStateFlow(true)
+    private val ignoreRegistrationError = MutableStateFlow(false)
     override suspend fun getPushProviderName(): String? {
         return pushProviderName
     }
@@ -51,6 +52,14 @@ class FakeUserPushStore(
 
     override fun useCompleteNotificationFormat(): Boolean {
         return true
+    }
+
+    override fun ignoreRegistrationError(): Flow<Boolean> {
+        return ignoreRegistrationError
+    }
+
+    override suspend fun setIgnoreRegistrationError(ignore: Boolean) {
+        ignoreRegistrationError.value = ignore
     }
 
     override suspend fun reset() {

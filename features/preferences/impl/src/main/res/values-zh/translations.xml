@@ -6,6 +6,7 @@
   <string name="screen_advanced_settings_element_call_base_url">"自定义 Element 通话 URL"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"为 Element 通话设置根 URL。"</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL 无效，请确保包含协议（http/https）和正确的地址。"</string>
+  <string name="screen_advanced_settings_push_provider_android">"通知推送提供者"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"禁用富文本编辑器，手动输入 Markdown。"</string>
   <string name="screen_advanced_settings_send_read_receipts">"已读回执"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"如果关闭，您的已读回执将不会发送给别人。您仍能收到别人的已读回执。"</string>
