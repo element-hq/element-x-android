@@ -169,8 +169,8 @@ fun TextComposer(
                         resolveMentionDisplay = { text, url ->
                             val permalinkData = permalinkParser.parse(url)
                             if (permalinkData is PermalinkData.UserLink) {
-                                val text = displayNameForUserId(permalinkData.userId) ?: permalinkData.userId.value
-                                TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor(text, url))
+                                val displayNameOrId = displayNameForUserId(permalinkData.userId) ?: permalinkData.userId.value
+                                TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor(displayNameOrId, url))
                             } else {
                                 TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor(text, url))
                             }
