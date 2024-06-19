@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import android.text.SpannableString
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -56,7 +57,7 @@ fun TimelineItemTextView(
         LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular
     ) {
         val body = getTextWithResolvedMentions(content)
-        Box(modifier.semantics { contentDescription = body.toString() }) {
+        Box(modifier.semantics { contentDescription = content.plainText }) {
             EditorStyledText(
                 text = body,
                 onLinkClickedListener = onLinkClick,
@@ -68,8 +69,9 @@ fun TimelineItemTextView(
     }
 }
 
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
-private fun getTextWithResolvedMentions(content: TimelineItemTextBasedContent): CharSequence {
+internal fun getTextWithResolvedMentions(content: TimelineItemTextBasedContent): CharSequence {
     val userProfileCache = LocalUserProfileCache.current
     val lastCacheUpdate by userProfileCache.lastCacheUpdate.collectAsState()
     val formattedBody = remember(content.htmlBody, lastCacheUpdate) {
