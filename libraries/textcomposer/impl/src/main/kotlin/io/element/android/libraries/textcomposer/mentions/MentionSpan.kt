@@ -92,7 +92,6 @@ class MentionSpan(
             if (mentionText.length > MAX_LENGTH) {
                 append("…")
             }
-            this@MentionSpan.mentionText = this
         }
     }
 
