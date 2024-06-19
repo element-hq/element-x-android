@@ -20,7 +20,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushproviders.api.PusherSubscriber
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
@@ -43,7 +43,7 @@ class DefaultFirebaseNewTokenHandler @Inject constructor(
     private val pusherSubscriber: PusherSubscriber,
     private val sessionStore: SessionStore,
     private val userPushStoreFactory: UserPushStoreFactory,
-    private val matrixAuthenticationService: MatrixAuthenticationService,
+    private val matrixClientProvider: MatrixClientProvider,
     private val firebaseStore: FirebaseStore,
 ) : FirebaseNewTokenHandler {
     override suspend fun handle(firebaseToken: String) {
@@ -54,8 +54,8 @@ class DefaultFirebaseNewTokenHandler @Inject constructor(
             .forEach { sessionId ->
                 val userDataStore = userPushStoreFactory.getOrCreate(sessionId)
                 if (userDataStore.getPushProviderName() == FirebaseConfig.NAME) {
-                    matrixAuthenticationService
-                        .restoreSession(sessionId)
+                    matrixClientProvider
+                        .getOrRestore(sessionId)
                         .onFailure {
                             Timber.tag(loggerTag.value).e(it, "Failed to restore session $sessionId")
                         }

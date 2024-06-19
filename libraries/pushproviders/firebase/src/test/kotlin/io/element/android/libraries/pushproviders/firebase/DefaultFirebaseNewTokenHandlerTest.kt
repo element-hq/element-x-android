@@ -18,13 +18,13 @@ package io.element.android.libraries.pushproviders.firebase
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
+import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.push.test.FakePusherSubscriber
 import io.element.android.libraries.pushproviders.api.PusherSubscriber
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
@@ -64,16 +64,14 @@ class DefaultFirebaseNewTokenHandlerTest {
                 storeData(aSessionData(A_USER_ID_2))
                 storeData(aSessionData(A_USER_ID_3))
             },
-            matrixAuthenticationService = FakeMatrixAuthenticationService(
-                matrixClientResult = { sessionId ->
-                    when (sessionId) {
-                        A_USER_ID -> Result.success(aMatrixClient1)
-                        A_USER_ID_2 -> Result.success(aMatrixClient2)
-                        A_USER_ID_3 -> Result.success(aMatrixClient3)
-                        else -> Result.failure(IllegalStateException())
-                    }
+            matrixClientProvider = FakeMatrixClientProvider { sessionId ->
+                when (sessionId) {
+                    A_USER_ID -> Result.success(aMatrixClient1)
+                    A_USER_ID_2 -> Result.success(aMatrixClient2)
+                    A_USER_ID_3 -> Result.success(aMatrixClient3)
+                    else -> Result.failure(IllegalStateException())
                 }
-            ),
+            },
             userPushStoreFactory = FakeUserPushStoreFactory(
                 userPushStore = { sessionId ->
                     when (sessionId) {
@@ -103,11 +101,9 @@ class DefaultFirebaseNewTokenHandlerTest {
             sessionStore = InMemoryMultiSessionsStore().apply {
                 storeData(aSessionData(A_USER_ID))
             },
-            matrixAuthenticationService = FakeMatrixAuthenticationService(
-                matrixClientResult = { _ ->
-                    Result.failure(IllegalStateException())
-                }
-            ),
+            matrixClientProvider = FakeMatrixClientProvider {
+                Result.failure(IllegalStateException())
+            },
             userPushStoreFactory = FakeUserPushStoreFactory(
                 userPushStore = { _ ->
                     FakeUserPushStore(pushProviderName = FirebaseConfig.NAME)
@@ -129,11 +125,9 @@ class DefaultFirebaseNewTokenHandlerTest {
             sessionStore = InMemoryMultiSessionsStore().apply {
                 storeData(aSessionData(A_USER_ID))
             },
-            matrixAuthenticationService = FakeMatrixAuthenticationService(
-                matrixClientResult = { _ ->
-                    Result.success(aMatrixClient1)
-                }
-            ),
+            matrixClientProvider = FakeMatrixClientProvider {
+                Result.success(aMatrixClient1)
+            },
             userPushStoreFactory = FakeUserPushStoreFactory(
                 userPushStore = { _ ->
                     FakeUserPushStore(pushProviderName = FirebaseConfig.NAME)
@@ -152,14 +146,14 @@ class DefaultFirebaseNewTokenHandlerTest {
         pusherSubscriber: PusherSubscriber = FakePusherSubscriber(),
         sessionStore: SessionStore = InMemorySessionStore(),
         userPushStoreFactory: UserPushStoreFactory = FakeUserPushStoreFactory(),
-        matrixAuthenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
+        matrixClientProvider: MatrixClientProvider = FakeMatrixClientProvider(),
         firebaseStore: FirebaseStore = InMemoryFirebaseStore(),
     ): FirebaseNewTokenHandler {
         return DefaultFirebaseNewTokenHandler(
             pusherSubscriber = pusherSubscriber,
             sessionStore = sessionStore,
             userPushStoreFactory = userPushStoreFactory,
-            matrixAuthenticationService = matrixAuthenticationService,
+            matrixClientProvider = matrixClientProvider,
             firebaseStore = firebaseStore
         )
     }

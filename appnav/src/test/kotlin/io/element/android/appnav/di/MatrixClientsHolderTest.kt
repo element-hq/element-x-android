@@ -40,7 +40,7 @@ class MatrixClientsHolderTest {
         fakeAuthenticationService.givenMatrixClient(fakeMatrixClient)
         assertThat(matrixClientsHolder.getOrNull(A_SESSION_ID)).isNull()
         assertThat(matrixClientsHolder.getOrRestore(A_SESSION_ID).getOrNull()).isEqualTo(fakeMatrixClient)
-        // Do it again to it the cache
+        // Do it again to hit the cache
         assertThat(matrixClientsHolder.getOrRestore(A_SESSION_ID).getOrNull()).isEqualTo(fakeMatrixClient)
         assertThat(matrixClientsHolder.getOrNull(A_SESSION_ID)).isEqualTo(fakeMatrixClient)
     }

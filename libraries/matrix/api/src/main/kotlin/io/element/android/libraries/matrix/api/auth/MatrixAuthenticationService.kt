@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.api.auth
 
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -31,6 +32,7 @@ interface MatrixAuthenticationService {
     /**
      * Restore a session from a [sessionId].
      * Do not restore anything it the access token is not valid anymore.
+     * Generally this method should not be used directly, prefer using [MatrixClientProvider.getOrRestore] instead.
      */
     suspend fun restoreSession(sessionId: SessionId): Result<MatrixClient>
     fun getHomeserverDetails(): StateFlow<MatrixHomeServerDetails?>
