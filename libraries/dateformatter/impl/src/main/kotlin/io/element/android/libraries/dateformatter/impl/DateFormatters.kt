@@ -26,19 +26,18 @@ import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toJavaLocalDateTime
 import java.time.Period
 import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.absoluteValue
 
-// TODO rework this date formatting
 class DateFormatters @Inject constructor(
     private val locale: Locale,
     private val clock: Clock,
     private val timeZone: TimeZone,
 ) {
     private val onlyTimeFormatter: DateTimeFormatter by lazy {
-        val pattern = DateFormat.getBestDateTimePattern(locale, "HH:mm") ?: "HH:mm"
-        DateTimeFormatter.ofPattern(pattern, locale)
+        DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale)
     }
 
     private val dateWithMonthFormatter: DateTimeFormatter by lazy {
@@ -51,6 +50,10 @@ class DateFormatters @Inject constructor(
         DateTimeFormatter.ofPattern(pattern, locale)
     }
 
+    private val dateWithFullFormatFormatter: DateTimeFormatter by lazy {
+        DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(locale)
+    }
+
     internal fun formatTime(localDateTime: LocalDateTime): String {
         return onlyTimeFormatter.format(localDateTime.toJavaLocalDateTime())
     }
@@ -61,6 +64,10 @@ class DateFormatters @Inject constructor(
 
     internal fun formatDateWithYear(localDateTime: LocalDateTime): String {
         return dateWithYearFormatter.format(localDateTime.toJavaLocalDateTime())
+    }
+
+    internal fun formatDateWithFullFormat(localDateTime: LocalDateTime): String {
+        return dateWithFullFormatFormatter.format(localDateTime.toJavaLocalDateTime())
     }
 
     internal fun formatDate(
