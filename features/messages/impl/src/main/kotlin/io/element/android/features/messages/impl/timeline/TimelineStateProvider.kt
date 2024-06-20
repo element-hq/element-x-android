@@ -18,7 +18,6 @@ package io.element.android.features.messages.impl.timeline
 
 import io.element.android.features.messages.impl.timeline.components.aProfileTimelineDetailsReady
 import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
-import io.element.android.features.messages.impl.timeline.model.InReplyToDetails
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -37,6 +36,7 @@ import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.sender
+package io.element.android.libraries.matrix.ui.messages.sender
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
