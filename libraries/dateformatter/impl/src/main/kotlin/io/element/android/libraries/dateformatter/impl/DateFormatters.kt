@@ -26,6 +26,7 @@ import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toJavaLocalDateTime
 import java.time.Period
 import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.absoluteValue
@@ -51,6 +52,10 @@ class DateFormatters @Inject constructor(
         DateTimeFormatter.ofPattern(pattern, locale)
     }
 
+    private val dateWithFullFormatFormatter: DateTimeFormatter by lazy {
+        DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(locale)
+    }
+
     internal fun formatTime(localDateTime: LocalDateTime): String {
         return onlyTimeFormatter.format(localDateTime.toJavaLocalDateTime())
     }
@@ -61,6 +66,10 @@ class DateFormatters @Inject constructor(
 
     internal fun formatDateWithYear(localDateTime: LocalDateTime): String {
         return dateWithYearFormatter.format(localDateTime.toJavaLocalDateTime())
+    }
+
+    internal fun formatDateWithFullFormat(localDateTime: LocalDateTime): String {
+        return dateWithFullFormatFormatter.format(localDateTime.toJavaLocalDateTime())
     }
 
     internal fun formatDate(

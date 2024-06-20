@@ -21,6 +21,7 @@ import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormat
 import io.element.android.libraries.dateformatter.test.FakeClock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.junit.Test
 import java.util.Locale
 
@@ -94,6 +95,15 @@ class DefaultLastMessageTimestampFormatterTest {
         val dat = "1979-04-06T18:35:24.00Z"
         val formatter = createFormatter(now)
         assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("06.04.1979")
+    }
+
+    @Test
+    fun `test full format`() {
+        val now = "1980-04-06T18:35:24.00Z"
+        val dat = "1979-04-06T18:35:24.00Z"
+        val clock = FakeClock().apply { givenInstant(Instant.parse(now)) }
+        val dateFormatters = DateFormatters(Locale.US, clock, TimeZone.UTC)
+        assertThat(dateFormatters.formatDateWithFullFormat(Instant.parse(dat).toLocalDateTime(TimeZone.UTC))).isEqualTo("Friday, April 6, 1979")
     }
 
     /**
