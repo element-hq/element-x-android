@@ -30,6 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import java.util.Collections
 import kotlin.math.PI
 import kotlin.math.cos
@@ -38,7 +40,7 @@ import kotlin.math.sin
 @Composable
 fun CompositeAvatar(
     avatarData: AvatarData,
-    heroes: List<AvatarData>,
+    heroes: ImmutableList<AvatarData>,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
 ) {
@@ -122,27 +124,27 @@ internal fun CompositeAvatarPreview() = ElementThemedPreview {
     ) {
         CompositeAvatar(
             avatarData = mainAvatar,
-            heroes = List(0) { aHeroAvatarData(it) },
+            heroes = List(0) { aHeroAvatarData(it) }.toPersistentList(),
         )
         CompositeAvatar(
             avatarData = mainAvatar,
-            heroes = List(1) { aHeroAvatarData(it) },
+            heroes = List(1) { aHeroAvatarData(it) }.toPersistentList(),
         )
         CompositeAvatar(
             avatarData = mainAvatar,
-            heroes = List(2) { aHeroAvatarData(it) },
+            heroes = List(2) { aHeroAvatarData(it) }.toPersistentList(),
         )
         CompositeAvatar(
             avatarData = mainAvatar,
-            heroes = List(3) { aHeroAvatarData(it) },
+            heroes = List(3) { aHeroAvatarData(it) }.toPersistentList(),
         )
         CompositeAvatar(
             avatarData = mainAvatar,
-            heroes = List(4) { aHeroAvatarData(it) },
+            heroes = List(4) { aHeroAvatarData(it) }.toPersistentList(),
         )
         CompositeAvatar(
             avatarData = mainAvatar,
-            heroes = List(5) { aHeroAvatarData(it) },
+            heroes = List(5) { aHeroAvatarData(it) }.toPersistentList(),
         )
     }
 }

@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -85,6 +84,8 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun RoomDetailsView(
@@ -326,7 +327,7 @@ private fun RoomHeaderSection(
     roomAlias: RoomAlias?,
     isEncrypted: Boolean,
     isPublic: Boolean,
-    heroes: List<MatrixUser> = emptyList(),
+    heroes: ImmutableList<MatrixUser>,
     openAvatarPreview: (url: String) -> Unit,
 ) {
     Column(
@@ -344,7 +345,7 @@ private fun RoomHeaderSection(
                     url = user.avatarUrl,
                     size = AvatarSize.RoomHeader
                 )
-            },
+            }.toPersistentList(),
             modifier = Modifier
                 .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
                 .testTag(TestTags.roomDetailAvatar)

@@ -443,7 +443,7 @@ private fun MessagesViewComposerBottomSheetContents(
 private fun MessagesViewTopBar(
     roomName: String?,
     roomAvatar: AvatarData?,
-    heroes: List<AvatarData>,
+    heroes: ImmutableList<AvatarData>,
     callState: RoomCallState,
     onRoomDetailsClick: () -> Unit,
     onJoinCallClick: () -> Unit,
@@ -503,7 +503,7 @@ private fun CallMenuItem(
 private fun RoomAvatarAndNameRow(
     roomName: String,
     roomAvatar: AvatarData,
-    heroes: List<AvatarData>,
+    heroes: ImmutableList<AvatarData>,
     modifier: Modifier = Modifier
 ) {
     Row(
