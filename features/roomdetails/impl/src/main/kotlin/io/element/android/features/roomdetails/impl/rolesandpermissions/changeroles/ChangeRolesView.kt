@@ -81,6 +81,7 @@ import io.element.android.libraries.matrix.api.room.getBestName
 import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.SelectedUsersRowList
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -327,7 +328,7 @@ private fun ListMemberItem(
     }
     MemberRow(
         modifier = Modifier.clickable(enabled = canToggle, onClick = { onToggleSelection(roomMember) }),
-        avatarData = AvatarData(roomMember.userId.value, roomMember.displayName, roomMember.avatarUrl, AvatarSize.UserListItem),
+        avatarData = roomMember.getAvatarData(size = AvatarSize.UserListItem),
         name = roomMember.getBestName(),
         userId = roomMember.userId.value.takeIf { roomMember.displayName?.isNotBlank() == true },
         isPending = roomMember.membership == RoomMembershipState.INVITE,
