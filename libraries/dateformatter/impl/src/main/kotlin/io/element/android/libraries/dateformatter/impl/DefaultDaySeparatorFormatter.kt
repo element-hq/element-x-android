@@ -28,6 +28,7 @@ class DefaultDaySeparatorFormatter @Inject constructor(
 ) : DaySeparatorFormatter {
     override fun format(timestamp: Long): String {
         val dateToFormat = localDateTimeProvider.providesFromTimestamp(timestamp)
-        return dateFormatters.formatDateWithYear(dateToFormat)
+        // TODO use relative formatting once iOS uses it too
+        return dateFormatters.formatDateWithFullFormat(dateToFormat)
     }
 }

@@ -22,11 +22,10 @@ import io.element.android.libraries.matrix.api.core.EventId
 @Immutable
 sealed interface LocalEventSendState {
     data object NotSentYet : LocalEventSendState
-
-    data class SendingFailed(
-        val error: String
-    ) : LocalEventSendState
-
+    sealed class SendingFailed(open val error: String) : LocalEventSendState {
+        data class Recoverable(override val error: String) : SendingFailed(error)
+        data class Unrecoverable(override val error: String) : SendingFailed(error)
+    }
     data class Sent(
         val eventId: EventId
     ) : LocalEventSendState

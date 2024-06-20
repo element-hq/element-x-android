@@ -81,8 +81,8 @@ fun TimelineItemReadReceiptView(
         }
     } else {
         when (state.sendState) {
-            is LocalEventSendState.SendingFailed,
-            is LocalEventSendState.NotSentYet -> {
+            LocalEventSendState.NotSentYet,
+            is LocalEventSendState.SendingFailed.Recoverable -> {
                 ReadReceiptsRow(modifier) {
                     Icon(
                         modifier = Modifier.padding(2.dp),
@@ -91,6 +91,9 @@ fun TimelineItemReadReceiptView(
                         tint = ElementTheme.colors.iconSecondary
                     )
                 }
+            }
+            is LocalEventSendState.SendingFailed.Unrecoverable -> {
+                // Error? The timestamp is already displayed in red
             }
             null,
             is LocalEventSendState.Sent -> {

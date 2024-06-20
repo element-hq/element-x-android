@@ -55,12 +55,13 @@ import org.junit.Test
         runCurrent()
 
         assert(setAllSendQueuesEnabledLambda)
-            .isCalledOnce()
-            .with(value(true))
+            .isCalledExactly(2)
+            .withSequence(
+                listOf(value(true)),
+                listOf(value(true)),
+            )
 
-        assert(setRoomSendQueueEnabledLambda)
-            .isCalledOnce()
-            .with(value(true))
+        assert(setRoomSendQueueEnabledLambda).isNeverCalled()
     }
 
     @Test

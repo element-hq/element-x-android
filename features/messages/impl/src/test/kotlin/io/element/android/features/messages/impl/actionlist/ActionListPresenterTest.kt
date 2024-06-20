@@ -615,7 +615,6 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Edit,
                         TimelineItemAction.Copy,
-                        TimelineItemAction.CopyLink,
                         TimelineItemAction.Redact,
                     )
                 )

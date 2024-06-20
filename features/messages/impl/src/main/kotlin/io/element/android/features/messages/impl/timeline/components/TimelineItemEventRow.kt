@@ -92,7 +92,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeRepliedTo
-import io.element.android.features.messages.impl.timeline.model.event.isEdited
 import io.element.android.features.messages.impl.timeline.model.eventId
 import io.element.android.features.messages.impl.timeline.model.metadata
 import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
@@ -460,8 +459,7 @@ private fun MessageEventBubbleContent(
                 Box(modifier, contentAlignment = Alignment.Center) {
                     content {}
                     TimelineEventTimestampView(
-                        formattedTime = event.sentTime,
-                        isMessageEdited = event.content.isEdited(),
+                        event = event,
                         modifier = Modifier
                             // Outer padding
                             .padding(horizontal = 4.dp, vertical = 4.dp)
@@ -481,8 +479,7 @@ private fun MessageEventBubbleContent(
                     content = { content(this::onContentLayoutChange) },
                     overlay = {
                         TimelineEventTimestampView(
-                            formattedTime = event.sentTime,
-                            isMessageEdited = event.content.isEdited(),
+                            event = event,
                             modifier = Modifier
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                         )
@@ -492,8 +489,7 @@ private fun MessageEventBubbleContent(
                 Column(modifier) {
                     content {}
                     TimelineEventTimestampView(
-                        formattedTime = event.sentTime,
-                        isMessageEdited = event.content.isEdited(),
+                        event = event,
                         modifier = Modifier
                             .align(Alignment.End)
                             .padding(horizontal = 8.dp, vertical = 4.dp)

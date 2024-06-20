@@ -24,14 +24,14 @@ import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
 import javax.inject.Inject
 
 @VisibleForTesting
-const val SEND_QUEUES_RETRY_DELAY_MILLIS = 1500L
+const val SEND_QUEUES_RETRY_DELAY_MILLIS = 500L
 
 @SingleIn(SessionScope::class)
 class SendQueues @Inject constructor(
@@ -45,14 +45,12 @@ class SendQueues @Inject constructor(
             }
             .launchIn(coroutineScope)
 
+        @OptIn(FlowPreview::class)
         matrixClient.sendQueueDisabledFlow()
-            .onEach { roomId: RoomId ->
-                Timber.d("Send queue disabled for room $roomId")
+            .debounce(SEND_QUEUES_RETRY_DELAY_MILLIS)
+            .onEach { _: RoomId ->
                 if (networkMonitor.connectivity.value == NetworkStatus.Online) {
-                    delay(SEND_QUEUES_RETRY_DELAY_MILLIS)
-                    matrixClient.getRoom(roomId)?.use { room ->
-                        room.setSendQueueEnabled(enabled = true)
-                    }
+                    matrixClient.setAllSendQueuesEnabled(enabled = true)
                 }
             }
             .launchIn(coroutineScope)
