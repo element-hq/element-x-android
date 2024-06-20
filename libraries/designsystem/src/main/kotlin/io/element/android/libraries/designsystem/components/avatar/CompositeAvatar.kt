@@ -122,30 +122,12 @@ internal fun CompositeAvatarPreview() = ElementThemedPreview {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        CompositeAvatar(
-            avatarData = mainAvatar,
-            heroes = List(0) { aHeroAvatarData(it) }.toPersistentList(),
-        )
-        CompositeAvatar(
-            avatarData = mainAvatar,
-            heroes = List(1) { aHeroAvatarData(it) }.toPersistentList(),
-        )
-        CompositeAvatar(
-            avatarData = mainAvatar,
-            heroes = List(2) { aHeroAvatarData(it) }.toPersistentList(),
-        )
-        CompositeAvatar(
-            avatarData = mainAvatar,
-            heroes = List(3) { aHeroAvatarData(it) }.toPersistentList(),
-        )
-        CompositeAvatar(
-            avatarData = mainAvatar,
-            heroes = List(4) { aHeroAvatarData(it) }.toPersistentList(),
-        )
-        CompositeAvatar(
-            avatarData = mainAvatar,
-            heroes = List(5) { aHeroAvatarData(it) }.toPersistentList(),
-        )
+        repeat(6) { nbOfHeroes ->
+            CompositeAvatar(
+                avatarData = mainAvatar,
+                heroes = List(nbOfHeroes) { aHeroAvatarData(it) }.toPersistentList(),
+            )
+        }
     }
 }
 
