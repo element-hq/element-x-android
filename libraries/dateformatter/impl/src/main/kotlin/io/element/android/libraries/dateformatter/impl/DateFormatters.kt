@@ -31,15 +31,13 @@ import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.absoluteValue
 
-// TODO rework this date formatting
 class DateFormatters @Inject constructor(
     private val locale: Locale,
     private val clock: Clock,
     private val timeZone: TimeZone,
 ) {
     private val onlyTimeFormatter: DateTimeFormatter by lazy {
-        val pattern = DateFormat.getBestDateTimePattern(locale, "HH:mm") ?: "HH:mm"
-        DateTimeFormatter.ofPattern(pattern, locale)
+        DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale)
     }
 
     private val dateWithMonthFormatter: DateTimeFormatter by lazy {
