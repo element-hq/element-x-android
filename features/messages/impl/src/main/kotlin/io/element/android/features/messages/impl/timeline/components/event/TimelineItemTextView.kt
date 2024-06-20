@@ -38,8 +38,8 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.ui.messages.LocalUserProfileCache
-import io.element.android.libraries.matrix.ui.messages.UserProfileCache
+import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
+import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.getMentionSpans
@@ -72,7 +72,7 @@ fun TimelineItemTextView(
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
 internal fun getTextWithResolvedMentions(content: TimelineItemTextBasedContent): CharSequence {
-    val userProfileCache = LocalUserProfileCache.current
+    val userProfileCache = LocalRoomMemberProfilesCache.current
     val lastCacheUpdate by userProfileCache.lastCacheUpdate.collectAsState()
     val formattedBody = remember(content.htmlBody, lastCacheUpdate) {
         updateMentionSpans(content.formattedBody, userProfileCache)
@@ -82,7 +82,7 @@ internal fun getTextWithResolvedMentions(content: TimelineItemTextBasedContent):
     return formattedBody
 }
 
-private fun updateMentionSpans(text: CharSequence?, cache: UserProfileCache): Boolean {
+private fun updateMentionSpans(text: CharSequence?, cache: RoomMemberProfilesCache): Boolean {
     var changedContents = false
     if (text != null) {
         for (mentionSpan in text.getMentionSpans()) {

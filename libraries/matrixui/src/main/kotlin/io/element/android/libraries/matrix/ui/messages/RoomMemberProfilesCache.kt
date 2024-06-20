@@ -18,23 +18,20 @@ package io.element.android.libraries.matrix.ui.messages
 
 import androidx.compose.runtime.staticCompositionLocalOf
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.services.toolbox.api.systemclock.SystemClock
+import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
-class UserProfileCache @Inject constructor(
-    private val clock: SystemClock,
-) {
-    private val cache = MutableStateFlow(mapOf<UserId, MatrixUser>())
+class RoomMemberProfilesCache @Inject constructor() {
+    private val cache = MutableStateFlow(mapOf<UserId, RoomMember>())
 
     private val _lastCacheUpdate = MutableStateFlow(0L)
     val lastCacheUpdate: StateFlow<Long> = _lastCacheUpdate
 
-    fun replace(items: List<MatrixUser>) {
+    fun replace(items: List<RoomMember>) {
         cache.value = items.associateBy { it.userId }
-        _lastCacheUpdate.tryEmit(clock.epochMillis())
+        _lastCacheUpdate.tryEmit(_lastCacheUpdate.value + 1)
     }
 
     fun getDisplayName(userId: UserId): String? {
@@ -42,6 +39,6 @@ class UserProfileCache @Inject constructor(
     }
 }
 
-val LocalUserProfileCache = staticCompositionLocalOf {
-    UserProfileCache(clock = { 0L })
+val LocalRoomMemberProfilesCache = staticCompositionLocalOf {
+    RoomMemberProfilesCache()
 }

@@ -68,10 +68,9 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.joinedRoomMembers
-import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.matrix.ui.messages.LocalUserProfileCache
-import io.element.android.libraries.matrix.ui.messages.UserProfileCache
+import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
+import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
 import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanProvider
@@ -94,7 +93,7 @@ class MessagesFlowNode @AssistedInject constructor(
     private val elementCallEntryPoint: ElementCallEntryPoint,
     private val analyticsService: AnalyticsService,
     private val room: MatrixRoom,
-    private val userProfileCache: UserProfileCache,
+    private val roomMemberProfilesCache: RoomMemberProfilesCache,
     mentionSpanProviderFactory: MentionSpanProvider.Factory,
 ) : BaseFlowNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
@@ -158,8 +157,7 @@ class MessagesFlowNode @AssistedInject constructor(
 
         room.membersStateFlow
             .onEach { membersState ->
-                val matrixUsers = membersState.joinedRoomMembers().map { it.toMatrixUser() }
-                userProfileCache.replace(matrixUsers)
+                roomMemberProfilesCache.replace(membersState.joinedRoomMembers())
             }
             .launchIn(lifecycleScope)
     }
@@ -375,7 +373,7 @@ class MessagesFlowNode @AssistedInject constructor(
         mentionSpanProvider.updateStyles()
 
         CompositionLocalProvider(
-            LocalUserProfileCache provides userProfileCache,
+            LocalRoomMemberProfilesCache provides roomMemberProfilesCache,
             LocalMentionSpanProvider provides mentionSpanProvider,
         ) {
             BackstackWithOverlayBox(modifier)

@@ -227,7 +227,7 @@ Compose:
       - LocalSnackbarDispatcher
       - LocalCameraPositionState
       - LocalTimelineItemPresenterFactories
-      - LocalUserProfileCache
+      - LocalRoomMemberProfilesCache
       - LocalMentionSpanProvider
   CompositionLocalNaming:
     active: true

@@ -57,7 +57,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
-import io.element.android.libraries.matrix.ui.messages.LocalUserProfileCache
+import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.textcomposer.components.ComposerOptionsButton
@@ -145,7 +145,7 @@ fun TextComposer(
         }
     }
 
-    val userProfileCache = LocalUserProfileCache.current
+    val userProfileCache = LocalRoomMemberProfilesCache.current
 
     val placeholder = if (composerMode.inThread) {
         stringResource(id = CommonStrings.action_reply_in_thread)

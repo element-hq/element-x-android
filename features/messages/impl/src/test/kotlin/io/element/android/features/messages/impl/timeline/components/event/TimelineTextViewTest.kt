@@ -32,12 +32,11 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_NAME
-import io.element.android.libraries.matrix.ui.components.aMatrixUser
-import io.element.android.libraries.matrix.ui.messages.LocalUserProfileCache
-import io.element.android.libraries.matrix.ui.messages.UserProfileCache
+import io.element.android.libraries.matrix.test.room.aRoomMember
+import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
+import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.getMentionSpans
-import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.wysiwyg.view.spans.CustomMentionSpan
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.test.runTest
@@ -140,11 +139,11 @@ class TimelineTextViewTest {
     ): CharSequence {
         val completable = CompletableDeferred<CharSequence>()
         setContent {
-            val userProfileCache = UserProfileCache(FakeSystemClock()).apply {
-                replace(listOf(aMatrixUser(id = A_USER_ID.value, displayName = A_USER_NAME)))
+            val roomMemberProfilesCache = RoomMemberProfilesCache().apply {
+                replace(listOf(aRoomMember(userId = A_USER_ID, displayName = A_USER_NAME)))
             }
             CompositionLocalProvider(
-                LocalUserProfileCache provides userProfileCache,
+                LocalRoomMemberProfilesCache provides roomMemberProfilesCache,
             ) {
                 completable.complete(getTextWithResolvedMentions(content = content))
             }
