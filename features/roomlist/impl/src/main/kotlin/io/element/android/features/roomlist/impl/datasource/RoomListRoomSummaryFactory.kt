@@ -26,6 +26,7 @@ import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.toInviteSender
 import kotlinx.collections.immutable.persistentListOf
@@ -63,34 +64,37 @@ class RoomListRoomSummaryFactory @Inject constructor(
     }
 
     fun create(roomSummary: RoomSummary.Filled): RoomListRoomSummary {
-        val roomIdentifier = roomSummary.identifier()
-        val avatarData = roomSummary.details.getAvatarData(size = AvatarSize.RoomListItem)
+        return create(roomSummary.details)
+    }
+
+    private fun create(details: RoomSummaryDetails): RoomListRoomSummary {
+        val avatarData = details.getAvatarData(size = AvatarSize.RoomListItem)
         return RoomListRoomSummary(
-            id = roomIdentifier,
-            roomId = RoomId(roomIdentifier),
-            name = roomSummary.details.name,
-            numberOfUnreadMessages = roomSummary.details.numUnreadMessages,
-            numberOfUnreadMentions = roomSummary.details.numUnreadMentions,
-            numberOfUnreadNotifications = roomSummary.details.numUnreadNotifications,
-            isMarkedUnread = roomSummary.details.isMarkedUnread,
-            timestamp = lastMessageTimestampFormatter.format(roomSummary.details.lastMessageTimestamp),
-            lastMessage = roomSummary.details.lastMessage?.let { message ->
-                roomLastMessageFormatter.format(message.event, roomSummary.details.isDirect)
+            id = details.roomId.value,
+            roomId = details.roomId,
+            name = details.name,
+            numberOfUnreadMessages = details.numUnreadMessages,
+            numberOfUnreadMentions = details.numUnreadMentions,
+            numberOfUnreadNotifications = details.numUnreadNotifications,
+            isMarkedUnread = details.isMarkedUnread,
+            timestamp = lastMessageTimestampFormatter.format(details.lastMessageTimestamp),
+            lastMessage = details.lastMessage?.let { message ->
+                roomLastMessageFormatter.format(message.event, details.isDirect)
             }.orEmpty(),
             avatarData = avatarData,
-            userDefinedNotificationMode = roomSummary.details.userDefinedNotificationMode,
-            hasRoomCall = roomSummary.details.hasRoomCall,
-            isDirect = roomSummary.details.isDirect,
-            isFavorite = roomSummary.details.isFavorite,
-            inviteSender = roomSummary.details.inviter?.toInviteSender(),
-            isDm = roomSummary.details.isDm,
-            canonicalAlias = roomSummary.details.canonicalAlias,
-            displayType = if (roomSummary.details.currentUserMembership == CurrentUserMembership.INVITED) {
+            userDefinedNotificationMode = details.userDefinedNotificationMode,
+            hasRoomCall = details.hasRoomCall,
+            isDirect = details.isDirect,
+            isFavorite = details.isFavorite,
+            inviteSender = details.inviter?.toInviteSender(),
+            isDm = details.isDm,
+            canonicalAlias = details.canonicalAlias,
+            displayType = if (details.currentUserMembership == CurrentUserMembership.INVITED) {
                 RoomSummaryDisplayType.INVITE
             } else {
                 RoomSummaryDisplayType.ROOM
             },
-            heroes = roomSummary.details.heroes.map { user ->
+            heroes = details.heroes.map { user ->
                 user.getAvatarData(size = AvatarSize.RoomListItem)
             }.toImmutableList(),
         )
