@@ -64,12 +64,7 @@ class RoomListRoomSummaryFactory @Inject constructor(
 
     fun create(roomSummary: RoomSummary.Filled): RoomListRoomSummary {
         val roomIdentifier = roomSummary.identifier()
-        val avatarData = AvatarData(
-            id = roomIdentifier,
-            name = roomSummary.details.name,
-            url = roomSummary.details.avatarUrl,
-            size = AvatarSize.RoomListItem,
-        )
+        val avatarData = roomSummary.details.getAvatarData(size = AvatarSize.RoomListItem)
         return RoomListRoomSummary(
             id = roomIdentifier,
             roomId = RoomId(roomIdentifier),

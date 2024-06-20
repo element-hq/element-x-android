@@ -41,7 +41,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -224,12 +223,7 @@ private fun RoomSummaryView(
         verticalAlignment = Alignment.CenterVertically
     ) {
         CompositeAvatar(
-            avatarData = AvatarData(
-                id = summary.roomId.value,
-                name = summary.name,
-                url = summary.avatarUrl,
-                size = AvatarSize.RoomSelectRoomListItem,
-            ),
+            avatarData = summary.getAvatarData(size = AvatarSize.RoomSelectRoomListItem),
             heroes = summary.heroes.map { user ->
                 user.getAvatarData(size = AvatarSize.RoomSelectRoomListItem)
             }.toPersistentList()

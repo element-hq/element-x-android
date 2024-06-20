@@ -36,7 +36,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -63,12 +62,7 @@ fun SelectedRoom(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             CompositeAvatar(
-                avatarData = AvatarData(
-                    roomSummary.roomId.value,
-                    roomSummary.name,
-                    roomSummary.avatarUrl,
-                    AvatarSize.SelectedRoom,
-                ),
+                avatarData = roomSummary.getAvatarData(size = AvatarSize.SelectedRoom),
                 heroes = roomSummary.heroes.map { user ->
                     user.getAvatarData(size = AvatarSize.SelectedRoom)
                 }.toImmutableList()

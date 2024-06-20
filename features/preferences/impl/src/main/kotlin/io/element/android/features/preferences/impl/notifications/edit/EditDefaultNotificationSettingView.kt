@@ -25,7 +25,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -98,12 +97,6 @@ fun EditDefaultNotificationSettingView(
                         RoomNotificationMode.MUTE -> stringResource(id = CommonStrings.common_mute)
                         null -> ""
                     }
-                    val avatarData = AvatarData(
-                        id = summary.identifier(),
-                        name = summary.details.name,
-                        url = summary.details.avatarUrl,
-                        size = AvatarSize.CustomRoomNotificationSetting,
-                    )
                     ListItem(
                         headlineContent = {
                             val roomName = summary.details.name
@@ -117,7 +110,7 @@ fun EditDefaultNotificationSettingView(
                         },
                         leadingContent = ListItemContent.Custom {
                             CompositeAvatar(
-                                avatarData = avatarData,
+                                avatarData = summary.details.getAvatarData(size = AvatarSize.CustomRoomNotificationSetting),
                                 heroes = summary.details.heroes.map { user ->
                                     user.getAvatarData(size = AvatarSize.CustomRoomNotificationSetting)
                                 }.toPersistentList()
