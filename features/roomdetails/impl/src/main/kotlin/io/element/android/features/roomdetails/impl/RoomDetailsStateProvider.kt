@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import kotlinx.collections.immutable.toPersistentList
 
 open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState> {
@@ -50,6 +51,7 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             ),
             aRoomDetailsState(canCall = false, canInvite = false),
             aRoomDetailsState(isPublic = false),
+            aRoomDetailsState(heroes = aMatrixUserList()),
             // Add other state here
         )
 }

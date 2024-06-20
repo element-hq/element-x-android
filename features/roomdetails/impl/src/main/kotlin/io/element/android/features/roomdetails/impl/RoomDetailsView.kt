@@ -346,7 +346,6 @@ private fun RoomHeaderSection(
                 )
             },
             modifier = Modifier
-                .size(70.dp)
                 .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
                 .testTag(TestTags.roomDetailAvatar)
         )
