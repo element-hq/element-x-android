@@ -58,7 +58,7 @@ class MatrixRoomInfoMapper {
             userDefinedNotificationMode = it.userDefinedNotificationMode?.map(),
             hasRoomCall = it.hasRoomCall,
             activeRoomCallParticipants = it.activeRoomCallParticipants.toImmutableList(),
-            heroes = it.heroes.map { hero -> hero.map() }.toImmutableList()
+            heroes = it.elementHeroes().toImmutableList()
         )
     }
 }

@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.impl.notificationsettings.RoomNotificationSettingsMapper
+import io.element.android.libraries.matrix.impl.room.elementHeroes
 import io.element.android.libraries.matrix.impl.room.map
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.room.message.RoomMessageFactory
@@ -49,7 +50,7 @@ class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFacto
             isDm = roomInfo.isDirect && roomInfo.activeMembersCount.toLong() == 2L,
             isFavorite = roomInfo.isFavourite,
             currentUserMembership = roomInfo.membership.map(),
-            heroes = roomInfo.heroes.map { it.map() },
+            heroes = roomInfo.elementHeroes(),
         )
     }
 }
