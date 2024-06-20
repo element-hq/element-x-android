@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -369,6 +370,12 @@ class FakeTimeline(
             Timeline.PaginationDirection.FORWARDS -> forwardPaginationStatus
         }
     }
+
+    var loadReplyDetailsLambda: (eventId: EventId) -> Result<InReplyTo> = {
+        Result.success(InReplyTo.NotLoaded(it))
+    }
+
+    override suspend fun loadReplyDetails(eventId: EventId) = loadReplyDetailsLambda(eventId)
 
     var closeCounter = 0
         private set

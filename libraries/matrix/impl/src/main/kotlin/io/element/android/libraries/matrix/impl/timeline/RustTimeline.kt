@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineException
+import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.map
@@ -41,7 +42,6 @@ import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.room.map
-import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessageMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
@@ -49,6 +49,7 @@ import io.element.android.libraries.matrix.impl.timeline.postprocessor.LastForwa
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.LoadingIndicatorsPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.RoomBeginningPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.TimelineEncryptedHistoryPostProcessor
+import io.element.android.libraries.matrix.impl.timeline.reply.InReplyToMapper
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
@@ -118,14 +119,14 @@ class RustTimeline(
     private val loadingIndicatorsPostProcessor = LoadingIndicatorsPostProcessor(systemClock)
     private val lastForwardIndicatorsPostProcessor = LastForwardIndicatorsPostProcessor(isLive)
 
+    private val timelineEventContentMapper = TimelineEventContentMapper()
+    private val inReplyToMapper = InReplyToMapper(timelineEventContentMapper)
     private val timelineItemFactory = MatrixTimelineItemMapper(
         fetchDetailsForEvent = this::fetchDetailsForEvent,
         roomCoroutineScope = roomCoroutineScope,
         virtualTimelineItemMapper = VirtualTimelineItemMapper(),
         eventTimelineItemMapper = EventTimelineItemMapper(
-            contentMapper = TimelineEventContentMapper(
-                eventMessageMapper = EventMessageMapper()
-            )
+            contentMapper = timelineEventContentMapper
         )
     )
 
@@ -578,6 +579,12 @@ class RustTimeline(
     private suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit> {
         return runCatching {
             inner.fetchDetailsForEvent(eventId.value)
+        }
+    }
+
+    override suspend fun loadReplyDetails(eventId: EventId): Result<InReplyTo> {
+        return runCatching {
+            inner.loadReplyDetails(eventId.value).use(inReplyToMapper::map)
         }
     }
 }
