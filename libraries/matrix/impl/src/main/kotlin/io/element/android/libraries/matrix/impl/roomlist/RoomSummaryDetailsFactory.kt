@@ -49,6 +49,7 @@ class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFacto
             isDm = roomInfo.isDirect && roomInfo.activeMembersCount.toLong() == 2L,
             isFavorite = roomInfo.isFavourite,
             currentUserMembership = roomInfo.membership.map(),
+            heroes = roomInfo.heroes.map { it.map() },
         )
     }
 }

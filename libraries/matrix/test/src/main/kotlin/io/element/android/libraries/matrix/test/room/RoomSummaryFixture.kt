@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.room.message.RoomMessage
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
@@ -78,6 +79,7 @@ fun aRoomSummaryDetails(
     isDm: Boolean = false,
     isFavorite: Boolean = false,
     currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,
+    heroes: List<MatrixUser> = emptyList(),
 ) = RoomSummaryDetails(
     roomId = roomId,
     name = name,
@@ -95,6 +97,7 @@ fun aRoomSummaryDetails(
     isDm = isDm,
     isFavorite = isFavorite,
     currentUserMembership = currentUserMembership,
+    heroes = heroes,
 )
 
 fun aRoomMessage(
