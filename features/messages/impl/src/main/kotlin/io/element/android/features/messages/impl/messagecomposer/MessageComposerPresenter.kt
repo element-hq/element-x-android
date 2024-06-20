@@ -39,6 +39,7 @@ import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
+import io.element.android.features.messages.impl.draft.ComposerDraftService
 import io.element.android.features.messages.impl.mentions.MentionSuggestionsProcessor
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.libraries.architecture.Presenter
@@ -54,6 +55,8 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.Mention
+import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
+import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
@@ -109,10 +112,10 @@ class MessageComposerPresenter @Inject constructor(
     private val permalinkBuilder: PermalinkBuilder,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
     private val timelineController: TimelineController,
+    private val draftService: ComposerDraftService,
 ) : Presenter<MessageComposerState> {
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
     private var pendingEvent: MessageComposerEvents? = null
-
     private val suggestionSearchTrigger = MutableStateFlow<Suggestion?>(null)
 
     // Used to disable some UI related elements in tests
@@ -260,6 +263,10 @@ class MessageComposerPresenter @Inject constructor(
                 TextEditorState.Markdown(markdownTextEditorState)
             }
         )
+
+        LaunchedEffect(Unit) {
+            loadDraft(textEditorState)
+        }
 
         LaunchedEffect(showTextFormatting) {
             if (!applyFormattingModeChanges) {
@@ -432,6 +439,9 @@ class MessageComposerPresenter @Inject constructor(
                         }
                     }
                 }
+                MessageComposerEvents.SaveDraft -> {
+                    appCoroutineScope.saveDraft(textEditorState)
+                }
             }
         }
 
@@ -582,4 +592,47 @@ class MessageComposerPresenter @Inject constructor(
                 snackbarDispatcher.post(snackbarMessage)
             }
         }
+
+    private fun CoroutineScope.loadDraft(
+        textEditorState: TextEditorState,
+    ) = launch {
+        val draft = draftService.loadDraft(room.roomId) ?: return@launch
+        val htmlText = draft.htmlText
+        val markdownText = draft.plainText
+        textEditorState.setMarkdown(markdownText)
+        if (htmlText != null) {
+            textEditorState.setHtml(htmlText)
+            showTextFormatting = true
+        }
+        when (val draftType = draft.draftType) {
+            ComposerDraftType.NewMessage -> messageComposerContext.composerMode = MessageComposerMode.Normal
+            is ComposerDraftType.Edit -> messageComposerContext.composerMode = MessageComposerMode.Edit(draftType.eventId, markdownText, null)
+            is ComposerDraftType.Reply -> messageComposerContext.composerMode = MessageComposerMode.Normal
+        }
+    }
+
+    private fun CoroutineScope.saveDraft(
+        textEditorState: TextEditorState,
+    ) = launch {
+        val html = textEditorState.messageHtml()
+        val markdown = textEditorState.messageMarkdown(permalinkBuilder)
+        val draftType = when (val mode = messageComposerContext.composerMode) {
+            is MessageComposerMode.Normal -> ComposerDraftType.NewMessage
+            is MessageComposerMode.Edit -> {
+                mode.eventId?.let { eventId -> ComposerDraftType.Edit(eventId) }
+            }
+            is MessageComposerMode.Reply -> ComposerDraftType.Reply(mode.eventId)
+            is MessageComposerMode.Quote -> null
+        }
+        if (draftType == null || markdown.isBlank()) {
+            return@launch
+        } else {
+            val composerDraft = ComposerDraft(
+                draftType = draftType,
+                htmlText = html,
+                plainText = markdown,
+            )
+            draftService.saveDraft(room.roomId, composerDraft)
+        }
+    }
 }

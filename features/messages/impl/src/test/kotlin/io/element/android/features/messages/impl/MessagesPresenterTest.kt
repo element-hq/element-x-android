@@ -25,6 +25,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.draft.FakeComposerDraftService
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.messagecomposer.DefaultMessageComposerContext
@@ -782,6 +783,7 @@ class MessagesPresenterTest {
             permalinkParser = FakePermalinkParser(),
             permalinkBuilder = FakePermalinkBuilder(),
             timelineController = TimelineController(matrixRoom),
+            draftService = FakeComposerDraftService(),
         ).apply {
             showTextFormatting = true
             isTesting = true

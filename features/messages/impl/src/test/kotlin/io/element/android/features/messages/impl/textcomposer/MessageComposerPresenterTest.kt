@@ -27,6 +27,8 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.messages.impl.draft.ComposerDraftService
+import io.element.android.features.messages.impl.draft.FakeComposerDraftService
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.DefaultMessageComposerContext
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
@@ -1045,6 +1047,7 @@ class MessageComposerPresenterTest {
         permissionPresenter: PermissionsPresenter = FakePermissionsPresenter(),
         permalinkBuilder: PermalinkBuilder = FakePermalinkBuilder(),
         isRichTextEditorEnabled: Boolean = true,
+        draftService: ComposerDraftService = FakeComposerDraftService(),
     ) = MessageComposerPresenter(
         coroutineScope,
         room,
@@ -1062,6 +1065,7 @@ class MessageComposerPresenterTest {
         permalinkParser = FakePermalinkParser(),
         permalinkBuilder = permalinkBuilder,
         timelineController = TimelineController(room),
+        draftService = draftService,
     ).apply {
         isTesting = true
         showTextFormatting = isRichTextEditorEnabled

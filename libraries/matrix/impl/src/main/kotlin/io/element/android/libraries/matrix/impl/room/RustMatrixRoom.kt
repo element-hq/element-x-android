@@ -618,7 +618,7 @@ class RustMatrixRoom(
     }
 
     override suspend fun clearComposerDraft(): Result<Unit> = runCatching {
-        Timber.d("clearComposerDraft: for $roomId")
+        Timber.d("clearComposerDraft for $roomId")
         innerRoom.clearComposerDraft()
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.di
+package io.element.android.features.messages.impl.draft
 
-abstract class RoomScope private constructor(
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 
-)
+interface ComposerDraftService {
+    suspend fun loadDraft(roomId: RoomId): ComposerDraft?
+    suspend fun saveDraft(roomId: RoomId, draft: ComposerDraft)
+}
