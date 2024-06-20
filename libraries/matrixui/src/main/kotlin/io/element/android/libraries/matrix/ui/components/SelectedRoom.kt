@@ -36,9 +36,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -60,7 +60,22 @@ fun SelectedRoom(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Avatar(AvatarData(roomSummary.roomId.value, roomSummary.name, roomSummary.avatarUrl, AvatarSize.SelectedRoom))
+            CompositeAvatar(
+                avatarData = AvatarData(
+                    roomSummary.roomId.value,
+                    roomSummary.name,
+                    roomSummary.avatarUrl,
+                    AvatarSize.SelectedRoom,
+                ),
+                heroes = roomSummary.heroes.map {
+                    AvatarData(
+                        id = it.userId.value,
+                        name = it.displayName,
+                        url = it.avatarUrl,
+                        size = AvatarSize.SelectedRoom
+                    )
+                }
+            )
             Text(
                 // If name is null, we do not have space to render "No room name", so just use `#` here.
                 text = roomSummary.name ?: "#",

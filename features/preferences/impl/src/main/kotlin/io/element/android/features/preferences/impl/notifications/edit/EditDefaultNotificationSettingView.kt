@@ -25,9 +25,9 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
-import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
@@ -114,7 +114,17 @@ fun EditDefaultNotificationSettingView(
                             Text(text = subtitle)
                         },
                         leadingContent = ListItemContent.Custom {
-                            Avatar(avatarData = avatarData)
+                            CompositeAvatar(
+                                avatarData = avatarData,
+                                heroes = summary.details.heroes.map { user ->
+                                    AvatarData(
+                                        id = user.userId.value,
+                                        name = user.displayName,
+                                        url = user.avatarUrl,
+                                        size = AvatarSize.CustomRoomNotificationSetting,
+                                    )
+                                }
+                            )
                         },
                         onClick = {
                             openRoomNotificationSettings(summary.details.roomId)

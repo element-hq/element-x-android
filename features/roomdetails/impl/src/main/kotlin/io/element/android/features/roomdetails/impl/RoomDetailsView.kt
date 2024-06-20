@@ -54,9 +54,9 @@ import io.element.android.features.userprofile.shared.blockuser.BlockUserDialogs
 import io.element.android.features.userprofile.shared.blockuser.BlockUserSection
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.components.ClickableLinkText
-import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.button.MainActionButton
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -81,6 +81,7 @@ import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.getBestName
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -127,6 +128,7 @@ fun RoomDetailsView(
                         roomAlias = state.roomAlias,
                         isEncrypted = state.isEncrypted,
                         isPublic = state.isPublic,
+                        heroes = state.heroes,
                         openAvatarPreview = { avatarUrl ->
                             openAvatarPreview(state.roomName, avatarUrl)
                         },
@@ -324,6 +326,7 @@ private fun RoomHeaderSection(
     roomAlias: RoomAlias?,
     isEncrypted: Boolean,
     isPublic: Boolean,
+    heroes: List<MatrixUser> = emptyList(),
     openAvatarPreview: (url: String) -> Unit,
 ) {
     Column(
@@ -332,8 +335,16 @@ private fun RoomHeaderSection(
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Avatar(
+        CompositeAvatar(
             avatarData = AvatarData(roomId.value, roomName, avatarUrl, AvatarSize.RoomHeader),
+            heroes = heroes.map { user ->
+                AvatarData(
+                    id = user.userId.value,
+                    name = user.displayName,
+                    url = user.avatarUrl,
+                    size = AvatarSize.RoomHeader
+                )
+            },
             modifier = Modifier
                 .size(70.dp)
                 .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }

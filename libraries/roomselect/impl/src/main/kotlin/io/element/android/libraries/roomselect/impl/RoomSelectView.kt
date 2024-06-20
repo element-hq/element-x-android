@@ -41,9 +41,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -221,13 +221,21 @@ private fun RoomSummaryView(
             .heightIn(56.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Avatar(
+        CompositeAvatar(
             avatarData = AvatarData(
                 id = summary.roomId.value,
                 name = summary.name,
                 url = summary.avatarUrl,
                 size = AvatarSize.RoomSelectRoomListItem,
             ),
+            heroes = summary.heroes.map {
+                AvatarData(
+                    it.userId.value,
+                    it.displayName,
+                    it.avatarUrl,
+                    AvatarSize.RoomSelectRoomListItem,
+                )
+            }
         )
         Column(
             modifier = Modifier

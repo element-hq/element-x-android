@@ -53,7 +53,7 @@ fun CompositeAvatar(
         }
         when (numberOfHeroes) {
             0 -> {
-                // Cannot happen
+                error("Unsupported number of heroes: 0")
             }
             1 -> {
                 Avatar(heroes[0], modifier, contentDescription)

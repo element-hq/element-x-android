@@ -27,6 +27,8 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.ui.model.toInviteSender
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 
 class RoomListRoomSummaryFactory @Inject constructor(
@@ -54,6 +56,7 @@ class RoomListRoomSummaryFactory @Inject constructor(
                 inviteSender = null,
                 isDm = false,
                 canonicalAlias = null,
+                heroes = persistentListOf(),
             )
         }
     }
@@ -90,7 +93,15 @@ class RoomListRoomSummaryFactory @Inject constructor(
                 RoomSummaryDisplayType.INVITE
             } else {
                 RoomSummaryDisplayType.ROOM
-            }
+            },
+            heroes = roomSummary.details.heroes.map {
+                AvatarData(
+                    id = it.userId.value,
+                    name = it.displayName,
+                    url = it.avatarUrl,
+                    size = AvatarSize.RoomListItem,
+                )
+            }.toImmutableList(),
         )
     }
 }
