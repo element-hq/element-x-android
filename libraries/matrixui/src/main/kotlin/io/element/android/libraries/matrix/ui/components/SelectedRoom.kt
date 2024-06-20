@@ -45,7 +45,9 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun SelectedRoom(
@@ -67,14 +69,9 @@ fun SelectedRoom(
                     roomSummary.avatarUrl,
                     AvatarSize.SelectedRoom,
                 ),
-                heroes = roomSummary.heroes.map {
-                    AvatarData(
-                        id = it.userId.value,
-                        name = it.displayName,
-                        url = it.avatarUrl,
-                        size = AvatarSize.SelectedRoom
-                    )
-                }
+                heroes = roomSummary.heroes.map { user ->
+                    user.getAvatarData(size = AvatarSize.SelectedRoom)
+                }.toImmutableList()
             )
             Text(
                 // If name is null, we do not have space to render "No room name", so just use `#` here.

@@ -59,9 +59,11 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -228,14 +230,9 @@ private fun RoomSummaryView(
                 url = summary.avatarUrl,
                 size = AvatarSize.RoomSelectRoomListItem,
             ),
-            heroes = summary.heroes.map {
-                AvatarData(
-                    it.userId.value,
-                    it.displayName,
-                    it.avatarUrl,
-                    AvatarSize.RoomSelectRoomListItem,
-                )
-            }
+            heroes = summary.heroes.map { user ->
+                user.getAvatarData(size = AvatarSize.RoomSelectRoomListItem)
+            }.toPersistentList()
         )
         Column(
             modifier = Modifier

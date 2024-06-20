@@ -86,6 +86,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.room.canCall
 import io.element.android.libraries.matrix.ui.room.canRedactOtherAsState
 import io.element.android.libraries.matrix.ui.room.canRedactOwnAsState
@@ -257,12 +258,7 @@ class MessagesPresenter @AssistedInject constructor(
 
     private fun MatrixRoomInfo.heroes(): List<AvatarData> {
         return heroes.map { user ->
-            AvatarData(
-                id = user.userId.value,
-                name = user.displayName,
-                url = user.avatarUrl,
-                size = AvatarSize.TimelineRoom
-            )
+            user.getAvatarData(size = AvatarSize.TimelineRoom)
         }
     }
 

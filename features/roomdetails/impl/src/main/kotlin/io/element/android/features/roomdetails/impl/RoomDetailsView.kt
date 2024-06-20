@@ -81,6 +81,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.getBestName
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -339,12 +340,7 @@ private fun RoomHeaderSection(
         CompositeAvatar(
             avatarData = AvatarData(roomId.value, roomName, avatarUrl, AvatarSize.RoomHeader),
             heroes = heroes.map { user ->
-                AvatarData(
-                    id = user.userId.value,
-                    name = user.displayName,
-                    url = user.avatarUrl,
-                    size = AvatarSize.RoomHeader
-                )
+                user.getAvatarData(size = AvatarSize.RoomHeader)
             }.toPersistentList(),
             modifier = Modifier
                 .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }

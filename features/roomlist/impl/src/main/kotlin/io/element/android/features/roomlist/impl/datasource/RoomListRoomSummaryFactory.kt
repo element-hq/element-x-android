@@ -26,6 +26,7 @@ import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.toInviteSender
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -94,13 +95,8 @@ class RoomListRoomSummaryFactory @Inject constructor(
             } else {
                 RoomSummaryDisplayType.ROOM
             },
-            heroes = roomSummary.details.heroes.map {
-                AvatarData(
-                    id = it.userId.value,
-                    name = it.displayName,
-                    url = it.avatarUrl,
-                    size = AvatarSize.RoomListItem,
-                )
+            heroes = roomSummary.details.heroes.map { user ->
+                user.getAvatarData(size = AvatarSize.RoomListItem)
             }.toImmutableList(),
         )
     }

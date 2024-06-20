@@ -37,7 +37,9 @@ import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.toPersistentList
 
 /**
  * A view that allows a user to edit the default notification setting for rooms. This can be set separately
@@ -117,13 +119,8 @@ fun EditDefaultNotificationSettingView(
                             CompositeAvatar(
                                 avatarData = avatarData,
                                 heroes = summary.details.heroes.map { user ->
-                                    AvatarData(
-                                        id = user.userId.value,
-                                        name = user.displayName,
-                                        url = user.avatarUrl,
-                                        size = AvatarSize.CustomRoomNotificationSetting,
-                                    )
-                                }
+                                    user.getAvatarData(size = AvatarSize.CustomRoomNotificationSetting)
+                                }.toPersistentList()
                             )
                         },
                         onClick = {
