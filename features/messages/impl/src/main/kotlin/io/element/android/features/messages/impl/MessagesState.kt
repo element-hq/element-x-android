@@ -29,12 +29,14 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.RoomId
+import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
 data class MessagesState(
     val roomId: RoomId,
     val roomName: AsyncData<String>,
     val roomAvatar: AsyncData<AvatarData>,
+    val heroes: ImmutableList<AvatarData>,
     val userHasPermissionToSendMessage: Boolean,
     val userHasPermissionToRedactOwn: Boolean,
     val userHasPermissionToRedactOther: Boolean,

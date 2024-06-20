@@ -83,9 +83,9 @@ import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitlePlaceholdersRowMolecule
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.ProgressDialogType
-import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -187,6 +187,7 @@ fun MessagesView(
                 MessagesViewTopBar(
                     roomName = state.roomName.dataOrNull(),
                     roomAvatar = state.roomAvatar.dataOrNull(),
+                    heroes = state.heroes,
                     callState = state.callState,
                     onBackClick = {
                         // Since the textfield is now based on an Android view, this is no longer done automatically.
@@ -442,6 +443,7 @@ private fun MessagesViewComposerBottomSheetContents(
 private fun MessagesViewTopBar(
     roomName: String?,
     roomAvatar: AvatarData?,
+    heroes: List<AvatarData>,
     callState: RoomCallState,
     onRoomDetailsClick: () -> Unit,
     onJoinCallClick: () -> Unit,
@@ -457,6 +459,7 @@ private fun MessagesViewTopBar(
                 RoomAvatarAndNameRow(
                     roomName = roomName,
                     roomAvatar = roomAvatar,
+                    heroes = heroes,
                     modifier = titleModifier
                 )
             } else {
@@ -500,13 +503,17 @@ private fun CallMenuItem(
 private fun RoomAvatarAndNameRow(
     roomName: String,
     roomAvatar: AvatarData,
+    heroes: List<AvatarData>,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Avatar(roomAvatar)
+        CompositeAvatar(
+            avatarData = roomAvatar,
+            heroes = heroes,
+        )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = roomName,
