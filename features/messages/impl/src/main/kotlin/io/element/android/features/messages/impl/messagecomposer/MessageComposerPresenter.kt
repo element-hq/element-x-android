@@ -184,9 +184,9 @@ class MessageComposerPresenter @Inject constructor(
             when (val modeValue = messageComposerContext.composerMode) {
                 is MessageComposerMode.Edit ->
                     if (showTextFormatting) {
-                        richTextEditorState.setHtml(modeValue.defaultContent)
+                        richTextEditorState.setHtml(modeValue.content)
                     } else {
-                        markdownTextEditorState.text.update(modeValue.defaultContent, true)
+                        markdownTextEditorState.text.update(modeValue.content, true)
                     }
                 else -> Unit
             }

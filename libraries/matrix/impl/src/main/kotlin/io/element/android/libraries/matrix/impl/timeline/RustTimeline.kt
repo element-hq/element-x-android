@@ -582,9 +582,22 @@ class RustTimeline(
         }
     }
 
-    override suspend fun loadReplyDetails(eventId: EventId): Result<InReplyTo> {
-        return runCatching {
-            inner.loadReplyDetails(eventId.value).use(inReplyToMapper::map)
+    override suspend fun loadReplyDetails(eventId: EventId): Result<InReplyTo> = withContext(dispatcher) {
+        runCatching {
+            val timelineItem = _timelineItems.value.firstOrNull { timelineItem ->
+                timelineItem is MatrixTimelineItem.Event && timelineItem.eventId == eventId
+            } as? MatrixTimelineItem.Event
+
+            if (timelineItem != null) {
+                InReplyTo.Ready(
+                    eventId = eventId,
+                    content = timelineItem.event.content,
+                    senderId = timelineItem.event.sender,
+                    senderProfile = timelineItem.event.senderProfile,
+                )
+            } else {
+                inner.loadReplyDetails(eventId.value).use(inReplyToMapper::map)
+            }
         }
     }
 }

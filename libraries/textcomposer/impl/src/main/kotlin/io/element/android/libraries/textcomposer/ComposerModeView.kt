@@ -46,6 +46,8 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToBox
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -61,9 +63,7 @@ internal fun ComposerModeView(
         is MessageComposerMode.Reply -> {
             ReplyToModeView(
                 modifier = Modifier.padding(8.dp),
-                senderName = composerMode.senderName,
-                text = composerMode.defaultContent,
-                attachmentThumbnailInfo = composerMode.attachmentThumbnailInfo,
+                replyToDetails = composerMode.replyToDetails,
                 onResetComposerMode = onResetComposerMode,
             )
         }
@@ -118,9 +118,7 @@ private fun EditingModeView(
 
 @Composable
 private fun ReplyToModeView(
-    senderName: String,
-    text: String?,
-    attachmentThumbnailInfo: AttachmentThumbnailInfo?,
+    replyToDetails: InReplyToDetails,
     onResetComposerMode: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -130,42 +128,7 @@ private fun ReplyToModeView(
             .background(MaterialTheme.colorScheme.surface)
             .padding(4.dp)
     ) {
-        if (attachmentThumbnailInfo != null) {
-            AttachmentThumbnail(
-                info = attachmentThumbnailInfo,
-                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-                modifier = Modifier
-                    .size(36.dp)
-                    .clip(RoundedCornerShape(9.dp))
-            )
-        }
-        Spacer(modifier = Modifier.width(8.dp))
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .align(Alignment.CenterVertically)
-        ) {
-            Text(
-                text = senderName,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clipToBounds(),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                style = ElementTheme.typography.fontBodySmMedium,
-                textAlign = TextAlign.Start,
-                color = ElementTheme.materialColors.primary,
-            )
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = text.orEmpty(),
-                style = ElementTheme.typography.fontBodyMdRegular,
-                textAlign = TextAlign.Start,
-                color = ElementTheme.materialColors.secondary,
-                maxLines = if (attachmentThumbnailInfo != null) 1 else 2,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
+        InReplyToBox(inReplyTo = replyToDetails, modifier = Modifier.weight(1f))
         Icon(
             imageVector = CompoundIcons.Close(),
             contentDescription = stringResource(CommonStrings.action_close),

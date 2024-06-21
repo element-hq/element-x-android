@@ -20,8 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetailsDisambiguatedProvider
 
 @PreviewsDayNight
 @Composable
@@ -32,19 +32,4 @@ internal fun TimelineItemEventRowDisambiguatedPreview(
         inReplyToDetails = inReplyToDetails,
         displayNameAmbiguous = true,
     )
-}
-
-class InReplyToDetailsDisambiguatedProvider : InReplyToDetailsProvider() {
-    override val values: Sequence<InReplyToDetails>
-        get() = sequenceOf(
-            aMessageContent(
-                body = "Message which are being replied.",
-                type = TextMessageType("Message which are being replied.", null)
-            ),
-        ).map {
-            aInReplyToDetails(
-                displayNameAmbiguous = true,
-                eventContent = it,
-            )
-        }
 }

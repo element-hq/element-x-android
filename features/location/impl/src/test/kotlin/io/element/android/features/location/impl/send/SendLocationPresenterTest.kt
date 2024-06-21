@@ -379,7 +379,7 @@ class SendLocationPresenterTest {
         fakeMessageComposerContext.apply {
             composerMode = MessageComposerMode.Edit(
                 eventId = null,
-                defaultContent = "",
+                content = "",
                 transactionId = null
             )
         }
@@ -427,7 +427,7 @@ class SendLocationPresenterTest {
         fakeMessageComposerContext.apply {
             composerMode = MessageComposerMode.Edit(
                 eventId = null,
-                defaultContent = "",
+                content = "",
                 transactionId = null
             )
         }

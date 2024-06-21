@@ -20,8 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetailsOtherProvider
 
 @PreviewsDayNight
 @Composable
@@ -29,12 +29,4 @@ internal fun TimelineItemEventRowWithReplyOtherPreview(
     @PreviewParameter(InReplyToDetailsOtherProvider::class) inReplyToDetails: InReplyToDetails,
 ) = ElementPreview {
     TimelineItemEventRowWithReplyContentToPreview(inReplyToDetails)
-}
-
-class InReplyToDetailsOtherProvider : InReplyToDetailsProvider() {
-    override val values: Sequence<InReplyToDetails>
-        get() = sequenceOf(
-            InReplyToDetails.Loading(eventId = EventId("\$anEventId")),
-            InReplyToDetails.Error(eventId = EventId("\$anEventId"), message = "An error message."),
-        )
 }
