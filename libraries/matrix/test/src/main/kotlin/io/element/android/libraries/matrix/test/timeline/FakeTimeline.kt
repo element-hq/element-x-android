@@ -371,8 +371,8 @@ class FakeTimeline(
         }
     }
 
-    var loadReplyDetailsLambda: (eventId: EventId) -> Result<InReplyTo> = {
-        Result.success(InReplyTo.NotLoaded(it))
+    var loadReplyDetailsLambda: (eventId: EventId) -> InReplyTo = {
+        InReplyTo.NotLoaded(it)
     }
 
     override suspend fun loadReplyDetails(eventId: EventId) = loadReplyDetailsLambda(eventId)

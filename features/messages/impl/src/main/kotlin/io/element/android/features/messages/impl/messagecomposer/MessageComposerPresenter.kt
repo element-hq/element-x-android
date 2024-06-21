@@ -58,6 +58,8 @@ import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
+import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
@@ -607,7 +609,14 @@ class MessageComposerPresenter @Inject constructor(
         when (val draftType = draft.draftType) {
             ComposerDraftType.NewMessage -> messageComposerContext.composerMode = MessageComposerMode.Normal
             is ComposerDraftType.Edit -> messageComposerContext.composerMode = MessageComposerMode.Edit(draftType.eventId, markdownText, null)
-            is ComposerDraftType.Reply -> messageComposerContext.composerMode = MessageComposerMode.Normal
+            is ComposerDraftType.Reply -> {
+                messageComposerContext.composerMode = MessageComposerMode.Reply(InReplyToDetails.Loading(draftType.eventId))
+                timelineController.invokeOnCurrentTimeline {
+                    val replyToDetails = loadReplyDetails(draftType.eventId).map(permalinkParser)
+                    messageComposerContext.composerMode = MessageComposerMode.Reply(replyToDetails)
+                    Unit
+                }
+            }
         }
     }
 

@@ -170,5 +170,5 @@ interface Timeline : AutoCloseable {
         progressCallback: ProgressCallback?
     ): Result<MediaUploadHandler>
 
-    suspend fun loadReplyDetails(eventId: EventId): Result<InReplyTo>
+    suspend fun loadReplyDetails(eventId: EventId): InReplyTo
 }

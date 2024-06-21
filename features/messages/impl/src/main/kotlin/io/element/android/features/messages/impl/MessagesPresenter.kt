@@ -49,10 +49,8 @@ import io.element.android.features.messages.impl.timeline.components.receipt.bot
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.typing.TypingNotificationPresenter
-import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatter
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
@@ -74,7 +72,6 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
-import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.matrix.ui.room.canCall
 import io.element.android.libraries.matrix.ui.room.canRedactOtherAsState
@@ -334,16 +331,11 @@ class MessagesPresenter @AssistedInject constructor(
     private suspend fun handleActionReply(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {
         if (targetEvent.eventId == null) return
         timelineController.invokeOnCurrentTimeline {
-            loadReplyDetails(targetEvent.eventId)
-                .onSuccess { inReplyTo ->
-                    val composerMode = MessageComposerMode.Reply(
-                        inReplyTo.map(permalinkParser)
-                    )
-                    composerState.eventSink(
-                        MessageComposerEvents.SetMode(composerMode)
-                    )
-                }
-                .onFailure { Timber.e(it) }
+            val replyToDetails = loadReplyDetails(targetEvent.eventId).map(permalinkParser)
+            val composerMode = MessageComposerMode.Reply(replyToDetails = replyToDetails)
+            composerState.eventSink(
+                MessageComposerEvents.SetMode(composerMode)
+            )
         }
     }
 
