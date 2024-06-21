@@ -17,22 +17,14 @@
 package io.element.android.libraries.matrix.impl.auth
 
 import io.element.android.libraries.matrix.api.auth.AuthenticationException
-import org.matrix.rustcomponents.sdk.AuthenticationException as RustAuthenticationException
+import org.matrix.rustcomponents.sdk.ClientBuildException as RustAuthenticationException
 
 fun Throwable.mapAuthenticationException(): AuthenticationException {
     val message = this.message ?: "Unknown error"
     return when (this) {
-        is RustAuthenticationException.ClientMissing -> AuthenticationException.ClientMissing(message)
         is RustAuthenticationException.Generic -> AuthenticationException.Generic(message)
         is RustAuthenticationException.InvalidServerName -> AuthenticationException.InvalidServerName(message)
-        is RustAuthenticationException.SessionMissing -> AuthenticationException.SessionMissing(message)
         is RustAuthenticationException.SlidingSyncNotAvailable -> AuthenticationException.SlidingSyncNotAvailable(message)
-        is RustAuthenticationException.OidcException -> AuthenticationException.OidcError("OidcException", message)
-        is RustAuthenticationException.OidcMetadataInvalid -> AuthenticationException.OidcError("OidcMetadataInvalid", message)
-        is RustAuthenticationException.OidcMetadataMissing -> AuthenticationException.OidcError("OidcMetadataMissing", message)
-        is RustAuthenticationException.OidcNotSupported -> AuthenticationException.OidcError("OidcNotSupported", message)
-        is RustAuthenticationException.OidcCancelled -> AuthenticationException.OidcError("OidcCancelled", message)
-        is RustAuthenticationException.OidcCallbackUrlInvalid -> AuthenticationException.OidcError("OidcCallbackUrlInvalid", message)
         else -> AuthenticationException.Generic(message)
     }
 }

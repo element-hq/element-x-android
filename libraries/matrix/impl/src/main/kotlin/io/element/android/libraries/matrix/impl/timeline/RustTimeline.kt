@@ -328,13 +328,10 @@ class RustTimeline(
             runCatching<Unit> {
                 when {
                     originalEventId != null -> {
-                        val editedEvent = specialModeEventTimelineItem ?: inner.getEventTimelineItemByEventId(originalEventId.value)
-                        editedEvent.use {
-                            inner.edit(
-                                newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
-                                editItem = it,
-                            )
-                        }
+                        inner.edit(
+                            newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
+                            eventId = originalEventId.value,
+                        )
                         specialModeEventTimelineItem = null
                     }
                     transactionId != null -> {
@@ -368,17 +365,9 @@ class RustTimeline(
     ): Result<Unit> = withContext(dispatcher) {
         runCatching {
             val msg = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map())
-            if (fromNotification) {
+            inner.sendReply(msg, eventId.value)
+            if (!fromNotification) {
                 // When replying from a notification, do not interfere with `specialModeEventTimelineItem`
-                val inReplyTo = inner.getEventTimelineItemByEventId(eventId.value)
-                inReplyTo.use { eventTimelineItem ->
-                    inner.sendReply(msg, eventTimelineItem)
-                }
-            } else {
-                val inReplyTo = specialModeEventTimelineItem ?: inner.getEventTimelineItemByEventId(eventId.value)
-                inReplyTo.use { eventTimelineItem ->
-                    inner.sendReply(msg, eventTimelineItem)
-                }
                 specialModeEventTimelineItem = null
             }
         }

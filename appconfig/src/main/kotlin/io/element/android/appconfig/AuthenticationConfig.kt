@@ -21,4 +21,6 @@ object AuthenticationConfig {
 
     const val DEFAULT_HOMESERVER_URL = MATRIX_ORG_URL
     const val SLIDING_SYNC_READ_MORE_URL = "https://github.com/matrix-org/sliding-sync/blob/main/docs/Landing.md"
+
+    val SLIDING_SYNC_PROXY_URL: String? = null
 }
