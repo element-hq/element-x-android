@@ -35,7 +35,7 @@ class RoomMemberProfilesCache @Inject constructor() {
     }
 
     fun getDisplayName(userId: UserId): String? {
-        return cache.value[userId]?.displayName
+        return cache.value[userId]?.disambiguatedDisplayName
     }
 }
 
