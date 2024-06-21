@@ -18,7 +18,9 @@ package io.element.android.features.messages.impl
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.node
@@ -64,12 +66,20 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.joinedRoomMembers
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
+import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
+import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanProvider
+import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
@@ -82,6 +92,9 @@ class MessagesFlowNode @AssistedInject constructor(
     private val createPollEntryPoint: CreatePollEntryPoint,
     private val elementCallEntryPoint: ElementCallEntryPoint,
     private val analyticsService: AnalyticsService,
+    private val room: MatrixRoom,
+    private val roomMemberProfilesCache: RoomMemberProfilesCache,
+    mentionSpanProviderFactory: MentionSpanProvider.Factory,
 ) : BaseFlowNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Messages,
@@ -136,6 +149,18 @@ class MessagesFlowNode @AssistedInject constructor(
     }
 
     private val callback = plugins<MessagesEntryPoint.Callback>().firstOrNull()
+
+    private val mentionSpanProvider = mentionSpanProviderFactory.create(room.sessionId.value)
+
+    override fun onBuilt() {
+        super.onBuilt()
+
+        room.membersStateFlow
+            .onEach { membersState ->
+                roomMemberProfilesCache.replace(membersState.joinedRoomMembers())
+            }
+            .launchIn(lifecycleScope)
+    }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
@@ -345,6 +370,13 @@ class MessagesFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        BackstackWithOverlayBox(modifier)
+        mentionSpanProvider.updateStyles()
+
+        CompositionLocalProvider(
+            LocalRoomMemberProfilesCache provides roomMemberProfilesCache,
+            LocalMentionSpanProvider provides mentionSpanProvider,
+        ) {
+            BackstackWithOverlayBox(modifier)
+        }
     }
 }
