@@ -33,6 +33,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -43,6 +44,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
@@ -454,7 +456,10 @@ private fun MessagesViewTopBar(
             BackButton(onClick = onBackClick)
         },
         title = {
-            val titleModifier = Modifier.clickable { onRoomDetailsClick() }
+            val roundedCornerShape = RoundedCornerShape(8.dp)
+            val titleModifier = Modifier
+                .clip(roundedCornerShape)
+                .clickable { onRoomDetailsClick() }
             if (roomName != null && roomAvatar != null) {
                 RoomAvatarAndNameRow(
                     roomName = roomName,
@@ -514,8 +519,8 @@ private fun RoomAvatarAndNameRow(
             avatarData = roomAvatar,
             heroes = heroes,
         )
-        Spacer(modifier = Modifier.width(8.dp))
         Text(
+            modifier = Modifier.padding(horizontal = 8.dp),
             text = roomName,
             style = ElementTheme.typography.fontBodyLgMedium,
             maxLines = 1,
