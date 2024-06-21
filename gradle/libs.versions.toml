@@ -45,7 +45,7 @@ showkase = "1.0.3"
 appyx = "1.4.0"
 sqldelight = "2.0.2"
 # TODO use a stable version before merging
-wysiwyg = "2.37.3-SNAPSHOT"
+wysiwyg = "2.37.3"
 telephoto = "0.11.2"
 
 # DI
