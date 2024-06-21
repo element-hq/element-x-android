@@ -19,7 +19,6 @@ package io.element.android.features.messages.impl.messagecomposer
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
@@ -38,7 +37,6 @@ data class MessageComposerState(
     val canCreatePoll: Boolean,
     val attachmentsState: AttachmentsState,
     val memberSuggestions: ImmutableList<ResolvedMentionSuggestion>,
-    val currentUserId: UserId,
     val eventSink: (MessageComposerEvents) -> Unit,
 )
 

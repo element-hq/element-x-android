@@ -17,7 +17,6 @@
 package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.textcomposer.aRichTextEditorState
@@ -57,6 +56,5 @@ fun aMessageComposerState(
     canCreatePoll = canCreatePoll,
     attachmentsState = attachmentsState,
     memberSuggestions = memberSuggestions,
-    currentUserId = UserId("@alice:localhost"),
     eventSink = {},
 )

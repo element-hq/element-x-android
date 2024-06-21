@@ -470,7 +470,9 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
 ) {
     setContent {
         // Cannot use the RichTextEditor, so simulate a LocalInspectionMode
-        CompositionLocalProvider(LocalInspectionMode provides true) {
+        CompositionLocalProvider(
+            LocalInspectionMode provides true
+        ) {
             MessagesView(
                 state = state,
                 onBackClick = onBackClick,

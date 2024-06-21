@@ -98,7 +98,7 @@ class MarkdownTextEditorState(
                                 replace(start, end, "@room")
                             } else {
                                 val link = permalinkBuilder.permalinkForUser(UserId(mention.rawValue)).getOrNull() ?: continue
-                                replace(start, end, "[${mention.text}]($link)")
+                                replace(start, end, "[${mention.rawValue}]($link)")
                             }
                         }
                     }

@@ -43,13 +43,14 @@ class MentionSpanProviderTest {
 
     private val permalinkParser = FakePermalinkParser()
     private val mentionSpanProvider = MentionSpanProvider(
-        currentSessionId = currentUserId,
+        currentSessionId = currentUserId.value,
         permalinkParser = permalinkParser,
-        currentUserBackgroundColor = myUserColor,
-        currentUserTextColor = myUserColor,
-        otherBackgroundColor = otherColor,
-        otherTextColor = otherColor,
-    )
+    ).apply {
+        currentUserBackgroundColor = myUserColor
+        currentUserTextColor = myUserColor
+        otherBackgroundColor = otherColor
+        otherTextColor = otherColor
+    }
 
     @Test
     fun `getting mention span for current user should return a MentionSpan with custom colors`() {
