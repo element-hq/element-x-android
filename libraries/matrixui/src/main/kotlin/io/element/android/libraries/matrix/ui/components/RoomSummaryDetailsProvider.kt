@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
 open class RoomSummaryDetailsProvider : PreviewParameterProvider<RoomSummaryDetails> {
     override val values: Sequence<RoomSummaryDetails>
@@ -50,6 +51,7 @@ fun aRoomSummaryDetails(
     isMarkedUnread: Boolean = false,
     isFavorite: Boolean = false,
     currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,
+    heroes: List<MatrixUser> = emptyList(),
 ) = RoomSummaryDetails(
     roomId = roomId,
     name = name,
@@ -67,4 +69,5 @@ fun aRoomSummaryDetails(
     isMarkedUnread = isMarkedUnread,
     isFavorite = isFavorite,
     currentUserMembership = currentUserMembership,
+    heroes = heroes,
 )

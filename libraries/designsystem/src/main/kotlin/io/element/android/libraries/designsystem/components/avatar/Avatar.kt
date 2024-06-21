@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -52,18 +53,22 @@ fun Avatar(
     avatarData: AvatarData,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
+    // If not null, will be used instead of the size from avatarData
+    forcedAvatarSize: Dp? = null,
 ) {
     val commonModifier = modifier
-        .size(avatarData.size.dp)
+        .size(forcedAvatarSize ?: avatarData.size.dp)
         .clip(CircleShape)
     if (avatarData.url.isNullOrBlank()) {
         InitialsAvatar(
             avatarData = avatarData,
+            forcedAvatarSize = forcedAvatarSize,
             modifier = commonModifier,
         )
     } else {
         ImageAvatar(
             avatarData = avatarData,
+            forcedAvatarSize = forcedAvatarSize,
             modifier = commonModifier,
             contentDescription = contentDescription,
         )
@@ -73,6 +78,7 @@ fun Avatar(
 @Composable
 private fun ImageAvatar(
     avatarData: AvatarData,
+    forcedAvatarSize: Dp?,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
 ) {
@@ -98,9 +104,15 @@ private fun ImageAvatar(
                     SideEffect {
                         Timber.e(state.result.throwable, "Error loading avatar $state\n${state.result}")
                     }
-                    InitialsAvatar(avatarData = avatarData)
+                    InitialsAvatar(
+                        avatarData = avatarData,
+                        forcedAvatarSize = forcedAvatarSize,
+                    )
                 }
-                else -> InitialsAvatar(avatarData = avatarData)
+                else -> InitialsAvatar(
+                    avatarData = avatarData,
+                    forcedAvatarSize = forcedAvatarSize,
+                )
             }
         }
     }
@@ -109,13 +121,14 @@ private fun ImageAvatar(
 @Composable
 private fun InitialsAvatar(
     avatarData: AvatarData,
+    forcedAvatarSize: Dp?,
     modifier: Modifier = Modifier,
 ) {
     val avatarColors = AvatarColorsProvider.provide(avatarData.id, ElementTheme.isLightTheme)
     Box(
         modifier.background(color = avatarColors.background)
     ) {
-        val fontSize = avatarData.size.dp.toSp() / 2
+        val fontSize = (forcedAvatarSize ?: avatarData.size.dp).toSp() / 2
         val originalFont = ElementTheme.typography.fontHeadingMdBold
         val ratio = fontSize.value / originalFont.fontSize.value
         val lineHeight = originalFont.lineHeight * ratio

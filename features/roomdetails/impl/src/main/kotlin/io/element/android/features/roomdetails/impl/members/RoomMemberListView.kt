@@ -67,7 +67,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
@@ -276,11 +276,7 @@ private fun RoomMemberListItem(
     }
     MatrixUserRow(
         modifier = modifier.clickable(onClick = onClick),
-        matrixUser = MatrixUser(
-            userId = roomMember.userId,
-            displayName = roomMember.displayName,
-            avatarUrl = roomMember.avatarUrl,
-        ),
+        matrixUser = roomMember.toMatrixUser(),
         avatarSize = AvatarSize.UserListItem,
         trailingContent = roleText?.let {
             @Composable {

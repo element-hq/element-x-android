@@ -126,6 +126,7 @@ class RoomDetailsViewTest {
         }
     }
 
+    @Config(qualifiers = "h1024dp")
     @Test
     fun `click on add topic emit expected event`() {
         ensureCalledOnceWithParam<RoomDetailsAction>(RoomDetailsAction.AddTopic) { callback ->

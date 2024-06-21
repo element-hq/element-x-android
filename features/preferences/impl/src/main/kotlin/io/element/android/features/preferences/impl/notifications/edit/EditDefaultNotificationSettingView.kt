@@ -25,9 +25,8 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
-import io.element.android.libraries.designsystem.components.avatar.Avatar
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
@@ -37,7 +36,9 @@ import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.toPersistentList
 
 /**
  * A view that allows a user to edit the default notification setting for rooms. This can be set separately
@@ -96,12 +97,6 @@ fun EditDefaultNotificationSettingView(
                         RoomNotificationMode.MUTE -> stringResource(id = CommonStrings.common_mute)
                         null -> ""
                     }
-                    val avatarData = AvatarData(
-                        id = summary.identifier(),
-                        name = summary.details.name,
-                        url = summary.details.avatarUrl,
-                        size = AvatarSize.CustomRoomNotificationSetting,
-                    )
                     ListItem(
                         headlineContent = {
                             val roomName = summary.details.name
@@ -114,7 +109,12 @@ fun EditDefaultNotificationSettingView(
                             Text(text = subtitle)
                         },
                         leadingContent = ListItemContent.Custom {
-                            Avatar(avatarData = avatarData)
+                            CompositeAvatar(
+                                avatarData = summary.details.getAvatarData(size = AvatarSize.CustomRoomNotificationSetting),
+                                heroes = summary.details.heroes.map { user ->
+                                    user.getAvatarData(size = AvatarSize.CustomRoomNotificationSetting)
+                                }.toPersistentList()
+                            )
                         },
                         onClick = {
                             openRoomNotificationSettings(summary.details.roomId)

@@ -45,6 +45,7 @@ import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerL
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
@@ -754,7 +755,8 @@ fun aRoomInfo(
     userDefinedNotificationMode: RoomNotificationMode? = null,
     hasRoomCall: Boolean = false,
     userPowerLevels: ImmutableMap<UserId, Long> = persistentMapOf(),
-    activeRoomCallParticipants: List<String> = emptyList()
+    activeRoomCallParticipants: List<String> = emptyList(),
+    heroes: List<MatrixUser> = emptyList(),
 ) = MatrixRoomInfo(
     id = id,
     name = name,
@@ -779,6 +781,7 @@ fun aRoomInfo(
     hasRoomCall = hasRoomCall,
     userPowerLevels = userPowerLevels,
     activeRoomCallParticipants = activeRoomCallParticipants.toImmutableList(),
+    heroes = heroes.toImmutableList(),
 )
 
 fun defaultRoomPowerLevels() = MatrixRoomPowerLevels(
