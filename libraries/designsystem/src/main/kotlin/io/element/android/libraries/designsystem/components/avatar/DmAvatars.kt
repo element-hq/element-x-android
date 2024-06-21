@@ -34,6 +34,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.text.toPx
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 
 /**
  * https://www.figma.com/design/A2pAEvTEpJZBiOPUlcMnKi/Settings-%2B-Room-Details-(new)?node-id=1787-56333
@@ -90,6 +92,7 @@ fun DmAvatars(
                 .clickable(enabled = otherUserAvatarData.url != null) {
                     otherUserAvatarData.url?.let { openOtherAvatarPreview(it) }
                 }
+                .testTag(TestTags.memberDetailAvatar)
         )
     }
 }

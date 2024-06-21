@@ -40,6 +40,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -48,7 +49,6 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.roomdetails.impl.components.RoomBadge
-import io.element.android.features.userprofile.shared.UserProfileHeaderSection
 import io.element.android.features.userprofile.shared.blockuser.BlockUserDialogs
 import io.element.android.features.userprofile.shared.blockuser.BlockUserSection
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
@@ -56,6 +56,7 @@ import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
+import io.element.android.libraries.designsystem.components.avatar.DmAvatars
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.button.MainActionButton
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -78,6 +79,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.getBestName
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -137,13 +139,12 @@ fun RoomDetailsView(
                     )
                 }
                 is RoomDetailsType.Dm -> {
-                    val member = state.roomType.roomMember
-                    UserProfileHeaderSection(
-                        avatarUrl = state.roomAvatarUrl ?: member.avatarUrl,
-                        userId = member.userId,
-                        userName = state.roomName,
-                        openAvatarPreview = { avatarUrl ->
-                            openAvatarPreview(member.getBestName(), avatarUrl)
+                    DmHeaderSection(
+                        me = state.roomType.me,
+                        otherMember = state.roomType.roomMember,
+                        roomName = state.roomName,
+                        openAvatarPreview = { name, avatarUrl ->
+                            openAvatarPreview(name, avatarUrl)
                         },
                     )
                 }
@@ -356,6 +357,47 @@ private fun RoomHeaderSection(
         }
         BadgeList(isEncrypted = isEncrypted, isPublic = isPublic)
         Spacer(Modifier.height(32.dp))
+    }
+}
+
+@Composable
+private fun DmHeaderSection(
+    me: RoomMember,
+    otherMember: RoomMember,
+    roomName: String,
+    openAvatarPreview: (name: String, url: String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        DmAvatars(
+            userAvatarData = me.getAvatarData(size = AvatarSize.DmCluster),
+            otherUserAvatarData = otherMember.getAvatarData(size = AvatarSize.DmCluster),
+            openAvatarPreview = { url -> openAvatarPreview(me.getBestName(), url) },
+            openOtherAvatarPreview = { url -> openAvatarPreview(roomName, url) },
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            modifier = Modifier.clipToBounds(),
+            text = roomName,
+            style = ElementTheme.typography.fontHeadingLgBold,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(modifier = Modifier.height(6.dp))
+        Text(
+            text = otherMember.userId.value,
+            style = ElementTheme.typography.fontBodyLgRegular,
+            color = MaterialTheme.colorScheme.secondary,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            textAlign = TextAlign.Center,
+        )
+        Spacer(Modifier.height(40.dp))
     }
 }
 

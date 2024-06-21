@@ -19,6 +19,7 @@ package io.element.android.features.roomdetails.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
+import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.userprofile.shared.UserProfileState
 import io.element.android.features.userprofile.shared.aUserProfileState
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -141,6 +142,9 @@ fun aDmRoomDetailsState(
     roomName: String = "Daniel",
 ) = aRoomDetailsState(
     roomName = roomName,
-    roomType = RoomDetailsType.Dm(aDmRoomMember(isIgnored = isDmMemberIgnored)),
+    roomType = RoomDetailsType.Dm(
+        aRoomMember(),
+        aDmRoomMember(isIgnored = isDmMemberIgnored),
+    ),
     roomMemberDetailsState = aUserProfileState()
 )
