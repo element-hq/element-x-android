@@ -37,13 +37,12 @@ import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 
-/**
- * https://www.figma.com/design/A2pAEvTEpJZBiOPUlcMnKi/Settings-%2B-Room-Details-(new)?node-id=1787-56333
- */
-
 /** Ratio between the box size (120 on Figma) and the avatar size (75 on Figma). */
 private const val SIZE_RATIO = 1.6f
 
+/**
+ * https://www.figma.com/design/A2pAEvTEpJZBiOPUlcMnKi/Settings-%2B-Room-Details-(new)?node-id=1787-56333
+ */
 @Composable
 fun DmAvatars(
     userAvatarData: AvatarData,
