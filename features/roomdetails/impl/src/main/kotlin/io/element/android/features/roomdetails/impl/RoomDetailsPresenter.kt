@@ -49,6 +49,7 @@ import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import io.element.android.libraries.matrix.ui.room.isOwnUserAdmin
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -151,6 +152,7 @@ class RoomDetailsPresenter @Inject constructor(
             isFavorite = isFavorite,
             displayRolesAndPermissionsSettings = !room.isDm && isUserAdmin,
             isPublic = isPublic,
+            heroes = roomInfo?.heroes.orEmpty().toPersistentList(),
             eventSink = ::handleEvents,
         )
     }

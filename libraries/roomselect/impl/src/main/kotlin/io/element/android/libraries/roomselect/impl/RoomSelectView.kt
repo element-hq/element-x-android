@@ -41,9 +41,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.libraries.designsystem.components.avatar.Avatar
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -59,9 +58,11 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -221,13 +222,11 @@ private fun RoomSummaryView(
             .heightIn(56.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Avatar(
-            avatarData = AvatarData(
-                id = summary.roomId.value,
-                name = summary.name,
-                url = summary.avatarUrl,
-                size = AvatarSize.RoomSelectRoomListItem,
-            ),
+        CompositeAvatar(
+            avatarData = summary.getAvatarData(size = AvatarSize.RoomSelectRoomListItem),
+            heroes = summary.heroes.map { user ->
+                user.getAvatarData(size = AvatarSize.RoomSelectRoomListItem)
+            }.toPersistentList()
         )
         Column(
             modifier = Modifier

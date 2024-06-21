@@ -60,10 +60,5 @@ data class InviteSender(
 fun RoomMember.toInviteSender() = InviteSender(
     userId = userId,
     displayName = displayName ?: "",
-    avatarData = AvatarData(
-        id = userId.value,
-        name = displayName,
-        url = avatarUrl,
-        size = AvatarSize.InviteSender,
-    ),
+    avatarData = getAvatarData(size = AvatarSize.InviteSender),
 )

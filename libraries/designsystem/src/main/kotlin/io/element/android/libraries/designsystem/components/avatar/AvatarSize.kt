@@ -55,4 +55,8 @@ enum class AvatarSize(val dp: Dp) {
     CustomRoomNotificationSetting(36.dp),
 
     RoomDirectoryItem(36.dp),
+
+    EditProfileDetails(96.dp),
+
+    Suggestion(32.dp),
 }

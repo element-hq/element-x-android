@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.ui.model.InviteSender
+import kotlinx.collections.immutable.toImmutableList
 
 open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSummary> {
     override val values: Sequence<RoomListRoomSummary>
@@ -142,6 +143,7 @@ internal fun aRoomListRoomSummary(
     inviteSender: InviteSender? = null,
     displayType: RoomSummaryDisplayType = RoomSummaryDisplayType.ROOM,
     canonicalAlias: RoomAlias? = null,
+    heroes: List<AvatarData> = emptyList(),
 ) = RoomListRoomSummary(
     id = id,
     roomId = RoomId(id),
@@ -161,4 +163,5 @@ internal fun aRoomListRoomSummary(
     inviteSender = inviteSender,
     displayType = displayType,
     canonicalAlias = canonicalAlias,
+    heroes = heroes.toImmutableList(),
 )

@@ -93,14 +93,14 @@ private fun RoomMemberSuggestionItemView(
     modifier: Modifier = Modifier,
 ) {
     Row(modifier = modifier.clickable { onSelectSuggestion(memberSuggestion) }, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-        val avatarSize = AvatarSize.TimelineRoom
         val avatarData = when (memberSuggestion) {
-            is ResolvedMentionSuggestion.AtRoom -> roomAvatar?.copy(size = avatarSize) ?: AvatarData(roomId, roomName, null, avatarSize)
+            is ResolvedMentionSuggestion.AtRoom -> roomAvatar?.copy(size = AvatarSize.Suggestion)
+                ?: AvatarData(roomId, roomName, null, AvatarSize.Suggestion)
             is ResolvedMentionSuggestion.Member -> AvatarData(
-                memberSuggestion.roomMember.userId.value,
-                memberSuggestion.roomMember.displayName,
-                memberSuggestion.roomMember.avatarUrl,
-                avatarSize,
+                id = memberSuggestion.roomMember.userId.value,
+                name = memberSuggestion.roomMember.displayName,
+                url = memberSuggestion.roomMember.avatarUrl,
+                size = AvatarSize.Suggestion,
             )
         }
         val title = when (memberSuggestion) {

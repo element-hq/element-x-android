@@ -99,8 +99,8 @@ fun aMessagesState(
     userHasPermissionToSendReaction: Boolean = true,
     composerState: MessageComposerState = aMessageComposerState(
         textEditorState = TextEditorState.Rich(aRichTextEditorState(initialText = "Hello", initialFocus = true)),
-    isFullScreen = false,
-    mode = MessageComposerMode.Normal,
+        isFullScreen = false,
+        mode = MessageComposerMode.Normal,
     ),
     voiceMessageComposerState: VoiceMessageComposerState = aVoiceMessageComposerState(),
     timelineState: TimelineState = aTimelineState(
@@ -121,6 +121,7 @@ fun aMessagesState(
     roomId = RoomId("!id:domain"),
     roomName = roomName,
     roomAvatar = roomAvatar,
+    heroes = persistentListOf(),
     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
     userHasPermissionToRedactOwn = userHasPermissionToRedactOwn,
     userHasPermissionToRedactOther = userHasPermissionToRedactOther,
