@@ -142,6 +142,7 @@ fun aDmRoomDetailsState(
     roomName: String = "Daniel",
 ) = aRoomDetailsState(
     roomName = roomName,
+    isPublic = false,
     roomType = RoomDetailsType.Dm(
         aRoomMember(),
         aDmRoomMember(isIgnored = isDmMemberIgnored),

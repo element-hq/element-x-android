@@ -20,6 +20,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -40,7 +41,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -130,8 +130,6 @@ fun RoomDetailsView(
                         roomId = state.roomId,
                         roomName = state.roomName,
                         roomAlias = state.roomAlias,
-                        isEncrypted = state.isEncrypted,
-                        isPublic = state.isPublic,
                         heroes = state.heroes,
                         openAvatarPreview = { avatarUrl ->
                             openAvatarPreview(state.roomName, avatarUrl)
@@ -149,6 +147,12 @@ fun RoomDetailsView(
                     )
                 }
             }
+            BadgeList(
+                isEncrypted = state.isEncrypted,
+                isPublic = state.isPublic,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            )
+            Spacer(Modifier.height(32.dp))
             MainActionsSection(
                 state = state,
                 onShareRoom = onShareRoom,
@@ -320,8 +324,6 @@ private fun RoomHeaderSection(
     roomId: RoomId,
     roomName: String,
     roomAlias: RoomAlias?,
-    isEncrypted: Boolean,
-    isPublic: Boolean,
     heroes: ImmutableList<MatrixUser>,
     openAvatarPreview: (url: String) -> Unit,
 ) {
@@ -340,23 +342,7 @@ private fun RoomHeaderSection(
                 .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
                 .testTag(TestTags.roomDetailAvatar)
         )
-        Spacer(modifier = Modifier.height(24.dp))
-        Text(
-            text = roomName,
-            style = ElementTheme.typography.fontHeadingLgBold,
-            textAlign = TextAlign.Center,
-        )
-        if (roomAlias != null) {
-            Spacer(modifier = Modifier.height(6.dp))
-            Text(
-                text = roomAlias.value,
-                style = ElementTheme.typography.fontBodyLgRegular,
-                color = MaterialTheme.colorScheme.secondary,
-                textAlign = TextAlign.Center,
-            )
-        }
-        BadgeList(isEncrypted = isEncrypted, isPublic = isPublic)
-        Spacer(Modifier.height(32.dp))
+        TitleAndSubtitle(title = roomName, subtitle = roomAlias?.value)
     }
 }
 
@@ -380,24 +366,32 @@ private fun DmHeaderSection(
             openAvatarPreview = { url -> openAvatarPreview(me.getBestName(), url) },
             openOtherAvatarPreview = { url -> openAvatarPreview(roomName, url) },
         )
-        Spacer(modifier = Modifier.height(24.dp))
-        Text(
-            modifier = Modifier.clipToBounds(),
-            text = roomName,
-            style = ElementTheme.typography.fontHeadingLgBold,
-            textAlign = TextAlign.Center,
+        TitleAndSubtitle(
+            title = roomName,
+            subtitle = otherMember.userId.value,
         )
+    }
+}
+
+@Composable
+private fun ColumnScope.TitleAndSubtitle(
+    title: String,
+    subtitle: String?,
+) {
+    Spacer(modifier = Modifier.height(24.dp))
+    Text(
+        text = title,
+        style = ElementTheme.typography.fontHeadingLgBold,
+        textAlign = TextAlign.Center,
+    )
+    if (subtitle != null) {
         Spacer(modifier = Modifier.height(6.dp))
         Text(
-            text = otherMember.userId.value,
+            text = subtitle,
             style = ElementTheme.typography.fontBodyLgRegular,
             color = MaterialTheme.colorScheme.secondary,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
             textAlign = TextAlign.Center,
         )
-        Spacer(Modifier.height(40.dp))
     }
 }
 
@@ -405,11 +399,12 @@ private fun DmHeaderSection(
 private fun BadgeList(
     isEncrypted: Boolean,
     isPublic: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     if (isEncrypted || isPublic) {
-        Spacer(modifier = Modifier.height(8.dp))
         Row(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = modifier
+                .padding(start = 16.dp, end = 16.dp, top = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             if (isEncrypted) {
