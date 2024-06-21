@@ -135,14 +135,7 @@ fun RoomDetailsView(
                             openAvatarPreview(state.roomName, avatarUrl)
                         },
                     )
-                    MainActionsSection(
-                        state = state,
-                        onShareRoom = onShareRoom,
-                        onInvitePeople = invitePeople,
-                        onCall = onJoinCallClick,
-                    )
                 }
-
                 is RoomDetailsType.Dm -> {
                     val member = state.roomType.roomMember
                     UserProfileHeaderSection(
@@ -153,14 +146,14 @@ fun RoomDetailsView(
                             openAvatarPreview(member.getBestName(), avatarUrl)
                         },
                     )
-                    MainActionsSection(
-                        state = state,
-                        onShareRoom = onShareRoom,
-                        onInvitePeople = invitePeople,
-                        onCall = onJoinCallClick,
-                    )
                 }
             }
+            MainActionsSection(
+                state = state,
+                onShareRoom = onShareRoom,
+                onInvitePeople = invitePeople,
+                onCall = onJoinCallClick,
+            )
             Spacer(Modifier.height(12.dp))
 
             if (state.roomTopic !is RoomTopicState.Hidden) {
