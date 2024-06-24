@@ -234,7 +234,7 @@ printf "\n======================================================================
 printf "Patching the FDroid APKs using inplace-fix.py...\n"
 
 inplaceFixScript="./tmp/inplace-fix.py"
-wget https://raw.githubusercontent.com/obfusk/reproducible-apk-tools/master/inplace-fix.py -O "${inplaceFixScript}"
+curl -s https://raw.githubusercontent.com/obfusk/reproducible-apk-tools/master/inplace-fix.py --output "${inplaceFixScript}"
 
 python3 "${inplaceFixScript}" --page-size 16 fix-pg-map-id "${fdroidTargetPath}"/app-fdroid-arm64-v8a-release.apk   '0000000'
 python3 "${inplaceFixScript}" --page-size 16 fix-pg-map-id "${fdroidTargetPath}"/app-fdroid-armeabi-v7a-release.apk '0000000'
