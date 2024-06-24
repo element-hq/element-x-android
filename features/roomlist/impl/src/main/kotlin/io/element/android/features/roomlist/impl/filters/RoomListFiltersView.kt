@@ -56,7 +56,6 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
-import timber.log.Timber
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
