@@ -32,6 +32,7 @@ import javax.inject.Provider
 
 interface ImageLoaderHolder {
     fun get(client: MatrixClient): ImageLoader
+    fun remove(sessionId: SessionId)
 }
 
 @ContributesBinding(AppScope::class)
@@ -52,7 +53,7 @@ class DefaultImageLoaderHolder @Inject constructor(
             override suspend fun onSessionCreated(userId: String) = Unit
 
             override suspend fun onSessionDeleted(userId: String) {
-                map.remove(SessionId(userId))
+                remove(SessionId(userId))
             }
         })
     }
@@ -66,6 +67,12 @@ class DefaultImageLoaderHolder @Inject constructor(
                     okHttpClient = okHttpClient,
                 ).newImageLoader()
             }
+        }
+    }
+
+    override fun remove(sessionId: SessionId) {
+        synchronized(map) {
+            map.remove(sessionId)
         }
     }
 }
