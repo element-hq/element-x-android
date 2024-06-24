@@ -24,6 +24,11 @@ android {
     namespace = "io.element.android.features.migration.impl"
 }
 
+anvil {
+    useKsp(contributesAndFactoryGeneration = true)
+    generateDaggerFactories.set(true)
+}
+
 dependencies {
     implementation(projects.features.migration.api)
     implementation(projects.libraries.architecture)

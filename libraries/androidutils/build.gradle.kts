@@ -16,6 +16,7 @@
 plugins {
     id("io.element.android-library")
     alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -27,11 +28,12 @@ android {
 }
 
 anvil {
+    useKsp(contributesAndFactoryGeneration = true)
     generateDaggerFactories.set(true)
 }
 
 dependencies {
-    anvil(projects.anvilcodegen)
+    ksp(projects.anvilcodegen)
     implementation(projects.anvilannotations)
     implementation(projects.libraries.di)
 

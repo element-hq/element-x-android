@@ -40,6 +40,7 @@ plugins {
     alias(libs.plugins.ktlint)
     alias(libs.plugins.dependencygraph)
     alias(libs.plugins.sonarqube)
+    alias(libs.plugins.compose.compiler)
 }
 
 tasks.register<Delete>("clean").configure {

@@ -15,6 +15,7 @@
  */
 
 @file:OptIn(ExperimentalAnvilApi::class)
+@file:Suppress("DEPRECATION")
 
 package io.element.android.anvilcodegen
 

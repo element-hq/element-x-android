@@ -17,14 +17,18 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.android.build.api.variant.FilterConfiguration.FilterType.ABI
+import com.android.build.gradle.tasks.GenerateBuildConfig
+import extension.GitBranchNameValueSource
+import extension.GitRevisionValueSource
 import extension.allFeaturesImpl
 import extension.allLibrariesImpl
 import extension.allServicesImpl
-import extension.gitBranchName
-import extension.gitRevision
 import extension.koverDependencies
 import extension.locales
 import extension.setupKover
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.internal.KaptGenerateStubsTask
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("io.element.android-compose-application")
@@ -55,9 +59,6 @@ android {
         ndk {
             abiFilters += listOf("armeabi-v7a", "x86", "arm64-v8a", "x86_64")
         }
-
-        buildConfigField("String", "GIT_REVISION", "\"${gitRevision()}\"")
-        buildConfigField("String", "GIT_BRANCH_NAME", "\"${gitBranchName()}\"")
 
         // Ref: https://developer.android.com/studio/build/configure-apk-splits.html#configure-abi-split
         splits {
@@ -264,4 +265,28 @@ dependencies {
 
     ksp(libs.showkase.processor)
     koverDependencies()
+}
+
+tasks.withType<KaptGenerateStubsTask>().configureEach {
+    // TODO necessary until anvil supports something for K2 contribution merging
+    compilerOptions {
+        progressiveMode.set(false)
+        languageVersion.set(KotlinVersion.KOTLIN_1_9)
+    }
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    // TODO necessary until anvil supports something for K2 contribution merging
+    compilerOptions {
+        progressiveMode.set(false)
+        languageVersion.set(KotlinVersion.KOTLIN_1_9)
+    }
+}
+
+tasks.withType<GenerateBuildConfig>().configureEach {
+    outputs.upToDateWhen { false }
+    val gitRevision = providers.of(GitRevisionValueSource::class.java) {}.get()
+    val gitBranchName = providers.of(GitBranchNameValueSource::class.java) {}.get()
+    android.defaultConfig.buildConfigField("String", "GIT_REVISION", "\"$gitRevision\"")
+    android.defaultConfig.buildConfigField("String", "GIT_BRANCH_NAME", "\"$gitBranchName\"")
 }

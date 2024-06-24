@@ -26,13 +26,14 @@ android {
 }
 
 anvil {
+    useKsp(contributesAndFactoryGeneration = true)
     generateDaggerFactories.set(true)
 }
 
 dependencies {
     ksp(libs.showkase.processor)
     implementation(projects.anvilannotations)
-    anvil(projects.anvilcodegen)
+    ksp(projects.anvilcodegen)
     api(projects.features.lockscreen.api)
     implementation(projects.appconfig)
     implementation(projects.libraries.core)

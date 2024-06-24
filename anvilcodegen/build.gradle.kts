@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.internal.KaptGenerateStubsTask
+
 /*
  * Copyright (c) 2022 New Vector Ltd
  *
@@ -20,6 +23,7 @@ plugins {
 }
 
 dependencies {
+    implementation(libs.ksp.plugin)
     implementation(projects.anvilannotations)
     api(libs.anvil.compiler.api)
     implementation(libs.anvil.compiler.utils)
@@ -27,4 +31,14 @@ dependencies {
     implementation(libs.dagger)
     compileOnly(libs.google.autoservice.annotations)
     kapt(libs.google.autoservice)
+    implementation(libs.ksp.plugin)
+    implementation("com.squareup:kotlinpoet-ksp:1.17.0")
+}
+
+tasks.withType<KaptGenerateStubsTask>().configureEach {
+    // TODO necessary until anvil supports something for K2 contribution merging
+    compilerOptions {
+        progressiveMode.set(false)
+        languageVersion.set(KotlinVersion.KOTLIN_1_9)
+    }
 }

@@ -26,12 +26,13 @@ android {
 }
 
 anvil {
+    useKsp(contributesAndFactoryGeneration = true)
     generateDaggerFactories.set(true)
 }
 
 dependencies {
     implementation(projects.anvilannotations)
-    anvil(projects.anvilcodegen)
+    ksp(projects.anvilcodegen)
     api(projects.features.invite.api)
     implementation(libs.androidx.datastore.preferences)
     implementation(projects.libraries.core)

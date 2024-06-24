@@ -37,21 +37,15 @@ import io.element.android.services.toolbox.api.strings.StringProvider
 import javax.inject.Inject
 
 interface NotificationDataFactory {
-    suspend fun toNotifications(
+    suspend fun toMessageNotifications(
         messages: List<NotifiableMessageEvent>,
         currentUser: MatrixUser,
         imageLoader: ImageLoader,
     ): List<RoomNotification>
 
-    @JvmName("toNotificationInvites")
-    @Suppress("INAPPLICABLE_JVM_NAME")
-    fun toNotifications(invites: List<InviteNotifiableEvent>): List<OneShotNotification>
-    @JvmName("toNotificationSimpleEvents")
-    @Suppress("INAPPLICABLE_JVM_NAME")
-    fun toNotifications(simpleEvents: List<SimpleNotifiableEvent>): List<OneShotNotification>
-    @JvmName("toNotificationFallbackEvents")
-    @Suppress("INAPPLICABLE_JVM_NAME")
-    fun toNotifications(fallback: List<FallbackNotifiableEvent>): List<OneShotNotification>
+    fun toInviteNotifications(invites: List<InviteNotifiableEvent>): List<OneShotNotification>
+    fun toSimpleNotifications(simpleEvents: List<SimpleNotifiableEvent>): List<OneShotNotification>
+    fun toFallbackNotifications(fallback: List<FallbackNotifiableEvent>): List<OneShotNotification>
 
     fun createSummaryNotification(
         currentUser: MatrixUser,
@@ -70,7 +64,7 @@ class DefaultNotificationDataFactory @Inject constructor(
     private val activeNotificationsProvider: ActiveNotificationsProvider,
     private val stringProvider: StringProvider,
 ) : NotificationDataFactory {
-    override suspend fun toNotifications(
+    override suspend fun toMessageNotifications(
         messages: List<NotifiableMessageEvent>,
         currentUser: MatrixUser,
         imageLoader: ImageLoader,
@@ -104,9 +98,7 @@ class DefaultNotificationDataFactory @Inject constructor(
         return activeNotificationsProvider.getMessageNotificationsForRoom(sessionId, roomId).firstOrNull()?.notification
     }
 
-    @JvmName("toNotificationInvites")
-    @Suppress("INAPPLICABLE_JVM_NAME")
-    override fun toNotifications(invites: List<InviteNotifiableEvent>): List<OneShotNotification> {
+    override fun toInviteNotifications(invites: List<InviteNotifiableEvent>): List<OneShotNotification> {
         return invites.map { event ->
             OneShotNotification(
                 key = event.roomId.value,
@@ -118,9 +110,7 @@ class DefaultNotificationDataFactory @Inject constructor(
         }
     }
 
-    @JvmName("toNotificationSimpleEvents")
-    @Suppress("INAPPLICABLE_JVM_NAME")
-    override fun toNotifications(simpleEvents: List<SimpleNotifiableEvent>): List<OneShotNotification> {
+    override fun toSimpleNotifications(simpleEvents: List<SimpleNotifiableEvent>): List<OneShotNotification> {
         return simpleEvents.map { event ->
             OneShotNotification(
                 key = event.eventId.value,
@@ -132,9 +122,7 @@ class DefaultNotificationDataFactory @Inject constructor(
         }
     }
 
-    @JvmName("toNotificationFallbackEvents")
-    @Suppress("INAPPLICABLE_JVM_NAME")
-    override fun toNotifications(fallback: List<FallbackNotifiableEvent>): List<OneShotNotification> {
+    override fun toFallbackNotifications(fallback: List<FallbackNotifiableEvent>): List<OneShotNotification> {
         return fallback.map { event ->
             OneShotNotification(
                 key = event.eventId.value,

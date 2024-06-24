@@ -68,7 +68,7 @@ constructor(
      * programmatically or by user interaction.
      */
     @ExperimentalMaterial3Api
-    @Suppress("Deprecation")
+    @Suppress("DEPRECATION")
     constructor(
         skipPartiallyExpanded: Boolean,
         density: Density,
@@ -285,7 +285,7 @@ constructor(
                 "Saver(skipPartiallyExpanded, confirmValueChange, LocalDensity.current)"
             )
         )
-        @Suppress("Deprecation", "FunctionName")
+        @Suppress("DEPRECATION", "FunctionName")
         fun Saver(
             skipPartiallyExpanded: Boolean,
             confirmValueChange: (SheetValue) -> Boolean
@@ -304,8 +304,6 @@ internal object AnchoredDraggableDefaults {
     /**
      * The default animation used by [AnchoredDraggableState].
      */
-    @get:ExperimentalMaterial3Api
-    @Suppress("OPT_IN_MARKER_ON_WRONG_TARGET")
     @ExperimentalMaterial3Api
     val AnimationSpec = SpringSpec<Float>()
 }

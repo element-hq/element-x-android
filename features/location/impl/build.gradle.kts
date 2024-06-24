@@ -30,6 +30,7 @@ android {
 }
 
 anvil {
+    useKsp(contributesAndFactoryGeneration = true)
     generateDaggerFactories.set(true)
 }
 
@@ -50,7 +51,7 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(libs.dagger)
     implementation(projects.anvilannotations)
-    anvil(projects.anvilcodegen)
+    ksp(projects.anvilcodegen)
     ksp(libs.showkase.processor)
 
     testImplementation(libs.test.junit)
