@@ -2,6 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="confirm_recovery_key_banner_message">"Vaša záloha konverzácie nie je momentálne synchronizovaná. Na zachovanie prístupu k zálohe konverzácie musíte potvrdiť svoj kľúč na obnovu."</string>
   <string name="confirm_recovery_key_banner_title">"Potvrďte svoj kľúč na obnovenie"</string>
+  <string name="full_screen_intent_banner_message">"Aby ste už nikdy nezmeškali dôležitý hovor, zmeňte svoje nastavenia a povoľte upozornenia na celú obrazovku, keď je váš telefón uzamknutý."</string>
+  <string name="full_screen_intent_banner_title">"Vylepšite svoj zážitok z hovoru"</string>
   <string name="screen_invites_decline_chat_message">"Naozaj chcete odmietnuť pozvánku na pripojenie do %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Odmietnuť pozvanie"</string>
   <string name="screen_invites_decline_direct_chat_message">"Naozaj chcete odmietnuť túto súkromnú konverzáciu s %1$s?"</string>

@@ -36,6 +36,8 @@ enum class AvatarSize(val dp: Dp) {
     SelectedUser(56.dp),
     SelectedRoom(56.dp),
 
+    DmCluster(75.dp),
+
     TimelineRoom(32.dp),
     TimelineSender(32.dp),
     TimelineReadReceipt(16.dp),

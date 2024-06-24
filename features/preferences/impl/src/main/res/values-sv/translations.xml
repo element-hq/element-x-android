@@ -50,4 +50,6 @@ Om du fortsätter kan vissa av dina inställningar ändras."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"systeminställningar"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Systemaviseringar avstängda"</string>
   <string name="screen_notification_settings_title">"Aviseringar"</string>
+  <string name="troubleshoot_notifications_entry_point_section">"Felsök"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"Felsök aviseringar"</string>
 </resources>

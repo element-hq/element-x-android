@@ -131,12 +131,16 @@
   <string name="common_decryption_error">"Ошибка расшифровки"</string>
   <string name="common_developer_options">"Для разработчика"</string>
   <string name="common_direct_chat">"Личный чат"</string>
+  <string name="common_do_not_show_this_again">"Не показывать больше"</string>
   <string name="common_edited_suffix">"(изменено)"</string>
   <string name="common_editing">"Редактирование"</string>
   <string name="common_emote">"%1$s%2$s"</string>
   <string name="common_encryption_enabled">"Шифрование включено"</string>
   <string name="common_enter_your_pin">"Введите свой PIN-код"</string>
   <string name="common_error">"Ошибка"</string>
+  <string name="common_error_registering_pusher_android">"Произошла ошибка, возможно, вы не будете получать уведомления о новых сообщениях. Устраните неполадки с уведомлениями в настройках.
+
+Причина:%1$s."</string>
   <string name="common_everyone">"Для всех"</string>
   <string name="common_failed">"Ошибка"</string>
   <string name="common_favourite">"Избранное"</string>
@@ -257,8 +261,6 @@
   <string name="error_missing_microphone_voice_rationale_android">"%1$s не имеет разрешения на доступ к вашему микрофону. Разрешите доступ к записи голосового сообщения."</string>
   <string name="error_some_messages_have_not_been_sent">"Некоторые сообщения не были отправлены"</string>
   <string name="error_unknown">"Извините, произошла ошибка"</string>
-  <string name="full_screen_intent_banner_message">"Чтобы никогда не пропустить важный звонок, измените настройки, чтобы разрешить полноэкранные уведомления, когда ваш телефон заблокирован."</string>
-  <string name="full_screen_intent_banner_title">"Улучшите качество звонков"</string>
   <string name="invite_friends_rich_title">"🔐️ Присоединяйтесь ко мне в %1$s"</string>
   <string name="invite_friends_text">"Привет, поговори со мной по %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>

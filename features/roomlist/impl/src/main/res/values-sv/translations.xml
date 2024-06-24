@@ -14,8 +14,11 @@
   <string name="screen_roomlist_empty_message">"Kom igång genom att skicka meddelanden till någon."</string>
   <string name="screen_roomlist_empty_title">"Inga chattar än."</string>
   <string name="screen_roomlist_filter_favourites">"Favoriter"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Du kan lägga till en chatt till dina favoriter i chattinställningarna.
+För tillfället kan du avmarkera filter för att se dina andra chattar"</string>
   <string name="screen_roomlist_filter_favourites_empty_state_title">"Du har inga favoritchattar än"</string>
   <string name="screen_roomlist_filter_low_priority">"Låg prioritet"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Du kan avmarkera filter för att se dina andra chattar"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Du har inga chattar för det här valet"</string>
   <string name="screen_roomlist_filter_people">"Personer"</string>
   <string name="screen_roomlist_filter_people_empty_state_title">"Du har inga DM:er än"</string>
@@ -27,6 +30,7 @@ Du har inga olästa meddelanden!"</string>
   <string name="screen_roomlist_main_space_title">"Alla chattar"</string>
   <string name="screen_roomlist_mark_as_read">"Markera som läst"</string>
   <string name="screen_roomlist_mark_as_unread">"Markera som oläst"</string>
+  <string name="screen_roomlist_room_directory_button_title">"Bläddra bland alla rum"</string>
   <string name="session_verification_banner_message">"Det verkar som om du använder en ny enhet. Verifiera med en annan enhet för att komma åt dina krypterade meddelanden."</string>
   <string name="session_verification_banner_title">"Verifiera att det är du"</string>
 </resources>

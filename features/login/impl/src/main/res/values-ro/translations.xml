@@ -39,6 +39,20 @@
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Conexiunea nu este sigură"</string>
   <string name="screen_qr_code_login_device_code_subtitle">"Vi se va cere să introduceți cele două cifre afișate pe acest dispozitiv."</string>
   <string name="screen_qr_code_login_device_code_title">"Introduceți numărul de mai jos pe celălalt dispozitiv"</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_description">"Autentificați-vă pe celălalt dispozitiv și apoi încercați din nou sau utilizați un alt dispozitiv care este deja conectat."</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_subtitle">"Celălalt dispozitiv nu este conectat"</string>
+  <string name="screen_qr_code_login_error_cancelled_subtitle">"Autentificarea a fost anulată de pe celălalt dispozitiv."</string>
+  <string name="screen_qr_code_login_error_cancelled_title">"Cererea de autentificare a fost anulată"</string>
+  <string name="screen_qr_code_login_error_declined_subtitle">"Autentificarea a fost refuzată pe celălalt dispozitiv."</string>
+  <string name="screen_qr_code_login_error_declined_title">"Autentificarea a fost refuzată"</string>
+  <string name="screen_qr_code_login_error_expired_subtitle">"Autentificarea a expirat. Vă rugăm să încercați din nou."</string>
+  <string name="screen_qr_code_login_error_expired_title">"Autentificarea nu a fost finalizată la timp"</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Celălalt dispozitiv nu acceptă autentificarea la %s cu un cod QR.
+
+Încercați să vă autentificați manual sau să scanați codul QR cu un alt dispozitiv."</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_title">"Formatul codului QR nu este acceptat."</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"Furnizorul dumneavoastră de cont nu acceptă %1$s."</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"%1$s nu este acceptat"</string>
   <string name="screen_qr_code_login_initial_state_button_title">"Gata de scanare"</string>
   <string name="screen_qr_code_login_initial_state_item_1">"Deschideți %1$s pe un dispozitiv desktop"</string>
   <string name="screen_qr_code_login_initial_state_item_2">"Faceți clic pe avatarul dumneavoastră"</string>

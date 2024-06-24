@@ -3,6 +3,7 @@
   <string name="notification_channel_call">"Apel"</string>
   <string name="notification_channel_listening_for_events">"Ascultare evenimente"</string>
   <string name="notification_channel_noisy">"Notificări zgomotoase"</string>
+  <string name="notification_channel_ringing_calls">"Apeluri care sună"</string>
   <string name="notification_channel_silent">"Notificări silențioase"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d mesaj"</item>
@@ -13,6 +14,7 @@
     <item quantity="other">"%d notificări"</item>
   </plurals>
   <string name="notification_fallback_content">"Notificare"</string>
+  <string name="notification_incoming_call">"Apel primit"</string>
   <string name="notification_inline_reply_failed">"** Trimiterea eșuată - vă rugăm să deschideți camera"</string>
   <string name="notification_invitation_action_join">"Alăturați-vă"</string>
   <string name="notification_invitation_action_reject">"Respingeți"</string>

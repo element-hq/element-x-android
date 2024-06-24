@@ -23,10 +23,13 @@
   <string name="screen_room_change_role_confirm_demote_self_action">"Degradera"</string>
   <string name="screen_room_change_role_confirm_demote_self_description">"Du kommer inte att kunna ångra denna ändring eftersom du degraderar dig själv, om du är den sista privilegierade användaren i rummet kommer det att vara omöjligt att återfå privilegier."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Degradera dig själv?"</string>
+  <string name="screen_room_change_role_invited_member_name">"%1$s (Väntar)"</string>
   <string name="screen_room_change_role_moderators_title">"Redigera moderatorer"</string>
   <string name="screen_room_change_role_section_administrators">"Administratörer"</string>
   <string name="screen_room_change_role_section_moderators">"Moderatorer"</string>
   <string name="screen_room_change_role_section_users">"Medlemmar"</string>
+  <string name="screen_room_change_role_unsaved_changes_description">"Du har osparade ändringar."</string>
+  <string name="screen_room_change_role_unsaved_changes_title">"Spara ändringar?"</string>
   <string name="screen_room_details_add_topic_title">"Lägg till ämne"</string>
   <string name="screen_room_details_already_a_member">"Redan medlem"</string>
   <string name="screen_room_details_already_invited">"Redan inbjuden"</string>
@@ -53,11 +56,13 @@
   <string name="screen_room_member_list_ban_member_confirmation_action">"Banna"</string>
   <string name="screen_room_member_list_ban_member_confirmation_description">"Denne kommer inte att kunna gå med i det här rummet igen om denne bjuds in."</string>
   <string name="screen_room_member_list_ban_member_confirmation_title">"Är du säker på att du vill banna den här medlemmen?"</string>
+  <string name="screen_room_member_list_banned_empty">"Det finns inga bannade användare i det här rummet."</string>
   <string name="screen_room_member_list_banning_user">"Bannar %1$s"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d person"</item>
     <item quantity="other">"%1$d personer"</item>
   </plurals>
+  <string name="screen_room_member_list_manage_member_ban">"Ta bort och banna medlem"</string>
   <string name="screen_room_member_list_manage_member_remove">"Ta bort från rummet"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Ta bort och banna medlem"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Ta bara bort medlem"</string>
@@ -89,11 +94,16 @@
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Endast omnämnanden och nyckelord"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"I det här rummet, meddela mig för"</string>
   <string name="screen_room_roles_and_permissions_admins">"Administratörer"</string>
+  <string name="screen_room_roles_and_permissions_change_my_role">"Ändra min roll"</string>
+  <string name="screen_room_roles_and_permissions_change_role_demote_to_member">"Degradera till medlem"</string>
+  <string name="screen_room_roles_and_permissions_change_role_demote_to_moderator">"Degradera till moderator"</string>
   <string name="screen_room_roles_and_permissions_member_moderation">"Medlemsmoderering"</string>
   <string name="screen_room_roles_and_permissions_messages_and_content">"Meddelanden och innehåll"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatorer"</string>
   <string name="screen_room_roles_and_permissions_permissions_header">"Behörigheter"</string>
   <string name="screen_room_roles_and_permissions_reset">"Återställ behörigheter"</string>
+  <string name="screen_room_roles_and_permissions_reset_confirm_description">"När du har återställt behörigheterna kommer du att förlora de aktuella inställningarna."</string>
+  <string name="screen_room_roles_and_permissions_reset_confirm_title">"Återställ behörigheter?"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"Roller"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Rumsdetaljer"</string>
   <string name="screen_room_roles_and_permissions_title">"Roller och behörigheter"</string>

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_subtitle">"Verifiera den här enheten för att konfigurera säkra meddelanden."</string>
+  <string name="screen_identity_confirmation_title">"Bekräfta att det är du"</string>
+  <string name="screen_identity_confirmed_subtitle">"Nu kan du läsa eller skicka meddelanden säkert, och alla du chattar med kan också lita på den här enheten."</string>
+  <string name="screen_identity_confirmed_title">"Enhet verifierad"</string>
+  <string name="screen_identity_use_another_device">"Använd en annan enhet"</string>
+  <string name="screen_identity_waiting_on_other_device">"Väntar på annan enhet …"</string>
   <string name="screen_session_verification_cancelled_subtitle">"Något verkar inte stämma. Antingen gick tidsgränsen för begäran ut eller så avvisades begäran."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Bekräfta att emojierna nedan matchar de som visas på din andra session."</string>
   <string name="screen_session_verification_compare_emojis_title">"Jämför emojis"</string>
