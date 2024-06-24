@@ -172,7 +172,7 @@ class RoomDetailsPresenterTest {
             assertThat(initialState.roomType).isEqualTo(
                 RoomDetailsType.Dm(
                     me = myRoomMember,
-                    roomMember = otherRoomMember,
+                    otherMember = otherRoomMember,
                 )
             )
             cancelAndIgnoreRemainingEvents()

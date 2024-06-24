@@ -54,7 +54,7 @@ sealed interface RoomDetailsType {
     data object Room : RoomDetailsType
     data class Dm(
         val me: RoomMember,
-        val roomMember: RoomMember,
+        val otherMember: RoomMember,
     ) : RoomDetailsType
 }
 

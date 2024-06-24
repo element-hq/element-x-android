@@ -175,7 +175,7 @@ class RoomDetailsPresenter @Inject constructor(
             if (dmMember != null && currentMember != null) {
                 RoomDetailsType.Dm(
                     me = currentMember,
-                    roomMember = dmMember,
+                    otherMember = dmMember,
                 )
             } else {
                 RoomDetailsType.Room

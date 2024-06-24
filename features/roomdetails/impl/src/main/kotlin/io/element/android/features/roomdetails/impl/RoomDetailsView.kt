@@ -139,7 +139,7 @@ fun RoomDetailsView(
                 is RoomDetailsType.Dm -> {
                     DmHeaderSection(
                         me = state.roomType.me,
-                        otherMember = state.roomType.roomMember,
+                        otherMember = state.roomType.otherMember,
                         roomName = state.roomName,
                         openAvatarPreview = { name, avatarUrl ->
                             openAvatarPreview(name, avatarUrl)
