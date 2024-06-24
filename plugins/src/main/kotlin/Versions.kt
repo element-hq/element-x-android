@@ -63,6 +63,7 @@ object Versions {
     val versionName = "$versionMajor.$versionMinor.$versionPatch"
     const val compileSdk = 34
     const val targetSdk = 33
+    // When updating the `minSdk`, make sure to update the value of `minSdkVersion` in the file `tools/release/release.sh`
     const val minSdk = 24
     val javaCompileVersion = JavaVersion.VERSION_17
     val javaLanguageVersion: JavaLanguageVersion = JavaLanguageVersion.of(11)
