@@ -74,7 +74,7 @@ if [ ${envError} == 1 ]; then
 fi
 
 minSdkVersion=23
-buildToolsVersion="32.0.0"
+buildToolsVersion="35.0.0"
 buildToolsPath="${androidHome}/build-tools/${buildToolsVersion}"
 
 if [[ ! -d ${buildToolsPath} ]]; then
