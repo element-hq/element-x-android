@@ -58,6 +58,7 @@ fun IconTitlePlaceholdersRowMolecule(
         PlaceholderAtom(width = 20.dp, height = 7.dp)
         Spacer(modifier = Modifier.width(7.dp))
         PlaceholderAtom(width = 45.dp, height = 7.dp)
+        Spacer(modifier = Modifier.width(8.dp))
     }
 }
 
