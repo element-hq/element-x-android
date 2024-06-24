@@ -117,6 +117,7 @@ import kotlin.math.roundToInt
 // The bubble has a negative margin to be placed a bit upper regarding the sender
 // information and overlap the avatar.
 val NEGATIVE_MARGIN_FOR_BUBBLE = (-8).dp
+
 // Width of the transparent border around the sender avatar
 val SENDER_AVATAR_BORDER_WIDTH = 3.dp
 
