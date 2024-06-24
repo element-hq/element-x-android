@@ -22,6 +22,7 @@ import io.element.android.appnav.di.MatrixClientsHolder
 import io.element.android.features.login.api.LoginUserStory
 import io.element.android.features.preferences.api.CacheService
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -39,6 +40,7 @@ class RootNavStateFlowFactory @Inject constructor(
     private val authenticationService: MatrixAuthenticationService,
     private val cacheService: CacheService,
     private val matrixClientsHolder: MatrixClientsHolder,
+    private val imageLoaderHolder: ImageLoaderHolder,
     private val loginUserStory: LoginUserStory,
 ) {
     private var currentCacheIndex = 0
@@ -69,6 +71,8 @@ class RootNavStateFlowFactory @Inject constructor(
         return cacheService.clearedCacheEventFlow
             .onEach { sessionId ->
                 matrixClientsHolder.remove(sessionId)
+                // Ensure image loader will be recreated with the new MatrixClient
+                imageLoaderHolder.remove(sessionId)
             }
             .toIndexFlow(initialCacheIndex)
             .onEach { cacheIndex ->

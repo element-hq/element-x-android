@@ -33,7 +33,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.joinedRoomMembers
+import io.element.android.libraries.matrix.api.room.activeRoomMembers
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
@@ -50,21 +50,21 @@ class RolesAndPermissionsPresenter @Inject constructor(
         val coroutineScope = rememberCoroutineScope()
         val roomInfo by room.roomInfoFlow.collectAsState(initial = null)
         val roomMembers by room.membersStateFlow.collectAsState()
-        // Get the list of joined room members, in order to filter members present in the power
-        // level state Event, but not member of the room anymore.
-        val joinedRoomMemberIds by remember {
+        // Get the list of active room members (joined or invited), in order to filter members present in the power
+        // level state Event.
+        val activeRoomMemberIds by remember {
             derivedStateOf {
-                roomMembers.joinedRoomMembers().map { it.userId }
+                roomMembers.activeRoomMembers().map { it.userId }
             }
         }
         val moderatorCount by remember {
             derivedStateOf {
-                roomInfo.userCountWithRole(joinedRoomMemberIds, RoomMember.Role.MODERATOR)
+                roomInfo.userCountWithRole(activeRoomMemberIds, RoomMember.Role.MODERATOR)
             }
         }
         val adminCount by remember {
             derivedStateOf {
-                roomInfo.userCountWithRole(joinedRoomMemberIds, RoomMember.Role.ADMIN)
+                roomInfo.userCountWithRole(activeRoomMemberIds, RoomMember.Role.ADMIN)
             }
         }
         val changeOwnRoleAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
@@ -118,9 +118,9 @@ class RolesAndPermissionsPresenter @Inject constructor(
         }
     }
 
-    private fun MatrixRoomInfo?.userCountWithRole(joinedRoomMemberIds: List<UserId>, role: RoomMember.Role): Int {
+    private fun MatrixRoomInfo?.userCountWithRole(userIds: List<UserId>, role: RoomMember.Role): Int {
         return this?.userPowerLevels.orEmpty().count { (userId, level) ->
-            RoomMember.Role.forPowerLevel(level) == role && userId in joinedRoomMemberIds
+            RoomMember.Role.forPowerLevel(level) == role && userId in userIds
         }
     }
 }

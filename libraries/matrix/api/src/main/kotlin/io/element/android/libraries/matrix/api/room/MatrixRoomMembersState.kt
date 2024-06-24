@@ -39,3 +39,7 @@ fun MatrixRoomMembersState.roomMembers(): List<RoomMember>? {
 fun MatrixRoomMembersState.joinedRoomMembers(): List<RoomMember> {
     return roomMembers().orEmpty().filter { it.membership == RoomMembershipState.JOIN }
 }
+
+fun MatrixRoomMembersState.activeRoomMembers(): List<RoomMember> {
+    return roomMembers().orEmpty().filter { it.membership.isActive() }
+}

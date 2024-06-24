@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrixui.messages
+package io.element.android.libraries.matrix.ui.messages
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
-import io.element.android.libraries.matrix.ui.messages.toPlainText
 import org.jsoup.Jsoup
 import org.junit.Test
 import org.junit.runner.RunWith
