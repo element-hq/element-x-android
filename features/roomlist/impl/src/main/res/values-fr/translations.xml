@@ -2,6 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="confirm_recovery_key_banner_message">"La sauvegarde des conversations est désynchronisée. Vous devez confirmer la clé de récupération pour accéder à votre historique."</string>
   <string name="confirm_recovery_key_banner_title">"Confirmer votre clé de récupération"</string>
+  <string name="full_screen_intent_banner_message">"Afin de ne jamais manquer un appel important, veuillez modifier vos paramètres pour autoriser les notifications en plein écran lorsque votre appareil est verrouillé."</string>
+  <string name="full_screen_intent_banner_title">"Améliorez votre expérience d’appel"</string>
   <string name="screen_invites_decline_chat_message">"Êtes-vous sûr de vouloir décliner l’invitation à rejoindre %1$s ?"</string>
   <string name="screen_invites_decline_chat_title">"Refuser l’invitation"</string>
   <string name="screen_invites_decline_direct_chat_message">"Êtes-vous sûr de vouloir refuser cette discussion privée avec %1$s ?"</string>

@@ -48,4 +48,28 @@
   <string name="push_distributor_background_sync_android">"Bakgrundssynkronisering"</string>
   <string name="push_distributor_firebase_android">"Google-tjänster"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Inga giltiga Google Play-tjänster hittades. Aviseringar kanske inte fungerar korrekt."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Hämta namnet på den nuvarande leverantören."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Inga push-leverantörer valda."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Nuvarande push-leverantör: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Nuvarande push-leverantör"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Se till att applikationen har minst en push-leverantör."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Inga push-leverantörer hittades."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"Hittade %1$d push-leverantör: %2$s"</item>
+    <item quantity="other">"Hittade %1$d push-leverantörer: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Upptäck push-leverantörer"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Kontrollera att applikationen kan visa avisering."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"Aviseringen har inte klickats på."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Kan inte visa aviseringen."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"Aviseringen har klickats på!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Visa avisering"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Vänligen klicka på aviseringen för att fortsätta testet."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"Kontrollera att applikationen tar emot push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Fel: pusher har avvisat begäran."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Fel: %1$s."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Fel, kan inte testa push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Fel, tidsgräns överskriden vid väntan på push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"Returnering av push tog %1$d ms."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"Testa returnering av push"</string>
 </resources>
