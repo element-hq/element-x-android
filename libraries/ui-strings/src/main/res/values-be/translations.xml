@@ -131,12 +131,16 @@
   <string name="common_decryption_error">"Памылка расшыфроўкі"</string>
   <string name="common_developer_options">"Параметры распрацоўшчыка"</string>
   <string name="common_direct_chat">"Прамы чат"</string>
+  <string name="common_do_not_show_this_again">"Не паказваць гэта зноў"</string>
   <string name="common_edited_suffix">"(Адрэдагавана)"</string>
   <string name="common_editing">"Рэдагаванне"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Шыфраванне ўключана"</string>
   <string name="common_enter_your_pin">"Увядзіце свой PIN-код"</string>
   <string name="common_error">"Памылка"</string>
+  <string name="common_error_registering_pusher_android">"Адбылася памылка, вы можаце не атрымліваць апавяшчэнні аб новых паведамленнях. Ліквідуйце непаладкі з апавяшчэннямі ў наладах. 
+
+Прычына: %1$s."</string>
   <string name="common_everyone">"Усе"</string>
   <string name="common_failed">"Памылка"</string>
   <string name="common_favourite">"Абраць"</string>
@@ -255,8 +259,6 @@
   <string name="error_missing_microphone_voice_rationale_android">"%1$s не мае дазволу на доступ да вашага мікрафона. Дазвольце доступ да запісу галасавога паведамлення."</string>
   <string name="error_some_messages_have_not_been_sent">"Некаторыя паведамленні не былі адпраўлены"</string>
   <string name="error_unknown">"На жаль, адбылася памылка"</string>
-  <string name="full_screen_intent_banner_message">"Каб не прапусціць важны званок, зменіце налады, каб дазволіць поўнаэкранныя апавяшчэнні, калі тэлефон заблакіраваны."</string>
-  <string name="full_screen_intent_banner_title">"Палепшыце якасць званкоў"</string>
   <string name="invite_friends_rich_title">"🔐️ Далучайцеся да мяне %1$s"</string>
   <string name="invite_friends_text">"Гэй, пагавары са мной у %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>

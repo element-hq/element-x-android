@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="full_screen_intent_banner_message">"Каб не прапусціць важны званок, зменіце налады, каб дазволіць поўнаэкранныя апавяшчэнні, калі тэлефон заблакіраваны."</string>
+  <string name="full_screen_intent_banner_title">"Палепшыце якасць званкоў"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Выберыце спосаб атрымання апавяшчэнняў"</string>
   <string name="screen_advanced_settings_developer_mode">"Рэжым распрацоўшчыка"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Падайце распрацоўнікам доступ да функцый і функцыянальным магчымасцям."</string>

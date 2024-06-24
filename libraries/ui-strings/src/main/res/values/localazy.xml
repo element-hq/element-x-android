@@ -255,8 +255,6 @@ Reason: %1$s."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s does not have permission to access your microphone. Enable access to record a voice message."</string>
   <string name="error_some_messages_have_not_been_sent">"Some messages have not been sent"</string>
   <string name="error_unknown">"Sorry, an error occurred"</string>
-  <string name="full_screen_intent_banner_message">"To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked."</string>
-  <string name="full_screen_intent_banner_title">"Enhance your call experience"</string>
   <string name="invite_friends_rich_title">"🔐️ Join me on %1$s"</string>
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
