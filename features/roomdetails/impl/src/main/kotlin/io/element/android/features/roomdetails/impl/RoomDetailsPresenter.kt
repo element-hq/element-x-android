@@ -45,6 +45,7 @@ import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendState
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.ui.room.canCall
+import io.element.android.libraries.matrix.ui.room.getCurrentRoomMember
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import io.element.android.libraries.matrix.ui.room.isOwnUserAdmin
 import io.element.android.services.analytics.api.AnalyticsService
@@ -98,8 +99,9 @@ class RoomDetailsPresenter @Inject constructor(
         val canEditTopic by getCanSendState(membersState, StateEventType.ROOM_TOPIC)
         val canJoinCall by room.canCall(updateKey = syncUpdateTimestamp)
         val dmMember by room.getDirectRoomMember(membersState)
+        val currentMember by room.getCurrentRoomMember(membersState)
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
-        val roomType by getRoomType(dmMember)
+        val roomType by getRoomType(dmMember, currentMember)
 
         val topicState = remember(canEditTopic, roomTopic, roomType) {
             val topic = roomTopic
@@ -165,10 +167,16 @@ class RoomDetailsPresenter @Inject constructor(
     }
 
     @Composable
-    private fun getRoomType(dmMember: RoomMember?): State<RoomDetailsType> = remember(dmMember) {
+    private fun getRoomType(
+        dmMember: RoomMember?,
+        currentMember: RoomMember?,
+    ): State<RoomDetailsType> = remember(dmMember, currentMember) {
         derivedStateOf {
-            if (dmMember != null) {
-                RoomDetailsType.Dm(dmMember)
+            if (dmMember != null && currentMember != null) {
+                RoomDetailsType.Dm(
+                    me = currentMember,
+                    otherMember = dmMember,
+                )
             } else {
                 RoomDetailsType.Room
             }

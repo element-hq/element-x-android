@@ -52,7 +52,10 @@ data class RoomDetailsState(
 @Immutable
 sealed interface RoomDetailsType {
     data object Room : RoomDetailsType
-    data class Dm(val roomMember: RoomMember) : RoomDetailsType
+    data class Dm(
+        val me: RoomMember,
+        val otherMember: RoomMember,
+    ) : RoomDetailsType
 }
 
 @Immutable
