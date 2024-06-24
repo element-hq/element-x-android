@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.test.notifications
+package io.element.android.libraries.matrix.ui.media
 
 import coil.ImageLoader
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 
-class FakeImageLoaderHolder : ImageLoaderHolder {
-    private val fakeImageLoader = FakeImageLoader()
-    override fun get(client: MatrixClient): ImageLoader {
-        return fakeImageLoader.getImageLoader()
-    }
-
-    override fun remove(sessionId: SessionId) {
-        // No-op
+class FakeLoggedInImageLoaderFactory(
+    private val newImageLoaderLambda: (MatrixClient) -> ImageLoader
+) : LoggedInImageLoaderFactory {
+    override fun newImageLoader(matrixClient: MatrixClient): ImageLoader {
+        return newImageLoaderLambda(matrixClient)
     }
 }

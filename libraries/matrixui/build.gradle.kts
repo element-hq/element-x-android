@@ -46,8 +46,11 @@ dependencies {
 
     ksp(libs.showkase.processor)
 
+    testImplementation(libs.coroutines.test)
     testImplementation(libs.test.junit)
-    testImplementation(libs.test.truth)
     testImplementation(libs.test.robolectric)
+    testImplementation(libs.test.truth)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.sessionStorage.test)
+    testImplementation(projects.tests.testutils)
 }
