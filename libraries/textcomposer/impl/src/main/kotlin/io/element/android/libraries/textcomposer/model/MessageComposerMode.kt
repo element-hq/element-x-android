@@ -29,9 +29,11 @@ sealed interface MessageComposerMode {
 
     sealed interface Special : MessageComposerMode
 
-    data class Edit(val eventId: EventId?, val content: String, val transactionId: TransactionId?) : Special
-
-    class Quote(val eventId: EventId, val content: String) : Special
+    data class Edit(
+        val eventId: EventId?,
+        val transactionId: TransactionId?,
+        val content: String
+    ) : Special
 
     class Reply(
         val replyToDetails: InReplyToDetails
@@ -43,7 +45,6 @@ sealed interface MessageComposerMode {
         get() = when (this) {
             is Normal -> null
             is Edit -> eventId
-            is Quote -> eventId
             is Reply -> eventId
         }
 

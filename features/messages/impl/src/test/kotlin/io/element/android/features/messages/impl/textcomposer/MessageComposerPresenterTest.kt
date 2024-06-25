@@ -60,7 +60,6 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.A_USER_ID_4
-import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
@@ -1083,7 +1082,7 @@ fun anEditMode(
     eventId: EventId? = AN_EVENT_ID,
     message: String = A_MESSAGE,
     transactionId: TransactionId? = null,
-) = MessageComposerMode.Edit(eventId, message, transactionId)
+) = MessageComposerMode.Edit(eventId, transactionId, message)
 
 fun aReplyMode() = MessageComposerMode.Reply(replyToDetails = InReplyToDetails.Loading(AN_EVENT_ID))
 fun aQuoteMode() = MessageComposerMode.Quote(AN_EVENT_ID, A_MESSAGE)

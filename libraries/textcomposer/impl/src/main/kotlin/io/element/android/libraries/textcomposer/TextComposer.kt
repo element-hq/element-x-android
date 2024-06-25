@@ -601,7 +601,7 @@ internal fun TextComposerEditPreview() = ElementPreview {
         ATextComposer(
             TextEditorState.Rich(aRichTextEditorState(initialText = "A message", initialFocus = true)),
             voiceMessageState = VoiceMessageState.Idle,
-            composerMode = MessageComposerMode.Edit(EventId("$1234"), "Some text", TransactionId("1234")),
+            composerMode = MessageComposerMode.Edit(EventId("$1234"), TransactionId("1234"), "Some text"),
             enableVoiceMessages = true,
             currentUserId = UserId("@alice:localhost")
         )
@@ -615,7 +615,7 @@ internal fun MarkdownTextComposerEditPreview() = ElementPreview {
         ATextComposer(
             TextEditorState.Markdown(aMarkdownTextEditorState(initialText = "A message", initialFocus = true)),
             voiceMessageState = VoiceMessageState.Idle,
-            composerMode = MessageComposerMode.Edit(EventId("$1234"), "Some text", TransactionId("1234")),
+            composerMode = MessageComposerMode.Edit(EventId("$1234"), TransactionId("1234"), "Some text"),
             enableVoiceMessages = true,
             currentUserId = UserId("@alice:localhost")
         )

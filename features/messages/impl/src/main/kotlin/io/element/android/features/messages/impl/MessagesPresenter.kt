@@ -312,6 +312,7 @@ class MessagesPresenter @AssistedInject constructor(
             else -> {
                 val composerMode = MessageComposerMode.Edit(
                     targetEvent.eventId,
+                    targetEvent.transactionId,
                     (targetEvent.content as? TimelineItemTextBasedContent)?.let {
                         if (enableTextFormatting) {
                             it.htmlBody ?: it.body
@@ -319,7 +320,6 @@ class MessagesPresenter @AssistedInject constructor(
                             it.body
                         }
                     }.orEmpty(),
-                    targetEvent.transactionId,
                 )
                 composerState.eventSink(
                     MessageComposerEvents.SetMode(composerMode)
