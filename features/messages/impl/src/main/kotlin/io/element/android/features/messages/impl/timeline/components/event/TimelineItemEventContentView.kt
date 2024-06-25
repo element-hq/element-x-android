@@ -23,6 +23,7 @@ import io.element.android.features.messages.impl.timeline.components.layout.Cont
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.rememberPresenter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
@@ -43,32 +44,32 @@ import io.element.android.libraries.architecture.Presenter
 @Composable
 fun TimelineItemEventContentView(
     content: TimelineItemEventContent,
-    onLinkClicked: (url: String) -> Unit,
+    onLinkClick: (url: String) -> Unit,
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier,
-    onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit = {},
+    onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit = {},
 ) {
     val presenterFactories = LocalTimelineItemPresenterFactories.current
     when (content) {
         is TimelineItemEncryptedContent -> TimelineItemEncryptedView(
             content = content,
-            onContentLayoutChanged = onContentLayoutChanged,
+            onContentLayoutChange = onContentLayoutChange,
             modifier = modifier
         )
         is TimelineItemRedactedContent -> TimelineItemRedactedView(
             content = content,
-            onContentLayoutChanged = onContentLayoutChanged,
+            onContentLayoutChange = onContentLayoutChange,
             modifier = modifier
         )
         is TimelineItemTextBasedContent -> TimelineItemTextView(
             content = content,
             modifier = modifier,
-            onLinkClicked = onLinkClicked,
-            onContentLayoutChanged = onContentLayoutChanged
+            onLinkClick = onLinkClick,
+            onContentLayoutChange = onContentLayoutChange
         )
         is TimelineItemUnknownContent -> TimelineItemUnknownView(
             content = content,
-            onContentLayoutChanged = onContentLayoutChanged,
+            onContentLayoutChange = onContentLayoutChange,
             modifier = modifier
         )
         is TimelineItemLocationContent -> TimelineItemLocationView(
@@ -77,7 +78,7 @@ fun TimelineItemEventContentView(
         )
         is TimelineItemImageContent -> TimelineItemImageView(
             content = content,
-            onContentLayoutChanged = onContentLayoutChanged,
+            onContentLayoutChange = onContentLayoutChange,
             modifier = modifier,
         )
         is TimelineItemStickerContent -> TimelineItemStickerView(
@@ -86,17 +87,17 @@ fun TimelineItemEventContentView(
         )
         is TimelineItemVideoContent -> TimelineItemVideoView(
             content = content,
-            onContentLayoutChanged = onContentLayoutChanged,
+            onContentLayoutChange = onContentLayoutChange,
             modifier = modifier
         )
         is TimelineItemFileContent -> TimelineItemFileView(
             content = content,
-            onContentLayoutChanged = onContentLayoutChanged,
+            onContentLayoutChange = onContentLayoutChange,
             modifier = modifier
         )
         is TimelineItemAudioContent -> TimelineItemAudioView(
             content = content,
-            onContentLayoutChanged = onContentLayoutChanged,
+            onContentLayoutChange = onContentLayoutChange,
             modifier = modifier
         )
         is TimelineItemLegacyCallInviteContent -> TimelineItemLegacyCallInviteView(modifier = modifier)
@@ -114,9 +115,10 @@ fun TimelineItemEventContentView(
             TimelineItemVoiceView(
                 state = presenter.present(),
                 content = content,
-                onContentLayoutChanged = onContentLayoutChanged,
+                onContentLayoutChange = onContentLayoutChange,
                 modifier = modifier
             )
         }
+        is TimelineItemCallNotifyContent -> error("This shouldn't be rendered as the content of a bubble")
     }
 }

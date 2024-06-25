@@ -26,6 +26,7 @@ import dagger.Provides
 import io.element.android.appconfig.ApplicationConfig
 import io.element.android.features.messages.impl.timeline.components.customreaction.DefaultEmojibaseProvider
 import io.element.android.features.messages.impl.timeline.components.customreaction.EmojibaseProvider
+import io.element.android.libraries.androidutils.system.getVersionCodeFromManifest
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
@@ -33,7 +34,6 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatch
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.CacheDirectory
-import io.element.android.libraries.di.DefaultPreferences
 import io.element.android.libraries.di.SingleIn
 import io.element.android.x.BuildConfig
 import io.element.android.x.R
@@ -87,7 +87,7 @@ object AppModule {
         // TODO EAx Config.LOW_PRIVACY_LOG_ENABLE,
         lowPrivacyLoggingEnabled = false,
         versionName = BuildConfig.VERSION_NAME,
-        versionCode = BuildConfig.VERSION_CODE,
+        versionCode = context.getVersionCodeFromManifest(),
         gitRevision = BuildConfig.GIT_REVISION,
         gitBranchName = BuildConfig.GIT_BRANCH_NAME,
         flavorDescription = BuildConfig.FLAVOR_DESCRIPTION,
@@ -96,8 +96,7 @@ object AppModule {
 
     @Provides
     @SingleIn(AppScope::class)
-    @DefaultPreferences
-    fun providesDefaultSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
+    fun providesSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
         return PreferenceManager.getDefaultSharedPreferences(context)
     }
 

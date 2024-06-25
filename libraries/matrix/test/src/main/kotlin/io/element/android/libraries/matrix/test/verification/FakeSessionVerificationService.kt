@@ -24,18 +24,17 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class FakeSessionVerificationService : SessionVerificationService {
-    private val _isReady = MutableStateFlow(false)
-    private val _sessionVerifiedStatus = MutableStateFlow<SessionVerifiedStatus>(SessionVerifiedStatus.Unknown)
+class FakeSessionVerificationService(
+    initialSessionVerifiedStatus: SessionVerifiedStatus = SessionVerifiedStatus.Unknown,
+) : SessionVerificationService {
+    private val _sessionVerifiedStatus = MutableStateFlow(initialSessionVerifiedStatus)
     private var _verificationFlowState = MutableStateFlow<VerificationFlowState>(VerificationFlowState.Initial)
-    private var _canVerifySessionFlow = MutableStateFlow(true)
+    private var _needsSessionVerification = MutableStateFlow(true)
     var shouldFail = false
 
     override val verificationFlowState: StateFlow<VerificationFlowState> = _verificationFlowState
     override val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus> = _sessionVerifiedStatus
-    override val canVerifySessionFlow: Flow<Boolean> = _canVerifySessionFlow
-
-    override val isReady: StateFlow<Boolean> = _isReady
+    override val needsSessionVerification: Flow<Boolean> = _needsSessionVerification
 
     override suspend fun requestVerification() {
         if (!shouldFail) {
@@ -85,12 +84,8 @@ class FakeSessionVerificationService : SessionVerificationService {
         _verificationFlowState.value = state
     }
 
-    fun givenCanVerifySession(canVerify: Boolean) {
-        _canVerifySessionFlow.value = canVerify
-    }
-
-    fun givenIsReady(value: Boolean) {
-        _isReady.value = value
+    fun givenNeedsSessionVerification(needsVerification: Boolean) {
+        _needsSessionVerification.value = needsVerification
     }
 
     override suspend fun reset() {

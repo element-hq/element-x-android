@@ -22,8 +22,8 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import io.element.android.features.invite.impl.response.AcceptDeclineInvitePresenter
 import io.element.android.features.invite.impl.response.AcceptDeclineInviteView
-import io.element.android.features.leaveroom.impl.LeaveRoomPresenterImpl
-import io.element.android.features.networkmonitor.impl.NetworkMonitorImpl
+import io.element.android.features.leaveroom.impl.DefaultLeaveRoomPresenter
+import io.element.android.features.networkmonitor.impl.DefaultNetworkMonitor
 import io.element.android.features.roomlist.impl.RoomListPresenter
 import io.element.android.features.roomlist.impl.RoomListView
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
@@ -31,7 +31,7 @@ import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryF
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersPresenter
 import io.element.android.features.roomlist.impl.filters.selection.DefaultFilterSelectionStrategy
 import io.element.android.features.roomlist.impl.migration.MigrationScreenPresenter
-import io.element.android.features.roomlist.impl.migration.SharedPrefsMigrationScreenStore
+import io.element.android.features.roomlist.impl.migration.SharedPreferencesMigrationScreenStore
 import io.element.android.features.roomlist.impl.search.RoomListSearchDataSource
 import io.element.android.features.roomlist.impl.search.RoomListSearchPresenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -45,6 +45,8 @@ import io.element.android.libraries.eventformatter.impl.RoomMembershipContentFor
 import io.element.android.libraries.eventformatter.impl.StateContentFormatter
 import io.element.android.libraries.featureflag.impl.DefaultFeatureFlagService
 import io.element.android.libraries.featureflag.impl.StaticFeatureFlagProvider
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsPresenter
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.indicator.impl.DefaultIndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -97,9 +99,9 @@ class RoomListScreen(
     )
     private val presenter = RoomListPresenter(
         client = matrixClient,
-        networkMonitor = NetworkMonitorImpl(context, Singleton.appScope),
+        networkMonitor = DefaultNetworkMonitor(context, Singleton.appScope),
         snackbarDispatcher = SnackbarDispatcher(),
-        leaveRoomPresenter = LeaveRoomPresenterImpl(matrixClient, RoomMembershipObserver(), coroutineDispatchers),
+        leaveRoomPresenter = DefaultLeaveRoomPresenter(matrixClient, RoomMembershipObserver(), coroutineDispatchers),
         roomListDataSource = RoomListDataSource(
             roomListService = matrixClient.roomListService,
             roomListRoomSummaryFactory = roomListRoomSummaryFactory,
@@ -114,7 +116,7 @@ class RoomListScreen(
         featureFlagService = featureFlagService,
         migrationScreenPresenter = MigrationScreenPresenter(
             matrixClient = matrixClient,
-            migrationScreenStore = SharedPrefsMigrationScreenStore(context.getSharedPreferences("migration", Context.MODE_PRIVATE))
+            migrationScreenStore = SharedPreferencesMigrationScreenStore(context.getSharedPreferences("migration", Context.MODE_PRIVATE))
         ),
         searchPresenter = RoomListSearchPresenter(
             RoomListSearchDataSource(
@@ -139,11 +141,22 @@ class RoomListScreen(
             notificationDrawerManager = FakeNotificationDrawerManager(),
         ),
         analyticsService = NoopAnalyticsService(),
+        fullScreenIntentPermissionsPresenter = object : FullScreenIntentPermissionsPresenter {
+            @Composable
+            override fun present(): FullScreenIntentPermissionsState {
+                return FullScreenIntentPermissionsState(
+                    permissionGranted = true,
+                    shouldDisplayBanner = false,
+                    dismissFullScreenIntentBanner = {},
+                    openFullScreenIntentSettings = {}
+                )
+            }
+        },
     )
 
     @Composable
     fun Content(modifier: Modifier = Modifier) {
-        fun onRoomClicked(roomId: RoomId) {
+        fun onRoomClick(roomId: RoomId) {
             Singleton.appScope.launch {
                 withContext(coroutineDispatchers.io) {
                     matrixClient.getRoom(roomId)!!.use { room ->
@@ -156,16 +169,16 @@ class RoomListScreen(
         val state = presenter.present()
         RoomListView(
             state = state,
-            onRoomClicked = ::onRoomClicked,
-            onSettingsClicked = {},
-            onConfirmRecoveryKeyClicked = {},
-            onCreateRoomClicked = {},
-            onRoomSettingsClicked = {},
-            onMenuActionClicked = {},
-            onRoomDirectorySearchClicked = {},
+            onRoomClick = ::onRoomClick,
+            onSettingsClick = {},
+            onConfirmRecoveryKeyClick = {},
+            onCreateRoomClick = {},
+            onRoomSettingsClick = {},
+            onMenuActionClick = {},
+            onRoomDirectorySearchClick = {},
             modifier = modifier,
             acceptDeclineInviteView = {
-                AcceptDeclineInviteView(state = state.acceptDeclineInviteState, onInviteAccepted = {}, onInviteDeclined = {})
+                AcceptDeclineInviteView(state = state.acceptDeclineInviteState, onAcceptInvite = {}, onDeclineInvite = {})
             }
         )
 

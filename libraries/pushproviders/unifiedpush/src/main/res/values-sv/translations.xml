@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_unified_push_description">"Se till att UnifiedPush-distributörer är tillgängliga."</string>
+  <string name="troubleshoot_notifications_test_unified_push_failure">"Inga push-distributörer hittades."</string>
+  <plurals name="troubleshoot_notifications_test_unified_push_success">
+    <item quantity="one">"%1$d distributör hittades:%2$s."</item>
+    <item quantity="other">"%1$d distributörer hittade:%2$s."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_unified_push_title">"Kontrollera UnifiedPush"</string>
+</resources>

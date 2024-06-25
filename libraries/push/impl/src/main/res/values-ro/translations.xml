@@ -3,6 +3,7 @@
   <string name="notification_channel_call">"Apel"</string>
   <string name="notification_channel_listening_for_events">"Ascultare evenimente"</string>
   <string name="notification_channel_noisy">"Notificări zgomotoase"</string>
+  <string name="notification_channel_ringing_calls">"Apeluri care sună"</string>
   <string name="notification_channel_silent">"Notificări silențioase"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d mesaj"</item>
@@ -13,6 +14,7 @@
     <item quantity="other">"%d notificări"</item>
   </plurals>
   <string name="notification_fallback_content">"Notificare"</string>
+  <string name="notification_incoming_call">"Apel primit"</string>
   <string name="notification_inline_reply_failed">"** Trimiterea eșuată - vă rugăm să deschideți camera"</string>
   <string name="notification_invitation_action_join">"Alăturați-vă"</string>
   <string name="notification_invitation_action_reject">"Respingeți"</string>
@@ -46,7 +48,6 @@
     <item quantity="one">"%d cameră"</item>
     <item quantity="other">"%d camere"</item>
   </plurals>
-  <string name="push_choose_distributor_dialog_title_android">"Alegeți modul de primire a notificărilor"</string>
   <string name="push_distributor_background_sync_android">"Sincronizare în fundal"</string>
   <string name="push_distributor_firebase_android">"Servicii Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Nu au fost găsite servicii Google Play valide. Este posibil ca notificările să nu funcționeze corect."</string>
@@ -58,6 +59,7 @@
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nu s-au găsit furnizori push."</string>
   <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
     <item quantity="one">"S-a găsit %1$d furnizor push: %2$s"</item>
+    <item quantity="few">"S-au găsit %1$d furnizori push: %2$s"</item>
     <item quantity="other">"S-au găsit %1$d furnizori push: %2$s"</item>
   </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Detectați furnizorii push"</string>

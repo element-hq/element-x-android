@@ -36,6 +36,6 @@ class ElementXApplication : Application(), DaggerComponentOwner {
             initializeComponent(TracingInitializer::class.java)
             initializeComponent(CacheCleanerInitializer::class.java)
         }
-        logApplicationInfo()
+        logApplicationInfo(this)
     }
 }

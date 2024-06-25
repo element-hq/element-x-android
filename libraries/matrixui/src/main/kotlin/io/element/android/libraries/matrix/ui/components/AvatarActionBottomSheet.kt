@@ -14,25 +14,23 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterialApi::class)
-@file:Suppress("UsingMaterialAndMaterial3Libraries")
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package io.element.android.libraries.matrix.ui.components
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetState
-import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -41,49 +39,60 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListItemStyle
-import io.element.android.libraries.designsystem.theme.components.ModalBottomSheetLayout
+import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.hide
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AvatarActionBottomSheet(
     actions: ImmutableList<AvatarAction>,
-    modalBottomSheetState: ModalBottomSheetState,
-    onActionSelected: (action: AvatarAction) -> Unit,
+    isVisible: Boolean,
+    onSelectAction: (action: AvatarAction) -> Unit,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    fun onItemActionClicked(itemAction: AvatarAction) {
-        onActionSelected(itemAction)
-        coroutineScope.launch {
-            modalBottomSheetState.hide()
-        }
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
+
+    BackHandler(enabled = isVisible) {
+        sheetState.hide(coroutineScope, then = { onDismiss() })
     }
 
-    ModalBottomSheetLayout(
-        modifier = modifier,
-        sheetState = modalBottomSheetState,
-        displayHandle = true,
-        sheetContent = {
+    fun onItemActionClick(itemAction: AvatarAction) {
+        onSelectAction(itemAction)
+        sheetState.hide(coroutineScope, then = { onDismiss() })
+    }
+
+    if (isVisible) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                sheetState.hide(coroutineScope, then = { onDismiss() })
+            },
+            modifier = modifier,
+            sheetState = sheetState,
+        ) {
             AvatarActionBottomSheetContent(
                 actions = actions,
-                onActionClicked = ::onItemActionClicked,
+                onActionClick = ::onItemActionClick,
                 modifier = Modifier
                     .navigationBarsPadding()
                     .imePadding()
             )
         }
-    )
+    }
 }
 
 @Composable
 private fun AvatarActionBottomSheetContent(
     actions: ImmutableList<AvatarAction>,
     modifier: Modifier = Modifier,
-    onActionClicked: (AvatarAction) -> Unit = { },
+    onActionClick: (AvatarAction) -> Unit = { },
 ) {
     LazyColumn(
         modifier = modifier.fillMaxWidth()
@@ -92,7 +101,7 @@ private fun AvatarActionBottomSheetContent(
             items = actions,
         ) { action ->
             ListItem(
-                modifier = Modifier.clickable { onActionClicked(action) },
+                modifier = Modifier.clickable { onActionClick(action) },
                 headlineContent = {
                     Text(
                         text = stringResource(action.titleResId),
@@ -115,10 +124,8 @@ private fun AvatarActionBottomSheetContent(
 internal fun AvatarActionBottomSheetPreview() = ElementPreview {
     AvatarActionBottomSheet(
         actions = persistentListOf(AvatarAction.TakePhoto, AvatarAction.ChoosePhoto, AvatarAction.Remove),
-        modalBottomSheetState = ModalBottomSheetState(
-            initialValue = ModalBottomSheetValue.Expanded,
-            density = LocalDensity.current,
-        ),
-        onActionSelected = { },
+        isVisible = true,
+        onSelectAction = { },
+        onDismiss = { },
     )
 }

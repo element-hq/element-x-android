@@ -17,14 +17,24 @@
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.ksp)
+    alias(libs.plugins.anvil)
     id("kotlin-parcelize")
 }
 
 android {
     namespace = "io.element.android.libraries.textcomposer"
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
+}
+
+anvil {
+    generateDaggerFactories.set(true)
 }
 
 dependencies {
+    implementation(projects.anvilannotations)
+    implementation(projects.libraries.architecture)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
@@ -47,9 +57,13 @@ dependencies {
     ksp(libs.showkase.processor)
 
     testImplementation(libs.test.junit)
-    testImplementation(libs.test.truth)
     testImplementation(libs.coroutines.test)
+    testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.robolectric)
+    testImplementation(libs.test.truth)
+    testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.tests.testutils)
+    testImplementation(libs.androidx.compose.ui.test.junit)
+    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 }

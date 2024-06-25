@@ -103,20 +103,19 @@ class LockScreenSettingsFlowNode @AssistedInject constructor(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Unlock -> {
-                val inputs = PinUnlockNode.Inputs(isInAppUnlock = true)
                 val callback = object : PinUnlockNode.Callback {
                     override fun onUnlock() {
                         backstack.newRoot(NavTarget.Settings)
                     }
                 }
-                createNode<PinUnlockNode>(buildContext, plugins = listOf(inputs, callback))
+                createNode<PinUnlockNode>(buildContext, plugins = listOf(callback))
             }
             NavTarget.SetupPin -> {
                 createNode<SetupPinNode>(buildContext)
             }
             NavTarget.Settings -> {
                 val callback = object : LockScreenSettingsNode.Callback {
-                    override fun onChangePinClicked() {
+                    override fun onChangePinClick() {
                         backstack.push(NavTarget.SetupPin)
                     }
                 }

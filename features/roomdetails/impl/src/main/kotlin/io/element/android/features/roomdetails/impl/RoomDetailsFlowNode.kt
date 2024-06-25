@@ -16,7 +16,6 @@
 
 package io.element.android.features.roomdetails.impl
 
-import android.content.Context
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,9 +27,10 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.call.CallType
-import io.element.android.features.call.ui.ElementCallActivity
+import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.poll.api.history.PollHistoryEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditNode
@@ -45,7 +45,6 @@ import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.core.mimetype.MimeTypes
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -53,15 +52,18 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
 class RoomDetailsFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    @ApplicationContext private val context: Context,
     private val pollHistoryEntryPoint: PollHistoryEntryPoint,
+    private val elementCallEntryPoint: ElementCallEntryPoint,
     private val room: MatrixRoom,
+    private val analyticsService: AnalyticsService,
 ) : BaseFlowNode<RoomDetailsFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<RoomDetailsEntryPoint.Params>().first().initialElement.toNavTarget(),
@@ -142,7 +144,8 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                             sessionId = room.sessionId,
                             roomId = room.roomId,
                         )
-                        ElementCallActivity.start(context, inputs)
+                        analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
+                        elementCallEntryPoint.startCall(inputs)
                     }
                 }
                 createNode<RoomDetailsNode>(buildContext, listOf(roomDetailsCallback))
@@ -189,8 +192,8 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                         plugins<RoomDetailsEntryPoint.Callback>().forEach { it.onOpenRoom(roomId) }
                     }
 
-                    override fun onStartCall(roomId: RoomId) {
-                        ElementCallActivity.start(context, CallType.RoomCall(roomId = roomId, sessionId = room.sessionId))
+                    override fun onStartCall(dmRoomId: RoomId) {
+                        elementCallEntryPoint.startCall(CallType.RoomCall(roomId = dmRoomId, sessionId = room.sessionId))
                     }
                 }
                 val plugins = listOf(RoomMemberDetailsNode.RoomMemberDetailsInput(navTarget.roomMemberId), callback)

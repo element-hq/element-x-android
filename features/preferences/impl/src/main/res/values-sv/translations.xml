@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Välj hur du vill ta emot aviseringar"</string>
   <string name="screen_advanced_settings_developer_mode">"Utvecklarläge"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Aktivera för att ha tillgång till funktionalitet för utvecklare."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Anpassad bas-URL för Element Call"</string>
@@ -11,9 +12,11 @@
   <string name="screen_advanced_settings_share_presence">"Dela närvaro"</string>
   <string name="screen_advanced_settings_share_presence_description">"Om det är avstängt kan du inte skicka eller ta emot läskvitton eller skrivnotiser"</string>
   <string name="screen_advanced_settings_view_source_description">"Aktivera alternativet för att visa meddelandekälla i tidslinjen."</string>
+  <string name="screen_blocked_users_empty">"Du har inga blockerade användare"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Avblockera"</string>
   <string name="screen_blocked_users_unblock_alert_description">"Du kommer att kunna se alla meddelanden från dem igen."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Avblockera användare"</string>
+  <string name="screen_blocked_users_unblocking">"Avblockerar …"</string>
   <string name="screen_edit_profile_display_name">"Visningsnamn"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Ditt visningsnamn"</string>
   <string name="screen_edit_profile_error">"Ett okänt fel påträffades och informationen kunde inte ändras."</string>
@@ -47,4 +50,6 @@ Om du fortsätter kan vissa av dina inställningar ändras."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"systeminställningar"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Systemaviseringar avstängda"</string>
   <string name="screen_notification_settings_title">"Aviseringar"</string>
+  <string name="troubleshoot_notifications_entry_point_section">"Felsök"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"Felsök aviseringar"</string>
 </resources>

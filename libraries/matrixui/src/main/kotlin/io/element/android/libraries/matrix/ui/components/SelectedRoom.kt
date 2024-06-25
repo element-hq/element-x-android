@@ -36,21 +36,22 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.libraries.designsystem.components.avatar.Avatar
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun SelectedRoom(
     roomSummary: RoomSummaryDetails,
-    onRoomRemoved: (RoomSummaryDetails) -> Unit,
+    onRemoveRoom: (RoomSummaryDetails) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -60,7 +61,12 @@ fun SelectedRoom(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Avatar(AvatarData(roomSummary.roomId.value, roomSummary.name, roomSummary.avatarUrl, AvatarSize.SelectedRoom))
+            CompositeAvatar(
+                avatarData = roomSummary.getAvatarData(size = AvatarSize.SelectedRoom),
+                heroes = roomSummary.heroes.map { user ->
+                    user.getAvatarData(size = AvatarSize.SelectedRoom)
+                }.toImmutableList()
+            )
             Text(
                 // If name is null, we do not have space to render "No room name", so just use `#` here.
                 text = roomSummary.name ?: "#",
@@ -78,7 +84,7 @@ fun SelectedRoom(
                 .clickable(
                     indication = rememberRipple(),
                     interactionSource = remember { MutableInteractionSource() },
-                    onClick = { onRoomRemoved(roomSummary) }
+                    onClick = { onRemoveRoom(roomSummary) }
                 ),
         ) {
             Icon(
@@ -98,6 +104,6 @@ internal fun SelectedRoomPreview(
 ) = ElementPreview {
     SelectedRoom(
         roomSummary = roomSummaryDetails,
-        onRoomRemoved = {},
+        onRemoveRoom = {},
     )
 }

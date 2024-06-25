@@ -22,23 +22,22 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
-import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentMap
-import org.matrix.rustcomponents.sdk.use
+import org.matrix.rustcomponents.sdk.RoomHero
 import org.matrix.rustcomponents.sdk.Membership as RustMembership
 import org.matrix.rustcomponents.sdk.RoomInfo as RustRoomInfo
 import org.matrix.rustcomponents.sdk.RoomNotificationMode as RustRoomNotificationMode
 
-class MatrixRoomInfoMapper(
-    private val timelineItemMapper: EventTimelineItemMapper = EventTimelineItemMapper(),
-) {
-    fun map(rustRoomInfo: RustRoomInfo): MatrixRoomInfo = rustRoomInfo.use {
+class MatrixRoomInfoMapper {
+    fun map(rustRoomInfo: RustRoomInfo): MatrixRoomInfo = rustRoomInfo.let {
         return MatrixRoomInfo(
             id = RoomId(it.id),
             name = it.displayName,
+            rawName = it.rawName,
             topic = it.topic,
             avatarUrl = it.avatarUrl,
             isDirect = it.isDirect,
@@ -49,7 +48,6 @@ class MatrixRoomInfoMapper(
             canonicalAlias = it.canonicalAlias?.let(::RoomAlias),
             alternativeAliases = it.alternativeAliases.toImmutableList(),
             currentUserMembership = it.membership.map(),
-            latestEvent = it.latestEvent?.use(timelineItemMapper::map),
             inviter = it.inviter?.let(RoomMemberMapper::map),
             activeMembersCount = it.activeMembersCount.toLong(),
             invitedMembersCount = it.invitedMembersCount.toLong(),
@@ -59,7 +57,8 @@ class MatrixRoomInfoMapper(
             notificationCount = it.notificationCount.toLong(),
             userDefinedNotificationMode = it.userDefinedNotificationMode?.map(),
             hasRoomCall = it.hasRoomCall,
-            activeRoomCallParticipants = it.activeRoomCallParticipants.toImmutableList()
+            activeRoomCallParticipants = it.activeRoomCallParticipants.toImmutableList(),
+            heroes = it.elementHeroes().toImmutableList()
         )
     }
 }
@@ -75,6 +74,15 @@ fun RustRoomNotificationMode.map(): RoomNotificationMode = when (this) {
     RustRoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
     RustRoomNotificationMode.MUTE -> RoomNotificationMode.MUTE
 }
+
+/**
+ * Map a RoomHero to a MatrixUser. There is not need to create a RoomHero type on the application side.
+ */
+fun RoomHero.map(): MatrixUser = MatrixUser(
+    userId = UserId(userId),
+    displayName = displayName,
+    avatarUrl = avatarUrl
+)
 
 fun mapPowerLevels(powerLevels: Map<String, Long>): ImmutableMap<UserId, Long> {
     return powerLevels.mapKeys { (key, _) -> UserId(key) }.toPersistentMap()

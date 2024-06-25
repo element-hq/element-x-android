@@ -86,6 +86,8 @@ sealed interface AsyncAction<out T> {
     fun isFailure(): Boolean = this is Failure
 
     fun isSuccess(): Boolean = this is Success
+
+    fun isReady() = isSuccess() || isFailure()
 }
 
 suspend inline fun <T> MutableState<AsyncAction<T>>.runCatchingUpdatingState(
@@ -122,6 +124,24 @@ suspend inline fun <T> MutableState<AsyncAction<T>>.runUpdatingState(
     errorTransform = errorTransform,
     resultBlock = resultBlock,
 )
+
+/**
+ * Run the given block and update the state accordingly, using only Loading and Failure states.
+ * It's up to the caller to manage the Success state.
+ */
+@OptIn(ExperimentalContracts::class)
+inline fun <T> MutableState<AsyncAction<T>>.runUpdatingStateNoSuccess(
+    resultBlock: () -> Result<Unit>,
+): Result<Unit> {
+    contract {
+        callsInPlace(resultBlock, InvocationKind.EXACTLY_ONCE)
+    }
+    value = AsyncAction.Loading
+    return resultBlock()
+        .onFailure { failure ->
+            value = AsyncAction.Failure(failure)
+        }
+}
 
 /**
  * Calls the specified [Result]-returning function [resultBlock]

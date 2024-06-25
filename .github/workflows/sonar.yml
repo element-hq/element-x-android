@@ -9,8 +9,9 @@ on:
 
 # Enrich gradle.properties for CI/CD
 env:
-  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx6g -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -XX:MaxMetaspaceSize=512m -Dkotlin.incremental=false -XX:+UseParallelGC
-  CI_GRADLE_ARG_PROPERTIES: --stacktrace -PpreDexEnable=false --max-workers 8 --no-daemon --warn
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx6g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.incremental=false -XX:+UseG1GC
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace --warn -Dsonar.gradle.skipCompile=true
+  GROUP: ${{ format('sonar-{0}', github.ref) }}
 
 jobs:
   sonar:
@@ -18,8 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
-      group: ${{ github.ref == 'refs/heads/main' && format('sonar-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('sonar-develop-{0}', github.sha) || format('sonar-{0}', github.ref) }}
-      cancel-in-progress: true
+      group: ${{ format('sonar-{0}', github.ref) }}
+      cancel-in-progress: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -35,6 +36,16 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
+      - name: Build Gplay Debug
+        run: ./gradlew :app:assembleGplayDebug $CI_GRADLE_ARG_PROPERTIES
+      - name: Build Fdroid Debug
+        run: ./gradlew :app:assembleFdroidDebug $CI_GRADLE_ARG_PROPERTIES
+      - name: Build Sample
+        run: ./gradlew :samples:minimal:assembleDebug $CI_GRADLE_ARG_PROPERTIES
+      - name: Build library fixtures
+        run: ./gradlew assembleDebug createFullJarDebugTestFixtures $CI_GRADLE_ARG_PROPERTIES
+      - name: Build app fixtures
+        run: ./gradlew :app:createFullJarGplayDebugTestFixtures $CI_GRADLE_ARG_PROPERTIES
       - name: 🔊 Publish results to Sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

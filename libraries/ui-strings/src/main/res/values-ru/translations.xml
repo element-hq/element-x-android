@@ -75,6 +75,7 @@
   <string name="action_load_more">"Загрузить еще"</string>
   <string name="action_manage_account">"Настройки аккаунта"</string>
   <string name="action_manage_devices">"Управление устройствами"</string>
+  <string name="action_message">"Сообщение"</string>
   <string name="action_next">"Далее"</string>
   <string name="action_no">"Нет"</string>
   <string name="action_not_now">"Не сейчас"</string>
@@ -84,6 +85,7 @@
   <string name="action_quick_reply">"Быстрый ответ"</string>
   <string name="action_quote">"Цитата"</string>
   <string name="action_react">"Реакция"</string>
+  <string name="action_reject">"Отклонить"</string>
   <string name="action_remove">"Удалить"</string>
   <string name="action_reply">"Ответить"</string>
   <string name="action_reply_in_thread">"Ответить в теме"</string>
@@ -120,6 +122,7 @@
   <string name="common_blocked_users">"Заблокированные пользователи"</string>
   <string name="common_bubbles">"Пузыри"</string>
   <string name="common_call_invite">"Выполняется звонок (не поддерживается)"</string>
+  <string name="common_call_started">"Звонок начат"</string>
   <string name="common_chat_backup">"Резервная копия чатов"</string>
   <string name="common_copyright">"Авторское право"</string>
   <string name="common_creating_room">"Создание комнаты…"</string>
@@ -128,12 +131,16 @@
   <string name="common_decryption_error">"Ошибка расшифровки"</string>
   <string name="common_developer_options">"Для разработчика"</string>
   <string name="common_direct_chat">"Личный чат"</string>
+  <string name="common_do_not_show_this_again">"Не показывать больше"</string>
   <string name="common_edited_suffix">"(изменено)"</string>
   <string name="common_editing">"Редактирование"</string>
   <string name="common_emote">"%1$s%2$s"</string>
   <string name="common_encryption_enabled">"Шифрование включено"</string>
   <string name="common_enter_your_pin">"Введите свой PIN-код"</string>
   <string name="common_error">"Ошибка"</string>
+  <string name="common_error_registering_pusher_android">"Произошла ошибка, возможно, вы не будете получать уведомления о новых сообщениях. Устраните неполадки с уведомлениями в настройках.
+
+Причина:%1$s."</string>
   <string name="common_everyone">"Для всех"</string>
   <string name="common_failed">"Ошибка"</string>
   <string name="common_favourite">"Избранное"</string>
@@ -201,6 +208,7 @@
   <string name="common_search_results">"Результаты поиска"</string>
   <string name="common_security">"Безопасность"</string>
   <string name="common_seen_by">"Просмотрено"</string>
+  <string name="common_send_to">"Отправить"</string>
   <string name="common_sending">"Отправка…"</string>
   <string name="common_sending_failed">"Сбой отправки"</string>
   <string name="common_sent">"Отправлено"</string>

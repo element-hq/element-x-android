@@ -16,10 +16,11 @@
 
 package io.element.android.features.messages.impl
 
-import android.content.Context
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.node
@@ -29,9 +30,10 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.call.CallType
-import io.element.android.features.call.ui.ElementCallActivity
+import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.SendLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationEntryPoint
@@ -57,7 +59,6 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.architecture.overlay.Overlay
 import io.element.android.libraries.architecture.overlay.operation.show
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
@@ -65,21 +66,35 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.joinedRoomMembers
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
+import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
+import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanProvider
+import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
 class MessagesFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    @ApplicationContext private val context: Context,
     private val matrixClient: MatrixClient,
     private val sendLocationEntryPoint: SendLocationEntryPoint,
     private val showLocationEntryPoint: ShowLocationEntryPoint,
     private val createPollEntryPoint: CreatePollEntryPoint,
+    private val elementCallEntryPoint: ElementCallEntryPoint,
+    private val analyticsService: AnalyticsService,
+    private val room: MatrixRoom,
+    private val roomMemberProfilesCache: RoomMemberProfilesCache,
+    mentionSpanProviderFactory: MentionSpanProvider.Factory,
 ) : BaseFlowNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Messages,
@@ -135,35 +150,47 @@ class MessagesFlowNode @AssistedInject constructor(
 
     private val callback = plugins<MessagesEntryPoint.Callback>().firstOrNull()
 
+    private val mentionSpanProvider = mentionSpanProviderFactory.create(room.sessionId.value)
+
+    override fun onBuilt() {
+        super.onBuilt()
+
+        room.membersStateFlow
+            .onEach { membersState ->
+                roomMemberProfilesCache.replace(membersState.joinedRoomMembers())
+            }
+            .launchIn(lifecycleScope)
+    }
+
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             is NavTarget.Messages -> {
                 val callback = object : MessagesNode.Callback {
-                    override fun onRoomDetailsClicked() {
-                        callback?.onRoomDetailsClicked()
+                    override fun onRoomDetailsClick() {
+                        callback?.onRoomDetailsClick()
                     }
 
-                    override fun onEventClicked(event: TimelineItem.Event): Boolean {
-                        return processEventClicked(event)
+                    override fun onEventClick(event: TimelineItem.Event): Boolean {
+                        return processEventClick(event)
                     }
 
                     override fun onPreviewAttachments(attachments: ImmutableList<Attachment>) {
                         backstack.push(NavTarget.AttachmentPreview(attachments.first()))
                     }
 
-                    override fun onUserDataClicked(userId: UserId) {
-                        callback?.onUserDataClicked(userId)
+                    override fun onUserDataClick(userId: UserId) {
+                        callback?.onUserDataClick(userId)
                     }
 
-                    override fun onPermalinkClicked(data: PermalinkData) {
-                        callback?.onPermalinkClicked(data)
+                    override fun onPermalinkClick(data: PermalinkData) {
+                        callback?.onPermalinkClick(data)
                     }
 
-                    override fun onShowEventDebugInfoClicked(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
+                    override fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
                         backstack.push(NavTarget.EventDebugInfo(eventId, debugInfo))
                     }
 
-                    override fun onForwardEventClicked(eventId: EventId) {
+                    override fun onForwardEventClick(eventId: EventId) {
                         backstack.push(NavTarget.ForwardEvent(eventId))
                     }
 
@@ -171,24 +198,25 @@ class MessagesFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.ReportMessage(eventId, senderId))
                     }
 
-                    override fun onSendLocationClicked() {
+                    override fun onSendLocationClick() {
                         backstack.push(NavTarget.SendLocation)
                     }
 
-                    override fun onCreatePollClicked() {
+                    override fun onCreatePollClick() {
                         backstack.push(NavTarget.CreatePoll)
                     }
 
-                    override fun onEditPollClicked(eventId: EventId) {
+                    override fun onEditPollClick(eventId: EventId) {
                         backstack.push(NavTarget.EditPoll(eventId))
                     }
 
-                    override fun onJoinCallClicked(roomId: RoomId) {
-                        val inputs = CallType.RoomCall(
+                    override fun onJoinCallClick(roomId: RoomId) {
+                        val callType = CallType.RoomCall(
                             sessionId = matrixClient.sessionId,
                             roomId = roomId,
                         )
-                        ElementCallActivity.start(context, inputs)
+                        analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
+                        elementCallEntryPoint.startCall(callType)
                     }
                 }
                 val inputs = MessagesNode.Inputs(
@@ -250,7 +278,7 @@ class MessagesFlowNode @AssistedInject constructor(
         }
     }
 
-    private fun processEventClicked(event: TimelineItem.Event): Boolean {
+    private fun processEventClick(event: TimelineItem.Event): Boolean {
         return when (event.content) {
             is TimelineItemImageContent -> {
                 val navTarget = NavTarget.MediaViewer(
@@ -342,6 +370,13 @@ class MessagesFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        BackstackWithOverlayBox(modifier)
+        mentionSpanProvider.updateStyles()
+
+        CompositionLocalProvider(
+            LocalRoomMemberProfilesCache provides roomMemberProfilesCache,
+            LocalMentionSpanProvider provides mentionSpanProvider,
+        ) {
+            BackstackWithOverlayBox(modifier)
+        }
     }
 }

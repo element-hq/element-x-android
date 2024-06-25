@@ -17,11 +17,15 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import android.text.SpannableString
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -33,33 +37,69 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContentProvider
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
+import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
+import io.element.android.libraries.textcomposer.mentions.MentionSpan
+import io.element.android.libraries.textcomposer.mentions.getMentionSpans
 import io.element.android.wysiwyg.compose.EditorStyledText
 
 @Composable
 fun TimelineItemTextView(
     content: TimelineItemTextBasedContent,
-    onLinkClicked: (String) -> Unit,
+    onLinkClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    onContentLayoutChanged: (ContentAvoidingLayoutData) -> Unit = {},
+    onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit = {},
 ) {
     CompositionLocalProvider(
         LocalContentColor provides ElementTheme.colors.textPrimary,
         LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular
     ) {
-        val formattedBody = content.formattedBody
-        val body = SpannableString(formattedBody ?: content.body)
-
-        Box(modifier.semantics { contentDescription = body.toString() }) {
+        val body = getTextWithResolvedMentions(content)
+        Box(modifier.semantics { contentDescription = content.plainText }) {
             EditorStyledText(
                 text = body,
-                onLinkClickedListener = onLinkClicked,
+                onLinkClickedListener = onLinkClick,
                 style = ElementRichTextEditorStyle.textStyle(),
-                onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChanged = onContentLayoutChanged),
+                onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChange = onContentLayoutChange),
                 releaseOnDetach = false,
             )
         }
     }
+}
+
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+@Composable
+internal fun getTextWithResolvedMentions(content: TimelineItemTextBasedContent): CharSequence {
+    val userProfileCache = LocalRoomMemberProfilesCache.current
+    val lastCacheUpdate by userProfileCache.lastCacheUpdate.collectAsState()
+    val formattedBody = remember(content.htmlBody, lastCacheUpdate) {
+        updateMentionSpans(content.formattedBody, userProfileCache)
+        SpannableString(content.formattedBody ?: content.body)
+    }
+
+    return formattedBody
+}
+
+private fun updateMentionSpans(text: CharSequence?, cache: RoomMemberProfilesCache): Boolean {
+    var changedContents = false
+    if (text != null) {
+        for (mentionSpan in text.getMentionSpans()) {
+            when (mentionSpan.type) {
+                MentionSpan.Type.USER -> {
+                    val displayName = cache.getDisplayName(UserId(mentionSpan.rawValue)) ?: mentionSpan.rawValue
+                    if (mentionSpan.text != displayName) {
+                        changedContents = true
+                        mentionSpan.text = displayName
+                    }
+                }
+                // Nothing yet for room mentions
+                else -> Unit
+            }
+        }
+    }
+    return changedContents
 }
 
 @PreviewsDayNight
@@ -69,6 +109,6 @@ internal fun TimelineItemTextViewPreview(
 ) = ElementPreview {
     TimelineItemTextView(
         content = content,
-        onLinkClicked = {},
+        onLinkClick = {},
     )
 }

@@ -17,15 +17,15 @@
 package io.element.android.features.rageshake.impl.reporter
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.services.toolbox.test.strings.FakeStringProvider
+import io.element.android.appconfig.RageshakeConfig
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.junit.Test
 
 class DefaultBugReporterUrlProviderTest {
     @Test
     fun `test DefaultBugReporterUrlProvider`() {
-        val sut = DefaultBugReporterUrlProvider(FakeStringProvider("https://example.org"))
+        val sut = DefaultBugReporterUrlProvider()
         val result = sut.provide()
-        assertThat(result).isEqualTo("https://example.org".toHttpUrl())
+        assertThat(result).isEqualTo(RageshakeConfig.BUG_REPORT_URL.toHttpUrl())
     }
 }

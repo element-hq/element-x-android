@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 enum class AvatarSize(val dp: Dp) {
     CurrentUserTopBar(32.dp),
 
+    IncomingCall(140.dp),
     RoomHeader(96.dp),
     RoomListItem(52.dp),
 
@@ -34,6 +35,8 @@ enum class AvatarSize(val dp: Dp) {
 
     SelectedUser(56.dp),
     SelectedRoom(56.dp),
+
+    DmCluster(75.dp),
 
     TimelineRoom(32.dp),
     TimelineSender(32.dp),
@@ -54,4 +57,8 @@ enum class AvatarSize(val dp: Dp) {
     CustomRoomNotificationSetting(36.dp),
 
     RoomDirectoryItem(36.dp),
+
+    EditProfileDetails(96.dp),
+
+    Suggestion(32.dp),
 }

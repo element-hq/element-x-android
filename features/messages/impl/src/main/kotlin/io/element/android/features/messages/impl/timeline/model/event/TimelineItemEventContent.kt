@@ -42,6 +42,7 @@ fun TimelineItemEventContent.canBeRepliedTo(): Boolean =
     when (this) {
         is TimelineItemRedactedContent,
         is TimelineItemLegacyCallInviteContent,
+        is TimelineItemCallNotifyContent,
         is TimelineItemStateContent -> false
         else -> true
     }
@@ -65,6 +66,7 @@ fun TimelineItemEventContent.canReact(): Boolean =
         is TimelineItemStateContent,
         is TimelineItemRedactedContent,
         is TimelineItemLegacyCallInviteContent,
+        is TimelineItemCallNotifyContent,
         TimelineItemUnknownContent -> false
     }
 

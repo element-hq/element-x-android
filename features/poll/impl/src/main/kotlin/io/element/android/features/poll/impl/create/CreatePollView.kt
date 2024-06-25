@@ -79,7 +79,7 @@ fun CreatePollView(
     if (state.showBackConfirmation) {
         ConfirmationDialog(
             content = stringResource(id = R.string.screen_create_poll_cancel_confirmation_content_android),
-            onSubmitClicked = { state.eventSink(CreatePollEvents.NavBack) },
+            onSubmitClick = { state.eventSink(CreatePollEvents.NavBack) },
             onDismiss = { state.eventSink(CreatePollEvents.HideConfirmation) }
         )
     }
@@ -87,7 +87,7 @@ fun CreatePollView(
         ConfirmationDialog(
             title = stringResource(id = R.string.screen_edit_poll_delete_confirmation_title),
             content = stringResource(id = R.string.screen_edit_poll_delete_confirmation),
-            onSubmitClicked = { state.eventSink(CreatePollEvents.Delete(confirmed = true)) },
+            onSubmitClick = { state.eventSink(CreatePollEvents.Delete(confirmed = true)) },
             onDismiss = { state.eventSink(CreatePollEvents.HideConfirmation) }
         )
     }
@@ -102,8 +102,8 @@ fun CreatePollView(
             CreatePollTopAppBar(
                 mode = state.mode,
                 saveEnabled = state.canSave,
-                onBackPress = navBack,
-                onSaveClicked = { state.eventSink(CreatePollEvents.Save) }
+                onBackClick = navBack,
+                onSaveClick = { state.eventSink(CreatePollEvents.Save) }
             )
         },
     ) { paddingValues ->
@@ -219,8 +219,8 @@ fun CreatePollView(
 private fun CreatePollTopAppBar(
     mode: CreatePollState.Mode,
     saveEnabled: Boolean,
-    onBackPress: () -> Unit = {},
-    onSaveClicked: () -> Unit = {},
+    onBackClick: () -> Unit = {},
+    onSaveClick: () -> Unit = {},
 ) {
     TopAppBar(
         title = {
@@ -233,7 +233,7 @@ private fun CreatePollTopAppBar(
             )
         },
         navigationIcon = {
-            BackButton(onClick = onBackPress)
+            BackButton(onClick = onBackClick)
         },
         actions = {
             TextButton(
@@ -241,7 +241,7 @@ private fun CreatePollTopAppBar(
                     CreatePollState.Mode.New -> stringResource(id = CommonStrings.action_create)
                     CreatePollState.Mode.Edit -> stringResource(id = CommonStrings.action_done)
                 },
-                onClick = onSaveClicked,
+                onClick = onSaveClick,
                 enabled = saveEnabled,
             )
         }

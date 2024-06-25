@@ -31,8 +31,6 @@ import io.element.android.features.messages.impl.timeline.components.reactionsum
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
-import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuState
-import io.element.android.features.messages.impl.timeline.components.retrysendmenu.aRetrySendMenuState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.typing.aTypingNotificationState
@@ -45,6 +43,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.textcomposer.aRichTextEditorState
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.TextEditorState
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 
@@ -99,7 +98,7 @@ fun aMessagesState(
     userHasPermissionToRedactOther: Boolean = false,
     userHasPermissionToSendReaction: Boolean = true,
     composerState: MessageComposerState = aMessageComposerState(
-        richTextEditorState = aRichTextEditorState(initialText = "Hello", initialFocus = true),
+        textEditorState = TextEditorState.Rich(aRichTextEditorState(initialText = "Hello", initialFocus = true)),
         isFullScreen = false,
         mode = MessageComposerMode.Normal,
     ),
@@ -109,7 +108,6 @@ fun aMessagesState(
         // Render a focused event for an event with sender information displayed
         focusedEventIndex = 2,
     ),
-    retrySendMenuState: RetrySendMenuState = aRetrySendMenuState(),
     readReceiptBottomSheetState: ReadReceiptBottomSheetState = aReadReceiptBottomSheetState(),
     actionListState: ActionListState = anActionListState(),
     customReactionState: CustomReactionState = aCustomReactionState(),
@@ -123,6 +121,7 @@ fun aMessagesState(
     roomId = RoomId("!id:domain"),
     roomName = roomName,
     roomAvatar = roomAvatar,
+    heroes = persistentListOf(),
     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
     userHasPermissionToRedactOwn = userHasPermissionToRedactOwn,
     userHasPermissionToRedactOther = userHasPermissionToRedactOther,
@@ -131,7 +130,6 @@ fun aMessagesState(
     voiceMessageComposerState = voiceMessageComposerState,
     typingNotificationState = aTypingNotificationState(),
     timelineState = timelineState,
-    retrySendMenuState = retrySendMenuState,
     readReceiptBottomSheetState = readReceiptBottomSheetState,
     actionListState = actionListState,
     customReactionState = customReactionState,

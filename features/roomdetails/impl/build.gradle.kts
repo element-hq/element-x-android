@@ -56,7 +56,7 @@ dependencies {
     api(projects.libraries.usersearch.api)
     api(projects.services.apperror.api)
     implementation(libs.coil.compose)
-    implementation(projects.features.call)
+    implementation(projects.features.call.api)
     implementation(projects.features.createroom.api)
     implementation(projects.features.leaveroom.api)
     implementation(projects.features.userprofile.shared)

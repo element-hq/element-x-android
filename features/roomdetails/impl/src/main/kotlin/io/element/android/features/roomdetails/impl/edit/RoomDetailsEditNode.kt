@@ -49,8 +49,8 @@ class RoomDetailsEditNode @AssistedInject constructor(
         val state = presenter.present()
         RoomDetailsEditView(
             state = state,
-            onBackPressed = ::navigateUp,
-            onRoomEdited = ::navigateUp,
+            onBackClick = ::navigateUp,
+            onRoomEditSuccess = ::navigateUp,
             modifier = modifier,
         )
     }

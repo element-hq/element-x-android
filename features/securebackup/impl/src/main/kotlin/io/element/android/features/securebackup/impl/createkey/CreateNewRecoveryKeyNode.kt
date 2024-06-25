@@ -38,7 +38,7 @@ class CreateNewRecoveryKeyNode @AssistedInject constructor(
         CreateNewRecoveryKeyView(
             desktopApplicationName = buildMeta.desktopApplicationName,
             modifier = modifier,
-            onBackClicked = ::navigateUp,
+            onBackClick = ::navigateUp,
         )
     }
 }

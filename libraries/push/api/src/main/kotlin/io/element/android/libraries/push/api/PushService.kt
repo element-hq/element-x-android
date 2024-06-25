@@ -17,16 +17,19 @@
 package io.element.android.libraries.push.api
 
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
+import kotlinx.coroutines.flow.Flow
 
 interface PushService {
-    // TODO Move away
-    fun notificationStyleChanged()
+    /**
+     * Return the current push provider, or null if none.
+     */
+    suspend fun getCurrentPushProvider(): PushProvider?
 
     /**
-     * Return the list of push providers, available at compile time, and
-     * available at runtime, sorted by index.
+     * Return the list of push providers, available at compile time, sorted by index.
      */
     fun getAvailablePushProviders(): List<PushProvider>
 
@@ -35,7 +38,23 @@ interface PushService {
      *
      * The method has effect only if the [PushProvider] is different than the current one.
      */
-    suspend fun registerWith(matrixClient: MatrixClient, pushProvider: PushProvider, distributor: Distributor)
+    suspend fun registerWith(
+        matrixClient: MatrixClient,
+        pushProvider: PushProvider,
+        distributor: Distributor,
+    ): Result<Unit>
+
+    /**
+     * Store the given push provider as the current one, but do not register.
+     * To be used when there is no distributor available.
+     */
+    suspend fun selectPushProvider(
+        matrixClient: MatrixClient,
+        pushProvider: PushProvider,
+    )
+
+    fun ignoreRegistrationError(sessionId: SessionId): Flow<Boolean>
+    suspend fun setIgnoreRegistrationError(sessionId: SessionId, ignore: Boolean)
 
     /**
      * Return false in case of early error.

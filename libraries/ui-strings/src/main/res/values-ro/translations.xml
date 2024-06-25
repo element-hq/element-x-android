@@ -75,6 +75,7 @@
   <string name="action_load_more">"Încărcați mai mult"</string>
   <string name="action_manage_account">"Administrare cont"</string>
   <string name="action_manage_devices">"Gestionare dispozitive"</string>
+  <string name="action_message">"Mesaj"</string>
   <string name="action_next">"Următorul"</string>
   <string name="action_no">"Nu"</string>
   <string name="action_not_now">"Nu acum"</string>
@@ -84,6 +85,7 @@
   <string name="action_quick_reply">"Raspuns rapid"</string>
   <string name="action_quote">"Citat"</string>
   <string name="action_react">"Reacționați"</string>
+  <string name="action_reject">"Respinge"</string>
   <string name="action_remove">"Ștergeți"</string>
   <string name="action_reply">"Răspundeți"</string>
   <string name="action_reply_in_thread">"Răspundeți în fir"</string>
@@ -120,6 +122,7 @@
   <string name="common_blocked_users">"Utilizatori blocați"</string>
   <string name="common_bubbles">"Baloane"</string>
   <string name="common_call_invite">"Apel în curs (nesuportat)"</string>
+  <string name="common_call_started">"A început un apel"</string>
   <string name="common_chat_backup">"Backup conversații"</string>
   <string name="common_copyright">"Drepturi de autor"</string>
   <string name="common_creating_room">"Se creează camera…"</string>
@@ -199,6 +202,7 @@
   <string name="common_search_results">"Rezultatele căutării"</string>
   <string name="common_security">"Securitate"</string>
   <string name="common_seen_by">"Văzut de"</string>
+  <string name="common_send_to">"Trimiteți către"</string>
   <string name="common_sending">"Se trimite…"</string>
   <string name="common_sending_failed">"Trimiterea a eșuat"</string>
   <string name="common_sent">"Trimis"</string>

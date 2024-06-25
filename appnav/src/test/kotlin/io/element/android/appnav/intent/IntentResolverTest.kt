@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
+import io.element.android.tests.testutils.lambda.lambdaError
 import org.junit.Assert.assertThrows
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -208,11 +209,31 @@ class IntentResolverTest {
             permalinkParserResult = { permalinkData }
         )
         val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
-            action = Intent.ACTION_SEND
+            action = Intent.ACTION_BATTERY_LOW
             data = "https://matrix.to/invalid".toUri()
         }
         val result = sut.resolve(intent)
         assertThat(result).isNull()
+    }
+
+    @Test
+    fun `test incoming share simple`() {
+        val sut = createIntentResolver()
+        val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
+            action = Intent.ACTION_SEND
+        }
+        val result = sut.resolve(intent)
+        assertThat(result).isEqualTo(ResolvedIntent.IncomingShare(intent = intent))
+    }
+
+    @Test
+    fun `test incoming share multiple`() {
+        val sut = createIntentResolver()
+        val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
+            action = Intent.ACTION_SEND_MULTIPLE
+        }
+        val result = sut.resolve(intent)
+        assertThat(result).isEqualTo(ResolvedIntent.IncomingShare(intent = intent))
     }
 
     @Test
@@ -229,7 +250,7 @@ class IntentResolverTest {
     }
 
     private fun createIntentResolver(
-        permalinkParserResult: () -> PermalinkData = { throw NotImplementedError() }
+        permalinkParserResult: () -> PermalinkData = { lambdaError() }
     ): IntentResolver {
         return IntentResolver(
             deeplinkParser = DeeplinkParser(),

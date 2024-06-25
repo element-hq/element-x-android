@@ -19,6 +19,7 @@ package io.element.android.features.roomdetails.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
+import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.userprofile.shared.UserProfileState
 import io.element.android.features.userprofile.shared.aUserProfileState
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -28,6 +29,9 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.components.aMatrixUserList
+import kotlinx.collections.immutable.toPersistentList
 
 open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState> {
     override val values: Sequence<RoomDetailsState>
@@ -48,6 +52,7 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             ),
             aRoomDetailsState(canCall = false, canInvite = false),
             aRoomDetailsState(isPublic = false),
+            aRoomDetailsState(heroes = aMatrixUserList()),
             // Add other state here
         )
 }
@@ -99,6 +104,7 @@ fun aRoomDetailsState(
     isFavorite: Boolean = false,
     displayAdminSettings: Boolean = false,
     isPublic: Boolean = true,
+    heroes: List<MatrixUser> = emptyList(),
     eventSink: (RoomDetailsEvent) -> Unit = {},
 ) = RoomDetailsState(
     roomId = roomId,
@@ -119,6 +125,7 @@ fun aRoomDetailsState(
     isFavorite = isFavorite,
     displayRolesAndPermissionsSettings = displayAdminSettings,
     isPublic = isPublic,
+    heroes = heroes.toPersistentList(),
     eventSink = eventSink
 )
 
@@ -135,6 +142,10 @@ fun aDmRoomDetailsState(
     roomName: String = "Daniel",
 ) = aRoomDetailsState(
     roomName = roomName,
-    roomType = RoomDetailsType.Dm(aDmRoomMember(isIgnored = isDmMemberIgnored)),
+    isPublic = false,
+    roomType = RoomDetailsType.Dm(
+        aRoomMember(),
+        aDmRoomMember(isIgnored = isDmMemberIgnored),
+    ),
     roomMemberDetailsState = aUserProfileState()
 )

@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 
 const val A_USER_NAME = "alice"
 const val A_PASSWORD = "password"
+const val A_SECRET = "secret"
 
 val A_USER_ID = UserId("@alice:server.org")
 val A_USER_ID_2 = UserId("@bob:server.org")
@@ -56,6 +57,7 @@ val A_TRANSACTION_ID = TransactionId("aTransactionId")
 const val A_UNIQUE_ID = "aUniqueId"
 
 const val A_ROOM_NAME = "A room name"
+const val A_ROOM_RAW_NAME = "A room raw name"
 const val A_MESSAGE = "Hello world!"
 const val A_REPLY = "OK, I'll be there!"
 const val ANOTHER_MESSAGE = "Hello universe!"

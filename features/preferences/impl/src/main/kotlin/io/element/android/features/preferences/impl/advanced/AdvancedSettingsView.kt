@@ -38,12 +38,12 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun AdvancedSettingsView(
     state: AdvancedSettingsState,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PreferencePage(
         modifier = modifier,
-        onBackPressed = onBackPressed,
+        onBackClick = onBackClick,
         title = stringResource(id = CommonStrings.common_advanced_settings)
     ) {
         ListItem(
@@ -56,18 +56,6 @@ fun AdvancedSettingsView(
             onClick = {
                 state.eventSink(AdvancedSettingsEvents.ChangeTheme)
             }
-        )
-        ListItem(
-            headlineContent = {
-                Text(text = stringResource(id = CommonStrings.common_rich_text_editor))
-            },
-            supportingContent = {
-                Text(text = stringResource(id = R.string.screen_advanced_settings_rich_text_editor_description))
-            },
-            trailingContent = ListItemContent.Switch(
-                checked = state.isRichTextEditorEnabled,
-            ),
-            onClick = { state.eventSink(AdvancedSettingsEvents.SetRichTextEditorEnabled(!state.isRichTextEditorEnabled)) }
         )
         ListItem(
             headlineContent = {
@@ -99,7 +87,7 @@ fun AdvancedSettingsView(
         SingleSelectionDialog(
             options = getOptions(),
             initialSelection = themes.indexOf(state.theme),
-            onOptionSelected = {
+            onSelectOption = {
                 state.eventSink(
                     AdvancedSettingsEvents.SetTheme(
                         themes[it]
@@ -133,5 +121,5 @@ private fun Theme.toHumanReadable(): String {
 @Composable
 internal fun AdvancedSettingsViewPreview(@PreviewParameter(AdvancedSettingsStateProvider::class) state: AdvancedSettingsState) =
     ElementPreview {
-        AdvancedSettingsView(state = state, onBackPressed = { })
+        AdvancedSettingsView(state = state, onBackClick = { })
     }

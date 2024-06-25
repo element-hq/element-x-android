@@ -10,9 +10,11 @@
 
 Element X Android is a [Matrix](https://matrix.org/) Android Client provided by [element.io](https://element.io/). This app is currently in a pre-alpha release stage with only basic functionalities.
 
-The application is a total rewrite of [Element-Android](https://github.com/element-hq/element-android) using the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) underneath and targeting devices running Android 6+. The UI layer is written using [Jetpack Compose](https://developer.android.com/jetpack/compose), and the navigation is managed using [Appyx](https://github.com/bumble-tech/appyx).
+The application is a total rewrite of [Element-Android](https://github.com/element-hq/element-android) using the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) underneath and targeting devices running Android 7+. The UI layer is written using [Jetpack Compose](https://developer.android.com/jetpack/compose), and the navigation is managed using [Appyx](https://github.com/bumble-tech/appyx).
 
 Learn more about why we are building Element X in our blog post: [https://element.io/blog/element-x-experience-the-future-of-element/](https://element.io/blog/element-x-experience-the-future-of-element/).
+
+[<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" height="80">](https://play.google.com/store/apps/details?id=io.element.android.x)[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/packages/io.element.android.x)
 
 ## Table of contents
 
@@ -25,13 +27,13 @@ Learn more about why we are building Element X in our blog post: [https://elemen
 * [Contributing](#contributing)
 * [Build instructions](#build-instructions)
 * [Support](#support)
-* [Copyright & License](#copyright-&-license)
+* [Copyright and License](#copyright-and-license)
 
 <!--- END -->
 
 ## Screenshots
 
-Here are some early screenshots of the application:
+Here are some screenshots of the application:
 
 <!--
 Commands run before taking the screenshots:
@@ -47,9 +49,9 @@ And to exit demo mode:
 adb shell am broadcast -a com.android.systemui.demo -e command exit
 -->
 
-|<img src=./docs/images-lfs/screen_1_light.png width=280 />|<img src=./docs/images-lfs/screen_2_light.png width=280 />|<img src=./docs/images-lfs/screen_3_light.png width=280 />|<img src=./docs/images-lfs/screen_4_light.png width=280 />|
+|<img src="./docs/images-lfs/screen_1_light.png" width="280" />|<img src="./docs/images-lfs/screen_2_light.png" width="280" />|<img src="./docs/images-lfs/screen_3_light.png" width="280" />|<img src="./docs/images-lfs/screen_4_light.png" width="280" />|
 |-|-|-|-|
-|<img src=./docs/images-lfs/screen_1_dark.png width=280 />|<img src=./docs/images-lfs/screen_2_dark.png width=280 />|<img src=./docs/images-lfs/screen_3_dark.png width=280 />|<img src=./docs/images-lfs/screen_4_dark.png width=280 />|
+|<img src="./docs/images-lfs/screen_1_dark.png" width="280" />|<img src="./docs/images-lfs/screen_2_dark.png" width="280" />|<img src="./docs/images-lfs/screen_3_dark.png" width="280" />|<img src="./docs/images-lfs/screen_4_dark.png" width="280" />|
 
 ## Translations
 
@@ -90,7 +92,7 @@ When you are experiencing an issue on Element X Android, please first search in 
 and then in [#element-x-android:matrix.org](https://matrix.to/#/#element-x-android:matrix.org).
 If after your research you still have a question, ask at [#element-x-android:matrix.org](https://matrix.to/#/#element-x-android:matrix.org). Otherwise feel free to create a GitHub issue if you encounter a bug or a crash, by explaining clearly in detail what happened. You can also perform bug reporting from the application settings. This is especially recommended when you encounter a crash.
 
-## Copyright & License
+## Copyright and License
 
 Copyright © New Vector Ltd
 

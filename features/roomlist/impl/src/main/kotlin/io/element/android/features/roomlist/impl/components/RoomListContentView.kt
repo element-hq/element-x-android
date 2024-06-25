@@ -71,9 +71,9 @@ fun RoomListContentView(
     contentState: RoomListContentState,
     filtersState: RoomListFiltersState,
     eventSink: (RoomListEvents) -> Unit,
-    onConfirmRecoveryKeyClicked: () -> Unit,
-    onRoomClicked: (RoomListRoomSummary) -> Unit,
-    onCreateRoomClicked: () -> Unit,
+    onConfirmRecoveryKeyClick: () -> Unit,
+    onRoomClick: (RoomListRoomSummary) -> Unit,
+    onCreateRoomClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
@@ -88,7 +88,7 @@ fun RoomListContentView(
             }
             is RoomListContentState.Empty -> {
                 EmptyView(
-                    onCreateRoomClicked = onCreateRoomClicked,
+                    onCreateRoomClick = onCreateRoomClick,
                 )
             }
             is RoomListContentState.Rooms -> {
@@ -96,8 +96,8 @@ fun RoomListContentView(
                     state = contentState,
                     filtersState = filtersState,
                     eventSink = eventSink,
-                    onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
-                    onRoomClicked = onRoomClicked,
+                    onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
+                    onRoomClick = onRoomClick,
                 )
             }
         }
@@ -120,7 +120,7 @@ private fun SkeletonView(count: Int, modifier: Modifier = Modifier) {
 
 @Composable
 private fun EmptyView(
-    onCreateRoomClicked: () -> Unit,
+    onCreateRoomClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     EmptyScaffold(
@@ -130,7 +130,7 @@ private fun EmptyView(
             Button(
                 text = stringResource(CommonStrings.action_start_chat),
                 leadingIcon = IconSource.Vector(CompoundIcons.Compose()),
-                onClick = onCreateRoomClicked,
+                onClick = onCreateRoomClick,
             )
         },
         modifier = modifier.fillMaxSize(),
@@ -142,8 +142,8 @@ private fun RoomsView(
     state: RoomListContentState.Rooms,
     filtersState: RoomListFiltersState,
     eventSink: (RoomListEvents) -> Unit,
-    onConfirmRecoveryKeyClicked: () -> Unit,
-    onRoomClicked: (RoomListRoomSummary) -> Unit,
+    onConfirmRecoveryKeyClick: () -> Unit,
+    onRoomClick: (RoomListRoomSummary) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (state.summaries.isEmpty() && filtersState.hasAnyFilterSelected) {
@@ -155,8 +155,8 @@ private fun RoomsView(
         RoomsViewList(
             state = state,
             eventSink = eventSink,
-            onConfirmRecoveryKeyClicked = onConfirmRecoveryKeyClicked,
-            onRoomClicked = onRoomClicked,
+            onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
+            onRoomClick = onRoomClick,
             modifier = modifier.fillMaxSize(),
         )
     }
@@ -166,8 +166,8 @@ private fun RoomsView(
 private fun RoomsViewList(
     state: RoomListContentState.Rooms,
     eventSink: (RoomListEvents) -> Unit,
-    onConfirmRecoveryKeyClicked: () -> Unit,
-    onRoomClicked: (RoomListRoomSummary) -> Unit,
+    onConfirmRecoveryKeyClick: () -> Unit,
+    onRoomClick: (RoomListRoomSummary) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val lazyListState = rememberLazyListState()
@@ -193,16 +193,22 @@ private fun RoomsViewList(
         // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80
         contentPadding = PaddingValues(bottom = 80.dp)
     ) {
-        when (state.securityBannerState) {
-            SecurityBannerState.RecoveryKeyConfirmation -> {
-                item {
-                    ConfirmRecoveryKeyBanner(
-                        onContinueClicked = onConfirmRecoveryKeyClicked,
-                        onDismissClicked = { eventSink(RoomListEvents.DismissRecoveryKeyPrompt) }
-                    )
+        if (state.securityBannerState != SecurityBannerState.None) {
+            when (state.securityBannerState) {
+                SecurityBannerState.RecoveryKeyConfirmation -> {
+                    item {
+                        ConfirmRecoveryKeyBanner(
+                            onContinueClick = onConfirmRecoveryKeyClick,
+                            onDismissClick = { eventSink(RoomListEvents.DismissRecoveryKeyPrompt) }
+                        )
+                    }
                 }
+                else -> Unit
             }
-            else -> Unit
+        } else if (state.fullScreenIntentPermissionsState.shouldDisplayBanner) {
+            item {
+                FullScreenIntentPermissionBanner(state = state.fullScreenIntentPermissionsState)
+            }
         }
 
         // Note: do not use a key for the LazyColumn, or the scroll will not behave as expected if a room
@@ -213,7 +219,7 @@ private fun RoomsViewList(
         ) { index, room ->
             RoomSummaryRow(
                 room = room,
-                onClick = onRoomClicked,
+                onClick = onRoomClick,
                 eventSink = eventSink,
             )
             if (index != state.summaries.lastIndex) {
@@ -275,8 +281,8 @@ internal fun RoomListContentViewPreview(@PreviewParameter(RoomListContentStatePr
             filterSelectionStates = RoomListFilter.entries.map { FilterSelectionState(it, isSelected = true) }
         ),
         eventSink = {},
-        onConfirmRecoveryKeyClicked = {},
-        onRoomClicked = {},
-        onCreateRoomClicked = {},
+        onConfirmRecoveryKeyClick = {},
+        onRoomClick = {},
+        onCreateRoomClick = {},
     )
 }

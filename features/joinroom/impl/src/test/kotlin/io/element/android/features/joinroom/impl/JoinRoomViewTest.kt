@@ -45,7 +45,7 @@ class JoinRoomViewTest {
                 aJoinRoomState(
                     eventSink = eventsRecorder,
                 ),
-                onBackPressed = it
+                onBackClick = it
             )
             rule.pressBack()
         }
@@ -167,7 +167,7 @@ class JoinRoomViewTest {
                     contentState = aLoadedContentState(roomType = RoomType.Space),
                     eventSink = eventsRecorder,
                 ),
-                onBackPressed = it
+                onBackClick = it
             )
             rule.clickOn(CommonStrings.action_go_back)
         }
@@ -176,14 +176,14 @@ class JoinRoomViewTest {
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setJoinRoomView(
     state: JoinRoomState,
-    onBackPressed: () -> Unit = EnsureNeverCalled(),
+    onBackClick: () -> Unit = EnsureNeverCalled(),
     onJoinSuccess: () -> Unit = EnsureNeverCalled(),
     onKnockSuccess: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         JoinRoomView(
             state = state,
-            onBackPressed = onBackPressed,
+            onBackClick = onBackClick,
             onJoinSuccess = onJoinSuccess,
             onKnockSuccess = onKnockSuccess,
         )

@@ -73,7 +73,7 @@ class LogoutViewTest {
                 aLogoutState(
                     eventSink = eventsRecorder
                 ),
-                onBackClicked = callback,
+                onBackClick = callback,
             )
             rule.pressBack()
         }
@@ -129,7 +129,7 @@ class LogoutViewTest {
                     isLastDevice = true,
                     eventSink = eventsRecorder
                 ),
-                onChangeRecoveryKeyClicked = callback,
+                onChangeRecoveryKeyClick = callback,
             )
             rule.clickOn(CommonStrings.common_settings)
         }
@@ -138,15 +138,15 @@ class LogoutViewTest {
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setLogoutView(
     state: LogoutState,
-    onChangeRecoveryKeyClicked: () -> Unit = EnsureNeverCalled(),
-    onBackClicked: () -> Unit = EnsureNeverCalled(),
+    onChangeRecoveryKeyClick: () -> Unit = EnsureNeverCalled(),
+    onBackClick: () -> Unit = EnsureNeverCalled(),
     onSuccessLogout: (logoutUrlResult: String?) -> Unit = EnsureNeverCalledWithParam()
 ) {
     setContent {
         LogoutView(
             state = state,
-            onChangeRecoveryKeyClicked = onChangeRecoveryKeyClicked,
-            onBackClicked = onBackClicked,
+            onChangeRecoveryKeyClick = onChangeRecoveryKeyClick,
+            onBackClick = onBackClick,
             onSuccessLogout = onSuccessLogout,
         )
     }

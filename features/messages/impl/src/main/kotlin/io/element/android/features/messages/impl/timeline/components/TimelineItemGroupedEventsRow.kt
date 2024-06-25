@@ -48,8 +48,7 @@ fun TimelineItemGroupedEventsRow(
     onLongClick: (TimelineItem.Event) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onUserDataClick: (UserId) -> Unit,
-    onLinkClicked: (String) -> Unit,
-    onTimestampClicked: (TimelineItem.Event) -> Unit,
+    onLinkClick: (String) -> Unit,
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
     onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
@@ -75,8 +74,7 @@ fun TimelineItemGroupedEventsRow(
         onLongClick = onLongClick,
         inReplyToClick = inReplyToClick,
         onUserDataClick = onUserDataClick,
-        onLinkClicked = onLinkClicked,
-        onTimestampClicked = onTimestampClicked,
+        onLinkClick = onLinkClick,
         onReactionClick = onReactionClick,
         onReactionLongClick = onReactionLongClick,
         onMoreReactionsClick = onMoreReactionsClick,
@@ -99,8 +97,7 @@ private fun TimelineItemGroupedEventsRowContent(
     onLongClick: (TimelineItem.Event) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onUserDataClick: (UserId) -> Unit,
-    onLinkClicked: (String) -> Unit,
-    onTimestampClicked: (TimelineItem.Event) -> Unit,
+    onLinkClick: (String) -> Unit,
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
     onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
@@ -132,14 +129,14 @@ private fun TimelineItemGroupedEventsRowContent(
                         onLongClick = onLongClick,
                         inReplyToClick = inReplyToClick,
                         onUserDataClick = onUserDataClick,
-                        onLinkClicked = onLinkClicked,
-                        onTimestampClicked = onTimestampClicked,
+                        onLinkClick = onLinkClick,
                         onReactionClick = onReactionClick,
                         onReactionLongClick = onReactionLongClick,
                         onMoreReactionsClick = onMoreReactionsClick,
                         onReadReceiptClick = onReadReceiptClick,
                         eventSink = eventSink,
                         onSwipeToReply = {},
+                        onJoinCallClick = {},
                     )
                 }
             }
@@ -151,7 +148,7 @@ private fun TimelineItemGroupedEventsRowContent(
                     receipts = timelineItem.aggregatedReadReceipts,
                 ),
                 renderReadReceipts = true,
-                onReadReceiptsClicked = onExpandGroupClick
+                onReadReceiptsClick = onExpandGroupClick
             )
         }
     }
@@ -173,8 +170,7 @@ internal fun TimelineItemGroupedEventsRowContentExpandedPreview() = ElementPrevi
         onLongClick = {},
         inReplyToClick = {},
         onUserDataClick = {},
-        onLinkClicked = {},
-        onTimestampClicked = {},
+        onLinkClick = {},
         onReactionClick = { _, _ -> },
         onReactionLongClick = { _, _ -> },
         onMoreReactionsClick = {},
@@ -198,8 +194,7 @@ internal fun TimelineItemGroupedEventsRowContentCollapsePreview() = ElementPrevi
         onLongClick = {},
         inReplyToClick = {},
         onUserDataClick = {},
-        onLinkClicked = {},
-        onTimestampClicked = {},
+        onLinkClick = {},
         onReactionClick = { _, _ -> },
         onReactionLongClick = { _, _ -> },
         onMoreReactionsClick = {},

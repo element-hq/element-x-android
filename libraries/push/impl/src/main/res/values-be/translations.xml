@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="notification_channel_call">"Выклік"</string>
+  <string name="notification_channel_call">"Пазваніць"</string>
   <string name="notification_channel_listening_for_events">"Праслухоўванне падзей"</string>
   <string name="notification_channel_noisy">"Шумныя апавяшчэнні"</string>
+  <string name="notification_channel_ringing_calls">"Званкі"</string>
   <string name="notification_channel_silent">"Ціхія апавяшчэнні"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d паведамленне"</item>
-    <item quantity="few">"%1$s: %2$d паведамлення"</item>
+    <item quantity="few">"%1$s: %2$d паведамленні"</item>
     <item quantity="many">"%1$s: %2$d паведамленняў"</item>
   </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="one">"%d апавяшчэнне"</item>
-    <item quantity="few">"%d апавяшчэння"</item>
+    <item quantity="few">"%d апавяшчэнні"</item>
     <item quantity="many">"%d апавяшчэнняў"</item>
   </plurals>
   <string name="notification_fallback_content">"Апавяшчэнне"</string>
+  <string name="notification_incoming_call">"Уваходны званок"</string>
   <string name="notification_inline_reply_failed">"** Не атрымалася даслаць - калі ласка, адкрыйце пакой"</string>
   <string name="notification_invitation_action_join">"Далучыцца"</string>
   <string name="notification_invitation_action_reject">"Адхіліць"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d запрашэнне"</item>
-    <item quantity="few">"%d запрашэння"</item>
+    <item quantity="few">"%d запрашэнні"</item>
     <item quantity="many">"%d запрашэнняў"</item>
   </plurals>
   <string name="notification_invite_body">"Запрасіў(-ла) вас у чат"</string>
@@ -28,7 +30,7 @@
   <string name="notification_new_messages">"Новыя паведамленні"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d новае паведамленне"</item>
-    <item quantity="few">"%d новых паведамлення"</item>
+    <item quantity="few">"%d новыя паведамленні"</item>
     <item quantity="many">"%d новых паведамленняў"</item>
   </plurals>
   <string name="notification_reaction_body">"Адрэагаваў(-ла) на %1$s"</string>
@@ -41,7 +43,7 @@
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
     <item quantity="one">"%d непрачытанае апавяшчэнне"</item>
-    <item quantity="few">"%d непрачытаных апавяшчэння"</item>
+    <item quantity="few">"%d непрачытаныя апавяшчэнні"</item>
     <item quantity="many">"%d непрачытаных апавяшчэнняў"</item>
   </plurals>
   <string name="notification_unread_notified_messages_and_invitation">"%1$s і %2$s"</string>
@@ -49,10 +51,9 @@
   <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s у %2$s і %3$s"</string>
   <plurals name="notification_unread_notified_messages_in_room_rooms">
     <item quantity="one">"%d пакой"</item>
-    <item quantity="few">"%d пакоя"</item>
+    <item quantity="few">"%d пакоі"</item>
     <item quantity="many">"%d пакояў"</item>
   </plurals>
-  <string name="push_choose_distributor_dialog_title_android">"Выберыце спосаб атрымання апавяшчэнняў"</string>
   <string name="push_distributor_background_sync_android">"Фонавая сінхранізацыя"</string>
   <string name="push_distributor_firebase_android">"Сэрвісы Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Службы Google Play не знойдзены. Апавяшчэнні могуць не працаваць належным чынам."</string>

@@ -81,5 +81,26 @@ enum class FeatureFlags(
         description = "Allow user to search for public rooms in their homeserver",
         defaultValue = false,
         isFinished = false,
-    )
+    ),
+    ShowBlockedUsersDetails(
+        key = "feature.showBlockedUsersDetails",
+        title = "Show blocked users details",
+        description = "Show the name and avatar of blocked users in the blocked users list",
+        defaultValue = false,
+        isFinished = false,
+    ),
+    QrCodeLogin(
+        key = "feature.qrCodeLogin",
+        title = "Enable login using QR code",
+        description = "Allow the user to login using the QR code flow",
+        defaultValue = true,
+        isFinished = false,
+    ),
+    IncomingShare(
+        key = "feature.incomingShare",
+        title = "Incoming Share support",
+        description = "Allow the application to receive data from other applications",
+        defaultValue = true,
+        isFinished = false,
+    ),
 }

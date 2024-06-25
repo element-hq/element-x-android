@@ -73,22 +73,22 @@ fun AttachmentsPreviewView(
     Scaffold(modifier) {
         AttachmentPreviewContent(
             attachment = state.attachment,
-            onSendClicked = ::postSendAttachment,
+            onSendClick = ::postSendAttachment,
             onDismiss = onDismiss
         )
     }
     AttachmentSendStateView(
         sendActionState = state.sendActionState,
-        onDismissClicked = ::postClearSendState,
-        onRetryClicked = ::postSendAttachment
+        onDismissClick = ::postClearSendState,
+        onRetryClick = ::postSendAttachment
     )
 }
 
 @Composable
 private fun AttachmentSendStateView(
     sendActionState: SendActionState,
-    onDismissClicked: () -> Unit,
-    onRetryClicked: () -> Unit
+    onDismissClick: () -> Unit,
+    onRetryClick: () -> Unit
 ) {
     when (sendActionState) {
         is SendActionState.Sending -> {
@@ -98,15 +98,15 @@ private fun AttachmentSendStateView(
                     SendActionState.Sending.Processing -> ProgressDialogType.Indeterminate
                 },
                 text = stringResource(id = CommonStrings.common_sending),
-                isCancellable = true,
-                onDismissRequest = onDismissClicked,
+                showCancelButton = true,
+                onDismissRequest = onDismissClick,
             )
         }
         is SendActionState.Failure -> {
             RetryDialog(
                 content = stringResource(sendAttachmentError(sendActionState.error)),
-                onDismiss = onDismissClicked,
-                onRetry = onRetryClicked
+                onDismiss = onDismissClick,
+                onRetry = onRetryClick
             )
         }
         else -> Unit
@@ -116,7 +116,7 @@ private fun AttachmentSendStateView(
 @Composable
 private fun AttachmentPreviewContent(
     attachment: Attachment,
-    onSendClicked: () -> Unit,
+    onSendClick: () -> Unit,
     onDismiss: () -> Unit,
 ) {
     Box(
@@ -146,8 +146,8 @@ private fun AttachmentPreviewContent(
             }
         }
         AttachmentsPreviewBottomActions(
-            onCancelClicked = onDismiss,
-            onSendClicked = onSendClicked,
+            onCancelClick = onDismiss,
+            onSendClick = onSendClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.Black.copy(alpha = 0.7f))
@@ -159,13 +159,13 @@ private fun AttachmentPreviewContent(
 
 @Composable
 private fun AttachmentsPreviewBottomActions(
-    onCancelClicked: () -> Unit,
-    onSendClicked: () -> Unit,
+    onCancelClick: () -> Unit,
+    onSendClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     ButtonRowMolecule(modifier = modifier) {
-        TextButton(stringResource(id = CommonStrings.action_cancel), onClick = onCancelClicked)
-        TextButton(stringResource(id = CommonStrings.action_send), onClick = onSendClicked)
+        TextButton(stringResource(id = CommonStrings.action_cancel), onClick = onCancelClick)
+        TextButton(stringResource(id = CommonStrings.action_send), onClick = onSendClick)
     }
 }
 

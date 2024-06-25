@@ -42,7 +42,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 @Composable
 fun UserDefinedRoomNotificationSettingsView(
     state: RoomNotificationSettingsState,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -50,7 +50,7 @@ fun UserDefinedRoomNotificationSettingsView(
         topBar = {
             UserDefinedRoomNotificationSettingsTopBar(
                 roomName = state.roomName,
-                onBackPressed = { onBackPressed() }
+                onBackClick = { onBackClick() }
             )
         }
     ) { padding ->
@@ -67,8 +67,8 @@ fun UserDefinedRoomNotificationSettingsView(
                     selected = state.displayNotificationMode,
                     enabled = !state.displayIsDefault.orTrue(),
                     displayMentionsOnlyDisclaimer = state.displayMentionsOnlyDisclaimer,
-                    onOptionSelected = {
-                        state.eventSink(RoomNotificationSettingsEvents.RoomNotificationModeChanged(it.mode))
+                    onSelectOption = {
+                        state.eventSink(RoomNotificationSettingsEvents.ChangeRoomNotificationMode(it.mode))
                     },
                 )
             }
@@ -90,7 +90,7 @@ fun UserDefinedRoomNotificationSettingsView(
 
             AsyncActionView(
                 async = state.restoreDefaultAction,
-                onSuccess = { onBackPressed() },
+                onSuccess = { onBackClick() },
                 errorMessage = { stringResource(R.string.screen_notification_settings_edit_failed_updating_default_mode) },
                 onErrorDismiss = { state.eventSink(RoomNotificationSettingsEvents.ClearRestoreDefaultError) },
             )
@@ -102,7 +102,7 @@ fun UserDefinedRoomNotificationSettingsView(
 @Composable
 private fun UserDefinedRoomNotificationSettingsTopBar(
     roomName: String,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
 ) {
     TopAppBar(
         title = {
@@ -110,7 +110,7 @@ private fun UserDefinedRoomNotificationSettingsTopBar(
                 text = roomName,
             )
         },
-        navigationIcon = { BackButton(onClick = onBackPressed) },
+        navigationIcon = { BackButton(onClick = onBackClick) },
     )
 }
 
@@ -121,6 +121,6 @@ internal fun UserDefinedRoomNotificationSettingsViewPreview(
 ) = ElementPreview {
     UserDefinedRoomNotificationSettingsView(
         state = state,
-        onBackPressed = {},
+        onBackClick = {},
     )
 }

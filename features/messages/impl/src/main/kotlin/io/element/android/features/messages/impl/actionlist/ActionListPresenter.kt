@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
@@ -32,8 +33,8 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeCopied
 import io.element.android.features.messages.impl.timeline.model.event.canReact
-import io.element.android.features.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -86,6 +87,13 @@ class ActionListPresenter @Inject constructor(
         val canRedact = timelineItem.isMine && userCanRedactOwn || !timelineItem.isMine && userCanRedactOther
         val actions =
             when (timelineItem.content) {
+                is TimelineItemCallNotifyContent -> {
+                    if (isDeveloperModeEnabled) {
+                        listOf(TimelineItemAction.ViewSource)
+                    } else {
+                        emptyList()
+                    }
+                }
                 is TimelineItemRedactedContent -> {
                     if (isDeveloperModeEnabled) {
                         listOf(TimelineItemAction.ViewSource)
@@ -96,7 +104,9 @@ class ActionListPresenter @Inject constructor(
                 is TimelineItemStateContent -> {
                     buildList {
                         add(TimelineItemAction.Copy)
-                        add(TimelineItemAction.CopyLink)
+                        if (timelineItem.isRemote) {
+                            add(TimelineItemAction.CopyLink)
+                        }
                         if (isDeveloperModeEnabled) {
                             add(TimelineItemAction.ViewSource)
                         }
@@ -120,7 +130,9 @@ class ActionListPresenter @Inject constructor(
                         if (timelineItem.content.canBeCopied()) {
                             add(TimelineItemAction.Copy)
                         }
-                        add(TimelineItemAction.CopyLink)
+                        if (timelineItem.isRemote) {
+                            add(TimelineItemAction.CopyLink)
+                        }
                         if (isDeveloperModeEnabled) {
                             add(TimelineItemAction.ViewSource)
                         }
@@ -137,8 +149,8 @@ class ActionListPresenter @Inject constructor(
                         if (timelineItem.isRemote) {
                             add(TimelineItemAction.Reply)
                             add(TimelineItemAction.Forward)
+                            add(TimelineItemAction.CopyLink)
                         }
-                        add(TimelineItemAction.CopyLink)
                         if (isDeveloperModeEnabled) {
                             add(TimelineItemAction.ViewSource)
                         }
@@ -173,13 +185,15 @@ class ActionListPresenter @Inject constructor(
                             add(TimelineItemAction.Forward)
                         }
                     }
-                    if (timelineItem.isMine && timelineItem.isTextMessage) {
+                    if (timelineItem.isEditable) {
                         add(TimelineItemAction.Edit)
                     }
                     if (timelineItem.content.canBeCopied()) {
                         add(TimelineItemAction.Copy)
                     }
-                    add(TimelineItemAction.CopyLink)
+                    if (timelineItem.isRemote) {
+                        add(TimelineItemAction.CopyLink)
+                    }
                     if (isDeveloperModeEnabled) {
                         add(TimelineItemAction.ViewSource)
                     }

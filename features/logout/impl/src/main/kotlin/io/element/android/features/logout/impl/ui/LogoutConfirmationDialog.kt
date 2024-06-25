@@ -24,14 +24,14 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun LogoutConfirmationDialog(
-    onSubmitClicked: () -> Unit,
+    onSubmitClick: () -> Unit,
     onDismiss: () -> Unit,
 ) {
     ConfirmationDialog(
         title = stringResource(id = CommonStrings.action_signout),
         content = stringResource(id = R.string.screen_signout_confirmation_dialog_content),
         submitText = stringResource(id = CommonStrings.action_signout),
-        onSubmitClicked = onSubmitClicked,
+        onSubmitClick = onSubmitClick,
         onDismiss = onDismiss,
     )
 }

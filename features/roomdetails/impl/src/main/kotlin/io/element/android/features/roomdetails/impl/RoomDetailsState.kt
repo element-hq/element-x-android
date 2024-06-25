@@ -16,12 +16,15 @@
 
 package io.element.android.features.roomdetails.impl
 
+import androidx.compose.runtime.Immutable
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.userprofile.shared.UserProfileState
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import kotlinx.collections.immutable.ImmutableList
 
 data class RoomDetailsState(
     val roomId: RoomId,
@@ -42,14 +45,20 @@ data class RoomDetailsState(
     val isFavorite: Boolean,
     val displayRolesAndPermissionsSettings: Boolean,
     val isPublic: Boolean,
+    val heroes: ImmutableList<MatrixUser>,
     val eventSink: (RoomDetailsEvent) -> Unit
 )
 
+@Immutable
 sealed interface RoomDetailsType {
     data object Room : RoomDetailsType
-    data class Dm(val roomMember: RoomMember) : RoomDetailsType
+    data class Dm(
+        val me: RoomMember,
+        val otherMember: RoomMember,
+    ) : RoomDetailsType
 }
 
+@Immutable
 sealed interface RoomTopicState {
     data object Hidden : RoomTopicState
     data object CanAddTopic : RoomTopicState

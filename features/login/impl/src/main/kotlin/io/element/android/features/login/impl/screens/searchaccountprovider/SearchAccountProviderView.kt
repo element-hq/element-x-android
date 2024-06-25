@@ -77,9 +77,9 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun SearchAccountProviderView(
     state: SearchAccountProviderState,
-    onBackPressed: () -> Unit,
-    onLearnMoreClicked: () -> Unit,
-    onDone: () -> Unit,
+    onBackClick: () -> Unit,
+    onLearnMoreClick: () -> Unit,
+    onSuccess: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val eventSink = state.eventSink
@@ -88,7 +88,7 @@ fun SearchAccountProviderView(
         topBar = {
             TopAppBar(
                 title = {},
-                navigationIcon = { BackButton(onClick = onBackPressed) }
+                navigationIcon = { BackButton(onClick = onBackClick) }
             )
         }
     ) { padding ->
@@ -188,8 +188,8 @@ fun SearchAccountProviderView(
             }
             ChangeServerView(
                 state = state.changeServerState,
-                onLearnMoreClicked = onLearnMoreClicked,
-                onDone = onDone,
+                onLearnMoreClick = onLearnMoreClick,
+                onSuccess = onSuccess,
             )
         }
     }
@@ -214,8 +214,8 @@ private fun HomeserverData.toAccountProvider(): AccountProvider {
 internal fun SearchAccountProviderViewPreview(@PreviewParameter(SearchAccountProviderStateProvider::class) state: SearchAccountProviderState) = ElementPreview {
     SearchAccountProviderView(
         state = state,
-        onBackPressed = {},
-        onLearnMoreClicked = {},
-        onDone = {},
+        onBackClick = {},
+        onLearnMoreClick = {},
+        onSuccess = {},
     )
 }

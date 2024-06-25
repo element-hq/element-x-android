@@ -32,6 +32,9 @@ interface PreferencesEntryPoint : FeatureEntryPoint {
 
         @Parcelize
         data object NotificationSettings : InitialTarget
+
+        @Parcelize
+        data object NotificationTroubleshoot : InitialTarget
     }
 
     data class Params(val initialElement: InitialTarget) : NodeInputs
@@ -45,7 +48,7 @@ interface PreferencesEntryPoint : FeatureEntryPoint {
 
     interface Callback : Plugin {
         fun onOpenBugReport()
-        fun onSecureBackupClicked()
+        fun onSecureBackupClick()
         fun onOpenRoomNotificationSettings(roomId: RoomId)
     }
 }

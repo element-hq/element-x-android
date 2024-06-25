@@ -23,6 +23,7 @@ sealed interface TimelineEvents {
     data class OnScrollFinished(val firstIndex: Int) : TimelineEvents
     data class FocusOnEvent(val eventId: EventId) : TimelineEvents
     data object ClearFocusRequestState : TimelineEvents
+    data object OnFocusEventRender : TimelineEvents
     data object JumpToLive : TimelineEvents
 
     /**
@@ -37,16 +38,16 @@ sealed interface TimelineEvents {
      */
     sealed interface TimelineItemPollEvents : EventFromTimelineItem
 
-    data class PollAnswerSelected(
+    data class SelectPollAnswer(
         val pollStartId: EventId,
         val answerId: String
     ) : TimelineItemPollEvents
 
-    data class PollEndClicked(
+    data class EndPoll(
         val pollStartId: EventId,
     ) : TimelineItemPollEvents
 
-    data class PollEditClicked(
+    data class EditPoll(
         val pollStartId: EventId,
     ) : TimelineItemPollEvents
 }

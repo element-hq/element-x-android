@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="full_screen_intent_banner_message">"Pentru a vă asigura că nu pierdeți niciodată un apel important, vă rugăm să modificați setările pentru a permite notificări fullscreen atunci când telefonul este blocat."</string>
+  <string name="full_screen_intent_banner_title">"Îmbunătățiți-vă experiența in timpul unui apel"</string>
+  <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Alegeți modul de primire a notificărilor"</string>
   <string name="screen_advanced_settings_developer_mode">"Modul dezvoltator"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Activați pentru a avea acces la funcționalități pentru dezvoltatori."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Adresa URL de bază Element Call"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Setați o adresă URL de bază personalizată pentru Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL invalid, vă rugăm să vă asigurați că includeți protocolul (http/https) și adresa corectă."</string>
+  <string name="screen_advanced_settings_push_provider_android">"Furnizor de notificări push"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Dezactivați editorul avansat pentru a tasta manual Markdown."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Chitanțe de citire"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Dacă dezactivată, chitanțele dumneavoastră de citire nu vor fi trimise nimănui. Veți primi în continuare chitanțe de citire de la alți utilizatori."</string>

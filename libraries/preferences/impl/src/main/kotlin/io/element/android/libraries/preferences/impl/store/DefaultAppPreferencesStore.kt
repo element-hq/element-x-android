@@ -24,19 +24,17 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.features.preferences.api.store.AppPreferencesStore
-import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "elementx_preferences")
 
-private val richTextEditorKey = booleanPreferencesKey("richTextEditor")
 private val developerModeKey = booleanPreferencesKey("developerMode")
 private val customElementCallBaseUrlKey = stringPreferencesKey("elementCallBaseUrl")
 private val themeKey = stringPreferencesKey("theme")
@@ -47,19 +45,6 @@ class DefaultAppPreferencesStore @Inject constructor(
     private val buildMeta: BuildMeta,
 ) : AppPreferencesStore {
     private val store = context.dataStore
-
-    override suspend fun setRichTextEditorEnabled(enabled: Boolean) {
-        store.edit { prefs ->
-            prefs[richTextEditorKey] = enabled
-        }
-    }
-
-    override fun isRichTextEditorEnabledFlow(): Flow<Boolean> {
-        return store.data.map { prefs ->
-            // enabled by default
-            prefs[richTextEditorKey].orTrue()
-        }
-    }
 
     override suspend fun setDeveloperModeEnabled(enabled: Boolean) {
         store.edit { prefs ->

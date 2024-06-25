@@ -35,8 +35,9 @@
   <string name="screen_recovery_key_confirm_key_description">"Jika Anda memiliki kunci keamanan atau frasa keamanan, ini juga bisa digunakan."</string>
   <string name="screen_recovery_key_confirm_key_label">"Kunci pemulihan atau kode sandi"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Masukkan…"</string>
+  <string name="screen_recovery_key_confirm_lost_recovery_key">"Kehilangan kunci pemulihan Anda?"</string>
   <string name="screen_recovery_key_confirm_success">"Kunci pemulihan dikonfirmasi"</string>
-  <string name="screen_recovery_key_confirm_title">"Konfirmasi kunci pemulihan atau kode sandi Anda"</string>
+  <string name="screen_recovery_key_confirm_title">"Konfirmasi kunci pemulihan Anda"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Kunci pemulihan disalin"</string>
   <string name="screen_recovery_key_generating_key">"Membuat…"</string>
   <string name="screen_recovery_key_save_action">"Simpan kunci pemulihan"</string>

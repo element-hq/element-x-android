@@ -44,6 +44,7 @@ import io.element.android.features.preferences.impl.root.PreferencesRootNode
 import io.element.android.features.preferences.impl.user.editprofile.EditUserProfileNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.appyx.canPop
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -115,8 +116,8 @@ class PreferencesFlowNode @AssistedInject constructor(
                         plugins<PreferencesEntryPoint.Callback>().forEach { it.onOpenBugReport() }
                     }
 
-                    override fun onSecureBackupClicked() {
-                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onSecureBackupClicked() }
+                    override fun onSecureBackupClick() {
+                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onSecureBackupClick() }
                     }
 
                     override fun onOpenAnalytics() {
@@ -151,7 +152,7 @@ class PreferencesFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.BlockedUsers)
                     }
 
-                    override fun onSignOutClicked() {
+                    override fun onSignOutClick() {
                         backstack.push(NavTarget.SignOut)
                     }
                 }
@@ -180,7 +181,7 @@ class PreferencesFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.EditDefaultNotificationSetting(isOneToOne))
                     }
 
-                    override fun onTroubleshootNotificationsClicked() {
+                    override fun onTroubleshootNotificationsClick() {
                         backstack.push(NavTarget.TroubleshootNotifications)
                     }
                 }
@@ -190,7 +191,11 @@ class PreferencesFlowNode @AssistedInject constructor(
                 notificationTroubleShootEntryPoint.nodeBuilder(this, buildContext)
                     .callback(object : NotificationTroubleShootEntryPoint.Callback {
                         override fun onDone() {
-                            backstack.pop()
+                            if (backstack.canPop()) {
+                                backstack.pop()
+                            } else {
+                                navigateUp()
+                            }
                         }
                     })
                     .build()
@@ -212,17 +217,15 @@ class PreferencesFlowNode @AssistedInject constructor(
                 createNode<EditUserProfileNode>(buildContext, listOf(inputs))
             }
             NavTarget.LockScreenSettings -> {
-                lockScreenEntryPoint.nodeBuilder(this, buildContext)
-                    .target(LockScreenEntryPoint.Target.Settings)
-                    .build()
+                lockScreenEntryPoint.nodeBuilder(this, buildContext, LockScreenEntryPoint.Target.Settings).build()
             }
             NavTarget.BlockedUsers -> {
                 createNode<BlockedUsersNode>(buildContext)
             }
             NavTarget.SignOut -> {
                 val callBack: LogoutEntryPoint.Callback = object : LogoutEntryPoint.Callback {
-                    override fun onChangeRecoveryKeyClicked() {
-                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onSecureBackupClicked() }
+                    override fun onChangeRecoveryKeyClick() {
+                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onSecureBackupClick() }
                     }
                 }
                 logoutEntryPoint.nodeBuilder(this, buildContext)

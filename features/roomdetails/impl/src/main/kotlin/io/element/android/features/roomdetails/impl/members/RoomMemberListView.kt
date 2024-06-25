@@ -67,7 +67,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
@@ -85,7 +85,7 @@ fun RoomMemberListView(
     modifier: Modifier = Modifier,
     initialSelectedSectionIndex: Int = 0,
 ) {
-    fun onUserSelected(roomMember: RoomMember) {
+    fun onSelectUser(roomMember: RoomMember) {
         state.eventSink(RoomMemberListEvents.RoomMemberSelected(roomMember))
     }
 
@@ -95,8 +95,8 @@ fun RoomMemberListView(
             if (!state.isSearchActive) {
                 RoomMemberListTopBar(
                     canInvite = state.canInvite,
-                    onBackPressed = navigator::exitRoomMemberList,
-                    onInvitePressed = navigator::openInviteMembers,
+                    onBackClick = navigator::exitRoomMemberList,
+                    onInviteClick = navigator::openInviteMembers,
                 )
             }
         }
@@ -119,9 +119,9 @@ fun RoomMemberListView(
                 state = state.searchResults,
                 active = state.isSearchActive,
                 placeHolderTitle = stringResource(CommonStrings.common_search_for_someone),
-                onActiveChanged = { state.eventSink(RoomMemberListEvents.OnSearchActiveChanged(it)) },
-                onTextChanged = { state.eventSink(RoomMemberListEvents.UpdateSearchQuery(it)) },
-                onUserSelected = ::onUserSelected,
+                onActiveChange = { state.eventSink(RoomMemberListEvents.OnSearchActiveChanged(it)) },
+                onTextChange = { state.eventSink(RoomMemberListEvents.UpdateSearchQuery(it)) },
+                onSelectUser = ::onSelectUser,
                 selectedSection = selectedSection,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -133,8 +133,8 @@ fun RoomMemberListView(
                     showMembersCount = true,
                     canDisplayBannedUsersControls = state.moderationState.canDisplayBannedUsers,
                     selectedSection = selectedSection,
-                    onSelectedSectionChanged = { selectedSection = it },
-                    onUserSelected = ::onUserSelected,
+                    onSelectedSectionChange = { selectedSection = it },
+                    onSelectUser = ::onSelectUser,
                 )
             }
         }
@@ -153,9 +153,9 @@ private fun RoomMemberList(
     roomMembers: RoomMembers,
     showMembersCount: Boolean,
     selectedSection: SelectedSection,
-    onSelectedSectionChanged: (SelectedSection) -> Unit,
+    onSelectedSectionChange: (SelectedSection) -> Unit,
     canDisplayBannedUsersControls: Boolean,
-    onUserSelected: (RoomMember) -> Unit,
+    onSelectUser: (RoomMember) -> Unit,
 ) {
     LazyColumn(modifier = Modifier.fillMaxWidth(), state = rememberLazyListState()) {
         stickyHeader {
@@ -176,7 +176,7 @@ private fun RoomMemberList(
                                 index = index,
                                 count = segmentedButtonTitles.size,
                                 selected = selectedSection.ordinal == index,
-                                onClick = { onSelectedSectionChanged(SelectedSection.entries[index]) },
+                                onClick = { onSelectedSectionChange(SelectedSection.entries[index]) },
                                 text = title,
                             )
                         }
@@ -197,7 +197,7 @@ private fun RoomMemberList(
                     roomMemberListSection(
                         headerText = { stringResource(id = R.string.screen_room_member_list_pending_header_title) },
                         members = roomMembers.invited,
-                        onMemberSelected = { onUserSelected(it) }
+                        onMemberSelected = { onSelectUser(it) }
                     )
                 }
                 if (roomMembers.joined.isNotEmpty()) {
@@ -211,7 +211,7 @@ private fun RoomMemberList(
                             }
                         },
                         members = roomMembers.joined,
-                        onMemberSelected = { onUserSelected(it) }
+                        onMemberSelected = { onSelectUser(it) }
                     )
                 }
             }
@@ -220,7 +220,7 @@ private fun RoomMemberList(
                     roomMemberListSection(
                         headerText = null,
                         members = roomMembers.banned,
-                        onMemberSelected = { onUserSelected(it) }
+                        onMemberSelected = { onSelectUser(it) }
                     )
                 } else {
                     item {
@@ -276,11 +276,7 @@ private fun RoomMemberListItem(
     }
     MatrixUserRow(
         modifier = modifier.clickable(onClick = onClick),
-        matrixUser = MatrixUser(
-            userId = roomMember.userId,
-            displayName = roomMember.displayName,
-            avatarUrl = roomMember.avatarUrl,
-        ),
+        matrixUser = roomMember.toMatrixUser(),
         avatarSize = AvatarSize.UserListItem,
         trailingContent = roleText?.let {
             @Composable {
@@ -298,8 +294,8 @@ private fun RoomMemberListItem(
 @Composable
 private fun RoomMemberListTopBar(
     canInvite: Boolean,
-    onBackPressed: () -> Unit,
-    onInvitePressed: () -> Unit,
+    onBackClick: () -> Unit,
+    onInviteClick: () -> Unit,
 ) {
     TopAppBar(
         title = {
@@ -308,12 +304,12 @@ private fun RoomMemberListTopBar(
                 style = ElementTheme.typography.aliasScreenTitle,
             )
         },
-        navigationIcon = { BackButton(onClick = onBackPressed) },
+        navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
             if (canInvite) {
                 TextButton(
                     text = stringResource(CommonStrings.action_invite),
-                    onClick = onInvitePressed,
+                    onClick = onInviteClick,
                 )
             }
         }
@@ -327,17 +323,17 @@ private fun RoomMemberSearchBar(
     state: SearchBarResultState<RoomMembers>,
     active: Boolean,
     placeHolderTitle: String,
-    onActiveChanged: (Boolean) -> Unit,
-    onTextChanged: (String) -> Unit,
-    onUserSelected: (RoomMember) -> Unit,
+    onActiveChange: (Boolean) -> Unit,
+    onTextChange: (String) -> Unit,
+    onSelectUser: (RoomMember) -> Unit,
     selectedSection: SelectedSection,
     modifier: Modifier = Modifier,
 ) {
     SearchBar(
         query = query,
-        onQueryChange = onTextChanged,
+        onQueryChange = onTextChange,
         active = active,
-        onActiveChange = onActiveChanged,
+        onActiveChange = onActiveChange,
         modifier = modifier,
         placeHolderTitle = placeHolderTitle,
         resultState = state,
@@ -346,10 +342,10 @@ private fun RoomMemberSearchBar(
                 isLoading = false,
                 roomMembers = results,
                 showMembersCount = false,
-                onUserSelected = { onUserSelected(it) },
+                onSelectUser = { onSelectUser(it) },
                 canDisplayBannedUsersControls = false,
                 selectedSection = selectedSection,
-                onSelectedSectionChanged = {},
+                onSelectedSectionChange = {},
             )
         },
     )

@@ -44,11 +44,13 @@ dependencies {
 
     testImplementation(libs.test.junit)
     testImplementation(libs.test.mockk)
+    testImplementation(libs.test.robolectric)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(libs.coroutines.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.services.appnavstate.test)
+    testImplementation(projects.libraries.pushstore.test)
     testImplementation(projects.libraries.sessionStorage.test)
 
     androidTestImplementation(libs.coroutines.test)

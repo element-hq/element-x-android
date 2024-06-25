@@ -17,6 +17,7 @@
 package io.element.android.libraries.textcomposer.impl.mentions
 
 import android.graphics.Color
+import android.net.Uri
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.UserId
@@ -42,13 +43,14 @@ class MentionSpanProviderTest {
 
     private val permalinkParser = FakePermalinkParser()
     private val mentionSpanProvider = MentionSpanProvider(
-        currentSessionId = currentUserId,
+        currentSessionId = currentUserId.value,
         permalinkParser = permalinkParser,
-        currentUserBackgroundColor = myUserColor,
-        currentUserTextColor = myUserColor,
-        otherBackgroundColor = otherColor,
-        otherTextColor = otherColor,
-    )
+    ).apply {
+        currentUserBackgroundColor = myUserColor
+        currentUserTextColor = myUserColor
+        otherBackgroundColor = otherColor
+        otherTextColor = otherColor
+    }
 
     @Test
     fun `getting mention span for current user should return a MentionSpan with custom colors`() {
@@ -62,6 +64,14 @@ class MentionSpanProviderTest {
     fun `getting mention span for other user should return a MentionSpan with normal colors`() {
         permalinkParser.givenResult(PermalinkData.UserLink(UserId("@other:matrix.org")))
         val mentionSpan = mentionSpanProvider.getMentionSpanFor("@other:matrix.org", "https://matrix.to/#/@other:matrix.org")
+        assertThat(mentionSpan.backgroundColor).isEqualTo(otherColor)
+        assertThat(mentionSpan.textColor).isEqualTo(otherColor)
+    }
+
+    @Test
+    fun `getting mention span for everyone in the room`() {
+        permalinkParser.givenResult(PermalinkData.FallbackLink(uri = Uri.EMPTY))
+        val mentionSpan = mentionSpanProvider.getMentionSpanFor("@room", "#")
         assertThat(mentionSpan.backgroundColor).isEqualTo(otherColor)
         assertThat(mentionSpan.textColor).isEqualTo(otherColor)
     }

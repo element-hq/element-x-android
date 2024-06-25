@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package io.element.android.features.roomdetails.impl.edit
 
@@ -29,13 +29,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -61,27 +59,20 @@ import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.EditableAvatarView
 import io.element.android.libraries.permissions.api.PermissionsView
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun RoomDetailsEditView(
     state: RoomDetailsEditState,
-    onBackPressed: () -> Unit,
-    onRoomEdited: () -> Unit,
+    onBackClick: () -> Unit,
+    onRoomEditSuccess: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val coroutineScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
-    val itemActionsBottomSheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden,
-    )
+    val isAvatarActionsSheetVisible = remember { mutableStateOf(false) }
 
-    fun onAvatarClicked() {
+    fun onAvatarClick() {
         focusManager.clearFocus()
-        coroutineScope.launch {
-            itemActionsBottomSheetState.show()
-        }
+        isAvatarActionsSheetVisible.value = true
     }
 
     Scaffold(
@@ -94,7 +85,7 @@ fun RoomDetailsEditView(
                         style = ElementTheme.typography.aliasScreenTitle,
                     )
                 },
-                navigationIcon = { BackButton(onClick = onBackPressed) },
+                navigationIcon = { BackButton(onClick = onBackClick) },
                 actions = {
                     TextButton(
                         text = stringResource(CommonStrings.action_save),
@@ -118,11 +109,12 @@ fun RoomDetailsEditView(
         ) {
             Spacer(modifier = Modifier.height(24.dp))
             EditableAvatarView(
-                userId = state.roomId,
-                displayName = state.roomName,
+                matrixId = state.roomId.value,
+                // As per Element Web, we use the raw name for the avatar as well
+                displayName = state.roomRawName,
                 avatarUrl = state.roomAvatarUrl,
                 avatarSize = AvatarSize.EditRoomDetails,
-                onAvatarClicked = ::onAvatarClicked,
+                onAvatarClick = ::onAvatarClick,
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(modifier = Modifier.height(60.dp))
@@ -130,7 +122,7 @@ fun RoomDetailsEditView(
             if (state.canChangeName) {
                 LabelledTextField(
                     label = stringResource(id = R.string.screen_room_details_room_name_label),
-                    value = state.roomName,
+                    value = state.roomRawName,
                     placeholder = stringResource(CommonStrings.common_room_name_placeholder),
                     singleLine = true,
                     onValueChange = { state.eventSink(RoomDetailsEditEvents.UpdateRoomName(it)) },
@@ -138,7 +130,7 @@ fun RoomDetailsEditView(
             } else {
                 LabelledReadOnlyField(
                     title = stringResource(R.string.screen_room_details_room_name_label),
-                    value = state.roomName
+                    value = state.roomRawName
                 )
             }
 
@@ -166,8 +158,9 @@ fun RoomDetailsEditView(
 
     AvatarActionBottomSheet(
         actions = state.avatarActions,
-        modalBottomSheetState = itemActionsBottomSheetState,
-        onActionSelected = { state.eventSink(RoomDetailsEditEvents.HandleAvatarAction(it)) }
+        isVisible = isAvatarActionsSheetVisible.value,
+        onDismiss = { isAvatarActionsSheetVisible.value = false },
+        onSelectAction = { state.eventSink(RoomDetailsEditEvents.HandleAvatarAction(it)) }
     )
 
     AsyncActionView(
@@ -177,7 +170,7 @@ fun RoomDetailsEditView(
                 progressText = stringResource(R.string.screen_room_details_updating_room),
             )
         },
-        onSuccess = { onRoomEdited() },
+        onSuccess = { onRoomEditSuccess() },
         errorMessage = { stringResource(R.string.screen_room_details_edition_error) },
         onErrorDismiss = { state.eventSink(RoomDetailsEditEvents.CancelSaveChanges) }
     )
@@ -216,7 +209,7 @@ private fun LabelledReadOnlyField(
 internal fun RoomDetailsEditViewPreview(@PreviewParameter(RoomDetailsEditStateProvider::class) state: RoomDetailsEditState) = ElementPreview {
     RoomDetailsEditView(
         state = state,
-        onBackPressed = {},
-        onRoomEdited = {},
+        onBackClick = {},
+        onRoomEditSuccess = {},
     )
 }

@@ -39,14 +39,18 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.core)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.testtags)
     implementation(libs.coil.compose)
     implementation(libs.coil.gif)
     implementation(libs.jsoup)
 
     ksp(libs.showkase.processor)
 
+    testImplementation(libs.coroutines.test)
     testImplementation(libs.test.junit)
-    testImplementation(libs.test.truth)
     testImplementation(libs.test.robolectric)
+    testImplementation(libs.test.truth)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.sessionStorage.test)
+    testImplementation(projects.tests.testutils)
 }

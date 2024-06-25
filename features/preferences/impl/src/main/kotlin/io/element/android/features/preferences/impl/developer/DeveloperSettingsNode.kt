@@ -59,7 +59,7 @@ class DeveloperSettingsNode @AssistedInject constructor(
             modifier = modifier,
             onOpenShowkase = ::openShowkase,
             onOpenConfigureTracing = ::onOpenConfigureTracing,
-            onBackPressed = ::navigateUp
+            onBackClick = ::navigateUp
         )
     }
 }

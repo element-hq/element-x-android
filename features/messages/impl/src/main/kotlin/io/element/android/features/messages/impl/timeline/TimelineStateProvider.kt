@@ -51,16 +51,23 @@ fun aTimelineState(
     focusedEventIndex: Int = -1,
     isLive: Boolean = true,
     eventSink: (TimelineEvents) -> Unit = {},
-) = TimelineState(
-    timelineItems = timelineItems,
-    timelineRoomInfo = timelineRoomInfo,
-    renderReadReceipts = renderReadReceipts,
-    newEventState = NewEventState.None,
-    isLive = isLive,
-    focusedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().getOrNull(focusedEventIndex)?.eventId,
-    focusRequestState = FocusRequestState.None,
-    eventSink = eventSink,
-)
+): TimelineState {
+    val focusedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().getOrNull(focusedEventIndex)?.eventId
+    val focusRequestState = if (focusedEventId != null) {
+        FocusRequestState.Success(focusedEventId, focusedEventIndex)
+    } else {
+        FocusRequestState.None
+    }
+    return TimelineState(
+        timelineItems = timelineItems,
+        timelineRoomInfo = timelineRoomInfo,
+        renderReadReceipts = renderReadReceipts,
+        newEventState = NewEventState.None,
+        isLive = isLive,
+        focusRequestState = focusRequestState,
+        eventSink = eventSink,
+    )
+}
 
 internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList<TimelineItem> {
     return persistentListOf(
@@ -74,7 +81,7 @@ internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList
             isMine = false,
             content = content,
             groupPosition = TimelineItemGroupPosition.Middle,
-            sendState = LocalEventSendState.SendingFailed("Message failed to send"),
+            sendState = LocalEventSendState.SendingFailed.Unrecoverable("Message failed to send"),
         ),
         aTimelineItemEvent(
             isMine = false,
@@ -97,7 +104,7 @@ internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList
             isMine = true,
             content = content,
             groupPosition = TimelineItemGroupPosition.Middle,
-            sendState = LocalEventSendState.SendingFailed("Message failed to send"),
+            sendState = LocalEventSendState.SendingFailed.Unrecoverable("Message failed to send"),
         ),
         aTimelineItemEvent(
             isMine = true,
@@ -232,4 +239,5 @@ internal fun aTimelineRoomInfo(
     name = name,
     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
     userHasPermissionToSendReaction = true,
+    isCallOngoing = false,
 )

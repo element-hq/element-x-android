@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.element.android.appconfig.MessageComposerConfig
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
@@ -45,9 +46,9 @@ import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryPresenter
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetPresenter
-import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuPresenter
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
@@ -66,7 +67,6 @@ import io.element.android.features.messages.impl.utils.messagesummary.MessageSum
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
-import io.element.android.features.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -86,12 +86,14 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.room.canCall
 import io.element.android.libraries.matrix.ui.room.canRedactOtherAsState
 import io.element.android.libraries.matrix.ui.room.canRedactOwnAsState
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -106,14 +108,12 @@ class MessagesPresenter @AssistedInject constructor(
     private val actionListPresenter: ActionListPresenter,
     private val customReactionPresenter: CustomReactionPresenter,
     private val reactionSummaryPresenter: ReactionSummaryPresenter,
-    private val retrySendMenuPresenter: RetrySendMenuPresenter,
     private val readReceiptBottomSheetPresenter: ReadReceiptBottomSheetPresenter,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val messageSummaryFormatter: MessageSummaryFormatter,
     private val dispatchers: CoroutineDispatchers,
     private val clipboardHelper: ClipboardHelper,
-    private val appPreferencesStore: AppPreferencesStore,
     private val featureFlagsService: FeatureFlagService,
     private val htmlConverterProvider: HtmlConverterProvider,
     @Assisted private val navigator: MessagesNavigator,
@@ -140,7 +140,6 @@ class MessagesPresenter @AssistedInject constructor(
         val actionListState = actionListPresenter.present()
         val customReactionState = customReactionPresenter.present()
         val reactionSummaryState = reactionSummaryPresenter.present()
-        val retryState = retrySendMenuPresenter.present()
         val readReceiptBottomSheetState = readReceiptBottomSheetPresenter.present()
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
@@ -153,6 +152,9 @@ class MessagesPresenter @AssistedInject constructor(
         }
         val roomAvatar: AsyncData<AvatarData> by remember {
             derivedStateOf { roomInfo?.avatarData()?.let { AsyncData.Success(it) } ?: AsyncData.Uninitialized }
+        }
+        val heroes by remember {
+            derivedStateOf { roomInfo?.heroes().orEmpty().toPersistentList() }
         }
 
         var hasDismissedInviteDialog by rememberSaveable {
@@ -171,16 +173,14 @@ class MessagesPresenter @AssistedInject constructor(
 
         val inviteProgress = remember { mutableStateOf<AsyncData<Unit>>(AsyncData.Uninitialized) }
         var showReinvitePrompt by remember { mutableStateOf(false) }
-        LaunchedEffect(hasDismissedInviteDialog, composerState.hasFocus, syncUpdateFlow.value) {
+        LaunchedEffect(hasDismissedInviteDialog, composerState.textEditorState.hasFocus(), syncUpdateFlow.value) {
             withContext(dispatchers.io) {
-                showReinvitePrompt = !hasDismissedInviteDialog && composerState.hasFocus && room.isDirect && room.activeMemberCount == 1L
+                showReinvitePrompt = !hasDismissedInviteDialog && composerState.textEditorState.hasFocus() && room.isDirect && room.activeMemberCount == 1L
             }
         }
         val networkConnectionStatus by networkMonitor.connectivity.collectAsState()
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
-
-        val enableTextFormatting by appPreferencesStore.isRichTextEditorEnabledFlow().collectAsState(initial = true)
 
         var enableVoiceMessages by remember { mutableStateOf(false) }
         LaunchedEffect(featureFlagsService) {
@@ -194,7 +194,7 @@ class MessagesPresenter @AssistedInject constructor(
                         action = event.action,
                         targetEvent = event.event,
                         composerState = composerState,
-                        enableTextFormatting = enableTextFormatting,
+                        enableTextFormatting = composerState.showTextFormatting,
                         timelineState = timelineState,
                     )
                 }
@@ -222,6 +222,7 @@ class MessagesPresenter @AssistedInject constructor(
             roomId = room.roomId,
             roomName = roomName,
             roomAvatar = roomAvatar,
+            heroes = heroes,
             userHasPermissionToSendMessage = userHasPermissionToSendMessage,
             userHasPermissionToRedactOwn = userHasPermissionToRedactOwn,
             userHasPermissionToRedactOther = userHasPermissionToRedactOther,
@@ -233,13 +234,12 @@ class MessagesPresenter @AssistedInject constructor(
             actionListState = actionListState,
             customReactionState = customReactionState,
             reactionSummaryState = reactionSummaryState,
-            retrySendMenuState = retryState,
             readReceiptBottomSheetState = readReceiptBottomSheetState,
             hasNetworkConnection = networkConnectionStatus == NetworkStatus.Online,
             snackbarMessage = snackbarMessage,
             showReinvitePrompt = showReinvitePrompt,
             inviteProgress = inviteProgress.value,
-            enableTextFormatting = enableTextFormatting,
+            enableTextFormatting = MessageComposerConfig.ENABLE_RICH_TEXT_EDITING,
             enableVoiceMessages = enableVoiceMessages,
             appName = buildMeta.applicationName,
             callState = callState,
@@ -254,6 +254,12 @@ class MessagesPresenter @AssistedInject constructor(
             url = avatarUrl ?: room.avatarUrl,
             size = AvatarSize.TimelineRoom
         )
+    }
+
+    private fun MatrixRoomInfo.heroes(): List<AvatarData> {
+        return heroes.map { user ->
+            user.getAvatarData(size = AvatarSize.TimelineRoom)
+        }
     }
 
     private fun CoroutineScope.handleTimelineAction(
@@ -311,11 +317,9 @@ class MessagesPresenter @AssistedInject constructor(
     }
 
     private suspend fun handleActionRedact(event: TimelineItem.Event) {
-        if (event.failedToSend) {
-            // If the message hasn't been sent yet, just cancel it
-            event.transactionId?.let { room.cancelSend(it) }
-        } else if (event.eventId != null) {
-            room.redactEvent(event.eventId)
+        timelineController.invokeOnCurrentTimeline {
+            redactEvent(eventId = event.eventId, transactionId = event.transactionId, reason = null)
+                .onFailure { Timber.e(it) }
         }
     }
 
@@ -327,7 +331,7 @@ class MessagesPresenter @AssistedInject constructor(
         when (targetEvent.content) {
             is TimelineItemPollContent -> {
                 if (targetEvent.eventId == null) return
-                navigator.onEditPollClicked(targetEvent.eventId)
+                navigator.onEditPollClick(targetEvent.eventId)
             }
             else -> {
                 val composerMode = MessageComposerMode.Edit(
@@ -395,6 +399,7 @@ class MessagesPresenter @AssistedInject constructor(
             is TimelineItemStateContent,
             is TimelineItemEncryptedContent,
             is TimelineItemLegacyCallInviteContent,
+            is TimelineItemCallNotifyContent,
             is TimelineItemUnknownContent -> null
         }
         val composerMode = MessageComposerMode.Reply(
@@ -410,24 +415,24 @@ class MessagesPresenter @AssistedInject constructor(
     }
 
     private fun handleShowDebugInfoAction(event: TimelineItem.Event) {
-        navigator.onShowEventDebugInfoClicked(event.eventId, event.debugInfo)
+        navigator.onShowEventDebugInfoClick(event.eventId, event.debugInfo)
     }
 
     private fun handleForwardAction(event: TimelineItem.Event) {
         if (event.eventId == null) return
-        navigator.onForwardEventClicked(event.eventId)
+        navigator.onForwardEventClick(event.eventId)
     }
 
     private fun handleReportAction(event: TimelineItem.Event) {
         if (event.eventId == null) return
-        navigator.onReportContentClicked(event.eventId, event.senderId)
+        navigator.onReportContentClick(event.eventId, event.senderId)
     }
 
     private fun handleEndPollAction(
         event: TimelineItem.Event,
         timelineState: TimelineState,
     ) {
-        event.eventId?.let { timelineState.eventSink(TimelineEvents.PollEndClicked(it)) }
+        event.eventId?.let { timelineState.eventSink(TimelineEvents.EndPoll(it)) }
     }
 
     private suspend fun handleCopyLink(event: TimelineItem.Event) {

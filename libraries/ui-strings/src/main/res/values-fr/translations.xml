@@ -34,8 +34,9 @@
   <string name="action_accept">"Accepter"</string>
   <string name="action_add_to_timeline">"Ajouter à la discussion"</string>
   <string name="action_back">"Retour"</string>
+  <string name="action_call">"Appel"</string>
   <string name="action_cancel">"Annuler"</string>
-  <string name="action_choose_photo">"Choisissez une photo"</string>
+  <string name="action_choose_photo">"Choisir une photo"</string>
   <string name="action_clear">"Effacer"</string>
   <string name="action_close">"Fermer"</string>
   <string name="action_complete_verification">"Terminer la vérification"</string>
@@ -72,6 +73,7 @@
   <string name="action_load_more">"Voir plus"</string>
   <string name="action_manage_account">"Gérer le compte"</string>
   <string name="action_manage_devices">"Gérez les sessions"</string>
+  <string name="action_message">"Message"</string>
   <string name="action_next">"Suivant"</string>
   <string name="action_no">"Non"</string>
   <string name="action_not_now">"Pas maintenant"</string>
@@ -81,6 +83,7 @@
   <string name="action_quick_reply">"Réponse rapide"</string>
   <string name="action_quote">"Citer"</string>
   <string name="action_react">"Réagissez"</string>
+  <string name="action_reject">"Rejeter"</string>
   <string name="action_remove">"Supprimer"</string>
   <string name="action_reply">"Répondre"</string>
   <string name="action_reply_in_thread">"Répondre dans le fil de discussion"</string>
@@ -117,6 +120,7 @@
   <string name="common_blocked_users">"Utilisateurs bloqués"</string>
   <string name="common_bubbles">"Bulles"</string>
   <string name="common_call_invite">"Appel en cours (non supporté)"</string>
+  <string name="common_call_started">"Appel démarré"</string>
   <string name="common_chat_backup">"Sauvegarde des discussions"</string>
   <string name="common_copyright">"Droits d’auteur"</string>
   <string name="common_creating_room">"Création du salon…"</string>
@@ -125,12 +129,16 @@
   <string name="common_decryption_error">"Erreur de déchiffrement"</string>
   <string name="common_developer_options">"Options pour les développeurs"</string>
   <string name="common_direct_chat">"Discussion à deux"</string>
+  <string name="common_do_not_show_this_again">"Ne plus afficher"</string>
   <string name="common_edited_suffix">"(modifié)"</string>
   <string name="common_editing">"Édition"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Chiffrement activé"</string>
   <string name="common_enter_your_pin">"Saisissez votre code PIN"</string>
   <string name="common_error">"Erreur"</string>
+  <string name="common_error_registering_pusher_android">"Une erreur s’est produite, il est possible que vous ne receviez pas de notifications pour les nouveaux messages. Veuillez résoudre les problèmes liés aux notifications depuis les paramètres.
+
+Raison: %1$s."</string>
   <string name="common_everyone">"Tout le monde"</string>
   <string name="common_failed">"Échec"</string>
   <string name="common_favourite">"Favori"</string>
@@ -194,6 +202,7 @@
   <string name="common_search_results">"Résultats de la recherche"</string>
   <string name="common_security">"Sécurité"</string>
   <string name="common_seen_by">"Vu par"</string>
+  <string name="common_send_to">"Envoyer vers"</string>
   <string name="common_sending">"Envoi en cours…"</string>
   <string name="common_sending_failed">"Échec de l’envoi"</string>
   <string name="common_sent">"Envoyé"</string>

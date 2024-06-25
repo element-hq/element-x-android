@@ -17,8 +17,11 @@
 package io.element.android.libraries.matrix.impl.pushers
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
+import io.element.android.libraries.matrix.api.pusher.UnsetHttpPusherData
+import io.element.android.libraries.matrix.impl.exception.mapClientException
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.HttpPusherData
@@ -51,11 +54,20 @@ class RustPushersService(
                     lang = setHttpPusherData.lang
                 )
             }
+                .mapFailure { it.mapClientException() }
         }
     }
 
-    override suspend fun unsetHttpPusher(): Result<Unit> {
-        // TODO Missing client API. We need to set the pusher with Kind == null, but we do not have access to this field from the SDK.
-        return Result.success(Unit)
+    override suspend fun unsetHttpPusher(unsetHttpPusherData: UnsetHttpPusherData): Result<Unit> {
+        return withContext(dispatchers.io) {
+            runCatching {
+                client.deletePusher(
+                    identifiers = PusherIdentifiers(
+                        pushkey = unsetHttpPusherData.pushKey,
+                        appId = unsetHttpPusherData.appId
+                    ),
+                )
+            }
+        }
     }
 }

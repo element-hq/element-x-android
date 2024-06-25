@@ -27,7 +27,7 @@ import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactory
-import io.element.android.features.messages.impl.messagecomposer.MessageComposerContextImpl
+import io.element.android.features.messages.impl.messagecomposer.DefaultMessageComposerContext
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagesummary.FakeMessageSummaryFormatter
 import io.element.android.features.messages.impl.textcomposer.TestRichTextEditorStateFactory
@@ -38,7 +38,6 @@ import io.element.android.features.messages.impl.timeline.components.customreact
 import io.element.android.features.messages.impl.timeline.components.customreaction.FakeEmojibaseProvider
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryPresenter
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetPresenter
-import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuPresenter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
@@ -64,18 +63,17 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatch
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
-import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
-import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
@@ -443,16 +441,25 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle action redact`() = runTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
-        val matrixRoom = FakeMatrixRoom()
+
+        val liveTimeline = FakeTimeline()
+        val matrixRoom = FakeMatrixRoom(liveTimeline = liveTimeline)
+
+        val redactEventLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String? -> Result.success(true) }
+        liveTimeline.redactEventLambda = redactEventLambda
+
         val presenter = createMessagesPresenter(matrixRoom = matrixRoom, coroutineDispatchers = coroutineDispatchers)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
             val initialState = awaitItem()
-            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Redact, aMessageEvent()))
-            assertThat(matrixRoom.redactEventEventIdParam).isEqualTo(AN_EVENT_ID)
+            val messageEvent = aMessageEvent()
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Redact, messageEvent))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
+            assert(redactEventLambda)
+                .isCalledOnce()
+                .with(value(messageEvent.eventId), value(messageEvent.transactionId), value(null))
         }
     }
 
@@ -511,7 +518,7 @@ class MessagesPresenterTest {
             // Initially the composer doesn't have focus, so we don't show the alert
             assertThat(initialState.showReinvitePrompt).isFalse()
             // When the input field is focused we show the alert
-            initialState.composerState.richTextEditorState.requestFocus()
+            initialState.composerState.textEditorState.requestFocus()
             val focusedState = consumeItemsUntilPredicate(timeout = 250.milliseconds) { state ->
                 state.showReinvitePrompt
             }.last()
@@ -534,7 +541,7 @@ class MessagesPresenterTest {
         }.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
-            initialState.composerState.richTextEditorState.requestFocus()
+            initialState.composerState.textEditorState.requestFocus()
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isFalse()
         }
@@ -549,7 +556,7 @@ class MessagesPresenterTest {
         }.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.showReinvitePrompt).isFalse()
-            initialState.composerState.richTextEditorState.requestFocus()
+            initialState.composerState.textEditorState.requestFocus()
             val focusedState = awaitItem()
             assertThat(focusedState.showReinvitePrompt).isFalse()
         }
@@ -754,7 +761,7 @@ class MessagesPresenterTest {
     ): MessagesPresenter {
         val mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom)
         val permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter)
-        val appPreferencesStore = InMemoryAppPreferencesStore(isRichTextEditorEnabled = true)
+        val appPreferencesStore = InMemoryAppPreferencesStore()
         val sessionPreferencesStore = InMemorySessionPreferencesStore()
         val messageComposerPresenter = MessageComposerPresenter(
             appCoroutineScope = this,
@@ -766,14 +773,16 @@ class MessagesPresenterTest {
             mediaSender = mediaSender,
             snackbarDispatcher = SnackbarDispatcher(),
             analyticsService = analyticsService,
-            messageComposerContext = MessageComposerContextImpl(),
+            messageComposerContext = DefaultMessageComposerContext(),
             richTextEditorStateFactory = TestRichTextEditorStateFactory(),
             permissionsPresenterFactory = permissionsPresenterFactory,
-            currentSessionIdHolder = CurrentSessionIdHolder(FakeMatrixClient(A_SESSION_ID)),
             permalinkParser = FakePermalinkParser(),
             permalinkBuilder = FakePermalinkBuilder(),
             timelineController = TimelineController(matrixRoom),
-        )
+        ).apply {
+            showTextFormatting = true
+            isTesting = true
+        }
         val voiceMessageComposerPresenter = VoiceMessageComposerPresenter(
             this,
             FakeVoiceRecorder(),
@@ -809,7 +818,6 @@ class MessagesPresenterTest {
         val readReceiptBottomSheetPresenter = ReadReceiptBottomSheetPresenter()
         val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
         val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)
-        val retrySendMenuPresenter = RetrySendMenuPresenter(room = matrixRoom)
         return MessagesPresenter(
             room = matrixRoom,
             composerPresenter = messageComposerPresenter,
@@ -819,14 +827,12 @@ class MessagesPresenterTest {
             actionListPresenter = actionListPresenter,
             customReactionPresenter = customReactionPresenter,
             reactionSummaryPresenter = reactionSummaryPresenter,
-            retrySendMenuPresenter = retrySendMenuPresenter,
             readReceiptBottomSheetPresenter = readReceiptBottomSheetPresenter,
             networkMonitor = FakeNetworkMonitor(),
             snackbarDispatcher = SnackbarDispatcher(),
             messageSummaryFormatter = FakeMessageSummaryFormatter(),
             navigator = navigator,
             clipboardHelper = clipboardHelper,
-            appPreferencesStore = appPreferencesStore,
             featureFlagsService = FakeFeatureFlagService(),
             buildMeta = aBuildMeta(),
             dispatchers = coroutineDispatchers,

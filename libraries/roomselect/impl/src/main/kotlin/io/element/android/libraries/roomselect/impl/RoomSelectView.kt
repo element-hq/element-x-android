@@ -41,9 +41,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.libraries.designsystem.components.avatar.Avatar
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -59,9 +58,11 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -82,7 +83,7 @@ fun RoomSelectView(
         if (isForwarding) return
         SelectedRooms(
             selectedRooms = selectedRooms,
-            onRoomRemoved = ::onRoomRemoved,
+            onRemoveRoom = ::onRoomRemoved,
             modifier = Modifier.padding(vertical = 16.dp)
         )
     }
@@ -105,6 +106,7 @@ fun RoomSelectView(
                     Text(
                         text = when (state.mode) {
                             RoomSelectMode.Forward -> stringResource(CommonStrings.common_forward_message)
+                            RoomSelectMode.Share -> stringResource(CommonStrings.common_send_to)
                         },
                         style = ElementTheme.typography.aliasScreenTitle
                     )
@@ -192,7 +194,7 @@ fun RoomSelectView(
 @Composable
 private fun SelectedRooms(
     selectedRooms: ImmutableList<RoomSummaryDetails>,
-    onRoomRemoved: (RoomSummaryDetails) -> Unit,
+    onRemoveRoom: (RoomSummaryDetails) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyRow(
@@ -201,7 +203,7 @@ private fun SelectedRooms(
         horizontalArrangement = Arrangement.spacedBy(32.dp)
     ) {
         items(selectedRooms, key = { it.roomId.value }) { roomSummary ->
-            SelectedRoom(roomSummary = roomSummary, onRoomRemoved = onRoomRemoved)
+            SelectedRoom(roomSummary = roomSummary, onRemoveRoom = onRemoveRoom)
         }
     }
 }
@@ -220,13 +222,11 @@ private fun RoomSummaryView(
             .heightIn(56.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Avatar(
-            avatarData = AvatarData(
-                id = summary.roomId.value,
-                name = summary.name,
-                url = summary.avatarUrl,
-                size = AvatarSize.RoomSelectRoomListItem,
-            ),
+        CompositeAvatar(
+            avatarData = summary.getAvatarData(size = AvatarSize.RoomSelectRoomListItem),
+            heroes = summary.heroes.map { user ->
+                user.getAvatarData(size = AvatarSize.RoomSelectRoomListItem)
+            }.toPersistentList()
         )
         Column(
             modifier = Modifier

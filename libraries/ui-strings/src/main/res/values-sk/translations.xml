@@ -85,6 +85,7 @@
   <string name="action_quick_reply">"Rýchla odpoveď"</string>
   <string name="action_quote">"Citovať"</string>
   <string name="action_react">"Reagovať"</string>
+  <string name="action_reject">"Odmietnuť"</string>
   <string name="action_remove">"Odstrániť"</string>
   <string name="action_reply">"Odpovedať"</string>
   <string name="action_reply_in_thread">"Odpovedať vo vlákne"</string>
@@ -121,6 +122,7 @@
   <string name="common_blocked_users">"Blokovaní používatelia"</string>
   <string name="common_bubbles">"Bubliny"</string>
   <string name="common_call_invite">"Prebieha hovor (nepodporované)"</string>
+  <string name="common_call_started">"Hovor sa začal"</string>
   <string name="common_chat_backup">"Záloha konverzácie"</string>
   <string name="common_copyright">"Autorské práva"</string>
   <string name="common_creating_room">"Vytváranie miestnosti…"</string>
@@ -129,15 +131,20 @@
   <string name="common_decryption_error">"Chyba dešifrovania"</string>
   <string name="common_developer_options">"Možnosti pre vývojárov"</string>
   <string name="common_direct_chat">"Priama konverzácia"</string>
+  <string name="common_do_not_show_this_again">"Nezobrazovať toto znova"</string>
   <string name="common_edited_suffix">"(upravené)"</string>
   <string name="common_editing">"Upravuje sa"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Šifrovanie zapnuté"</string>
   <string name="common_enter_your_pin">"Zadajte svoj PIN"</string>
   <string name="common_error">"Chyba"</string>
+  <string name="common_error_registering_pusher_android">"Vyskytla sa chyba, nemusíte dostávať upozornenia na nové správy. Prosím, vyriešte problémy s upozorneniami v nastaveniach.
+
+Dôvod: %1$s."</string>
   <string name="common_everyone">"Všetci"</string>
   <string name="common_failed">"Zlyhalo"</string>
   <string name="common_favourite">"Obľúbené"</string>
+  <string name="common_favourited">"Obľúbené"</string>
   <string name="common_file">"Súbor"</string>
   <string name="common_file_saved_on_disk_android">"Súbor bol uložený do priečinka Stiahnuté súbory"</string>
   <string name="common_forward_message">"Preposlať správu"</string>
@@ -199,6 +206,7 @@
   <string name="common_search_results">"Výsledky hľadania"</string>
   <string name="common_security">"Bezpečnosť"</string>
   <string name="common_seen_by">"Videné"</string>
+  <string name="common_send_to">"Odoslať"</string>
   <string name="common_sending">"Odosiela sa…"</string>
   <string name="common_sending_failed">"Odoslanie zlyhalo"</string>
   <string name="common_sent">"Odoslané"</string>

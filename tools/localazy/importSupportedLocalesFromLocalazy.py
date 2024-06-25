@@ -27,6 +27,8 @@ def normalizeForResourceConfigurations(locale):
             return "in"
         case "zh_TW#Hant":
             return "zh-rTW"
+        case "pt_BR":
+            return "pt-rBR"
         case "zh#Hans":
             return "zh-rCN"
         case _:

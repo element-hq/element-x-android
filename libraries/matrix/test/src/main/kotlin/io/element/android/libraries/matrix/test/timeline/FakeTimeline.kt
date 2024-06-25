@@ -69,6 +69,16 @@ class FakeTimeline(
         mentions: List<Mention>,
     ): Result<Unit> = sendMessageLambda(body, htmlBody, mentions)
 
+    var redactEventLambda: (eventId: EventId?, transactionId: TransactionId?, reason: String?) -> Result<Boolean> = { _, _, _ ->
+        Result.success(true)
+    }
+
+    override suspend fun redactEvent(
+        eventId: EventId?,
+        transactionId: TransactionId?,
+        reason: String?
+    ): Result<Boolean> = redactEventLambda(eventId, transactionId, reason)
+
     var editMessageLambda: (
         originalEventId: EventId?,
         transactionId: TransactionId?,
@@ -104,7 +114,8 @@ class FakeTimeline(
         body: String,
         htmlBody: String?,
         mentions: List<Mention>,
-    ) -> Result<Unit> = { _, _, _, _ ->
+        fromNotification: Boolean,
+    ) -> Result<Unit> = { _, _, _, _, _ ->
         Result.success(Unit)
     }
 
@@ -113,11 +124,13 @@ class FakeTimeline(
         body: String,
         htmlBody: String?,
         mentions: List<Mention>,
+        fromNotification: Boolean,
     ): Result<Unit> = replyMessageLambda(
         eventId,
         body,
         htmlBody,
-        mentions
+        mentions,
+        fromNotification,
     )
 
     var sendImageLambda: (
@@ -216,11 +229,7 @@ class FakeTimeline(
     var forwardEventLambda: (eventId: EventId, roomIds: List<RoomId>) -> Result<Unit> = { _, _ -> Result.success(Unit) }
     override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> = forwardEventLambda(eventId, roomIds)
 
-    var retrySendMessageLambda: (transactionId: TransactionId) -> Result<Unit> = { Result.success(Unit) }
-    override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> = retrySendMessageLambda(transactionId)
-
-    var cancelSendLambda: (transactionId: TransactionId) -> Result<Unit> = { Result.success(Unit) }
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> = cancelSendLambda(transactionId)
+    override suspend fun cancelSend(transactionId: TransactionId): Result<Boolean> = redactEvent(null, transactionId, null)
 
     var sendLocationLambda: (
         body: String,

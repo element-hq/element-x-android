@@ -17,9 +17,9 @@
 package io.element.android.features.migration.impl.migrations
 
 import com.squareup.anvil.annotations.ContributesMultibinding
-import io.element.android.features.preferences.api.store.SessionPreferencesStoreFactory
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStoreFactory
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject

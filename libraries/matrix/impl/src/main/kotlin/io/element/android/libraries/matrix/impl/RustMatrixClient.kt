@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.impl
 
-import io.element.android.appconfig.TimelineConfig
 import io.element.android.libraries.androidutils.file.getSizeOfFiles
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -25,7 +24,6 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
@@ -43,7 +41,6 @@ import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import io.element.android.libraries.matrix.api.roomlist.awaitLoaded
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
@@ -57,21 +54,16 @@ import io.element.android.libraries.matrix.impl.notification.RustNotificationSer
 import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
 import io.element.android.libraries.matrix.impl.oidc.toRustAction
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
-import io.element.android.libraries.matrix.impl.room.MatrixRoomInfoMapper
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
-import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
-import io.element.android.libraries.matrix.impl.room.RustMatrixRoom
-import io.element.android.libraries.matrix.impl.room.map
+import io.element.android.libraries.matrix.impl.room.RustRoomFactory
 import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewMapper
 import io.element.android.libraries.matrix.impl.roomdirectory.RustRoomDirectoryService
 import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
-import io.element.android.libraries.matrix.impl.roomlist.fullRoomWithTimeline
-import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
-import io.element.android.libraries.matrix.impl.util.SessionDirectoryNameProvider
+import io.element.android.libraries.matrix.impl.util.SessionDirectoryProvider
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
@@ -103,14 +95,12 @@ import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.BackupState
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
-import org.matrix.rustcomponents.sdk.FilterTimelineEventType
+import org.matrix.rustcomponents.sdk.ClientException
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
-import org.matrix.rustcomponents.sdk.Room
-import org.matrix.rustcomponents.sdk.RoomListItem
+import org.matrix.rustcomponents.sdk.SendQueueRoomErrorListener
 import org.matrix.rustcomponents.sdk.TaskHandle
-import org.matrix.rustcomponents.sdk.TimelineEventTypeFilter
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
@@ -151,7 +141,6 @@ class RustMatrixClient(
     private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
     private val notificationSettingsService = RustNotificationSettingsService(client, dispatchers)
         .apply { start() }
-    private val roomSyncSubscriber = RoomSyncSubscriber(innerRoomListService, dispatchers)
     private val encryptionService = RustEncryptionService(
         client = client,
         syncService = rustSyncService,
@@ -164,7 +153,7 @@ class RustMatrixClient(
         sessionDispatcher = sessionDispatcher,
     )
 
-    private val sessionDirectoryNameProvider = SessionDirectoryNameProvider()
+    private val sessionDirectoryProvider = SessionDirectoryProvider(sessionStore)
 
     private val isLoggingOut = AtomicBoolean(false)
 
@@ -184,6 +173,7 @@ class RustMatrixClient(
                             isTokenValid = false,
                             loginType = existingData.loginType,
                             passphrase = existingData.passphrase,
+                            sessionPath = existingData.sessionPath,
                         )
                         sessionStore.updateData(newData)
                         Timber.d("Removed session data with token: '...$anonymizedToken'.")
@@ -211,6 +201,7 @@ class RustMatrixClient(
                     isTokenValid = true,
                     loginType = existingData.loginType,
                     passphrase = existingData.passphrase,
+                    sessionPath = existingData.sessionPath,
                 )
                 sessionStore.updateData(newData)
                 Timber.d("Saved new session data with token: '...$anonymizedToken'.")
@@ -238,15 +229,18 @@ class RustMatrixClient(
         sessionCoroutineScope = sessionCoroutineScope,
     )
 
-    private val eventFilters = TimelineConfig.excludedEvents
-        .takeIf { it.isNotEmpty() }
-        ?.let { listStateEventType ->
-            TimelineEventTypeFilter.exclude(
-                listStateEventType.map { stateEventType ->
-                    FilterTimelineEventType.State(stateEventType.map())
-                }
-            )
-        }
+    private val roomFactory = RustRoomFactory(
+        roomListService = roomListService,
+        innerRoomListService = innerRoomListService,
+        sessionId = sessionId,
+        notificationSettingsService = notificationSettingsService,
+        sessionCoroutineScope = sessionCoroutineScope,
+        dispatchers = dispatchers,
+        systemClock = clock,
+        roomContentForwarder = RoomContentForwarder(innerRoomListService),
+        isKeyBackupEnabled = { client.encryption().use { it.backupState() == BackupState.ENABLED } },
+        getSessionData = { sessionStore.getSession(sessionId.value)!! },
+    )
 
     override val mediaLoader: MatrixMediaLoader = RustMediaLoader(
         baseCacheDirectory = baseCacheDirectory,
@@ -255,8 +249,6 @@ class RustMatrixClient(
     )
 
     private val roomMembershipObserver = RoomMembershipObserver()
-
-    private val roomContentForwarder = RoomContentForwarder(innerRoomListService)
 
     private val clientDelegateTaskHandle: TaskHandle? = client.setDelegate(clientDelegate)
 
@@ -288,31 +280,8 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun getRoom(roomId: RoomId): MatrixRoom? = withContext(sessionDispatcher) {
-        // Check if already in memory...
-        var cachedPairOfRoom = pairOfRoom(roomId)
-        if (cachedPairOfRoom == null) {
-            // ... otherwise, lets wait for the SS to load all rooms and check again.
-            roomListService.allRooms.awaitLoaded()
-            cachedPairOfRoom = pairOfRoom(roomId)
-        }
-        cachedPairOfRoom?.let { (roomListItem, fullRoom) ->
-            RustMatrixRoom(
-                sessionId = sessionId,
-                isKeyBackupEnabled = client.encryption().backupState() == BackupState.ENABLED,
-                roomListItem = roomListItem,
-                innerRoom = fullRoom,
-                innerTimeline = fullRoom.timeline(),
-                roomNotificationSettingsService = notificationSettingsService,
-                sessionCoroutineScope = sessionCoroutineScope,
-                coroutineDispatchers = dispatchers,
-                systemClock = clock,
-                roomContentForwarder = roomContentForwarder,
-                sessionData = sessionStore.getSession(sessionId.value)!!,
-                roomSyncSubscriber = roomSyncSubscriber,
-                matrixRoomInfoMapper = MatrixRoomInfoMapper(),
-            )
-        }
+    override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
+        return roomFactory.create(roomId)
     }
 
     /**
@@ -328,18 +297,6 @@ class RustMatrixClient(
                     roomSummaries.map { it.identifier() }.contains(roomId.value)
                 }
                 .first()
-        }
-    }
-
-    private suspend fun pairOfRoom(roomId: RoomId): Pair<RoomListItem, Room>? {
-        val cachedRoomListItem = innerRoomListService.roomOrNull(roomId.value)
-        val fullRoom = cachedRoomListItem?.fullRoomWithTimeline(filter = eventFilters)
-        return if (cachedRoomListItem == null || fullRoom == null) {
-            Timber.d("No room cached for $roomId")
-            null
-        } else {
-            Timber.d("Found room cached for $roomId")
-            Pair(cachedRoomListItem, fullRoom)
         }
     }
 
@@ -487,9 +444,12 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias): Result<RoomPreview> = withContext(sessionDispatcher) {
+    override suspend fun getRoomPreviewFromRoomId(roomId: RoomId, serverNames: List<String>): Result<RoomPreview> = withContext(sessionDispatcher) {
         runCatching {
-            client.getRoomPreview(roomIdOrAlias.identifier).let(RoomPreviewMapper::map)
+            client.getRoomPreviewFromRoomId(
+                roomId = roomId.value,
+                viaServers = serverNames,
+            ).let(RoomPreviewMapper::map)
         }
     }
 
@@ -526,7 +486,7 @@ class RustMatrixClient(
 
     override suspend fun clearCache() {
         close()
-        baseDirectory.deleteSessionDirectory(deleteCryptoDb = false)
+        deleteSessionDirectory(deleteCryptoDb = false)
     }
 
     override suspend fun logout(ignoreSdkError: Boolean): String? = doLogout(
@@ -556,7 +516,7 @@ class RustMatrixClient(
                 }
             }
             close()
-            baseDirectory.deleteSessionDirectory(deleteCryptoDb = true)
+            deleteSessionDirectory(deleteCryptoDb = true)
             if (removeSession) {
                 sessionStore.removeSession(sessionId.value)
             }
@@ -595,11 +555,23 @@ class RustMatrixClient(
         }.distinctUntilChanged()
     }
 
+    override suspend fun setAllSendQueuesEnabled(enabled: Boolean) = withContext(sessionDispatcher) {
+        Timber.i("setAllSendQueuesEnabled($enabled)")
+        client.enableAllSendQueues(enabled)
+    }
+
+    override fun sendQueueDisabledFlow(): Flow<RoomId> = mxCallbackFlow {
+        client.subscribeToSendQueueStatus(object : SendQueueRoomErrorListener {
+            override fun onError(roomId: String, error: ClientException) {
+                trySend(RoomId(roomId))
+            }
+        })
+    }.buffer(Channel.UNLIMITED)
+
     private suspend fun File.getCacheSize(
         includeCryptoDb: Boolean = false,
     ): Long = withContext(sessionDispatcher) {
-        val sessionDirectoryName = sessionDirectoryNameProvider.provides(sessionId)
-        val sessionDirectory = File(this@getCacheSize, sessionDirectoryName)
+        val sessionDirectory = sessionDirectoryProvider.provides(sessionId) ?: return@withContext 0L
         if (includeCryptoDb) {
             sessionDirectory.getSizeOfFiles()
         } else {
@@ -615,11 +587,10 @@ class RustMatrixClient(
         }
     }
 
-    private suspend fun File.deleteSessionDirectory(
+    private suspend fun deleteSessionDirectory(
         deleteCryptoDb: Boolean = false,
     ): Boolean = withContext(sessionDispatcher) {
-        val sessionDirectoryName = sessionDirectoryNameProvider.provides(sessionId)
-        val sessionDirectory = File(this@deleteSessionDirectory, sessionDirectoryName)
+        val sessionDirectory = sessionDirectoryProvider.provides(sessionId) ?: return@withContext false
         if (deleteCryptoDb) {
             // Delete the folder and all its content
             sessionDirectory.deleteRecursively()

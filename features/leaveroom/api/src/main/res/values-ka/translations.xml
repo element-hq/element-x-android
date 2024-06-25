@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_room_alert_empty_subtitle">"დარწმუნებული ბრძანდებით, რომ ამ ოთახის დატოვება გსურთ? თქვენ აქ მარტო ხართ და ჩატის დატოვებისას აქ თქვენს ჩათვლით ვერავინ ვერ გაწევრიანდება."</string>
+  <string name="leave_room_alert_private_subtitle">"დარწმუნებული ბრძანდებით, რომ ამ ოთახის დატოვება გსურთ? ეს ოთახი არ არის საჯარო და მოწვევის გარეშე ვერ შეძლებთ ხელახლა გაწევრიანებას."</string>
+  <string name="leave_room_alert_subtitle">"დარწმუნებული ბრძანდებით, რომ ოთახის დატოვება გსურთ?"</string>
+</resources>

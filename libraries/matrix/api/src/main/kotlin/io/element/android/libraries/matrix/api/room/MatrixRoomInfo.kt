@@ -20,14 +20,17 @@ import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 
 @Immutable
 data class MatrixRoomInfo(
     val id: RoomId,
+    /** The room's name from the room state event if received from sync, or one that's been computed otherwise. */
     val name: String?,
+    /** Room name as defined by the room state event only. */
+    val rawName: String?,
     val topic: String?,
     val avatarUrl: String?,
     val isDirect: Boolean,
@@ -38,7 +41,6 @@ data class MatrixRoomInfo(
     val canonicalAlias: RoomAlias?,
     val alternativeAliases: ImmutableList<String>,
     val currentUserMembership: CurrentUserMembership,
-    val latestEvent: EventTimelineItem?,
     val inviter: RoomMember?,
     val activeMembersCount: Long,
     val invitedMembersCount: Long,
@@ -48,5 +50,6 @@ data class MatrixRoomInfo(
     val notificationCount: Long,
     val userDefinedNotificationMode: RoomNotificationMode?,
     val hasRoomCall: Boolean,
-    val activeRoomCallParticipants: ImmutableList<String>
+    val activeRoomCallParticipants: ImmutableList<String>,
+    val heroes: ImmutableList<MatrixUser>,
 )

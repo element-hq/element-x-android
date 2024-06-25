@@ -18,12 +18,13 @@ package io.element.android.x.di
 
 import com.squareup.anvil.annotations.ContributesTo
 import io.element.android.features.api.MigrationEntryPoint
+import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.lockscreen.api.LockScreenService
-import io.element.android.features.preferences.api.store.AppPreferencesStore
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.tracing.TracingService
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 
 @ContributesTo(AppScope::class)
 interface AppBindings {
@@ -38,4 +39,6 @@ interface AppBindings {
     fun preferencesStore(): AppPreferencesStore
 
     fun migrationEntryPoint(): MigrationEntryPoint
+
+    fun lockScreenEntryPoint(): LockScreenEntryPoint
 }

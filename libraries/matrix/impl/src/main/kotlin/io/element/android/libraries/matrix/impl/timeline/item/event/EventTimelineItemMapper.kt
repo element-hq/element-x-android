@@ -77,9 +77,14 @@ fun RustEventSendState?.map(): LocalEventSendState? {
     return when (this) {
         null -> null
         RustEventSendState.NotSentYet -> LocalEventSendState.NotSentYet
-        is RustEventSendState.SendingFailed -> LocalEventSendState.SendingFailed(error)
+        is RustEventSendState.SendingFailed -> {
+            if (this.isRecoverable) {
+                LocalEventSendState.SendingFailed.Recoverable(this.error)
+            } else {
+                LocalEventSendState.SendingFailed.Unrecoverable(this.error)
+            }
+        }
         is RustEventSendState.Sent -> LocalEventSendState.Sent(EventId(eventId))
-        RustEventSendState.Cancelled -> LocalEventSendState.Canceled
     }
 }
 

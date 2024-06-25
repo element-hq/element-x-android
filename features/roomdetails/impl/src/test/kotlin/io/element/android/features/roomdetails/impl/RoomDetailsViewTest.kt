@@ -23,6 +23,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -120,12 +121,13 @@ class RoomDetailsViewTest {
                     eventSink = EventsRecorder(expectEvents = false),
                     canInvite = true,
                 ),
-                onJoinCallClicked = callback,
+                onJoinCallClick = callback,
             )
             rule.clickOn(CommonStrings.action_call)
         }
     }
 
+    @Config(qualifiers = "h1024dp")
     @Test
     fun `click on add topic emit expected event`() {
         ensureCalledOnceWithParam<RoomDetailsAction>(RoomDetailsAction.AddTopic) { callback ->
@@ -134,7 +136,7 @@ class RoomDetailsViewTest {
                     eventSink = EventsRecorder(expectEvents = false),
                     roomTopic = RoomTopicState.CanAddTopic,
                 ),
-                onActionClicked = callback,
+                onActionClick = callback,
             )
             rule.clickOn(R.string.screen_room_details_add_topic_title)
         }
@@ -148,7 +150,7 @@ class RoomDetailsViewTest {
                     eventSink = EventsRecorder(expectEvents = false),
                     canEdit = true,
                 ),
-                onActionClicked = callback,
+                onActionClick = callback,
             )
             val menuContentDescription = rule.activity.getString(CommonStrings.a11y_user_menu)
             rule.onNodeWithContentDescription(menuContentDescription).performClick()
@@ -176,7 +178,11 @@ class RoomDetailsViewTest {
     fun `click on avatar test on DM`() {
         val eventsRecorder = EventsRecorder<RoomDetailsEvent>(expectEvents = false)
         val state = aRoomDetailsState(
-            roomType = RoomDetailsType.Dm(aDmRoomMember(avatarUrl = "an_avatar_url")),
+            roomType = RoomDetailsType.Dm(
+                aRoomMember(),
+                aDmRoomMember(avatarUrl = "an_avatar_url"),
+            ),
+            roomName = "Daniel",
             eventSink = eventsRecorder,
         )
         val callback = EnsureCalledOnceWithTwoParams("Daniel", "an_avatar_url")
@@ -248,7 +254,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
         eventSink = EventsRecorder(expectEvents = false),
     ),
     goBack: () -> Unit = EnsureNeverCalled(),
-    onActionClicked: (RoomDetailsAction) -> Unit = EnsureNeverCalledWithParam(),
+    onActionClick: (RoomDetailsAction) -> Unit = EnsureNeverCalledWithParam(),
     onShareRoom: () -> Unit = EnsureNeverCalled(),
     openRoomMemberList: () -> Unit = EnsureNeverCalled(),
     openRoomNotificationSettings: () -> Unit = EnsureNeverCalled(),
@@ -256,13 +262,13 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
     openAvatarPreview: (name: String, url: String) -> Unit = EnsureNeverCalledWithTwoParams(),
     openPollHistory: () -> Unit = EnsureNeverCalled(),
     openAdminSettings: () -> Unit = EnsureNeverCalled(),
-    onJoinCallClicked: () -> Unit = EnsureNeverCalled(),
+    onJoinCallClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         RoomDetailsView(
             state = state,
             goBack = goBack,
-            onActionClicked = onActionClicked,
+            onActionClick = onActionClick,
             onShareRoom = onShareRoom,
             openRoomMemberList = openRoomMemberList,
             openRoomNotificationSettings = openRoomNotificationSettings,
@@ -270,7 +276,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
             openAvatarPreview = openAvatarPreview,
             openPollHistory = openPollHistory,
             openAdminSettings = openAdminSettings,
-            onJoinCallClicked = onJoinCallClicked,
+            onJoinCallClick = onJoinCallClick,
         )
     }
 }

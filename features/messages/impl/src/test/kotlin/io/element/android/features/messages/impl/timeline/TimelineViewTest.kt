@@ -29,6 +29,7 @@ import io.element.android.features.messages.impl.typing.aTypingNotificationState
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EnsureNeverCalledWithTwoParams
 import io.element.android.tests.testutils.EventsRecorder
@@ -101,32 +102,32 @@ class TimelineViewTest {
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setTimelineView(
     state: TimelineState,
     typingNotificationState: TypingNotificationState = aTypingNotificationState(),
-    onUserDataClicked: (UserId) -> Unit = EnsureNeverCalledWithParam(),
-    onLinkClicked: (String) -> Unit = EnsureNeverCalledWithParam(),
-    onMessageClicked: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
-    onMessageLongClicked: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
-    onTimestampClicked: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
+    onUserDataClick: (UserId) -> Unit = EnsureNeverCalledWithParam(),
+    onLinkClick: (String) -> Unit = EnsureNeverCalledWithParam(),
+    onMessageClick: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
+    onMessageLongClick: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
     onSwipeToReply: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
-    onReactionClicked: (emoji: String, TimelineItem.Event) -> Unit = EnsureNeverCalledWithTwoParams(),
-    onReactionLongClicked: (emoji: String, TimelineItem.Event) -> Unit = EnsureNeverCalledWithTwoParams(),
-    onMoreReactionsClicked: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
+    onReactionClick: (emoji: String, TimelineItem.Event) -> Unit = EnsureNeverCalledWithTwoParams(),
+    onReactionLongClick: (emoji: String, TimelineItem.Event) -> Unit = EnsureNeverCalledWithTwoParams(),
+    onMoreReactionsClick: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
     onReadReceiptClick: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
+    onJoinCallClick: () -> Unit = EnsureNeverCalled(),
     forceJumpToBottomVisibility: Boolean = false,
 ) {
     setContent {
         TimelineView(
             state = state,
             typingNotificationState = typingNotificationState,
-            onUserDataClicked = onUserDataClicked,
-            onLinkClicked = onLinkClicked,
-            onMessageClicked = onMessageClicked,
-            onMessageLongClicked = onMessageLongClicked,
-            onTimestampClicked = onTimestampClicked,
+            onUserDataClick = onUserDataClick,
+            onLinkClick = onLinkClick,
+            onMessageClick = onMessageClick,
+            onMessageLongClick = onMessageLongClick,
             onSwipeToReply = onSwipeToReply,
-            onReactionClicked = onReactionClicked,
-            onReactionLongClicked = onReactionLongClicked,
-            onMoreReactionsClicked = onMoreReactionsClicked,
+            onReactionClick = onReactionClick,
+            onReactionLongClick = onReactionLongClick,
+            onMoreReactionsClick = onMoreReactionsClick,
             onReadReceiptClick = onReadReceiptClick,
+            onJoinCallClick = onJoinCallClick,
             forceJumpToBottomVisibility = forceJumpToBottomVisibility,
         )
     }

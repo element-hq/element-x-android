@@ -51,21 +51,21 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun RoomNotificationSettingsView(
     state: RoomNotificationSettingsState,
     onShowGlobalNotifications: () -> Unit,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (state.showUserDefinedSettingStyle) {
         UserDefinedRoomNotificationSettingsView(
             state = state,
             modifier = modifier,
-            onBackPressed = onBackPressed,
+            onBackClick = onBackClick,
         )
     } else {
         RoomSpecificNotificationSettingsView(
             state = state,
             modifier = modifier,
             onShowGlobalNotifications = onShowGlobalNotifications,
-            onBackPressed = onBackPressed,
+            onBackClick = onBackClick,
         )
     }
 }
@@ -74,14 +74,14 @@ fun RoomNotificationSettingsView(
 private fun RoomSpecificNotificationSettingsView(
     state: RoomNotificationSettingsState,
     onShowGlobalNotifications: () -> Unit,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier,
         topBar = {
             RoomNotificationSettingsTopBar(
-                onBackPressed = { onBackPressed() }
+                onBackClick = { onBackClick() }
             )
         }
     ) { padding ->
@@ -136,7 +136,7 @@ private fun RoomSpecificNotificationSettingsView(
                         RoomNotificationSettingsOption(
                             roomNotificationSettingsItem = RoomNotificationSettingsItem(state.defaultRoomNotificationMode, defaultModeTitle),
                             isSelected = true,
-                            onOptionSelected = { },
+                            onSelectOption = { },
                             displayMentionsOnlyDisclaimer = displayMentionsOnlyDisclaimer,
                             enabled = true
                         )
@@ -148,8 +148,8 @@ private fun RoomSpecificNotificationSettingsView(
                         selected = state.displayNotificationMode,
                         enabled = !state.displayIsDefault.orTrue(),
                         displayMentionsOnlyDisclaimer = state.displayMentionsOnlyDisclaimer,
-                        onOptionSelected = {
-                            state.eventSink(RoomNotificationSettingsEvents.RoomNotificationModeChanged(it.mode))
+                        onSelectOption = {
+                            state.eventSink(RoomNotificationSettingsEvents.ChangeRoomNotificationMode(it.mode))
                         },
                     )
                 }
@@ -175,7 +175,7 @@ private fun RoomSpecificNotificationSettingsView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RoomNotificationSettingsTopBar(
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
 ) {
     TopAppBar(
         title = {
@@ -184,7 +184,7 @@ private fun RoomNotificationSettingsTopBar(
                 style = ElementTheme.typography.aliasScreenTitle,
             )
         },
-        navigationIcon = { BackButton(onClick = onBackPressed) },
+        navigationIcon = { BackButton(onClick = onBackClick) },
     )
 }
 
@@ -196,6 +196,6 @@ internal fun RoomNotificationSettingsViewPreview(
     RoomNotificationSettingsView(
         state = state,
         onShowGlobalNotifications = {},
-        onBackPressed = {},
+        onBackClick = {},
     )
 }

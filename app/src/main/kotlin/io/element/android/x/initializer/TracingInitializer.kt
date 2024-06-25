@@ -20,9 +20,11 @@ import android.content.Context
 import android.system.Os
 import androidx.preference.PreferenceManager
 import androidx.startup.Initializer
-import io.element.android.features.preferences.impl.developer.tracing.SharedPrefTracingConfigurationStore
+import io.element.android.features.preferences.impl.developer.tracing.SharedPreferencesTracingConfigurationStore
 import io.element.android.features.preferences.impl.developer.tracing.TargetLogLevelMapBuilder
+import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
 import io.element.android.libraries.matrix.api.tracing.TracingFilterConfigurations
 import io.element.android.libraries.matrix.api.tracing.WriteToFilesConfiguration
@@ -36,37 +38,43 @@ class TracingInitializer : Initializer<Unit> {
         val tracingService = appBindings.tracingService()
         val bugReporter = appBindings.bugReporter()
         Timber.plant(tracingService.createTimberTree())
-        val tracingConfiguration = if (BuildConfig.DEBUG) {
-            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-            val store = SharedPrefTracingConfigurationStore(prefs)
-            val builder = TargetLogLevelMapBuilder(store)
+        val tracingConfiguration = if (BuildConfig.BUILD_TYPE == BuildType.RELEASE.name) {
             TracingConfiguration(
-                filterConfiguration = TracingFilterConfigurations.custom(builder.getCurrentMap()),
-                writesToLogcat = true,
-                writesToFilesConfiguration = WriteToFilesConfiguration.Disabled
+                filterConfiguration = TracingFilterConfigurations.release,
+                writesToLogcat = false,
+                writesToFilesConfiguration = defaultWriteToDiskConfiguration(bugReporter),
             )
         } else {
-            val config = if (BuildConfig.BUILD_TYPE == "nightly") {
-                TracingFilterConfigurations.nightly
-            } else {
-                TracingFilterConfigurations.release
-            }
+            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+            val store = SharedPreferencesTracingConfigurationStore(prefs)
+            val builder = TargetLogLevelMapBuilder(
+                tracingConfigurationStore = store,
+                defaultConfig = if (BuildConfig.BUILD_TYPE == BuildType.NIGHTLY.name) {
+                    TracingFilterConfigurations.nightly
+                } else {
+                    TracingFilterConfigurations.debug
+                }
+            )
             TracingConfiguration(
-                filterConfiguration = config,
-                writesToLogcat = false,
-                writesToFilesConfiguration = WriteToFilesConfiguration.Enabled(
-                    directory = bugReporter.logDirectory().absolutePath,
-                    filenamePrefix = "logs",
-                    filenameSuffix = null,
-                    // Keep a minimum of 1 week of log files.
-                    numberOfFiles = 7 * 24,
-                )
+                filterConfiguration = TracingFilterConfigurations.custom(builder.getCurrentMap()),
+                writesToLogcat = BuildConfig.DEBUG,
+                writesToFilesConfiguration = defaultWriteToDiskConfiguration(bugReporter),
             )
         }
         bugReporter.setCurrentTracingFilter(tracingConfiguration.filterConfiguration.filter)
         tracingService.setupTracing(tracingConfiguration)
         // Also set env variable for rust back trace
         Os.setenv("RUST_BACKTRACE", "1", true)
+    }
+
+    private fun defaultWriteToDiskConfiguration(bugReporter: BugReporter): WriteToFilesConfiguration.Enabled {
+        return WriteToFilesConfiguration.Enabled(
+            directory = bugReporter.logDirectory().absolutePath,
+            filenamePrefix = "logs",
+            filenameSuffix = null,
+            // Keep a minimum of 1 week of log files.
+            numberOfFiles = 7 * 24,
+        )
     }
 
     override fun dependencies(): List<Class<out Initializer<*>>> = mutableListOf()

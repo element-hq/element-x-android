@@ -16,18 +16,20 @@
 
 package io.element.android.features.lockscreen.impl
 
+import android.content.Context
+import android.content.Intent
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
+import io.element.android.features.lockscreen.impl.unlock.activity.PinUnlockActivity
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultLockScreenEntryPoint @Inject constructor() : LockScreenEntryPoint {
-    override fun nodeBuilder(parentNode: Node, buildContext: BuildContext): LockScreenEntryPoint.NodeBuilder {
-        var innerTarget: LockScreenEntryPoint.Target = LockScreenEntryPoint.Target.Unlock
+    override fun nodeBuilder(parentNode: Node, buildContext: BuildContext, navTarget: LockScreenEntryPoint.Target): LockScreenEntryPoint.NodeBuilder {
         val callbacks = mutableListOf<LockScreenEntryPoint.Callback>()
 
         return object : LockScreenEntryPoint.NodeBuilder {
@@ -36,15 +38,9 @@ class DefaultLockScreenEntryPoint @Inject constructor() : LockScreenEntryPoint {
                 return this
             }
 
-            override fun target(target: LockScreenEntryPoint.Target): LockScreenEntryPoint.NodeBuilder {
-                innerTarget = target
-                return this
-            }
-
             override fun build(): Node {
                 val inputs = LockScreenFlowNode.Inputs(
-                    when (innerTarget) {
-                        LockScreenEntryPoint.Target.Unlock -> LockScreenFlowNode.NavTarget.Unlock
+                    when (navTarget) {
                         LockScreenEntryPoint.Target.Setup -> LockScreenFlowNode.NavTarget.Setup
                         LockScreenEntryPoint.Target.Settings -> LockScreenFlowNode.NavTarget.Settings
                     }
@@ -53,5 +49,9 @@ class DefaultLockScreenEntryPoint @Inject constructor() : LockScreenEntryPoint {
                 return parentNode.createNode<LockScreenFlowNode>(buildContext, plugins)
             }
         }
+    }
+
+    override fun pinUnlockIntent(context: Context): Intent {
+        return PinUnlockActivity.newIntent(context)
     }
 }

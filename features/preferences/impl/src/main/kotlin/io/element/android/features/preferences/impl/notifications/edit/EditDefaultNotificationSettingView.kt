@@ -25,9 +25,8 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
-import io.element.android.libraries.designsystem.components.avatar.Avatar
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
@@ -37,7 +36,9 @@ import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.toPersistentList
 
 /**
  * A view that allows a user to edit the default notification setting for rooms. This can be set separately
@@ -47,7 +48,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun EditDefaultNotificationSettingView(
     state: EditDefaultNotificationSettingState,
     openRoomNotificationSettings: (roomId: RoomId) -> Unit,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val title = if (state.isOneToOne) {
@@ -57,7 +58,7 @@ fun EditDefaultNotificationSettingView(
     }
     PreferencePage(
         modifier = modifier,
-        onBackPressed = onBackPressed,
+        onBackClick = onBackClick,
         title = stringResource(id = title)
     ) {
         // Only ALL_MESSAGES and MENTIONS_AND_KEYWORDS_ONLY are valid global defaults.
@@ -68,7 +69,10 @@ fun EditDefaultNotificationSettingView(
         } else {
             R.string.screen_notification_settings_edit_screen_group_section_header
         }
-        PreferenceCategory(title = stringResource(id = categoryTitle)) {
+        PreferenceCategory(
+            title = stringResource(id = categoryTitle),
+            showTopDivider = false,
+        ) {
             if (state.mode != null) {
                 Column(modifier = Modifier.selectableGroup()) {
                     validModes.forEach { item ->
@@ -76,7 +80,7 @@ fun EditDefaultNotificationSettingView(
                             mode = item,
                             isSelected = state.mode == item,
                             displayMentionsOnlyDisclaimer = state.displayMentionsOnlyDisclaimer,
-                            onOptionSelected = { state.eventSink(EditDefaultNotificationSettingStateEvents.SetNotificationMode(it)) }
+                            onSelectOption = { state.eventSink(EditDefaultNotificationSettingStateEvents.SetNotificationMode(it)) }
                         )
                     }
                 }
@@ -93,12 +97,6 @@ fun EditDefaultNotificationSettingView(
                         RoomNotificationMode.MUTE -> stringResource(id = CommonStrings.common_mute)
                         null -> ""
                     }
-                    val avatarData = AvatarData(
-                        id = summary.identifier(),
-                        name = summary.details.name,
-                        url = summary.details.avatarUrl,
-                        size = AvatarSize.CustomRoomNotificationSetting,
-                    )
                     ListItem(
                         headlineContent = {
                             val roomName = summary.details.name
@@ -111,7 +109,12 @@ fun EditDefaultNotificationSettingView(
                             Text(text = subtitle)
                         },
                         leadingContent = ListItemContent.Custom {
-                            Avatar(avatarData = avatarData)
+                            CompositeAvatar(
+                                avatarData = summary.details.getAvatarData(size = AvatarSize.CustomRoomNotificationSetting),
+                                heroes = summary.details.heroes.map { user ->
+                                    user.getAvatarData(size = AvatarSize.CustomRoomNotificationSetting)
+                                }.toPersistentList()
+                            )
                         },
                         onClick = {
                             openRoomNotificationSettings(summary.details.roomId)
@@ -137,6 +140,6 @@ internal fun EditDefaultNotificationSettingViewPreview(
     EditDefaultNotificationSettingView(
         state = state,
         openRoomNotificationSettings = {},
-        onBackPressed = {},
+        onBackClick = {},
     )
 }

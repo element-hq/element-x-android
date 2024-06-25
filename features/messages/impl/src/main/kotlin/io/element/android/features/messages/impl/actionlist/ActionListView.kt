@@ -59,6 +59,7 @@ import io.element.android.features.messages.impl.sender.SenderName
 import io.element.android.features.messages.impl.sender.SenderNameMode
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
@@ -72,7 +73,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
-import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatterImpl
+import io.element.android.features.messages.impl.utils.messagesummary.DefaultMessageSummaryFormatter
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -94,38 +95,38 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun ActionListView(
     state: ActionListState,
-    onActionSelected: (action: TimelineItemAction, TimelineItem.Event) -> Unit,
-    onEmojiReactionClicked: (String, TimelineItem.Event) -> Unit,
-    onCustomReactionClicked: (TimelineItem.Event) -> Unit,
+    onSelectAction: (action: TimelineItemAction, TimelineItem.Event) -> Unit,
+    onEmojiReactionClick: (String, TimelineItem.Event) -> Unit,
+    onCustomReactionClick: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val sheetState = rememberModalBottomSheetState()
     val coroutineScope = rememberCoroutineScope()
     val targetItem = (state.target as? ActionListState.Target.Success)?.event
 
-    fun onItemActionClicked(
+    fun onItemActionClick(
         itemAction: TimelineItemAction
     ) {
         if (targetItem == null) return
         sheetState.hide(coroutineScope) {
             state.eventSink(ActionListEvents.Clear)
-            onActionSelected(itemAction, targetItem)
+            onSelectAction(itemAction, targetItem)
         }
     }
 
-    fun onEmojiReactionClicked(emoji: String) {
+    fun onEmojiReactionClick(emoji: String) {
         if (targetItem == null) return
         sheetState.hide(coroutineScope) {
             state.eventSink(ActionListEvents.Clear)
-            onEmojiReactionClicked(emoji, targetItem)
+            onEmojiReactionClick(emoji, targetItem)
         }
     }
 
-    fun onCustomReactionClicked() {
+    fun onCustomReactionClick() {
         if (targetItem == null) return
         sheetState.hide(coroutineScope) {
             state.eventSink(ActionListEvents.Clear)
-            onCustomReactionClicked(targetItem)
+            onCustomReactionClick(targetItem)
         }
     }
 
@@ -141,9 +142,9 @@ fun ActionListView(
         ) {
             SheetContent(
                 state = state,
-                onActionClicked = ::onItemActionClicked,
-                onEmojiReactionClicked = ::onEmojiReactionClicked,
-                onCustomReactionClicked = ::onCustomReactionClicked,
+                onActionClick = ::onItemActionClick,
+                onEmojiReactionClick = ::onEmojiReactionClick,
+                onCustomReactionClick = ::onCustomReactionClick,
                 modifier = Modifier
                     .navigationBarsPadding()
                     .imePadding()
@@ -155,9 +156,9 @@ fun ActionListView(
 @Composable
 private fun SheetContent(
     state: ActionListState,
-    onActionClicked: (TimelineItemAction) -> Unit,
-    onEmojiReactionClicked: (String) -> Unit,
-    onCustomReactionClicked: () -> Unit,
+    onActionClick: (TimelineItemAction) -> Unit,
+    onEmojiReactionClick: (String) -> Unit,
+    onCustomReactionClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when (val target = state.target) {
@@ -188,8 +189,8 @@ private fun SheetContent(
                     item {
                         EmojiReactionsRow(
                             highlightedEmojis = target.event.reactionsState.highlightedKeys,
-                            onEmojiReactionClicked = onEmojiReactionClicked,
-                            onCustomReactionClicked = onCustomReactionClicked,
+                            onEmojiReactionClick = onEmojiReactionClick,
+                            onCustomReactionClick = onCustomReactionClick,
                             modifier = Modifier.fillMaxWidth(),
                         )
                         HorizontalDivider()
@@ -200,7 +201,7 @@ private fun SheetContent(
                 ) { action ->
                     ListItem(
                         modifier = Modifier.clickable {
-                            onActionClicked(action)
+                            onActionClick(action)
                         },
                         headlineContent = {
                             Text(text = stringResource(id = action.titleRes))
@@ -229,7 +230,7 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
     }
 
     val context = LocalContext.current
-    val formatter = remember(context) { MessageSummaryFormatterImpl(context) }
+    val formatter = remember(context) { DefaultMessageSummaryFormatter(context) }
     val textContent = remember(event.content) { formatter.format(event) }
 
     when (event.content) {
@@ -265,6 +266,9 @@ private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modif
         is TimelineItemLegacyCallInviteContent -> {
             content = { ContentForBody(textContent) }
         }
+        is TimelineItemCallNotifyContent -> {
+            content = { ContentForBody(stringResource(CommonStrings.common_call_started)) }
+        }
     }
     Row(modifier = modifier) {
         icon()
@@ -292,8 +296,8 @@ private val emojiRippleRadius = 24.dp
 @Composable
 private fun EmojiReactionsRow(
     highlightedEmojis: ImmutableList<String>,
-    onEmojiReactionClicked: (String) -> Unit,
-    onCustomReactionClicked: () -> Unit,
+    onEmojiReactionClick: (String) -> Unit,
+    onCustomReactionClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -310,7 +314,7 @@ private fun EmojiReactionsRow(
         )
         for (emoji in defaultEmojis) {
             val isHighlighted = highlightedEmojis.contains(emoji)
-            EmojiButton(emoji, isHighlighted, onEmojiReactionClicked)
+            EmojiButton(emoji, isHighlighted, onEmojiReactionClick)
         }
         Box(
             modifier = Modifier
@@ -325,7 +329,7 @@ private fun EmojiReactionsRow(
                     .size(24.dp)
                     .clickable(
                         enabled = true,
-                        onClick = onCustomReactionClicked,
+                        onClick = onCustomReactionClick,
                         indication = rememberRipple(bounded = false, radius = emojiRippleRadius),
                         interactionSource = remember { MutableInteractionSource() }
                     )
@@ -338,7 +342,7 @@ private fun EmojiReactionsRow(
 private fun EmojiButton(
     emoji: String,
     isHighlighted: Boolean,
-    onClicked: (String) -> Unit,
+    onClick: (String) -> Unit,
 ) {
     val backgroundColor = if (isHighlighted) {
         ElementTheme.colors.bgActionPrimaryRest
@@ -365,7 +369,7 @@ private fun EmojiButton(
             modifier = Modifier
                 .clickable(
                     enabled = true,
-                    onClick = { onClicked(emoji) },
+                    onClick = { onClick(emoji) },
                     indication = rememberRipple(bounded = false, radius = emojiRippleRadius),
                     interactionSource = remember { MutableInteractionSource() }
                 )
@@ -380,8 +384,8 @@ internal fun SheetContentPreview(
 ) = ElementPreview {
     SheetContent(
         state = state,
-        onActionClicked = {},
-        onEmojiReactionClicked = {},
-        onCustomReactionClicked = {},
+        onActionClick = {},
+        onEmojiReactionClick = {},
+        onCustomReactionClick = {},
     )
 }

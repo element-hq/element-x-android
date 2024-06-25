@@ -28,11 +28,11 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.mapbox.mapboxsdk.camera.CameraPosition
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
-import com.mapbox.mapboxsdk.maps.MapboxMap
-import com.mapbox.mapboxsdk.maps.Projection
 import kotlinx.parcelize.Parcelize
+import org.maplibre.android.camera.CameraPosition
+import org.maplibre.android.camera.CameraUpdateFactory
+import org.maplibre.android.maps.MapLibreMap
+import org.maplibre.android.maps.Projection
 
 /**
  * Create and [rememberSaveable] a [CameraPositionState] using [CameraPositionState.Saver].
@@ -49,7 +49,7 @@ public inline fun rememberCameraPositionState(
 
 /**
  * A state object that can be hoisted to control and observe the map's camera state.
- * A [CameraPositionState] may only be used by a single [MapboxMap] composable at a time
+ * A [CameraPositionState] may only be used by a single [MapLibreMap] composable at a time
  * as it reflects instance state for a single view of a map.
  *
  * @param position the initial camera position
@@ -143,15 +143,15 @@ public class CameraPositionState(
 
     // The map currently associated with this CameraPositionState.
     // Guarded by `lock`.
-    private var map: MapboxMap? by mutableStateOf(null)
+    private var map: MapLibreMap? by mutableStateOf(null)
 
     // The current map is set and cleared by side effect.
     // There can be only one associated at a time.
-    internal fun setMap(map: MapboxMap?) {
+    internal fun setMap(map: MapLibreMap?) {
         synchronized(lock) {
             if (this.map == null && map == null) return
             if (this.map != null && map != null) {
-                error("CameraPositionState may only be associated with one MapboxMap at a time")
+                error("CameraPositionState may only be associated with one MapLibreMap at a time")
             }
             this.map = map
             if (map == null) {
@@ -179,7 +179,7 @@ internal val LocalCameraPositionState = staticCompositionLocalOf { CameraPositio
 
 /** The current [CameraPositionState] used by the map. */
 public val currentCameraPositionState: CameraPositionState
-    @[MapboxMapComposable ReadOnlyComposable Composable]
+    @[MapLibreMapComposable ReadOnlyComposable Composable]
     get() = LocalCameraPositionState.current
 
 @Parcelize

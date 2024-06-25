@@ -16,47 +16,38 @@
 
 package io.element.android.features.securebackup.impl.createkey
 
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.securebackup.impl.R
+import io.element.android.libraries.designsystem.atomic.organisms.NumberedListOrganism
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.modifiers.squareSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Scaffold
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.annotatedTextWithBold
+import kotlinx.collections.immutable.toImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateNewRecoveryKeyView(
     desktopApplicationName: String,
-    onBackClicked: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(title = {}, navigationIcon = { BackButton(onClick = onBackClicked) })
+            TopAppBar(title = {}, navigationIcon = { BackButton(onClick = onBackClick) })
         }
     ) { padding ->
         Column(
@@ -74,55 +65,22 @@ fun CreateNewRecoveryKeyView(
 
 @Composable
 private fun Content(desktopApplicationName: String) {
-    Column(modifier = Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
-        Item(index = 1, text = AnnotatedString(stringResource(R.string.screen_create_new_recovery_key_list_item_1, desktopApplicationName)))
-        Item(index = 2, text = AnnotatedString(stringResource(R.string.screen_create_new_recovery_key_list_item_2)))
-        Item(
-            index = 3,
-            text = buildAnnotatedString {
-                val resetAllAction = stringResource(R.string.screen_create_new_recovery_key_list_item_3_reset_all)
-                val text = stringResource(R.string.screen_create_new_recovery_key_list_item_3, resetAllAction)
-                append(text)
-                val start = text.indexOf(resetAllAction)
-                val end = start + resetAllAction.length
-                if (start in text.indices && end in text.indices) {
-                    addStyle(SpanStyle(fontWeight = FontWeight.Bold), start, end)
-                }
-            }
+    val listItems = buildList {
+        add(AnnotatedString(stringResource(R.string.screen_create_new_recovery_key_list_item_1, desktopApplicationName)))
+        add(AnnotatedString(stringResource(R.string.screen_create_new_recovery_key_list_item_2)))
+        add(
+            annotatedTextWithBold(
+                text = stringResource(
+                    id = R.string.screen_create_new_recovery_key_list_item_3,
+                    stringResource(R.string.screen_create_new_recovery_key_list_item_3_reset_all)
+                ),
+                boldText = stringResource(R.string.screen_create_new_recovery_key_list_item_3_reset_all)
+            )
         )
-        Item(index = 4, text = AnnotatedString(stringResource(R.string.screen_create_new_recovery_key_list_item_4)))
-        Item(index = 5, text = AnnotatedString(stringResource(R.string.screen_create_new_recovery_key_list_item_5)))
+        add(AnnotatedString(stringResource(R.string.screen_create_new_recovery_key_list_item_4)))
+        add(AnnotatedString(stringResource(R.string.screen_create_new_recovery_key_list_item_5)))
     }
-}
-
-@Composable
-private fun Item(index: Int, text: AnnotatedString) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        ItemNumber(index = index)
-        Text(text = text, style = ElementTheme.typography.fontBodyMdRegular, color = ElementTheme.colors.textPrimary)
-    }
-}
-
-@Composable
-private fun ItemNumber(
-    index: Int,
-) {
-    val color = ElementTheme.colors.textPlaceholder
-    Box(
-        modifier = Modifier
-            .border(1.dp, color, CircleShape)
-            .squareSize()
-    ) {
-        Text(
-            modifier = Modifier.padding(1.5.dp),
-            text = index.toString(),
-            style = ElementTheme.typography.fontBodySmRegular,
-            color = color,
-            textAlign = TextAlign.Center,
-        )
-    }
+    NumberedListOrganism(modifier = Modifier.padding(horizontal = 16.dp), items = listItems.toImmutableList())
 }
 
 @PreviewsDayNight
@@ -131,7 +89,7 @@ internal fun CreateNewRecoveryKeyViewPreview() {
     ElementPreview {
         CreateNewRecoveryKeyView(
             desktopApplicationName = "Element",
-            onBackClicked = {},
+            onBackClick = {},
         )
     }
 }

@@ -53,7 +53,7 @@ import io.element.android.features.roomlist.impl.model.RoomListRoomSummaryProvid
 import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
 import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
-import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -105,10 +105,10 @@ internal fun RoomSummaryRow(
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 InviteButtonsRow(
-                    onAcceptClicked = {
+                    onAcceptClick = {
                         eventSink(RoomListEvents.AcceptInvite(room))
                     },
-                    onDeclineClicked = {
+                    onDeclineClick = {
                         eventSink(RoomListEvents.DeclineInvite(room))
                     }
                 )
@@ -158,7 +158,10 @@ private fun RoomSummaryScaffoldRow(
             .padding(horizontal = 16.dp, vertical = 11.dp)
             .height(IntrinsicSize.Min),
     ) {
-        Avatar(room.avatarData)
+        CompositeAvatar(
+            avatarData = room.avatarData,
+            heroes = room.heroes,
+        )
         Spacer(modifier = Modifier.width(16.dp))
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -299,8 +302,8 @@ private fun InviteNameAndIndicatorRow(
 
 @Composable
 private fun InviteButtonsRow(
-    onAcceptClicked: () -> Unit,
-    onDeclineClicked: () -> Unit,
+    onAcceptClick: () -> Unit,
+    onDeclineClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -309,13 +312,13 @@ private fun InviteButtonsRow(
     ) {
         OutlinedButton(
             text = stringResource(CommonStrings.action_decline),
-            onClick = onDeclineClicked,
+            onClick = onDeclineClick,
             size = ButtonSize.Medium,
             modifier = Modifier.weight(1f),
         )
         Button(
             text = stringResource(CommonStrings.action_accept),
-            onClick = onAcceptClicked,
+            onClick = onAcceptClick,
             size = ButtonSize.Medium,
             modifier = Modifier.weight(1f),
         )

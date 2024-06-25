@@ -17,14 +17,11 @@
 package io.element.android.features.userprofile.shared
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,6 +33,8 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.testtags.TestTags
@@ -55,15 +54,12 @@ fun UserProfileHeaderSection(
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Box(modifier = Modifier.size(70.dp)) {
-            Avatar(
-                avatarData = AvatarData(userId.value, userName, avatarUrl, AvatarSize.UserHeader),
-                modifier = Modifier
+        Avatar(
+            avatarData = AvatarData(userId.value, userName, avatarUrl, AvatarSize.UserHeader),
+            modifier = Modifier
                     .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
-                    .fillMaxSize()
                     .testTag(TestTags.memberDetailAvatar)
-            )
-        }
+        )
         Spacer(modifier = Modifier.height(24.dp))
         if (userName != null) {
             Text(
@@ -85,4 +81,15 @@ fun UserProfileHeaderSection(
         )
         Spacer(Modifier.height(40.dp))
     }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun UserProfileHeaderSectionPreview() = ElementPreview {
+    UserProfileHeaderSection(
+        avatarUrl = null,
+        userId = UserId("@alice:example.com"),
+        userName = "Alice",
+        openAvatarPreview = {},
+    )
 }

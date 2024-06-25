@@ -16,6 +16,7 @@
 
 package io.element.android.features.preferences.impl.developer.tracing
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -48,6 +49,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.ListItem
@@ -62,7 +64,7 @@ import kotlinx.collections.immutable.ImmutableMap
 @Composable
 fun ConfigureTracingView(
     state: ConfigureTracingState,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var showMenu by remember { mutableStateOf(false) }
@@ -75,7 +77,7 @@ fun ConfigureTracingView(
         topBar = {
             TopAppBar(
                 navigationIcon = {
-                    BackButton(onClick = onBackPressed)
+                    BackButton(onClick = onBackClick)
                 },
                 title = {
                     Text(
@@ -124,15 +126,17 @@ fun ConfigureTracingView(
                     .consumeWindowInsets(it)
                     .verticalScroll(state = rememberScrollState())
             ) {
-                CrateListContent(state)
                 ListItem(
                     headlineContent = {
                         Text(
-                            text = "Kill and restart the app for the change to take effect.",
+                            modifier = Modifier.clickable { Runtime.getRuntime().exit(0) },
+                            text = "Tap here to kill the app and apply the changes. You'll have to re-open the app manually.",
                             style = ElementTheme.typography.fontHeadingSmMedium,
                         )
                     },
                 )
+                HorizontalDivider()
+                CrateListContent(state)
             }
         }
     )
@@ -234,6 +238,6 @@ internal fun ConfigureTracingViewPreview(
 ) = ElementPreview {
     ConfigureTracingView(
         state = state,
-        onBackPressed = {},
+        onBackClick = {},
     )
 }

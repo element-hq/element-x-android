@@ -3,6 +3,7 @@
   <string name="notification_channel_call">"Позвонить"</string>
   <string name="notification_channel_listening_for_events">"Прослушивание событий"</string>
   <string name="notification_channel_noisy">"Шумные уведомления"</string>
+  <string name="notification_channel_ringing_calls">"Звонки"</string>
   <string name="notification_channel_silent">"Бесшумные уведомления"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d сообщение"</item>
@@ -15,6 +16,7 @@
     <item quantity="many">"%d уведомлений"</item>
   </plurals>
   <string name="notification_fallback_content">"Уведомление"</string>
+  <string name="notification_incoming_call">"Входящий вызов"</string>
   <string name="notification_inline_reply_failed">"** Не удалось отправить - пожалуйста, откройте комнату"</string>
   <string name="notification_invitation_action_join">"Присоединиться"</string>
   <string name="notification_invitation_action_reject">"Отклонить"</string>
@@ -52,7 +54,6 @@
     <item quantity="few">"%d комнаты"</item>
     <item quantity="many">"%d комнат"</item>
   </plurals>
-  <string name="push_choose_distributor_dialog_title_android">"Выберите способ получения уведомлений"</string>
   <string name="push_distributor_background_sync_android">"Фоновая синхронизация"</string>
   <string name="push_distributor_firebase_android">"Сервисы Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Не найдены действующие службы Google Play. Уведомления могут работать некорректно."</string>

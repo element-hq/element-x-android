@@ -79,7 +79,7 @@ fun TimelineItemStateEventRow(
             ) {
                 TimelineItemEventContentView(
                     content = event.content,
-                    onLinkClicked = {},
+                    onLinkClick = {},
                     eventSink = eventSink,
                     modifier = Modifier.defaultTimelineContentPadding()
                 )
@@ -92,7 +92,7 @@ fun TimelineItemStateEventRow(
                 receipts = event.readReceiptState.receipts,
             ),
             renderReadReceipts = renderReadReceipts,
-            onReadReceiptsClicked = { onReadReceiptsClick(event) },
+            onReadReceiptsClick = { onReadReceiptsClick(event) },
         )
     }
 }

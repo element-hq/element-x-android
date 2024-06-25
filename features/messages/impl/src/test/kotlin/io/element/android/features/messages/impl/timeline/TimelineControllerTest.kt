@@ -172,8 +172,12 @@ class TimelineControllerTest {
         )
         matrixRoom.givenTimelineFocusedOnEventResult(Result.success(detachedTimeline))
         val sut = TimelineController(matrixRoom)
-        sut.focusOnEvent(AN_EVENT_ID)
         sut.activeTimelineFlow().test {
+            sut.focusOnEvent(AN_EVENT_ID)
+            awaitItem().also { state ->
+                assertThat(state).isEqualTo(liveTimeline)
+            }
+            sut.focusOnEvent(AN_EVENT_ID)
             awaitItem().also { state ->
                 assertThat(state).isEqualTo(detachedTimeline)
             }

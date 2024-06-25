@@ -18,10 +18,10 @@ package io.element.android.features.preferences.impl.root
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -52,9 +52,9 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun PreferencesRootView(
     state: PreferencesRootState,
-    onBackPressed: () -> Unit,
-    onSecureBackupClicked: () -> Unit,
-    onManageAccountClicked: (url: String) -> Unit,
+    onBackClick: () -> Unit,
+    onSecureBackupClick: () -> Unit,
+    onManageAccountClick: (url: String) -> Unit,
     onOpenAnalytics: () -> Unit,
     onOpenRageShake: () -> Unit,
     onOpenLockScreenSettings: () -> Unit,
@@ -64,7 +64,7 @@ fun PreferencesRootView(
     onOpenNotificationSettings: () -> Unit,
     onOpenUserProfile: (MatrixUser) -> Unit,
     onOpenBlockedUsers: () -> Unit,
-    onSignOutClicked: () -> Unit,
+    onSignOutClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -72,7 +72,7 @@ fun PreferencesRootView(
     // Include pref from other modules
     PreferencePage(
         modifier = modifier,
-        onBackPressed = onBackPressed,
+        onBackClick = onBackClick,
         title = stringResource(id = CommonStrings.common_settings),
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) {
@@ -88,13 +88,13 @@ fun PreferencesRootView(
             state = state,
             onOpenNotificationSettings = onOpenNotificationSettings,
             onOpenLockScreenSettings = onOpenLockScreenSettings,
-            onSecureBackupClicked = onSecureBackupClicked,
+            onSecureBackupClick = onSecureBackupClick,
         )
 
         // 'Account' section
         ManageAccountSection(
             state = state,
-            onManageAccountClicked = onManageAccountClicked,
+            onManageAccountClick = onManageAccountClick,
             onOpenBlockedUsers = onOpenBlockedUsers
         )
 
@@ -106,12 +106,17 @@ fun PreferencesRootView(
             onOpenRageShake = onOpenRageShake,
             onOpenAdvancedSettings = onOpenAdvancedSettings,
             onOpenDeveloperSettings = onOpenDeveloperSettings,
-            onSignOutClicked = onSignOutClicked,
+            onSignOutClick = onSignOutClick,
         )
 
         Footer(
             version = state.version,
             deviceId = state.deviceId,
+            onClick = if (!state.showDeveloperSettings) {
+                { state.eventSink(PreferencesRootEvents.OnVersionInfoClick) }
+            } else {
+                null
+            }
         )
     }
 }
@@ -121,7 +126,7 @@ private fun ColumnScope.ManageAppSection(
     state: PreferencesRootState,
     onOpenNotificationSettings: () -> Unit,
     onOpenLockScreenSettings: () -> Unit,
-    onSecureBackupClicked: () -> Unit,
+    onSecureBackupClick: () -> Unit,
 ) {
     if (state.showNotificationSettings) {
         ListItem(
@@ -142,7 +147,7 @@ private fun ColumnScope.ManageAppSection(
             headlineContent = { Text(stringResource(id = CommonStrings.common_chat_backup)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.KeySolid())),
             trailingContent = ListItemContent.Badge.takeIf { state.showSecureBackupBadge },
-            onClick = onSecureBackupClicked,
+            onClick = onSecureBackupClick,
         )
     }
     if (state.showNotificationSettings || state.showLockScreenSettings || state.showSecureBackup) {
@@ -153,7 +158,7 @@ private fun ColumnScope.ManageAppSection(
 @Composable
 private fun ColumnScope.ManageAccountSection(
     state: PreferencesRootState,
-    onManageAccountClicked: (url: String) -> Unit,
+    onManageAccountClick: (url: String) -> Unit,
     onOpenBlockedUsers: () -> Unit,
 ) {
     state.accountManagementUrl?.let { url ->
@@ -161,7 +166,7 @@ private fun ColumnScope.ManageAccountSection(
             headlineContent = { Text(stringResource(id = CommonStrings.action_manage_account)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserProfile())),
             trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.PopOut())),
-            onClick = { onManageAccountClicked(url) },
+            onClick = { onManageAccountClick(url) },
         )
     }
 
@@ -170,7 +175,7 @@ private fun ColumnScope.ManageAccountSection(
             headlineContent = { Text(stringResource(id = CommonStrings.action_manage_devices)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Devices())),
             trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.PopOut())),
-            onClick = { onManageAccountClicked(url) },
+            onClick = { onManageAccountClick(url) },
         )
     }
 
@@ -195,7 +200,7 @@ private fun ColumnScope.GeneralSection(
     onOpenRageShake: () -> Unit,
     onOpenAdvancedSettings: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
-    onSignOutClicked: () -> Unit,
+    onSignOutClick: () -> Unit,
 ) {
     ListItem(
         headlineContent = { Text(stringResource(id = CommonStrings.common_about)) },
@@ -226,14 +231,15 @@ private fun ColumnScope.GeneralSection(
         headlineContent = { Text(stringResource(id = CommonStrings.action_signout)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.SignOut())),
         style = ListItemStyle.Destructive,
-        onClick = onSignOutClicked,
+        onClick = onSignOutClick,
     )
 }
 
 @Composable
-private fun Footer(
+private fun ColumnScope.Footer(
     version: String,
-    deviceId: String?
+    deviceId: String?,
+    onClick: (() -> Unit)?,
 ) {
     val text = remember(version, deviceId) {
         buildString {
@@ -246,8 +252,10 @@ private fun Footer(
     }
     Text(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 40.dp, bottom = 24.dp),
+            .align(Alignment.CenterHorizontally)
+            .padding(top = 16.dp)
+            .clickable(enabled = onClick != null, onClick = onClick ?: {})
+            .padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 24.dp),
         textAlign = TextAlign.Center,
         text = text,
         style = ElementTheme.typography.fontBodySmRegular,
@@ -279,18 +287,18 @@ internal fun PreferencesRootViewDarkPreview(@PreviewParameter(MatrixUserProvider
 private fun ContentToPreview(matrixUser: MatrixUser) {
     PreferencesRootView(
         state = aPreferencesRootState(myUser = matrixUser),
-        onBackPressed = {},
+        onBackClick = {},
         onOpenAnalytics = {},
         onOpenRageShake = {},
         onOpenDeveloperSettings = {},
         onOpenAdvancedSettings = {},
         onOpenAbout = {},
-        onSecureBackupClicked = {},
-        onManageAccountClicked = {},
+        onSecureBackupClick = {},
+        onManageAccountClick = {},
         onOpenNotificationSettings = {},
         onOpenLockScreenSettings = {},
         onOpenUserProfile = {},
         onOpenBlockedUsers = {},
-        onSignOutClicked = {},
+        onSignOutClick = {},
     )
 }

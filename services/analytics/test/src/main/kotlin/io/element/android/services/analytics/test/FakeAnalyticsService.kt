@@ -18,6 +18,7 @@ package io.element.android.services.analytics.test
 
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
+import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.AnalyticsProvider
@@ -26,7 +27,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeAnalyticsService(
     isEnabled: Boolean = false,
-    didAskUserConsent: Boolean = false
+    didAskUserConsent: Boolean = false,
+    private val resetLambda: () -> Unit = {},
 ) : AnalyticsService {
     private val isEnabledFlow = MutableStateFlow(isEnabled)
     private val didAskUserConsentFlow = MutableStateFlow(didAskUserConsent)
@@ -54,9 +56,6 @@ class FakeAnalyticsService(
     override suspend fun setAnalyticsId(analyticsId: String) {
     }
 
-    override suspend fun onSignOut() {
-    }
-
     override fun capture(event: VectorAnalyticsEvent) {
         capturedEvents += event
     }
@@ -73,7 +72,12 @@ class FakeAnalyticsService(
         trackedErrors += throwable
     }
 
+    override fun updateSuperProperties(updatedProperties: SuperProperties) {
+        // No op
+    }
+
     override suspend fun reset() {
         didAskUserConsentFlow.value = false
+        resetLambda()
     }
 }

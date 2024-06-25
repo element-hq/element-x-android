@@ -33,21 +33,24 @@ interface PushProvider {
     val name: String
 
     /**
-     * Return true if the push provider is available on this device.
+     * Return the list of available distributors.
      */
-    fun isAvailable(): Boolean
-
     fun getDistributors(): List<Distributor>
 
     /**
      * Register the pusher to the homeserver.
      */
-    suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor)
+    suspend fun registerWith(matrixClient: MatrixClient, distributor: Distributor): Result<Unit>
+
+    /**
+     * Return the current distributor, or null if none.
+     */
+    suspend fun getCurrentDistributor(matrixClient: MatrixClient): Distributor?
 
     /**
      * Unregister the pusher.
      */
-    suspend fun unregister(matrixClient: MatrixClient)
+    suspend fun unregister(matrixClient: MatrixClient): Result<Unit>
 
     suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig?
 }

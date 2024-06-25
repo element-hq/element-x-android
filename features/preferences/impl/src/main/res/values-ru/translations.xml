@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="full_screen_intent_banner_message">"Чтобы никогда не пропустить важный звонок, измените настройки, чтобы разрешить полноэкранные уведомления, когда ваш телефон заблокирован."</string>
+  <string name="full_screen_intent_banner_title">"Улучшите качество звонков"</string>
+  <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Выберите способ получения уведомлений"</string>
   <string name="screen_advanced_settings_developer_mode">"Режим разработчика"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Предоставьте разработчикам доступ к функциям и функциональным возможностям."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Базовый URL сервера звонков Element"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Задайте свой сервер Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Адрес указан неверно, удостоверьтесь, что вы указали протокол (http/https) и правильный адрес."</string>
+  <string name="screen_advanced_settings_push_provider_android">"Поставщик push-уведомлений"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Отключить редактор форматированного текста и включить Markdown."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Уведомления о прочтении"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Если этот параметр выключен, ваш статус о прочтении не будет отображаться. Вы по-прежнему будете видеть статус о прочтении от других пользователей."</string>

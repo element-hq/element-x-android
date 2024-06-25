@@ -72,6 +72,7 @@ import org.matrix.rustcomponents.sdk.FormattedBody
 import org.matrix.rustcomponents.sdk.MessageFormat
 import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
+import org.matrix.rustcomponents.sdk.TimelineChange
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
 import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
@@ -79,6 +80,7 @@ import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk_ui.EventItemOrigin
+import uniffi.matrix_sdk_ui.LiveBackPaginationStatus
 import java.io.File
 import java.util.Date
 import java.util.concurrent.atomic.AtomicBoolean
@@ -142,17 +144,32 @@ class RustTimeline(
 
     init {
         roomCoroutineScope.launch(dispatcher) {
-            inner.timelineDiffFlow { initialList ->
-                postItems(initialList)
-            }.onEach { diffs ->
-                if (diffs.any { diff -> diff.eventOrigin() == EventItemOrigin.SYNC }) {
-                    onNewSyncedEvent()
+            inner.timelineDiffFlow()
+                .onEach { diffs ->
+                    if (diffs.any { diff -> diff.eventOrigin() == EventItemOrigin.SYNC }) {
+                        onNewSyncedEvent()
+                    }
+                    postDiffs(diffs)
                 }
-                postDiffs(diffs)
-            }.launchIn(this)
+                .launchIn(this)
 
             launch {
                 fetchMembers()
+            }
+
+            if (isLive) {
+                // When timeline is live, we need to listen to the back pagination status as
+                // sdk can automatically paginate backwards.
+                inner.liveBackPaginationStatus()
+                    .onEach { backPaginationStatus ->
+                        updatePaginationStatus(Timeline.PaginationDirection.BACKWARDS) {
+                            when (backPaginationStatus) {
+                                is LiveBackPaginationStatus.Idle -> it.copy(isPaginating = false, hasMoreToLoad = !backPaginationStatus.hitStartOfTimeline)
+                                is LiveBackPaginationStatus.Paginating -> it.copy(isPaginating = true, hasMoreToLoad = true)
+                            }
+                        }
+                    }
+                    .launchIn(this)
             }
         }
     }
@@ -257,14 +274,45 @@ class RustTimeline(
     }
 
     private suspend fun postDiffs(diffs: List<TimelineDiff>) {
+        val diffsToProcess = diffs.toMutableList()
+        if (!isInit.get()) {
+            val resetDiff = diffsToProcess.firstOrNull { it.change() == TimelineChange.RESET }
+            if (resetDiff != null) {
+                // Keep using the postItems logic so we can post the timelineItems asap.
+                postItems(resetDiff.reset() ?: emptyList())
+                diffsToProcess.remove(resetDiff)
+            }
+        }
         initLatch.await()
-        timelineDiffProcessor.postDiffs(diffs)
+        if (diffsToProcess.isNotEmpty()) {
+            timelineDiffProcessor.postDiffs(diffsToProcess)
+        }
     }
 
     override suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> = withContext(dispatcher) {
         messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()).use { content ->
-            runCatching {
+            runCatching<Unit> {
                 inner.send(content)
+            }
+        }
+    }
+
+    override suspend fun redactEvent(eventId: EventId?, transactionId: TransactionId?, reason: String?): Result<Boolean> = withContext(dispatcher) {
+        runCatching {
+            when {
+                eventId != null -> {
+                    inner.getEventTimelineItemByEventId(eventId.value).use {
+                        inner.redactEvent(item = it, reason = reason)
+                    }
+                }
+                transactionId != null -> {
+                    inner.getEventTimelineItemByTransactionId(transactionId.value).use {
+                        inner.redactEvent(item = it, reason = reason)
+                    }
+                }
+                else -> {
+                    error("Either eventId or transactionId must be non-null")
+                }
             }
         }
     }
@@ -277,21 +325,24 @@ class RustTimeline(
         mentions: List<Mention>,
     ): Result<Unit> =
         withContext(dispatcher) {
-            if (originalEventId != null) {
-                runCatching {
-                    val editedEvent = specialModeEventTimelineItem ?: inner.getEventTimelineItemByEventId(originalEventId.value)
-                    editedEvent.use {
-                        inner.edit(
-                            newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
-                            editItem = it,
-                        )
+            runCatching<Unit> {
+                when {
+                    originalEventId != null -> {
+                        val editedEvent = specialModeEventTimelineItem ?: inner.getEventTimelineItemByEventId(originalEventId.value)
+                        editedEvent.use {
+                            inner.edit(
+                                newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
+                                editItem = it,
+                            )
+                        }
+                        specialModeEventTimelineItem = null
                     }
-                    specialModeEventTimelineItem = null
-                }
-            } else {
-                runCatching {
-                    transactionId?.let { cancelSend(it) }
-                    inner.send(messageEventContentFromParts(body, htmlBody))
+                    transactionId != null -> {
+                        error("Editing local echo is not supported yet.")
+                    }
+                    else -> {
+                        error("Either originalEventId or transactionId must be non null")
+                    }
                 }
             }
         }
@@ -308,13 +359,28 @@ class RustTimeline(
         }
     }
 
-    override suspend fun replyMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> = withContext(dispatcher) {
+    override suspend fun replyMessage(
+        eventId: EventId,
+        body: String,
+        htmlBody: String?,
+        mentions: List<Mention>,
+        fromNotification: Boolean,
+    ): Result<Unit> = withContext(dispatcher) {
         runCatching {
-            val inReplyTo = specialModeEventTimelineItem ?: inner.getEventTimelineItemByEventId(eventId.value)
-            inReplyTo.use { eventTimelineItem ->
-                inner.sendReply(messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()), eventTimelineItem)
+            val msg = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map())
+            if (fromNotification) {
+                // When replying from a notification, do not interfere with `specialModeEventTimelineItem`
+                val inReplyTo = inner.getEventTimelineItemByEventId(eventId.value)
+                inReplyTo.use { eventTimelineItem ->
+                    inner.sendReply(msg, eventTimelineItem)
+                }
+            } else {
+                val inReplyTo = specialModeEventTimelineItem ?: inner.getEventTimelineItemByEventId(eventId.value)
+                inReplyTo.use { eventTimelineItem ->
+                    inner.sendReply(msg, eventTimelineItem)
+                }
+                specialModeEventTimelineItem = null
             }
-            specialModeEventTimelineItem = null
         }
     }
 
@@ -395,17 +461,7 @@ class RustTimeline(
         }
     }
 
-    override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> = withContext(dispatcher) {
-        runCatching {
-            inner.retrySend(transactionId.value)
-        }
-    }
-
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> = withContext(dispatcher) {
-        runCatching {
-            inner.cancelSend(transactionId.value)
-        }
-    }
+    override suspend fun cancelSend(transactionId: TransactionId): Result<Boolean> = redactEvent(eventId = null, transactionId = transactionId, reason = null)
 
     override suspend fun sendLocation(
         body: String,

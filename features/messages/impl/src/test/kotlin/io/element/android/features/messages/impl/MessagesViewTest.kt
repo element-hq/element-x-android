@@ -52,8 +52,6 @@ import io.element.android.features.messages.impl.timeline.components.customreact
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvents
 import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
-import io.element.android.features.messages.impl.timeline.components.retrysendmenu.RetrySendMenuEvents
-import io.element.android.features.messages.impl.timeline.components.retrysendmenu.aRetrySendMenuState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.matrix.api.core.UserId
@@ -74,6 +72,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 class MessagesViewTest {
@@ -88,7 +87,7 @@ class MessagesViewTest {
         ensureCalledOnce { callback ->
             rule.setMessagesView(
                 state = state,
-                onBackPressed = callback,
+                onBackClick = callback,
             )
             rule.pressBack()
         }
@@ -103,7 +102,7 @@ class MessagesViewTest {
         ensureCalledOnce { callback ->
             rule.setMessagesView(
                 state = state,
-                onRoomDetailsClicked = callback,
+                onRoomDetailsClick = callback,
             )
             rule.onNodeWithText(state.roomName.dataOrNull().orEmpty()).performClick()
         }
@@ -118,7 +117,7 @@ class MessagesViewTest {
         ensureCalledOnce { callback ->
             rule.setMessagesView(
                 state = state,
-                onJoinCallClicked = callback,
+                onJoinCallClick = callback,
             )
             val joinCallContentDescription = rule.activity.getString(CommonStrings.a11y_start_call)
             rule.onNodeWithContentDescription(joinCallContentDescription).performClick()
@@ -138,27 +137,11 @@ class MessagesViewTest {
         )
         rule.setMessagesView(
             state = state,
-            onEventClicked = callback,
+            onEventClick = callback,
         )
         // Cannot perform click on "Text", it's not detected. Use tag instead
         rule.onAllNodesWithTag(TestTags.messageBubble.value).onFirst().performClick()
         callback.assertSuccess()
-    }
-
-    @Test
-    fun `clicking on an Event timestamp in error emits the expected Event`() {
-        val eventsRecorder = EventsRecorder<RetrySendMenuEvents>()
-        val state = aMessagesState(
-            retrySendMenuState = aRetrySendMenuState(
-                eventSink = eventsRecorder
-            ),
-        )
-        val timelineItem = state.timelineState.timelineItems[1] as TimelineItem.Event
-        rule.setMessagesView(
-            state = state,
-        )
-        rule.onAllNodesWithText(timelineItem.sentTime)[1].performClick()
-        eventsRecorder.assertSingle(RetrySendMenuEvents.EventSelected(timelineItem))
     }
 
     @Test
@@ -287,7 +270,7 @@ class MessagesViewTest {
         ensureCalledOnce { callback ->
             rule.setMessagesView(
                 state = state,
-                onSendLocationClicked = callback,
+                onSendLocationClick = callback,
             )
             rule.clickOn(R.string.screen_room_attachment_source_location)
         }
@@ -305,7 +288,7 @@ class MessagesViewTest {
         ensureCalledOnce { callback ->
             rule.setMessagesView(
                 state = state,
-                onCreatePollClicked = callback,
+                onCreatePollClick = callback,
             )
             // Then click on the poll action
             rule.clickOn(R.string.screen_room_attachment_source_poll)
@@ -313,6 +296,7 @@ class MessagesViewTest {
     }
 
     @Test
+    @Config(qualifiers = "h1024dp")
     fun `clicking on the sender of an Event invoke expected callback`() {
         val eventsRecorder = EventsRecorder<MessagesEvents>(expectEvents = false)
         val state = aMessagesState(
@@ -324,7 +308,7 @@ class MessagesViewTest {
         ) { callback ->
             rule.setMessagesView(
                 state = state,
-                onUserDataClicked = callback,
+                onUserDataClick = callback,
             )
             rule.onNodeWithTag(TestTags.timelineItemSenderInfo.value).performClick()
         }
@@ -474,30 +458,32 @@ class MessagesViewTest {
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessagesView(
     state: MessagesState,
-    onBackPressed: () -> Unit = EnsureNeverCalled(),
-    onRoomDetailsClicked: () -> Unit = EnsureNeverCalled(),
-    onEventClicked: (event: TimelineItem.Event) -> Boolean = EnsureNeverCalledWithParamAndResult(),
-    onUserDataClicked: (UserId) -> Unit = EnsureNeverCalledWithParam(),
-    onLinkClicked: (String) -> Unit = EnsureNeverCalledWithParam(),
+    onBackClick: () -> Unit = EnsureNeverCalled(),
+    onRoomDetailsClick: () -> Unit = EnsureNeverCalled(),
+    onEventClick: (event: TimelineItem.Event) -> Boolean = EnsureNeverCalledWithParamAndResult(),
+    onUserDataClick: (UserId) -> Unit = EnsureNeverCalledWithParam(),
+    onLinkClick: (String) -> Unit = EnsureNeverCalledWithParam(),
     onPreviewAttachments: (ImmutableList<Attachment>) -> Unit = EnsureNeverCalledWithParam(),
-    onSendLocationClicked: () -> Unit = EnsureNeverCalled(),
-    onCreatePollClicked: () -> Unit = EnsureNeverCalled(),
-    onJoinCallClicked: () -> Unit = EnsureNeverCalled(),
+    onSendLocationClick: () -> Unit = EnsureNeverCalled(),
+    onCreatePollClick: () -> Unit = EnsureNeverCalled(),
+    onJoinCallClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         // Cannot use the RichTextEditor, so simulate a LocalInspectionMode
-        CompositionLocalProvider(LocalInspectionMode provides true) {
+        CompositionLocalProvider(
+            LocalInspectionMode provides true
+        ) {
             MessagesView(
                 state = state,
-                onBackPressed = onBackPressed,
-                onRoomDetailsClicked = onRoomDetailsClicked,
-                onEventClicked = onEventClicked,
-                onUserDataClicked = onUserDataClicked,
-                onLinkClicked = onLinkClicked,
+                onBackClick = onBackClick,
+                onRoomDetailsClick = onRoomDetailsClick,
+                onEventClick = onEventClick,
+                onUserDataClick = onUserDataClick,
+                onLinkClick = onLinkClick,
                 onPreviewAttachments = onPreviewAttachments,
-                onSendLocationClicked = onSendLocationClicked,
-                onCreatePollClicked = onCreatePollClicked,
-                onJoinCallClicked = onJoinCallClicked,
+                onSendLocationClick = onSendLocationClick,
+                onCreatePollClick = onCreatePollClick,
+                onJoinCallClick = onJoinCallClick,
             )
         }
     }

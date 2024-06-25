@@ -25,6 +25,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.datastore.preferences.preferencesDataStoreFile
 import io.element.android.libraries.androidutils.hash.hash
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushstore.api.UserPushStore
@@ -61,6 +62,7 @@ class UserPushStoreDataStore(
     private val pushProviderName = stringPreferencesKey("pushProviderName")
     private val currentPushKey = stringPreferencesKey("currentPushKey")
     private val notificationEnabled = booleanPreferencesKey("notificationEnabled")
+    private val ignoreRegistrationError = booleanPreferencesKey("ignoreRegistrationError")
 
     override suspend fun getPushProviderName(): String? {
         return context.dataStore.data.first()[pushProviderName]
@@ -76,9 +78,13 @@ class UserPushStoreDataStore(
         return context.dataStore.data.first()[currentPushKey]
     }
 
-    override suspend fun setCurrentRegisteredPushKey(value: String) {
+    override suspend fun setCurrentRegisteredPushKey(value: String?) {
         context.dataStore.edit {
-            it[currentPushKey] = value
+            if (value == null) {
+                it.remove(currentPushKey)
+            } else {
+                it[currentPushKey] = value
+            }
         }
     }
 
@@ -94,6 +100,16 @@ class UserPushStoreDataStore(
 
     override fun useCompleteNotificationFormat(): Boolean {
         return true
+    }
+
+    override fun ignoreRegistrationError(): Flow<Boolean> {
+        return context.dataStore.data.map { it[ignoreRegistrationError].orFalse() }
+    }
+
+    override suspend fun setIgnoreRegistrationError(ignore: Boolean) {
+        context.dataStore.edit {
+            it[ignoreRegistrationError] = ignore
+        }
     }
 
     override suspend fun reset() {

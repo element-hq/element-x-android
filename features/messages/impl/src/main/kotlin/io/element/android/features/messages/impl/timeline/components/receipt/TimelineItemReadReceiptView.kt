@@ -61,7 +61,7 @@ import kotlinx.collections.immutable.ImmutableList
 fun TimelineItemReadReceiptView(
     state: ReadReceiptViewState,
     renderReadReceipts: Boolean,
-    onReadReceiptsClicked: () -> Unit,
+    onReadReceiptsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (state.receipts.isNotEmpty()) {
@@ -73,7 +73,7 @@ fun TimelineItemReadReceiptView(
                         .testTag(TestTags.messageReadReceipts)
                         .clip(RoundedCornerShape(4.dp))
                         .clickable {
-                            onReadReceiptsClicked()
+                            onReadReceiptsClick()
                         }
                         .padding(2.dp)
                 )
@@ -81,7 +81,8 @@ fun TimelineItemReadReceiptView(
         }
     } else {
         when (state.sendState) {
-            LocalEventSendState.NotSentYet -> {
+            LocalEventSendState.NotSentYet,
+            is LocalEventSendState.SendingFailed.Recoverable -> {
                 ReadReceiptsRow(modifier) {
                     Icon(
                         modifier = Modifier.padding(2.dp),
@@ -91,8 +92,7 @@ fun TimelineItemReadReceiptView(
                     )
                 }
             }
-            LocalEventSendState.Canceled -> Unit
-            is LocalEventSendState.SendingFailed -> {
+            is LocalEventSendState.SendingFailed.Unrecoverable -> {
                 // Error? The timestamp is already displayed in red
             }
             null,
@@ -213,6 +213,6 @@ internal fun TimelineItemReadReceiptViewPreview(
     TimelineItemReadReceiptView(
         state = state,
         renderReadReceipts = true,
-        onReadReceiptsClicked = {},
+        onReadReceiptsClick = {},
     )
 }

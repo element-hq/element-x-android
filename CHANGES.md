@@ -1,3 +1,76 @@
+Changes in Element X v0.4.15 (2024-06-19)
+=========================================
+
+Features ✨
+----------
+ - Ringing call notifications and full screen ringing screen for DMs when the device is locked. ([#2894](https://github.com/element-hq/element-x-android/issues/2894))
+
+Bugfixes 🐛
+----------
+ - Improve UX on notification setting changes. ([#1647](https://github.com/element-hq/element-x-android/issues/1647))
+ - Fix tracing configuration in debug and nightlies:
+ - Debug will now write the logs to disk too.
+ - Nightly will be able to customise tracing filters.
+ - Improved the configure tracing and bug report screens. ([#3016](https://github.com/element-hq/element-x-android/issues/3016))
+
+Other changes
+-------------
+ - Allow cancelling jump to event in timeline. ([#2876](https://github.com/element-hq/element-x-android/issues/2876))
+ - Make Element Call widget URL configurable ([#3009](https://github.com/element-hq/element-x-android/issues/3009))
+ - Enable hidden access to developer options in release mode apps. ([#3020](https://github.com/element-hq/element-x-android/issues/3020))
+ - Improve how active calls work by also taking into account external url calls and waiting for the sync process to start before sending the `m.call.notify` event. ([#3029](https://github.com/element-hq/element-x-android/issues/3029))
+
+
+Changes in Element X v0.4.14 (2024-06-07)
+=========================================
+
+Features ✨
+----------
+ - Add support for incoming share (text or files) from other apps ([#1980](https://github.com/element-hq/element-x-android/issues/1980))
+
+Bugfixes 🐛
+----------
+ - Render selected/deselected room list filters on top ([#2809](https://github.com/element-hq/element-x-android/issues/2809))
+ - Set auto captilization, multiline and autocompletion flags for the markdown EditText. ([#2896](https://github.com/element-hq/element-x-android/issues/2896))
+ - Restore Markdown text input contents when returning to the room screen. ([#2898](https://github.com/element-hq/element-x-android/issues/2898))
+ - Fixed sending rich content from android keyboards on the markdown text input ([#2917](https://github.com/element-hq/element-x-android/issues/2917))
+ - Fix crash when restoring the selection values in the plain text editor. ([#2959](https://github.com/element-hq/element-x-android/issues/2959))
+
+Other changes
+-------------
+ - BugReporting | Add public device keys to rageshakes ([#2893](https://github.com/element-hq/element-x-android/issues/2893))
+ - Move push provider setting to the "Notifications" screen and display it only when several push provider are available. ([#2912](https://github.com/element-hq/element-x-android/issues/2912))
+ - Simplify notifications by removing the custom persistence layer.
+ - Bump minSdk to 24 (Android 7). ([#2924](https://github.com/element-hq/element-x-android/issues/2924))
+ - Add a feature flag ShowBlockedUsersDetails, disabled by default to render display name and avatar of blocked users in the blocked users list. ([#2930](https://github.com/element-hq/element-x-android/issues/2930))
+ - Be more specific with the widget permissions ([#2932](https://github.com/element-hq/element-x-android/issues/2932))
+ - Analytics | Add support for SuperProperties ([#2953](https://github.com/element-hq/element-x-android/issues/2953))
+ - Track when the user starts a room call and when they enable formatting options on the message composer ([#2969](https://github.com/element-hq/element-x-android/issues/2969))
+
+
+Changes in Element X v0.4.13 (2024-05-22)
+=========================================
+
+Features ✨
+----------
+ - Add plain text editor based on Markdown input. ([#2840](https://github.com/element-hq/element-x-android/issues/2840))
+
+Bugfixes 🐛
+----------
+ - Use members display names for their membership state events. ([#2286](https://github.com/element-hq/element-x-android/issues/2286))
+ - Make sure explicit links in messages take priority over links found by linkification (urls, emails, phone numbers, etc.) ([#2291](https://github.com/element-hq/element-x-android/issues/2291))
+ - Fix modal contents overlapping screen lock pin. ([#2692](https://github.com/element-hq/element-x-android/issues/2692))
+ - Fix a crash when trying to create an `EncryptedFile` in Android 6. ([#2846](https://github.com/element-hq/element-x-android/issues/2846))
+ - Session falsely displayed as 'verified' with no internet connection. ([#2884](https://github.com/element-hq/element-x-android/issues/2884))
+
+Other changes
+-------------
+ - Allow configuring push notification provider ([#2340](https://github.com/element-hq/element-x-android/issues/2340))
+ - UX cleanup: reorder text composer actions to prioritise camera ones. ([#2803](https://github.com/element-hq/element-x-android/issues/2803))
+ - Translation added into Portuguese and Simplified Chinese ([#2834](https://github.com/element-hq/element-x-android/issues/2834))
+ - Use via parameters when joining a room from permalink. ([#2843](https://github.com/element-hq/element-x-android/issues/2843))
+
+
 Changes in Element X v0.4.12 (2024-05-13)
 =========================================
 

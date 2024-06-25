@@ -409,7 +409,7 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink.invoke(TimelineEvents.PollAnswerSelected(AN_EVENT_ID, "anAnswerId"))
+            initialState.eventSink.invoke(TimelineEvents.SelectPollAnswer(AN_EVENT_ID, "anAnswerId"))
         }
         delay(1)
         sendPollResponseAction.verifyExecutionCount(1)
@@ -425,7 +425,7 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink.invoke(TimelineEvents.PollEndClicked(AN_EVENT_ID))
+            initialState.eventSink.invoke(TimelineEvents.EndPoll(AN_EVENT_ID))
         }
         delay(1)
         endPollAction.verifyExecutionCount(1)
@@ -440,7 +440,7 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            awaitFirstItem().eventSink(TimelineEvents.PollEditClicked(AN_EVENT_ID))
+            awaitFirstItem().eventSink(TimelineEvents.EditPoll(AN_EVENT_ID))
             assertThat(navigator.onEditPollClickedCount).isEqualTo(1)
         }
     }
@@ -495,11 +495,11 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
             initialState.eventSink.invoke(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
             awaitItem().also { state ->
                 assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
-                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Fetching)
+                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Loading(AN_EVENT_ID))
             }
             skipItems(2)
             awaitItem().also { state ->
-                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Fetched)
+                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Success(AN_EVENT_ID))
                 assertThat(state.timelineItems).isNotEmpty()
             }
             initialState.eventSink.invoke(TimelineEvents.JumpToLive)
@@ -539,7 +539,7 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
             initialState.eventSink.invoke(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
             awaitItem().also { state ->
                 assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
-                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Cached(0))
+                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Success(AN_EVENT_ID, 0))
             }
         }
     }
@@ -562,7 +562,7 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
             initialState.eventSink(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
             awaitItem().also { state ->
                 assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
-                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Fetching)
+                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Loading(AN_EVENT_ID))
             }
             awaitItem().also { state ->
                 assertThat(state.focusRequestState).isInstanceOf(FocusRequestState.Failure::class.java)

@@ -25,9 +25,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.mapToTheme
-import io.element.android.features.preferences.api.store.AppPreferencesStore
-import io.element.android.features.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,9 +38,6 @@ class AdvancedSettingsPresenter @Inject constructor(
     @Composable
     override fun present(): AdvancedSettingsState {
         val localCoroutineScope = rememberCoroutineScope()
-        val isRichTextEditorEnabled by appPreferencesStore
-            .isRichTextEditorEnabledFlow()
-            .collectAsState(initial = false)
         val isDeveloperModeEnabled by appPreferencesStore
             .isDeveloperModeEnabledFlow()
             .collectAsState(initial = false)
@@ -52,11 +49,9 @@ class AdvancedSettingsPresenter @Inject constructor(
         }
             .collectAsState(initial = Theme.System)
         var showChangeThemeDialog by remember { mutableStateOf(false) }
+
         fun handleEvents(event: AdvancedSettingsEvents) {
             when (event) {
-                is AdvancedSettingsEvents.SetRichTextEditorEnabled -> localCoroutineScope.launch {
-                    appPreferencesStore.setRichTextEditorEnabled(event.enabled)
-                }
                 is AdvancedSettingsEvents.SetDeveloperModeEnabled -> localCoroutineScope.launch {
                     appPreferencesStore.setDeveloperModeEnabled(event.enabled)
                 }
@@ -73,7 +68,6 @@ class AdvancedSettingsPresenter @Inject constructor(
         }
 
         return AdvancedSettingsState(
-            isRichTextEditorEnabled = isRichTextEditorEnabled,
             isDeveloperModeEnabled = isDeveloperModeEnabled,
             isSharePresenceEnabled = isSharePresenceEnabled,
             theme = theme,

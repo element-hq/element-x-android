@@ -75,9 +75,9 @@ class ConfirmAccountProviderNode @AssistedInject constructor(
             state = state,
             modifier = modifier,
             onOidcDetails = ::onOidcDetails,
-            onLoginPasswordNeeded = ::onLoginPasswordNeeded,
+            onNeedLoginPassword = ::onLoginPasswordNeeded,
             onChange = ::onChangeAccountProvider,
-            onLearnMoreClicked = { openLearnMorePage(context) },
+            onLearnMoreClick = { openLearnMorePage(context) },
         )
     }
 }

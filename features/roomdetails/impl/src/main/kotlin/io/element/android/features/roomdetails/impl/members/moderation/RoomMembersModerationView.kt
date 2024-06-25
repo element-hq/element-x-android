@@ -45,7 +45,6 @@ import io.element.android.libraries.designsystem.components.async.AsyncIndicator
 import io.element.android.libraries.designsystem.components.async.AsyncIndicatorHost
 import io.element.android.libraries.designsystem.components.async.rememberAsyncIndicatorState
 import io.element.android.libraries.designsystem.components.avatar.Avatar
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -59,6 +58,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.getBestName
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
@@ -75,7 +75,7 @@ fun RoomMembersModerationView(
             RoomMemberActionsBottomSheet(
                 roomMember = state.selectedRoomMember,
                 actions = state.actions,
-                onActionSelected = { action ->
+                onSelectAction = { action ->
                     when (action) {
                         is ModerationAction.DisplayProfile -> {
                             onDisplayMemberProfile(action.userId)
@@ -126,7 +126,7 @@ fun RoomMembersModerationView(
                     title = stringResource(R.string.screen_room_member_list_ban_member_confirmation_title),
                     content = stringResource(R.string.screen_room_member_list_ban_member_confirmation_description),
                     submitText = stringResource(R.string.screen_room_member_list_ban_member_confirmation_action),
-                    onSubmitClicked = { state.selectedRoomMember?.userId?.let { state.eventSink(RoomMembersModerationEvents.BanUser) } },
+                    onSubmitClick = { state.selectedRoomMember?.userId?.let { state.eventSink(RoomMembersModerationEvents.BanUser) } },
                     onDismiss = { state.eventSink(RoomMembersModerationEvents.Reset) }
                 )
             }
@@ -161,7 +161,7 @@ fun RoomMembersModerationView(
                         title = stringResource(R.string.screen_room_member_list_manage_member_unban_title),
                         content = stringResource(R.string.screen_room_member_list_manage_member_unban_message),
                         submitText = stringResource(R.string.screen_room_member_list_manage_member_unban_action),
-                        onSubmitClicked = { state.eventSink(RoomMembersModerationEvents.UnbanUser) },
+                        onSubmitClick = { state.eventSink(RoomMembersModerationEvents.UnbanUser) },
                         onDismiss = { state.eventSink(RoomMembersModerationEvents.Reset) },
                     )
                 }
@@ -197,7 +197,7 @@ fun RoomMembersModerationView(
 private fun RoomMemberActionsBottomSheet(
     roomMember: RoomMember?,
     actions: ImmutableList<ModerationAction>,
-    onActionSelected: (ModerationAction) -> Unit,
+    onSelectAction: (ModerationAction) -> Unit,
     onDismiss: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -217,12 +217,7 @@ private fun RoomMemberActionsBottomSheet(
                 modifier = Modifier.padding(vertical = 16.dp)
             ) {
                 Avatar(
-                    avatarData = AvatarData(
-                        id = roomMember.userId.value,
-                        name = roomMember.displayName,
-                        url = roomMember.avatarUrl,
-                        size = AvatarSize.RoomListManageUser,
-                    ),
+                    avatarData = roomMember.getAvatarData(size = AvatarSize.RoomListManageUser),
                     modifier = Modifier
                         .padding(bottom = 28.dp)
                         .align(Alignment.CenterHorizontally)
@@ -260,7 +255,7 @@ private fun RoomMemberActionsBottomSheet(
                                 leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Info())),
                                 onClick = {
                                     coroutineScope.launch {
-                                        onActionSelected(action)
+                                        onSelectAction(action)
                                         bottomSheetState.hide()
                                     }
                                 }
@@ -273,7 +268,7 @@ private fun RoomMemberActionsBottomSheet(
                                 onClick = {
                                     coroutineScope.launch {
                                         bottomSheetState.hide()
-                                        onActionSelected(action)
+                                        onSelectAction(action)
                                     }
                                 }
                             )
@@ -286,7 +281,7 @@ private fun RoomMemberActionsBottomSheet(
                                 onClick = {
                                     coroutineScope.launch {
                                         bottomSheetState.hide()
-                                        onActionSelected(action)
+                                        onSelectAction(action)
                                     }
                                 }
                             )

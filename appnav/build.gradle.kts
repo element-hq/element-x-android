@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.coil)
 
     implementation(projects.features.ftue.api)
+    implementation(projects.features.share.api)
     implementation(projects.features.viewfolder.api)
 
     implementation(projects.services.apperror.impl)
@@ -66,11 +67,13 @@ dependencies {
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.push.test)
+    testImplementation(projects.libraries.pushproviders.test)
     testImplementation(projects.features.networkmonitor.test)
     testImplementation(projects.features.login.impl)
     testImplementation(projects.tests.testutils)
     testImplementation(projects.features.rageshake.test)
     testImplementation(projects.features.rageshake.impl)
+    testImplementation(projects.features.share.test)
     testImplementation(projects.services.appnavstate.test)
     testImplementation(projects.services.analytics.test)
     testImplementation(libs.test.appyx.junit)

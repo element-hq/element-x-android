@@ -16,28 +16,18 @@
 
 package io.element.android.libraries.preferences.test
 
-import io.element.android.features.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class InMemoryAppPreferencesStore(
-    isRichTextEditorEnabled: Boolean = false,
     isDeveloperModeEnabled: Boolean = false,
     customElementCallBaseUrl: String? = null,
     theme: String? = null,
 ) : AppPreferencesStore {
-    private val isRichTextEditorEnabled = MutableStateFlow(isRichTextEditorEnabled)
     private val isDeveloperModeEnabled = MutableStateFlow(isDeveloperModeEnabled)
     private val customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
     private val theme = MutableStateFlow(theme)
-
-    override suspend fun setRichTextEditorEnabled(enabled: Boolean) {
-        isRichTextEditorEnabled.value = enabled
-    }
-
-    override fun isRichTextEditorEnabledFlow(): Flow<Boolean> {
-        return isRichTextEditorEnabled
-    }
 
     override suspend fun setDeveloperModeEnabled(enabled: Boolean) {
         isDeveloperModeEnabled.value = enabled

@@ -85,6 +85,7 @@
   <string name="action_quick_reply">"Rychlá odpověď"</string>
   <string name="action_quote">"Citovat"</string>
   <string name="action_react">"Reagovat"</string>
+  <string name="action_reject">"Odmítnout"</string>
   <string name="action_remove">"Odstranit"</string>
   <string name="action_reply">"Odpovědět"</string>
   <string name="action_reply_in_thread">"Odpovědět ve vlákně"</string>
@@ -121,6 +122,7 @@
   <string name="common_blocked_users">"Blokovaní uživatelé"</string>
   <string name="common_bubbles">"Bubliny"</string>
   <string name="common_call_invite">"Probíhá hovor (nepodporováno)"</string>
+  <string name="common_call_started">"Hovor zahájen"</string>
   <string name="common_chat_backup">"Záloha chatu"</string>
   <string name="common_copyright">"Autorská práva"</string>
   <string name="common_creating_room">"Vytváření místnosti…"</string>
@@ -129,12 +131,16 @@
   <string name="common_decryption_error">"Chyba dešifrování"</string>
   <string name="common_developer_options">"Možnosti pro vývojáře"</string>
   <string name="common_direct_chat">"Přímý chat"</string>
+  <string name="common_do_not_show_this_again">"Znovu nezobrazovat"</string>
   <string name="common_edited_suffix">"(upraveno)"</string>
   <string name="common_editing">"Úpravy"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Šifrování povoleno"</string>
   <string name="common_enter_your_pin">"Zadejte svůj PIN"</string>
   <string name="common_error">"Chyba"</string>
+  <string name="common_error_registering_pusher_android">"Došlo k chybě, nemusíte dostávat oznámení o nových zprávách. Vyřešte prosím problémy s oznámeními z nastavení.
+
+Důvod: %1$s."</string>
   <string name="common_everyone">"Všichni"</string>
   <string name="common_failed">"Selhalo"</string>
   <string name="common_favourite">"Oblíbené"</string>
@@ -200,6 +206,7 @@
   <string name="common_search_results">"Výsledky hledání"</string>
   <string name="common_security">"Zabezpečení"</string>
   <string name="common_seen_by">"Viděno"</string>
+  <string name="common_send_to">"Odeslat do"</string>
   <string name="common_sending">"Odesílání…"</string>
   <string name="common_sending_failed">"Odeslání se nezdařilo"</string>
   <string name="common_sent">"Odesláno"</string>
