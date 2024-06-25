@@ -56,7 +56,7 @@ anvil = "2.4.9"
 autoservice = "1.1.1"
 
 # quality
-androidx-test-ext-junit = "1.1.5"
+androidx-test-ext-junit = "1.2.0"
 espresso-core = "3.5.1"
 kover = "0.8.0"
 
