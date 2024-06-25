@@ -246,9 +246,8 @@ class RustMatrixAuthenticationService @Inject constructor(
         .getBaseClientBuilder(sessionPath, pendingPassphrase)
         .requiresSlidingSync()
 
-    fun clear() {
+    private fun clear() {
         client?.close()
         client = null
     }
-
 }
