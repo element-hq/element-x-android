@@ -209,7 +209,6 @@ google_autoservice_annotations = { module = "com.google.auto.service:auto-servic
 # See https://github.com/renovatebot/renovate/issues/18354
 android_composeCompiler = { module = "androidx.compose.compiler:compiler", version.ref = "composecompiler" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
-appcompat = "androidx.appcompat:appcompat:1.7.0"
 
 [bundles]
 
