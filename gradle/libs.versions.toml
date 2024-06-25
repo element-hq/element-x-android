@@ -57,7 +57,7 @@ autoservice = "1.1.1"
 
 # quality
 androidx-test-ext-junit = "1.2.0"
-espresso-core = "3.5.1"
+espresso-core = "3.6.0"
 kover = "0.8.0"
 
 [libraries]
