@@ -57,7 +57,6 @@ autoservice = "1.1.1"
 
 # quality
 androidx-test-ext-junit = "1.2.0"
-espresso-core = "3.5.1"
 kover = "0.8.0"
 
 [libraries]
@@ -210,8 +209,6 @@ google_autoservice_annotations = { module = "com.google.auto.service:auto-servic
 # See https://github.com/renovatebot/renovate/issues/18354
 android_composeCompiler = { module = "androidx.compose.compiler:compiler", version.ref = "composecompiler" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
-appcompat = "androidx.appcompat:appcompat:1.7.0"
 
 [bundles]
 
