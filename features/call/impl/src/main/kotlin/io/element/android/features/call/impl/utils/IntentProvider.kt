@@ -35,7 +35,7 @@ internal object IntentProvider {
             context,
             DefaultElementCallEntryPoint.REQUEST_CODE,
             createIntent(context, callType),
-            0,
+            PendingIntent.FLAG_CANCEL_CURRENT,
             false
         )!!
     }
