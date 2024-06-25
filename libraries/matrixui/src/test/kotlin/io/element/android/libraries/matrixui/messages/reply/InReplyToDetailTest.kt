@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.model
+package io.element.android.libraries.matrixui.messages.reply
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
@@ -28,6 +28,8 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.timeline.aProfileTimelineDetails
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
+import io.element.android.libraries.matrix.ui.messages.reply.map
 import org.junit.Test
 
 class InReplyToDetailTest {

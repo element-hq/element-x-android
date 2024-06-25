@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.model
+package io.element.android.libraries.matrixui.messages.reply
 
 import android.content.res.Configuration
 import androidx.compose.runtime.Composable
@@ -60,6 +60,9 @@ import io.element.android.libraries.matrix.test.timeline.aProfileTimelineDetails
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToMetadata
+import io.element.android.libraries.matrix.ui.messages.reply.metadata
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -336,7 +336,7 @@ class MessagesPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
             val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
-            assertThat(replyMode.replyToDetails).isInstanceOf(InReplyToDetails.Ready::class.java)
+            assertThat(replyMode.replyToDetails).isInstanceOf(InReplyToDetails.Loading::class.java)
             assertThat(finalState.actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
@@ -369,7 +369,7 @@ class MessagesPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
             val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
-            assertThat(replyMode.replyToDetails).isInstanceOf(InReplyToDetails.Ready::class.java)
+            assertThat(replyMode.replyToDetails).isInstanceOf(InReplyToDetails.Loading::class.java)
             assertThat(finalState.actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
@@ -395,7 +395,7 @@ class MessagesPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
             val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
-            assertThat(replyMode.replyToDetails).isInstanceOf(InReplyToDetails.Ready::class.java)
+            assertThat(replyMode.replyToDetails).isInstanceOf(InReplyToDetails.Loading::class.java)
             assertThat(finalState.actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
@@ -741,7 +741,7 @@ class MessagesPresenterTest {
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
             val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
 
-            assertThat(replyMode.replyToDetails).isInstanceOf(InReplyToDetails.Ready::class.java)
+            assertThat(replyMode.replyToDetails).isInstanceOf(InReplyToDetails.Loading::class.java)
             assertThat(finalState.actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }

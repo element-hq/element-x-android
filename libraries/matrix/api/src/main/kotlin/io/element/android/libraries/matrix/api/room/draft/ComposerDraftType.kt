@@ -18,8 +18,8 @@ package io.element.android.libraries.matrix.api.room.draft
 
 import io.element.android.libraries.matrix.api.core.EventId
 
-sealed class ComposerDraftType {
-    data object NewMessage : ComposerDraftType()
-    data class Reply(val eventId: EventId) : ComposerDraftType()
-    data class Edit(val eventId: EventId) : ComposerDraftType()
+sealed interface ComposerDraftType {
+    data object NewMessage : ComposerDraftType
+    data class Reply(val eventId: EventId) : ComposerDraftType
+    data class Edit(val eventId: EventId) : ComposerDraftType
 }

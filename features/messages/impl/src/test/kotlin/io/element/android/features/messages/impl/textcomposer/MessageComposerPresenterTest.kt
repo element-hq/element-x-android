@@ -180,7 +180,6 @@ class MessageComposerPresenterTest {
             state.eventSink.invoke(MessageComposerEvents.SetMode(mode))
             state = awaitItem()
             assertThat(state.mode).isEqualTo(mode)
-            state = awaitItem()
             assertThat(state.textEditorState.messageHtml()).isEqualTo(A_MESSAGE)
             state = backToNormalMode(state, skipCount = 1)
 
@@ -221,22 +220,6 @@ class MessageComposerPresenterTest {
 
             // The message typed while replying is not cleared
             assertThat(state.textEditorState.messageHtml()).isEqualTo(A_REPLY)
-        }
-    }
-
-    @Test
-    fun `present - change mode to quote`() = runTest {
-        val presenter = createPresenter(this)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            var state = awaitFirstItem()
-            val mode = aQuoteMode()
-            state.eventSink.invoke(MessageComposerEvents.SetMode(mode))
-            state = awaitItem()
-            assertThat(state.mode).isEqualTo(mode)
-            assertThat(state.textEditorState.messageHtml()).isEqualTo("")
-            backToNormalMode(state)
         }
     }
 
@@ -316,7 +299,6 @@ class MessageComposerPresenterTest {
             assertThat(initialState.textEditorState.messageHtml()).isEqualTo("")
             val mode = anEditMode()
             initialState.eventSink.invoke(MessageComposerEvents.SetMode(mode))
-            skipItems(1)
             val withMessageState = awaitItem()
             assertThat(withMessageState.mode).isEqualTo(mode)
             assertThat(withMessageState.textEditorState.messageHtml()).isEqualTo(A_MESSAGE)
@@ -366,7 +348,6 @@ class MessageComposerPresenterTest {
             assertThat(initialState.textEditorState.messageHtml()).isEqualTo("")
             val mode = anEditMode(eventId = null, transactionId = A_TRANSACTION_ID)
             initialState.eventSink.invoke(MessageComposerEvents.SetMode(mode))
-            skipItems(1)
             val withMessageState = awaitItem()
             assertThat(withMessageState.mode).isEqualTo(mode)
             assertThat(withMessageState.textEditorState.messageHtml()).isEqualTo(A_MESSAGE)
@@ -1085,7 +1066,6 @@ fun anEditMode(
 ) = MessageComposerMode.Edit(eventId, transactionId, message)
 
 fun aReplyMode() = MessageComposerMode.Reply(replyToDetails = InReplyToDetails.Loading(AN_EVENT_ID))
-fun aQuoteMode() = MessageComposerMode.Quote(AN_EVENT_ID, A_MESSAGE)
 
 private suspend fun TextEditorState.setHtml(html: String) {
     (this as? TextEditorState.Rich)?.richTextEditorState?.setHtml(html) ?: error("TextEditorState is not Rich")
