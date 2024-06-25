@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.impl.roomlist
 
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.DmChecker
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.impl.notificationsettings.RoomNotificationSettingsMapper
 import io.element.android.libraries.matrix.impl.room.elementHeroes
@@ -33,6 +34,7 @@ class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFacto
         val latestRoomMessage = roomListItem.latestEvent()?.use {
             roomMessageFactory.create(it)
         }
+        val isEncrypted = runCatching { roomListItem.isEncrypted() }.getOrDefault(false)
         return RoomSummaryDetails(
             roomId = RoomId(roomInfo.id),
             name = roomInfo.displayName,
@@ -47,7 +49,8 @@ class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFacto
             inviter = roomInfo.inviter?.let(RoomMemberMapper::map),
             userDefinedNotificationMode = roomInfo.userDefinedNotificationMode?.let(RoomNotificationSettingsMapper::mapMode),
             hasRoomCall = roomInfo.hasRoomCall,
-            isDm = roomInfo.isDirect && roomInfo.activeMembersCount.toLong() == 2L,
+            // TODO find some way to get the encrypted info at this point. Right now we have to assume the room is encrypted to calculate if it's a DM
+            isDm = DmChecker.isDm(direct = roomInfo.isDirect, activeMembersCount = roomInfo.activeMembersCount.toLong(), encrypted = isEncrypted),
             isFavorite = roomInfo.isFavourite,
             currentUserMembership = roomInfo.membership.map(),
             heroes = roomInfo.elementHeroes(),
