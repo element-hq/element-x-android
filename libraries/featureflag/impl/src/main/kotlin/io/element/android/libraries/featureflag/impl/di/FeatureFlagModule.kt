@@ -20,11 +20,9 @@ import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.ElementsIntoSet
-import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.featureflag.impl.FeatureFlagProvider
 import io.element.android.libraries.featureflag.impl.PreferencesFeatureFlagProvider
-import io.element.android.libraries.featureflag.impl.StaticFeatureFlagProvider
 
 @Module
 @ContributesTo(AppScope::class)
@@ -33,20 +31,10 @@ object FeatureFlagModule {
     @Provides
     @ElementsIntoSet
     fun providesFeatureFlagProvider(
-        buildType: BuildType,
         mutableFeatureFlagProvider: PreferencesFeatureFlagProvider,
-        staticFeatureFlagProvider: StaticFeatureFlagProvider,
     ): Set<FeatureFlagProvider> {
-        val providers = HashSet<FeatureFlagProvider>()
-        when (buildType) {
-            BuildType.RELEASE -> {
-                providers.add(staticFeatureFlagProvider)
-            }
-            BuildType.NIGHTLY,
-            BuildType.DEBUG -> {
-                providers.add(mutableFeatureFlagProvider)
-            }
+        return buildSet {
+            add(mutableFeatureFlagProvider)
         }
-        return providers
     }
 }

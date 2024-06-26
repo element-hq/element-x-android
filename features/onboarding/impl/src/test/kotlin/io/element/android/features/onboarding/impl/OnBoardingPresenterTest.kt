@@ -35,13 +35,18 @@ class OnBoardingPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
+        val buildMeta = aBuildMeta(
+            applicationName = "A",
+            productionApplicationName = "B",
+            desktopApplicationName = "C",
+        )
+        val featureFlagService = FakeFeatureFlagService(
+            initialState = mapOf(FeatureFlags.QrCodeLogin.key to true),
+            buildMeta = buildMeta,
+        )
         val presenter = OnBoardingPresenter(
-            buildMeta = aBuildMeta(
-                applicationName = "A",
-                productionApplicationName = "B",
-                desktopApplicationName = "C",
-            ),
-            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.QrCodeLogin.name to true)),
+            buildMeta = buildMeta,
+            featureFlagService = featureFlagService,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()

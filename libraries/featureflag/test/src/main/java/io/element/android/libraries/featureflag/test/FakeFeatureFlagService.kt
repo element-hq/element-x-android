@@ -16,19 +16,19 @@
 
 package io.element.android.libraries.featureflag.test
 
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.featureflag.api.Feature
 import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeFeatureFlagService(
-    initialState: Map<String, Boolean> = emptyMap()
+    initialState: Map<String, Boolean> = emptyMap(),
+    private val buildMeta: BuildMeta = aBuildMeta(),
 ) : FeatureFlagService {
     private val enabledFeatures = initialState
-        .map {
-            it.key to MutableStateFlow(it.value)
-        }
-        .toMap()
+        .mapValues { MutableStateFlow(it.value) }
         .toMutableMap()
 
     override suspend fun setFeatureEnabled(feature: Feature, enabled: Boolean): Boolean {
@@ -38,6 +38,6 @@ class FakeFeatureFlagService(
     }
 
     override fun isFeatureEnabledFlow(feature: Feature): Flow<Boolean> {
-        return enabledFeatures.getOrPut(feature.key) { MutableStateFlow(feature.defaultValue) }
+        return enabledFeatures.getOrPut(feature.key) { MutableStateFlow(feature.defaultValue(buildMeta)) }
     }
 }

@@ -16,11 +16,15 @@
 
 package io.element.android.libraries.featureflag.impl
 
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.featureflag.api.Feature
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class FakeMutableFeatureFlagProvider(override val priority: Int) : MutableFeatureFlagProvider {
+class FakeMutableFeatureFlagProvider(
+    override val priority: Int,
+    private val buildMeta: BuildMeta,
+) : MutableFeatureFlagProvider {
     private val enabledFeatures = mutableMapOf<String, MutableStateFlow<Boolean>>()
 
     override suspend fun setFeatureEnabled(feature: Feature, enabled: Boolean) {
@@ -29,7 +33,7 @@ class FakeMutableFeatureFlagProvider(override val priority: Int) : MutableFeatur
     }
 
     override fun isFeatureEnabledFlow(feature: Feature): Flow<Boolean> {
-        return enabledFeatures.getOrPut(feature.key) { MutableStateFlow(feature.defaultValue) }
+        return enabledFeatures.getOrPut(feature.key) { MutableStateFlow(feature.defaultValue(buildMeta)) }
     }
 
     override fun hasFeature(feature: Feature): Boolean = true
