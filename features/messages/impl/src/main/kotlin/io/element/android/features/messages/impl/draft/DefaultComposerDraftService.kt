@@ -37,7 +37,8 @@ class DefaultComposerDraftService @Inject constructor(
                 .onSuccess { draft ->
                     room.clearComposerDraft()
                     Timber.d("Loaded composer draft for room $roomId : $draft")
-                }.getOrNull()
+                }
+                .getOrNull()
         }
     }
 

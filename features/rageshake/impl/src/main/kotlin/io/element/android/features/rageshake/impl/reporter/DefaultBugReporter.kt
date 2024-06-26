@@ -282,11 +282,13 @@ class DefaultBugReporter @Inject constructor(
                 listener.onUploadFailed(serverError)
             }
         } finally {
-            // delete the generated files when the bug report process has finished
-            for (file in bugReportFiles) {
-                file.safeDelete()
+            withContext(coroutineDispatchers.io) {
+                // delete the generated files when the bug report process has finished
+                for (file in bugReportFiles) {
+                    file.safeDelete()
+                }
+                response?.close()
             }
-            response?.close()
         }
     }
 

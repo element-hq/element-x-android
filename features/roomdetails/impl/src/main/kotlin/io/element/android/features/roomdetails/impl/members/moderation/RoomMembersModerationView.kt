@@ -45,7 +45,6 @@ import io.element.android.libraries.designsystem.components.async.AsyncIndicator
 import io.element.android.libraries.designsystem.components.async.AsyncIndicatorHost
 import io.element.android.libraries.designsystem.components.async.rememberAsyncIndicatorState
 import io.element.android.libraries.designsystem.components.avatar.Avatar
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -59,6 +58,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.getBestName
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
@@ -217,12 +217,7 @@ private fun RoomMemberActionsBottomSheet(
                 modifier = Modifier.padding(vertical = 16.dp)
             ) {
                 Avatar(
-                    avatarData = AvatarData(
-                        id = roomMember.userId.value,
-                        name = roomMember.displayName,
-                        url = roomMember.avatarUrl,
-                        size = AvatarSize.RoomListManageUser,
-                    ),
+                    avatarData = roomMember.getAvatarData(size = AvatarSize.RoomListManageUser),
                     modifier = Modifier
                         .padding(bottom = 28.dp)
                         .align(Alignment.CenterHorizontally)

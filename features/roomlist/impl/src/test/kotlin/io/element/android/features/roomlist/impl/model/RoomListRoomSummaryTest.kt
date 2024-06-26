@@ -23,6 +23,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
+import kotlinx.collections.immutable.toPersistentList
 import org.junit.Test
 
 class RoomListRoomSummaryTest {
@@ -91,6 +92,7 @@ internal fun createRoomListRoomSummary(
     userDefinedNotificationMode: RoomNotificationMode? = null,
     isFavorite: Boolean = false,
     displayType: RoomSummaryDisplayType = RoomSummaryDisplayType.ROOM,
+    heroes: List<AvatarData> = emptyList(),
 ) = RoomListRoomSummary(
     id = A_ROOM_ID.value,
     roomId = A_ROOM_ID,
@@ -110,4 +112,5 @@ internal fun createRoomListRoomSummary(
     canonicalAlias = null,
     inviteSender = null,
     isDm = false,
+    heroes = heroes.toPersistentList(),
 )

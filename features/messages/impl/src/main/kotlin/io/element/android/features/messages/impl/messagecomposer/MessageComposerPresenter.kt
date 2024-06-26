@@ -57,7 +57,6 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
-import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.mediapickers.api.PickerProvider
@@ -66,8 +65,8 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
-import io.element.android.libraries.textcomposer.mentions.rememberMentionSpanProvider
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
@@ -111,7 +110,6 @@ class MessageComposerPresenter @Inject constructor(
     private val analyticsService: AnalyticsService,
     private val messageComposerContext: DefaultMessageComposerContext,
     private val richTextEditorStateFactory: RichTextEditorStateFactory,
-    private val currentSessionIdHolder: CurrentSessionIdHolder,
     private val permalinkParser: PermalinkParser,
     private val permalinkBuilder: PermalinkBuilder,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
@@ -208,7 +206,7 @@ class MessageComposerPresenter @Inject constructor(
         val memberSuggestions = remember { mutableStateListOf<ResolvedMentionSuggestion>() }
         LaunchedEffect(isMentionsEnabled) {
             if (!isMentionsEnabled) return@LaunchedEffect
-            val currentUserId = currentSessionIdHolder.current
+            val currentUserId = room.sessionId
 
             suspend fun canSendRoomMention(): Boolean {
                 val userCanSendAtRoom = room.canUserTriggerRoomNotification(currentUserId).getOrDefault(false)
@@ -258,14 +256,7 @@ class MessageComposerPresenter @Inject constructor(
             loadDraft(markdownTextEditorState, richTextEditorState)
         }
 
-        val mentionSpanProvider = if (isTesting) {
-            null
-        } else {
-            rememberMentionSpanProvider(
-                currentUserId = room.sessionId,
-                permalinkParser = permalinkParser,
-            )
-        }
+        val mentionSpanProvider = LocalMentionSpanProvider.current
 
         fun handleEvents(event: MessageComposerEvents) {
             when (event) {
@@ -379,19 +370,17 @@ class MessageComposerPresenter @Inject constructor(
                                     richTextEditorState.insertAtRoomMentionAtSuggestion()
                                 }
                                 is ResolvedMentionSuggestion.Member -> {
-                                    val text = mention.roomMember.displayName?.prependIndent("@") ?: mention.roomMember.userId.value
+                                    val text = mention.roomMember.userId.value
                                     val link = permalinkBuilder.permalinkForUser(mention.roomMember.userId).getOrNull() ?: return@launch
                                     richTextEditorState.insertMentionAtSuggestion(text = text, link = link)
                                 }
                             }
                         } else if (markdownTextEditorState.currentMentionSuggestion != null) {
-                            mentionSpanProvider?.let {
-                                markdownTextEditorState.insertMention(
-                                    mention = event.mention,
-                                    mentionSpanProvider = it,
-                                    permalinkBuilder = permalinkBuilder,
-                                )
-                            }
+                            markdownTextEditorState.insertMention(
+                                mention = event.mention,
+                                mentionSpanProvider = mentionSpanProvider,
+                                permalinkBuilder = permalinkBuilder,
+                            )
                             suggestionSearchTrigger.value = null
                         }
                     }
@@ -413,7 +402,6 @@ class MessageComposerPresenter @Inject constructor(
             canCreatePoll = canCreatePoll.value,
             attachmentsState = attachmentsState.value,
             memberSuggestions = memberSuggestions.toPersistentList(),
-            currentUserId = currentSessionIdHolder.current,
             eventSink = { handleEvents(it) }
         )
     }

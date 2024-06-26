@@ -124,7 +124,6 @@ internal fun MessageComposerView(
         onReceiveSuggestion = ::onSuggestionReceived,
         onError = ::onError,
         onTyping = ::onTyping,
-        currentUserId = state.currentUserId,
         onSelectRichContent = ::sendUri,
     )
 }

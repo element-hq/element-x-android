@@ -17,7 +17,6 @@
 package io.element.android.features.messages.impl.timeline.components
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
@@ -32,11 +31,9 @@ import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -45,8 +42,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
 import androidx.compose.ui.res.stringResource
@@ -55,7 +50,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -84,7 +78,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeRepliedTo
-import io.element.android.features.messages.impl.timeline.model.event.isEdited
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -109,6 +102,13 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.roundToInt
+
+// The bubble has a negative margin to be placed a bit upper regarding the sender
+// information and overlap the avatar.
+val NEGATIVE_MARGIN_FOR_BUBBLE = (-8).dp
+
+// Width of the transparent border around the sender avatar
+val SENDER_AVATAR_BORDER_WIDTH = 3.dp
 
 @Composable
 fun TimelineItemEventRow(
@@ -281,13 +281,11 @@ private fun TimelineItemEventRowContent(
         ) = createRefs()
 
         // Sender
-        val avatarStrokeSize = 3.dp
         if (event.showSenderInformation && !timelineRoomInfo.isDm) {
             MessageSenderInformation(
                 event.senderId,
                 event.senderProfile,
                 event.senderAvatar,
-                avatarStrokeSize,
                 Modifier
                     .constrainAs(sender) {
                         top.linkTo(parent.top)
@@ -313,7 +311,7 @@ private fun TimelineItemEventRowContent(
         MessageEventBubble(
             modifier = Modifier
                 .constrainAs(message) {
-                    top.linkTo(sender.bottom, margin = -avatarStrokeSize - 8.dp)
+                    top.linkTo(sender.bottom, margin = NEGATIVE_MARGIN_FOR_BUBBLE)
                     this.linkStartOrEnd(event)
                 },
             state = bubbleState,
@@ -365,37 +363,17 @@ private fun MessageSenderInformation(
     senderId: UserId,
     senderProfile: ProfileTimelineDetails,
     senderAvatar: AvatarData,
-    avatarStrokeSize: Dp,
     modifier: Modifier = Modifier
 ) {
-    val avatarStrokeColor = MaterialTheme.colorScheme.background
-    val avatarSize = senderAvatar.size.dp
     val avatarColors = AvatarColorsProvider.provide(senderAvatar.id, ElementTheme.isLightTheme)
-    Box(
-        modifier = modifier
-    ) {
-        // Background of Avatar, to erase the corner of the message content
-        Canvas(
-            modifier = Modifier
-                .size(size = avatarSize + avatarStrokeSize)
-                .clipToBounds()
-        ) {
-            drawCircle(
-                color = avatarStrokeColor,
-                center = Offset(x = (avatarSize / 2).toPx(), y = (avatarSize / 2).toPx()),
-                radius = (avatarSize / 2 + avatarStrokeSize).toPx()
-            )
-        }
-        // Content
-        Row {
-            Avatar(senderAvatar)
-            Spacer(modifier = Modifier.width(4.dp))
-            SenderName(
-                senderId = senderId,
-                senderProfile = senderProfile,
-                senderNameMode = SenderNameMode.Timeline(avatarColors.foreground),
-            )
-        }
+    Row(modifier = modifier) {
+        Avatar(senderAvatar)
+        Spacer(modifier = Modifier.width(4.dp))
+        SenderName(
+            senderId = senderId,
+            senderProfile = senderProfile,
+            senderNameMode = SenderNameMode.Timeline(avatarColors.foreground),
+        )
     }
 }
 
@@ -451,8 +429,7 @@ private fun MessageEventBubbleContent(
                 Box(modifier, contentAlignment = Alignment.Center) {
                     content {}
                     TimelineEventTimestampView(
-                        formattedTime = event.sentTime,
-                        isMessageEdited = event.content.isEdited(),
+                        event = event,
                         modifier = Modifier
                             // Outer padding
                             .padding(horizontal = 4.dp, vertical = 4.dp)
@@ -472,8 +449,7 @@ private fun MessageEventBubbleContent(
                     content = { content(this::onContentLayoutChange) },
                     overlay = {
                         TimelineEventTimestampView(
-                            formattedTime = event.sentTime,
-                            isMessageEdited = event.content.isEdited(),
+                            event = event,
                             modifier = Modifier
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                         )
@@ -483,8 +459,7 @@ private fun MessageEventBubbleContent(
                 Column(modifier) {
                     content {}
                     TimelineEventTimestampView(
-                        formattedTime = event.sentTime,
-                        isMessageEdited = event.content.isEdited(),
+                        event = event,
                         modifier = Modifier
                             .align(Alignment.End)
                             .padding(horizontal = 8.dp, vertical = 4.dp)

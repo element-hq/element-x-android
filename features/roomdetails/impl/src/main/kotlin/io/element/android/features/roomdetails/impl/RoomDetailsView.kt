@@ -20,13 +20,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -49,14 +49,14 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.leaveroom.api.LeaveRoomView
 import io.element.android.features.roomdetails.impl.components.RoomBadge
-import io.element.android.features.userprofile.shared.UserProfileHeaderSection
 import io.element.android.features.userprofile.shared.blockuser.BlockUserDialogs
 import io.element.android.features.userprofile.shared.blockuser.BlockUserSection
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.components.ClickableLinkText
-import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
+import io.element.android.libraries.designsystem.components.avatar.DmAvatars
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.button.MainActionButton
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -79,11 +79,16 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.getBestName
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun RoomDetailsView(
@@ -125,38 +130,35 @@ fun RoomDetailsView(
                         roomId = state.roomId,
                         roomName = state.roomName,
                         roomAlias = state.roomAlias,
-                        isEncrypted = state.isEncrypted,
-                        isPublic = state.isPublic,
+                        heroes = state.heroes,
                         openAvatarPreview = { avatarUrl ->
                             openAvatarPreview(state.roomName, avatarUrl)
                         },
                     )
-                    MainActionsSection(
-                        state = state,
-                        onShareRoom = onShareRoom,
-                        onInvitePeople = invitePeople,
-                        onCall = onJoinCallClick,
-                    )
                 }
-
                 is RoomDetailsType.Dm -> {
-                    val member = state.roomType.roomMember
-                    UserProfileHeaderSection(
-                        avatarUrl = state.roomAvatarUrl ?: member.avatarUrl,
-                        userId = member.userId,
-                        userName = state.roomName,
-                        openAvatarPreview = { avatarUrl ->
-                            openAvatarPreview(member.getBestName(), avatarUrl)
+                    DmHeaderSection(
+                        me = state.roomType.me,
+                        otherMember = state.roomType.otherMember,
+                        roomName = state.roomName,
+                        openAvatarPreview = { name, avatarUrl ->
+                            openAvatarPreview(name, avatarUrl)
                         },
-                    )
-                    MainActionsSection(
-                        state = state,
-                        onShareRoom = onShareRoom,
-                        onInvitePeople = invitePeople,
-                        onCall = onJoinCallClick,
                     )
                 }
             }
+            BadgeList(
+                isEncrypted = state.isEncrypted,
+                isPublic = state.isPublic,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            )
+            Spacer(Modifier.height(32.dp))
+            MainActionsSection(
+                state = state,
+                onShareRoom = onShareRoom,
+                onInvitePeople = invitePeople,
+                onCall = onJoinCallClick,
+            )
             Spacer(Modifier.height(12.dp))
 
             if (state.roomTopic !is RoomTopicState.Hidden) {
@@ -322,8 +324,7 @@ private fun RoomHeaderSection(
     roomId: RoomId,
     roomName: String,
     roomAlias: RoomAlias?,
-    isEncrypted: Boolean,
-    isPublic: Boolean,
+    heroes: ImmutableList<MatrixUser>,
     openAvatarPreview: (url: String) -> Unit,
 ) {
     Column(
@@ -332,30 +333,65 @@ private fun RoomHeaderSection(
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Avatar(
+        CompositeAvatar(
             avatarData = AvatarData(roomId.value, roomName, avatarUrl, AvatarSize.RoomHeader),
+            heroes = heroes.map { user ->
+                user.getAvatarData(size = AvatarSize.RoomHeader)
+            }.toPersistentList(),
             modifier = Modifier
-                .size(70.dp)
                 .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
                 .testTag(TestTags.roomDetailAvatar)
         )
-        Spacer(modifier = Modifier.height(24.dp))
+        TitleAndSubtitle(title = roomName, subtitle = roomAlias?.value)
+    }
+}
+
+@Composable
+private fun DmHeaderSection(
+    me: RoomMember,
+    otherMember: RoomMember,
+    roomName: String,
+    openAvatarPreview: (name: String, url: String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        DmAvatars(
+            userAvatarData = me.getAvatarData(size = AvatarSize.DmCluster),
+            otherUserAvatarData = otherMember.getAvatarData(size = AvatarSize.DmCluster),
+            openAvatarPreview = { url -> openAvatarPreview(me.getBestName(), url) },
+            openOtherAvatarPreview = { url -> openAvatarPreview(roomName, url) },
+        )
+        TitleAndSubtitle(
+            title = roomName,
+            subtitle = otherMember.userId.value,
+        )
+    }
+}
+
+@Composable
+private fun ColumnScope.TitleAndSubtitle(
+    title: String,
+    subtitle: String?,
+) {
+    Spacer(modifier = Modifier.height(24.dp))
+    Text(
+        text = title,
+        style = ElementTheme.typography.fontHeadingLgBold,
+        textAlign = TextAlign.Center,
+    )
+    if (subtitle != null) {
+        Spacer(modifier = Modifier.height(6.dp))
         Text(
-            text = roomName,
-            style = ElementTheme.typography.fontHeadingLgBold,
+            text = subtitle,
+            style = ElementTheme.typography.fontBodyLgRegular,
+            color = MaterialTheme.colorScheme.secondary,
             textAlign = TextAlign.Center,
         )
-        if (roomAlias != null) {
-            Spacer(modifier = Modifier.height(6.dp))
-            Text(
-                text = roomAlias.value,
-                style = ElementTheme.typography.fontBodyLgRegular,
-                color = MaterialTheme.colorScheme.secondary,
-                textAlign = TextAlign.Center,
-            )
-        }
-        BadgeList(isEncrypted = isEncrypted, isPublic = isPublic)
-        Spacer(Modifier.height(32.dp))
     }
 }
 
@@ -363,11 +399,12 @@ private fun RoomHeaderSection(
 private fun BadgeList(
     isEncrypted: Boolean,
     isPublic: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     if (isEncrypted || isPublic) {
-        Spacer(modifier = Modifier.height(8.dp))
         Row(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = modifier
+                .padding(start = 16.dp, end = 16.dp, top = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             if (isEncrypted) {

@@ -5,6 +5,8 @@
     "Введите "
     <b>"ключ восстановления"</b>
   </string>
+  <string name="full_screen_intent_banner_message">"Чтобы никогда не пропустить важный звонок, измените настройки, чтобы разрешить полноэкранные уведомления, когда ваш телефон заблокирован."</string>
+  <string name="full_screen_intent_banner_title">"Улучшите качество звонков"</string>
   <string name="screen_invites_decline_chat_message">"Вы уверены, что хотите отклонить приглашение в %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Отклонить приглашение"</string>
   <string name="screen_invites_decline_direct_chat_message">"Вы уверены, что хотите отказаться от личного общения с %1$s?"</string>

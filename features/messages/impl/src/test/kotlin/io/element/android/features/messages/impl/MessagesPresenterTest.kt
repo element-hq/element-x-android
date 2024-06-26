@@ -70,13 +70,11 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
-import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
-import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
@@ -780,10 +778,9 @@ class MessagesPresenterTest {
             messageComposerContext = DefaultMessageComposerContext(),
             richTextEditorStateFactory = TestRichTextEditorStateFactory(),
             permissionsPresenterFactory = permissionsPresenterFactory,
-            currentSessionIdHolder = CurrentSessionIdHolder(FakeMatrixClient(A_SESSION_ID)),
+            permalinkParser = FakePermalinkParser(),
             permalinkBuilder = FakePermalinkBuilder(),
             timelineController = TimelineController(matrixRoom),
-            permalinkParser = permalinkParser,
             draftService = FakeComposerDraftService(),
         ).apply {
             showTextFormatting = true

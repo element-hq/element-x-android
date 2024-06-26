@@ -21,7 +21,6 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.createComposeRule
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.test.A_USER_ID
-import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -33,9 +32,7 @@ class DefaultHtmlConverterProviderTest {
 
     @Test
     fun `calling provide without calling Update first should throw an exception`() {
-        val provider = DefaultHtmlConverterProvider(
-            permalinkParser = FakePermalinkParser(),
-        )
+        val provider = DefaultHtmlConverterProvider()
 
         val exception = runCatching { provider.provide() }.exceptionOrNull()
 
@@ -44,9 +41,7 @@ class DefaultHtmlConverterProviderTest {
 
     @Test
     fun `calling provide after calling Update first should return an HtmlConverter`() {
-        val provider = DefaultHtmlConverterProvider(
-            permalinkParser = FakePermalinkParser(),
-        )
+        val provider = DefaultHtmlConverterProvider()
         composeTestRule.setContent {
             CompositionLocalProvider(LocalInspectionMode provides true) {
                 provider.Update(currentUserId = A_USER_ID)

@@ -1,0 +1,1 @@
+Resolve display names in mentions in real time, also send mentions with user ids as the fallback text for the link representation of the mentions.

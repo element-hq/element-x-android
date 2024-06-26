@@ -73,12 +73,14 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.ui.messages.reply.map
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.room.canCall
 import io.element.android.libraries.matrix.ui.room.canRedactOtherAsState
 import io.element.android.libraries.matrix.ui.room.canRedactOwnAsState
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -137,6 +139,9 @@ class MessagesPresenter @AssistedInject constructor(
         }
         val roomAvatar: AsyncData<AvatarData> by remember {
             derivedStateOf { roomInfo?.avatarData()?.let { AsyncData.Success(it) } ?: AsyncData.Uninitialized }
+        }
+        val heroes by remember {
+            derivedStateOf { roomInfo?.heroes().orEmpty().toPersistentList() }
         }
 
         var hasDismissedInviteDialog by rememberSaveable {
@@ -204,6 +209,7 @@ class MessagesPresenter @AssistedInject constructor(
             roomId = room.roomId,
             roomName = roomName,
             roomAvatar = roomAvatar,
+            heroes = heroes,
             userHasPermissionToSendMessage = userHasPermissionToSendMessage,
             userHasPermissionToRedactOwn = userHasPermissionToRedactOwn,
             userHasPermissionToRedactOther = userHasPermissionToRedactOther,
@@ -235,6 +241,12 @@ class MessagesPresenter @AssistedInject constructor(
             url = avatarUrl ?: room.avatarUrl,
             size = AvatarSize.TimelineRoom
         )
+    }
+
+    private fun MatrixRoomInfo.heroes(): List<AvatarData> {
+        return heroes.map { user ->
+            user.getAvatarData(size = AvatarSize.TimelineRoom)
+        }
     }
 
     private fun CoroutineScope.handleTimelineAction(

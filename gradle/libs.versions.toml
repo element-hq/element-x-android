@@ -34,7 +34,7 @@ coroutines = "1.8.1"
 accompanist = "0.34.0"
 
 # Test
-test_core = "1.5.0"
+test_core = "1.6.0"
 
 #other
 coil = "2.6.0"
@@ -44,7 +44,7 @@ serialization_json = "1.6.3"
 showkase = "1.0.3"
 appyx = "1.4.0"
 sqldelight = "2.0.2"
-wysiwyg = "2.37.3"
+wysiwyg = "2.37.4"
 telephoto = "0.11.2"
 
 # DI
@@ -55,8 +55,7 @@ anvil = "2.4.9"
 autoservice = "1.1.1"
 
 # quality
-androidx-test-ext-junit = "1.1.5"
-espresso-core = "3.5.1"
+androidx-test-ext-junit = "1.2.0"
 kover = "0.8.0"
 
 [libraries]
@@ -68,7 +67,7 @@ kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 gms_google_services = "com.google.gms:google-services:4.4.2"
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:33.1.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:33.1.1"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 
@@ -138,7 +137,7 @@ test_core = { module = "androidx.test:core", version.ref = "test_core" }
 test_corektx = { module = "androidx.test:core-ktx", version.ref = "test_core" }
 test_arch_core = "androidx.arch.core:core-testing:2.2.0"
 test_junit = "junit:junit:4.13.2"
-test_runner = "androidx.test:runner:1.5.2"
+test_runner = "androidx.test:runner:1.6.0"
 test_mockk = "io.mockk:mockk:1.13.11"
 test_konsist = "com.lemonappdev:konsist:0.15.1"
 test_turbine = "app.cash.turbine:turbine:1.1.0"
@@ -175,7 +174,7 @@ otaliastudios_transcoder = "com.otaliastudios:transcoder:0.10.5"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
-statemachine = "com.freeletics.flowredux:compose:1.2.1"
+statemachine = "com.freeletics.flowredux:compose:1.2.2"
 maplibre = "org.maplibre.gl:android-sdk:11.0.1"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:3.0.0"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.0"
@@ -184,7 +183,7 @@ kotlinpoet = "com.squareup:kotlinpoet:1.17.0"
 zxing_cpp = "io.github.zxing-cpp:android:2.2.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.3.2"
+posthog = "com.posthog:posthog-android:3.4.0"
 sentry = "io.sentry:sentry-android:7.10.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.23.1"
@@ -209,8 +208,6 @@ google_autoservice_annotations = { module = "com.google.auto.service:auto-servic
 # See https://github.com/renovatebot/renovate/issues/18354
 android_composeCompiler = { module = "androidx.compose.compiler:compiler", version.ref = "composecompiler" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
-appcompat = "androidx.appcompat:appcompat:1.7.0"
 
 [bundles]
 

@@ -51,6 +51,7 @@ dependencies {
 
     ksp(libs.showkase.processor)
 
+    testImplementation(libs.coroutines.test)
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)
@@ -62,4 +63,5 @@ dependencies {
     testImplementation(libs.test.mockk)
     testImplementation(libs.test.robolectric)
     testImplementation(libs.androidx.compose.ui.test.junit)
+    testImplementation(projects.libraries.sessionStorage.test)
 }
