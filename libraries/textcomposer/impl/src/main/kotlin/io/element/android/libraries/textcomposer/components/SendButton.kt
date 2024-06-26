@@ -86,7 +86,7 @@ internal fun SendButton(
 @Composable
 internal fun SendButtonPreview() = ElementPreview {
     val normalMode = MessageComposerMode.Normal
-    val editMode = MessageComposerMode.Edit(null, "", null)
+    val editMode = MessageComposerMode.Edit(null, null, "")
     Row {
         SendButton(canSendMessage = true, onClick = {}, composerMode = normalMode)
         SendButton(canSendMessage = false, onClick = {}, composerMode = normalMode)

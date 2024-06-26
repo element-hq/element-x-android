@@ -26,6 +26,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.Lifecycle
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -35,6 +36,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
@@ -45,6 +47,7 @@ import io.element.android.libraries.androidutils.system.toast
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.analytics.toAnalyticsViewRoom
@@ -195,6 +198,12 @@ class MessagesNode @AssistedInject constructor(
             LocalTimelineItemPresenterFactories provides timelineItemPresenterFactories,
         ) {
             val state = presenter.present()
+            OnLifecycleEvent { _, event ->
+                when (event) {
+                    Lifecycle.Event.ON_PAUSE -> state.composerState.eventSink(MessageComposerEvents.SaveDraft)
+                    else -> Unit
+                }
+            }
             MessagesView(
                 state = state,
                 onBackClick = this::navigateUp,

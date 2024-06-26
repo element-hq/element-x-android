@@ -39,6 +39,7 @@ import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
+import io.element.android.features.messages.impl.draft.ComposerDraftService
 import io.element.android.features.messages.impl.mentions.MentionSuggestionsProcessor
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.libraries.architecture.Presenter
@@ -54,6 +55,10 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.Mention
+import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
+import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
+import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
@@ -62,6 +67,7 @@ import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
+import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
@@ -69,6 +75,7 @@ import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.textcomposer.model.rememberMarkdownTextEditorState
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
+import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CancellationException
@@ -107,10 +114,10 @@ class MessageComposerPresenter @Inject constructor(
     private val permalinkBuilder: PermalinkBuilder,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
     private val timelineController: TimelineController,
+    private val draftService: ComposerDraftService,
 ) : Presenter<MessageComposerState> {
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
     private var pendingEvent: MessageComposerEvents? = null
-
     private val suggestionSearchTrigger = MutableStateFlow<Suggestion?>(null)
 
     // Used to disable some UI related elements in tests
@@ -126,8 +133,6 @@ class MessageComposerPresenter @Inject constructor(
     override fun present(): MessageComposerState {
         val localCoroutineScope = rememberCoroutineScope()
 
-        // Initially disabled so we don't set focus and text twice
-        var applyFormattingModeChanges by remember { mutableStateOf(false) }
         val richTextEditorState = richTextEditorStateFactory.remember()
         if (isTesting) {
             richTextEditorState.isReadyToProcessActions = true
@@ -174,18 +179,6 @@ class MessageComposerPresenter @Inject constructor(
         var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
 
         val sendTypingNotifications by sessionPreferencesStore.isSendTypingNotificationsEnabled().collectAsState(initial = true)
-
-        LaunchedEffect(messageComposerContext.composerMode) {
-            when (val modeValue = messageComposerContext.composerMode) {
-                is MessageComposerMode.Edit ->
-                    if (showTextFormatting) {
-                        richTextEditorState.setHtml(modeValue.defaultContent)
-                    } else {
-                        markdownTextEditorState.text.update(modeValue.defaultContent, true)
-                    }
-                else -> Unit
-            }
-        }
 
         LaunchedEffect(attachmentsState.value) {
             when (val attachmentStateValue = attachmentsState.value) {
@@ -259,22 +252,8 @@ class MessageComposerPresenter @Inject constructor(
             }
         )
 
-        LaunchedEffect(showTextFormatting) {
-            if (!applyFormattingModeChanges) {
-                applyFormattingModeChanges = true
-                return@LaunchedEffect
-            }
-            if (showTextFormatting) {
-                val markdown = markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
-                richTextEditorState.setMarkdown(markdown)
-                richTextEditorState.requestFocus()
-            } else {
-                val markdown = richTextEditorState.messageMarkdown
-                markdownTextEditorState.text.update(markdown, true)
-                // Give some time for the focus of the previous editor to be cleared
-                delay(100)
-                markdownTextEditorState.requestFocusAction()
-            }
+        LaunchedEffect(Unit) {
+            loadDraft(markdownTextEditorState, richTextEditorState)
         }
 
         val mentionSpanProvider = LocalMentionSpanProvider.current
@@ -320,19 +299,7 @@ class MessageComposerPresenter @Inject constructor(
                     attachmentState = attachmentsState,
                 )
                 is MessageComposerEvents.SetMode -> {
-                    messageComposerContext.composerMode = event.composerMode
-                    when (event.composerMode) {
-                        is MessageComposerMode.Reply -> event.composerMode.eventId
-                        is MessageComposerMode.Edit -> event.composerMode.eventId
-                        is MessageComposerMode.Normal -> null
-                        is MessageComposerMode.Quote -> null
-                    }.let { relatedEventId ->
-                        appCoroutineScope.launch {
-                            timelineController.invokeOnCurrentTimeline {
-                                enterSpecialMode(relatedEventId)
-                            }
-                        }
-                    }
+                    localCoroutineScope.setMode(event.composerMode, markdownTextEditorState, richTextEditorState)
                 }
                 MessageComposerEvents.AddAttachment -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = true
@@ -380,10 +347,7 @@ class MessageComposerPresenter @Inject constructor(
                 }
                 is MessageComposerEvents.ToggleTextFormatting -> {
                     showAttachmentSourcePicker = false
-                    showTextFormatting = event.enabled
-                    if (showTextFormatting) {
-                        analyticsService.captureInteraction(Interaction.Name.MobileRoomComposerFormattingEnabled)
-                    }
+                    localCoroutineScope.toggleTextFormatting(event.enabled, markdownTextEditorState, richTextEditorState)
                 }
                 is MessageComposerEvents.Error -> {
                     analyticsService.trackError(event.error)
@@ -420,6 +384,9 @@ class MessageComposerPresenter @Inject constructor(
                             suggestionSearchTrigger.value = null
                         }
                     }
+                }
+                MessageComposerEvents.SaveDraft -> {
+                    appCoroutineScope.saveDraft(textEditorState)
                 }
             }
         }
@@ -473,7 +440,6 @@ class MessageComposerPresenter @Inject constructor(
                 }
             }
 
-            is MessageComposerMode.Quote -> TODO()
             is MessageComposerMode.Reply -> {
                 timelineController.invokeOnCurrentTimeline {
                     replyMessage(capturedMode.eventId, message.markdown, message.html, mentions)
@@ -570,4 +536,111 @@ class MessageComposerPresenter @Inject constructor(
                 snackbarDispatcher.post(snackbarMessage)
             }
         }
+
+    private fun CoroutineScope.loadDraft(
+        markdownTextEditorState: MarkdownTextEditorState,
+        richTextEditorState: RichTextEditorState,
+    ) = launch {
+        val draft = draftService.loadDraft(room.roomId) ?: return@launch
+        val htmlText = draft.htmlText
+        val markdownText = draft.plainText
+        if (htmlText != null) {
+            showTextFormatting = true
+            richTextEditorState.setHtml(htmlText)
+            richTextEditorState.requestFocus()
+        } else {
+            showTextFormatting = false
+            markdownTextEditorState.text.update(markdownText, true)
+            markdownTextEditorState.requestFocusAction()
+        }
+        when (val draftType = draft.draftType) {
+            ComposerDraftType.NewMessage -> messageComposerContext.composerMode = MessageComposerMode.Normal
+            is ComposerDraftType.Edit -> messageComposerContext.composerMode = MessageComposerMode.Edit(
+                eventId = draftType.eventId,
+                transactionId = null,
+                content = htmlText ?: markdownText
+            )
+            is ComposerDraftType.Reply -> {
+                messageComposerContext.composerMode = MessageComposerMode.Reply(InReplyToDetails.Loading(draftType.eventId))
+                timelineController.invokeOnCurrentTimeline {
+                    val replyToDetails = loadReplyDetails(draftType.eventId).map(permalinkParser)
+                    run { messageComposerContext.composerMode = MessageComposerMode.Reply(replyToDetails) }
+                }
+            }
+        }
+    }
+
+    private fun CoroutineScope.saveDraft(
+        textEditorState: TextEditorState,
+    ) = launch {
+        val html = textEditorState.messageHtml()
+        val markdown = textEditorState.messageMarkdown(permalinkBuilder)
+        val draftType = when (val mode = messageComposerContext.composerMode) {
+            is MessageComposerMode.Normal -> ComposerDraftType.NewMessage
+            is MessageComposerMode.Edit -> {
+                mode.eventId?.let { eventId -> ComposerDraftType.Edit(eventId) }
+            }
+            is MessageComposerMode.Reply -> ComposerDraftType.Reply(mode.eventId)
+        }
+        if (draftType == null || markdown.isBlank()) {
+            return@launch
+        } else {
+            val composerDraft = ComposerDraft(
+                draftType = draftType,
+                htmlText = html,
+                plainText = markdown,
+            )
+            draftService.saveDraft(room.roomId, composerDraft)
+        }
+    }
+
+    private fun CoroutineScope.toggleTextFormatting(
+        enabled: Boolean,
+        markdownTextEditorState: MarkdownTextEditorState,
+        richTextEditorState: RichTextEditorState,
+    ) = launch {
+        showTextFormatting = enabled
+        if (showTextFormatting) {
+            val markdown = markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
+            richTextEditorState.setMarkdown(markdown)
+            richTextEditorState.requestFocus()
+            analyticsService.captureInteraction(Interaction.Name.MobileRoomComposerFormattingEnabled)
+        } else {
+            val markdown = richTextEditorState.messageMarkdown
+            markdownTextEditorState.text.update(markdown, true)
+            // Give some time for the focus of the previous editor to be cleared
+            delay(100)
+            markdownTextEditorState.requestFocusAction()
+        }
+    }
+
+    private fun CoroutineScope.setMode(
+        composerMode: MessageComposerMode,
+        markdownTextEditorState: MarkdownTextEditorState,
+        richTextEditorState: RichTextEditorState
+    ) = launch {
+        messageComposerContext.composerMode = composerMode
+        when (composerMode) {
+            is MessageComposerMode.Reply -> {
+                timelineController.invokeOnCurrentTimeline {
+                    enterSpecialMode(composerMode.eventId)
+                }
+            }
+            is MessageComposerMode.Edit -> {
+                setText(composerMode.content, markdownTextEditorState, richTextEditorState)
+                timelineController.invokeOnCurrentTimeline {
+                    enterSpecialMode(composerMode.eventId)
+                }
+            }
+            else -> Unit
+        }
+    }
+
+    private suspend fun setText(content: String, markdownTextEditorState: MarkdownTextEditorState, richTextEditorState: RichTextEditorState) {
+        if (showTextFormatting) {
+            richTextEditorState.setHtml(content)
+        } else {
+            markdownTextEditorState.text.update(content, true)
+        }
+    }
 }

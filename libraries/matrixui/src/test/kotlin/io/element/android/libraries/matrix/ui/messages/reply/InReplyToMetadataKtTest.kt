@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.model
+package io.element.android.libraries.matrix.ui.messages.reply
 
 import android.content.res.Configuration
 import androidx.compose.runtime.Composable
