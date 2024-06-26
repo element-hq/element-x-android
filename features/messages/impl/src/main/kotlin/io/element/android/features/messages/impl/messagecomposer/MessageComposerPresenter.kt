@@ -187,12 +187,22 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
+        val textEditorState by rememberUpdatedState(
+            if (showTextFormatting) {
+                TextEditorState.Rich(richTextEditorState)
+            } else {
+                TextEditorState.Markdown(markdownTextEditorState)
+            }
+        )
+
         LaunchedEffect(attachmentsState.value) {
             when (val attachmentStateValue = attachmentsState.value) {
                 is AttachmentsState.Sending.Processing -> {
                     ongoingSendAttachmentJob.value = localCoroutineScope.sendAttachment(
-                        attachmentStateValue.attachments.first(),
-                        attachmentsState,
+                        attachment = attachmentStateValue.attachments.first(),
+                        message = null,
+                        attachmentState = attachmentsState,
+                        textEditorState = textEditorState,
                     )
                 }
                 else -> Unit
@@ -251,14 +261,6 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
-        val textEditorState by rememberUpdatedState(
-            if (showTextFormatting) {
-                TextEditorState.Rich(richTextEditorState)
-            } else {
-                TextEditorState.Markdown(markdownTextEditorState)
-            }
-        )
-
         LaunchedEffect(showTextFormatting) {
             if (!applyFormattingModeChanges) {
                 applyFormattingModeChanges = true
@@ -301,11 +303,25 @@ class MessageComposerPresenter @Inject constructor(
                     } else {
                         markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
                     }
-                    appCoroutineScope.sendMessage(
-                        message = Message(html = html, markdown = markdown),
-                        updateComposerMode = { messageComposerContext.composerMode = it },
-                        textEditorState = textEditorState,
-                    )
+                    when (val attachmentState = attachmentsState.value) {
+                        // Are we sending media?
+                        is AttachmentsState.Previewing -> {
+                            appCoroutineScope.sendAttachment(
+                                attachmentState.attachments.first(),
+                                message = Message(html = html, markdown = markdown),
+                                attachmentState = attachmentsState,
+                                textEditorState = textEditorState,
+                            )
+                        }
+                        // Send normal message
+                        else -> {
+                            appCoroutineScope.sendMessage(
+                                message = Message(html = html, markdown = markdown),
+                                updateComposerMode = { messageComposerContext.composerMode = it },
+                                textEditorState = textEditorState,
+                            )
+                        }
+                    }
                 }
                 is MessageComposerEvents.SendUri -> appCoroutineScope.sendAttachment(
                     attachment = Attachment.Media(
@@ -317,7 +333,9 @@ class MessageComposerPresenter @Inject constructor(
                         ),
                         compressIfPossible = true
                     ),
+                    message = null,
                     attachmentState = attachmentsState,
+                    textEditorState,
                 )
                 is MessageComposerEvents.SetMode -> {
                     messageComposerContext.composerMode = event.composerMode
@@ -371,6 +389,9 @@ class MessageComposerPresenter @Inject constructor(
                 MessageComposerEvents.PickAttachmentSource.Poll -> {
                     showAttachmentSourcePicker = false
                     // Navigation to the create poll screen is done at the view layer
+                }
+                is MessageComposerEvents.ClearAttachments -> {
+                    attachmentsState.value = AttachmentsState.None
                 }
                 is MessageComposerEvents.CancelSendAttachment -> {
                     ongoingSendAttachmentJob.value?.let {
@@ -493,18 +514,31 @@ class MessageComposerPresenter @Inject constructor(
 
     private fun CoroutineScope.sendAttachment(
         attachment: Attachment,
+        message: Message?,
         attachmentState: MutableState<AttachmentsState>,
-    ) = when (attachment) {
-        is Attachment.Media -> {
-            launch {
+        textEditorState: TextEditorState,
+    ) = launch {
+        when (attachment) {
+            is Attachment.Media -> {
+                textEditorState.reset()
                 sendMedia(
-                    uri = attachment.localMedia.uri,
-                    mimeType = attachment.localMedia.info.mimeType,
-                    attachmentState = attachmentState,
-                )
+                        uri = attachment.localMedia.uri,
+                        mimeType = attachment.localMedia.info.mimeType,
+                        caption = when (message?.markdown.isNullOrEmpty()) {
+                            true -> null
+                            false -> message?.markdown
+                        },
+                        formattedCaption = when (message?.html.isNullOrEmpty()) {
+                            true -> null
+                            false -> message?.html
+                        },
+                        attachmentState = attachmentState,
+                        compressIfPossible = attachment.compressIfPossible,
+                    )
             }
         }
     }
+
 
     @UnstableApi
     private fun handlePickedMedia(
@@ -540,7 +574,10 @@ class MessageComposerPresenter @Inject constructor(
     private suspend fun sendMedia(
         uri: Uri,
         mimeType: String,
+        caption: String?,
+        formattedCaption: String?,
         attachmentState: MutableState<AttachmentsState>,
+        compressIfPossible: Boolean = false,
     ) = runCatching {
         val context = coroutineContext
         val progressCallback = object : ProgressCallback {
@@ -550,10 +587,13 @@ class MessageComposerPresenter @Inject constructor(
                 }
             }
         }
+        attachmentState.value = AttachmentsState.Sending.Uploading(0F)
         mediaSender.sendMedia(
             uri = uri,
             mimeType = mimeType,
-            compressIfPossible = false,
+            compressIfPossible = compressIfPossible,
+            caption,
+            formattedCaption,
             progressCallback = progressCallback
         ).getOrThrow()
     }

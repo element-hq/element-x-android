@@ -37,10 +37,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -60,7 +58,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewView
 import io.element.android.features.messages.impl.mentions.MentionSuggestionsPickerView
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsBottomSheet
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
@@ -114,7 +112,6 @@ fun MessagesView(
     onEventClick: (event: TimelineItem.Event) -> Boolean,
     onUserDataClick: (UserId) -> Unit,
     onLinkClick: (String) -> Unit,
-    onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
     onSendLocationClick: () -> Unit,
     onCreatePollClick: () -> Unit,
     onJoinCallClick: () -> Unit,
@@ -129,7 +126,6 @@ fun MessagesView(
 
     AttachmentStateView(
         state = state.composerState.attachmentsState,
-        onPreviewAttachments = onPreviewAttachments,
         onCancel = { state.composerState.eventSink(MessageComposerEvents.CancelSendAttachment) },
     )
 
@@ -275,17 +271,11 @@ private fun ReinviteDialog(state: MessagesState) {
 @Composable
 private fun AttachmentStateView(
     state: AttachmentsState,
-    onPreviewAttachments: (ImmutableList<Attachment>) -> Unit,
     onCancel: () -> Unit,
 ) {
     when (state) {
         AttachmentsState.None -> Unit
-        is AttachmentsState.Previewing -> {
-            val latestOnPreviewAttachments by rememberUpdatedState(onPreviewAttachments)
-            LaunchedEffect(state) {
-                latestOnPreviewAttachments(state.attachments)
-            }
-        }
+        is AttachmentsState.Previewing -> Unit
         is AttachmentsState.Sending -> {
             ProgressDialog(
                 type = when (state) {
@@ -396,7 +386,7 @@ private fun MessagesViewContent(
             },
             sheetContentKey = sheetResizeContentKey.intValue,
             sheetTonalElevation = 0.dp,
-            sheetShadowElevation = if (state.composerState.memberSuggestions.isNotEmpty()) 16.dp else 0.dp,
+            sheetShadowElevation = if (state.composerState.memberSuggestions.isNotEmpty() || state.composerState.attachmentsState != AttachmentsState.None) 16.dp else 0.dp,
         )
     }
 }
@@ -424,6 +414,14 @@ private fun MessagesViewComposerBottomSheetContents(
                 onSelectSuggestion = {
                     state.composerState.eventSink(MessageComposerEvents.InsertMention(it))
                 }
+            )
+            AttachmentsPreviewView(
+                state = state.composerState.attachmentsState,
+                onDismiss = {
+                    state.composerState.eventSink(MessageComposerEvents.ClearAttachments)
+                },
+                modifier = Modifier
+                    .heightIn(max = 230.dp)
             )
             MessageComposerView(
                 state = state.composerState,
@@ -552,7 +550,6 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onBackClick = {},
         onRoomDetailsClick = {},
         onEventClick = { false },
-        onPreviewAttachments = {},
         onUserDataClick = {},
         onLinkClick = {},
         onSendLocationClick = {},

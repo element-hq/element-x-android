@@ -5,6 +5,7 @@
   <string name="rich_text_editor_close_formatting_options">"Close formatting options"</string>
   <string name="rich_text_editor_code_block">"Toggle code block"</string>
   <string name="rich_text_editor_composer_placeholder">"Message…"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"Caption…"</string>
   <string name="rich_text_editor_create_link">"Create a link"</string>
   <string name="rich_text_editor_edit_link">"Edit link"</string>
   <string name="rich_text_editor_format_bold">"Apply bold format"</string>
