@@ -35,7 +35,7 @@ sealed interface MessageComposerMode {
         val content: String
     ) : Special
 
-    class Reply(
+    data class Reply(
         val replyToDetails: InReplyToDetails
     ) : Special {
         val eventId: EventId = replyToDetails.eventId()

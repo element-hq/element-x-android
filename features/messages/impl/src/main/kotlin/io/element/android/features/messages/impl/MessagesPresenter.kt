@@ -105,7 +105,6 @@ class MessagesPresenter @AssistedInject constructor(
     private val timelineController: TimelineController,
     private val permalinkParser: PermalinkParser,
 ) : Presenter<MessagesState> {
-
     private val timelinePresenter = timelinePresenterFactory.create(navigator = navigator)
 
     @AssistedFactory

@@ -139,7 +139,6 @@ class InReplyToDetailsOtherProvider : InReplyToDetailsProvider() {
         )
 }
 
-
 private fun aMessageContent(
     body: String,
     type: MessageType,

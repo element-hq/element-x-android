@@ -16,6 +16,4 @@
 
 package io.element.android.libraries.di
 
-abstract class RoomScope private constructor(
-
-)
+abstract class RoomScope private constructor()

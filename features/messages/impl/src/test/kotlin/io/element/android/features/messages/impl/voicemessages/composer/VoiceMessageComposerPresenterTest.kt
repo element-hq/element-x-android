@@ -29,8 +29,6 @@ import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.messages.impl.voicemessages.VoiceMessageException
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
-import io.element.android.libraries.matrix.test.A_MESSAGE
-import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer

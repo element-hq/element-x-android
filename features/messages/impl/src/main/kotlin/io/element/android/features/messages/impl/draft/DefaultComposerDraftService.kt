@@ -28,7 +28,6 @@ import javax.inject.Inject
 class DefaultComposerDraftService @Inject constructor(
     private val client: MatrixClient,
 ) : ComposerDraftService {
-
     override suspend fun loadDraft(roomId: RoomId): ComposerDraft? {
         return client.getRoom(roomId)?.use { room ->
             room.loadComposerDraft()

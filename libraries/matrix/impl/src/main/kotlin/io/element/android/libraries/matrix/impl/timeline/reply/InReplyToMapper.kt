@@ -27,7 +27,6 @@ import org.matrix.rustcomponents.sdk.RepliedToEventDetails
 class InReplyToMapper(
     private val timelineEventContentMapper: TimelineEventContentMapper,
 ) {
-
     fun map(inReplyToDetails: InReplyToDetails): InReplyTo {
         val inReplyToId = EventId(inReplyToDetails.eventId)
         return when (val event = inReplyToDetails.event) {

@@ -656,7 +656,3 @@ class MessageComposerPresenter @Inject constructor(
         }
     }
 }
-
-
-
-
