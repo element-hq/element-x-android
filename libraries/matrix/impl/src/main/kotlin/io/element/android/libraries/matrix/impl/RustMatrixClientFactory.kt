@@ -50,7 +50,6 @@ class RustMatrixClientFactory @Inject constructor(
         val client = getBaseClientBuilder(sessionData.sessionPath, sessionData.passphrase)
             .serverNameOrHomeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
-            // FIXME Quick and dirty fix for stopping version requests on startup https://github.com/matrix-org/matrix-rust-sdk/pull/1376
             .use { it.build() }
 
         client.restoreSession(sessionData.toSession())
@@ -80,6 +79,7 @@ class RustMatrixClientFactory @Inject constructor(
             .addRootCertificates(userCertificatesProvider.provides())
             .autoEnableBackups(true)
             .autoEnableCrossSigning(true)
+            // FIXME Quick and dirty fix for stopping version requests on startup https://github.com/matrix-org/matrix-rust-sdk/pull/1376
             .serverVersions(listOf("v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"))
             .apply {
                 proxyProvider.provides()?.let { proxy(it) }
