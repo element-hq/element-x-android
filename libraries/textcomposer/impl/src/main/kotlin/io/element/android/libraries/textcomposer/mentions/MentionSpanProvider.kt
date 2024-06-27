@@ -108,7 +108,7 @@ class MentionSpanProvider @AssistedInject constructor(
                 MentionSpan(
                     text = text,
                     rawValue = "@room",
-                    type = MentionSpan.Type.USER,
+                    type = MentionSpan.Type.EVERYONE,
                     backgroundColor = otherBackgroundColor,
                     textColor = otherTextColor,
                     startPadding = startPaddingPx,

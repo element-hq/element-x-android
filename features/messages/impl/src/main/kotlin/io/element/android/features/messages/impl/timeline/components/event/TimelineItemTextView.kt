@@ -94,8 +94,10 @@ private fun updateMentionSpans(text: CharSequence?, cache: RoomMemberProfilesCac
                         mentionSpan.text = displayName
                     }
                 }
+                // There's no need to do anything for `@room` pills
+                MentionSpan.Type.EVERYONE -> Unit
                 // Nothing yet for room mentions
-                else -> Unit
+                MentionSpan.Type.ROOM -> Unit
             }
         }
     }

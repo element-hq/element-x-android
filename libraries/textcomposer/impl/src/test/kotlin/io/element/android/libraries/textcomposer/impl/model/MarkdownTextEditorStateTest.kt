@@ -156,7 +156,7 @@ class MarkdownTextEditorStateTest {
 
     private fun aMarkdownTextWithMentions(): CharSequence {
         val userMentionSpan = MentionSpan("@Alice", "@alice:matrix.org", MentionSpan.Type.USER, 0, 0, 0, 0)
-        val atRoomMentionSpan = MentionSpan("@room", "@room", MentionSpan.Type.USER, 0, 0, 0, 0)
+        val atRoomMentionSpan = MentionSpan("@room", "@room", MentionSpan.Type.EVERYONE, 0, 0, 0, 0)
         return buildSpannedString {
             append("Hello ")
             inSpans(userMentionSpan) {
