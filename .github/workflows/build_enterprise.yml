@@ -16,8 +16,8 @@ jobs:
   build:
     name: Build Enterprise APKs
     runs-on: ubuntu-latest
-    # Skip for `main`
-    if: github.ref != 'refs/heads/main'
+    # Skip in forks
+    if: github.repository == 'element-hq/element-x-android'
     strategy:
       matrix:
         variant: [debug, release, nightly]
