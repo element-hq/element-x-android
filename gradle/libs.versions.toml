@@ -55,7 +55,7 @@ anvil = "2.4.9"
 autoservice = "1.1.1"
 
 # quality
-androidx-test-ext-junit = "1.2.0"
+androidx-test-ext-junit = "1.2.1"
 kover = "0.8.0"
 
 [libraries]
