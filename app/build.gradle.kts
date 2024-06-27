@@ -212,7 +212,6 @@ knit {
         exclude(
             "**/build/**",
             "*/.gradle/**",
-            "*/towncrier/template.md",
             "**/CHANGES.md",
         )
     }
