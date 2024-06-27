@@ -88,10 +88,12 @@ private fun updateMentionSpans(text: CharSequence?, cache: RoomMemberProfilesCac
         for (mentionSpan in text.getMentionSpans()) {
             when (mentionSpan.type) {
                 MentionSpan.Type.USER -> {
-                    val displayName = cache.getDisplayName(UserId(mentionSpan.rawValue)) ?: mentionSpan.rawValue
-                    if (mentionSpan.text != displayName) {
-                        changedContents = true
-                        mentionSpan.text = displayName
+                    if (mentionSpan.rawValue != "@room") {
+                        val displayName = cache.getDisplayName(UserId(mentionSpan.rawValue)) ?: mentionSpan.rawValue
+                        if (mentionSpan.text != displayName) {
+                            changedContents = true
+                            mentionSpan.text = displayName
+                        }
                     }
                 }
                 // Nothing yet for room mentions
