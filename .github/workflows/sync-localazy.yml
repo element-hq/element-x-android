@@ -45,3 +45,4 @@ jobs:
             - Update Strings from Localazy
           branch: sync-localazy
           base: develop
+          labels: PR-i18n

@@ -4,7 +4,7 @@
     "config:base"
   ],
   "labels" : [
-    "dependencies"
+    "PR-Dependencies"
   ],
   "ignoreDeps" : [
     "string:app_name"
