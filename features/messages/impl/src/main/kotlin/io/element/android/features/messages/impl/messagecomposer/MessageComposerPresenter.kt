@@ -621,16 +621,8 @@ class MessageComposerPresenter @Inject constructor(
     ) = launch {
         messageComposerContext.composerMode = composerMode
         when (composerMode) {
-            is MessageComposerMode.Reply -> {
-                timelineController.invokeOnCurrentTimeline {
-                    enterSpecialMode(composerMode.eventId)
-                }
-            }
             is MessageComposerMode.Edit -> {
                 setText(composerMode.content, markdownTextEditorState, richTextEditorState)
-                timelineController.invokeOnCurrentTimeline {
-                    enterSpecialMode(composerMode.eventId)
-                }
             }
             else -> Unit
         }

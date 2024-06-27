@@ -68,7 +68,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.FormattedBody
 import org.matrix.rustcomponents.sdk.MessageFormat
 import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
@@ -252,7 +251,6 @@ class RustTimeline(
 
     override fun close() {
         inner.close()
-        specialModeEventTimelineItem?.destroy()
     }
 
     private suspend fun fetchMembers() = withContext(dispatcher) {
@@ -333,7 +331,6 @@ class RustTimeline(
                             newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
                             eventId = originalEventId.value,
                         )
-                        specialModeEventTimelineItem = null
                     }
                     transactionId != null -> {
                         error("Editing local echo is not supported yet.")
@@ -345,18 +342,6 @@ class RustTimeline(
             }
         }
 
-    private var specialModeEventTimelineItem: EventTimelineItem? = null
-
-    override suspend fun enterSpecialMode(eventId: EventId?): Result<Unit> = withContext(dispatcher) {
-        runCatching {
-            specialModeEventTimelineItem?.destroy()
-            specialModeEventTimelineItem = null
-            specialModeEventTimelineItem = eventId?.let { inner.getEventTimelineItemByEventId(it.value) }
-        }.onFailure {
-            Timber.e(it, "Unable to retrieve event for special mode. Are you using the correct timeline?")
-        }
-    }
-
     override suspend fun replyMessage(
         eventId: EventId,
         body: String,
@@ -367,10 +352,6 @@ class RustTimeline(
         runCatching {
             val msg = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map())
             inner.sendReply(msg, eventId.value)
-            if (!fromNotification) {
-                // When replying from a notification, do not interfere with `specialModeEventTimelineItem`
-                specialModeEventTimelineItem = null
-            }
         }
     }
 

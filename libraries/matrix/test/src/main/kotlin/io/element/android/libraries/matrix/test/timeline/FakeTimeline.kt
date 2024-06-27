@@ -104,12 +104,6 @@ class FakeTimeline(
         mentions
     )
 
-    var enterSpecialModeLambda: (eventId: EventId?) -> Result<Unit> = {
-        Result.success(Unit)
-    }
-
-    override suspend fun enterSpecialMode(eventId: EventId?): Result<Unit> = enterSpecialModeLambda(eventId)
-
     var replyMessageLambda: (
         eventId: EventId,
         body: String,
