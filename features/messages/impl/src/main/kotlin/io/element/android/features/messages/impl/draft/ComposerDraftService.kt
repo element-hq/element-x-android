@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.sender
+package io.element.android.features.messages.impl.draft
 
-import androidx.compose.runtime.Immutable
-import androidx.compose.ui.graphics.Color
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 
-@Immutable
-sealed interface SenderNameMode {
-    data class Timeline(val mainColor: Color) : SenderNameMode
-    data object Reply : SenderNameMode
-    data object ActionList : SenderNameMode
+interface ComposerDraftService {
+    suspend fun loadDraft(roomId: RoomId): ComposerDraft?
+    suspend fun saveDraft(roomId: RoomId, draft: ComposerDraft)
 }

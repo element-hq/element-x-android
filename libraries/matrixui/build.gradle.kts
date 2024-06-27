@@ -23,6 +23,11 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.matrix.ui"
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 anvil {
@@ -48,9 +53,15 @@ dependencies {
 
     testImplementation(libs.coroutines.test)
     testImplementation(libs.test.junit)
-    testImplementation(libs.test.robolectric)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
+    testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.libraries.sessionStorage.test)
+    testImplementation(projects.libraries.dateformatter.test)
     testImplementation(projects.tests.testutils)
+    testImplementation(libs.test.mockk)
+    testImplementation(libs.test.robolectric)
+    testImplementation(libs.androidx.compose.ui.test.junit)
+    testImplementation(projects.libraries.sessionStorage.test)
 }

@@ -45,4 +45,5 @@ sealed interface MessageComposerEvents {
     data class TypingNotice(val isTyping: Boolean) : MessageComposerEvents
     data class SuggestionReceived(val suggestion: Suggestion?) : MessageComposerEvents
     data class InsertMention(val mention: ResolvedMentionSuggestion) : MessageComposerEvents
+    data object SaveDraft : MessageComposerEvents
 }

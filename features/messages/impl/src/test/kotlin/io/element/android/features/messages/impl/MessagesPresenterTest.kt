@@ -25,11 +25,11 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.draft.FakeComposerDraftService
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.messagecomposer.DefaultMessageComposerContext
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
-import io.element.android.features.messages.impl.messagesummary.FakeMessageSummaryFormatter
 import io.element.android.features.messages.impl.textcomposer.TestRichTextEditorStateFactory
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineItemIndexer
@@ -65,6 +65,7 @@ import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
@@ -81,6 +82,7 @@ import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.libraries.mediaupload.api.MediaSender
@@ -331,7 +333,7 @@ class MessagesPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
             val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
-            assertThat(replyMode.attachmentThumbnailInfo).isNotNull()
+            assertThat(replyMode.replyToDetails).isInstanceOf(InReplyToDetails.Loading::class.java)
             assertThat(finalState.actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
@@ -364,7 +366,7 @@ class MessagesPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
             val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
-            assertThat(replyMode.attachmentThumbnailInfo).isNotNull()
+            assertThat(replyMode.replyToDetails).isInstanceOf(InReplyToDetails.Loading::class.java)
             assertThat(finalState.actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
@@ -390,7 +392,7 @@ class MessagesPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
             val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
-            assertThat(replyMode.attachmentThumbnailInfo).isNotNull()
+            assertThat(replyMode.replyToDetails).isInstanceOf(InReplyToDetails.Loading::class.java)
             assertThat(finalState.actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
@@ -735,9 +737,8 @@ class MessagesPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.composerState.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
             val replyMode = finalState.composerState.mode as MessageComposerMode.Reply
-            assertThat(replyMode.attachmentThumbnailInfo).isNotNull()
-            assertThat(replyMode.attachmentThumbnailInfo?.textContent)
-                .isEqualTo("What type of food should we have at the party?")
+
+            assertThat(replyMode.replyToDetails).isInstanceOf(InReplyToDetails.Loading::class.java)
             assertThat(finalState.actionListState.target).isEqualTo(ActionListState.Target.None)
         }
     }
@@ -758,6 +759,7 @@ class MessagesPresenterTest {
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
         permissionsPresenter: PermissionsPresenter = FakePermissionsPresenter(),
         endPollAction: EndPollAction = FakeEndPollAction(),
+        permalinkParser: PermalinkParser = FakePermalinkParser(),
     ): MessagesPresenter {
         val mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom)
         val permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter)
@@ -779,6 +781,7 @@ class MessagesPresenterTest {
             permalinkParser = FakePermalinkParser(),
             permalinkBuilder = FakePermalinkBuilder(),
             timelineController = TimelineController(matrixRoom),
+            draftService = FakeComposerDraftService(),
         ).apply {
             showTextFormatting = true
             isTesting = true
@@ -830,7 +833,6 @@ class MessagesPresenterTest {
             readReceiptBottomSheetPresenter = readReceiptBottomSheetPresenter,
             networkMonitor = FakeNetworkMonitor(),
             snackbarDispatcher = SnackbarDispatcher(),
-            messageSummaryFormatter = FakeMessageSummaryFormatter(),
             navigator = navigator,
             clipboardHelper = clipboardHelper,
             featureFlagsService = FakeFeatureFlagService(),
@@ -838,6 +840,7 @@ class MessagesPresenterTest {
             dispatchers = coroutineDispatchers,
             htmlConverterProvider = FakeHtmlConverterProvider(),
             timelineController = TimelineController(matrixRoom),
+            permalinkParser = permalinkParser,
         )
     }
 }

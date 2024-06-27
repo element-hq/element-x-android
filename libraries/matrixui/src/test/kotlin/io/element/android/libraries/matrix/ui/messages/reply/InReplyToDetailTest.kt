@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.timeline.model
+package io.element.android.libraries.matrix.ui.messages.reply
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody

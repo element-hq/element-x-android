@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.sender
+package io.element.android.libraries.matrix.ui.messages.sender
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.messages.impl.timeline.components.aProfileTimelineDetailsReady
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 
@@ -58,9 +57,10 @@ private fun aSenderNameData(
     displayNameAmbiguous: Boolean = false,
 ) = SenderNameData(
     userId = UserId("@alice:${senderNameMode.javaClass.simpleName.lowercase()}"),
-    profileTimelineDetails = aProfileTimelineDetailsReady(
+    profileTimelineDetails = ProfileTimelineDetails.Ready(
         displayName = "Alice ${senderNameMode.javaClass.simpleName}",
         displayNameAmbiguous = displayNameAmbiguous,
+        avatarUrl = null
     ),
     senderNameMode = senderNameMode,
 )
