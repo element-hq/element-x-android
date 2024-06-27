@@ -34,6 +34,7 @@ fun aNotificationData(
         roomAvatarUrl = null,
         roomDisplayName = null,
         isDirect = false,
+        isDm = false,
         isEncrypted = false,
         isNoisy = false,
         timestamp = 0L,

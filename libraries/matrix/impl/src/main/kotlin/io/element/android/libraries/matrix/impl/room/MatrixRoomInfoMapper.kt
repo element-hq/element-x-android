@@ -45,6 +45,7 @@ class MatrixRoomInfoMapper {
             isSpace = it.isSpace,
             isTombstoned = it.isTombstoned,
             isFavorite = it.isFavourite,
+            isEncrypted = it.isEncrypted,
             canonicalAlias = it.canonicalAlias?.let(::RoomAlias),
             alternativeAliases = it.alternativeAliases.toImmutableList(),
             currentUserMembership = it.membership.map(),

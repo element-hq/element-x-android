@@ -38,6 +38,7 @@ data class MatrixRoomInfo(
     val isSpace: Boolean,
     val isTombstoned: Boolean,
     val isFavorite: Boolean,
+    val isEncrypted: Boolean,
     val canonicalAlias: RoomAlias?,
     val alternativeAliases: ImmutableList<String>,
     val currentUserMembership: CurrentUserMembership,
@@ -52,4 +53,6 @@ data class MatrixRoomInfo(
     val hasRoomCall: Boolean,
     val activeRoomCallParticipants: ImmutableList<String>,
     val heroes: ImmutableList<MatrixUser>,
-)
+) {
+    val isDm: Boolean get() = DmChecker.isDm(isDirect = isDirect, activeMembersCount = activeMembersCount.toInt(), isEncrypted = isEncrypted)
+}

@@ -45,7 +45,7 @@ import org.junit.Test
 class DefaultRoomMembersModerationPresenterTest {
     @Test
     fun `canDisplayModerationActions - when room is DM is false`() = runTest {
-        val room = FakeMatrixRoom(isDirect = true, isPublic = true, isOneToOne = true).apply {
+        val room = FakeMatrixRoom(isDirect = true, isPublic = true, activeMemberCount = 2).apply {
             givenRoomInfo(aRoomInfo(isDirect = true, isPublic = false, activeMembersCount = 2))
         }
         val presenter = createDefaultRoomMembersModerationPresenter(matrixRoom = room)
@@ -54,7 +54,7 @@ class DefaultRoomMembersModerationPresenterTest {
 
     @Test
     fun `canDisplayModerationActions - when user can kick other users, FF is enabled and room is not a DM returns true`() = runTest {
-        val room = FakeMatrixRoom(isDirect = false, isOneToOne = false).apply {
+        val room = FakeMatrixRoom(isDirect = false, activeMemberCount = 10).apply {
             givenCanKickResult(Result.success(true))
         }
         val presenter = createDefaultRoomMembersModerationPresenter(matrixRoom = room)
@@ -63,7 +63,7 @@ class DefaultRoomMembersModerationPresenterTest {
 
     @Test
     fun `canDisplayModerationActions - when user can ban other users, FF is enabled and room is not a DM returns true`() = runTest {
-        val room = FakeMatrixRoom(isDirect = false, isOneToOne = false).apply {
+        val room = FakeMatrixRoom(isDirect = false, activeMemberCount = 10).apply {
             givenCanBanResult(Result.success(true))
         }
         val presenter = createDefaultRoomMembersModerationPresenter(matrixRoom = room)

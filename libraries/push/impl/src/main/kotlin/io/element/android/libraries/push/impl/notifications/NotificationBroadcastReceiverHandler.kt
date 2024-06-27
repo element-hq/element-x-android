@@ -161,6 +161,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
             threadId = threadId,
             roomName = room.displayName,
             roomIsDirect = room.isDirect,
+            roomIsDm = room.isDm,
             outGoingMessage = true,
         )
         onNotifiableEventReceived.onNotifiableEventReceived(notifiableMessageEvent)

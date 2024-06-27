@@ -18,6 +18,7 @@ package io.element.android.libraries.matrix.impl.roomlist
 
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.DmChecker
 import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.impl.notificationsettings.RoomNotificationSettingsMapper
 import io.element.android.libraries.matrix.impl.room.elementHeroes
@@ -47,7 +48,7 @@ class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFacto
             inviter = roomInfo.inviter?.let(RoomMemberMapper::map),
             userDefinedNotificationMode = roomInfo.userDefinedNotificationMode?.let(RoomNotificationSettingsMapper::mapMode),
             hasRoomCall = roomInfo.hasRoomCall,
-            isDm = roomInfo.isDirect && roomInfo.activeMembersCount.toLong() == 2L,
+            isDm = DmChecker.isDm(isDirect = roomInfo.isDirect, activeMembersCount = roomInfo.activeMembersCount.toInt(), isEncrypted = roomInfo.isEncrypted),
             isFavorite = roomInfo.isFavourite,
             currentUserMembership = roomInfo.membership.map(),
             heroes = roomInfo.elementHeroes(),

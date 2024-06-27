@@ -162,7 +162,7 @@ class MessagesPresenter @AssistedInject constructor(
         var showReinvitePrompt by remember { mutableStateOf(false) }
         LaunchedEffect(hasDismissedInviteDialog, composerState.textEditorState.hasFocus(), syncUpdateFlow.value) {
             withContext(dispatchers.io) {
-                showReinvitePrompt = !hasDismissedInviteDialog && composerState.textEditorState.hasFocus() && room.isDirect && room.activeMemberCount == 1L
+                showReinvitePrompt = !hasDismissedInviteDialog && composerState.textEditorState.hasFocus() && room.isDm && room.activeMemberCount == 1L
             }
         }
         val networkConnectionStatus by networkMonitor.connectivity.collectAsState()

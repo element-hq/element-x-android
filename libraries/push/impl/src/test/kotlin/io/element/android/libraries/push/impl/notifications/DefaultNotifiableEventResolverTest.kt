@@ -686,6 +686,7 @@ class DefaultNotifiableEventResolverTest {
             timestamp = timestamp,
             content = content,
             hasMention = hasMention,
+            isDm = false,
         )
     }
 

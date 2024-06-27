@@ -27,12 +27,12 @@ import org.junit.Test
 class RoomListFilterTest {
     private val regularRoom = aRoomSummaryFilled(
         aRoomSummaryDetails(
-            isDirect = false
+            isDm = false
         )
     )
-    private val directRoom = aRoomSummaryFilled(
+    private val dmRoom = aRoomSummaryFilled(
         aRoomSummaryDetails(
-            isDirect = true
+            isDm = true,
         )
     )
     private val favoriteRoom = aRoomSummaryFilled(
@@ -63,7 +63,7 @@ class RoomListFilterTest {
 
     private val roomSummaries = listOf(
         regularRoom,
-        directRoom,
+        dmRoom,
         favoriteRoom,
         markedAsUnreadRoom,
         unreadNotificationRoom,
@@ -86,7 +86,7 @@ class RoomListFilterTest {
     @Test
     fun `Room list filter people`() = runTest {
         val filter = RoomListFilter.Category.People
-        assertThat(roomSummaries.filter(filter)).containsExactly(directRoom)
+        assertThat(roomSummaries.filter(filter)).containsExactly(dmRoom)
     }
 
     @Test

@@ -58,7 +58,7 @@ interface MatrixRoom : Closeable {
     val joinedMemberCount: Long
 
     /** Whether the room is a direct message. */
-    val isDm: Boolean get() = isDirect && isOneToOne
+    val isDm: Boolean get() = DmChecker.isDm(isDirect = isDirect, activeMembersCount = activeMemberCount.toInt(), isEncrypted = isEncrypted)
 
     val roomInfoFlow: Flow<MatrixRoomInfo>
     val roomTypingMembersFlow: Flow<List<UserId>>

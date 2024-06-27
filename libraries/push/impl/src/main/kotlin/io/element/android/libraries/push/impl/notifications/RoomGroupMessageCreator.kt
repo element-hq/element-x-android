@@ -68,12 +68,14 @@ class DefaultRoomGroupMessageCreator @Inject constructor(
 
         val lastMessageTimestamp = events.last().timestamp
         val smartReplyErrors = events.filter { it.isSmartReplyError() }
+        val roomIsDm = lastKnownRoomEvent.roomIsDm
         return notificationCreator.createMessagesListNotification(
                 RoomEventGroupInfo(
                     sessionId = currentUser.userId,
                     roomId = roomId,
                     roomDisplayName = roomName,
                     isDirect = !roomIsGroup,
+                    isDm = roomIsDm,
                     hasSmartReplyError = smartReplyErrors.isNotEmpty(),
                     shouldBing = events.any { it.noisy },
                     customSound = events.last().soundName,

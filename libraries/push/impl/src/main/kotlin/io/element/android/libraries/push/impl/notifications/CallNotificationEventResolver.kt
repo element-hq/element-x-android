@@ -80,6 +80,7 @@ class DefaultCallNotificationEventResolver @Inject constructor(
                     body = "☎️ ${stringProvider.getString(R.string.notification_incoming_call)}",
                     roomName = roomDisplayName,
                     roomIsDirect = isDirect,
+                    roomIsDm = isDm,
                     roomAvatarPath = roomAvatarUrl,
                     senderAvatarPath = senderAvatarUrl,
                     type = EventType.CALL_NOTIFY,

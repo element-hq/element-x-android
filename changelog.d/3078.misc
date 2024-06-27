@@ -1,0 +1,1 @@
+Unify DM room check. A DM for Element is a room with at most 2 active members, direct and encrypted.

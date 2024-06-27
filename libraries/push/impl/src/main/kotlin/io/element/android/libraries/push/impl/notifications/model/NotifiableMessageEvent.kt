@@ -44,6 +44,7 @@ data class NotifiableMessageEvent(
     val threadId: ThreadId?,
     val roomName: String?,
     val roomIsDirect: Boolean = false,
+    val roomIsDm: Boolean = false,
     val roomAvatarPath: String? = null,
     val senderAvatarPath: String? = null,
     val soundName: String? = null,

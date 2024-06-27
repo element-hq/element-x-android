@@ -121,6 +121,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     imageUriString = fetchImageIfPresent(client)?.toString(),
                     roomName = roomDisplayName,
                     roomIsDirect = isDirect,
+                    roomIsDm = isDm,
                     roomAvatarPath = roomAvatarUrl,
                     senderAvatarPath = senderAvatarUrl,
                 )
@@ -169,6 +170,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     imageUriString = fetchImageIfPresent(client)?.toString(),
                     roomName = roomDisplayName,
                     roomIsDirect = isDirect,
+                    roomIsDm = isDm,
                     roomAvatarPath = roomAvatarUrl,
                     senderAvatarPath = senderAvatarUrl,
                 )
@@ -198,6 +200,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     imageUriString = null,
                     roomName = roomDisplayName,
                     roomIsDirect = isDirect,
+                    roomIsDm = isDm,
                     roomAvatarPath = roomAvatarUrl,
                     senderAvatarPath = senderAvatarUrl,
                 )
@@ -331,6 +334,7 @@ internal fun buildNotifiableMessageEvent(
     threadId: ThreadId? = null,
     roomName: String? = null,
     roomIsDirect: Boolean = false,
+    roomIsDm: Boolean = false,
     roomAvatarPath: String? = null,
     senderAvatarPath: String? = null,
     soundName: String? = null,
@@ -355,6 +359,7 @@ internal fun buildNotifiableMessageEvent(
     threadId = threadId,
     roomName = roomName,
     roomIsDirect = roomIsDirect,
+    roomIsDm = roomIsDm,
     roomAvatarPath = roomAvatarPath,
     senderAvatarPath = senderAvatarPath,
     soundName = soundName,

@@ -774,7 +774,6 @@ class MessageComposerPresenterTest {
         val david = aRoomMember(userId = A_USER_ID_4, displayName = "Dave", membership = RoomMembershipState.JOIN)
         val room = FakeMatrixRoom(
             isDirect = false,
-            isOneToOne = false,
         ).apply {
             givenRoomMembersState(
                 MatrixRoomMembersState.Ready(
@@ -840,7 +839,8 @@ class MessageComposerPresenterTest {
         val david = aRoomMember(userId = A_USER_ID_4, displayName = "Dave", membership = RoomMembershipState.JOIN)
         val room = FakeMatrixRoom(
             isDirect = true,
-            isOneToOne = true,
+            activeMemberCount = 2,
+            isEncrypted = true,
         ).apply {
             givenRoomMembersState(
                 MatrixRoomMembersState.Ready(

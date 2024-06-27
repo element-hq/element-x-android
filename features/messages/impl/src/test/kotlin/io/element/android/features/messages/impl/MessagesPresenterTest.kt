@@ -510,7 +510,7 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - shows prompt to reinvite users in DM`() = runTest {
-        val room = FakeMatrixRoom(sessionId = A_SESSION_ID, isDirect = true, activeMemberCount = 1L)
+        val room = FakeMatrixRoom(sessionId = A_SESSION_ID, isDirect = true, activeMemberCount = 1L, isEncrypted = true)
         val presenter = createMessagesPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()

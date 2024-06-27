@@ -58,8 +58,7 @@ class DefaultRoomMembersModerationPresenter @Inject constructor(
     private suspend fun canKick() = room.canKick().getOrDefault(false)
 
     override suspend fun canDisplayModerationActions(): Boolean {
-        val isDm = room.isDm && room.isEncrypted
-        return !isDm && (canBan() || canKick())
+        return !room.isDm && (canBan() || canKick())
     }
 
     @Composable
