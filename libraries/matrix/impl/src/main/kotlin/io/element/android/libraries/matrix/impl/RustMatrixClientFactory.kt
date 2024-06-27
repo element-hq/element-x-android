@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl
 
+import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.matrix.impl.analytics.UtdTracker
@@ -46,11 +47,9 @@ class RustMatrixClientFactory @Inject constructor(
     private val utdTracker: UtdTracker,
 ) {
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
-        val client = getBaseClientBuilder(sessionData.sessionPath)
-            .homeserverUrl(sessionData.homeserverUrl)
+        val client = getBaseClientBuilder(sessionData.sessionPath, sessionData.passphrase)
+            .serverNameOrHomeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
-            .passphrase(sessionData.passphrase)
-            // FIXME Quick and dirty fix for stopping version requests on startup https://github.com/matrix-org/matrix-rust-sdk/pull/1376
             .use { it.build() }
 
         client.restoreSession(sessionData.toSession())
@@ -71,21 +70,20 @@ class RustMatrixClientFactory @Inject constructor(
         )
     }
 
-    internal fun getBaseClientBuilder(sessionPath: String): ClientBuilder {
+    internal fun getBaseClientBuilder(sessionPath: String, passphrase: String?): ClientBuilder {
         return ClientBuilder()
             .sessionPath(sessionPath)
+            .passphrase(passphrase)
+            .slidingSyncProxy(AuthenticationConfig.SLIDING_SYNC_PROXY_URL)
             .userAgent(userAgentProvider.provide())
             .addRootCertificates(userCertificatesProvider.provides())
+            .autoEnableBackups(true)
+            .autoEnableCrossSigning(true)
+            // FIXME Quick and dirty fix for stopping version requests on startup https://github.com/matrix-org/matrix-rust-sdk/pull/1376
             .serverVersions(listOf("v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"))
-            .let {
-                // Sadly ClientBuilder.proxy() does not accept null :/
-                // Tracked by https://github.com/matrix-org/matrix-rust-sdk/issues/3159
-                val proxy = proxyProvider.provides()
-                if (proxy != null) {
-                    it.proxy(proxy)
-                } else {
-                    it
-                }
+            .run {
+                // Workaround for non-nullable proxy parameter in the SDK, since each call to the ClientBuilder returns a new reference we need to keep
+                proxyProvider.provides()?.let { proxy(it) } ?: this
             }
     }
 }

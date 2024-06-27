@@ -51,7 +51,6 @@ class MainActivity : ComponentActivity() {
             baseDirectory = baseDirectory,
             coroutineDispatchers = Singleton.coroutineDispatchers,
             sessionStore = sessionStore,
-            userAgentProvider = userAgentProvider,
             rustMatrixClientFactory = RustMatrixClientFactory(
                 baseDirectory = baseDirectory,
                 cacheDirectory = applicationContext.cacheDir,
@@ -65,8 +64,6 @@ class MainActivity : ComponentActivity() {
                 utdTracker = UtdTracker(NoopAnalyticsService()),
             ),
             passphraseGenerator = NullPassphraseGenerator(),
-            userCertificatesProvider = userCertificatesProvider,
-            proxyProvider = proxyProvider,
             oidcConfigurationProvider = OidcConfigurationProvider(baseDirectory),
         )
     }
