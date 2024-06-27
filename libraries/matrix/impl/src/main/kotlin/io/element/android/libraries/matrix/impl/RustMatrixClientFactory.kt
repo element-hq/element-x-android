@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.impl
 
-import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.matrix.impl.analytics.UtdTracker
@@ -48,7 +47,7 @@ class RustMatrixClientFactory @Inject constructor(
 ) {
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
         val client = getBaseClientBuilder(sessionData.sessionPath, sessionData.passphrase)
-            .serverNameOrHomeserverUrl(sessionData.homeserverUrl)
+            .homeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
             .use { it.build() }
 
@@ -70,11 +69,15 @@ class RustMatrixClientFactory @Inject constructor(
         )
     }
 
-    internal fun getBaseClientBuilder(sessionPath: String, passphrase: String?): ClientBuilder {
+    internal fun getBaseClientBuilder(
+        sessionPath: String,
+        passphrase: String?,
+        slidingSyncProxy: String? = null,
+    ): ClientBuilder {
         return ClientBuilder()
             .sessionPath(sessionPath)
             .passphrase(passphrase)
-            .slidingSyncProxy(AuthenticationConfig.SLIDING_SYNC_PROXY_URL)
+            .slidingSyncProxy(slidingSyncProxy)
             .userAgent(userAgentProvider.provide())
             .addRootCertificates(userCertificatesProvider.provides())
             .autoEnableBackups(true)
