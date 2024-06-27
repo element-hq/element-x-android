@@ -87,6 +87,7 @@ class MentionSpan(
                         append("#")
                     }
                 }
+                Type.EVERYONE -> Unit
             }
             append(mentionText.substring(0, min(mentionText.length, MAX_LENGTH)))
             if (mentionText.length > MAX_LENGTH) {
@@ -98,6 +99,7 @@ class MentionSpan(
     enum class Type {
         USER,
         ROOM,
+        EVERYONE,
     }
 }
 
