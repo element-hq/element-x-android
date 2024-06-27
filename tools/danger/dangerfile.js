@@ -27,30 +27,14 @@ if (editedFiles.length > 50) {
     message("This pull request seems relatively large. Please consider splitting it into multiple smaller ones.")
 }
 
-// Request a changelog for each PR
-const changelogAllowList = [
-    "dependabot[bot]",
-]
+// Request a correct title for each PR
+if (pr.title.endsWith("…")) {
+    fail("Please provide a complete title that can be used as a changelog entry.")
+}
 
-const requiresChangelog = !changelogAllowList.includes(user)
-
-if (requiresChangelog) {
-    const changelogFiles = editedFiles.filter(file => file.startsWith("changelog.d/"))
-
-    if (changelogFiles.length == 0) {
-        warn("Please add a changelog. See instructions [here](https://github.com/element-hq/element-android/blob/develop/CONTRIBUTING.md#changelog)")
-    } else {
-        const validTowncrierExtensions = [
-            "bugfix",
-            "doc",
-            "feature",
-            "misc",
-            "wip",
-        ]
-        if (!changelogFiles.every(file => validTowncrierExtensions.includes(file.split(".").pop()))) {
-            fail("Invalid extension for changelog. See instructions [here](https://github.com/element-hq/element-android/blob/develop/CONTRIBUTING.md#changelog)")
-        }
-    }
+// Request a `PR-` label for each PR
+if (pr.labels.filter((label) => label.name.startsWith("PR-")).length != 1) {
+    fail("Please add a `PR-` label to categorise the changelog entry.")
 }
 
 // check that frozen classes have not been modified
