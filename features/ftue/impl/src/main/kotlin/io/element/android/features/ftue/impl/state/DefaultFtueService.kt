@@ -119,8 +119,14 @@ class DefaultFtueService @Inject constructor(
                 emit(SessionVerifiedStatus.NotVerified)
             }
             .first()
-        val skipVerification = suspend { sessionPreferencesStore.isSessionVerificationSkipped().first() }
-        return readyVerifiedSessionStatus == SessionVerifiedStatus.NotVerified && !skipVerification()
+        // For some obscure reason we need to call this *before* we check the `readyVerifiedSessionStatus`, otherwise there's a deadlock
+        // It seems like a DataStore bug
+        val skipVerification = canSkipVerification()
+        return readyVerifiedSessionStatus == SessionVerifiedStatus.NotVerified && !skipVerification
+    }
+
+    private suspend fun canSkipVerification(): Boolean {
+        return sessionPreferencesStore.isSessionVerificationSkipped().first()
     }
 
     private suspend fun needsAnalyticsOptIn(): Boolean {
