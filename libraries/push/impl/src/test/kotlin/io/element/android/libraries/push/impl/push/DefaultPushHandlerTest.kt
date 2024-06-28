@@ -118,7 +118,7 @@ class DefaultPushHandlerTest {
             incrementPushCounterResult.assertions()
                 .isCalledOnce()
             notifiableEventResult.assertions()
-                .isNeverCalled()
+                .isCalledOnce()
             onNotifiableEventReceived.assertions()
                 .isNeverCalled()
         }
@@ -275,6 +275,34 @@ class DefaultPushHandlerTest {
 
         handleIncomingCallLambda.assertions().isNeverCalled()
         onNotifiableEventReceived.assertions().isCalledOnce()
+    }
+
+    @Test
+    fun `when notify call PushData is received, the incoming call will be treated as a normal notification even if notification are disabled`() = runTest {
+        val aPushData = PushData(
+            eventId = AN_EVENT_ID,
+            roomId = A_ROOM_ID,
+            unread = 0,
+            clientSecret = A_SECRET,
+        )
+        val onNotifiableEventReceived = lambdaRecorder<NotifiableEvent, Unit> {}
+        val handleIncomingCallLambda = lambdaRecorder<CallType.RoomCall, EventId, UserId, String?, String?, String?, String, Unit> { _, _, _, _, _, _, _ -> }
+        val elementCallEntryPoint = FakeElementCallEntryPoint(handleIncomingCallResult = handleIncomingCallLambda)
+        val defaultPushHandler = createDefaultPushHandler(
+            elementCallEntryPoint = elementCallEntryPoint,
+            onNotifiableEventReceived = onNotifiableEventReceived,
+            notifiableEventResult = { _, _, _ -> aNotifiableCallEvent() },
+            incrementPushCounterResult = {},
+            userPushStore = FakeUserPushStore().apply {
+                setNotificationEnabledForDevice(false)
+            },
+            pushClientSecret = FakePushClientSecret(
+                getUserIdFromSecretResult = { A_USER_ID }
+            ),
+        )
+        defaultPushHandler.handle(aPushData)
+        handleIncomingCallLambda.assertions().isCalledOnce()
+        onNotifiableEventReceived.assertions().isNeverCalled()
     }
 
     @Test

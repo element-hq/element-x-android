@@ -28,6 +28,7 @@ anvil {
 }
 
 dependencies {
+    implementation(libs.androidx.annotationjvm)
     implementation(libs.dagger)
     implementation(projects.libraries.di)
     implementation(projects.libraries.matrix.api)
