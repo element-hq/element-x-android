@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
+import javax.inject.Inject
 
 interface LanguageTagProvider {
     @Composable
@@ -27,7 +28,7 @@ interface LanguageTagProvider {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultLanguageTagProvider : LanguageTagProvider {
+class DefaultLanguageTagProvider @Inject constructor() : LanguageTagProvider {
     @Composable
     override fun provideLanguageTag(): String? {
         return LocalConfiguration.current.locales.get(0)?.toLanguageTag()
