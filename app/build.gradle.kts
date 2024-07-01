@@ -182,20 +182,6 @@ android {
             buildConfigField("String", "FLAVOR_DESCRIPTION", "\"FDroid\"")
         }
     }
-
-    packaging {
-        resources.pickFirsts.addAll(
-            listOf(
-                "kotlin/annotation/annotation.kotlin_builtins",
-                "kotlin/collections/collections.kotlin_builtins",
-                "kotlin/coroutines/coroutines.kotlin_builtins",
-                "kotlin/internal/internal.kotlin_builtins",
-                "kotlin/kotlin.kotlin_builtins",
-                "kotlin/ranges/ranges.kotlin_builtins",
-                "kotlin/reflect/reflect.kotlin_builtins",
-            )
-        )
-    }
 }
 
 androidComponents {
