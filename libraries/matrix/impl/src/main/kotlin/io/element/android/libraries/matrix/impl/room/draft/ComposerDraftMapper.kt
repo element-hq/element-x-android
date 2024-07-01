@@ -19,8 +19,8 @@ package io.element.android.libraries.matrix.impl.room.draft
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
-import uniffi.matrix_sdk_base.ComposerDraft as RustComposerDraft
-import uniffi.matrix_sdk_base.ComposerDraftType as RustComposerDraftType
+import org.matrix.rustcomponents.sdk.ComposerDraft as RustComposerDraft
+import org.matrix.rustcomponents.sdk.ComposerDraftType as RustComposerDraftType
 
 internal fun ComposerDraft.into(): RustComposerDraft {
     return RustComposerDraft(

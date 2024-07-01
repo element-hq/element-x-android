@@ -327,7 +327,7 @@ class RustTimeline(
             runCatching<Unit> {
                 when {
                     originalEventId != null -> {
-                        inner.edit(
+                        inner.editByEventId(
                             newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
                             eventId = originalEventId.value,
                         )
