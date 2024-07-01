@@ -23,6 +23,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Clone submodules
+        if: github.repository == 'element-hq/element-x-android'
         run: git submodule update --init --recursive
       - name: Run code quality check suite
         run: ./tools/check/check_code_quality.sh
@@ -79,6 +80,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Clone submodules
+        if: github.repository == 'element-hq/element-x-android'
         run: git submodule update --init --recursive
       - name: Use JDK 17
         uses: actions/setup-java@v4
@@ -117,6 +119,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Clone submodules
+        if: github.repository == 'element-hq/element-x-android'
         run: git submodule update --init --recursive
       - name: Use JDK 17
         uses: actions/setup-java@v4
@@ -159,6 +162,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Clone submodules
+        if: github.repository == 'element-hq/element-x-android'
         run: git submodule update --init --recursive
       - name: Use JDK 17
         uses: actions/setup-java@v4
@@ -197,6 +201,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Clone submodules
+        if: github.repository == 'element-hq/element-x-android'
         run: git submodule update --init --recursive
       - name: Use JDK 17
         uses: actions/setup-java@v4
@@ -235,6 +240,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Clone submodules
+        if: github.repository == 'element-hq/element-x-android'
         run: git submodule update --init --recursive
       - name: Use JDK 17
         uses: actions/setup-java@v4
