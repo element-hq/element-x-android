@@ -17,6 +17,7 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.android.build.api.variant.FilterConfiguration.FilterType.ABI
+import extension.allEnterpriseImpl
 import extension.allFeaturesImpl
 import extension.allLibrariesImpl
 import extension.allServicesImpl
@@ -46,7 +47,11 @@ android {
     namespace = "io.element.android.x"
 
     defaultConfig {
-        applicationId = "io.element.android.x"
+        applicationId = if (isEnterpriseBuild) {
+            "io.element.enterprise"
+        } else {
+            "io.element.android.x"
+        }
         targetSdk = Versions.targetSdk
         versionCode = Versions.versionCode
         versionName = Versions.versionName
@@ -99,15 +104,22 @@ android {
         }
     }
 
+    val baseAppName = if (isEnterpriseBuild) {
+        "Element Enterprise"
+    } else {
+        "Element X"
+    }
+    logger.warnInBox("Building $baseAppName")
+
     buildTypes {
         getByName("debug") {
-            resValue("string", "app_name", "Element X dbg")
+            resValue("string", "app_name", "$baseAppName dbg")
             applicationIdSuffix = ".debug"
             signingConfig = signingConfigs.getByName("debug")
         }
 
         getByName("release") {
-            resValue("string", "app_name", "Element X")
+            resValue("string", "app_name", baseAppName)
             signingConfig = signingConfigs.getByName("debug")
 
             postprocessing {
@@ -124,7 +136,7 @@ android {
             initWith(release)
             applicationIdSuffix = ".nightly"
             versionNameSuffix = "-nightly"
-            resValue("string", "app_name", "Element X nightly")
+            resValue("string", "app_name", "$baseAppName nightly")
             matchingFallbacks += listOf("release")
             signingConfig = signingConfigs.getByName("nightly")
 
@@ -220,6 +232,9 @@ knit {
 dependencies {
     allLibrariesImpl()
     allServicesImpl()
+    if (isEnterpriseBuild) {
+        allEnterpriseImpl(rootDir, logger)
+    }
     allFeaturesImpl(rootDir, logger)
     implementation(projects.features.migration.api)
     implementation(projects.anvilannotations)

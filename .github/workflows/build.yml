@@ -16,8 +16,6 @@ jobs:
   debug:
     name: Build APKs
     runs-on: ubuntu-latest
-    # Skip for `main`
-    if: github.ref != 'refs/heads/main'
     strategy:
       matrix:
         variant: [debug, release, nightly, samples]

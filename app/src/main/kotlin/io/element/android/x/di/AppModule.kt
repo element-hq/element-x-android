@@ -24,6 +24,7 @@ import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
 import io.element.android.appconfig.ApplicationConfig
+import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.messages.impl.timeline.components.customreaction.DefaultEmojibaseProvider
 import io.element.android.features.messages.impl.timeline.components.customreaction.EmojibaseProvider
 import io.element.android.libraries.androidutils.system.getVersionCodeFromManifest
@@ -77,13 +78,18 @@ object AppModule {
 
     @Provides
     @SingleIn(AppScope::class)
-    fun providesBuildMeta(@ApplicationContext context: Context, buildType: BuildType) = BuildMeta(
+    fun providesBuildMeta(
+        @ApplicationContext context: Context,
+        buildType: BuildType,
+        enterpriseService: EnterpriseService,
+    ) = BuildMeta(
         isDebuggable = BuildConfig.DEBUG,
         buildType = buildType,
         applicationName = ApplicationConfig.APPLICATION_NAME.takeIf { it.isNotEmpty() } ?: context.getString(R.string.app_name),
         productionApplicationName = ApplicationConfig.PRODUCTION_APPLICATION_NAME,
         desktopApplicationName = ApplicationConfig.DESKTOP_APPLICATION_NAME,
         applicationId = BuildConfig.APPLICATION_ID,
+        isEnterpriseBuild = enterpriseService.isEnterpriseBuild,
         // TODO EAx Config.LOW_PRIVACY_LOG_ENABLE,
         lowPrivacyLoggingEnabled = false,
         versionName = BuildConfig.VERSION_NAME,

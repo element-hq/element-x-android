@@ -112,6 +112,7 @@ class KonsistClassNameTest {
                 "DBov",
                 "Default",
                 "DataStore",
+                "Enterprise",
                 "FileExtensionExtractor",
                 "KeyStore",
                 "Matrix",

@@ -23,6 +23,7 @@ data class BuildMeta(
     val productionApplicationName: String,
     val desktopApplicationName: String,
     val applicationId: String,
+    val isEnterpriseBuild: Boolean,
     val lowPrivacyLoggingEnabled: Boolean,
     val versionName: String,
     val versionCode: Long,

@@ -169,6 +169,9 @@ class DefaultBugReporter @Inject constructor(
                 currentTracingFilter?.let {
                     builder.addFormDataPart("tracing_filter", it)
                 }
+                if (buildMeta.isEnterpriseBuild) {
+                    builder.addFormDataPart("label", "Enterprise")
+                }
                 // add the gzipped files, don't cancel the whole upload if only some file failed to upload
                 var totalUploadedSize = 0L
                 var uploadedSomeLogs = false

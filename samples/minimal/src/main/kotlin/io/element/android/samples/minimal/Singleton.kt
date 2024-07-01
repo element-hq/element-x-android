@@ -36,6 +36,7 @@ object Singleton {
         productionApplicationName = "EAX-Minimal",
         desktopApplicationName = "EAX-Minimal-Desktop",
         applicationId = "io.element.android.samples.minimal",
+        isEnterpriseBuild = false,
         lowPrivacyLoggingEnabled = false,
         versionName = "0.1.0",
         versionCode = 1,

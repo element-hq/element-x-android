@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Enterprise" pattern="file://*||file[ElementX.enterprise*]:*//*" />
+</component>
