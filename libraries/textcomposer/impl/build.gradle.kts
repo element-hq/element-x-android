@@ -16,7 +16,6 @@
 
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.ksp)
     alias(libs.plugins.anvil)
     id("kotlin-parcelize")
 }
@@ -54,8 +53,7 @@ dependencies {
         debugApi(libs.matrix.richtexteditor.compose)
     }
 
-    ksp(libs.showkase.processor)
-
+    
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)

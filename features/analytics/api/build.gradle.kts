@@ -15,7 +15,6 @@
  */
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.ksp)
 }
 
 android {
@@ -28,5 +27,4 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.uiStrings)
 
-    ksp(libs.showkase.processor)
-}
+    }

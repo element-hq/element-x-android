@@ -18,7 +18,6 @@ import java.util.Properties
 
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.ksp)
     id("kotlin-parcelize")
 }
 
@@ -66,8 +65,7 @@ dependencies {
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.uiStrings)
     implementation(libs.coil.compose)
-    ksp(libs.showkase.processor)
-
+    
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)
 }

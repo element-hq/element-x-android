@@ -21,7 +21,6 @@ import extension.allFeaturesApi
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.kapt)
     id("kotlin-parcelize")
 }
@@ -79,5 +78,4 @@ dependencies {
     testImplementation(libs.test.appyx.junit)
     testImplementation(libs.test.arch.core)
 
-    ksp(libs.showkase.processor)
-}
+    }

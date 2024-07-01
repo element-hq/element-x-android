@@ -31,7 +31,6 @@ plugins {
     id("io.element.android-compose-application")
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.anvil)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.kapt)
     // When using precompiled plugins, we need to apply the firebase plugin like this
     id(libs.plugins.firebaseAppDistribution.get().pluginId)
@@ -275,6 +274,5 @@ dependencies {
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
 
-    ksp(libs.showkase.processor)
-    koverDependencies()
+        koverDependencies()
 }

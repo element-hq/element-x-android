@@ -27,6 +27,13 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        maven {
+            url = URI("https://jitpack.io")
+            content {
+                includeModule("com.github.sergio-sastre.ComposablePreviewScanner", "android")
+                includeModule("com.github.sergio-sastre.ComposablePreviewScanner", "core")
+            }
+        }
         // Snapshot versions
         maven {
             url = URI("https://s01.oss.sonatype.org/content/repositories/snapshots")

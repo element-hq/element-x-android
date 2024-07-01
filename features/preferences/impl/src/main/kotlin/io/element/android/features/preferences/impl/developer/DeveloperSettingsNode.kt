@@ -20,7 +20,6 @@ import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.airbnb.android.showkase.models.Showkase
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -28,7 +27,6 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.libraries.designsystem.showkase.getBrowserIntent
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
@@ -49,8 +47,9 @@ class DeveloperSettingsNode @AssistedInject constructor(
     override fun View(modifier: Modifier) {
         val activity = LocalContext.current as Activity
         fun openShowkase() {
-            val intent = Showkase.getBrowserIntent(activity)
-            activity.startActivity(intent)
+            // FIXME: add alternative gallery or remove this option entirely
+//            val intent = Showkase.getBrowserIntent(activity)
+//            activity.startActivity(intent)
         }
 
         val state = presenter.present()
