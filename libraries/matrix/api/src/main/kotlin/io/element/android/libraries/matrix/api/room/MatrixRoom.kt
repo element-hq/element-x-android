@@ -308,8 +308,8 @@ interface MatrixRoom : Closeable {
     suspend fun generateWidgetWebViewUrl(
         widgetSettings: MatrixWidgetSettings,
         clientId: String,
-        languageTag: String? = null,
-        theme: String? = null,
+        languageTag: String?,
+        theme: String?,
     ): Result<String>
 
     /**
