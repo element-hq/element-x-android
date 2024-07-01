@@ -248,7 +248,9 @@ knit {
 dependencies {
     allLibrariesImpl()
     allServicesImpl()
-    allEnterpriseImpl(rootDir, logger)
+    if (isEnterpriseBuild) {
+        allEnterpriseImpl(rootDir, logger)
+    }
     allFeaturesImpl(rootDir, logger)
     implementation(projects.features.migration.api)
     implementation(projects.anvilannotations)
