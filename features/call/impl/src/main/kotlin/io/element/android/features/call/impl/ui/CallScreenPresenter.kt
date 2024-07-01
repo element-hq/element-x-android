@@ -26,10 +26,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalConfiguration
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.impl.data.WidgetMessage
 import io.element.android.features.call.impl.utils.ActiveCallManager
@@ -68,6 +70,7 @@ class CallScreenPresenter @AssistedInject constructor(
     private val screenTracker: ScreenTracker,
     private val appCoroutineScope: CoroutineScope,
     private val activeCallManager: ActiveCallManager,
+    private val languageTagProvider: LanguageTagProvider,
 ) : Presenter<CallScreenState> {
     @AssistedFactory
     interface Factory {
@@ -85,12 +88,19 @@ class CallScreenPresenter @AssistedInject constructor(
         val callWidgetDriver = remember { mutableStateOf<MatrixWidgetDriver?>(null) }
         val messageInterceptor = remember { mutableStateOf<WidgetMessageInterceptor?>(null) }
         var isJoinedCall by rememberSaveable { mutableStateOf(false) }
-
+        val languageTag = languageTagProvider.provideLanguageTag()
+        val theme = if (ElementTheme.isLightTheme) "light" else "dark"
         DisposableEffect(Unit) {
             coroutineScope.launch {
                 // Sets the call as joined
                 activeCallManager.joinedCall(callType)
-                loadUrl(callType, urlState, callWidgetDriver)
+                loadUrl(
+                    inputs = callType,
+                    urlState = urlState,
+                    callWidgetDriver = callWidgetDriver,
+                    languageTag = languageTag,
+                    theme = theme,
+                )
             }
             onDispose {
                 activeCallManager.hungUpCall(callType)
@@ -178,6 +188,8 @@ class CallScreenPresenter @AssistedInject constructor(
         inputs: CallType,
         urlState: MutableState<AsyncData<String>>,
         callWidgetDriver: MutableState<MatrixWidgetDriver?>,
+        languageTag: String?,
+        theme: String?,
     ) {
         urlState.runCatchingUpdatingState {
             when (inputs) {
@@ -189,8 +201,8 @@ class CallScreenPresenter @AssistedInject constructor(
                         sessionId = inputs.sessionId,
                         roomId = inputs.roomId,
                         clientId = UUID.randomUUID().toString(),
-                        languageTag = null,
-                        theme = null,
+                        languageTag = languageTag,
+                        theme = theme,
                     ).getOrThrow()
                     callWidgetDriver.value = result.driver
                     result.url
