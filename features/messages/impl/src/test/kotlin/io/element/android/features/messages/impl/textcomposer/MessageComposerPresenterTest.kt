@@ -1176,8 +1176,8 @@ class MessageComposerPresenterTest {
     }
 
     @Test
-    fun `present - when save draft event is invoked and composer is empty then nothing happens`() = runTest {
-        val saveDraftLambda = lambdaRecorder<RoomId, ComposerDraft, Unit> { _, _ -> }
+    fun `present - when save draft event is invoked and composer is empty then service is called with null draft`() = runTest {
+        val saveDraftLambda = lambdaRecorder<RoomId, ComposerDraft?, Unit> { _, _ -> }
         val composerDraftService = FakeComposerDraftService().apply {
             this.saveDraftLambda = saveDraftLambda
         }
@@ -1189,13 +1189,14 @@ class MessageComposerPresenterTest {
             initialState.eventSink.invoke(MessageComposerEvents.SaveDraft)
             advanceUntilIdle()
             assert(saveDraftLambda)
-                .isNeverCalled()
+                .isCalledOnce()
+                .with(value(A_ROOM_ID), value(null))
         }
     }
 
     @Test
     fun `present - when save draft event is invoked and composer is not empty then service is called`() = runTest {
-        val saveDraftLambda = lambdaRecorder<RoomId, ComposerDraft, Unit> { _, _ -> }
+        val saveDraftLambda = lambdaRecorder<RoomId, ComposerDraft?, Unit> { _, _ -> }
         val composerDraftService = FakeComposerDraftService().apply {
             this.saveDraftLambda = saveDraftLambda
         }

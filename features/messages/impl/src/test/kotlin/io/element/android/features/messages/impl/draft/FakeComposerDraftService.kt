@@ -23,6 +23,6 @@ class FakeComposerDraftService : ComposerDraftService {
     var loadDraftLambda: (RoomId) -> ComposerDraft? = { null }
     override suspend fun loadDraft(roomId: RoomId) = loadDraftLambda(roomId)
 
-    var saveDraftLambda: (RoomId, ComposerDraft) -> Unit = { _, _ -> }
-    override suspend fun saveDraft(roomId: RoomId, draft: ComposerDraft) = saveDraftLambda(roomId, draft)
+    var saveDraftLambda: (RoomId, ComposerDraft?) -> Unit = { _, _ -> }
+    override suspend fun updateDraft(roomId: RoomId, draft: ComposerDraft?) = saveDraftLambda(roomId, draft)
 }

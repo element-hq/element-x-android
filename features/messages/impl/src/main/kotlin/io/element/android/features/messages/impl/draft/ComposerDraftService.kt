@@ -21,5 +21,5 @@ import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 
 interface ComposerDraftService {
     suspend fun loadDraft(roomId: RoomId): ComposerDraft?
-    suspend fun saveDraft(roomId: RoomId, draft: ComposerDraft)
+    suspend fun updateDraft(roomId: RoomId, draft: ComposerDraft?)
 }
