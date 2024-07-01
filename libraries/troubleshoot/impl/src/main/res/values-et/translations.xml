@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_screen_action">"Käivita testid"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Käivita testid uuesti"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Mõned testid tuvastasid vigu. Palun vaata üksikasjalikku teavet."</string>
+  <string name="troubleshoot_notifications_screen_notice">"Tuvastamaks kas teavituste toimimiseks on vigu, palun käivita mõned asjakohased testid."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Proovi seda lahendada"</string>
+  <string name="troubleshoot_notifications_screen_success">"Testid ei tuvastanud vigu."</string>
+  <string name="troubleshoot_notifications_screen_title">"Teavituste veaotsing"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Palun pööra tähelepanu mõnede testide tulemustele. Palun vaata üksikasjalikku teavet."</string>
+</resources>

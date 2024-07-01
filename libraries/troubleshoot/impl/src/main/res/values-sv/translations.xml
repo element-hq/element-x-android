@@ -2,7 +2,10 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="troubleshoot_notifications_screen_action">"Kör tester"</string>
   <string name="troubleshoot_notifications_screen_action_again">"Kör tester igen"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Vissa tester misslyckades. Kontrollera detaljerna."</string>
   <string name="troubleshoot_notifications_screen_notice">"Kör testerna för att upptäcka eventuella problem i din konfiguration som kan göra att aviseringar inte fungerar som förväntat."</string>
   <string name="troubleshoot_notifications_screen_quick_fix_action">"Försök att fixa"</string>
+  <string name="troubleshoot_notifications_screen_success">"Alla tester godkändes."</string>
   <string name="troubleshoot_notifications_screen_title">"Felsök aviseringar"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Vissa tester kräver din uppmärksamhet. Kontrollera detaljerna."</string>
 </resources>

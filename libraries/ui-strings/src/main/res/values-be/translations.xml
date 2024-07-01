@@ -258,7 +258,7 @@
   <string name="error_missing_location_rationale_android">"У %1$s няма дазволу на доступ да вашага месцазнаходжання. Дазвольце доступ ніжэй."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s не мае дазволу на доступ да вашага мікрафона. Дазвольце доступ да запісу галасавога паведамлення."</string>
   <string name="error_some_messages_have_not_been_sent">"Некаторыя паведамленні не былі адпраўлены"</string>
-  <string name="error_unknown">"На жаль, адбылася памылка"</string>
+  <string name="error_unknown">"Выбачце, адбылася памылка"</string>
   <string name="invite_friends_rich_title">"🔐️ Далучайцеся да мяне %1$s"</string>
   <string name="invite_friends_text">"Гэй, пагавары са мной у %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>

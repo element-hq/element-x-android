@@ -34,6 +34,7 @@
   <string name="action_accept">"Accetta"</string>
   <string name="action_add_to_timeline">"Aggiungi alla conversazione"</string>
   <string name="action_back">"Indietro"</string>
+  <string name="action_call">"Chiama"</string>
   <string name="action_cancel">"Annulla"</string>
   <string name="action_choose_photo">"Scegli foto"</string>
   <string name="action_clear">"Cancella"</string>
@@ -72,6 +73,7 @@
   <string name="action_load_more">"Carica altro"</string>
   <string name="action_manage_account">"Gestisci account"</string>
   <string name="action_manage_devices">"Gestisci dispositivi"</string>
+  <string name="action_message">"Invia messaggio"</string>
   <string name="action_next">"Avanti"</string>
   <string name="action_no">"No"</string>
   <string name="action_not_now">"Non ora"</string>
@@ -81,6 +83,7 @@
   <string name="action_quick_reply">"Risposta rapida"</string>
   <string name="action_quote">"Citazione"</string>
   <string name="action_react">"Reagisci"</string>
+  <string name="action_reject">"Rifiuta"</string>
   <string name="action_remove">"Rimuovi"</string>
   <string name="action_reply">"Rispondi"</string>
   <string name="action_reply_in_thread">"Rispondi nella discussione"</string>
@@ -117,6 +120,7 @@
   <string name="common_blocked_users">"Utenti bloccati"</string>
   <string name="common_bubbles">"Fumetti"</string>
   <string name="common_call_invite">"Chiamata in corso (non supportata)"</string>
+  <string name="common_call_started">"Chiamata avviata"</string>
   <string name="common_chat_backup">"Backup della chat"</string>
   <string name="common_copyright">"Copyright"</string>
   <string name="common_creating_room">"Creazione stanza…"</string>
@@ -125,12 +129,16 @@
   <string name="common_decryption_error">"Errore di decrittazione"</string>
   <string name="common_developer_options">"Opzioni sviluppatore"</string>
   <string name="common_direct_chat">"Conversazione diretta"</string>
+  <string name="common_do_not_show_this_again">"Non mostrarlo più"</string>
   <string name="common_edited_suffix">"(modificato)"</string>
   <string name="common_editing">"Modifica in corso"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Crittografia abilitata"</string>
   <string name="common_enter_your_pin">"Inserisci il PIN"</string>
   <string name="common_error">"Errore"</string>
+  <string name="common_error_registering_pusher_android">"Si è verificato un errore, potresti non ricevere notifiche per nuovi messaggi. Risolvi i problemi relativi alle notifiche dalle impostazioni.
+
+Motivo:. %1$s"</string>
   <string name="common_everyone">"Tutti"</string>
   <string name="common_failed">"Fallito"</string>
   <string name="common_favourite">"Preferiti"</string>
@@ -194,6 +202,7 @@
   <string name="common_search_results">"Risultati di ricerca"</string>
   <string name="common_security">"Sicurezza"</string>
   <string name="common_seen_by">"Visto da"</string>
+  <string name="common_send_to">"Invia a"</string>
   <string name="common_sending">"Invio in corso…"</string>
   <string name="common_sending_failed">"Invio fallito"</string>
   <string name="common_sent">"Inviato"</string>
@@ -262,6 +271,7 @@
   <string name="screen_room_member_details_unblock_alert_action">"Sblocca"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Potrai vedere di nuovo tutti i suoi messaggi."</string>
   <string name="screen_room_member_details_unblock_user">"Sblocca utente"</string>
+  <string name="screen_room_title">"Conversazione"</string>
   <string name="screen_share_location_title">"Condividi posizione"</string>
   <string name="screen_share_my_location_action">"Condividi la mia posizione"</string>
   <string name="screen_share_open_apple_maps">"Apri in Apple Maps"</string>

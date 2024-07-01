@@ -3,6 +3,7 @@
   <string name="notification_channel_call">"Chiamata"</string>
   <string name="notification_channel_listening_for_events">"Eventi in ascolto"</string>
   <string name="notification_channel_noisy">"Notifiche con suono"</string>
+  <string name="notification_channel_ringing_calls">"Squillo delle chiamate"</string>
   <string name="notification_channel_silent">"Notifiche silenziose"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d messaggio"</item>
@@ -13,6 +14,7 @@
     <item quantity="other">"%d notifiche"</item>
   </plurals>
   <string name="notification_fallback_content">"Notifica"</string>
+  <string name="notification_incoming_call">"Chiamata in arrivo"</string>
   <string name="notification_inline_reply_failed">"** Invio fallito - si prega di aprire la stanza"</string>
   <string name="notification_invitation_action_join">"Entra"</string>
   <string name="notification_invitation_action_reject">"Rifiuta"</string>

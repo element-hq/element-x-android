@@ -1,8 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Loo uus taastevõti"</string>
   <string name="screen_identity_confirmation_subtitle">"Krüptitud sõnumivahetuse tagamiseks verifitseeri see seade."</string>
   <string name="screen_identity_confirmation_title">"Kinnita, et see oled sina"</string>
   <string name="screen_identity_confirmed_subtitle">"Nüüd saad saata või lugeda sõnumeid turvaliselt ning kõik sinu vestluspartnerid võivad usaldada seda seadet."</string>
   <string name="screen_identity_confirmed_title">"Seade on verifitseeritud"</string>
   <string name="screen_identity_use_another_device">"Kasuta mõnda muud seadet"</string>
+  <string name="screen_identity_waiting_on_other_device">"Ootame teise seadme järgi…"</string>
+  <string name="screen_session_verification_cancelled_subtitle">"Olukord pole päris õige. Päring kas aegus või teine osapool keeldus päringule vastamast."</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"Kinnita, et kõik alljärgnevas kuvatud emojid on täpselt samad, mida sa näed oma teises sessioonis."</string>
+  <string name="screen_session_verification_compare_emojis_title">"Võrdle emojisid"</string>
+  <string name="screen_session_verification_compare_numbers_subtitle">"Kinnita, et kõik alljärgnevas kuvatud numbrid on täpselt samad, mida sa näed oma teises sessioonis."</string>
+  <string name="screen_session_verification_compare_numbers_title">"Võrdle numbreid"</string>
+  <string name="screen_session_verification_complete_subtitle">"Sinu uus sessioon on nüüd verifitseeritud. Sellel sessioonil on nüüd ligipääs sinu krüptitud sõnumitele ja teised osapooled näevad teda usaldusväärsena."</string>
+  <string name="screen_session_verification_enter_recovery_key">"Sisesta taastevõti"</string>
+  <string name="screen_session_verification_open_existing_session_subtitle">"Saamaks ligipääsu krüptitud sõnumite ajaloole tõesta et tegemist on sinuga."</string>
+  <string name="screen_session_verification_open_existing_session_title">"Ava olemasolev sessioon"</string>
+  <string name="screen_session_verification_positive_button_canceled">"Proovi uuesti verifitseerimist"</string>
+  <string name="screen_session_verification_positive_button_initial">"Ma olen valmis alustama"</string>
+  <string name="screen_session_verification_positive_button_verifying_ongoing">"Ootame kinnitust sobivusele"</string>
+  <string name="screen_session_verification_ready_subtitle">"Võrdle unikaalset emojide kombinatsiooni"</string>
+  <string name="screen_session_verification_request_accepted_subtitle">"Võrdle unikaalset emojide kombinatsiooni ning kontrolli, et nad on täpselt samas järjekorras."</string>
+  <string name="screen_session_verification_they_dont_match">"Nad ei klapi omavahel"</string>
+  <string name="screen_session_verification_they_match">"Nad klapivad omavahel"</string>
+  <string name="screen_session_verification_waiting_to_accept_subtitle">"Jätkamaks nõustu verifitseerimisprotsessi alustamisega oma teises sessioonis."</string>
+  <string name="screen_session_verification_waiting_to_accept_title">"Ootame nõustumist verifitseerimispäringuga"</string>
 </resources>

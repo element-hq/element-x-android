@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="full_screen_intent_banner_message">"Selleks, et sul ainsamgi tähtis kõne ei jääks märkamata, siis palun muuda oma nutiseadme seadistusi nii, et lukustusvaates oleksid täisekraani mõõtu teavitused lubatud."</string>
+  <string name="full_screen_intent_banner_title">"Täiusta oma telefonikõnede kogemust"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Vali kuidas sa soovid saada teavitusi"</string>
   <string name="screen_advanced_settings_developer_mode">"Arendaja valikud"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Selle eelistuse sisselülitamisel lisanduvad rakendusse arendaja tööks vajalikud valikud."</string>
+  <string name="screen_advanced_settings_element_call_base_url">"Element Calli kohandatud teenuseaadress"</string>
+  <string name="screen_advanced_settings_element_call_base_url_description">"Seadista kohandatud teenuseaadress Element Calli jaoks."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Vigane url. Palun vaata, et url algaks protokolliga (http/https) ning aadress ise oleks ka õige."</string>
   <string name="screen_advanced_settings_push_provider_android">"Tõuketeavituste pakkuja"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Kui soovid Markdown-vormingut käsitsi lisada, siis lülita vormindatud teksti toimeti välja."</string>
@@ -12,6 +16,9 @@
   <string name="screen_advanced_settings_share_presence_description">"Kui see eelistus on välja lülitatud, siis sa ei saa ega saada ei lugemisteatisi ega kirjutamise teavitusi"</string>
   <string name="screen_advanced_settings_view_source_description">"Selle eelistuse sisselülitamisel on võimalik ajajoonel vaadata sõnumite lähtekoodi."</string>
   <string name="screen_blocked_users_empty">"Sa pole ühtegi kasutajat blokeerinud"</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Eemalda blokeering"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Nüüd näed sa jälle kõiki tema sõnumeid"</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Eemalda kasutajalt blokeering"</string>
   <string name="screen_blocked_users_unblocking">"Eemaldame blokeeringu…"</string>
   <string name="screen_edit_profile_display_name">"Kuvatav nimi"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Sinu kuvatav nimi"</string>
@@ -46,4 +53,6 @@ Kui sa jätkad muutmist, siis võivad muutuda ka need peidetud eelistused."</str
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"süsteemi seadistusi"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Süsteemi teavitused on välja lülitatud"</string>
   <string name="screen_notification_settings_title">"Teavitused"</string>
+  <string name="troubleshoot_notifications_entry_point_section">"Veaotsing"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"Teavituste veaotsing"</string>
 </resources>

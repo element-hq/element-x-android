@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_unified_push_description">"Palun veendu, et UnifiedPushi levitajad on saadaval."</string>
+  <string name="troubleshoot_notifications_test_unified_push_failure">"Tõuketeenuse levitajaid ei leidu."</string>
+  <plurals name="troubleshoot_notifications_test_unified_push_success">
+    <item quantity="one">"Leidus %1$d tõuketeenuse levitaja: %2$s."</item>
+    <item quantity="other">"Leidus %1$d tõuketeenuse levitajat: %2$s."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_unified_push_title">"Kontrolli UnifiedPushi"</string>
+</resources>
