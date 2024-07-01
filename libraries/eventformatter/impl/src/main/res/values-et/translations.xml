@@ -30,7 +30,7 @@
   <string name="state_event_room_join_by_you">"Sina liitusid jututoaga"</string>
   <string name="state_event_room_knock">"%1$s palus liitumist"</string>
   <string name="state_event_room_knock_accepted">"%1$s lubas kasutajal %2$s liituda"</string>
-  <string name="state_event_room_knock_accepted_by_you">"Sina lubasid kasutajal %1$s liituda"</string>
+  <string name="state_event_room_knock_accepted_by_you">"Sina lubasid kasutajal %1$s liituda!"</string>
   <string name="state_event_room_knock_by_you">"Sina palusid liitumist"</string>
   <string name="state_event_room_knock_denied">"%1$s lükkas tagasi kasutaja %2$s liitumispalve"</string>
   <string name="state_event_room_knock_denied_by_you">"Sina lükkasid tagasi kasutaja %1$s liitumispalve"</string>

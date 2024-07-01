@@ -5,7 +5,7 @@
   <string name="troubleshoot_notifications_test_firebase_availability_success">"Firebase 可用。"</string>
   <string name="troubleshoot_notifications_test_firebase_availability_title">"检查 Firebase"</string>
   <string name="troubleshoot_notifications_test_firebase_token_description">"确保 Firebase 令牌可用。"</string>
-  <string name="troubleshoot_notifications_test_firebase_token_failure">"Firebas 令牌未知。"</string>
+  <string name="troubleshoot_notifications_test_firebase_token_failure">"Firebase 令牌未知。"</string>
   <string name="troubleshoot_notifications_test_firebase_token_success">"Firebase 令牌：%1$s 。"</string>
   <string name="troubleshoot_notifications_test_firebase_token_title">"检查 Firebase 令牌"</string>
 </resources>

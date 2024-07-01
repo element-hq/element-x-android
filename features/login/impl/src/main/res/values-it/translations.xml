@@ -39,11 +39,26 @@
   <string name="screen_qr_code_login_connection_note_secure_state_title">"La connessione non è sicura"</string>
   <string name="screen_qr_code_login_device_code_subtitle">"Ti verrà chiesto di inserire le due cifre mostrate su questo dispositivo."</string>
   <string name="screen_qr_code_login_device_code_title">"Inserisci il numero qui sotto sull\'altro dispositivo"</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_description">"Accedi all\'altro dispositivo e riprova oppure usa un altro dispositivo che ha già eseguito l\'accesso."</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_subtitle">"Altro dispositivo non connesso"</string>
+  <string name="screen_qr_code_login_error_cancelled_subtitle">"L\'accesso è stato annullato sull\'altro dispositivo."</string>
+  <string name="screen_qr_code_login_error_cancelled_title">"Richiesta di accesso annullata"</string>
+  <string name="screen_qr_code_login_error_declined_subtitle">"L\'accesso è stato rifiutato sull\'altro dispositivo."</string>
+  <string name="screen_qr_code_login_error_declined_title">"Accesso rifiutato"</string>
+  <string name="screen_qr_code_login_error_expired_subtitle">"L\'accesso è scaduto. Riprova."</string>
+  <string name="screen_qr_code_login_error_expired_title">"L\'accesso non è stato completato in tempo"</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"L\'altro dispositivo non supporta l\'accesso a %s con un codice QR.
+
+Prova ad accedere manualmente o scansiona il codice QR con un altro dispositivo."</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_title">"Codice QR non supportato"</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"Il tuo fornitore di account non supporta %1$s ."</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"%1$s non supportato"</string>
+  <string name="screen_qr_code_login_initial_state_button_title">"Pronto per la scansione"</string>
   <string name="screen_qr_code_login_initial_state_item_1">"Apri %1$s su un dispositivo desktop"</string>
   <string name="screen_qr_code_login_initial_state_item_2">"Clicca sul tuo avatar"</string>
   <string name="screen_qr_code_login_initial_state_item_3">"Seleziona %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"\"Collega un nuovo dispositivo\""</string>
-  <string name="screen_qr_code_login_initial_state_item_4">"Segui le istruzioni mostrate"</string>
+  <string name="screen_qr_code_login_initial_state_item_4">"Scansiona il codice QR con questo dispositivo"</string>
   <string name="screen_qr_code_login_initial_state_title">"Apri %1$s su un altro dispositivo per ottenere il codice QR"</string>
   <string name="screen_qr_code_login_invalid_scan_state_description">"Usa il codice QR mostrato sull\'altro dispositivo."</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Riprova"</string>

@@ -3,4 +3,7 @@
   <string name="screen_onboarding_sign_in_manually">"Logi sisse käsitsi"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Logi sisse QR-koodi alusel"</string>
   <string name="screen_onboarding_sign_up">"Loo kasutajakonto"</string>
+  <string name="screen_onboarding_welcome_message">"Läbi aegade kiireim ja mugavaim %1$s."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Tere tulemast kasutama kiiret ja lihtsat suhtlusrakendust %1$s."</string>
+  <string name="screen_onboarding_welcome_title">"Ole oma elemendis"</string>
 </resources>

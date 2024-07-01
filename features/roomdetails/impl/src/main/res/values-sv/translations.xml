@@ -24,6 +24,7 @@
   <string name="screen_room_change_role_confirm_demote_self_description">"Du kommer inte att kunna ångra denna ändring eftersom du degraderar dig själv, om du är den sista privilegierade användaren i rummet kommer det att vara omöjligt att återfå privilegier."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Degradera dig själv?"</string>
   <string name="screen_room_change_role_invited_member_name">"%1$s (Väntar)"</string>
+  <string name="screen_room_change_role_invited_member_name_android">"(Väntar)"</string>
   <string name="screen_room_change_role_moderators_title">"Redigera moderatorer"</string>
   <string name="screen_room_change_role_section_administrators">"Administratörer"</string>
   <string name="screen_room_change_role_section_moderators">"Moderatorer"</string>
@@ -51,6 +52,7 @@
   <string name="screen_room_details_room_name_label">"Rumsnamn"</string>
   <string name="screen_room_details_security_title">"Säkerhet"</string>
   <string name="screen_room_details_share_room_title">"Dela rum"</string>
+  <string name="screen_room_details_title">"Rumsinfo"</string>
   <string name="screen_room_details_topic_title">"Ämne"</string>
   <string name="screen_room_details_updating_room">"Uppdaterar rummet …"</string>
   <string name="screen_room_member_list_ban_member_confirmation_action">"Banna"</string>

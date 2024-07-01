@@ -62,6 +62,7 @@
   <string name="action_go_back">"Tagasi eelmisesse vaatesse"</string>
   <string name="action_invite">"Kutsu"</string>
   <string name="action_invite_friends">"Kutsu osalejaid"</string>
+  <string name="action_invite_friends_to_app">"Kutsu huvilisi kasutama rakendust %1$s"</string>
   <string name="action_invite_people_to_app">"Kutsu huvilisi kasutama rakendust %1$s"</string>
   <string name="action_invites_list">"Kutsed"</string>
   <string name="action_join">"Liitu"</string>
@@ -82,6 +83,7 @@
   <string name="action_quick_reply">"Kiirvastus"</string>
   <string name="action_quote">"Tsiteeri"</string>
   <string name="action_react">"Reageeri"</string>
+  <string name="action_reject">"Lükka tagasi"</string>
   <string name="action_remove">"Eemalda"</string>
   <string name="action_reply">"Vasta"</string>
   <string name="action_reply_in_thread">"Vasta jutulõngas"</string>
@@ -127,12 +129,16 @@
   <string name="common_decryption_error">"Dekrüptimisviga"</string>
   <string name="common_developer_options">"Arendaja valikud"</string>
   <string name="common_direct_chat">"Otsevestlus"</string>
+  <string name="common_do_not_show_this_again">"Ära enam näita seda uuesti"</string>
   <string name="common_edited_suffix">"(muudetud)"</string>
   <string name="common_editing">"Muutmine"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Krüptimine on kasutusel"</string>
   <string name="common_enter_your_pin">"Sisesta oma PIN-kood"</string>
   <string name="common_error">"Viga"</string>
+  <string name="common_error_registering_pusher_android">"Tekkis viga ja sa ei pruugi enam saada uute sõnumite kohta teavitusi. Palun kontrolli teavituste seadistusi ja proovi viga tuvastada.
+
+Põhjus: %1$s."</string>
   <string name="common_everyone">"Kõik"</string>
   <string name="common_failed">"Ei õnnestunud"</string>
   <string name="common_favourite">"Lemmik"</string>
@@ -158,7 +164,7 @@
   <string name="common_message_layout">"Sõnumi paigutus"</string>
   <string name="common_message_removed">"Sõnum on eemaldatud"</string>
   <string name="common_modern">"Kaasaegne"</string>
-  <string name="common_mute">"Summuta"</string>
+  <string name="common_mute">"Summutamine"</string>
   <string name="common_no_results">"Otsingul pole tulemusi"</string>
   <string name="common_no_room_name">"Jututoal puudub nimi"</string>
   <string name="common_offline">"Võrgust väljas"</string>
@@ -196,6 +202,7 @@
   <string name="common_search_results">"Otsingutulemused"</string>
   <string name="common_security">"Turvalisus"</string>
   <string name="common_seen_by">"Seda nägi"</string>
+  <string name="common_send_to">"Saada kasutajale"</string>
   <string name="common_sending">"Saadame…"</string>
   <string name="common_sending_failed">"Saatmine ei õnnestunud"</string>
   <string name="common_sent">"Saadetud"</string>
@@ -209,6 +216,9 @@
   <string name="common_sticker">"Kleeps"</string>
   <string name="common_success">"Õnnestus"</string>
   <string name="common_suggestions">"Soovitused"</string>
+  <string name="common_syncing">"Sünkroniseerime"</string>
+  <string name="common_system">"Süsteem"</string>
+  <string name="common_text">"Tekst"</string>
   <string name="common_third_party_notices">"Kolmandate osapoolte teatised"</string>
   <string name="common_thread">"Jutulõng"</string>
   <string name="common_topic">"Teema"</string>
@@ -253,8 +263,20 @@
   <string name="screen_media_upload_preview_error_failed_processing">"Meediafaili töötlemine enne üleslaadimist ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Meediafaili üleslaadimine ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_room_error_failed_processing_media">"Meediafaili töötlemine enne üleslaadimist ei õnnestunud. Palun proovi uuesti."</string>
+  <string name="screen_room_error_failed_retrieving_user_details">"Kasutaja andmete laadimine ei õnnestunud"</string>
+  <string name="screen_room_member_details_block_alert_action">"Blokeeri"</string>
+  <string name="screen_room_member_details_block_alert_description">"Blokeeritud kasutajad ei saa sulle kirjutada ja kõik nende sõnumid on sinu eest peidetud. Sa saad alati blokeeringu eemaldada."</string>
+  <string name="screen_room_member_details_block_user">"Blokeeri kasutaja"</string>
+  <string name="screen_room_member_details_title">"Profiil"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"Eemalda blokeering"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"Nüüd näed sa jälle kõiki tema sõnumeid"</string>
+  <string name="screen_room_member_details_unblock_user">"Eemalda kasutajalt blokeering"</string>
+  <string name="screen_room_title">"Vestlus"</string>
   <string name="screen_share_location_title">"Jaga asukohta"</string>
   <string name="screen_share_my_location_action">"Jaga minu asukohta"</string>
+  <string name="screen_share_open_apple_maps">"Ava Apple Mapsis"</string>
+  <string name="screen_share_open_google_maps">"Ava Google Mapsis"</string>
+  <string name="screen_share_open_osm_maps">"Ava OpenStreetMapis"</string>
   <string name="screen_share_this_location_action">"Jaga seda asukohta"</string>
   <string name="screen_view_location_title">"Asukoht"</string>
   <string name="settings_version_number">"Versioon: %1$s (%2$s)"</string>
