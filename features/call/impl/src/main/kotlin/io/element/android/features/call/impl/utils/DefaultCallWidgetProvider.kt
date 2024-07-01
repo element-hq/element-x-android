@@ -46,7 +46,12 @@ class DefaultCallWidgetProvider @Inject constructor(
             ?: elementCallBaseUrlProvider.provides(sessionId)
             ?: ElementCallConfig.DEFAULT_BASE_URL
         val widgetSettings = callWidgetSettingsProvider.provide(baseUrl, encrypted = room.isEncrypted)
-        val callUrl = room.generateWidgetWebViewUrl(widgetSettings, clientId, languageTag, theme).getOrThrow()
+        val callUrl = room.generateWidgetWebViewUrl(
+            widgetSettings = widgetSettings,
+            clientId = clientId,
+            languageTag = languageTag,
+            theme = theme,
+        ).getOrThrow()
         CallWidgetProvider.GetWidgetResult(
             driver = room.getWidgetDriver(widgetSettings).getOrThrow(),
             url = callUrl
