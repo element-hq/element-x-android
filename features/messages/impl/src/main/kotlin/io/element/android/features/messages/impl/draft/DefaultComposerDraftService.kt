@@ -42,14 +42,19 @@ class DefaultComposerDraftService @Inject constructor(
         }
     }
 
-    override suspend fun saveDraft(roomId: RoomId, draft: ComposerDraft) {
+    override suspend fun updateDraft(roomId: RoomId, draft: ComposerDraft?) {
         client.getRoom(roomId)?.use { room ->
-            room.saveComposerDraft(draft)
+            val updateDraftResult = if (draft == null) {
+                room.clearComposerDraft()
+            } else {
+                room.saveComposerDraft(draft)
+            }
+            updateDraftResult
                 .onFailure {
-                    Timber.e(it, "Failed to save composer draft for room $roomId")
+                    Timber.e(it, "Failed to update composer draft for room $roomId")
                 }
                 .onSuccess {
-                    Timber.d("Saved composer draft for room $roomId")
+                    Timber.d("Updated composer draft for room $roomId")
                 }
         }
     }

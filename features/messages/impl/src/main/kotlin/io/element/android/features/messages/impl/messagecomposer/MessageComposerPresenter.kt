@@ -582,16 +582,16 @@ class MessageComposerPresenter @Inject constructor(
             }
             is MessageComposerMode.Reply -> ComposerDraftType.Reply(mode.eventId)
         }
-        if (draftType == null || markdown.isBlank()) {
-            return@launch
+        val composerDraft = if (draftType == null || markdown.isBlank()) {
+            null
         } else {
-            val composerDraft = ComposerDraft(
+            ComposerDraft(
                 draftType = draftType,
                 htmlText = html,
                 plainText = markdown,
             )
-            draftService.saveDraft(room.roomId, composerDraft)
         }
+        draftService.updateDraft(room.roomId, composerDraft)
     }
 
     private fun CoroutineScope.toggleTextFormatting(
