@@ -189,6 +189,8 @@ class CallScreenPresenter @AssistedInject constructor(
                         sessionId = inputs.sessionId,
                         roomId = inputs.roomId,
                         clientId = UUID.randomUUID().toString(),
+                        languageTag = null,
+                        theme = null,
                     ).getOrThrow()
                     callWidgetDriver.value = result.driver
                     result.url
