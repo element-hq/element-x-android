@@ -25,8 +25,8 @@ interface CallWidgetProvider {
         sessionId: SessionId,
         roomId: RoomId,
         clientId: String,
-        languageTag: String? = null,
-        theme: String? = null,
+        languageTag: String?,
+        theme: String?,
     ): Result<GetWidgetResult>
 
     data class GetWidgetResult(
