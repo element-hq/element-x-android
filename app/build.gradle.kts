@@ -274,5 +274,5 @@ dependencies {
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
 
-        koverDependencies()
+    koverDependencies()
 }

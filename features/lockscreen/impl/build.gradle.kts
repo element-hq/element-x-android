@@ -29,7 +29,7 @@ anvil {
 }
 
 dependencies {
-        implementation(projects.anvilannotations)
+    implementation(projects.anvilannotations)
     anvil(projects.anvilcodegen)
     api(projects.features.lockscreen.api)
     implementation(projects.appconfig)
