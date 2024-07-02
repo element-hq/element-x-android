@@ -280,6 +280,17 @@ class RustMatrixClient(
         }
     }
 
+    override fun userIdServerName(): String {
+        return runCatching {
+            client.userIdServerName()
+        }
+            .onFailure {
+                Timber.w(it, "Failed to get userIdServerName")
+            }
+            .getOrNull()
+            ?: sessionId.value.substringAfter(":")
+    }
+
     override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
         return roomFactory.create(roomId)
     }

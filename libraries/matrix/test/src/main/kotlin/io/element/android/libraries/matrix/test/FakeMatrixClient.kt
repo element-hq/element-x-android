@@ -313,4 +313,8 @@ class FakeMatrixClient(
 
     var sendQueueDisabledFlow = emptyFlow<RoomId>()
     override fun sendQueueDisabledFlow(): Flow<RoomId> = sendQueueDisabledFlow
+
+    override fun userIdServerName(): String {
+        TODO("Not yet implemented")
+    }
 }
