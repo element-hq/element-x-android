@@ -18,7 +18,11 @@ package base
 
 import android.content.res.Configuration
 import android.os.LocaleList
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -27,8 +31,8 @@ import app.cash.paparazzi.DeviceConfig
 import app.cash.paparazzi.Paparazzi
 import app.cash.paparazzi.TestName
 import com.android.resources.NightMode
+import io.element.android.compound.theme.ElementTheme
 import sergio.sastre.composable.preview.scanner.android.AndroidPreviewInfo
-import sergio.sastre.composable.preview.scanner.android.screenshotid.AndroidPreviewScreenshotIdBuilder
 import sergio.sastre.composable.preview.scanner.core.preview.ComposablePreview
 import java.util.Locale
 
@@ -57,7 +61,14 @@ object ScreenshotTest {
                     uiMode = preview.previewInfo.uiMode
                 },
             ) {
-                preview()
+                ElementTheme {
+                    Box(
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.background)
+                    ) {
+                        preview()
+                    }
+                }
             }
         }
     }
@@ -68,8 +79,7 @@ private val testNameField = Paparazzi::class.java.getDeclaredField("testName").a
 }
 
 private fun Paparazzi.fixScreenshotName(preview: ComposablePreview<AndroidPreviewInfo>, locale: String) {
-    var id = createScreenshotIdFor(preview)
-    id += "_$locale"
+    val id = listOf(createScreenshotIdFor(preview), locale).joinToString("_")
     val packageName = preview.declaringClass
         // Remove common prefix
         .replace("io.element.android.", "")
@@ -94,20 +104,20 @@ private fun String.toLocale(): Locale {
     }
 }
 
-fun createScreenshotIdFor(preview: ComposablePreview<AndroidPreviewInfo>) =
-    AndroidPreviewScreenshotIdBuilder(preview)
-        // Paparazzi screenshot names already include className and methodName
-        // so ignore them to avoid them duplicated what might throw a FileNotFoundException
-        // due to the longName
-        .ignoreClassName()
-        .ignoreMethodName()
-        .ignoreIdFor("heightDp")
-        .ignoreIdFor("widthDp")
-        .overrideDefaultIdFor(
-            previewInfoName = "uiMode",
-            applyInfoValue = { null }
-        )
-        .build()
+fun createScreenshotIdFor(preview: ComposablePreview<AndroidPreviewInfo>) = buildList {
+    // `name` here can be `Day`, `Night`, or nothing at all
+    if (preview.previewInfo.name.isNotEmpty()) {
+        add(preview.previewInfo.name)
+    }
+    if (preview.previewInfo.group.isNotEmpty()) {
+        add(preview.previewInfo.group)
+    }
+    // If it's a day/night preview, we should add an index to be consistent even if there is only version of this composable
+    val needsIndex = preview.previewInfo.name == "Day" || preview.previewInfo.name == "Night"
+    if (preview.previewIndex != null || needsIndex) {
+        add((preview.previewIndex ?: 0).toString())
+    }
+}.joinToString("_")
 
 object PaparazziPreviewRule {
     fun createFor(preview: ComposablePreview<AndroidPreviewInfo>, locale: String, deviceConfig: DeviceConfig = ScreenshotTest.defaultDeviceConfig): Paparazzi {

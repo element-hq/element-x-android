@@ -276,7 +276,7 @@ function addTable() {
         } else if(modifiedDayTime >= minModifiedDayTime) {
           hasTranslatedFiles = true;
           // Foreign file is the same as the english file, replacing the language
-          const foreignFile = englishFile.replace("_en.", `_${dataLanguages[languageIndex]}.`)
+          const foreignFile = englishFile.substring(0, englishFile.length-2) + dataLanguages[languageIndex];
           const fullForeignFile = `${dataLanguages[languageIndex]}/${foreignFile}.png`;
           td.appendChild(createImageElement(fullForeignFile, modifiedDayTime));
         } else {

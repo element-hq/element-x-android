@@ -105,10 +105,10 @@ def detectRecordedLanguages():
 def computeDarkFileName(lightFileName):
     if "_Day" in lightFileName:
         return lightFileName.replace("_Day", "_Night")
-    match = re.match("(.*)_Day(\\d*)_(.*)", lightFileName, flags=re.ASCII)
+    match = re.match("(.*)_Day_(\\d+)_(.*)", lightFileName, flags=re.ASCII)
     if match:
         print("Found match!")
-        return match.group(1) + "_Night" + match.group(2) + "_" + match.group(3)
+        return match.group(1) + "_Night_" + match.group(2) + "_" + match.group(3)
     return ""
 
 def generateJavascriptFile():
@@ -119,7 +119,7 @@ def generateJavascriptFile():
     data = [["en", "en-dark"] + languages]
     files = sorted(
         os.listdir("tests/uitests/src/test/snapshots/images/"),
-        key=lambda file: file[file.find("_", 4):],
+        key=lambda file: file,
     )
     for file in files:
         # Continue if file contains "_Night", keep only light screenshots
