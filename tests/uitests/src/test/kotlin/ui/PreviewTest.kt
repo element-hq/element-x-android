@@ -37,7 +37,7 @@ class PreviewTest(
     val preview: ComposablePreview<AndroidPreviewInfo>,
 ) {
     @get:Rule
-    val paparazziRule = PaparazziPreviewRule.createFor(preview)
+    val paparazziRule = PaparazziPreviewRule.createFor(preview, locale = "en")
 
     @Test
     fun snapshot() {

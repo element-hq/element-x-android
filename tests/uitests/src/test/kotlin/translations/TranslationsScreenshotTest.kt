@@ -39,7 +39,7 @@ class TranslationsScreenshotTest(
     val localeStr: String,
 ) {
     @get:Rule
-    val paparazziRule = PaparazziPreviewRule.createFor(indexedPreview.value)
+    val paparazziRule = PaparazziPreviewRule.createFor(indexedPreview.value, locale = localeStr)
 
     @Test
     fun snapshot() {

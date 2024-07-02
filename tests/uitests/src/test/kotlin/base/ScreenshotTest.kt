@@ -110,7 +110,7 @@ fun createScreenshotIdFor(preview: ComposablePreview<AndroidPreviewInfo>) =
         .build()
 
 object PaparazziPreviewRule {
-    fun createFor(preview: ComposablePreview<AndroidPreviewInfo>, deviceConfig: DeviceConfig = ScreenshotTest.defaultDeviceConfig): Paparazzi {
+    fun createFor(preview: ComposablePreview<AndroidPreviewInfo>, locale: String, deviceConfig: DeviceConfig = ScreenshotTest.defaultDeviceConfig): Paparazzi {
         val densityScale = deviceConfig.density.dpiValue / 160f
         val customScreenHeight = preview.previewInfo.heightDp.takeIf { it >= 0 }?.let { it * densityScale }?.toInt()
         return Paparazzi(
@@ -119,6 +119,7 @@ object PaparazziPreviewRule {
                     true -> NightMode.NIGHT
                     false -> NightMode.NOTNIGHT
                 },
+                locale = locale,
                 softButtons = false,
                 screenHeight = customScreenHeight ?: deviceConfig.screenHeight,
             ),
