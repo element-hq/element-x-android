@@ -26,7 +26,14 @@ import sergio.sastre.composable.preview.scanner.core.preview.ComposablePreview
 object ComposablePreviewProvider : TestParameter.TestParameterValuesProvider {
     private val values: List<IndexedValue<ComposablePreview<AndroidPreviewInfo>>> by lazy {
         AndroidComposablePreviewScanner()
-            .scanPackageTrees("io.element.android")
+            .scanPackageTrees(
+                "io.element.android.features",
+                "io.element.android.libraries",
+                "io.element.android.services",
+                "io.element.android.appnav",
+                "io.element.android.x",
+                // Make sure we don't import Compound previews by mistake
+            )
             .getPreviews()
             .withIndex()
             .toList()
