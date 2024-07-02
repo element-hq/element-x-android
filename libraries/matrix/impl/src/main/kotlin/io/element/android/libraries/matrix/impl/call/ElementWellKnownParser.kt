@@ -20,13 +20,14 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import org.matrix.rustcomponents.sdk.ElementWellKnown
 import org.matrix.rustcomponents.sdk.makeElementWellKnown
+import javax.inject.Inject
 
 interface ElementWellKnownParser {
     fun parse(str: String): Result<ElementWellKnown>
 }
 
 @ContributesBinding(AppScope::class)
-class RustElementWellKnownParser : ElementWellKnownParser {
+class RustElementWellKnownParser @Inject constructor() : ElementWellKnownParser {
     override fun parse(str: String): Result<ElementWellKnown> {
         return runCatching {
             makeElementWellKnown(str)
