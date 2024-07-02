@@ -162,7 +162,8 @@ class DefaultNotificationChannels @Inject constructor(
         )
 
         // Register a channel for incoming call notifications which will ring the device when received
-        val ringtoneUri = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE)
+        // TODO use a fallback ringtone if the default ringtone is not available
+        val ringtoneUri = runCatching { RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE) }.getOrNull()
         notificationManager.createNotificationChannel(
             NotificationChannelCompat.Builder(
                 RINGING_CALL_NOTIFICATION_CHANNEL_ID,
@@ -170,14 +171,18 @@ class DefaultNotificationChannels @Inject constructor(
             )
                 .setName(stringProvider.getString(R.string.notification_channel_ringing_calls).ifEmpty { "Ringing calls" })
                 .setVibrationEnabled(true)
-                .setSound(
-                    ringtoneUri,
-                    AudioAttributes.Builder()
-                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                        .setLegacyStreamType(AudioManager.STREAM_RING)
-                        .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
-                        .build()
-                )
+                .apply {
+                    if (ringtoneUri != null) {
+                        setSound(
+                            ringtoneUri,
+                            AudioAttributes.Builder()
+                                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                                .setLegacyStreamType(AudioManager.STREAM_RING)
+                                .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+                                .build()
+                        )
+                    }
+                }
                 .setDescription(stringProvider.getString(R.string.notification_channel_ringing_calls))
                 .setLightsEnabled(true)
                 .setLightColor(accentColor)
