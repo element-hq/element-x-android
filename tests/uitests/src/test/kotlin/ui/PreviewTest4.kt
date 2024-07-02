@@ -25,8 +25,8 @@ import sergio.sastre.composable.preview.scanner.android.AndroidPreviewInfo
 import sergio.sastre.composable.preview.scanner.core.preview.ComposablePreview
 
 @RunWith(TestParameterInjector::class)
-class PreviewTest(
-    @TestParameter(valuesProvider = Shard1ComposablePreviewProvider::class)
+class PreviewTest4(
+    @TestParameter(valuesProvider = Shard4ComposablePreviewProvider::class)
     val preview: ComposablePreview<AndroidPreviewInfo>,
     @TestParameter(value = ["en"])
     val localeStr: String,
