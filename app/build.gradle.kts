@@ -153,7 +153,11 @@ android {
                 // artifactType = "AAB"
                 // artifactPath = "$rootDir/app/build/outputs/bundle/nightly/app-nightly.aab"
                 releaseNotesFile = "tools/release/ReleaseNotesNightly.md"
-                groups = "external-testers"
+                groups = if (isEnterpriseBuild) {
+                    "enterprise-testers"
+                } else {
+                    "external-testers"
+                }
                 // This should not be required, but if I do not add the appId, I get this error:
                 // "App Distribution halted because it had a problem uploading the APK: [404] Requested entity was not found."
                 appId = if (isEnterpriseBuild) {
