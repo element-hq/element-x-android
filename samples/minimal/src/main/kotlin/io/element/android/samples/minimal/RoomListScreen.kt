@@ -219,6 +219,7 @@ class RoomListScreen(
             gitBranchName = "",
             flavorDescription = "",
             flavorShortDescription = "",
+            isEnterpriseBuild = false,
         )
     }
 }
