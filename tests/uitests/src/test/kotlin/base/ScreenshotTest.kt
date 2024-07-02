@@ -79,7 +79,9 @@ private val testNameField = Paparazzi::class.java.getDeclaredField("testName").a
 }
 
 private fun Paparazzi.fixScreenshotName(preview: ComposablePreview<AndroidPreviewInfo>, locale: String) {
-    val id = listOf(createScreenshotIdFor(preview), locale).joinToString("_")
+    val id = listOf(createScreenshotIdFor(preview), locale)
+        .filter { it.isNotEmpty() }
+        .joinToString("_")
     val packageName = preview.declaringClass
         // Remove common prefix
         .replace("io.element.android.", "")
