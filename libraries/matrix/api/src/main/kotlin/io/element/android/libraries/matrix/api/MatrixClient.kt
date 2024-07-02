@@ -121,4 +121,15 @@ interface MatrixClient : Closeable {
      * This flow will emit a new value whenever the send queue is disabled for a room.
      */
     fun sendQueueDisabledFlow(): Flow<RoomId>
+
+    /**
+     * Return the server name part of the current user ID, using the SDK, and if a failure occurs,
+     * compute it manually.
+     */
+    fun userIdServerName(): String
+
+    /**
+     * Execute generic GET requests through the SDKs internal HTTP client.
+     */
+    suspend fun getUrl(url: String): Result<String>
 }

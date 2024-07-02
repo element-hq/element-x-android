@@ -18,9 +18,9 @@ package io.element.android.features.call.utils
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.call.impl.utils.DefaultCallWidgetProvider
-import io.element.android.features.call.impl.utils.ElementCallBaseUrlProvider
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
-import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.call.ElementCallBaseUrlProvider
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -116,9 +116,9 @@ class DefaultCallWidgetProviderTest {
     @Test
     fun `getWidget - will use a wellknown base url if it exists`() = runTest {
         val aCustomUrl = "https://custom.element.io"
-        val providesLambda = lambdaRecorder<SessionId, String?> { _ -> aCustomUrl }
-        val elementCallBaseUrlProvider = FakeElementCallBaseUrlProvider { sessionId ->
-            providesLambda(sessionId)
+        val providesLambda = lambdaRecorder<MatrixClient, String?> { _ -> aCustomUrl }
+        val elementCallBaseUrlProvider = FakeElementCallBaseUrlProvider { matrixClient ->
+            providesLambda(matrixClient)
         }
         val room = FakeMatrixRoom().apply {
             givenGenerateWidgetWebViewUrlResult(Result.success("url"))
@@ -137,7 +137,7 @@ class DefaultCallWidgetProviderTest {
         assertThat(settingsProvider.providedBaseUrls).containsExactly(aCustomUrl)
         providesLambda.assertions()
             .isCalledOnce()
-            .with(value(A_SESSION_ID))
+            .with(value(client))
     }
 
     private fun createProvider(

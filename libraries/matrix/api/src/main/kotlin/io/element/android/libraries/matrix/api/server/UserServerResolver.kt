@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,22 +14,8 @@
  * limitations under the License.
  */
 
-package io.element.android.features.call.impl.wellknown
+package io.element.android.libraries.matrix.api.server
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
-/**
- * Example:
- * <pre>
- * {
- *     "widget_url": "https://call.server.com"
- * }
- * </pre>
- * .
- */
-@Serializable
-data class CallWellKnown(
-    @SerialName("widget_url")
-    val widgetUrl: String? = null,
-)
+interface UserServerResolver {
+    fun resolve(): String
+}
