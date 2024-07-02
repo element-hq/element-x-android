@@ -28,15 +28,6 @@ jobs:
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
-      - name: Install towncrier
-        run: |
-          python3 -m pip install towncrier
-      - name: Prepare changelog file
-        run: |
-          mv towncrier.toml towncrier.toml.bak
-          sed 's/CHANGES\.md/CHANGES_NIGHTLY\.md/' towncrier.toml.bak > towncrier.toml
-          rm towncrier.toml.bak
-          yes n | towncrier build --version nightly
       - name: Build and upload Nightly application
         run: |
           ./gradlew assembleGplayNightly appDistributionUploadGplayNightly $CI_GRADLE_ARG_PROPERTIES
