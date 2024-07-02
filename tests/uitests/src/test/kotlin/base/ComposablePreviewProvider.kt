@@ -16,7 +16,7 @@
 
 @file:Suppress("DEPRECATION")
 
-package ui
+package base
 
 import com.google.testing.junit.testparameterinjector.TestParameter
 import sergio.sastre.composable.preview.scanner.android.AndroidComposablePreviewScanner
@@ -32,7 +32,7 @@ object ComposablePreviewProvider : TestParameter.TestParameterValuesProvider {
             .toList()
     }
 
-    override fun provideValues(): List<IndexedValue<ComposablePreview<AndroidPreviewInfo>>> = this.values
+    override fun provideValues(): List<IndexedValue<ComposablePreview<AndroidPreviewInfo>>> = values
 }
 
 object Shard1ComposablePreviewProvider : TestParameter.TestParameterValuesProvider {

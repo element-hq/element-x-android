@@ -34,19 +34,19 @@ def generateAllScreenshots(languages):
         print("Generating all screenshots...")
         os.system("./gradlew recordPaparazziDebug -PallLanguages")
     else:
-        tFile = "tests/uitests/src/test/kotlin/ui/T.kt"
+        tFile = "tests/uitests/src/test/kotlin/translations/TranslationsScreenshotTest.kt"
         print("Generating screenshots for languages: %s" % languages)
         # Record the languages one by one, else it's getting too slow
         for lang in languages:
             print("Generating screenshots for language: %s" % lang)
-            # Patch file T.kt, replace `@TestParameter(value = ["de"]) localeStr: String,` with `@TestParameter(value = [<the languages>]) localeStr: String,`
+            # Patch file TranslationsScreenshotTest.kt, replace `@TestParameter(value = ["de"])` with `@TestParameter(value = [<the languages>])`
             with open(tFile, "r") as file:
                 data = file.read()
-            data = data.replace("@TestParameter(value = [\"de\"]) localeStr: String,", "@TestParameter(value = [\"%s\"]) localeStr: String," % lang)
+            data = data.replace("@TestParameter(value = [\"de\"])", "@TestParameter(value = [\"%s\"])" % lang)
             with open(tFile, "w") as file:
                 file.write(data)
             os.system("./gradlew recordPaparazziDebug -PallLanguagesNoEnglish")
-            # Git reset the change on file T.kt
+            # Git reset the change on file TranslationsScreenshotTest.kt
             os.system("git checkout HEAD -- %s" % tFile)
 
 

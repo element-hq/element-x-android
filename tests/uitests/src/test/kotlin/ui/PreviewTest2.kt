@@ -16,6 +16,9 @@
 
 package ui
 
+import base.PaparazziPreviewRule
+import base.ScreenshotTest
+import base.Shard2ComposablePreviewProvider
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import org.junit.Rule
@@ -24,18 +27,20 @@ import org.junit.runner.RunWith
 import sergio.sastre.composable.preview.scanner.android.AndroidPreviewInfo
 import sergio.sastre.composable.preview.scanner.core.preview.ComposablePreview
 
+/**
+ * Test that takes a preview and runs a screenshot test on it.
+ * It uses a sharded preview provider so multiple 'shards' can run in parallel, optimizing CPU and time usage.
+ */
 @RunWith(TestParameterInjector::class)
 class PreviewTest2(
     @TestParameter(valuesProvider = Shard2ComposablePreviewProvider::class)
     val preview: ComposablePreview<AndroidPreviewInfo>,
-    @TestParameter(value = ["en"])
-    val localeStr: String,
 ) {
     @get:Rule
     val paparazziRule = PaparazziPreviewRule.createFor(preview)
 
     @Test
     fun snapshot() {
-        ScreenshotTest.runTest(paparazzi = paparazziRule, preview = preview, localeStr = localeStr)
+        ScreenshotTest.runTest(paparazzi = paparazziRule, preview = preview, localeStr = "en")
     }
 }
