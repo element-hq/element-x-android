@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ui
+package base
 
 import app.cash.paparazzi.DeviceConfig
 

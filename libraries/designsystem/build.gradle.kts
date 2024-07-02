@@ -46,7 +46,6 @@ android {
         implementation(projects.libraries.uiStrings)
 
         ksp(libs.showkase.processor)
-        kspTest(libs.showkase.processor)
 
         testImplementation(libs.test.junit)
         testImplementation(libs.coroutines.test)

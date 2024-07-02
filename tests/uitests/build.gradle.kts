@@ -20,7 +20,6 @@ import extension.allServicesImpl
 
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.ksp)
     alias(libs.plugins.paparazzi)
 }
 
@@ -58,9 +57,6 @@ dependencies {
         )
     }
 
-    ksp(libs.showkase.processor)
-    kspTest(libs.showkase.processor)
-
     implementation(libs.showkase)
 
     // TODO There is a Resources.NotFoundException maybe due to the mipmap, even if we have
@@ -70,4 +66,6 @@ dependencies {
     allLibrariesImpl()
     allServicesImpl()
     allFeaturesImpl(rootDir, logger)
+
+    testImplementation("com.github.sergio-sastre.ComposablePreviewScanner:android:0.1.2")
 }

@@ -17,7 +17,6 @@
 plugins {
     id("io.element.android-library")
     alias(libs.plugins.anvil)
-    alias(libs.plugins.ksp)
 }
 
 android {
