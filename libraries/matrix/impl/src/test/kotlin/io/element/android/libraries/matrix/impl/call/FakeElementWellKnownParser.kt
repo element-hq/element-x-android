@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package io.element.android.features.call.impl.wellknown
+package io.element.android.libraries.matrix.impl.call
 
-import retrofit2.http.GET
+import org.matrix.rustcomponents.sdk.ElementWellKnown
 
-internal interface CallWellknownAPI {
-    @GET(".well-known/element/call.json")
-    suspend fun getCallWellKnown(): CallWellKnown
+class FakeElementWellKnownParser(
+    private val result: Result<ElementWellKnown>
+) : ElementWellKnownParser {
+    override fun parse(str: String): Result<ElementWellKnown> {
+        return result
+    }
 }

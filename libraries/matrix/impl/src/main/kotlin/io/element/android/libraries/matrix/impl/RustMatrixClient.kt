@@ -291,6 +291,12 @@ class RustMatrixClient(
             ?: sessionId.value.substringAfter(":")
     }
 
+    override suspend fun getUrl(url: String): Result<String> = withContext(sessionDispatcher) {
+        runCatching {
+            client.getUrl(url)
+        }
+    }
+
     override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
         return roomFactory.create(roomId)
     }

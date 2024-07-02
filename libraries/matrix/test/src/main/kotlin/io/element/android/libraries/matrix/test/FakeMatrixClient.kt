@@ -82,6 +82,8 @@ class FakeMatrixClient(
     private val resolveRoomAliasResult: (RoomAlias) -> Result<ResolvedRoomAlias> = { Result.success(ResolvedRoomAlias(A_ROOM_ID, emptyList())) },
     private val getRoomPreviewFromRoomIdResult: (RoomId, List<String>) -> Result<RoomPreview> = { _, _ -> Result.failure(AN_EXCEPTION) },
     private val clearCacheLambda: () -> Unit = { lambdaError() },
+    private val userIdServerNameLambda: () -> String = { lambdaError() },
+    private val getUrlLambda: (String) -> Result<String> = { lambdaError() },
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -315,6 +317,10 @@ class FakeMatrixClient(
     override fun sendQueueDisabledFlow(): Flow<RoomId> = sendQueueDisabledFlow
 
     override fun userIdServerName(): String {
-        TODO("Not yet implemented")
+        return userIdServerNameLambda()
+    }
+
+    override suspend fun getUrl(url: String): Result<String> {
+        return getUrlLambda(url)
     }
 }

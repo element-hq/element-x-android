@@ -127,4 +127,9 @@ interface MatrixClient : Closeable {
      * compute it manually.
      */
     fun userIdServerName(): String
+
+    /**
+     * Execute generic GET requests through the SDKs internal HTTP client.
+     */
+    suspend fun getUrl(url: String): Result<String>
 }
