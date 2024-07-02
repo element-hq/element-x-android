@@ -61,5 +61,4 @@ dependencies {
     testImplementation(projects.features.poll.test)
     testImplementation(libs.androidx.compose.ui.test.junit)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
-
     }

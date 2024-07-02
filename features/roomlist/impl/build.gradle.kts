@@ -61,7 +61,7 @@ dependencies {
     implementation(projects.services.analytics.api)
     implementation(libs.androidx.datastore.preferences)
     api(projects.features.roomlist.api)
-    
+
     testImplementation(libs.androidx.compose.ui.test.junit)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
     testImplementation(libs.test.junit)

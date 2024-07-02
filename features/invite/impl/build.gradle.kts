@@ -51,5 +51,4 @@ dependencies {
     testImplementation(projects.libraries.push.test)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.tests.testutils)
-
     }

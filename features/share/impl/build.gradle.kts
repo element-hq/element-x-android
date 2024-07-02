@@ -64,5 +64,4 @@ dependencies {
     testImplementation(projects.libraries.mediaupload.test)
     testImplementation(projects.tests.testutils)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
-
     }

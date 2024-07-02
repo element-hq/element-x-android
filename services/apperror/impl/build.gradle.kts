@@ -45,5 +45,4 @@ dependencies {
     testImplementation(libs.coroutines.test)
     testImplementation(libs.test.turbine)
     testImplementation(libs.test.truth)
-
     }

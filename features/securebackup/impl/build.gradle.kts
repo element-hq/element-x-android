@@ -60,5 +60,4 @@ dependencies {
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.tests.testutils)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
-
     }

@@ -17,6 +17,9 @@
 package translations
 
 import android.content.res.Configuration
+import base.ComposablePreviewProvider
+import base.PaparazziPreviewRule
+import base.ScreenshotTest
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import org.junit.Rule
@@ -24,9 +27,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import sergio.sastre.composable.preview.scanner.android.AndroidPreviewInfo
 import sergio.sastre.composable.preview.scanner.core.preview.ComposablePreview
-import base.ComposablePreviewProvider
-import base.PaparazziPreviewRule
-import base.ScreenshotTest
 
 /**
  * Test that takes a preview and a locale and runs a screenshot test on it.

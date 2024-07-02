@@ -41,7 +41,7 @@ dependencies {
     implementation(projects.appconfig)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.browser)
-    
+
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)

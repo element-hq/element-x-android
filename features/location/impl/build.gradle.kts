@@ -50,7 +50,7 @@ dependencies {
     implementation(libs.dagger)
     implementation(projects.anvilannotations)
     anvil(projects.anvilcodegen)
-    
+
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)

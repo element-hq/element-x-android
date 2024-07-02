@@ -77,5 +77,4 @@ dependencies {
     testImplementation(projects.services.analytics.test)
     testImplementation(libs.test.appyx.junit)
     testImplementation(libs.test.arch.core)
-
-    }
+}

@@ -66,5 +66,4 @@ dependencies {
     testImplementation(libs.coroutines.test)
     testImplementation(libs.androidx.compose.ui.test.junit)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
-
     }

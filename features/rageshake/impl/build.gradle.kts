@@ -54,7 +54,7 @@ dependencies {
     implementation(libs.network.okhttp.okhttp)
     implementation(libs.coil)
     implementation(libs.coil.compose)
-    
+
     testImplementation(libs.test.junit)
     testImplementation(libs.test.robolectric)
     testImplementation(libs.coroutines.test)

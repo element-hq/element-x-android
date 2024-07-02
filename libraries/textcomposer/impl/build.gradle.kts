@@ -53,7 +53,6 @@ dependencies {
         debugApi(libs.matrix.richtexteditor.compose)
     }
 
-    
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)

@@ -43,7 +43,7 @@ dependencies {
     api(projects.libraries.troubleshoot.api)
     api(projects.libraries.push.api)
     implementation(projects.services.analytics.api)
-    
+
     testImplementation(libs.test.junit)
     testImplementation(libs.test.robolectric)
     testImplementation(libs.molecule.runtime)

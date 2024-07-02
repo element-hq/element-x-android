@@ -34,7 +34,6 @@ dependencies {
     implementation(projects.libraries.sessionStorage.api)
     implementation(projects.libraries.uiStrings)
 
-    
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)

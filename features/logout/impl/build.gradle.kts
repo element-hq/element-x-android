@@ -46,7 +46,7 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.dateformatter.api)
     api(projects.features.logout.api)
-    
+
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)

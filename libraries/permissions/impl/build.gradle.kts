@@ -60,5 +60,4 @@ dependencies {
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.services.toolbox.test)
     testImplementation(projects.tests.testutils)
-
     }

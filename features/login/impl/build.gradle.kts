@@ -55,7 +55,7 @@ dependencies {
     implementation(libs.network.retrofit)
     implementation(libs.serialization.json)
     api(projects.features.login.api)
-    
+
     testImplementation(libs.test.junit)
     testImplementation(libs.androidx.compose.ui.test.junit)
     testImplementation(libs.androidx.test.ext.junit)
