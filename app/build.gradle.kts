@@ -241,7 +241,7 @@ dependencies {
     allServicesImpl()
     if (isEnterpriseBuild) {
         allEnterpriseImpl(rootDir, logger)
-        // TODO implementation(projects.appicon.enterprise)
+        implementation(projects.appicon.enterprise)
     } else {
         implementation(projects.appicon.element)
     }
