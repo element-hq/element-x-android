@@ -745,7 +745,7 @@ class MessagesPresenterTest {
 
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
         // Skip 2 item if Mentions feature is enabled, else 1
-        skipItems(if (FeatureFlags.Mentions.defaultValue) 2 else 1)
+        skipItems(if (FeatureFlags.Mentions.defaultValue(aBuildMeta())) 2 else 1)
         return awaitItem()
     }
 

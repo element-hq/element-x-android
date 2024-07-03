@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-plugins {
-    id("io.element.android-library")
-}
+package io.element.android.libraries.matrix.impl.call
 
-android {
-    namespace = "io.element.android.libraries.featureflag.api"
-}
+import org.matrix.rustcomponents.sdk.ElementWellKnown
 
-dependencies {
-    implementation(projects.appconfig)
-    implementation(projects.libraries.core)
-    implementation(libs.coroutines.core)
+class FakeElementWellKnownParser(
+    private val result: Result<ElementWellKnown>
+) : ElementWellKnownParser {
+    override fun parse(str: String): Result<ElementWellKnown> {
+        return result
+    }
 }

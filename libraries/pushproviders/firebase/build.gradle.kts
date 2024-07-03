@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+@file:Suppress("UnstableApiUsage")
+
 plugins {
     id("io.element.android-library")
     alias(libs.plugins.anvil)
@@ -22,9 +25,43 @@ android {
     namespace = "io.element.android.libraries.pushproviders.firebase"
 
     buildTypes {
-        release {
+        getByName("release") {
             isMinifyEnabled = true
             consumerProguardFiles("consumer-proguard-rules.pro")
+            resValue(
+                type = "string",
+                name = "google_app_id",
+                value = if (isEnterpriseBuild) {
+                    "1:912726360885:android:d273c2077ec3291500427c"
+                } else {
+                    "1:912726360885:android:d097de99a4c23d2700427c"
+                }
+            )
+        }
+        getByName("debug") {
+            resValue(
+                type = "string",
+                name = "google_app_id",
+                value = if (isEnterpriseBuild) {
+                    "1:912726360885:android:f8de9126a94143d300427c"
+                } else {
+                    "1:912726360885:android:def0a4e454042e9b00427c"
+                }
+            )
+        }
+        register("nightly") {
+            isMinifyEnabled = true
+            consumerProguardFiles("consumer-proguard-rules.pro")
+            matchingFallbacks += listOf("release")
+            resValue(
+                type = "string",
+                name = "google_app_id",
+                value = if (isEnterpriseBuild) {
+                    "1:912726360885:android:3f7e1fe644d99d5a00427c"
+                } else {
+                    "1:912726360885:android:e17435e0beb0303000427c"
+                }
+            )
         }
     }
 }

@@ -74,31 +74,30 @@ fun TimelineItemTextView(
 internal fun getTextWithResolvedMentions(content: TimelineItemTextBasedContent): CharSequence {
     val userProfileCache = LocalRoomMemberProfilesCache.current
     val lastCacheUpdate by userProfileCache.lastCacheUpdate.collectAsState()
-    val formattedBody = remember(content.htmlBody, lastCacheUpdate) {
-        updateMentionSpans(content.formattedBody, userProfileCache)
-        SpannableString(content.formattedBody ?: content.body)
+    val formattedBody = remember(content.formattedBody, lastCacheUpdate) {
+        content.formattedBody?.let { formattedBody ->
+            updateMentionSpans(formattedBody, userProfileCache)
+            formattedBody
+        }
     }
-
-    return formattedBody
+    return SpannableString(formattedBody ?: content.body)
 }
 
-private fun updateMentionSpans(text: CharSequence?, cache: RoomMemberProfilesCache): Boolean {
+private fun updateMentionSpans(text: CharSequence, cache: RoomMemberProfilesCache): Boolean {
     var changedContents = false
-    if (text != null) {
-        for (mentionSpan in text.getMentionSpans()) {
-            when (mentionSpan.type) {
-                MentionSpan.Type.USER -> {
-                    val displayName = cache.getDisplayName(UserId(mentionSpan.rawValue)) ?: mentionSpan.rawValue
-                    if (mentionSpan.text != displayName) {
-                        changedContents = true
-                        mentionSpan.text = displayName
-                    }
+    for (mentionSpan in text.getMentionSpans()) {
+        when (mentionSpan.type) {
+            MentionSpan.Type.USER -> {
+                val displayName = cache.getDisplayName(UserId(mentionSpan.rawValue)) ?: mentionSpan.rawValue
+                if (mentionSpan.text != displayName) {
+                    changedContents = true
+                    mentionSpan.text = displayName
                 }
-                // There's no need to do anything for `@room` pills
-                MentionSpan.Type.EVERYONE -> Unit
-                // Nothing yet for room mentions
-                MentionSpan.Type.ROOM -> Unit
             }
+            // There's no need to do anything for `@room` pills
+            MentionSpan.Type.EVERYONE -> Unit
+            // Nothing yet for room mentions
+            MentionSpan.Type.ROOM -> Unit
         }
     }
     return changedContents

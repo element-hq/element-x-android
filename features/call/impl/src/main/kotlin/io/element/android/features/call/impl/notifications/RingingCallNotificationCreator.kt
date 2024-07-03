@@ -116,7 +116,8 @@ class RingingCallNotificationCreator @Inject constructor(
             false
         )
 
-        val ringtoneUri = RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE)
+        // TODO use a fallback ringtone if the default ringtone is not available
+        val ringtoneUri = runCatching { RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE) }.getOrNull()
         return NotificationCompat.Builder(context, notificationChannelId)
             .setSmallIcon(CommonDrawables.ic_notification_small)
             .setPriority(NotificationCompat.PRIORITY_MAX)
@@ -127,7 +128,11 @@ class RingingCallNotificationCreator @Inject constructor(
             .setWhen(timestamp)
             .setOngoing(true)
             .setShowWhen(false)
-            .setSound(ringtoneUri, AudioManager.STREAM_RING)
+            .apply {
+                if (ringtoneUri != null) {
+                    setSound(ringtoneUri, AudioManager.STREAM_RING)
+                }
+            }
             .setTimeoutAfter(ElementCallConfig.RINGING_CALL_DURATION_SECONDS.seconds.inWholeMilliseconds)
             .setContentIntent(answerIntent)
             .setDeleteIntent(declineIntent)

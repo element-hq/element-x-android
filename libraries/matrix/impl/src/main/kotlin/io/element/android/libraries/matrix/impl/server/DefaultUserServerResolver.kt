@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.features.call.utils
+package io.element.android.libraries.matrix.impl.server
 
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.call.ElementCallBaseUrlProvider
-import io.element.android.tests.testutils.lambda.lambdaError
+import io.element.android.libraries.matrix.api.server.UserServerResolver
+import javax.inject.Inject
 
-class FakeElementCallBaseUrlProvider(
-    private val providesLambda: (MatrixClient) -> String? = { lambdaError() }
-) : ElementCallBaseUrlProvider {
-    override suspend fun provides(matrixClient: MatrixClient): String? {
-        return providesLambda(matrixClient)
+@ContributesBinding(SessionScope::class)
+class DefaultUserServerResolver @Inject constructor(
+    private val matrixClient: MatrixClient,
+) : UserServerResolver {
+    override fun resolve(): String {
+        return matrixClient.userIdServerName()
     }
 }

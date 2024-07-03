@@ -63,6 +63,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.A_USER_ID_4
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
@@ -828,7 +829,6 @@ class MessageComposerPresenterTest {
 
             // If room is a DM, `RoomMemberSuggestion.Room` is not returned
             room.givenCanTriggerRoomNotification(Result.success(true))
-            room.isDirect
         }
     }
 
@@ -1300,7 +1300,7 @@ class MessageComposerPresenterTest {
 
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
         // Skip 2 item if Mentions feature is enabled, else 1
-        skipItems(if (FeatureFlags.Mentions.defaultValue) 2 else 1)
+        skipItems(if (FeatureFlags.Mentions.defaultValue(aBuildMeta())) 2 else 1)
         return awaitItem()
     }
 }

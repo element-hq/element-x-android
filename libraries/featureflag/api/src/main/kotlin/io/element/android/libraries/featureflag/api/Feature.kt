@@ -16,6 +16,8 @@
 
 package io.element.android.libraries.featureflag.api
 
+import io.element.android.libraries.core.meta.BuildMeta
+
 interface Feature {
     /**
      * Unique key to identify the feature.
@@ -33,9 +35,9 @@ interface Feature {
     val description: String?
 
     /**
-     * The default value of the feature (enabled or disabled).
+     * Calculate the default value of the feature (enabled or disabled) given a [BuildMeta].
      */
-    val defaultValue: Boolean
+    val defaultValue: (BuildMeta) -> Boolean
 
     /**
      * Whether the feature is finished or not.

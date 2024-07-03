@@ -333,7 +333,10 @@ class RustTimeline(
                         )
                     }
                     transactionId != null -> {
-                        error("Editing local echo is not supported yet.")
+                        inner.edit(
+                            newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
+                            item = inner.getEventTimelineItemByTransactionId(transactionId.value),
+                        )
                     }
                     else -> {
                         error("Either originalEventId or transactionId must be non null")
