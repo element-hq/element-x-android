@@ -28,18 +28,18 @@ class DefaultComposerDraftService @Inject constructor(
     private val matrixComposerDraftStore: MatrixComposerDraftStore,
 ) : ComposerDraftService {
     override suspend fun loadDraft(roomId: RoomId, isVolatile: Boolean): ComposerDraft? {
-        return if (isVolatile) {
-            volatileComposerDraftStore.loadDraft(roomId)
-        } else {
-            matrixComposerDraftStore.loadDraft(roomId)
-        }
+        return getStore(isVolatile).loadDraft(roomId)
     }
 
     override suspend fun updateDraft(roomId: RoomId, draft: ComposerDraft?, isVolatile: Boolean) {
-        if (isVolatile) {
-            volatileComposerDraftStore.updateDraft(roomId, draft)
+        getStore(isVolatile).updateDraft(roomId, draft)
+    }
+
+    private fun getStore(isVolatile: Boolean): ComposerDraftStore {
+        return if (isVolatile) {
+            volatileComposerDraftStore
         } else {
-            matrixComposerDraftStore.updateDraft(roomId, draft)
+            matrixComposerDraftStore
         }
     }
 }
