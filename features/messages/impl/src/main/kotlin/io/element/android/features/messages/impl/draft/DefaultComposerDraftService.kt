@@ -18,44 +18,28 @@ package io.element.android.features.messages.impl.draft
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
-import timber.log.Timber
 import javax.inject.Inject
 
 @ContributesBinding(RoomScope::class)
 class DefaultComposerDraftService @Inject constructor(
-    private val client: MatrixClient,
+    private val volatileComposerDraftStore: VolatileComposerDraftStore,
+    private val matrixComposerDraftStore: MatrixComposerDraftStore,
 ) : ComposerDraftService {
-    override suspend fun loadDraft(roomId: RoomId): ComposerDraft? {
-        return client.getRoom(roomId)?.use { room ->
-            room.loadComposerDraft()
-                .onFailure {
-                    Timber.e(it, "Failed to load composer draft for room $roomId")
-                }
-                .onSuccess { draft ->
-                    room.clearComposerDraft()
-                    Timber.d("Loaded composer draft for room $roomId : $draft")
-                }
-                .getOrNull()
-        }
+    override suspend fun loadDraft(roomId: RoomId, isVolatile: Boolean): ComposerDraft? {
+        return getStore(isVolatile).loadDraft(roomId)
     }
 
-    override suspend fun updateDraft(roomId: RoomId, draft: ComposerDraft?) {
-        client.getRoom(roomId)?.use { room ->
-            val updateDraftResult = if (draft == null) {
-                room.clearComposerDraft()
-            } else {
-                room.saveComposerDraft(draft)
-            }
-            updateDraftResult
-                .onFailure {
-                    Timber.e(it, "Failed to update composer draft for room $roomId")
-                }
-                .onSuccess {
-                    Timber.d("Updated composer draft for room $roomId")
-                }
+    override suspend fun updateDraft(roomId: RoomId, draft: ComposerDraft?, isVolatile: Boolean) {
+        getStore(isVolatile).updateDraft(roomId, draft)
+    }
+
+    private fun getStore(isVolatile: Boolean): ComposerDraftStore {
+        return if (isVolatile) {
+            volatileComposerDraftStore
+        } else {
+            matrixComposerDraftStore
         }
     }
 }

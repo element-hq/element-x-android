@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,10 +19,7 @@ package io.element.android.features.messages.impl.draft
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 
-class FakeComposerDraftService : ComposerDraftService {
-    var loadDraftLambda: (RoomId, Boolean) -> ComposerDraft? = { _, _ -> null }
-    override suspend fun loadDraft(roomId: RoomId, isVolatile: Boolean): ComposerDraft? = loadDraftLambda(roomId, isVolatile)
-
-    var saveDraftLambda: (RoomId, ComposerDraft?, Boolean) -> Unit = { _, _, _ -> }
-    override suspend fun updateDraft(roomId: RoomId, draft: ComposerDraft?, isVolatile: Boolean) = saveDraftLambda(roomId, draft, isVolatile)
+interface ComposerDraftStore {
+    suspend fun loadDraft(roomId: RoomId): ComposerDraft?
+    suspend fun updateDraft(roomId: RoomId, draft: ComposerDraft?)
 }
