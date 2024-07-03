@@ -20,6 +20,11 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import javax.inject.Inject
 
+/**
+ * A volatile draft store that keeps drafts in memory only.
+ * It can be used to store drafts that should not be persisted across app restarts.
+ * Currently it's used to store draft message when moving to edit mode.
+ */
 class VolatileComposerDraftStore @Inject constructor() : ComposerDraftStore {
     private val drafts: MutableMap<RoomId, ComposerDraft> = mutableMapOf()
 

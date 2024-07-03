@@ -22,6 +22,10 @@ import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * A draft store that persists drafts in the room state.
+ * It can be used to store drafts that should be persisted across app restarts.
+ */
 class MatrixComposerDraftStore @Inject constructor(
     private val client: MatrixClient,
 ) : ComposerDraftStore {
