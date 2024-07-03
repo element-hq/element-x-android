@@ -66,6 +66,8 @@ dependencies {
     allLibrariesImpl()
     allServicesImpl()
     allFeaturesImpl(rootDir, logger)
+    implementation(projects.appicon.element)
+    implementation(projects.appicon.enterprise)
 
     testImplementation("com.github.sergio-sastre.ComposablePreviewScanner:android:0.1.2")
 }

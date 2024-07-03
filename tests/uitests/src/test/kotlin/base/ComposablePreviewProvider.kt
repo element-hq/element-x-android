@@ -30,6 +30,7 @@ object ComposablePreviewProvider : TestParameter.TestParameterValuesProvider {
                 "io.element.android.features",
                 "io.element.android.libraries",
                 "io.element.android.services",
+                "io.element.android.appicon",
                 "io.element.android.appnav",
                 "io.element.android.x",
                 // Make sure we don't import Compound previews by mistake
