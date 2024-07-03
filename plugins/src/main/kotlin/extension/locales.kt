@@ -7,6 +7,7 @@ val locales = setOf(
     "bg",
     "cs",
     "de",
+    "el",
     "en",
     "es",
     "et",

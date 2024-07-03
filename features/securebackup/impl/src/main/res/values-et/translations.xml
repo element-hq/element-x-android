@@ -21,7 +21,7 @@
   <string name="screen_key_backup_disable_confirmation_title">"Kas sa oled kindel, et soovid varukoopiate tegemise välja lülitada?"</string>
   <string name="screen_key_backup_disable_description">"Varunduse väljalülitamisel kustutatakse hetkel olemasolev sinu krüptovõtmete varukoopia ning lülituvad välja veel mõned turvafunktsionaalsused. Sellisel juhul sul:"</string>
   <string name="screen_key_backup_disable_description_point_1">"sul ei ole krüptitud sõnumite ajalugu uutes seadmetes"</string>
-  <string name="screen_key_backup_disable_description_point_2">"sa kaotad ligipääsu oma krüptitud sõnumitele kui sa logid kõikjal %1$s rakendusest välja"</string>
+  <string name="screen_key_backup_disable_description_point_2">"sa kaotad ligipääsu oma krüptitud sõnumitele, kui sa logid kõikjal välja rakendusest %1$s"</string>
   <string name="screen_key_backup_disable_title">"Kas sa oled kindel, et soovid varunduse välja lülitada?"</string>
   <string name="screen_recovery_key_change_description">"Kui oled vana taastevõtme kaotanud, siis loo uus. Peale seda muudatust vana taastevõti enam ei tööta."</string>
   <string name="screen_recovery_key_change_generate_key">"Loo uus taastevõti"</string>

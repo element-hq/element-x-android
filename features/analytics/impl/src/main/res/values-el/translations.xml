@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_analytics_prompt_data_usage">"Δεν θα καταγράψουμε ούτε θα δημιουργήσουμε προφίλ προσωπικών δεδομένων"</string>
+  <string name="screen_analytics_prompt_help_us_improve">"Μοιράσου ανώνυμα δεδομένα χρήσης για να μάς βοηθήσεις να εντοπίσουμε προβλήματα."</string>
+  <string name="screen_analytics_prompt_read_terms">"Μπορείς να διαβάσεις όλους τους όρους μας %1$s."</string>
+  <string name="screen_analytics_prompt_read_terms_content_link">"εδώ"</string>
+  <string name="screen_analytics_prompt_settings">"Μπορείς να το απενεργοποιήσεις ανά πάσα στιγμή"</string>
+  <string name="screen_analytics_prompt_third_party_sharing">"Δεν θα μοιραστούμε τα δεδομένα σου με τρίτους"</string>
+  <string name="screen_analytics_prompt_title">"Βοήθησε στη βελτίωση του %1$s"</string>
+</resources>

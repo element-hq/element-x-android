@@ -21,7 +21,7 @@
   <string name="screen_key_backup_disable_confirmation_title">"Biztos, hogy kikapcsolja a biztonsági mentéseket?"</string>
   <string name="screen_key_backup_disable_description">"A biztonsági mentés kikapcsolása eltávolítja a jelenlegi titkosítási kulcsának mentését, és kikapcsol más biztonsági funkciókat is. Ebben az esetben:"</string>
   <string name="screen_key_backup_disable_description_point_1">"Nem lesznek meg a titkosított üzenetek előzményei az új eszközein"</string>
-  <string name="screen_key_backup_disable_description_point_2">"Elveszti a titkosított üzenetei hozzáférését, ha mindenhol kilép az %1$sből"</string>
+  <string name="screen_key_backup_disable_description_point_2">"Elveszti a hozzáférését a titkosított üzeneteihez, ha mindenhol kilép az %1$sből"</string>
   <string name="screen_key_backup_disable_title">"Biztos, hogy kikapcsolja a biztonsági mentéseket?"</string>
   <string name="screen_recovery_key_change_description">"Szerezzen új helyreállítási kulcsot, ha elvesztette a meglévőt. A helyreállítása kulcsa módosítása után a régi már nem fog működni."</string>
   <string name="screen_recovery_key_change_generate_key">"Új helyreállítási kulcs előállítása"</string>

@@ -10,7 +10,7 @@
   <string name="screen_chat_backup_recovery_action_setup">"Configurar recuperação"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Obtém acesso às tuas mensagens cifradas mesmo se perderes todos os teus dispositivos ou se terminares todas as tuas sessões %1$s."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Abre a %1$s num computador"</string>
-  <string name="screen_create_new_recovery_key_list_item_2">"Inicia sessão novamente"</string>
+  <string name="screen_create_new_recovery_key_list_item_2">"Iniciar sessão novamente"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Quando te for pedido para verificares o teu dispositivo, seleciona %1$s"</string>
   <string name="screen_create_new_recovery_key_list_item_3_reset_all">"“Repor tudo”"</string>
   <string name="screen_create_new_recovery_key_list_item_4">"Segue as instruções para criar uma nova chave de recuperação"</string>
@@ -19,9 +19,9 @@
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Desligar"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Perderás as tuas mensagens cifradas se tiveres terminado a sessão em todos os teus dispositivos."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Tens a certeza que queres desativar a cópia de segurança?"</string>
-  <string name="screen_key_backup_disable_description">"Desativar a cópia de segurança irá remover a atual cópia da chave de cifragem e desativar outras funcionalidades de segurança. Neste caso, irá:"</string>
-  <string name="screen_key_backup_disable_description_point_1">"O histórico de mensagens cifradas em novos dispositivos"</string>
-  <string name="screen_key_backup_disable_description_point_2">"Acesso às tuas mensagens cifradas se terminares todas as sessões %1$s"</string>
+  <string name="screen_key_backup_disable_description">"Desativar a cópia de segurança irá remover a atual cópia da chave de cifragem e desativar outras funcionalidades de segurança. Neste caso, irás:"</string>
+  <string name="screen_key_backup_disable_description_point_1">"Não ter o histórico de mensagens cifradas em novos dispositivos"</string>
+  <string name="screen_key_backup_disable_description_point_2">"Perder o acesso às tuas mensagens cifradas se terminares todas as sessões %1$s"</string>
   <string name="screen_key_backup_disable_title">"Tens a certeza que queres desativar a cópia de segurança?"</string>
   <string name="screen_recovery_key_change_description">"Obtém uma nova chave de recuperação se tiveres perdido a atual. Depois de a alterares, a antiga deixará de funcionar."</string>
   <string name="screen_recovery_key_change_generate_key">"Gerar uma nova chave de recuperação"</string>
@@ -35,12 +35,12 @@
   <string name="screen_recovery_key_confirm_key_description">"Também funciona se tiveres uma chave ou frase de segurança."</string>
   <string name="screen_recovery_key_confirm_key_label">"Chave ou código de recuperação"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Inserir…"</string>
-  <string name="screen_recovery_key_confirm_lost_recovery_key">"Perdeste a tua chave de recuperação?"</string>
+  <string name="screen_recovery_key_confirm_lost_recovery_key">"Perdeste a tua chave?"</string>
   <string name="screen_recovery_key_confirm_success">"Chave de recuperação confirmada"</string>
   <string name="screen_recovery_key_confirm_title">"Insere a tua chave de recuperação"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Chave de recuperação copiada"</string>
   <string name="screen_recovery_key_generating_key">"A gerar…"</string>
-  <string name="screen_recovery_key_save_action">"Guardar chave de recuperação"</string>
+  <string name="screen_recovery_key_save_action">"Guardar chave"</string>
   <string name="screen_recovery_key_save_description">"Anota a tua chave de recuperação num local seguro ou guarda-a num gestor de senhas."</string>
   <string name="screen_recovery_key_save_key_description">"Toca para copiar a chave de recuperação"</string>
   <string name="screen_recovery_key_save_title">"Guarda a tua chave de recuperação"</string>

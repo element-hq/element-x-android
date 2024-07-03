@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Δημιουργία νέου κλειδιού ανάκτησης"</string>
+  <string name="screen_identity_confirmation_subtitle">"Επαλήθευσε αυτήν τη συσκευή για να ρυθμίσεις την ασφαλή επικοινωνία."</string>
+  <string name="screen_identity_confirmation_title">"Επιβεβαίωσε ότι είσαι εσύ"</string>
+  <string name="screen_identity_confirmed_subtitle">"Τώρα μπορείς να διαβάζεις ή να στέλνεις μηνύματα με ασφάλεια και επίσης μπορεί να εμπιστευτεί αυτήν τη συσκευή οποιοσδήποτε με τον οποίο συνομιλείς."</string>
+  <string name="screen_identity_confirmed_title">"Επαληθευμένη συσκευή"</string>
+  <string name="screen_identity_use_another_device">"Χρήση άλλης συσκευής"</string>
+  <string name="screen_identity_waiting_on_other_device">"Αναμονή σε άλλη συσκευή…"</string>
+  <string name="screen_session_verification_cancelled_subtitle">"Κάτι δεν πάει καλά. Είτε το αίτημα έληξε είτε απορρίφθηκε."</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"Επιβεβαίωσε ότι τα παρακάτω emoji ταιριάζουν με αυτά που εμφανίζονται στην άλλη συνεδρία σου."</string>
+  <string name="screen_session_verification_compare_emojis_title">"Σύγκριση emoji"</string>
+  <string name="screen_session_verification_compare_numbers_subtitle">"Επιβεβαίωσε ότι οι παρακάτω αριθμοί ταιριάζουν με αυτούς που εμφανίζονται στην άλλη συνεδρία σου."</string>
+  <string name="screen_session_verification_compare_numbers_title">"Σύγκριση αριθμών"</string>
+  <string name="screen_session_verification_complete_subtitle">"Η νέα σου συνεδρία έχει πλέον επαληθευτεί. Έχει πρόσβαση στα κρυπτογραφημένα μηνύματά σας και άλλοι χρήστες θα το βλέπουν ως αξιόπιστο."</string>
+  <string name="screen_session_verification_enter_recovery_key">"Εισαγωγή κλειδιού ανάκτησης"</string>
+  <string name="screen_session_verification_open_existing_session_subtitle">"Απέδειξε ότι είσαι εσύ για να αποκτήσεις πρόσβαση στο κρυπτογραφημένο ιστορικό μηνυμάτων σου."</string>
+  <string name="screen_session_verification_open_existing_session_title">"Άνοιξε μια υπάρχουσα συνεδρία"</string>
+  <string name="screen_session_verification_positive_button_canceled">"Επανάληψη επαλήθευσης"</string>
+  <string name="screen_session_verification_positive_button_initial">"Είμαι έτοιμος/η"</string>
+  <string name="screen_session_verification_positive_button_verifying_ongoing">"Αναμονή για αντιστοίχιση"</string>
+  <string name="screen_session_verification_ready_subtitle">"Σύγκρινε ένα μοναδικό σύνολο emojis."</string>
+  <string name="screen_session_verification_request_accepted_subtitle">"Σύγκρινε τα μοναδικά emoji και σιγουρέψου ότι εμφανίζονται με την ίδια σειρά."</string>
+  <string name="screen_session_verification_they_dont_match">"Δεν ταιριάζουν"</string>
+  <string name="screen_session_verification_they_match">"Ταιριάζουν"</string>
+  <string name="screen_session_verification_waiting_to_accept_subtitle">"Αποδέξου το αίτημα για να ξεκινήσεις τη διαδικασία επαλήθευσης στην άλλη συνεδρία σου για να συνεχίσεις."</string>
+  <string name="screen_session_verification_waiting_to_accept_title">"Αναμονή για αποδοχή αιτήματος"</string>
+</resources>

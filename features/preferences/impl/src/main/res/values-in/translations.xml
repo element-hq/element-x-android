@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="full_screen_intent_banner_message">"Untuk memastikan Anda tidak melewatkan panggilan penting, silakan ubah pengaturan Anda untuk memperbolehkan notifikasi layar penuh ketika ponsel Anda terkunci."</string>
+  <string name="full_screen_intent_banner_title">"Tingkatkan pengalaman panggilan Anda"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Pilih cara menerima notifikasi"</string>
   <string name="screen_advanced_settings_developer_mode">"Mode pengembang"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Aktifkan untuk mengakses fitur dan fungsi untuk para pengembang."</string>
