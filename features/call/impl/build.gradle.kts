@@ -17,7 +17,6 @@
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
-    alias(libs.plugins.ksp)
     id("kotlin-parcelize")
     alias(libs.plugins.kotlin.serialization)
 }
@@ -57,7 +56,6 @@ dependencies {
     implementation(libs.network.retrofit)
     implementation(libs.serialization.json)
     api(projects.features.call.api)
-    ksp(libs.showkase.processor)
 
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)
