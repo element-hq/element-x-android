@@ -85,7 +85,7 @@ class DefaultAnalyticsService(
 
     override suspend fun onSessionDeleted(userId: String) {
         // Delete the store
-        analyticsStore.reset()
+        // analyticsStore.reset()
     }
 
     private fun observeUserConsent() {
