@@ -32,7 +32,7 @@ import sergio.sastre.composable.preview.scanner.core.preview.ComposablePreview
  * It uses a sharded preview provider so multiple 'shards' can run in parallel, optimizing CPU and time usage.
  */
 @RunWith(TestParameterInjector::class)
-class PreviewTest(
+class PreviewTest1(
     @TestParameter(valuesProvider = Shard1ComposablePreviewProvider::class)
     val preview: ComposablePreview<AndroidPreviewInfo>,
 ) {

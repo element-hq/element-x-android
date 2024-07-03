@@ -71,7 +71,6 @@ def deleteDuplicatedScreenshots(lang):
         englishFile = file[:-6] + "en" + file[-4:]
         fullFile = "tests/uitests/src/test/snapshots/images/" + file
         fullEnglishFile = "tests/uitests/src/test/snapshots/images/" + englishFile
-        print("File: %s, enligshFile: %s" % (fullFile, fullEnglishFile))
         isDifferent = compare(fullFile, fullEnglishFile)
         if isDifferent:
             differentFileCounter += 1
@@ -107,7 +106,6 @@ def computeDarkFileName(lightFileName):
         return lightFileName.replace("_Day", "_Night")
     match = re.match("(.*)_Day_(\\d+)_(.*)", lightFileName, flags=re.ASCII)
     if match:
-        print("Found match!")
         return match.group(1) + "_Night_" + match.group(2) + "_" + match.group(3)
     return ""
 
@@ -119,7 +117,7 @@ def generateJavascriptFile():
     data = [["en", "en-dark"] + languages]
     files = sorted(
         os.listdir("tests/uitests/src/test/snapshots/images/"),
-        key=lambda file: file,
+        key=lambda file: file[file.find("_", 1):],
     )
     for file in files:
         # Continue if file contains "_Night", keep only light screenshots
@@ -134,7 +132,6 @@ def generateJavascriptFile():
         for l in languages:
             simpleFile = file[:-6] + l
             translatedFile = "./screenshots/" + l + "/" + simpleFile + ".png"
-            print("Translated file: %s" % translatedFile)
             if os.path.exists(translatedFile):
                 # Get the last modified date of the file in seconds and round to days
                 date = os.popen("git log -1 --format=%ct -- \"" + translatedFile + "\"").read().strip()
@@ -169,6 +166,5 @@ def main():
         deleteDuplicatedScreenshots(l)
         moveScreenshots(l)
     generateJavascriptFile()
-
 
 main()
