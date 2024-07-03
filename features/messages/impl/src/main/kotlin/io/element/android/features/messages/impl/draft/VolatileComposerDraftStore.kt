@@ -21,7 +21,6 @@ import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import javax.inject.Inject
 
 class VolatileComposerDraftStore @Inject constructor() : ComposerDraftStore {
-
     private val drafts: MutableMap<RoomId, ComposerDraft> = mutableMapOf()
 
     override suspend fun loadDraft(roomId: RoomId): ComposerDraft? {

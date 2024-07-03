@@ -20,9 +20,9 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 
 class FakeComposerDraftService : ComposerDraftService {
-    var loadDraftLambda: (RoomId) -> ComposerDraft? = { null }
-    override suspend fun loadDraft(roomId: RoomId) = loadDraftLambda(roomId)
+    var loadDraftLambda: (RoomId, Boolean) -> ComposerDraft? = { _, _ -> null }
+    override suspend fun loadDraft(roomId: RoomId, isVolatile: Boolean): ComposerDraft? = loadDraftLambda(roomId, isVolatile)
 
-    var saveDraftLambda: (RoomId, ComposerDraft?) -> Unit = { _, _ -> }
-    override suspend fun updateDraft(roomId: RoomId, draft: ComposerDraft?) = saveDraftLambda(roomId, draft)
+    var saveDraftLambda: (RoomId, ComposerDraft?, Boolean) -> Unit = { _, _, _ -> }
+    override suspend fun updateDraft(roomId: RoomId, draft: ComposerDraft?, isVolatile: Boolean) = saveDraftLambda(roomId, draft, isVolatile)
 }
