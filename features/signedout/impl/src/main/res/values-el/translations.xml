@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signed_out_reason_1">"Άλλαξες τον κωδικό πρόσβασής σου σε άλλη συνεδρία"</string>
+  <string name="screen_signed_out_reason_2">"Έχεις διαγράψει τη συνεδρία από άλλη συνεδρία"</string>
+  <string name="screen_signed_out_reason_3">"Ο διαχειριστής του διακομιστή σου έχει ακυρώσει την πρόσβασή σου"</string>
+  <string name="screen_signed_out_subtitle">"Μπορεί να έχεις αποσυνδεθεί για έναν από τους λόγους που αναφέρονται παρακάτω. Συνδέσου ξανά για να συνεχίσεις να χρησιμοποιείς %s."</string>
+  <string name="screen_signed_out_title">"Έχεις αποσυνδεθεί"</string>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"Προσθήκη επιλογής"</string>
+  <string name="screen_create_poll_anonymous_desc">"Εμφάνιση αποτελεσμάτων μόνο μετά τη λήξη της ψηφοφορίας"</string>
+  <string name="screen_create_poll_anonymous_headline">"Απόκρυψη ψήφων"</string>
+  <string name="screen_create_poll_answer_hint">"Επιλογή %1$d"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Οι αλλαγές σου δεν έχουν αποθηκευτεί. Σίγουρα θέλεις να πας πίσω;"</string>
+  <string name="screen_create_poll_question_desc">"Ερώτηση ή θέμα"</string>
+  <string name="screen_create_poll_question_hint">"Τί αφορά η δημοσκόπηση;"</string>
+  <string name="screen_create_poll_title">"Δημιουργία Δημοσκόπησης"</string>
+  <string name="screen_edit_poll_delete_confirmation">"Θες σίγουρα να διαγράψεις αυτήν τη δημοσκόπηση;"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Διαγραφή Δημοσκόπησης"</string>
+  <string name="screen_edit_poll_title">"Επεξεργασία δημοσκόπησης"</string>
+  <string name="screen_polls_history_empty_ongoing">"Δεν είναι δυνατή η εύρεση ενεργών δημοσκοπήσεων"</string>
+  <string name="screen_polls_history_empty_past">"Δεν είναι δυνατή η εύρεση παλιών δημοσκοπήσεων"</string>
+  <string name="screen_polls_history_filter_ongoing">"Σε εξέλιξη"</string>
+  <string name="screen_polls_history_filter_past">"Παρελθόν"</string>
+  <string name="screen_polls_history_title">"Δημοσκοπήσεις"</string>
+</resources>

@@ -23,7 +23,7 @@
     <item quantity="other">"Lida por %1$s e %2$d outros"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Lida por %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Toque para mostrar tudo"</string>
+  <string name="a11y_read_receipts_tap_to_show_all">"Toca para mostrar tudo"</string>
   <string name="a11y_remove_reaction_with">"Remover reação com %1$s"</string>
   <string name="a11y_send_files">"Enviar ficheiros"</string>
   <string name="a11y_show_password">"Mostrar senha"</string>
@@ -98,14 +98,14 @@
   <string name="action_send_message">"Enviar mensagem"</string>
   <string name="action_share">"Partilhar"</string>
   <string name="action_share_link">"Partilhar ligação"</string>
-  <string name="action_sign_in_again">"Inicia sessão novamente"</string>
+  <string name="action_sign_in_again">"Iniciar sessão novamente"</string>
   <string name="action_signout">"Terminar sessão"</string>
   <string name="action_signout_anyway">"Terminar mesmo assim"</string>
   <string name="action_skip">"Saltar"</string>
   <string name="action_start">"Iniciar"</string>
   <string name="action_start_chat">"Iniciar conversa"</string>
   <string name="action_start_verification">"Iniciar verificação"</string>
-  <string name="action_static_map_load">"Toque para carregar o mapa"</string>
+  <string name="action_static_map_load">"Toca para carregar o mapa"</string>
   <string name="action_take_photo">"Tirar foto"</string>
   <string name="action_tap_for_options">"Toca para ver as opções"</string>
   <string name="action_try_again">"Tentar novamente"</string>
@@ -129,12 +129,16 @@
   <string name="common_decryption_error">"Erro de decifragem"</string>
   <string name="common_developer_options">"Opções de programador"</string>
   <string name="common_direct_chat">"Conversa direta"</string>
+  <string name="common_do_not_show_this_again">"Não mostrar novamente"</string>
   <string name="common_edited_suffix">"(editada)"</string>
   <string name="common_editing">"A editar"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Cifragem ativada"</string>
   <string name="common_enter_your_pin">"Introduz o teu PIN"</string>
   <string name="common_error">"Erro"</string>
+  <string name="common_error_registering_pusher_android">"Ocorreu um erro, podes não estar a receber notificações de novas mensagens. Resolve o problema nas configurações.
+
+Razão: %1$s."</string>
   <string name="common_everyone">"Toda a gente"</string>
   <string name="common_failed">"Falha"</string>
   <string name="common_favourite">"Marcar como favorita"</string>
@@ -247,7 +251,7 @@
   <string name="error_failed_uploading_voice_message">"Falha ao carregar mensagem de voz."</string>
   <string name="error_message_not_found">"Mensagem não encontrada"</string>
   <string name="error_missing_location_auth_android">"A %1$s não tem permissão para aceder à tua localização. Podes ativar o acesso nas Definições."</string>
-  <string name="error_missing_location_rationale_android">"A %1$s não tem permissão para aceder à tua localização. Ativa o acesso abaixo."</string>
+  <string name="error_missing_location_rationale_android">"A %1$s não tem permissão para aceder à tua localização. Continua para ativares o acesso."</string>
   <string name="error_missing_microphone_voice_rationale_android">"A %1$s não tem permissão para aceder ao teu microfone. Permite o acesso para gravar uma mensagem de voz."</string>
   <string name="error_some_messages_have_not_been_sent">"Algumas mensagens não foram enviadas"</string>
   <string name="error_unknown">"Ocorreu um erro, desculpa"</string>

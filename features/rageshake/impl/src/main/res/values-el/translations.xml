@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"Επισύναψη στιγμιοτύπου οθόνης"</string>
+  <string name="screen_bug_report_contact_me">"Μπορείς να επικοινωνήσεις μαζί μου εάν έχεις οποιεσδήποτε επιπλέον ερωτήσεις."</string>
+  <string name="screen_bug_report_contact_me_title">"Επικοινώνησε μαζί μου"</string>
+  <string name="screen_bug_report_edit_screenshot">"Επεξεργασία στιγμιότυπου οθόνης"</string>
+  <string name="screen_bug_report_editor_description">"Παρακαλώ περιέγραψε το πρόβλημα. Τί έκανες; Τί περίμενες να συμβεί; Τι πραγματικά συνέβη. Παρακαλώ μπες σε όσο περισσότερες λεπτομέρειες μπορείς."</string>
+  <string name="screen_bug_report_editor_placeholder">"Περιέγραψε το πρόβλημα…"</string>
+  <string name="screen_bug_report_editor_supporting">"Εάν είναι δυνατόν, γράψε την περιγραφή στα αγγλικά."</string>
+  <string name="screen_bug_report_error_description_too_short">"Η περιγραφή είναι πολύ σύντομη, δώσε περισσότερες λεπτομέρειες σχετικά με το τί συνέβη. Ευχαριστώ!"</string>
+  <string name="screen_bug_report_include_crash_logs">"Αποστολή αρχείων καταγραφής σφαλμάτων"</string>
+  <string name="screen_bug_report_include_logs">"Να επιτρέπονται τα αρχεία καταγραφής"</string>
+  <string name="screen_bug_report_include_screenshot">"Αποστολή στιγμιοτύπου οθόνης"</string>
+  <string name="screen_bug_report_logs_description">"Τα αρχεία καταγραφής θα συμπεριληφθούν στο μήνυμά σου για να βεβαιωθούμε ότι όλα λειτουργούν σωστά. Για να στείλεις το μήνυμά σου χωρίς αρχεία καταγραφής, απενεργοποίησε αυτήν τη ρύθμιση."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"Το %1$s διακόπηκε την τελευταία φορά που χρησιμοποιήθηκε. Θα \'θελες να μοιραστείς μια αναφορά σφάλματος μαζί μας;"</string>
+  <string name="screen_bug_report_view_logs">"Προβολή αρχείων καταγραφής"</string>
+</resources>

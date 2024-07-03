@@ -16,7 +16,7 @@
   <string name="screen_session_verification_enter_recovery_key">"Insere a chave de recuperação"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Prova que és tu para acederes ao teu histórico de mensagens cifradas."</string>
   <string name="screen_session_verification_open_existing_session_title">"Abrir sessão existente"</string>
-  <string name="screen_session_verification_positive_button_canceled">"Repetir verficiação"</string>
+  <string name="screen_session_verification_positive_button_canceled">"Repetir verificação"</string>
   <string name="screen_session_verification_positive_button_initial">"Estou pronto"</string>
   <string name="screen_session_verification_positive_button_verifying_ongoing">"A aguardar correspondência"</string>
   <string name="screen_session_verification_ready_subtitle">"Compara um conjunto único de emojis."</string>

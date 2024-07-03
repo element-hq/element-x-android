@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signout_confirmation_dialog_content">"Σίγουρα θες να αποσυνδεθείς;"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Αποσύνδεση"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Αποσύνδεση"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Αποσύνδεση…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"Πρόκειται να αποσυνδεθείς από την τελευταία σου συνεδρία. Εάν αποσυνδεθείς τώρα, θα χάσεις την πρόσβαση στα κρυπτογραφημένα μηνύματά σου."</string>
+  <string name="screen_signout_key_backup_disabled_title">"Έχεις απενεργοποιήσει τη δημιουργία αντιγράφων ασφαλείας"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"Εξακολουθούσε να δημιουργείται αντίγραφο ασφαλείας των κλειδιών σου όταν βρέθηκες εκτός σύνδεσης. Επανασυνδέσου, ώστε να είναι δυνατή η δημιουργία αντιγράφων ασφαλείας των κλειδιών σου πριν αποσυνδεθείς."</string>
+  <string name="screen_signout_key_backup_offline_title">"Εξακολουθούν να δημιουργούνται αντίγραφα ασφαλείας των κλειδιών σου"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Περίμενε να ολοκληρωθεί πριν αποσυνδεθείς."</string>
+  <string name="screen_signout_key_backup_ongoing_title">"Εξακολουθούν να δημιουργούνται αντίγραφα ασφαλείας των κλειδιών σου"</string>
+  <string name="screen_signout_preference_item">"Αποσύνδεση"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"Πρόκειται να αποσυνδεθείς από την τελευταία σου συνεδρία. Εάν αποσυνδεθείς τώρα, θα χάσεις την πρόσβαση στα κρυπτογραφημένα μηνύματά σου."</string>
+  <string name="screen_signout_recovery_disabled_title">"Η ανάκτηση δεν έχει ρυθμιστεί"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"Πρόκειται να αποσυνδεθείς από την τελευταία σας συνεδρία. Εάν αποσυνδεθείς τώρα, ενδέχεται να χάσεις την πρόσβαση στα κρυπτογραφημένα μηνύματά σου."</string>
+  <string name="screen_signout_save_recovery_key_title">"Έχεις αποθηκεύσει το κλειδί ανάκτησης;"</string>
+</resources>

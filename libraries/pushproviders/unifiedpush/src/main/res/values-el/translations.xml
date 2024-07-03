@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_unified_push_description">"Βεβαιώσου ότι οι διανομείς UnifiedPush είναι διαθέσιμοι."</string>
+  <string name="troubleshoot_notifications_test_unified_push_failure">"Δεν βρέθηκαν διανομείς push."</string>
+  <plurals name="troubleshoot_notifications_test_unified_push_success">
+    <item quantity="one">"%Βρέθηκε %1$d διανομέας: %2$s."</item>
+    <item quantity="other">"Βρέθηκαν %1$d διανομείς: %2$s."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_unified_push_title">"Έλεγχος UnifiedPush"</string>
+</resources>

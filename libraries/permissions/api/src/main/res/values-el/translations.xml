@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_permission_camera">"Για να επιτρέψεις στην εφαρμογή να χρησιμοποιεί την κάμερα, παραχώρησε την άδεια στις ρυθμίσεις συστήματος."</string>
+  <string name="dialog_permission_generic">"Παρακαλώ παραχώρησε την άδεια στις ρυθμίσεις συστήματος."</string>
+  <string name="dialog_permission_microphone">"Για να επιτρέψεις στην εφαρμογή να χρησιμοποιεί το μικρόφωνο, παραχώρησε την άδεια στις ρυθμίσεις συστήματος."</string>
+  <string name="dialog_permission_notification">"Για να επιτρέψεις στην εφαρμογή να εμφανίζει ειδοποιήσεις, παραχώρησε την άδεια στις ρυθμίσεις συστήματος."</string>
+</resources>

@@ -43,7 +43,7 @@
   <string name="screen_qr_code_login_device_not_signed_in_scan_state_subtitle">"Teine seade pole sisselogitud"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Sisselogimine katkestati teises seadmes."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Sisselogimispäring on tühistatud"</string>
-  <string name="screen_qr_code_login_error_declined_subtitle">"Sisselogimisest keelduti teises seadmes."</string>
+  <string name="screen_qr_code_login_error_declined_subtitle">"Sisselogimisest on teise seadmes keeldutud."</string>
   <string name="screen_qr_code_login_error_declined_title">"Sisselogimisest on keeldutud"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"Sisselogimine aegus. Palun proovi uuesti."</string>
   <string name="screen_qr_code_login_error_expired_title">"Sisselogimine jäi etteantud aja jooksul tegemata"</string>

@@ -6,6 +6,6 @@
   <string name="troubleshoot_notifications_screen_notice">"Corre os testes para detetar problemas com a tua configuração que possam levar a comportamentos inesperados das notificações."</string>
   <string name="troubleshoot_notifications_screen_quick_fix_action">"Tentar corrigir"</string>
   <string name="troubleshoot_notifications_screen_success">"Todos os testes realizados sem problemas."</string>
-  <string name="troubleshoot_notifications_screen_title">"Resolver problemas com as notificações"</string>
+  <string name="troubleshoot_notifications_screen_title">"Corrigir notificações"</string>
   <string name="troubleshoot_notifications_screen_waiting">"Alguns testes necessitam a tua atenção. Por favor, verifica os detalhes."</string>
 </resources>
