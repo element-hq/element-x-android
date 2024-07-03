@@ -18,7 +18,7 @@ package ui
 
 import base.PaparazziPreviewRule
 import base.ScreenshotTest
-import base.Shard3ComposablePreviewProvider
+import base.Shard4ComposablePreviewProvider
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import org.junit.Rule
@@ -32,8 +32,8 @@ import sergio.sastre.composable.preview.scanner.core.preview.ComposablePreview
  * It uses a sharded preview provider so multiple 'shards' can run in parallel, optimizing CPU and time usage.
  */
 @RunWith(TestParameterInjector::class)
-class PreviewTest3(
-    @TestParameter(valuesProvider = Shard3ComposablePreviewProvider::class)
+class PreviewShard4Test(
+    @TestParameter(valuesProvider = Shard4ComposablePreviewProvider::class)
     val preview: ComposablePreview<AndroidPreviewInfo>,
 ) {
     @get:Rule
