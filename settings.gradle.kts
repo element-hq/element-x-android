@@ -71,6 +71,8 @@ rootProject.name = "ElementX"
 include(":app")
 include(":appnav")
 include(":appconfig")
+include(":appicon:element")
+// TODO include(":appicon:enterprise")
 include(":tests:konsist")
 include(":tests:uitests")
 include(":tests:testutils")
