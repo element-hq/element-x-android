@@ -32,4 +32,4 @@ dependencies {
     implementation(projects.anvilannotations)
     anvil(projects.anvilcodegen)
     implementation(projects.libraries.designsystem)
-    }
+}
