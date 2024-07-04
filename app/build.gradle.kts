@@ -241,6 +241,9 @@ dependencies {
     allServicesImpl()
     if (isEnterpriseBuild) {
         allEnterpriseImpl(rootDir, logger)
+        implementation(projects.appicon.enterprise)
+    } else {
+        implementation(projects.appicon.element)
     }
     allFeaturesImpl(rootDir, logger)
     implementation(projects.features.migration.api)

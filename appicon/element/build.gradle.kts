@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+plugins {
+    id("io.element.android-compose-library")
+}
 
-package ui
+android {
+    namespace = "io.element.android.appicon.element"
 
-import android.app.Activity
-import android.content.Intent
-import com.airbnb.android.showkase.ui.ShowkaseBrowserActivity
-
-fun openShowkase(activity: Activity) {
-    val intent = Intent(activity, ShowkaseBrowserActivity::class.java)
-    intent.putExtra(
-        "SHOWKASE_ROOT_MODULE",
-        "io.element.android.libraries.designsystem.showkase.DesignSystemShowkaseRootModule"
-    )
-    activity.startActivity(intent)
+    buildTypes {
+        register("nightly")
+    }
 }

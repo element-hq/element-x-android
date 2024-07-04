@@ -39,10 +39,6 @@ tasks.withType<Test> {
 }
 
 dependencies {
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.parameter.injector)
-    testImplementation(projects.libraries.designsystem)
-
     // Paparazzi 1.3.2 workaround (see https://github.com/cashapp/paparazzi/blob/master/CHANGELOG.md#132---2024-01-13)
     constraints.add("testImplementation", "com.google.guava:guava") {
         attributes {
@@ -66,6 +62,11 @@ dependencies {
     allLibrariesImpl()
     allServicesImpl()
     allFeaturesImpl(rootDir, logger)
+    implementation(projects.appicon.element)
+    implementation(projects.appicon.enterprise)
 
-    testImplementation("com.github.sergio-sastre.ComposablePreviewScanner:android:0.1.2")
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.parameter.injector)
+    testImplementation(projects.libraries.designsystem)
+    testImplementation(libs.test.composable.preview.scanner)
 }

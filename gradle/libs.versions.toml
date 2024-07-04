@@ -145,6 +145,7 @@ test_truth = "com.google.truth:truth:1.4.3"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.16"
 test_robolectric = "org.robolectric:robolectric:4.12.2"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
+test_composable_preview_scanner = "com.github.sergio-sastre.ComposablePreviewScanner:android:0.1.2"
 
 # Others
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }

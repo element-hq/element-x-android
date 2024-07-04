@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+plugins {
+    id("io.element.android-compose-library")
+}
 
-package ui
+android {
+    namespace = "io.element.android.appicon.enterprise"
 
-import com.airbnb.android.showkase.annotation.ShowkaseRoot
-import com.airbnb.android.showkase.annotation.ShowkaseRootModule
-
-@ShowkaseRoot
-class ElementXShowkaseRootModule : ShowkaseRootModule
+    buildTypes {
+        register("nightly")
+    }
+}

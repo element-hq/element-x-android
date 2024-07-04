@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.x.icon
+package io.element.android.appicon.element
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,7 +31,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.element.android.x.R
 
 @Preview
 @Composable
