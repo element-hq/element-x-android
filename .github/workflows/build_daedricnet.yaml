@@ -14,8 +14,7 @@ jobs:
   nightly:
     name: Deploy nightly
     concurrency:
-      #group: ${{ format('build-release-main-gplay-{0}', github.sha) }}
-      group: ${{ github.ref == 'refs/heads/develop' && format('build-develop-{0}-{1}', matrix.variant, github.sha) || format('build-{0}-{1}', matrix.variant, github.ref)  }}
+      group: ${{ format('build-release-main-gplay-{0}', github.sha) }}
       cancel-in-progress: true    
     runs-on: ubuntu-latest
     steps:
@@ -32,7 +31,7 @@ jobs:
           ELEMENT_ANDROID_MAPTILER_API_KEY: 'y2pJp6r8fSjQHnFpYNKH'
           ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: 'streets-v2'
           ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: 'streets-v2-dark'
-        run: ./gradlew assembleNightly $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew assembleGplayNightly $CI_GRADLE_ARG_PROPERTIES
       - name: Upload bundle as artifact
         uses: actions/upload-artifact@v4
         with:
@@ -43,8 +42,8 @@ jobs:
       - name: Deploy Nightly
         uses: WebFreak001/deploy-nightly@v3.1.0
         with:
-          upload_url: https://uploads.github.com/repos/daedric7/element-x-android/releases/161786548/assets{?name,label} # find out this value by opening https://api.github.com/repos/<owner>/<repo>/releases in your browser and copy the full "upload_url" value including the {?name,label} part
-          release_id: 161786548 # same as above (id can just be taken out the upload_url, it's used to find old releases)
+          upload_url: https://uploads.github.com/repos/daedric7/element-x-daedricnet/releases/164077249/assets{?name,label} # find out this value by opening https://api.github.com/repos/<owner>/<repo>/releases in your browser and copy the full "upload_url" value including the {?name,label} part
+          release_id: 164077249 # same as above (id can just be taken out the upload_url, it's used to find old releases)
           asset_path: app/build/outputs/apk/gplay/nightly/app-gplay-arm64-v8a-nightly.apk # path to archive to upload
           asset_name: daedricnet-element-x-$$.apk # name to upload the release as, use $$ to insert date (YYYYMMDD) and 6 letter commit hash
           asset_content_type: application/vnd.android.package-archive # required by GitHub API
