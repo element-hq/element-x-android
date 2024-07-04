@@ -17,7 +17,6 @@
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
-    alias(libs.plugins.ksp)
 }
 
 android {
@@ -61,6 +60,4 @@ dependencies {
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.services.toolbox.test)
     testImplementation(projects.tests.testutils)
-
-    ksp(libs.showkase.processor)
 }

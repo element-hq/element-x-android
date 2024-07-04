@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
+import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
@@ -307,8 +308,8 @@ interface MatrixRoom : Closeable {
     suspend fun generateWidgetWebViewUrl(
         widgetSettings: MatrixWidgetSettings,
         clientId: String,
-        languageTag: String? = null,
-        theme: String? = null,
+        languageTag: String?,
+        theme: String?,
     ): Result<String>
 
     /**
@@ -336,6 +337,21 @@ interface MatrixRoom : Closeable {
     suspend fun sendCallNotificationIfNeeded(): Result<Unit>
 
     suspend fun setSendQueueEnabled(enabled: Boolean)
+
+    /**
+     * Store the given `ComposerDraft` in the state store of this room.
+     */
+    suspend fun saveComposerDraft(composerDraft: ComposerDraft): Result<Unit>
+
+    /**
+     * Retrieve the `ComposerDraft` stored in the state store for this room.
+     */
+    suspend fun loadComposerDraft(): Result<ComposerDraft?>
+
+    /**
+     * Clear the `ComposerDraft` stored in the state store for this room.
+     */
+    suspend fun clearComposerDraft(): Result<Unit>
 
     override fun close() = destroy()
 }

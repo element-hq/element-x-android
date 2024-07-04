@@ -28,9 +28,8 @@ import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
-import io.element.android.libraries.textcomposer.mentions.rememberMentionSpanProvider
+import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanProvider
 import io.element.android.wysiwyg.compose.StyledHtmlConverter
 import io.element.android.wysiwyg.display.MentionDisplayHandler
 import io.element.android.wysiwyg.display.TextDisplay
@@ -40,9 +39,7 @@ import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
 @SingleIn(SessionScope::class)
-class DefaultHtmlConverterProvider @Inject constructor(
-    private val permalinkParser: PermalinkParser,
-) : HtmlConverterProvider {
+class DefaultHtmlConverterProvider @Inject constructor() : HtmlConverterProvider {
     private val htmlConverter: MutableState<HtmlConverter?> = mutableStateOf(null)
 
     @Composable
@@ -53,10 +50,7 @@ class DefaultHtmlConverterProvider @Inject constructor(
         }
 
         val editorStyle = ElementRichTextEditorStyle.textStyle()
-        val mentionSpanProvider = rememberMentionSpanProvider(
-            currentUserId = currentUserId,
-            permalinkParser = permalinkParser,
-        )
+        val mentionSpanProvider = LocalMentionSpanProvider.current
 
         val context = LocalContext.current
 

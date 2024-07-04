@@ -16,14 +16,14 @@
 
 package io.element.android.features.call.utils
 
-import io.element.android.features.call.impl.utils.ElementCallBaseUrlProvider
-import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.call.ElementCallBaseUrlProvider
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeElementCallBaseUrlProvider(
-    private val providesLambda: (SessionId) -> String? = { lambdaError() }
+    private val providesLambda: (MatrixClient) -> String? = { lambdaError() }
 ) : ElementCallBaseUrlProvider {
-    override suspend fun provides(sessionId: SessionId): String? {
-        return providesLambda(sessionId)
+    override suspend fun provides(matrixClient: MatrixClient): String? {
+        return providesLambda(matrixClient)
     }
 }

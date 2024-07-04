@@ -60,7 +60,7 @@ allprojects {
         config.from(files("$rootDir/tools/detekt/detekt.yml"))
     }
     dependencies {
-        detektPlugins("io.nlopez.compose.rules:detekt:0.4.4")
+        detektPlugins("io.nlopez.compose.rules:detekt:0.4.5")
     }
 
     // KtLint
@@ -160,15 +160,15 @@ allprojects {
             // Record all the languages?
             if (project.hasProperty("allLanguagesNoEnglish")) {
                 // Do not record English language
-                exclude("ui/S.class")
+                exclude("ui/*.class")
             } else if (project.hasProperty("allLanguages").not()) {
                 // Do not record other languages
-                exclude("ui/T.class")
+                exclude("translations/*.class")
             }
         } else {
             // Disable screenshot tests by default
-            exclude("ui/S.class")
-            exclude("ui/T.class")
+            exclude("ui/*.class")
+            exclude("translations/*.class")
         }
     }
 }

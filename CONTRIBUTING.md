@@ -91,19 +91,9 @@ This project is full Kotlin. Please do not write Java classes.
 
 ### Changelog
 
-Please create at least one file under ./changelog.d containing details about your change. Towncrier will be used when preparing the release.
+The release notes are generated from the pull request titles and labels. If possible, the title must describe best what will be the user facing change.
 
-Towncrier says to use the PR number for the filename, but the issue number is also fine.
-
-Supported filename extensions are:
-
-- ``.feature``: Signifying a new feature in Element Android or in the Matrix SDK.
-- ``.bugfix``: Signifying a bug fix.
-- ``.wip``: Signifying a work in progress change, typically a component of a larger feature which will be enabled once all tasks are complete.
-- ``.doc``: Signifying a documentation improvement.
-- ``.misc``: Any other changes.
-
-See https://github.com/twisted/towncrier#news-fragments if you need more details.
+You will also need to add a label starting by `PR-` to you Pull Request to help categorize the release note. The label should be added by the PR author, but can be added by the reviewer if the submitter does not have right to add label. Also note that the label can be added after the PR has been merged, as soon as the release is not done yet.
 
 ### Code quality
 

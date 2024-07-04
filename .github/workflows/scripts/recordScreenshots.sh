@@ -65,7 +65,7 @@ echo "Deleting previous screenshots"
 ./gradlew removeOldSnapshots --stacktrace --warn
 
 echo "Record screenshots"
-./gradlew recordPaparazziDebug --stacktrace --warn
+./gradlew recordPaparazziDebug --stacktrace
 
 echo "Committing changes"
 git config http.sslVerify false

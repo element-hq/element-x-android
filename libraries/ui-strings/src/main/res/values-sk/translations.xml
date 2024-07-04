@@ -131,12 +131,16 @@
   <string name="common_decryption_error">"Chyba dešifrovania"</string>
   <string name="common_developer_options">"Možnosti pre vývojárov"</string>
   <string name="common_direct_chat">"Priama konverzácia"</string>
+  <string name="common_do_not_show_this_again">"Nezobrazovať toto znova"</string>
   <string name="common_edited_suffix">"(upravené)"</string>
   <string name="common_editing">"Upravuje sa"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Šifrovanie zapnuté"</string>
   <string name="common_enter_your_pin">"Zadajte svoj PIN"</string>
   <string name="common_error">"Chyba"</string>
+  <string name="common_error_registering_pusher_android">"Vyskytla sa chyba, nemusíte dostávať upozornenia na nové správy. Prosím, vyriešte problémy s upozorneniami v nastaveniach.
+
+Dôvod: %1$s."</string>
   <string name="common_everyone">"Všetci"</string>
   <string name="common_failed">"Zlyhalo"</string>
   <string name="common_favourite">"Obľúbené"</string>
@@ -255,8 +259,6 @@
   <string name="error_missing_microphone_voice_rationale_android">"%1$s nemá povolenie na prístup k vášmu mikrofónu. Povoľte prístup na nahrávanie hlasovej správy."</string>
   <string name="error_some_messages_have_not_been_sent">"Niektoré správy neboli odoslané"</string>
   <string name="error_unknown">"Prepáčte, vyskytla sa chyba"</string>
-  <string name="full_screen_intent_banner_message">"Aby ste už nikdy nezmeškali dôležitý hovor, zmeňte svoje nastavenia a povoľte upozornenia na celú obrazovku, keď je váš telefón uzamknutý."</string>
-  <string name="full_screen_intent_banner_title">"Vylepšite svoj zážitok z hovoru"</string>
   <string name="invite_friends_rich_title">"🔐️ Pripojte sa ku mne na %1$s"</string>
   <string name="invite_friends_text">"Ahoj, porozprávajte sa so mnou na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>

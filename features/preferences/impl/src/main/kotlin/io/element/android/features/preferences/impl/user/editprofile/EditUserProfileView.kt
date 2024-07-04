@@ -109,7 +109,7 @@ fun EditUserProfileView(
                 matrixId = state.userId.value,
                 displayName = state.displayName,
                 avatarUrl = state.userAvatarUrl,
-                avatarSize = AvatarSize.RoomHeader,
+                avatarSize = AvatarSize.EditProfileDetails,
                 onAvatarClick = { onAvatarClick() },
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             )

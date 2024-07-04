@@ -2,6 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="confirm_recovery_key_banner_message">"Cadangan percakapan Anda saat ini tidak tersinkron. Anda perlu mengonfirmasi kunci pemulihan Anda untuk tetap memiliki akses ke cadangan percakapan Anda."</string>
   <string name="confirm_recovery_key_banner_title">"Konfirmasi kunci pemulihan Anda"</string>
+  <string name="full_screen_intent_banner_message">"Untuk memastikan Anda tidak melewatkan panggilan penting, silakan ubah pengaturan Anda untuk memperbolehkan notifikasi layar penuh ketika ponsel Anda terkunci."</string>
+  <string name="full_screen_intent_banner_title">"Tingkatkan pengalaman panggilan Anda"</string>
   <string name="screen_invites_decline_chat_message">"Apakah Anda yakin ingin menolak undangan untuk bergabung ke %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Tolak undangan"</string>
   <string name="screen_invites_decline_direct_chat_message">"Apakah Anda yakin ingin menolak obrolan pribadi dengan %1$s?"</string>

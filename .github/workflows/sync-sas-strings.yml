@@ -31,5 +31,6 @@ jobs:
             - Update SAS Strings from matrix-doc.
           branch: sync-sas-strings
           base: develop
+          labels: PR-Misc
 
 

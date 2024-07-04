@@ -47,23 +47,10 @@ import io.element.android.features.messages.impl.timeline.components.customreact
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryPresenter
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetPresenter
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.typing.TypingNotificationPresenter
-import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatter
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
@@ -80,24 +67,27 @@ import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarM
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
-import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
-import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import io.element.android.libraries.matrix.ui.messages.reply.map
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.room.canCall
 import io.element.android.libraries.matrix.ui.room.canRedactOtherAsState
 import io.element.android.libraries.matrix.ui.room.canRedactOwnAsState
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class MessagesPresenter @AssistedInject constructor(
+    @Assisted private val navigator: MessagesNavigator,
     private val room: MatrixRoom,
     private val composerPresenter: MessageComposerPresenter,
     private val voiceMessageComposerPresenter: VoiceMessageComposerPresenter,
@@ -109,14 +99,13 @@ class MessagesPresenter @AssistedInject constructor(
     private val readReceiptBottomSheetPresenter: ReadReceiptBottomSheetPresenter,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
-    private val messageSummaryFormatter: MessageSummaryFormatter,
     private val dispatchers: CoroutineDispatchers,
     private val clipboardHelper: ClipboardHelper,
     private val featureFlagsService: FeatureFlagService,
     private val htmlConverterProvider: HtmlConverterProvider,
-    @Assisted private val navigator: MessagesNavigator,
     private val buildMeta: BuildMeta,
     private val timelineController: TimelineController,
+    private val permalinkParser: PermalinkParser,
 ) : Presenter<MessagesState> {
     private val timelinePresenter = timelinePresenterFactory.create(navigator = navigator)
 
@@ -150,6 +139,9 @@ class MessagesPresenter @AssistedInject constructor(
         }
         val roomAvatar: AsyncData<AvatarData> by remember {
             derivedStateOf { roomInfo?.avatarData()?.let { AsyncData.Success(it) } ?: AsyncData.Uninitialized }
+        }
+        val heroes by remember {
+            derivedStateOf { roomInfo?.heroes().orEmpty().toPersistentList() }
         }
 
         var hasDismissedInviteDialog by rememberSaveable {
@@ -217,6 +209,7 @@ class MessagesPresenter @AssistedInject constructor(
             roomId = room.roomId,
             roomName = roomName,
             roomAvatar = roomAvatar,
+            heroes = heroes,
             userHasPermissionToSendMessage = userHasPermissionToSendMessage,
             userHasPermissionToRedactOwn = userHasPermissionToRedactOwn,
             userHasPermissionToRedactOther = userHasPermissionToRedactOther,
@@ -248,6 +241,12 @@ class MessagesPresenter @AssistedInject constructor(
             url = avatarUrl ?: room.avatarUrl,
             size = AvatarSize.TimelineRoom
         )
+    }
+
+    private fun MatrixRoomInfo.heroes(): List<AvatarData> {
+        return heroes.map { user ->
+            user.getAvatarData(size = AvatarSize.TimelineRoom)
+        }
     }
 
     private fun CoroutineScope.handleTimelineAction(
@@ -324,6 +323,7 @@ class MessagesPresenter @AssistedInject constructor(
             else -> {
                 val composerMode = MessageComposerMode.Edit(
                     targetEvent.eventId,
+                    targetEvent.transactionId,
                     (targetEvent.content as? TimelineItemTextBasedContent)?.let {
                         if (enableTextFormatting) {
                             it.htmlBody ?: it.body
@@ -331,7 +331,6 @@ class MessagesPresenter @AssistedInject constructor(
                             it.body
                         }
                     }.orEmpty(),
-                    targetEvent.transactionId,
                 )
                 composerState.eventSink(
                     MessageComposerEvents.SetMode(composerMode)
@@ -340,66 +339,15 @@ class MessagesPresenter @AssistedInject constructor(
         }
     }
 
-    private fun handleActionReply(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {
+    private suspend fun handleActionReply(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {
         if (targetEvent.eventId == null) return
-        val textContent = messageSummaryFormatter.format(targetEvent)
-        val attachmentThumbnailInfo = when (targetEvent.content) {
-            is TimelineItemImageContent -> AttachmentThumbnailInfo(
-                thumbnailSource = targetEvent.content.thumbnailSource ?: targetEvent.content.mediaSource,
-                textContent = targetEvent.content.body,
-                type = AttachmentThumbnailType.Image,
-                blurHash = targetEvent.content.blurhash,
+        timelineController.invokeOnCurrentTimeline {
+            val replyToDetails = loadReplyDetails(targetEvent.eventId).map(permalinkParser)
+            val composerMode = MessageComposerMode.Reply(replyToDetails = replyToDetails)
+            composerState.eventSink(
+                MessageComposerEvents.SetMode(composerMode)
             )
-            is TimelineItemStickerContent -> AttachmentThumbnailInfo(
-                thumbnailSource = targetEvent.content.thumbnailSource ?: targetEvent.content.mediaSource,
-                textContent = targetEvent.content.body,
-                type = AttachmentThumbnailType.Image,
-                blurHash = targetEvent.content.blurhash,
-            )
-            is TimelineItemVideoContent -> AttachmentThumbnailInfo(
-                thumbnailSource = targetEvent.content.thumbnailSource,
-                textContent = targetEvent.content.body,
-                type = AttachmentThumbnailType.Video,
-                blurHash = targetEvent.content.blurHash,
-            )
-            is TimelineItemFileContent -> AttachmentThumbnailInfo(
-                thumbnailSource = targetEvent.content.thumbnailSource,
-                textContent = targetEvent.content.body,
-                type = AttachmentThumbnailType.File,
-            )
-            is TimelineItemAudioContent -> AttachmentThumbnailInfo(
-                textContent = targetEvent.content.body,
-                type = AttachmentThumbnailType.Audio,
-            )
-            is TimelineItemVoiceContent -> AttachmentThumbnailInfo(
-                textContent = textContent,
-                type = AttachmentThumbnailType.Voice,
-            )
-            is TimelineItemLocationContent -> AttachmentThumbnailInfo(
-                type = AttachmentThumbnailType.Location,
-            )
-            is TimelineItemPollContent -> AttachmentThumbnailInfo(
-                textContent = targetEvent.content.question,
-                type = AttachmentThumbnailType.Poll,
-            )
-            is TimelineItemTextBasedContent,
-            is TimelineItemRedactedContent,
-            is TimelineItemStateContent,
-            is TimelineItemEncryptedContent,
-            is TimelineItemLegacyCallInviteContent,
-            is TimelineItemCallNotifyContent,
-            is TimelineItemUnknownContent -> null
         }
-        val composerMode = MessageComposerMode.Reply(
-            isThreaded = targetEvent.isThreaded,
-            senderName = targetEvent.safeSenderName,
-            eventId = targetEvent.eventId,
-            attachmentThumbnailInfo = attachmentThumbnailInfo,
-            defaultContent = textContent,
-        )
-        composerState.eventSink(
-            MessageComposerEvents.SetMode(composerMode)
-        )
     }
 
     private fun handleShowDebugInfoAction(event: TimelineItem.Event) {

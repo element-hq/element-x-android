@@ -129,12 +129,16 @@
   <string name="common_decryption_error">"Visszafejtési hiba"</string>
   <string name="common_developer_options">"Fejlesztői beállítások"</string>
   <string name="common_direct_chat">"Közvetlen csevegés"</string>
+  <string name="common_do_not_show_this_again">"Ne jelenjen meg többé"</string>
   <string name="common_edited_suffix">"(szerkesztve)"</string>
   <string name="common_editing">"Szerkesztés"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Titkosítás engedélyezve"</string>
   <string name="common_enter_your_pin">"Adja meg a PIN-kódját"</string>
   <string name="common_error">"Hiba"</string>
+  <string name="common_error_registering_pusher_android">"Hiba történt, előfordulhat, hogy nem kap értesítést az új üzenetekről. Az értesítések hibaelhárítása a beállításokban található.
+
+Ok: %1$s."</string>
   <string name="common_everyone">"Mindenki"</string>
   <string name="common_failed">"Sikertelen"</string>
   <string name="common_favourite">"Kedvenc"</string>

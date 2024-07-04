@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="state_event_avatar_changed_too">"(изображение тоже было изменено)"</string>
   <string name="state_event_avatar_url_changed">"%1$s сменили свое изображение"</string>
-  <string name="state_event_avatar_url_changed_by_you">"Вы сменили изображение"</string>
+  <string name="state_event_avatar_url_changed_by_you">"Вы сменили изображение профиля"</string>
   <string name="state_event_demoted_to_member">"%1$s был понижен в должности до участника"</string>
   <string name="state_event_demoted_to_moderator">"%1$s был понижен в должности до модератора"</string>
   <string name="state_event_display_name_changed_from">"%1$s изменил свое отображаемое имя с %2$s на %3$s"</string>

@@ -7,5 +7,5 @@
   <string name="screen_join_room_subtitle_knock">"Націсніце кнопку ніжэй, і адміністратар пакоя атрымае апавяшчэнне. Вы зможаце далучыцца да размовы пасля зацвярджэння."</string>
   <string name="screen_join_room_subtitle_no_preview">"Вы павінны быць удзельнікам гэтага пакоя каб прагледзець гісторыю паведамленняў."</string>
   <string name="screen_join_room_title_knock">"Вы хочаце далучыцца да гэтага пакоя?"</string>
-  <string name="screen_join_room_title_no_preview">"Папярэдні прагляд недаступны"</string>
+  <string name="screen_join_room_title_no_preview">"Перадпрагляд недаступны"</string>
 </resources>

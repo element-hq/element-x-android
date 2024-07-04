@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineException
+import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.map
@@ -41,7 +42,6 @@ import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.location.toInner
 import io.element.android.libraries.matrix.impl.room.map
-import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessageMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
@@ -49,6 +49,7 @@ import io.element.android.libraries.matrix.impl.timeline.postprocessor.LastForwa
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.LoadingIndicatorsPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.RoomBeginningPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.TimelineEncryptedHistoryPostProcessor
+import io.element.android.libraries.matrix.impl.timeline.reply.InReplyToMapper
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
@@ -67,7 +68,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.FormattedBody
 import org.matrix.rustcomponents.sdk.MessageFormat
 import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
@@ -118,14 +118,14 @@ class RustTimeline(
     private val loadingIndicatorsPostProcessor = LoadingIndicatorsPostProcessor(systemClock)
     private val lastForwardIndicatorsPostProcessor = LastForwardIndicatorsPostProcessor(isLive)
 
+    private val timelineEventContentMapper = TimelineEventContentMapper()
+    private val inReplyToMapper = InReplyToMapper(timelineEventContentMapper)
     private val timelineItemFactory = MatrixTimelineItemMapper(
         fetchDetailsForEvent = this::fetchDetailsForEvent,
         roomCoroutineScope = roomCoroutineScope,
         virtualTimelineItemMapper = VirtualTimelineItemMapper(),
         eventTimelineItemMapper = EventTimelineItemMapper(
-            contentMapper = TimelineEventContentMapper(
-                eventMessageMapper = EventMessageMapper()
-            )
+            contentMapper = timelineEventContentMapper
         )
     )
 
@@ -251,7 +251,6 @@ class RustTimeline(
 
     override fun close() {
         inner.close()
-        specialModeEventTimelineItem?.destroy()
     }
 
     private suspend fun fetchMembers() = withContext(dispatcher) {
@@ -328,17 +327,16 @@ class RustTimeline(
             runCatching<Unit> {
                 when {
                     originalEventId != null -> {
-                        val editedEvent = specialModeEventTimelineItem ?: inner.getEventTimelineItemByEventId(originalEventId.value)
-                        editedEvent.use {
-                            inner.edit(
-                                newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
-                                editItem = it,
-                            )
-                        }
-                        specialModeEventTimelineItem = null
+                        inner.editByEventId(
+                            newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
+                            eventId = originalEventId.value,
+                        )
                     }
                     transactionId != null -> {
-                        error("Editing local echo is not supported yet.")
+                        inner.edit(
+                            newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
+                            item = inner.getEventTimelineItemByTransactionId(transactionId.value),
+                        )
                     }
                     else -> {
                         error("Either originalEventId or transactionId must be non null")
@@ -346,18 +344,6 @@ class RustTimeline(
                 }
             }
         }
-
-    private var specialModeEventTimelineItem: EventTimelineItem? = null
-
-    override suspend fun enterSpecialMode(eventId: EventId?): Result<Unit> = withContext(dispatcher) {
-        runCatching {
-            specialModeEventTimelineItem?.destroy()
-            specialModeEventTimelineItem = null
-            specialModeEventTimelineItem = eventId?.let { inner.getEventTimelineItemByEventId(it.value) }
-        }.onFailure {
-            Timber.e(it, "Unable to retrieve event for special mode. Are you using the correct timeline?")
-        }
-    }
 
     override suspend fun replyMessage(
         eventId: EventId,
@@ -368,19 +354,7 @@ class RustTimeline(
     ): Result<Unit> = withContext(dispatcher) {
         runCatching {
             val msg = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map())
-            if (fromNotification) {
-                // When replying from a notification, do not interfere with `specialModeEventTimelineItem`
-                val inReplyTo = inner.getEventTimelineItemByEventId(eventId.value)
-                inReplyTo.use { eventTimelineItem ->
-                    inner.sendReply(msg, eventTimelineItem)
-                }
-            } else {
-                val inReplyTo = specialModeEventTimelineItem ?: inner.getEventTimelineItemByEventId(eventId.value)
-                inReplyTo.use { eventTimelineItem ->
-                    inner.sendReply(msg, eventTimelineItem)
-                }
-                specialModeEventTimelineItem = null
-            }
+            inner.sendReply(msg, eventId.value)
         }
     }
 
@@ -578,6 +552,23 @@ class RustTimeline(
     private suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit> {
         return runCatching {
             inner.fetchDetailsForEvent(eventId.value)
+        }
+    }
+
+    override suspend fun loadReplyDetails(eventId: EventId): InReplyTo = withContext(dispatcher) {
+        val timelineItem = _timelineItems.value.firstOrNull { timelineItem ->
+            timelineItem is MatrixTimelineItem.Event && timelineItem.eventId == eventId
+        } as? MatrixTimelineItem.Event
+
+        if (timelineItem != null) {
+            InReplyTo.Ready(
+                eventId = eventId,
+                content = timelineItem.event.content,
+                senderId = timelineItem.event.sender,
+                senderProfile = timelineItem.event.senderProfile,
+            )
+        } else {
+            inner.loadReplyDetails(eventId.value).use(inReplyToMapper::map)
         }
     }
 }

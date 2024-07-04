@@ -73,8 +73,8 @@ if [ ${envError} == 1 ]; then
   exit 1
 fi
 
-minSdkVersion=23
-buildToolsVersion="32.0.0"
+minSdkVersion=24
+buildToolsVersion="35.0.0"
 buildToolsPath="${androidHome}/build-tools/${buildToolsVersion}"
 
 if [[ ! -d ${buildToolsPath} ]]; then
@@ -142,17 +142,6 @@ rm ${versionsFileBak}
 git commit -a -m "Setting version for the release ${version}"
 
 printf "\n================================================================================\n"
-printf "Running towncrier...\n"
-yes | towncrier build --version "v${version}"
-
-printf "\n================================================================================\n"
-read -p "Check the file CHANGES.md consistency. It's possible to reorder items (most important changes first) or change their section if relevant. Also an opportunity to fix some typo, or rewrite things. Do not commit your change. Press enter to continue. "
-
-printf "\n================================================================================\n"
-printf "Committing...\n"
-git commit -a -m "Changelog for version ${version}"
-
-printf "\n================================================================================\n"
 printf "Creating fastlane file...\n"
 printf -v versionMajor2Digits "%02d" "${versionMajor}"
 printf -v versionMinor2Digits "%02d" "${versionMinor}"
@@ -199,17 +188,6 @@ printf "Committing...\n"
 git commit -a -m 'version++'
 
 printf "\n================================================================================\n"
-read -p "Done, push the branch 'develop' (yes/no) default to yes? (A rebase may be necessary in case develop got new commits) " doPush
-doPush=${doPush:-yes}
-
-if [ "${doPush}" == "yes" ]; then
-  printf "Pushing branch 'develop'...\n"
-  git push origin develop
-else
-    printf "Not pushing, do not forget to push manually!\n"
-fi
-
-printf "\n================================================================================\n"
 printf "Wait for the GitHub action https://github.com/element-hq/element-x-android/actions/workflows/release.yml?query=branch%%3Amain to build the 'main' branch.\n"
 printf "Please enter the url of the github action (!!! WARNING: NOT THE URL OF THE ARTIFACT ANYMORE !!!)\n"
 read -p "For instance https://github.com/element-hq/element-x-android/actions/runs/9065756777: " runUrl
@@ -229,6 +207,18 @@ printf "Unzipping the F-Droid artifact...\n"
 
 fdroidTargetPath="${targetPath}/fdroid"
 unzip "${targetPath}"/elementx-app-fdroid-apks-unsigned.zip -d "${fdroidTargetPath}"
+
+printf "\n================================================================================\n"
+printf "Patching the FDroid APKs using inplace-fix.py...\n"
+
+inplaceFixScript="./tmp/inplace-fix.py"
+curl -s https://raw.githubusercontent.com/obfusk/reproducible-apk-tools/master/inplace-fix.py --output "${inplaceFixScript}"
+curl -s https://raw.githubusercontent.com/obfusk/reproducible-apk-tools/master/fix-pg-map-id.py --output "./tmp/fix-pg-map-id.py"
+
+python3 "${inplaceFixScript}" --page-size 16 fix-pg-map-id "${fdroidTargetPath}"/app-fdroid-arm64-v8a-release.apk   '0000000'
+python3 "${inplaceFixScript}" --page-size 16 fix-pg-map-id "${fdroidTargetPath}"/app-fdroid-armeabi-v7a-release.apk '0000000'
+python3 "${inplaceFixScript}" --page-size 16 fix-pg-map-id "${fdroidTargetPath}"/app-fdroid-x86-release.apk         '0000000'
+python3 "${inplaceFixScript}" --page-size 16 fix-pg-map-id "${fdroidTargetPath}"/app-fdroid-x86_64-release.apk      '0000000'
 
 printf "\n================================================================================\n"
 printf "Signing the FDroid APKs...\n"
@@ -369,18 +359,36 @@ printf "You can then go to \"Publishing overview\" and send the new release for 
 read -p "Press enter to continue. "
 
 printf "\n================================================================================\n"
-# Url encode for "<!-- Copy paste the section of the file CHANGES.md for this release here -->"
-body="%3C%21--%20Copy%20paste%20the%20section%20of%20the%20file%20CHANGES.md%20for%20this%20release%20here%20--%3E"
-githubCreateReleaseLink="https://github.com/element-hq/element-x-android/releases/new?tag=v${version}&title=Element%20X%20Android%20v${version}&body=${body}"
+githubCreateReleaseLink="https://github.com/element-hq/element-x-android/releases/new?tag=v${version}&title=Element%20X%20Android%20v${version}"
 printf "Creating the release on gitHub.\n"
 printf -- "Open this link: %s\n" "${githubCreateReleaseLink}"
 printf "Then\n"
-printf " - copy paste the section of the file CHANGES.md for this release.\n"
-printf " - click on the 'Generate releases notes' button.\n"
+printf " - Click on the 'Generate releases notes' button.\n"
+printf " - Optionally reorder items and fix typos.\n"
 printf " - Add the file ${signedBundlePath} to the GitHub release.\n"
 printf " - Add the universal APK, downloaded from the GooglePlay console to the GitHub release.\n"
 printf " - Add the 4 signed APKs for F-Droid, located at ${fdroidTargetPath} to the GitHub release.\n"
 read -p ". Press enter to continue. "
+
+printf "\n================================================================================\n"
+printf "Update the project release notes:\n\n"
+
+read -p "Copy the content of the release note generated by GitHub to the file CHANGES.md and press enter to commit the change. \n"
+
+printf "\n================================================================================\n"
+printf "Committing...\n"
+git commit -a -m "Changelog for version ${version}"
+
+printf "\n================================================================================\n"
+read -p "Done, push the branch 'develop' (yes/no) default to yes? (A rebase may be necessary in case develop got new commits) " doPush
+doPush=${doPush:-yes}
+
+if [ "${doPush}" == "yes" ]; then
+  printf "Pushing branch 'develop'...\n"
+  git push origin develop
+else
+    printf "Not pushing, do not forget to push manually!\n"
+fi
 
 printf "\n================================================================================\n"
 printf "Message for the Android internal room:\n\n"

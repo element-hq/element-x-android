@@ -124,7 +124,7 @@ class MarkdownTextEditorStateTest {
         val markdown = state.getMessageMarkdown(permalinkBuilder = permalinkBuilder)
 
         assertThat(markdown).isEqualTo(
-            "Hello [@Alice](https://matrix.to/#/@alice:matrix.org) and everyone in @room"
+            "Hello [@alice:matrix.org](https://matrix.to/#/@alice:matrix.org) and everyone in @room"
         )
     }
 
@@ -151,12 +151,12 @@ class MarkdownTextEditorStateTest {
         currentSessionId: SessionId = A_SESSION_ID,
         permalinkParser: FakePermalinkParser = FakePermalinkParser(),
     ): MentionSpanProvider {
-        return MentionSpanProvider(currentSessionId, permalinkParser)
+        return MentionSpanProvider(currentSessionId.value, permalinkParser)
     }
 
     private fun aMarkdownTextWithMentions(): CharSequence {
         val userMentionSpan = MentionSpan("@Alice", "@alice:matrix.org", MentionSpan.Type.USER, 0, 0, 0, 0)
-        val atRoomMentionSpan = MentionSpan("@room", "@room", MentionSpan.Type.USER, 0, 0, 0, 0)
+        val atRoomMentionSpan = MentionSpan("@room", "@room", MentionSpan.Type.EVERYONE, 0, 0, 0, 0)
         return buildSpannedString {
             append("Hello ")
             inSpans(userMentionSpan) {

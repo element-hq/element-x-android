@@ -23,7 +23,7 @@
   <string name="screen_room_encrypted_history_banner">"L’historique des messages n’est actuellement pas disponible dans ce salon"</string>
   <string name="screen_room_encrypted_history_banner_unverified">"L’historique de la discussion n’est pas disponible. Vérifiez cette session pour accéder à l’historique."</string>
   <string name="screen_room_invite_again_alert_message">"Souhaitez-vous inviter l’ancien membre à revenir ?"</string>
-  <string name="screen_room_invite_again_alert_title">"Vous êtes seul dans ce salon"</string>
+  <string name="screen_room_invite_again_alert_title">"Vous êtes seul dans cette discussion"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Notifier tout le salon"</string>
   <string name="screen_room_mentions_at_room_title">"Tout le monde"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Envoyer à nouveau"</string>

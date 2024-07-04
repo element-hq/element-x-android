@@ -8,10 +8,17 @@ jobs:
     name: Danger main check
     steps:
       - uses: actions/checkout@v4
+      - name: Add SSH private keys for submodule repositories
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
+      - name: Clone submodules
+        if: github.repository == 'element-hq/element-x-android'
+        run: git submodule update --init --recursive
       - run: |
           npm install --save-dev @babel/plugin-transform-flow-strip-types
       - name: Danger
-        uses: danger/danger-js@12.3.2
+        uses: danger/danger-js@12.3.3
         with:
           args: "--dangerfile ./tools/danger/dangerfile.js"
         env:

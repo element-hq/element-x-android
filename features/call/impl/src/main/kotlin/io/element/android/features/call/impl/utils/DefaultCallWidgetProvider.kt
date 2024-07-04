@@ -20,6 +20,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.ElementCallConfig
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider
+import io.element.android.libraries.matrix.api.call.ElementCallBaseUrlProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
@@ -41,12 +42,18 @@ class DefaultCallWidgetProvider @Inject constructor(
         languageTag: String?,
         theme: String?,
     ): Result<CallWidgetProvider.GetWidgetResult> = runCatching {
-        val room = matrixClientsProvider.getOrRestore(sessionId).getOrThrow().getRoom(roomId) ?: error("Room not found")
+        val matrixClient = matrixClientsProvider.getOrRestore(sessionId).getOrThrow()
+        val room = matrixClient.getRoom(roomId) ?: error("Room not found")
         val baseUrl = appPreferencesStore.getCustomElementCallBaseUrlFlow().firstOrNull()
-            ?: elementCallBaseUrlProvider.provides(sessionId)
+            ?: elementCallBaseUrlProvider.provides(matrixClient)
             ?: ElementCallConfig.DEFAULT_BASE_URL
         val widgetSettings = callWidgetSettingsProvider.provide(baseUrl, encrypted = room.isEncrypted)
-        val callUrl = room.generateWidgetWebViewUrl(widgetSettings, clientId, languageTag, theme).getOrThrow()
+        val callUrl = room.generateWidgetWebViewUrl(
+            widgetSettings = widgetSettings,
+            clientId = clientId,
+            languageTag = languageTag,
+            theme = theme,
+        ).getOrThrow()
         CallWidgetProvider.GetWidgetResult(
             driver = room.getWidgetDriver(widgetSettings).getOrThrow(),
             url = callUrl

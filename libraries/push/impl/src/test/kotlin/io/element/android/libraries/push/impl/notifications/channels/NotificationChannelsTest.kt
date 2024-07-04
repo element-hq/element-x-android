@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.push.impl.notifications.channels
 
-import android.app.NotificationChannel
 import android.os.Build
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
@@ -43,7 +42,6 @@ class NotificationChannelsTest {
         createNotificationChannels(notificationManager = notificationManager)
 
         verify { notificationManager.createNotificationChannel(any<NotificationChannelCompat>()) }
-        verify { notificationManager.createNotificationChannel(any<NotificationChannel>()) }
         verify { notificationManager.deleteNotificationChannel(any<String>()) }
     }
 
@@ -55,7 +53,7 @@ class NotificationChannelsTest {
         assertThat(ringingChannel).isEqualTo(RINGING_CALL_NOTIFICATION_CHANNEL_ID)
 
         val normalChannel = notificationChannels.getChannelForIncomingCall(ring = false)
-        assertThat(normalChannel).isEqualTo(CALL_NOTIFICATION_CHANNEL_ID_V3)
+        assertThat(normalChannel).isEqualTo(CALL_NOTIFICATION_CHANNEL_ID)
     }
 
     @Test

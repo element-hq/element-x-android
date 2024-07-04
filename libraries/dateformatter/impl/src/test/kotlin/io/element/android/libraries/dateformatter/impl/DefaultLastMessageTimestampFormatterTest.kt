@@ -21,6 +21,7 @@ import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormat
 import io.element.android.libraries.dateformatter.test.FakeClock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.junit.Test
 import java.util.Locale
 
@@ -44,7 +45,7 @@ class DefaultLastMessageTimestampFormatterTest {
         val now = "1980-04-06T18:35:24.00Z"
         val dat = "1980-04-06T18:35:24.00Z"
         val formatter = createFormatter(now)
-        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("18:35")
+        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("6:35 PM")
     }
 
     @Test
@@ -52,7 +53,7 @@ class DefaultLastMessageTimestampFormatterTest {
         val now = "1980-04-06T18:35:24.00Z"
         val dat = "1980-04-06T18:35:23.00Z"
         val formatter = createFormatter(now)
-        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("18:35")
+        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("6:35 PM")
     }
 
     @Test
@@ -60,7 +61,7 @@ class DefaultLastMessageTimestampFormatterTest {
         val now = "1980-04-06T18:35:24.00Z"
         val dat = "1980-04-06T18:34:24.00Z"
         val formatter = createFormatter(now)
-        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("18:34")
+        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("6:34 PM")
     }
 
     @Test
@@ -68,7 +69,7 @@ class DefaultLastMessageTimestampFormatterTest {
         val now = "1980-04-06T18:35:24.00Z"
         val dat = "1980-04-06T17:35:24.00Z"
         val formatter = createFormatter(now)
-        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("17:35")
+        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("5:35 PM")
     }
 
     @Test
@@ -94,6 +95,15 @@ class DefaultLastMessageTimestampFormatterTest {
         val dat = "1979-04-06T18:35:24.00Z"
         val formatter = createFormatter(now)
         assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("06.04.1979")
+    }
+
+    @Test
+    fun `test full format`() {
+        val now = "1980-04-06T18:35:24.00Z"
+        val dat = "1979-04-06T18:35:24.00Z"
+        val clock = FakeClock().apply { givenInstant(Instant.parse(now)) }
+        val dateFormatters = DateFormatters(Locale.US, clock, TimeZone.UTC)
+        assertThat(dateFormatters.formatDateWithFullFormat(Instant.parse(dat).toLocalDateTime(TimeZone.UTC))).isEqualTo("Friday, April 6, 1979")
     }
 
     /**

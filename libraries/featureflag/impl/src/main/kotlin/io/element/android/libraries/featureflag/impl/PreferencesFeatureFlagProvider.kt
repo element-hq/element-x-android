@@ -22,6 +22,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.featureflag.api.Feature
 import kotlinx.coroutines.flow.Flow
@@ -34,7 +35,10 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 /**
  * Note: this will be used only in the nightly and in the debug build.
  */
-class PreferencesFeatureFlagProvider @Inject constructor(@ApplicationContext context: Context) : MutableFeatureFlagProvider {
+class PreferencesFeatureFlagProvider @Inject constructor(
+    @ApplicationContext context: Context,
+    private val buildMeta: BuildMeta,
+) : MutableFeatureFlagProvider {
     private val store = context.dataStore
 
     override val priority = MEDIUM_PRIORITY
@@ -47,7 +51,7 @@ class PreferencesFeatureFlagProvider @Inject constructor(@ApplicationContext con
 
     override fun isFeatureEnabledFlow(feature: Feature): Flow<Boolean> {
         return store.data.map { prefs ->
-            prefs[booleanPreferencesKey(feature.key)] ?: feature.defaultValue
+            prefs[booleanPreferencesKey(feature.key)] ?: feature.defaultValue(buildMeta)
         }.distinctUntilChanged()
     }
 

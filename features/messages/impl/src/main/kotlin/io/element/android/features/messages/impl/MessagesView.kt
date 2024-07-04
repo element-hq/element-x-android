@@ -33,6 +33,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -43,6 +44,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
@@ -83,9 +85,9 @@ import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitlePlaceholdersRowMolecule
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.ProgressDialogType
-import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.CompositeAvatar
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -187,6 +189,7 @@ fun MessagesView(
                 MessagesViewTopBar(
                     roomName = state.roomName.dataOrNull(),
                     roomAvatar = state.roomAvatar.dataOrNull(),
+                    heroes = state.heroes,
                     callState = state.callState,
                     onBackClick = {
                         // Since the textfield is now based on an Android view, this is no longer done automatically.
@@ -442,6 +445,7 @@ private fun MessagesViewComposerBottomSheetContents(
 private fun MessagesViewTopBar(
     roomName: String?,
     roomAvatar: AvatarData?,
+    heroes: ImmutableList<AvatarData>,
     callState: RoomCallState,
     onRoomDetailsClick: () -> Unit,
     onJoinCallClick: () -> Unit,
@@ -452,11 +456,15 @@ private fun MessagesViewTopBar(
             BackButton(onClick = onBackClick)
         },
         title = {
-            val titleModifier = Modifier.clickable { onRoomDetailsClick() }
+            val roundedCornerShape = RoundedCornerShape(8.dp)
+            val titleModifier = Modifier
+                .clip(roundedCornerShape)
+                .clickable { onRoomDetailsClick() }
             if (roomName != null && roomAvatar != null) {
                 RoomAvatarAndNameRow(
                     roomName = roomName,
                     roomAvatar = roomAvatar,
+                    heroes = heroes,
                     modifier = titleModifier
                 )
             } else {
@@ -500,15 +508,19 @@ private fun CallMenuItem(
 private fun RoomAvatarAndNameRow(
     roomName: String,
     roomAvatar: AvatarData,
+    heroes: ImmutableList<AvatarData>,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Avatar(roomAvatar)
-        Spacer(modifier = Modifier.width(8.dp))
+        CompositeAvatar(
+            avatarData = roomAvatar,
+            heroes = heroes,
+        )
         Text(
+            modifier = Modifier.padding(horizontal = 8.dp),
             text = roomName,
             style = ElementTheme.typography.fontBodyLgMedium,
             maxLines = 1,

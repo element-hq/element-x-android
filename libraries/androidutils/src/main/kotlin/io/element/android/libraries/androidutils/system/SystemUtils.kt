@@ -26,15 +26,11 @@ import android.os.Build
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.RequiresApi
 import androidx.core.content.pm.PackageInfoCompat
 import io.element.android.libraries.androidutils.R
 import io.element.android.libraries.androidutils.compat.getApplicationInfoCompat
 import io.element.android.libraries.core.mimetype.MimeTypes
-
-@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
-fun supportNotificationChannels() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
 /**
  * Return the application label of the provided package. If not found, the package is returned.

@@ -5,15 +5,65 @@
   <string name="screen_account_provider_form_notice">"Sisesta otsingusõna või domeeni nimi."</string>
   <string name="screen_account_provider_form_subtitle">"Otsi äriühingut, kogukonda või võrgus leiduvat Matrixi serverit."</string>
   <string name="screen_account_provider_form_title">"Leia teenusepakkuja"</string>
+  <string name="screen_account_provider_signin_subtitle">"See on koht, kus sinu vestlused elavad – just nagu kasutaksid oma e-kirjade säilitamiseks e-postitenuse pakkujat."</string>
   <string name="screen_account_provider_signin_title">"Sa oled sisse logimas %s teenusesse"</string>
+  <string name="screen_account_provider_signup_subtitle">"See on koht, kus sinu vestlused elavad – just nagu kasutaksid oma e-kirjade säilitamiseks e-postitenuse pakkujat."</string>
   <string name="screen_account_provider_signup_title">"Sa oled loomas kasutajakontot %s teenuses"</string>
+  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org on suur ja tasuta koduserver Matrixi võrgus, mis on mõeldud turvalise ja hajutatud suhtluse jaoks. Selle serveri halduse eest vastutab Matrix.org Foundation."</string>
+  <string name="screen_change_account_provider_other">"Muu teenusepakkuja"</string>
+  <string name="screen_change_account_provider_subtitle">"Kasuta erinevat teenusepakkujat, milleks võib olla ka sinu oma server või töökoha hallatav server."</string>
+  <string name="screen_change_account_provider_title">"Muuda teenusepakkujat"</string>
+  <string name="screen_change_server_error_invalid_homeserver">"Me ei suutnud luuaühendust selle koduserveriga. Palun kontrolli, kas koduserveri aadress on õige. Kui aadress on õige, siis täiendavat teavet oskab sulle anda koduserveri haldaja."</string>
+  <string name="screen_change_server_error_invalid_well_known">"Sliding sync režiim pole saadaval vea tõttu well-known failis:
+%1$s"</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"See koduserver hetkel ei toeta Sliding sync režiimi"</string>
   <string name="screen_change_server_form_header">"Koduserveri url"</string>
+  <string name="screen_change_server_form_notice">"Sa saad luua ühendust vaid olemasoleva serveriga, mis toetab Sliding sync režiimi. Sinu koduserveri haldur peaks selle seadistama. %1$s"</string>
   <string name="screen_change_server_subtitle">"Mis on sinu koduserveri aadress?"</string>
   <string name="screen_change_server_title">"Vali oma server"</string>
   <string name="screen_login_error_deactivated_account">"Konto on kasutusest eemaldatud."</string>
   <string name="screen_login_error_invalid_credentials">"Vigane kasutajanimi ja/või salasõna"</string>
   <string name="screen_login_error_invalid_user_id">"See ei ole korrektne kasutajanimi. Õige vorming on: „@kasutaja:koduserver.ee“"</string>
+  <string name="screen_login_error_refresh_tokens">"See server on seadistatud kasutama tunnusloa põhist sisselogimist. Salasõnaga sisselogimisel see võimalus aga ei ole toetatud."</string>
+  <string name="screen_login_error_unsupported_authentication">"Valitud koduserver ei toeta salasõna ega OIDC-põhist sisselogimist. Lisateavet saad koduserveri haldajalt, aga sa võid ka valida mõne teise serveri."</string>
+  <string name="screen_login_form_header">"Sisesta oma andmed"</string>
+  <string name="screen_login_subtitle">"Matrix on avatud võrk turvalise ja hajutatud suhtluse jaoks."</string>
+  <string name="screen_login_title">"Tere tulemast tagasi!"</string>
+  <string name="screen_login_title_with_homeserver">"Logi sisse serverisse %1$s"</string>
+  <string name="screen_qr_code_login_connecting_subtitle">"Loome turvalist ühendust"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_description">"Turvalise ühenduse loomine uue seadmega ei õnnestunud. Sinu olemasolevad seadmed on jätkuvalt turvatud ja sa ei pea nende pärast muretsema."</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Mida järgmiseks teeme?"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_1">"Kui see juhtumisi oli võrguühenduse viga, siis proovi uuesti QR-koodiga sisse logida"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Kui sama probleem kordub, siis kasuta mõnda muud WiFi- või mobiilset andmedsideühendust"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Kui see ka ei aita, siis logi sisse käsitsi"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_title">"Ühendus pole turvaline"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Sul palutakse sisestada kaks selles seadmes kuvatud numbrit."</string>
+  <string name="screen_qr_code_login_device_code_title">"Sisesta see number oma teises seadmes"</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_description">"Logi sisse oma teise seadmesse ja proovi siis uuesti või kasuta mõnda muud oma seadet, mis on juba sisse logitud."</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_subtitle">"Teine seade pole sisselogitud"</string>
+  <string name="screen_qr_code_login_error_cancelled_subtitle">"Sisselogimine katkestati teises seadmes."</string>
+  <string name="screen_qr_code_login_error_cancelled_title">"Sisselogimispäring on tühistatud"</string>
+  <string name="screen_qr_code_login_error_declined_subtitle">"Sisselogimisest on teise seadmes keeldutud."</string>
+  <string name="screen_qr_code_login_error_declined_title">"Sisselogimisest on keeldutud"</string>
+  <string name="screen_qr_code_login_error_expired_subtitle">"Sisselogimine aegus. Palun proovi uuesti."</string>
+  <string name="screen_qr_code_login_error_expired_title">"Sisselogimine jäi etteantud aja jooksul tegemata"</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Sinu teine seade ei toeta %s sisselogimist QR-koodiga.
+
+Proovi käsitsi sisselogimist või skaneeri QR-koodi mõne muu seadmega."</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_title">"QR-kood pole toetatud"</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"Sinu teenusepakkuja ei toeta rakendust %1$s."</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"%1$s pole toetatud"</string>
+  <string name="screen_qr_code_login_initial_state_button_title">"Skaneerimiseks valmis"</string>
+  <string name="screen_qr_code_login_initial_state_item_1">"Ava %1$s töölauarakenduses"</string>
+  <string name="screen_qr_code_login_initial_state_item_2">"Klõpsi oma tunnuspilti"</string>
+  <string name="screen_qr_code_login_initial_state_item_3">"Vali %1$s"</string>
+  <string name="screen_qr_code_login_initial_state_item_3_action">"„Seo uus seade“"</string>
+  <string name="screen_qr_code_login_initial_state_item_4">"Skaneeri QR-koodi selle seadmega"</string>
+  <string name="screen_qr_code_login_initial_state_title">"QR-koodi saamiseks ava %1$s oma teises seadmes"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_description">"Kasuta teises seadmes näidatavat QR-koodi"</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Proovi uuesti"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_subtitle">"Vale QR-kood"</string>
+  <string name="screen_qr_code_login_no_camera_permission_button">"Ava kaamera seadistused"</string>
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Jätkamiseks pead lubama, et %1$s saab kasutada sinu nutiseadme kaamerat"</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"QR-koodi lugemiseks luba kaamerat kasutada"</string>
   <string name="screen_qr_code_login_scanning_state_title">"Skaneeri QR-koodi"</string>
@@ -22,5 +72,16 @@
   <string name="screen_qr_code_login_verify_code_loading">"Ootame sinu teise seadme järgi"</string>
   <string name="screen_qr_code_login_verify_code_subtitle">"Sinu teenusepakkuja võib sisselogimisel eeldada selle verifitseerimiskoodi kasutamist."</string>
   <string name="screen_qr_code_login_verify_code_title">"Sinu verifitseerimiskood"</string>
+  <string name="screen_server_confirmation_change_server">"Muuda teenusepakujat"</string>
+  <string name="screen_server_confirmation_message_login_element_dot_io">"Privaatne server Elemendi töötajate jaoks."</string>
+  <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix on avatud võrk turvalise ja hajutatud suhtluse jaoks."</string>
+  <string name="screen_server_confirmation_message_register">"See on koht, kus sinu vestlused elavad – just nagu kasutaksid oma e-kirjade säilitamiseks e-postitenuse pakkujat."</string>
+  <string name="screen_server_confirmation_title_login">"Sa oled sisselogimas koduserverisse %1$s"</string>
+  <string name="screen_server_confirmation_title_register">"Sa oled loomas kasutajakontot koduserveris %1$s"</string>
+  <string name="screen_waitlist_message">"%1$s kasutamiseks %2$s koduserveris on hetkel palju huvilisi. Proovi seda samast rakendusest mõne päeva pärast.
+
+Täname kannatlikkuse eest!"</string>
   <string name="screen_waitlist_message_success">"Tere tulemast rakendusse %1$s!"</string>
+  <string name="screen_waitlist_title">"Peaaegu olemas."</string>
+  <string name="screen_waitlist_title_success">"Oled nüüd jututoas."</string>
 </resources>

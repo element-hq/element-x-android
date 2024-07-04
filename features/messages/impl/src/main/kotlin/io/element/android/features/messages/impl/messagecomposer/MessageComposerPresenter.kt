@@ -39,6 +39,7 @@ import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
+import io.element.android.features.messages.impl.draft.ComposerDraftService
 import io.element.android.features.messages.impl.mentions.MentionSuggestionsProcessor
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.libraries.architecture.Presenter
@@ -54,15 +55,19 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.Mention
-import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
+import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
+import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
+import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
-import io.element.android.libraries.textcomposer.mentions.rememberMentionSpanProvider
+import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
@@ -70,6 +75,7 @@ import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.textcomposer.model.rememberMarkdownTextEditorState
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
+import io.element.android.wysiwyg.compose.RichTextEditorState
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CancellationException
@@ -104,15 +110,14 @@ class MessageComposerPresenter @Inject constructor(
     private val analyticsService: AnalyticsService,
     private val messageComposerContext: DefaultMessageComposerContext,
     private val richTextEditorStateFactory: RichTextEditorStateFactory,
-    private val currentSessionIdHolder: CurrentSessionIdHolder,
     private val permalinkParser: PermalinkParser,
     private val permalinkBuilder: PermalinkBuilder,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
     private val timelineController: TimelineController,
+    private val draftService: ComposerDraftService,
 ) : Presenter<MessageComposerState> {
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
     private var pendingEvent: MessageComposerEvents? = null
-
     private val suggestionSearchTrigger = MutableStateFlow<Suggestion?>(null)
 
     // Used to disable some UI related elements in tests
@@ -128,8 +133,6 @@ class MessageComposerPresenter @Inject constructor(
     override fun present(): MessageComposerState {
         val localCoroutineScope = rememberCoroutineScope()
 
-        // Initially disabled so we don't set focus and text twice
-        var applyFormattingModeChanges by remember { mutableStateOf(false) }
         val richTextEditorState = richTextEditorStateFactory.remember()
         if (isTesting) {
             richTextEditorState.isReadyToProcessActions = true
@@ -177,18 +180,6 @@ class MessageComposerPresenter @Inject constructor(
 
         val sendTypingNotifications by sessionPreferencesStore.isSendTypingNotificationsEnabled().collectAsState(initial = true)
 
-        LaunchedEffect(messageComposerContext.composerMode) {
-            when (val modeValue = messageComposerContext.composerMode) {
-                is MessageComposerMode.Edit ->
-                    if (showTextFormatting) {
-                        richTextEditorState.setHtml(modeValue.defaultContent)
-                    } else {
-                        markdownTextEditorState.text.update(modeValue.defaultContent, true)
-                    }
-                else -> Unit
-            }
-        }
-
         LaunchedEffect(attachmentsState.value) {
             when (val attachmentStateValue = attachmentsState.value) {
                 is AttachmentsState.Sending.Processing -> {
@@ -215,7 +206,7 @@ class MessageComposerPresenter @Inject constructor(
         val memberSuggestions = remember { mutableStateListOf<ResolvedMentionSuggestion>() }
         LaunchedEffect(isMentionsEnabled) {
             if (!isMentionsEnabled) return@LaunchedEffect
-            val currentUserId = currentSessionIdHolder.current
+            val currentUserId = room.sessionId
 
             suspend fun canSendRoomMention(): Boolean {
                 val userCanSendAtRoom = room.canUserTriggerRoomNotification(currentUserId).getOrDefault(false)
@@ -261,32 +252,14 @@ class MessageComposerPresenter @Inject constructor(
             }
         )
 
-        LaunchedEffect(showTextFormatting) {
-            if (!applyFormattingModeChanges) {
-                applyFormattingModeChanges = true
-                return@LaunchedEffect
-            }
-            if (showTextFormatting) {
-                val markdown = markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
-                richTextEditorState.setMarkdown(markdown)
-                richTextEditorState.requestFocus()
-            } else {
-                val markdown = richTextEditorState.messageMarkdown
-                markdownTextEditorState.text.update(markdown, true)
-                // Give some time for the focus of the previous editor to be cleared
-                delay(100)
-                markdownTextEditorState.requestFocusAction()
+        LaunchedEffect(Unit) {
+            val draft = draftService.loadDraft(room.roomId, isVolatile = false)
+            if (draft != null) {
+                applyDraft(draft, markdownTextEditorState, richTextEditorState)
             }
         }
 
-        val mentionSpanProvider = if (isTesting) {
-            null
-        } else {
-            rememberMentionSpanProvider(
-                currentUserId = room.sessionId,
-                permalinkParser = permalinkParser,
-            )
-        }
+        val mentionSpanProvider = LocalMentionSpanProvider.current
 
         fun handleEvents(event: MessageComposerEvents) {
             when (event) {
@@ -294,26 +267,16 @@ class MessageComposerPresenter @Inject constructor(
                 MessageComposerEvents.CloseSpecialMode -> {
                     if (messageComposerContext.composerMode is MessageComposerMode.Edit) {
                         localCoroutineScope.launch {
-                            textEditorState.reset()
+                            resetComposer(markdownTextEditorState, richTextEditorState, fromEdit = true)
                         }
+                    } else {
+                        messageComposerContext.composerMode = MessageComposerMode.Normal
                     }
-                    messageComposerContext.composerMode = MessageComposerMode.Normal
                 }
                 is MessageComposerEvents.SendMessage -> {
-                    val html = if (showTextFormatting) {
-                        richTextEditorState.messageHtml
-                    } else {
-                        null
-                    }
-                    val markdown = if (showTextFormatting) {
-                        richTextEditorState.messageMarkdown
-                    } else {
-                        markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
-                    }
                     appCoroutineScope.sendMessage(
-                        message = Message(html = html, markdown = markdown),
-                        updateComposerMode = { messageComposerContext.composerMode = it },
-                        textEditorState = textEditorState,
+                        markdownTextEditorState = markdownTextEditorState,
+                        richTextEditorState = richTextEditorState,
                     )
                 }
                 is MessageComposerEvents.SendUri -> appCoroutineScope.sendAttachment(
@@ -329,19 +292,7 @@ class MessageComposerPresenter @Inject constructor(
                     attachmentState = attachmentsState,
                 )
                 is MessageComposerEvents.SetMode -> {
-                    messageComposerContext.composerMode = event.composerMode
-                    when (event.composerMode) {
-                        is MessageComposerMode.Reply -> event.composerMode.eventId
-                        is MessageComposerMode.Edit -> event.composerMode.eventId
-                        is MessageComposerMode.Normal -> null
-                        is MessageComposerMode.Quote -> null
-                    }.let { relatedEventId ->
-                        appCoroutineScope.launch {
-                            timelineController.invokeOnCurrentTimeline {
-                                enterSpecialMode(relatedEventId)
-                            }
-                        }
-                    }
+                    localCoroutineScope.setMode(event.composerMode, markdownTextEditorState, richTextEditorState)
                 }
                 MessageComposerEvents.AddAttachment -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = true
@@ -389,10 +340,7 @@ class MessageComposerPresenter @Inject constructor(
                 }
                 is MessageComposerEvents.ToggleTextFormatting -> {
                     showAttachmentSourcePicker = false
-                    showTextFormatting = event.enabled
-                    if (showTextFormatting) {
-                        analyticsService.captureInteraction(Interaction.Name.MobileRoomComposerFormattingEnabled)
-                    }
+                    localCoroutineScope.toggleTextFormatting(event.enabled, markdownTextEditorState, richTextEditorState)
                 }
                 is MessageComposerEvents.Error -> {
                     analyticsService.trackError(event.error)
@@ -415,22 +363,24 @@ class MessageComposerPresenter @Inject constructor(
                                     richTextEditorState.insertAtRoomMentionAtSuggestion()
                                 }
                                 is ResolvedMentionSuggestion.Member -> {
-                                    val text = mention.roomMember.displayName?.prependIndent("@") ?: mention.roomMember.userId.value
+                                    val text = mention.roomMember.userId.value
                                     val link = permalinkBuilder.permalinkForUser(mention.roomMember.userId).getOrNull() ?: return@launch
                                     richTextEditorState.insertMentionAtSuggestion(text = text, link = link)
                                 }
                             }
                         } else if (markdownTextEditorState.currentMentionSuggestion != null) {
-                            mentionSpanProvider?.let {
-                                markdownTextEditorState.insertMention(
-                                    mention = event.mention,
-                                    mentionSpanProvider = it,
-                                    permalinkBuilder = permalinkBuilder,
-                                )
-                            }
+                            markdownTextEditorState.insertMention(
+                                mention = event.mention,
+                                mentionSpanProvider = mentionSpanProvider,
+                                permalinkBuilder = permalinkBuilder,
+                            )
                             suggestionSearchTrigger.value = null
                         }
                     }
+                }
+                MessageComposerEvents.SaveDraft -> {
+                    val draft = createDraftFromState(markdownTextEditorState, richTextEditorState)
+                    appCoroutineScope.updateDraft(draft, isVolatile = false)
                 }
             }
         }
@@ -446,49 +396,31 @@ class MessageComposerPresenter @Inject constructor(
             canCreatePoll = canCreatePoll.value,
             attachmentsState = attachmentsState.value,
             memberSuggestions = memberSuggestions.toPersistentList(),
-            currentUserId = currentSessionIdHolder.current,
             eventSink = { handleEvents(it) }
         )
     }
 
     private fun CoroutineScope.sendMessage(
-        message: Message,
-        updateComposerMode: (newComposerMode: MessageComposerMode) -> Unit,
-        textEditorState: TextEditorState,
+        markdownTextEditorState: MarkdownTextEditorState,
+        richTextEditorState: RichTextEditorState,
     ) = launch {
+        val message = currentComposerMessage(markdownTextEditorState, richTextEditorState, withMentions = true)
         val capturedMode = messageComposerContext.composerMode
-        val mentions = when (textEditorState) {
-            is TextEditorState.Rich -> {
-                textEditorState.richTextEditorState.mentionsState?.let { state ->
-                    buildList {
-                        if (state.hasAtRoomMention) {
-                            add(Mention.AtRoom)
-                        }
-                        for (userId in state.userIds) {
-                            add(Mention.User(UserId(userId)))
-                        }
-                    }
-                }.orEmpty()
-            }
-            is TextEditorState.Markdown -> textEditorState.state.getMentions()
-        }
         // Reset composer right away
-        textEditorState.reset()
-        updateComposerMode(MessageComposerMode.Normal)
+        resetComposer(markdownTextEditorState, richTextEditorState, fromEdit = capturedMode is MessageComposerMode.Edit)
         when (capturedMode) {
-            is MessageComposerMode.Normal -> room.sendMessage(body = message.markdown, htmlBody = message.html, mentions = mentions)
+            is MessageComposerMode.Normal -> room.sendMessage(body = message.markdown, htmlBody = message.html, mentions = message.mentions)
             is MessageComposerMode.Edit -> {
                 val eventId = capturedMode.eventId
                 val transactionId = capturedMode.transactionId
                 timelineController.invokeOnCurrentTimeline {
-                    editMessage(eventId, transactionId, message.markdown, message.html, mentions)
+                    editMessage(eventId, transactionId, message.markdown, message.html, message.mentions)
                 }
             }
 
-            is MessageComposerMode.Quote -> TODO()
             is MessageComposerMode.Reply -> {
                 timelineController.invokeOnCurrentTimeline {
-                    replyMessage(capturedMode.eventId, message.markdown, message.html, mentions)
+                    replyMessage(capturedMode.eventId, message.markdown, message.html, message.mentions)
                 }
             }
         }
@@ -582,4 +514,183 @@ class MessageComposerPresenter @Inject constructor(
                 snackbarDispatcher.post(snackbarMessage)
             }
         }
+
+    private fun CoroutineScope.updateDraft(
+        draft: ComposerDraft?,
+        isVolatile: Boolean,
+    ) = launch {
+        draftService.updateDraft(
+            roomId = room.roomId,
+            draft = draft,
+            isVolatile = isVolatile
+        )
+    }
+
+    private suspend fun applyDraft(
+        draft: ComposerDraft,
+        markdownTextEditorState: MarkdownTextEditorState,
+        richTextEditorState: RichTextEditorState,
+    ) {
+        val htmlText = draft.htmlText
+        val markdownText = draft.plainText
+        if (htmlText != null) {
+            showTextFormatting = true
+            setText(htmlText, markdownTextEditorState, richTextEditorState, requestFocus = true)
+        } else {
+            showTextFormatting = false
+            setText(markdownText, markdownTextEditorState, richTextEditorState, requestFocus = true)
+        }
+        when (val draftType = draft.draftType) {
+            ComposerDraftType.NewMessage -> messageComposerContext.composerMode = MessageComposerMode.Normal
+            is ComposerDraftType.Edit -> messageComposerContext.composerMode = MessageComposerMode.Edit(
+                eventId = draftType.eventId,
+                transactionId = null,
+                content = htmlText ?: markdownText
+            )
+            is ComposerDraftType.Reply -> {
+                messageComposerContext.composerMode = MessageComposerMode.Reply(InReplyToDetails.Loading(draftType.eventId))
+                timelineController.invokeOnCurrentTimeline {
+                    val replyToDetails = loadReplyDetails(draftType.eventId).map(permalinkParser)
+                    run { messageComposerContext.composerMode = MessageComposerMode.Reply(replyToDetails) }
+                }
+            }
+        }
+    }
+
+    private fun createDraftFromState(
+        markdownTextEditorState: MarkdownTextEditorState,
+        richTextEditorState: RichTextEditorState,
+    ): ComposerDraft? {
+        val message = currentComposerMessage(markdownTextEditorState, richTextEditorState, withMentions = false)
+        val draftType = when (val mode = messageComposerContext.composerMode) {
+            is MessageComposerMode.Normal -> ComposerDraftType.NewMessage
+            is MessageComposerMode.Edit -> {
+                mode.eventId?.let { eventId -> ComposerDraftType.Edit(eventId) }
+            }
+            is MessageComposerMode.Reply -> ComposerDraftType.Reply(mode.eventId)
+        }
+        return if (draftType == null || message.markdown.isBlank()) {
+            null
+        } else {
+            ComposerDraft(
+                draftType = draftType,
+                htmlText = message.html,
+                plainText = message.markdown,
+            )
+        }
+    }
+
+    private fun currentComposerMessage(
+        markdownTextEditorState: MarkdownTextEditorState,
+        richTextEditorState: RichTextEditorState,
+        withMentions: Boolean,
+    ): Message {
+        return if (showTextFormatting) {
+            val html = richTextEditorState.messageHtml
+            val markdown = richTextEditorState.messageMarkdown
+            val mentions = richTextEditorState.mentionsState
+                .takeIf { withMentions }
+                ?.let { state ->
+                    buildList {
+                        if (state.hasAtRoomMention) {
+                            add(Mention.AtRoom)
+                        }
+                        for (userId in state.userIds) {
+                            add(Mention.User(UserId(userId)))
+                        }
+                    }
+                }
+                .orEmpty()
+            Message(html = html, markdown = markdown, mentions = mentions)
+        } else {
+            val markdown = markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
+            val mentions = if (withMentions) {
+                markdownTextEditorState.getMentions()
+            } else {
+                emptyList()
+            }
+            Message(html = null, markdown = markdown, mentions = mentions)
+        }
+    }
+
+    private fun CoroutineScope.toggleTextFormatting(
+        enabled: Boolean,
+        markdownTextEditorState: MarkdownTextEditorState,
+        richTextEditorState: RichTextEditorState
+    ) = launch {
+        showTextFormatting = enabled
+        if (showTextFormatting) {
+            val markdown = markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
+            richTextEditorState.setMarkdown(markdown)
+            richTextEditorState.requestFocus()
+            analyticsService.captureInteraction(Interaction.Name.MobileRoomComposerFormattingEnabled)
+        } else {
+            val markdown = richTextEditorState.messageMarkdown
+            markdownTextEditorState.text.update(markdown, true)
+            // Give some time for the focus of the previous editor to be cleared
+            delay(100)
+            markdownTextEditorState.requestFocusAction()
+        }
+    }
+
+    private fun CoroutineScope.setMode(
+        newComposerMode: MessageComposerMode,
+        markdownTextEditorState: MarkdownTextEditorState,
+        richTextEditorState: RichTextEditorState,
+    ) = launch {
+        val currentComposerMode = messageComposerContext.composerMode
+        when (newComposerMode) {
+            is MessageComposerMode.Edit -> {
+                if (currentComposerMode !is MessageComposerMode.Edit) {
+                    val draft = createDraftFromState(markdownTextEditorState, richTextEditorState)
+                    updateDraft(draft, isVolatile = true).join()
+                }
+                setText(newComposerMode.content, markdownTextEditorState, richTextEditorState)
+            }
+            else -> {
+                // When coming from edit, just clear the composer as it'd be weird to reset a volatile draft in this scenario.
+                if (currentComposerMode is MessageComposerMode.Edit) {
+                    setText("", markdownTextEditorState, richTextEditorState)
+                }
+            }
+        }
+        messageComposerContext.composerMode = newComposerMode
+    }
+
+    private suspend fun resetComposer(
+        markdownTextEditorState: MarkdownTextEditorState,
+        richTextEditorState: RichTextEditorState,
+        fromEdit: Boolean,
+    ) {
+        // Use the volatile draft only when coming from edit mode otherwise.
+        val draft = draftService.loadDraft(room.roomId, isVolatile = true).takeIf { fromEdit }
+        if (draft != null) {
+            applyDraft(draft, markdownTextEditorState, richTextEditorState)
+        } else {
+            setText("", markdownTextEditorState, richTextEditorState)
+            messageComposerContext.composerMode = MessageComposerMode.Normal
+        }
+    }
+
+    private suspend fun setText(
+        content: String,
+        markdownTextEditorState: MarkdownTextEditorState,
+        richTextEditorState: RichTextEditorState,
+        requestFocus: Boolean = false,
+    ) {
+        if (showTextFormatting) {
+            richTextEditorState.setHtml(content)
+            if (requestFocus) {
+                richTextEditorState.requestFocus()
+            }
+        } else {
+            if (content.isEmpty()) {
+                markdownTextEditorState.selection = IntRange.EMPTY
+            }
+            markdownTextEditorState.text.update(content, true)
+            if (requestFocus) {
+                markdownTextEditorState.requestFocusAction()
+            }
+        }
+    }
 }

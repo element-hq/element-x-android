@@ -17,12 +17,16 @@
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
-    alias(libs.plugins.ksp)
     id("kotlin-parcelize")
 }
 
 android {
     namespace = "io.element.android.libraries.matrix.ui"
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 anvil {
@@ -44,10 +48,17 @@ dependencies {
     implementation(libs.coil.gif)
     implementation(libs.jsoup)
 
-    ksp(libs.showkase.processor)
-
+    testImplementation(libs.coroutines.test)
     testImplementation(libs.test.junit)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.molecule.runtime)
     testImplementation(libs.test.truth)
-    testImplementation(libs.test.robolectric)
+    testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.dateformatter.test)
+    testImplementation(projects.tests.testutils)
+    testImplementation(libs.test.mockk)
+    testImplementation(libs.test.robolectric)
+    testImplementation(libs.androidx.compose.ui.test.junit)
+    testImplementation(projects.libraries.sessionStorage.test)
 }

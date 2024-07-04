@@ -169,8 +169,12 @@ class RoomDetailsPresenterTest {
         val presenter = createRoomDetailsPresenter(room)
         presenter.test {
             val initialState = awaitItem()
-            assertThat(initialState.roomType).isEqualTo(RoomDetailsType.Dm(otherRoomMember))
-
+            assertThat(initialState.roomType).isEqualTo(
+                RoomDetailsType.Dm(
+                    me = myRoomMember,
+                    otherMember = otherRoomMember,
+                )
+            )
             cancelAndIgnoreRemainingEvents()
         }
     }

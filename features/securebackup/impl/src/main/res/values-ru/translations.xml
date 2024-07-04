@@ -31,7 +31,7 @@
   <string name="screen_key_backup_disable_confirmation_title">"Вы действительно хотите отключить резервное копирование?"</string>
   <string name="screen_key_backup_disable_description">"Отключение резервного копирования удалит текущую резервную копию ключа шифрования и отключит другие функции безопасности. В этом случае вы выполните следующие действия:"</string>
   <string name="screen_key_backup_disable_description_point_1">"Нет зашифрованной истории сообщений на новых устройствах"</string>
-  <string name="screen_key_backup_disable_description_point_2">"Потерять доступ к зашифрованным сообщениям, если вы вышли из %1$s любой точки мира"</string>
+  <string name="screen_key_backup_disable_description_point_2">"Вы потеряете доступ к зашифрованным сообщениям, если выйдете из %1$s везде"</string>
   <string name="screen_key_backup_disable_title">"Вы действительно хотите отключить резервное копирование?"</string>
   <string name="screen_recovery_key_change_description">"Получите новый ключ восстановления, если вы потеряли существующий. После смены ключа восстановления старый ключ больше не будет работать."</string>
   <string name="screen_recovery_key_change_generate_key">

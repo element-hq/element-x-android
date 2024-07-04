@@ -40,11 +40,13 @@ import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.StateEventType
+import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
@@ -527,6 +529,15 @@ class FakeMatrixRoom(
     var setSendQueueEnabledLambda = { _: Boolean -> }
     override suspend fun setSendQueueEnabled(enabled: Boolean) = setSendQueueEnabledLambda(enabled)
 
+    var saveComposerDraftLambda = { _: ComposerDraft -> Result.success(Unit) }
+    override suspend fun saveComposerDraft(composerDraft: ComposerDraft) = saveComposerDraftLambda(composerDraft)
+
+    var loadComposerDraftLambda = { Result.success<ComposerDraft?>(null) }
+    override suspend fun loadComposerDraft() = loadComposerDraftLambda()
+
+    var clearComposerDraftLambda = { Result.success(Unit) }
+    override suspend fun clearComposerDraft() = clearComposerDraftLambda()
+
     override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver> = getWidgetDriverResult
 
     fun givenRoomMembersState(state: MatrixRoomMembersState) {
@@ -754,7 +765,8 @@ fun aRoomInfo(
     userDefinedNotificationMode: RoomNotificationMode? = null,
     hasRoomCall: Boolean = false,
     userPowerLevels: ImmutableMap<UserId, Long> = persistentMapOf(),
-    activeRoomCallParticipants: List<String> = emptyList()
+    activeRoomCallParticipants: List<String> = emptyList(),
+    heroes: List<MatrixUser> = emptyList(),
 ) = MatrixRoomInfo(
     id = id,
     name = name,
@@ -779,6 +791,7 @@ fun aRoomInfo(
     hasRoomCall = hasRoomCall,
     userPowerLevels = userPowerLevels,
     activeRoomCallParticipants = activeRoomCallParticipants.toImmutableList(),
+    heroes = heroes.toImmutableList(),
 )
 
 fun defaultRoomPowerLevels() = MatrixRoomPowerLevels(

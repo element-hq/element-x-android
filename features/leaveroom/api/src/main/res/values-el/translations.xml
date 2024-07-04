@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_conversation_alert_subtitle">"Είσαι σίγουρος ότι θέλεις να αποχωρήσεις από αυτή τη συζήτηση; Αυτή η συνομιλία δεν είναι δημόσια και δεν θα μπορείς να συμμετάσχεις ξανά χωρίς πρόσκληση."</string>
+  <string name="leave_room_alert_empty_subtitle">"Σίγουρα θες να φύγεις από αυτό το δωμάτιο; Είσαι το μόνο άτομο εδώ. Εάν φύγεις, κανείς δεν θα μπορεί να συμμετάσχει στο μέλλον, ούτε και \'σύ."</string>
+  <string name="leave_room_alert_private_subtitle">"Σίγουρα θες να φύγεις από αυτό το δωμάτιο; Αυτό το δωμάτιο δεν είναι δημόσιο και δεν θα μπορείς να συμμετάσχεις ξανά χωρίς πρόσκληση."</string>
+  <string name="leave_room_alert_subtitle">"Θες σίγουρα να φύγεις από το δωμάτιο;"</string>
+</resources>

@@ -15,7 +15,6 @@
  */
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.ksp)
 }
 
 android {

@@ -18,7 +18,7 @@ package io.element.android.libraries.matrix.api.room.powerlevels
 
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.joinedRoomMembers
+import io.element.android.libraries.matrix.api.room.activeRoomMembers
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
@@ -27,14 +27,13 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 /**
- * Return a flow of the list of room members who are still in the room (with membership == RoomMembershipState.JOIN)
- * and who have the given role.
+ * Return a flow of the list of active room members who have the given role.
  */
 fun MatrixRoom.usersWithRole(role: RoomMember.Role): Flow<ImmutableList<RoomMember>> {
     return roomInfoFlow
         .map { it.userPowerLevels.filter { (_, powerLevel) -> RoomMember.Role.forPowerLevel(powerLevel) == role } }
         .combine(membersStateFlow) { powerLevels, membersState ->
-            membersState.joinedRoomMembers()
+            membersState.activeRoomMembers()
                 .filter { powerLevels.containsKey(it.userId) }
                 .toPersistentList()
         }

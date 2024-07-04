@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_account_provider_change">"Αλλαγή παρόχου λογαριασμού"</string>
+  <string name="screen_account_provider_form_hint">"Διεύθυνση οικιακού διακομιστή"</string>
+  <string name="screen_account_provider_form_notice">"Εισήγαγε έναν όρο αναζήτησης ή μια διεύθυνση τομέα."</string>
+  <string name="screen_account_provider_form_subtitle">"Αναζήτησε μια εταιρεία, κοινότητα ή ιδιωτικό διακομιστή."</string>
+  <string name="screen_account_provider_form_title">"Βρες έναν πάροχο λογαριασμού"</string>
+  <string name="screen_account_provider_signin_subtitle">"Εδώ θα ζουν οι συνομιλίες σου - όπως θα χρησιμοποιούσες έναν πάροχο email για να διατηρήσεις τα email σου."</string>
+  <string name="screen_account_provider_signin_title">"Πρόκειται να συνδεθείς στο %s"</string>
+  <string name="screen_account_provider_signup_subtitle">"Εδώ θα ζουν οι συνομιλίες σου - όπως θα χρησιμοποιούσες έναν πάροχο email για να διατηρήσεις τα email σου."</string>
+  <string name="screen_account_provider_signup_title">"Πρόκειται να δημιουργήσεις έναν λογαριασμό στο %s"</string>
+  <string name="screen_change_account_provider_matrix_org_subtitle">"Το Matrix.org είναι ένας μεγάλος, δωρεάν διακομιστής στο δημόσιο δίκτυο Matrix για ασφαλή, αποκεντρωμένη επικοινωνία, που διευθύνεται από το Ίδρυμα Matrix.org."</string>
+  <string name="screen_change_account_provider_other">"Άλλο"</string>
+  <string name="screen_change_account_provider_subtitle">"Χρησιμοποίησε διαφορετικό πάροχο λογαριασμού, όπως τον δικό σου ιδιωτικό διακομιστή ή έναν εργασιακό λογαριασμό."</string>
+  <string name="screen_change_account_provider_title">"Αλλαγή παρόχου λογαριασμού"</string>
+  <string name="screen_change_server_error_invalid_homeserver">"Δεν μπορούσαμε να επικοινωνήσουμε με αυτόν τον οικιακό διακομιστή. Βεβαιώσου ότι έχεις εισαγάγει σωστά τη διεύθυνση URL του αρχικού διακομιστή. Εάν η διεύθυνση URL είναι σωστή, επικοινώνησε με τον διαχειριστή του κεντρικού διακομιστή για περαιτέρω βοήθεια."</string>
+  <string name="screen_change_server_error_invalid_well_known">"Το Sliding sync δεν είναι διαθέσιμο εξαιτίας ενός ζητήματος σε ένα πολύ γνωστό αρχείο:
+%1$s"</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Αυτός ο διακομιστής προς το παρόν δεν υποστηρίζει Sliding sync."</string>
+  <string name="screen_change_server_form_header">"URL οικιακού διακομιστή"</string>
+  <string name="screen_change_server_form_notice">"Μπορείτε να συνδεθείς μόνο σε υπάρχοντα διακομιστή που υποστηρίζει Sliding sync. Ο διαχειριστής του οικιακού διακομιστή σου θα πρέπει να το ρυθμίσει. %1$s"</string>
+  <string name="screen_change_server_subtitle">"Ποια είναι η διεύθυνση του διακομιστή σου;"</string>
+  <string name="screen_change_server_title">"Επέλεξε το διακομιστή σου"</string>
+  <string name="screen_login_error_deactivated_account">"Αυτός ο λογαριασμός έχει απενεργοποιηθεί."</string>
+  <string name="screen_login_error_invalid_credentials">"Λανθασμένο όνομα χρήστη ή κωδικός πρόσβασης"</string>
+  <string name="screen_login_error_invalid_user_id">"Αυτό δεν είναι έγκυρο αναγνωριστικό χρήστη. Αναμενόμενη μορφή: \'@χρήστης:homeserver.org\'"</string>
+  <string name="screen_login_error_refresh_tokens">"Αυτός ο διακομιστής έχει ρυθμιστεί ώστε να χρησιμοποιεί διακριτικά ανανέωσης. Αυτά δεν υποστηρίζονται όταν χρησιμοποιείς σύνδεση μέσω κωδικού πρόσβασης."</string>
+  <string name="screen_login_error_unsupported_authentication">"Ο επιλεγμένος οικιακός διακομιστής δεν υποστηρίζει κωδικό πρόσβασης ή σύνδεση OIDC. Επικοινωνήστε με τον διαχειριστή σου ή επέλεξε άλλο οικιακό διακομιστή."</string>
+  <string name="screen_login_form_header">"Εισήγαγε τα στοιχεία σου"</string>
+  <string name="screen_login_subtitle">"Το Matrix είναι ένα ανοιχτό δίκτυο για ασφαλή, αποκεντρωμένη επικοινωνία."</string>
+  <string name="screen_login_title">"Καλωσόρισες ξανά!"</string>
+  <string name="screen_login_title_with_homeserver">"Συνδέσου στο %1$s"</string>
+  <string name="screen_qr_code_login_connecting_subtitle">"Εγκαθίδρυση ασφαλούς σύνδεσης"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_description">"Δεν ήταν δυνατή η πραγματοποίηση ασφαλούς σύνδεσης στη νέα συσκευή. Οι υπάρχουσες συσκευές σας εξακολουθούν να είναι ασφαλείς και δεν χρειάζεται να ανησυχείς για αυτές."</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Τί είναι πάλι;"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_1">"Δοκίμασε να συνδεθείς ξανά με έναν κωδικό QR σε περίπτωση που ήταν πρόβλημα του δικτύου"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Εάν αντιμετωπίσεις το ίδιο πρόβλημα, δοκίμασε ένα διαφορετικό δίκτυο wifi ή χρησιμοποίησε τα δεδομένα του κινητού σου αντί για wifi"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Εάν δεν λειτουργήσει, συνδέσου χειροκίνητα"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_title">"Η σύνδεση δεν είναι ασφαλής"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Θα σου ζητηθεί να εισάγεις τα δύο ψηφία που εμφανίζονται σε αυτήν τη συσκευή."</string>
+  <string name="screen_qr_code_login_device_code_title">"Εισήγαγε τον παρακάτω αριθμό στην άλλη συσκευή σου"</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_description">"Συνδέσου στην άλλη συσκευή σου και στη συνέχεια, δοκίμασε ξανά ή χρησιμοποίησε άλλη συσκευή που είναι ήδη συνδεδεμένη."</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_subtitle">"Η άλλη συσκευή δεν έχει συνδεθεί"</string>
+  <string name="screen_qr_code_login_error_cancelled_subtitle">"Η σύνδεση ακυρώθηκε στην άλλη συσκευή."</string>
+  <string name="screen_qr_code_login_error_cancelled_title">"Το αίτημα σύνδεσης ακυρώθηκε"</string>
+  <string name="screen_qr_code_login_error_declined_subtitle">"Η σύνδεση απορρίφθηκε στην άλλη συσκευή."</string>
+  <string name="screen_qr_code_login_error_declined_title">"Η σύνδεση απορρίφθηκε"</string>
+  <string name="screen_qr_code_login_error_expired_subtitle">"Η είσοδος έληξε. Παρακαλώ προσπάθησε ξανά."</string>
+  <string name="screen_qr_code_login_error_expired_title">"Η σύνδεση δεν ολοκληρώθηκε εγκαίρως"</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Η άλλη σου συσκευή δεν υποστηρίζει σύνδεση στο %s με κωδικό QR.
+
+Δοκίμασε να συνδεθείς χειροκίνητα ή σάρωσε τον κωδικό QR με άλλη συσκευή."</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_title">"Ο κωδικός QR δεν υποστηρίζεται"</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"Ο πάροχος λογαριασμού σου δεν υποστηρίζει το %1$s."</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"Το %1$s δεν υποστηρίζεται"</string>
+  <string name="screen_qr_code_login_initial_state_button_title">"Έτοιμο για σάρωση"</string>
+  <string name="screen_qr_code_login_initial_state_item_1">"Άνοιγμα %1$s σε υπολογιστή"</string>
+  <string name="screen_qr_code_login_initial_state_item_2">"Κάνε κλικ στο avatar σου"</string>
+  <string name="screen_qr_code_login_initial_state_item_3">"Επιλογή %1$s"</string>
+  <string name="screen_qr_code_login_initial_state_item_3_action">"«Σύνδεση νέας συσκευής»"</string>
+  <string name="screen_qr_code_login_initial_state_item_4">"Σάρωσε τον κωδικό QR με αυτήν τη συσκευή"</string>
+  <string name="screen_qr_code_login_initial_state_title">"Άνοιγμα %1$s σε άλλη συσκευή για να λήψη κωδικού QR"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_description">"Χρησιμοποίησε τον κωδικό QR που εμφανίζεται στην άλλη συσκευή."</string>
+  <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Προσπάθησε ξανά"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_subtitle">"Λάθος κωδικός QR"</string>
+  <string name="screen_qr_code_login_no_camera_permission_button">"Μετάβαση στις ρυθμίσεις κάμερας"</string>
+  <string name="screen_qr_code_login_no_camera_permission_state_description">"Πρέπει να δώσεις άδεια για %1$s για να χρησιμοποιήσεις την κάμερα της συσκευής σου και να συνεχίσεις."</string>
+  <string name="screen_qr_code_login_no_camera_permission_state_title">"Επέτρεψε την πρόσβαση της κάμερας για σάρωση του κωδικού QR"</string>
+  <string name="screen_qr_code_login_scanning_state_title">"Σάρωση κωδικού QR"</string>
+  <string name="screen_qr_code_login_start_over_button">"Ξανά από την αρχή"</string>
+  <string name="screen_qr_code_login_unknown_error_description">"Παρουσιάστηκε ένα απροσδόκητο σφάλμα. Παρακαλώ προσπάθησε ξανά."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Αναμονή για την άλλη σου συσκευή"</string>
+  <string name="screen_qr_code_login_verify_code_subtitle">"Ο πάροχος λογαριασμού σου μπορεί να ζητήσει τον ακόλουθο κωδικό για να επαληθεύσει τη σύνδεση."</string>
+  <string name="screen_qr_code_login_verify_code_title">"Ο κωδικός επαλήθευσής σου"</string>
+  <string name="screen_server_confirmation_change_server">"Αλλαγή παρόχου λογαριασμού"</string>
+  <string name="screen_server_confirmation_message_login_element_dot_io">"Ένας ιδιωτικός διακομιστής για υπαλλήλους του Element."</string>
+  <string name="screen_server_confirmation_message_login_matrix_dot_org">"Το Matrix είναι ένα ανοιχτό δίκτυο για ασφαλή, αποκεντρωμένη επικοινωνία."</string>
+  <string name="screen_server_confirmation_message_register">"Εδώ θα ζουν οι συνομιλίες σου - όπως θα χρησιμοποιούσες έναν πάροχο email για να διατηρήσεις τα email σου."</string>
+  <string name="screen_server_confirmation_title_login">"Πρόκειται να συνδεθείς στο %1$s"</string>
+  <string name="screen_server_confirmation_title_register">"Πρόκειται να δημιουργήσεις έναν λογαριασμό στο %1$s"</string>
+  <string name="screen_waitlist_message">"Υπάρχει μεγάλη ζήτηση για το %1$s στον %2$s αυτή τη στιγμή. Επέστρεψε στην εφαρμογή σε λίγες μέρες και δοκίμασε ξανά.
+
+Ευχαριστώ για την υπομονή σου!"</string>
+  <string name="screen_waitlist_message_success">"Καλώς ήρθες στο %1$s!"</string>
+  <string name="screen_waitlist_title">"Σχεδόν τα κατάφερες."</string>
+  <string name="screen_waitlist_title_success">"Είσαι μέσα."</string>
+</resources>

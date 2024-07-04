@@ -93,13 +93,16 @@ class MarkdownTextEditorState(
                     for (mention in mentions.reversed()) {
                         val start = charSequence.getSpanStart(mention)
                         val end = charSequence.getSpanEnd(mention)
-                        if (mention.type == MentionSpan.Type.USER) {
-                            if (mention.rawValue == "@room") {
-                                replace(start, end, "@room")
-                            } else {
+                        when (mention.type) {
+                            MentionSpan.Type.USER -> {
                                 val link = permalinkBuilder.permalinkForUser(UserId(mention.rawValue)).getOrNull() ?: continue
-                                replace(start, end, "[${mention.text}]($link)")
+                                replace(start, end, "[${mention.rawValue}]($link)")
                             }
+                            MentionSpan.Type.EVERYONE -> {
+                                replace(start, end, "@room")
+                            }
+                            // Nothing to do here yet
+                            MentionSpan.Type.ROOM -> Unit
                         }
                     }
                 }
@@ -114,14 +117,9 @@ class MarkdownTextEditorState(
         val mentionSpans = text.getSpans<MentionSpan>(0, text.length)
         return mentionSpans.mapNotNull { mentionSpan ->
             when (mentionSpan.type) {
-                MentionSpan.Type.USER -> {
-                    if (mentionSpan.rawValue == "@room") {
-                        Mention.AtRoom
-                    } else {
-                        Mention.User(UserId(mentionSpan.rawValue))
-                    }
-                }
-                else -> null
+                MentionSpan.Type.USER -> Mention.User(UserId(mentionSpan.rawValue))
+                MentionSpan.Type.EVERYONE -> Mention.AtRoom
+                MentionSpan.Type.ROOM -> null
             }
         }
     }

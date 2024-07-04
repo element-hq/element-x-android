@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crash_detection_dialog_content">"Το %1$s διακόπηκε την τελευταία φορά που χρησιμοποιήθηκε. Θα \'θελες να μοιραστείς μια αναφορά σφάλματος μαζί μας;"</string>
+  <string name="rageshake_detection_dialog_content">"Φαίνεται να κουνάς το τηλέφωνο με σύγχυση. Θες να ανοίξεις την οθόνη αναφοράς σφαλμάτων;"</string>
+  <string name="settings_rageshake">"Rageshake"</string>
+  <string name="settings_rageshake_detection_threshold">"Όριο ανίχνευσης"</string>
+</resources>

@@ -17,7 +17,6 @@
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
-    alias(libs.plugins.ksp)
 }
 
 android {
@@ -34,8 +33,6 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.sessionStorage.api)
     implementation(projects.libraries.uiStrings)
-
-    ksp(libs.showkase.processor)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

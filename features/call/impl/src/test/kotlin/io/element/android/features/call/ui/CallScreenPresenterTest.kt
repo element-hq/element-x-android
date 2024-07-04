@@ -292,6 +292,7 @@ class CallScreenPresenterTest {
             appCoroutineScope = this,
             activeCallManager = activeCallManager,
             screenTracker = screenTracker,
+            languageTagProvider = FakeLanguageTagProvider("en-US"),
         )
     }
 }

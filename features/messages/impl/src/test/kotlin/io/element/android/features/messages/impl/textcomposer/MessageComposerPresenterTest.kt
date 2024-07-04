@@ -27,6 +27,8 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.messages.impl.draft.ComposerDraftService
+import io.element.android.features.messages.impl.draft.FakeComposerDraftService
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.DefaultMessageComposerContext
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
@@ -39,6 +41,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
@@ -47,24 +50,26 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
-import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
+import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
+import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
+import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.test.ANOTHER_MESSAGE
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_REPLY
-import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_TRANSACTION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.A_USER_ID_4
-import io.element.android.libraries.matrix.test.A_USER_NAME
-import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
@@ -168,22 +173,85 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - change mode to edit`() = runTest {
-        val presenter = createPresenter(this)
+        val loadDraftLambda = lambdaRecorder { _: RoomId, _: Boolean ->
+            ComposerDraft(A_MESSAGE, A_MESSAGE, ComposerDraftType.NewMessage)
+        }
+        val updateDraftLambda = lambdaRecorder { _: RoomId, _: ComposerDraft?, _: Boolean -> }
+        val draftService = FakeComposerDraftService().apply {
+            this.loadDraftLambda = loadDraftLambda
+            this.saveDraftLambda = updateDraftLambda
+        }
+        val presenter = createPresenter(
+            coroutineScope = this,
+            draftService = draftService,
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             val state = presenter.present()
             remember(state, state.textEditorState.messageHtml()) { state }
         }.test {
             var state = awaitFirstItem()
-            val mode = anEditMode()
+            val mode = anEditMode(message = ANOTHER_MESSAGE)
             state.eventSink.invoke(MessageComposerEvents.SetMode(mode))
             state = awaitItem()
             assertThat(state.mode).isEqualTo(mode)
-            state = awaitItem()
+            assertThat(state.textEditorState.messageHtml()).isEqualTo(ANOTHER_MESSAGE)
+            state = backToNormalMode(state)
+            // The message that was being edited is cleared and volatile draft is loaded
             assertThat(state.textEditorState.messageHtml()).isEqualTo(A_MESSAGE)
-            state = backToNormalMode(state, skipCount = 1)
 
-            // The message that was being edited is cleared
-            assertThat(state.textEditorState.messageHtml()).isEqualTo("")
+            assert(loadDraftLambda)
+                .isCalledExactly(2)
+                .withSequence(
+                    // Automatic load of draft
+                    listOf(value(A_ROOM_ID), value(false)),
+                    // Load of volatile draft when closing edit mode
+                    listOf(value(A_ROOM_ID), value(true))
+                )
+
+            assert(updateDraftLambda)
+                .isCalledOnce()
+                .with(value(A_ROOM_ID), any(), value(true))
+        }
+    }
+
+    @Test
+    fun `present - change mode to reply after edit`() = runTest {
+        val loadDraftLambda = lambdaRecorder { _: RoomId, _: Boolean ->
+            ComposerDraft(A_MESSAGE, A_MESSAGE, ComposerDraftType.NewMessage)
+        }
+        val updateDraftLambda = lambdaRecorder { _: RoomId, _: ComposerDraft?, _: Boolean -> }
+        val draftService = FakeComposerDraftService().apply {
+            this.loadDraftLambda = loadDraftLambda
+            this.saveDraftLambda = updateDraftLambda
+        }
+        val presenter = createPresenter(
+            coroutineScope = this,
+            draftService = draftService,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            val state = presenter.present()
+            remember(state, state.textEditorState.messageHtml()) { state }
+        }.test {
+            var state = awaitFirstItem()
+            val editMode = anEditMode(message = ANOTHER_MESSAGE)
+            state.eventSink.invoke(MessageComposerEvents.SetMode(editMode))
+            state = awaitItem()
+            assertThat(state.mode).isEqualTo(editMode)
+            assertThat(state.textEditorState.messageHtml()).isEqualTo(ANOTHER_MESSAGE)
+
+            val replyMode = aReplyMode()
+            state.eventSink.invoke(MessageComposerEvents.SetMode(replyMode))
+            state = awaitItem()
+            assertThat(state.mode).isEqualTo(replyMode)
+            assertThat(state.textEditorState.messageHtml()).isEmpty()
+
+            assert(loadDraftLambda)
+                .isCalledOnce()
+                .with(value(A_ROOM_ID), value(false))
+
+            assert(updateDraftLambda)
+                .isCalledOnce()
+                .with(value(A_ROOM_ID), any(), value(true))
         }
     }
 
@@ -219,22 +287,6 @@ class MessageComposerPresenterTest {
 
             // The message typed while replying is not cleared
             assertThat(state.textEditorState.messageHtml()).isEqualTo(A_REPLY)
-        }
-    }
-
-    @Test
-    fun `present - change mode to quote`() = runTest {
-        val presenter = createPresenter(this)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            var state = awaitFirstItem()
-            val mode = aQuoteMode()
-            state.eventSink.invoke(MessageComposerEvents.SetMode(mode))
-            state = awaitItem()
-            assertThat(state.mode).isEqualTo(mode)
-            assertThat(state.textEditorState.messageHtml()).isEqualTo("")
-            backToNormalMode(state)
         }
     }
 
@@ -314,7 +366,6 @@ class MessageComposerPresenterTest {
             assertThat(initialState.textEditorState.messageHtml()).isEqualTo("")
             val mode = anEditMode()
             initialState.eventSink.invoke(MessageComposerEvents.SetMode(mode))
-            skipItems(1)
             val withMessageState = awaitItem()
             assertThat(withMessageState.mode).isEqualTo(mode)
             assertThat(withMessageState.textEditorState.messageHtml()).isEqualTo(A_MESSAGE)
@@ -330,7 +381,7 @@ class MessageComposerPresenterTest {
 
             assert(editMessageLambda)
                 .isCalledOnce()
-                .with(any(), any(), value(ANOTHER_MESSAGE), value(ANOTHER_MESSAGE), any())
+                .with(value(AN_EVENT_ID), value(null), value(ANOTHER_MESSAGE), value(ANOTHER_MESSAGE), any())
 
             assertThat(analyticsService.capturedEvents).containsExactly(
                 Composer(
@@ -364,7 +415,6 @@ class MessageComposerPresenterTest {
             assertThat(initialState.textEditorState.messageHtml()).isEqualTo("")
             val mode = anEditMode(eventId = null, transactionId = A_TRANSACTION_ID)
             initialState.eventSink.invoke(MessageComposerEvents.SetMode(mode))
-            skipItems(1)
             val withMessageState = awaitItem()
             assertThat(withMessageState.mode).isEqualTo(mode)
             assertThat(withMessageState.textEditorState.messageHtml()).isEqualTo(A_MESSAGE)
@@ -380,7 +430,7 @@ class MessageComposerPresenterTest {
 
             assert(editMessageLambda)
                 .isCalledOnce()
-                .with(any(), any(), value(ANOTHER_MESSAGE), value(ANOTHER_MESSAGE), any())
+                .with(value(null), value(A_TRANSACTION_ID), value(ANOTHER_MESSAGE), value(ANOTHER_MESSAGE), any())
 
             assertThat(analyticsService.capturedEvents).containsExactly(
                 Composer(
@@ -843,7 +893,6 @@ class MessageComposerPresenterTest {
 
             // If room is a DM, `RoomMemberSuggestion.Room` is not returned
             room.givenCanTriggerRoomNotification(Result.success(true))
-            room.isDirect
         }
     }
 
@@ -1026,6 +1075,268 @@ class MessageComposerPresenterTest {
         }
     }
 
+    @Test
+    fun `present - when there is no draft, nothing is restored`() = runTest {
+        val loadDraftLambda = lambdaRecorder<RoomId, Boolean, ComposerDraft?> { _, _ -> null }
+        val composerDraftService = FakeComposerDraftService().apply {
+            this.loadDraftLambda = loadDraftLambda
+        }
+        val presenter = createPresenter(draftService = composerDraftService, coroutineScope = this)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitFirstItem()
+            assert(loadDraftLambda)
+                .isCalledOnce()
+                .with(value(A_ROOM_ID), value(false))
+
+            ensureAllEventsConsumed()
+        }
+    }
+
+    @Test
+    fun `present - when there is a draft for new message with plain text, it is restored`() = runTest {
+        val loadDraftLambda = lambdaRecorder<RoomId, Boolean, ComposerDraft?> { _, _ ->
+            ComposerDraft(plainText = A_MESSAGE, htmlText = null, draftType = ComposerDraftType.NewMessage)
+        }
+        val composerDraftService = FakeComposerDraftService().apply {
+            this.loadDraftLambda = loadDraftLambda
+        }
+        val permalinkBuilder = FakePermalinkBuilder()
+        val presenter = createPresenter(
+            draftService = composerDraftService,
+            permalinkBuilder = permalinkBuilder,
+            coroutineScope = this
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitFirstItem().also { state ->
+                assertThat(state.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo(A_MESSAGE)
+                assertThat(state.textEditorState.messageHtml()).isNull()
+            }
+
+            assert(loadDraftLambda)
+                .isCalledOnce()
+                .with(value(A_ROOM_ID), value(false))
+
+            ensureAllEventsConsumed()
+        }
+    }
+
+    @Test
+    fun `present - when there is a draft for new message with rich text, it is restored`() = runTest {
+        val loadDraftLambda = lambdaRecorder<RoomId, Boolean, ComposerDraft?> { _, _ ->
+            ComposerDraft(
+                plainText = A_MESSAGE,
+                htmlText = A_MESSAGE,
+                draftType = ComposerDraftType.NewMessage
+            )
+        }
+        val composerDraftService = FakeComposerDraftService().apply {
+            this.loadDraftLambda = loadDraftLambda
+        }
+        val permalinkBuilder = FakePermalinkBuilder()
+        val presenter = createPresenter(
+            draftService = composerDraftService,
+            permalinkBuilder = permalinkBuilder,
+            coroutineScope = this
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitFirstItem().also { state ->
+                assertThat(state.showTextFormatting).isTrue()
+                assertThat(state.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo(A_MESSAGE)
+                assertThat(state.textEditorState.messageHtml()).isEqualTo(A_MESSAGE)
+            }
+            assert(loadDraftLambda)
+                .isCalledOnce()
+                .with(value(A_ROOM_ID), value(false))
+            ensureAllEventsConsumed()
+        }
+    }
+
+    @Test
+    fun `present - when there is a draft for edit, it is restored`() = runTest {
+        val loadDraftLambda = lambdaRecorder<RoomId, Boolean, ComposerDraft?> { _, _ ->
+            ComposerDraft(
+                plainText = A_MESSAGE,
+                htmlText = null,
+                draftType = ComposerDraftType.Edit(AN_EVENT_ID)
+            )
+        }
+        val composerDraftService = FakeComposerDraftService().apply {
+            this.loadDraftLambda = loadDraftLambda
+        }
+        val permalinkBuilder = FakePermalinkBuilder()
+        val presenter = createPresenter(
+            draftService = composerDraftService,
+            permalinkBuilder = permalinkBuilder,
+            coroutineScope = this
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitFirstItem().also { state ->
+                assertThat(state.showTextFormatting).isFalse()
+                assertThat(state.mode).isEqualTo(anEditMode())
+                assertThat(state.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo(A_MESSAGE)
+                assertThat(state.textEditorState.messageHtml()).isNull()
+            }
+            assert(loadDraftLambda)
+                .isCalledOnce()
+                .with(value(A_ROOM_ID), value(false))
+
+            ensureAllEventsConsumed()
+        }
+    }
+
+    @Test
+    fun `present - when there is a draft for reply, it is restored`() = runTest {
+        val loadDraftLambda = lambdaRecorder<RoomId, Boolean, ComposerDraft?> { _, _ ->
+            ComposerDraft(
+                plainText = A_MESSAGE,
+                htmlText = null,
+                draftType = ComposerDraftType.Reply(AN_EVENT_ID)
+            )
+        }
+        val composerDraftService = FakeComposerDraftService().apply {
+            this.loadDraftLambda = loadDraftLambda
+        }
+        val loadReplyDetailsLambda = lambdaRecorder<EventId, InReplyTo> { eventId ->
+            InReplyTo.Pending(eventId)
+        }
+        val timeline = FakeTimeline().apply {
+            this.loadReplyDetailsLambda = loadReplyDetailsLambda
+        }
+        val room = FakeMatrixRoom(liveTimeline = timeline)
+        val permalinkBuilder = FakePermalinkBuilder()
+        val presenter = createPresenter(
+            room = room,
+            draftService = composerDraftService,
+            permalinkBuilder = permalinkBuilder,
+            coroutineScope = this
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitFirstItem().also { state ->
+                assertThat(state.showTextFormatting).isFalse()
+                assertThat(state.mode).isEqualTo(aReplyMode())
+                assertThat(state.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo(A_MESSAGE)
+                assertThat(state.textEditorState.messageHtml()).isNull()
+            }
+            assert(loadDraftLambda)
+                .isCalledOnce()
+                .with(value(A_ROOM_ID), value(false))
+
+            assert(loadReplyDetailsLambda)
+                .isCalledOnce()
+                .with(value(AN_EVENT_ID))
+
+            ensureAllEventsConsumed()
+        }
+    }
+
+    @Test
+    fun `present - when save draft event is invoked and composer is empty then service is called with null draft`() = runTest {
+        val saveDraftLambda = lambdaRecorder<RoomId, ComposerDraft?, Boolean, Unit> { _, _, _ -> }
+        val composerDraftService = FakeComposerDraftService().apply {
+            this.saveDraftLambda = saveDraftLambda
+        }
+        val presenter = createPresenter(draftService = composerDraftService, coroutineScope = this)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink.invoke(MessageComposerEvents.SaveDraft)
+            advanceUntilIdle()
+            assert(saveDraftLambda)
+                .isCalledOnce()
+                .with(value(A_ROOM_ID), value(null), value(false))
+        }
+    }
+
+    @Test
+    fun `present - when save draft event is invoked and composer is not empty then service is called`() = runTest {
+        val saveDraftLambda = lambdaRecorder<RoomId, ComposerDraft?, Boolean, Unit> { _, _, _ -> }
+        val composerDraftService = FakeComposerDraftService().apply {
+            this.saveDraftLambda = saveDraftLambda
+        }
+        val permalinkBuilder = FakePermalinkBuilder()
+        val presenter = createPresenter(
+            isRichTextEditorEnabled = false,
+            draftService = composerDraftService,
+            permalinkBuilder = permalinkBuilder,
+            coroutineScope = this
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            val state = presenter.present()
+            val messageMarkdown = state.textEditorState.messageMarkdown(permalinkBuilder)
+            remember(state, messageMarkdown) { state }
+        }.test {
+            val initialState = awaitFirstItem()
+            initialState.textEditorState.setMarkdown(A_MESSAGE)
+
+            val withMessageState = awaitItem()
+            assertThat(withMessageState.textEditorState.messageMarkdown(permalinkBuilder)).isEqualTo(A_MESSAGE)
+            withMessageState.eventSink(MessageComposerEvents.SaveDraft)
+            advanceUntilIdle()
+
+            withMessageState.eventSink(MessageComposerEvents.ToggleTextFormatting(true))
+            skipItems(1)
+            val withFormattingState = awaitItem()
+            assertThat(withFormattingState.showTextFormatting).isTrue()
+            withFormattingState.eventSink(MessageComposerEvents.SaveDraft)
+            advanceUntilIdle()
+
+            withFormattingState.eventSink(MessageComposerEvents.SetMode(anEditMode()))
+            val withEditModeState = awaitItem()
+            assertThat(withEditModeState.mode).isEqualTo(anEditMode())
+            withEditModeState.eventSink(MessageComposerEvents.SaveDraft)
+            advanceUntilIdle()
+
+            withEditModeState.eventSink(MessageComposerEvents.SetMode(aReplyMode()))
+            val withReplyModeState = awaitItem()
+            assertThat(withReplyModeState.mode).isEqualTo(aReplyMode())
+            withReplyModeState.eventSink(MessageComposerEvents.SaveDraft)
+            advanceUntilIdle()
+
+            assert(saveDraftLambda)
+                .isCalledExactly(5)
+                .withSequence(
+                    listOf(
+                        value(A_ROOM_ID),
+                        value(ComposerDraft(plainText = A_MESSAGE, htmlText = null, draftType = ComposerDraftType.NewMessage)),
+                        value(false)
+                    ),
+                    listOf(
+                        value(A_ROOM_ID),
+                        value(ComposerDraft(plainText = A_MESSAGE, htmlText = A_MESSAGE, draftType = ComposerDraftType.NewMessage)),
+                        value(false)
+                    ),
+                    listOf(
+                        value(A_ROOM_ID),
+                        value(ComposerDraft(plainText = A_MESSAGE, htmlText = A_MESSAGE, draftType = ComposerDraftType.NewMessage)),
+                        // The volatile draft created when switching to edit mode.
+                        value(true)
+                    ),
+                    listOf(
+                        value(A_ROOM_ID),
+                        value(ComposerDraft(plainText = A_MESSAGE, htmlText = A_MESSAGE, draftType = ComposerDraftType.Edit(AN_EVENT_ID))),
+                        value(false)
+                    ),
+                    listOf(
+                        value(A_ROOM_ID),
+                        // When moving from edit mode, text composer is cleared, so the draft is null
+                        value(null),
+                        value(false)
+                    )
+                )
+        }
+    }
+
     private suspend fun ReceiveTurbine<MessageComposerState>.backToNormalMode(state: MessageComposerState, skipCount: Int = 0): MessageComposerState {
         state.eventSink.invoke(MessageComposerEvents.CloseSpecialMode)
         skipItems(skipCount)
@@ -1045,6 +1356,7 @@ class MessageComposerPresenterTest {
         permissionPresenter: PermissionsPresenter = FakePermissionsPresenter(),
         permalinkBuilder: PermalinkBuilder = FakePermalinkBuilder(),
         isRichTextEditorEnabled: Boolean = true,
+        draftService: ComposerDraftService = FakeComposerDraftService(),
     ) = MessageComposerPresenter(
         coroutineScope,
         room,
@@ -1057,11 +1369,11 @@ class MessageComposerPresenterTest {
         analyticsService,
         DefaultMessageComposerContext(),
         TestRichTextEditorStateFactory(),
-        currentSessionIdHolder = CurrentSessionIdHolder(FakeMatrixClient(A_SESSION_ID)),
         permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionPresenter),
         permalinkParser = FakePermalinkParser(),
         permalinkBuilder = permalinkBuilder,
         timelineController = TimelineController(room),
+        draftService = draftService,
     ).apply {
         isTesting = true
         showTextFormatting = isRichTextEditorEnabled
@@ -1069,7 +1381,7 @@ class MessageComposerPresenterTest {
 
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
         // Skip 2 item if Mentions feature is enabled, else 1
-        skipItems(if (FeatureFlags.Mentions.defaultValue) 2 else 1)
+        skipItems(if (FeatureFlags.Mentions.defaultValue(aBuildMeta())) 2 else 1)
         return awaitItem()
     }
 }
@@ -1078,15 +1390,6 @@ fun anEditMode(
     eventId: EventId? = AN_EVENT_ID,
     message: String = A_MESSAGE,
     transactionId: TransactionId? = null,
-) = MessageComposerMode.Edit(eventId, message, transactionId)
+) = MessageComposerMode.Edit(eventId, transactionId, message)
 
-fun aReplyMode() = MessageComposerMode.Reply(A_USER_NAME, null, false, AN_EVENT_ID, A_MESSAGE)
-fun aQuoteMode() = MessageComposerMode.Quote(AN_EVENT_ID, A_MESSAGE)
-
-private suspend fun TextEditorState.setHtml(html: String) {
-    (this as? TextEditorState.Rich)?.richTextEditorState?.setHtml(html) ?: error("TextEditorState is not Rich")
-}
-
-private fun TextEditorState.setMarkdown(markdown: String) {
-    (this as? TextEditorState.Markdown)?.state?.text?.update(markdown, needsDisplaying = false) ?: error("TextEditorState is not Markdown")
-}
+fun aReplyMode() = MessageComposerMode.Reply(replyToDetails = InReplyToDetails.Loading(AN_EVENT_ID))

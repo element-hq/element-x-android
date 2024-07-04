@@ -16,7 +16,7 @@
 
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.anvil)
     id("kotlin-parcelize")
 }
 
@@ -27,7 +27,13 @@ android {
     }
 }
 
+anvil {
+    generateDaggerFactories.set(true)
+}
+
 dependencies {
+    implementation(projects.anvilannotations)
+    implementation(projects.libraries.architecture)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
@@ -46,8 +52,6 @@ dependencies {
         debugApi(libs.matrix.richtexteditor)
         debugApi(libs.matrix.richtexteditor.compose)
     }
-
-    ksp(libs.showkase.processor)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

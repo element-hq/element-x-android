@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="notification_channel_call">"Κλήση"</string>
+  <string name="notification_channel_listening_for_events">"Ακρόαση για εκδηλώσεις"</string>
+  <string name="notification_channel_noisy">"Θορυβώδεις ειδοποιήσεις"</string>
+  <string name="notification_channel_ringing_calls">"Κουδούνισμα κλήσεων"</string>
+  <string name="notification_channel_silent">"Αθόρυβες ειδοποιήσεις"</string>
+  <plurals name="notification_compat_summary_line_for_room">
+    <item quantity="one">"%1$s: %2$d μήνυμα"</item>
+    <item quantity="other">"%1$s: %2$d μηνύματα"</item>
+  </plurals>
+  <plurals name="notification_compat_summary_title">
+    <item quantity="one">"%d ειδοποίηση"</item>
+    <item quantity="other">"%d ειδοποιήσεις"</item>
+  </plurals>
+  <string name="notification_fallback_content">"Γνωστοποίηση"</string>
+  <string name="notification_incoming_call">"Εισερχόμενη κλήση"</string>
+  <string name="notification_inline_reply_failed">"** Αποτυχία αποστολής - παρακαλώ άνοιξε το δωμάτιο"</string>
+  <string name="notification_invitation_action_join">"Συμμετοχή"</string>
+  <string name="notification_invitation_action_reject">"Απόρριψη"</string>
+  <plurals name="notification_invitations">
+    <item quantity="one">"%d πρόσκληση"</item>
+    <item quantity="other">"%d προσκλήσεις"</item>
+  </plurals>
+  <string name="notification_invite_body">"Σε προσκάλεσε να συνομιλήσετε"</string>
+  <string name="notification_mentioned_you_body">"Σέ ανέφερε: %1$s"</string>
+  <string name="notification_new_messages">"Νέα Μηνύματα"</string>
+  <plurals name="notification_new_messages_for_room">
+    <item quantity="one">"%d νέο μήνυμα"</item>
+    <item quantity="other">"%d νέα μηνύματα"</item>
+  </plurals>
+  <string name="notification_reaction_body">"Αντέδρασε με %1$s"</string>
+  <string name="notification_room_action_mark_as_read">"Επισήμανση ως αναγνωσμένου"</string>
+  <string name="notification_room_action_quick_reply">"Γρήγορη απάντηση"</string>
+  <string name="notification_room_invite_body">"Σέ προσκάλεσε να συμμετάσχεις στο δωμάτιο"</string>
+  <string name="notification_sender_me">"Εγώ"</string>
+  <string name="notification_test_push_notification_content">"Βλέπεις την ειδοποίηση! Κάνε μου κλικ!"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
+  <plurals name="notification_unread_notified_messages">
+    <item quantity="one">"%d μη αναγνωσμένο ειδοποιημένο μήνυμα"</item>
+    <item quantity="other">"%d μη αναγνωσμένα ειδοποημένα μηνύματα"</item>
+  </plurals>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s και %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%1$s σε %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s σε %2$s και %3$s"</string>
+  <plurals name="notification_unread_notified_messages_in_room_rooms">
+    <item quantity="one">"%d δωμάτιο"</item>
+    <item quantity="other">"%d δωμάτια"</item>
+  </plurals>
+  <string name="push_distributor_background_sync_android">"Συγχρονισμός στο παρασκήνιο"</string>
+  <string name="push_distributor_firebase_android">"Υπηρεσίες Google"</string>
+  <string name="push_no_valid_google_play_services_apk_android">"Δεν βρέθηκαν έγκυρες υπηρεσίες Google Play. Οι ειδοποιήσεις ενδέχεται να μην λειτουργούν σωστά."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Λάβε το όνομα του τρέχοντος παρόχου."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Δεν έχουν επιλεγεί πάροχοι push."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Τρέχων πάροχος push: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Τρέχων πάροχος push"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Βεβαιώσου ότι η εφαρμογή διαθέτει τουλάχιστον έναν πάροχο push."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Δεν βρέθηκαν πάροχοι push."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"Βρέθηκε %1$d πάροχος push: %2$s"</item>
+    <item quantity="other">"Βρέθηκαν %1$d πάροχοι push: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Εντοπισμός παρόχων push"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Έλεγξε ότι η εφαρμογή μπορεί να εμφανίσει ειδοποίηση."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"Δεν έχει γίνει κλικ στην ειδοποίηση."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Δεν είναι δυνατή η εμφάνιση της ειδοποίησης."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"Έγινε κλικ στην ειδοποίηση!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Εμφάνιση ειδοποίησης"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Κάνε κλικ στην ειδοποίηση για να συνεχίσεις τη δοκιμή."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"Βεβαιώσου ότι η εφαρμογή λαμβάνει push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Σφάλμα: ο pusher απέρριψε το αίτημα."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Σφάλμα: %1$s."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Σφάλμα, δεν είναι δυνατή η δοκιμή push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Σφάλμα, λήξη χρονικού ορίου αναμένοντας για push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"Το push loop back χρειάστηκε %1$d ms."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"Δοκιμή push loopback"</string>
+</resources>

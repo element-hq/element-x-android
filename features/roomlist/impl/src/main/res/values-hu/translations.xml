@@ -2,6 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="confirm_recovery_key_banner_message">"A csevegés biztonsági mentése nincs szinkronban. Meg kell erősítenie a helyreállítási kulcsát, hogy továbbra is hozzáférjen a csevegés biztonsági mentéséhez."</string>
   <string name="confirm_recovery_key_banner_title">"Helyreállítási kulcs megerősítése"</string>
+  <string name="full_screen_intent_banner_message">"Annak érdekében, hogy soha ne maradjon le egyetlen fontos hívásról sem, módosítsa a beállításokat, hogy engedélyezze a teljes képernyős értesítéseket, amikor a telefon zárolva van."</string>
+  <string name="full_screen_intent_banner_title">"Növelje a hívásélményét"</string>
   <string name="screen_invites_decline_chat_message">"Biztos, hogy elutasítja a meghívást, hogy csatlakozzon ehhez: %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Meghívás elutasítása"</string>
   <string name="screen_invites_decline_direct_chat_message">"Biztos, hogy elutasítja ezt a privát csevegést vele: %1$s?"</string>

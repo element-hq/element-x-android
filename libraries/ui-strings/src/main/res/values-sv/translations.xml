@@ -49,6 +49,7 @@
   <string name="action_decline">"Neka"</string>
   <string name="action_delete_poll">"Radera omröstning"</string>
   <string name="action_disable">"Inaktivera"</string>
+  <string name="action_discard">"Kassera"</string>
   <string name="action_done">"Klar"</string>
   <string name="action_edit">"Redigera"</string>
   <string name="action_edit_poll">"Redigera omröstning"</string>
@@ -57,6 +58,7 @@
   <string name="action_enter_pin">"Ange PIN-kod"</string>
   <string name="action_forgot_password">"Glömt lösenordet?"</string>
   <string name="action_forward">"Vidarebefordra"</string>
+  <string name="action_go_back">"Gå tillbaka"</string>
   <string name="action_invite">"Bjud in"</string>
   <string name="action_invite_friends">"Bjud in personer"</string>
   <string name="action_invite_friends_to_app">"Bjud in personer till %1$s"</string>
@@ -84,6 +86,7 @@
   <string name="action_reply_in_thread">"Svara i tråd"</string>
   <string name="action_report_bug">"Rapportera bugg"</string>
   <string name="action_report_content">"Rapportera innehåll"</string>
+  <string name="action_reset">"Återställ"</string>
   <string name="action_retry">"Försök igen"</string>
   <string name="action_retry_decryption">"Försök att avkryptera igen"</string>
   <string name="action_save">"Spara"</string>
@@ -113,6 +116,7 @@
   <string name="common_audio">"Ljud"</string>
   <string name="common_blocked_users">"Blockerade användare"</string>
   <string name="common_bubbles">"Bubblor"</string>
+  <string name="common_call_invite">"Samtal pågår (stöds inte)"</string>
   <string name="common_chat_backup">"Chattsäkerhetskopia"</string>
   <string name="common_copyright">"Upphovsrätt"</string>
   <string name="common_creating_room">"Skapar rum …"</string>
@@ -181,6 +185,7 @@
   <string name="common_room">"Rum"</string>
   <string name="common_room_name">"Rumsnamn"</string>
   <string name="common_room_name_placeholder">"t.ex. ditt projektnamn"</string>
+  <string name="common_saved_changes">"Sparade ändringar"</string>
   <string name="common_saving">"Sparar"</string>
   <string name="common_screen_lock">"Skärmlås"</string>
   <string name="common_search_for_someone">"Sök efter någon"</string>
@@ -224,6 +229,8 @@
   <string name="dialog_title_error">"Fel"</string>
   <string name="dialog_title_success">"Lyckades"</string>
   <string name="dialog_title_warning">"Varning"</string>
+  <string name="dialog_unsaved_changes_description_android">"Dina ändringar har inte sparats. Är du säker på att du vill gå tillbaka?"</string>
+  <string name="dialog_unsaved_changes_title">"Spara ändringar?"</string>
   <string name="error_failed_creating_the_permalink">"Misslyckades att skapa permalänken"</string>
   <string name="error_failed_loading_map">"%1$s kunde inte ladda kartan. Vänligen försök igen senare."</string>
   <string name="error_failed_loading_messages">"Misslyckades att ladda meddelanden"</string>
@@ -246,6 +253,7 @@
   <string name="screen_room_member_details_block_alert_action">"Blockera"</string>
   <string name="screen_room_member_details_block_alert_description">"Blockerade användare kommer inte att kunna skicka meddelanden till dig och alla deras meddelanden kommer att döljas. Du kan avblockera dem när som helst."</string>
   <string name="screen_room_member_details_block_user">"Blockera användare"</string>
+  <string name="screen_room_member_details_title">"Profil"</string>
   <string name="screen_room_member_details_unblock_alert_action">"Avblockera"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Du kommer att kunna se alla meddelanden från dem igen."</string>
   <string name="screen_room_member_details_unblock_user">"Avblockera användare"</string>

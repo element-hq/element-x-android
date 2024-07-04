@@ -32,7 +32,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -40,8 +46,10 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemGrou
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleStateProvider
 import io.element.android.libraries.core.extensions.to01
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.messageFromMeBackground
@@ -51,6 +59,7 @@ import io.element.android.libraries.testtags.testTag
 
 private val BUBBLE_RADIUS = 12.dp
 internal val BUBBLE_INCOMING_OFFSET = 16.dp
+private val avatarRadius = AvatarSize.TimelineSender.dp / 2
 
 // Design says: The maximum width of a bubble is still 3/4 of the screen width. But try with 85% now.
 private const val BUBBLE_WIDTH_RATIO = 0.85f
@@ -66,11 +75,12 @@ fun MessageEventBubble(
     content: @Composable () -> Unit = {},
 ) {
     fun bubbleShape(): Shape {
+        val topLeftCorner = if (state.cutTopStart) 0.dp else BUBBLE_RADIUS
         return when (state.groupPosition) {
             TimelineItemGroupPosition.First -> if (state.isMine) {
                 RoundedCornerShape(BUBBLE_RADIUS, BUBBLE_RADIUS, 0.dp, BUBBLE_RADIUS)
             } else {
-                RoundedCornerShape(BUBBLE_RADIUS, BUBBLE_RADIUS, BUBBLE_RADIUS, 0.dp)
+                RoundedCornerShape(topLeftCorner, BUBBLE_RADIUS, BUBBLE_RADIUS, 0.dp)
             }
             TimelineItemGroupPosition.Middle -> if (state.isMine) {
                 RoundedCornerShape(BUBBLE_RADIUS, 0.dp, 0.dp, BUBBLE_RADIUS)
@@ -84,7 +94,7 @@ fun MessageEventBubble(
             }
             TimelineItemGroupPosition.None ->
                 RoundedCornerShape(
-                    BUBBLE_RADIUS,
+                    topLeftCorner,
                     BUBBLE_RADIUS,
                     BUBBLE_RADIUS,
                     BUBBLE_RADIUS
@@ -106,11 +116,30 @@ fun MessageEventBubble(
         else -> ElementTheme.colors.messageFromOtherBackground
     }
     val bubbleShape = bubbleShape()
+    val radiusPx = (avatarRadius + SENDER_AVATAR_BORDER_WIDTH).toPx()
+    val yOffsetPx = -(NEGATIVE_MARGIN_FOR_BUBBLE + avatarRadius).toPx()
     Box(
         modifier = modifier
             .fillMaxWidth(BUBBLE_WIDTH_RATIO)
-            .padding(horizontal = 16.dp)
-            .offsetForItem(),
+            .padding(start = avatarRadius, end = 16.dp)
+            .offsetForItem()
+            .graphicsLayer {
+                compositingStrategy = CompositingStrategy.Offscreen
+            }
+            .drawWithContent {
+                drawContent()
+                if (state.cutTopStart) {
+                    drawCircle(
+                        color = Color.Black,
+                        center = Offset(
+                            x = 0f,
+                            y = yOffsetPx,
+                        ),
+                        radius = radiusPx,
+                        blendMode = BlendMode.Clear,
+                    )
+                }
+            },
         // Need to set the contentAlignment again (it's already set in TimelineItemEventRow), for the case
         // when content width is low.
         contentAlignment = if (state.isMine) Alignment.CenterEnd else Alignment.CenterStart
