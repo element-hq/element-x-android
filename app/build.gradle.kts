@@ -37,7 +37,7 @@ plugins {
     alias(libs.plugins.knit)
     id("kotlin-parcelize")
     // To be able to update the firebase.xml files, uncomment and build the project
-    // id("com.google.gms.google-services")
+    id("com.google.gms.google-services")
 }
 
 setupKover()
