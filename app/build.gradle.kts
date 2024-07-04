@@ -49,7 +49,7 @@ android {
         applicationId = if (isEnterpriseBuild) {
             "io.element.enterprise"
         } else {
-            "io.element.android.x"
+            "net.daedric.element"
         }
         targetSdk = Versions.targetSdk
         versionCode = Versions.versionCode
