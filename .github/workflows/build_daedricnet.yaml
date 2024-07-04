@@ -14,7 +14,8 @@ jobs:
   nightly:
     name: Deploy nightly
     concurrency:
-      group: ${{ format('build-release-main-gplay-{0}', github.sha) }}
+      #group: ${{ format('build-release-main-gplay-{0}', github.sha) }}
+      group: ${{ github.ref == 'refs/heads/develop' && format('build-develop-{0}-{1}', matrix.variant, github.sha) || format('build-{0}-{1}', matrix.variant, github.ref)  }}
       cancel-in-progress: true    
     runs-on: ubuntu-latest
     steps:
