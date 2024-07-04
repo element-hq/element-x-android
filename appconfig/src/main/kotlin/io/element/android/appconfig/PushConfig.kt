@@ -20,5 +20,5 @@ object PushConfig {
     /**
      * Note: pusher_app_id cannot exceed 64 chars.
      */
-    const val PUSHER_APP_ID: String = "im.vector.app.android"
+    const val PUSHER_APP_ID: String = "net.daedric.element"
 }
