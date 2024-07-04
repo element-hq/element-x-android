@@ -1,0 +1,50 @@
+name: Create and Release DaedricNET Nightly
+on:
+  # This can be used to automatically publish nightlies at UTC nighttime
+  schedule:
+    - cron: '0 23 * * *' # run at 2 AM UTC
+  # This can be used to allow manually triggering nightlies from the web interface
+  workflow_dispatch:
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx6g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.incremental=false -XX:+UseG1GC
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace --no-daemon -Dsonar.gradle.skipCompile=true  
+
+jobs:
+  nightly:
+    name: Deploy nightly
+    concurrency:
+      group: ${{ format('build-release-main-gplay-{0}', github.sha) }}
+      cancel-in-progress: true    
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
+      - name: Configure gradle
+        uses: gradle/actions/setup-gradle@v3
+      - name: Create app bundle
+        env:
+          ELEMENT_ANDROID_MAPTILER_API_KEY: 'y2pJp6r8fSjQHnFpYNKH'
+          ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: 'streets-v2'
+          ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: 'streets-v2-dark'
+        run: ./gradlew assembleNightly $CI_GRADLE_ARG_PROPERTIES
+      - name: Upload bundle as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: elementx-app-gplay-bundle-unsigned
+          path: |
+            app/build/outputs/apk/gplay/nightly/app-gplay-arm64-v8a-nightly.apk
+
+      - name: Deploy Nightly
+        uses: WebFreak001/deploy-nightly@v3.1.0
+        with:
+          upload_url: https://uploads.github.com/repos/daedric7/element-x-android/releases/161786548/assets{?name,label} # find out this value by opening https://api.github.com/repos/<owner>/<repo>/releases in your browser and copy the full "upload_url" value including the {?name,label} part
+          release_id: 161786548 # same as above (id can just be taken out the upload_url, it's used to find old releases)
+          asset_path: app/build/outputs/apk/gplay/nightly/app-gplay-arm64-v8a-nightly.apk # path to archive to upload
+          asset_name: daedricnet-element-x-$$.apk # name to upload the release as, use $$ to insert date (YYYYMMDD) and 6 letter commit hash
+          asset_content_type: application/vnd.android.package-archive # required by GitHub API
+          max_releases: 1 # optional, if there are more releases than this matching the asset_name, the oldest ones are going to be deleted
