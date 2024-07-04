@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="default_web_client_id" translatable="false">912726360885-e87n3jva9uoj4vbidvijq78ebg02asv2.apps.googleusercontent.com</string>
+    <string name="default_web_client_id" translatable="false">532032404365-e87n3jva9uoj4vbidvijq78ebg02asv2.apps.googleusercontent.com</string>
     <string name="firebase_database_url" translatable="false">https://vector-alpha.firebaseio.com</string>
-    <string name="gcm_defaultSenderId" translatable="false">912726360885</string>
-    <string name="google_api_key" translatable="false">AIzaSyAFZX8IhIfgzdOZvxDP_ISO5WYoU7jmQ5c</string>
-    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAFZX8IhIfgzdOZvxDP_ISO5WYoU7jmQ5c</string>
-    <string name="google_storage_bucket" translatable="false">vector-alpha.appspot.com</string>
-    <string name="project_id" translatable="false" tools:ignore="UnusedResources">vector-alpha</string>
+    <string name="gcm_defaultSenderId" translatable="false">532032404365</string>
+    <string name="google_api_key" translatable="false">AIzaSyAAGwca7l1BN9uatWbC3TsYrPphjdVb4BA</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAAGwca7l1BN9uatWbC3TsYrPphjdVb4BA</string>
+    <string name="google_storage_bucket" translatable="false">matrix-400109.appspot.com</string>
+    <string name="project_id" translatable="false" tools:ignore="UnusedResources">net.daedric.element</string>
 </resources>
