@@ -57,6 +57,12 @@ class RustSessionVerificationService(
     private val encryptionService: Encryption = client.encryption()
     private lateinit var verificationController: SessionVerificationController
 
+    private val _verificationFlowState = MutableStateFlow<VerificationFlowState>(VerificationFlowState.Initial)
+    override val verificationFlowState = _verificationFlowState.asStateFlow()
+
+    private val _sessionVerifiedStatus = MutableStateFlow<SessionVerifiedStatus>(SessionVerifiedStatus.Unknown)
+    override val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus> = _sessionVerifiedStatus.asStateFlow()
+
     // Listen for changes in verification status and update accordingly
     private val verificationStateListenerTaskHandle = encryptionService.verificationStateListener(object : VerificationStateListener {
         override fun onUpdate(status: VerificationState) {
@@ -73,12 +79,6 @@ class RustSessionVerificationService(
             sessionCoroutineScope.launch { updateVerificationStatus() }
         }
     })
-
-    private val _verificationFlowState = MutableStateFlow<VerificationFlowState>(VerificationFlowState.Initial)
-    override val verificationFlowState = _verificationFlowState.asStateFlow()
-
-    private val _sessionVerifiedStatus = MutableStateFlow<SessionVerifiedStatus>(SessionVerifiedStatus.Unknown)
-    override val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus> = _sessionVerifiedStatus.asStateFlow()
 
     /**
      * The internal service that checks verification can only run after the initial sync.
