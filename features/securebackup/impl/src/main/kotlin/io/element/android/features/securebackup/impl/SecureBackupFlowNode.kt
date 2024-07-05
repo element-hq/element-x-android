@@ -81,7 +81,7 @@ class SecureBackupFlowNode @AssistedInject constructor(
         data object CreateNewRecoveryKey : NavTarget
     }
 
-    private val callback = plugins<SecureBackupEntryPoint.Callback>().firstOrNull()
+    private val callbacks = plugins<SecureBackupEntryPoint.Callback>()
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
@@ -130,8 +130,8 @@ class SecureBackupFlowNode @AssistedInject constructor(
             NavTarget.EnterRecoveryKey -> {
                 val callback = object : SecureBackupEnterRecoveryKeyNode.Callback {
                     override fun onEnterRecoveryKeySuccess() {
-                        if (callback != null) {
-                            callback.onDone()
+                        if (callbacks.isNotEmpty()) {
+                            callbacks.forEach { it.onDone() }
                         } else {
                             backstack.pop()
                         }
