@@ -124,7 +124,6 @@ class RoomListPresenter @Inject constructor(
 
         fun handleEvents(event: RoomListEvents) {
             when (event) {
-                is RoomListEvents.UpdateVisibleRange -> updateVisibleRange(event.range)
                 RoomListEvents.DismissRequestVerificationPrompt -> securityBannerDismissed = true
                 RoomListEvents.DismissRecoveryKeyPrompt -> securityBannerDismissed = true
                 RoomListEvents.ToggleSearchResults -> searchState.eventSink(RoomListSearchEvents.ToggleSearchVisibility)
@@ -285,16 +284,6 @@ class RoomListPresenter @Inject constructor(
                     analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle)
                 }
         }
-    }
-
-    private fun updateVisibleRange(range: IntRange) {
-        if (range.isEmpty()) return
-        val midExtendedRangeSize = EXTENDED_RANGE_SIZE / 2
-        val extendedRangeStart = (range.first - midExtendedRangeSize).coerceAtLeast(0)
-        // Safe to give bigger size than room list
-        val extendedRangeEnd = range.last + midExtendedRangeSize
-        val extendedRange = IntRange(extendedRangeStart, extendedRangeEnd)
-        client.roomListService.updateAllRoomsVisibleRange(extendedRange)
     }
 }
 

@@ -204,48 +204,6 @@ class RoomListPresenterTest {
     }
 
     @Test
-    fun `present - update visible range`() = runTest {
-        val roomListService = FakeRoomListService()
-        val matrixClient = FakeMatrixClient(
-            roomListService = roomListService
-        )
-        val scope = CoroutineScope(coroutineContext + SupervisorJob())
-        val presenter = createRoomListPresenter(client = matrixClient, coroutineScope = scope)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            roomListService.postAllRooms(listOf(aRoomSummaryFilled()))
-            val loadedState = awaitItem()
-            // check initial value
-            assertThat(roomListService.latestSlidingSyncRange).isNull()
-            // Test empty range
-            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(1, 0)))
-            assertThat(roomListService.latestSlidingSyncRange).isNull()
-            // Update visible range and check that range is transmitted to the SDK after computation
-            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(0, 0)))
-            assertThat(roomListService.latestSlidingSyncRange)
-                .isEqualTo(IntRange(0, 20))
-            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(0, 1)))
-            assertThat(roomListService.latestSlidingSyncRange)
-                .isEqualTo(IntRange(0, 21))
-            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(19, 29)))
-            assertThat(roomListService.latestSlidingSyncRange)
-                .isEqualTo(IntRange(0, 49))
-            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(49, 59)))
-            assertThat(roomListService.latestSlidingSyncRange)
-                .isEqualTo(IntRange(29, 79))
-            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(149, 159)))
-            assertThat(roomListService.latestSlidingSyncRange)
-                .isEqualTo(IntRange(129, 179))
-            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(149, 259)))
-            assertThat(roomListService.latestSlidingSyncRange)
-                .isEqualTo(IntRange(129, 279))
-            cancelAndIgnoreRemainingEvents()
-            scope.cancel()
-        }
-    }
-
-    @Test
     fun `present - handle DismissRequestVerificationPrompt`() = runTest {
         val scope = CoroutineScope(context = coroutineContext + SupervisorJob())
         val roomListService = FakeRoomListService().apply {

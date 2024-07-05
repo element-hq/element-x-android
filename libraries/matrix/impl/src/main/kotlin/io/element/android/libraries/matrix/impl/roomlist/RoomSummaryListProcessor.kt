@@ -22,7 +22,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
-import org.matrix.rustcomponents.sdk.RoomListEntry
+import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomListServiceInterface
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
@@ -59,6 +59,8 @@ class RoomSummaryListProcessor(
     }
 
     private suspend fun MutableList<RoomSummary>.applyUpdate(update: RoomListEntriesUpdate) {
+        // Remove this comment to debug changes in the room list
+        // Timber.d("Apply room list update: ${describe(update)}")
         when (update) {
             is RoomListEntriesUpdate.Append -> {
                 val roomSummaries = update.values.map {
@@ -104,14 +106,8 @@ class RoomSummaryListProcessor(
         }
     }
 
-    private suspend fun buildSummaryForRoomListEntry(entry: RoomListEntry): RoomSummary {
-        return when (entry) {
-            RoomListEntry.Empty -> buildEmptyRoomSummary()
-            is RoomListEntry.Filled -> buildAndCacheRoomSummaryForIdentifier(entry.roomId)
-            is RoomListEntry.Invalidated -> {
-                roomSummariesByIdentifier[entry.roomId] ?: buildAndCacheRoomSummaryForIdentifier(entry.roomId)
-            }
-        }
+    private suspend fun buildSummaryForRoomListEntry(entry: RoomListItem): RoomSummary {
+        return buildAndCacheRoomSummaryForRoomListItem(entry)
     }
 
     private fun buildEmptyRoomSummary(): RoomSummary {
@@ -120,10 +116,16 @@ class RoomSummaryListProcessor(
 
     private suspend fun buildAndCacheRoomSummaryForIdentifier(identifier: String): RoomSummary {
         val builtRoomSummary = roomListService.roomOrNull(identifier)?.use { roomListItem ->
-            RoomSummary.Filled(
-                details = roomSummaryDetailsFactory.create(roomListItem)
-            )
+            buildAndCacheRoomSummaryForRoomListItem(roomListItem)
         } ?: buildEmptyRoomSummary()
+        roomSummariesByIdentifier[builtRoomSummary.identifier()] = builtRoomSummary
+        return builtRoomSummary
+    }
+
+    private suspend fun buildAndCacheRoomSummaryForRoomListItem(roomListItem: RoomListItem): RoomSummary {
+        val builtRoomSummary = RoomSummary.Filled(
+            details = roomSummaryDetailsFactory.create(roomListItem = roomListItem)
+        )
         roomSummariesByIdentifier[builtRoomSummary.identifier()] = builtRoomSummary
         return builtRoomSummary
     }
@@ -134,6 +136,44 @@ class RoomSummaryListProcessor(
             val mutableRoomSummaries = current.orEmpty().toMutableList()
             block(mutableRoomSummaries)
             roomSummaries.emit(mutableRoomSummaries)
+        }
+    }
+
+    private fun describe(roomListEntriesUpdate: RoomListEntriesUpdate): String {
+        return when (roomListEntriesUpdate) {
+            is RoomListEntriesUpdate.Set -> {
+                "Set #${roomListEntriesUpdate.index} to '${roomListEntriesUpdate.value.displayName()}'"
+            }
+            is RoomListEntriesUpdate.Append -> {
+                "Append ${roomListEntriesUpdate.values.map { "'" + it.displayName() + "'" }}"
+            }
+            is RoomListEntriesUpdate.PushBack -> {
+                "PushBack '${roomListEntriesUpdate.value.displayName()}'"
+            }
+            is RoomListEntriesUpdate.PushFront -> {
+                "PushFront '${roomListEntriesUpdate.value.displayName()}'"
+            }
+            is RoomListEntriesUpdate.Insert -> {
+                "Insert at #${roomListEntriesUpdate.index}: '${roomListEntriesUpdate.value.displayName()}'"
+            }
+            is RoomListEntriesUpdate.Remove -> {
+                "Remove #${roomListEntriesUpdate.index}"
+            }
+            is RoomListEntriesUpdate.Reset -> {
+                "Reset all to ${roomListEntriesUpdate.values.map { "'" + it.displayName()  + "'" }}"
+            }
+            RoomListEntriesUpdate.PopBack -> {
+                "PopBack"
+            }
+            RoomListEntriesUpdate.PopFront -> {
+                "PopFront"
+            }
+            RoomListEntriesUpdate.Clear -> {
+                "Clear"
+            }
+            is RoomListEntriesUpdate.Truncate -> {
+                "Truncate to ${roomListEntriesUpdate.length} items"
+            }
         }
     }
 }
