@@ -38,10 +38,11 @@
     <application>
         <activity
             android:name=".ui.ElementCallActivity"
-            android:configChanges="screenSize|screenLayout|orientation|keyboardHidden|keyboard|navigation|uiMode"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden|keyboard|navigation|uiMode"
             android:exported="true"
             android:label="@string/element_call"
             android:launchMode="singleTask"
+            android:supportsPictureInPicture="true"
             android:taskAffinity="io.element.android.features.call">
 
             <intent-filter android:autoVerify="true">
