@@ -60,12 +60,6 @@ interface RoomListService {
     val allRooms: DynamicRoomList
 
     /**
-     * Will set the visible range of all rooms.
-     * This is useful to load more data when the user scrolls down.
-     */
-    fun updateAllRoomsVisibleRange(range: IntRange)
-
-    /**
      * The sync indicator as a flow.
      */
     val syncIndicator: StateFlow<SyncIndicator>

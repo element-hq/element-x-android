@@ -18,9 +18,9 @@ package io.element.android.libraries.matrix.ui.model
 
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 
-fun RoomSummaryDetails.getAvatarData(size: AvatarSize) = AvatarData(
+fun RoomSummary.getAvatarData(size: AvatarSize) = AvatarData(
     id = roomId.value,
     name = name,
     url = avatarUrl,

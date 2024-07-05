@@ -68,7 +68,7 @@ import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
-import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
+import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
@@ -183,7 +183,7 @@ class RoomListPresenterTest {
             roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
             roomListService.postAllRooms(
                 listOf(
-                    aRoomSummaryFilled(
+                    aRoomSummary(
                         numUnreadMentions = 1,
                         numUnreadMessages = 2,
                     )
@@ -198,48 +198,6 @@ class RoomListPresenterTest {
                     numberOfUnreadMessages = 2,
                 )
             )
-            cancelAndIgnoreRemainingEvents()
-            scope.cancel()
-        }
-    }
-
-    @Test
-    fun `present - update visible range`() = runTest {
-        val roomListService = FakeRoomListService()
-        val matrixClient = FakeMatrixClient(
-            roomListService = roomListService
-        )
-        val scope = CoroutineScope(coroutineContext + SupervisorJob())
-        val presenter = createRoomListPresenter(client = matrixClient, coroutineScope = scope)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            roomListService.postAllRooms(listOf(aRoomSummaryFilled()))
-            val loadedState = awaitItem()
-            // check initial value
-            assertThat(roomListService.latestSlidingSyncRange).isNull()
-            // Test empty range
-            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(1, 0)))
-            assertThat(roomListService.latestSlidingSyncRange).isNull()
-            // Update visible range and check that range is transmitted to the SDK after computation
-            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(0, 0)))
-            assertThat(roomListService.latestSlidingSyncRange)
-                .isEqualTo(IntRange(0, 20))
-            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(0, 1)))
-            assertThat(roomListService.latestSlidingSyncRange)
-                .isEqualTo(IntRange(0, 21))
-            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(19, 29)))
-            assertThat(roomListService.latestSlidingSyncRange)
-                .isEqualTo(IntRange(0, 49))
-            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(49, 59)))
-            assertThat(roomListService.latestSlidingSyncRange)
-                .isEqualTo(IntRange(29, 79))
-            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(149, 159)))
-            assertThat(roomListService.latestSlidingSyncRange)
-                .isEqualTo(IntRange(129, 179))
-            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(149, 259)))
-            assertThat(roomListService.latestSlidingSyncRange)
-                .isEqualTo(IntRange(129, 279))
             cancelAndIgnoreRemainingEvents()
             scope.cancel()
         }
@@ -449,7 +407,7 @@ class RoomListPresenterTest {
         val notificationSettingsService = FakeNotificationSettingsService()
         val roomListService = FakeRoomListService()
         roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
-        roomListService.postAllRooms(listOf(aRoomSummaryFilled(notificationMode = userDefinedMode)))
+        roomListService.postAllRooms(listOf(aRoomSummary(notificationMode = userDefinedMode)))
         val matrixClient = FakeMatrixClient(
             roomListService = roomListService,
             notificationSettingsService = notificationSettingsService
@@ -594,7 +552,7 @@ class RoomListPresenterTest {
         val matrixClient = FakeMatrixClient(
             roomListService = roomListService,
         )
-        val roomSummary = aRoomSummaryFilled(
+        val roomSummary = aRoomSummary(
             currentUserMembership = CurrentUserMembership.INVITED
         )
         roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
@@ -610,7 +568,7 @@ class RoomListPresenterTest {
             }.last()
 
             val roomListRoomSummary = state.contentAsRooms().summaries.first {
-                it.id == roomSummary.identifier()
+                it.id == roomSummary.roomId.value
             }
             state.eventSink(RoomListEvents.AcceptInvite(roomListRoomSummary))
             state.eventSink(RoomListEvents.DeclineInvite(roomListRoomSummary))

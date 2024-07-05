@@ -29,10 +29,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
-import org.matrix.rustcomponents.sdk.RoomListException
-import org.matrix.rustcomponents.sdk.RoomListInput
-import org.matrix.rustcomponents.sdk.RoomListRange
 import org.matrix.rustcomponents.sdk.RoomListServiceState
 import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicator
 import timber.log.Timber
@@ -71,20 +67,6 @@ internal class RustRoomListService(
 
     init {
         allRooms.loadAllIncrementally(sessionCoroutineScope)
-    }
-
-    override fun updateAllRoomsVisibleRange(range: IntRange) {
-        Timber.v("setVisibleRange=$range")
-        sessionCoroutineScope.launch {
-            try {
-                val ranges = listOf(RoomListRange(range.first.toUInt(), range.last.toUInt()))
-                innerRoomListService.applyInput(
-                    RoomListInput.Viewport(ranges)
-                )
-            } catch (exception: RoomListException) {
-                Timber.e(exception, "Failed updating visible range")
-            }
-        }
     }
 
     override val syncIndicator: StateFlow<RoomListService.SyncIndicator> =
