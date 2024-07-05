@@ -26,21 +26,19 @@ val RoomListFilter.predicate
         is RoomListFilter.Any -> { _: RoomSummary -> true }
         RoomListFilter.None -> { _: RoomSummary -> false }
         RoomListFilter.Category.Group -> { roomSummary: RoomSummary ->
-            roomSummary is RoomSummary.Filled && !roomSummary.details.isDirect && !roomSummary.isInvited()
+            !roomSummary.isDirect && !roomSummary.isInvited()
         }
         RoomListFilter.Category.People -> { roomSummary: RoomSummary ->
-            roomSummary is RoomSummary.Filled && roomSummary.details.isDirect && !roomSummary.isInvited()
+            roomSummary.isDirect && !roomSummary.isInvited()
         }
         RoomListFilter.Favorite -> { roomSummary: RoomSummary ->
-            roomSummary is RoomSummary.Filled && roomSummary.details.isFavorite && !roomSummary.isInvited()
+            roomSummary.isFavorite && !roomSummary.isInvited()
         }
         RoomListFilter.Unread -> { roomSummary: RoomSummary ->
-            roomSummary is RoomSummary.Filled &&
-                !roomSummary.isInvited() &&
-                (roomSummary.details.numUnreadNotifications > 0 || roomSummary.details.isMarkedUnread)
+            !roomSummary.isInvited() && (roomSummary.numUnreadNotifications > 0 || roomSummary.isMarkedUnread)
         }
         is RoomListFilter.NormalizedMatchRoomName -> { roomSummary: RoomSummary ->
-            roomSummary is RoomSummary.Filled && roomSummary.details.name.orEmpty().contains(pattern, ignoreCase = true)
+            roomSummary.name.orEmpty().contains(pattern, ignoreCase = true)
         }
         RoomListFilter.Invite -> { roomSummary: RoomSummary ->
             roomSummary.isInvited()
@@ -61,4 +59,4 @@ fun List<RoomSummary>.filter(filter: RoomListFilter): List<RoomSummary> {
     }
 }
 
-private fun RoomSummary.isInvited() = this is RoomSummary.Filled && this.details.currentUserMembership == CurrentUserMembership.INVITED
+private fun RoomSummary.isInvited() = currentUserMembership == CurrentUserMembership.INVITED

@@ -43,15 +43,15 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun SelectedRoom(
-    roomSummary: RoomSummaryDetails,
-    onRemoveRoom: (RoomSummaryDetails) -> Unit,
+    roomSummary: RoomSummary,
+    onRemoveRoom: (RoomSummary) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -100,10 +100,10 @@ fun SelectedRoom(
 @PreviewsDayNight
 @Composable
 internal fun SelectedRoomPreview(
-    @PreviewParameter(RoomSummaryDetailsProvider::class) roomSummaryDetails: RoomSummaryDetails
+    @PreviewParameter(RoomSummaryDetailsProvider::class) roomSummary: RoomSummary
 ) = ElementPreview {
     SelectedRoom(
-        roomSummary = roomSummaryDetails,
+        roomSummary = roomSummary,
         onRemoveRoom = {},
     )
 }

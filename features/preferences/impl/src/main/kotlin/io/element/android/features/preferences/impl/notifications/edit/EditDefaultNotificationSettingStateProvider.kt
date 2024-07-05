@@ -53,13 +53,11 @@ private fun anEditDefaultNotificationSettingsState(
 
 private fun aRoomSummary(
     name: String?,
-) = RoomSummary.Filled(
-    aRoomSummaryDetails(
-        roomId = RoomId("!roomId:domain"),
-        name = name,
-        avatarUrl = null,
-        isDirect = false,
-        lastMessage = null,
-        notificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
-    )
+) = aRoomSummaryDetails(
+    roomId = RoomId("!roomId:domain"),
+    name = name,
+    avatarUrl = null,
+    isDirect = false,
+    lastMessage = null,
+    notificationMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
 )

@@ -26,7 +26,6 @@ import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.RoomListServiceInterface
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
-import java.util.UUID
 import kotlin.coroutines.CoroutineContext
 
 class RoomSummaryListProcessor(
@@ -50,9 +49,9 @@ class RoomSummaryListProcessor(
     suspend fun rebuildRoomSummaries() {
         updateRoomSummaries {
             forEachIndexed { i, summary ->
-                this[i] = when (summary) {
-                    is RoomSummary.Empty -> summary
-                    is RoomSummary.Filled -> buildAndCacheRoomSummaryForIdentifier(summary.identifier())
+                val result = buildAndCacheRoomSummaryForIdentifier(summary.roomId.value)
+                if (result != null) {
+                    this[i] = result
                 }
             }
         }
@@ -110,23 +109,21 @@ class RoomSummaryListProcessor(
         return buildAndCacheRoomSummaryForRoomListItem(entry)
     }
 
-    private fun buildEmptyRoomSummary(): RoomSummary {
-        return RoomSummary.Empty(UUID.randomUUID().toString())
-    }
-
-    private suspend fun buildAndCacheRoomSummaryForIdentifier(identifier: String): RoomSummary {
+    private suspend fun buildAndCacheRoomSummaryForIdentifier(identifier: String): RoomSummary? {
         val builtRoomSummary = roomListService.roomOrNull(identifier)?.use { roomListItem ->
             buildAndCacheRoomSummaryForRoomListItem(roomListItem)
-        } ?: buildEmptyRoomSummary()
-        roomSummariesByIdentifier[builtRoomSummary.identifier()] = builtRoomSummary
+        }
+        if (builtRoomSummary != null) {
+            roomSummariesByIdentifier[identifier] = builtRoomSummary
+        } else {
+            roomSummariesByIdentifier.remove(identifier)
+        }
         return builtRoomSummary
     }
 
     private suspend fun buildAndCacheRoomSummaryForRoomListItem(roomListItem: RoomListItem): RoomSummary {
-        val builtRoomSummary = RoomSummary.Filled(
-            details = roomSummaryDetailsFactory.create(roomListItem = roomListItem)
-        )
-        roomSummariesByIdentifier[builtRoomSummary.identifier()] = builtRoomSummary
+        val builtRoomSummary = roomSummaryDetailsFactory.create(roomListItem = roomListItem)
+        roomSummariesByIdentifier[builtRoomSummary.roomId.value] = builtRoomSummary
         return builtRoomSummary
     }
 

@@ -48,7 +48,6 @@ class RoomListSearchDataSource @Inject constructor(
     val roomSummaries: Flow<PersistentList<RoomListRoomSummary>> = roomList.filteredSummaries
         .map { roomSummaries ->
             roomSummaries
-                .filterIsInstance<RoomSummary.Filled>()
                 .map(roomSummaryFactory::create)
                 .toPersistentList()
         }

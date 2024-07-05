@@ -25,7 +25,6 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -59,7 +58,7 @@ fun aRoomSummaryFilled(
 )
 
 fun aRoomSummaryFilled(
-    details: RoomSummaryDetails = aRoomSummaryDetails(),
+    details: RoomSummary = aRoomSummaryDetails(),
 ) = RoomSummary.Filled(details)
 
 fun aRoomSummaryDetails(
@@ -80,7 +79,7 @@ fun aRoomSummaryDetails(
     isFavorite: Boolean = false,
     currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,
     heroes: List<MatrixUser> = emptyList(),
-) = RoomSummaryDetails(
+) = RoomSummary(
     roomId = roomId,
     name = name,
     isDirect = isDirect,
