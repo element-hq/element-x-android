@@ -30,6 +30,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -165,6 +170,18 @@ private fun RoomsViewList(
     modifier: Modifier = Modifier,
 ) {
     val lazyListState = rememberLazyListState()
+    val visibleRange by remember {
+        derivedStateOf {
+            val layoutInfo = lazyListState.layoutInfo
+            val firstItemIndex = layoutInfo.visibleItemsInfo.firstOrNull()?.index ?: 0
+            val size = layoutInfo.visibleItemsInfo.size
+            firstItemIndex until firstItemIndex + size
+        }
+    }
+    val updatedEventSink by rememberUpdatedState(newValue = eventSink)
+    LaunchedEffect(visibleRange) {
+        updatedEventSink(RoomListEvents.UpdateVisibleRange(visibleRange))
+    }
     LazyColumn(
         state = lazyListState,
         modifier = modifier,
@@ -177,7 +194,7 @@ private fun RoomsViewList(
                     item {
                         ConfirmRecoveryKeyBanner(
                             onContinueClick = onConfirmRecoveryKeyClick,
-                            onDismissClick = { eventSink(RoomListEvents.DismissRecoveryKeyPrompt) }
+                            onDismissClick = { updatedEventSink(RoomListEvents.DismissRecoveryKeyPrompt) }
                         )
                     }
                 }

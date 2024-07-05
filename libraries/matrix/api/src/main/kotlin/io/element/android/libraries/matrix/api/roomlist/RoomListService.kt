@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.api.roomlist
 
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.matrix.api.core.RoomId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -52,6 +53,12 @@ interface RoomListService {
         initialFilter: RoomListFilter,
         source: RoomList.Source,
     ): DynamicRoomList
+
+    /**
+     * Subscribes to sync requests for the visible rooms.
+     * @param roomIds the list of visible room ids to subscribe to.
+     */
+    suspend fun subscribeToVisibleRooms(roomIds: List<RoomId>)
 
     /**
      * Returns a [DynamicRoomList] object of all rooms we want to display.

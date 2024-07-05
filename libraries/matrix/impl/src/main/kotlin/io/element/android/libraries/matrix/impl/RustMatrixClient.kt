@@ -55,6 +55,7 @@ import io.element.android.libraries.matrix.impl.notificationsettings.RustNotific
 import io.element.android.libraries.matrix.impl.oidc.toRustAction
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
+import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustRoomFactory
 import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewMapper
 import io.element.android.libraries.matrix.impl.roomdirectory.RustRoomDirectoryService
@@ -213,6 +214,8 @@ class RustMatrixClient(
         }
     }
 
+    private val roomSyncSubscriber: RoomSyncSubscriber = RoomSyncSubscriber(innerRoomListService, dispatchers)
+
     override val roomListService: RoomListService = RustRoomListService(
         innerRoomListService = innerRoomListService,
         sessionCoroutineScope = sessionCoroutineScope,
@@ -221,6 +224,7 @@ class RustMatrixClient(
             innerRoomListService = innerRoomListService,
             sessionCoroutineScope = sessionCoroutineScope,
         ),
+        roomSyncSubscriber = roomSyncSubscriber,
     )
 
     private val verificationService = RustSessionVerificationService(
@@ -238,6 +242,7 @@ class RustMatrixClient(
         dispatchers = dispatchers,
         systemClock = clock,
         roomContentForwarder = RoomContentForwarder(innerRoomListService),
+        roomSyncSubscriber = roomSyncSubscriber,
         isKeyBackupEnabled = { client.encryption().use { it.backupState() == BackupState.ENABLED } },
         getSessionData = { sessionStore.getSession(sessionId.value)!! },
     )

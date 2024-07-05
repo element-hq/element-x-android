@@ -113,9 +113,7 @@ class RoomSummaryListProcessor(
         val builtRoomSummary = roomListService.roomOrNull(identifier)?.use { roomListItem ->
             buildAndCacheRoomSummaryForRoomListItem(roomListItem)
         }
-        if (builtRoomSummary != null) {
-            roomSummariesByIdentifier[identifier] = builtRoomSummary
-        } else {
+        if (builtRoomSummary == null) {
             roomSummariesByIdentifier.remove(identifier)
         }
         return builtRoomSummary
