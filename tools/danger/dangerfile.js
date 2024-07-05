@@ -125,19 +125,39 @@ const filesWithPreviews = editedFiles.filter(file => file.endsWith(".kt")).filte
     return previewAnnotations.some((ann) => content.includes(ann));
 })
 
-const buildFilesWithMissingProcessor = filesWithPreviews.map(file => {
-    let parent = path.dirname(file);
-    while (fs.statSync(path.join(parent, 'build.gradle.kts'), {throwIfNoEntry: false}) === undefined) {
-        parent = path.dirname(parent);
-    }
-    return path.join(parent, 'build.gradle.kts');
-}).filter((value, index, array) => array.indexOf(value) === index).filter(buildFile => {
-    const content = fs.readFileSync(buildFile);
-    return !content.includes('ksp(libs.showkase.processor)');
-})
+const composablePreviewProviderContents = fs.readFileSync('tests/uitests/src/test/kotlin/base/ComposablePreviewProvider.kt');
+const packageTreesRegex = /private val PACKAGE_TREES = arrayOf\(([\w\W]+?)\n\)/gm;
+const packageTreesMatch = packageTreesRegex.exec(composablePreviewProviderContents)[1];
+const scannedPreviewPackageTrees = packageTreesMatch
+    .replaceAll("\"", "")
+    .replaceAll(",", "")
+    .split('\n').map((line) => line.trim())
+    .filter((line) => line.length > 0);
 
-if (buildFilesWithMissingProcessor.length > 0) {
-    warn("You have made changes to a file containing a `@Preview` annotated function but its module doesn't include the showkase processor. Missing processor in: " + buildFilesWithMissingProcessor.join(", "))
+const previewPackagesNotIncludedInScreenshotTests = filesWithPreviews.map((file) => {
+    const content = fs.readFileSync(file);
+    const packageRegex = /package\s+([a-zA-Z0-9.]+)/;
+    const packageMatch = packageRegex.exec(content);
+
+    if (!packageMatch || packageMatch.length != 2) {
+        return null;
+    }
+
+    return packageMatch[1];
+
+
+}).filter((package) => {
+    if (!package) {
+        return false;
+    }
+    if (!scannedPreviewPackageTrees.some((prefix) => package.includes(prefix))) {
+        return true;
+    }
+});
+
+if (previewPackagesNotIncludedInScreenshotTests.length > 0) {
+    const packagesList = previewPackagesNotIncludedInScreenshotTests.map((p) => '- `' + p + '`').join("\n");
+    warn("You have made changes to a file containing a `@Preview` annotated function but its package name prefix is not included in the `ComposablePreviewProvider`.\nPackages missing in `tests/uitests/src/test/kotlin/base/ComposablePreviewProvider.kt`: \n" + packagesList);
 }
 
 // Check for pngs on resources

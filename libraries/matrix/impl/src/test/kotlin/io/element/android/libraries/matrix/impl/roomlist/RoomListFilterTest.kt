@@ -19,46 +19,31 @@ package io.element.android.libraries.matrix.impl.roomlist
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
-import io.element.android.libraries.matrix.test.room.aRoomSummaryDetails
-import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
+import io.element.android.libraries.matrix.test.room.aRoomSummary
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class RoomListFilterTest {
-    private val regularRoom = aRoomSummaryFilled(
-        aRoomSummaryDetails(
-            isDirect = false
-        )
+    private val regularRoom = aRoomSummary(
+        isDirect = false
     )
-    private val directRoom = aRoomSummaryFilled(
-        aRoomSummaryDetails(
-            isDirect = true
-        )
+    private val directRoom = aRoomSummary(
+        isDirect = true
     )
-    private val favoriteRoom = aRoomSummaryFilled(
-        aRoomSummaryDetails(
-            isFavorite = true
-        )
+    private val favoriteRoom = aRoomSummary(
+        isFavorite = true
     )
-    private val markedAsUnreadRoom = aRoomSummaryFilled(
-        aRoomSummaryDetails(
-            isMarkedUnread = true
-        )
+    private val markedAsUnreadRoom = aRoomSummary(
+        isMarkedUnread = true
     )
-    private val unreadNotificationRoom = aRoomSummaryFilled(
-        aRoomSummaryDetails(
-            numUnreadNotifications = 1
-        )
+    private val unreadNotificationRoom = aRoomSummary(
+        numUnreadNotifications = 1
     )
-    private val roomToSearch = aRoomSummaryFilled(
-        aRoomSummaryDetails(
-            name = "Room to search"
-        )
+    private val roomToSearch = aRoomSummary(
+        name = "Room to search"
     )
-    private val invitedRoom = aRoomSummaryFilled(
-        aRoomSummaryDetails(
-            currentUserMembership = CurrentUserMembership.INVITED
-        )
+    private val invitedRoom = aRoomSummary(
+        currentUserMembership = CurrentUserMembership.INVITED
     )
 
     private val roomSummaries = listOf(

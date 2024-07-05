@@ -54,7 +54,7 @@ class RoomListDataSource @Inject constructor(
     private val lock = Mutex()
     private val diffCache = MutableListDiffCache<RoomListRoomSummary>()
     private val diffCacheUpdater = DiffCacheUpdater<RoomSummary, RoomListRoomSummary>(diffCache = diffCache, detectMoves = true) { old, new ->
-        old?.identifier() == new?.identifier()
+        old?.roomId == new?.roomId
     }
 
     fun launchIn(coroutineScope: CoroutineScope) {
@@ -96,12 +96,8 @@ class RoomListDataSource @Inject constructor(
     }
 
     private fun buildAndCacheItem(roomSummaries: List<RoomSummary>, index: Int): RoomListRoomSummary? {
-        val roomListRoomSummary = when (val roomSummary = roomSummaries.getOrNull(index)) {
-            is RoomSummary.Empty -> RoomListRoomSummaryFactory.createPlaceholder(roomSummary.identifier)
-            is RoomSummary.Filled -> roomListRoomSummaryFactory.create(roomSummary)
-            null -> null
-        }
-        diffCache[index] = roomListRoomSummary
-        return roomListRoomSummary
+        val roomListSummary = roomSummaries.getOrNull(index)?.let { roomListRoomSummaryFactory.create(it) }
+        diffCache[index] = roomListSummary
+        return roomListSummary
     }
 }

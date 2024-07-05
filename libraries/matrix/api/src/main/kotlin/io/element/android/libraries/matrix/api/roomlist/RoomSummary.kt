@@ -24,19 +24,7 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
-sealed interface RoomSummary {
-    data class Empty(val identifier: String) : RoomSummary
-    data class Filled(val details: RoomSummaryDetails) : RoomSummary
-
-    fun identifier(): String {
-        return when (this) {
-            is Empty -> identifier
-            is Filled -> details.roomId.value
-        }
-    }
-}
-
-data class RoomSummaryDetails(
+data class RoomSummary(
     val roomId: RoomId,
     val name: String?,
     val canonicalAlias: RoomAlias?,

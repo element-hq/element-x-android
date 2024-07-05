@@ -76,7 +76,7 @@ internal fun RoomListInterface.entriesFlow(
             }
         }
         val result = entriesWithDynamicAdapters(pageSize.toUInt(), listener)
-        val controller = result.controller
+        val controller = result.controller()
         controller.setFilter(initialFilterKind)
         roomListDynamicEvents.onEach { controllerEvents ->
             when (controllerEvents) {
@@ -92,7 +92,8 @@ internal fun RoomListInterface.entriesFlow(
             }
         }.launchIn(this)
         awaitClose {
-            result.entriesStream.cancelAndDestroy()
+            result.entriesStream().cancelAndDestroy()
+            controller.destroy()
             result.destroy()
         }
     }.catch {

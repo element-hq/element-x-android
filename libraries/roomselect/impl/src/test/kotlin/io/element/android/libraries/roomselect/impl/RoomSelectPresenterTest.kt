@@ -23,8 +23,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import io.element.android.libraries.matrix.test.room.aRoomSummaryDetails
+import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.tests.testutils.WarmUpRule
@@ -69,7 +68,7 @@ class RoomSelectPresenterTest {
     @Test
     fun `present - update query`() = runTest {
         val roomListService = FakeRoomListService().apply {
-            postAllRooms(listOf(RoomSummary.Filled(aRoomSummaryDetails())))
+            postAllRooms(listOf(aRoomSummary()))
         }
         val presenter = createRoomSelectPresenter(
             roomListService = roomListService
@@ -78,7 +77,7 @@ class RoomSelectPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(awaitItem().resultState as? SearchBarResultState.Results).isEqualTo(SearchBarResultState.Results(listOf(aRoomSummaryDetails())))
+            assertThat(awaitItem().resultState as? SearchBarResultState.Results).isEqualTo(SearchBarResultState.Results(listOf(aRoomSummary())))
             initialState.eventSink(RoomSelectEvents.ToggleSearchActive)
             skipItems(1)
             initialState.eventSink(RoomSelectEvents.UpdateQuery("string not contained"))
@@ -98,7 +97,7 @@ class RoomSelectPresenterTest {
     @Test
     fun `present - select and remove a room`() = runTest {
         val roomListService = FakeRoomListService().apply {
-            postAllRooms(listOf(RoomSummary.Filled(aRoomSummaryDetails())))
+            postAllRooms(listOf(aRoomSummary()))
         }
         val presenter = createRoomSelectPresenter(
             roomListService = roomListService,
@@ -107,7 +106,7 @@ class RoomSelectPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            val summary = aRoomSummaryDetails()
+            val summary = aRoomSummary()
             initialState.eventSink(RoomSelectEvents.SetSelectedRoom(summary))
             assertThat(awaitItem().selectedRooms).isEqualTo(persistentListOf(summary))
             initialState.eventSink(RoomSelectEvents.RemoveSelectedRoom)

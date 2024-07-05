@@ -311,7 +311,7 @@ class RustMatrixClient(
         withTimeout(timeout) {
             roomListService.allRooms.summaries
                 .filter { roomSummaries ->
-                    roomSummaries.map { it.identifier() }.contains(roomId.value)
+                    roomSummaries.map { it.roomId }.contains(roomId)
                 }
                 .first()
         }

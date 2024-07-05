@@ -46,9 +46,6 @@ class FakeRoomListService : RoomListService {
         syncIndicatorStateFlow.emit(value)
     }
 
-    var latestSlidingSyncRange: IntRange? = null
-        private set
-
     override fun createRoomList(
         pageSize: Int,
         initialFilter: RoomListFilter,
@@ -64,10 +61,6 @@ class FakeRoomListService : RoomListService {
         allRoomsLoadingStateFlow,
         MutableStateFlow(RoomListFilter.all())
     )
-
-    override fun updateAllRoomsVisibleRange(range: IntRange) {
-        latestSlidingSyncRange = range
-    }
 
     override val state: StateFlow<RoomListService.State> = roomListStateFlow
 

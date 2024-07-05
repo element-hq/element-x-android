@@ -28,8 +28,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
+import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
@@ -117,10 +116,7 @@ class RoomListSearchPresenterTest {
                 assertThat(state.results).isEmpty()
             }
             roomListService.postAllRooms(
-                listOf(
-                    RoomSummary.Empty("1"),
-                    aRoomSummaryFilled()
-                )
+                listOf(aRoomSummary())
             )
             awaitItem().let { state ->
                 assertThat(state.results).hasSize(1)

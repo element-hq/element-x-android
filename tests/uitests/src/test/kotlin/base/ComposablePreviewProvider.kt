@@ -23,18 +23,20 @@ import sergio.sastre.composable.preview.scanner.android.AndroidComposablePreview
 import sergio.sastre.composable.preview.scanner.android.AndroidPreviewInfo
 import sergio.sastre.composable.preview.scanner.core.preview.ComposablePreview
 
+// Make sure we don't import Compound previews by mistake
+private val PACKAGE_TREES = arrayOf(
+    "io.element.android.features",
+    "io.element.android.libraries",
+    "io.element.android.services",
+    "io.element.android.appicon",
+    "io.element.android.appnav",
+    "io.element.android.x",
+)
+
 object ComposablePreviewProvider : TestParameter.TestParameterValuesProvider {
     private val values: List<IndexedValue<ComposablePreview<AndroidPreviewInfo>>> by lazy {
         AndroidComposablePreviewScanner()
-            .scanPackageTrees(
-                "io.element.android.features",
-                "io.element.android.libraries",
-                "io.element.android.services",
-                "io.element.android.appicon",
-                "io.element.android.appnav",
-                "io.element.android.x",
-                // Make sure we don't import Compound previews by mistake
-            )
+            .scanPackageTrees(*PACKAGE_TREES)
             .getPreviews()
             .withIndex()
             .toList()

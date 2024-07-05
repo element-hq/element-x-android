@@ -29,7 +29,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
-import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -45,7 +45,7 @@ class RoomSelectPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): RoomSelectState {
-        var selectedRooms by remember { mutableStateOf(persistentListOf<RoomSummaryDetails>()) }
+        var selectedRooms by remember { mutableStateOf(persistentListOf<RoomSummary>()) }
         var searchQuery by remember { mutableStateOf("") }
         var isSearchActive by remember { mutableStateOf(false) }
 
