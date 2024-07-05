@@ -20,13 +20,11 @@ import com.google.common.truth.Truth.assertThat
 import com.sun.jna.Pointer
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
-import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
@@ -171,7 +169,6 @@ class RoomSummaryListProcessorTest {
         fakeRoomListService,
         coroutineContext = StandardTestDispatcher(testScheduler),
         roomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
-        roomSyncSubscriber = RoomSyncSubscriber(fakeRoomListService, testCoroutineDispatchers())
     )
 
     // Fake room list service that returns Rust objects with null pointers. Luckily for us, they don't crash for our test cases
