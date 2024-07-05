@@ -68,7 +68,7 @@ import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
-import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
+import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
@@ -183,7 +183,7 @@ class RoomListPresenterTest {
             roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
             roomListService.postAllRooms(
                 listOf(
-                    aRoomSummaryFilled(
+                    aRoomSummary(
                         numUnreadMentions = 1,
                         numUnreadMessages = 2,
                     )
@@ -407,7 +407,7 @@ class RoomListPresenterTest {
         val notificationSettingsService = FakeNotificationSettingsService()
         val roomListService = FakeRoomListService()
         roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
-        roomListService.postAllRooms(listOf(aRoomSummaryFilled(notificationMode = userDefinedMode)))
+        roomListService.postAllRooms(listOf(aRoomSummary(notificationMode = userDefinedMode)))
         val matrixClient = FakeMatrixClient(
             roomListService = roomListService,
             notificationSettingsService = notificationSettingsService
@@ -552,7 +552,7 @@ class RoomListPresenterTest {
         val matrixClient = FakeMatrixClient(
             roomListService = roomListService,
         )
-        val roomSummary = aRoomSummaryFilled(
+        val roomSummary = aRoomSummary(
             currentUserMembership = CurrentUserMembership.INVITED
         )
         roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
@@ -568,7 +568,7 @@ class RoomListPresenterTest {
             }.last()
 
             val roomListRoomSummary = state.contentAsRooms().summaries.first {
-                it.id == roomSummary.identifier()
+                it.id == roomSummary.roomId.value
             }
             state.eventSink(RoomListEvents.AcceptInvite(roomListRoomSummary))
             state.eventSink(RoomListEvents.DeclineInvite(roomListRoomSummary))

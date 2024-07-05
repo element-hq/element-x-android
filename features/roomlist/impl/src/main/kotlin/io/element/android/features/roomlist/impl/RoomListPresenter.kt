@@ -78,8 +78,6 @@ import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val EXTENDED_RANGE_SIZE = 40
-
 class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
     private val networkMonitor: NetworkMonitor,

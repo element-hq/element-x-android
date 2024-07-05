@@ -43,25 +43,19 @@ fun aRoomSummaryFilled(
     numUnreadMessages: Int = 0,
     notificationMode: RoomNotificationMode? = null,
     currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,
-) = RoomSummary.Filled(
-    aRoomSummaryDetails(
-        roomId = roomId,
-        name = name,
-        isDirect = isDirect,
-        avatarUrl = avatarUrl,
-        lastMessage = lastMessage,
-        numUnreadMentions = numUnreadMentions,
-        numUnreadMessages = numUnreadMessages,
-        notificationMode = notificationMode,
-        currentUserMembership = currentUserMembership,
-    )
+) = aRoomSummary(
+    roomId = roomId,
+    name = name,
+    isDirect = isDirect,
+    avatarUrl = avatarUrl,
+    lastMessage = lastMessage,
+    numUnreadMentions = numUnreadMentions,
+    numUnreadMessages = numUnreadMessages,
+    notificationMode = notificationMode,
+    currentUserMembership = currentUserMembership,
 )
 
-fun aRoomSummaryFilled(
-    details: RoomSummary = aRoomSummaryDetails(),
-) = RoomSummary.Filled(details)
-
-fun aRoomSummaryDetails(
+fun aRoomSummary(
     roomId: RoomId = A_ROOM_ID,
     name: String? = A_ROOM_NAME,
     isDirect: Boolean = false,

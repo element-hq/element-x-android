@@ -39,7 +39,7 @@ internal fun RoomListEntriesUpdate.describe(): String {
             "Remove #$index"
         }
         is RoomListEntriesUpdate.Reset -> {
-            "Reset all to ${values.map { "'" + it.displayName()  + "'" }}"
+            "Reset all to ${values.map { "'" + it.displayName() + "'" }}"
         }
         RoomListEntriesUpdate.PopBack -> {
             "PopBack"
