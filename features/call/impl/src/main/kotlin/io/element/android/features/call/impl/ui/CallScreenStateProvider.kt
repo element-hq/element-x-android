@@ -28,7 +28,7 @@ open class CallScreenStateProvider : PreviewParameterProvider<CallScreenState> {
         )
 }
 
-private fun aCallScreenState(
+internal fun aCallScreenState(
     urlState: AsyncData<String> = AsyncData.Success("https://call.element.io/some-actual-call?with=parameters"),
     userAgent: String = "",
     isInWidgetMode: Boolean = false,
