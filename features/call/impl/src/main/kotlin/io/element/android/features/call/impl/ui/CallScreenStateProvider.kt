@@ -23,6 +23,7 @@ open class CallScreenStateProvider : PreviewParameterProvider<CallScreenState> {
     override val values: Sequence<CallScreenState>
         get() = sequenceOf(
             aCallScreenState(),
+            aCallScreenState(urlState = AsyncData.Loading()),
             aCallScreenState(urlState = AsyncData.Failure(Exception("An error occurred"))),
         )
 }
