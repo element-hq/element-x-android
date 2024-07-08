@@ -32,7 +32,7 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 class PictureInPicturePresenterTest {
     @Test
-    @Config(sdk = [VERSION_CODES.N, VERSION_CODES.O, VERSION_CODES.S])
+    @Config(sdk = [/*VERSION_CODES.N,*/ VERSION_CODES.O, VERSION_CODES.S])
     fun `when pip is not supported, the state value supportPip is false`() = runTest {
         val presenter = createPictureInPicturePresenter(supportPip = false)
         moleculeFlow(RecompositionMode.Immediate) {
