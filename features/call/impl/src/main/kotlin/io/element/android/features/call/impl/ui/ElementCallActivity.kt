@@ -94,10 +94,10 @@ class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
                 appPreferencesStore.getThemeFlow().mapToTheme()
             }
                 .collectAsState(initial = Theme.System)
-            val state = presenter.present()
             ElementTheme(
                 darkTheme = theme.isDark()
             ) {
+                val state = presenter.present()
                 CallScreenView(
                     state = state,
                     requestPermissions = { permissions, callback ->
