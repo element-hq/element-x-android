@@ -20,8 +20,15 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.core.content.IntentCompat
 import androidx.lifecycle.lifecycleScope
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.theme.Theme
+import io.element.android.compound.theme.isDark
+import io.element.android.compound.theme.mapToTheme
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.call.impl.di.CallBindings
@@ -29,6 +36,7 @@ import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.utils.ActiveCallManager
 import io.element.android.features.call.impl.utils.CallState
 import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -51,6 +59,9 @@ class IncomingCallActivity : AppCompatActivity() {
     @Inject
     lateinit var activeCallManager: ActiveCallManager
 
+    @Inject
+    lateinit var appPreferencesStore: AppPreferencesStore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -68,11 +79,19 @@ class IncomingCallActivity : AppCompatActivity() {
         val notificationData = intent?.let { IntentCompat.getParcelableExtra(it, EXTRA_NOTIFICATION_DATA, CallNotificationData::class.java) }
         if (notificationData != null) {
             setContent {
-                IncomingCallScreen(
-                    notificationData = notificationData,
-                    onAnswer = ::onAnswer,
-                    onCancel = ::onCancel,
-                )
+                val theme by remember {
+                    appPreferencesStore.getThemeFlow().mapToTheme()
+                }
+                    .collectAsState(initial = Theme.System)
+                ElementTheme(
+                    darkTheme = theme.isDark()
+                ) {
+                    IncomingCallScreen(
+                        notificationData = notificationData,
+                        onAnswer = ::onAnswer,
+                        onCancel = ::onCancel,
+                    )
+                }
             }
         } else {
             // No data, finish the activity
