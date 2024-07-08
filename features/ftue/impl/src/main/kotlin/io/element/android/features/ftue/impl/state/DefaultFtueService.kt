@@ -35,6 +35,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
@@ -70,6 +71,7 @@ class DefaultFtueService @Inject constructor(
             .launchIn(sessionCoroutineScope)
 
         analyticsService.didAskUserConsent()
+            .distinctUntilChanged()
             .onEach { updateState() }
             .launchIn(sessionCoroutineScope)
     }
@@ -120,10 +122,7 @@ class DefaultFtueService @Inject constructor(
                 emit(SessionVerifiedStatus.NotVerified)
             }
             .first()
-        // For some obscure reason we need to call this *before* we check the `readyVerifiedSessionStatus`, otherwise there's a deadlock
-        // It seems like a DataStore bug
-        val skipVerification = canSkipVerification()
-        return readyVerifiedSessionStatus == SessionVerifiedStatus.NotVerified && !skipVerification
+        return readyVerifiedSessionStatus == SessionVerifiedStatus.NotVerified && !canSkipVerification()
     }
 
     private suspend fun canSkipVerification(): Boolean {
@@ -131,7 +130,6 @@ class DefaultFtueService @Inject constructor(
     }
 
     private suspend fun needsAnalyticsOptIn(): Boolean {
-        // We need this function to not be suspend, so we need to load the value through runBlocking
         return analyticsService.didAskUserConsent().first().not()
     }
 
