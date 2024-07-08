@@ -48,6 +48,6 @@ class EventsRecorder<T>(
     }
 
     fun assertTrue(index: Int, predicate: (T) -> Boolean) {
-        assertThat((predicate(events[index]))).isTrue()
+        assertThat(predicate(events[index])).isTrue()
     }
 }
