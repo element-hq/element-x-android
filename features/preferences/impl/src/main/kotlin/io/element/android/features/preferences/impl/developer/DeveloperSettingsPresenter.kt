@@ -114,7 +114,7 @@ class DeveloperSettingsPresenter @Inject constructor(
                     appPreferencesStore.setCustomElementCallBaseUrl(urlToSave)
                 }
                 is DeveloperSettingsEvents.SetCustomSlidingSyncProxy -> coroutineScope.launch {
-                    appPreferencesStore.setCustomSlidingSyncProxy(event.proxy)
+                    appPreferencesStore.setCustomSlidingSyncProxy(event.proxy?.takeIf { it.isNotBlank() })
                 }
                 DeveloperSettingsEvents.ClearCache -> coroutineScope.clearCache(clearCacheAction)
             }
