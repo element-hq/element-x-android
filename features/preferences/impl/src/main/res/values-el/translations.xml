@@ -13,7 +13,7 @@
   <string name="screen_advanced_settings_send_read_receipts">"Αποδεικτικά ανάγνωσης"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Εάν απενεργοποιηθεί, τα αποδεικτικά ανάγνωσης δεν θα στέλνονται σε κανέναν. Θα εξακολουθείς να λαμβάνεις αποδεικτικά ανάγνωσης από άλλους χρήστες."</string>
   <string name="screen_advanced_settings_share_presence">"Κοινή χρήση παρουσίας"</string>
-  <string name="screen_advanced_settings_share_presence_description">"Εάν απενεργοποιηθεί, δεν θα μπορείς να στέλνεις ή να λαμβάνεις αποδεικτικά ανάγνωσης ή ειδοποιήσεις πληκτρολόγησης"</string>
+  <string name="screen_advanced_settings_share_presence_description">"Εάν απενεργοποιηθεί, δεν θα μπορείς να στέλνεις ή να λαμβάνεις αποδεικτικά ανάγνωσης ή ειδοποιήσεις πληκτρολόγησης."</string>
   <string name="screen_advanced_settings_view_source_description">"Ενεργοποίησε την επιλογή για προβολή πηγής μηνυμάτων στη ροή."</string>
   <string name="screen_blocked_users_unblock_alert_action">"Άρση αποκλεισμού"</string>
   <string name="screen_blocked_users_unblock_alert_description">"Θα μπορείς να δεις ξανά όλα τα μηνύματα του."</string>
