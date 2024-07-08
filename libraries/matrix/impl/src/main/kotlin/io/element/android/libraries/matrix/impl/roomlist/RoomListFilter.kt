@@ -19,6 +19,8 @@ package io.element.android.libraries.matrix.impl.roomlist
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind
+import org.matrix.rustcomponents.sdk.RoomListFilterCategory
 
 val RoomListFilter.predicate
     get() = when (this) {
@@ -43,6 +45,7 @@ val RoomListFilter.predicate
         RoomListFilter.Invite -> { roomSummary: RoomSummary ->
             roomSummary.isInvited()
         }
+        RoomListFilter.NonLeft -> { _: RoomSummary -> false }
     }
 
 fun List<RoomSummary>.filter(filter: RoomListFilter): List<RoomSummary> {
@@ -60,3 +63,18 @@ fun List<RoomSummary>.filter(filter: RoomListFilter): List<RoomSummary> {
 }
 
 private fun RoomSummary.isInvited() = currentUserMembership == CurrentUserMembership.INVITED
+
+fun RoomListFilter.toRustFilter(): RoomListEntriesDynamicFilterKind {
+    return when (this) {
+        is RoomListFilter.All -> RoomListEntriesDynamicFilterKind.All(filters.map { it.toRustFilter() })
+        is RoomListFilter.Any -> RoomListEntriesDynamicFilterKind.Any(filters.map { it.toRustFilter() })
+        RoomListFilter.Category.Group -> RoomListEntriesDynamicFilterKind.Category(RoomListFilterCategory.GROUP)
+        RoomListFilter.Category.People -> RoomListEntriesDynamicFilterKind.Category(RoomListFilterCategory.PEOPLE)
+        RoomListFilter.None -> RoomListEntriesDynamicFilterKind.None
+        is RoomListFilter.NormalizedMatchRoomName -> RoomListEntriesDynamicFilterKind.NormalizedMatchRoomName(pattern)
+        RoomListFilter.Unread -> RoomListEntriesDynamicFilterKind.Unread
+        RoomListFilter.Favorite -> RoomListEntriesDynamicFilterKind.Favourite
+        RoomListFilter.Invite -> RoomListEntriesDynamicFilterKind.Invite
+        RoomListFilter.NonLeft -> RoomListEntriesDynamicFilterKind.NonLeft
+    }
+}

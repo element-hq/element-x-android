@@ -24,6 +24,8 @@ import io.element.android.libraries.matrix.impl.room.elementHeroes
 import io.element.android.libraries.matrix.impl.room.map
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.room.message.RoomMessageFactory
+import org.matrix.rustcomponents.sdk.Membership
+import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.use
 

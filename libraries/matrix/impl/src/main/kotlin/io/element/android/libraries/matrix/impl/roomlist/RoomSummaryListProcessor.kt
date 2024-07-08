@@ -59,7 +59,7 @@ class RoomSummaryListProcessor(
 
     private suspend fun MutableList<RoomSummary>.applyUpdate(update: RoomListEntriesUpdate) {
         // Remove this comment to debug changes in the room list
-        // Timber.d("Apply room list update: ${update.describe()}")
+         Timber.d("Apply room list update: ${update.describe()}")
         when (update) {
             is RoomListEntriesUpdate.Append -> {
                 val roomSummaries = update.values.map {

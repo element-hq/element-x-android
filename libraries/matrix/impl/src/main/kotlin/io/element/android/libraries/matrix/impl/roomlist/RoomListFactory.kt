@@ -33,6 +33,7 @@ import kotlinx.coroutines.launch
 import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind
 import org.matrix.rustcomponents.sdk.RoomListLoadingState
 import org.matrix.rustcomponents.sdk.RoomListService
+import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 import org.matrix.rustcomponents.sdk.RoomList as InnerRoomList
@@ -68,7 +69,7 @@ internal class RoomListFactory(
                 innerRoomList.entriesFlow(
                     pageSize = pageSize,
                     roomListDynamicEvents = dynamicEvents,
-                    initialFilterKind = RoomListEntriesDynamicFilterKind.NonLeft
+                    initialFilterKind = initialFilter.toRustFilter(),
                 ).onEach { update ->
                     processor.postUpdate(update)
                 }.launchIn(this)
@@ -79,22 +80,13 @@ internal class RoomListFactory(
                         loadingStateFlow.value = it
                     }
                     .launchIn(this)
-
-                combine(
-                    currentFilter,
-                    summariesFlow
-                ) { filter, summaries ->
-                    summaries.filter(filter)
-                }.onEach {
-                    filteredSummariesFlow.emit(it)
-                }.launchIn(this)
             }
         }.invokeOnCompletion {
             innerRoomList?.destroy()
         }
         return RustDynamicRoomList(
             summaries = summariesFlow,
-            filteredSummaries = filteredSummariesFlow,
+            filteredSummaries = summariesFlow,
             loadingState = loadingStateFlow,
             currentFilter = currentFilter,
             loadedPages = loadedPages,
@@ -120,7 +112,12 @@ private class RustDynamicRoomList(
     }
 
     override suspend fun updateFilter(filter: RoomListFilter) {
+        Timber.d("Updating current filter: $filter")
         currentFilter.emit(filter)
+        Timber.d("Updating filter event")
+        val filterEvent = RoomListDynamicEvents.SetFilter(filter.toRustFilter())
+        dynamicEvents.emit(filterEvent)
+        Timber.d("Updated filter event")
     }
 
     override suspend fun loadMore() {

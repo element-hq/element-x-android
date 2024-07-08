@@ -50,6 +50,11 @@ sealed interface RoomListFilter {
     ) : RoomListFilter
 
     /**
+     * A filter that matches rooms that are not left.
+     */
+    data object NonLeft : RoomListFilter
+
+    /**
      * A filter that matches rooms that are unread.
      */
     data object Unread : RoomListFilter

@@ -61,6 +61,7 @@ internal class RustRoomListService(
     override val allRooms: DynamicRoomList = roomListFactory.createRoomList(
         pageSize = DEFAULT_PAGE_SIZE,
         coroutineContext = sessionDispatcher,
+        initialFilter = RoomListFilter.all(),
     ) {
         innerRoomListService.allRooms()
     }

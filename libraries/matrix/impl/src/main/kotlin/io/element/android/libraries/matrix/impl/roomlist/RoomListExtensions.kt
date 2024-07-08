@@ -72,6 +72,7 @@ internal fun RoomListInterface.entriesFlow(
     callbackFlow {
         val listener = object : RoomListEntriesListener {
             override fun onUpdate(roomEntriesUpdate: List<RoomListEntriesUpdate>) {
+                Timber.d("Update received in the FFI layer")
                 trySendBlocking(roomEntriesUpdate)
             }
         }
@@ -81,6 +82,7 @@ internal fun RoomListInterface.entriesFlow(
         roomListDynamicEvents.onEach { controllerEvents ->
             when (controllerEvents) {
                 is RoomListDynamicEvents.SetFilter -> {
+                    Timber.d("Filter applied in the FFI layer")
                     controller.setFilter(controllerEvents.filter)
                 }
                 is RoomListDynamicEvents.LoadMore -> {
