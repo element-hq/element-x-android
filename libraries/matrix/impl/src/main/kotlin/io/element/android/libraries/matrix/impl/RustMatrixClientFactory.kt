@@ -22,10 +22,12 @@ import io.element.android.libraries.matrix.impl.analytics.UtdTracker
 import io.element.android.libraries.matrix.impl.certificates.UserCertificatesProvider
 import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
 import io.element.android.libraries.network.useragent.UserAgentProvider
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.Session
@@ -44,6 +46,7 @@ class RustMatrixClientFactory @Inject constructor(
     private val proxyProvider: ProxyProvider,
     private val clock: SystemClock,
     private val utdTracker: UtdTracker,
+    private val appPreferencesStore: AppPreferencesStore,
 ) {
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
         val client = getBaseClientBuilder(sessionData.sessionPath, sessionData.passphrase)
@@ -51,7 +54,8 @@ class RustMatrixClientFactory @Inject constructor(
             .username(sessionData.userId)
             .use { it.build() }
 
-        client.restoreSession(sessionData.toSession())
+        val customProxy = appPreferencesStore.customSlidingSyncProxy().first()
+        client.restoreSession(sessionData.toSession(customSlidingSyncProxy = customProxy))
 
         val syncService = client.syncService()
             .withUtdHook(utdTracker)
@@ -91,12 +95,12 @@ class RustMatrixClientFactory @Inject constructor(
     }
 }
 
-private fun SessionData.toSession() = Session(
+private fun SessionData.toSession(customSlidingSyncProxy: String? = null) = Session(
     accessToken = accessToken,
     refreshToken = refreshToken,
     userId = userId,
     deviceId = deviceId,
     homeserverUrl = homeserverUrl,
-    slidingSyncProxy = slidingSyncProxy,
+    slidingSyncProxy = customSlidingSyncProxy ?: slidingSyncProxy,
     oidcData = oidcData,
 )

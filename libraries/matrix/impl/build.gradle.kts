@@ -40,6 +40,7 @@ dependencies {
     implementation(projects.libraries.di)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.network)
+    implementation(projects.libraries.preferences.api)
     implementation(projects.services.analytics.api)
     implementation(projects.services.toolbox.api)
     implementation(projects.libraries.featureflag.api)

@@ -27,6 +27,7 @@ data class DeveloperSettingsState(
     val rageshakeState: RageshakePreferencesState,
     val clearCacheAction: AsyncData<Unit>,
     val customElementCallBaseUrlState: CustomElementCallBaseUrlState,
+    val customSlidingSyncProxy: String?,
     val eventSink: (DeveloperSettingsEvents) -> Unit
 )
 

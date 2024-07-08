@@ -24,10 +24,12 @@ class InMemoryAppPreferencesStore(
     isDeveloperModeEnabled: Boolean = false,
     customElementCallBaseUrl: String? = null,
     theme: String? = null,
+    customSlidingSyncProxy: String? = null,
 ) : AppPreferencesStore {
     private val isDeveloperModeEnabled = MutableStateFlow(isDeveloperModeEnabled)
     private val customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
     private val theme = MutableStateFlow(theme)
+    private val customSlidingSyncProxy = MutableStateFlow(customSlidingSyncProxy)
 
     override suspend fun setDeveloperModeEnabled(enabled: Boolean) {
         isDeveloperModeEnabled.value = enabled
@@ -51,6 +53,14 @@ class InMemoryAppPreferencesStore(
 
     override fun getThemeFlow(): Flow<String?> {
         return theme
+    }
+
+    override suspend fun setCustomSlidingSyncProxy(string: String?) {
+        customSlidingSyncProxy.tryEmit(string)
+    }
+
+    override fun customSlidingSyncProxy(): Flow<String?> {
+        return customSlidingSyncProxy
     }
 
     override suspend fun reset() {

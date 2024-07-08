@@ -28,5 +28,8 @@ interface AppPreferencesStore {
     suspend fun setTheme(theme: String)
     fun getThemeFlow(): Flow<String?>
 
+    suspend fun setCustomSlidingSyncProxy(string: String?)
+    fun customSlidingSyncProxy(): Flow<String?>
+
     suspend fun reset()
 }

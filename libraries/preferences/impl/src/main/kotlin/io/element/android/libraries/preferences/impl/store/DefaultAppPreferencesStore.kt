@@ -38,6 +38,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 private val developerModeKey = booleanPreferencesKey("developerMode")
 private val customElementCallBaseUrlKey = stringPreferencesKey("elementCallBaseUrl")
 private val themeKey = stringPreferencesKey("theme")
+private val customSlidingSyncProxyKey = stringPreferencesKey("customSlidingSyncProxy")
 
 @ContributesBinding(AppScope::class)
 class DefaultAppPreferencesStore @Inject constructor(
@@ -86,6 +87,18 @@ class DefaultAppPreferencesStore @Inject constructor(
             prefs[themeKey]
         }
     }
+
+    override suspend fun setCustomSlidingSyncProxy(string: String?) {
+        store.edit { prefs ->
+            if (string == null) {
+                prefs.remove(customSlidingSyncProxyKey)
+            } else {
+                prefs[customSlidingSyncProxyKey] = string
+            }
+        }
+    }
+
+    override fun customSlidingSyncProxy(): Flow<String?> = store.data.map { prefs -> prefs[customSlidingSyncProxyKey] }
 
     override suspend fun reset() {
         store.edit { it.clear() }

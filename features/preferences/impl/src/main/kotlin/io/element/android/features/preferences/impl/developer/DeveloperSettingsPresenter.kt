@@ -113,6 +113,9 @@ class DeveloperSettingsPresenter @Inject constructor(
                     val urlToSave = event.baseUrl.takeIf { !it.isNullOrEmpty() && it != ElementCallConfig.DEFAULT_BASE_URL }
                     appPreferencesStore.setCustomElementCallBaseUrl(urlToSave)
                 }
+                is DeveloperSettingsEvents.SetCustomSlidingSyncProxy -> coroutineScope.launch {
+                    appPreferencesStore.setCustomSlidingSyncProxy(event.proxy)
+                }
                 DeveloperSettingsEvents.ClearCache -> coroutineScope.clearCache(clearCacheAction)
             }
         }
@@ -127,6 +130,7 @@ class DeveloperSettingsPresenter @Inject constructor(
                 defaultUrl = ElementCallConfig.DEFAULT_BASE_URL,
                 validator = ::customElementCallUrlValidator,
             ),
+            customSlidingSyncProxy = appPreferencesStore.customSlidingSyncProxy().collectAsState(null).value,
             eventSink = ::handleEvents
         )
     }

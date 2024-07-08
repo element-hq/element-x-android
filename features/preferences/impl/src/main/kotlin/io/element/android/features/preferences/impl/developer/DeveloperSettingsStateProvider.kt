@@ -39,6 +39,7 @@ open class DeveloperSettingsStateProvider : PreviewParameterProvider<DeveloperSe
 fun aDeveloperSettingsState(
     clearCacheAction: AsyncData<Unit> = AsyncData.Uninitialized,
     customElementCallBaseUrlState: CustomElementCallBaseUrlState = aCustomElementCallBaseUrlState(),
+    customSlidingSyncProxy: String? = null,
     eventSink: (DeveloperSettingsEvents) -> Unit = {},
 ) = DeveloperSettingsState(
     features = aFeatureUiModelList(),
@@ -46,6 +47,7 @@ fun aDeveloperSettingsState(
     cacheSize = AsyncData.Success("1.2 MB"),
     clearCacheAction = clearCacheAction,
     customElementCallBaseUrlState = customElementCallBaseUrlState,
+    customSlidingSyncProxy = customSlidingSyncProxy,
     eventSink = eventSink,
 )
 

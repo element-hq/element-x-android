@@ -60,6 +60,14 @@ fun DeveloperSettingsView(
                 title = "Configure tracing",
                 onClick = onOpenConfigureTracing,
             )
+            PreferenceTextField(
+                headline = "Custom sliding sync proxy",
+                supportingText = "You'll need to kill and restart the app for this option to take effect.",
+                value = state.customSlidingSyncProxy,
+                onChange = {
+                    state.eventSink(DeveloperSettingsEvents.SetCustomSlidingSyncProxy(it))
+                }
+            )
         }
         PreferenceCategory(title = "Showkase") {
             PreferenceText(
