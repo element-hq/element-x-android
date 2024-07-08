@@ -22,6 +22,10 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.matrix.impl"
+
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
 }
 
 anvil {
@@ -59,4 +63,8 @@ dependencies {
     testImplementation(projects.tests.testutils)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.test.turbine)
+
+    androidTestImplementation(libs.test.junit)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation("androidx.test:runner:1.6.1")
 }
