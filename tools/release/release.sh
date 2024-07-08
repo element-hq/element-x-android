@@ -227,6 +227,7 @@ cp "${fdroidTargetPath}"/app-fdroid-arm64-v8a-release.apk \
    "${fdroidTargetPath}"/app-fdroid-arm64-v8a-release-signed.apk
 "${buildToolsPath}"/apksigner sign \
        -v \
+       --alignment-preserved true \
        --ks "${keyStorePath}" \
        --ks-pass pass:"${keyStorePassword}" \
        --ks-key-alias elementx \
@@ -238,6 +239,7 @@ cp "${fdroidTargetPath}"/app-fdroid-armeabi-v7a-release.apk \
    "${fdroidTargetPath}"/app-fdroid-armeabi-v7a-release-signed.apk
 "${buildToolsPath}"/apksigner sign \
        -v \
+       --alignment-preserved true \
        --ks "${keyStorePath}" \
        --ks-pass pass:"${keyStorePassword}" \
        --ks-key-alias elementx \
@@ -249,6 +251,7 @@ cp "${fdroidTargetPath}"/app-fdroid-x86-release.apk \
    "${fdroidTargetPath}"/app-fdroid-x86-release-signed.apk
 "${buildToolsPath}"/apksigner sign \
        -v \
+       --alignment-preserved true \
        --ks "${keyStorePath}" \
        --ks-pass pass:"${keyStorePassword}" \
        --ks-key-alias elementx \
@@ -260,6 +263,7 @@ cp "${fdroidTargetPath}"/app-fdroid-x86_64-release.apk \
    "${fdroidTargetPath}"/app-fdroid-x86_64-release-signed.apk
 "${buildToolsPath}"/apksigner sign \
        -v \
+       --alignment-preserved true \
        --ks "${keyStorePath}" \
        --ks-pass pass:"${keyStorePassword}" \
        --ks-key-alias elementx \
