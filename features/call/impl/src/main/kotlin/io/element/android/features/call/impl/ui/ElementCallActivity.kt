@@ -30,15 +30,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.core.content.IntentCompat
-import io.element.android.compound.theme.ElementTheme
-import io.element.android.compound.theme.Theme
-import io.element.android.compound.theme.isDark
-import io.element.android.compound.theme.mapToTheme
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.impl.DefaultElementCallEntryPoint
 import io.element.android.features.call.impl.di.CallBindings
@@ -46,6 +39,7 @@ import io.element.android.features.call.impl.pip.PictureInPicturePresenter
 import io.element.android.features.call.impl.services.CallForegroundService
 import io.element.android.features.call.impl.utils.CallIntentDataParser
 import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.designsystem.theme.ElementThemeApp
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import javax.inject.Inject
 
@@ -94,14 +88,8 @@ class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
         requestAudioFocus()
 
         setContent {
-            val theme by remember {
-                appPreferencesStore.getThemeFlow().mapToTheme()
-            }
-                .collectAsState(initial = Theme.System)
             val pipState = pictureInPicturePresenter.present()
-            ElementTheme(
-                darkTheme = theme.isDark()
-            ) {
+            ElementThemeApp(appPreferencesStore) {
                 val state = presenter.present()
                 CallScreenView(
                     state = state,

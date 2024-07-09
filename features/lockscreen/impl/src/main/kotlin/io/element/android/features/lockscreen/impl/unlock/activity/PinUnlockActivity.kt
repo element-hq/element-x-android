@@ -23,20 +23,14 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.lifecycle.lifecycleScope
-import io.element.android.compound.theme.ElementTheme
-import io.element.android.compound.theme.Theme
-import io.element.android.compound.theme.isDark
-import io.element.android.compound.theme.mapToTheme
 import io.element.android.features.lockscreen.api.LockScreenLockState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.lockscreen.impl.unlock.PinUnlockPresenter
 import io.element.android.features.lockscreen.impl.unlock.PinUnlockView
 import io.element.android.features.lockscreen.impl.unlock.di.PinUnlockBindings
 import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.designsystem.theme.ElementThemeApp
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -57,13 +51,7 @@ class PinUnlockActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         bindings<PinUnlockBindings>().inject(this)
         setContent {
-            val theme by remember {
-                appPreferencesStore.getThemeFlow().mapToTheme()
-            }
-                .collectAsState(initial = Theme.System)
-            ElementTheme(
-                darkTheme = theme.isDark()
-            ) {
+            ElementThemeApp(appPreferencesStore) {
                 val state = presenter.present()
                 PinUnlockView(state = state, isInAppUnlock = false)
             }
