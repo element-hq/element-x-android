@@ -290,5 +290,5 @@ internal fun RoomListRoomSummary.toInviteData() = InviteData(
     roomId = roomId,
     // Note: `name` should not be null at this point, but just in case, fallback to the roomId
     roomName = name ?: roomId.value,
-    isDirect = isDirect,
+    isDirect = isDm,
 )

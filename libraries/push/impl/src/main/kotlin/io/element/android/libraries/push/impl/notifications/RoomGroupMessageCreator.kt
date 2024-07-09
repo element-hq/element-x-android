@@ -56,7 +56,7 @@ class DefaultRoomGroupMessageCreator @Inject constructor(
     ): Notification {
         val lastKnownRoomEvent = events.last()
         val roomName = lastKnownRoomEvent.roomName ?: lastKnownRoomEvent.senderDisambiguatedDisplayName ?: "Room name (${roomId.value.take(8)}…)"
-        val roomIsGroup = !lastKnownRoomEvent.roomIsDirect
+        val roomIsGroup = !lastKnownRoomEvent.roomIsDm
 
         val tickerText = if (roomIsGroup) {
             stringProvider.getString(R.string.notification_ticker_text_group, roomName, events.last().senderDisambiguatedDisplayName, events.last().description)
@@ -68,12 +68,13 @@ class DefaultRoomGroupMessageCreator @Inject constructor(
 
         val lastMessageTimestamp = events.last().timestamp
         val smartReplyErrors = events.filter { it.isSmartReplyError() }
+        val roomIsDm = !roomIsGroup
         return notificationCreator.createMessagesListNotification(
                 RoomEventGroupInfo(
                     sessionId = currentUser.userId,
                     roomId = roomId,
                     roomDisplayName = roomName,
-                    isDirect = !roomIsGroup,
+                    isDm = roomIsDm,
                     hasSmartReplyError = smartReplyErrors.isNotEmpty(),
                     shouldBing = events.any { it.noisy },
                     customSound = events.last().soundName,

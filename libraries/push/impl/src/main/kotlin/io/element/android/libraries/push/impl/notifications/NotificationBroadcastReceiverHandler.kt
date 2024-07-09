@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.asEventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStoreFactory
 import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
@@ -160,7 +161,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
             imageUriString = null,
             threadId = threadId,
             roomName = room.displayName,
-            roomIsDirect = room.isDirect,
+            roomIsDm = room.isDm,
             outGoingMessage = true,
         )
         onNotifiableEventReceived.onNotifiableEventReceived(notifiableMessageEvent)

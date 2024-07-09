@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.canBan
 import io.element.android.libraries.matrix.api.room.powerlevels.canKick
 import io.element.android.services.analytics.api.AnalyticsService
@@ -58,8 +59,7 @@ class DefaultRoomMembersModerationPresenter @Inject constructor(
     private suspend fun canKick() = room.canKick().getOrDefault(false)
 
     override suspend fun canDisplayModerationActions(): Boolean {
-        val isDm = room.isDm && room.isEncrypted
-        return !isDm && (canBan() || canKick())
+        return !room.isDm && (canBan() || canKick())
     }
 
     @Composable

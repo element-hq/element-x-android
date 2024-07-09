@@ -26,10 +26,10 @@ val RoomListFilter.predicate
         is RoomListFilter.Any -> { _: RoomSummary -> true }
         RoomListFilter.None -> { _: RoomSummary -> false }
         RoomListFilter.Category.Group -> { roomSummary: RoomSummary ->
-            !roomSummary.isDirect && !roomSummary.isInvited()
+            !roomSummary.isDm && !roomSummary.isInvited()
         }
         RoomListFilter.Category.People -> { roomSummary: RoomSummary ->
-            roomSummary.isDirect && !roomSummary.isInvited()
+            roomSummary.isDm && !roomSummary.isInvited()
         }
         RoomListFilter.Favorite -> { roomSummary: RoomSummary ->
             roomSummary.isFavorite && !roomSummary.isInvited()
