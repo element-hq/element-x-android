@@ -92,6 +92,10 @@ allprojects {
         plugin("org.owasp.dependencycheck")
     }
 
+    configure<org.owasp.dependencycheck.gradle.extension.DependencyCheckExtension> {
+        nvd.apiKey = properties["NVD_API_KEY"] as? String ?: ""
+    }
+
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         // Warnings are potential errors, so stop ignoring them
         // This is disabled by default, but the CI will enforce this.
