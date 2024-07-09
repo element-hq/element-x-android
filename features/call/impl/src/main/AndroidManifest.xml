@@ -38,10 +38,11 @@
     <application>
         <activity
             android:name=".ui.ElementCallActivity"
-            android:configChanges="screenSize|screenLayout|orientation|keyboardHidden|keyboard|navigation|uiMode"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden|keyboard|navigation|uiMode"
             android:exported="true"
             android:label="@string/element_call"
             android:launchMode="singleTask"
+            android:supportsPictureInPicture="true"
             android:taskAffinity="io.element.android.features.call">
 
             <intent-filter android:autoVerify="true">
@@ -77,10 +78,11 @@
 
         </activity>
 
-        <activity android:name=".ui.IncomingCallActivity"
+        <activity
+            android:name=".ui.IncomingCallActivity"
             android:configChanges="screenSize|screenLayout|orientation|keyboardHidden|keyboard|navigation|uiMode"
-            android:exported="false"
             android:excludeFromRecents="true"
+            android:exported="false"
             android:launchMode="singleTask"
             android:taskAffinity="io.element.android.features.call" />
 
@@ -90,9 +92,10 @@
             android:exported="false"
             android:foregroundServiceType="phoneCall" />
 
-        <receiver android:name=".receivers.DeclineCallBroadcastReceiver"
-            android:exported="false"
-            android:enabled="true" />
+        <receiver
+            android:name=".receivers.DeclineCallBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false" />
 
     </application>
 

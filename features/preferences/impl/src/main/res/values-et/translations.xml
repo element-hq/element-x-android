@@ -13,7 +13,7 @@
   <string name="screen_advanced_settings_send_read_receipts">"Lugemisteatised"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Kui lülitad selle valiku välja, siis mitte keegi enam ei saa sinult lugemisteatisi. Küll aga saad sina teiste kasutajate lugemisteatisi."</string>
   <string name="screen_advanced_settings_share_presence">"Jaga oma olekut"</string>
-  <string name="screen_advanced_settings_share_presence_description">"Kui see eelistus on välja lülitatud, siis sa ei saa ega saada ei lugemisteatisi ega kirjutamise teavitusi"</string>
+  <string name="screen_advanced_settings_share_presence_description">"Kui see eelistus on välja lülitatud, siis sa ei saa ega saada ei lugemisteatisi ega kirjutamise teavitusi."</string>
   <string name="screen_advanced_settings_view_source_description">"Selle eelistuse sisselülitamisel on võimalik ajajoonel vaadata sõnumite lähtekoodi."</string>
   <string name="screen_blocked_users_empty">"Sa pole ühtegi kasutajat blokeerinud"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Eemalda blokeering"</string>

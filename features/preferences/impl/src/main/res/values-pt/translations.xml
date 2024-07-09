@@ -13,7 +13,7 @@
   <string name="screen_advanced_settings_send_read_receipts">"Recibos de leitura"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Se desativada, os teus recibos de leitura não serão enviados a ninguém. Continuas a receber recibos de leitura de outros utilizadores."</string>
   <string name="screen_advanced_settings_share_presence">"Partilhar presença"</string>
-  <string name="screen_advanced_settings_share_presence_description">"Se desativado, não poderás enviar ou receber recibos de leitura ou notificações de escrita"</string>
+  <string name="screen_advanced_settings_share_presence_description">"Se desativado, não poderás enviar ou receber recibos de leitura ou notificações de escrita."</string>
   <string name="screen_advanced_settings_view_source_description">"Ativa a opção para ver a origem da mensagem na cronologia."</string>
   <string name="screen_blocked_users_empty">"Não tens nenhum utilizador bloqueado"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Desbloquear"</string>

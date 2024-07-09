@@ -23,11 +23,12 @@ open class CallScreenStateProvider : PreviewParameterProvider<CallScreenState> {
     override val values: Sequence<CallScreenState>
         get() = sequenceOf(
             aCallScreenState(),
+            aCallScreenState(urlState = AsyncData.Loading()),
             aCallScreenState(urlState = AsyncData.Failure(Exception("An error occurred"))),
         )
 }
 
-private fun aCallScreenState(
+internal fun aCallScreenState(
     urlState: AsyncData<String> = AsyncData.Success("https://call.element.io/some-actual-call?with=parameters"),
     userAgent: String = "",
     isInWidgetMode: Boolean = false,
