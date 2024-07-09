@@ -42,4 +42,12 @@ class EventsRecorder<T>(
     fun assertList(expectedEvents: List<T>) {
         assertThat(events).isEqualTo(expectedEvents)
     }
+
+    fun assertSize(size: Int) {
+        assertThat(events.size).isEqualTo(size)
+    }
+
+    fun assertTrue(index: Int, predicate: (T) -> Boolean) {
+        assertThat(predicate(events[index])).isTrue()
+    }
 }

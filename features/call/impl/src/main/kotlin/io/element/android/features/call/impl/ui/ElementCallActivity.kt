@@ -42,6 +42,7 @@ import io.element.android.compound.theme.mapToTheme
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.impl.DefaultElementCallEntryPoint
 import io.element.android.features.call.impl.di.CallBindings
+import io.element.android.features.call.impl.pip.PictureInPicturePresenter
 import io.element.android.features.call.impl.services.CallForegroundService
 import io.element.android.features.call.impl.utils.CallIntentDataParser
 import io.element.android.libraries.architecture.bindings
@@ -52,6 +53,7 @@ class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
     @Inject lateinit var callIntentDataParser: CallIntentDataParser
     @Inject lateinit var presenterFactory: CallScreenPresenter.Factory
     @Inject lateinit var appPreferencesStore: AppPreferencesStore
+    @Inject lateinit var pictureInPicturePresenter: PictureInPicturePresenter
 
     private lateinit var presenter: CallScreenPresenter
 
@@ -86,6 +88,8 @@ class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
             updateUiMode(resources.configuration)
         }
 
+        pictureInPicturePresenter.onCreate(this)
+
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         requestAudioFocus()
 
@@ -94,12 +98,14 @@ class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
                 appPreferencesStore.getThemeFlow().mapToTheme()
             }
                 .collectAsState(initial = Theme.System)
+            val pipState = pictureInPicturePresenter.present()
             ElementTheme(
                 darkTheme = theme.isDark()
             ) {
                 val state = presenter.present()
                 CallScreenView(
                     state = state,
+                    pipState = pipState,
                     requestPermissions = { permissions, callback ->
                         requestPermissionCallback = callback
                         requestPermissionsLauncher.launch(permissions)
@@ -112,6 +118,11 @@ class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         updateUiMode(newConfig)
+    }
+
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+        pictureInPicturePresenter.onPictureInPictureModeChanged(isInPictureInPictureMode)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -131,10 +142,16 @@ class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
         }
     }
 
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        pictureInPicturePresenter.onUserLeaveHint()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         releaseAudioFocus()
         CallForegroundService.stop(this)
+        pictureInPicturePresenter.onDestroy()
     }
 
     override fun finish() {

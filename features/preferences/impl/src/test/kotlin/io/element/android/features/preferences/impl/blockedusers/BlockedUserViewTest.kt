@@ -45,7 +45,7 @@ class BlockedUserViewTest {
     fun `clicking on back invokes back callback`() {
         val eventsRecorder = EventsRecorder<BlockedUsersEvents>(expectEvents = false)
         ensureCalledOnce { callback ->
-            rule.setLogoutView(
+            rule.setBlockedUsersView(
                 aBlockedUsersState(
                     eventSink = eventsRecorder
                 ),
@@ -59,7 +59,7 @@ class BlockedUserViewTest {
     fun `clicking on a user emits the expected Event`() {
         val eventsRecorder = EventsRecorder<BlockedUsersEvents>()
         val userList = aMatrixUserList()
-        rule.setLogoutView(
+        rule.setBlockedUsersView(
             aBlockedUsersState(
                 blockedUsers = userList,
                 eventSink = eventsRecorder
@@ -72,7 +72,7 @@ class BlockedUserViewTest {
     @Test
     fun `clicking on cancel sends a BlockedUsersEvents`() {
         val eventsRecorder = EventsRecorder<BlockedUsersEvents>()
-        rule.setLogoutView(
+        rule.setBlockedUsersView(
             aBlockedUsersState(
                 unblockUserAction = AsyncAction.Confirming,
                 eventSink = eventsRecorder
@@ -85,7 +85,7 @@ class BlockedUserViewTest {
     @Test
     fun `clicking on confirm sends a BlockedUsersEvents`() {
         val eventsRecorder = EventsRecorder<BlockedUsersEvents>()
-        rule.setLogoutView(
+        rule.setBlockedUsersView(
             aBlockedUsersState(
                 unblockUserAction = AsyncAction.Confirming,
                 eventSink = eventsRecorder
@@ -96,7 +96,7 @@ class BlockedUserViewTest {
     }
 }
 
-private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setLogoutView(
+private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setBlockedUsersView(
     state: BlockedUsersState,
     onBackClick: () -> Unit = EnsureNeverCalled(),
 ) {

@@ -1,12 +1,5 @@
 <!-- Please read [CONTRIBUTING.md](https://github.com/element-hq/element-x-android/blob/develop/CONTRIBUTING.md) before submitting your pull request -->
  
-## Type of change
-
-- [ ] Feature
-- [ ] Bugfix
-- [ ] Technical
-- [ ] Other :
-
 ## Content
 
 <!-- Describe shortly what has been changed -->
