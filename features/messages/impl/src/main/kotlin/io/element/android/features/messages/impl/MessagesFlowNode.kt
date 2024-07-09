@@ -107,6 +107,7 @@ class MessagesFlowNode @AssistedInject constructor(
     plugins = plugins
 ) {
     data class Inputs(val focusedEventId: EventId?) : NodeInputs
+
     private val inputs = inputs<Inputs>()
 
     sealed interface NavTarget : Parcelable {
@@ -148,7 +149,7 @@ class MessagesFlowNode @AssistedInject constructor(
         data class EditPoll(val eventId: EventId) : NavTarget
     }
 
-    private val callback = plugins<MessagesEntryPoint.Callback>().firstOrNull()
+    private val callbacks = plugins<MessagesEntryPoint.Callback>()
 
     private val mentionSpanProvider = mentionSpanProviderFactory.create(room.sessionId.value)
 
@@ -167,7 +168,7 @@ class MessagesFlowNode @AssistedInject constructor(
             is NavTarget.Messages -> {
                 val callback = object : MessagesNode.Callback {
                     override fun onRoomDetailsClick() {
-                        callback?.onRoomDetailsClick()
+                        callbacks.forEach { it.onRoomDetailsClick() }
                     }
 
                     override fun onEventClick(event: TimelineItem.Event): Boolean {
@@ -179,11 +180,11 @@ class MessagesFlowNode @AssistedInject constructor(
                     }
 
                     override fun onUserDataClick(userId: UserId) {
-                        callback?.onUserDataClick(userId)
+                        callbacks.forEach { it.onUserDataClick(userId) }
                     }
 
                     override fun onPermalinkClick(data: PermalinkData) {
-                        callback?.onPermalinkClick(data)
+                        callbacks.forEach { it.onPermalinkClick(data) }
                     }
 
                     override fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
@@ -250,7 +251,7 @@ class MessagesFlowNode @AssistedInject constructor(
                 val inputs = ForwardMessagesNode.Inputs(navTarget.eventId)
                 val callback = object : ForwardMessagesNode.Callback {
                     override fun onForwardedToSingleRoom(roomId: RoomId) {
-                        this@MessagesFlowNode.callback?.onForwardedToSingleRoom(roomId)
+                        callbacks.forEach { it.onForwardedToSingleRoom(roomId) }
                     }
                 }
                 createNode<ForwardMessagesNode>(buildContext, listOf(inputs, callback))

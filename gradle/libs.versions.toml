@@ -44,7 +44,7 @@ serialization_json = "1.6.3"
 showkase = "1.0.3"
 appyx = "1.4.0"
 sqldelight = "2.0.2"
-wysiwyg = "2.37.4"
+wysiwyg = "2.37.5"
 telephoto = "0.11.2"
 
 # DI
@@ -143,7 +143,7 @@ test_konsist = "com.lemonappdev:konsist:0.15.1"
 test_turbine = "app.cash.turbine:turbine:1.1.0"
 test_truth = "com.google.truth:truth:1.4.3"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.16"
-test_robolectric = "org.robolectric:robolectric:4.12.2"
+test_robolectric = "org.robolectric:robolectric:4.13"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
 test_composable_preview_scanner = "com.github.sergio-sastre.ComposablePreviewScanner:android:0.1.2"
 
@@ -224,7 +224,7 @@ anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
 detekt = "io.gitlab.arturbosch.detekt:1.23.6"
 ktlint = "org.jlleitschuh.gradle.ktlint:12.1.1"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
-dependencycheck = "org.owasp.dependencycheck:10.0.1"
+dependencycheck = "org.owasp.dependencycheck:10.0.2"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
 paparazzi = "app.cash.paparazzi:1.3.4"
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
