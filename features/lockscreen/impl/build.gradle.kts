@@ -40,6 +40,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.cryptography.api)
+    implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.sessionStorage.api)
     implementation(projects.services.appnavstate.api)

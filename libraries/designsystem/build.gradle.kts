@@ -42,6 +42,7 @@ android {
         implementation(libs.coil.compose)
         implementation(libs.vanniktech.blurhash)
         implementation(projects.libraries.architecture)
+        implementation(projects.libraries.preferences.api)
         implementation(projects.libraries.testtags)
         implementation(projects.libraries.uiStrings)
 
