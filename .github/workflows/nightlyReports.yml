@@ -71,7 +71,7 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Dependency analysis
-        run: ./gradlew dependencyCheckAnalyze $CI_GRADLE_ARG_PROPERTIES -PNVD_API_KEY=${{ secrets.NVD_API_KEY }}
+        run: ./gradlew dependencyCheckAnalyze $CI_GRADLE_ARG_PROPERTIES -PNVD_API_KEY="${{ secrets.NVD_API_KEY }}"
       - name: Upload dependency analysis
         if: always()
         uses: actions/upload-artifact@v4

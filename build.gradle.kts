@@ -87,13 +87,16 @@ allprojects {
             exclude { element -> element.file.path.contains("${layout.buildDirectory.asFile.get()}/generated/") }
         }
     }
+
     // Dependency check
     apply {
         plugin("org.owasp.dependencycheck")
     }
 
     configure<org.owasp.dependencycheck.gradle.extension.DependencyCheckExtension> {
-        nvd.apiKey = properties["NVD_API_KEY"] as? String ?: ""
+        val apiKey = properties["NVD_API_KEY"] as? String
+        apiKey?.let { nvd.apiKey = it }
+        nvd.delay = 16000
     }
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
