@@ -183,7 +183,7 @@ function getNiceName(name) {
   for(var i = 0; i < name.length; i++) {
       if (name[i] === "_") indices.push(i);
   }
-  return name.substring(indices[2] + 1, indices[3]);
+  return name.substring(indices[0] + 1, indices[1]);
 }
 
 function createMissingImageElement() {
@@ -276,7 +276,7 @@ function addTable() {
         } else if(modifiedDayTime >= minModifiedDayTime) {
           hasTranslatedFiles = true;
           // Foreign file is the same as the english file, replacing the language
-          const foreignFile = englishFile.replace("en]", `${dataLanguages[languageIndex]}]`).replace("_S_", "_T_")
+          const foreignFile = englishFile.substring(0, englishFile.length-2) + dataLanguages[languageIndex];
           const fullForeignFile = `${dataLanguages[languageIndex]}/${foreignFile}.png`;
           td.appendChild(createImageElement(fullForeignFile, modifiedDayTime));
         } else {
