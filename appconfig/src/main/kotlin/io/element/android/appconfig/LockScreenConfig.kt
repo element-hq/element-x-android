@@ -23,8 +23,8 @@ object LockScreenConfig {
     /** Whether the PIN is mandatory or not. */
     const val IS_PIN_MANDATORY: Boolean = false
 
-    /** Set of forbidden PIN. */
-    val PIN_BLACKLIST: Set<String> = setOf("0000", "1234")
+    /** Set of forbidden PIN codes. */
+    val FORBIDDEN_PIN_CODES: Set<String> = setOf("0000", "1234")
 
     /** The size of the PIN */
     const val PIN_SIZE: Int = 4

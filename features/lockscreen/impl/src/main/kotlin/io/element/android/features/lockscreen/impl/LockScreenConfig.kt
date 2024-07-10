@@ -25,7 +25,7 @@ import io.element.android.appconfig.LockScreenConfig as AppConfigLockScreenConfi
 
 data class LockScreenConfig(
     val isPinMandatory: Boolean,
-    val pinBlacklist: Set<String>,
+    val forbiddenPinCodes: Set<String>,
     val pinSize: Int,
     val maxPinCodeAttemptsBeforeLogout: Int,
     val gracePeriod: Duration,
@@ -39,7 +39,7 @@ object LockScreenConfigModule {
     @Provides
     fun providesLockScreenConfig(): LockScreenConfig = LockScreenConfig(
         isPinMandatory = AppConfigLockScreenConfig.IS_PIN_MANDATORY,
-        pinBlacklist = AppConfigLockScreenConfig.PIN_BLACKLIST,
+        forbiddenPinCodes = AppConfigLockScreenConfig.FORBIDDEN_PIN_CODES,
         pinSize = AppConfigLockScreenConfig.PIN_SIZE,
         maxPinCodeAttemptsBeforeLogout = AppConfigLockScreenConfig.MAX_PIN_CODE_ATTEMPTS_BEFORE_LOGOUT,
         gracePeriod = AppConfigLockScreenConfig.GRACE_PERIOD,

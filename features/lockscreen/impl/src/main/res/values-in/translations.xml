@@ -14,11 +14,11 @@
   <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Hemat waktu Anda dan gunakan %1$s untuk membuka kunci aplikasi setiap kalinya"</string>
   <string name="screen_app_lock_setup_choose_pin">"Pilih PIN"</string>
   <string name="screen_app_lock_setup_confirm_pin">"Konfirmasi PIN"</string>
-  <string name="screen_app_lock_setup_pin_blacklisted_dialog_content">"Anda tidak dapat memilih PIN ini demi keamanan"</string>
-  <string name="screen_app_lock_setup_pin_blacklisted_dialog_title">"Pilih PIN yang lain"</string>
   <string name="screen_app_lock_setup_pin_context">"Kunci %1$s untuk menambahkan keamanan tambahan pada percakapan Anda.
 
 Pilih sesuatu yang mudah untuk diingat. Jika Anda lupa PIN ini, Anda akan dikeluarkan dari aplikasi."</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"Anda tidak dapat memilih PIN ini demi keamanan"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"Pilih PIN yang lain"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Silakan masukkan PIN yang sama dua kali"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN tidak cocok"</string>
   <string name="screen_app_lock_signout_alert_message">"Anda harus masuk ulang dan membuat PIN baru untuk melanjutkan"</string>

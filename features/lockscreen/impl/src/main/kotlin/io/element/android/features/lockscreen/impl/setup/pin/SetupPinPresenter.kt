@@ -97,7 +97,7 @@ class SetupPinPresenter @Inject constructor(
                             choosePinEntry = choosePinEntry.clear()
                             confirmPinEntry = confirmPinEntry.clear()
                         }
-                        is SetupPinFailure.PinBlacklisted -> {
+                        is SetupPinFailure.ForbiddenPin -> {
                             choosePinEntry = choosePinEntry.clear()
                         }
                         null -> Unit

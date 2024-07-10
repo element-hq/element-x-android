@@ -13,11 +13,11 @@
   <string name="screen_app_lock_setup_biometric_unlock_skip">"我想使用 PIN 碼"</string>
   <string name="screen_app_lock_setup_choose_pin">"選擇 PIN 碼"</string>
   <string name="screen_app_lock_setup_confirm_pin">"確認 PIN 碼"</string>
-  <string name="screen_app_lock_setup_pin_blacklisted_dialog_content">"基於安全性的考量，您選的 PIN 碼無法使用"</string>
-  <string name="screen_app_lock_setup_pin_blacklisted_dialog_title">"選擇不一樣的 PIN 碼"</string>
   <string name="screen_app_lock_setup_pin_context">"將 %1$s 上鎖，為你的聊天室添加一層防護。
 
 請選擇好記憶的數字。如果忘記 PIN 碼，您會被登出。"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"基於安全性的考量，您選的 PIN 碼無法使用"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"選擇不一樣的 PIN 碼"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"請輸入相同的 PIN 碼兩次"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN 碼不一樣"</string>
   <string name="screen_app_lock_signout_alert_message">"您需要重新登入並建立新的 PIN 碼才能繼續"</string>

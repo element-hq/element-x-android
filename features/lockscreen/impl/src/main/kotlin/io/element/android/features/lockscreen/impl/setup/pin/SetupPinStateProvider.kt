@@ -39,7 +39,7 @@ open class SetupPinStateProvider : PreviewParameterProvider<SetupPinState> {
             ),
             aSetupPinState(
                 choosePinEntry = PinEntry.createEmpty(4).fillWith("1111"),
-                creationFailure = SetupPinFailure.PinBlacklisted
+                creationFailure = SetupPinFailure.ForbiddenPin
             ),
         )
 }
