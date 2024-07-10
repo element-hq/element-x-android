@@ -14,11 +14,11 @@
   <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Сэкономьте время и используйте %1$s для разблокировки приложения"</string>
   <string name="screen_app_lock_setup_choose_pin">"Выберите PIN-код"</string>
   <string name="screen_app_lock_setup_confirm_pin">"Подтвердите PIN-код"</string>
-  <string name="screen_app_lock_setup_pin_blacklisted_dialog_content">"Из соображений безопасности вы не можешь выбрать это в качестве PIN-кода"</string>
-  <string name="screen_app_lock_setup_pin_blacklisted_dialog_title">"Выберите другой PIN-код"</string>
   <string name="screen_app_lock_setup_pin_context">"Заблокируйте %1$s, чтобы повысить безопасность ваших чатов.
 
 Введите что-нибудь незабываемое. Если вы забудете этот PIN-код, вы выйдете из приложения."</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"Из соображений безопасности вы не можешь выбрать это в качестве PIN-кода"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"Выберите другой PIN-код"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Повторите PIN-код"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN-коды не совпадают"</string>
   <string name="screen_app_lock_signout_alert_message">"Чтобы продолжить, вам необходимо повторно войти в систему и создать новый PIN-код"</string>

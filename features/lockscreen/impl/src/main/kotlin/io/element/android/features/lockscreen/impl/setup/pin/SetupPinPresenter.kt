@@ -22,7 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import io.element.android.appconfig.LockScreenConfig
+import io.element.android.features.lockscreen.impl.LockScreenConfig
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.setup.pin.validation.PinValidator
@@ -76,7 +76,7 @@ class SetupPinPresenter @Inject constructor(
                 if (confirmPinEntry == choosePinEntry) {
                     pinCodeManager.createPinCode(confirmPinEntry.toText())
                 } else {
-                    setupPinFailure = SetupPinFailure.PinsDontMatch
+                    setupPinFailure = SetupPinFailure.PinsDoNotMatch
                 }
             }
         }
@@ -93,11 +93,11 @@ class SetupPinPresenter @Inject constructor(
                 }
                 SetupPinEvents.ClearFailure -> {
                     when (setupPinFailure) {
-                        is SetupPinFailure.PinsDontMatch -> {
+                        is SetupPinFailure.PinsDoNotMatch -> {
                             choosePinEntry = choosePinEntry.clear()
                             confirmPinEntry = confirmPinEntry.clear()
                         }
-                        is SetupPinFailure.PinBlacklisted -> {
+                        is SetupPinFailure.ForbiddenPin -> {
                             choosePinEntry = choosePinEntry.clear()
                         }
                         null -> Unit

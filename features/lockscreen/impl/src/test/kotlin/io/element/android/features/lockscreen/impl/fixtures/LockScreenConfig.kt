@@ -16,13 +16,13 @@
 
 package io.element.android.features.lockscreen.impl.fixtures
 
-import io.element.android.appconfig.LockScreenConfig
+import io.element.android.features.lockscreen.impl.LockScreenConfig
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 internal fun aLockScreenConfig(
     isPinMandatory: Boolean = false,
-    pinBlacklist: Set<String> = emptySet(),
+    forbiddenPinCodes: Set<String> = emptySet(),
     pinSize: Int = 4,
     maxPinCodeAttemptsBeforeLogout: Int = 3,
     gracePeriod: Duration = 3.seconds,
@@ -31,7 +31,7 @@ internal fun aLockScreenConfig(
 ): LockScreenConfig {
     return LockScreenConfig(
         isPinMandatory = isPinMandatory,
-        pinBlacklist = pinBlacklist,
+        forbiddenPinCodes = forbiddenPinCodes,
         pinSize = pinSize,
         maxPinCodeAttemptsBeforeLogout = maxPinCodeAttemptsBeforeLogout,
         gracePeriod = gracePeriod,

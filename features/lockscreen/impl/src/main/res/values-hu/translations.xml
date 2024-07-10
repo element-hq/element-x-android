@@ -14,11 +14,11 @@
   <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Spóroljon meg némi időt, és használja a %1$st az alkalmazás feloldásához"</string>
   <string name="screen_app_lock_setup_choose_pin">"PIN-kód kiválasztása"</string>
   <string name="screen_app_lock_setup_confirm_pin">"PIN-kód megerősítése"</string>
-  <string name="screen_app_lock_setup_pin_blacklisted_dialog_content">"Ezt biztonsági okokból nem választhatja PIN-kódként"</string>
-  <string name="screen_app_lock_setup_pin_blacklisted_dialog_title">"Válasszon egy másik PIN-kódot"</string>
   <string name="screen_app_lock_setup_pin_context">"Az %1$s zárolása a csevegései nagyobb biztonsága érdekében.
 
 Válasszon valami megjegyezhetőt. Ha elfelejti a PIN-kódot, akkor ki lesz jelentkeztetve az alkalmazásból."</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"Ezt biztonsági okokból nem választhatja PIN-kódként"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"Válasszon egy másik PIN-kódot"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Adja meg a PIN-kódját kétszer"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"A PIN-kódok nem egyeznek"</string>
   <string name="screen_app_lock_signout_alert_message">"A folytatáshoz újra be kell jelentkeznie, és létre kell hoznia egy új PIN-kódot"</string>

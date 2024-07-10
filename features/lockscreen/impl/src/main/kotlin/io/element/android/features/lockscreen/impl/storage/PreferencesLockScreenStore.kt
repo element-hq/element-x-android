@@ -25,7 +25,7 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.appconfig.LockScreenConfig
+import io.element.android.features.lockscreen.impl.LockScreenConfig
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SingleIn

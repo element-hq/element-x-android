@@ -16,7 +16,7 @@
 
 package io.element.android.features.lockscreen.impl.setup.pin.validation
 
-import io.element.android.appconfig.LockScreenConfig
+import io.element.android.features.lockscreen.impl.LockScreenConfig
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import javax.inject.Inject
 
@@ -28,9 +28,9 @@ class PinValidator @Inject constructor(private val lockScreenConfig: LockScreenC
 
     fun isPinValid(pinEntry: PinEntry): Result {
         val pinAsText = pinEntry.toText()
-        val isBlacklisted = lockScreenConfig.pinBlacklist.any { it == pinAsText }
-        return if (isBlacklisted) {
-            Result.Invalid(SetupPinFailure.PinBlacklisted)
+        val isForbidden = lockScreenConfig.forbiddenPinCodes.any { it == pinAsText }
+        return if (isForbidden) {
+            Result.Invalid(SetupPinFailure.ForbiddenPin)
         } else {
             Result.Valid
         }
