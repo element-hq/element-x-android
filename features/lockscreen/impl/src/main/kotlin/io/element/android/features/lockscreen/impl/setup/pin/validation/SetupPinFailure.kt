@@ -18,5 +18,5 @@ package io.element.android.features.lockscreen.impl.setup.pin.validation
 
 sealed interface SetupPinFailure {
     data object ForbiddenPin : SetupPinFailure
-    data object PinsDontMatch : SetupPinFailure
+    data object PinsDoNotMatch : SetupPinFailure
 }

@@ -76,7 +76,7 @@ class SetupPinPresenter @Inject constructor(
                 if (confirmPinEntry == choosePinEntry) {
                     pinCodeManager.createPinCode(confirmPinEntry.toText())
                 } else {
-                    setupPinFailure = SetupPinFailure.PinsDontMatch
+                    setupPinFailure = SetupPinFailure.PinsDoNotMatch
                 }
             }
         }
@@ -93,7 +93,7 @@ class SetupPinPresenter @Inject constructor(
                 }
                 SetupPinEvents.ClearFailure -> {
                     when (setupPinFailure) {
-                        is SetupPinFailure.PinsDontMatch -> {
+                        is SetupPinFailure.PinsDoNotMatch -> {
                             choosePinEntry = choosePinEntry.clear()
                             confirmPinEntry = confirmPinEntry.clear()
                         }

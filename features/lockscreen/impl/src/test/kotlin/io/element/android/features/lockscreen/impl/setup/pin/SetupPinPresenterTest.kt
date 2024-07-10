@@ -89,7 +89,7 @@ class SetupPinPresenterTest {
             awaitLastSequentialItem().also { state ->
                 state.choosePinEntry.assertText(completePin)
                 state.confirmPinEntry.assertText(mismatchedPin)
-                assertThat(state.setupPinFailure).isEqualTo(SetupPinFailure.PinsDontMatch)
+                assertThat(state.setupPinFailure).isEqualTo(SetupPinFailure.PinsDoNotMatch)
                 state.eventSink(SetupPinEvents.ClearFailure)
             }
             awaitLastSequentialItem().also { state ->
