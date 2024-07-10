@@ -17,7 +17,6 @@
 package io.element.android.features.lockscreen.impl
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.appconfig.LockScreenConfig
 import io.element.android.features.lockscreen.api.LockScreenLockState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.lockscreen.impl.biometric.BiometricUnlockManager

@@ -15,20 +15,13 @@
  */
 plugins {
     id("io.element.android-library")
-    alias(libs.plugins.anvil)
 }
 
 android {
     namespace = "io.element.android.appconfig"
 }
 
-anvil {
-    generateDaggerFactories.set(true)
-}
-
 dependencies {
     implementation(libs.androidx.annotationjvm)
-    implementation(libs.dagger)
-    implementation(projects.libraries.di)
     implementation(projects.libraries.matrix.api)
 }

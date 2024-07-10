@@ -16,7 +16,7 @@
 
 package io.element.android.features.lockscreen.impl.fixtures
 
-import io.element.android.appconfig.LockScreenConfig
+import io.element.android.features.lockscreen.impl.LockScreenConfig
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 

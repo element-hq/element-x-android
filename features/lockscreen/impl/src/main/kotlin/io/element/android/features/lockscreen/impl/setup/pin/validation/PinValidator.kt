@@ -16,7 +16,7 @@
 
 package io.element.android.features.lockscreen.impl.setup.pin.validation
 
-import io.element.android.appconfig.LockScreenConfig
+import io.element.android.features.lockscreen.impl.LockScreenConfig
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import javax.inject.Inject
 
