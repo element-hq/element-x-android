@@ -45,7 +45,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -93,11 +93,9 @@ class FtueFlowNode @AssistedInject constructor(
         })
 
         analyticsService.didAskUserConsent()
-            .drop(1) // We only care about consent passing from not asked to asked state
-            .onEach { didAskUserConsent ->
-                if (didAskUserConsent) {
-                    lifecycleScope.launch { moveToNextStep() }
-                }
+            .distinctUntilChanged()
+            .onEach {
+                lifecycleScope.launch { moveToNextStep() }
             }
             .launchIn(lifecycleScope)
     }
