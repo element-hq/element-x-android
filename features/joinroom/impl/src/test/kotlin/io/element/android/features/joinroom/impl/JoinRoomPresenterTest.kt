@@ -93,7 +93,7 @@ class JoinRoomPresenterTest {
                 assertThat(contentState.topic).isEqualTo(roomInfo.topic)
                 assertThat(contentState.alias).isEqualTo(roomInfo.canonicalAlias)
                 assertThat(contentState.numberOfMembers).isEqualTo(roomInfo.activeMembersCount)
-                assertThat(contentState.isDirect).isEqualTo(roomInfo.isDirect)
+                assertThat(contentState.isDm).isEqualTo(roomInfo.isDirect)
                 assertThat(contentState.roomAvatarUrl).isEqualTo(roomInfo.avatarUrl)
             }
         }
@@ -283,7 +283,7 @@ class JoinRoomPresenterTest {
                 assertThat(contentState.topic).isEqualTo(roomDescription.topic)
                 assertThat(contentState.alias).isEqualTo(roomDescription.alias)
                 assertThat(contentState.numberOfMembers).isEqualTo(roomDescription.numberOfMembers)
-                assertThat(contentState.isDirect).isFalse()
+                assertThat(contentState.isDm).isFalse()
                 assertThat(contentState.roomAvatarUrl).isEqualTo(roomDescription.avatarUrl)
             }
         }
@@ -398,7 +398,7 @@ class JoinRoomPresenterTest {
                         topic = "Room topic",
                         alias = RoomAlias("#alias:matrix.org"),
                         numberOfMembers = 2,
-                        isDirect = false,
+                        isDm = false,
                         roomType = RoomType.Room,
                         roomAvatarUrl = "avatarUrl",
                         joinAuthorisationStatus = JoinAuthorisationStatus.CanJoin
