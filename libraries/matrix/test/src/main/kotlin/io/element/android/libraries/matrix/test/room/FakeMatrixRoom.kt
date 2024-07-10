@@ -90,8 +90,6 @@ class FakeMatrixRoom(
     canRedactOwn: Boolean = false,
     canRedactOther: Boolean = false,
 ) : MatrixRoom {
-    override val isOneToOne: Boolean = activeMemberCount <= 2L
-
     private var ignoreResult: Result<Unit> = Result.success(Unit)
     private var unignoreResult: Result<Unit> = Result.success(Unit)
     private var userDisplayNameResult = Result.success<String?>(null)
