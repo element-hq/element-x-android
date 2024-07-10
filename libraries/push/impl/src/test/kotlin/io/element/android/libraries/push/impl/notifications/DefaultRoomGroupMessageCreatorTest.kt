@@ -188,14 +188,14 @@ class DefaultRoomGroupMessageCreatorTest {
     }
 
     @Test
-    fun `test createRoomMessage for direct room`() = runTest {
+    fun `test createRoomMessage for DM`() = runTest {
         val sut = createRoomGroupMessageCreator()
         val fakeImageLoader = FakeImageLoader()
         val result = sut.createRoomMessage(
             currentUser = aMatrixUser(),
             events = listOf(
                 aNotifiableMessageEvent(timestamp = A_TIMESTAMP).copy(
-                    roomIsDirect = true,
+                    roomIsDm = true,
                 ),
             ),
             roomId = A_ROOM_ID,

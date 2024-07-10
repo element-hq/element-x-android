@@ -119,7 +119,7 @@ class DefaultLeaveRoomPresenterTest {
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
-                    result = FakeMatrixRoom(activeMemberCount = 2, isDirect = true, isOneToOne = true),
+                    result = FakeMatrixRoom(activeMemberCount = 2, isDirect = true),
                 )
             }
         )

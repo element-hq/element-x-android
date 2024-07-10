@@ -45,7 +45,7 @@ class RoomListRoomSummaryFactory @Inject constructor(
             isMarkedUnread = details.isMarkedUnread,
             timestamp = lastMessageTimestampFormatter.format(details.lastMessageTimestamp),
             lastMessage = details.lastMessage?.let { message ->
-                roomLastMessageFormatter.format(message.event, details.isDirect)
+                roomLastMessageFormatter.format(message.event, details.isDm)
             }.orEmpty(),
             avatarData = avatarData,
             userDefinedNotificationMode = details.userDefinedNotificationMode,
