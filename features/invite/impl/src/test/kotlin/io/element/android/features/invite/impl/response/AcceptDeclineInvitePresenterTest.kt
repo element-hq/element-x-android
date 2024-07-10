@@ -260,12 +260,12 @@ class AcceptDeclineInvitePresenterTest {
     private fun anInviteData(
         roomId: RoomId = A_ROOM_ID,
         name: String = A_ROOM_NAME,
-        isDirect: Boolean = false
+        isDm: Boolean = false
     ): InviteData {
         return InviteData(
             roomId = roomId,
             roomName = name,
-            isDm = isDirect
+            isDm = isDm
         )
     }
 
