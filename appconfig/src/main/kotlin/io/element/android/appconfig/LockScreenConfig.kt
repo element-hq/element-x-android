@@ -17,7 +17,7 @@
 package io.element.android.appconfig
 
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Duration.Companion.minutes
 
 object LockScreenConfig {
     /** Whether the PIN is mandatory or not. */
@@ -33,7 +33,7 @@ object LockScreenConfig {
     const val MAX_PIN_CODE_ATTEMPTS_BEFORE_LOGOUT: Int = 3
 
     /** Time period before locking the app once backgrounded. */
-    val GRACE_PERIOD: Duration = 0.seconds
+    val GRACE_PERIOD: Duration = 2.minutes
 
     /** Authentication with strong methods (fingerprint, some face/iris unlock implementations) is supported. */
     const val IS_STRONG_BIOMETRICS_ENABLED: Boolean = true
