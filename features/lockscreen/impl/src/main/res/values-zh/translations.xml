@@ -14,11 +14,11 @@
   <string name="screen_app_lock_setup_biometric_unlock_subtitle">"节省时间，用 %1$s 来解锁应用程序"</string>
   <string name="screen_app_lock_setup_choose_pin">"选择 PIN 码"</string>
   <string name="screen_app_lock_setup_confirm_pin">"确认 PIN 码"</string>
-  <string name="screen_app_lock_setup_pin_blacklisted_dialog_content">"出于安全原因，您不能选择这个 PIN 码"</string>
-  <string name="screen_app_lock_setup_pin_blacklisted_dialog_title">"选择不同的 PIN 码"</string>
   <string name="screen_app_lock_setup_pin_context">"锁定 %1$s 以为聊天增加安全性。
 
 选择好记的 PIN 码。如果忘掉了这个 PIN 码，就不得不登出应用。"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"出于安全原因，您不能选择这个 PIN 码"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"选择不同的 PIN 码"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"请输入两次相同的 PIN 码"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN 码不匹配"</string>
   <string name="screen_app_lock_signout_alert_message">"您需要重新登录并创建新的 PIN 才能继续"</string>

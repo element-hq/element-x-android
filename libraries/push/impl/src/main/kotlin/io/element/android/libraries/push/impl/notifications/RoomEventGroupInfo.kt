@@ -26,7 +26,7 @@ data class RoomEventGroupInfo(
     val sessionId: SessionId,
     val roomId: RoomId,
     val roomDisplayName: String,
-    val isDirect: Boolean = false,
+    val isDm: Boolean = false,
     // An event in the list has not yet been display
     val hasNewEvent: Boolean = false,
     // true if at least one on the not yet displayed event is noisy

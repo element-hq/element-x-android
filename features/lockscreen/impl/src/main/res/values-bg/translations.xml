@@ -9,7 +9,7 @@
   <string name="screen_app_lock_setup_biometric_unlock_skip">"Предпочитам да използвам PIN"</string>
   <string name="screen_app_lock_setup_choose_pin">"Избор на PIN"</string>
   <string name="screen_app_lock_setup_confirm_pin">"Потвърждаване на PIN"</string>
-  <string name="screen_app_lock_setup_pin_blacklisted_dialog_title">"Избор на различен PIN"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"Избор на различен PIN"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Моля, въведете един и същ PIN два пъти"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PINs не съвпадат"</string>
   <plurals name="screen_app_lock_subtitle">

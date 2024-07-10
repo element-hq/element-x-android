@@ -14,11 +14,11 @@
   <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Ahorra algo de tiempo y usa %1$s para desbloquear la aplicación cada vez"</string>
   <string name="screen_app_lock_setup_choose_pin">"Elegir PIN"</string>
   <string name="screen_app_lock_setup_confirm_pin">"Confirmar PIN"</string>
-  <string name="screen_app_lock_setup_pin_blacklisted_dialog_content">"No puedes usar este código PIN por motivos de seguridad"</string>
-  <string name="screen_app_lock_setup_pin_blacklisted_dialog_title">"Elige un PIN diferente"</string>
   <string name="screen_app_lock_setup_pin_context">"Añade un bloqueo a %1$s para añadir seguridad adicional a tus chats.
 
 Elige algo que puedas recordar. Si olvidas este PIN, se cerrará la sesión de la aplicación."</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"No puedes usar este código PIN por motivos de seguridad"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"Elige un PIN diferente"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Por favor ingresa el mismo PIN dos veces"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"Los PINs no coinciden"</string>
   <string name="screen_app_lock_signout_alert_message">"Tendrás que volver a iniciar sesión y crear un nuevo PIN para continuar"</string>

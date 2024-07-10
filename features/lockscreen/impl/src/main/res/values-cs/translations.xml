@@ -14,11 +14,11 @@
   <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Ušetřete si čas a použijte pokaždé %1$s pro odemknutí aplikace"</string>
   <string name="screen_app_lock_setup_choose_pin">"Zvolte PIN"</string>
   <string name="screen_app_lock_setup_confirm_pin">"Potvrďte PIN"</string>
-  <string name="screen_app_lock_setup_pin_blacklisted_dialog_content">"Z bezpečnostních důvodů si toto nemůžete zvolit jako svůj PIN kód"</string>
-  <string name="screen_app_lock_setup_pin_blacklisted_dialog_title">"Zvolte jiný PIN"</string>
   <string name="screen_app_lock_setup_pin_context">"Zamkněte %1$s pro zvýšení bezpečnosti vašich konverzací.
 
 Vyberte si něco zapamatovatelného. Pokud tento kód PIN zapomenete, budete z aplikace odhlášeni."</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"Z bezpečnostních důvodů si toto nemůžete zvolit jako svůj PIN kód"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"Zvolte jiný PIN"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Zadejte stejný PIN dvakrát"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN kódy se neshodují."</string>
   <string name="screen_app_lock_signout_alert_message">"Abyste mohli pokračovat, budete se muset znovu přihlásit a vytvořit nový PIN"</string>

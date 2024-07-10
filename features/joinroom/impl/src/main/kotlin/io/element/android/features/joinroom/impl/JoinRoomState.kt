@@ -53,7 +53,7 @@ sealed interface ContentState {
         val topic: String?,
         val alias: RoomAlias?,
         val numberOfMembers: Long?,
-        val isDirect: Boolean,
+        val isDm: Boolean,
         val roomType: RoomType,
         val roomAvatarUrl: String?,
         val joinAuthorisationStatus: JoinAuthorisationStatus,

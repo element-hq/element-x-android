@@ -14,11 +14,11 @@
   <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Säästa aega ja kasuta alati %1$s rakenduse lukustuse eemaldamiseks"</string>
   <string name="screen_app_lock_setup_choose_pin">"Vali PIN-kood"</string>
   <string name="screen_app_lock_setup_confirm_pin">"Korda PIN-koodi"</string>
-  <string name="screen_app_lock_setup_pin_blacklisted_dialog_content">"Turvakaalutlustel sa ei saa sellist PIN-koodi kasutada"</string>
-  <string name="screen_app_lock_setup_pin_blacklisted_dialog_title">"Kasuta mõnda teist PIN-koodi"</string>
   <string name="screen_app_lock_setup_pin_context">"Lisamaks oma %1$s vestlustele turvalisust ja privaatsust, lukusta oma nutiseade.
 
 Vali midagi, mis hästi meelde jääb. Kui unustad selle PIN-koodi, siis turvakaalutlustel logitakse sind rakendusest välja."</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"Turvakaalutlustel sa ei saa sellist PIN-koodi kasutada"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"Kasuta mõnda teist PIN-koodi"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Palun sisesta sama PIN-kood kaks korda"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN-koodid ei klapi omavahel"</string>
   <string name="screen_app_lock_signout_alert_message">"Jätkamaks pead uuesti sisse logima ja looma uue PIN-koodi"</string>

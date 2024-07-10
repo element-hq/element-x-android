@@ -473,7 +473,6 @@ class DefaultNotifiableEventResolverTest {
             imageUriString = null,
             threadId = null,
             roomName = null,
-            roomIsDirect = false,
             roomAvatarPath = null,
             senderAvatarPath = null,
             soundName = null,
@@ -544,7 +543,6 @@ class DefaultNotifiableEventResolverTest {
             roomId = A_ROOM_ID,
             threadId = null,
             roomName = null,
-            roomIsDirect = false,
             canBeReplaced = false,
             isRedacted = false,
             imageUriString = null,
@@ -578,7 +576,6 @@ class DefaultNotifiableEventResolverTest {
             roomId = A_ROOM_ID,
             threadId = null,
             roomName = null,
-            roomIsDirect = false,
             canBeReplaced = false,
             isRedacted = false,
             imageUriString = null,
@@ -686,6 +683,7 @@ class DefaultNotifiableEventResolverTest {
             timestamp = timestamp,
             content = content,
             hasMention = hasMention,
+            isDm = false,
         )
     }
 
@@ -704,7 +702,6 @@ class DefaultNotifiableEventResolverTest {
             imageUriString = null,
             threadId = null,
             roomName = null,
-            roomIsDirect = false,
             roomAvatarPath = null,
             senderAvatarPath = null,
             soundName = null,
