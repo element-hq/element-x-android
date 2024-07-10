@@ -233,7 +233,7 @@ internal fun ContentState.toInviteData(): InviteData? {
             roomId = roomId,
             // Note: name should not be null at this point, but use Id just in case...
             roomName = name ?: roomId.value,
-            isDirect = isDirect
+            isDm = isDirect
         )
         else -> null
     }

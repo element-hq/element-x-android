@@ -79,13 +79,13 @@ private fun DeclineConfirmationDialog(
     onDismissClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val contentResource = if (invite.isDirect) {
+    val contentResource = if (invite.isDm) {
         R.string.screen_invites_decline_direct_chat_message
     } else {
         R.string.screen_invites_decline_chat_message
     }
 
-    val titleResource = if (invite.isDirect) {
+    val titleResource = if (invite.isDm) {
         R.string.screen_invites_decline_direct_chat_title
     } else {
         R.string.screen_invites_decline_chat_title

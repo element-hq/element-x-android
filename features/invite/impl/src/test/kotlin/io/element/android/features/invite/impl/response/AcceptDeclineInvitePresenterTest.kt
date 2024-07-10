@@ -265,7 +265,7 @@ class AcceptDeclineInvitePresenterTest {
         return InviteData(
             roomId = roomId,
             roomName = name,
-            isDirect = isDirect
+            isDm = isDirect
         )
     }
 
