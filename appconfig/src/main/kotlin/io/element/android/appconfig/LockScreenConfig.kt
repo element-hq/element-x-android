@@ -26,7 +26,7 @@ object LockScreenConfig {
     /** Set of forbidden PIN codes. */
     val FORBIDDEN_PIN_CODES: Set<String> = setOf("0000", "1234")
 
-    /** The size of the PIN */
+    /** The size of the PIN. */
     const val PIN_SIZE: Int = 4
 
     /** Number of attempts before the user is logged out. */
