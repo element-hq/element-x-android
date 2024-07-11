@@ -68,6 +68,8 @@ import io.element.android.services.analyticsproviders.api.trackers.captureIntera
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -77,6 +79,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private const val EXTENDED_RANGE_SIZE = 40
 
 class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
@@ -122,6 +126,9 @@ class RoomListPresenter @Inject constructor(
 
         fun handleEvents(event: RoomListEvents) {
             when (event) {
+                is RoomListEvents.UpdateVisibleRange -> coroutineScope.launch {
+                    updateVisibleRange(event.range)
+                }
                 RoomListEvents.DismissRequestVerificationPrompt -> securityBannerDismissed = true
                 RoomListEvents.DismissRecoveryKeyPrompt -> securityBannerDismissed = true
                 RoomListEvents.ToggleSearchResults -> searchState.eventSink(RoomListSearchEvents.ToggleSearchVisibility)
@@ -281,6 +288,22 @@ class RoomListPresenter @Inject constructor(
                 .onSuccess {
                     analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle)
                 }
+        }
+    }
+
+    private var currentUpdateVisibleRangeJob: Job? = null
+    private fun CoroutineScope.updateVisibleRange(range: IntRange) {
+        currentUpdateVisibleRangeJob?.cancel()
+        currentUpdateVisibleRangeJob = launch(SupervisorJob()) {
+            if (range.isEmpty()) return@launch
+            val currentRoomList = roomListDataSource.allRooms.first()
+            // Use extended range to 'prefetch' the next rooms info
+            val midExtendedRangeSize = EXTENDED_RANGE_SIZE / 2
+            val extendedRange = range.first until range.last + midExtendedRangeSize
+            val roomIds = extendedRange.mapNotNull { index ->
+                currentRoomList.getOrNull(index)?.roomId
+            }
+            roomListDataSource.subscribeToVisibleRooms(roomIds)
         }
     }
 }

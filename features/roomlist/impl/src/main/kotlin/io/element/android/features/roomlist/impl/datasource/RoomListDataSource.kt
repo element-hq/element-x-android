@@ -20,6 +20,7 @@ import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
 import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
@@ -57,6 +58,10 @@ class RoomListDataSource @Inject constructor(
         old?.roomId == new?.roomId
     }
 
+    val allRooms: Flow<ImmutableList<RoomListRoomSummary>> = _allRooms
+
+    val loadingState = roomListService.allRooms.loadingState
+
     fun launchIn(coroutineScope: CoroutineScope) {
         roomListService
             .allRooms
@@ -67,9 +72,9 @@ class RoomListDataSource @Inject constructor(
             .launchIn(coroutineScope)
     }
 
-    val allRooms: Flow<ImmutableList<RoomListRoomSummary>> = _allRooms
-
-    val loadingState = roomListService.allRooms.loadingState
+    suspend fun subscribeToVisibleRooms(roomIds: List<RoomId>) {
+        roomListService.subscribeToVisibleRooms(roomIds)
+    }
 
     @OptIn(FlowPreview::class)
     private fun observeNotificationSettings() {

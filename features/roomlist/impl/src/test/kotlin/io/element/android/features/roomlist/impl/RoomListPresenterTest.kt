@@ -50,6 +50,7 @@ import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.fullscreenintent.test.FakeFullScreenIntentPermissionsPresenter
 import io.element.android.libraries.indicator.impl.DefaultIndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
@@ -581,6 +582,37 @@ class RoomListPresenterTest {
                     listOf(value(AcceptDeclineInviteEvents.AcceptInvite(inviteData))),
                     listOf(value(AcceptDeclineInviteEvents.DeclineInvite(inviteData))),
                 )
+        }
+    }
+
+    @Test
+    fun `present - UpdateVisibleRange subscribes to rooms in visible range`() = runTest {
+        val subscribeToVisibleRoomsLambda = lambdaRecorder { _: List<RoomId> -> }
+        val roomListService = FakeRoomListService(subscribeToVisibleRoomsLambda = subscribeToVisibleRoomsLambda)
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val matrixClient = FakeMatrixClient(
+            roomListService = roomListService,
+        )
+        val roomSummary = aRoomSummary(
+            currentUserMembership = CurrentUserMembership.INVITED
+        )
+        roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
+        roomListService.postAllRooms(listOf(roomSummary))
+        val presenter = createRoomListPresenter(
+            coroutineScope = scope,
+            client = matrixClient,
+        )
+        presenter.test {
+            val state = consumeItemsUntilPredicate {
+                it.contentState is RoomListContentState.Rooms
+            }.last()
+
+            state.eventSink(RoomListEvents.UpdateVisibleRange(IntRange(0, 10)))
+            subscribeToVisibleRoomsLambda.assertions().isCalledOnce()
+
+            // If called again, it will cancel the current one, which should not result in a test failure
+            state.eventSink(RoomListEvents.UpdateVisibleRange(IntRange(0, 11)))
+            subscribeToVisibleRoomsLambda.assertions().isCalledExactly(2)
         }
     }
 

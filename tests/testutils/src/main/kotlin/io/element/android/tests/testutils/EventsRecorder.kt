@@ -50,4 +50,8 @@ class EventsRecorder<T>(
     fun assertTrue(index: Int, predicate: (T) -> Boolean) {
         assertThat(predicate(events[index])).isTrue()
     }
+
+    fun clear() {
+        events.clear()
+    }
 }

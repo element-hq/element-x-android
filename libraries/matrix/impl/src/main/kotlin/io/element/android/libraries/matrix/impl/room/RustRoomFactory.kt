@@ -50,6 +50,7 @@ class RustRoomFactory(
     private val roomContentForwarder: RoomContentForwarder,
     private val roomListService: RoomListService,
     private val innerRoomListService: InnerRoomListService,
+    private val roomSyncSubscriber: RoomSyncSubscriber,
     private val isKeyBackupEnabled: suspend () -> Boolean,
     private val getSessionData: suspend () -> SessionData,
 ) {
@@ -58,8 +59,6 @@ class RustRoomFactory(
     private val mutex = Mutex()
 
     private val matrixRoomInfoMapper = MatrixRoomInfoMapper()
-
-    private val roomSyncSubscriber: RoomSyncSubscriber = RoomSyncSubscriber(innerRoomListService, dispatchers)
 
     private val eventFilters = TimelineConfig.excludedEvents
         .takeIf { it.isNotEmpty() }

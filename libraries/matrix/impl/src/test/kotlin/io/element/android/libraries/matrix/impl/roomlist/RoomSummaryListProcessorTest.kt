@@ -43,6 +43,7 @@ import org.matrix.rustcomponents.sdk.RoomListServiceStateListener
 import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicatorListener
 import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomNotificationMode
+import org.matrix.rustcomponents.sdk.RoomSubscription
 import org.matrix.rustcomponents.sdk.TaskHandle
 
 // NOTE: this class is using a fake implementation of a Rust SDK interface which returns actual Rust objects with pointers.
@@ -267,4 +268,6 @@ class FakeRoomListItem(
     override suspend fun latestEvent(): EventTimelineItem? {
         return latestEvent
     }
+
+    override fun subscribe(settings: RoomSubscription?) = Unit
 }
