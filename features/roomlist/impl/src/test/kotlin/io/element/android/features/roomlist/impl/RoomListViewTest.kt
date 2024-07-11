@@ -45,6 +45,24 @@ class RoomListViewTest {
     @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
+    fun `displaying the view automatically sends a couple of UpdateVisibleRangeEvents`() {
+        val eventsRecorder = EventsRecorder<RoomListEvents>()
+        rule.setRoomListView(
+            state = aRoomListState(
+                contentState = aRoomsContentState(securityBannerState = SecurityBannerState.RecoveryKeyConfirmation),
+                eventSink = eventsRecorder,
+            )
+        )
+
+        eventsRecorder.assertList(
+            listOf(
+                RoomListEvents.UpdateVisibleRange(IntRange.EMPTY),
+                RoomListEvents.UpdateVisibleRange(0 until 2),
+            )
+        )
+    }
+
+    @Test
     fun `clicking on close recovery key banner emits the expected Event`() {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
         rule.setRoomListView(
@@ -53,6 +71,10 @@ class RoomListViewTest {
                 eventSink = eventsRecorder,
             )
         )
+
+        // Remove automatic initial events
+        eventsRecorder.clear()
+
         val close = rule.activity.getString(CommonStrings.action_close)
         rule.onNodeWithContentDescription(close).performClick()
         eventsRecorder.assertSingle(RoomListEvents.DismissRecoveryKeyPrompt)
@@ -60,7 +82,7 @@ class RoomListViewTest {
 
     @Test
     fun `clicking on continue recovery key banner invokes the expected callback`() {
-        val eventsRecorder = EventsRecorder<RoomListEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<RoomListEvents>()
         ensureCalledOnce { callback ->
             rule.setRoomListView(
                 state = aRoomListState(
@@ -69,7 +91,13 @@ class RoomListViewTest {
                 ),
                 onConfirmRecoveryKeyClick = callback,
             )
+
+            // Remove automatic initial events
+            eventsRecorder.clear()
+
             rule.clickOn(CommonStrings.action_continue)
+
+            eventsRecorder.assertEmpty()
         }
     }
 
@@ -90,7 +118,7 @@ class RoomListViewTest {
 
     @Test
     fun `clicking on a room invokes the expected callback`() {
-        val eventsRecorder = EventsRecorder<RoomListEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<RoomListEvents>()
         val state = aRoomListState(
             eventSink = eventsRecorder,
         )
@@ -102,8 +130,14 @@ class RoomListViewTest {
                 state = state,
                 onRoomClick = callback,
             )
+
+            // Remove automatic initial events
+            eventsRecorder.clear()
+
             rule.onNodeWithText(room0.lastMessage!!.toString()).performClick()
         }
+
+        eventsRecorder.assertEmpty()
     }
 
     @Test
@@ -118,6 +152,9 @@ class RoomListViewTest {
         rule.setRoomListView(
             state = state,
         )
+        // Remove automatic initial events
+        eventsRecorder.clear()
+
         rule.onNodeWithText(room0.lastMessage!!.toString()).performTouchInput { longClick() }
         eventsRecorder.assertSingle(RoomListEvents.ShowContextMenu(room0))
     }
@@ -135,8 +172,13 @@ class RoomListViewTest {
                 state = state,
                 onRoomSettingsClick = callback,
             )
+
+            // Remove automatic initial events
+            eventsRecorder.clear()
+
             rule.clickOn(CommonStrings.common_settings)
         }
+
         eventsRecorder.assertSingle(RoomListEvents.HideContextMenu)
     }
 
@@ -150,6 +192,10 @@ class RoomListViewTest {
             it.displayType == RoomSummaryDisplayType.INVITE
         }
         rule.setRoomListView(state = state)
+
+        // Remove automatic initial events
+        eventsRecorder.clear()
+
         rule.clickOn(CommonStrings.action_accept)
         rule.clickOn(CommonStrings.action_decline)
         eventsRecorder.assertList(

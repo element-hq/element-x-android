@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.test.roomlist
 
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.DynamicRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
@@ -24,7 +25,9 @@ import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class FakeRoomListService : RoomListService {
+class FakeRoomListService(
+    var subscribeToVisibleRoomsLambda: (List<RoomId>) -> Unit = {},
+) : RoomListService {
     private val allRoomSummariesFlow = MutableStateFlow<List<RoomSummary>>(emptyList())
     private val allRoomsLoadingStateFlow = MutableStateFlow<RoomList.LoadingState>(RoomList.LoadingState.NotLoaded)
     private val roomListStateFlow = MutableStateFlow<RoomListService.State>(RoomListService.State.Idle)
@@ -54,6 +57,10 @@ class FakeRoomListService : RoomListService {
         return when (source) {
             RoomList.Source.All -> allRooms
         }
+    }
+
+    override suspend fun subscribeToVisibleRooms(roomIds: List<RoomId>) {
+        subscribeToVisibleRoomsLambda(roomIds)
     }
 
     override val allRooms = SimplePagedRoomList(
