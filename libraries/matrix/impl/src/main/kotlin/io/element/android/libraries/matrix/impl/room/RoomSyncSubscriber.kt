@@ -97,9 +97,9 @@ class RoomSyncSubscriber(
                     0 -> return@withContext
                     1 -> {
                         Timber.d("Unsubscribe from room $roomId")
-                        roomListService.room(roomId.value).use { roomListItem ->
-                            roomListItem.unsubscribe()
-                        }
+//                        roomListService.room(roomId.value).use { roomListItem ->
+//                            roomListItem.unsubscribe()
+//                        }
                     }
                 }
                 subscriptionCounts[roomId] = currentSubscription - 1
