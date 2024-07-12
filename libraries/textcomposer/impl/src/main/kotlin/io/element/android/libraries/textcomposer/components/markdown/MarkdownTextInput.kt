@@ -39,8 +39,9 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
-import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanProvider
+import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
+import io.element.android.libraries.textcomposer.mentions.updateMentionStyles
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
@@ -81,6 +82,8 @@ fun MarkdownTextInput(
             return remaining
         }
     }
+
+    val mentionSpanTheme = LocalMentionSpanTheme.current
 
     AndroidView(
         modifier = Modifier
@@ -131,7 +134,9 @@ fun MarkdownTextInput(
             editText.applyStyleInCompose(richTextEditorStyle)
 
             if (state.text.needsDisplaying()) {
-                editText.updateEditableText(state.text.value())
+                val text = state.text.value()
+                mentionSpanTheme.updateMentionStyles(text)
+                editText.updateEditableText(text)
                 if (canUpdateState) {
                     state.text.update(editText.editableText, false)
                 }

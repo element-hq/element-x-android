@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.textcomposer.impl.mentions
 
-import android.graphics.Color
 import android.net.Uri
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -24,7 +23,9 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
+import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.tests.testutils.WarmUpRule
 import org.junit.Rule
@@ -37,66 +38,34 @@ class MentionSpanProviderTest {
     @JvmField @Rule
     val warmUpRule = WarmUpRule()
 
-    private val myUserColor = Color.RED
-    private val otherColor = Color.BLUE
-    private val currentUserId = A_SESSION_ID
 
     private val permalinkParser = FakePermalinkParser()
     private val mentionSpanProvider = MentionSpanProvider(
-        currentSessionId = currentUserId.value,
         permalinkParser = permalinkParser,
-    ).apply {
-        currentUserBackgroundColor = myUserColor
-        currentUserTextColor = myUserColor
-        otherBackgroundColor = otherColor
-        otherTextColor = otherColor
+    )
+
+    @Test
+    fun `getting mention span for a user returns a MentionSpan of type USER`() {
+        permalinkParser.givenResult(PermalinkData.UserLink(A_USER_ID))
+        val mentionSpan = mentionSpanProvider.getMentionSpanFor("@me:matrix.org", "https://matrix.to/#/${A_USER_ID.value}")
+        assertThat(mentionSpan.type).isEqualTo(MentionSpan.Type.USER)
     }
 
     @Test
-    fun `getting mention span for current user should return a MentionSpan with custom colors`() {
-        permalinkParser.givenResult(PermalinkData.UserLink(currentUserId))
-        val mentionSpan = mentionSpanProvider.getMentionSpanFor("@me:matrix.org", "https://matrix.to/#/${currentUserId.value}")
-        assertThat(mentionSpan.backgroundColor).isEqualTo(myUserColor)
-        assertThat(mentionSpan.textColor).isEqualTo(myUserColor)
-    }
-
-    @Test
-    fun `getting mention span for other user should return a MentionSpan with normal colors`() {
-        permalinkParser.givenResult(PermalinkData.UserLink(UserId("@other:matrix.org")))
-        val mentionSpan = mentionSpanProvider.getMentionSpanFor("@other:matrix.org", "https://matrix.to/#/@other:matrix.org")
-        assertThat(mentionSpan.backgroundColor).isEqualTo(otherColor)
-        assertThat(mentionSpan.textColor).isEqualTo(otherColor)
-    }
-
-    @Test
-    fun `getting mention span for everyone in the room`() {
+    fun `getting mention span for everyone in the room returns a MentionSpan of type EVERYONE`() {
         permalinkParser.givenResult(PermalinkData.FallbackLink(uri = Uri.EMPTY))
         val mentionSpan = mentionSpanProvider.getMentionSpanFor("@room", "#")
-        assertThat(mentionSpan.backgroundColor).isEqualTo(otherColor)
-        assertThat(mentionSpan.textColor).isEqualTo(otherColor)
+        assertThat(mentionSpan.type).isEqualTo(MentionSpan.Type.EVERYONE)
     }
 
     @Test
-    fun `getting mention span for a room should return a MentionSpan with normal colors`() {
+    fun `getting mention span for a room returns a MentionSpan of type ROOM`() {
         permalinkParser.givenResult(
             PermalinkData.RoomLink(
                 roomIdOrAlias = RoomAlias("#room:matrix.org").toRoomIdOrAlias(),
             )
         )
         val mentionSpan = mentionSpanProvider.getMentionSpanFor("#room:matrix.org", "https://matrix.to/#/#room:matrix.org")
-        assertThat(mentionSpan.backgroundColor).isEqualTo(otherColor)
-        assertThat(mentionSpan.textColor).isEqualTo(otherColor)
-    }
-
-    @Test
-    fun `getting mention span for @room should return a MentionSpan with normal colors`() {
-        permalinkParser.givenResult(
-            PermalinkData.RoomLink(
-                roomIdOrAlias = RoomAlias("#room:matrix.org").toRoomIdOrAlias(),
-            )
-        )
-        val mentionSpan = mentionSpanProvider.getMentionSpanFor("@room", "#room:matrix.org")
-        assertThat(mentionSpan.backgroundColor).isEqualTo(otherColor)
-        assertThat(mentionSpan.textColor).isEqualTo(otherColor)
+        assertThat(mentionSpan.type).isEqualTo(MentionSpan.Type.ROOM)
     }
 }

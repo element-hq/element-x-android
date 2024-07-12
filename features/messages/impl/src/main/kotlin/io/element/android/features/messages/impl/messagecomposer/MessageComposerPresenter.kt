@@ -52,13 +52,14 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.isDm
-import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
+import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.mediapickers.api.PickerProvider
@@ -67,7 +68,8 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
-import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanProvider
+import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanTheme
+import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.Message
@@ -78,6 +80,7 @@ import io.element.android.libraries.textcomposer.model.rememberMarkdownTextEdito
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import io.element.android.wysiwyg.compose.RichTextEditorState
+import io.element.android.wysiwyg.display.TextDisplay
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CancellationException
@@ -117,8 +120,10 @@ class MessageComposerPresenter @Inject constructor(
     permissionsPresenterFactory: PermissionsPresenter.Factory,
     private val timelineController: TimelineController,
     private val draftService: ComposerDraftService,
+    private val mentionSpanProvider: MentionSpanProvider,
+    private val pillificationHelper: TextPillificationHelper,
+    private val roomMemberProfilesCache: RoomMemberProfilesCache,
 ) : Presenter<MessageComposerState> {
-    private lateinit var pillificationHelper: TextPillificationHelper
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
     private var pendingEvent: MessageComposerEvents? = null
     private val suggestionSearchTrigger = MutableStateFlow<Suggestion?>(null)
@@ -141,17 +146,8 @@ class MessageComposerPresenter @Inject constructor(
             richTextEditorState.isReadyToProcessActions = true
         }
         val markdownTextEditorState = rememberMarkdownTextEditorState(initialText = null, initialFocus = false)
-
-        val mentionSpanProvider = LocalMentionSpanProvider.current
-        val roomMemberProfilesCache = LocalRoomMemberProfilesCache.current
         var isMentionsEnabled by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
-            pillificationHelper = TextPillificationHelper(
-                mentionSpanProvider = mentionSpanProvider,
-                permalinkBuilder = permalinkBuilder,
-                permalinkParser = permalinkParser,
-                roomMemberProfilesCache = roomMemberProfilesCache,
-            )
             isMentionsEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.Mentions)
         }
 
@@ -394,9 +390,9 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
+        val mentionSpanTheme = LocalMentionSpanTheme.current
         return MessageComposerState(
             textEditorState = textEditorState,
-            permalinkParser = permalinkParser,
             isFullScreen = isFullScreen.value,
             mode = messageComposerContext.composerMode,
             showAttachmentSourcePicker = showAttachmentSourcePicker,
@@ -405,7 +401,22 @@ class MessageComposerPresenter @Inject constructor(
             canCreatePoll = canCreatePoll.value,
             attachmentsState = attachmentsState.value,
             memberSuggestions = memberSuggestions.toPersistentList(),
-            eventSink = { handleEvents(it) }
+            resolveMentionDisplay = remember(mentionSpanTheme) {
+                { text, url ->
+                    val permalinkData = permalinkParser.parse(url)
+                    if (permalinkData is PermalinkData.UserLink) {
+                        val displayNameOrId = roomMemberProfilesCache.getDisplayName(permalinkData.userId) ?: permalinkData.userId.value
+                        val mentionSpan = mentionSpanProvider.getMentionSpanFor(displayNameOrId, url)
+                        mentionSpan.update(mentionSpanTheme)
+                        TextDisplay.Custom(mentionSpan)
+                    } else {
+                        val mentionSpan = mentionSpanProvider.getMentionSpanFor(text, url)
+                        mentionSpan.update(mentionSpanTheme)
+                        TextDisplay.Custom(mentionSpan)
+                    }
+                }
+            },
+            eventSink = { handleEvents(it) },
         )
     }
 

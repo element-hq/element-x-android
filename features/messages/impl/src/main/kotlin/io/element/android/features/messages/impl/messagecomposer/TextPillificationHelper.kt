@@ -21,14 +21,16 @@ import android.text.SpannableStringBuilder
 import androidx.core.text.getSpans
 import io.element.android.libraries.matrix.api.core.MatrixPatternType
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
+import javax.inject.Inject
 
-class TextPillificationHelper(
+class TextPillificationHelper @Inject constructor(
     private val mentionSpanProvider: MentionSpanProvider,
     private val permalinkBuilder: PermalinkBuilder,
     private val permalinkParser: PermalinkParser,
@@ -55,7 +57,7 @@ class TextPillificationHelper(
                 MatrixPatternType.ROOM_ALIAS -> {
                     val mentionSpanExists = spannable.getSpans<MentionSpan>(match.start, match.end).isNotEmpty()
                     if (!mentionSpanExists) {
-                        val permalink = permalinkBuilder.permalinkForRoomAlias(match.value).getOrNull() ?: continue
+                        val permalink = permalinkBuilder.permalinkForRoomAlias(RoomAlias(match.value)).getOrNull() ?: continue
                         val mentionSpan = mentionSpanProvider.getMentionSpanFor(match.value, permalink)
                         spannable.replace(match.start, match.end + 1, "@ ")
                         spannable.setSpan(mentionSpan, match.start, match.start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

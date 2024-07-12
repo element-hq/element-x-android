@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.impl.permalink
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilderError
@@ -37,12 +38,12 @@ class DefaultPermalinkBuilder @Inject constructor() : PermalinkBuilder {
         }
     }
 
-    override fun permalinkForRoomAlias(roomAlias: String): Result<String> {
-        if (!MatrixPatterns.isRoomAlias(roomAlias)) {
+    override fun permalinkForRoomAlias(roomAlias: RoomAlias): Result<String> {
+        if (!MatrixPatterns.isRoomAlias(roomAlias.value)) {
             return Result.failure(PermalinkBuilderError.InvalidRoomAlias)
         }
         return runCatching {
-            matrixToRoomAliasPermalink(roomAlias)
+            matrixToRoomAliasPermalink(roomAlias.value)
         }
     }
 }

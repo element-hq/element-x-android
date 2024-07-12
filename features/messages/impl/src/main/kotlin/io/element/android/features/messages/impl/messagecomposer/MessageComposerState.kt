@@ -19,16 +19,15 @@ package io.element.android.features.messages.impl.messagecomposer
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.TextEditorState
+import io.element.android.wysiwyg.display.TextDisplay
 import kotlinx.collections.immutable.ImmutableList
 
 @Stable
 data class MessageComposerState(
     val textEditorState: TextEditorState,
-    val permalinkParser: PermalinkParser,
     val isFullScreen: Boolean,
     val mode: MessageComposerMode,
     val showAttachmentSourcePicker: Boolean,
@@ -37,6 +36,7 @@ data class MessageComposerState(
     val canCreatePoll: Boolean,
     val attachmentsState: AttachmentsState,
     val memberSuggestions: ImmutableList<ResolvedMentionSuggestion>,
+    val resolveMentionDisplay: (String, String) -> TextDisplay,
     val eventSink: (MessageComposerEvents) -> Unit,
 )
 

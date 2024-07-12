@@ -38,6 +38,7 @@ import io.element.android.libraries.textcomposer.components.markdown.StableCharS
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
+import io.element.android.libraries.textcomposer.mentions.getMentionSpans
 import kotlinx.parcelize.Parcelize
 
 @Stable
@@ -86,10 +87,10 @@ class MarkdownTextEditorState(
     fun getMessageMarkdown(permalinkBuilder: PermalinkBuilder): String {
         val charSequence = text.value()
         return if (charSequence is Spanned) {
-            val mentions = charSequence.getSpans(0, charSequence.length, MentionSpan::class.java)
+            val mentions = charSequence.getMentionSpans()
             buildString {
                 append(charSequence.toString())
-                if (mentions != null && mentions.isNotEmpty()) {
+                if (mentions.isNotEmpty()) {
                     for (mention in mentions.sortedByDescending { charSequence.getSpanEnd(it) }) {
                         val start = charSequence.getSpanStart(mention)
                         val end = charSequence.getSpanEnd(mention)
