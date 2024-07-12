@@ -171,7 +171,7 @@ class MarkdownTextInputTest {
         rule.awaitIdle()
 
         // Text is replaced with a placeholder
-        assertThat(editor?.editableText.toString()).isEqualTo(". ")
+        assertThat(editor?.editableText.toString()).isEqualTo("@ ")
         // The placeholder contains a MentionSpan
         val mentionSpans = editor?.editableText?.getSpans<MentionSpan>(0, 2).orEmpty()
         assertThat(mentionSpans).isNotEmpty()

@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilderError
+import org.matrix.rustcomponents.sdk.matrixToRoomAliasPermalink
 import org.matrix.rustcomponents.sdk.matrixToUserPermalink
 import javax.inject.Inject
 
@@ -33,6 +34,15 @@ class DefaultPermalinkBuilder @Inject constructor() : PermalinkBuilder {
         }
         return runCatching {
             matrixToUserPermalink(userId.value)
+        }
+    }
+
+    override fun permalinkForRoomAlias(roomAlias: String): Result<String> {
+        if (!MatrixPatterns.isRoomAlias(roomAlias)) {
+            return Result.failure(PermalinkBuilderError.InvalidRoomAlias)
+        }
+        return runCatching {
+            matrixToRoomAliasPermalink(roomAlias)
         }
     }
 }

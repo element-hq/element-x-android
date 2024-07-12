@@ -16,13 +16,16 @@
 
 package io.element.android.libraries.matrix.api.core
 
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+
 /**
  * This class contains pattern to match the different Matrix ids
  * Ref: https://matrix.org/docs/spec/appendices#identifier-grammar
  */
 object MatrixPatterns {
     // Note: TLD is not mandatory (localhost, IP address...)
-    private const val DOMAIN_REGEX = ":[A-Z0-9.-]+(:[0-9]{2,5})?"
+    private const val DOMAIN_REGEX = ":[A-Za-z0-9.-]+(:[0-9]{2,5})?"
 
     // regex pattern to find matrix user ids in a string.
     // See https://matrix.org/docs/spec/appendices#historical-user-ids
@@ -109,4 +112,50 @@ object MatrixPatterns {
      * @return true if the string is a valid thread id.
      */
     fun isThreadId(str: String?) = isEventId(str)
+
+    fun findPatterns(text: CharSequence, permalinkParser: PermalinkParser): List<MatrixPatternResult> {
+        val regex = "\\S+?$DOMAIN_REGEX".toRegex(RegexOption.IGNORE_CASE)
+        val rawTextMatches = regex.findAll(text)
+        val urlMatches = "\\[\\S+?\\]\\((\\S+?)\\)".toRegex(RegexOption.IGNORE_CASE).findAll(text)
+        val atRoomMatches = Regex("@room").findAll(text)
+        return buildList {
+            for (match in rawTextMatches) {
+                val type = when {
+                    isUserId(match.value) -> MatrixPatternType.USER_ID
+                    isRoomId(match.value) -> MatrixPatternType.ROOM_ID
+                    isRoomAlias(match.value) -> MatrixPatternType.ROOM_ALIAS
+                    isEventId(match.value) -> MatrixPatternType.EVENT_ID
+                    else -> null
+                }
+                if (type != null) {
+                    add(MatrixPatternResult(type, match.value, match.range.first, match.range.last))
+                }
+            }
+            for (match in urlMatches) {
+                val urlMatch = match.groupValues[1]
+                when (val permalink = permalinkParser.parse(urlMatch)) {
+                    is PermalinkData.UserLink -> {
+                        add(MatrixPatternResult(MatrixPatternType.USER_ID, permalink.userId.toString(), match.range.first, match.range.last))
+                    }
+                    is PermalinkData.RoomLink -> {
+                        add(MatrixPatternResult(MatrixPatternType.ROOM_ID, permalink.roomIdOrAlias.toString(), match.range.first, match.range.last))
+                    }
+                    else -> Unit
+                }
+            }
+            for (match in atRoomMatches) {
+                add(MatrixPatternResult(MatrixPatternType.AT_ROOM, match.value, match.range.first, match.range.last))
+            }
+        }
+    }
 }
+
+enum class MatrixPatternType {
+    USER_ID,
+    ROOM_ID,
+    ROOM_ALIAS,
+    EVENT_ID,
+    AT_ROOM
+}
+
+data class MatrixPatternResult(val type: MatrixPatternType, val value: String, val start: Int, val end: Int)

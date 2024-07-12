@@ -58,6 +58,7 @@ import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.mediapickers.api.PickerProvider
@@ -117,6 +118,7 @@ class MessageComposerPresenter @Inject constructor(
     private val timelineController: TimelineController,
     private val draftService: ComposerDraftService,
 ) : Presenter<MessageComposerState> {
+    private lateinit var pillificationHelper: TextPillificationHelper
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
     private var pendingEvent: MessageComposerEvents? = null
     private val suggestionSearchTrigger = MutableStateFlow<Suggestion?>(null)
@@ -140,8 +142,16 @@ class MessageComposerPresenter @Inject constructor(
         }
         val markdownTextEditorState = rememberMarkdownTextEditorState(initialText = null, initialFocus = false)
 
+        val mentionSpanProvider = LocalMentionSpanProvider.current
+        val roomMemberProfilesCache = LocalRoomMemberProfilesCache.current
         var isMentionsEnabled by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
+            pillificationHelper = TextPillificationHelper(
+                mentionSpanProvider = mentionSpanProvider,
+                permalinkBuilder = permalinkBuilder,
+                permalinkParser = permalinkParser,
+                roomMemberProfilesCache = roomMemberProfilesCache,
+            )
             isMentionsEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.Mentions)
         }
 
@@ -259,8 +269,6 @@ class MessageComposerPresenter @Inject constructor(
                 applyDraft(draft, markdownTextEditorState, richTextEditorState)
             }
         }
-
-        val mentionSpanProvider = LocalMentionSpanProvider.current
 
         fun handleEvents(event: MessageComposerEvents) {
             when (event) {
@@ -627,7 +635,8 @@ class MessageComposerPresenter @Inject constructor(
             analyticsService.captureInteraction(Interaction.Name.MobileRoomComposerFormattingEnabled)
         } else {
             val markdown = richTextEditorState.messageMarkdown
-            markdownTextEditorState.text.update(markdown, true)
+            val pilliefiedMarkdown = pillificationHelper.pillify(markdown)
+            markdownTextEditorState.text.update(pilliefiedMarkdown, true)
             // Give some time for the focus of the previous editor to be cleared
             delay(100)
             markdownTextEditorState.requestFocusAction()
@@ -688,7 +697,8 @@ class MessageComposerPresenter @Inject constructor(
             if (content.isEmpty()) {
                 markdownTextEditorState.selection = IntRange.EMPTY
             }
-            markdownTextEditorState.text.update(content, true)
+            val pillifiedContent = pillificationHelper.pillify(content)
+            markdownTextEditorState.text.update(pillifiedContent, true)
             if (requestFocus) {
                 markdownTextEditorState.requestFocusAction()
             }
