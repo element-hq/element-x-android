@@ -168,6 +168,7 @@ Reason: %1$s."</string>
   <string name="common_no_results">"No results"</string>
   <string name="common_no_room_name">"No room name"</string>
   <string name="common_offline">"Offline"</string>
+  <string name="common_open_source_licenses">"Open source licenses"</string>
   <string name="common_or">"or"</string>
   <string name="common_password">"Password"</string>
   <string name="common_people">"People"</string>

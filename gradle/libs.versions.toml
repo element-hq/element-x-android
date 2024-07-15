@@ -45,7 +45,7 @@ showkase = "1.0.3"
 appyx = "1.4.0"
 sqldelight = "2.0.2"
 wysiwyg = "2.37.5"
-telephoto = "0.11.2"
+telephoto = "0.12.0"
 
 # DI
 dagger = "2.51.1"
@@ -141,7 +141,7 @@ test_runner = "androidx.test:runner:1.6.1"
 test_mockk = "io.mockk:mockk:1.13.11"
 test_konsist = "com.lemonappdev:konsist:0.15.1"
 test_turbine = "app.cash.turbine:turbine:1.1.0"
-test_truth = "com.google.truth:truth:1.4.3"
+test_truth = "com.google.truth:truth:1.4.4"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.16"
 test_robolectric = "org.robolectric:robolectric:4.13"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
