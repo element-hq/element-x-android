@@ -30,7 +30,6 @@ import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.messagecomposer.DefaultMessageComposerContext
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
-import io.element.android.features.messages.impl.messagecomposer.TextPillificationHelper
 import io.element.android.features.messages.impl.textcomposer.TestRichTextEditorStateFactory
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineItemIndexer
@@ -45,6 +44,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.typing.TypingNotificationPresenter
+import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPlayer
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.messages.impl.voicemessages.timeline.FakeRedactedVoiceMessageManager

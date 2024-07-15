@@ -42,6 +42,7 @@ import io.element.android.features.messages.impl.attachments.preview.error.sendA
 import io.element.android.features.messages.impl.draft.ComposerDraftService
 import io.element.android.features.messages.impl.mentions.MentionSuggestionsProcessor
 import io.element.android.features.messages.impl.timeline.TimelineController
+import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage

@@ -113,13 +113,17 @@ object MatrixPatterns {
      */
     fun isThreadId(str: String?) = isEventId(str)
 
+    /**
+     * Finds existing ids or aliases in a [CharSequence].
+     * Note not all cases are implemented.
+     */
     fun findPatterns(text: CharSequence, permalinkParser: PermalinkParser): List<MatrixPatternResult> {
-        val regex = "\\S+?$DOMAIN_REGEX".toRegex(RegexOption.IGNORE_CASE)
-        val rawTextMatches = regex.findAll(text)
+        val rawTextMatches = "\\S+?$DOMAIN_REGEX".toRegex(RegexOption.IGNORE_CASE).findAll(text)
         val urlMatches = "\\[\\S+?\\]\\((\\S+?)\\)".toRegex(RegexOption.IGNORE_CASE).findAll(text)
         val atRoomMatches = Regex("@room").findAll(text)
         return buildList {
             for (match in rawTextMatches) {
+                // Match existing id and alias patterns in the text
                 val type = when {
                     isUserId(match.value) -> MatrixPatternType.USER_ID
                     isRoomId(match.value) -> MatrixPatternType.ROOM_ID
@@ -128,23 +132,25 @@ object MatrixPatterns {
                     else -> null
                 }
                 if (type != null) {
-                    add(MatrixPatternResult(type, match.value, match.range.first, match.range.last))
+                    add(MatrixPatternResult(type, match.value, match.range.first, match.range.last + 1))
                 }
             }
             for (match in urlMatches) {
+                // Extract the link and check if it's a valid permalink
                 val urlMatch = match.groupValues[1]
                 when (val permalink = permalinkParser.parse(urlMatch)) {
                     is PermalinkData.UserLink -> {
-                        add(MatrixPatternResult(MatrixPatternType.USER_ID, permalink.userId.toString(), match.range.first, match.range.last))
+                        add(MatrixPatternResult(MatrixPatternType.USER_ID, permalink.userId.toString(), match.range.first, match.range.last + 1))
                     }
                     is PermalinkData.RoomLink -> {
-                        add(MatrixPatternResult(MatrixPatternType.ROOM_ID, permalink.roomIdOrAlias.toString(), match.range.first, match.range.last))
+                        add(MatrixPatternResult(MatrixPatternType.ROOM_ALIAS, permalink.roomIdOrAlias.identifier, match.range.first, match.range.last + 1))
                     }
                     else -> Unit
                 }
             }
             for (match in atRoomMatches) {
-                add(MatrixPatternResult(MatrixPatternType.AT_ROOM, match.value, match.range.first, match.range.last))
+                // Special case for `@room` mentions
+                add(MatrixPatternResult(MatrixPatternType.AT_ROOM, match.value, match.range.first, match.range.last + 1))
             }
         }
     }

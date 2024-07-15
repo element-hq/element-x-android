@@ -22,7 +22,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import javax.inject.Inject
 
 @Stable
-class MentionSpanProvider @Inject constructor(
+open class MentionSpanProvider @Inject constructor(
     private val permalinkParser: PermalinkParser,
 ) {
     fun getMentionSpanFor(text: String, url: String): MentionSpan {
@@ -45,7 +45,7 @@ class MentionSpanProvider @Inject constructor(
             permalinkData is PermalinkData.RoomLink -> {
                 MentionSpan(
                     text = text,
-                    rawValue = permalinkData.roomIdOrAlias.toString(),
+                    rawValue = permalinkData.roomIdOrAlias.identifier,
                     type = MentionSpan.Type.ROOM,
                 )
             }

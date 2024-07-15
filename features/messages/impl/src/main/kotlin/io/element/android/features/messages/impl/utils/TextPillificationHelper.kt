@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.messagecomposer
+package io.element.android.features.messages.impl.utils
 
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -51,7 +51,7 @@ class TextPillificationHelper @Inject constructor(
                         val permalink = permalinkBuilder.permalinkForUser(userId).getOrNull() ?: continue
                         val mentionSpan = mentionSpanProvider.getMentionSpanFor(match.value, permalink)
                         roomMemberProfilesCache.getDisplayName(userId)?.let { mentionSpan.text = it }
-                        spannable.replace(match.start, match.end + 1, "@ ")
+                        spannable.replace(match.start, match.end, "@ ")
                         spannable.setSpan(mentionSpan, match.start, match.start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
                 }
@@ -60,7 +60,7 @@ class TextPillificationHelper @Inject constructor(
                     if (!mentionSpanExists) {
                         val permalink = permalinkBuilder.permalinkForRoomAlias(RoomAlias(match.value)).getOrNull() ?: continue
                         val mentionSpan = mentionSpanProvider.getMentionSpanFor(match.value, permalink)
-                        spannable.replace(match.start, match.end + 1, "@ ")
+                        spannable.replace(match.start, match.end, "@ ")
                         spannable.setSpan(mentionSpan, match.start, match.start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
                 }
@@ -68,7 +68,7 @@ class TextPillificationHelper @Inject constructor(
                     val mentionSpanExists = spannable.getSpans<MentionSpan>(match.start, match.end).isNotEmpty()
                     if (!mentionSpanExists) {
                         val mentionSpan = mentionSpanProvider.getMentionSpanFor("@room", "")
-                        spannable.replace(match.start, match.end + 1, "@ ")
+                        spannable.replace(match.start, match.end, "@ ")
                         spannable.setSpan(mentionSpan, match.start, match.start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
                 }

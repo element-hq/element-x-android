@@ -34,8 +34,8 @@ import io.element.android.features.messages.impl.messagecomposer.DefaultMessageC
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
-import io.element.android.features.messages.impl.messagecomposer.TextPillificationHelper
 import io.element.android.features.messages.impl.timeline.TimelineController
+import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.api.FeatureFlagService
