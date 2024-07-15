@@ -45,7 +45,7 @@ showkase = "1.0.3"
 appyx = "1.4.0"
 sqldelight = "2.0.2"
 wysiwyg = "2.37.5"
-telephoto = "0.11.2"
+telephoto = "0.12.0"
 
 # DI
 dagger = "2.51.1"
