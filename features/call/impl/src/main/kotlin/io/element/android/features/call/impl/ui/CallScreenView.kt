@@ -81,7 +81,7 @@ internal fun CallScreenView(
                     title = { Text(stringResource(R.string.element_call)) },
                     navigationIcon = {
                         BackButton(
-                            imageVector = CompoundIcons.Close(),
+                            imageVector = if (pipState.supportPip) CompoundIcons.ArrowLeft() else CompoundIcons.Close(),
                             onClick = ::handleBack,
                         )
                     }
