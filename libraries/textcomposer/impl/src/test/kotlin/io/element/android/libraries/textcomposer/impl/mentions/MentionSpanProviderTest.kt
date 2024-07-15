@@ -19,10 +19,8 @@ package io.element.android.libraries.textcomposer.impl.mentions
 import android.net.Uri
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.RoomAlias
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
-import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
@@ -37,7 +35,6 @@ import org.robolectric.RobolectricTestRunner
 class MentionSpanProviderTest {
     @JvmField @Rule
     val warmUpRule = WarmUpRule()
-
 
     private val permalinkParser = FakePermalinkParser()
     private val mentionSpanProvider = MentionSpanProvider(

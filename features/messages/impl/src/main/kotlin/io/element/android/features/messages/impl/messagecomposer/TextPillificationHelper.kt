@@ -36,6 +36,7 @@ class TextPillificationHelper @Inject constructor(
     private val permalinkParser: PermalinkParser,
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
 ) {
+    @Suppress("LoopWithTooManyJumpStatements")
     fun pillify(text: CharSequence): CharSequence {
         val matches = MatrixPatterns.findPatterns(text, permalinkParser).sortedByDescending { it.end }
         if (matches.isEmpty()) return text
