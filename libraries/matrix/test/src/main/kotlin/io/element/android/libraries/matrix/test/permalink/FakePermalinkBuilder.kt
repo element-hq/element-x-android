@@ -16,13 +16,19 @@
 
 package io.element.android.libraries.matrix.test.permalink
 
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 
 class FakePermalinkBuilder(
-    private val result: (UserId) -> Result<String> = { Result.failure(Exception("Not implemented")) }
+    private val permalinkForUserLambda: (UserId) -> Result<String> = { Result.failure(Exception("Not implemented")) },
+    private val permalinkForRoomAliasLambda: (RoomAlias) -> Result<String> = { Result.failure(Exception("Not implemented")) },
 ) : PermalinkBuilder {
     override fun permalinkForUser(userId: UserId): Result<String> {
-        return result(userId)
+        return permalinkForUserLambda(userId)
+    }
+
+    override fun permalinkForRoomAlias(roomAlias: RoomAlias): Result<String> {
+        return permalinkForRoomAliasLambda(roomAlias)
     }
 }

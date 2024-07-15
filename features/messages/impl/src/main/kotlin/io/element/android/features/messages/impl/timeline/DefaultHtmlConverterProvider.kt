@@ -29,7 +29,8 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
-import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanProvider
+import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanTheme
+import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.wysiwyg.compose.StyledHtmlConverter
 import io.element.android.wysiwyg.display.MentionDisplayHandler
 import io.element.android.wysiwyg.display.TextDisplay
@@ -39,7 +40,9 @@ import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
 @SingleIn(SessionScope::class)
-class DefaultHtmlConverterProvider @Inject constructor() : HtmlConverterProvider {
+class DefaultHtmlConverterProvider @Inject constructor(
+    private val mentionSpanProvider: MentionSpanProvider,
+) : HtmlConverterProvider {
     private val htmlConverter: MutableState<HtmlConverter?> = mutableStateOf(null)
 
     @Composable
@@ -50,20 +53,23 @@ class DefaultHtmlConverterProvider @Inject constructor() : HtmlConverterProvider
         }
 
         val editorStyle = ElementRichTextEditorStyle.textStyle()
-        val mentionSpanProvider = LocalMentionSpanProvider.current
-
+        val mentionSpanTheme = LocalMentionSpanTheme.current
         val context = LocalContext.current
 
-        htmlConverter.value = remember(editorStyle, mentionSpanProvider) {
+        htmlConverter.value = remember(editorStyle, mentionSpanTheme) {
             StyledHtmlConverter(
                 context = context,
                 mentionDisplayHandler = object : MentionDisplayHandler {
                     override fun resolveAtRoomMentionDisplay(): TextDisplay {
-                        return TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor(text = "@room", url = "#"))
+                        val mentionSpan = mentionSpanProvider.getMentionSpanFor(text = "@room", url = "#")
+                        mentionSpan.update(mentionSpanTheme)
+                        return TextDisplay.Custom(mentionSpan)
                     }
 
                     override fun resolveMentionDisplay(text: String, url: String): TextDisplay {
-                        return TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor(text, url))
+                        val mentionSpan = mentionSpanProvider.getMentionSpanFor(text, url)
+                        mentionSpan.update(mentionSpanTheme)
+                        return TextDisplay.Custom(mentionSpan)
                     }
                 },
                 isMention = { _, url -> mentionDetector?.isMention(url).orFalse() }

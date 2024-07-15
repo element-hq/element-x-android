@@ -21,10 +21,8 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.Mention
-import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.aRoomMember
@@ -60,7 +58,7 @@ class MarkdownTextEditorStateTest {
         val member = aRoomMember()
         val mention = ResolvedMentionSuggestion.Member(member)
         val permalinkParser = FakePermalinkParser(result = { PermalinkData.UserLink(member.userId) })
-        val permalinkBuilder = FakePermalinkBuilder(result = { Result.failure(IllegalStateException("Failed")) })
+        val permalinkBuilder = FakePermalinkBuilder(permalinkForUserLambda = { Result.failure(IllegalStateException("Failed")) })
         val mentionSpanProvider = aMentionSpanProvider(permalinkParser = permalinkParser)
 
         state.insertMention(mention, mentionSpanProvider, permalinkBuilder)
@@ -77,7 +75,7 @@ class MarkdownTextEditorStateTest {
         val member = aRoomMember()
         val mention = ResolvedMentionSuggestion.Member(member)
         val permalinkParser = FakePermalinkParser(result = { PermalinkData.UserLink(member.userId) })
-        val permalinkBuilder = FakePermalinkBuilder(result = { Result.success("https://matrix.to/#/${member.userId}") })
+        val permalinkBuilder = FakePermalinkBuilder(permalinkForUserLambda = { Result.success("https://matrix.to/#/${member.userId}") })
         val mentionSpanProvider = aMentionSpanProvider(permalinkParser = permalinkParser)
 
         state.insertMention(mention, mentionSpanProvider, permalinkBuilder)
@@ -117,7 +115,7 @@ class MarkdownTextEditorStateTest {
     @Test
     fun `getMessageMarkdown - when there are MentionSpans returns the same text with links to the mentions`() {
         val text = "No mentions here"
-        val permalinkBuilder = FakePermalinkBuilder(result = { Result.success("https://matrix.to/#/$it") })
+        val permalinkBuilder = FakePermalinkBuilder(permalinkForUserLambda = { Result.success("https://matrix.to/#/$it") })
         val state = MarkdownTextEditorState(initialText = text, initialFocus = true)
         state.text.update(aMarkdownTextWithMentions(), needsDisplaying = false)
 
@@ -148,15 +146,14 @@ class MarkdownTextEditorStateTest {
     }
 
     private fun aMentionSpanProvider(
-        currentSessionId: SessionId = A_SESSION_ID,
         permalinkParser: FakePermalinkParser = FakePermalinkParser(),
     ): MentionSpanProvider {
-        return MentionSpanProvider(currentSessionId.value, permalinkParser)
+        return MentionSpanProvider(permalinkParser)
     }
 
     private fun aMarkdownTextWithMentions(): CharSequence {
-        val userMentionSpan = MentionSpan("@Alice", "@alice:matrix.org", MentionSpan.Type.USER, 0, 0, 0, 0)
-        val atRoomMentionSpan = MentionSpan("@room", "@room", MentionSpan.Type.EVERYONE, 0, 0, 0, 0)
+        val userMentionSpan = MentionSpan("@Alice", "@alice:matrix.org", MentionSpan.Type.USER)
+        val atRoomMentionSpan = MentionSpan("@room", "@room", MentionSpan.Type.EVERYONE)
         return buildSpannedString {
             append("Hello ")
             inSpans(userMentionSpan) {
