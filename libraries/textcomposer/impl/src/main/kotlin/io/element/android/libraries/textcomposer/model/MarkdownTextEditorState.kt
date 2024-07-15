@@ -38,6 +38,7 @@ import io.element.android.libraries.textcomposer.components.markdown.StableCharS
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
+import io.element.android.libraries.textcomposer.mentions.getMentionSpans
 import kotlinx.parcelize.Parcelize
 
 @Stable
@@ -63,7 +64,7 @@ class MarkdownTextEditorState(
                 val currentText = SpannableStringBuilder(text.value())
                 val replaceText = "@room"
                 val roomPill = mentionSpanProvider.getMentionSpanFor(replaceText, "")
-                currentText.replace(suggestion.start, suggestion.end, ". ")
+                currentText.replace(suggestion.start, suggestion.end, "@ ")
                 val end = suggestion.start + 1
                 currentText.setSpan(roomPill, suggestion.start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 text.update(currentText, true)
@@ -74,7 +75,7 @@ class MarkdownTextEditorState(
                 val text = mention.roomMember.displayName?.prependIndent("@") ?: mention.roomMember.userId.value
                 val link = permalinkBuilder.permalinkForUser(mention.roomMember.userId).getOrNull() ?: return
                 val mentionPill = mentionSpanProvider.getMentionSpanFor(text, link)
-                currentText.replace(suggestion.start, suggestion.end, ". ")
+                currentText.replace(suggestion.start, suggestion.end, "@ ")
                 val end = suggestion.start + 1
                 currentText.setSpan(mentionPill, suggestion.start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 this.text.update(currentText, true)
@@ -86,11 +87,11 @@ class MarkdownTextEditorState(
     fun getMessageMarkdown(permalinkBuilder: PermalinkBuilder): String {
         val charSequence = text.value()
         return if (charSequence is Spanned) {
-            val mentions = charSequence.getSpans(0, charSequence.length, MentionSpan::class.java)
+            val mentions = charSequence.getMentionSpans()
             buildString {
                 append(charSequence.toString())
-                if (mentions != null && mentions.isNotEmpty()) {
-                    for (mention in mentions.reversed()) {
+                if (mentions.isNotEmpty()) {
+                    for (mention in mentions.sortedByDescending { charSequence.getSpanEnd(it) }) {
                         val start = charSequence.getSpanStart(mention)
                         val end = charSequence.getSpanEnd(mention)
                         when (mention.type) {

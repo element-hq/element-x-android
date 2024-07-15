@@ -35,6 +35,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.timeline.TimelineController
+import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -46,6 +47,7 @@ import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
+import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.Mention
@@ -69,6 +71,7 @@ import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
+import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
@@ -82,6 +85,7 @@ import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
+import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
@@ -318,7 +322,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - send message with plain text enabled`() = runTest {
-        val permalinkBuilder = FakePermalinkBuilder(result = { Result.success("") })
+        val permalinkBuilder = FakePermalinkBuilder(permalinkForUserLambda = { Result.success("") })
         val presenter = createPresenter(this, isRichTextEditorEnabled = false)
         moleculeFlow(RecompositionMode.Immediate) {
             val state = presenter.present()
@@ -934,11 +938,11 @@ class MessageComposerPresenterTest {
     }
 
     @Test
-    fun `present - insertMention`() = runTest {
+    fun `present - insertMention for user in rich text editor`() = runTest {
         val presenter = createPresenter(
             coroutineScope = this,
             permalinkBuilder = FakePermalinkBuilder(
-                result = {
+                permalinkForUserLambda = {
                     Result.success("https://matrix.to/#/${A_USER_ID_2.value}")
                 }
             )
@@ -1355,6 +1359,15 @@ class MessageComposerPresenterTest {
         snackbarDispatcher: SnackbarDispatcher = this.snackbarDispatcher,
         permissionPresenter: PermissionsPresenter = FakePermissionsPresenter(),
         permalinkBuilder: PermalinkBuilder = FakePermalinkBuilder(),
+        permalinkParser: PermalinkParser = FakePermalinkParser(),
+        mentionSpanProvider: MentionSpanProvider = MentionSpanProvider(permalinkParser),
+        roomMemberProfilesCache: RoomMemberProfilesCache = RoomMemberProfilesCache(),
+        textPillificationHelper: TextPillificationHelper = TextPillificationHelper(
+            mentionSpanProvider = mentionSpanProvider,
+            permalinkBuilder = permalinkBuilder,
+            permalinkParser = permalinkParser,
+            roomMemberProfilesCache = roomMemberProfilesCache,
+        ),
         isRichTextEditorEnabled: Boolean = true,
         draftService: ComposerDraftService = FakeComposerDraftService(),
     ) = MessageComposerPresenter(
@@ -1370,10 +1383,13 @@ class MessageComposerPresenterTest {
         DefaultMessageComposerContext(),
         TestRichTextEditorStateFactory(),
         permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionPresenter),
-        permalinkParser = FakePermalinkParser(),
+        permalinkParser = permalinkParser,
         permalinkBuilder = permalinkBuilder,
         timelineController = TimelineController(room),
         draftService = draftService,
+        mentionSpanProvider = mentionSpanProvider,
+        pillificationHelper = textPillificationHelper,
+        roomMemberProfilesCache = roomMemberProfilesCache,
     ).apply {
         isTesting = true
         showTextFormatting = isRichTextEditorEnabled

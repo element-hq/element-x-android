@@ -41,8 +41,10 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
+import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.getMentionSpans
+import io.element.android.libraries.textcomposer.mentions.updateMentionStyles
 import io.element.android.wysiwyg.compose.EditorStyledText
 
 @Composable
@@ -74,9 +76,11 @@ fun TimelineItemTextView(
 internal fun getTextWithResolvedMentions(content: TimelineItemTextBasedContent): CharSequence {
     val userProfileCache = LocalRoomMemberProfilesCache.current
     val lastCacheUpdate by userProfileCache.lastCacheUpdate.collectAsState()
-    val formattedBody = remember(content.formattedBody, lastCacheUpdate) {
+    val mentionSpanTheme = LocalMentionSpanTheme.current
+    val formattedBody = remember(content.formattedBody, mentionSpanTheme, lastCacheUpdate) {
         content.formattedBody?.let { formattedBody ->
             updateMentionSpans(formattedBody, userProfileCache)
+            mentionSpanTheme.updateMentionStyles(formattedBody)
             formattedBody
         }
     }

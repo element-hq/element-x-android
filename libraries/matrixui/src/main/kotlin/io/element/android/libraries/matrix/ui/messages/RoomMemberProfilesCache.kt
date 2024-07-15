@@ -17,12 +17,15 @@
 package io.element.android.libraries.matrix.ui.messages
 
 import androidx.compose.runtime.staticCompositionLocalOf
+import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
+@SingleIn(RoomScope::class)
 class RoomMemberProfilesCache @Inject constructor() {
     private val cache = MutableStateFlow(mapOf<UserId, RoomMember>())
 
