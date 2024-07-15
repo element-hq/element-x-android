@@ -50,9 +50,10 @@ class TextPillificationHelperTest {
         val pillified = helper.pillify(text)
         val mentionSpans = pillified.getMentionSpans()
         assertThat(mentionSpans).hasSize(1)
-        assertThat(mentionSpans.firstOrNull()?.type).isEqualTo(MentionSpan.Type.USER)
-        assertThat(mentionSpans.firstOrNull()?.rawValue).isEqualTo("@user:server.com")
-        assertThat(mentionSpans.firstOrNull()?.text).isEqualTo("@user:server.com")
+        val mentionSpan = mentionSpans.firstOrNull()
+        assertThat(mentionSpan?.type).isEqualTo(MentionSpan.Type.USER)
+        assertThat(mentionSpan?.rawValue).isEqualTo("@user:server.com")
+        assertThat(mentionSpan?.text).isEqualTo("@user:server.com")
     }
 
     @Test
@@ -72,9 +73,10 @@ class TextPillificationHelperTest {
         val pillified = helper.pillify(text)
         val mentionSpans = pillified.getMentionSpans()
         assertThat(mentionSpans).hasSize(1)
-        assertThat(mentionSpans.firstOrNull()?.type).isEqualTo(MentionSpan.Type.USER)
-        assertThat(mentionSpans.firstOrNull()?.rawValue).isEqualTo("@user:server.com")
-        assertThat(mentionSpans.firstOrNull()?.text).isEqualTo("Alice")
+        val mentionSpan = mentionSpans.firstOrNull()
+        assertThat(mentionSpan?.type).isEqualTo(MentionSpan.Type.USER)
+        assertThat(mentionSpan?.rawValue).isEqualTo("@user:server.com")
+        assertThat(mentionSpan?.text).isEqualTo("Alice")
     }
 
     @Test
@@ -91,9 +93,10 @@ class TextPillificationHelperTest {
         val pillified = helper.pillify(text)
         val mentionSpans = pillified.getMentionSpans()
         assertThat(mentionSpans).hasSize(1)
-        assertThat(mentionSpans.firstOrNull()?.type).isEqualTo(MentionSpan.Type.ROOM)
-        assertThat(mentionSpans.firstOrNull()?.rawValue).isEqualTo("#room:server.com")
-        assertThat(mentionSpans.firstOrNull()?.text).isEqualTo("#room:server.com")
+        val mentionSpan = mentionSpans.firstOrNull()
+        assertThat(mentionSpan?.type).isEqualTo(MentionSpan.Type.ROOM)
+        assertThat(mentionSpan?.rawValue).isEqualTo("#room:server.com")
+        assertThat(mentionSpan?.text).isEqualTo("#room:server.com")
     }
 
     @Test
@@ -105,9 +108,10 @@ class TextPillificationHelperTest {
         val pillified = helper.pillify(text)
         val mentionSpans = pillified.getMentionSpans()
         assertThat(mentionSpans).hasSize(1)
-        assertThat(mentionSpans.firstOrNull()?.type).isEqualTo(MentionSpan.Type.EVERYONE)
-        assertThat(mentionSpans.firstOrNull()?.rawValue).isEqualTo("@room")
-        assertThat(mentionSpans.firstOrNull()?.text).isEqualTo("@room")
+        val mentionSpan = mentionSpans.firstOrNull()
+        assertThat(mentionSpan?.type).isEqualTo(MentionSpan.Type.EVERYONE)
+        assertThat(mentionSpan?.rawValue).isEqualTo("@room")
+        assertThat(mentionSpan?.text).isEqualTo("@room")
     }
 
     private fun aTextPillificationHelper(

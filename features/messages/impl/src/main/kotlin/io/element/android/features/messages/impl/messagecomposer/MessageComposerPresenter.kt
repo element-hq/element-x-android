@@ -392,6 +392,21 @@ class MessageComposerPresenter @Inject constructor(
         }
 
         val mentionSpanTheme = LocalMentionSpanTheme.current
+        val resolveMentionDisplay = remember(mentionSpanTheme) {
+            { text: String, url: String ->
+                val permalinkData = permalinkParser.parse(url)
+                if (permalinkData is PermalinkData.UserLink) {
+                    val displayNameOrId = roomMemberProfilesCache.getDisplayName(permalinkData.userId) ?: permalinkData.userId.value
+                    val mentionSpan = mentionSpanProvider.getMentionSpanFor(displayNameOrId, url)
+                    mentionSpan.update(mentionSpanTheme)
+                    TextDisplay.Custom(mentionSpan)
+                } else {
+                    val mentionSpan = mentionSpanProvider.getMentionSpanFor(text, url)
+                    mentionSpan.update(mentionSpanTheme)
+                    TextDisplay.Custom(mentionSpan)
+                }
+            }
+        }
         return MessageComposerState(
             textEditorState = textEditorState,
             isFullScreen = isFullScreen.value,
@@ -402,21 +417,7 @@ class MessageComposerPresenter @Inject constructor(
             canCreatePoll = canCreatePoll.value,
             attachmentsState = attachmentsState.value,
             memberSuggestions = memberSuggestions.toPersistentList(),
-            resolveMentionDisplay = remember(mentionSpanTheme) {
-                { text, url ->
-                    val permalinkData = permalinkParser.parse(url)
-                    if (permalinkData is PermalinkData.UserLink) {
-                        val displayNameOrId = roomMemberProfilesCache.getDisplayName(permalinkData.userId) ?: permalinkData.userId.value
-                        val mentionSpan = mentionSpanProvider.getMentionSpanFor(displayNameOrId, url)
-                        mentionSpan.update(mentionSpanTheme)
-                        TextDisplay.Custom(mentionSpan)
-                    } else {
-                        val mentionSpan = mentionSpanProvider.getMentionSpanFor(text, url)
-                        mentionSpan.update(mentionSpanTheme)
-                        TextDisplay.Custom(mentionSpan)
-                    }
-                }
-            },
+            resolveMentionDisplay = resolveMentionDisplay,
             eventSink = { handleEvents(it) },
         )
     }
