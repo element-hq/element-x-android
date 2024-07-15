@@ -113,4 +113,11 @@ enum class FeatureFlags(
         defaultValue = { true },
         isFinished = false,
     ),
+    PictureInPicture(
+        key = "feature.pictureInPicture",
+        title = "Picture in Picture for Calls",
+        description = "Allow the Call to be rendered in PiP mode",
+        defaultValue = { it.buildType != BuildType.RELEASE },
+        isFinished = false,
+    ),
 }
