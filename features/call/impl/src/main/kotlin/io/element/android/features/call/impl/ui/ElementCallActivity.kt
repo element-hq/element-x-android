@@ -32,6 +32,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.IntentCompat
+import androidx.lifecycle.Lifecycle
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.impl.DefaultElementCallEntryPoint
 import io.element.android.features.call.impl.di.CallBindings
@@ -41,6 +42,7 @@ import io.element.android.features.call.impl.utils.CallIntentDataParser
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import timber.log.Timber
 import javax.inject.Inject
 
 class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
@@ -62,6 +64,8 @@ class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
 
     private var isDarkMode = false
     private val webViewTarget = mutableStateOf<CallType?>(null)
+
+    private var eventSink: ((CallScreenEvents) -> Unit)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,6 +95,7 @@ class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
             val pipState = pictureInPicturePresenter.present()
             ElementThemeApp(appPreferencesStore) {
                 val state = presenter.present()
+                eventSink = state.eventSink
                 CallScreenView(
                     state = state,
                     pipState = pipState,
@@ -111,6 +116,11 @@ class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
         pictureInPicturePresenter.onPictureInPictureModeChanged(isInPictureInPictureMode)
+
+        if (!isInPictureInPictureMode && !lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+            Timber.d("Exiting PiP mode: Hangup the call")
+            eventSink?.invoke(CallScreenEvents.Hangup)
+        }
     }
 
     override fun onNewIntent(intent: Intent) {
