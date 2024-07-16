@@ -54,7 +54,7 @@ class MatrixPatternsTest {
     }
 
     @Test
-    fun `findPatterns - returns raw room event ids`() {
+    fun `findPatterns - returns raw event ids`() {
         val text = "A \$event:server.com and \$event2:server.com"
         val patterns = MatrixPatterns.findPatterns(text, aPermalinkParser())
         assertThat(patterns).containsExactly(
