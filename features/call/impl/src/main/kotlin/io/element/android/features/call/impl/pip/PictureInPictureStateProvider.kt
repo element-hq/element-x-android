@@ -16,6 +16,16 @@
 
 package io.element.android.features.call.impl.pip
 
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+
+open class PictureInPictureStateProvider : PreviewParameterProvider<PictureInPictureState> {
+    override val values: Sequence<PictureInPictureState>
+        get() = sequenceOf(
+            aPictureInPictureState(supportPip = true),
+            aPictureInPictureState(supportPip = true, isInPictureInPicture = true),
+        )
+}
+
 fun aPictureInPictureState(
     supportPip: Boolean = false,
     isInPictureInPicture: Boolean = false,

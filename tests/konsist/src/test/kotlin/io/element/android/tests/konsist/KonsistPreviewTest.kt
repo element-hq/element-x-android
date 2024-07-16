@@ -72,6 +72,7 @@ class KonsistPreviewTest {
                 "AsyncIndicatorLoadingPreview",
                 "BloomInitialsPreview",
                 "BloomPreview",
+                "CallScreenPipViewPreview",
                 "ColorAliasesPreview",
                 "DefaultRoomListTopBarWithIndicatorPreview",
                 "GradientFloatingActionButtonCircleShapePreview",
