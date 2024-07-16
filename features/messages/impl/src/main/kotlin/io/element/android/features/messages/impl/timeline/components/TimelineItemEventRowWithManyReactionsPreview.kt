@@ -32,7 +32,7 @@ internal fun TimelineItemEventRowWithManyReactionsPreview() = ElementPreview {
             ATimelineItemEventRow(
                 event = aTimelineItemEvent(
                     isMine = isMine,
-                    content = aTimelineItemTextContent().copy(
+                    content = aTimelineItemTextContent(
                         body = "A couple of multi-line messages with many reactions attached." +
                             " One sent by me and another from someone else."
                     ),

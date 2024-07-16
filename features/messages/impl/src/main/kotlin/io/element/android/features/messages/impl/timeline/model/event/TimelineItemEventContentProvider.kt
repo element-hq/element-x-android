@@ -84,9 +84,12 @@ fun aTimelineItemNoticeContent() = TimelineItemNoticeContent(
 
 fun aTimelineItemRedactedContent() = TimelineItemRedactedContent
 
-fun aTimelineItemTextContent() = TimelineItemTextContent(
-    body = "Text",
-    pillifiedBody = "Text",
+fun aTimelineItemTextContent(
+    body: String = "Text",
+    pillifiedBody: CharSequence = body,
+) = TimelineItemTextContent(
+    body = body,
+    pillifiedBody = pillifiedBody,
     htmlDocument = null,
     formattedBody = null,
     isEdited = false,
