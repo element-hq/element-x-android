@@ -121,6 +121,7 @@ class MatrixPatternsTest {
         assertThat(MatrixPatterns.isRoomAlias("#${longLocalPart}a:server.com")).isFalse()
 
         assertThat(MatrixPatterns.isRoomAlias("#room:server.com")).isTrue()
+        assertThat(MatrixPatterns.isRoomAlias("#nico's-stickers:neko.dev")).isTrue()
         assertThat(MatrixPatterns.isRoomAlias("#$longLocalPart:server.com")).isTrue()
     }
 
