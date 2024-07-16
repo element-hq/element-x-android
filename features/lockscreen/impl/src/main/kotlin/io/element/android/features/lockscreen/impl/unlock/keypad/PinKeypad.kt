@@ -37,7 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.coerceAtMost
+import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
@@ -50,6 +50,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 private val spaceBetweenPinKey = 16.dp
+private val minSizePinKey = 16.dp
 private val maxSizePinKey = 80.dp
 
 @Composable
@@ -61,8 +62,8 @@ fun PinKeypad(
     verticalAlignment: Alignment.Vertical = Alignment.Top,
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
 ) {
-    val pinKeyMaxWidth = ((maxWidth - 2 * spaceBetweenPinKey) / 3).coerceAtMost(maxSizePinKey)
-    val pinKeyMaxHeight = ((maxHeight - 3 * spaceBetweenPinKey) / 4).coerceAtMost(maxSizePinKey)
+    val pinKeyMaxWidth = ((maxWidth - 2 * spaceBetweenPinKey) / 3).coerceIn(minSizePinKey, maxSizePinKey)
+    val pinKeyMaxHeight = ((maxHeight - 3 * spaceBetweenPinKey) / 4).coerceIn(minSizePinKey, maxSizePinKey)
     val pinKeySize = if (pinKeyMaxWidth < pinKeyMaxHeight) pinKeyMaxWidth else pinKeyMaxHeight
 
     val horizontalArrangement = spacedBy(spaceBetweenPinKey, Alignment.CenterHorizontally)
