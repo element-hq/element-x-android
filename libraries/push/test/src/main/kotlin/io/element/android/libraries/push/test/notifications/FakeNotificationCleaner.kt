@@ -19,16 +19,16 @@ package io.element.android.libraries.push.test.notifications
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
+import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.tests.testutils.lambda.lambdaError
 
-class FakeNotificationDrawerManager(
+class FakeNotificationCleaner(
     private val clearAllMessagesEventsLambda: (SessionId) -> Unit = { lambdaError() },
     private val clearMessagesForRoomLambda: (SessionId, RoomId) -> Unit = { _, _ -> lambdaError() },
     private val clearEventLambda: (SessionId, EventId) -> Unit = { _, _ -> lambdaError() },
     private val clearMembershipNotificationForSessionLambda: (SessionId) -> Unit = { lambdaError() },
     private val clearMembershipNotificationForRoomLambda: (SessionId, RoomId) -> Unit = { _, _ -> lambdaError() }
-) : NotificationDrawerManager {
+) : NotificationCleaner {
     override fun clearAllMessagesEvents(sessionId: SessionId) {
         clearAllMessagesEventsLambda(sessionId)
     }

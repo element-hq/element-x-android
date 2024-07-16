@@ -34,7 +34,7 @@ import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
-import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
+import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.Optional
@@ -44,7 +44,7 @@ import kotlin.jvm.optionals.getOrNull
 class AcceptDeclineInvitePresenter @Inject constructor(
     private val client: MatrixClient,
     private val joinRoom: JoinRoom,
-    private val notificationDrawerManager: NotificationDrawerManager,
+    private val notificationCleaner: NotificationCleaner,
 ) : Presenter<AcceptDeclineInviteState> {
     @Composable
     override fun present(): AcceptDeclineInviteState {
@@ -112,7 +112,7 @@ class AcceptDeclineInvitePresenter @Inject constructor(
                 trigger = JoinedRoom.Trigger.Invite,
             )
                 .onSuccess {
-                    notificationDrawerManager.clearMembershipNotificationForRoom(client.sessionId, roomId)
+                    notificationCleaner.clearMembershipNotificationForRoom(client.sessionId, roomId)
                 }
                 .map { roomId }
         }
@@ -122,7 +122,7 @@ class AcceptDeclineInvitePresenter @Inject constructor(
         suspend {
             client.getRoom(roomId)?.use {
                 it.leave().getOrThrow()
-                notificationDrawerManager.clearMembershipNotificationForRoom(client.sessionId, roomId)
+                notificationCleaner.clearMembershipNotificationForRoom(client.sessionId, roomId)
             }
             roomId
         }.runCatchingUpdatingState(declinedAction)

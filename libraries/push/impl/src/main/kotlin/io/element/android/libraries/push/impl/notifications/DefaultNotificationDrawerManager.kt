@@ -30,7 +30,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
-import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
+import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.shouldIgnoreEventInRoom
@@ -59,7 +59,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
     private val matrixClientProvider: MatrixClientProvider,
     private val imageLoaderHolder: ImageLoaderHolder,
     private val activeNotificationsProvider: ActiveNotificationsProvider,
-) : NotificationDrawerManager {
+) : NotificationCleaner {
     private var appNavigationStateObserver: Job? = null
 
     // TODO EAx add a setting per user for this

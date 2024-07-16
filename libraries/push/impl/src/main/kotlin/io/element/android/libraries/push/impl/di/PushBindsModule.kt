@@ -20,7 +20,7 @@ import com.squareup.anvil.annotations.ContributesTo
 import dagger.Binds
 import dagger.Module
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
+import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.impl.notifications.DefaultNotificationDrawerManager
 
 @Module
@@ -29,5 +29,5 @@ abstract class PushBindsModule {
     @Binds
     abstract fun bindNotificationDrawerManager(
         defaultNotificationDrawerManager: DefaultNotificationDrawerManager
-    ): NotificationDrawerManager
+    ): NotificationCleaner
 }

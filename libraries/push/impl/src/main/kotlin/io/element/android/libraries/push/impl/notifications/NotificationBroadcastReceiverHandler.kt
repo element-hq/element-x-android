@@ -28,7 +28,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStoreFactory
-import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
+import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.push.OnNotifiableEventReceived
@@ -47,7 +47,7 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
     private val appCoroutineScope: CoroutineScope,
     private val matrixClientProvider: MatrixClientProvider,
     private val sessionPreferencesStore: SessionPreferencesStoreFactory,
-    private val notificationDrawerManager: NotificationDrawerManager,
+    private val notificationCleaner: NotificationCleaner,
     private val actionIds: NotificationActionIds,
     private val systemClock: SystemClock,
     private val onNotifiableEventReceived: OnNotifiableEventReceived,
@@ -66,26 +66,26 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
                 handleSmartReply(sessionId, roomId, threadId, intent)
             }
             actionIds.dismissRoom -> if (roomId != null) {
-                notificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
+                notificationCleaner.clearMessagesForRoom(sessionId, roomId)
             }
             actionIds.dismissSummary ->
-                notificationDrawerManager.clearAllMessagesEvents(sessionId)
+                notificationCleaner.clearAllMessagesEvents(sessionId)
             actionIds.dismissInvite -> if (roomId != null) {
-                notificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId)
+                notificationCleaner.clearMembershipNotificationForRoom(sessionId, roomId)
             }
             actionIds.dismissEvent -> if (eventId != null) {
-                notificationDrawerManager.clearEvent(sessionId, eventId)
+                notificationCleaner.clearEvent(sessionId, eventId)
             }
             actionIds.markRoomRead -> if (roomId != null) {
-                notificationDrawerManager.clearMessagesForRoom(sessionId, roomId)
+                notificationCleaner.clearMessagesForRoom(sessionId, roomId)
                 handleMarkAsRead(sessionId, roomId)
             }
             actionIds.join -> if (roomId != null) {
-                notificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId)
+                notificationCleaner.clearMembershipNotificationForRoom(sessionId, roomId)
                 handleJoinRoom(sessionId, roomId)
             }
             actionIds.reject -> if (roomId != null) {
-                notificationDrawerManager.clearMembershipNotificationForRoom(sessionId, roomId)
+                notificationCleaner.clearMembershipNotificationForRoom(sessionId, roomId)
                 handleRejectRoom(sessionId, roomId)
             }
         }
