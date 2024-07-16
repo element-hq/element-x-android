@@ -158,6 +158,7 @@ class RoomListScreen(
                 )
             }
         },
+        notificationCleaner = FakeNotificationCleaner(),
     )
 
     @Composable
