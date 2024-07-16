@@ -545,7 +545,7 @@ class RoomListPresenterTest {
             clearMessagesForRoomLambda.assertions().isCalledOnce()
                 .with(value(A_SESSION_ID), value(A_ROOM_ID))
             initialState.eventSink.invoke(RoomListEvents.MarkAsUnread(A_ROOM_ID_2))
-            assertThat(room2.markAsReadCalls).isEqualTo(emptyList<ReceiptType>())
+            assertThat(room2.markAsReadCalls).isEmpty()
             assertThat(room2.setUnreadFlagCalls).isEqualTo(listOf(true))
             // Test again with private read receipts
             sessionPreferencesStore.setSendPublicReadReceipts(false)
