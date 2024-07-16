@@ -49,6 +49,9 @@ object MatrixPatterns {
     private const val MATRIX_EVENT_IDENTIFIER_REGEX = "^\\$$OPAQUE_ID_REGEX$DOMAIN_REGEX$"
     private val PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER = MATRIX_EVENT_IDENTIFIER_REGEX.toRegex(RegexOption.IGNORE_CASE)
 
+    private const val MATRIX_EVENT_IDENTIFIER_V4_REGEX = "\\$$OPAQUE_ID_REGEX"
+    private val PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V4 = MATRIX_EVENT_IDENTIFIER_V4_REGEX.toRegex(RegexOption.IGNORE_CASE)
+
     private const val MAX_IDENTIFIER_LENGTH = 255
 
     /**
@@ -96,7 +99,10 @@ object MatrixPatterns {
      * @return true if the string is a valid event id.
      */
     fun isEventId(str: String?): Boolean {
-        return str != null && str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER && str.length <= MAX_IDENTIFIER_LENGTH
+        return str != null &&
+            (str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER ||
+                str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V4) &&
+            str.length <= MAX_IDENTIFIER_LENGTH
     }
 
     /**

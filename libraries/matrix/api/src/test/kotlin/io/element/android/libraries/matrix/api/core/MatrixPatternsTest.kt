@@ -136,9 +136,12 @@ class MatrixPatternsTest {
         assertThat(MatrixPatterns.isEventId("!event:server.com")).isFalse()
         assertThat(MatrixPatterns.isEventId("#event:server.com")).isFalse()
         assertThat(MatrixPatterns.isEventId("$${longLocalPart}a:server.com")).isFalse()
+        assertThat(MatrixPatterns.isEventId("\$" + "a".repeat(255))).isFalse()
 
         assertThat(MatrixPatterns.isEventId("\$event:server.com")).isTrue()
         assertThat(MatrixPatterns.isEventId("$$longLocalPart:server.com")).isTrue()
+        assertThat(MatrixPatterns.isEventId("\$9BozuV4TBw6rfRW3rMEgZ5v-jNk1D6FA8Hd1OsWqT9k")).isTrue()
+        assertThat(MatrixPatterns.isEventId("\$" + "a".repeat(254))).isTrue()
     }
 
     @Test
