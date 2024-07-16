@@ -328,16 +328,20 @@ class RustTimeline(
             runCatching<Unit> {
                 when {
                     originalEventId != null -> {
-                        inner.editByEventId(
-                            newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
-                            eventId = originalEventId.value,
-                        )
+                        inner.getEventTimelineItemByEventId(originalEventId.value).use {
+                            inner.edit(
+                                newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
+                                item = it,
+                            )
+                        }
                     }
                     transactionId != null -> {
-                        inner.edit(
-                            newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
-                            item = inner.getEventTimelineItemByTransactionId(transactionId.value),
-                        )
+                        inner.getEventTimelineItemByTransactionId(transactionId.value).use {
+                            inner.edit(
+                                newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
+                                item = it,
+                            )
+                        }
                     }
                     else -> {
                         error("Either originalEventId or transactionId must be non null")
