@@ -23,6 +23,8 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import org.junit.Test
 
 class MatrixPatternsTest {
+    private val longLocalPart = "a".repeat(255 - ":server.com".length - 1)
+
     @Test
     fun `findPatterns - returns raw user ids`() {
         val text = "A @user:server.com and @user2:server.com"
@@ -88,6 +90,70 @@ class MatrixPatternsTest {
         }
         val patterns = MatrixPatterns.findPatterns(text, permalinkParser)
         assertThat(patterns).containsExactly(MatrixPatternResult(MatrixPatternType.ROOM_ALIAS, "#room:server.com", 2, 46))
+    }
+
+    @Test
+    fun `test isRoomId`() {
+        assertThat(MatrixPatterns.isRoomId(null)).isFalse()
+        assertThat(MatrixPatterns.isRoomId("")).isFalse()
+        assertThat(MatrixPatterns.isRoomId("not a room id")).isFalse()
+        assertThat(MatrixPatterns.isRoomId(" !room:server.com")).isFalse()
+        assertThat(MatrixPatterns.isRoomId("!room:server.com ")).isFalse()
+        assertThat(MatrixPatterns.isRoomId("@room:server.com")).isFalse()
+        assertThat(MatrixPatterns.isRoomId("#room:server.com")).isFalse()
+        assertThat(MatrixPatterns.isRoomId("\$room:server.com")).isFalse()
+        assertThat(MatrixPatterns.isRoomId("!${longLocalPart}a:server.com")).isFalse()
+
+        assertThat(MatrixPatterns.isRoomId("!room:server.com")).isTrue()
+        assertThat(MatrixPatterns.isRoomId("!$longLocalPart:server.com")).isTrue()
+    }
+
+    @Test
+    fun `test isRoomAlias`() {
+        assertThat(MatrixPatterns.isRoomAlias(null)).isFalse()
+        assertThat(MatrixPatterns.isRoomAlias("")).isFalse()
+        assertThat(MatrixPatterns.isRoomAlias("not a room alias")).isFalse()
+        assertThat(MatrixPatterns.isRoomAlias(" #room:server.com")).isFalse()
+        assertThat(MatrixPatterns.isRoomAlias("#room:server.com ")).isFalse()
+        assertThat(MatrixPatterns.isRoomAlias("@room:server.com")).isFalse()
+        assertThat(MatrixPatterns.isRoomAlias("!room:server.com")).isFalse()
+        assertThat(MatrixPatterns.isRoomAlias("\$room:server.com")).isFalse()
+        assertThat(MatrixPatterns.isRoomAlias("#${longLocalPart}a:server.com")).isFalse()
+
+        assertThat(MatrixPatterns.isRoomAlias("#room:server.com")).isTrue()
+        assertThat(MatrixPatterns.isRoomAlias("#$longLocalPart:server.com")).isTrue()
+    }
+
+    @Test
+    fun `test isEventId`() {
+        assertThat(MatrixPatterns.isEventId(null)).isFalse()
+        assertThat(MatrixPatterns.isEventId("")).isFalse()
+        assertThat(MatrixPatterns.isEventId("not an event id")).isFalse()
+        assertThat(MatrixPatterns.isEventId(" \$event:server.com")).isFalse()
+        assertThat(MatrixPatterns.isEventId("\$event:server.com ")).isFalse()
+        assertThat(MatrixPatterns.isEventId("@event:server.com")).isFalse()
+        assertThat(MatrixPatterns.isEventId("!event:server.com")).isFalse()
+        assertThat(MatrixPatterns.isEventId("#event:server.com")).isFalse()
+        assertThat(MatrixPatterns.isEventId("$${longLocalPart}a:server.com")).isFalse()
+
+        assertThat(MatrixPatterns.isEventId("\$event:server.com")).isTrue()
+        assertThat(MatrixPatterns.isEventId("$$longLocalPart:server.com")).isTrue()
+    }
+
+    @Test
+    fun `test isUserId`() {
+        assertThat(MatrixPatterns.isUserId(null)).isFalse()
+        assertThat(MatrixPatterns.isUserId("")).isFalse()
+        assertThat(MatrixPatterns.isUserId("not a user id")).isFalse()
+        assertThat(MatrixPatterns.isUserId(" @user:server.com")).isFalse()
+        assertThat(MatrixPatterns.isUserId("@user:server.com ")).isFalse()
+        assertThat(MatrixPatterns.isUserId("!user:server.com")).isFalse()
+        assertThat(MatrixPatterns.isUserId("#user:server.com")).isFalse()
+        assertThat(MatrixPatterns.isUserId("\$user:server.com")).isFalse()
+        assertThat(MatrixPatterns.isUserId("@${longLocalPart}a:server.com")).isFalse()
+
+        assertThat(MatrixPatterns.isUserId("@user:server.com")).isTrue()
+        assertThat(MatrixPatterns.isUserId("@$longLocalPart:server.com")).isTrue()
     }
 
     private fun aPermalinkParser(block: (String) -> PermalinkData = { PermalinkData.FallbackLink(Uri.EMPTY) }) = object : PermalinkParser {
