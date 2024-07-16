@@ -129,7 +129,7 @@ private fun PinKeypadRow(
                     )
                 }
                 is PinKeypadModel.Number -> {
-                    PinKeyBadDigitButton(
+                    PinKeypadDigitButton(
                         size = pinKeySize,
                         modifier = commonModifier,
                         digit = model.number.toString(),
@@ -158,7 +158,7 @@ private fun PinKeypadButton(
 }
 
 @Composable
-private fun PinKeyBadDigitButton(
+private fun PinKeypadDigitButton(
     digit: String,
     size: Dp,
     onClick: (String) -> Unit,
