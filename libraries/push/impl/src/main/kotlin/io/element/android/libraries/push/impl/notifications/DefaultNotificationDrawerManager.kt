@@ -46,7 +46,7 @@ import javax.inject.Inject
 private val loggerTag = LoggerTag("DefaultNotificationDrawerManager", LoggerTag.NotificationLoggerTag)
 
 /**
- * The NotificationDrawerManager receives notification events as they arrive (from event stream or fcm) and
+ * This class receives notification events as they arrive from the PushHandler calling [onNotifiableEventReceived] and
  * organise them in order to display them in the notification drawer.
  * Events can be grouped into the same notification, old (already read) events can be removed to do some cleaning.
  */
