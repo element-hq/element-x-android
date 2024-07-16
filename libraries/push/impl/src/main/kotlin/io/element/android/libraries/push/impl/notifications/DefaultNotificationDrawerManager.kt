@@ -18,6 +18,7 @@ package io.element.android.libraries.push.impl.notifications
 
 import androidx.annotation.VisibleForTesting
 import androidx.core.app.NotificationManagerCompat
+import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.AppScope
@@ -51,6 +52,7 @@ private val loggerTag = LoggerTag("DefaultNotificationDrawerManager", LoggerTag.
  * Events can be grouped into the same notification, old (already read) events can be removed to do some cleaning.
  */
 @SingleIn(AppScope::class)
+@ContributesBinding(AppScope::class)
 class DefaultNotificationDrawerManager @Inject constructor(
     private val notificationManager: NotificationManagerCompat,
     private val notificationRenderer: NotificationRenderer,
