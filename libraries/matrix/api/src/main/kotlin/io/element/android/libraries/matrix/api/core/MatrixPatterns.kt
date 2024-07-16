@@ -112,8 +112,8 @@ object MatrixPatterns {
      * Note not all cases are implemented.
      */
     fun findPatterns(text: CharSequence, permalinkParser: PermalinkParser): List<MatrixPatternResult> {
-        val rawTextMatches = "\\S+?$DOMAIN_REGEX".toRegex(RegexOption.IGNORE_CASE).findAll(text)
-        val urlMatches = "\\[\\S+?\\]\\((\\S+?)\\)".toRegex(RegexOption.IGNORE_CASE).findAll(text)
+        val rawTextMatches = "\\S+$DOMAIN_REGEX".toRegex(RegexOption.IGNORE_CASE).findAll(text)
+        val urlMatches = "\\[\\S+\\]\\((\\S+)\\)".toRegex(RegexOption.IGNORE_CASE).findAll(text)
         val atRoomMatches = Regex("@room").findAll(text)
         return buildList {
             for (match in rawTextMatches) {
