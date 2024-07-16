@@ -86,6 +86,7 @@ fun aTimelineItemRedactedContent() = TimelineItemRedactedContent
 
 fun aTimelineItemTextContent() = TimelineItemTextContent(
     body = "Text",
+    pillifiedBody = "Text",
     htmlDocument = null,
     formattedBody = null,
     isEdited = false,
