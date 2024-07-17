@@ -58,6 +58,9 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 
 // Designs: https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&mode=design&t=U03tOFZz5FSLVUMa-1
 
+// Horizontal padding for button with low padding
+internal val lowPaddingValue = 4.dp
+
 @Composable
 fun Button(
     text: String,
@@ -139,8 +142,10 @@ private fun ButtonInternal(
 ) {
     val minHeight = when (size) {
         ButtonSize.Small -> 32.dp
-        ButtonSize.Medium -> 40.dp
-        ButtonSize.Large -> 48.dp
+        ButtonSize.Medium,
+        ButtonSize.MediumLowPadding -> 40.dp
+        ButtonSize.Large,
+        ButtonSize.LargeLowPadding -> 48.dp
     }
 
     val hasStartDrawable = showProgress || leadingIcon != null
@@ -166,6 +171,7 @@ private fun ButtonInternal(
                 PaddingValues(start = 12.dp, top = 10.dp, end = 12.dp, bottom = 10.dp)
             }
         }
+        ButtonSize.MediumLowPadding -> PaddingValues(horizontal = lowPaddingValue, vertical = 10.dp)
         ButtonSize.Large -> when (style) {
             ButtonStyle.Filled,
             ButtonStyle.Outlined -> if (hasStartDrawable) {
@@ -179,6 +185,7 @@ private fun ButtonInternal(
                 PaddingValues(start = 16.dp, top = 13.dp, end = 16.dp, bottom = 13.dp)
             }
         }
+        ButtonSize.LargeLowPadding -> PaddingValues(horizontal = lowPaddingValue, vertical = 13.dp)
     }
 
     val shape = when (style) {
@@ -204,8 +211,10 @@ private fun ButtonInternal(
 
     val textStyle = when (size) {
         ButtonSize.Small,
-        ButtonSize.Medium -> MaterialTheme.typography.labelLarge
-        ButtonSize.Large -> ElementTheme.typography.fontBodyLgMedium
+        ButtonSize.Medium,
+        ButtonSize.MediumLowPadding -> MaterialTheme.typography.labelLarge
+        ButtonSize.Large,
+        ButtonSize.LargeLowPadding -> ElementTheme.typography.fontBodyLgMedium
     }
 
     androidx.compose.material3.Button(
@@ -270,7 +279,19 @@ sealed interface IconSource {
 enum class ButtonSize {
     Small,
     Medium,
-    Large
+
+    /**
+     * Like [Medium] but with minimal horizontal padding, so that large texts have less risk to get truncated.
+     * To be used for instance for button with weight which ensures a maximal width.
+     */
+    MediumLowPadding,
+    Large,
+
+    /**
+     * Like [Large] but with minimal horizontal padding, so that large texts have less risk to get truncated.
+     * To be used for instance for button with weight which ensures a maximal width.
+     */
+    LargeLowPadding,
 }
 
 internal enum class ButtonStyle {
@@ -347,10 +368,28 @@ internal fun FilledButtonMediumPreview() {
 
 @Preview(group = PreviewGroup.Buttons)
 @Composable
+internal fun FilledButtonMediumLowPaddingPreview() {
+    ButtonCombinationPreview(
+        style = ButtonStyle.Filled,
+        size = ButtonSize.MediumLowPadding,
+    )
+}
+
+@Preview(group = PreviewGroup.Buttons)
+@Composable
 internal fun FilledButtonLargePreview() {
     ButtonCombinationPreview(
         style = ButtonStyle.Filled,
         size = ButtonSize.Large,
+    )
+}
+
+@Preview(group = PreviewGroup.Buttons)
+@Composable
+internal fun FilledButtonLargeLowPaddingPreview() {
+    ButtonCombinationPreview(
+        style = ButtonStyle.Filled,
+        size = ButtonSize.LargeLowPadding,
     )
 }
 
@@ -374,10 +413,28 @@ internal fun OutlinedButtonMediumPreview() {
 
 @Preview(group = PreviewGroup.Buttons)
 @Composable
+internal fun OutlinedButtonMediumLowPaddingPreview() {
+    ButtonCombinationPreview(
+        style = ButtonStyle.Outlined,
+        size = ButtonSize.MediumLowPadding,
+    )
+}
+
+@Preview(group = PreviewGroup.Buttons)
+@Composable
 internal fun OutlinedButtonLargePreview() {
     ButtonCombinationPreview(
         style = ButtonStyle.Outlined,
         size = ButtonSize.Large,
+    )
+}
+
+@Preview(group = PreviewGroup.Buttons)
+@Composable
+internal fun OutlinedButtonLargeLowPaddingPreview() {
+    ButtonCombinationPreview(
+        style = ButtonStyle.Outlined,
+        size = ButtonSize.LargeLowPadding,
     )
 }
 
@@ -401,10 +458,28 @@ internal fun TextButtonMediumPreview() {
 
 @Preview(group = PreviewGroup.Buttons)
 @Composable
+internal fun TextButtonMediumLowPaddingPreview() {
+    ButtonCombinationPreview(
+        style = ButtonStyle.Text,
+        size = ButtonSize.MediumLowPadding,
+    )
+}
+
+@Preview(group = PreviewGroup.Buttons)
+@Composable
 internal fun TextButtonLargePreview() {
     ButtonCombinationPreview(
         style = ButtonStyle.Text,
         size = ButtonSize.Large,
+    )
+}
+
+@Preview(group = PreviewGroup.Buttons)
+@Composable
+internal fun TextButtonLargeLowPaddingPreview() {
+    ButtonCombinationPreview(
+        style = ButtonStyle.Text,
+        size = ButtonSize.LargeLowPadding,
     )
 }
 

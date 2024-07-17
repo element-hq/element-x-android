@@ -53,6 +53,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
+import io.element.android.libraries.designsystem.theme.components.lowPaddingValue
 
 @OptIn(CoreColorToken::class)
 @Composable
@@ -67,7 +68,9 @@ fun SuperButton(
     val contentPadding = remember(buttonSize) {
         when (buttonSize) {
             ButtonSize.Large -> PaddingValues(horizontal = 24.dp, vertical = 13.dp)
+            ButtonSize.LargeLowPadding -> PaddingValues(horizontal = lowPaddingValue, vertical = 13.dp)
             ButtonSize.Medium -> PaddingValues(horizontal = 20.dp, vertical = 9.dp)
+            ButtonSize.MediumLowPadding -> PaddingValues(horizontal = lowPaddingValue, vertical = 9.dp)
             ButtonSize.Small -> PaddingValues(horizontal = 16.dp, vertical = 5.dp)
         }
     }
@@ -146,10 +149,26 @@ internal fun SuperButtonPreview() {
 
             SuperButton(
                 modifier = Modifier.padding(10.dp),
+                buttonSize = ButtonSize.LargeLowPadding,
+                onClick = {},
+            ) {
+                Text("Super LargeLowPadding")
+            }
+
+            SuperButton(
+                modifier = Modifier.padding(10.dp),
                 buttonSize = ButtonSize.Medium,
                 onClick = {},
             ) {
                 Text("Super button!")
+            }
+
+            SuperButton(
+                modifier = Modifier.padding(10.dp),
+                buttonSize = ButtonSize.MediumLowPadding,
+                onClick = {},
+            ) {
+                Text("Super MediumLowPadding")
             }
 
             SuperButton(
