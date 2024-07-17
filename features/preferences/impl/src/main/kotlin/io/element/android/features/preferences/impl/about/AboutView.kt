@@ -30,6 +30,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun AboutView(
     state: AboutState,
     onElementLegalClick: (ElementLegal) -> Unit,
+    onOpenSourceLicensesClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -44,6 +45,12 @@ fun AboutView(
                 onClick = { onElementLegalClick(elementLegal) }
             )
         }
+        if (state.hasOpenSourcesLicenses) {
+            PreferenceText(
+                title = stringResource(id = CommonStrings.common_open_source_licenses),
+                onClick = onOpenSourceLicensesClick,
+            )
+        }
     }
 }
 
@@ -53,6 +60,7 @@ internal fun AboutViewPreview(@PreviewParameter(AboutStateProvider::class) state
     AboutView(
         state = state,
         onElementLegalClick = {},
+        onOpenSourceLicensesClick = {},
         onBackClick = {},
     )
 }
