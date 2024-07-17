@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.room
 
+import androidx.collection.lruCache
 import io.element.android.appconfig.TimelineConfig
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -30,6 +31,7 @@ import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -40,6 +42,8 @@ import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.TimelineEventTypeFilter
 import timber.log.Timber
 import org.matrix.rustcomponents.sdk.RoomListService as InnerRoomListService
+
+private const val CACHE_SIZE = 16
 
 class RustRoomFactory(
     private val sessionId: SessionId,
@@ -55,8 +59,23 @@ class RustRoomFactory(
     private val getSessionData: suspend () -> SessionData,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
-    private val createRoomDispatcher = dispatchers.io.limitedParallelism(1)
+    private val dispatcher = dispatchers.io.limitedParallelism(1)
     private val mutex = Mutex()
+    private var isDestroyed: Boolean = false
+
+    private data class RustRoomReferences(
+        val roomListItem: RoomListItem,
+        val fullRoom: Room,
+    )
+
+    private val cache = lruCache<RoomId, RustRoomReferences>(
+        maxSize = CACHE_SIZE,
+        onEntryRemoved = { evicted, roomId, oldRoom, _ ->
+            Timber.d("On room removed from cache: $roomId, evicted: $evicted")
+            oldRoom.roomListItem.close()
+            oldRoom.fullRoom.close()
+        }
+    )
 
     private val matrixRoomInfoMapper = MatrixRoomInfoMapper()
 
@@ -70,30 +89,41 @@ class RustRoomFactory(
             )
         }
 
-    suspend fun create(roomId: RoomId): MatrixRoom? = withContext(createRoomDispatcher) {
-        var cachedPairOfRoom: Pair<RoomListItem, Room>?
-        mutex.withLock {
-            // Check if already in memory...
-            cachedPairOfRoom = pairOfRoom(roomId)
-            if (cachedPairOfRoom == null) {
-                // ... otherwise, lets wait for the SS to load all rooms and check again.
-                roomListService.allRooms.awaitLoaded()
-                cachedPairOfRoom = pairOfRoom(roomId)
+    suspend fun destroy() {
+        withContext(NonCancellable + dispatcher) {
+            mutex.withLock {
+                Timber.d("Destroying room factory")
+                cache.evictAll()
+                isDestroyed = true
             }
         }
-        if (cachedPairOfRoom == null) {
-            Timber.d("No room found for $roomId")
-            return@withContext null
-        }
-        cachedPairOfRoom?.let { (roomListItem, fullRoom) ->
+    }
+
+    suspend fun create(roomId: RoomId): MatrixRoom? = withContext(dispatcher) {
+        mutex.withLock {
+            if (isDestroyed) {
+                Timber.d("Room factory is destroyed, returning null for $roomId")
+                return@withContext null
+            }
+            var roomReferences: RustRoomReferences? = getRoomReferences(roomId)
+            if (roomReferences == null) {
+                // ... otherwise, lets wait for the SS to load all rooms and check again.
+                roomListService.allRooms.awaitLoaded()
+                roomReferences = getRoomReferences(roomId)
+            }
+            if (roomReferences == null) {
+                Timber.d("No room found for $roomId, returning null")
+                return@withContext null
+            }
+            val liveTimeline = roomReferences.fullRoom.timeline()
             RustMatrixRoom(
                 sessionId = sessionId,
                 isKeyBackupEnabled = isKeyBackupEnabled(),
-                roomListItem = roomListItem,
-                innerRoom = fullRoom,
-                innerTimeline = fullRoom.timeline(),
-                notificationSettingsService = notificationSettingsService,
+                roomListItem = roomReferences.roomListItem,
+                innerRoom = roomReferences.fullRoom,
+                innerTimeline = liveTimeline,
                 sessionCoroutineScope = sessionCoroutineScope,
+                notificationSettingsService = notificationSettingsService,
                 coroutineDispatchers = dispatchers,
                 systemClock = systemClock,
                 roomContentForwarder = roomContentForwarder,
@@ -104,20 +134,28 @@ class RustRoomFactory(
         }
     }
 
-    private suspend fun pairOfRoom(roomId: RoomId): Pair<RoomListItem, Room>? {
-        val cachedRoomListItem = innerRoomListService.roomOrNull(roomId.value)
+    private suspend fun getRoomReferences(roomId: RoomId): RustRoomReferences? {
+        cache[roomId]?.let {
+            Timber.d("Room found in cache for $roomId")
+            return it
+        }
+        val roomListItem = innerRoomListService.roomOrNull(roomId.value)
+        if (roomListItem == null) {
+            Timber.d("Room not found for $roomId")
+            return null
+        }
         val fullRoom = try {
-            cachedRoomListItem?.fullRoomWithTimeline(filter = eventFilters)
+            roomListItem.fullRoomWithTimeline(filter = eventFilters)
         } catch (e: RoomListException) {
             Timber.e(e, "Failed to get full room with timeline for $roomId")
-            null
+            return null
         }
-        return if (cachedRoomListItem == null || fullRoom == null) {
-            Timber.d("No room cached for $roomId")
-            null
-        } else {
-            Timber.d("Found room cached for $roomId")
-            Pair(cachedRoomListItem, fullRoom)
+        Timber.d("Got full room with timeline for $roomId")
+        return RustRoomReferences(
+            roomListItem = roomListItem,
+            fullRoom = fullRoom,
+        ).also {
+            cache.put(roomId, it)
         }
     }
 }
