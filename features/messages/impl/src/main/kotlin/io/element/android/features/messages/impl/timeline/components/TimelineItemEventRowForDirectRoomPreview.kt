@@ -34,7 +34,7 @@ internal fun TimelineItemEventRowForDirectRoomPreview() = ElementPreview {
             ATimelineItemEventRow(
                 event = aTimelineItemEvent(
                     isMine = it,
-                    content = aTimelineItemTextContent().copy(
+                    content = aTimelineItemTextContent(
                         body = "A long text which will be displayed on several lines and" +
                             " hopefully can be manually adjusted to test different behaviors."
                     ),

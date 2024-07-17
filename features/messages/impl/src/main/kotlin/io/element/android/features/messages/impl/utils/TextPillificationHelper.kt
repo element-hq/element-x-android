@@ -19,6 +19,8 @@ package io.element.android.features.messages.impl.utils
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import androidx.core.text.getSpans
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.MatrixPatternType
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -30,14 +32,19 @@ import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import javax.inject.Inject
 
-class TextPillificationHelper @Inject constructor(
+interface TextPillificationHelper {
+    fun pillify(text: CharSequence): CharSequence
+}
+
+@ContributesBinding(RoomScope::class)
+class DefaultTextPillificationHelper @Inject constructor(
     private val mentionSpanProvider: MentionSpanProvider,
     private val permalinkBuilder: PermalinkBuilder,
     private val permalinkParser: PermalinkParser,
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
-) {
+) : TextPillificationHelper {
     @Suppress("LoopWithTooManyJumpStatements")
-    fun pillify(text: CharSequence): CharSequence {
+    override fun pillify(text: CharSequence): CharSequence {
         val matches = MatrixPatterns.findPatterns(text, permalinkParser).sortedByDescending { it.end }
         if (matches.isEmpty()) return text
 

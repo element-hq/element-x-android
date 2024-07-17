@@ -63,6 +63,7 @@ import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.toPersistentList
@@ -97,6 +98,7 @@ class RoomListPresenter @Inject constructor(
     private val analyticsService: AnalyticsService,
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
     private val fullScreenIntentPermissionsPresenter: FullScreenIntentPermissionsPresenter,
+    private val notificationCleaner: NotificationCleaner,
 ) : Presenter<RoomListState> {
     private val encryptionService: EncryptionService = client.encryptionService()
     private val syncService: SyncService = client.syncService()
@@ -268,6 +270,7 @@ class RoomListPresenter @Inject constructor(
     }
 
     private fun CoroutineScope.markAsRead(roomId: RoomId) = launch {
+        notificationCleaner.clearMessagesForRoom(client.sessionId, roomId)
         client.getRoom(roomId)?.use { room ->
             room.setUnreadFlag(isUnread = false)
             val receiptType = if (sessionPreferencesStore.isSendPublicReadReceiptsEnabled().first()) {

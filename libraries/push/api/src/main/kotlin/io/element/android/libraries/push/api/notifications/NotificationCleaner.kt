@@ -20,7 +20,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 
-interface NotificationDrawerManager {
+interface NotificationCleaner {
     fun clearAllMessagesEvents(sessionId: SessionId)
     fun clearMessagesForRoom(sessionId: SessionId, roomId: RoomId)
     fun clearEvent(sessionId: SessionId, eventId: EventId)

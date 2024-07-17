@@ -35,6 +35,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.timeline.TimelineController
+import io.element.android.features.messages.impl.utils.FakeTextPillificationHelper
 import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -1362,12 +1363,7 @@ class MessageComposerPresenterTest {
         permalinkParser: PermalinkParser = FakePermalinkParser(),
         mentionSpanProvider: MentionSpanProvider = MentionSpanProvider(permalinkParser),
         roomMemberProfilesCache: RoomMemberProfilesCache = RoomMemberProfilesCache(),
-        textPillificationHelper: TextPillificationHelper = TextPillificationHelper(
-            mentionSpanProvider = mentionSpanProvider,
-            permalinkBuilder = permalinkBuilder,
-            permalinkParser = permalinkParser,
-            roomMemberProfilesCache = roomMemberProfilesCache,
-        ),
+        textPillificationHelper: TextPillificationHelper = FakeTextPillificationHelper(),
         isRichTextEditorEnabled: Boolean = true,
         draftService: ComposerDraftService = FakeComposerDraftService(),
     ) = MessageComposerPresenter(

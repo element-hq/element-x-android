@@ -35,7 +35,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class TextPillificationHelperTest {
+class DefaultTextPillificationHelperTest {
     @Test
     fun `pillify - adds pills for user ids`() {
         val text = "A @user:server.com"
@@ -119,7 +119,7 @@ class TextPillificationHelperTest {
         permalinkBuilder: FakePermalinkBuilder = FakePermalinkBuilder(),
         mentionSpanProvider: MentionSpanProvider = MentionSpanProvider(permalinkparser),
         roomMemberProfilesCache: RoomMemberProfilesCache = RoomMemberProfilesCache(),
-    ) = TextPillificationHelper(
+    ) = DefaultTextPillificationHelper(
         mentionSpanProvider = mentionSpanProvider,
         permalinkBuilder = permalinkBuilder,
         permalinkParser = permalinkparser,
