@@ -62,12 +62,12 @@ class RustRoomFactory(
     private val mutex = Mutex()
     private var isDestroyed: Boolean = false
 
-    private data class RustRoomObjects(
+    private data class RustRoomReferences(
         val roomListItem: RoomListItem,
         val fullRoom: Room,
     )
 
-    private val cache = lruCache<RoomId, RustRoomObjects>(
+    private val cache = lruCache<RoomId, RustRoomReferences>(
         maxSize = CACHE_SIZE,
         onEntryRemoved = { evicted, roomId, oldRoom, _ ->
             Timber.d("On room removed from cache: $roomId, evicted: $evicted")
@@ -104,22 +104,22 @@ class RustRoomFactory(
                 Timber.d("Room factory is destroyed, returning null for $roomId")
                 return@withContext null
             }
-            var roomObjects: RustRoomObjects? = getRoomObjects(roomId)
-            if (roomObjects == null) {
+            var roomReferences: RustRoomReferences? = getRoomReferences(roomId)
+            if (roomReferences == null) {
                 // ... otherwise, lets wait for the SS to load all rooms and check again.
                 roomListService.allRooms.awaitLoaded()
-                roomObjects = getRoomObjects(roomId)
+                roomReferences = getRoomReferences(roomId)
             }
-            if (roomObjects == null) {
+            if (roomReferences == null) {
                 Timber.d("No room found for $roomId, returning null")
                 return@withContext null
             }
-            val liveTimeline = roomObjects.fullRoom.timeline()
+            val liveTimeline = roomReferences.fullRoom.timeline()
             RustMatrixRoom(
                 sessionId = sessionId,
                 isKeyBackupEnabled = isKeyBackupEnabled(),
-                roomListItem = roomObjects.roomListItem,
-                innerRoom = roomObjects.fullRoom,
+                roomListItem = roomReferences.roomListItem,
+                innerRoom = roomReferences.fullRoom,
                 innerTimeline = liveTimeline,
                 sessionCoroutineScope = sessionCoroutineScope,
                 notificationSettingsService = notificationSettingsService,
@@ -133,7 +133,7 @@ class RustRoomFactory(
         }
     }
 
-    private suspend fun getRoomObjects(roomId: RoomId): RustRoomObjects? {
+    private suspend fun getRoomReferences(roomId: RoomId): RustRoomReferences? {
         cache[roomId]?.let {
             Timber.d("Room found in cache for $roomId")
             return it
@@ -150,7 +150,7 @@ class RustRoomFactory(
             return null
         }
         Timber.d("Got full room with timeline for $roomId")
-        return RustRoomObjects(
+        return RustRoomReferences(
             roomListItem = roomListItem,
             fullRoom = fullRoom,
         ).also {
