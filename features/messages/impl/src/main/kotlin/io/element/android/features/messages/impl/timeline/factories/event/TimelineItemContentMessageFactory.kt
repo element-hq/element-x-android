@@ -36,6 +36,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
+import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -69,6 +70,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
     private val featureFlagService: FeatureFlagService,
     private val htmlConverterProvider: HtmlConverterProvider,
     private val permalinkParser: PermalinkParser,
+    private val textPillificationHelper: TextPillificationHelper,
 ) {
     suspend fun create(
         content: MessageContent,
@@ -126,6 +128,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     val body = messageType.body.trimEnd()
                     TimelineItemTextContent(
                         body = body,
+                        pillifiedBody = textPillificationHelper.pillify(body),
                         htmlDocument = null,
                         plainText = body,
                         formattedBody = null,
@@ -215,6 +218,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 val body = messageType.body.trimEnd()
                 TimelineItemTextContent(
                     body = body,
+                    pillifiedBody = textPillificationHelper.pillify(body),
                     htmlDocument = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser),
                     formattedBody = parseHtml(messageType.formatted) ?: body.withLinks(),
                     isEdited = content.isEdited,
@@ -224,6 +228,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 val body = messageType.body.trimEnd()
                 TimelineItemTextContent(
                     body = body,
+                    pillifiedBody = textPillificationHelper.pillify(body),
                     htmlDocument = null,
                     formattedBody = body.withLinks(),
                     isEdited = content.isEdited,

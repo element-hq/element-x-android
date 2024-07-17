@@ -48,9 +48,7 @@ internal fun TimelineItemEventRowWithReplyContentToPreview(
                 event = aTimelineItemEvent(
                     isMine = it,
                     timelineItemReactions = aTimelineItemReactions(count = 0),
-                    content = aTimelineItemTextContent().copy(
-                        body = "A reply."
-                    ),
+                    content = aTimelineItemTextContent(body = "A reply."),
                     inReplyTo = inReplyToDetails,
                     displayNameAmbiguous = displayNameAmbiguous,
                     groupPosition = TimelineItemGroupPosition.First,

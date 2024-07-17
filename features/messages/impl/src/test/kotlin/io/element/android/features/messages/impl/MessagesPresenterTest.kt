@@ -44,7 +44,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.typing.TypingNotificationPresenter
-import io.element.android.features.messages.impl.utils.TextPillificationHelper
+import io.element.android.features.messages.impl.utils.FakeTextPillificationHelper
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPlayer
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.messages.impl.voicemessages.timeline.FakeRedactedVoiceMessageManager
@@ -787,7 +787,7 @@ class MessagesPresenterTest {
             timelineController = TimelineController(matrixRoom),
             draftService = FakeComposerDraftService(),
             mentionSpanProvider = mentionSpanProvider,
-            pillificationHelper = TextPillificationHelper(mentionSpanProvider, FakePermalinkBuilder(), FakePermalinkParser(), RoomMemberProfilesCache()),
+            pillificationHelper = FakeTextPillificationHelper(),
             roomMemberProfilesCache = RoomMemberProfilesCache(),
         ).apply {
             showTextFormatting = true
