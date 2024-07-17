@@ -65,6 +65,7 @@ import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
 import io.element.android.libraries.matrix.impl.util.SessionDirectoryProvider
+import io.element.android.libraries.matrix.impl.util.anonymizeToken
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
@@ -158,16 +159,22 @@ class RustMatrixClient(
 
     private val isLoggingOut = AtomicBoolean(false)
 
+    @OptIn(ExperimentalStdlibApi::class)
     private val clientDelegate = object : ClientDelegate {
+        private val clientTag = "RustMatrixClient#${this@RustMatrixClient.hashCode().toHexString()}"
         override fun didReceiveAuthError(isSoftLogout: Boolean) {
-            Timber.w("didReceiveAuthError(isSoftLogout=$isSoftLogout)")
+            Timber.w("[$clientTag]: didReceiveAuthError(isSoftLogout=$isSoftLogout)")
             if (isLoggingOut.getAndSet(true).not()) {
-                Timber.v("didReceiveAuthError -> do the cleanup")
+                Timber.v("[$clientTag]: didReceiveAuthError -> do the cleanup")
                 // TODO handle isSoftLogout parameter.
                 appCoroutineScope.launch {
                     val existingData = sessionStore.getSession(client.userId())
-                    val anonymizedToken = existingData?.accessToken?.takeLast(4)
-                    Timber.d("Removing session data with token: '...$anonymizedToken'.")
+                    val anonymizedAccessToken = existingData?.accessToken?.let(::anonymizeToken)
+                    val anonymizedRefreshToken = existingData?.refreshToken?.let(::anonymizeToken)
+                    Timber.d(
+                        "[$clientTag]: Removing session data with access token '$anonymizedAccessToken' " +
+                        "and refresh token '$anonymizedRefreshToken'."
+                    )
                     if (existingData != null) {
                         // Set isTokenValid to false
                         val newData = client.session().toSessionData(
@@ -177,27 +184,32 @@ class RustMatrixClient(
                             sessionPath = existingData.sessionPath,
                         )
                         sessionStore.updateData(newData)
-                        Timber.d("Removed session data with token: '...$anonymizedToken'.")
+                        Timber.d("[$clientTag]: Removed session data with access token: '$anonymizedAccessToken'.")
                     } else {
-                        Timber.d("No session data found.")
+                        Timber.d("[$clientTag]: No session data found.")
                     }
                     doLogout(doRequest = false, removeSession = false, ignoreSdkError = false)
                 }.invokeOnCompletion {
                     if (it != null) {
-                        Timber.e(it, "Failed to remove session data.")
+                        Timber.e(it, "[$clientTag]: Failed to remove session data.")
                     }
                 }
             } else {
-                Timber.v("didReceiveAuthError -> already cleaning up")
+                Timber.v("[$clientTag]: didReceiveAuthError -> already cleaning up")
             }
         }
 
         override fun didRefreshTokens() {
-            Timber.w("didRefreshTokens()")
+            Timber.w("[$clientTag]: didRefreshTokens()")
             appCoroutineScope.launch {
                 val existingData = sessionStore.getSession(client.userId()) ?: return@launch
-                val anonymizedToken = client.session().accessToken.takeLast(4)
-                Timber.d("Saving new session data with token: '...$anonymizedToken'. Was token valid: ${existingData.isTokenValid}")
+                val anonymizedAccessToken = client.session().accessToken.let(::anonymizeToken)
+                val anonymizedRefreshToken = client.session().refreshToken?.let(::anonymizeToken)
+                Timber.d(
+                    "[$clientTag]: Saving new session data with token: access token '$anonymizedAccessToken' " +
+                        "and refresh token '$anonymizedRefreshToken'. " +
+                        "Was token valid: ${existingData.isTokenValid}"
+                )
                 val newData = client.session().toSessionData(
                     isTokenValid = true,
                     loginType = existingData.loginType,
@@ -205,10 +217,10 @@ class RustMatrixClient(
                     sessionPath = existingData.sessionPath,
                 )
                 sessionStore.updateData(newData)
-                Timber.d("Saved new session data with token: '...$anonymizedToken'.")
+                Timber.d("[$clientTag]: Saved new session data with access token: '$anonymizedAccessToken'.")
             }.invokeOnCompletion {
                 if (it != null) {
-                    Timber.e(it, "Failed to save new session data.")
+                    Timber.e(it, "[$clientTag]: Failed to save new session data.")
                 }
             }
         }

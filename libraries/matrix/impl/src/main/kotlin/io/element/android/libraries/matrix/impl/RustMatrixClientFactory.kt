@@ -21,6 +21,7 @@ import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.matrix.impl.analytics.UtdTracker
 import io.element.android.libraries.matrix.impl.certificates.UserCertificatesProvider
 import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
+import io.element.android.libraries.matrix.impl.util.anonymizeToken
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -30,6 +31,7 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.use
+import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
@@ -45,6 +47,7 @@ class RustMatrixClientFactory @Inject constructor(
     private val clock: SystemClock,
     private val utdTracker: UtdTracker,
 ) {
+    @OptIn(ExperimentalStdlibApi::class)
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
         val client = getBaseClientBuilder(sessionData.sessionPath, sessionData.passphrase)
             .homeserverUrl(sessionData.homeserverUrl)
@@ -57,6 +60,9 @@ class RustMatrixClientFactory @Inject constructor(
             .withUtdHook(utdTracker)
             .finish()
 
+        val anonymizedAccessToken = sessionData.accessToken.let(::anonymizeToken)
+        val anonymizedRefreshToken = sessionData.refreshToken?.let(::anonymizeToken)
+
         RustMatrixClient(
             client = client,
             syncService = syncService,
@@ -66,7 +72,12 @@ class RustMatrixClientFactory @Inject constructor(
             baseDirectory = baseDirectory,
             baseCacheDirectory = cacheDirectory,
             clock = clock,
-        )
+        ).also {
+            Timber.d(
+                "Creating RustMatrixClient#${it.hashCode().toHexString()} with access token '$anonymizedAccessToken'" +
+                    " and refresh token '$anonymizedRefreshToken'"
+            )
+        }
     }
 
     internal fun getBaseClientBuilder(
