@@ -40,10 +40,9 @@ private const val INITIAL_MAX_SIZE = 50
  * This class is responsible for subscribing to a timeline and post the items/diffs to the timelineDiffProcessor.
  * It will also trigger a callback when a new synced event is received.
  * It will also handle the initial items and make sure they are posted before any diff.
- * When closing the room subscription, it will also unsubscribe automatically.
  */
 internal class TimelineItemsSubscriber(
-    roomCoroutineScope: CoroutineScope,
+    timelineCoroutineScope: CoroutineScope,
     dispatcher: CoroutineDispatcher,
     private val timeline: Timeline,
     private val timelineDiffProcessor: MatrixTimelineDiffProcessor,
@@ -54,8 +53,12 @@ internal class TimelineItemsSubscriber(
     private var subscriptionCount = 0
     private val mutex = Mutex()
 
-    private val coroutineScope = roomCoroutineScope.childScope(dispatcher, "TimelineItemsSubscriber")
+    private val coroutineScope = timelineCoroutineScope.childScope(dispatcher, "TimelineItemsSubscriber")
 
+    /**
+     * Add a subscription to the timeline and start posting items/diffs to the timelineDiffProcessor.
+     * It will also trigger a callback when a new synced event is received.
+     */
     suspend fun subscribeIfNeeded() = mutex.withLock {
         if (subscriptionCount == 0) {
             timeline.timelineDiffFlow()
@@ -70,6 +73,11 @@ internal class TimelineItemsSubscriber(
         subscriptionCount++
     }
 
+    /**
+     * Remove a subscription to the timeline and unsubscribe if needed.
+     * The timeline will be unsubscribed when the last subscription is removed.
+     * If the timelineCoroutineScope is cancelled, the timeline will be unsubscribed automatically.
+     */
     suspend fun unsubscribeIfNeeded() = mutex.withLock {
         when (subscriptionCount) {
             0 -> return@withLock

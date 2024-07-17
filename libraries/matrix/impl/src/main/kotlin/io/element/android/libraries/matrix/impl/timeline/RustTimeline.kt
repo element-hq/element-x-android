@@ -56,6 +56,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -64,6 +65,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -88,9 +90,9 @@ class RustTimeline(
     private val inner: InnerTimeline,
     private val isLive: Boolean,
     systemClock: SystemClock,
-    roomCoroutineScope: CoroutineScope,
     isKeyBackupEnabled: Boolean,
     private val matrixRoom: MatrixRoom,
+    private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
     lastLoginTimestamp: Date?,
     private val roomContentForwarder: RoomContentForwarder,
@@ -106,7 +108,7 @@ class RustTimeline(
     private val inReplyToMapper = InReplyToMapper(timelineEventContentMapper)
     private val timelineItemMapper = MatrixTimelineItemMapper(
         fetchDetailsForEvent = this::fetchDetailsForEvent,
-        roomCoroutineScope = roomCoroutineScope,
+        coroutineScope = coroutineScope,
         virtualTimelineItemMapper = VirtualTimelineItemMapper(),
         eventTimelineItemMapper = EventTimelineItemMapper(
             contentMapper = timelineEventContentMapper
@@ -124,7 +126,7 @@ class RustTimeline(
     )
     private val timelineItemsSubscriber = TimelineItemsSubscriber(
         timeline = inner,
-        roomCoroutineScope = roomCoroutineScope,
+        timelineCoroutineScope = coroutineScope,
         timelineDiffProcessor = timelineDiffProcessor,
         initLatch = initLatch,
         isInit = isInit,
@@ -145,13 +147,11 @@ class RustTimeline(
     )
 
     init {
-        roomCoroutineScope.launch(dispatcher) {
-            fetchMembers()
-            if (isLive) {
-                // When timeline is live, we need to listen to the back pagination status as
-                // sdk can automatically paginate backwards.
-                registerBackPaginationStatusListener()
-            }
+        coroutineScope.fetchMembers()
+        if (isLive) {
+            // When timeline is live, we need to listen to the back pagination status as
+            // sdk can automatically paginate backwards.
+            coroutineScope.registerBackPaginationStatusListener()
         }
     }
 
@@ -243,9 +243,12 @@ class RustTimeline(
         }
     }.onStart {
         timelineItemsSubscriber.subscribeIfNeeded()
+    }.onCompletion {
+        timelineItemsSubscriber.unsubscribeIfNeeded()
     }
 
     override fun close() {
+        coroutineScope.cancel()
         inner.close()
     }
 
