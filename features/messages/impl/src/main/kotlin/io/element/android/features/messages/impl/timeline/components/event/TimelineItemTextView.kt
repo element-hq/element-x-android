@@ -77,20 +77,11 @@ internal fun getTextWithResolvedMentions(content: TimelineItemTextBasedContent):
     val userProfileCache = LocalRoomMemberProfilesCache.current
     val lastCacheUpdate by userProfileCache.lastCacheUpdate.collectAsState()
     val mentionSpanTheme = LocalMentionSpanTheme.current
-    val textWithMentions = if (content.formattedBody != null) {
-        remember(content.formattedBody, mentionSpanTheme, lastCacheUpdate) {
-            content.formattedBody?.let { formattedBody ->
-                updateMentionSpans(formattedBody, userProfileCache)
-                mentionSpanTheme.updateMentionStyles(formattedBody)
-                formattedBody
-            }
-        }
-    } else {
-        remember(content.pillifiedBody, mentionSpanTheme, lastCacheUpdate) {
-            updateMentionSpans(content.pillifiedBody, userProfileCache)
-            mentionSpanTheme.updateMentionStyles(content.pillifiedBody)
-            content.pillifiedBody
-        }
+    val formattedBody = content.formattedBody ?: content.pillifiedBody
+    val textWithMentions = remember(formattedBody, mentionSpanTheme, lastCacheUpdate) {
+        updateMentionSpans(formattedBody, userProfileCache)
+        mentionSpanTheme.updateMentionStyles(formattedBody)
+        formattedBody
     }
     return SpannableString(textWithMentions)
 }
