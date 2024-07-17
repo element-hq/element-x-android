@@ -106,6 +106,7 @@ class MatrixPatternsTest {
 
         assertThat(MatrixPatterns.isRoomId("!room:server.com")).isTrue()
         assertThat(MatrixPatterns.isRoomId("!$longLocalPart:server.com")).isTrue()
+        assertThat(MatrixPatterns.isRoomId("!#test/room\nversion <u>11</u>, with @🐈️:maunium.net")).isTrue()
     }
 
     @Test
@@ -157,6 +158,7 @@ class MatrixPatternsTest {
         assertThat(MatrixPatterns.isUserId("@${longLocalPart}a:server.com")).isFalse()
 
         assertThat(MatrixPatterns.isUserId("@user:server.com")).isTrue()
+        assertThat(MatrixPatterns.isUserId("@:server.com")).isTrue()
         assertThat(MatrixPatterns.isUserId("@$longLocalPart:server.com")).isTrue()
     }
 

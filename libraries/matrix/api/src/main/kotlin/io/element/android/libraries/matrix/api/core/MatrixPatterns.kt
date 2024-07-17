@@ -27,18 +27,20 @@ object MatrixPatterns {
     // Note: TLD is not mandatory (localhost, IP address...)
     private const val DOMAIN_REGEX = ":[A-Za-z0-9.-]+(:[0-9]{2,5})?"
 
-    // See https://spec.matrix.org/v1.11/appendices/#opaque-identifiers
-    private const val OPAQUE_ID_REGEX = "[0-9A-Za-z-\\._~]+"
+    private const val BASE_64_ALPHABET = "[0-9A-Za-z/\\+=]+"
+    private const val BASE_64_URL_SAFE_ALPHABET = "[0-9A-Za-z/\\-_]+"
 
     // regex pattern to find matrix user ids in a string.
     // See https://matrix.org/docs/spec/appendices#historical-user-ids
     // Sadly, we need to relax the regex pattern a bit as there already exist some ids that don't match the spec.
-    private const val MATRIX_USER_IDENTIFIER_REGEX = "^@\\S+?$DOMAIN_REGEX$"
-    private val PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER = MATRIX_USER_IDENTIFIER_REGEX.toRegex(RegexOption.IGNORE_CASE)
+    // Note: local part can be empty
+    private const val MATRIX_USER_IDENTIFIER_REGEX = "^@\\S*?$DOMAIN_REGEX$"
+    private val PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER = MATRIX_USER_IDENTIFIER_REGEX.toRegex()
 
     // regex pattern to match room ids.
-    private const val MATRIX_ROOM_IDENTIFIER_REGEX = "^!$OPAQUE_ID_REGEX$DOMAIN_REGEX$"
-    private val PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER = MATRIX_ROOM_IDENTIFIER_REGEX.toRegex(RegexOption.IGNORE_CASE)
+    // Note: roomId can be arbitrary strings, including space and new line char
+    private const val MATRIX_ROOM_IDENTIFIER_REGEX = "^!.+$DOMAIN_REGEX$"
+    private val PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER = MATRIX_ROOM_IDENTIFIER_REGEX.toRegex(RegexOption.DOT_MATCHES_ALL)
 
     // regex pattern to match room aliases.
     private const val MATRIX_ROOM_ALIAS_REGEX = "^#\\S+$DOMAIN_REGEX$"
@@ -46,11 +48,17 @@ object MatrixPatterns {
 
     // regex pattern to match event ids.
     // Sadly, we need to relax the regex pattern a bit as there already exist some ids that don't match the spec.
-    private const val MATRIX_EVENT_IDENTIFIER_REGEX = "^\\$$OPAQUE_ID_REGEX$DOMAIN_REGEX$"
-    private val PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER = MATRIX_EVENT_IDENTIFIER_REGEX.toRegex(RegexOption.IGNORE_CASE)
+    // v1 and v2: arbitrary string + domain
+    private const val MATRIX_EVENT_IDENTIFIER_REGEX = "^\\$.+$DOMAIN_REGEX$"
+    private val PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER = MATRIX_EVENT_IDENTIFIER_REGEX.toRegex()
 
-    private const val MATRIX_EVENT_IDENTIFIER_V4_REGEX = "\\$$OPAQUE_ID_REGEX"
-    private val PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V4 = MATRIX_EVENT_IDENTIFIER_V4_REGEX.toRegex(RegexOption.IGNORE_CASE)
+    // v3: base64
+    private const val MATRIX_EVENT_IDENTIFIER_V3_REGEX = "\\$$BASE_64_ALPHABET"
+    private val PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V3 = MATRIX_EVENT_IDENTIFIER_V3_REGEX.toRegex()
+
+    // v4: url-safe base64
+    private const val MATRIX_EVENT_IDENTIFIER_V4_REGEX = "\\$$BASE_64_URL_SAFE_ALPHABET"
+    private val PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V4 = MATRIX_EVENT_IDENTIFIER_V4_REGEX.toRegex()
 
     private const val MAX_IDENTIFIER_LENGTH = 255
 
@@ -61,7 +69,9 @@ object MatrixPatterns {
      * @return true if the string is a valid user id
      */
     fun isUserId(str: String?): Boolean {
-        return str != null && str matches PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER && str.length <= MAX_IDENTIFIER_LENGTH
+        return str != null &&
+            str.length <= MAX_IDENTIFIER_LENGTH &&
+            str matches PATTERN_CONTAIN_MATRIX_USER_IDENTIFIER
     }
 
     /**
@@ -79,7 +89,9 @@ object MatrixPatterns {
      * @return true if the string is a valid room Id
      */
     fun isRoomId(str: String?): Boolean {
-        return str != null && str matches PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER && str.length <= MAX_IDENTIFIER_LENGTH
+        return str != null &&
+            str.length <= MAX_IDENTIFIER_LENGTH &&
+            str matches PATTERN_CONTAIN_MATRIX_ROOM_IDENTIFIER
     }
 
     /**
@@ -89,7 +101,9 @@ object MatrixPatterns {
      * @return true if the string is a valid room alias.
      */
     fun isRoomAlias(str: String?): Boolean {
-        return str != null && str matches PATTERN_CONTAIN_MATRIX_ALIAS && str.length <= MAX_IDENTIFIER_LENGTH
+        return str != null &&
+            str.length <= MAX_IDENTIFIER_LENGTH &&
+            str matches PATTERN_CONTAIN_MATRIX_ALIAS
     }
 
     /**
@@ -100,9 +114,10 @@ object MatrixPatterns {
      */
     fun isEventId(str: String?): Boolean {
         return str != null &&
-            (str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER ||
-                str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V4) &&
-            str.length <= MAX_IDENTIFIER_LENGTH
+            str.length <= MAX_IDENTIFIER_LENGTH &&
+            (str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V4 ||
+                str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V3 ||
+                str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER)
     }
 
     /**
