@@ -23,6 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Mutex
@@ -32,7 +33,6 @@ import org.matrix.rustcomponents.sdk.TimelineChange
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
 import uniffi.matrix_sdk_ui.EventItemOrigin
-import java.util.concurrent.atomic.AtomicBoolean
 
 private const val INITIAL_MAX_SIZE = 50
 
@@ -47,7 +47,7 @@ internal class TimelineItemsSubscriber(
     private val timeline: Timeline,
     private val timelineDiffProcessor: MatrixTimelineDiffProcessor,
     private val initLatch: CompletableDeferred<Unit>,
-    private val isInit: AtomicBoolean,
+    private val isInit: MutableStateFlow<Boolean>,
     private val onNewSyncedEvent: () -> Unit,
 ) {
     private var subscriptionCount = 0
@@ -94,13 +94,13 @@ internal class TimelineItemsSubscriber(
             ensureActive()
             timelineDiffProcessor.postItems(it)
         }
-        isInit.set(true)
+        isInit.value = true
         initLatch.complete(Unit)
     }
 
     private suspend fun postDiffs(diffs: List<TimelineDiff>) {
         val diffsToProcess = diffs.toMutableList()
-        if (!isInit.get()) {
+        if (!isInit.value) {
             val resetDiff = diffsToProcess.firstOrNull { it.change() == TimelineChange.RESET }
             if (resetDiff != null) {
                 // Keep using the postItems logic so we can post the timelineItems asap.

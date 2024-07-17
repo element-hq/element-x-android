@@ -81,7 +81,6 @@ import timber.log.Timber
 import uniffi.matrix_sdk_ui.LiveBackPaginationStatus
 import java.io.File
 import java.util.Date
-import java.util.concurrent.atomic.AtomicBoolean
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
 private const val PAGINATION_SIZE = 50
@@ -99,7 +98,7 @@ class RustTimeline(
     onNewSyncedEvent: () -> Unit,
 ) : Timeline {
     private val initLatch = CompletableDeferred<Unit>()
-    private val isInit = AtomicBoolean(false)
+    private val isInit = MutableStateFlow(false)
 
     private val _timelineItems: MutableStateFlow<List<MatrixTimelineItem>> =
         MutableStateFlow(emptyList())
@@ -208,7 +207,7 @@ class RustTimeline(
     }
 
     private fun canPaginate(direction: Timeline.PaginationDirection): Boolean {
-        if (!isInit.get()) return false
+        if (!isInit.value) return false
         return when (direction) {
             Timeline.PaginationDirection.BACKWARDS -> backPaginationStatus.value.canPaginate
             Timeline.PaginationDirection.FORWARDS -> forwardPaginationStatus.value.canPaginate
@@ -226,20 +225,25 @@ class RustTimeline(
         _timelineItems,
         backPaginationStatus.map { it.hasMoreToLoad }.distinctUntilChanged(),
         forwardPaginationStatus.map { it.hasMoreToLoad }.distinctUntilChanged(),
-    ) { timelineItems, hasMoreToLoadBackward, hasMoreToLoadForward ->
+        isInit,
+    ) { timelineItems, hasMoreToLoadBackward, hasMoreToLoadForward, isInit ->
         withContext(dispatcher) {
             timelineItems
-                .let { items -> encryptedHistoryPostProcessor.process(items) }
-                .let { items ->
+                .process { items -> encryptedHistoryPostProcessor.process(items) }
+                .process { items ->
                     roomBeginningPostProcessor.process(
                         items = items,
                         isDm = matrixRoom.isDm,
                         hasMoreToLoadBackwards = hasMoreToLoadBackward
                     )
                 }
-                .let { items -> loadingIndicatorsPostProcessor.process(items, hasMoreToLoadBackward, hasMoreToLoadForward) }
+                .process(predicate = isInit) { items ->
+                    loadingIndicatorsPostProcessor.process(items, hasMoreToLoadBackward, hasMoreToLoadForward)
+                }
                 // Keep lastForwardIndicatorsPostProcessor last
-                .let { items -> lastForwardIndicatorsPostProcessor.process(items) }
+                .process(predicate = isInit) { items ->
+                    lastForwardIndicatorsPostProcessor.process(items)
+                }
         }
     }.onStart {
         timelineItemsSubscriber.subscribeIfNeeded()
@@ -543,5 +547,16 @@ class RustTimeline(
         return runCatching {
             inner.fetchDetailsForEvent(eventId.value)
         }
+    }
+}
+
+private suspend fun List<MatrixTimelineItem>.process(
+    predicate: Boolean = true,
+    processor: suspend (List<MatrixTimelineItem>) -> List<MatrixTimelineItem>
+): List<MatrixTimelineItem> {
+    return if (predicate) {
+        processor(this)
+    } else {
+        this
     }
 }
