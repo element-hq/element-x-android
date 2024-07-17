@@ -62,7 +62,7 @@ class RoomMemberListPresenterTest {
         }.test {
             skipItems(1)
             val initialState = awaitItem()
-            assertThat(initialState.roomMembers.isLoading).isTrue()
+            assertThat(initialState.roomMembers.isLoading()).isTrue()
             assertThat(initialState.searchQuery).isEmpty()
             assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(initialState.isSearchActive).isFalse()
@@ -70,9 +70,9 @@ class RoomMemberListPresenterTest {
             // Skip item while the new members state is processed
             skipItems(1)
             val loadedMembersState = awaitItem()
-            assertThat(loadedMembersState.roomMembers.isLoading).isFalse()
-            assertThat(loadedMembersState.roomMembers.invited).isEqualTo(listOf(aVictor(), aWalter()))
-            assertThat(loadedMembersState.roomMembers.joined).isNotEmpty()
+            assertThat(loadedMembersState.roomMembers.isLoading()).isFalse()
+            assertThat(loadedMembersState.roomMembers.dataOrNull()?.invited).isEqualTo(listOf(aVictor(), aWalter()))
+            assertThat(loadedMembersState.roomMembers.dataOrNull()?.joined).isNotEmpty()
         }
     }
 
@@ -126,7 +126,7 @@ class RoomMemberListPresenterTest {
             assertThat(searchQueryUpdatedState.searchQuery).isEqualTo("Alice")
             val searchSearchResultDelivered = awaitItem()
             assertThat(searchSearchResultDelivered.searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
-            assertThat((searchSearchResultDelivered.searchResults as SearchBarResultState.Results).results.joined.first().displayName)
+            assertThat((searchSearchResultDelivered.searchResults as SearchBarResultState.Results).results.dataOrNull()!!.joined.first().displayName)
                 .isEqualTo("Alice")
         }
     }

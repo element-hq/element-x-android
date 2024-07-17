@@ -83,10 +83,10 @@ class RoomMemberListPresenter @AssistedInject constructor(
             if (membersState is MatrixRoomMembersState.Unknown) {
                 return@LaunchedEffect
             }
-            val _membersState = membersState
-            if (_membersState is MatrixRoomMembersState.Error && _membersState.roomMembers().orEmpty().isEmpty()) {
+            val finalMembersState = membersState
+            if (finalMembersState is MatrixRoomMembersState.Error && finalMembersState.roomMembers().orEmpty().isEmpty()) {
                 // Cannot fetch members and no cached members, display the error
-                roomMembers = AsyncData.Failure(_membersState.failure)
+                roomMembers = AsyncData.Failure(finalMembersState.failure)
                 return@LaunchedEffect
             }
             withContext(coroutineDispatchers.io) {
