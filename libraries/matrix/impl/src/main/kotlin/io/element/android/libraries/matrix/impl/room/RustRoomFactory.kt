@@ -31,6 +31,7 @@ import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -89,7 +90,7 @@ class RustRoomFactory(
         }
 
     suspend fun destroy() {
-        withContext(dispatcher) {
+        withContext(NonCancellable + dispatcher) {
             mutex.withLock {
                 Timber.d("Destroying room factory")
                 cache.evictAll()
