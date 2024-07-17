@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationView
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -128,7 +129,6 @@ fun RoomMemberListView(
 
             if (!state.isSearchActive) {
                 RoomMemberList(
-                    isLoading = state.roomMembers.isLoading,
                     roomMembers = state.roomMembers,
                     showMembersCount = true,
                     canDisplayBannedUsersControls = state.moderationState.canDisplayBannedUsers,
@@ -149,8 +149,7 @@ fun RoomMemberListView(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 private fun RoomMemberList(
-    isLoading: Boolean,
-    roomMembers: RoomMembers,
+    roomMembers: AsyncData<RoomMembers>,
     showMembersCount: Boolean,
     selectedSection: SelectedSection,
     onSelectedSectionChange: (SelectedSection) -> Unit,
@@ -183,7 +182,7 @@ private fun RoomMemberList(
                     }
                 }
                 AnimatedVisibility(
-                    visible = isLoading,
+                    visible = roomMembers.isLoading(),
                     enter = fadeIn() + expandVertically(),
                     exit = fadeOut() + shrinkVertically(),
                 ) {
@@ -191,47 +190,72 @@ private fun RoomMemberList(
                 }
             }
         }
-        when (selectedSection) {
-            SelectedSection.MEMBERS -> {
-                if (roomMembers.invited.isNotEmpty()) {
-                    roomMemberListSection(
-                        headerText = { stringResource(id = R.string.screen_room_member_list_pending_header_title) },
-                        members = roomMembers.invited,
-                        onMemberSelected = { onSelectUser(it) }
-                    )
-                }
-                if (roomMembers.joined.isNotEmpty()) {
-                    roomMemberListSection(
-                        headerText = {
-                            if (showMembersCount) {
-                                val memberCount = roomMembers.joined.count()
-                                pluralStringResource(id = R.plurals.screen_room_member_list_header_title, count = memberCount, memberCount)
-                            } else {
-                                stringResource(id = R.string.screen_room_member_list_room_members_header_title)
-                            }
-                        },
-                        members = roomMembers.joined,
-                        onMemberSelected = { onSelectUser(it) }
-                    )
-                }
+        when (roomMembers) {
+            is AsyncData.Failure -> failureItem(roomMembers.error)
+            is AsyncData.Loading,
+            is AsyncData.Success -> memberItems(
+                roomMembers = roomMembers.dataOrNull() ?: return@LazyColumn,
+                selectedSection = selectedSection,
+                onSelectUser = onSelectUser,
+                showMembersCount = showMembersCount,
+            )
+            AsyncData.Uninitialized -> Unit
+        }
+    }
+}
+
+private fun LazyListScope.memberItems(
+    roomMembers: RoomMembers,
+    selectedSection: SelectedSection,
+    onSelectUser: (RoomMember) -> Unit,
+    showMembersCount: Boolean,
+) {
+    when (selectedSection) {
+        SelectedSection.MEMBERS -> {
+            if (roomMembers.invited.isNotEmpty()) {
+                roomMemberListSection(
+                    headerText = { stringResource(id = R.string.screen_room_member_list_pending_header_title) },
+                    members = roomMembers.invited,
+                    onMemberSelected = { onSelectUser(it) }
+                )
             }
-            SelectedSection.BANNED -> { // Banned users
-                if (roomMembers.banned.isNotEmpty()) {
-                    roomMemberListSection(
-                        headerText = null,
-                        members = roomMembers.banned,
-                        onMemberSelected = { onSelectUser(it) }
-                    )
-                } else {
-                    item {
-                        Box(Modifier.fillParentMaxSize().padding(horizontal = 16.dp)) {
-                            Text(
-                                modifier = Modifier.padding(bottom = 56.dp).align(Alignment.Center),
-                                text = stringResource(id = R.string.screen_room_member_list_banned_empty),
-                                color = ElementTheme.colors.textSecondary,
-                                textAlign = TextAlign.Center,
-                            )
+            if (roomMembers.joined.isNotEmpty()) {
+                roomMemberListSection(
+                    headerText = {
+                        if (showMembersCount) {
+                            val memberCount = roomMembers.joined.count()
+                            pluralStringResource(id = R.plurals.screen_room_member_list_header_title, count = memberCount, memberCount)
+                        } else {
+                            stringResource(id = R.string.screen_room_member_list_room_members_header_title)
                         }
+                    },
+                    members = roomMembers.joined,
+                    onMemberSelected = { onSelectUser(it) }
+                )
+            }
+        }
+        SelectedSection.BANNED -> { // Banned users
+            if (roomMembers.banned.isNotEmpty()) {
+                roomMemberListSection(
+                    headerText = null,
+                    members = roomMembers.banned,
+                    onMemberSelected = { onSelectUser(it) }
+                )
+            } else {
+                item {
+                    Box(
+                        Modifier
+                            .fillParentMaxSize()
+                            .padding(horizontal = 16.dp)
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .padding(bottom = 56.dp)
+                                .align(Alignment.Center),
+                            text = stringResource(id = R.string.screen_room_member_list_banned_empty),
+                            color = ElementTheme.colors.textSecondary,
+                            textAlign = TextAlign.Center,
+                        )
                     }
                 }
             }
@@ -239,9 +263,22 @@ private fun RoomMemberList(
     }
 }
 
+private fun LazyListScope.failureItem(failure: Throwable) {
+    item {
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 32.dp),
+            text = stringResource(id = CommonStrings.error_unknown) + "\n\n" + failure.localizedMessage,
+            color = ElementTheme.colors.textCriticalPrimary,
+            textAlign = TextAlign.Center,
+        )
+    }
+}
+
 private fun LazyListScope.roomMemberListSection(
     headerText: @Composable (() -> String)?,
-    members: ImmutableList<RoomMember>,
+    members: ImmutableList<RoomMember>?,
     onMemberSelected: (RoomMember) -> Unit,
 ) {
     headerText?.let {
@@ -254,7 +291,7 @@ private fun LazyListScope.roomMemberListSection(
             )
         }
     }
-    items(members) { matrixUser ->
+    items(members.orEmpty()) { matrixUser ->
         RoomMemberListItem(
             modifier = Modifier.fillMaxWidth(),
             roomMember = matrixUser,
@@ -320,7 +357,7 @@ private fun RoomMemberListTopBar(
 @Composable
 private fun RoomMemberSearchBar(
     query: String,
-    state: SearchBarResultState<RoomMembers>,
+    state: SearchBarResultState<AsyncData<RoomMembers>>,
     active: Boolean,
     placeHolderTitle: String,
     onActiveChange: (Boolean) -> Unit,
@@ -339,7 +376,6 @@ private fun RoomMemberSearchBar(
         resultState = state,
         resultHandler = { results ->
             RoomMemberList(
-                isLoading = false,
                 roomMembers = results,
                 showMembersCount = false,
                 onSelectUser = { onSelectUser(it) },

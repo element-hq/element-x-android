@@ -31,6 +31,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationEvents
 import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationPresenter
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -59,10 +60,10 @@ class RoomMemberListPresenter @AssistedInject constructor(
     @Composable
     override fun present(): RoomMemberListState {
         val coroutineScope = rememberCoroutineScope()
-        var roomMembers by remember { mutableStateOf(RoomMembers.loading()) }
+        var roomMembers: AsyncData<RoomMembers> by remember { mutableStateOf(AsyncData.Loading()) }
         var searchQuery by rememberSaveable { mutableStateOf("") }
         var searchResults by remember {
-            mutableStateOf<SearchBarResultState<RoomMembers>>(SearchBarResultState.Initial())
+            mutableStateOf<SearchBarResultState<AsyncData<RoomMembers>>>(SearchBarResultState.Initial())
         }
         var isSearchActive by rememberSaveable { mutableStateOf(false) }
 
@@ -82,6 +83,12 @@ class RoomMemberListPresenter @AssistedInject constructor(
             if (membersState is MatrixRoomMembersState.Unknown) {
                 return@LaunchedEffect
             }
+            val _membersState = membersState
+            if (_membersState is MatrixRoomMembersState.Error && _membersState.roomMembers().orEmpty().isEmpty()) {
+                // Cannot fetch members and no cached members, display the error
+                roomMembers = AsyncData.Failure(_membersState.failure)
+                return@LaunchedEffect
+            }
             withContext(coroutineDispatchers.io) {
                 val members = membersState.roomMembers().orEmpty().groupBy { it.membership }
                 val info = room.roomInfoFlow.first()
@@ -90,14 +97,18 @@ class RoomMemberListPresenter @AssistedInject constructor(
                     // This result will come from the timeline loading membership events and it'll be wrong.
                     return@withContext
                 }
-                roomMembers = RoomMembers(
+                val result = RoomMembers(
                     invited = members.getOrDefault(RoomMembershipState.INVITE, emptyList()).toImmutableList(),
                     joined = members.getOrDefault(RoomMembershipState.JOIN, emptyList())
                         .sortedWith(PowerLevelRoomMemberComparator())
                         .toImmutableList(),
                     banned = members.getOrDefault(RoomMembershipState.BAN, emptyList()).sortedBy { it.userId.value }.toImmutableList(),
-                    isLoading = membersState is MatrixRoomMembersState.Pending,
                 )
+                roomMembers = if (membersState is MatrixRoomMembersState.Pending) {
+                    AsyncData.Loading(result)
+                } else {
+                    AsyncData.Success(result)
+                }
             }
         }
 
@@ -110,15 +121,19 @@ class RoomMemberListPresenter @AssistedInject constructor(
                     if (results.isEmpty()) {
                         SearchBarResultState.NoResultsFound()
                     } else {
+                        val result = RoomMembers(
+                            invited = results.getOrDefault(RoomMembershipState.INVITE, emptyList()).toImmutableList(),
+                            joined = results.getOrDefault(RoomMembershipState.JOIN, emptyList())
+                                .sortedWith(PowerLevelRoomMemberComparator())
+                                .toImmutableList(),
+                            banned = results.getOrDefault(RoomMembershipState.BAN, emptyList()).sortedBy { it.userId.value }.toImmutableList(),
+                        )
                         SearchBarResultState.Results(
-                            RoomMembers(
-                                invited = results.getOrDefault(RoomMembershipState.INVITE, emptyList()).toImmutableList(),
-                                joined = results.getOrDefault(RoomMembershipState.JOIN, emptyList())
-                                    .sortedWith(PowerLevelRoomMemberComparator())
-                                    .toImmutableList(),
-                                banned = results.getOrDefault(RoomMembershipState.BAN, emptyList()).sortedBy { it.userId.value }.toImmutableList(),
-                                isLoading = membersState is MatrixRoomMembersState.Pending,
-                            )
+                            if (membersState is MatrixRoomMembersState.Pending) {
+                                AsyncData.Loading(result)
+                            } else {
+                                AsyncData.Success(result)
+                            }
                         )
                     }
                 }
