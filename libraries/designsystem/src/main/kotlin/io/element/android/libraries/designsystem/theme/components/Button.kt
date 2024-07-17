@@ -59,7 +59,7 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 // Designs: https://www.figma.com/file/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?type=design&mode=design&t=U03tOFZz5FSLVUMa-1
 
 // Horizontal padding for button with low padding
-internal val lowPaddingValue = 4.dp
+internal val lowHorizontalPaddingValue = 4.dp
 
 @Composable
 fun Button(
@@ -171,7 +171,7 @@ private fun ButtonInternal(
                 PaddingValues(start = 12.dp, top = 10.dp, end = 12.dp, bottom = 10.dp)
             }
         }
-        ButtonSize.MediumLowPadding -> PaddingValues(horizontal = lowPaddingValue, vertical = 10.dp)
+        ButtonSize.MediumLowPadding -> PaddingValues(horizontal = lowHorizontalPaddingValue, vertical = 10.dp)
         ButtonSize.Large -> when (style) {
             ButtonStyle.Filled,
             ButtonStyle.Outlined -> if (hasStartDrawable) {
@@ -185,7 +185,7 @@ private fun ButtonInternal(
                 PaddingValues(start = 16.dp, top = 13.dp, end = 16.dp, bottom = 13.dp)
             }
         }
-        ButtonSize.LargeLowPadding -> PaddingValues(horizontal = lowPaddingValue, vertical = 13.dp)
+        ButtonSize.LargeLowPadding -> PaddingValues(horizontal = lowHorizontalPaddingValue, vertical = 13.dp)
     }
 
     val shape = when (style) {
