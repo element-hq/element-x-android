@@ -70,8 +70,8 @@ class RustMatrixClientFactory @Inject constructor(
             baseDirectory = baseDirectory,
             baseCacheDirectory = cacheDirectory,
             clock = clock,
-        ).also { client ->
-            Timber.tag(client.toString()).d("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
+        ).also {
+            Timber.tag(it.toString()).d("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
         }
     }
 
