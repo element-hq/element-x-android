@@ -133,6 +133,9 @@ class RustMatrixClient(
 
     private val innerRoomListService = syncService.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
+
+    // To make sure only one coroutine affecting the token persistence can run at a time
+    private val tokenRefreshDispatcher = sessionDispatcher.limitedParallelism(1)
     private val rustSyncService = RustSyncService(syncService, sessionCoroutineScope)
     private val pushersService = RustPushersService(
         client = client,
@@ -167,7 +170,7 @@ class RustMatrixClient(
             if (isLoggingOut.getAndSet(true).not()) {
                 clientLog.v("didReceiveAuthError -> do the cleanup")
                 // TODO handle isSoftLogout parameter.
-                appCoroutineScope.launch {
+                appCoroutineScope.launch(tokenRefreshDispatcher) {
                     val existingData = sessionStore.getSession(client.userId())
                     val (anonymizedAccessToken, anonymizedRefreshToken) = existingData.anonymizedTokens()
                     clientLog.d(
@@ -200,7 +203,7 @@ class RustMatrixClient(
 
         override fun didRefreshTokens() {
             clientLog.w("didRefreshTokens()")
-            appCoroutineScope.launch {
+            appCoroutineScope.launch(tokenRefreshDispatcher) {
                 val existingData = sessionStore.getSession(client.userId()) ?: return@launch
                 val (anonymizedAccessToken, anonymizedRefreshToken) = client.session().anonymizedTokens()
                 clientLog.d(
