@@ -307,19 +307,19 @@ private fun InviteButtonsRow(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier.padding(),
+        modifier = modifier,
         horizontalArrangement = spacedBy(12.dp)
     ) {
         OutlinedButton(
             text = stringResource(CommonStrings.action_decline),
             onClick = onDeclineClick,
-            size = ButtonSize.Medium,
+            size = ButtonSize.MediumLowPadding,
             modifier = Modifier.weight(1f),
         )
         Button(
             text = stringResource(CommonStrings.action_accept),
             onClick = onAcceptClick,
-            size = ButtonSize.Medium,
+            size = ButtonSize.MediumLowPadding,
             modifier = Modifier.weight(1f),
         )
     }

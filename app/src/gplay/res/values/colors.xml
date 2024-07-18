@@ -16,10 +16,17 @@
 
 <resources>
 
-    <style name="Theme.OssLicenses.v27" parent="Base.Theme.OssLicenses">
-        <item name="android:windowLightNavigationBar">false</item>
-    </style>
+    <!-- Use a few colors from compoundColorsLight -->
+    <!-- LightColorTokens.colorThemeBg -->
+    <color name="colorThemeBg">#FFFFFFFF</color>
+    <!-- LightColorTokens.colorGray1400 -->
+    <color name="textPrimary">#FF1B1D22</color>
+    <!-- LightColorTokens.colorGray900 -->
+    <color name="textSecondary">#FF656D77</color>
+    <!-- LightColorTokens.colorBlue900 -->
+    <color name="textLinkExternal">#FF0467DD</color>
 
-    <style name="Theme.OssLicenses" parent="Theme.OssLicenses.v27"/>
+    <bool name="windowLightStatusBar">true</bool>
+    <bool name="windowLightNavigationBar">true</bool>
 
 </resources>

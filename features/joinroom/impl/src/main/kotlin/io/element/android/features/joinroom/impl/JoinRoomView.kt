@@ -155,13 +155,13 @@ private fun JoinRoomFooter(
                         text = stringResource(CommonStrings.action_decline),
                         onClick = onDeclineInvite,
                         modifier = Modifier.weight(1f),
-                        size = ButtonSize.Large,
+                        size = ButtonSize.LargeLowPadding,
                     )
                     Button(
                         text = stringResource(CommonStrings.action_accept),
                         onClick = onAcceptInvite,
                         modifier = Modifier.weight(1f),
-                        size = ButtonSize.Large,
+                        size = ButtonSize.LargeLowPadding,
                     )
                 }
             }
