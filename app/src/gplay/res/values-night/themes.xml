@@ -23,6 +23,8 @@
     <color name="textPrimary">#FFEBEEF2</color>
     <!-- DarkColorTokens.colorGray900 -->
     <color name="textSecondary">#ff808994</color>
+    <!-- DarkColorTokens.colorBlue900 -->
+    <color name="textLinkExternal">#FF4187EB</color>
 
     <style name="Base.Theme.OssLicenses" parent="Theme.MaterialComponents">
         <!-- Background of title bar -->
@@ -31,6 +33,8 @@
         <item name="android:colorBackground">@color/colorThemeBg</item>
         <!-- Text of the licenses -->
         <item name="android:textColor">@color/textSecondary</item>
+        <!-- Link text color -->
+        <item name="android:textColorLink">@color/textLinkExternal</item>
         <!-- Title, back button and license item text color -->
         <item name="android:textColorPrimary">@color/textPrimary</item>
         <!-- Background of status bar -->
