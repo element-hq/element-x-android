@@ -192,17 +192,22 @@ class DefaultActiveCallManager @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun observeRingingCall() {
+        // This will observe ringing calls and ensure they're terminated if the room call is cancelled
         activeCall
             .filterNotNull()
             .filter { it.callState is CallState.Ringing && it.callType is CallType.RoomCall }
             .flatMapLatest { activeCall ->
                 val callType = activeCall.callType as CallType.RoomCall
+                // Get a flow of updated `hasRoomCall` values for the room
                 matrixClientProvider.getOrRestore(callType.sessionId).getOrNull()
                     ?.getRoom(callType.roomId)
-                    ?.roomInfoFlow ?: flowOf()
+                    ?.roomInfoFlow
+                    ?.map { it.hasRoomCall }
+                    ?: flowOf()
             }
-            .map { it.hasRoomCall }
+            // We only want to check if the room active call status changes
             .distinctUntilChanged()
+            // Skip the first one, we're not interested in it (if the check below passes, it had to be active anyway)
             .drop(1)
             .onEach { roomHasActiveCall ->
                 if (!roomHasActiveCall) {
