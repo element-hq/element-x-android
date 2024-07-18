@@ -196,8 +196,6 @@ class RustMatrixRoom(
     override fun destroy() {
         roomCoroutineScope.cancel()
         liveTimeline.close()
-        innerRoom.destroy()
-        roomListItem.destroy()
     }
 
     override val displayName: String
@@ -627,12 +625,13 @@ class RustMatrixRoom(
         isLive: Boolean,
         onNewSyncedEvent: () -> Unit = {},
     ): Timeline {
+        val timelineCoroutineScope = roomCoroutineScope.childScope(coroutineDispatchers.main, "TimelineScope-$roomId-$timeline")
         return RustTimeline(
             isKeyBackupEnabled = isKeyBackupEnabled,
             isLive = isLive,
             matrixRoom = this,
             systemClock = systemClock,
-            roomCoroutineScope = roomCoroutineScope,
+            coroutineScope = timelineCoroutineScope,
             dispatcher = roomDispatcher,
             lastLoginTimestamp = sessionData.loginTimestamp,
             onNewSyncedEvent = onNewSyncedEvent,

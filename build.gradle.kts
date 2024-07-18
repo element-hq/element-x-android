@@ -5,6 +5,7 @@ buildscript {
     dependencies {
         classpath(libs.kotlin.gradle.plugin)
         classpath(libs.gms.google.services)
+        classpath(libs.oss.licenses.plugin)
     }
 }
 

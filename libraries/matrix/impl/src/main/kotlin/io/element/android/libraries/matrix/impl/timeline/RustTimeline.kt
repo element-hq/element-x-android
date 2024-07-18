@@ -56,8 +56,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -66,74 +65,77 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.FormattedBody
 import org.matrix.rustcomponents.sdk.MessageFormat
 import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
-import org.matrix.rustcomponents.sdk.TimelineChange
-import org.matrix.rustcomponents.sdk.TimelineDiff
-import org.matrix.rustcomponents.sdk.TimelineItem
 import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
 import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
-import uniffi.matrix_sdk_ui.EventItemOrigin
 import uniffi.matrix_sdk_ui.LiveBackPaginationStatus
 import java.io.File
 import java.util.Date
-import java.util.concurrent.atomic.AtomicBoolean
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
-private const val INITIAL_MAX_SIZE = 50
 private const val PAGINATION_SIZE = 50
 
 class RustTimeline(
     private val inner: InnerTimeline,
-    isLive: Boolean,
+    private val isLive: Boolean,
     systemClock: SystemClock,
-    roomCoroutineScope: CoroutineScope,
     isKeyBackupEnabled: Boolean,
     private val matrixRoom: MatrixRoom,
+    private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
     lastLoginTimestamp: Date?,
     private val roomContentForwarder: RoomContentForwarder,
-    private val onNewSyncedEvent: () -> Unit,
+    onNewSyncedEvent: () -> Unit,
 ) : Timeline {
     private val initLatch = CompletableDeferred<Unit>()
-    private val isInit = AtomicBoolean(false)
+    private val isInit = MutableStateFlow(false)
 
     private val _timelineItems: MutableStateFlow<List<MatrixTimelineItem>> =
         MutableStateFlow(emptyList())
 
+    private val timelineEventContentMapper = TimelineEventContentMapper()
+    private val inReplyToMapper = InReplyToMapper(timelineEventContentMapper)
+    private val timelineItemMapper = MatrixTimelineItemMapper(
+        fetchDetailsForEvent = this::fetchDetailsForEvent,
+        coroutineScope = coroutineScope,
+        virtualTimelineItemMapper = VirtualTimelineItemMapper(),
+        eventTimelineItemMapper = EventTimelineItemMapper(
+            contentMapper = timelineEventContentMapper
+        )
+    )
+    private val timelineDiffProcessor = MatrixTimelineDiffProcessor(
+        timelineItems = _timelineItems,
+        timelineItemFactory = timelineItemMapper,
+    )
     private val encryptedHistoryPostProcessor = TimelineEncryptedHistoryPostProcessor(
         lastLoginTimestamp = lastLoginTimestamp,
         isRoomEncrypted = matrixRoom.isEncrypted,
         isKeyBackupEnabled = isKeyBackupEnabled,
         dispatcher = dispatcher,
     )
+    private val timelineItemsSubscriber = TimelineItemsSubscriber(
+        timeline = inner,
+        timelineCoroutineScope = coroutineScope,
+        timelineDiffProcessor = timelineDiffProcessor,
+        initLatch = initLatch,
+        isInit = isInit,
+        dispatcher = dispatcher,
+        onNewSyncedEvent = onNewSyncedEvent,
+    )
 
     private val roomBeginningPostProcessor = RoomBeginningPostProcessor()
     private val loadingIndicatorsPostProcessor = LoadingIndicatorsPostProcessor(systemClock)
     private val lastForwardIndicatorsPostProcessor = LastForwardIndicatorsPostProcessor(isLive)
-
-    private val timelineEventContentMapper = TimelineEventContentMapper()
-    private val inReplyToMapper = InReplyToMapper(timelineEventContentMapper)
-    private val timelineItemFactory = MatrixTimelineItemMapper(
-        fetchDetailsForEvent = this::fetchDetailsForEvent,
-        roomCoroutineScope = roomCoroutineScope,
-        virtualTimelineItemMapper = VirtualTimelineItemMapper(),
-        eventTimelineItemMapper = EventTimelineItemMapper(
-            contentMapper = timelineEventContentMapper
-        )
-    )
-
-    private val timelineDiffProcessor = MatrixTimelineDiffProcessor(
-        timelineItems = _timelineItems,
-        timelineItemFactory = timelineItemFactory,
-    )
 
     private val backPaginationStatus = MutableStateFlow(
         Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = true)
@@ -144,35 +146,25 @@ class RustTimeline(
     )
 
     init {
-        roomCoroutineScope.launch(dispatcher) {
-            inner.timelineDiffFlow()
-                .onEach { diffs ->
-                    if (diffs.any { diff -> diff.eventOrigin() == EventItemOrigin.SYNC }) {
-                        onNewSyncedEvent()
-                    }
-                    postDiffs(diffs)
-                }
-                .launchIn(this)
-
-            launch {
-                fetchMembers()
-            }
-
-            if (isLive) {
-                // When timeline is live, we need to listen to the back pagination status as
-                // sdk can automatically paginate backwards.
-                inner.liveBackPaginationStatus()
-                    .onEach { backPaginationStatus ->
-                        updatePaginationStatus(Timeline.PaginationDirection.BACKWARDS) {
-                            when (backPaginationStatus) {
-                                is LiveBackPaginationStatus.Idle -> it.copy(isPaginating = false, hasMoreToLoad = !backPaginationStatus.hitStartOfTimeline)
-                                is LiveBackPaginationStatus.Paginating -> it.copy(isPaginating = true, hasMoreToLoad = true)
-                            }
-                        }
-                    }
-                    .launchIn(this)
-            }
+        coroutineScope.fetchMembers()
+        if (isLive) {
+            // When timeline is live, we need to listen to the back pagination status as
+            // sdk can automatically paginate backwards.
+            coroutineScope.registerBackPaginationStatusListener()
         }
+    }
+
+    private fun CoroutineScope.registerBackPaginationStatusListener() {
+        inner.liveBackPaginationStatus()
+            .onEach { backPaginationStatus ->
+                updatePaginationStatus(Timeline.PaginationDirection.BACKWARDS) {
+                    when (backPaginationStatus) {
+                        is LiveBackPaginationStatus.Idle -> it.copy(isPaginating = false, hasMoreToLoad = !backPaginationStatus.hitStartOfTimeline)
+                        is LiveBackPaginationStatus.Paginating -> it.copy(isPaginating = true, hasMoreToLoad = true)
+                    }
+                }
+            }
+            .launchIn(this)
     }
 
     override val membershipChangeEventReceived: Flow<Unit> = timelineDiffProcessor.membershipChangeEventReceived
@@ -215,7 +207,7 @@ class RustTimeline(
     }
 
     private fun canPaginate(direction: Timeline.PaginationDirection): Boolean {
-        if (!isInit.get()) return false
+        if (!isInit.value) return false
         return when (direction) {
             Timeline.PaginationDirection.BACKWARDS -> backPaginationStatus.value.canPaginate
             Timeline.PaginationDirection.FORWARDS -> forwardPaginationStatus.value.canPaginate
@@ -233,59 +225,43 @@ class RustTimeline(
         _timelineItems,
         backPaginationStatus.map { it.hasMoreToLoad }.distinctUntilChanged(),
         forwardPaginationStatus.map { it.hasMoreToLoad }.distinctUntilChanged(),
-    ) { timelineItems, hasMoreToLoadBackward, hasMoreToLoadForward ->
+        isInit,
+    ) { timelineItems, hasMoreToLoadBackward, hasMoreToLoadForward, isInit ->
         withContext(dispatcher) {
             timelineItems
-                .let { items -> encryptedHistoryPostProcessor.process(items) }
-                .let { items ->
+                .process { items -> encryptedHistoryPostProcessor.process(items) }
+                .process { items ->
                     roomBeginningPostProcessor.process(
                         items = items,
                         isDm = matrixRoom.isDm,
                         hasMoreToLoadBackwards = hasMoreToLoadBackward
                     )
                 }
-                .let { items -> loadingIndicatorsPostProcessor.process(items, hasMoreToLoadBackward, hasMoreToLoadForward) }
+                .process(predicate = isInit) { items ->
+                    loadingIndicatorsPostProcessor.process(items, hasMoreToLoadBackward, hasMoreToLoadForward)
+                }
                 // Keep lastForwardIndicatorsPostProcessor last
-                .let { items -> lastForwardIndicatorsPostProcessor.process(items) }
+                .process(predicate = isInit) { items ->
+                    lastForwardIndicatorsPostProcessor.process(items)
+                }
         }
+    }.onStart {
+        timelineItemsSubscriber.subscribeIfNeeded()
+    }.onCompletion {
+        timelineItemsSubscriber.unsubscribeIfNeeded()
     }
 
     override fun close() {
+        coroutineScope.cancel()
         inner.close()
     }
 
-    private suspend fun fetchMembers() = withContext(dispatcher) {
+    private fun CoroutineScope.fetchMembers() = launch(dispatcher) {
         initLatch.await()
         try {
             inner.fetchMembers()
         } catch (exception: Exception) {
             Timber.e(exception, "Error fetching members for room ${matrixRoom.roomId}")
-        }
-    }
-
-    private suspend fun postItems(items: List<TimelineItem>) = coroutineScope {
-        // Split the initial items in multiple list as there is no pagination in the cached data, so we can post timelineItems asap.
-        items.chunked(INITIAL_MAX_SIZE).reversed().forEach {
-            ensureActive()
-            timelineDiffProcessor.postItems(it)
-        }
-        isInit.set(true)
-        initLatch.complete(Unit)
-    }
-
-    private suspend fun postDiffs(diffs: List<TimelineDiff>) {
-        val diffsToProcess = diffs.toMutableList()
-        if (!isInit.get()) {
-            val resetDiff = diffsToProcess.firstOrNull { it.change() == TimelineChange.RESET }
-            if (resetDiff != null) {
-                // Keep using the postItems logic so we can post the timelineItems asap.
-                postItems(resetDiff.reset() ?: emptyList())
-                diffsToProcess.remove(resetDiff)
-            }
-        }
-        initLatch.await()
-        if (diffsToProcess.isNotEmpty()) {
-            timelineDiffProcessor.postDiffs(diffsToProcess)
         }
     }
 
@@ -554,12 +530,6 @@ class RustTimeline(
         }
     }
 
-    private suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit> {
-        return runCatching {
-            inner.fetchDetailsForEvent(eventId.value)
-        }
-    }
-
     override suspend fun loadReplyDetails(eventId: EventId): InReplyTo = withContext(dispatcher) {
         val timelineItem = _timelineItems.value.firstOrNull { timelineItem ->
             timelineItem is MatrixTimelineItem.Event && timelineItem.eventId == eventId
@@ -575,5 +545,22 @@ class RustTimeline(
         } else {
             inner.loadReplyDetails(eventId.value).use(inReplyToMapper::map)
         }
+    }
+
+    private suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit> {
+        return runCatching {
+            inner.fetchDetailsForEvent(eventId.value)
+        }
+    }
+}
+
+private suspend fun List<MatrixTimelineItem>.process(
+    predicate: Boolean = true,
+    processor: suspend (List<MatrixTimelineItem>) -> List<MatrixTimelineItem>
+): List<MatrixTimelineItem> {
+    return if (predicate) {
+        processor(this)
+    } else {
+        this
     }
 }
