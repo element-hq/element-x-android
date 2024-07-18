@@ -30,6 +30,8 @@ data class TracingFilterConfiguration(
         Target.MATRIX_SDK_SLIDING_SYNC to LogLevel.INFO,
         Target.MATRIX_SDK_BASE_SLIDING_SYNC to LogLevel.INFO,
         Target.MATRIX_SDK_UI_TIMELINE to LogLevel.INFO,
+        // To debug OIDC logouts
+        Target.MATRIX_SDK_OIDC to LogLevel.TRACE,
     )
 
     fun getLogLevel(target: Target): LogLevel {
