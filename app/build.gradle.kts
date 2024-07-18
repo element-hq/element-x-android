@@ -36,6 +36,7 @@ plugins {
     id(libs.plugins.firebaseAppDistribution.get().pluginId)
     alias(libs.plugins.knit)
     id("kotlin-parcelize")
+    id("com.google.android.gms.oss-licenses-plugin")
     // To be able to update the firebase.xml files, uncomment and build the project
     id("com.google.gms.google-services")
 }
@@ -250,12 +251,15 @@ dependencies {
     implementation(projects.anvilannotations)
     implementation(projects.appnav)
     implementation(projects.appconfig)
+    implementation(projects.libraries.uiStrings)
     anvil(projects.anvilcodegen)
 
     // Comment to not include firebase in the project
     "gplayImplementation"(projects.libraries.pushproviders.firebase)
     // Comment to not include unified push in the project
     implementation(projects.libraries.pushproviders.unifiedpush)
+
+    "gplayImplementation"(libs.play.services.oss.licenses)
 
     implementation(libs.appyx.core)
     implementation(libs.androidx.splash)

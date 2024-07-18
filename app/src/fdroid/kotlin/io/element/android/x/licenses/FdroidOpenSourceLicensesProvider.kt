@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.features.preferences.impl.about
+package io.element.android.x.licenses
 
-import androidx.compose.runtime.Composable
+import android.app.Activity
+import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.preferences.api.OpenSourceLicensesProvider
-import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.di.AppScope
 import javax.inject.Inject
 
-class AboutPresenter @Inject constructor(
-    private val openSourceLicensesProvider: OpenSourceLicensesProvider,
-) : Presenter<AboutState> {
-    @Composable
-    override fun present(): AboutState {
-        return AboutState(
-            elementLegals = getAllLegals(),
-            hasOpenSourcesLicenses = openSourceLicensesProvider.hasOpenSourceLicenses,
-        )
+@ContributesBinding(AppScope::class)
+class FdroidOpenSourceLicensesProvider @Inject constructor() : OpenSourceLicensesProvider {
+    override val hasOpenSourceLicenses: Boolean = false
+
+    override fun navigateToOpenSourceLicenses(activity: Activity) {
+        error("Not supported, please ensure that hasOpenSourcesLicenses is true before calling this method")
     }
 }

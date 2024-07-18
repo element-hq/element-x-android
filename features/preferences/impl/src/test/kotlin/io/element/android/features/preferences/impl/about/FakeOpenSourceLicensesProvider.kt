@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,19 +16,11 @@
 
 package io.element.android.features.preferences.impl.about
 
-import androidx.compose.runtime.Composable
+import android.app.Activity
 import io.element.android.features.preferences.api.OpenSourceLicensesProvider
-import io.element.android.libraries.architecture.Presenter
-import javax.inject.Inject
 
-class AboutPresenter @Inject constructor(
-    private val openSourceLicensesProvider: OpenSourceLicensesProvider,
-) : Presenter<AboutState> {
-    @Composable
-    override fun present(): AboutState {
-        return AboutState(
-            elementLegals = getAllLegals(),
-            hasOpenSourcesLicenses = openSourceLicensesProvider.hasOpenSourceLicenses,
-        )
-    }
+class FakeOpenSourceLicensesProvider(
+    override val hasOpenSourceLicenses: Boolean,
+) : OpenSourceLicensesProvider {
+    override fun navigateToOpenSourceLicenses(activity: Activity) = Unit
 }

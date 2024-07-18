@@ -27,6 +27,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.preferences.api.OpenSourceLicensesProvider
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.di.SessionScope
 
@@ -35,6 +36,7 @@ class AboutNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: AboutPresenter,
+    private val openSourceLicensesProvider: OpenSourceLicensesProvider,
 ) : Node(buildContext, plugins = plugins) {
     private fun onElementLegalClick(
         activity: Activity,
@@ -54,6 +56,9 @@ class AboutNode @AssistedInject constructor(
             onBackClick = ::navigateUp,
             onElementLegalClick = { elementLegal ->
                 onElementLegalClick(activity, isDark, elementLegal)
+            },
+            onOpenSourceLicensesClick = {
+                openSourceLicensesProvider.navigateToOpenSourceLicenses(activity)
             },
             modifier = modifier
         )

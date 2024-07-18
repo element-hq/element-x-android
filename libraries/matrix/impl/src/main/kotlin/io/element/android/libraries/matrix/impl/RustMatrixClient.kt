@@ -490,6 +490,9 @@ class RustMatrixClient(
     override fun roomDirectoryService(): RoomDirectoryService = roomDirectoryService
 
     override fun close() {
+        appCoroutineScope.launch {
+            roomFactory.destroy()
+        }
         sessionCoroutineScope.cancel()
         clientDelegateTaskHandle?.cancelAndDestroy()
         notificationSettingsService.destroy()
