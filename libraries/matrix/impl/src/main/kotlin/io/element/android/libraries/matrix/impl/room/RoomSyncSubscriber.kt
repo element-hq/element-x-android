@@ -34,7 +34,7 @@ class RoomSyncSubscriber(
     private val roomListService: RoomListServiceInterface,
     private val dispatchers: CoroutineDispatchers,
 ) {
-    private val subscriptionCounts = HashMap<RoomId, Int>()
+    private val subscribedRoomIds = mutableSetOf<RoomId>()
     private val mutex = Mutex()
 
     private val settings = RoomSubscription(
@@ -54,14 +54,7 @@ class RoomSyncSubscriber(
     suspend fun subscribe(roomId: RoomId) = mutex.withLock {
         withContext(dispatchers.io) {
             try {
-                val currentSubscription = subscriptionCounts.getOrElse(roomId) { 0 }
-                if (currentSubscription == 0) {
-                    Timber.d("Subscribing to room $roomId}")
-                    roomListService.room(roomId.value).use { roomListItem ->
-                        roomListItem.subscribe(settings)
-                    }
-                }
-                subscriptionCounts[roomId] = currentSubscription + 1
+                subscribeToRoom(roomId)
             } catch (exception: Exception) {
                 Timber.e("Failed to subscribe to room $roomId")
             }
@@ -72,14 +65,7 @@ class RoomSyncSubscriber(
         withContext(dispatchers.io) {
             for (roomId in roomIds) {
                 try {
-                    val currentSubscription = subscriptionCounts.getOrElse(roomId) { 0 }
-                    if (currentSubscription == 0) {
-                        Timber.d("Subscribing to room $roomId}")
-                        roomListService.room(roomId.value).use { roomListItem ->
-                            roomListItem.subscribe(settings)
-                        }
-                    }
-                    subscriptionCounts[roomId] = currentSubscription + 1
+                    subscribeToRoom(roomId)
                 } catch (cancellationException: CancellationException) {
                     throw cancellationException
                 } catch (exception: Exception) {
@@ -89,28 +75,17 @@ class RoomSyncSubscriber(
         }
     }
 
-    suspend fun unsubscribe(roomId: RoomId) = mutex.withLock {
-        withContext(dispatchers.io) {
-            try {
-                val currentSubscription = subscriptionCounts.getOrElse(roomId) { 0 }
-                when (currentSubscription) {
-                    0 -> return@withContext
-                    1 -> {
-                        Timber.d("Unsubscribe from room $roomId")
-                        roomListService.room(roomId.value).use { roomListItem ->
-                            roomListItem.unsubscribe()
-                        }
-                    }
-                }
-                subscriptionCounts[roomId] = currentSubscription - 1
-            } catch (exception: Exception) {
-                Timber.e("Failed to unsubscribe from room $roomId")
+    private fun subscribeToRoom(roomId: RoomId) {
+        if (!isSubscribedTo(roomId)) {
+            Timber.d("Subscribing to room $roomId}")
+            roomListService.room(roomId.value).use { roomListItem ->
+                roomListItem.subscribe(settings)
             }
         }
+        subscribedRoomIds.add(roomId)
     }
 
     fun isSubscribedTo(roomId: RoomId): Boolean {
-        val subscriptionCount = subscriptionCounts[roomId] ?: return false
-        return subscriptionCount > 0
+        return subscribedRoomIds.contains(roomId)
     }
 }

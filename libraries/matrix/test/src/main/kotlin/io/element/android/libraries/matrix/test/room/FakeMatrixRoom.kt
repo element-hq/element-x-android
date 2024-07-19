@@ -226,7 +226,6 @@ class FakeMatrixRoom(
 
     override suspend fun subscribeToSync() = Unit
 
-    override suspend fun unsubscribeFromSync() = Unit
     override suspend fun powerLevels(): Result<MatrixRoomPowerLevels> {
         return powerLevelsResult
     }

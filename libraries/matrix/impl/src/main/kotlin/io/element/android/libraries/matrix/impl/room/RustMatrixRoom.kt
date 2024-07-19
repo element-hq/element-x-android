@@ -173,8 +173,6 @@ class RustMatrixRoom(
 
     override suspend fun subscribeToSync() = roomSyncSubscriber.subscribe(roomId)
 
-    override suspend fun unsubscribeFromSync() = roomSyncSubscriber.unsubscribe(roomId)
-
     override suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline> {
         return runCatching {
             innerRoom.timelineFocusedOnEvent(
@@ -582,7 +580,7 @@ class RustMatrixRoom(
             room = innerRoom,
             widgetCapabilitiesProvider = object : WidgetCapabilitiesProvider {
                 override fun acquireCapabilities(capabilities: WidgetCapabilities): WidgetCapabilities {
-                    return getElementCallRequiredPermissions(sessionId.value)
+                    return getElementCallRequiredPermissions(sessionId.value, sessionData.deviceId)
                 }
             },
         )
