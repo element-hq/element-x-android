@@ -75,6 +75,9 @@ class DeveloperSettingsPresenter @Inject constructor(
         val customElementCallBaseUrl by appPreferencesStore
             .getCustomElementCallBaseUrlFlow()
             .collectAsState(initial = null)
+        val isSimplifiedSlidingSyncEnabled by appPreferencesStore
+            .isSimplifiedSlidingSyncEnabledFlow()
+            .collectAsState(initial = false)
 
         LaunchedEffect(Unit) {
             FeatureFlags.entries
@@ -114,6 +117,9 @@ class DeveloperSettingsPresenter @Inject constructor(
                     appPreferencesStore.setCustomElementCallBaseUrl(urlToSave)
                 }
                 DeveloperSettingsEvents.ClearCache -> coroutineScope.clearCache(clearCacheAction)
+                is DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled -> coroutineScope.launch {
+                    appPreferencesStore.setSimplifiedSlidingSyncEnabled(event.isEnabled)
+                }
             }
         }
 
@@ -127,6 +133,7 @@ class DeveloperSettingsPresenter @Inject constructor(
                 defaultUrl = ElementCallConfig.DEFAULT_BASE_URL,
                 validator = ::customElementCallUrlValidator,
             ),
+            isSimpleSlidingSyncEnabled = isSimplifiedSlidingSyncEnabled,
             eventSink = ::handleEvents
         )
     }

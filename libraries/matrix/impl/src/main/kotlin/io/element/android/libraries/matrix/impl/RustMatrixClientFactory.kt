@@ -23,10 +23,12 @@ import io.element.android.libraries.matrix.impl.certificates.UserCertificatesPro
 import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
 import io.element.android.libraries.matrix.impl.util.anonymizedTokens
 import io.element.android.libraries.network.useragent.UserAgentProvider
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.Session
@@ -46,9 +48,14 @@ class RustMatrixClientFactory @Inject constructor(
     private val proxyProvider: ProxyProvider,
     private val clock: SystemClock,
     private val utdTracker: UtdTracker,
+    private val appPreferencesStore: AppPreferencesStore,
 ) {
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
-        val client = getBaseClientBuilder(sessionData.sessionPath, sessionData.passphrase)
+        val client = getBaseClientBuilder(
+            sessionPath = sessionData.sessionPath,
+            passphrase = sessionData.passphrase,
+            useSimplifiedSlidingSync = appPreferencesStore.isSimplifiedSlidingSyncEnabledFlow().first(),
+        )
             .homeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
             .use { it.build() }
@@ -70,6 +77,7 @@ class RustMatrixClientFactory @Inject constructor(
             baseDirectory = baseDirectory,
             baseCacheDirectory = cacheDirectory,
             clock = clock,
+            appPreferencesStore = appPreferencesStore,
         ).also {
             Timber.tag(it.toString()).d("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
         }
@@ -79,6 +87,7 @@ class RustMatrixClientFactory @Inject constructor(
         sessionPath: String,
         passphrase: String?,
         slidingSyncProxy: String? = null,
+        useSimplifiedSlidingSync: Boolean = false,
     ): ClientBuilder {
         return ClientBuilder()
             .sessionPath(sessionPath)
@@ -88,6 +97,7 @@ class RustMatrixClientFactory @Inject constructor(
             .addRootCertificates(userCertificatesProvider.provides())
             .autoEnableBackups(true)
             .autoEnableCrossSigning(true)
+            .simplifiedSlidingSync(useSimplifiedSlidingSync)
             .run {
                 // Workaround for non-nullable proxy parameter in the SDK, since each call to the ClientBuilder returns a new reference we need to keep
                 proxyProvider.provides()?.let { proxy(it) } ?: this

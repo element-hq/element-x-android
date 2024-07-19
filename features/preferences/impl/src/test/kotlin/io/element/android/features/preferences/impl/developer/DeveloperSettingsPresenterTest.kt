@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -55,6 +56,7 @@ class DeveloperSettingsPresenterTest {
             assertThat(initialState.cacheSize).isEqualTo(AsyncData.Uninitialized)
             assertThat(initialState.customElementCallBaseUrlState).isNotNull()
             assertThat(initialState.customElementCallBaseUrlState.baseUrl).isNull()
+            assertThat(initialState.isSimpleSlidingSyncEnabled).isFalse()
             val loadedState = awaitItem()
             assertThat(loadedState.rageshakeState.isEnabled).isFalse()
             assertThat(loadedState.rageshakeState.isSupported).isTrue()
@@ -157,6 +159,26 @@ class DeveloperSettingsPresenterTest {
             assertThat(urlValidator("http://")).isFalse()
             assertThat(urlValidator("geo://test")).isFalse()
             assertThat(urlValidator("https://call.element.io")).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - toggling simplified sliding sync changes the preferences`() = runTest {
+        val preferences = InMemoryAppPreferencesStore()
+        val presenter = createDeveloperSettingsPresenter(preferencesStore = preferences)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitLastSequentialItem()
+            assertThat(initialState.isSimpleSlidingSyncEnabled).isFalse()
+
+            initialState.eventSink(DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled(true))
+            assertThat(awaitItem().isSimpleSlidingSyncEnabled).isTrue()
+            assertThat(preferences.isSimplifiedSlidingSyncEnabledFlow().first()).isTrue()
+
+            initialState.eventSink(DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled(false))
+            assertThat(awaitItem().isSimpleSlidingSyncEnabled).isFalse()
+            assertThat(preferences.isSimplifiedSlidingSyncEnabledFlow().first()).isFalse()
         }
     }
 

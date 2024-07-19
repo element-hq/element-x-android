@@ -26,6 +26,7 @@ import io.element.android.features.preferences.impl.R
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesView
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
+import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.components.preferences.PreferenceText
 import io.element.android.libraries.designsystem.components.preferences.PreferenceTextField
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -59,6 +60,14 @@ fun DeveloperSettingsView(
             PreferenceText(
                 title = "Configure tracing",
                 onClick = onOpenConfigureTracing,
+            )
+            PreferenceSwitch(
+                title = "Enable Simplified Sliding Sync",
+                subtitle = "This option requires an app restart to work.",
+                isChecked = state.isSimpleSlidingSyncEnabled,
+                onCheckedChange = {
+                    state.eventSink(DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled(it))
+                }
             )
         }
         PreferenceCategory(title = "Showkase") {
