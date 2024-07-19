@@ -212,6 +212,7 @@ class DefaultActiveCallManager @Inject constructor(
             .onEach { roomHasActiveCall ->
                 if (!roomHasActiveCall) {
                     // The call was cancelled
+                    timedOutCallJob?.cancel()
                     incomingCallTimedOut()
                 }
             }
