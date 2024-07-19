@@ -28,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import io.element.android.appconfig.ElementCallConfig
+import io.element.android.features.logout.api.LogoutUseCase
 import io.element.android.features.preferences.impl.tasks.ClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.ComputeCacheSizeUseCase
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesPresenter
@@ -55,6 +56,7 @@ class DeveloperSettingsPresenter @Inject constructor(
     private val rageshakePresenter: RageshakePreferencesPresenter,
     private val appPreferencesStore: AppPreferencesStore,
     private val buildMeta: BuildMeta,
+    private val logoutUseCase: LogoutUseCase,
 ) : Presenter<DeveloperSettingsState> {
     @Composable
     override fun present(): DeveloperSettingsState {
@@ -119,6 +121,7 @@ class DeveloperSettingsPresenter @Inject constructor(
                 DeveloperSettingsEvents.ClearCache -> coroutineScope.clearCache(clearCacheAction)
                 is DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled -> coroutineScope.launch {
                     appPreferencesStore.setSimplifiedSlidingSyncEnabled(event.isEnabled)
+                    logoutUseCase.logout(ignoreSdkError = true)
                 }
             }
         }

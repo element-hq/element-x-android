@@ -63,7 +63,7 @@ fun DeveloperSettingsView(
             )
             PreferenceSwitch(
                 title = "Enable Simplified Sliding Sync",
-                subtitle = "This option requires an app restart to work.",
+                subtitle = "When toggled you'll be logged out of the app and will need to log in again.",
                 isChecked = state.isSimpleSlidingSyncEnabled,
                 onCheckedChange = {
                     state.eventSink(DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled(it))

@@ -21,6 +21,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.ElementCallConfig
+import io.element.android.features.logout.api.LogoutUseCase
 import io.element.android.features.preferences.impl.tasks.FakeClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.FakeComputeCacheSizeUseCase
 import io.element.android.features.rageshake.impl.preferences.DefaultRageshakePreferencesPresenter
@@ -163,9 +164,10 @@ class DeveloperSettingsPresenterTest {
     }
 
     @Test
-    fun `present - toggling simplified sliding sync changes the preferences`() = runTest {
+    fun `present - toggling simplified sliding sync changes the preferences and logs out the user`() = runTest {
+        val logoutUseCase = FakeLogoutUseCase()
         val preferences = InMemoryAppPreferencesStore()
-        val presenter = createDeveloperSettingsPresenter(preferencesStore = preferences)
+        val presenter = createDeveloperSettingsPresenter(preferencesStore = preferences, logoutUseCase = logoutUseCase)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -175,10 +177,12 @@ class DeveloperSettingsPresenterTest {
             initialState.eventSink(DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled(true))
             assertThat(awaitItem().isSimpleSlidingSyncEnabled).isTrue()
             assertThat(preferences.isSimplifiedSlidingSyncEnabledFlow().first()).isTrue()
+            assertThat(logoutUseCase.logoutCallCount).isEqualTo(1)
 
             initialState.eventSink(DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled(false))
             assertThat(awaitItem().isSimpleSlidingSyncEnabled).isFalse()
             assertThat(preferences.isSimplifiedSlidingSyncEnabledFlow().first()).isFalse()
+            assertThat(logoutUseCase.logoutCallCount).isEqualTo(2)
         }
     }
 
@@ -189,6 +193,7 @@ class DeveloperSettingsPresenterTest {
         rageshakePresenter: DefaultRageshakePreferencesPresenter = DefaultRageshakePreferencesPresenter(FakeRageShake(), FakeRageshakeDataStore()),
         preferencesStore: InMemoryAppPreferencesStore = InMemoryAppPreferencesStore(),
         buildMeta: BuildMeta = aBuildMeta(),
+        logoutUseCase: FakeLogoutUseCase = FakeLogoutUseCase()
     ): DeveloperSettingsPresenter {
         return DeveloperSettingsPresenter(
             featureFlagService = featureFlagService,
@@ -197,6 +202,16 @@ class DeveloperSettingsPresenterTest {
             rageshakePresenter = rageshakePresenter,
             appPreferencesStore = preferencesStore,
             buildMeta = buildMeta,
+            logoutUseCase = logoutUseCase,
         )
+    }
+}
+
+private class FakeLogoutUseCase : LogoutUseCase {
+    var logoutCallCount = 0
+        private set
+
+    override suspend fun logout(ignoreSdkError: Boolean) {
+        logoutCallCount++
     }
 }

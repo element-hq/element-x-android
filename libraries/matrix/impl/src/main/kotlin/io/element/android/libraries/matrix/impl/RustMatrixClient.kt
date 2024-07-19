@@ -69,7 +69,6 @@ import io.element.android.libraries.matrix.impl.util.anonymizedTokens
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
-import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.collections.immutable.ImmutableList
@@ -127,7 +126,6 @@ class RustMatrixClient(
     private val baseDirectory: File,
     baseCacheDirectory: File,
     private val clock: SystemClock,
-    private val appPreferencesStore: AppPreferencesStore,
 ) : MatrixClient {
     override val sessionId: UserId = UserId(client.userId())
     override val deviceId: String = client.deviceId()
@@ -556,7 +554,6 @@ class RustMatrixClient(
             }
             close()
             deleteSessionDirectory(deleteCryptoDb = true)
-            appPreferencesStore.setSimplifiedSlidingSyncEnabled(false)
             if (removeSession) {
                 sessionStore.removeSession(sessionId.value)
             }
