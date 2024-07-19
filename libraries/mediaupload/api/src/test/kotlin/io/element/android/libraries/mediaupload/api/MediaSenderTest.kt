@@ -19,9 +19,12 @@ package io.element.android.libraries.mediaupload.api
 import android.net.Uri
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -46,13 +49,17 @@ class MediaSenderTest {
 
     @Test
     fun `given an attachment when sending it the MatrixRoom will call sendMedia`() = runTest {
-        val room = FakeMatrixRoom()
+        val sendMediaResult = lambdaRecorder<ProgressCallback?, Result<FakeMediaUploadHandler>> {
+            Result.success(FakeMediaUploadHandler())
+        }
+        val room = FakeMatrixRoom(
+            sendMediaResult = sendMediaResult
+        )
         val sender = aMediaSender(room = room)
 
         val uri = Uri.parse("content://image.jpg")
         sender.sendMedia(uri = uri, mimeType = MimeTypes.Jpeg, compressIfPossible = true)
-
-        assertThat(room.sendMediaCount).isEqualTo(1)
+        sendMediaResult.assertions().isCalledOnce()
     }
 
     @Test
@@ -70,9 +77,9 @@ class MediaSenderTest {
 
     @Test
     fun `given a failure in the media upload when sending the whole process fails`() = runTest {
-        val room = FakeMatrixRoom().apply {
-            givenSendMediaResult(Result.failure(Exception()))
-        }
+        val room = FakeMatrixRoom(
+            sendMediaResult = { Result.failure(Exception()) }
+        )
         val sender = aMediaSender(room = room)
 
         val uri = Uri.parse("content://image.jpg")
@@ -84,7 +91,9 @@ class MediaSenderTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `given a cancellation in the media upload when sending the job is cancelled`() = runTest(StandardTestDispatcher()) {
-        val room = FakeMatrixRoom()
+        val room = FakeMatrixRoom(
+            sendMediaResult = { Result.success(FakeMediaUploadHandler()) }
+        )
         val sender = aMediaSender(room = room)
         val sendJob = launch {
             val uri = Uri.parse("content://image.jpg")

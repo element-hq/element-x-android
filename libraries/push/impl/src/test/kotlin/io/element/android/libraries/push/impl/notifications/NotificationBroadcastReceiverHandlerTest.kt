@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStoreFactory
@@ -297,9 +298,9 @@ class NotificationBroadcastReceiverHandlerTest {
     @Test
     fun `Test reject room`() = runTest {
         val leaveRoom = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val matrixRoom = FakeMatrixRoom().apply {
+        val matrixRoom = FakeMatrixRoom(
             leaveRoomLambda = leaveRoom
-        }
+        )
         val clearMembershipNotificationForRoomLambda = lambdaRecorder<SessionId, RoomId, Unit> { _, _ -> }
         val fakeNotificationCleaner = FakeNotificationCleaner(
             clearMembershipNotificationForRoomLambda = clearMembershipNotificationForRoomLambda,
@@ -342,7 +343,8 @@ class NotificationBroadcastReceiverHandlerTest {
             replyMessageLambda = replyMessage
         }
         val matrixRoom = FakeMatrixRoom(
-            liveTimeline = liveTimeline
+            liveTimeline = liveTimeline,
+            getUpdatedMemberResult = { Result.success(aRoomMember()) },
         )
         val onNotifiableEventReceivedResult = lambdaRecorder<NotifiableEvent, Unit> { _ -> }
         val onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventReceivedResult = onNotifiableEventReceivedResult)
@@ -400,7 +402,8 @@ class NotificationBroadcastReceiverHandlerTest {
             replyMessageLambda = replyMessage
         }
         val matrixRoom = FakeMatrixRoom(
-            liveTimeline = liveTimeline
+            liveTimeline = liveTimeline,
+            getUpdatedMemberResult = { Result.success(aRoomMember()) },
         )
         val onNotifiableEventReceivedResult = lambdaRecorder<NotifiableEvent, Unit> { _ -> }
         val onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventReceivedResult = onNotifiableEventReceivedResult)

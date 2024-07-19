@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.test.A_UNIQUE_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
+import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -38,9 +39,9 @@ class TimelineControllerTest {
         val liveTimeline = FakeTimeline(name = "live")
         val detachedTimeline = FakeTimeline(name = "detached")
         val matrixRoom = FakeMatrixRoom(
-            liveTimeline = liveTimeline
+            liveTimeline = liveTimeline,
+            timelineFocusedOnEventResult = { Result.success(detachedTimeline) }
         )
-        matrixRoom.givenTimelineFocusedOnEventResult(Result.success(detachedTimeline))
         val sut = TimelineController(matrixRoom)
 
         sut.activeTimelineFlow().test {
@@ -68,8 +69,17 @@ class TimelineControllerTest {
         val liveTimeline = FakeTimeline(name = "live")
         val detachedTimeline1 = FakeTimeline(name = "detached 1")
         val detachedTimeline2 = FakeTimeline(name = "detached 2")
+        var callNumber = 0
         val matrixRoom = FakeMatrixRoom(
-            liveTimeline = liveTimeline
+            liveTimeline = liveTimeline,
+            timelineFocusedOnEventResult = {
+                callNumber++
+                when (callNumber) {
+                    1 -> Result.success(detachedTimeline1)
+                    2 -> Result.success(detachedTimeline2)
+                    else -> lambdaError()
+                }
+            }
         )
         val sut = TimelineController(matrixRoom)
 
@@ -77,7 +87,6 @@ class TimelineControllerTest {
             awaitItem().also { state ->
                 assertThat(state).isEqualTo(liveTimeline)
             }
-            matrixRoom.givenTimelineFocusedOnEventResult(Result.success(detachedTimeline1))
             sut.focusOnEvent(AN_EVENT_ID)
             awaitItem().also { state ->
                 assertThat(state).isEqualTo(detachedTimeline1)
@@ -85,7 +94,6 @@ class TimelineControllerTest {
             assertThat(detachedTimeline1.closeCounter).isEqualTo(0)
             assertThat(detachedTimeline2.closeCounter).isEqualTo(0)
             // Focus on another event should close the previous detached timeline
-            matrixRoom.givenTimelineFocusedOnEventResult(Result.success(detachedTimeline2))
             sut.focusOnEvent(AN_EVENT_ID)
             awaitItem().also { state ->
                 assertThat(state).isEqualTo(detachedTimeline2)
@@ -117,11 +125,10 @@ class TimelineControllerTest {
         val liveTimeline = FakeTimeline(name = "live")
         val detachedTimeline = FakeTimeline(name = "detached")
         val matrixRoom = FakeMatrixRoom(
-            liveTimeline = liveTimeline
+            liveTimeline = liveTimeline,
+            timelineFocusedOnEventResult = { Result.success(detachedTimeline) }
         )
-        matrixRoom.givenTimelineFocusedOnEventResult(Result.success(detachedTimeline))
         val sut = TimelineController(matrixRoom)
-
         sut.activeTimelineFlow().test {
             awaitItem().also { state ->
                 assertThat(state).isEqualTo(liveTimeline)
@@ -168,9 +175,9 @@ class TimelineControllerTest {
             sendMessageLambda = lambdaForDetached
         }
         val matrixRoom = FakeMatrixRoom(
-            liveTimeline = liveTimeline
+            liveTimeline = liveTimeline,
+            timelineFocusedOnEventResult = { Result.success(detachedTimeline) }
         )
-        matrixRoom.givenTimelineFocusedOnEventResult(Result.success(detachedTimeline))
         val sut = TimelineController(matrixRoom)
         sut.activeTimelineFlow().test {
             sut.focusOnEvent(AN_EVENT_ID)
@@ -193,9 +200,9 @@ class TimelineControllerTest {
         val liveTimeline = FakeTimeline(name = "live")
         val detachedTimeline = FakeTimeline(name = "detached")
         val matrixRoom = FakeMatrixRoom(
-            liveTimeline = liveTimeline
+            liveTimeline = liveTimeline,
+            timelineFocusedOnEventResult = { Result.success(detachedTimeline) }
         )
-        matrixRoom.givenTimelineFocusedOnEventResult(Result.success(detachedTimeline))
         val sut = TimelineController(matrixRoom)
 
         sut.activeTimelineFlow().test {

@@ -54,29 +54,34 @@ class DefaultRoomMembersModerationPresenterTest {
 
     @Test
     fun `canDisplayModerationActions - when user can kick other users, FF is enabled and room is not a DM returns true`() = runTest {
-        val room = FakeMatrixRoom(isDirect = false, activeMemberCount = 10).apply {
-            givenCanKickResult(Result.success(true))
-        }
+        val room = FakeMatrixRoom(
+            isDirect = false,
+            activeMemberCount = 10,
+            canKickResult = { Result.success(true) },
+            canBanResult = { Result.success(true) },
+        )
         val presenter = createDefaultRoomMembersModerationPresenter(matrixRoom = room)
         assertThat(presenter.canDisplayModerationActions()).isTrue()
     }
 
     @Test
     fun `canDisplayModerationActions - when user can ban other users, FF is enabled and room is not a DM returns true`() = runTest {
-        val room = FakeMatrixRoom(isDirect = false, activeMemberCount = 10).apply {
-            givenCanBanResult(Result.success(true))
-        }
+        val room = FakeMatrixRoom(
+            isDirect = false,
+            activeMemberCount = 10,
+            canBanResult = { Result.success(true) },
+        )
         val presenter = createDefaultRoomMembersModerationPresenter(matrixRoom = room)
         assertThat(presenter.canDisplayModerationActions()).isTrue()
     }
 
     @Test
     fun `present - SelectRoomMember when the current user has permissions displays member actions`() = runTest {
-        val room = FakeMatrixRoom().apply {
-            givenCanKickResult(Result.success(true))
-            givenCanBanResult(Result.success(true))
-            givenUserRoleResult(Result.success(RoomMember.Role.ADMIN))
-        }
+        val room = FakeMatrixRoom(
+            canKickResult = { Result.success(true) },
+            canBanResult = { Result.success(true) },
+            userRoleResult = { Result.success(RoomMember.Role.ADMIN) },
+        )
         val selectedMember = aVictor()
         val presenter = createDefaultRoomMembersModerationPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -98,11 +103,12 @@ class DefaultRoomMembersModerationPresenterTest {
 
     @Test
     fun `present - SelectRoomMember displays only view profile if selected member has same power level as the current user`() = runTest {
-        val room = FakeMatrixRoom(sessionId = A_USER_ID).apply {
-            givenCanKickResult(Result.success(true))
-            givenCanBanResult(Result.success(true))
-            givenUserRoleResult(Result.success(RoomMember.Role.ADMIN))
-        }
+        val room = FakeMatrixRoom(
+            sessionId = A_USER_ID,
+            canKickResult = { Result.success(true) },
+            canBanResult = { Result.success(true) },
+            userRoleResult = { Result.success(RoomMember.Role.ADMIN) },
+        )
         val selectedMember = aRoomMember(A_USER_ID_2, powerLevel = 100L)
         val presenter = createDefaultRoomMembersModerationPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -123,11 +129,11 @@ class DefaultRoomMembersModerationPresenterTest {
     @Test
     fun `present - SelectRoomMember displays an unban confirmation dialog when the member is banned`() = runTest {
         val selectedMember = aRoomMember(A_USER_ID_2, membership = RoomMembershipState.BAN)
-        val room = FakeMatrixRoom().apply {
-            givenCanKickResult(Result.success(true))
-            givenCanBanResult(Result.success(true))
-            givenUserRoleResult(Result.success(RoomMember.Role.ADMIN))
-        }
+        val room = FakeMatrixRoom(
+            canKickResult = { Result.success(true) },
+            canBanResult = { Result.success(true) },
+            userRoleResult = { Result.success(RoomMember.Role.ADMIN) },
+        )
         val presenter = createDefaultRoomMembersModerationPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -144,11 +150,12 @@ class DefaultRoomMembersModerationPresenterTest {
     @Test
     fun `present - Kick removes the user`() = runTest {
         val analyticsService = FakeAnalyticsService()
-        val room = FakeMatrixRoom().apply {
-            givenCanKickResult(Result.success(true))
-            givenCanBanResult(Result.success(true))
-            givenUserRoleResult(Result.success(RoomMember.Role.ADMIN))
-        }
+        val room = FakeMatrixRoom(
+            canKickResult = { Result.success(true) },
+            canBanResult = { Result.success(true) },
+            userRoleResult = { Result.success(RoomMember.Role.ADMIN) },
+            kickUserResult = { _, _ -> Result.success(Unit) },
+        )
         val selectedMember = aVictor()
         val presenter = createDefaultRoomMembersModerationPresenter(matrixRoom = room, analyticsService = analyticsService)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -171,11 +178,12 @@ class DefaultRoomMembersModerationPresenterTest {
     @Test
     fun `present - BanUser requires confirmation and then bans the user`() = runTest {
         val analyticsService = FakeAnalyticsService()
-        val room = FakeMatrixRoom().apply {
-            givenCanKickResult(Result.success(true))
-            givenCanBanResult(Result.success(true))
-            givenUserRoleResult(Result.success(RoomMember.Role.ADMIN))
-        }
+        val room = FakeMatrixRoom(
+            canKickResult = { Result.success(true) },
+            canBanResult = { Result.success(true) },
+            userRoleResult = { Result.success(RoomMember.Role.ADMIN) },
+            banUserResult = { _, _ -> Result.success(Unit) },
+        )
         val selectedMember = aVictor()
         val presenter = createDefaultRoomMembersModerationPresenter(matrixRoom = room, analyticsService = analyticsService)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -204,11 +212,13 @@ class DefaultRoomMembersModerationPresenterTest {
     fun `present - UnbanUser requires confirmation and then unbans the user`() = runTest {
         val analyticsService = FakeAnalyticsService()
         val selectedMember = aRoomMember(A_USER_ID_2, membership = RoomMembershipState.BAN)
-        val room = FakeMatrixRoom().apply {
-            givenCanKickResult(Result.success(true))
-            givenCanBanResult(Result.success(true))
+        val room = FakeMatrixRoom(
+            canKickResult = { Result.success(true) },
+            canBanResult = { Result.success(true) },
+            userRoleResult = { Result.success(RoomMember.Role.ADMIN) },
+            unBanUserResult = { _, _ -> Result.success(Unit) },
+        ).apply {
             givenRoomMembersState(MatrixRoomMembersState.Ready(persistentListOf(selectedMember)))
-            givenUserRoleResult(Result.success(RoomMember.Role.ADMIN))
         }
         val presenter = createDefaultRoomMembersModerationPresenter(matrixRoom = room, analyticsService = analyticsService)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -231,10 +241,11 @@ class DefaultRoomMembersModerationPresenterTest {
 
     @Test
     fun `present - Reset removes the selected user and actions`() = runTest {
-        val room = FakeMatrixRoom().apply {
-            givenCanKickResult(Result.success(true))
-            givenCanBanResult(Result.success(true))
-        }
+        val room = FakeMatrixRoom(
+            canKickResult = { Result.success(true) },
+            canBanResult = { Result.success(true) },
+            userRoleResult = { Result.success(RoomMember.Role.USER) },
+        )
         val presenter = createDefaultRoomMembersModerationPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -251,13 +262,14 @@ class DefaultRoomMembersModerationPresenterTest {
 
     @Test
     fun `present - Reset resets any async actions`() = runTest {
-        val room = FakeMatrixRoom().apply {
-            givenCanKickResult(Result.success(true))
-            givenCanBanResult(Result.success(true))
-            givenKickUserResult(Result.failure(Throwable("Eek")))
-            givenBanUserResult(Result.failure(Throwable("Eek")))
-            givenUnbanUserResult(Result.failure(Throwable("Eek")))
-        }
+        val room = FakeMatrixRoom(
+            canKickResult = { Result.success(true) },
+            canBanResult = { Result.success(true) },
+            kickUserResult = { _, _ -> Result.failure(Throwable("Eek")) },
+            banUserResult = { _, _ -> Result.failure(Throwable("Eek")) },
+            unBanUserResult = { _, _ -> Result.failure(Throwable("Eek")) },
+            userRoleResult = { Result.success(RoomMember.Role.USER) },
+        )
         val presenter = createDefaultRoomMembersModerationPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()

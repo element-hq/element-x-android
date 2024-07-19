@@ -27,6 +27,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.defaultRoomPowerLevels
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -67,7 +68,12 @@ class RolesAndPermissionPresenterTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - DemoteSelfTo changes own role to the specified one`() = runTest(StandardTestDispatcher()) {
-        val presenter = createRolesAndPermissionsPresenter(dispatchers = testCoroutineDispatchers())
+        val presenter = createRolesAndPermissionsPresenter(
+            dispatchers = testCoroutineDispatchers(),
+            room = FakeMatrixRoom(
+                updateUserRoleResult = { Result.success(Unit) }
+            ),
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -85,9 +91,9 @@ class RolesAndPermissionPresenterTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - DemoteSelfTo can handle failures and clean them`() = runTest(StandardTestDispatcher()) {
-        val room = FakeMatrixRoom().apply {
-            givenUpdateUserRoleResult(Result.failure(Exception("Failed to update role")))
-        }
+        val room = FakeMatrixRoom(
+            updateUserRoleResult = { Result.failure(Exception("Failed to update role")) }
+        )
         val presenter = createRolesAndPermissionsPresenter(room = room, dispatchers = testCoroutineDispatchers())
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -123,7 +129,12 @@ class RolesAndPermissionPresenterTest {
     @Test
     fun `present - ResetPermissions needs confirmation, then resets permissions`() = runTest {
         val analyticsService = FakeAnalyticsService()
-        val presenter = createRolesAndPermissionsPresenter(analyticsService = analyticsService)
+        val presenter = createRolesAndPermissionsPresenter(
+            analyticsService = analyticsService,
+            room = FakeMatrixRoom(
+                resetPowerLevelsResult = { Result.success(defaultRoomPowerLevels()) }
+            )
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {

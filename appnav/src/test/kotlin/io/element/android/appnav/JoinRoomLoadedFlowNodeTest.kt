@@ -123,7 +123,9 @@ class JoinRoomLoadedFlowNodeTest {
     @Test
     fun `given a room flow node when initialized then it loads messages entry point`() = runTest {
         // GIVEN
-        val room = FakeMatrixRoom()
+        val room = FakeMatrixRoom(
+            updateMembersResult = { }
+        )
         val fakeMessagesEntryPoint = FakeMessagesEntryPoint()
         val inputs = JoinedRoomLoadedFlowNode.Inputs(room, RoomNavigationTarget.Messages())
         val roomFlowNode = createJoinedRoomLoadedFlowNode(
@@ -144,7 +146,9 @@ class JoinRoomLoadedFlowNodeTest {
     @Test
     fun `given a room flow node when callback on room details is triggered then it loads room details entry point`() = runTest {
         // GIVEN
-        val room = FakeMatrixRoom()
+        val room = FakeMatrixRoom(
+            updateMembersResult = { }
+        )
         val fakeMessagesEntryPoint = FakeMessagesEntryPoint()
         val fakeRoomDetailsEntryPoint = FakeRoomDetailsEntryPoint()
         val inputs = JoinedRoomLoadedFlowNode.Inputs(room, RoomNavigationTarget.Messages())
