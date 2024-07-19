@@ -104,11 +104,6 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
                     inputs.room.subscribeToSync()
                 }
             },
-            onPause = {
-                appCoroutineScope.launch {
-                    inputs.room.unsubscribeFromSync()
-                }
-            },
             onDestroy = {
                 Timber.v("OnDestroy")
                 appNavigationStateService.onLeavingRoom(id)
