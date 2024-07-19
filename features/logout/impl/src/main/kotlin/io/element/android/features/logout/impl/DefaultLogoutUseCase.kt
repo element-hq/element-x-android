@@ -17,16 +17,27 @@
 package io.element.android.features.logout.impl
 
 import com.squareup.anvil.annotations.ContributesBinding
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import io.element.android.features.logout.api.LogoutUseCase
-import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.matrix.api.MatrixClient
-import javax.inject.Inject
+import io.element.android.libraries.di.AppScope
+import io.element.android.libraries.matrix.api.MatrixClientProvider
+import io.element.android.libraries.matrix.api.core.SessionId
 
-@ContributesBinding(SessionScope::class)
-class DefaultLogoutUseCase @Inject constructor(
-    private val matrixClient: MatrixClient
+class DefaultLogoutUseCase @AssistedInject constructor(
+    @Assisted private val sessionId: String,
+    private val matrixClientProvider: MatrixClientProvider,
 ) : LogoutUseCase {
-    override suspend fun logout(ignoreSdkError: Boolean) {
+    @ContributesBinding(AppScope::class)
+    @AssistedFactory
+    interface Factory : LogoutUseCase.Factory {
+        override fun create(sessionId: String): DefaultLogoutUseCase
+    }
+
+    override suspend fun logout(ignoreSdkError: Boolean): String {
+        val matrixClient = matrixClientProvider.getOrRestore(SessionId(sessionId)).getOrThrow()
         matrixClient.logout(ignoreSdkError = ignoreSdkError)
+        return sessionId
     }
 }

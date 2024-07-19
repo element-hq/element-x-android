@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.unlock.di
+package io.element.android.features.logout.impl
 
 import com.squareup.anvil.annotations.ContributesTo
-import io.element.android.features.lockscreen.impl.unlock.activity.PinUnlockActivity
+import dagger.Module
+import dagger.Provides
+import io.element.android.features.logout.api.LogoutUseCase
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.user.CurrentSessionIdHolder
 
+@Module
 @ContributesTo(SessionScope::class)
-interface PinUnlockBindings {
-    fun inject(activity: PinUnlockActivity)
+object SessionLogoutModule {
+     @Provides
+     fun provideLogoutUseCase(
+         currentSessionIdHolder: CurrentSessionIdHolder,
+         factory: DefaultLogoutUseCase.Factory,
+     ): LogoutUseCase {
+         return factory.create(currentSessionIdHolder.current.value)
+     }
 }
