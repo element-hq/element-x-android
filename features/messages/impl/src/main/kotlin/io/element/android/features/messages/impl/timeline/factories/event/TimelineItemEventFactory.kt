@@ -117,6 +117,7 @@ class TimelineItemEventFactory @Inject constructor(
                             sentTime = timeFormatter.format(date),
                         )
                     }
+                    .toImmutableList()
             )
         }
         // Sort aggregated reactions by count and then timestamp ascending, using
@@ -127,7 +128,9 @@ class TimelineItemEventFactory @Inject constructor(
                 compareByDescending<AggregatedReaction> { it.count }
                     .thenBy { it.senders[0].timestamp }
             )
-        return TimelineItemReactions(aggregatedReactions.toImmutableList())
+        return TimelineItemReactions(
+            reactions = aggregatedReactions.toImmutableList()
+        )
     }
 
     private fun MatrixTimelineItem.Event.computeReadReceiptState(

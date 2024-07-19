@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.timeline.model
 
 import io.element.android.libraries.core.extensions.ellipsize
 import io.element.android.libraries.matrix.api.core.UserId
+import kotlinx.collections.immutable.ImmutableList
 
 /**
  * Length at which we ellipsize a reaction key for display
@@ -35,28 +36,22 @@ private const val MAX_DISPLAY_CHARS = 16
 data class AggregatedReaction(
     val currentUserId: UserId,
     val key: String,
-    val senders: List<AggregatedReactionSender>
+    val senders: ImmutableList<AggregatedReactionSender>
 ) {
     /**
      * The key to be displayed on screen.
      *
      * See [MAX_DISPLAY_CHARS].
      */
-    val displayKey: String by lazy {
-        key.ellipsize(MAX_DISPLAY_CHARS)
-    }
+    val displayKey: String = key.ellipsize(MAX_DISPLAY_CHARS)
 
     /**
      * The number of users who reacted with this key.
      */
-    val count: Int by lazy {
-        senders.count()
-    }
+    val count: Int = senders.count()
 
     /**
      * True if the reaction has (also) been sent by the current user.
      */
-    val isHighlighted: Boolean by lazy {
-        senders.any { it.senderId.value == currentUserId.value }
-    }
+    val isHighlighted: Boolean = senders.any { it.senderId == currentUserId }
 }

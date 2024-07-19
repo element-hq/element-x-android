@@ -47,7 +47,7 @@ class ReactionSummaryPresenter @Inject constructor(
         fun handleEvents(event: ReactionSummaryEvents) {
             when (event) {
                 is ReactionSummaryEvents.ShowReactionSummary -> target.value = ReactionSummaryState.Summary(
-                    reactions = event.reactions,
+                    reactions = event.reactions.toImmutableList(),
                     selectedKey = event.selectedKey,
                     selectedEventId = event.eventId
                 )
@@ -73,8 +73,8 @@ class ReactionSummaryPresenter @Inject constructor(
                             avatarUrl = member?.avatarUrl
                         )
                         sender.copy(user = user)
-                    })
-                })
+                    }.toImmutableList())
+                }.toImmutableList())
             }
         }
     }
