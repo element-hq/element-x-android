@@ -110,8 +110,6 @@ interface MatrixRoom : Closeable {
 
     suspend fun subscribeToSync()
 
-    suspend fun unsubscribeFromSync()
-
     suspend fun powerLevels(): Result<MatrixRoomPowerLevels>
 
     suspend fun updatePowerLevels(matrixRoomPowerLevels: MatrixRoomPowerLevels): Result<Unit>

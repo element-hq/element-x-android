@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.timeline.model
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.core.UserId
+import kotlinx.collections.immutable.toImmutableList
 import java.text.DateFormat
 import java.util.Date
 
@@ -53,6 +54,6 @@ fun anAggregatedReaction(
     return AggregatedReaction(
         currentUserId = userId,
         key = key,
-        senders = senders
+        senders = senders.toImmutableList()
     )
 }

@@ -71,8 +71,7 @@ class TracingInitializer : Initializer<Unit> {
         return WriteToFilesConfiguration.Enabled(
             directory = bugReporter.logDirectory().absolutePath,
             filenamePrefix = "logs",
-            filenameSuffix = null,
-            // Keep a minimum of 1 week of log files.
+            // Keep a maximum of 1 week of log files.
             numberOfFiles = 7 * 24,
         )
     }

@@ -21,7 +21,7 @@ import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
 
 class FakeMatrixClientProvider(
-    private val getClient: (SessionId) -> Result<MatrixClient> = { Result.success(FakeMatrixClient()) }
+    var getClient: (SessionId) -> Result<MatrixClient> = { Result.success(FakeMatrixClient()) }
 ) : MatrixClientProvider {
     override suspend fun getOrRestore(sessionId: SessionId): Result<MatrixClient> = getClient(sessionId)
 
