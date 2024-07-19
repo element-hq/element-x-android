@@ -20,11 +20,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: Add SSH private keys for submodule repositories
         uses: webfactory/ssh-agent@v0.9.0
-        if: github.repository == 'element-hq/element-x-android'
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
         with:
           ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Clone submodules
-        if: github.repository == 'element-hq/element-x-android'
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
         run: git submodule update --init --recursive
       - name: Run code quality check suite
         run: ./tools/check/check_code_quality.sh
@@ -78,11 +78,11 @@ jobs:
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
       - name: Add SSH private keys for submodule repositories
         uses: webfactory/ssh-agent@v0.9.0
-        if: github.repository == 'element-hq/element-x-android'
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
         with:
           ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Clone submodules
-        if: github.repository == 'element-hq/element-x-android'
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
         run: git submodule update --init --recursive
       - name: Use JDK 17
         uses: actions/setup-java@v4
@@ -118,11 +118,11 @@ jobs:
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
       - name: Add SSH private keys for submodule repositories
         uses: webfactory/ssh-agent@v0.9.0
-        if: github.repository == 'element-hq/element-x-android'
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
         with:
           ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Clone submodules
-        if: github.repository == 'element-hq/element-x-android'
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
         run: git submodule update --init --recursive
       - name: Use JDK 17
         uses: actions/setup-java@v4
@@ -162,11 +162,11 @@ jobs:
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
       - name: Add SSH private keys for submodule repositories
         uses: webfactory/ssh-agent@v0.9.0
-        if: github.repository == 'element-hq/element-x-android'
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
         with:
           ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Clone submodules
-        if: github.repository == 'element-hq/element-x-android'
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
         run: git submodule update --init --recursive
       - name: Use JDK 17
         uses: actions/setup-java@v4
@@ -202,11 +202,11 @@ jobs:
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
       - name: Add SSH private keys for submodule repositories
         uses: webfactory/ssh-agent@v0.9.0
-        if: github.repository == 'element-hq/element-x-android'
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
         with:
           ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Clone submodules
-        if: github.repository == 'element-hq/element-x-android'
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
         run: git submodule update --init --recursive
       - name: Use JDK 17
         uses: actions/setup-java@v4
@@ -242,11 +242,11 @@ jobs:
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
       - name: Add SSH private keys for submodule repositories
         uses: webfactory/ssh-agent@v0.9.0
-        if: github.repository == 'element-hq/element-x-android'
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
         with:
           ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Clone submodules
-        if: github.repository == 'element-hq/element-x-android'
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
         run: git submodule update --init --recursive
       - name: Use JDK 17
         uses: actions/setup-java@v4
