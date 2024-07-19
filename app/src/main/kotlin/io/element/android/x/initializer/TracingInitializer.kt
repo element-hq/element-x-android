@@ -71,8 +71,6 @@ class TracingInitializer : Initializer<Unit> {
         return WriteToFilesConfiguration.Enabled(
             directory = bugReporter.logDirectory().absolutePath,
             filenamePrefix = "logs",
-            // DO NOT CHANGE: suffix *MUST* be "log" for the rageshake server to not rename the file to something generic
-            filenameSuffix = "log",
             // Keep a maximum of 1 week of log files.
             numberOfFiles = 7 * 24,
         )
