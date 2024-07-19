@@ -58,7 +58,7 @@ fun MatrixRoom.getDirectRoomMember(roomMembersState: MatrixRoomMembersState): St
     return remember(roomMembersState) {
         derivedStateOf {
             roomMembers
-                ?.takeIf { it.size == 2 && isDirect && isEncrypted }
+                ?.takeIf { it.size == 2 && isDirect }
                 ?.find { it.userId != sessionId }
         }
     }
