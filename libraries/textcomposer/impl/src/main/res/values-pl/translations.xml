@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"Dodaj załącznik"</string>
+  <string name="rich_text_editor_bullet_list">"Przełącz listę punktową"</string>
+  <string name="rich_text_editor_close_formatting_options">"Zamknij opcje formatowania"</string>
+  <string name="rich_text_editor_code_block">"Przełącz blok kodu"</string>
+  <string name="rich_text_editor_composer_placeholder">"Wiadomość…"</string>
+  <string name="rich_text_editor_create_link">"Utwórz link"</string>
+  <string name="rich_text_editor_edit_link">"Edytuj link"</string>
+  <string name="rich_text_editor_format_bold">"Zastosuj pogrubiony format"</string>
+  <string name="rich_text_editor_format_italic">"Zastosuj format kursywy"</string>
+  <string name="rich_text_editor_format_strikethrough">"Zastosuj format przekreślenia"</string>
+  <string name="rich_text_editor_format_underline">"Zastosuj format podkreślenia"</string>
+  <string name="rich_text_editor_full_screen_toggle">"Przełącz tryb pełnoekranowy"</string>
+  <string name="rich_text_editor_indent">"Wcięcie"</string>
+  <string name="rich_text_editor_inline_code">"Zastosuj format kodu wbudowanego"</string>
+  <string name="rich_text_editor_link">"Wstaw łącze"</string>
+  <string name="rich_text_editor_numbered_list">"Przełącz listę numerowaną"</string>
+  <string name="rich_text_editor_open_compose_options">"Otwórz opcje tworzenia"</string>
+  <string name="rich_text_editor_quote">"Przełącz cytat"</string>
+  <string name="rich_text_editor_remove_link">"Usuń link"</string>
+  <string name="rich_text_editor_unindent">"Bez wcięcia"</string>
+  <string name="rich_text_editor_url_placeholder">"Link"</string>
+  <string name="screen_room_voice_message_tooltip">"Przytrzymaj, aby nagrywać"</string>
+</resources>

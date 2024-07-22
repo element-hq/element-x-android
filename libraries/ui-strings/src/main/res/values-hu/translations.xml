@@ -80,6 +80,7 @@
   <string name="action_ok">"Rendben"</string>
   <string name="action_open_settings">"Beállítások megnyitása"</string>
   <string name="action_open_with">"Megnyitás a következővel"</string>
+  <string name="action_pin">"Kitűzés"</string>
   <string name="action_quick_reply">"Gyors válasz"</string>
   <string name="action_quote">"Idézet"</string>
   <string name="action_react">"Reakció"</string>
@@ -168,6 +169,7 @@ Ok: %1$s."</string>
   <string name="common_no_results">"Nincs találat"</string>
   <string name="common_no_room_name">"Nincs szobanév"</string>
   <string name="common_offline">"Kapcsolat nélkül"</string>
+  <string name="common_open_source_licenses">"Nyílt forráskódú licencek"</string>
   <string name="common_or">"vagy"</string>
   <string name="common_password">"Jelszó"</string>
   <string name="common_people">"Emberek"</string>
@@ -255,6 +257,10 @@ Ok: %1$s."</string>
   <string name="error_missing_microphone_voice_rationale_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a mikrofonhoz. Engedélyezze, hogy tudjon hangüzenetet felvenni."</string>
   <string name="error_some_messages_have_not_been_sent">"Néhány üzenet nem került elküldésre"</string>
   <string name="error_unknown">"Elnézést, hiba történt"</string>
+  <string name="event_shield_reason_authenticity_not_guaranteed">"A titkosított üzenetek valódiságát ezen az eszközön nem lehet garantálni."</string>
+  <string name="event_shield_reason_unknown_device">"Ismeretlen vagy törölt eszköz által titkosítva."</string>
+  <string name="event_shield_reason_unsigned_device">"A tulajdonos által nem ellenőrzött eszköz által titkosítva."</string>
+  <string name="event_shield_reason_unverified_identity">"Nem ellenőrzött felhasználó által titkosítva."</string>
   <string name="invite_friends_rich_title">"🔐️ Csatlakozz hozzám itt: %1$s"</string>
   <string name="invite_friends_text">"Beszélgessünk itt: %1$s, %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>

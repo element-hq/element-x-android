@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_session_verification_cancelled_subtitle">"Coś tu nie gra. Albo upłynął limit czasu, albo żądanie zostało odrzucone."</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"Upewnij się, że poniższe emotikony pasują do tych wyświetlanych na innej sesji."</string>
+  <string name="screen_session_verification_compare_emojis_title">"Porównaj emotki"</string>
+  <string name="screen_session_verification_compare_numbers_subtitle">"Upewnij się, że liczby poniżej pasują do tych wyświetlanych na innej sesji."</string>
+  <string name="screen_session_verification_compare_numbers_title">"Porównaj liczby"</string>
+  <string name="screen_session_verification_complete_subtitle">"Twoja nowa sesja jest teraz zweryfikowana. Ma ona dostęp do Twoich zaszyfrowanych wiadomości, a inni użytkownicy będą widzieć ją jako zaufaną."</string>
+  <string name="screen_session_verification_open_existing_session_subtitle">"Udowodnij, że to ty, aby uzyskać dostęp do historii zaszyfrowanych wiadomości."</string>
+  <string name="screen_session_verification_open_existing_session_title">"Otwórz istniejącą sesję"</string>
+  <string name="screen_session_verification_positive_button_canceled">"Ponów weryfikację"</string>
+  <string name="screen_session_verification_positive_button_initial">"Jestem gotowy(a)"</string>
+  <string name="screen_session_verification_positive_button_verifying_ongoing">"Oczekiwanie na dopasowanie"</string>
+  <string name="screen_session_verification_ready_subtitle">"Porównaj unikalny zestaw emoji."</string>
+  <string name="screen_session_verification_request_accepted_subtitle">"Porównaj unikalne emoji, upewniając się, że pojawiły się w tej samej kolejności."</string>
+  <string name="screen_session_verification_they_dont_match">"Nie pasują do siebie"</string>
+  <string name="screen_session_verification_they_match">"Pasują do siebie"</string>
+  <string name="screen_session_verification_waiting_to_accept_subtitle">"Zaakceptuj prośbę o rozpoczęcie procesu weryfikacji w innej sesji, aby kontynuować."</string>
+  <string name="screen_session_verification_waiting_to_accept_title">"Oczekiwanie na zaakceptowanie żądania"</string>
+</resources>

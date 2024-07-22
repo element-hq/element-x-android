@@ -25,12 +25,13 @@
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Μπορείς να καταργήσεις την επιλογή φίλτρων για να δεις τις άλλες συνομιλίες σου"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Δεν έχεις συνομιλίες για αυτήν την επιλογή"</string>
   <string name="screen_roomlist_filter_people">"Άτομα"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Δεν έχεις ακόμα ΠΜ"</string>
   <string name="screen_roomlist_filter_rooms">"Δωμάτια"</string>
   <string name="screen_roomlist_filter_rooms_empty_state_title">"Δεν είσαι ακόμα σε κανένα δωμάτιο"</string>
   <string name="screen_roomlist_filter_unreads">"Μη αναγνωσμένα"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Συγχαρητήρια!
 Δεν έχεις μη αναγνωσμένα μηνύματα!"</string>
-  <string name="screen_roomlist_main_space_title">"Συζητήσεις"</string>
+  <string name="screen_roomlist_main_space_title">"Συνομιλίες"</string>
   <string name="screen_roomlist_mark_as_read">"Επισήμανση ως αναγνωσμένου"</string>
   <string name="screen_roomlist_mark_as_unread">"Επισήμανση ως μη αναγνωσμένου"</string>
   <string name="screen_roomlist_room_directory_button_title">"Περιήγηση σε όλα τα δωμάτια"</string>

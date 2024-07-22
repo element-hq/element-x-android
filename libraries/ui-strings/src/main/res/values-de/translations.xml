@@ -83,6 +83,7 @@
   <string name="action_quick_reply">"Schnelle Antwort"</string>
   <string name="action_quote">"Zitat"</string>
   <string name="action_react">"Reagieren"</string>
+  <string name="action_reject">"Ablehnen"</string>
   <string name="action_remove">"Entfernen"</string>
   <string name="action_reply">"Antworten"</string>
   <string name="action_reply_in_thread">"Im Thread antworten"</string>

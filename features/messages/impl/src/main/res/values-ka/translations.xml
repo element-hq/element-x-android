@@ -21,8 +21,10 @@
   <string name="screen_room_attachment_source_poll">"გამოკითხვა"</string>
   <string name="screen_room_attachment_text_formatting">"ტექსტის ფორმატირება"</string>
   <string name="screen_room_encrypted_history_banner">"შეტყობინებების ისტორია ამჟამად მიუწვდომელია."</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"შეტყობინებების ისტორია ამ ოთახში მიუწვდომელია. დაადასტურეთ ეს მოწყობილობა თქვენი შეტყობინებების ისტორიის სანახავად."</string>
   <string name="screen_room_invite_again_alert_message">"გსურთ მათი კვლავ მოწვევა?"</string>
   <string name="screen_room_invite_again_alert_title">"თქვენ მარტო ხართ ამ ჩატში"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"მთელი ოთახისათვის შეტყობინება"</string>
   <string name="screen_room_mentions_at_room_title">"ყველა"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Ხელახლა გაგზავნა"</string>
   <string name="screen_room_retry_send_menu_title">"თქვენი შეტყობინების გაგზავნა ვერ მოხერხდა"</string>

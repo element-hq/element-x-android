@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="confirm_recovery_key_banner_message">"თქვენი ჩეთების სარეზერვო ასლი ამჟამად არ არის სინქრონიზებული. თქვენ უნდა შეიყვანოთ თქვენი აღდგენის გასაღები, რათა შეინარჩუნოთ წვდომა ჩეთების სარეზერვო ასლზე."</string>
+  <string name="confirm_recovery_key_banner_title">"შეიყვანეთ აღდგენის გასაღები"</string>
   <string name="screen_invites_decline_chat_message">"დარწმუნებული ხართ, რომ გსურთ, უარი თქვათ მოწვევაზე %1$s-ში?"</string>
   <string name="screen_invites_decline_chat_title">"მოწვევაზე უარის თქმა"</string>
   <string name="screen_invites_decline_direct_chat_message">"დარწმუნებული ხართ, რომ გსურთ, უარი თქვათ ჩატზე %1$s-თან?"</string>
