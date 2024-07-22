@@ -92,9 +92,9 @@ class AcceptDeclineInvitePresenterTest {
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(
                 roomId = A_ROOM_ID,
-                result = FakeMatrixRoom().apply {
+                result = FakeMatrixRoom(
                     leaveRoomLambda = declineInviteFailure
-                }
+                )
             )
         }
         val presenter = createAcceptDeclineInvitePresenter(client = client)
@@ -142,9 +142,9 @@ class AcceptDeclineInvitePresenterTest {
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(
                 roomId = A_ROOM_ID,
-                result = FakeMatrixRoom().apply {
+                result = FakeMatrixRoom(
                     leaveRoomLambda = declineInviteSuccess
-                }
+                )
             )
         }
         val presenter = createAcceptDeclineInvitePresenter(

@@ -164,7 +164,13 @@ class ChangeRoomPermissionsPresenterTest {
     @Test
     fun `present - Save updates the current permissions and resets hasChanges`() = runTest {
         val analyticsService = FakeAnalyticsService()
-        val presenter = createChangeRoomPermissionsPresenter(analyticsService = analyticsService)
+        val presenter = createChangeRoomPermissionsPresenter(
+            analyticsService = analyticsService,
+            room = FakeMatrixRoom(
+                updatePowerLevelsResult = { Result.success(Unit) },
+                powerLevelsResult = { Result.success(defaultPermissions()) }
+            ),
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -208,9 +214,9 @@ class ChangeRoomPermissionsPresenterTest {
 
     @Test
     fun `present - Save will fail if there are not current permissions`() = runTest {
-        val room = FakeMatrixRoom().apply {
-            givenPowerLevelsResult(Result.failure(IllegalStateException("Failed to load power levels")))
-        }
+        val room = FakeMatrixRoom(
+            powerLevelsResult = { Result.failure(IllegalStateException("Failed to load power levels")) }
+        )
         val presenter = createChangeRoomPermissionsPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -225,9 +231,10 @@ class ChangeRoomPermissionsPresenterTest {
 
     @Test
     fun `present - Save can handle failures and they can be cleared`() = runTest {
-        val room = FakeMatrixRoom().apply {
-            givenUpdatePowerLevelsResult(Result.failure(IllegalStateException("Failed to update power levels")))
-        }
+        val room = FakeMatrixRoom(
+            powerLevelsResult = { Result.success(defaultPermissions()) },
+            updatePowerLevelsResult = { Result.failure(IllegalStateException("Failed to update power levels")) },
+        )
         val presenter = createChangeRoomPermissionsPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -292,7 +299,9 @@ class ChangeRoomPermissionsPresenterTest {
 
     private fun createChangeRoomPermissionsPresenter(
         section: ChangeRoomPermissionsSection = ChangeRoomPermissionsSection.RoomDetails,
-        room: FakeMatrixRoom = FakeMatrixRoom(),
+        room: FakeMatrixRoom = FakeMatrixRoom(
+            powerLevelsResult = { Result.success(defaultPermissions()) }
+        ),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
     ) = ChangeRoomPermissionsPresenter(
         section = section,
