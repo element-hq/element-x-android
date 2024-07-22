@@ -82,6 +82,7 @@
   <string name="action_ok">"Добра"</string>
   <string name="action_open_settings">"Налады"</string>
   <string name="action_open_with">"Адкрыць з дапамогай"</string>
+  <string name="action_pin">"Замацаваць"</string>
   <string name="action_quick_reply">"Хуткі адказ"</string>
   <string name="action_quote">"Цытата"</string>
   <string name="action_react">"Рэакцыя"</string>
@@ -222,7 +223,7 @@
   <string name="common_success">"Поспех"</string>
   <string name="common_suggestions">"Прапановы"</string>
   <string name="common_syncing">"Сінхранізацыя"</string>
-  <string name="common_system">"Сістэма"</string>
+  <string name="common_system">"Сістэмная"</string>
   <string name="common_text">"Тэкст"</string>
   <string name="common_third_party_notices">"Паведамленні трэціх асоб"</string>
   <string name="common_thread">"Гутарка"</string>
@@ -260,6 +261,10 @@
   <string name="error_missing_microphone_voice_rationale_android">"%1$s не мае дазволу на доступ да вашага мікрафона. Дазвольце доступ да запісу галасавога паведамлення."</string>
   <string name="error_some_messages_have_not_been_sent">"Некаторыя паведамленні не былі адпраўлены"</string>
   <string name="error_unknown">"Выбачце, адбылася памылка"</string>
+  <string name="event_shield_reason_authenticity_not_guaranteed">"Сапраўднасць гэтага зашыфраванага паведамлення не можа быць гарантаваная на гэтай прыладзе."</string>
+  <string name="event_shield_reason_unknown_device">"Зашыфравана невядомай ці выдаленай прыладай."</string>
+  <string name="event_shield_reason_unsigned_device">"Зашыфравана прыладай, не пацверджанай яе ўладальнікам."</string>
+  <string name="event_shield_reason_unverified_identity">"Зашыфравана неправераным карыстальнікам."</string>
   <string name="invite_friends_rich_title">"🔐️ Далучайцеся да мяне %1$s"</string>
   <string name="invite_friends_text">"Гэй, пагавары са мной у %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>

@@ -15,9 +15,11 @@
   <string name="screen_advanced_settings_share_presence">"Κοινή χρήση παρουσίας"</string>
   <string name="screen_advanced_settings_share_presence_description">"Εάν απενεργοποιηθεί, δεν θα μπορείς να στέλνεις ή να λαμβάνεις αποδεικτικά ανάγνωσης ή ειδοποιήσεις πληκτρολόγησης."</string>
   <string name="screen_advanced_settings_view_source_description">"Ενεργοποίησε την επιλογή για προβολή πηγής μηνυμάτων στη ροή."</string>
+  <string name="screen_blocked_users_empty">"Δεν έχεις αποκλεισμένους χρήστες"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Άρση αποκλεισμού"</string>
   <string name="screen_blocked_users_unblock_alert_description">"Θα μπορείς να δεις ξανά όλα τα μηνύματα του."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Κατάργηση αποκλεισμού χρήστη"</string>
+  <string name="screen_blocked_users_unblocking">"Άρση αποκλεισμού…"</string>
   <string name="screen_edit_profile_display_name">"Εμφανιζόμενο όνομα"</string>
   <string name="screen_edit_profile_display_name_placeholder">"Το εμφανιζόμενο όνομά σου"</string>
   <string name="screen_edit_profile_error">"Παρουσιάστηκε ένα άγνωστο σφάλμα και οι πληροφορίες δεν μπορούσαν να αλλάξουν."</string>
@@ -45,7 +47,7 @@
   <string name="screen_notification_settings_mentions_section_title">"Αναφορές"</string>
   <string name="screen_notification_settings_mode_all">"Όλα"</string>
   <string name="screen_notification_settings_mode_mentions">"Αναφορές"</string>
-  <string name="screen_notification_settings_notification_section_title">"Ειδοποιήσε με για"</string>
+  <string name="screen_notification_settings_notification_section_title">"Ειδοποίησέ με για"</string>
   <string name="screen_notification_settings_room_mention_label">"Ειδοποίηση για @room"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"Για να λαμβάνεις ειδοποιήσεις, άλλαξε το %1$s ."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"ρυθμίσεις συστήματος"</string>

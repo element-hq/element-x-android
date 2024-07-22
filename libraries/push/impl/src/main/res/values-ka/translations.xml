@@ -21,6 +21,7 @@
     <item quantity="other">"%d მოწვევები"</item>
   </plurals>
   <string name="notification_invite_body">"მოგიწვიათ ჩატში"</string>
+  <string name="notification_mentioned_you_body">"მოგახსენათ: %1$s"</string>
   <string name="notification_new_messages">"ახალი შეტყობინებები"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d ახალი მესიჯი"</item>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Ocorreu um erro ao atualizar a configuração de notificação."</string>
+  <string name="screen_room_change_permissions_everyone">"Todos"</string>
+  <string name="screen_room_details_add_topic_title">"Adicionar tópico"</string>
+  <string name="screen_room_details_already_a_member">"Já é membro"</string>
+  <string name="screen_room_details_already_invited">"Já foi convidado"</string>
+  <string name="screen_room_details_edit_room_title">"Editar sala"</string>
+  <string name="screen_room_details_edition_error">"Ocorreu um erro desconhecido e as informações não puderam ser alteradas."</string>
+  <string name="screen_room_details_edition_error_title">"Não foi possível atualizar a sala"</string>
+  <string name="screen_room_details_encryption_enabled_subtitle">"As mensagens são protegidas com bloqueios. Somente você e os destinatários têm as chaves exclusivas para desbloqueá-los."</string>
+  <string name="screen_room_details_encryption_enabled_title">"Criptografia de mensagens ativada"</string>
+  <string name="screen_room_details_error_loading_notification_settings">"Ocorreu um erro ao carregar as configurações de notificação."</string>
+  <string name="screen_room_details_error_muting">"Falha ao silenciar esta sala, tente novamente."</string>
+  <string name="screen_room_details_error_unmuting">"Falha ao ativar o som desta sala. Tente novamente."</string>
+  <string name="screen_room_details_invite_people_title">"Convidar pessoas"</string>
+  <string name="screen_room_details_leave_conversation_title">"Sair da conversa"</string>
+  <string name="screen_room_details_leave_room_title">"Sair da sala"</string>
+  <string name="screen_room_details_notification_mode_custom">"Personalizado"</string>
+  <string name="screen_room_details_notification_mode_default">"Padrão"</string>
+  <string name="screen_room_details_notification_title">"Notificações"</string>
+  <string name="screen_room_details_room_name_label">"Nome da sala"</string>
+  <string name="screen_room_details_security_title">"Segurança"</string>
+  <string name="screen_room_details_share_room_title">"Compartilhar sala"</string>
+  <string name="screen_room_details_topic_title">"Tópico"</string>
+  <string name="screen_room_details_updating_room">"Atualizando a sala…"</string>
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"%1$d pessoa"</item>
+    <item quantity="other">"%1$d pessoas"</item>
+  </plurals>
+  <string name="screen_room_member_list_pending_header_title">"Pendente"</string>
+  <string name="screen_room_member_list_room_members_header_title">"Membros da sala"</string>
+  <string name="screen_room_notification_settings_allow_custom">"Permitir configuração personalizada"</string>
+  <string name="screen_room_notification_settings_allow_custom_footnote">"Ativar isso substituirá sua configuração padrão"</string>
+  <string name="screen_room_notification_settings_custom_settings_title">"Me notifique nesta conversa para"</string>
+  <string name="screen_room_notification_settings_default_setting_footnote">"Você pode alterá-lo no seu %1$s."</string>
+  <string name="screen_room_notification_settings_default_setting_footnote_content_link">"configurações globais"</string>
+  <string name="screen_room_notification_settings_default_setting_title">"Configuração padrão"</string>
+  <string name="screen_room_notification_settings_edit_remove_setting">"Remover configuração personalizada"</string>
+  <string name="screen_room_notification_settings_error_loading_settings">"Ocorreu um erro ao carregar as configurações de notificação."</string>
+  <string name="screen_room_notification_settings_error_restoring_default">"Falha ao restaurar o modo padrão, tente novamente."</string>
+  <string name="screen_room_notification_settings_error_setting_mode">"Falha ao definir o modo, tente novamente."</string>
+  <string name="screen_room_notification_settings_mode_all_messages">"Todas as mensagens"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Somente menções e palavras-chave"</string>
+  <string name="screen_room_notification_settings_room_custom_settings_title">"Nesta sala, notifique-me para"</string>
+</resources>

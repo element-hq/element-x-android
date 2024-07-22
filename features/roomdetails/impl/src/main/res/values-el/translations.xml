@@ -4,6 +4,7 @@
   <string name="screen_notification_settings_mentions_only_disclaimer">"Ο οικιακός διακομιστής σου δεν υποστηρίζει αυτήν την επιλογή σε κρυπτογραφημένα δωμάτια, ενδέχεται να μην λάβεις ειδοποίηση σε ορισμένα δωμάτια."</string>
   <string name="screen_polls_history_title">"Δημοσκοπήσεις"</string>
   <string name="screen_room_change_permissions_administrators">"Μόνο διαχειριστές"</string>
+  <string name="screen_room_change_permissions_ban_people">"Αποκλεισμός ατόμων"</string>
   <string name="screen_room_change_permissions_delete_messages">"Αφαίρεση μηνυμάτων"</string>
   <string name="screen_room_change_permissions_everyone">"Όλοι"</string>
   <string name="screen_room_change_permissions_invite_people">"Πρόσκληση ατόμων"</string>
@@ -58,17 +59,23 @@
   <string name="screen_room_details_title">"Πληροφορίες δωματίου"</string>
   <string name="screen_room_details_topic_title">"Θέμα"</string>
   <string name="screen_room_details_updating_room">"Ενημέρωση δωματίου…"</string>
+  <string name="screen_room_member_list_ban_member_confirmation_action">"Αποκλεισμός"</string>
   <string name="screen_room_member_list_ban_member_confirmation_description">"Δεν θα μπορεί να συμμετέχει ξανά σε αυτό το δωμάτιο εάν προσκληθεί."</string>
+  <string name="screen_room_member_list_ban_member_confirmation_title">"Θες σίγουρα να αποκλείσεις αυτό το μέλος;"</string>
+  <string name="screen_room_member_list_banned_empty">"Δεν υπάρχουν αποκλεισμένοι χρήστες σε αυτό το δωμάτιο."</string>
+  <string name="screen_room_member_list_banning_user">"Αποκλεισμός του χρήστη %1$s"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d άτομο"</item>
     <item quantity="other">"%1$d άτομα"</item>
   </plurals>
+  <string name="screen_room_member_list_manage_member_ban">"Αφαίρεση και αποκλεισμός μέλους"</string>
   <string name="screen_room_member_list_manage_member_remove">"Αφαίρεση από το δωμάτιο"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Αφαίρεση και αποκλεισμός μέλους"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Μόνο αφαίρεση μέλους"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_title">"Αφαίρεση μέλους και απαγόρευση συμμετοχής στο μέλλον;"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Αναίρεση αποκλεισμού"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Θα μπορεί να συμμετάσχει ξανά στο δωμάτιο εάν προσκληθεί."</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"Άρση αποκλεισμού χρήστη"</string>
   <string name="screen_room_member_list_manage_member_user_info">"Προβολή προφίλ"</string>
   <string name="screen_room_member_list_mode_banned">"Αποκλεισμένοι"</string>
   <string name="screen_room_member_list_mode_members">"Μέλη"</string>
@@ -77,6 +84,7 @@
   <string name="screen_room_member_list_role_administrator">"Διαχειριστής"</string>
   <string name="screen_room_member_list_role_moderator">"Συντονιστής"</string>
   <string name="screen_room_member_list_room_members_header_title">"Μέλη δωματίου"</string>
+  <string name="screen_room_member_list_unbanning_user">"Άρση αποκλεισμού %1$s"</string>
   <string name="screen_room_notification_settings_allow_custom">"Να επιτρέπεται η προσαρμοσμένη ρύθμιση"</string>
   <string name="screen_room_notification_settings_allow_custom_footnote">"Η ενεργοποίηση αυτής της ρύθμισης θα παρακάμψει την προεπιλεγμένη ρύθμιση"</string>
   <string name="screen_room_notification_settings_custom_settings_title">"Ειδοποιήσε με σε αυτήν τη συνομιλία για"</string>
