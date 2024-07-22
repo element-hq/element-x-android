@@ -275,7 +275,10 @@ class ChangeRolesPresenterTest {
 
     @Test
     fun `present - Save will display a confirmation when adding admins`() = runTest {
-        val room = FakeMatrixRoom().apply {
+        val room = FakeMatrixRoom(
+            updateUserRoleResult = { Result.success(Unit) },
+            updateMembersResult = { Result.success(Unit) },
+        ).apply {
             givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
             givenRoomInfo(aRoomInfo(userPowerLevels = persistentMapOf(A_USER_ID to 100)))
         }
@@ -325,7 +328,10 @@ class ChangeRolesPresenterTest {
     @Test
     fun `present - Save will just save the data for moderators`() = runTest {
         val analyticsService = FakeAnalyticsService()
-        val room = FakeMatrixRoom().apply {
+        val room = FakeMatrixRoom(
+            updateUserRoleResult = { Result.success(Unit) },
+            updateMembersResult = { Result.success(Unit) },
+        ).apply {
             givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
             givenRoomInfo(aRoomInfo(userPowerLevels = persistentMapOf(A_USER_ID to 50)))
         }
@@ -351,10 +357,11 @@ class ChangeRolesPresenterTest {
 
     @Test
     fun `present - Save can handle failures and ClearError clears them`() = runTest {
-        val room = FakeMatrixRoom().apply {
+        val room = FakeMatrixRoom(
+            updateUserRoleResult = { Result.failure(IllegalStateException("Failed")) }
+        ).apply {
             givenRoomMembersState(MatrixRoomMembersState.Ready(aRoomMemberList()))
             givenRoomInfo(aRoomInfo(userPowerLevels = persistentMapOf(A_USER_ID to 50)))
-            givenUpdateUserRoleResult(Result.failure(IllegalStateException("Failed")))
         }
         val presenter = createChangeRolesPresenter(role = RoomMember.Role.MODERATOR, room = room)
         moleculeFlow(RecompositionMode.Immediate) {

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crash_detection_dialog_content">"%1$s uległ awarii podczas ostatniego użycia. Czy chcesz przesłać nam raport o awarii?"</string>
+  <string name="rageshake_detection_dialog_content">"Wygląda na to, że potrząsasz telefonem z frustracji. Czy chcesz otworzyć ekran zgłaszania błędów?"</string>
+  <string name="settings_rageshake">"Gniewne wstrząsanie"</string>
+  <string name="settings_rageshake_detection_threshold">"Próg wykrywania"</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_permission_camera">"Para permitir que o aplicativo use a câmera, conceda a permissão nas configurações do sistema."</string>
+  <string name="dialog_permission_generic">"Por favor, conceda a permissão nas configurações do sistema."</string>
+  <string name="dialog_permission_microphone">"Para permitir que o aplicativo use o microfone, conceda a permissão nas configurações do sistema."</string>
+  <string name="dialog_permission_notification">"Para permitir que o aplicativo exiba notificações, conceda a permissão nas configurações do sistema."</string>
+</resources>

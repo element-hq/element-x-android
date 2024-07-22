@@ -441,7 +441,10 @@ class RoomListPresenterTest {
     @Test
     fun `present - when set is favorite event is emitted, then the action is called`() = runTest {
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
-        val room = FakeMatrixRoom()
+        val setIsFavoriteResult = lambdaRecorder { _: Boolean -> Result.success(Unit) }
+        val room = FakeMatrixRoom(
+            setIsFavoriteResult = setIsFavoriteResult
+        )
         val analyticsService = FakeAnalyticsService()
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
@@ -452,9 +455,13 @@ class RoomListPresenterTest {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(RoomListEvents.SetRoomIsFavorite(A_ROOM_ID, true))
-            assertThat(room.setIsFavoriteCalls).isEqualTo(listOf(true))
+            setIsFavoriteResult.assertions().isCalledOnce().with(value(true))
             initialState.eventSink(RoomListEvents.SetRoomIsFavorite(A_ROOM_ID, false))
-            assertThat(room.setIsFavoriteCalls).isEqualTo(listOf(true, false))
+            setIsFavoriteResult.assertions().isCalledExactly(2)
+                .withSequence(
+                    listOf(value(true)),
+                    listOf(value(false)),
+                )
             assertThat(analyticsService.capturedEvents).containsExactly(
                 Interaction(name = Interaction.Name.MobileRoomListRoomContextMenuFavouriteToggle),
                 Interaction(name = Interaction.Name.MobileRoomListRoomContextMenuFavouriteToggle)

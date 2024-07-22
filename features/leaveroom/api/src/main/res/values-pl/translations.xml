@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_conversation_alert_subtitle">"Czy na pewno chcesz opuścić tę konwersację? Konwersacja nie jest publiczna i nie będziesz mógł dołączyć ponownie bez zaproszenia."</string>
+  <string name="leave_room_alert_empty_subtitle">"Jesteś pewien, że chcesz opuścić ten pokój? Jesteś tu jedyną osobą. Jeśli wyjdziesz, nikt nie będzie mógł dołączyć, w tym Ty."</string>
+  <string name="leave_room_alert_private_subtitle">"Czy na pewno chcesz opuścić ten pokój? Ten pokój nie jest publiczny i nie będziesz mógł do niego wrócić bez zaproszenia."</string>
+  <string name="leave_room_alert_subtitle">"Jesteś pewien, że chcesz wyjść z tego pokoju?"</string>
+</resources>

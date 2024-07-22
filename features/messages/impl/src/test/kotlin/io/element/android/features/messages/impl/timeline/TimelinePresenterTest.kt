@@ -133,7 +133,10 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
                 )
             )
         )
-        val room = FakeMatrixRoom(liveTimeline = timeline)
+        val room = FakeMatrixRoom(
+            liveTimeline = timeline,
+            canUserSendMessageResult = { _, _ -> Result.success(true) },
+        )
         val sessionPreferencesStore = InMemorySessionPreferencesStore(isSendPublicReadReceiptsEnabled = false)
         val presenter = createTimelinePresenter(
             timeline = timeline,
@@ -482,9 +485,9 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
         )
         val room = FakeMatrixRoom(
             liveTimeline = liveTimeline,
-        ).apply {
-            givenTimelineFocusedOnEventResult(Result.success(detachedTimeline))
-        }
+            timelineFocusedOnEventResult = { Result.success(detachedTimeline) },
+            canUserSendMessageResult = { _, _ -> Result.success(true) },
+        )
         val presenter = createTimelinePresenter(
             room = room,
         )
@@ -529,6 +532,7 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
                         )
                     )
                 ),
+                canUserSendMessageResult = { _, _ -> Result.success(true) },
             ),
             timelineItemIndexer = timelineItemIndexer,
         )
@@ -551,9 +555,9 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
                 liveTimeline = FakeTimeline(
                     timelineItems = flowOf(emptyList()),
                 ),
-            ).apply {
-                givenTimelineFocusedOnEventResult(Result.failure(Throwable("An error")))
-            },
+                timelineFocusedOnEventResult = { Result.failure(Throwable("An error")) },
+                canUserSendMessageResult = { _, _ -> Result.success(true) },
+            )
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -594,7 +598,10 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
                 )
             )
         )
-        val room = FakeMatrixRoom(liveTimeline = timeline).apply {
+        val room = FakeMatrixRoom(
+            liveTimeline = timeline,
+            canUserSendMessageResult = { _, _ -> Result.success(true) },
+        ).apply {
             givenRoomMembersState(MatrixRoomMembersState.Unknown)
         }
 
@@ -626,7 +633,10 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
 
     private fun TestScope.createTimelinePresenter(
         timeline: Timeline = FakeTimeline(),
-        room: FakeMatrixRoom = FakeMatrixRoom(liveTimeline = timeline),
+        room: FakeMatrixRoom = FakeMatrixRoom(
+            liveTimeline = timeline,
+            canUserSendMessageResult = { _, _ -> Result.success(true) }
+        ),
         timelineItemsFactory: TimelineItemsFactory = aTimelineItemsFactory(),
         redactedVoiceMessageManager: RedactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
         messagesNavigator: FakeMessagesNavigator = FakeMessagesNavigator(),
