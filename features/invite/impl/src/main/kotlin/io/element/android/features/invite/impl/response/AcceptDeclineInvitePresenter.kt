@@ -33,6 +33,7 @@ import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import kotlinx.coroutines.CoroutineScope
@@ -107,7 +108,7 @@ class AcceptDeclineInvitePresenter @Inject constructor(
     ) = launch {
         acceptedAction.runUpdatingState {
             joinRoom(
-                roomId = roomId,
+                roomIdOrAlias = roomId.toRoomIdOrAlias(),
                 serverNames = emptyList(),
                 trigger = JoinedRoom.Trigger.Invite,
             )

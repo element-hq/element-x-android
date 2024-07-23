@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
@@ -36,6 +37,7 @@ import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
@@ -80,7 +82,7 @@ class FakeMatrixClient(
     private val roomDirectoryService: RoomDirectoryService = FakeRoomDirectoryService(),
     private val accountManagementUrlString: Result<String?> = Result.success(null),
     private val resolveRoomAliasResult: (RoomAlias) -> Result<ResolvedRoomAlias> = { Result.success(ResolvedRoomAlias(A_ROOM_ID, emptyList())) },
-    private val getRoomPreviewFromRoomIdResult: (RoomId, List<String>) -> Result<RoomPreview> = { _, _ -> Result.failure(AN_EXCEPTION) },
+    private val getRoomPreviewResult: (RoomIdOrAlias, List<String>) -> Result<RoomPreview> = { _, _ -> Result.failure(AN_EXCEPTION) },
     private val clearCacheLambda: () -> Unit = { lambdaError() },
     private val userIdServerNameLambda: () -> String = { lambdaError() },
     private val getUrlLambda: (String) -> Result<String> = { lambdaError() },
@@ -108,11 +110,11 @@ class FakeMatrixClient(
     private var setDisplayNameResult: Result<Unit> = Result.success(Unit)
     private var uploadAvatarResult: Result<Unit> = Result.success(Unit)
     private var removeAvatarResult: Result<Unit> = Result.success(Unit)
-    var joinRoomLambda: (RoomId) -> Result<Unit> = {
-        Result.success(Unit)
+    var joinRoomLambda: (RoomId) -> Result<RoomSummary?> = {
+        Result.success(null)
     }
-    var joinRoomByIdOrAliasLambda: (RoomId, List<String>) -> Result<Unit> = { _, _ ->
-        Result.success(Unit)
+    var joinRoomByIdOrAliasLambda: (RoomIdOrAlias, List<String>) -> Result<RoomSummary?> = { _, _ ->
+        Result.success(null)
     }
     var knockRoomLambda: (RoomId) -> Result<Unit> = {
         Result.success(Unit)
@@ -207,10 +209,10 @@ class FakeMatrixClient(
         return removeAvatarResult
     }
 
-    override suspend fun joinRoom(roomId: RoomId): Result<Unit> = joinRoomLambda(roomId)
+    override suspend fun joinRoom(roomId: RoomId): Result<RoomSummary?> = joinRoomLambda(roomId)
 
-    override suspend fun joinRoomByIdOrAlias(roomId: RoomId, serverNames: List<String>): Result<Unit> {
-        return joinRoomByIdOrAliasLambda(roomId, serverNames)
+    override suspend fun joinRoomByIdOrAlias(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomSummary?> {
+        return joinRoomByIdOrAliasLambda(roomIdOrAlias, serverNames)
     }
 
     override suspend fun knockRoom(roomId: RoomId): Result<Unit> = knockRoomLambda(roomId)
@@ -297,8 +299,8 @@ class FakeMatrixClient(
         resolveRoomAliasResult(roomAlias)
     }
 
-    override suspend fun getRoomPreviewFromRoomId(roomId: RoomId, serverNames: List<String>) = simulateLongTask {
-        getRoomPreviewFromRoomIdResult(roomId, serverNames)
+    override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreview> = simulateLongTask {
+        getRoomPreviewResult(roomIdOrAlias, serverNames)
     }
 
     override suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>> {

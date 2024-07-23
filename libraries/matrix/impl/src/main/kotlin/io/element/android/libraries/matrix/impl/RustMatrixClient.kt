@@ -24,7 +24,9 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.createroom.RoomVisibility
@@ -41,6 +43,7 @@ import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
@@ -175,7 +178,7 @@ class RustMatrixClient(
                     val (anonymizedAccessToken, anonymizedRefreshToken) = existingData.anonymizedTokens()
                     clientLog.d(
                         "Removing session data with access token '$anonymizedAccessToken' " +
-                        "and refresh token '$anonymizedRefreshToken'."
+                            "and refresh token '$anonymizedRefreshToken'."
                     )
                     if (existingData != null) {
                         // Set isTokenValid to false
@@ -320,16 +323,23 @@ class RustMatrixClient(
 
     /**
      * Wait for the room to be available in the room list.
-     * @param roomId the room id to wait for
+     * @param roomIdOrAlias the room id or alias to wait for
      * @param timeout the timeout to wait for the room to be available
      * @throws TimeoutCancellationException if the room is not available after the timeout
      */
-    private suspend fun awaitRoom(roomId: RoomId, timeout: Duration) {
-        withTimeout(timeout) {
+    private suspend fun awaitRoom(roomIdOrAlias: RoomIdOrAlias, timeout: Duration): RoomSummary {
+        val predicate: (List<RoomSummary>) -> Boolean = when (roomIdOrAlias) {
+            is RoomIdOrAlias.Alias -> { roomSummaries: List<RoomSummary> ->
+                roomSummaries.flatMap { it.aliases }.contains(roomIdOrAlias.roomAlias)
+            }
+            is RoomIdOrAlias.Id -> { roomSummaries: List<RoomSummary> ->
+                roomSummaries.map { it.roomId }.contains(roomIdOrAlias.roomId)
+            }
+        }
+        return withTimeout(timeout) {
             roomListService.allRooms.summaries
-                .filter { roomSummaries ->
-                    roomSummaries.map { it.roomId }.contains(roomId)
-                }
+                .filter(predicate)
+                .first()
                 .first()
         }
     }
@@ -373,7 +383,7 @@ class RustMatrixClient(
             val roomId = RoomId(client.createRoom(rustParams))
             // Wait to receive the room back from the sync but do not returns failure if it fails.
             try {
-                awaitRoom(roomId, 30.seconds)
+                awaitRoom(roomId.toRoomIdOrAlias(), 30.seconds)
             } catch (e: Exception) {
                 Timber.e(e, "Timeout waiting for the room to be available in the room list")
             }
@@ -424,30 +434,29 @@ class RustMatrixClient(
             runCatching { client.removeAvatar() }
         }
 
-    override suspend fun joinRoom(roomId: RoomId): Result<Unit> = withContext(sessionDispatcher) {
+    override suspend fun joinRoom(roomId: RoomId): Result<RoomSummary?> = withContext(sessionDispatcher) {
         runCatching {
             client.joinRoomById(roomId.value).destroy()
             try {
-                awaitRoom(roomId, 10.seconds)
+                awaitRoom(roomId.toRoomIdOrAlias(), 10.seconds)
             } catch (e: Exception) {
                 Timber.e(e, "Timeout waiting for the room to be available in the room list")
+                null
             }
         }
     }
 
-    override suspend fun joinRoomByIdOrAlias(
-        roomId: RoomId,
-        serverNames: List<String>,
-    ): Result<Unit> = withContext(sessionDispatcher) {
+    override suspend fun joinRoomByIdOrAlias(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomSummary?> = withContext(sessionDispatcher) {
         runCatching {
             client.joinRoomByIdOrAlias(
-                roomIdOrAlias = roomId.value,
+                roomIdOrAlias = roomIdOrAlias.identifier,
                 serverNames = serverNames,
             ).destroy()
             try {
-                awaitRoom(roomId, 10.seconds)
+                awaitRoom(roomIdOrAlias, 10.seconds)
             } catch (e: Exception) {
                 Timber.e(e, "Timeout waiting for the room to be available in the room list")
+                null
             }
         }
     }
@@ -478,12 +487,12 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun getRoomPreviewFromRoomId(roomId: RoomId, serverNames: List<String>): Result<RoomPreview> = withContext(sessionDispatcher) {
+    override suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreview> = withContext(sessionDispatcher) {
         runCatching {
-            client.getRoomPreviewFromRoomId(
-                roomId = roomId.value,
-                viaServers = serverNames,
-            ).let(RoomPreviewMapper::map)
+            when (roomIdOrAlias) {
+                is RoomIdOrAlias.Alias -> client.getRoomPreviewFromRoomAlias(roomIdOrAlias.roomAlias.value)
+                is RoomIdOrAlias.Id -> client.getRoomPreviewFromRoomId(roomIdOrAlias.roomId.value, serverNames)
+            }.let(RoomPreviewMapper::map)
         }
     }
 
@@ -581,7 +590,7 @@ class RustMatrixClient(
             var room = getRoom(roomId)
             if (room == null) {
                 emit(Optional.empty())
-                awaitRoom(roomId, INFINITE)
+                awaitRoom(roomId.toRoomIdOrAlias(), INFINITE)
                 room = getRoom(roomId)
             }
             room?.use {

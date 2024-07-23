@@ -29,6 +29,7 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
@@ -180,7 +181,7 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is joined with success, all the parameters are provided`() = runTest {
         val aTrigger = JoinedRoom.Trigger.MobilePermalink
-        val joinRoomLambda = lambdaRecorder { _: RoomId, _: List<String>, _: JoinedRoom.Trigger ->
+        val joinRoomLambda = lambdaRecorder { _: RoomIdOrAlias, _: List<String>, _: JoinedRoom.Trigger ->
             Result.success(Unit)
         }
         val presenter = createJoinRoomPresenter(
@@ -201,7 +202,7 @@ class JoinRoomPresenterTest {
             }
             joinRoomLambda.assertions()
                 .isCalledOnce()
-                .with(value(A_ROOM_ID), value(A_SERVER_LIST), value(aTrigger))
+                .with(value(A_ROOM_ID.toRoomIdOrAlias()), value(A_SERVER_LIST), value(aTrigger))
         }
     }
 
@@ -366,7 +367,7 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewFromRoomIdResult = { _, _ ->
+            getRoomPreviewResult = { _, _ ->
                 Result.success(
                     RoomPreview(
                         roomId = A_ROOM_ID,
@@ -411,7 +412,7 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded with error`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewFromRoomIdResult = { _, _ ->
+            getRoomPreviewResult = { _, _ ->
                 Result.failure(AN_EXCEPTION)
             }
         )
@@ -449,7 +450,7 @@ class JoinRoomPresenterTest {
     @Test
     fun `present - when room is not known RoomPreview is loaded with error 403`() = runTest {
         val client = FakeMatrixClient(
-            getRoomPreviewFromRoomIdResult = { _, _ ->
+            getRoomPreviewResult = { _, _ ->
                 Result.failure(Exception("403"))
             }
         )
@@ -474,7 +475,7 @@ class JoinRoomPresenterTest {
         serverNames: List<String> = emptyList(),
         trigger: JoinedRoom.Trigger = JoinedRoom.Trigger.Invite,
         matrixClient: MatrixClient = FakeMatrixClient(),
-        joinRoomLambda: (RoomId, List<String>, JoinedRoom.Trigger) -> Result<Unit> = { _, _, _ ->
+        joinRoomLambda: (RoomIdOrAlias, List<String>, JoinedRoom.Trigger) -> Result<Unit> = { _, _, _ ->
             Result.success(Unit)
         },
         knockRoom: KnockRoom = FakeKnockRoom(),
