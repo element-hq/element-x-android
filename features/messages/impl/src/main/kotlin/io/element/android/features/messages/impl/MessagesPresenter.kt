@@ -39,6 +39,8 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
+import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerPresenter
+import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
@@ -98,6 +100,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val customReactionPresenter: CustomReactionPresenter,
     private val reactionSummaryPresenter: ReactionSummaryPresenter,
     private val readReceiptBottomSheetPresenter: ReadReceiptBottomSheetPresenter,
+    private val pinnedMessagesBannerPresenter: Presenter<PinnedMessagesBannerState>,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val dispatchers: CoroutineDispatchers,
@@ -129,6 +132,7 @@ class MessagesPresenter @AssistedInject constructor(
         val customReactionState = customReactionPresenter.present()
         val reactionSummaryState = reactionSummaryPresenter.present()
         val readReceiptBottomSheetState = readReceiptBottomSheetPresenter.present()
+        val pinnedMessagesBannerState = pinnedMessagesBannerPresenter.present()
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
@@ -231,6 +235,7 @@ class MessagesPresenter @AssistedInject constructor(
             enableVoiceMessages = enableVoiceMessages,
             appName = buildMeta.applicationName,
             callState = callState,
+            pinnedMessagesBannerState = pinnedMessagesBannerState,
             eventSink = { handleEvents(it) }
         )
     }

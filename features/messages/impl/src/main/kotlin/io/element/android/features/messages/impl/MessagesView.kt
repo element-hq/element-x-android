@@ -68,6 +68,7 @@ import io.element.android.features.messages.impl.messagecomposer.AttachmentsBott
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
+import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerView
 import io.element.android.features.messages.impl.timeline.TimelineView
 import io.element.android.features.messages.impl.timeline.components.JoinCallMenuItem
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
@@ -373,22 +374,24 @@ private fun MessagesViewContent(
                 RectangleShape
             },
             content = { paddingValues ->
-                TimelineView(
-                    state = state.timelineState,
-                    typingNotificationState = state.typingNotificationState,
-                    onUserDataClick = onUserDataClick,
-                    onLinkClick = onLinkClick,
-                    onMessageClick = onMessageClick,
-                    onMessageLongClick = onMessageLongClick,
-                    onSwipeToReply = onSwipeToReply,
-                    onReactionClick = onReactionClick,
-                    onReactionLongClick = onReactionLongClick,
-                    onMoreReactionsClick = onMoreReactionsClick,
-                    onReadReceiptClick = onReadReceiptClick,
-                    modifier = Modifier.padding(paddingValues),
-                    forceJumpToBottomVisibility = forceJumpToBottomVisibility,
-                    onJoinCallClick = onJoinCallClick,
-                )
+                Box(modifier = Modifier.padding(paddingValues)) {
+                    TimelineView(
+                        state = state.timelineState,
+                        typingNotificationState = state.typingNotificationState,
+                        onUserDataClick = onUserDataClick,
+                        onLinkClick = onLinkClick,
+                        onMessageClick = onMessageClick,
+                        onMessageLongClick = onMessageLongClick,
+                        onSwipeToReply = onSwipeToReply,
+                        onReactionClick = onReactionClick,
+                        onReactionLongClick = onReactionLongClick,
+                        onMoreReactionsClick = onMoreReactionsClick,
+                        onReadReceiptClick = onReadReceiptClick,
+                        forceJumpToBottomVisibility = forceJumpToBottomVisibility,
+                        onJoinCallClick = onJoinCallClick,
+                    )
+                    PinnedMessagesBannerView(state = state.pinnedMessagesBannerState)
+                }
             },
             sheetContent = { subcomposing: Boolean ->
                 MessagesViewComposerBottomSheetContents(

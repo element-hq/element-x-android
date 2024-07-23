@@ -30,6 +30,7 @@ import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.messagecomposer.DefaultMessageComposerContext
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
+import io.element.android.features.messages.impl.pinned.banner.aPinnedMessagesBannerState
 import io.element.android.features.messages.impl.textcomposer.TestRichTextEditorStateFactory
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineItemIndexer
@@ -56,6 +57,7 @@ import io.element.android.features.poll.test.actions.FakeEndPollAction
 import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -828,6 +830,7 @@ class MessagesPresenterTest {
         val readReceiptBottomSheetPresenter = ReadReceiptBottomSheetPresenter()
         val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
         val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)
+
         return MessagesPresenter(
             room = matrixRoom,
             composerPresenter = messageComposerPresenter,
@@ -838,6 +841,7 @@ class MessagesPresenterTest {
             customReactionPresenter = customReactionPresenter,
             reactionSummaryPresenter = reactionSummaryPresenter,
             readReceiptBottomSheetPresenter = readReceiptBottomSheetPresenter,
+            pinnedMessagesBannerPresenter = { aPinnedMessagesBannerState() },
             networkMonitor = FakeNetworkMonitor(),
             snackbarDispatcher = SnackbarDispatcher(),
             navigator = navigator,
