@@ -41,9 +41,7 @@ internal fun TimelineItemEventRowWithRRPreview(
             event = aTimelineItemEvent(
                 isMine = false,
                 sendState = null,
-                content = aTimelineItemTextContent().copy(
-                    body = "A message from someone else"
-                ),
+                content = aTimelineItemTextContent(body = "A message from someone else"),
                 timelineItemReactions = aTimelineItemReactions(count = 0),
                 readReceiptState = TimelineItemReadReceipts(state.receipts),
             ),
@@ -55,9 +53,7 @@ internal fun TimelineItemEventRowWithRRPreview(
             event = aTimelineItemEvent(
                 isMine = true,
                 sendState = state.sendState,
-                content = aTimelineItemTextContent().copy(
-                    body = "A message from me"
-                ),
+                content = aTimelineItemTextContent(body = "A message from me"),
                 timelineItemReactions = aTimelineItemReactions(count = 0),
                 readReceiptState = TimelineItemReadReceipts(state.receipts),
             ),
@@ -69,9 +65,7 @@ internal fun TimelineItemEventRowWithRRPreview(
             event = aTimelineItemEvent(
                 isMine = true,
                 sendState = state.sendState,
-                content = aTimelineItemTextContent().copy(
-                    body = "A last message from me"
-                ),
+                content = aTimelineItemTextContent(body = "A last message from me"),
                 timelineItemReactions = aTimelineItemReactions(count = 0),
                 readReceiptState = TimelineItemReadReceipts(state.receipts),
             ),

@@ -17,14 +17,18 @@
 package io.element.android.features.preferences.impl.about
 
 import androidx.compose.runtime.Composable
+import io.element.android.features.preferences.api.OpenSourceLicensesProvider
 import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
 
-class AboutPresenter @Inject constructor() : Presenter<AboutState> {
+class AboutPresenter @Inject constructor(
+    private val openSourceLicensesProvider: OpenSourceLicensesProvider,
+) : Presenter<AboutState> {
     @Composable
     override fun present(): AboutState {
         return AboutState(
             elementLegals = getAllLegals(),
+            hasOpenSourcesLicenses = openSourceLicensesProvider.hasOpenSourceLicenses,
         )
     }
 }

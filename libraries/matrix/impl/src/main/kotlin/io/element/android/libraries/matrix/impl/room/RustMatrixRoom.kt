@@ -56,6 +56,7 @@ import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.room.powerlevels.RoomPowerLevelsMapper
 import io.element.android.libraries.matrix.impl.timeline.RustTimeline
 import io.element.android.libraries.matrix.impl.timeline.toRustReceiptType
+import io.element.android.libraries.matrix.impl.util.MessageEventContent
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
 import io.element.android.libraries.matrix.impl.widget.generateWidgetWebViewUrl
@@ -173,8 +174,6 @@ class RustMatrixRoom(
 
     override suspend fun subscribeToSync() = roomSyncSubscriber.subscribe(roomId)
 
-    override suspend fun unsubscribeFromSync() = roomSyncSubscriber.unsubscribe(roomId)
-
     override suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline> {
         return runCatching {
             innerRoom.timelineFocusedOnEvent(
@@ -196,8 +195,6 @@ class RustMatrixRoom(
     override fun destroy() {
         roomCoroutineScope.cancel()
         liveTimeline.close()
-        innerRoom.destroy()
-        roomListItem.destroy()
     }
 
     override val displayName: String
@@ -325,6 +322,14 @@ class RustMatrixRoom(
     override suspend fun userAvatarUrl(userId: UserId): Result<String?> = withContext(roomDispatcher) {
         runCatching {
             innerRoom.memberAvatarUrl(userId.value)
+        }
+    }
+
+    override suspend fun editMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            MessageEventContent.from(body, htmlBody, mentions).use { newContent ->
+                innerRoom.edit(eventId.value, newContent)
+            }
         }
     }
 
@@ -584,7 +589,7 @@ class RustMatrixRoom(
             room = innerRoom,
             widgetCapabilitiesProvider = object : WidgetCapabilitiesProvider {
                 override fun acquireCapabilities(capabilities: WidgetCapabilities): WidgetCapabilities {
-                    return getElementCallRequiredPermissions(sessionId.value)
+                    return getElementCallRequiredPermissions(sessionId.value, sessionData.deviceId)
                 }
             },
         )
@@ -627,12 +632,13 @@ class RustMatrixRoom(
         isLive: Boolean,
         onNewSyncedEvent: () -> Unit = {},
     ): Timeline {
+        val timelineCoroutineScope = roomCoroutineScope.childScope(coroutineDispatchers.main, "TimelineScope-$roomId-$timeline")
         return RustTimeline(
             isKeyBackupEnabled = isKeyBackupEnabled,
             isLive = isLive,
             matrixRoom = this,
             systemClock = systemClock,
-            roomCoroutineScope = roomCoroutineScope,
+            coroutineScope = timelineCoroutineScope,
             dispatcher = roomDispatcher,
             lastLoginTimestamp = sessionData.loginTimestamp,
             onNewSyncedEvent = onNewSyncedEvent,

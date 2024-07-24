@@ -52,7 +52,10 @@ class RoomMemberListPresenterTest {
 
     @Test
     fun `member loading is done automatically on start, but is async`() = runTest {
-        val room = FakeMatrixRoom().apply {
+        val room = FakeMatrixRoom(
+            updateMembersResult = { Result.success(Unit) },
+            canInviteResult = { Result.success(true) }
+        ).apply {
             // Needed to avoid discarding the loaded members as a partial and invalid result
             givenRoomInfo(aRoomInfo(joinedMembersCount = 2))
         }
@@ -62,7 +65,7 @@ class RoomMemberListPresenterTest {
         }.test {
             skipItems(1)
             val initialState = awaitItem()
-            assertThat(initialState.roomMembers.isLoading).isTrue()
+            assertThat(initialState.roomMembers.isLoading()).isTrue()
             assertThat(initialState.searchQuery).isEmpty()
             assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(initialState.isSearchActive).isFalse()
@@ -70,15 +73,20 @@ class RoomMemberListPresenterTest {
             // Skip item while the new members state is processed
             skipItems(1)
             val loadedMembersState = awaitItem()
-            assertThat(loadedMembersState.roomMembers.isLoading).isFalse()
-            assertThat(loadedMembersState.roomMembers.invited).isEqualTo(listOf(aVictor(), aWalter()))
-            assertThat(loadedMembersState.roomMembers.joined).isNotEmpty()
+            assertThat(loadedMembersState.roomMembers.isLoading()).isFalse()
+            assertThat(loadedMembersState.roomMembers.dataOrNull()?.invited).isEqualTo(listOf(aVictor(), aWalter()))
+            assertThat(loadedMembersState.roomMembers.dataOrNull()?.joined).isNotEmpty()
         }
     }
 
     @Test
     fun `open search`() = runTest {
-        val presenter = createPresenter()
+        val presenter = createPresenter(
+            matrixRoom = FakeMatrixRoom(
+                updateMembersResult = { Result.success(Unit) },
+                canInviteResult = { Result.success(true) }
+            )
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -93,7 +101,12 @@ class RoomMemberListPresenterTest {
 
     @Test
     fun `search for something which is not found`() = runTest {
-        val presenter = createPresenter()
+        val presenter = createPresenter(
+            matrixRoom = FakeMatrixRoom(
+                updateMembersResult = { Result.success(Unit) },
+                canInviteResult = { Result.success(true) }
+            )
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -112,7 +125,12 @@ class RoomMemberListPresenterTest {
 
     @Test
     fun `search for something which is found`() = runTest {
-        val presenter = createPresenter()
+        val presenter = createPresenter(
+            matrixRoom = FakeMatrixRoom(
+                updateMembersResult = { Result.success(Unit) },
+                canInviteResult = { Result.success(true) }
+            )
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -126,7 +144,7 @@ class RoomMemberListPresenterTest {
             assertThat(searchQueryUpdatedState.searchQuery).isEqualTo("Alice")
             val searchSearchResultDelivered = awaitItem()
             assertThat(searchSearchResultDelivered.searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
-            assertThat((searchSearchResultDelivered.searchResults as SearchBarResultState.Results).results.joined.first().displayName)
+            assertThat((searchSearchResultDelivered.searchResults as SearchBarResultState.Results).results.dataOrNull()!!.joined.first().displayName)
                 .isEqualTo("Alice")
         }
     }
@@ -134,9 +152,10 @@ class RoomMemberListPresenterTest {
     @Test
     fun `present - asynchronously sets canInvite when user has correct power level`() = runTest {
         val presenter = createPresenter(
-            matrixRoom = FakeMatrixRoom().apply {
-                givenCanInviteResult(Result.success(true))
-            }
+            matrixRoom = FakeMatrixRoom(
+                canInviteResult = { Result.success(true) },
+                updateMembersResult = { Result.success(Unit) }
+            )
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -150,9 +169,10 @@ class RoomMemberListPresenterTest {
     @Test
     fun `present - asynchronously sets canInvite when user does not have correct power level`() = runTest {
         val presenter = createPresenter(
-            matrixRoom = FakeMatrixRoom().apply {
-                givenCanInviteResult(Result.success(false))
-            }
+            matrixRoom = FakeMatrixRoom(
+                canInviteResult = { Result.success(false) },
+                updateMembersResult = { Result.success(Unit) }
+            )
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -166,9 +186,10 @@ class RoomMemberListPresenterTest {
     @Test
     fun `present - asynchronously sets canInvite when power level check fails`() = runTest {
         val presenter = createPresenter(
-            matrixRoom = FakeMatrixRoom().apply {
-                givenCanInviteResult(Result.failure(Throwable("Eek")))
-            }
+            matrixRoom = FakeMatrixRoom(
+                canInviteResult = { Result.failure(Throwable("Eek")) },
+                updateMembersResult = { Result.success(Unit) }
+            )
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -183,7 +204,14 @@ class RoomMemberListPresenterTest {
     fun `present - RoomMemberSelected by default opens the room member details through the navigator`() = runTest {
         val navigator = FakeRoomMemberListNavigator()
         val moderationPresenter = FakeRoomMembersModerationPresenter(canDisplayModerationActions = false)
-        val presenter = createPresenter(moderationPresenter = moderationPresenter, navigator = navigator)
+        val presenter = createPresenter(
+            moderationPresenter = moderationPresenter,
+            navigator = navigator,
+            matrixRoom = FakeMatrixRoom(
+                updateMembersResult = { Result.success(Unit) },
+                canInviteResult = { Result.success(true) }
+            )
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -205,7 +233,14 @@ class RoomMemberListPresenterTest {
         val moderationPresenter = FakeRoomMembersModerationPresenter(canDisplayModerationActions = true).apply {
             givenState(capturingState)
         }
-        val presenter = createPresenter(moderationPresenter = moderationPresenter, navigator = navigator)
+        val presenter = createPresenter(
+            moderationPresenter = moderationPresenter,
+            navigator = navigator,
+            matrixRoom = FakeMatrixRoom(
+                updateMembersResult = { Result.success(Unit) },
+                canInviteResult = { Result.success(true) }
+            )
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -236,10 +271,12 @@ private fun TestScope.createDataSource(
 @ExperimentalCoroutinesApi
 private fun TestScope.createPresenter(
     coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
-    matrixRoom: MatrixRoom = FakeMatrixRoom(),
+    matrixRoom: MatrixRoom = FakeMatrixRoom(
+        updateMembersResult = { Result.success(Unit) }
+    ),
     roomMemberListDataSource: RoomMemberListDataSource = createDataSource(coroutineDispatchers = coroutineDispatchers),
     moderationPresenter: FakeRoomMembersModerationPresenter = FakeRoomMembersModerationPresenter(),
-    navigator: RoomMemberListNavigator = object : RoomMemberListNavigator { }
+    navigator: RoomMemberListNavigator = object : RoomMemberListNavigator {}
 ) = RoomMemberListPresenter(
     room = matrixRoom,
     roomMemberListDataSource = roomMemberListDataSource,

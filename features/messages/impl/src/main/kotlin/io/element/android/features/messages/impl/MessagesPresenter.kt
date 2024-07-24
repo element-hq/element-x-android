@@ -72,6 +72,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
+import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.room.canCall
@@ -162,7 +163,7 @@ class MessagesPresenter @AssistedInject constructor(
         var showReinvitePrompt by remember { mutableStateOf(false) }
         LaunchedEffect(hasDismissedInviteDialog, composerState.textEditorState.hasFocus(), syncUpdateFlow.value) {
             withContext(dispatchers.io) {
-                showReinvitePrompt = !hasDismissedInviteDialog && composerState.textEditorState.hasFocus() && room.isDirect && room.activeMemberCount == 1L
+                showReinvitePrompt = !hasDismissedInviteDialog && composerState.textEditorState.hasFocus() && room.isDm && room.activeMemberCount == 1L
             }
         }
         val networkConnectionStatus by networkMonitor.connectivity.collectAsState()

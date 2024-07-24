@@ -52,9 +52,6 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
-import io.element.android.libraries.matrix.api.permalink.PermalinkData
-import io.element.android.libraries.matrix.api.permalink.PermalinkParser
-import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetailsProvider
 import io.element.android.libraries.testtags.TestTags
@@ -70,7 +67,6 @@ import io.element.android.libraries.textcomposer.components.VoiceMessageRecordin
 import io.element.android.libraries.textcomposer.components.markdown.MarkdownTextInput
 import io.element.android.libraries.textcomposer.components.markdown.aMarkdownTextEditorState
 import io.element.android.libraries.textcomposer.components.textInputRoundedCornerShape
-import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanProvider
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.TextEditorState
@@ -90,7 +86,6 @@ import kotlin.time.Duration.Companion.seconds
 fun TextComposer(
     state: TextEditorState,
     voiceMessageState: VoiceMessageState,
-    permalinkParser: PermalinkParser,
     composerMode: MessageComposerMode,
     enableVoiceMessages: Boolean,
     onRequestFocus: () -> Unit,
@@ -106,6 +101,7 @@ fun TextComposer(
     onTyping: (Boolean) -> Unit,
     onReceiveSuggestion: (Suggestion?) -> Unit,
     onSelectRichContent: ((Uri) -> Unit)?,
+    resolveMentionDisplay: (text: String, url: String) -> TextDisplay,
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
     subcomposing: Boolean = false,
@@ -144,8 +140,6 @@ fun TextComposer(
         }
     }
 
-    val userProfileCache = LocalRoomMemberProfilesCache.current
-
     val placeholder = if (composerMode.inThread) {
         stringResource(id = CommonStrings.action_reply_in_thread)
     } else {
@@ -155,23 +149,14 @@ fun TextComposer(
         is TextEditorState.Rich -> {
             remember(state.richTextEditorState, subcomposing, composerMode, onResetComposerMode, onError) {
                 @Composable {
-                    val mentionSpanProvider = LocalMentionSpanProvider.current
                     TextInput(
                         state = state.richTextEditorState,
                         subcomposing = subcomposing,
                         placeholder = placeholder,
                         composerMode = composerMode,
                         onResetComposerMode = onResetComposerMode,
-                        resolveMentionDisplay = { text, url ->
-                            val permalinkData = permalinkParser.parse(url)
-                            if (permalinkData is PermalinkData.UserLink) {
-                                val displayNameOrId = userProfileCache.getDisplayName(permalinkData.userId) ?: permalinkData.userId.value
-                                TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor(displayNameOrId, url))
-                            } else {
-                                TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor(text, url))
-                            }
-                        },
-                        resolveRoomMentionDisplay = { TextDisplay.Custom(mentionSpanProvider.getMentionSpanFor("@room", "#")) },
+                        resolveMentionDisplay = resolveMentionDisplay,
+                        resolveRoomMentionDisplay = { resolveMentionDisplay("@room", "#") },
                         onError = onError,
                         onTyping = onTyping,
                         onSelectRichContent = onSelectRichContent,
@@ -709,9 +694,6 @@ private fun ATextComposer(
         state = state,
         showTextFormatting = showTextFormatting,
         voiceMessageState = voiceMessageState,
-        permalinkParser = object : PermalinkParser {
-            override fun parse(uriString: String): PermalinkData = TODO("Not yet implemented")
-        },
         composerMode = composerMode,
         enableVoiceMessages = enableVoiceMessages,
         onRequestFocus = {},
@@ -726,6 +708,7 @@ private fun ATextComposer(
         onError = {},
         onTyping = {},
         onReceiveSuggestion = {},
+        resolveMentionDisplay = { _, _ -> TextDisplay.Plain },
         onSelectRichContent = null,
     )
 }

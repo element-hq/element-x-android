@@ -57,9 +57,6 @@ interface MatrixRoom : Closeable {
     val activeMemberCount: Long
     val joinedMemberCount: Long
 
-    /** Whether the room is a direct message. */
-    val isDm: Boolean get() = isDirect && isOneToOne
-
     val roomInfoFlow: Flow<MatrixRoomInfo>
     val roomTypingMembersFlow: Flow<List<UserId>>
 
@@ -113,8 +110,6 @@ interface MatrixRoom : Closeable {
 
     suspend fun subscribeToSync()
 
-    suspend fun unsubscribeFromSync()
-
     suspend fun powerLevels(): Result<MatrixRoomPowerLevels>
 
     suspend fun updatePowerLevels(matrixRoomPowerLevels: MatrixRoomPowerLevels): Result<Unit>
@@ -130,6 +125,8 @@ interface MatrixRoom : Closeable {
     suspend fun userAvatarUrl(userId: UserId): Result<String?>
 
     suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
+
+    suspend fun editMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
 
     suspend fun sendImage(
         file: File,

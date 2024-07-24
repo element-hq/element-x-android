@@ -23,7 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import io.element.android.appconfig.LockScreenConfig
+import io.element.android.features.lockscreen.impl.LockScreenConfig
 import io.element.android.features.lockscreen.impl.biometric.BiometricUnlockManager
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.storage.LockScreenStore

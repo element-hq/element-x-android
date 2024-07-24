@@ -35,7 +35,6 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
-import io.element.android.libraries.matrix.test.room.SavePollInvocation
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.LiveTimelineProvider
 import io.element.android.services.analytics.test.FakeAnalyticsService
@@ -51,9 +50,9 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class) class CreatePollPresenterTest {
-    @get:Rule
-    val warmUpRule = WarmUpRule()
+@OptIn(ExperimentalCoroutinesApi::class)
+class CreatePollPresenterTest {
+    @get:Rule val warmUpRule = WarmUpRule()
 
     private val pollEventId = AN_EVENT_ID
     private var navUpInvocationsCount = 0
@@ -128,7 +127,13 @@ import org.junit.Test
 
     @Test
     fun `create poll sends a poll start event`() = runTest {
-        val presenter = createCreatePollPresenter(mode = CreatePollMode.NewPoll)
+        val createPollResult = lambdaRecorder<String, List<String>, Int, PollKind, Result<Unit>> { _, _, _, _ -> Result.success(Unit) }
+        val presenter = createCreatePollPresenter(
+            room = FakeMatrixRoom(
+                createPollResult = createPollResult
+            ),
+            mode = CreatePollMode.NewPoll,
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -139,15 +144,13 @@ import org.junit.Test
             skipItems(3)
             initial.eventSink(CreatePollEvents.Save)
             delay(1) // Wait for the coroutine to finish
-            assertThat(fakeMatrixRoom.createPollInvocations.size).isEqualTo(1)
-            assertThat(fakeMatrixRoom.createPollInvocations.last()).isEqualTo(
-                SavePollInvocation(
-                    question = "A question?",
-                    answers = listOf("Answer 1", "Answer 2"),
-                    maxSelections = 1,
-                    pollKind = PollKind.Disclosed
+            createPollResult.assertions().isCalledOnce()
+                .with(
+                    value("A question?"),
+                    value(listOf("Answer 1", "Answer 2")),
+                    value(1),
+                    value(PollKind.Disclosed),
                 )
-            )
             assertThat(fakeAnalyticsService.capturedEvents.size).isEqualTo(2)
             assertThat(fakeAnalyticsService.capturedEvents[0]).isEqualTo(
                 Composer(
@@ -170,8 +173,15 @@ import org.junit.Test
     @Test
     fun `when poll creation fails, error is tracked`() = runTest {
         val error = Exception("cause")
-        fakeMatrixRoom.givenCreatePollResult(Result.failure(error))
-        val presenter = createCreatePollPresenter(mode = CreatePollMode.NewPoll)
+        val createPollResult = lambdaRecorder<String, List<String>, Int, PollKind, Result<Unit>> { _, _, _, _ ->
+            Result.failure(error)
+        }
+        val presenter = createCreatePollPresenter(
+            room = FakeMatrixRoom(
+                createPollResult = createPollResult
+            ),
+            mode = CreatePollMode.NewPoll,
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -180,7 +190,7 @@ import org.junit.Test
             awaitItem().eventSink(CreatePollEvents.SetAnswer(1, "Answer 2"))
             awaitItem().eventSink(CreatePollEvents.Save)
             delay(1) // Wait for the coroutine to finish
-            assertThat(fakeMatrixRoom.createPollInvocations).hasSize(1)
+            createPollResult.assertions().isCalledOnce()
             assertThat(fakeAnalyticsService.capturedEvents).isEmpty()
             assertThat(fakeAnalyticsService.trackedErrors).hasSize(1)
             assertThat(fakeAnalyticsService.trackedErrors).containsExactly(
@@ -252,14 +262,22 @@ import org.junit.Test
     @Test
     fun `when edit poll fails, error is tracked`() = runTest {
         val error = Exception("cause")
+        val editPollResult = lambdaRecorder { _: EventId, _: String, _: List<String>, _: Int, _: PollKind ->
+            Result.failure<Unit>(error)
+        }
+        val presenter = createCreatePollPresenter(
+            room = FakeMatrixRoom(
+                editPollResult = editPollResult,
+                liveTimeline = timeline,
+            ),
+            mode = CreatePollMode.EditPoll(pollEventId),
+        )
         val editPollLambda = lambdaRecorder { _: EventId, _: String, _: List<String>, _: Int, _: PollKind ->
             Result.failure<Unit>(error)
         }
         timeline.apply {
             this.editPollLambda = editPollLambda
         }
-        fakeMatrixRoom.givenEditPollResult(Result.failure(error))
-        val presenter = createCreatePollPresenter(mode = CreatePollMode.EditPoll(pollEventId))
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signed_out_reason_1">"Você alterou sua senha em outra sessão"</string>
+  <string name="screen_signed_out_reason_2">"Você excluiu essa sessão através de outra sessão"</string>
+  <string name="screen_signed_out_reason_3">"O administrador do seu servidor invalidou seu acesso"</string>
+  <string name="screen_signed_out_subtitle">"Você pode ter sido desconectado por um dos motivos listados abaixo. Faça login novamente para continuar usando %s."</string>
+  <string name="screen_signed_out_title">"Você está desconectado"</string>
+</resources>

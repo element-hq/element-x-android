@@ -18,6 +18,7 @@ package io.element.android.libraries.push.impl.notifications
 
 import androidx.annotation.VisibleForTesting
 import androidx.core.app.NotificationManagerCompat
+import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.AppScope
@@ -30,7 +31,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
-import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
+import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.shouldIgnoreEventInRoom
@@ -46,11 +47,12 @@ import javax.inject.Inject
 private val loggerTag = LoggerTag("DefaultNotificationDrawerManager", LoggerTag.NotificationLoggerTag)
 
 /**
- * The NotificationDrawerManager receives notification events as they arrive (from event stream or fcm) and
+ * This class receives notification events as they arrive from the PushHandler calling [onNotifiableEventReceived] and
  * organise them in order to display them in the notification drawer.
  * Events can be grouped into the same notification, old (already read) events can be removed to do some cleaning.
  */
 @SingleIn(AppScope::class)
+@ContributesBinding(AppScope::class)
 class DefaultNotificationDrawerManager @Inject constructor(
     private val notificationManager: NotificationManagerCompat,
     private val notificationRenderer: NotificationRenderer,
@@ -59,7 +61,7 @@ class DefaultNotificationDrawerManager @Inject constructor(
     private val matrixClientProvider: MatrixClientProvider,
     private val imageLoaderHolder: ImageLoaderHolder,
     private val activeNotificationsProvider: ActiveNotificationsProvider,
-) : NotificationDrawerManager {
+) : NotificationCleaner {
     private var appNavigationStateObserver: Job? = null
 
     // TODO EAx add a setting per user for this

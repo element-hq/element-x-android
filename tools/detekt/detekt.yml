@@ -226,7 +226,7 @@ Compose:
       - LocalCameraPositionState
       - LocalTimelineItemPresenterFactories
       - LocalRoomMemberProfilesCache
-      - LocalMentionSpanProvider
+      - LocalMentionSpanTheme
   CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:

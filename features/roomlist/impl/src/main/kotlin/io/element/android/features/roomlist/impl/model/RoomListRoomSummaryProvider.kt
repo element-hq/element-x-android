@@ -101,7 +101,7 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                         userId = UserId("@bob:matrix.org"),
                         displayName = "Bob",
                     ),
-                    isDirect = true,
+                    isDm = true,
                 ),
                 aRoomListRoomSummary(
                     name = null,

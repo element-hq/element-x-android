@@ -56,7 +56,7 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.impl.room.join.DefaultJoinRoom
 import io.element.android.libraries.preferences.impl.store.DefaultSessionPreferencesStore
-import io.element.android.libraries.push.test.notifications.FakeNotificationDrawerManager
+import io.element.android.libraries.push.test.notifications.FakeNotificationCleaner
 import io.element.android.services.analytics.noop.NoopAnalyticsService
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import kotlinx.coroutines.launch
@@ -144,7 +144,7 @@ class RoomListScreen(
         acceptDeclineInvitePresenter = AcceptDeclineInvitePresenter(
             client = matrixClient,
             joinRoom = DefaultJoinRoom(matrixClient, NoopAnalyticsService()),
-            notificationDrawerManager = FakeNotificationDrawerManager(),
+            notificationCleaner = FakeNotificationCleaner(),
         ),
         analyticsService = NoopAnalyticsService(),
         fullScreenIntentPermissionsPresenter = object : FullScreenIntentPermissionsPresenter {
@@ -158,6 +158,7 @@ class RoomListScreen(
                 )
             }
         },
+        notificationCleaner = FakeNotificationCleaner(),
     )
 
     @Composable

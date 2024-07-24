@@ -18,13 +18,14 @@ package io.element.android.features.messages.impl.timeline.components.reactionsu
 
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.libraries.matrix.api.core.EventId
+import kotlinx.collections.immutable.ImmutableList
 
 data class ReactionSummaryState(
     val target: Summary?,
     val eventSink: (ReactionSummaryEvents) -> Unit
 ) {
     data class Summary(
-        val reactions: List<AggregatedReaction>,
+        val reactions: ImmutableList<AggregatedReaction>,
         val selectedKey: String,
         val selectedEventId: EventId
     )

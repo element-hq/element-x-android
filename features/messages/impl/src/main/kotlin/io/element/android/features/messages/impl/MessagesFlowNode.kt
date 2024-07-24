@@ -73,8 +73,8 @@ import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCa
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
-import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanProvider
-import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
+import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanTheme
+import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.ImmutableList
@@ -94,7 +94,7 @@ class MessagesFlowNode @AssistedInject constructor(
     private val analyticsService: AnalyticsService,
     private val room: MatrixRoom,
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
-    mentionSpanProviderFactory: MentionSpanProvider.Factory,
+    private val mentionSpanTheme: MentionSpanTheme,
 ) : BaseFlowNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Messages,
@@ -107,6 +107,7 @@ class MessagesFlowNode @AssistedInject constructor(
     plugins = plugins
 ) {
     data class Inputs(val focusedEventId: EventId?) : NodeInputs
+
     private val inputs = inputs<Inputs>()
 
     sealed interface NavTarget : Parcelable {
@@ -148,9 +149,7 @@ class MessagesFlowNode @AssistedInject constructor(
         data class EditPoll(val eventId: EventId) : NavTarget
     }
 
-    private val callback = plugins<MessagesEntryPoint.Callback>().firstOrNull()
-
-    private val mentionSpanProvider = mentionSpanProviderFactory.create(room.sessionId.value)
+    private val callbacks = plugins<MessagesEntryPoint.Callback>()
 
     override fun onBuilt() {
         super.onBuilt()
@@ -167,7 +166,7 @@ class MessagesFlowNode @AssistedInject constructor(
             is NavTarget.Messages -> {
                 val callback = object : MessagesNode.Callback {
                     override fun onRoomDetailsClick() {
-                        callback?.onRoomDetailsClick()
+                        callbacks.forEach { it.onRoomDetailsClick() }
                     }
 
                     override fun onEventClick(event: TimelineItem.Event): Boolean {
@@ -179,11 +178,11 @@ class MessagesFlowNode @AssistedInject constructor(
                     }
 
                     override fun onUserDataClick(userId: UserId) {
-                        callback?.onUserDataClick(userId)
+                        callbacks.forEach { it.onUserDataClick(userId) }
                     }
 
                     override fun onPermalinkClick(data: PermalinkData) {
-                        callback?.onPermalinkClick(data)
+                        callbacks.forEach { it.onPermalinkClick(data) }
                     }
 
                     override fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
@@ -250,7 +249,7 @@ class MessagesFlowNode @AssistedInject constructor(
                 val inputs = ForwardMessagesNode.Inputs(navTarget.eventId)
                 val callback = object : ForwardMessagesNode.Callback {
                     override fun onForwardedToSingleRoom(roomId: RoomId) {
-                        this@MessagesFlowNode.callback?.onForwardedToSingleRoom(roomId)
+                        callbacks.forEach { it.onForwardedToSingleRoom(roomId) }
                     }
                 }
                 createNode<ForwardMessagesNode>(buildContext, listOf(inputs, callback))
@@ -370,11 +369,10 @@ class MessagesFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        mentionSpanProvider.updateStyles()
-
+        mentionSpanTheme.updateStyles(currentUserId = room.sessionId)
         CompositionLocalProvider(
             LocalRoomMemberProfilesCache provides roomMemberProfilesCache,
-            LocalMentionSpanProvider provides mentionSpanProvider,
+            LocalMentionSpanTheme provides mentionSpanTheme,
         ) {
             BackstackWithOverlayBox(modifier)
         }

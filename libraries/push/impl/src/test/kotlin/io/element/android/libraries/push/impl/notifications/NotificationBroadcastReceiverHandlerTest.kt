@@ -35,16 +35,17 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStoreFactory
 import io.element.android.libraries.preferences.test.FakeSessionPreferencesStoreFactory
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
-import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
+import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.push.FakeOnNotifiableEventReceived
 import io.element.android.libraries.push.impl.push.OnNotifiableEventReceived
-import io.element.android.libraries.push.test.notifications.FakeNotificationDrawerManager
+import io.element.android.libraries.push.test.notifications.FakeNotificationCleaner
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
@@ -90,11 +91,11 @@ class NotificationBroadcastReceiverHandlerTest {
     @Test
     fun `Test dismiss room`() = runTest {
         val clearMessagesForRoomLambda = lambdaRecorder<SessionId, RoomId, Unit> { _, _ -> }
-        val notificationDrawerManager = FakeNotificationDrawerManager(
+        val fakeNotificationCleaner = FakeNotificationCleaner(
             clearMessagesForRoomLambda = clearMessagesForRoomLambda,
         )
         val sut = createNotificationBroadcastReceiverHandler(
-            notificationDrawerManager = notificationDrawerManager
+            notificationCleaner = fakeNotificationCleaner
         )
         sut.onReceive(
             createIntent(
@@ -111,11 +112,11 @@ class NotificationBroadcastReceiverHandlerTest {
     @Test
     fun `Test dismiss summary`() = runTest {
         val clearAllMessagesEventsLambda = lambdaRecorder<SessionId, Unit> { _ -> }
-        val notificationDrawerManager = FakeNotificationDrawerManager(
+        val fakeNotificationCleaner = FakeNotificationCleaner(
             clearAllMessagesEventsLambda = clearAllMessagesEventsLambda,
         )
         val sut = createNotificationBroadcastReceiverHandler(
-            notificationDrawerManager = notificationDrawerManager
+            notificationCleaner = fakeNotificationCleaner
         )
         sut.onReceive(
             createIntent(
@@ -140,11 +141,11 @@ class NotificationBroadcastReceiverHandlerTest {
     @Test
     fun `Test dismiss Invite`() = runTest {
         val clearMembershipNotificationForRoomLambda = lambdaRecorder<SessionId, RoomId, Unit> { _, _ -> }
-        val notificationDrawerManager = FakeNotificationDrawerManager(
+        val fakeNotificationCleaner = FakeNotificationCleaner(
             clearMembershipNotificationForRoomLambda = clearMembershipNotificationForRoomLambda,
         )
         val sut = createNotificationBroadcastReceiverHandler(
-            notificationDrawerManager = notificationDrawerManager
+            notificationCleaner = fakeNotificationCleaner
         )
         sut.onReceive(
             createIntent(
@@ -170,11 +171,11 @@ class NotificationBroadcastReceiverHandlerTest {
     @Test
     fun `Test dismiss Event`() = runTest {
         val clearEventLambda = lambdaRecorder<SessionId, EventId, Unit> { _, _ -> }
-        val notificationDrawerManager = FakeNotificationDrawerManager(
+        val fakeNotificationCleaner = FakeNotificationCleaner(
             clearEventLambda = clearEventLambda,
         )
         val sut = createNotificationBroadcastReceiverHandler(
-            notificationDrawerManager = notificationDrawerManager
+            notificationCleaner = fakeNotificationCleaner
         )
         sut.onReceive(
             createIntent(
@@ -227,13 +228,13 @@ class NotificationBroadcastReceiverHandlerTest {
         )
         val clearMessagesForRoomLambda = lambdaRecorder<SessionId, RoomId, Unit> { _, _ -> }
         val matrixRoom = FakeMatrixRoom()
-        val notificationDrawerManager = FakeNotificationDrawerManager(
+        val fakeNotificationCleaner = FakeNotificationCleaner(
             clearMessagesForRoomLambda = clearMessagesForRoomLambda,
         )
         val sut = createNotificationBroadcastReceiverHandler(
             sessionPreferencesStore = sessionPreferencesStore,
             matrixRoom = matrixRoom,
-            notificationDrawerManager = notificationDrawerManager
+            notificationCleaner = fakeNotificationCleaner
         )
         sut.onReceive(
             createIntent(
@@ -262,12 +263,12 @@ class NotificationBroadcastReceiverHandlerTest {
     fun `Test join room`() = runTest {
         val joinRoom = lambdaRecorder<RoomId, Result<Unit>> { _ -> Result.success(Unit) }
         val clearMembershipNotificationForRoomLambda = lambdaRecorder<SessionId, RoomId, Unit> { _, _ -> }
-        val notificationDrawerManager = FakeNotificationDrawerManager(
+        val fakeNotificationCleaner = FakeNotificationCleaner(
             clearMembershipNotificationForRoomLambda = clearMembershipNotificationForRoomLambda,
         )
         val sut = createNotificationBroadcastReceiverHandler(
             joinRoom = joinRoom,
-            notificationDrawerManager = notificationDrawerManager,
+            notificationCleaner = fakeNotificationCleaner,
         )
         sut.onReceive(
             createIntent(
@@ -297,16 +298,16 @@ class NotificationBroadcastReceiverHandlerTest {
     @Test
     fun `Test reject room`() = runTest {
         val leaveRoom = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val matrixRoom = FakeMatrixRoom().apply {
+        val matrixRoom = FakeMatrixRoom(
             leaveRoomLambda = leaveRoom
-        }
+        )
         val clearMembershipNotificationForRoomLambda = lambdaRecorder<SessionId, RoomId, Unit> { _, _ -> }
-        val notificationDrawerManager = FakeNotificationDrawerManager(
+        val fakeNotificationCleaner = FakeNotificationCleaner(
             clearMembershipNotificationForRoomLambda = clearMembershipNotificationForRoomLambda,
         )
         val sut = createNotificationBroadcastReceiverHandler(
             matrixRoom = matrixRoom,
-            notificationDrawerManager = notificationDrawerManager
+            notificationCleaner = fakeNotificationCleaner
         )
         sut.onReceive(
             createIntent(
@@ -342,7 +343,8 @@ class NotificationBroadcastReceiverHandlerTest {
             replyMessageLambda = replyMessage
         }
         val matrixRoom = FakeMatrixRoom(
-            liveTimeline = liveTimeline
+            liveTimeline = liveTimeline,
+            getUpdatedMemberResult = { Result.success(aRoomMember()) },
         )
         val onNotifiableEventReceivedResult = lambdaRecorder<NotifiableEvent, Unit> { _ -> }
         val onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventReceivedResult = onNotifiableEventReceivedResult)
@@ -400,7 +402,8 @@ class NotificationBroadcastReceiverHandlerTest {
             replyMessageLambda = replyMessage
         }
         val matrixRoom = FakeMatrixRoom(
-            liveTimeline = liveTimeline
+            liveTimeline = liveTimeline,
+            getUpdatedMemberResult = { Result.success(aRoomMember()) },
         )
         val onNotifiableEventReceivedResult = lambdaRecorder<NotifiableEvent, Unit> { _ -> }
         val onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventReceivedResult = onNotifiableEventReceivedResult)
@@ -447,7 +450,7 @@ class NotificationBroadcastReceiverHandlerTest {
             joinRoomLambda = joinRoom
         },
         sessionPreferencesStore: SessionPreferencesStoreFactory = FakeSessionPreferencesStoreFactory(),
-        notificationDrawerManager: NotificationDrawerManager = FakeNotificationDrawerManager(),
+        notificationCleaner: NotificationCleaner = FakeNotificationCleaner(),
         systemClock: SystemClock = FakeSystemClock(),
         onNotifiableEventReceived: OnNotifiableEventReceived = FakeOnNotifiableEventReceived(),
         stringProvider: StringProvider = FakeStringProvider(),
@@ -463,7 +466,7 @@ class NotificationBroadcastReceiverHandlerTest {
                 }
             },
             sessionPreferencesStore = sessionPreferencesStore,
-            notificationDrawerManager = notificationDrawerManager,
+            notificationCleaner = notificationCleaner,
             actionIds = actionIds,
             systemClock = systemClock,
             onNotifiableEventReceived = onNotifiableEventReceived,

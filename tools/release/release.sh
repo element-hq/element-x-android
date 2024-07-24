@@ -211,10 +211,7 @@ unzip "${targetPath}"/elementx-app-fdroid-apks-unsigned.zip -d "${fdroidTargetPa
 printf "\n================================================================================\n"
 printf "Patching the FDroid APKs using inplace-fix.py...\n"
 
-inplaceFixScript="./tmp/inplace-fix.py"
-curl -s https://raw.githubusercontent.com/obfusk/reproducible-apk-tools/master/inplace-fix.py --output "${inplaceFixScript}"
-curl -s https://raw.githubusercontent.com/obfusk/reproducible-apk-tools/master/fix-pg-map-id.py --output "./tmp/fix-pg-map-id.py"
-
+inplaceFixScript="./tools/release/inplace-fix.py"
 python3 "${inplaceFixScript}" --page-size 16 fix-pg-map-id "${fdroidTargetPath}"/app-fdroid-arm64-v8a-release.apk   '0000000'
 python3 "${inplaceFixScript}" --page-size 16 fix-pg-map-id "${fdroidTargetPath}"/app-fdroid-armeabi-v7a-release.apk '0000000'
 python3 "${inplaceFixScript}" --page-size 16 fix-pg-map-id "${fdroidTargetPath}"/app-fdroid-x86-release.apk         '0000000'
@@ -227,6 +224,7 @@ cp "${fdroidTargetPath}"/app-fdroid-arm64-v8a-release.apk \
    "${fdroidTargetPath}"/app-fdroid-arm64-v8a-release-signed.apk
 "${buildToolsPath}"/apksigner sign \
        -v \
+       --alignment-preserved true \
        --ks "${keyStorePath}" \
        --ks-pass pass:"${keyStorePassword}" \
        --ks-key-alias elementx \
@@ -238,6 +236,7 @@ cp "${fdroidTargetPath}"/app-fdroid-armeabi-v7a-release.apk \
    "${fdroidTargetPath}"/app-fdroid-armeabi-v7a-release-signed.apk
 "${buildToolsPath}"/apksigner sign \
        -v \
+       --alignment-preserved true \
        --ks "${keyStorePath}" \
        --ks-pass pass:"${keyStorePassword}" \
        --ks-key-alias elementx \
@@ -249,6 +248,7 @@ cp "${fdroidTargetPath}"/app-fdroid-x86-release.apk \
    "${fdroidTargetPath}"/app-fdroid-x86-release-signed.apk
 "${buildToolsPath}"/apksigner sign \
        -v \
+       --alignment-preserved true \
        --ks "${keyStorePath}" \
        --ks-pass pass:"${keyStorePassword}" \
        --ks-key-alias elementx \
@@ -260,6 +260,7 @@ cp "${fdroidTargetPath}"/app-fdroid-x86_64-release.apk \
    "${fdroidTargetPath}"/app-fdroid-x86_64-release-signed.apk
 "${buildToolsPath}"/apksigner sign \
        -v \
+       --alignment-preserved true \
        --ks "${keyStorePath}" \
        --ks-pass pass:"${keyStorePassword}" \
        --ks-key-alias elementx \

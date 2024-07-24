@@ -32,7 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.appconfig.LockScreenConfig
+import io.element.android.features.lockscreen.impl.LockScreenConfig
 import io.element.android.features.lockscreen.impl.R
 import io.element.android.features.lockscreen.impl.storage.LockScreenStore
 import io.element.android.libraries.cryptography.api.EncryptionDecryptionService

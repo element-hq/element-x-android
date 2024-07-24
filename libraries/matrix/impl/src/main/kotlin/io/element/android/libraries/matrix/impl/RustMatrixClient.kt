@@ -55,6 +55,7 @@ import io.element.android.libraries.matrix.impl.notificationsettings.RustNotific
 import io.element.android.libraries.matrix.impl.oidc.toRustAction
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
+import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustRoomFactory
 import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewMapper
 import io.element.android.libraries.matrix.impl.roomdirectory.RustRoomDirectoryService
@@ -64,6 +65,7 @@ import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
 import io.element.android.libraries.matrix.impl.util.SessionDirectoryProvider
+import io.element.android.libraries.matrix.impl.util.anonymizedTokens
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
@@ -131,6 +133,9 @@ class RustMatrixClient(
 
     private val innerRoomListService = syncService.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
+
+    // To make sure only one coroutine affecting the token persistence can run at a time
+    private val tokenRefreshDispatcher = sessionDispatcher.limitedParallelism(1)
     private val rustSyncService = RustSyncService(syncService, sessionCoroutineScope)
     private val pushersService = RustPushersService(
         client = client,
@@ -158,15 +163,20 @@ class RustMatrixClient(
     private val isLoggingOut = AtomicBoolean(false)
 
     private val clientDelegate = object : ClientDelegate {
+        private val clientLog get() = Timber.tag(this@RustMatrixClient.toString())
+
         override fun didReceiveAuthError(isSoftLogout: Boolean) {
-            Timber.w("didReceiveAuthError(isSoftLogout=$isSoftLogout)")
+            clientLog.w("didReceiveAuthError(isSoftLogout=$isSoftLogout)")
             if (isLoggingOut.getAndSet(true).not()) {
-                Timber.v("didReceiveAuthError -> do the cleanup")
+                clientLog.v("didReceiveAuthError -> do the cleanup")
                 // TODO handle isSoftLogout parameter.
-                appCoroutineScope.launch {
+                appCoroutineScope.launch(tokenRefreshDispatcher) {
                     val existingData = sessionStore.getSession(client.userId())
-                    val anonymizedToken = existingData?.accessToken?.takeLast(4)
-                    Timber.d("Removing session data with token: '...$anonymizedToken'.")
+                    val (anonymizedAccessToken, anonymizedRefreshToken) = existingData.anonymizedTokens()
+                    clientLog.d(
+                        "Removing session data with access token '$anonymizedAccessToken' " +
+                        "and refresh token '$anonymizedRefreshToken'."
+                    )
                     if (existingData != null) {
                         // Set isTokenValid to false
                         val newData = client.session().toSessionData(
@@ -176,27 +186,30 @@ class RustMatrixClient(
                             sessionPath = existingData.sessionPath,
                         )
                         sessionStore.updateData(newData)
-                        Timber.d("Removed session data with token: '...$anonymizedToken'.")
+                        clientLog.d("Removed session data with access token: '$anonymizedAccessToken'.")
                     } else {
-                        Timber.d("No session data found.")
+                        clientLog.d("No session data found.")
                     }
                     doLogout(doRequest = false, removeSession = false, ignoreSdkError = false)
                 }.invokeOnCompletion {
                     if (it != null) {
-                        Timber.e(it, "Failed to remove session data.")
+                        clientLog.e(it, "Failed to remove session data.")
                     }
                 }
             } else {
-                Timber.v("didReceiveAuthError -> already cleaning up")
+                clientLog.v("didReceiveAuthError -> already cleaning up")
             }
         }
 
         override fun didRefreshTokens() {
-            Timber.w("didRefreshTokens()")
-            appCoroutineScope.launch {
+            clientLog.w("didRefreshTokens()")
+            appCoroutineScope.launch(tokenRefreshDispatcher) {
                 val existingData = sessionStore.getSession(client.userId()) ?: return@launch
-                val anonymizedToken = client.session().accessToken.takeLast(4)
-                Timber.d("Saving new session data with token: '...$anonymizedToken'. Was token valid: ${existingData.isTokenValid}")
+                val (anonymizedAccessToken, anonymizedRefreshToken) = client.session().anonymizedTokens()
+                clientLog.d(
+                    "Saving new session data with token: access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'. " +
+                        "Was token valid: ${existingData.isTokenValid}"
+                )
                 val newData = client.session().toSessionData(
                     isTokenValid = true,
                     loginType = existingData.loginType,
@@ -204,14 +217,16 @@ class RustMatrixClient(
                     sessionPath = existingData.sessionPath,
                 )
                 sessionStore.updateData(newData)
-                Timber.d("Saved new session data with token: '...$anonymizedToken'.")
+                clientLog.d("Saved new session data with access token: '$anonymizedAccessToken'.")
             }.invokeOnCompletion {
                 if (it != null) {
-                    Timber.e(it, "Failed to save new session data.")
+                    clientLog.e(it, "Failed to save new session data.")
                 }
             }
         }
     }
+
+    private val roomSyncSubscriber: RoomSyncSubscriber = RoomSyncSubscriber(innerRoomListService, dispatchers)
 
     override val roomListService: RoomListService = RustRoomListService(
         innerRoomListService = innerRoomListService,
@@ -221,6 +236,7 @@ class RustMatrixClient(
             innerRoomListService = innerRoomListService,
             sessionCoroutineScope = sessionCoroutineScope,
         ),
+        roomSyncSubscriber = roomSyncSubscriber,
     )
 
     private val verificationService = RustSessionVerificationService(
@@ -238,6 +254,7 @@ class RustMatrixClient(
         dispatchers = dispatchers,
         systemClock = clock,
         roomContentForwarder = RoomContentForwarder(innerRoomListService),
+        roomSyncSubscriber = roomSyncSubscriber,
         isKeyBackupEnabled = { client.encryption().use { it.backupState() == BackupState.ENABLED } },
         getSessionData = { sessionStore.getSession(sessionId.value)!! },
     )
@@ -311,7 +328,7 @@ class RustMatrixClient(
         withTimeout(timeout) {
             roomListService.allRooms.summaries
                 .filter { roomSummaries ->
-                    roomSummaries.map { it.identifier() }.contains(roomId.value)
+                    roomSummaries.map { it.roomId }.contains(roomId)
                 }
                 .first()
         }
@@ -485,6 +502,9 @@ class RustMatrixClient(
     override fun roomDirectoryService(): RoomDirectoryService = roomDirectoryService
 
     override fun close() {
+        appCoroutineScope.launch {
+            roomFactory.destroy()
+        }
         sessionCoroutineScope.cancel()
         clientDelegateTaskHandle?.cancelAndDestroy()
         notificationSettingsService.destroy()

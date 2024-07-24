@@ -43,6 +43,7 @@ dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
     implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.matrix.impl)
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.network)
@@ -70,4 +71,6 @@ dependencies {
     testImplementation(projects.libraries.push.test)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.tests.testutils)
+    testImplementation(libs.androidx.compose.ui.test.junit)
+    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 }

@@ -20,9 +20,11 @@ import android.net.Uri
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.text.SpannedString
 import android.text.style.URLSpan
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
+import androidx.core.text.toSpannable
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.location.api.Location
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
@@ -35,6 +37,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
+import io.element.android.features.messages.impl.utils.FakeTextPillificationHelper
 import io.element.android.features.messages.test.timeline.FakeHtmlConverterProvider
 import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.core.mimetype.MimeTypes
@@ -73,6 +76,7 @@ import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractorW
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.fail
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -194,7 +198,7 @@ class TimelineItemContentMessageFactoryTest {
             inSpans(URLSpan("https://matrix.org")) {
                 append("and manually added link")
             }
-        }
+        }.toSpannable()
         val sut = createTimelineItemContentMessageFactory(
             htmlConverterTransform = { expected }
         )
@@ -609,7 +613,7 @@ class TimelineItemContentMessageFactoryTest {
             senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
-        assertThat((result as TimelineItemNoticeContent).formattedBody).isEqualTo("formatted")
+        (result as TimelineItemNoticeContent).formattedBody.assertSpannedEquals(SpannedString("formatted"))
     }
 
     @Test
@@ -643,7 +647,8 @@ class TimelineItemContentMessageFactoryTest {
             senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
-        assertThat((result as TimelineItemEmoteContent).formattedBody).isEqualTo(SpannableString("* Bob formatted"))
+
+        (result as TimelineItemEmoteContent).formattedBody.assertSpannedEquals(SpannableString("* Bob formatted"))
     }
 
     @Test
@@ -653,7 +658,7 @@ class TimelineItemContentMessageFactoryTest {
             inSpans(URLSpan("https://www.example.org")) {
                 append("me@matrix.org")
             }
-        }
+        }.toSpannable()
         val sut = createTimelineItemContentMessageFactory(
             htmlConverterTransform = { expectedSpanned },
             permalinkParser = FakePermalinkParser { PermalinkData.FallbackLink(Uri.EMPTY) }
@@ -668,7 +673,59 @@ class TimelineItemContentMessageFactoryTest {
             senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
-        assertThat((result as TimelineItemTextContent).formattedBody).isEqualTo(expectedSpanned)
+        (result as TimelineItemTextContent).formattedBody.assertSpannedEquals(expectedSpanned)
+    }
+
+    @Test
+    fun `a message with plain URL in a formatted body Spanned format gets linkified too`() = runTest {
+        val expectedSpanned = buildSpannedString {
+            append("Test ")
+            inSpansWithFlags(URLSpan("https://www.example.org"), flags = Spanned.SPAN_EXCLUSIVE_EXCLUSIVE) {
+                append("https://www.example.org")
+            }
+        }
+        val sut = createTimelineItemContentMessageFactory(
+            htmlConverterTransform = { expectedSpanned },
+            permalinkParser = FakePermalinkParser { PermalinkData.FallbackLink(Uri.EMPTY) }
+        )
+        val result = sut.create(
+            content = createMessageContent(
+                type = TextMessageType(
+                    body = "Test [me@matrix.org](https://www.example.org)",
+                    formatted = FormattedBody(MessageFormat.HTML, "Test https://www.example.org")
+                )
+            ),
+            senderDisambiguatedDisplayName = "Bob",
+            eventId = AN_EVENT_ID,
+        )
+        (result as TimelineItemTextContent).formattedBody.assertSpannedEquals(expectedSpanned)
+    }
+
+    @Test
+    fun `a message with plain URL in a formatted body with plain text format gets linkified too`() = runTest {
+        val resultString = "Test https://www.example.org"
+        val expectedSpanned = buildSpannedString {
+            append("Test ")
+            inSpansWithFlags(URLSpan("https://www.example.org"), flags = Spanned.SPAN_EXCLUSIVE_EXCLUSIVE) {
+                append("https://www.example.org")
+            }
+        }.toSpannable()
+        val sut = createTimelineItemContentMessageFactory(
+            htmlConverterTransform = { resultString },
+            permalinkParser = FakePermalinkParser { PermalinkData.FallbackLink(Uri.EMPTY) }
+        )
+        val result = sut.create(
+            content = createMessageContent(
+                type = TextMessageType(
+                    body = "Test [me@matrix.org](https://www.example.org)",
+                    formatted = FormattedBody(MessageFormat.HTML, "Test https://www.example.org")
+                )
+            ),
+            senderDisambiguatedDisplayName = "Bob",
+            eventId = AN_EVENT_ID,
+        )
+
+        (result as TimelineItemTextContent).formattedBody.assertSpannedEquals(expectedSpanned)
     }
 
     private fun createMessageContent(
@@ -697,6 +754,7 @@ class TimelineItemContentMessageFactoryTest {
         featureFlagService = featureFlagService,
         htmlConverterProvider = FakeHtmlConverterProvider(htmlConverterTransform),
         permalinkParser = permalinkParser,
+        textPillificationHelper = FakeTextPillificationHelper(),
     )
 
     private fun createStickerContent(
@@ -715,4 +773,41 @@ class TimelineItemContentMessageFactoryTest {
         fileSizeFormatter = FakeFileSizeFormatter(),
         fileExtensionExtractor = FileExtensionExtractorWithoutValidation()
     )
+}
+
+private inline fun SpannableStringBuilder.inSpansWithFlags(span: Any, flags: Int, action: SpannableStringBuilder.() -> Unit) {
+    val start = this.length
+    action()
+    val end = this.length
+    setSpan(span, start, end, flags)
+}
+
+fun CharSequence?.assertSpannedEquals(other: CharSequence?) {
+    if (this == null && other == null) {
+        return
+    } else if (this is Spanned && other is Spanned) {
+        assertThat(this.toString()).isEqualTo(other.toString())
+        assertThat(this.length).isEqualTo(other.length)
+        val thisSpans = this.getSpans(0, this.length, Any::class.java)
+        val otherSpans = other.getSpans(0, other.length, Any::class.java)
+        if (thisSpans.size != otherSpans.size) {
+            fail("Expected ${thisSpans.size} spans, got ${otherSpans.size}")
+        }
+        thisSpans.forEachIndexed { index, span ->
+            val otherSpan = otherSpans[index]
+            // URLSpans don't have a proper `equals` implementation, so we compare the URL instead
+            if (span is URLSpan && otherSpan is URLSpan) {
+                assertThat(span.url).isEqualTo(otherSpan.url)
+            } else {
+                assertThat(span).isEqualTo(otherSpan)
+            }
+            assertThat(this.getSpanStart(span)).isEqualTo(other.getSpanStart(otherSpan))
+            assertThat(this.getSpanEnd(span)).isEqualTo(other.getSpanEnd(otherSpan))
+            assertThat(this.getSpanFlags(span)).isEqualTo(other.getSpanFlags(otherSpan))
+        }
+    } else {
+        val thisString = this?.toString() ?: "null"
+        val otherString = other?.toString() ?: "null"
+        fail("Expected Spanned, got $thisString and $otherString")
+    }
 }

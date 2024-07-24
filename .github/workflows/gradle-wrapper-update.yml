@@ -12,7 +12,7 @@ jobs:
       - name: Update Gradle Wrapper
         uses: gradle-update/update-gradle-wrapper-action@v1
         # Skip in forks
-        if: github.repository == 'element-hq/element-x-android'
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           target-branch: develop

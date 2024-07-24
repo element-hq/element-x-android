@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_account_provider_change">"Alterar provedor da conta"</string>
+  <string name="screen_account_provider_form_hint">"Endereço do servidor"</string>
+  <string name="screen_account_provider_form_notice">"Insira um termo de pesquisa ou um endereço de domínio."</string>
+  <string name="screen_account_provider_form_subtitle">"Procure uma empresa, comunidade ou servidor privado."</string>
+  <string name="screen_account_provider_form_title">"Encontre um provedor de contas"</string>
+  <string name="screen_account_provider_signin_subtitle">"Aqui é onde suas conversas vão ficar — assim como você usa um provedor de e-mails para manter seus e-mails."</string>
+  <string name="screen_account_provider_signin_title">"Você está prestes a entrar em %s"</string>
+  <string name="screen_account_provider_signup_subtitle">"Aqui é onde suas conversas vão ficar — assim como você usa um provedor de e-mails para manter seus e-mails."</string>
+  <string name="screen_account_provider_signup_title">"Você está prestes a criar uma conta em %s"</string>
+  <string name="screen_change_account_provider_matrix_org_subtitle">"O Matrix.org é um grande servidor gratuito na rede pública Matrix para comunicação segura e descentralizada, administrado pela Fundação Matrix.org."</string>
+  <string name="screen_change_account_provider_other">"Outro"</string>
+  <string name="screen_change_account_provider_subtitle">"Use um provedor de conta diferente, como seu próprio servidor privado ou uma conta corporativa."</string>
+  <string name="screen_change_account_provider_title">"Alterar provedor da conta"</string>
+  <string name="screen_change_server_error_invalid_homeserver">"Não conseguimos acessar esse servidor. Verifique se você inseriu a URL do servidor corretamente. Se a URL estiver correta, entre em contato com o administrador do servidor para obter mais ajuda."</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Este servidor atualmente não oferece suporte à tecnologia sliding sync."</string>
+  <string name="screen_change_server_form_header">"URL do servidor"</string>
+  <string name="screen_change_server_form_notice">"Você só pode se conectar a um servidor existente que ofereça suporte à tecnologia sliding sync. O administrador do seu servidor precisará configurá-lo. %1$s"</string>
+  <string name="screen_change_server_subtitle">"Qual é o endereço do seu servidor?"</string>
+  <string name="screen_change_server_title">"Selecione seu servidor"</string>
+  <string name="screen_login_error_deactivated_account">"Essa conta foi desativada."</string>
+  <string name="screen_login_error_invalid_credentials">"Nome de usuário e/ou senha incorretos"</string>
+  <string name="screen_login_error_invalid_user_id">"Esse não é um identificador de usuário válido. Formato esperado: \'@usuário:servidor.org\'"</string>
+  <string name="screen_login_error_unsupported_authentication">"O servidor selecionado não suporta senha ou login no OIDC. Entre em contato com o administrador ou escolha outro servidor."</string>
+  <string name="screen_login_form_header">"Insira seus dados"</string>
+  <string name="screen_login_subtitle">"A Matrix é uma rede aberta para comunicação segura e descentralizada."</string>
+  <string name="screen_login_title">"Bem-vindo de volta!"</string>
+  <string name="screen_login_title_with_homeserver">"Iniciar sessão em %1$s"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Tente novamente"</string>
+  <string name="screen_server_confirmation_change_server">"Alterar provedor da conta"</string>
+  <string name="screen_server_confirmation_message_login_element_dot_io">"Um servidor privado para funcionários do Element."</string>
+  <string name="screen_server_confirmation_message_login_matrix_dot_org">"A Matrix é uma rede aberta para comunicação segura e descentralizada."</string>
+  <string name="screen_server_confirmation_message_register">"Aqui é onde suas conversas vão ficar — assim como você usa um provedor de e-mails para manter seus e-mails."</string>
+  <string name="screen_server_confirmation_title_login">"Você está prestes a fazer login em %1$s"</string>
+  <string name="screen_server_confirmation_title_register">"Você está prestes a criar uma conta em %1$s"</string>
+  <string name="screen_waitlist_message">"Há uma grande demanda por %1$s sobre %2$s no momento. Volte ao aplicativo em alguns dias e tente novamente. 
+
+Obrigado pela sua paciência!"</string>
+  <string name="screen_waitlist_message_success">"Bem-vindo ao %1$s!"</string>
+  <string name="screen_waitlist_title">"Você está quase lá."</string>
+  <string name="screen_waitlist_title_success">"Você está dentro."</string>
+</resources>

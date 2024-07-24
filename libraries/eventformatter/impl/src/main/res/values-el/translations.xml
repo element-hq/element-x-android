@@ -59,4 +59,5 @@
   <string name="state_event_room_topic_removed_by_you">"Αφαίρεσες το θέμα του δωματίου"</string>
   <string name="state_event_room_unban">"Ο χρήστης %1$s έκανε άρση αποκλεισμού στον χρήστη %2$s"</string>
   <string name="state_event_room_unban_by_you">"Έκανες άρση αποκλεισμού στον χρήστη %1$s"</string>
+  <string name="state_event_room_unknown_membership_change">"Ο χρήστης %1$s έκανε μια άγνωστη αλλαγή στην ιδιότητα μέλους του."</string>
 </resources>

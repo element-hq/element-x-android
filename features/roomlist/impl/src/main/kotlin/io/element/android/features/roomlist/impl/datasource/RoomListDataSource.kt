@@ -20,6 +20,7 @@ import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
 import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
@@ -54,8 +55,12 @@ class RoomListDataSource @Inject constructor(
     private val lock = Mutex()
     private val diffCache = MutableListDiffCache<RoomListRoomSummary>()
     private val diffCacheUpdater = DiffCacheUpdater<RoomSummary, RoomListRoomSummary>(diffCache = diffCache, detectMoves = true) { old, new ->
-        old?.identifier() == new?.identifier()
+        old?.roomId == new?.roomId
     }
+
+    val allRooms: Flow<ImmutableList<RoomListRoomSummary>> = _allRooms
+
+    val loadingState = roomListService.allRooms.loadingState
 
     fun launchIn(coroutineScope: CoroutineScope) {
         roomListService
@@ -67,9 +72,9 @@ class RoomListDataSource @Inject constructor(
             .launchIn(coroutineScope)
     }
 
-    val allRooms: Flow<ImmutableList<RoomListRoomSummary>> = _allRooms
-
-    val loadingState = roomListService.allRooms.loadingState
+    suspend fun subscribeToVisibleRooms(roomIds: List<RoomId>) {
+        roomListService.subscribeToVisibleRooms(roomIds)
+    }
 
     @OptIn(FlowPreview::class)
     private fun observeNotificationSettings() {
@@ -96,12 +101,8 @@ class RoomListDataSource @Inject constructor(
     }
 
     private fun buildAndCacheItem(roomSummaries: List<RoomSummary>, index: Int): RoomListRoomSummary? {
-        val roomListRoomSummary = when (val roomSummary = roomSummaries.getOrNull(index)) {
-            is RoomSummary.Empty -> RoomListRoomSummaryFactory.createPlaceholder(roomSummary.identifier)
-            is RoomSummary.Filled -> roomListRoomSummaryFactory.create(roomSummary)
-            null -> null
-        }
-        diffCache[index] = roomListRoomSummary
-        return roomListRoomSummary
+        val roomListSummary = roomSummaries.getOrNull(index)?.let { roomListRoomSummaryFactory.create(it) }
+        diffCache[index] = roomListSummary
+        return roomListSummary
     }
 }

@@ -33,6 +33,7 @@ import io.element.android.features.messages.impl.timeline.factories.event.Timeli
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemDaySeparatorFactory
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemVirtualFactory
 import io.element.android.features.messages.impl.timeline.groups.TimelineItemGrouper
+import io.element.android.features.messages.impl.utils.FakeTextPillificationHelper
 import io.element.android.features.messages.test.timeline.FakeHtmlConverterProvider
 import io.element.android.features.poll.test.pollcontent.FakePollContentStateFactory
 import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
@@ -62,6 +63,7 @@ internal fun TestScope.aTimelineItemsFactory(
                     featureFlagService = FakeFeatureFlagService(),
                     htmlConverterProvider = FakeHtmlConverterProvider(),
                     permalinkParser = FakePermalinkParser(),
+                    textPillificationHelper = FakeTextPillificationHelper(),
                 ),
                 redactedMessageFactory = TimelineItemContentRedactedFactory(),
                 stickerFactory = TimelineItemContentStickerFactory(

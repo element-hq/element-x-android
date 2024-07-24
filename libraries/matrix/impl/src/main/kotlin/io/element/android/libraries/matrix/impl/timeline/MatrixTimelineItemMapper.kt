@@ -26,7 +26,7 @@ import org.matrix.rustcomponents.sdk.TimelineItem
 
 class MatrixTimelineItemMapper(
     private val fetchDetailsForEvent: suspend (EventId) -> Result<Unit>,
-    private val roomCoroutineScope: CoroutineScope,
+    private val coroutineScope: CoroutineScope,
     private val virtualTimelineItemMapper: VirtualTimelineItemMapper = VirtualTimelineItemMapper(),
     private val eventTimelineItemMapper: EventTimelineItemMapper = EventTimelineItemMapper(),
 ) {
@@ -49,7 +49,7 @@ class MatrixTimelineItemMapper(
         return MatrixTimelineItem.Other
     }
 
-    private fun fetchEventDetails(eventId: EventId) = roomCoroutineScope.launch {
+    private fun fetchEventDetails(eventId: EventId) = coroutineScope.launch {
         fetchDetailsForEvent(eventId)
     }
 }

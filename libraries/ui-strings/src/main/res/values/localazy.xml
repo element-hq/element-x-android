@@ -80,6 +80,7 @@
   <string name="action_ok">"OK"</string>
   <string name="action_open_settings">"Settings"</string>
   <string name="action_open_with">"Open with"</string>
+  <string name="action_pin">"Pin"</string>
   <string name="action_quick_reply">"Quick reply"</string>
   <string name="action_quote">"Quote"</string>
   <string name="action_react">"React"</string>
@@ -168,6 +169,7 @@ Reason: %1$s."</string>
   <string name="common_no_results">"No results"</string>
   <string name="common_no_room_name">"No room name"</string>
   <string name="common_offline">"Offline"</string>
+  <string name="common_open_source_licenses">"Open source licenses"</string>
   <string name="common_or">"or"</string>
   <string name="common_password">"Password"</string>
   <string name="common_people">"People"</string>
@@ -255,6 +257,10 @@ Reason: %1$s."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s does not have permission to access your microphone. Enable access to record a voice message."</string>
   <string name="error_some_messages_have_not_been_sent">"Some messages have not been sent"</string>
   <string name="error_unknown">"Sorry, an error occurred"</string>
+  <string name="event_shield_reason_authenticity_not_guaranteed">"The authenticity of this encrypted message can\'t be guaranteed on this device."</string>
+  <string name="event_shield_reason_unknown_device">"Encrypted by an unknown or deleted device."</string>
+  <string name="event_shield_reason_unsigned_device">"Encrypted by a device not verified by its owner."</string>
+  <string name="event_shield_reason_unverified_identity">"Encrypted by an unverified user."</string>
   <string name="invite_friends_rich_title">"🔐️ Join me on %1$s"</string>
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
@@ -271,6 +277,9 @@ Reason: %1$s."</string>
   <string name="screen_room_member_details_unblock_alert_action">"Unblock"</string>
   <string name="screen_room_member_details_unblock_alert_description">"You\'ll be able to see all messages from them again."</string>
   <string name="screen_room_member_details_unblock_user">"Unblock user"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s of %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Pinned messages"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"View All"</string>
   <string name="screen_room_title">"Chat"</string>
   <string name="screen_share_location_title">"Share location"</string>
   <string name="screen_share_my_location_action">"Share my location"</string>

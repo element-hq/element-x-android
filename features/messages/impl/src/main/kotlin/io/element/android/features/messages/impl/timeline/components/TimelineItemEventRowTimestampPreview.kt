@@ -41,6 +41,7 @@ internal fun TimelineItemEventRowTimestampPreview(
                 event = event.copy(
                     content = oldContent.copy(
                         body = str,
+                        pillifiedBody = str,
                     ),
                     reactionsState = aTimelineItemReactions(count = 0),
                 ),

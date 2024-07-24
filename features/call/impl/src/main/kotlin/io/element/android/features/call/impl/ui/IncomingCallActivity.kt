@@ -29,6 +29,8 @@ import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.utils.ActiveCallManager
 import io.element.android.features.call.impl.utils.CallState
 import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.designsystem.theme.ElementThemeApp
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -51,6 +53,9 @@ class IncomingCallActivity : AppCompatActivity() {
     @Inject
     lateinit var activeCallManager: ActiveCallManager
 
+    @Inject
+    lateinit var appPreferencesStore: AppPreferencesStore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -68,11 +73,13 @@ class IncomingCallActivity : AppCompatActivity() {
         val notificationData = intent?.let { IntentCompat.getParcelableExtra(it, EXTRA_NOTIFICATION_DATA, CallNotificationData::class.java) }
         if (notificationData != null) {
             setContent {
-                IncomingCallScreen(
-                    notificationData = notificationData,
-                    onAnswer = ::onAnswer,
-                    onCancel = ::onCancel,
-                )
+                ElementThemeApp(appPreferencesStore) {
+                    IncomingCallScreen(
+                        notificationData = notificationData,
+                        onAnswer = ::onAnswer,
+                        onCancel = ::onCancel,
+                    )
+                }
             }
         } else {
             // No data, finish the activity

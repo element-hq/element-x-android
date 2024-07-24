@@ -80,6 +80,7 @@
   <string name="action_ok">"OK"</string>
   <string name="action_open_settings">"Ρυθμίσεις"</string>
   <string name="action_open_with">"Άνοιγμα με"</string>
+  <string name="action_pin">"Καρφίτσωμα"</string>
   <string name="action_quick_reply">"Γρήγορη απάντηση"</string>
   <string name="action_quote">"Παράθεση"</string>
   <string name="action_react">"Αντέδρασε"</string>
@@ -117,6 +118,7 @@
   <string name="common_analytics">"Στατιστικά στοιχεία"</string>
   <string name="common_appearance">"Εμφάνιση"</string>
   <string name="common_audio">"Ήχος"</string>
+  <string name="common_blocked_users">"Αποκλεισμένοι χρήστες"</string>
   <string name="common_bubbles">"Φυσαλίδες"</string>
   <string name="common_call_invite">"Κλήση σε εξέλιξη (δεν υποστηρίζεται)"</string>
   <string name="common_call_started">"Η κλήση ξεκίνησε"</string>
@@ -167,6 +169,7 @@
   <string name="common_no_results">"Κανένα αποτέλεσμα"</string>
   <string name="common_no_room_name">"Χωρίς όνομα δωματίου"</string>
   <string name="common_offline">"Εκτός σύνδεσης"</string>
+  <string name="common_open_source_licenses">"Άδειες ανοιχτού κώδικα"</string>
   <string name="common_or">"ή"</string>
   <string name="common_password">"Κωδικός πρόσβασης"</string>
   <string name="common_people">"Άτομα"</string>
@@ -254,6 +257,10 @@
   <string name="error_missing_microphone_voice_rationale_android">"Το %1$s δεν έχει άδεια πρόσβασης στο μικρόφωνό σου. Ενεργοποίησε την πρόσβαση για εγγραφή φωνητικού μηνύματος."</string>
   <string name="error_some_messages_have_not_been_sent">"Ορισμένα μηνύματα δεν έχουν σταλεί"</string>
   <string name="error_unknown">"Λυπούμαστε, παρουσιάστηκε σφάλμα"</string>
+  <string name="event_shield_reason_authenticity_not_guaranteed">"Η αυθεντικότητα αυτού του κρυπτογραφημένου μηνύματος δεν είναι εγγυημένη σε αυτήν τη συσκευή."</string>
+  <string name="event_shield_reason_unknown_device">"Κρυπτογραφημένο από άγνωστη ή διαγεγραμμένη συσκευή."</string>
+  <string name="event_shield_reason_unsigned_device">"Κρυπτογραφημένο από μια συσκευή που δεν έχει επαληθευτεί από τον ιδιοκτήτη της."</string>
+  <string name="event_shield_reason_unverified_identity">"Κρυπτογραφημένο από μη επαληθευμένο χρήστη."</string>
   <string name="invite_friends_rich_title">"🔐️ Έλα μαζί μου στο %1$s"</string>
   <string name="invite_friends_text">"Γεια, μίλα μου στην εφαρμογή %1$s :%2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
@@ -270,6 +277,9 @@
   <string name="screen_room_member_details_unblock_alert_action">"Άρση αποκλεισμού"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Θα μπορείς να δεις ξανά όλα τα μηνύματα του."</string>
   <string name="screen_room_member_details_unblock_user">"Κατάργηση αποκλεισμού χρήστη"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s από %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Καρφιτσωμένα μηνύματα"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Προβολή Όλων"</string>
   <string name="screen_room_title">"Συνομιλία"</string>
   <string name="screen_share_location_title">"Κοινή χρήση τοποθεσίας"</string>
   <string name="screen_share_my_location_action">"Κοινή χρήση της τοποθεσίας μου"</string>

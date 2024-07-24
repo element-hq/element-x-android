@@ -28,6 +28,7 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.Mention
+import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
@@ -41,7 +42,6 @@ import io.element.android.libraries.matrix.impl.media.toMSC3246range
 import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.location.toInner
-import io.element.android.libraries.matrix.impl.room.map
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
@@ -50,13 +50,13 @@ import io.element.android.libraries.matrix.impl.timeline.postprocessor.LoadingIn
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.RoomBeginningPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.TimelineEncryptedHistoryPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.reply.InReplyToMapper
+import io.element.android.libraries.matrix.impl.util.MessageEventContent
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -65,74 +65,75 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.FormattedBody
 import org.matrix.rustcomponents.sdk.MessageFormat
-import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
-import org.matrix.rustcomponents.sdk.TimelineChange
-import org.matrix.rustcomponents.sdk.TimelineDiff
-import org.matrix.rustcomponents.sdk.TimelineItem
-import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
-import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
-import uniffi.matrix_sdk_ui.EventItemOrigin
 import uniffi.matrix_sdk_ui.LiveBackPaginationStatus
 import java.io.File
 import java.util.Date
-import java.util.concurrent.atomic.AtomicBoolean
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
-private const val INITIAL_MAX_SIZE = 50
 private const val PAGINATION_SIZE = 50
 
 class RustTimeline(
     private val inner: InnerTimeline,
-    isLive: Boolean,
+    private val isLive: Boolean,
     systemClock: SystemClock,
-    roomCoroutineScope: CoroutineScope,
     isKeyBackupEnabled: Boolean,
     private val matrixRoom: MatrixRoom,
+    private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
     lastLoginTimestamp: Date?,
     private val roomContentForwarder: RoomContentForwarder,
-    private val onNewSyncedEvent: () -> Unit,
+    onNewSyncedEvent: () -> Unit,
 ) : Timeline {
     private val initLatch = CompletableDeferred<Unit>()
-    private val isInit = AtomicBoolean(false)
+    private val isInit = MutableStateFlow(false)
 
     private val _timelineItems: MutableStateFlow<List<MatrixTimelineItem>> =
         MutableStateFlow(emptyList())
 
+    private val timelineEventContentMapper = TimelineEventContentMapper()
+    private val inReplyToMapper = InReplyToMapper(timelineEventContentMapper)
+    private val timelineItemMapper = MatrixTimelineItemMapper(
+        fetchDetailsForEvent = this::fetchDetailsForEvent,
+        coroutineScope = coroutineScope,
+        virtualTimelineItemMapper = VirtualTimelineItemMapper(),
+        eventTimelineItemMapper = EventTimelineItemMapper(
+            contentMapper = timelineEventContentMapper
+        )
+    )
+    private val timelineDiffProcessor = MatrixTimelineDiffProcessor(
+        timelineItems = _timelineItems,
+        timelineItemFactory = timelineItemMapper,
+    )
     private val encryptedHistoryPostProcessor = TimelineEncryptedHistoryPostProcessor(
         lastLoginTimestamp = lastLoginTimestamp,
         isRoomEncrypted = matrixRoom.isEncrypted,
         isKeyBackupEnabled = isKeyBackupEnabled,
         dispatcher = dispatcher,
     )
+    private val timelineItemsSubscriber = TimelineItemsSubscriber(
+        timeline = inner,
+        timelineCoroutineScope = coroutineScope,
+        timelineDiffProcessor = timelineDiffProcessor,
+        initLatch = initLatch,
+        isInit = isInit,
+        dispatcher = dispatcher,
+        onNewSyncedEvent = onNewSyncedEvent,
+    )
 
     private val roomBeginningPostProcessor = RoomBeginningPostProcessor()
     private val loadingIndicatorsPostProcessor = LoadingIndicatorsPostProcessor(systemClock)
     private val lastForwardIndicatorsPostProcessor = LastForwardIndicatorsPostProcessor(isLive)
-
-    private val timelineEventContentMapper = TimelineEventContentMapper()
-    private val inReplyToMapper = InReplyToMapper(timelineEventContentMapper)
-    private val timelineItemFactory = MatrixTimelineItemMapper(
-        fetchDetailsForEvent = this::fetchDetailsForEvent,
-        roomCoroutineScope = roomCoroutineScope,
-        virtualTimelineItemMapper = VirtualTimelineItemMapper(),
-        eventTimelineItemMapper = EventTimelineItemMapper(
-            contentMapper = timelineEventContentMapper
-        )
-    )
-
-    private val timelineDiffProcessor = MatrixTimelineDiffProcessor(
-        timelineItems = _timelineItems,
-        timelineItemFactory = timelineItemFactory,
-    )
 
     private val backPaginationStatus = MutableStateFlow(
         Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = true)
@@ -143,35 +144,25 @@ class RustTimeline(
     )
 
     init {
-        roomCoroutineScope.launch(dispatcher) {
-            inner.timelineDiffFlow()
-                .onEach { diffs ->
-                    if (diffs.any { diff -> diff.eventOrigin() == EventItemOrigin.SYNC }) {
-                        onNewSyncedEvent()
-                    }
-                    postDiffs(diffs)
-                }
-                .launchIn(this)
-
-            launch {
-                fetchMembers()
-            }
-
-            if (isLive) {
-                // When timeline is live, we need to listen to the back pagination status as
-                // sdk can automatically paginate backwards.
-                inner.liveBackPaginationStatus()
-                    .onEach { backPaginationStatus ->
-                        updatePaginationStatus(Timeline.PaginationDirection.BACKWARDS) {
-                            when (backPaginationStatus) {
-                                is LiveBackPaginationStatus.Idle -> it.copy(isPaginating = false, hasMoreToLoad = !backPaginationStatus.hitStartOfTimeline)
-                                is LiveBackPaginationStatus.Paginating -> it.copy(isPaginating = true, hasMoreToLoad = true)
-                            }
-                        }
-                    }
-                    .launchIn(this)
-            }
+        coroutineScope.fetchMembers()
+        if (isLive) {
+            // When timeline is live, we need to listen to the back pagination status as
+            // sdk can automatically paginate backwards.
+            coroutineScope.registerBackPaginationStatusListener()
         }
+    }
+
+    private fun CoroutineScope.registerBackPaginationStatusListener() {
+        inner.liveBackPaginationStatus()
+            .onEach { backPaginationStatus ->
+                updatePaginationStatus(Timeline.PaginationDirection.BACKWARDS) {
+                    when (backPaginationStatus) {
+                        is LiveBackPaginationStatus.Idle -> it.copy(isPaginating = false, hasMoreToLoad = !backPaginationStatus.hitStartOfTimeline)
+                        is LiveBackPaginationStatus.Paginating -> it.copy(isPaginating = true, hasMoreToLoad = true)
+                    }
+                }
+            }
+            .launchIn(this)
     }
 
     override val membershipChangeEventReceived: Flow<Unit> = timelineDiffProcessor.membershipChangeEventReceived
@@ -214,7 +205,7 @@ class RustTimeline(
     }
 
     private fun canPaginate(direction: Timeline.PaginationDirection): Boolean {
-        if (!isInit.get()) return false
+        if (!isInit.value) return false
         return when (direction) {
             Timeline.PaginationDirection.BACKWARDS -> backPaginationStatus.value.canPaginate
             Timeline.PaginationDirection.FORWARDS -> forwardPaginationStatus.value.canPaginate
@@ -232,28 +223,38 @@ class RustTimeline(
         _timelineItems,
         backPaginationStatus.map { it.hasMoreToLoad }.distinctUntilChanged(),
         forwardPaginationStatus.map { it.hasMoreToLoad }.distinctUntilChanged(),
-    ) { timelineItems, hasMoreToLoadBackward, hasMoreToLoadForward ->
+        isInit,
+    ) { timelineItems, hasMoreToLoadBackward, hasMoreToLoadForward, isInit ->
         withContext(dispatcher) {
             timelineItems
-                .let { items -> encryptedHistoryPostProcessor.process(items) }
-                .let { items ->
+                .process { items -> encryptedHistoryPostProcessor.process(items) }
+                .process { items ->
                     roomBeginningPostProcessor.process(
                         items = items,
                         isDm = matrixRoom.isDm,
                         hasMoreToLoadBackwards = hasMoreToLoadBackward
                     )
                 }
-                .let { items -> loadingIndicatorsPostProcessor.process(items, hasMoreToLoadBackward, hasMoreToLoadForward) }
+                .process(predicate = isInit) { items ->
+                    loadingIndicatorsPostProcessor.process(items, hasMoreToLoadBackward, hasMoreToLoadForward)
+                }
                 // Keep lastForwardIndicatorsPostProcessor last
-                .let { items -> lastForwardIndicatorsPostProcessor.process(items) }
+                .process(predicate = isInit) { items ->
+                    lastForwardIndicatorsPostProcessor.process(items)
+                }
         }
+    }.onStart {
+        timelineItemsSubscriber.subscribeIfNeeded()
+    }.onCompletion {
+        timelineItemsSubscriber.unsubscribeIfNeeded()
     }
 
     override fun close() {
+        coroutineScope.cancel()
         inner.close()
     }
 
-    private suspend fun fetchMembers() = withContext(dispatcher) {
+    private fun CoroutineScope.fetchMembers() = launch(dispatcher) {
         initLatch.await()
         try {
             inner.fetchMembers()
@@ -262,34 +263,8 @@ class RustTimeline(
         }
     }
 
-    private suspend fun postItems(items: List<TimelineItem>) = coroutineScope {
-        // Split the initial items in multiple list as there is no pagination in the cached data, so we can post timelineItems asap.
-        items.chunked(INITIAL_MAX_SIZE).reversed().forEach {
-            ensureActive()
-            timelineDiffProcessor.postItems(it)
-        }
-        isInit.set(true)
-        initLatch.complete(Unit)
-    }
-
-    private suspend fun postDiffs(diffs: List<TimelineDiff>) {
-        val diffsToProcess = diffs.toMutableList()
-        if (!isInit.get()) {
-            val resetDiff = diffsToProcess.firstOrNull { it.change() == TimelineChange.RESET }
-            if (resetDiff != null) {
-                // Keep using the postItems logic so we can post the timelineItems asap.
-                postItems(resetDiff.reset() ?: emptyList())
-                diffsToProcess.remove(resetDiff)
-            }
-        }
-        initLatch.await()
-        if (diffsToProcess.isNotEmpty()) {
-            timelineDiffProcessor.postDiffs(diffsToProcess)
-        }
-    }
-
     override suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> = withContext(dispatcher) {
-        messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()).use { content ->
+        MessageEventContent.from(body, htmlBody, mentions).use { content ->
             runCatching<Unit> {
                 inner.send(content)
             }
@@ -298,20 +273,8 @@ class RustTimeline(
 
     override suspend fun redactEvent(eventId: EventId?, transactionId: TransactionId?, reason: String?): Result<Boolean> = withContext(dispatcher) {
         runCatching {
-            when {
-                eventId != null -> {
-                    inner.getEventTimelineItemByEventId(eventId.value).use {
-                        inner.redactEvent(item = it, reason = reason)
-                    }
-                }
-                transactionId != null -> {
-                    inner.getEventTimelineItemByTransactionId(transactionId.value).use {
-                        inner.redactEvent(item = it, reason = reason)
-                    }
-                }
-                else -> {
-                    error("Either eventId or transactionId must be non-null")
-                }
+            getEventTimelineItem(eventId, transactionId).use { item ->
+                inner.redactEvent(item = item, reason = reason)
             }
         }
     }
@@ -325,22 +288,11 @@ class RustTimeline(
     ): Result<Unit> =
         withContext(dispatcher) {
             runCatching<Unit> {
-                when {
-                    originalEventId != null -> {
-                        inner.editByEventId(
-                            newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
-                            eventId = originalEventId.value,
-                        )
-                    }
-                    transactionId != null -> {
-                        inner.edit(
-                            newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
-                            item = inner.getEventTimelineItemByTransactionId(transactionId.value),
-                        )
-                    }
-                    else -> {
-                        error("Either originalEventId or transactionId must be non null")
-                    }
+                getEventTimelineItem(originalEventId, transactionId).use { item ->
+                    inner.edit(
+                        newContent = MessageEventContent.from(body, htmlBody, mentions),
+                        item = item,
+                    )
                 }
             }
         }
@@ -353,7 +305,7 @@ class RustTimeline(
         fromNotification: Boolean,
     ): Result<Unit> = withContext(dispatcher) {
         runCatching {
-            val msg = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map())
+            val msg = MessageEventContent.from(body, htmlBody, mentions)
             inner.sendReply(msg, eventId.value)
         }
     }
@@ -377,6 +329,20 @@ class RustTimeline(
                 },
                 progressWatcher = progressCallback?.toProgressWatcher()
             )
+        }
+    }
+
+    @Throws
+    private suspend fun getEventTimelineItem(eventId: EventId?, transactionId: TransactionId?): EventTimelineItem {
+        return try {
+            when {
+                eventId != null -> inner.getEventTimelineItemByEventId(eventId.value)
+                transactionId != null -> inner.getEventTimelineItemByTransactionId(transactionId.value)
+                else -> error("Either eventId or transactionId must be non-null")
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to get event timeline item")
+            throw TimelineException.EventNotFound
         }
     }
 
@@ -536,22 +502,9 @@ class RustTimeline(
         )
     }
 
-    private fun messageEventContentFromParts(body: String, htmlBody: String?): RoomMessageEventContentWithoutRelation =
-        if (htmlBody != null) {
-            messageEventContentFromHtml(body, htmlBody)
-        } else {
-            messageEventContentFromMarkdown(body)
-        }
-
     private fun sendAttachment(files: List<File>, handle: () -> SendAttachmentJoinHandle): Result<MediaUploadHandler> {
         return runCatching {
             MediaUploadHandlerImpl(files, handle())
-        }
-    }
-
-    private suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit> {
-        return runCatching {
-            inner.fetchDetailsForEvent(eventId.value)
         }
     }
 
@@ -570,5 +523,22 @@ class RustTimeline(
         } else {
             inner.loadReplyDetails(eventId.value).use(inReplyToMapper::map)
         }
+    }
+
+    private suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit> {
+        return runCatching {
+            inner.fetchDetailsForEvent(eventId.value)
+        }
+    }
+}
+
+private suspend fun List<MatrixTimelineItem>.process(
+    predicate: Boolean = true,
+    processor: suspend (List<MatrixTimelineItem>) -> List<MatrixTimelineItem>
+): List<MatrixTimelineItem> {
+    return if (predicate) {
+        processor(this)
+    } else {
+        this
     }
 }

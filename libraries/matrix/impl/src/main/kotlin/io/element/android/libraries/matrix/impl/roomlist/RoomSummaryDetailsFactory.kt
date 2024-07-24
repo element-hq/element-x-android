@@ -18,7 +18,8 @@ package io.element.android.libraries.matrix.impl.roomlist
 
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
+import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.impl.notificationsettings.RoomNotificationSettingsMapper
 import io.element.android.libraries.matrix.impl.room.elementHeroes
 import io.element.android.libraries.matrix.impl.room.map
@@ -28,12 +29,12 @@ import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.use
 
 class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFactory = RoomMessageFactory()) {
-    suspend fun create(roomListItem: RoomListItem): RoomSummaryDetails {
+    suspend fun create(roomListItem: RoomListItem): RoomSummary {
         val roomInfo = roomListItem.roomInfo()
-        val latestRoomMessage = roomListItem.latestEvent()?.use {
-            roomMessageFactory.create(it)
+        val latestRoomMessage = roomListItem.latestEvent().use { event ->
+            roomMessageFactory.create(event)
         }
-        return RoomSummaryDetails(
+        return RoomSummary(
             roomId = RoomId(roomInfo.id),
             name = roomInfo.displayName,
             canonicalAlias = roomInfo.canonicalAlias?.let(::RoomAlias),
@@ -47,7 +48,7 @@ class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFacto
             inviter = roomInfo.inviter?.let(RoomMemberMapper::map),
             userDefinedNotificationMode = roomInfo.userDefinedNotificationMode?.let(RoomNotificationSettingsMapper::mapMode),
             hasRoomCall = roomInfo.hasRoomCall,
-            isDm = roomInfo.isDirect && roomInfo.activeMembersCount.toLong() == 2L,
+            isDm = isDm(isDirect = roomInfo.isDirect, activeMembersCount = roomInfo.activeMembersCount.toInt()),
             isFavorite = roomInfo.isFavourite,
             currentUserMembership = roomInfo.membership.map(),
             heroes = roomInfo.elementHeroes(),

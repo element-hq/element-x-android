@@ -56,7 +56,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.roomselect.api.RoomSelectMode
@@ -73,13 +73,13 @@ fun RoomSelectView(
     modifier: Modifier = Modifier,
 ) {
     @Suppress("UNUSED_PARAMETER")
-    fun onRoomRemoved(roomSummaryDetails: RoomSummaryDetails) {
+    fun onRoomRemoved(roomSummary: RoomSummary) {
         // TODO toggle selection when multi-selection is enabled
         state.eventSink(RoomSelectEvents.RemoveSelectedRoom)
     }
 
     @Composable
-    fun SelectedRoomsHelper(isForwarding: Boolean, selectedRooms: ImmutableList<RoomSummaryDetails>) {
+    fun SelectedRoomsHelper(isForwarding: Boolean, selectedRooms: ImmutableList<RoomSummary>) {
         if (isForwarding) return
         SelectedRooms(
             selectedRooms = selectedRooms,
@@ -193,8 +193,8 @@ fun RoomSelectView(
 
 @Composable
 private fun SelectedRooms(
-    selectedRooms: ImmutableList<RoomSummaryDetails>,
-    onRemoveRoom: (RoomSummaryDetails) -> Unit,
+    selectedRooms: ImmutableList<RoomSummary>,
+    onRemoveRoom: (RoomSummary) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyRow(
@@ -210,9 +210,9 @@ private fun SelectedRooms(
 
 @Composable
 private fun RoomSummaryView(
-    summary: RoomSummaryDetails,
+    summary: RoomSummary,
     isSelected: Boolean,
-    onSelection: (RoomSummaryDetails) -> Unit,
+    onSelection: (RoomSummary) -> Unit,
 ) {
     Row(
         modifier = Modifier

@@ -97,7 +97,6 @@ fun aNotifiableMessageEvent(
     roomId = roomId,
     threadId = threadId,
     roomName = "room-name",
-    roomIsDirect = false,
     canBeReplaced = false,
     isRedacted = isRedacted,
     imageUriString = null,

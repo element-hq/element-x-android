@@ -16,7 +16,7 @@
 
 package io.element.android.features.preferences.impl.about
 
-// Do not use default value, so no member get forgotten in the presenters.
 data class AboutState(
     val elementLegals: List<ElementLegal>,
+    val hasOpenSourcesLicenses: Boolean,
 )

@@ -42,6 +42,7 @@ import io.element.android.features.messages.impl.attachments.preview.error.sendA
 import io.element.android.features.messages.impl.draft.ComposerDraftService
 import io.element.android.features.messages.impl.mentions.MentionSuggestionsProcessor
 import io.element.android.features.messages.impl.timeline.TimelineController
+import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
@@ -52,11 +53,15 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
+import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.timeline.TimelineException
+import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.mediapickers.api.PickerProvider
@@ -65,7 +70,8 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.permissions.api.PermissionsEvents
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
-import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanProvider
+import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanTheme
+import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.Message
@@ -76,6 +82,7 @@ import io.element.android.libraries.textcomposer.model.rememberMarkdownTextEdito
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import io.element.android.wysiwyg.compose.RichTextEditorState
+import io.element.android.wysiwyg.display.TextDisplay
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CancellationException
@@ -115,6 +122,9 @@ class MessageComposerPresenter @Inject constructor(
     permissionsPresenterFactory: PermissionsPresenter.Factory,
     private val timelineController: TimelineController,
     private val draftService: ComposerDraftService,
+    private val mentionSpanProvider: MentionSpanProvider,
+    private val pillificationHelper: TextPillificationHelper,
+    private val roomMemberProfilesCache: RoomMemberProfilesCache,
 ) : Presenter<MessageComposerState> {
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
     private var pendingEvent: MessageComposerEvents? = null
@@ -138,7 +148,6 @@ class MessageComposerPresenter @Inject constructor(
             richTextEditorState.isReadyToProcessActions = true
         }
         val markdownTextEditorState = rememberMarkdownTextEditorState(initialText = null, initialFocus = false)
-
         var isMentionsEnabled by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
             isMentionsEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.Mentions)
@@ -258,8 +267,6 @@ class MessageComposerPresenter @Inject constructor(
                 applyDraft(draft, markdownTextEditorState, richTextEditorState)
             }
         }
-
-        val mentionSpanProvider = LocalMentionSpanProvider.current
 
         fun handleEvents(event: MessageComposerEvents) {
             when (event) {
@@ -385,9 +392,24 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
+        val mentionSpanTheme = LocalMentionSpanTheme.current
+        val resolveMentionDisplay = remember(mentionSpanTheme) {
+            { text: String, url: String ->
+                val permalinkData = permalinkParser.parse(url)
+                if (permalinkData is PermalinkData.UserLink) {
+                    val displayNameOrId = roomMemberProfilesCache.getDisplayName(permalinkData.userId) ?: permalinkData.userId.value
+                    val mentionSpan = mentionSpanProvider.getMentionSpanFor(displayNameOrId, url)
+                    mentionSpan.update(mentionSpanTheme)
+                    TextDisplay.Custom(mentionSpan)
+                } else {
+                    val mentionSpan = mentionSpanProvider.getMentionSpanFor(text, url)
+                    mentionSpan.update(mentionSpanTheme)
+                    TextDisplay.Custom(mentionSpan)
+                }
+            }
+        }
         return MessageComposerState(
             textEditorState = textEditorState,
-            permalinkParser = permalinkParser,
             isFullScreen = isFullScreen.value,
             mode = messageComposerContext.composerMode,
             showAttachmentSourcePicker = showAttachmentSourcePicker,
@@ -396,7 +418,8 @@ class MessageComposerPresenter @Inject constructor(
             canCreatePoll = canCreatePoll.value,
             attachmentsState = attachmentsState.value,
             memberSuggestions = memberSuggestions.toPersistentList(),
-            eventSink = { handleEvents(it) }
+            resolveMentionDisplay = resolveMentionDisplay,
+            eventSink = { handleEvents(it) },
         )
     }
 
@@ -414,7 +437,14 @@ class MessageComposerPresenter @Inject constructor(
                 val eventId = capturedMode.eventId
                 val transactionId = capturedMode.transactionId
                 timelineController.invokeOnCurrentTimeline {
+                    // First try to edit the message in the current timeline
                     editMessage(eventId, transactionId, message.markdown, message.html, message.mentions)
+                        .onFailure { cause ->
+                            if (cause is TimelineException.EventNotFound && eventId != null) {
+                                // if the event is not found in the timeline, try to edit the message directly
+                                room.editMessage(eventId, message.markdown, message.html, message.mentions)
+                            }
+                        }
                 }
             }
 
@@ -626,7 +656,8 @@ class MessageComposerPresenter @Inject constructor(
             analyticsService.captureInteraction(Interaction.Name.MobileRoomComposerFormattingEnabled)
         } else {
             val markdown = richTextEditorState.messageMarkdown
-            markdownTextEditorState.text.update(markdown, true)
+            val pilliefiedMarkdown = pillificationHelper.pillify(markdown)
+            markdownTextEditorState.text.update(pilliefiedMarkdown, true)
             // Give some time for the focus of the previous editor to be cleared
             delay(100)
             markdownTextEditorState.requestFocusAction()
@@ -687,7 +718,8 @@ class MessageComposerPresenter @Inject constructor(
             if (content.isEmpty()) {
                 markdownTextEditorState.selection = IntRange.EMPTY
             }
-            markdownTextEditorState.text.update(content, true)
+            val pillifiedContent = pillificationHelper.pillify(content)
+            markdownTextEditorState.text.update(pillifiedContent, true)
             if (requestFocus) {
                 markdownTextEditorState.requestFocusAction()
             }

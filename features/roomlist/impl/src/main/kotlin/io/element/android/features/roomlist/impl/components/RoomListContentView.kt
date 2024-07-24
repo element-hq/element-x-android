@@ -30,17 +30,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -179,17 +178,13 @@ private fun RoomsViewList(
             firstItemIndex until firstItemIndex + size
         }
     }
-    val nestedScrollConnection = remember {
-        object : NestedScrollConnection {
-            override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
-                eventSink(RoomListEvents.UpdateVisibleRange(visibleRange))
-                return super.onPostFling(consumed, available)
-            }
-        }
+    val updatedEventSink by rememberUpdatedState(newValue = eventSink)
+    LaunchedEffect(visibleRange) {
+        updatedEventSink(RoomListEvents.UpdateVisibleRange(visibleRange))
     }
     LazyColumn(
         state = lazyListState,
-        modifier = modifier.nestedScroll(nestedScrollConnection),
+        modifier = modifier,
         // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80
         contentPadding = PaddingValues(bottom = 80.dp)
     ) {
@@ -199,7 +194,7 @@ private fun RoomsViewList(
                     item {
                         ConfirmRecoveryKeyBanner(
                             onContinueClick = onConfirmRecoveryKeyClick,
-                            onDismissClick = { eventSink(RoomListEvents.DismissRecoveryKeyPrompt) }
+                            onDismissClick = { updatedEventSink(RoomListEvents.DismissRecoveryKeyPrompt) }
                         )
                     }
                 }

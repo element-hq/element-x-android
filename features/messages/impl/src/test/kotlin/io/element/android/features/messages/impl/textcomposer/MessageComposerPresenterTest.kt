@@ -35,23 +35,28 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.timeline.TimelineController
+import io.element.android.features.messages.impl.utils.FakeTextPillificationHelper
+import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
+import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
+import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.test.ANOTHER_MESSAGE
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -64,11 +69,13 @@ import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.A_USER_ID_4
 import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
+import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
@@ -82,6 +89,7 @@ import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
+import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
@@ -292,7 +300,13 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - send message with rich text enabled`() = runTest {
-        val presenter = createPresenter(this)
+        val presenter = createPresenter(
+            coroutineScope = this,
+            room = FakeMatrixRoom(
+                sendMessageResult = { _, _, _ -> Result.success(Unit) },
+                typingNoticeResult = { Result.success(Unit) }
+            ),
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             val state = presenter.present()
             remember(state, state.textEditorState.messageHtml()) { state }
@@ -318,8 +332,15 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - send message with plain text enabled`() = runTest {
-        val permalinkBuilder = FakePermalinkBuilder(result = { Result.success("") })
-        val presenter = createPresenter(this, isRichTextEditorEnabled = false)
+        val permalinkBuilder = FakePermalinkBuilder(permalinkForUserLambda = { Result.success("") })
+        val presenter = createPresenter(
+            coroutineScope = this,
+            isRichTextEditorEnabled = false,
+            room = FakeMatrixRoom(
+                sendMessageResult = { _, _, _ -> Result.success(Unit) },
+                typingNoticeResult = { Result.success(Unit) }
+            ),
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             val state = presenter.present()
             val messageMarkdown = state.textEditorState.messageMarkdown(permalinkBuilder)
@@ -353,7 +374,10 @@ class MessageComposerPresenterTest {
         val timeline = FakeTimeline().apply {
             this.editMessageLambda = editMessageLambda
         }
-        val fakeMatrixRoom = FakeMatrixRoom(liveTimeline = timeline)
+        val fakeMatrixRoom = FakeMatrixRoom(
+            liveTimeline = timeline,
+            typingNoticeResult = { Result.success(Unit) }
+        )
         val presenter = createPresenter(
             this,
             fakeMatrixRoom,
@@ -395,6 +419,67 @@ class MessageComposerPresenterTest {
     }
 
     @Test
+    fun `present - edit sent message event not found`() = runTest {
+        val timelineEditMessageLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String, _: String?, _: List<Mention> ->
+            Result.failure<Unit>(TimelineException.EventNotFound)
+        }
+        val timeline = FakeTimeline().apply {
+            this.editMessageLambda = timelineEditMessageLambda
+        }
+        val roomEditMessageLambda = lambdaRecorder { _: EventId?, _: String, _: String?, _: List<Mention> ->
+            Result.success(Unit)
+        }
+        val fakeMatrixRoom = FakeMatrixRoom(
+            liveTimeline = timeline,
+            typingNoticeResult = { Result.success(Unit) }
+        ).apply {
+            this.editMessageLambda = roomEditMessageLambda
+        }
+        val presenter = createPresenter(
+            this,
+            fakeMatrixRoom,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            val state = presenter.present()
+            remember(state, state.textEditorState.messageHtml()) { state }
+        }.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.textEditorState.messageHtml()).isEqualTo("")
+            val mode = anEditMode()
+            initialState.eventSink.invoke(MessageComposerEvents.SetMode(mode))
+            val withMessageState = awaitItem()
+            assertThat(withMessageState.mode).isEqualTo(mode)
+            assertThat(withMessageState.textEditorState.messageHtml()).isEqualTo(A_MESSAGE)
+            withMessageState.textEditorState.setHtml(ANOTHER_MESSAGE)
+            val withEditedMessageState = awaitItem()
+            assertThat(withEditedMessageState.textEditorState.messageHtml()).isEqualTo(ANOTHER_MESSAGE)
+            withEditedMessageState.eventSink.invoke(MessageComposerEvents.SendMessage)
+            skipItems(1)
+            val messageSentState = awaitItem()
+            assertThat(messageSentState.textEditorState.messageHtml()).isEqualTo("")
+
+            advanceUntilIdle()
+
+            assert(timelineEditMessageLambda)
+                .isCalledOnce()
+                .with(value(AN_EVENT_ID), value(null), value(ANOTHER_MESSAGE), value(ANOTHER_MESSAGE), any())
+
+            assert(roomEditMessageLambda)
+                .isCalledOnce()
+                .with(value(AN_EVENT_ID), value(ANOTHER_MESSAGE), value(ANOTHER_MESSAGE), any())
+
+            assertThat(analyticsService.capturedEvents).containsExactly(
+                Composer(
+                    inThread = false,
+                    isEditing = true,
+                    isReply = false,
+                    messageType = Composer.MessageType.Text,
+                )
+            )
+        }
+    }
+
+    @Test
     fun `present - edit not sent message`() = runTest {
         val editMessageLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String, _: String?, _: List<Mention> ->
             Result.success(Unit)
@@ -402,7 +487,10 @@ class MessageComposerPresenterTest {
         val timeline = FakeTimeline().apply {
             this.editMessageLambda = editMessageLambda
         }
-        val fakeMatrixRoom = FakeMatrixRoom(liveTimeline = timeline)
+        val fakeMatrixRoom = FakeMatrixRoom(
+            liveTimeline = timeline,
+            typingNoticeResult = { Result.success(Unit) },
+        )
         val presenter = createPresenter(
             this,
             fakeMatrixRoom,
@@ -451,7 +539,10 @@ class MessageComposerPresenterTest {
         val timeline = FakeTimeline().apply {
             this.replyMessageLambda = replyMessageLambda
         }
-        val fakeMatrixRoom = FakeMatrixRoom(liveTimeline = timeline)
+        val fakeMatrixRoom = FakeMatrixRoom(
+            liveTimeline = timeline,
+            typingNoticeResult = { Result.success(Unit) }
+        )
         val presenter = createPresenter(
             this,
             fakeMatrixRoom,
@@ -519,7 +610,9 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Pick image from gallery`() = runTest {
-        val room = FakeMatrixRoom()
+        val room = FakeMatrixRoom(
+            typingNoticeResult = { Result.success(Unit) }
+        )
         val presenter = createPresenter(this, room = room)
         pickerProvider.givenMimeType(MimeTypes.Images)
         mediaPreProcessor.givenResult(
@@ -552,7 +645,9 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Pick video from gallery`() = runTest {
-        val room = FakeMatrixRoom()
+        val room = FakeMatrixRoom(
+            typingNoticeResult = { Result.success(Unit) }
+        )
         val presenter = createPresenter(this, room = room)
         pickerProvider.givenMimeType(MimeTypes.Videos)
         mediaPreProcessor.givenResult(
@@ -602,13 +697,17 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Pick file from storage`() = runTest {
-        val room = FakeMatrixRoom()
-        room.givenProgressCallbackValues(
-            listOf(
+        val sendMediaResult = lambdaRecorder { _: ProgressCallback? ->
+            Result.success(FakeMediaUploadHandler())
+        }
+        val room = FakeMatrixRoom(
+            progressCallbackValues = listOf(
                 Pair(0, 10),
                 Pair(5, 10),
                 Pair(10, 10)
-            )
+            ),
+            sendMediaResult = sendMediaResult,
+            typingNoticeResult = { Result.success(Unit) }
         )
         val presenter = createPresenter(this, room = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -624,13 +723,15 @@ class MessageComposerPresenterTest {
             assertThat(awaitItem().attachmentsState).isEqualTo(AttachmentsState.Sending.Uploading(1f))
             val sentState = awaitItem()
             assertThat(sentState.attachmentsState).isEqualTo(AttachmentsState.None)
-            assertThat(room.sendMediaCount).isEqualTo(1)
+            sendMediaResult.assertions().isCalledOnce()
         }
     }
 
     @Test
     fun `present - create poll`() = runTest {
-        val room = FakeMatrixRoom()
+        val room = FakeMatrixRoom(
+            typingNoticeResult = { Result.success(Unit) }
+        )
         val presenter = createPresenter(this, room = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -647,7 +748,9 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - share location`() = runTest {
-        val room = FakeMatrixRoom()
+        val room = FakeMatrixRoom(
+            typingNoticeResult = { Result.success(Unit) }
+        )
         val presenter = createPresenter(this, room = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -664,7 +767,9 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Take photo`() = runTest {
-        val room = FakeMatrixRoom()
+        val room = FakeMatrixRoom(
+            typingNoticeResult = { Result.success(Unit) }
+        )
         val permissionPresenter = FakePermissionsPresenter().apply { setPermissionGranted() }
         val presenter = createPresenter(
             this,
@@ -684,7 +789,9 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Take photo with permission request`() = runTest {
-        val room = FakeMatrixRoom()
+        val room = FakeMatrixRoom(
+            typingNoticeResult = { Result.success(Unit) }
+        )
         val permissionPresenter = FakePermissionsPresenter()
         val presenter = createPresenter(
             this,
@@ -709,7 +816,9 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Record video`() = runTest {
-        val room = FakeMatrixRoom()
+        val room = FakeMatrixRoom(
+            typingNoticeResult = { Result.success(Unit) }
+        )
         val permissionPresenter = FakePermissionsPresenter().apply { setPermissionGranted() }
         val presenter = createPresenter(
             this,
@@ -729,7 +838,9 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Record video with permission request`() = runTest {
-        val room = FakeMatrixRoom()
+        val room = FakeMatrixRoom(
+            typingNoticeResult = { Result.success(Unit) }
+        )
         val permissionPresenter = FakePermissionsPresenter()
         val presenter = createPresenter(
             this,
@@ -754,9 +865,10 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - Uploading media failure can be recovered from`() = runTest {
-        val room = FakeMatrixRoom().apply {
-            givenSendMediaResult(Result.failure(Exception()))
-        }
+        val room = FakeMatrixRoom(
+            sendMediaResult = { Result.failure(Exception()) },
+            typingNoticeResult = { Result.success(Unit) }
+        )
         val presenter = createPresenter(this, room = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -837,16 +949,17 @@ class MessageComposerPresenterTest {
         val invitedUser = aRoomMember(userId = A_USER_ID_3, membership = RoomMembershipState.INVITE)
         val bob = aRoomMember(userId = A_USER_ID_2, membership = RoomMembershipState.JOIN)
         val david = aRoomMember(userId = A_USER_ID_4, displayName = "Dave", membership = RoomMembershipState.JOIN)
+        var canUserTriggerRoomNotificationResult = true
         val room = FakeMatrixRoom(
             isDirect = false,
-            isOneToOne = false,
+            canUserTriggerRoomNotificationResult = { Result.success(canUserTriggerRoomNotificationResult) },
+            typingNoticeResult = { Result.success(Unit) }
         ).apply {
             givenRoomMembersState(
                 MatrixRoomMembersState.Ready(
                     persistentListOf(currentUser, invitedUser, bob, david),
                 )
             )
-            givenCanTriggerRoomNotification(Result.success(true))
         }
         val flagsService = FakeFeatureFlagService(
             mapOf(
@@ -886,13 +999,10 @@ class MessageComposerPresenterTest {
             assertThat(awaitItem().memberSuggestions).isEmpty()
 
             // If user has no permission to send `@room` mentions, `RoomMemberSuggestion.Room` is not returned
-            room.givenCanTriggerRoomNotification(Result.success(false))
+            canUserTriggerRoomNotificationResult = false
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
             assertThat(awaitItem().memberSuggestions)
                 .containsExactly(ResolvedMentionSuggestion.Member(bob), ResolvedMentionSuggestion.Member(david))
-
-            // If room is a DM, `RoomMemberSuggestion.Room` is not returned
-            room.givenCanTriggerRoomNotification(Result.success(true))
         }
     }
 
@@ -904,14 +1014,16 @@ class MessageComposerPresenterTest {
         val david = aRoomMember(userId = A_USER_ID_4, displayName = "Dave", membership = RoomMembershipState.JOIN)
         val room = FakeMatrixRoom(
             isDirect = true,
-            isOneToOne = true,
+            activeMemberCount = 2,
+            isEncrypted = true,
+            canUserTriggerRoomNotificationResult = { Result.success(true) },
+            typingNoticeResult = { Result.success(Unit) }
         ).apply {
             givenRoomMembersState(
                 MatrixRoomMembersState.Ready(
                     persistentListOf(currentUser, invitedUser, bob, david),
                 )
             )
-            givenCanTriggerRoomNotification(Result.success(true))
         }
         val flagsService = FakeFeatureFlagService(
             mapOf(
@@ -934,11 +1046,11 @@ class MessageComposerPresenterTest {
     }
 
     @Test
-    fun `present - insertMention`() = runTest {
+    fun `present - insertMention for user in rich text editor`() = runTest {
         val presenter = createPresenter(
             coroutineScope = this,
             permalinkBuilder = FakePermalinkBuilder(
-                result = {
+                permalinkForUserLambda = {
                     Result.success("https://matrix.to/#/${A_USER_ID_2.value}")
                 }
             )
@@ -968,7 +1080,14 @@ class MessageComposerPresenterTest {
             this.replyMessageLambda = replyMessageLambda
             this.editMessageLambda = editMessageLambda
         }
-        val room = FakeMatrixRoom(liveTimeline = timeline)
+        val sendMessageResult = lambdaRecorder { _: String, _: String?, _: List<Mention> ->
+            Result.success(Unit)
+        }
+        val room = FakeMatrixRoom(
+            liveTimeline = timeline,
+            sendMessageResult = sendMessageResult,
+            typingNoticeResult = { Result.success(Unit) }
+        )
         val presenter = createPresenter(room = room, coroutineScope = this)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -988,7 +1107,8 @@ class MessageComposerPresenterTest {
 
             advanceUntilIdle()
 
-            assertThat(room.sendMessageMentions).isEqualTo(listOf(Mention.User(A_USER_ID)))
+            sendMessageResult.assertions().isCalledOnce()
+                .with(value(A_MESSAGE), any(), value(listOf(Mention.User(A_USER_ID))))
 
             // Check intentional mentions on reply sent
             initialState.eventSink(MessageComposerEvents.SetMode(aReplyMode()))
@@ -1044,22 +1164,32 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - handle typing notice event`() = runTest {
-        val room = FakeMatrixRoom()
+        val typingNoticeResult = lambdaRecorder<Boolean, Result<Unit>> { Result.success(Unit) }
+        val room = FakeMatrixRoom(
+            typingNoticeResult = typingNoticeResult
+        )
         val presenter = createPresenter(room = room, coroutineScope = this)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
-            assertThat(room.typingRecord).isEmpty()
+            typingNoticeResult.assertions().isNeverCalled()
             initialState.eventSink.invoke(MessageComposerEvents.TypingNotice(true))
             initialState.eventSink.invoke(MessageComposerEvents.TypingNotice(false))
-            assertThat(room.typingRecord).isEqualTo(listOf(true, false))
+            typingNoticeResult.assertions().isCalledExactly(2)
+                .withSequence(
+                    listOf(value(true)),
+                    listOf(value(false)),
+                )
         }
     }
 
     @Test
     fun `present - handle typing notice event when sending typing notice is disabled`() = runTest {
-        val room = FakeMatrixRoom()
+        val typingNoticeResult = lambdaRecorder<Boolean, Result<Unit>> { Result.success(Unit) }
+        val room = FakeMatrixRoom(
+            typingNoticeResult = typingNoticeResult
+        )
         val store = InMemorySessionPreferencesStore(
             isSendTypingNotificationsEnabled = false
         )
@@ -1068,10 +1198,10 @@ class MessageComposerPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
-            assertThat(room.typingRecord).isEmpty()
+            typingNoticeResult.assertions().isNeverCalled()
             initialState.eventSink.invoke(MessageComposerEvents.TypingNotice(true))
             initialState.eventSink.invoke(MessageComposerEvents.TypingNotice(false))
-            assertThat(room.typingRecord).isEmpty()
+            typingNoticeResult.assertions().isNeverCalled()
         }
     }
 
@@ -1210,7 +1340,10 @@ class MessageComposerPresenterTest {
         val timeline = FakeTimeline().apply {
             this.loadReplyDetailsLambda = loadReplyDetailsLambda
         }
-        val room = FakeMatrixRoom(liveTimeline = timeline)
+        val room = FakeMatrixRoom(
+            liveTimeline = timeline,
+            typingNoticeResult = { Result.success(Unit) },
+        )
         val permalinkBuilder = FakePermalinkBuilder()
         val presenter = createPresenter(
             room = room,
@@ -1347,7 +1480,9 @@ class MessageComposerPresenterTest {
 
     private fun createPresenter(
         coroutineScope: CoroutineScope,
-        room: MatrixRoom = FakeMatrixRoom(),
+        room: MatrixRoom = FakeMatrixRoom(
+            typingNoticeResult = { Result.success(Unit) }
+        ),
         pickerProvider: PickerProvider = this.pickerProvider,
         featureFlagService: FeatureFlagService = this.featureFlagService,
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
@@ -1355,6 +1490,10 @@ class MessageComposerPresenterTest {
         snackbarDispatcher: SnackbarDispatcher = this.snackbarDispatcher,
         permissionPresenter: PermissionsPresenter = FakePermissionsPresenter(),
         permalinkBuilder: PermalinkBuilder = FakePermalinkBuilder(),
+        permalinkParser: PermalinkParser = FakePermalinkParser(),
+        mentionSpanProvider: MentionSpanProvider = MentionSpanProvider(permalinkParser),
+        roomMemberProfilesCache: RoomMemberProfilesCache = RoomMemberProfilesCache(),
+        textPillificationHelper: TextPillificationHelper = FakeTextPillificationHelper(),
         isRichTextEditorEnabled: Boolean = true,
         draftService: ComposerDraftService = FakeComposerDraftService(),
     ) = MessageComposerPresenter(
@@ -1370,10 +1509,13 @@ class MessageComposerPresenterTest {
         DefaultMessageComposerContext(),
         TestRichTextEditorStateFactory(),
         permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionPresenter),
-        permalinkParser = FakePermalinkParser(),
+        permalinkParser = permalinkParser,
         permalinkBuilder = permalinkBuilder,
         timelineController = TimelineController(room),
         draftService = draftService,
+        mentionSpanProvider = mentionSpanProvider,
+        pillificationHelper = textPillificationHelper,
+        roomMemberProfilesCache = roomMemberProfilesCache,
     ).apply {
         isTesting = true
         showTextFormatting = isRichTextEditorEnabled
