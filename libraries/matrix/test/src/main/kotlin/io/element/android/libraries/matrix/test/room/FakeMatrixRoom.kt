@@ -212,6 +212,11 @@ class FakeMatrixRoom(
         return updateUserRoleResult()
     }
 
+    var editMessageLambda: (EventId, String, String?, List<Mention>) -> Result<Unit> = { _, _, _, _ -> lambdaError() }
+    override suspend fun editMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> {
+        return editMessageLambda(eventId, body, htmlBody, mentions)
+    }
+
     override suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>) = simulateLongTask {
         sendMessageResult(body, htmlBody, mentions)
     }
