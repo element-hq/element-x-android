@@ -54,7 +54,11 @@ class RustMatrixClientFactory @Inject constructor(
         val client = getBaseClientBuilder(
             sessionPath = sessionData.sessionPath,
             passphrase = sessionData.passphrase,
-            useSimplifiedSlidingSync = appPreferencesStore.isSimplifiedSlidingSyncEnabledFlow().first(),
+            slidingSync = if (appPreferencesStore.isSimplifiedSlidingSyncEnabledFlow().first()) {
+                ClientBuilderSlidingSync.Simplified
+            } else {
+                ClientBuilderSlidingSync.Restored
+            },
         )
             .homeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
@@ -86,7 +90,7 @@ class RustMatrixClientFactory @Inject constructor(
         sessionPath: String,
         passphrase: String?,
         slidingSyncProxy: String? = null,
-        useSimplifiedSlidingSync: Boolean = false,
+        slidingSync: ClientBuilderSlidingSync,
     ): ClientBuilder {
         return ClientBuilder()
             .sessionPath(sessionPath)
@@ -96,12 +100,29 @@ class RustMatrixClientFactory @Inject constructor(
             .addRootCertificates(userCertificatesProvider.provides())
             .autoEnableBackups(true)
             .autoEnableCrossSigning(true)
-            .simplifiedSlidingSync(useSimplifiedSlidingSync)
+            .run {
+                when (slidingSync) {
+                    ClientBuilderSlidingSync.Restored -> this
+                    ClientBuilderSlidingSync.Discovered -> requiresSlidingSync()
+                    ClientBuilderSlidingSync.Simplified -> simplifiedSlidingSync(true)
+                }
+            }
             .run {
                 // Workaround for non-nullable proxy parameter in the SDK, since each call to the ClientBuilder returns a new reference we need to keep
                 proxyProvider.provides()?.let { proxy(it) } ?: this
             }
     }
+}
+
+enum class ClientBuilderSlidingSync {
+    // The proxy will be supplied when restoring the Session.
+    Restored,
+
+    // A proxy must be discovered whilst building the session.
+    Discovered,
+
+    // Use Simplified Sliding Sync (discovery isn't a thing yet).
+    Simplified,
 }
 
 private fun SessionData.toSession() = Session(
