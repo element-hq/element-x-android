@@ -23,14 +23,17 @@ import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugIn
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
+import io.element.android.libraries.matrix.api.timeline.item.event.ShieldColor
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.matrix.rustcomponents.sdk.Reaction
+import org.matrix.rustcomponents.sdk.ShieldState
 import org.matrix.rustcomponents.sdk.EventSendState as RustEventSendState
 import org.matrix.rustcomponents.sdk.EventTimelineItem as RustEventTimelineItem
 import org.matrix.rustcomponents.sdk.EventTimelineItemDebugInfo as RustEventTimelineItemDebugInfo
@@ -55,7 +58,8 @@ class EventTimelineItemMapper(private val contentMapper: TimelineEventContentMap
             timestamp = it.timestamp().toLong(),
             content = contentMapper.map(it.content()),
             debugInfo = it.debugInfo().map(),
-            origin = it.origin()?.map()
+            origin = it.origin()?.map(),
+            messageShield = it.getShield(false)?.map(),
         )
     }
 }
@@ -126,5 +130,14 @@ private fun RustEventItemOrigin.map(): TimelineItemEventOrigin {
         RustEventItemOrigin.LOCAL -> TimelineItemEventOrigin.LOCAL
         RustEventItemOrigin.SYNC -> TimelineItemEventOrigin.SYNC
         RustEventItemOrigin.PAGINATION -> TimelineItemEventOrigin.PAGINATION
+    }
+}
+
+private fun ShieldState?.map(): MessageShield? {
+    return when (this) {
+        is ShieldState.Grey -> MessageShield(message = this.message, color = ShieldColor.GREY)
+        is ShieldState.Red -> MessageShield(message = this.message, color = ShieldColor.RED)
+        ShieldState.None,
+        null -> null
     }
 }

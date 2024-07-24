@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl.timeline.components
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
@@ -50,6 +51,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -75,6 +77,8 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
+import io.element.android.features.messages.impl.timeline.model.event.aGreyShield
+import io.element.android.features.messages.impl.timeline.model.event.aRedShield
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.canBeRepliedTo
@@ -277,6 +281,7 @@ private fun TimelineItemEventRowContent(
         val (
             sender,
             message,
+            shield,
             reactions,
         ) = createRefs()
 
@@ -328,6 +333,29 @@ private fun TimelineItemEventRowContent(
             )
         }
 
+        val shieldPosition = event.shieldPosition()
+        if (shieldPosition is MessageShieldPosition.OutOfBubble) {
+            MessageShieldView(
+                isMine = event.isMine,
+                shield = shieldPosition.messageShield,
+                modifier = Modifier
+                    .constrainAs(shield) {
+                        top.linkTo(message.bottom, margin = (-4).dp)
+                        linkStartOrEnd(event)
+                    }
+                    .padding(
+                        // Note: due to the applied constraints, start is left for other's message and right for mine
+                        // In design we want a offset of 6.dp compare to the bubble, so start is 22.dp (16 + 6)
+                        start = when {
+                            event.isMine -> 22.dp
+                            timelineRoomInfo.isDm -> 22.dp
+                            else -> 22.dp + BUBBLE_INCOMING_OFFSET
+                        },
+                        end = 16.dp
+                    ),
+            )
+        }
+
         // Reactions
         if (event.reactionsState.reactions.isNotEmpty()) {
             TimelineItemReactionsView(
@@ -339,7 +367,11 @@ private fun TimelineItemEventRowContent(
                 onMoreReactionsClick = { onMoreReactionsClick(event) },
                 modifier = Modifier
                     .constrainAs(reactions) {
-                        top.linkTo(message.bottom, margin = (-4).dp)
+                        if (shieldPosition is MessageShieldPosition.OutOfBubble) {
+                            top.linkTo(shield.bottom, margin = (-4).dp)
+                        } else {
+                            top.linkTo(message.bottom, margin = (-4).dp)
+                        }
                         linkStartOrEnd(event)
                     }
                     .zIndex(1f)
@@ -472,6 +504,7 @@ private fun MessageEventBubbleContent(
     @Composable
     fun CommonLayout(
         timestampPosition: TimestampPosition,
+        messageShieldPosition: MessageShieldPosition,
         showThreadDecoration: Boolean,
         inReplyToDetails: InReplyToDetails?,
         modifier: Modifier = Modifier,
@@ -510,13 +543,30 @@ private fun MessageEventBubbleContent(
                 canShrinkContent = canShrinkContent,
                 modifier = timestampLayoutModifier,
             ) { onContentLayoutChange ->
-                TimelineItemEventContentView(
-                    content = event.content,
-                    onLinkClick = onLinkClick,
-                    eventSink = eventSink,
-                    onContentLayoutChange = onContentLayoutChange,
-                    modifier = contentModifier
-                )
+
+                if (messageShieldPosition is MessageShieldPosition.InBubble) {
+                    Column {
+                        TimelineItemEventContentView(
+                            content = event.content,
+                            onLinkClick = onLinkClick,
+                            eventSink = eventSink,
+                            onContentLayoutChange = onContentLayoutChange,
+                            modifier = contentModifier
+                        )
+                        MessageShieldView(
+                            modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+                            shield = messageShieldPosition.messageShield,
+                        )
+                    }
+                } else {
+                    TimelineItemEventContentView(
+                        content = event.content,
+                        onLinkClick = onLinkClick,
+                        eventSink = eventSink,
+                        onContentLayoutChange = onContentLayoutChange,
+                        modifier = contentModifier
+                    )
+                }
             }
         }
         val inReplyTo = @Composable { inReplyTo: InReplyToDetails ->
@@ -551,9 +601,11 @@ private fun MessageEventBubbleContent(
         is TimelineItemPollContent -> TimestampPosition.Below
         else -> TimestampPosition.Default
     }
+    val messageShieldPosition = event.shieldPosition()
     CommonLayout(
         showThreadDecoration = event.isThreaded,
-        timestampPosition = timestampPosition,
+        messageShieldPosition = messageShieldPosition,
+        timestampPosition = if (messageShieldPosition is MessageShieldPosition.InBubble) TimestampPosition.Below else timestampPosition,
         inReplyToDetails = event.inReplyTo,
         canShrinkContent = event.content is TimelineItemVoiceContent,
         modifier = bubbleModifier.semantics(mergeDescendants = true) {
@@ -588,5 +640,70 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
                 ),
             )
         }
+    }
+}
+
+@Preview(
+    name = "Encryption Shields"
+)
+@Preview(
+    name = "Encryption Shields - Night",
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+internal fun TimelineItemEventRowShieldsPreview() = ElementPreview {
+    Column {
+        ATimelineItemEventRow(
+            event = aTimelineItemEvent(
+                senderDisplayName = "Sender with a super long name that should ellipsize",
+                isMine = true,
+                content = aTimelineItemTextContent(
+                    body = "Message sent from unsigned device"
+                ),
+                groupPosition = TimelineItemGroupPosition.First,
+                messageShield = aRedShield()
+            ),
+        )
+        ATimelineItemEventRow(
+            event = aTimelineItemEvent(
+                senderDisplayName = "Sender with a super long name that should ellipsize",
+                content = aTimelineItemTextContent(
+                    body = "Short Message with authenticity warning"
+                ),
+                groupPosition = TimelineItemGroupPosition.Middle,
+                messageShield = aGreyShield()
+            ),
+        )
+        ATimelineItemEventRow(
+            event = aTimelineItemEvent(
+                isMine = true,
+                content = aTimelineItemImageContent().copy(
+                    aspectRatio = 2.5f
+                ),
+                groupPosition = TimelineItemGroupPosition.Last,
+                messageShield = aRedShield()
+            ),
+        )
+        ATimelineItemEventRow(
+            event = aTimelineItemEvent(
+                content = aTimelineItemImageContent().copy(
+                    aspectRatio = 2.5f
+                ),
+                groupPosition = TimelineItemGroupPosition.Last,
+                messageShield = aGreyShield()
+            ),
+        )
+    }
+}
+
+private fun TimelineItem.Event.shieldPosition(): MessageShieldPosition {
+    if (this.messageShield == null) return MessageShieldPosition.None
+    return when (this.content) {
+        is TimelineItemImageContent,
+        is TimelineItemVideoContent,
+        is TimelineItemStickerContent,
+        is TimelineItemLocationContent,
+        is TimelineItemPollContent -> MessageShieldPosition.OutOfBubble(this.messageShield)
+        else -> MessageShieldPosition.InBubble(this.messageShield)
     }
 }
