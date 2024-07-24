@@ -56,6 +56,7 @@ import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
+import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.test.ANOTHER_MESSAGE
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -405,6 +406,67 @@ class MessageComposerPresenterTest {
             assert(editMessageLambda)
                 .isCalledOnce()
                 .with(value(AN_EVENT_ID), value(null), value(ANOTHER_MESSAGE), value(ANOTHER_MESSAGE), any())
+
+            assertThat(analyticsService.capturedEvents).containsExactly(
+                Composer(
+                    inThread = false,
+                    isEditing = true,
+                    isReply = false,
+                    messageType = Composer.MessageType.Text,
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - edit sent message event not found`() = runTest {
+        val timelineEditMessageLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String, _: String?, _: List<Mention> ->
+            Result.failure<Unit>(TimelineException.EventNotFound)
+        }
+        val timeline = FakeTimeline().apply {
+            this.editMessageLambda = timelineEditMessageLambda
+        }
+        val roomEditMessageLambda = lambdaRecorder { _: EventId?, _: String, _: String?, _: List<Mention> ->
+            Result.success(Unit)
+        }
+        val fakeMatrixRoom = FakeMatrixRoom(
+            liveTimeline = timeline,
+            typingNoticeResult = { Result.success(Unit) }
+        ).apply {
+            this.editMessageLambda = roomEditMessageLambda
+        }
+        val presenter = createPresenter(
+            this,
+            fakeMatrixRoom,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            val state = presenter.present()
+            remember(state, state.textEditorState.messageHtml()) { state }
+        }.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.textEditorState.messageHtml()).isEqualTo("")
+            val mode = anEditMode()
+            initialState.eventSink.invoke(MessageComposerEvents.SetMode(mode))
+            val withMessageState = awaitItem()
+            assertThat(withMessageState.mode).isEqualTo(mode)
+            assertThat(withMessageState.textEditorState.messageHtml()).isEqualTo(A_MESSAGE)
+            withMessageState.textEditorState.setHtml(ANOTHER_MESSAGE)
+            val withEditedMessageState = awaitItem()
+            assertThat(withEditedMessageState.textEditorState.messageHtml()).isEqualTo(ANOTHER_MESSAGE)
+            withEditedMessageState.eventSink.invoke(MessageComposerEvents.SendMessage)
+            skipItems(1)
+            val messageSentState = awaitItem()
+            assertThat(messageSentState.textEditorState.messageHtml()).isEqualTo("")
+
+            advanceUntilIdle()
+
+            assert(timelineEditMessageLambda)
+                .isCalledOnce()
+                .with(value(AN_EVENT_ID), value(null), value(ANOTHER_MESSAGE), value(ANOTHER_MESSAGE), any())
+
+            assert(roomEditMessageLambda)
+                .isCalledOnce()
+                .with(value(AN_EVENT_ID), value(ANOTHER_MESSAGE), value(ANOTHER_MESSAGE), any())
 
             assertThat(analyticsService.capturedEvents).containsExactly(
                 Composer(
