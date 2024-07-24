@@ -60,6 +60,7 @@ import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.map
@@ -436,7 +437,14 @@ class MessageComposerPresenter @Inject constructor(
                 val eventId = capturedMode.eventId
                 val transactionId = capturedMode.transactionId
                 timelineController.invokeOnCurrentTimeline {
+                    // First try to edit the message in the current timeline
                     editMessage(eventId, transactionId, message.markdown, message.html, message.mentions)
+                        .onFailure { cause ->
+                            if (cause is TimelineException.EventNotFound && eventId != null) {
+                                // if the event is not found in the timeline, try to edit the message directly
+                                room.editMessage(eventId, message.markdown, message.html, message.mentions)
+                            }
+                        }
                 }
             }
 
