@@ -22,11 +22,14 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -81,7 +84,12 @@ class ReportMessagePresenterTest {
 
     @Test
     fun `presenter - handle successful report and block user`() = runTest {
-        val room = FakeMatrixRoom()
+        val reportContentResult = lambdaRecorder<EventId, String, UserId?, Result<Unit>> { _, _, _ ->
+            Result.success(Unit)
+        }
+        val room = FakeMatrixRoom(
+            reportContentResult = reportContentResult
+        )
         val presenter = createReportMessagePresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -92,13 +100,18 @@ class ReportMessagePresenterTest {
             initialState.eventSink(ReportMessageEvents.Report)
             assertThat(awaitItem().result).isInstanceOf(AsyncAction.Loading::class.java)
             assertThat(awaitItem().result).isInstanceOf(AsyncAction.Success::class.java)
-            assertThat(room.reportedContentCount).isEqualTo(1)
+            reportContentResult.assertions().isCalledOnce()
         }
     }
 
     @Test
     fun `presenter - handle successful report`() = runTest {
-        val room = FakeMatrixRoom()
+        val reportContentResult = lambdaRecorder<EventId, String, UserId?, Result<Unit>> { _, _, _ ->
+            Result.success(Unit)
+        }
+        val room = FakeMatrixRoom(
+            reportContentResult = reportContentResult
+        )
         val presenter = createReportMessagePresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -107,15 +120,18 @@ class ReportMessagePresenterTest {
             initialState.eventSink(ReportMessageEvents.Report)
             assertThat(awaitItem().result).isInstanceOf(AsyncAction.Loading::class.java)
             assertThat(awaitItem().result).isInstanceOf(AsyncAction.Success::class.java)
-            assertThat(room.reportedContentCount).isEqualTo(1)
+            reportContentResult.assertions().isCalledOnce()
         }
     }
 
     @Test
     fun `presenter - handle failed report`() = runTest {
-        val room = FakeMatrixRoom().apply {
-            givenReportContentResult(Result.failure(Exception("Failed to report content")))
+        val reportContentResult = lambdaRecorder<EventId, String, UserId?, Result<Unit>> { _, _, _ ->
+            Result.failure(Exception("Failed to report content"))
         }
+        val room = FakeMatrixRoom(
+            reportContentResult = reportContentResult
+        )
         val presenter = createReportMessagePresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -125,7 +141,7 @@ class ReportMessagePresenterTest {
             assertThat(awaitItem().result).isInstanceOf(AsyncAction.Loading::class.java)
             val resultState = awaitItem()
             assertThat(resultState.result).isInstanceOf(AsyncAction.Failure::class.java)
-            assertThat(room.reportedContentCount).isEqualTo(1)
+            reportContentResult.assertions().isCalledOnce()
 
             resultState.eventSink(ReportMessageEvents.ClearError)
             assertThat(awaitItem().result).isInstanceOf(AsyncAction.Uninitialized::class.java)

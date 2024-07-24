@@ -18,4 +18,5 @@ package io.element.android.libraries.matrix.api.timeline
 
 sealed class TimelineException : Exception() {
     data object CannotPaginate : TimelineException()
+    data object EventNotFound : TimelineException()
 }

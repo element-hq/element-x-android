@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Atividades"</string>
+  <string name="emoji_picker_category_flags">"Bandeiras"</string>
+  <string name="emoji_picker_category_foods">"Comida &amp; Bebida"</string>
+  <string name="emoji_picker_category_nature">"Animais &amp; Natureza"</string>
+  <string name="emoji_picker_category_objects">"Objetos"</string>
+  <string name="emoji_picker_category_people">"Sorrisos &amp; Pessoas"</string>
+  <string name="emoji_picker_category_places">"Viagens &amp; Lugares"</string>
+  <string name="emoji_picker_category_symbols">"Símbolos"</string>
+  <string name="screen_report_content_block_user">"Bloquear usuário"</string>
+  <string name="screen_report_content_block_user_hint">"Marque se você deseja ocultar todas as mensagens atuais e futuras desse usuário"</string>
+  <string name="screen_report_content_explanation">"Essa mensagem será reportada ao administrador do seu homeserver. Eles não conseguirão ler nenhuma mensagem criptografada."</string>
+  <string name="screen_report_content_hint">"Motivo para denunciar este conteúdo"</string>
+  <string name="screen_room_attachment_source_camera">"Câmera"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Tirar foto"</string>
+  <string name="screen_room_attachment_source_camera_video">"Gravar vídeo"</string>
+  <string name="screen_room_attachment_source_files">"Anexo"</string>
+  <string name="screen_room_attachment_source_gallery">"Biblioteca de fotos e vídeos"</string>
+  <string name="screen_room_attachment_source_location">"Localização"</string>
+  <string name="screen_room_attachment_source_poll">"Enquete"</string>
+  <string name="screen_room_attachment_text_formatting">"Formatação de texto"</string>
+  <string name="screen_room_encrypted_history_banner">"O histórico de mensagens não está disponível no momento."</string>
+  <string name="screen_room_invite_again_alert_message">"Gostaria de convidá-los de volta?"</string>
+  <string name="screen_room_invite_again_alert_title">"Você está sozinho neste chat"</string>
+  <string name="screen_room_mentions_at_room_title">"Todos"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"Enviar novamente"</string>
+  <string name="screen_room_retry_send_menu_title">"Sua mensagem não foi enviada"</string>
+  <string name="screen_room_timeline_add_reaction">"Adicionar emoji"</string>
+  <string name="screen_room_timeline_beginning_of_room">"Este é o início do %1$s."</string>
+  <string name="screen_room_timeline_beginning_of_room_no_name">"Este é o início desta conversa."</string>
+  <string name="screen_room_timeline_less_reactions">"Mostrar menos"</string>
+  <string name="screen_room_timeline_message_copied">"Mensagem copiada"</string>
+  <string name="screen_room_timeline_no_permission_to_post">"Você não tem permissão para postar nesta sala"</string>
+  <string name="screen_room_timeline_reactions_show_less">"Mostrar menos"</string>
+  <string name="screen_room_timeline_reactions_show_more">"Mostrar mais"</string>
+  <string name="screen_room_timeline_read_marker_title">"Novo"</string>
+  <plurals name="screen_room_timeline_state_changes">
+    <item quantity="one">"%1$d mudança de sala"</item>
+    <item quantity="other">"%1$d mudanças de salas"</item>
+  </plurals>
+</resources>

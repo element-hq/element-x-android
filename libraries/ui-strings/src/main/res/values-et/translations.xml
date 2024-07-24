@@ -80,6 +80,7 @@
   <string name="action_ok">"OK"</string>
   <string name="action_open_settings">"Seadistused"</string>
   <string name="action_open_with">"Ava rakendusega"</string>
+  <string name="action_pin">"Kinnita"</string>
   <string name="action_quick_reply">"Kiirvastus"</string>
   <string name="action_quote">"Tsiteeri"</string>
   <string name="action_react">"Reageeri"</string>
@@ -256,6 +257,10 @@ Põhjus: %1$s."</string>
   <string name="error_missing_microphone_voice_rationale_android">"Rakendusel %1$s puudub õigus sinu nutiseadme mikrofoni kasutada. Järgnevalt anna õigused heli salvestamiseks."</string>
   <string name="error_some_messages_have_not_been_sent">"Mõned sõnumid on saatmata"</string>
   <string name="error_unknown">"Vabandust, ilmnes viga"</string>
+  <string name="event_shield_reason_authenticity_not_guaranteed">"Selle krüptitud sõnumi tõepärasus pole selles seadmes tagatud."</string>
+  <string name="event_shield_reason_unknown_device">"Krüptitud tundmatu või kustutatud seadme poolt."</string>
+  <string name="event_shield_reason_unsigned_device">"Krüptitud seadme poolt, mida tema omanik pole verifitseerinud."</string>
+  <string name="event_shield_reason_unverified_identity">"Krüptitud verifitseerimata kasutaja poolt."</string>
   <string name="invite_friends_rich_title">"🔐️ Liitu minuga rakenduses %1$s"</string>
   <string name="invite_friends_text">"Hei, suhtle minuga %1$s võrgus: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
@@ -272,6 +277,9 @@ Põhjus: %1$s."</string>
   <string name="screen_room_member_details_unblock_alert_action">"Eemalda blokeering"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Nüüd näed sa jälle kõiki tema sõnumeid"</string>
   <string name="screen_room_member_details_unblock_user">"Eemalda kasutajalt blokeering"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s kinnitatud sõnumit"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Näita kõiki"</string>
   <string name="screen_room_title">"Vestlus"</string>
   <string name="screen_share_location_title">"Jaga asukohta"</string>
   <string name="screen_share_my_location_action">"Jaga minu asukohta"</string>

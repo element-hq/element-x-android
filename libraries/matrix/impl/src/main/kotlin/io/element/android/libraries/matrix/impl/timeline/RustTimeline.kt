@@ -42,7 +42,6 @@ import io.element.android.libraries.matrix.impl.media.toMSC3246range
 import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.location.toInner
-import io.element.android.libraries.matrix.impl.room.map
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
@@ -51,6 +50,7 @@ import io.element.android.libraries.matrix.impl.timeline.postprocessor.LoadingIn
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.RoomBeginningPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.TimelineEncryptedHistoryPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.reply.InReplyToMapper
+import io.element.android.libraries.matrix.impl.util.MessageEventContent
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
@@ -70,12 +70,10 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.FormattedBody
 import org.matrix.rustcomponents.sdk.MessageFormat
-import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
-import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
-import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk_ui.LiveBackPaginationStatus
@@ -266,7 +264,7 @@ class RustTimeline(
     }
 
     override suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> = withContext(dispatcher) {
-        messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()).use { content ->
+        MessageEventContent.from(body, htmlBody, mentions).use { content ->
             runCatching<Unit> {
                 inner.send(content)
             }
@@ -275,20 +273,8 @@ class RustTimeline(
 
     override suspend fun redactEvent(eventId: EventId?, transactionId: TransactionId?, reason: String?): Result<Boolean> = withContext(dispatcher) {
         runCatching {
-            when {
-                eventId != null -> {
-                    inner.getEventTimelineItemByEventId(eventId.value).use {
-                        inner.redactEvent(item = it, reason = reason)
-                    }
-                }
-                transactionId != null -> {
-                    inner.getEventTimelineItemByTransactionId(transactionId.value).use {
-                        inner.redactEvent(item = it, reason = reason)
-                    }
-                }
-                else -> {
-                    error("Either eventId or transactionId must be non-null")
-                }
+            getEventTimelineItem(eventId, transactionId).use { item ->
+                inner.redactEvent(item = item, reason = reason)
             }
         }
     }
@@ -302,26 +288,11 @@ class RustTimeline(
     ): Result<Unit> =
         withContext(dispatcher) {
             runCatching<Unit> {
-                when {
-                    originalEventId != null -> {
-                        inner.getEventTimelineItemByEventId(originalEventId.value).use {
-                            inner.edit(
-                                newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
-                                item = it,
-                            )
-                        }
-                    }
-                    transactionId != null -> {
-                        inner.getEventTimelineItemByTransactionId(transactionId.value).use {
-                            inner.edit(
-                                newContent = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map()),
-                                item = it,
-                            )
-                        }
-                    }
-                    else -> {
-                        error("Either originalEventId or transactionId must be non null")
-                    }
+                getEventTimelineItem(originalEventId, transactionId).use { item ->
+                    inner.edit(
+                        newContent = MessageEventContent.from(body, htmlBody, mentions),
+                        item = item,
+                    )
                 }
             }
         }
@@ -334,7 +305,7 @@ class RustTimeline(
         fromNotification: Boolean,
     ): Result<Unit> = withContext(dispatcher) {
         runCatching {
-            val msg = messageEventContentFromParts(body, htmlBody).withMentions(mentions.map())
+            val msg = MessageEventContent.from(body, htmlBody, mentions)
             inner.sendReply(msg, eventId.value)
         }
     }
@@ -358,6 +329,20 @@ class RustTimeline(
                 },
                 progressWatcher = progressCallback?.toProgressWatcher()
             )
+        }
+    }
+
+    @Throws
+    private suspend fun getEventTimelineItem(eventId: EventId?, transactionId: TransactionId?): EventTimelineItem {
+        return try {
+            when {
+                eventId != null -> inner.getEventTimelineItemByEventId(eventId.value)
+                transactionId != null -> inner.getEventTimelineItemByTransactionId(transactionId.value)
+                else -> error("Either eventId or transactionId must be non-null")
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to get event timeline item")
+            throw TimelineException.EventNotFound
         }
     }
 
@@ -516,13 +501,6 @@ class RustTimeline(
             progressWatcher = progressCallback?.toProgressWatcher(),
         )
     }
-
-    private fun messageEventContentFromParts(body: String, htmlBody: String?): RoomMessageEventContentWithoutRelation =
-        if (htmlBody != null) {
-            messageEventContentFromHtml(body, htmlBody)
-        } else {
-            messageEventContentFromMarkdown(body)
-        }
 
     private fun sendAttachment(files: List<File>, handle: () -> SendAttachmentJoinHandle): Result<MediaUploadHandler> {
         return runCatching {

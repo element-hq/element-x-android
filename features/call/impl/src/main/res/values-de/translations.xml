@@ -3,4 +3,5 @@
   <string name="call_foreground_service_channel_title_android">"Laufender Anruf"</string>
   <string name="call_foreground_service_message_android">"Tippen, um zum Anruf zurückzukehren"</string>
   <string name="call_foreground_service_title_android">"☎️ Anruf läuft"</string>
+  <string name="screen_incoming_call_subtitle_android">"Eingehender Element Call"</string>
 </resources>

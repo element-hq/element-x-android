@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_app_lock_forgot_pin">"Esqueceu o PIN?"</string>
+  <string name="screen_app_lock_settings_change_pin">"Mudar código de PIN"</string>
+  <string name="screen_app_lock_settings_enable_biometric_unlock">"Permitir desbloqueio biométrico"</string>
+  <string name="screen_app_lock_settings_remove_pin">"Remover PIN"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_message">"Tem certeza de que quer remover o PIN?"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_title">"Remover PIN?"</string>
+  <string name="screen_app_lock_setup_choose_pin">"Escolher PIN"</string>
+  <string name="screen_app_lock_setup_confirm_pin">"Confirmar PIN"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"Os PINs não correspondem"</string>
+  <string name="screen_app_lock_signout_alert_title">"Você está sendo desconectado"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"Você tem %1$d tentativa de debloqueio"</item>
+    <item quantity="other">"Você tem %1$d tentativas de debloqueio"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"PIN incorreto. Você tem mais %1$d chance"</item>
+    <item quantity="other">"PIN incorreto. Você tem mais %1$d chances"</item>
+  </plurals>
+  <string name="screen_signout_in_progress_dialog_content">"Saindo…"</string>
+</resources>

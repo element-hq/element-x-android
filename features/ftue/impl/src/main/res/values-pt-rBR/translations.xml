@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_notification_optin_subtitle">"Você pode alterar suas configurações mais tarde."</string>
+  <string name="screen_notification_optin_title">"Permita notificações e nunca perca uma mensagem"</string>
+  <string name="screen_welcome_bullet_1">"Chamadas, enquetes, pesquisa e muito mais serão adicionadas ainda este ano."</string>
+  <string name="screen_welcome_bullet_2">"O histórico de mensagens para salas criptografadas ainda não está disponível."</string>
+  <string name="screen_welcome_bullet_3">"Adoraríamos ouvir sua opinião. Deixe-nos saber o que você pensa através da página de configurações."</string>
+  <string name="screen_welcome_button">"Vamos lá!"</string>
+  <string name="screen_welcome_subtitle">"Aqui está o que você precisa saber:"</string>
+  <string name="screen_welcome_title">"Bem-vindo ao %1$s!"</string>
+</resources>

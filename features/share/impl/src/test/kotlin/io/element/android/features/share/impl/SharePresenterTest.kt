@@ -28,6 +28,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
@@ -92,7 +93,9 @@ class SharePresenterTest {
 
     @Test
     fun `present - send text ok`() = runTest {
-        val matrixRoom = FakeMatrixRoom()
+        val matrixRoom = FakeMatrixRoom(
+            sendMessageResult = { _, _, _ -> Result.success(Unit) },
+        )
         val matrixClient = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, matrixRoom)
         }
@@ -117,7 +120,9 @@ class SharePresenterTest {
 
     @Test
     fun `present - send media ok`() = runTest {
-        val matrixRoom = FakeMatrixRoom()
+        val matrixRoom = FakeMatrixRoom(
+            sendMediaResult = { Result.success(FakeMediaUploadHandler()) },
+        )
         val matrixClient = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, matrixRoom)
         }

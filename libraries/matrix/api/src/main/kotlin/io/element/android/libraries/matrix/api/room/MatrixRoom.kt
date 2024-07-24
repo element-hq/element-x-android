@@ -126,6 +126,8 @@ interface MatrixRoom : Closeable {
 
     suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
 
+    suspend fun editMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
+
     suspend fun sendImage(
         file: File,
         thumbnailFile: File?,

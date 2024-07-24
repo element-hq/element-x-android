@@ -56,6 +56,7 @@ import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.room.powerlevels.RoomPowerLevelsMapper
 import io.element.android.libraries.matrix.impl.timeline.RustTimeline
 import io.element.android.libraries.matrix.impl.timeline.toRustReceiptType
+import io.element.android.libraries.matrix.impl.util.MessageEventContent
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
 import io.element.android.libraries.matrix.impl.widget.generateWidgetWebViewUrl
@@ -321,6 +322,14 @@ class RustMatrixRoom(
     override suspend fun userAvatarUrl(userId: UserId): Result<String?> = withContext(roomDispatcher) {
         runCatching {
             innerRoom.memberAvatarUrl(userId.value)
+        }
+    }
+
+    override suspend fun editMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> = withContext(roomDispatcher) {
+        runCatching {
+            MessageEventContent.from(body, htmlBody, mentions).use { newContent ->
+                innerRoom.edit(eventId.value, newContent)
+            }
         }
     }
 
