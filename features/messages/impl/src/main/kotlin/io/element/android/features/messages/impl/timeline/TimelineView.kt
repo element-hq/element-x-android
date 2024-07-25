@@ -90,6 +90,7 @@ fun TimelineView(
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     onJoinCallClick: () -> Unit,
     modifier: Modifier = Modifier,
+    lazyListState: LazyListState = rememberLazyListState(),
     forceJumpToBottomVisibility: Boolean = false
 ) {
     fun clearFocusRequestState() {
@@ -109,7 +110,6 @@ fun TimelineView(
     }
 
     val context = LocalContext.current
-    val lazyListState = rememberLazyListState()
     // Disable reverse layout when TalkBack is enabled to avoid incorrect ordering issues seen in the current Compose UI version
     val useReverseLayout = remember {
         val accessibilityManager = context.getSystemService(AccessibilityManager::class.java)
