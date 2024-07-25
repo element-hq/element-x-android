@@ -38,6 +38,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 private val developerModeKey = booleanPreferencesKey("developerMode")
 private val customElementCallBaseUrlKey = stringPreferencesKey("elementCallBaseUrl")
 private val themeKey = stringPreferencesKey("theme")
+private val simplifiedSlidingSyncKey = booleanPreferencesKey("useSimplifiedSlidingSync")
 
 @ContributesBinding(AppScope::class)
 class DefaultAppPreferencesStore @Inject constructor(
@@ -84,6 +85,18 @@ class DefaultAppPreferencesStore @Inject constructor(
     override fun getThemeFlow(): Flow<String?> {
         return store.data.map { prefs ->
             prefs[themeKey]
+        }
+    }
+
+    override suspend fun setSimplifiedSlidingSyncEnabled(enabled: Boolean) {
+        store.edit { prefs ->
+            prefs[simplifiedSlidingSyncKey] = enabled
+        }
+    }
+
+    override fun isSimplifiedSlidingSyncEnabledFlow(): Flow<Boolean> {
+        return store.data.map { prefs ->
+            prefs[simplifiedSlidingSyncKey] ?: false
         }
     }
 

@@ -82,6 +82,7 @@
   <string name="action_ok">"OK"</string>
   <string name="action_open_settings">"Otvoriť nastavenia"</string>
   <string name="action_open_with">"Otvoriť pomocou"</string>
+  <string name="action_pin">"Pripnúť"</string>
   <string name="action_quick_reply">"Rýchla odpoveď"</string>
   <string name="action_quote">"Citovať"</string>
   <string name="action_react">"Reagovať"</string>
@@ -260,6 +261,10 @@ Dôvod: %1$s."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s nemá povolenie na prístup k vášmu mikrofónu. Povoľte prístup na nahrávanie hlasovej správy."</string>
   <string name="error_some_messages_have_not_been_sent">"Niektoré správy neboli odoslané"</string>
   <string name="error_unknown">"Prepáčte, vyskytla sa chyba"</string>
+  <string name="event_shield_reason_authenticity_not_guaranteed">"Pravosť tejto šifrovanej správy nie je možné zaručiť na tomto zariadení."</string>
+  <string name="event_shield_reason_unknown_device">"Zašifrované neznámym alebo odstráneným zariadením."</string>
+  <string name="event_shield_reason_unsigned_device">"Šifrované zariadením, ktoré nie je overené jeho majiteľom."</string>
+  <string name="event_shield_reason_unverified_identity">"Šifrované neovereným používateľom."</string>
   <string name="invite_friends_rich_title">"🔐️ Pripojte sa ku mne na %1$s"</string>
   <string name="invite_friends_text">"Ahoj, porozprávajte sa so mnou na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
@@ -276,6 +281,9 @@ Dôvod: %1$s."</string>
   <string name="screen_room_member_details_unblock_alert_action">"Odblokovať"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Všetky správy od nich budete môcť opäť vidieť."</string>
   <string name="screen_room_member_details_unblock_user">"Odblokovať používateľa"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s z %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Pripnutých správ"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Zobraziť všetko"</string>
   <string name="screen_room_title">"Konverzácia"</string>
   <string name="screen_share_location_title">"Zdieľať polohu"</string>
   <string name="screen_share_my_location_action">"Zdieľať moju polohu"</string>

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"შეტყობინებების პარამეტრის განახლებისას მოხდა შეცდომა."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"თქვენი სახლის სერვერი არ უჭერს მხარს ამ პარამეტრს დაშიფრულ ოთახებში, ზოგიერთ ოთახში შეიძლება არ მიიღოთ შეტყობინება."</string>
+  <string name="screen_polls_history_title">"გამოკითხვები"</string>
   <string name="screen_room_change_permissions_everyone">"ყველა"</string>
   <string name="screen_room_details_add_topic_title">"თემის დამატება"</string>
   <string name="screen_room_details_already_a_member">"უკვე წევრია"</string>
@@ -39,6 +41,7 @@
   <string name="screen_room_notification_settings_error_loading_settings">"შეტყობინებების პარამეტრების ჩატვირთვისას მოხდა შეცდომა."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"ნაგულისხმევი რეჟიმის აღდგენა ვერ მოხერხდა, გთხოვთ, სცადოთ ხელახლა."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"რეჟიმის დაყენება ვერ მოხერხდა, გთხოვთ, სცადოთ ხელახლა."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"თქვენი სახლის სერვერი არ უჭერს მხარს ამ პარამეტრს დაშიფრულ ოთახებში, თქვენ არ მიიღებთ შეტყობინებას ამ ოთახში."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"ყველა შეტყობინება"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"მხოლოდ ხსენებები და საკვანძო სიტყვები"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"ამ ოთახში, შემატყობინეთ:"</string>

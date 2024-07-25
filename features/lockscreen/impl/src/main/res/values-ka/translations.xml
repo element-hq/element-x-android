@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_app_lock_biometric_authentication">"ბიომეტრიული ავტორიზაცია"</string>
+  <string name="screen_app_lock_biometric_unlock">"ბიომეტრიული განბლოკვა"</string>
+  <string name="screen_app_lock_biometric_unlock_title_android">"განბლოკვა ბიომეტრიით"</string>
   <string name="screen_app_lock_forgot_pin">"დაგავიწყდათ PIN?"</string>
   <string name="screen_app_lock_settings_change_pin">"PIN კოდის შეცვლა"</string>
   <string name="screen_app_lock_settings_enable_biometric_unlock">"ბიომეტრიული განბლოკვის დაშვება"</string>
   <string name="screen_app_lock_settings_remove_pin">"პინ კოდის წაშლა"</string>
   <string name="screen_app_lock_settings_remove_pin_alert_message">"დარწმუნებული ხართ, რომ გსურთ PIN-ის წაშლა?"</string>
   <string name="screen_app_lock_settings_remove_pin_alert_title">"გსურთ PIN-ის წაშლა?"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_allow_title">"%1$s დაშვება"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_skip">"მირჩევნია PIN-ის გამოყენება"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"დაზოგეთ დრო და გამოიყენეთ %1$s აპლიკაციის განსაბლოკად."</string>
+  <string name="screen_app_lock_setup_choose_pin">"აირჩიეთ PIN"</string>
   <string name="screen_app_lock_setup_confirm_pin">"დაადასტურეთ PIN"</string>
+  <string name="screen_app_lock_setup_pin_context">"თქვენი ჩატების დამატებითი უსაფრთხოებისათვის დაბლოკეთ %1$s.
+
+აირჩიეთ რაიმე ისეთი, რაც დაგამახსოვრდებათ. თუ დაგავიწყდებათ ეს PIN, აპლიკაციიდან გამოხვალთ."</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"თქვენ არ შეგიძლიათ აირჩიოთ ეს PIN კოდი უსაფრთხოების მიზეზების გამო"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"აირჩიეთ სხვა PIN"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"გთხოვთ შეიყვანოთ იგივე PIN ორჯერ"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN-ები არ ემთხვევა"</string>
   <string name="screen_app_lock_signout_alert_message">"გასაგრძელებლად საჭიროა ხელახლა შესვლა და ახალი PIN-ის შექმნა"</string>
   <string name="screen_app_lock_signout_alert_title">"თქვენ ახლა გადიხართ…"</string>
   <plurals name="screen_app_lock_subtitle">
@@ -17,5 +31,7 @@
     <item quantity="one">"არასწორი PIN. თქვენ %1$d შანსი დაგრჩათ"</item>
     <item quantity="other">"არასწორი PIN. თქვენ %1$d შანსი დაგრჩათ"</item>
   </plurals>
+  <string name="screen_app_lock_use_biometric_android">"გამოიყენეთ ბიომეტრია"</string>
+  <string name="screen_app_lock_use_pin_android">"გამოიყენეთ PIN"</string>
   <string name="screen_signout_in_progress_dialog_content">"გასვლა…"</string>
 </resources>

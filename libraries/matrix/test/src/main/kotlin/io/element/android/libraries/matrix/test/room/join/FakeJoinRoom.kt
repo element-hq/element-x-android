@@ -17,18 +17,18 @@
 package io.element.android.libraries.matrix.test.room.join
 
 import im.vector.app.features.analytics.plan.JoinedRoom
-import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
 import io.element.android.tests.testutils.simulateLongTask
 
 class FakeJoinRoom(
-    var lambda: (RoomId, List<String>, JoinedRoom.Trigger) -> Result<Unit>
+    var lambda: (RoomIdOrAlias, List<String>, JoinedRoom.Trigger) -> Result<Unit>
 ) : JoinRoom {
     override suspend fun invoke(
-        roomId: RoomId,
+        roomIdOrAlias: RoomIdOrAlias,
         serverNames: List<String>,
         trigger: JoinedRoom.Trigger,
     ): Result<Unit> = simulateLongTask {
-        lambda(roomId, serverNames, trigger)
+        lambda(roomIdOrAlias, serverNames, trigger)
     }
 }

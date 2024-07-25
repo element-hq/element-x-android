@@ -28,7 +28,7 @@ import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.pin.model.assertText
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
-import io.element.android.features.lockscreen.impl.unlock.signout.SignOut
+import io.element.android.features.logout.test.FakeLogoutUseCase
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -106,9 +106,9 @@ class PinUnlockPresenterTest {
 
     @Test
     fun `present - forgot pin flow`() = runTest {
-        val signOutLambda = lambdaRecorder<String?> { null }
-        val signOut = FakeSignOut(signOutLambda)
-        val presenter = createPinUnlockPresenter(this, signOut = signOut)
+        val signOutLambda = lambdaRecorder<Boolean, String> { "" }
+        val signOut = FakeLogoutUseCase(signOutLambda)
+        val presenter = createPinUnlockPresenter(this, logoutUseCase = signOut)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -135,7 +135,7 @@ class PinUnlockPresenterTest {
             awaitItem().also { state ->
                 assertThat(state.signOutAction).isInstanceOf(AsyncData.Success::class.java)
             }
-            assert(signOutLambda).isCalledOnce().withNoParameter()
+            assert(signOutLambda).isCalledOnce()
         }
     }
 
@@ -147,7 +147,7 @@ class PinUnlockPresenterTest {
         scope: CoroutineScope,
         biometricUnlockManager: BiometricUnlockManager = FakeBiometricUnlockManager(),
         callback: PinCodeManager.Callback = DefaultPinCodeManagerCallback(),
-        signOut: SignOut = FakeSignOut(),
+        logoutUseCase: FakeLogoutUseCase = FakeLogoutUseCase(logoutLambda = { "" }),
     ): PinUnlockPresenter {
         val pinCodeManager = aPinCodeManager().apply {
             addCallback(callback)
@@ -156,7 +156,7 @@ class PinUnlockPresenterTest {
         return PinUnlockPresenter(
             pinCodeManager = pinCodeManager,
             biometricUnlockManager = biometricUnlockManager,
-            signOut = signOut,
+            logoutUseCase = logoutUseCase,
             coroutineScope = scope,
             pinUnlockHelper = PinUnlockHelper(biometricUnlockManager, pinCodeManager),
         )

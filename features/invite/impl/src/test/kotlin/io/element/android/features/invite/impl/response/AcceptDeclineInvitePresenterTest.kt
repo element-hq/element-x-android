@@ -23,7 +23,9 @@ import io.element.android.features.invite.api.response.InviteData
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -92,9 +94,9 @@ class AcceptDeclineInvitePresenterTest {
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(
                 roomId = A_ROOM_ID,
-                result = FakeMatrixRoom().apply {
+                result = FakeMatrixRoom(
                     leaveRoomLambda = declineInviteFailure
-                }
+                )
             )
         }
         val presenter = createAcceptDeclineInvitePresenter(client = client)
@@ -142,9 +144,9 @@ class AcceptDeclineInvitePresenterTest {
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(
                 roomId = A_ROOM_ID,
-                result = FakeMatrixRoom().apply {
+                result = FakeMatrixRoom(
                     leaveRoomLambda = declineInviteSuccess
-                }
+                )
             )
         }
         val presenter = createAcceptDeclineInvitePresenter(
@@ -178,8 +180,8 @@ class AcceptDeclineInvitePresenterTest {
 
     @Test
     fun `present - accepting invite error flow`() = runTest {
-        val joinRoomFailure = lambdaRecorder { roomId: RoomId, _: List<String>, _: JoinedRoom.Trigger ->
-            Result.failure<Unit>(RuntimeException("Failed to join room $roomId"))
+        val joinRoomFailure = lambdaRecorder { roomIdOrAlias: RoomIdOrAlias, _: List<String>, _: JoinedRoom.Trigger ->
+            Result.failure<Unit>(RuntimeException("Failed to join room $roomIdOrAlias"))
         }
         val presenter = createAcceptDeclineInvitePresenter(joinRoomLambda = joinRoomFailure)
         presenter.test {
@@ -208,7 +210,7 @@ class AcceptDeclineInvitePresenterTest {
         assert(joinRoomFailure)
             .isCalledOnce()
             .with(
-                value(A_ROOM_ID),
+                value(A_ROOM_ID.toRoomIdOrAlias()),
                 value(emptyList<String>()),
                 value(JoinedRoom.Trigger.Invite)
             )
@@ -222,7 +224,7 @@ class AcceptDeclineInvitePresenterTest {
         val fakeNotificationCleaner = FakeNotificationCleaner(
             clearMembershipNotificationForRoomLambda = clearMembershipNotificationForRoomLambda
         )
-        val joinRoomSuccess = lambdaRecorder { _: RoomId, _: List<String>, _: JoinedRoom.Trigger ->
+        val joinRoomSuccess = lambdaRecorder { _: RoomIdOrAlias, _: List<String>, _: JoinedRoom.Trigger ->
             Result.success(Unit)
         }
         val presenter = createAcceptDeclineInvitePresenter(
@@ -248,7 +250,7 @@ class AcceptDeclineInvitePresenterTest {
         assert(joinRoomSuccess)
             .isCalledOnce()
             .with(
-                value(A_ROOM_ID),
+                value(A_ROOM_ID.toRoomIdOrAlias()),
                 value(emptyList<String>()),
                 value(JoinedRoom.Trigger.Invite)
             )
@@ -271,7 +273,7 @@ class AcceptDeclineInvitePresenterTest {
 
     private fun createAcceptDeclineInvitePresenter(
         client: MatrixClient = FakeMatrixClient(),
-        joinRoomLambda: (RoomId, List<String>, JoinedRoom.Trigger) -> Result<Unit> = { _, _, _ ->
+        joinRoomLambda: (RoomIdOrAlias, List<String>, JoinedRoom.Trigger) -> Result<Unit> = { _, _, _ ->
             Result.success(Unit)
         },
         notificationCleaner: NotificationCleaner = FakeNotificationCleaner(),

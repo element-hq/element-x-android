@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="notification_channel_call">"Chamada"</string>
+  <string name="notification_channel_listening_for_events">"Ouvindo eventos"</string>
+  <string name="notification_channel_noisy">"Notificações barulhentas"</string>
+  <string name="notification_channel_silent">"Notificações silenciosas"</string>
+  <plurals name="notification_compat_summary_line_for_room">
+    <item quantity="one">"%1$s: %2$d mensagem"</item>
+    <item quantity="other">"%1$s: %2$d mensagens"</item>
+  </plurals>
+  <plurals name="notification_compat_summary_title">
+    <item quantity="one">"%d notificação"</item>
+    <item quantity="other">"%d notificações"</item>
+  </plurals>
+  <string name="notification_fallback_content">"Notificação"</string>
+  <string name="notification_inline_reply_failed">"** Falha ao enviar - por favor, abra a sala"</string>
+  <string name="notification_invitation_action_join">"Entrar"</string>
+  <string name="notification_invitation_action_reject">"Rejeitar"</string>
+  <plurals name="notification_invitations">
+    <item quantity="one">"%d convite"</item>
+    <item quantity="other">"%d convites"</item>
+  </plurals>
+  <string name="notification_invite_body">"Convidou você para conversar"</string>
+  <string name="notification_new_messages">"Novas mensagens"</string>
+  <plurals name="notification_new_messages_for_room">
+    <item quantity="one">"%d nova mensagem"</item>
+    <item quantity="other">"%d novas mensagens"</item>
+  </plurals>
+  <string name="notification_reaction_body">"Reagiu com %1$s"</string>
+  <string name="notification_room_action_quick_reply">"Resposta rápida"</string>
+  <string name="notification_room_invite_body">"Convidou você para entrar na sala"</string>
+  <string name="notification_sender_me">"Eu"</string>
+  <string name="notification_test_push_notification_content">"Você está visualizando a notificação! Clique em mim!"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
+  <plurals name="notification_unread_notified_messages">
+    <item quantity="one">"%d mensagem notificada não lida"</item>
+    <item quantity="other">"%d mensagens notificadas não lidas"</item>
+  </plurals>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s e %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%1$s em %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s em %2$s e %3$s"</string>
+  <plurals name="notification_unread_notified_messages_in_room_rooms">
+    <item quantity="one">"%d sala"</item>
+    <item quantity="other">"%d salas"</item>
+  </plurals>
+  <string name="push_distributor_background_sync_android">"Sincronização em segundo plano"</string>
+  <string name="push_distributor_firebase_android">"Serviços do Google"</string>
+  <string name="push_no_valid_google_play_services_apk_android">"O Google Play Services não foi encontrado. As notificações podem não funcionar corretamente."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Erro: %1$s."</string>
+</resources>

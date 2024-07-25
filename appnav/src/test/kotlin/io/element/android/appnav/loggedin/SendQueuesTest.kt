@@ -33,7 +33,6 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class) class SendQueuesTest {
     private val matrixClient = FakeMatrixClient()
-    private val room = FakeMatrixRoom()
     private val networkMonitor = FakeNetworkMonitor()
     private val sut = SendQueues(matrixClient, networkMonitor)
 
@@ -43,11 +42,11 @@ import org.junit.Test
         val setAllSendQueuesEnabledLambda = lambdaRecorder { _: Boolean -> }
         matrixClient.sendQueueDisabledFlow = sendQueueDisabledFlow
         matrixClient.setAllSendQueuesEnabledLambda = setAllSendQueuesEnabledLambda
-        matrixClient.givenGetRoomResult(room.roomId, room)
-
         val setRoomSendQueueEnabledLambda = lambdaRecorder { _: Boolean -> }
-        room.setSendQueueEnabledLambda = setRoomSendQueueEnabledLambda
-
+        val room = FakeMatrixRoom(
+            setSendQueueEnabledLambda = setRoomSendQueueEnabledLambda
+        )
+        matrixClient.givenGetRoomResult(room.roomId, room)
         sut.launchIn(backgroundScope)
 
         sendQueueDisabledFlow.emit(room.roomId)
@@ -72,10 +71,11 @@ import org.junit.Test
         matrixClient.sendQueueDisabledFlow = sendQueueDisabledFlow
         matrixClient.setAllSendQueuesEnabledLambda = setAllSendQueuesEnabledLambda
         networkMonitor.connectivity.value = NetworkStatus.Offline
-        matrixClient.givenGetRoomResult(room.roomId, room)
-
         val setRoomSendQueueEnabledLambda = lambdaRecorder { _: Boolean -> }
-        room.setSendQueueEnabledLambda = setRoomSendQueueEnabledLambda
+        val room = FakeMatrixRoom(
+            setSendQueueEnabledLambda = setRoomSendQueueEnabledLambda
+        )
+        matrixClient.givenGetRoomResult(room.roomId, room)
 
         sut.launchIn(backgroundScope)
 
