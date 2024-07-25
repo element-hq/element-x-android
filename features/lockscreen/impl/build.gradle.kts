@@ -41,6 +41,7 @@ dependencies {
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.cryptography.api)
     implementation(projects.libraries.preferences.api)
+    implementation(projects.features.logout.api)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.sessionStorage.api)
     implementation(projects.services.appnavstate.api)
@@ -59,4 +60,5 @@ dependencies {
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.sessionStorage.test)
     testImplementation(projects.services.appnavstate.test)
+    testImplementation(projects.features.logout.test)
 }

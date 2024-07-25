@@ -17,11 +17,11 @@
 package io.element.android.libraries.matrix.api.room.join
 
 import im.vector.app.features.analytics.plan.JoinedRoom
-import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 
 interface JoinRoom {
     suspend operator fun invoke(
-        roomId: RoomId,
+        roomIdOrAlias: RoomIdOrAlias,
         serverNames: List<String>,
         trigger: JoinedRoom.Trigger,
     ): Result<Unit>

@@ -19,7 +19,7 @@ datastore = "1.0.0"
 constraintlayout = "2.1.4"
 constraintlayout_compose = "1.0.1"
 lifecycle = "2.7.0"
-activity = "1.9.0"
+activity = "1.9.1"
 media3 = "1.3.1"
 camera = "1.3.4"
 
@@ -177,7 +177,7 @@ vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.2"
-maplibre = "org.maplibre.gl:android-sdk:11.0.1"
+maplibre = "org.maplibre.gl:android-sdk:11.1.0"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:3.0.0"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.0"
 opusencoder = "io.element.android:opusencoder:1.1.0"
