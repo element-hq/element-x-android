@@ -87,7 +87,7 @@ private fun MessageShield.toIcon(): ImageVector {
 
 @PreviewsDayNight
 @Composable
-internal fun MessageShieldViewPreviews() {
+internal fun MessageShieldViewPreview() {
     ElementPreview {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             MessageShieldView(
