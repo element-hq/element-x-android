@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.impl.ClientBuilderSlidingSync
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
 import io.element.android.libraries.matrix.impl.auth.qrlogin.QrErrorMapper
 import io.element.android.libraries.matrix.impl.auth.qrlogin.SdkQrCodeLoginData
@@ -210,6 +211,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                     sessionPath = sessionPath,
                     passphrase = pendingPassphrase,
                     slidingSyncProxy = AuthenticationConfig.SLIDING_SYNC_PROXY_URL,
+                    slidingSync = ClientBuilderSlidingSync.Discovered,
                 )
                     .buildWithQrCode(
                         qrCodeData = (qrCodeData as SdkQrCodeLoginData).rustQrCodeData,
@@ -251,8 +253,8 @@ class RustMatrixAuthenticationService @Inject constructor(
             sessionPath = sessionPath,
             passphrase = pendingPassphrase,
             slidingSyncProxy = AuthenticationConfig.SLIDING_SYNC_PROXY_URL,
+            slidingSync = ClientBuilderSlidingSync.Discovered,
         )
-        .requiresSlidingSync()
 
     private fun clear() {
         currentClient?.close()

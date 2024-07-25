@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.features.lockscreen.impl.unlock
+plugins {
+    id("io.element.android-library")
+}
 
-import io.element.android.features.lockscreen.impl.unlock.signout.SignOut
-import io.element.android.tests.testutils.simulateLongTask
+android {
+    namespace = "io.element.android.features.logout.test"
+}
 
-class FakeSignOut(
-    var lambda: () -> String? = { null }
-) : SignOut {
-    override suspend fun invoke(): String? = simulateLongTask {
-        lambda()
-    }
+dependencies {
+    implementation(libs.coroutines.core)
+    implementation(projects.tests.testutils)
+    api(projects.features.logout.api)
 }

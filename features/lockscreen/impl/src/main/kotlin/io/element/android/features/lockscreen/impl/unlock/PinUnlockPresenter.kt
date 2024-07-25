@@ -29,7 +29,7 @@ import io.element.android.features.lockscreen.impl.biometric.BiometricUnlockMana
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
-import io.element.android.features.lockscreen.impl.unlock.signout.SignOut
+import io.element.android.features.logout.api.LogoutUseCase
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -41,7 +41,7 @@ import javax.inject.Inject
 class PinUnlockPresenter @Inject constructor(
     private val pinCodeManager: PinCodeManager,
     private val biometricUnlockManager: BiometricUnlockManager,
-    private val signOut: SignOut,
+    private val logoutUseCase: LogoutUseCase,
     private val coroutineScope: CoroutineScope,
     private val pinUnlockHelper: PinUnlockHelper,
 ) : Presenter<PinUnlockState> {
@@ -179,7 +179,7 @@ class PinUnlockPresenter @Inject constructor(
 
     private fun CoroutineScope.signOut(signOutAction: MutableState<AsyncData<String?>>) = launch {
         suspend {
-            signOut()
+            logoutUseCase.logout(ignoreSdkError = true)
         }.runCatchingUpdatingState(signOutAction)
     }
 }
