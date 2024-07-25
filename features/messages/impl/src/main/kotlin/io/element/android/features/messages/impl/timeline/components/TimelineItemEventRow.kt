@@ -37,6 +37,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -696,14 +697,29 @@ internal fun TimelineItemEventRowShieldsPreview() = ElementPreview {
     }
 }
 
+@Composable
+@ReadOnlyComposable
 private fun TimelineItem.Event.shieldPosition(): MessageShieldPosition {
-    if (this.messageShield == null) return MessageShieldPosition.None
+    val shield = this.messageShield ?: return MessageShieldPosition.None
+
+    // sdk returns raw human readable strings, add i18n support
+    val localizedMessage = when (shield.message) {
+        "The authenticity of this encrypted message can't be guaranteed on this device." -> stringResource(
+            CommonStrings.event_shield_reason_authenticity_not_guaranteed
+        )
+        "Encrypted by a device not verified by its owner." -> stringResource(CommonStrings.event_shield_reason_unsigned_device)
+        "Encrypted by an unknown or deleted device." -> stringResource(CommonStrings.event_shield_reason_unknown_device)
+        "Encrypted by an unverified user." -> stringResource(CommonStrings.event_shield_reason_unverified_identity)
+        else -> shield.message
+    }
+    val localShield = shield.copy(message = localizedMessage)
+
     return when (this.content) {
         is TimelineItemImageContent,
         is TimelineItemVideoContent,
         is TimelineItemStickerContent,
         is TimelineItemLocationContent,
-        is TimelineItemPollContent -> MessageShieldPosition.OutOfBubble(this.messageShield)
-        else -> MessageShieldPosition.InBubble(this.messageShield)
+        is TimelineItemPollContent -> MessageShieldPosition.OutOfBubble(localShield)
+        else -> MessageShieldPosition.InBubble(localShield)
     }
 }
