@@ -96,7 +96,7 @@ class JoinRoomPresenter @AssistedInject constructor(
                 }
                 else -> {
                     value = ContentState.Loading(roomIdOrAlias)
-                    val result = matrixClient.getRoomPreviewFromRoomId(roomId, serverNames)
+                    val result = matrixClient.getRoomPreview(roomIdOrAlias, serverNames)
                     value = result.fold(
                         onSuccess = { roomPreview ->
                             roomPreview.toContentState()
@@ -153,7 +153,7 @@ class JoinRoomPresenter @AssistedInject constructor(
     private fun CoroutineScope.joinRoom(joinAction: MutableState<AsyncAction<Unit>>) = launch {
         joinAction.runUpdatingState {
             joinRoom.invoke(
-                roomId = roomId,
+                roomIdOrAlias = roomIdOrAlias,
                 serverNames = serverNames,
                 trigger = trigger
             )
