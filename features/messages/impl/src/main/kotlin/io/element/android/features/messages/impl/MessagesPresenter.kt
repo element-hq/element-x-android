@@ -20,6 +20,7 @@ import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -131,10 +132,9 @@ class MessagesPresenter @AssistedInject constructor(
         val readReceiptBottomSheetState = readReceiptBottomSheetPresenter.present()
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
-        val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
-        val userHasPermissionToRedactOwn by room.canRedactOwnAsState(updateKey = syncUpdateFlow.value)
-        val userHasPermissionToRedactOther by room.canRedactOtherAsState(updateKey = syncUpdateFlow.value)
-        val userHasPermissionToSendReaction by room.canSendMessageAsState(type = MessageEventType.REACTION, updateKey = syncUpdateFlow.value)
+
+        val userEventPermissions by userEventPermissions(syncUpdateFlow.value)
+
         val roomName: AsyncData<String> by remember {
             derivedStateOf { roomInfo?.name?.let { AsyncData.Success(it) } ?: AsyncData.Uninitialized }
         }
@@ -211,11 +211,8 @@ class MessagesPresenter @AssistedInject constructor(
             roomName = roomName,
             roomAvatar = roomAvatar,
             heroes = heroes,
-            userHasPermissionToSendMessage = userHasPermissionToSendMessage,
-            userHasPermissionToRedactOwn = userHasPermissionToRedactOwn,
-            userHasPermissionToRedactOther = userHasPermissionToRedactOther,
-            userHasPermissionToSendReaction = userHasPermissionToSendReaction,
             composerState = composerState,
+            userEventPermissions = userEventPermissions,
             voiceMessageComposerState = voiceMessageComposerState,
             timelineState = timelineState,
             typingNotificationState = typingNotificationState,
@@ -233,6 +230,24 @@ class MessagesPresenter @AssistedInject constructor(
             callState = callState,
             eventSink = { handleEvents(it) }
         )
+    }
+
+    @Composable
+    private fun userEventPermissions(updateKey: Long): State<UserEventPermissions> {
+        val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = updateKey)
+        val userHasPermissionToRedactOwn by room.canRedactOwnAsState(updateKey = updateKey)
+        val userHasPermissionToRedactOther by room.canRedactOtherAsState(updateKey = updateKey)
+        val userHasPermissionToSendReaction by room.canSendMessageAsState(type = MessageEventType.REACTION, updateKey = updateKey)
+        return remember {
+            derivedStateOf {
+                UserEventPermissions(
+                    canSendMessage = userHasPermissionToSendMessage,
+                    canRedactOwn = userHasPermissionToRedactOwn,
+                    canRedactOther = userHasPermissionToRedactOther,
+                    canSendReaction = userHasPermissionToSendReaction,
+                )
+            }
+        }
     }
 
     private fun MatrixRoomInfo.avatarData(): AvatarData {

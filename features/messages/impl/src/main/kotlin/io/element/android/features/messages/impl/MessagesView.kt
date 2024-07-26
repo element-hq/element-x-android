@@ -154,10 +154,7 @@ fun MessagesView(
         state.actionListState.eventSink(
             ActionListEvents.ComputeForMessage(
                 event = event,
-                canRedactOwn = state.userHasPermissionToRedactOwn,
-                canRedactOther = state.userHasPermissionToRedactOther,
-                canSendMessage = state.userHasPermissionToSendMessage,
-                canSendReaction = state.userHasPermissionToSendReaction,
+                userEventPermissions = state.userEventPermissions,
             )
         )
     }
@@ -408,7 +405,7 @@ private fun MessagesViewComposerBottomSheetContents(
     subcomposing: Boolean,
     state: MessagesState,
 ) {
-    if (state.userHasPermissionToSendMessage) {
+    if (state.userEventPermissions.canSendMessage) {
         Column(modifier = Modifier.fillMaxWidth()) {
             MentionSuggestionsPickerView(
                 modifier = Modifier

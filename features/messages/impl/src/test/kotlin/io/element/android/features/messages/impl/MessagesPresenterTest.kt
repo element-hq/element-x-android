@@ -137,8 +137,8 @@ class MessagesPresenterTest {
             assertThat(initialState.roomName).isEqualTo(AsyncData.Success(""))
             assertThat(initialState.roomAvatar)
                 .isEqualTo(AsyncData.Success(AvatarData(id = A_ROOM_ID.value, name = "", url = AN_AVATAR_URL, size = AvatarSize.TimelineRoom)))
-            assertThat(initialState.userHasPermissionToSendMessage).isTrue()
-            assertThat(initialState.userHasPermissionToRedactOwn).isTrue()
+            assertThat(initialState.userEventPermissions.canSendMessage).isTrue()
+            assertThat(initialState.userEventPermissions.canRedactOwn).isTrue()
             assertThat(initialState.hasNetworkConnection).isTrue()
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.inviteProgress).isEqualTo(AsyncData.Uninitialized)
@@ -787,7 +787,7 @@ class MessagesPresenterTest {
             presenter.present()
         }.test {
             val state = awaitFirstItem()
-            assertThat(state.userHasPermissionToSendMessage).isTrue()
+            assertThat(state.userEventPermissions.canSendMessage).isTrue()
         }
     }
 
@@ -811,9 +811,9 @@ class MessagesPresenterTest {
             presenter.present()
         }.test {
             // Default value
-            assertThat(awaitItem().userHasPermissionToSendMessage).isTrue()
+            assertThat(awaitItem().userEventPermissions.canSendMessage).isTrue()
             skipItems(1)
-            assertThat(awaitItem().userHasPermissionToSendMessage).isFalse()
+            assertThat(awaitItem().userEventPermissions.canSendMessage).isFalse()
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -831,9 +831,9 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = consumeItemsUntilPredicate { it.userHasPermissionToRedactOwn }.last()
-            assertThat(initialState.userHasPermissionToRedactOwn).isTrue()
-            assertThat(initialState.userHasPermissionToRedactOther).isFalse()
+            val initialState = consumeItemsUntilPredicate { it.userEventPermissions.canRedactOwn }.last()
+            assertThat(initialState.userEventPermissions.canRedactOwn).isTrue()
+            assertThat(initialState.userEventPermissions.canRedactOther).isFalse()
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -851,9 +851,9 @@ class MessagesPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = consumeItemsUntilPredicate { it.userHasPermissionToRedactOther }.last()
-            assertThat(initialState.userHasPermissionToRedactOwn).isFalse()
-            assertThat(initialState.userHasPermissionToRedactOther).isTrue()
+            val initialState = consumeItemsUntilPredicate { it.userEventPermissions.canRedactOther }.last()
+            assertThat(initialState.userEventPermissions.canRedactOwn).isFalse()
+            assertThat(initialState.userEventPermissions.canRedactOther).isTrue()
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -963,6 +963,7 @@ class MessagesPresenterTest {
             room = matrixRoom,
             sessionPreferencesStore = sessionPreferencesStore,
         )
+
         val readReceiptBottomSheetPresenter = ReadReceiptBottomSheetPresenter()
         val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
         val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)

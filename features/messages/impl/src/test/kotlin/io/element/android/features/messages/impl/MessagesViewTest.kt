@@ -26,6 +26,7 @@ import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
+import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -43,7 +44,6 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
-import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.aTimelineItemReadReceipts
 import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aTimelineState
@@ -175,10 +175,12 @@ class MessagesViewTest {
             actionListState = anActionListState(
                 eventSink = eventsRecorder
             ),
-            userHasPermissionToSendMessage = userHasPermissionToSendMessage,
-            userHasPermissionToRedactOwn = userHasPermissionToRedactOwn,
-            userHasPermissionToRedactOther = userHasPermissionToRedactOther,
-            userHasPermissionToSendReaction = userHasPermissionToSendReaction,
+            userEventPermissions = UserEventPermissions(
+                canSendMessage = userHasPermissionToSendMessage,
+                canRedactOwn = userHasPermissionToRedactOwn,
+                canRedactOther = userHasPermissionToRedactOther,
+                canSendReaction = userHasPermissionToSendReaction,
+            ),
         )
         val timelineItem = state.timelineState.timelineItems.first() as TimelineItem.Event
         rule.setMessagesView(
@@ -189,10 +191,7 @@ class MessagesViewTest {
         eventsRecorder.assertSingle(
             ActionListEvents.ComputeForMessage(
                 event = timelineItem,
-                canRedactOwn = state.userHasPermissionToRedactOwn,
-                canRedactOther = state.userHasPermissionToRedactOther,
-                canSendMessage = state.userHasPermissionToSendMessage,
-                canSendReaction = state.userHasPermissionToSendReaction,
+                userEventPermissions = state.userEventPermissions,
             )
         )
     }
@@ -237,9 +236,11 @@ class MessagesViewTest {
 
     private fun swipeTest(userHasPermissionToSendMessage: Boolean) {
         val eventsRecorder = EventsRecorder<MessagesEvents>()
+        val canBeRepliedEvent = aTimelineItemEvent(canBeRepliedTo = true)
+        val cannotBeRepliedEvent = aTimelineItemEvent(canBeRepliedTo = false)
         val state = aMessagesState(
             timelineState = aTimelineState(
-                timelineItems = aTimelineItemList(aTimelineItemTextContent()),
+                timelineItems = persistentListOf(canBeRepliedEvent, cannotBeRepliedEvent),
                 timelineRoomInfo = aTimelineRoomInfo(
                     userHasPermissionToSendMessage = userHasPermissionToSendMessage
                 ),
@@ -249,10 +250,12 @@ class MessagesViewTest {
         rule.setMessagesView(
             state = state,
         )
-        rule.onAllNodesWithTag(TestTags.messageBubble.value).onFirst().performTouchInput { swipeRight(endX = 200f) }
+        rule.onAllNodesWithTag(TestTags.messageBubble.value).apply {
+            onFirst().performTouchInput { swipeRight(endX = 200f) }
+            onLast().performTouchInput { swipeRight(endX = 200f) }
+        }
         if (userHasPermissionToSendMessage) {
-            val timelineItem = state.timelineState.timelineItems.first() as TimelineItem.Event
-            eventsRecorder.assertSingle(MessagesEvents.HandleAction(TimelineItemAction.Reply, timelineItem))
+            eventsRecorder.assertSingle(MessagesEvents.HandleAction(TimelineItemAction.Reply, canBeRepliedEvent))
         } else {
             eventsRecorder.assertEmpty()
         }
