@@ -245,6 +245,7 @@ class MessagesPresenter @AssistedInject constructor(
                     canRedactOwn = userHasPermissionToRedactOwn,
                     canRedactOther = userHasPermissionToRedactOther,
                     canSendReaction = userHasPermissionToSendReaction,
+                    canPin = false,
                 )
             }
         }
@@ -283,6 +284,7 @@ class MessagesPresenter @AssistedInject constructor(
             TimelineItemAction.Forward -> handleForwardAction(targetEvent)
             TimelineItemAction.ReportContent -> handleReportAction(targetEvent)
             TimelineItemAction.EndPoll -> handleEndPollAction(targetEvent, timelineState)
+            TimelineItemAction.Pin -> Timber.d("Pin action not implemented")
         }
     }
 

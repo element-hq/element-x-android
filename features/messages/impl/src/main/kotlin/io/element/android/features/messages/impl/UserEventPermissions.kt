@@ -25,4 +25,5 @@ data class UserEventPermissions(
     val canRedactOther: Boolean,
     val canSendMessage: Boolean,
     val canSendReaction: Boolean,
+    val canPin: Boolean,
 )

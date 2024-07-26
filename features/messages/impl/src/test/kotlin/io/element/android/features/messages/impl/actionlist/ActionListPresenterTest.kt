@@ -835,5 +835,6 @@ class ActionListPresenterTest {
 
 private fun createActionListPresenter(isDeveloperModeEnabled: Boolean): ActionListPresenter {
     val preferencesStore = InMemoryAppPreferencesStore(isDeveloperModeEnabled = isDeveloperModeEnabled)
-    return ActionListPresenter(appPreferencesStore = preferencesStore)
+    val featureFlagsService = FakeFeatureFlagService()
+    return ActionListPresenter(appPreferencesStore = preferencesStore, featureFlagsService = featureFlagsService)
 }

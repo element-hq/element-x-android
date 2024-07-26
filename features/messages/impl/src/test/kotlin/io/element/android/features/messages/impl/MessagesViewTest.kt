@@ -169,6 +169,7 @@ class MessagesViewTest {
         userHasPermissionToRedactOwn: Boolean = false,
         userHasPermissionToRedactOther: Boolean = false,
         userHasPermissionToSendReaction: Boolean = false,
+        userCanPinEvent: Boolean = false,
     ) {
         val eventsRecorder = EventsRecorder<ActionListEvents>()
         val state = aMessagesState(
@@ -180,6 +181,7 @@ class MessagesViewTest {
                 canRedactOwn = userHasPermissionToRedactOwn,
                 canRedactOther = userHasPermissionToRedactOther,
                 canSendReaction = userHasPermissionToSendReaction,
+                canPin = userCanPinEvent,
             ),
         )
         val timelineItem = state.timelineState.timelineItems.first() as TimelineItem.Event

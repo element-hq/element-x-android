@@ -958,7 +958,8 @@ class MessagesPresenterTest {
                 return timelinePresenter
             }
         }
-        val actionListPresenter = ActionListPresenter(appPreferencesStore = appPreferencesStore)
+        val featureFlagService = FakeFeatureFlagService()
+        val actionListPresenter = ActionListPresenter(appPreferencesStore = appPreferencesStore, featureFlagsService = featureFlagService)
         val typingNotificationPresenter = TypingNotificationPresenter(
             room = matrixRoom,
             sessionPreferencesStore = sessionPreferencesStore,
@@ -981,7 +982,7 @@ class MessagesPresenterTest {
             snackbarDispatcher = SnackbarDispatcher(),
             navigator = navigator,
             clipboardHelper = clipboardHelper,
-            featureFlagsService = FakeFeatureFlagService(),
+            featureFlagsService = featureFlagService,
             buildMeta = aBuildMeta(),
             dispatchers = coroutineDispatchers,
             htmlConverterProvider = FakeHtmlConverterProvider(),

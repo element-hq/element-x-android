@@ -36,6 +36,8 @@ import io.element.android.features.messages.impl.timeline.model.event.canBeCopie
 import io.element.android.features.messages.impl.timeline.model.event.canBeForwarded
 import io.element.android.features.messages.impl.timeline.model.event.canReact
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -44,6 +46,7 @@ import javax.inject.Inject
 
 class ActionListPresenter @Inject constructor(
     private val appPreferencesStore: AppPreferencesStore,
+    private val featureFlagsService: FeatureFlagService,
 ) : Presenter<ActionListState> {
     @Composable
     override fun present(): ActionListState {
@@ -54,6 +57,7 @@ class ActionListPresenter @Inject constructor(
         }
 
         val isDeveloperModeEnabled by appPreferencesStore.isDeveloperModeEnabledFlow().collectAsState(initial = false)
+        val isPinnedEventsEnabled by featureFlagsService.isFeatureEnabledFlow(FeatureFlags.PinnedEvents).collectAsState(initial = false)
 
         fun handleEvents(event: ActionListEvents) {
             when (event) {
@@ -62,6 +66,7 @@ class ActionListPresenter @Inject constructor(
                     timelineItem = event.event,
                     usersEventPermissions = event.userEventPermissions,
                     isDeveloperModeEnabled = isDeveloperModeEnabled,
+                    isPinnedEventsEnabled = isPinnedEventsEnabled,
                     target = target,
                 )
             }
@@ -77,6 +82,7 @@ class ActionListPresenter @Inject constructor(
         timelineItem: TimelineItem.Event,
         usersEventPermissions: UserEventPermissions,
         isDeveloperModeEnabled: Boolean,
+        isPinnedEventsEnabled: Boolean,
         target: MutableState<ActionListState.Target>
     ) = launch {
         target.value = ActionListState.Target.Loading(timelineItem)
@@ -85,6 +91,7 @@ class ActionListPresenter @Inject constructor(
             timelineItem = timelineItem,
             usersEventPermissions = usersEventPermissions,
             isDeveloperModeEnabled = isDeveloperModeEnabled,
+            isPinnedEventsEnabled = isPinnedEventsEnabled,
         )
         val displayEmojiReactions = usersEventPermissions.canSendReaction &&
             timelineItem.isRemote &&
@@ -105,6 +112,7 @@ private fun buildActions(
     timelineItem: TimelineItem.Event,
     usersEventPermissions: UserEventPermissions,
     isDeveloperModeEnabled: Boolean,
+    isPinnedEventsEnabled: Boolean,
 ): List<TimelineItemAction> {
     val canRedact = timelineItem.isMine && usersEventPermissions.canRedactOwn || !timelineItem.isMine && usersEventPermissions.canRedactOther
     return buildList {
@@ -123,6 +131,11 @@ private fun buildActions(
         }
         if (canRedact && timelineItem.content is TimelineItemPollContent && !timelineItem.content.isEnded) {
             add(TimelineItemAction.EndPoll)
+        }
+        // TODO: handle unpin
+        val canPin = isPinnedEventsEnabled && usersEventPermissions.canPin && timelineItem.isRemote
+        if (canPin) {
+            add(TimelineItemAction.Pin)
         }
         if (timelineItem.content.canBeCopied()) {
             add(TimelineItemAction.Copy)
