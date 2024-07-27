@@ -39,7 +39,7 @@ test_core = "1.6.1"
 #other
 coil = "2.7.0"
 datetime = "0.6.0"
-dependencyAnalysis = "1.32.0"
+dependencyAnalysis = "1.33.0"
 serialization_json = "1.6.3"
 showkase = "1.0.3"
 appyx = "1.4.0"
