@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
+import io.element.android.tests.testutils.lambda.lambdaError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -370,6 +371,16 @@ class FakeTimeline(
     }
 
     override suspend fun loadReplyDetails(eventId: EventId) = loadReplyDetailsLambda(eventId)
+
+    var pinEventLambda: (eventId: EventId) -> Result<Boolean> = lambdaError()
+    override suspend fun pinEvent(eventId: EventId): Result<Boolean> {
+        return pinEventLambda(eventId)
+    }
+
+    var unpinEventLambda: (eventId: EventId) -> Result<Boolean> = lambdaError()
+    override suspend fun unpinEvent(eventId: EventId): Result<Boolean> {
+        return unpinEventLambda(eventId)
+    }
 
     var closeCounter = 0
         private set
