@@ -221,6 +221,7 @@ private fun aRustRoomInfo(
     numUnreadMessages: ULong = 0uL,
     numUnreadNotifications: ULong = 0uL,
     numUnreadMentions: ULong = 0uL,
+    pinnedEventIds: List<String> = listOf(),
 ) = RoomInfo(
     id = id,
     displayName = displayName,
@@ -249,7 +250,8 @@ private fun aRustRoomInfo(
     isMarkedUnread = isMarkedUnread,
     numUnreadMessages = numUnreadMessages,
     numUnreadNotifications = numUnreadNotifications,
-    numUnreadMentions = numUnreadMentions
+    numUnreadMentions = numUnreadMentions,
+    pinnedEventIds = pinnedEventIds,
 )
 
 class FakeRoomListItem(
