@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_screen_action">"Uruchom testy"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Uruchom testy ponownie"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Niektóre testy się nie powiodły. Sprawdź szczegóły."</string>
+  <string name="troubleshoot_notifications_screen_notice">"Uruchom testy, aby wykryć potencjalne problemy z konfiguracją, jeśli powiadomienia nie działają prawidłowo."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Spróbuj naprawić"</string>
+  <string name="troubleshoot_notifications_screen_success">"Wszystkie testy przebiegły pomyślnie."</string>
+  <string name="troubleshoot_notifications_screen_title">"Powiadomienia rozwiązywania problemów"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Niektóre testy wymagają Twojej uwagi. Sprawdź szczegóły."</string>
+</resources>

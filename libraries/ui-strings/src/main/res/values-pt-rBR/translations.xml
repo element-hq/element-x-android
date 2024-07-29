@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_delete">"Excluir"</string>
+  <plurals name="a11y_digits_entered">
+    <item quantity="one">"%1$d dígito inserido"</item>
+    <item quantity="other">"%1$d dígitos inseridos"</item>
+  </plurals>
   <string name="a11y_hide_password">"Ocultar senha"</string>
   <string name="a11y_jump_to_bottom">"Ir para o final"</string>
   <string name="a11y_notifications_mentions_only">"Apenas menções"</string>
@@ -14,6 +18,10 @@
   <string name="a11y_react_with">"Reagir com %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reaja com outros emojis"</string>
   <string name="a11y_read_receipts_multiple">"Lido por %1$s e %2$s"</string>
+  <plurals name="a11y_read_receipts_multiple_with_others">
+    <item quantity="one">"Lido por %1$s e %2$d outro"</item>
+    <item quantity="other">"Lido por %1$s e %2$d outros"</item>
+  </plurals>
   <string name="a11y_read_receipts_single">"Lido por %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Toque para mostrar tudo"</string>
   <string name="a11y_remove_reaction_with">"Remova a reação com %1$s"</string>
@@ -186,7 +194,7 @@
   <string name="common_room">"Sala"</string>
   <string name="common_room_name">"Nome da sala"</string>
   <string name="common_room_name_placeholder">"por exemplo, o nome do seu projeto"</string>
-  <string name="common_saved_changes">"Mudanças salvas"</string>
+  <string name="common_saved_changes">"Alterações salvas"</string>
   <string name="common_saving">"Salvando"</string>
   <string name="common_screen_lock">"Bloqueio de tela"</string>
   <string name="common_search_for_someone">"Procurar alguém"</string>
@@ -233,8 +241,8 @@
   <string name="dialog_title_error">"Erro"</string>
   <string name="dialog_title_success">"Sucesso"</string>
   <string name="dialog_title_warning">"Aviso"</string>
-  <string name="dialog_unsaved_changes_description_android">"Suas mudanças não foram salvas. Tem certeza de que você quer voltar?"</string>
-  <string name="dialog_unsaved_changes_title">"Salvar mudanças?"</string>
+  <string name="dialog_unsaved_changes_description_android">"Suas alterações não foram salvas. Tem certeza de que você quer voltar?"</string>
+  <string name="dialog_unsaved_changes_title">"Salvar alterações?"</string>
   <string name="error_failed_creating_the_permalink">"Falha ao criar o link permanente"</string>
   <string name="error_failed_loading_map">"%1$s não conseguiu carregar o mapa. Por favor, tente novamente mais tarde."</string>
   <string name="error_failed_loading_messages">"Falha ao carregar mensagens"</string>
@@ -243,6 +251,7 @@
   <string name="error_message_not_found">"Mensagem não encontrada"</string>
   <string name="error_missing_location_auth_android">"%1$s não tem permissão para acessar sua localização. Você pode ativar o acesso nas Configurações."</string>
   <string name="error_missing_location_rationale_android">"%1$s não tem permissão para acessar sua localização. Habilite o acesso abaixo."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s não tem permissão para acessar seu microfone. Permita o acesso para gravar uma mensagem de voz."</string>
   <string name="error_some_messages_have_not_been_sent">"Algumas mensagens não foram enviadas"</string>
   <string name="error_unknown">"Desculpe, ocorreu um erro"</string>
   <string name="event_shield_reason_unknown_device">"Criptografada por um dispositivo desconhecido ou apagado."</string>

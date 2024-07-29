@@ -23,6 +23,7 @@
   <string name="screen_room_encrypted_history_banner">"O histórico de mensagens não está disponível no momento."</string>
   <string name="screen_room_invite_again_alert_message">"Gostaria de convidá-los de volta?"</string>
   <string name="screen_room_invite_again_alert_title">"Você está sozinho neste chat"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Notificar a sala inteira"</string>
   <string name="screen_room_mentions_at_room_title">"Todos"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Enviar novamente"</string>
   <string name="screen_room_retry_send_menu_title">"Sua mensagem não foi enviada"</string>
@@ -36,7 +37,16 @@
   <string name="screen_room_timeline_reactions_show_more">"Mostrar mais"</string>
   <string name="screen_room_timeline_read_marker_title">"Novo"</string>
   <plurals name="screen_room_timeline_state_changes">
-    <item quantity="one">"%1$d mudança de sala"</item>
-    <item quantity="other">"%1$d mudanças de salas"</item>
+    <item quantity="one">"%1$d alteração na sala"</item>
+    <item quantity="other">"%1$d alterações na sala"</item>
   </plurals>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="one">"%1$s, %2$s e %3$d outro"</item>
+    <item quantity="other">"%1$s, %2$s e %3$d outros"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="one">"%1$s está digitando"</item>
+    <item quantity="other">"%1$s estão digitando"</item>
+  </plurals>
+  <string name="screen_room_typing_two_members">"%1$s e %2$s"</string>
 </resources>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Bildirishnomalarni qanday qabul qilishni tanlang"</string>
+  <string name="screen_advanced_settings_developer_mode">"Dasturchi rejimi"</string>
+  <string name="screen_advanced_settings_developer_mode_description">"Ishlab chiquvchilar uchun xususiyatlar va funksiyalarga kirishni yoqing."</string>
+  <string name="screen_advanced_settings_element_call_base_url">"Maxsus element qo‘ng‘iroqlar bazasi URL manzili"</string>
+  <string name="screen_advanced_settings_rich_text_editor_description">"Boy matn muharriri o\'chiring Markdown bilan qo\'lda yozish uchun"</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Blokdan chiqarish"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Ulardan kelgan barcha xabarlarni yana koʻrishingiz mumkin boʻladi."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Foydalanuvchini blokdan chiqarish"</string>
+  <string name="screen_edit_profile_display_name">"Ko\'rsatiladigan ism"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"Ismingizni ko\'rsating"</string>
+  <string name="screen_edit_profile_error">"Noma\'lum xatolik yuz berdi va ma\'lumotni o\'zgartirib bo\'lmadi."</string>
+  <string name="screen_edit_profile_error_title">"Profilni yangilab bo‘lmadi"</string>
+  <string name="screen_edit_profile_title">"Profilni tahrirlash"</string>
+  <string name="screen_edit_profile_updating_details">"Profil yangilanmoqda…"</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"Qo\'shimcha sozlamalar"</string>
+  <string name="screen_notification_settings_calls_label">"Audio va video qo\'ng\'iroqlar"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"Konfiguratsiya mos kelmasligi"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"Variantlarni topishni osonlashtirish uchun bildirishnomalar sozlamalarini soddalashtirdik. Ilgari siz tanlagan baʼzi shaxsiy sozlamalar bu yerda koʻrsatilmaydi, lekin ular hali ham faol. 
+
+Davom ettirsangiz, baʼzi sozlamalaringiz oʻzgarishi mumkin."</string>
+  <string name="screen_notification_settings_direct_chats">"To\'g\'ridan-to\'g\'ri suhbatlar"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Har bir suhbat uchun moslashtirilgan sozlama"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Bildirishnoma sozlamalarini yangilashda xatolik yuz berdi."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"Barcha xabarlar"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Faqat eslatmalar va kalit so\'zlar"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"To\'g\'ridan-to\'g\'ri suhbats, menga xabar bering"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"Guruh suhbatlarida menga xabar bering"</string>
+  <string name="screen_notification_settings_enable_notifications">"Ushbu qurilmada bildirishnomalarni yoqing"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"Konfiguratsiya tuzatilmadi, qayta urinib ko\'ring."</string>
+  <string name="screen_notification_settings_group_chats">"Guruh suhbatlari"</string>
+  <string name="screen_notification_settings_mentions_section_title">"Eslatmalar"</string>
+  <string name="screen_notification_settings_mode_all">"Hammasi"</string>
+  <string name="screen_notification_settings_mode_mentions">"Eslatmalar"</string>
+  <string name="screen_notification_settings_notification_section_title">"Menga xabar bering"</string>
+  <string name="screen_notification_settings_room_mention_label">"Menga @room orqali xabar bering"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"Bildirishnomalarni olish uchun, iltimos, o\'zingizni %1$singizni o\'zgartiring."</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"tizim sozlamalari"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"Tizim bildirishnomalari o\'chirilgan"</string>
+  <string name="screen_notification_settings_title">"Bildirishnomalar"</string>
+</resources>
