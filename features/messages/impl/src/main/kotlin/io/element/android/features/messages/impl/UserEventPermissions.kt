@@ -25,5 +25,15 @@ data class UserEventPermissions(
     val canRedactOther: Boolean,
     val canSendMessage: Boolean,
     val canSendReaction: Boolean,
-    val canPin: Boolean,
-)
+    val canPinUnpin: Boolean,
+) {
+    companion object {
+        val DEFAULT = UserEventPermissions(
+            canRedactOwn = false,
+            canRedactOther = false,
+            canSendMessage = true,
+            canSendReaction = true,
+            canPinUnpin = false
+        )
+    }
+}

@@ -133,8 +133,8 @@ private fun buildActions(
             add(TimelineItemAction.EndPoll)
         }
         // TODO: handle unpin
-        val canPin = isPinnedEventsEnabled && usersEventPermissions.canPin && timelineItem.isRemote
-        if (canPin) {
+        val canPinUnpin = isPinnedEventsEnabled && usersEventPermissions.canPinUnpin && timelineItem.isRemote
+        if (canPinUnpin) {
             add(TimelineItemAction.Pin)
         }
         if (timelineItem.content.canBeCopied()) {

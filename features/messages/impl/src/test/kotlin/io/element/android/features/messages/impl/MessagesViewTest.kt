@@ -53,7 +53,6 @@ import io.element.android.features.messages.impl.timeline.components.reactionsum
 import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -181,7 +180,7 @@ class MessagesViewTest {
                 canRedactOwn = userHasPermissionToRedactOwn,
                 canRedactOther = userHasPermissionToRedactOther,
                 canSendReaction = userHasPermissionToSendReaction,
-                canPin = userCanPinEvent,
+                canPinUnpin = userCanPinEvent,
             ),
         )
         val timelineItem = state.timelineState.timelineItems.first() as TimelineItem.Event
