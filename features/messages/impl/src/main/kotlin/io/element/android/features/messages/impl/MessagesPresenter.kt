@@ -280,7 +280,14 @@ class MessagesPresenter @AssistedInject constructor(
             TimelineItemAction.Forward -> handleForwardAction(targetEvent)
             TimelineItemAction.ReportContent -> handleReportAction(targetEvent)
             TimelineItemAction.EndPoll -> handleEndPollAction(targetEvent, timelineState)
-            TimelineItemAction.Pin -> Timber.d("Pin action not implemented")
+            TimelineItemAction.Pin -> handlePinAction(targetEvent)
+        }
+    }
+
+    private suspend fun handlePinAction(targetEvent: TimelineItem.Event) {
+        if (targetEvent.eventId == null) return
+        timelineController.invokeOnCurrentTimeline {
+            pinEvent(targetEvent.eventId)
         }
     }
 
