@@ -145,7 +145,6 @@ private fun buildActions(
         if (canRedact && timelineItem.content is TimelineItemPollContent && !timelineItem.content.isEnded) {
             add(TimelineItemAction.EndPoll)
         }
-        // TODO: handle unpin
         val canPinUnpin = isPinnedEventsEnabled && usersEventPermissions.canPinUnpin && timelineItem.isRemote
         if (canPinUnpin) {
             if (isEventPinned) {

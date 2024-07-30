@@ -187,5 +187,4 @@ interface Timeline : AutoCloseable {
      * pinned
      */
     suspend fun unpinEvent(eventId: EventId): Result<Boolean>
-
 }

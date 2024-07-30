@@ -372,12 +372,12 @@ class FakeTimeline(
 
     override suspend fun loadReplyDetails(eventId: EventId) = loadReplyDetailsLambda(eventId)
 
-    var pinEventLambda: (eventId: EventId) -> Result<Boolean> = { lambdaError()}
+    var pinEventLambda: (eventId: EventId) -> Result<Boolean> = { lambdaError() }
     override suspend fun pinEvent(eventId: EventId): Result<Boolean> {
         return pinEventLambda(eventId)
     }
 
-    var unpinEventLambda: (eventId: EventId) -> Result<Boolean> = { lambdaError()}
+    var unpinEventLambda: (eventId: EventId) -> Result<Boolean> = { lambdaError() }
     override suspend fun unpinEvent(eventId: EventId): Result<Boolean> {
         return unpinEventLambda(eventId)
     }
