@@ -43,6 +43,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.typing.TypingNotificationPresenter
 import io.element.android.features.messages.impl.utils.FakeTextPillificationHelper
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPlayer
@@ -892,6 +893,62 @@ class MessagesPresenterTest {
 
             assertThat(replyMode.replyToDetails).isInstanceOf(InReplyToDetails.Loading::class.java)
             assertThat(finalState.actionListState.target).isEqualTo(ActionListState.Target.None)
+        }
+    }
+
+    @Test
+    fun `present - handle action pin`() = runTest {
+        val pinEventLambda = lambdaRecorder { _: EventId -> Result.success(true) }
+        val timeline = FakeTimeline().apply {
+            this.pinEventLambda = pinEventLambda
+        }
+        val room = FakeMatrixRoom(
+            liveTimeline = timeline,
+            canUserSendMessageResult = { _, _ -> Result.success(true) },
+            canRedactOwnResult = { Result.success(true) },
+            canRedactOtherResult = { Result.success(true) },
+            canUserJoinCallResult = { Result.success(true) },
+            typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
+        )
+        val presenter = createMessagesPresenter(matrixRoom = room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val messageEvent = aMessageEvent(
+                content = aTimelineItemTextContent()
+            )
+            val initialState = awaitFirstItem()
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Pin, messageEvent))
+            assert(pinEventLambda).isCalledOnce().with(value(messageEvent.eventId))
+        }
+    }
+
+    @Test
+    fun `present - handle action unpin`() = runTest {
+        val unpinEventLambda = lambdaRecorder { _: EventId -> Result.success(true) }
+        val timeline = FakeTimeline().apply {
+            this.unpinEventLambda = unpinEventLambda
+        }
+        val room = FakeMatrixRoom(
+            liveTimeline = timeline,
+            canUserSendMessageResult = { _, _ -> Result.success(true) },
+            canRedactOwnResult = { Result.success(true) },
+            canRedactOtherResult = { Result.success(true) },
+            canUserJoinCallResult = { Result.success(true) },
+            typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
+        )
+        val presenter = createMessagesPresenter(matrixRoom = room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val messageEvent = aMessageEvent(
+                content = aTimelineItemTextContent()
+            )
+            val initialState = awaitFirstItem()
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Unpin, messageEvent))
+            assert(unpinEventLambda).isCalledOnce().with(value(messageEvent.eventId))
         }
     }
 
