@@ -144,13 +144,13 @@ fun aUserEventPermissions(
     canRedactOther: Boolean = false,
     canSendMessage: Boolean = true,
     canSendReaction: Boolean = true,
-    canPin: Boolean = false,
+    canPinUnpin: Boolean = false,
 ) = UserEventPermissions(
     canRedactOwn = canRedactOwn,
     canRedactOther = canRedactOther,
     canSendMessage = canSendMessage,
     canSendReaction = canSendReaction,
-    canPinUnpin = canPin,
+    canPinUnpin = canPinUnpin,
 )
 
 fun aReactionSummaryState(
