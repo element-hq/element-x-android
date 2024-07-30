@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"Biriktirma qo\'shing"</string>
+  <string name="rich_text_editor_bullet_list">"Belgilar roʻyxatini almashtirish"</string>
+  <string name="rich_text_editor_close_formatting_options">"Formatlash parametrlarini yoping"</string>
+  <string name="rich_text_editor_code_block">"Kod blokini almashtirish"</string>
+  <string name="rich_text_editor_composer_placeholder">"Xabar…"</string>
+  <string name="rich_text_editor_create_link">"Havola yarating"</string>
+  <string name="rich_text_editor_edit_link">"Havolani tahrirlash"</string>
+  <string name="rich_text_editor_format_bold">"Qalin formatni qo\'llang"</string>
+  <string name="rich_text_editor_format_italic">"Kursiv formatini qo\'llang"</string>
+  <string name="rich_text_editor_format_strikethrough">"Chizilgan formatni qo\'llash"</string>
+  <string name="rich_text_editor_format_underline">"Pastki chiziq formatini qo\'llang"</string>
+  <string name="rich_text_editor_full_screen_toggle">"Toʻliq ekran rejimiga oʻtish"</string>
+  <string name="rich_text_editor_indent">"Paragraf"</string>
+  <string name="rich_text_editor_inline_code">"Koq formatini mos ravishda qo\'shing"</string>
+  <string name="rich_text_editor_link">"Havolani o\'rnatish"</string>
+  <string name="rich_text_editor_numbered_list">"Raqamlangan roʻyxatni almashtirish"</string>
+  <string name="rich_text_editor_open_compose_options">"Yozish parametrlarini oching"</string>
+  <string name="rich_text_editor_quote">"Iqtibosni almashtirish"</string>
+  <string name="rich_text_editor_remove_link">"Havolani olib tashlang"</string>
+  <string name="rich_text_editor_unindent">"Paragrafni bekor qilish"</string>
+  <string name="rich_text_editor_url_placeholder">"Havola"</string>
+  <string name="screen_room_voice_message_tooltip">"Yozib olish uchun bosib turing"</string>
+</resources>

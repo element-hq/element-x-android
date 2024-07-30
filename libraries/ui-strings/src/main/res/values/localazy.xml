@@ -110,6 +110,7 @@
   <string name="action_take_photo">"Take photo"</string>
   <string name="action_tap_for_options">"Tap for options"</string>
   <string name="action_try_again">"Try again"</string>
+  <string name="action_unpin">"Unpin"</string>
   <string name="action_view_source">"View source"</string>
   <string name="action_yes">"Yes"</string>
   <string name="common_about">"About"</string>

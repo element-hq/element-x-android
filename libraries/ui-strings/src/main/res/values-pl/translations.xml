@@ -260,10 +260,14 @@ Powód: %1$s."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s nie ma uprawnień dostępu do Twojego mikrofonu. Włącz dostęp, aby nagrać wiadomość głosową."</string>
   <string name="error_some_messages_have_not_been_sent">"Niektóre wiadomości nie zostały wysłane"</string>
   <string name="error_unknown">"Przepraszamy, wystąpił błąd"</string>
+  <string name="event_shield_reason_authenticity_not_guaranteed">"Autentyczność tej wiadomości szyfrowanej nie jest gwarantowana na tym urządzeniu."</string>
+  <string name="event_shield_reason_unknown_device">"Zaszyfrowana przez nieznane lub usunięte urządzenie."</string>
+  <string name="event_shield_reason_unsigned_device">"Zaszyfrowana przez urządzenie niezweryfikowane przez jego właściciela."</string>
+  <string name="event_shield_reason_unverified_identity">"Zaszyfrowana przez niezweryfikowanego użytkownika."</string>
   <string name="invite_friends_rich_title">"🔐️ Dołącz do mnie na %1$s"</string>
   <string name="invite_friends_text">"Hej, porozmawiajmy na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <string name="preference_rageshake">"Gniewne wstrząsanie, aby zgłosić błąd"</string>
+  <string name="preference_rageshake">"Wstrząśnij gniewnie, aby zgłosić błąd"</string>
   <string name="screen_media_picker_error_failed_selection">"Nie udało się wybrać multimediów. Spróbuj ponownie."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Przetwarzanie multimediów do przesłania nie powiodło się, spróbuj ponownie."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Przesyłanie multimediów nie powiodło się, spróbuj ponownie."</string>
@@ -272,9 +276,11 @@ Powód: %1$s."</string>
   <string name="screen_room_member_details_block_alert_action">"Zablokuj"</string>
   <string name="screen_room_member_details_block_alert_description">"Zablokowani użytkownicy nie będą mogli wysyłać Ci wiadomości, a wszystkie ich wiadomości zostaną ukryte. Możesz odblokować ich w dowolnym momencie."</string>
   <string name="screen_room_member_details_block_user">"Zablokuj użytkownika"</string>
+  <string name="screen_room_member_details_title">"Profil"</string>
   <string name="screen_room_member_details_unblock_alert_action">"Odblokuj"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Będziesz mógł ponownie zobaczyć wszystkie wiadomości od tego użytkownika."</string>
   <string name="screen_room_member_details_unblock_user">"Odblokuj użytkownika"</string>
+  <string name="screen_room_title">"Czat"</string>
   <string name="screen_share_location_title">"Udostępnij lokalizację"</string>
   <string name="screen_share_my_location_action">"Udostępnij moją lokalizację"</string>
   <string name="screen_share_open_apple_maps">"Otwórz w Apple Maps"</string>

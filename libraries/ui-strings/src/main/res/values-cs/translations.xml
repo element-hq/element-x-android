@@ -82,6 +82,7 @@
   <string name="action_ok">"OK"</string>
   <string name="action_open_settings">"Otevřít nastavení"</string>
   <string name="action_open_with">"Otevřít v aplikaci"</string>
+  <string name="action_pin">"Pin"</string>
   <string name="action_quick_reply">"Rychlá odpověď"</string>
   <string name="action_quote">"Citovat"</string>
   <string name="action_react">"Reagovat"</string>
@@ -111,6 +112,7 @@
   <string name="action_take_photo">"Vyfotit"</string>
   <string name="action_tap_for_options">"Klepnutím zobrazíte možnosti"</string>
   <string name="action_try_again">"Zkusit znovu"</string>
+  <string name="action_unpin">"Odepnout"</string>
   <string name="action_view_source">"Zobrazit zdroj"</string>
   <string name="action_yes">"Ano"</string>
   <string name="common_about">"O aplikaci"</string>
@@ -260,6 +262,10 @@ Důvod: %1$s."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s nemá oprávnění k přístupu k mikrofonu. Povolte přístup k nahrávání hlasové zprávy."</string>
   <string name="error_some_messages_have_not_been_sent">"Některé zprávy nebyly odeslány"</string>
   <string name="error_unknown">"Omlouváme se, došlo k chybě"</string>
+  <string name="event_shield_reason_authenticity_not_guaranteed">"Autenticitu této zašifrované zprávy nelze na tomto zařízení zaručit."</string>
+  <string name="event_shield_reason_unknown_device">"Šifrováno neznámým nebo smazaným zařízením."</string>
+  <string name="event_shield_reason_unsigned_device">"Šifrováno zařízením, které nebylo ověřeno jeho vlastníkem."</string>
+  <string name="event_shield_reason_unverified_identity">"Šifrováno neověřeným uživatelem."</string>
   <string name="invite_friends_rich_title">"🔐️ Připojte se ke mně na %1$s"</string>
   <string name="invite_friends_text">"Ahoj, ozvi se mi na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
@@ -276,6 +282,9 @@ Důvod: %1$s."</string>
   <string name="screen_room_member_details_unblock_alert_action">"Odblokovat"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Znovu uvidíte všechny zprávy od nich."</string>
   <string name="screen_room_member_details_unblock_user">"Odblokovat uživatele"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s z %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Připnuté zprávy"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Zobrazit vše"</string>
   <string name="screen_room_title">"Chat"</string>
   <string name="screen_share_location_title">"Sdílet polohu"</string>
   <string name="screen_share_my_location_action">"Sdílet moji polohu"</string>

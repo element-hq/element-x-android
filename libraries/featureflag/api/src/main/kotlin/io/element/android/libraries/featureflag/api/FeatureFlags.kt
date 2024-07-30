@@ -120,4 +120,11 @@ enum class FeatureFlags(
         defaultValue = { it.buildType != BuildType.RELEASE },
         isFinished = false,
     ),
+    SyncOnPush(
+        key = "feature.syncOnPush",
+        title = "Sync on push",
+        description = "Subscribe to room sync when a push is received",
+        defaultValue = { false },
+        isFinished = false,
+    ),
 }

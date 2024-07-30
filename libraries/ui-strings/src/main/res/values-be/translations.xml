@@ -281,6 +281,9 @@
   <string name="screen_room_member_details_unblock_alert_action">"Разблакіраваць"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Вы зноў зможаце ўбачыць усе паведамленні."</string>
   <string name="screen_room_member_details_unblock_user">"Разблакіраваць карыстальніка"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s з %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Замацаваныя паведамленні"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Паглядзець усе"</string>
   <string name="screen_room_title">"Чат"</string>
   <string name="screen_share_location_title">"Падзяліцца месцазнаходжаннем"</string>
   <string name="screen_share_my_location_action">"Падзяліцца маім месцазнаходжаннем"</string>

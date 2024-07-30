@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_permission_camera">"Ilovaga kameradan foydalanishiga ruxsat berish uchun tizim sozlamalarida ruxsat bering."</string>
+  <string name="dialog_permission_generic">"Iltimos, tizim sozlamalarida ruxsat bering."</string>
+  <string name="dialog_permission_microphone">"Ilovaga mikrofondan foydalanishiga ruxsat berish uchun tizim sozlamalarida ruxsat bering."</string>
+  <string name="dialog_permission_notification">"Ilova bildirishnomalarni ko\'rsatishi uchun tizim sozlamalarida ruxsat bering."</string>
+</resources>

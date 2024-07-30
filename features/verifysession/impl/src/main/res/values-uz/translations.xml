@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_session_verification_cancelled_subtitle">"Nimadir noto‘g‘ri ko‘rinadi. Yoki so‘rov muddati tugadi yoki so‘rov rad etildi."</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"Quyidagi kulgichlar boshqa seansda ko‘rsatilganlarga mos kelishini tasdiqlang."</string>
+  <string name="screen_session_verification_compare_emojis_title">"Emojilarni solishtiring"</string>
+  <string name="screen_session_verification_complete_subtitle">"Yangi seansingiz tasdiqlandi. U sizning shifrlangan xabarlaringizga kirish huquqiga ega va boshqa foydalanuvchilar uni ishonchli deb bilishadi."</string>
+  <string name="screen_session_verification_open_existing_session_subtitle">"Shifrlangan xabarlar tarixiga kirish uchun shaxsingizni tasdiqlang."</string>
+  <string name="screen_session_verification_open_existing_session_title">"Mavjud seansni oching"</string>
+  <string name="screen_session_verification_positive_button_canceled">"Tasdiqlashni qaytadan urining"</string>
+  <string name="screen_session_verification_positive_button_initial">"Men tayyorman"</string>
+  <string name="screen_session_verification_positive_button_verifying_ongoing">"Mos kelishi kutilmoqda"</string>
+  <string name="screen_session_verification_request_accepted_subtitle">"Noyob emojilarni solishtiring, ular bir xil tartibda paydo bo\'lishiga ishonch hosil qiling."</string>
+  <string name="screen_session_verification_they_dont_match">"Ular mos kelmaydi"</string>
+  <string name="screen_session_verification_they_match">"Ular mos keladi"</string>
+  <string name="screen_session_verification_waiting_to_accept_subtitle">"Davom etish uchun boshqa seansda tekshirish jarayonini boshlash soʻrovini qabul qiling."</string>
+  <string name="screen_session_verification_waiting_to_accept_title">"Soʻrovni qabul qilish kutilmoqda"</string>
+</resources>
