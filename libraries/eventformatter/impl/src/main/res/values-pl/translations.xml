@@ -3,12 +3,16 @@
   <string name="state_event_avatar_changed_too">"(zdjęcie profilowe też zostało zmienione)"</string>
   <string name="state_event_avatar_url_changed">"%1$s zmienił swoje zdjęcie profilowe"</string>
   <string name="state_event_avatar_url_changed_by_you">"Zmieniłeś swoje zdjęcie profilowe"</string>
+  <string name="state_event_demoted_to_member">"%1$s został zdegradowany do członka"</string>
+  <string name="state_event_demoted_to_moderator">"%1$s został zdegradowany do moderatora"</string>
   <string name="state_event_display_name_changed_from">"%1$s zmienił swoją wyświetlaną nazwę z %2$s na %3$s"</string>
   <string name="state_event_display_name_changed_from_by_you">"Zmieniłeś swoją wyświetlaną nazwę z %1$s na %2$s"</string>
   <string name="state_event_display_name_removed">"%1$s usunął swoją wyświetlaną nazwę (byo to %2$s)"</string>
   <string name="state_event_display_name_removed_by_you">"Usunąłeś swoją wyświetlaną nazwę (było to %1$s)"</string>
   <string name="state_event_display_name_set">"%1$s ustawił swoją wyświetlaną nazwę na %2$s"</string>
   <string name="state_event_display_name_set_by_you">"Ustawiłeś swoją wyświetlaną nazwę na %1$s"</string>
+  <string name="state_event_promoted_to_administrator">"%1$s został awansowany na administratora"</string>
+  <string name="state_event_promoted_to_moderator">"%1$s został awansowany na moderatora"</string>
   <string name="state_event_room_avatar_changed">"%1$s zmienił zdjęcie profilowe pokoju"</string>
   <string name="state_event_room_avatar_changed_by_you">"Zmieniłeś zdjęcie profilowe pokoju"</string>
   <string name="state_event_room_avatar_removed">"%1$s usunął zdjęcie profilowe pokoju"</string>
@@ -42,7 +46,7 @@
   <string name="state_event_room_none">"%1$s nie wprowadził żadnych zmian"</string>
   <string name="state_event_room_none_by_you">"Nie wprowadzono żadnych zmian"</string>
   <string name="state_event_room_reject">"%1$s odrzucił zaproszenie"</string>
-  <string name="state_event_room_reject_by_you">"Odrzuciłeś(aś) zaproszenie"</string>
+  <string name="state_event_room_reject_by_you">"Odrzuciłeś zaproszenie"</string>
   <string name="state_event_room_remove">"%1$s usunął %2$s"</string>
   <string name="state_event_room_remove_by_you">"Usunąłeś %1$s"</string>
   <string name="state_event_room_third_party_invite">"%1$s wysłał zaproszenie do %2$s, aby dołączył do pokoju"</string>

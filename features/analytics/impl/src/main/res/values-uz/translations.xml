@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_analytics_prompt_data_usage">"Biz hech qanday shaxsiy ma\'lumotlarni yozmaymiz yoki profilga kiritmaymiz"</string>
+  <string name="screen_analytics_prompt_help_us_improve">"Muammolarni aniqlashda yordam berish uchun anonim foydalanish maʼlumotlarini baham koʻring."</string>
+  <string name="screen_analytics_prompt_read_terms">"Siz bizning barcha shartlarimizni o\'qishingiz mumkin%1$s."</string>
+  <string name="screen_analytics_prompt_read_terms_content_link">"Bu yerga"</string>
+  <string name="screen_analytics_prompt_settings">"Buni istalgan vaqtda oʻchirib qoʻyishingiz mumkin"</string>
+  <string name="screen_analytics_prompt_third_party_sharing">"Biz sizning ma\'lumotlaringizni uchinchi tomonlar bilan baham ko\'rmaymiz"</string>
+  <string name="screen_analytics_prompt_title">"Yaxshilashga yordam bering%1$s"</string>
+</resources>

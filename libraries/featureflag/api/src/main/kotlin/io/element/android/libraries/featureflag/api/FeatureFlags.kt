@@ -126,5 +126,12 @@ enum class FeatureFlags(
         description = "Allow user to pin events in a room",
         defaultValue = { false },
         isFinished = false,
-    )
+    ),
+    SyncOnPush(
+        key = "feature.syncOnPush",
+        title = "Sync on push",
+        description = "Subscribe to room sync when a push is received",
+        defaultValue = { false },
+        isFinished = false,
+    ),
 }

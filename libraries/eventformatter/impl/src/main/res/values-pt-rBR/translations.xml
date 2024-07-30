@@ -3,12 +3,16 @@
   <string name="state_event_avatar_changed_too">"(o avatar também foi alterado)"</string>
   <string name="state_event_avatar_url_changed">"%1$s mudou seu avatar"</string>
   <string name="state_event_avatar_url_changed_by_you">"Você mudou seu avatar"</string>
+  <string name="state_event_demoted_to_member">"%1$s foi rebaixado a membro"</string>
+  <string name="state_event_demoted_to_moderator">"%1$s foi rebaixado a moderador"</string>
   <string name="state_event_display_name_changed_from">"%1$s mudou seu nome de exibição de %2$s para %3$s"</string>
   <string name="state_event_display_name_changed_from_by_you">"Você alterou seu nome de exibição de %1$s para %2$s"</string>
   <string name="state_event_display_name_removed">"%1$s removeu seu nome de exibição (era %2$s)"</string>
   <string name="state_event_display_name_removed_by_you">"Você removeu seu nome de exibição (era %1$s)"</string>
   <string name="state_event_display_name_set">"%1$s definiu seu nome de exibição como %2$s"</string>
   <string name="state_event_display_name_set_by_you">"Você definiu seu nome de exibição como %1$s"</string>
+  <string name="state_event_promoted_to_administrator">"%1$s foi promovido a administrador"</string>
+  <string name="state_event_promoted_to_moderator">"%1$s foi promovido a moderador"</string>
   <string name="state_event_room_avatar_changed">"%1$s mudou o avatar da sala"</string>
   <string name="state_event_room_avatar_changed_by_you">"Você mudou o avatar da sala"</string>
   <string name="state_event_room_avatar_removed">"%1$s removeu o avatar da sala"</string>
@@ -39,6 +43,8 @@
   <string name="state_event_room_name_changed_by_you">"Você mudou o nome da sala para: %1$s"</string>
   <string name="state_event_room_name_removed">"%1$s removeu o nome da sala"</string>
   <string name="state_event_room_name_removed_by_you">"Você removeu o nome da sala"</string>
+  <string name="state_event_room_none">"%1$s não fez alterações"</string>
+  <string name="state_event_room_none_by_you">"Você não fez nenhuma alteração"</string>
   <string name="state_event_room_reject">"%1$s rejeitou o convite"</string>
   <string name="state_event_room_reject_by_you">"Você rejeitou o convite"</string>
   <string name="state_event_room_remove">"%1$s removido %2$s"</string>

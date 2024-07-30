@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"Variant qo\'shish"</string>
+  <string name="screen_create_poll_anonymous_desc">"Natijalarni faqat soʻrov tugagandan keyin koʻrsatish"</string>
+  <string name="screen_create_poll_anonymous_headline">"Ovozlarni yashirish"</string>
+  <string name="screen_create_poll_answer_hint">"Variant%1$d"</string>
+  <string name="screen_create_poll_question_desc">"Savol yoki mavzu"</string>
+  <string name="screen_create_poll_question_hint">"So\'rovnoma nima haqida?"</string>
+  <string name="screen_create_poll_title">"So‘rovnoma yaratish"</string>
+  <string name="screen_edit_poll_title">"So‘rovnomani tahrirlash"</string>
+</resources>

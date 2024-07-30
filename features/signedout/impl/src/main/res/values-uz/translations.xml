@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signed_out_reason_1">"Siz boshqa seansda parolingizni o\'zgartirdingiz"</string>
+  <string name="screen_signed_out_reason_2">"Siz seansni boshqa seansdan o\'chirib tashladingiz"</string>
+  <string name="screen_signed_out_reason_3">"Serveringiz administratori ruxsatingizni bekor qildi"</string>
+  <string name="screen_signed_out_subtitle">"Siz quyida sanab o‘tilgan sabablardan biri tufayli tizimdan chiqqan bo‘lishingiz mumkin. Foydalanishni davom ettirish uchun qayta kiring%s ."</string>
+  <string name="screen_signed_out_title">"Hisobingizdan chiqdingiz"</string>
+</resources>

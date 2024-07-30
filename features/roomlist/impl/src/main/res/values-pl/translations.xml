@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="confirm_recovery_key_banner_message">"Twoja kopia zapasowa czatu jest obecnie niezsynchronizowana. Aby zachować dostęp do kopii zapasowej czatu, musisz potwierdzić klucz odzyskiwania."</string>
-  <string name="confirm_recovery_key_banner_title">"Potwierdź klucz odzyskiwania"</string>
+  <string name="confirm_recovery_key_banner_title">"Wprowadź swój klucz przywracania"</string>
   <string name="full_screen_intent_banner_message">"Upewnij się, że nie pominiesz żadnego połączenia. Zmień swoje ustawienia i zezwól na powiadomienia na blokadzie ekranu."</string>
   <string name="full_screen_intent_banner_title">"Popraw jakość swoich rozmów"</string>
-  <string name="screen_invites_decline_chat_message">"Czy na pewno chcesz odrzucić zaproszenie do dołączenia do %1$s?"</string>
+  <string name="screen_invites_decline_chat_message">"Czy na pewno chcesz odrzucić zaproszenie dołączenia do %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Odrzuć zaproszenie"</string>
   <string name="screen_invites_decline_direct_chat_message">"Czy na pewno chcesz odrzucić rozmowę prywatną z %1$s?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Odrzuć czat"</string>
@@ -15,8 +15,26 @@
   <string name="screen_roomlist_a11y_create_message">"Utwórz nową rozmowę lub pokój"</string>
   <string name="screen_roomlist_empty_message">"Wyślij komuś wiadomość, aby rozpocząć."</string>
   <string name="screen_roomlist_empty_title">"Brak czatów."</string>
+  <string name="screen_roomlist_filter_favourites">"Ulubione"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Możesz dodać czat do ulubionych w ustawieniach czatu.
+Na razie możesz wyczyścić filtry, aby zobaczyć pozostałe czaty"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Nie masz jeszcze ulubionych czatów"</string>
+  <string name="screen_roomlist_filter_invites">"Zaproszenia"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Nie masz żadnych oczekujących zaproszeń."</string>
+  <string name="screen_roomlist_filter_low_priority">"Niski priorytet"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Wyczyść filtry, aby zobaczyć pozostałe czaty"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Brak czatów dla podanych kryteriów"</string>
   <string name="screen_roomlist_filter_people">"Osoby"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Nie masz jeszcze żadnych PW"</string>
+  <string name="screen_roomlist_filter_rooms">"Pokoje"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Nie jesteś jeszcze w żadnym pokoju"</string>
+  <string name="screen_roomlist_filter_unreads">"Nieprzeczytane"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Gratulacje!
+Nie masz żadnych nieprzeczytanych wiadomości!"</string>
   <string name="screen_roomlist_main_space_title">"Wszystkie czaty"</string>
+  <string name="screen_roomlist_mark_as_read">"Oznacz jako przeczytane"</string>
+  <string name="screen_roomlist_mark_as_unread">"Oznacz jako nieprzeczytane"</string>
+  <string name="screen_roomlist_room_directory_button_title">"Przeglądaj wszystkie pokoje"</string>
   <string name="session_verification_banner_message">"Wygląda na to, że używasz nowego urządzenia. Zweryfikuj się innym urządzeniem, aby uzyskać dostęp do zaszyfrowanych wiadomości."</string>
   <string name="session_verification_banner_title">"Potwierdź, że to Ty"</string>
 </resources>
