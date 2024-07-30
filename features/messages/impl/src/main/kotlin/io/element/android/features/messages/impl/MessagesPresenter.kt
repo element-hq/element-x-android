@@ -289,6 +289,10 @@ class MessagesPresenter @AssistedInject constructor(
         if (targetEvent.eventId == null) return
         timelineController.invokeOnCurrentTimeline {
             pinEvent(targetEvent.eventId)
+                .onFailure {
+                    Timber.e(it, "Failed to pin event ${targetEvent.eventId}")
+                    snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_error))
+                }
         }
     }
 
@@ -296,6 +300,10 @@ class MessagesPresenter @AssistedInject constructor(
         if (targetEvent.eventId == null) return
         timelineController.invokeOnCurrentTimeline {
             unpinEvent(targetEvent.eventId)
+                .onFailure {
+                    Timber.e(it, "Failed to unpin event ${targetEvent.eventId}")
+                    snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_error))
+                }
         }
     }
 
