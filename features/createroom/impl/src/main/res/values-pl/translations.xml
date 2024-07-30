@@ -6,7 +6,7 @@
   <string name="screen_create_room_private_option_description">"Wiadomości w tym pokoju są szyfrowane. Szyfrowania nie można później wyłączyć."</string>
   <string name="screen_create_room_private_option_title">"Pokój prywatny (tylko zaproszenie)"</string>
   <string name="screen_create_room_public_option_description">"Wiadomości nie są szyfrowane i każdy może je odczytać. Możesz aktywować szyfrowanie później."</string>
-  <string name="screen_create_room_public_option_title">"Pokój publiczny (każdy)"</string>
+  <string name="screen_create_room_public_option_title">"Pokój publiczny (wszyscy)"</string>
   <string name="screen_create_room_room_name_label">"Nazwa pokoju"</string>
   <string name="screen_create_room_title">"Utwórz pokój"</string>
   <string name="screen_create_room_topic_label">"Temat (opcjonalnie)"</string>

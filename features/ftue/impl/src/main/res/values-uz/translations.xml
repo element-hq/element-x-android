@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_notification_optin_subtitle">"Sozlamalaringizni keyinroq o\'zgartirishingiz mumkin."</string>
+  <string name="screen_notification_optin_title">"Bildirishnomalarga ruxsat bering va hech qachon xabarni o\'tkazib yubormang"</string>
+  <string name="screen_welcome_bullet_1">"Qo\'ng\'iroqlar, so\'ro\'vlar, qidiruv va boshqalar shu yil oxirida qo\'shiladi."</string>
+  <string name="screen_welcome_bullet_2">"Shifrlangan xonalar uchun xabarlar tarixi hali mavjud emas."</string>
+  <string name="screen_welcome_bullet_3">"Biz sizdan eshitishni istardik, sozlamalar sahifasi orqali fikringizni bildiring."</string>
+  <string name="screen_welcome_button">"Qani ketdik!"</string>
+  <string name="screen_welcome_subtitle">"Buni bilishingiz kerak:"</string>
+  <string name="screen_welcome_title">"%1$sga Xush kelibsiz!"</string>
+</resources>

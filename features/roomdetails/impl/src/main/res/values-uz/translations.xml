@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Bildirishnoma sozlamalarini yangilashda xatolik yuz berdi."</string>
+  <string name="screen_room_change_permissions_everyone">"Har kim"</string>
+  <string name="screen_room_details_add_topic_title">"Mavzu qo\'shish"</string>
+  <string name="screen_room_details_already_a_member">"Allaqachon a\'zo"</string>
+  <string name="screen_room_details_already_invited">"Allaqachon taklif qilingan"</string>
+  <string name="screen_room_details_edit_room_title">"Xonani tahrirlash"</string>
+  <string name="screen_room_details_edition_error">"Nomaʼlum xatolik yuz berdi va maʼlumotni oʻzgartirib boʻlmadi."</string>
+  <string name="screen_room_details_edition_error_title">"Xonani yangilab bo‘lmadi"</string>
+  <string name="screen_room_details_encryption_enabled_subtitle">"Xabarlar qulflar bilan himoyalangan. Faqat siz va qabul qiluvchilar ularni qulfdan chiqarish uchun noyob kalitlarga ega."</string>
+  <string name="screen_room_details_encryption_enabled_title">"Xabarni shifrlash yoqilgan"</string>
+  <string name="screen_room_details_error_loading_notification_settings">"Bildirishnoma sozlamalarini yuklashda xatolik yuz berdi."</string>
+  <string name="screen_room_details_error_muting">"Bu xona ovozini o‘chirib bo‘lmadi, qayta urinib ko‘ring."</string>
+  <string name="screen_room_details_error_unmuting">"Bu xonaning ovozi yoqilmadi, qayta urinib ko‘ring."</string>
+  <string name="screen_room_details_invite_people_title">"Odamlarni taklif qiling"</string>
+  <string name="screen_room_details_leave_room_title">"Xonani tark etish "</string>
+  <string name="screen_room_details_notification_mode_custom">"Maxsus"</string>
+  <string name="screen_room_details_notification_mode_default">"Standart"</string>
+  <string name="screen_room_details_notification_title">"Bildirishnomalar"</string>
+  <string name="screen_room_details_room_name_label">"Xona nomi"</string>
+  <string name="screen_room_details_security_title">"Xavfsizlik"</string>
+  <string name="screen_room_details_share_room_title">"Xonani baham ko\'ring"</string>
+  <string name="screen_room_details_topic_title">"Mavzu"</string>
+  <string name="screen_room_details_updating_room">"Xona yangilanmoqda…"</string>
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"%1$dodam"</item>
+    <item quantity="other">"%1$dodamlar"</item>
+  </plurals>
+  <string name="screen_room_member_list_pending_header_title">"Kutilmoqda"</string>
+  <string name="screen_room_member_list_room_members_header_title">"Xona a\'zolari"</string>
+  <string name="screen_room_notification_settings_allow_custom">"Moslashtirilgan sozlamalarga ruxsat bering"</string>
+  <string name="screen_room_notification_settings_allow_custom_footnote">"Buni yoqsangiz, standart sozlamalaringiz bekor qilinadi"</string>
+  <string name="screen_room_notification_settings_custom_settings_title">"Bu chatda menga xabar bering"</string>
+  <string name="screen_room_notification_settings_default_setting_footnote">"Siz buni o\'zgartira olasiz o\'zingizning %1$sda."</string>
+  <string name="screen_room_notification_settings_default_setting_footnote_content_link">"global sozlamalar"</string>
+  <string name="screen_room_notification_settings_default_setting_title">"Standart sozlama"</string>
+  <string name="screen_room_notification_settings_edit_remove_setting">"Maxsus sozlamani olib tashlang"</string>
+  <string name="screen_room_notification_settings_error_loading_settings">"Bildirishnoma sozlamalarini yuklashda xatolik yuz berdi."</string>
+  <string name="screen_room_notification_settings_error_restoring_default">"Standart rejimni tiklab bo‘lmadi, qaytadan urinib ko‘ring."</string>
+  <string name="screen_room_notification_settings_error_setting_mode">"Rejimni o‘rnatib bo‘lmadi, qayta urinib ko‘ring."</string>
+  <string name="screen_room_notification_settings_mode_all_messages">"Barcha xabarlar"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Faqat eslatmalar va kalit so\'zlar"</string>
+  <string name="screen_room_notification_settings_room_custom_settings_title">"Bu xonada menga xabar bering"</string>
+</resources>

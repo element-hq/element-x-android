@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_unified_push_description">"Upewnij się, że dystrybutorzy UnifiedPush są dostępni."</string>
+  <string name="troubleshoot_notifications_test_unified_push_failure">"Nie znaleziono dystrybutorów push."</string>
+  <plurals name="troubleshoot_notifications_test_unified_push_success">
+    <item quantity="one">"Znaleziono %1$d dystrybutora: %2$s."</item>
+    <item quantity="few">"Znaleziono %1$d dystrybutorów: %2$s."</item>
+    <item quantity="many">"Znaleziono %1$d dystrybutorów: %2$s."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_unified_push_title">"Sprawdź UnifiedPush"</string>
+</resources>

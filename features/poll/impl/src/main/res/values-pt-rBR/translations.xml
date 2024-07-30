@@ -7,6 +7,12 @@
   <string name="screen_create_poll_question_desc">"Pergunta ou tópico"</string>
   <string name="screen_create_poll_question_hint">"Sobre o que é a enquete?"</string>
   <string name="screen_create_poll_title">"Criar enquete"</string>
+  <string name="screen_edit_poll_delete_confirmation">"Tem certeza de que quer deletar esta enquete?"</string>
   <string name="screen_edit_poll_delete_confirmation_title">"Excluir Enquete"</string>
   <string name="screen_edit_poll_title">"Editar enquete"</string>
+  <string name="screen_polls_history_empty_ongoing">"Não foi possível encontrar nenhuma enquete em andamento."</string>
+  <string name="screen_polls_history_empty_past">"Não foi possível encontrar nenhuma enquete anterior."</string>
+  <string name="screen_polls_history_filter_ongoing">"Em andamento"</string>
+  <string name="screen_polls_history_filter_past">"Anteriores"</string>
+  <string name="screen_polls_history_title">"Enquetes"</string>
 </resources>
