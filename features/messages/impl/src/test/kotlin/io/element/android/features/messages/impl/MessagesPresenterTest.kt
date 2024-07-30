@@ -78,6 +78,7 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
+import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
@@ -898,10 +899,9 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action pin`() = runTest {
-        val pinEventLambda = lambdaRecorder { _: EventId -> Result.success(true) }
-        val timeline = FakeTimeline().apply {
-            this.pinEventLambda = pinEventLambda
-        }
+        val successPinEventLambda = lambdaRecorder { _: EventId -> Result.success(true) }
+        val failurePinEventLambda = lambdaRecorder { _: EventId -> Result.failure<Boolean>(A_THROWABLE) }
+        val timeline = FakeTimeline()
         val room = FakeMatrixRoom(
             liveTimeline = timeline,
             canUserSendMessageResult = { _, _ -> Result.success(true) },
@@ -919,17 +919,23 @@ class MessagesPresenterTest {
                 content = aTimelineItemTextContent()
             )
             val initialState = awaitFirstItem()
+
+            timeline.pinEventLambda = successPinEventLambda
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Pin, messageEvent))
-            assert(pinEventLambda).isCalledOnce().with(value(messageEvent.eventId))
+            assert(successPinEventLambda).isCalledOnce().with(value(messageEvent.eventId))
+
+            timeline.pinEventLambda = failurePinEventLambda
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Pin, messageEvent))
+            assert(failurePinEventLambda).isCalledOnce().with(value(messageEvent.eventId))
+            assertThat(awaitItem().snackbarMessage).isNotNull()
         }
     }
 
     @Test
     fun `present - handle action unpin`() = runTest {
-        val unpinEventLambda = lambdaRecorder { _: EventId -> Result.success(true) }
-        val timeline = FakeTimeline().apply {
-            this.unpinEventLambda = unpinEventLambda
-        }
+        val successUnpinEventLambda = lambdaRecorder { _: EventId -> Result.success(true) }
+        val failureUnpinEventLambda = lambdaRecorder { _: EventId -> Result.failure<Boolean>(A_THROWABLE) }
+        val timeline = FakeTimeline()
         val room = FakeMatrixRoom(
             liveTimeline = timeline,
             canUserSendMessageResult = { _, _ -> Result.success(true) },
@@ -947,8 +953,15 @@ class MessagesPresenterTest {
                 content = aTimelineItemTextContent()
             )
             val initialState = awaitFirstItem()
+
+            timeline.unpinEventLambda = successUnpinEventLambda
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Unpin, messageEvent))
-            assert(unpinEventLambda).isCalledOnce().with(value(messageEvent.eventId))
+            assert(successUnpinEventLambda).isCalledOnce().with(value(messageEvent.eventId))
+
+            timeline.unpinEventLambda = failureUnpinEventLambda
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Unpin, messageEvent))
+            assert(failureUnpinEventLambda).isCalledOnce().with(value(messageEvent.eventId))
+            assertThat(awaitItem().snackbarMessage).isNotNull()
         }
     }
 
