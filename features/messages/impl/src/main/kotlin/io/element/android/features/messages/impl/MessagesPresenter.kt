@@ -281,6 +281,7 @@ class MessagesPresenter @AssistedInject constructor(
             TimelineItemAction.ReportContent -> handleReportAction(targetEvent)
             TimelineItemAction.EndPoll -> handleEndPollAction(targetEvent, timelineState)
             TimelineItemAction.Pin -> handlePinAction(targetEvent)
+            TimelineItemAction.Unpin -> handleUnpinAction(targetEvent)
         }
     }
 
@@ -288,6 +289,13 @@ class MessagesPresenter @AssistedInject constructor(
         if (targetEvent.eventId == null) return
         timelineController.invokeOnCurrentTimeline {
             pinEvent(targetEvent.eventId)
+        }
+    }
+
+    private suspend fun handleUnpinAction(targetEvent: TimelineItem.Event) {
+        if (targetEvent.eventId == null) return
+        timelineController.invokeOnCurrentTimeline {
+            unpinEvent(targetEvent.eventId)
         }
     }
 
