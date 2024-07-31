@@ -65,3 +65,8 @@ suspend fun MatrixRoom.canRedactOwn(): Result<Boolean> = canUserRedactOwn(sessio
  * Shortcut for calling [MatrixRoom.canRedactOther] with our own user.
  */
 suspend fun MatrixRoom.canRedactOther(): Result<Boolean> = canUserRedactOther(sessionId)
+
+/**
+ * Shortcut for calling [MatrixRoom.canUserPinUnpin] with our own user.
+ */
+suspend fun MatrixRoom.canPinUnpin(): Result<Boolean> = canUserPinUnpin(sessionId)

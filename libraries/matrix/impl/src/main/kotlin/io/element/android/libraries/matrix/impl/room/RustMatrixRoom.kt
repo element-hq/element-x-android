@@ -403,6 +403,12 @@ class RustMatrixRoom(
         }
     }
 
+    override suspend fun canUserPinUnpin(userId: UserId): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserPinUnpin(userId.value)
+        }
+    }
+
     override suspend fun sendImage(
         file: File,
         thumbnailFile: File?,

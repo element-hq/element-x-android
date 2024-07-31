@@ -125,6 +125,7 @@ class FakeMatrixRoom(
     private val getWidgetDriverResult: (MatrixWidgetSettings) -> Result<MatrixWidgetDriver> = { lambdaError() },
     private val canUserTriggerRoomNotificationResult: (UserId) -> Result<Boolean> = { lambdaError() },
     private val canUserJoinCallResult: (UserId) -> Result<Boolean> = { lambdaError() },
+    private val canUserPinUnpinResult: (UserId) -> Result<Boolean> = { lambdaError() },
     private val setIsFavoriteResult: (Boolean) -> Result<Unit> = { lambdaError() },
     private val powerLevelsResult: () -> Result<MatrixRoomPowerLevels> = { lambdaError() },
     private val updatePowerLevelsResult: () -> Result<Unit> = { lambdaError() },
@@ -287,6 +288,10 @@ class FakeMatrixRoom(
 
     override suspend fun canUserJoinCall(userId: UserId): Result<Boolean> {
         return canUserJoinCallResult(userId)
+    }
+
+    override suspend fun canUserPinUnpin(userId: UserId): Result<Boolean> {
+        return canUserPinUnpinResult(userId)
     }
 
     override suspend fun sendImage(
@@ -517,6 +522,7 @@ fun aRoomInfo(
     userPowerLevels: ImmutableMap<UserId, Long> = persistentMapOf(),
     activeRoomCallParticipants: List<String> = emptyList(),
     heroes: List<MatrixUser> = emptyList(),
+    pinnedEventIds: List<EventId> = emptyList(),
 ) = MatrixRoomInfo(
     id = id,
     name = name,
@@ -542,6 +548,7 @@ fun aRoomInfo(
     userPowerLevels = userPowerLevels,
     activeRoomCallParticipants = activeRoomCallParticipants.toImmutableList(),
     heroes = heroes.toImmutableList(),
+    pinnedEventIds = pinnedEventIds.toImmutableList(),
 )
 
 fun defaultRoomPowerLevels() = MatrixRoomPowerLevels(

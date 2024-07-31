@@ -76,6 +76,7 @@ class TimelineItemEventFactory @Inject constructor(
             content = contentFactory.create(currentTimelineItem.event),
             isMine = currentTimelineItem.event.isOwn,
             isEditable = currentTimelineItem.event.isEditable,
+            canBeRepliedTo = currentTimelineItem.event.canBeRepliedTo,
             sentTime = sentTime,
             groupPosition = groupPosition,
             reactionsState = currentTimelineItem.computeReactionsState(),

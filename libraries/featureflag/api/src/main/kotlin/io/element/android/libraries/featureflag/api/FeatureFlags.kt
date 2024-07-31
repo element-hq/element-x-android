@@ -120,6 +120,13 @@ enum class FeatureFlags(
         defaultValue = { it.buildType != BuildType.RELEASE },
         isFinished = false,
     ),
+    PinnedEvents(
+        key = "feature.pinnedEvents",
+        title = "Pinned Events",
+        description = "Allow user to pin events in a room",
+        defaultValue = { false },
+        isFinished = false,
+    ),
     SyncOnPush(
         key = "feature.syncOnPush",
         title = "Sync on push",
