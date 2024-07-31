@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-@file:OptIn(ExperimentalFoundationApi::class)
-
 package io.element.android.features.messages.impl.pinned.banner
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement.spacedBy
@@ -44,6 +41,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -57,6 +55,7 @@ import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.pinnedMessageBannerBorder
 import io.element.android.libraries.designsystem.theme.pinnedMessageBannerIndicator
 import io.element.android.libraries.designsystem.utils.annotatedTextWithBold
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun PinnedMessagesBannerView(
@@ -110,7 +109,7 @@ fun PinnedMessagesBannerView(
             message = "This is a pinned message",
             modifier = Modifier.weight(1f)
         )
-        TextButton(text = "View all", onClick = { /*TODO*/ })
+        TextButton(text = stringResource(id = CommonStrings.screen_room_pinned_banner_view_all_button_title), onClick = { /*TODO*/ })
     }
 }
 
@@ -168,13 +167,13 @@ private fun PinnedMessageItem(
     message: String,
     modifier: Modifier = Modifier,
 ) {
-    val countMessage = "${index + 1} of $totalCount"
-    val fullMessage = "$countMessage Pinned messages"
+    val countMessage = stringResource(id = CommonStrings.screen_room_pinned_banner_indicator, index + 1, totalCount)
+    val fullCountMessage = stringResource(id = CommonStrings.screen_room_pinned_banner_indicator_description, countMessage)
     Column(modifier = modifier) {
         if (totalCount > 1) {
             Text(
                 text = annotatedTextWithBold(
-                    text = fullMessage,
+                    text = fullCountMessage,
                     boldText = countMessage,
                 ),
                 style = ElementTheme.typography.fontBodySmMedium,

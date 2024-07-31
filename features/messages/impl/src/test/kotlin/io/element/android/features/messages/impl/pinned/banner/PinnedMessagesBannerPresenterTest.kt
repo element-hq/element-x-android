@@ -22,7 +22,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class PinnedMessagesBannerPresenterTest {
-
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createPinnedMessagesBannerPresenter()
