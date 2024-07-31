@@ -376,6 +376,7 @@ private fun MessageSenderInformation(
     }
 }
 
+@Suppress("MultipleEmitters") // False positive
 @Composable
 private fun MessageEventBubbleContent(
     event: TimelineItem.Event,
