@@ -110,6 +110,7 @@
   <string name="action_take_photo">"Τράβηξε φωτογραφία"</string>
   <string name="action_tap_for_options">"Πάτα για επιλογές"</string>
   <string name="action_try_again">"Προσπάθησε ξανά"</string>
+  <string name="action_unpin">"Ξεκαρφίτσωμα"</string>
   <string name="action_view_source">"Προβολή πηγής"</string>
   <string name="action_yes">"Ναι"</string>
   <string name="common_about">"Σχετικά"</string>

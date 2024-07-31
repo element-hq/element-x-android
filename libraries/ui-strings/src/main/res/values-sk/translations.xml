@@ -112,6 +112,7 @@
   <string name="action_take_photo">"Urobiť fotku"</string>
   <string name="action_tap_for_options">"Klepnutím získate možnosti"</string>
   <string name="action_try_again">"Skúste to znova"</string>
+  <string name="action_unpin">"Odopnúť"</string>
   <string name="action_view_source">"Zobraziť zdroj"</string>
   <string name="action_yes">"Áno"</string>
   <string name="common_about">"O aplikácii"</string>

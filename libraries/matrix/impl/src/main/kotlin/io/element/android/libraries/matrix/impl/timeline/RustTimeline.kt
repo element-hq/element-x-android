@@ -525,6 +525,18 @@ class RustTimeline(
         }
     }
 
+    override suspend fun pinEvent(eventId: EventId): Result<Boolean> = withContext(dispatcher) {
+        runCatching {
+            inner.pinEvent(eventId = eventId.value)
+        }
+    }
+
+    override suspend fun unpinEvent(eventId: EventId): Result<Boolean> = withContext(dispatcher) {
+        runCatching {
+            inner.unpinEvent(eventId = eventId.value)
+        }
+    }
+
     private suspend fun fetchDetailsForEvent(eventId: EventId): Result<Unit> {
         return runCatching {
             inner.fetchDetailsForEvent(eventId.value)

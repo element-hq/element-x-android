@@ -55,7 +55,7 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
             aMessagesState(),
             aMessagesState(hasNetworkConnection = false),
             aMessagesState(composerState = aMessageComposerState(showAttachmentSourcePicker = true)),
-            aMessagesState(userHasPermissionToSendMessage = false),
+            aMessagesState(userEventPermissions = aUserEventPermissions(canSendMessage = false)),
             aMessagesState(showReinvitePrompt = true),
             aMessagesState(
                 roomName = AsyncData.Uninitialized,
@@ -101,10 +101,7 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
 fun aMessagesState(
     roomName: AsyncData<String> = AsyncData.Success("Room name"),
     roomAvatar: AsyncData<AvatarData> = AsyncData.Success(AvatarData("!id:domain", "Room name", size = AvatarSize.TimelineRoom)),
-    userHasPermissionToSendMessage: Boolean = true,
-    userHasPermissionToRedactOwn: Boolean = false,
-    userHasPermissionToRedactOther: Boolean = false,
-    userHasPermissionToSendReaction: Boolean = true,
+    userEventPermissions: UserEventPermissions = aUserEventPermissions(),
     composerState: MessageComposerState = aMessageComposerState(
         textEditorState = TextEditorState.Rich(aRichTextEditorState(initialText = "Hello", initialFocus = true)),
         isFullScreen = false,
@@ -131,10 +128,7 @@ fun aMessagesState(
     roomName = roomName,
     roomAvatar = roomAvatar,
     heroes = persistentListOf(),
-    userHasPermissionToSendMessage = userHasPermissionToSendMessage,
-    userHasPermissionToRedactOwn = userHasPermissionToRedactOwn,
-    userHasPermissionToRedactOther = userHasPermissionToRedactOther,
-    userHasPermissionToSendReaction = userHasPermissionToSendReaction,
+    userEventPermissions = userEventPermissions,
     composerState = composerState,
     voiceMessageComposerState = voiceMessageComposerState,
     typingNotificationState = aTypingNotificationState(),
@@ -153,6 +147,20 @@ fun aMessagesState(
     appName = "Element",
     pinnedMessagesBannerState = pinnedMessagesBannerState,
     eventSink = eventSink,
+)
+
+fun aUserEventPermissions(
+    canRedactOwn: Boolean = false,
+    canRedactOther: Boolean = false,
+    canSendMessage: Boolean = true,
+    canSendReaction: Boolean = true,
+    canPinUnpin: Boolean = false,
+) = UserEventPermissions(
+    canRedactOwn = canRedactOwn,
+    canRedactOther = canRedactOther,
+    canSendMessage = canSendMessage,
+    canSendReaction = canSendReaction,
+    canPinUnpin = canPinUnpin,
 )
 
 fun aReactionSummaryState(

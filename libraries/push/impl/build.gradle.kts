@@ -56,6 +56,7 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.troubleshoot.api)
     implementation(projects.features.call.api)
+    implementation(projects.libraries.featureflag.api)
     api(projects.libraries.pushproviders.api)
     api(projects.libraries.pushstore.api)
     api(projects.libraries.push.api)
