@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
+import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
@@ -54,6 +55,7 @@ data class MessagesState(
     val enableVoiceMessages: Boolean,
     val callState: RoomCallState,
     val appName: String,
+    val pinnedMessagesBannerState: PinnedMessagesBannerState,
     val eventSink: (MessagesEvents) -> Unit
 )
 
