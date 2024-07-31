@@ -19,7 +19,6 @@ package io.element.android.features.messages.impl.pinned.banner
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
 internal class PinnedMessagesBannerStateProvider : PreviewParameterProvider<PinnedMessagesBannerState> {
-
     override val values: Sequence<PinnedMessagesBannerState>
         get() = sequenceOf(
             aPinnedMessagesBannerState(pinnedMessagesCount = 1, currentPinnedMessageIndex = 0),

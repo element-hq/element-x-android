@@ -32,15 +32,12 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -138,7 +135,7 @@ private fun PinIndicators(
         val viewportSize = lazyListState.layoutInfo.viewportSize
         lazyListState.animateScrollToItem(
             pinIndex,
-            (indicatorHeight / 2 - viewportSize.height / 2)
+            indicatorHeight / 2 - viewportSize.height / 2
         )
     }
     LazyColumn(
@@ -192,13 +189,12 @@ private fun PinnedMessageItem(
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
         )
-
     }
 }
 
 @PreviewsDayNight
 @Composable
-fun PinnedMessagesBannerViewPreview(@PreviewParameter(PinnedMessagesBannerStateProvider::class) state: PinnedMessagesBannerState) = ElementPreview {
+internal fun PinnedMessagesBannerViewPreview(@PreviewParameter(PinnedMessagesBannerStateProvider::class) state: PinnedMessagesBannerState) = ElementPreview {
     PinnedMessagesBannerView(
         state = state,
     )

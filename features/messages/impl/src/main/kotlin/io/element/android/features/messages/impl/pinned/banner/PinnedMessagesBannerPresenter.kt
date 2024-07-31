@@ -26,7 +26,6 @@ import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
 
 class PinnedMessagesBannerPresenter @Inject constructor() : Presenter<PinnedMessagesBannerState> {
-
     @Composable
     override fun present(): PinnedMessagesBannerState {
         var pinnedMessageCount by remember {
