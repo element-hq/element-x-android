@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.troubleshoot.impl
 
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
@@ -68,7 +69,7 @@ fun TroubleshootNotificationsView(
 }
 
 @Composable
-private fun TroubleshootTestView(
+private fun ColumnScope.TroubleshootTestView(
     testState: NotificationTroubleshootTestState,
     onQuickFixClick: () -> Unit,
 ) {
@@ -127,7 +128,7 @@ private fun TroubleshootTestView(
 }
 
 @Composable
-private fun TroubleshootNotificationsContent(state: TroubleshootNotificationsState) {
+private fun ColumnScope.TroubleshootNotificationsContent(state: TroubleshootNotificationsState) {
     when (state.testSuiteState.mainState) {
         AsyncAction.Loading,
         AsyncAction.Confirming,
@@ -197,7 +198,7 @@ private fun RunTestButton(state: TroubleshootNotificationsState) {
 }
 
 @Composable
-private fun TestSuiteView(
+private fun ColumnScope.TestSuiteView(
     testSuiteState: TroubleshootTestSuiteState,
     onQuickFixClick: (Int) -> Unit,
 ) {

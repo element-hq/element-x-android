@@ -64,6 +64,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
+@Suppress("MultipleEmitters") // False positive
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoomSelectView(

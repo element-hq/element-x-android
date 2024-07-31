@@ -127,6 +127,7 @@ internal fun aTimelineItemEvent(
     transactionId: TransactionId? = null,
     isMine: Boolean = false,
     isEditable: Boolean = false,
+    canBeRepliedTo: Boolean = false,
     senderDisplayName: String = "Sender",
     displayNameAmbiguous: Boolean = false,
     content: TimelineItemEventContent = aTimelineItemTextContent(),
@@ -150,6 +151,7 @@ internal fun aTimelineItemEvent(
         sentTime = "12:34",
         isMine = isMine,
         isEditable = isEditable,
+        canBeRepliedTo = canBeRepliedTo,
         senderProfile = aProfileTimelineDetailsReady(
             displayName = senderDisplayName,
             displayNameAmbiguous = displayNameAmbiguous,
