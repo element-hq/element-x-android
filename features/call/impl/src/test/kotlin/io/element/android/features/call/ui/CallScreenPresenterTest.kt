@@ -36,6 +36,7 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.services.analytics.api.ScreenTracker
@@ -43,11 +44,13 @@ import io.element.android.services.analytics.test.FakeScreenTracker
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilTimeout
+import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.test.TestScope
@@ -86,8 +89,9 @@ class CallScreenPresenterTest {
     @Test
     fun `present - with CallType RoomCall sets call as active, loads URL, runs WidgetDriver and notifies the other clients a call started`() = runTest {
         val sendCallNotificationIfNeededLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val syncService = FakeSyncService(MutableStateFlow(SyncState.Running))
         val fakeRoom = FakeMatrixRoom(sendCallNotificationIfNeededResult = sendCallNotificationIfNeededLambda)
-        val client = FakeMatrixClient().apply {
+        val client = FakeMatrixClient(syncService = syncService).apply {
             givenGetRoomResult(A_ROOM_ID, fakeRoom)
         }
         val widgetDriver = FakeMatrixWidgetDriver()
@@ -216,7 +220,12 @@ class CallScreenPresenterTest {
     fun `present - automatically starts the Matrix client sync when on RoomCall`() = runTest {
         val navigator = FakeCallScreenNavigator()
         val widgetDriver = FakeMatrixWidgetDriver()
-        val matrixClient = FakeMatrixClient()
+        val syncStateFlow = MutableStateFlow(SyncState.Idle)
+        val startSyncLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val syncService = FakeSyncService(syncStateFlow = syncStateFlow).apply {
+            this.startSyncLambda = startSyncLambda
+        }
+        val matrixClient = FakeMatrixClient(syncService = syncService)
         val presenter = createCallScreenPresenter(
             callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
             widgetDriver = widgetDriver,
@@ -230,7 +239,7 @@ class CallScreenPresenterTest {
         }.test {
             consumeItemsUntilTimeout()
 
-            assertThat(matrixClient.syncService().syncState.value).isEqualTo(SyncState.Running)
+            assert(startSyncLambda).isCalledOnce()
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -240,7 +249,12 @@ class CallScreenPresenterTest {
     fun `present - automatically stops the Matrix client sync on dispose`() = runTest {
         val navigator = FakeCallScreenNavigator()
         val widgetDriver = FakeMatrixWidgetDriver()
-        val matrixClient = FakeMatrixClient()
+        val syncStateFlow = MutableStateFlow(SyncState.Running)
+        val stopSyncLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val syncService = FakeSyncService(syncStateFlow = syncStateFlow).apply {
+            this.stopSyncLambda = stopSyncLambda
+        }
+        val matrixClient = FakeMatrixClient(syncService = syncService)
         val presenter = createCallScreenPresenter(
             callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
             widgetDriver = widgetDriver,
@@ -262,7 +276,7 @@ class CallScreenPresenterTest {
 
         job.cancelAndJoin()
 
-        assertThat(matrixClient.syncService().syncState.value).isEqualTo(SyncState.Terminated)
+        assert(stopSyncLambda).isCalledOnce()
     }
 
     private fun TestScope.createCallScreenPresenter(
