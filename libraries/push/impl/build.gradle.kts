@@ -82,4 +82,6 @@ dependencies {
     testImplementation(projects.services.appnavstate.test)
     testImplementation(projects.services.toolbox.impl)
     testImplementation(projects.services.toolbox.test)
+    testImplementation(projects.libraries.featureflag.test)
+    testImplementation(libs.kotlinx.collections.immutable)
 }

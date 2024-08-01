@@ -16,6 +16,9 @@
 
 package io.element.android.features.messages.impl
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,6 +36,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -68,6 +72,7 @@ import io.element.android.features.messages.impl.messagecomposer.AttachmentsBott
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
+import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerView
 import io.element.android.features.messages.impl.timeline.TimelineView
 import io.element.android.features.messages.impl.timeline.components.JoinCallMenuItem
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
@@ -100,6 +105,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.KeepScreenOn
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
+import io.element.android.libraries.designsystem.utils.isScrollingUp
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.UserId
@@ -370,22 +376,34 @@ private fun MessagesViewContent(
                 RectangleShape
             },
             content = { paddingValues ->
-                TimelineView(
-                    state = state.timelineState,
-                    typingNotificationState = state.typingNotificationState,
-                    onUserDataClick = onUserDataClick,
-                    onLinkClick = onLinkClick,
-                    onMessageClick = onMessageClick,
-                    onMessageLongClick = onMessageLongClick,
-                    onSwipeToReply = onSwipeToReply,
-                    onReactionClick = onReactionClick,
-                    onReactionLongClick = onReactionLongClick,
-                    onMoreReactionsClick = onMoreReactionsClick,
-                    onReadReceiptClick = onReadReceiptClick,
-                    modifier = Modifier.padding(paddingValues),
-                    forceJumpToBottomVisibility = forceJumpToBottomVisibility,
-                    onJoinCallClick = onJoinCallClick,
-                )
+                Box(modifier = Modifier.padding(paddingValues)) {
+                    val timelineLazyListState = rememberLazyListState()
+                    TimelineView(
+                        state = state.timelineState,
+                        typingNotificationState = state.typingNotificationState,
+                        onUserDataClick = onUserDataClick,
+                        onLinkClick = onLinkClick,
+                        onMessageClick = onMessageClick,
+                        onMessageLongClick = onMessageLongClick,
+                        onSwipeToReply = onSwipeToReply,
+                        onReactionClick = onReactionClick,
+                        onReactionLongClick = onReactionLongClick,
+                        onMoreReactionsClick = onMoreReactionsClick,
+                        onReadReceiptClick = onReadReceiptClick,
+                        forceJumpToBottomVisibility = forceJumpToBottomVisibility,
+                        onJoinCallClick = onJoinCallClick,
+                        lazyListState = timelineLazyListState,
+                    )
+                    AnimatedVisibility(
+                        visible = state.pinnedMessagesBannerState.displayBanner && timelineLazyListState.isScrollingUp(),
+                        enter = expandVertically(),
+                        exit = shrinkVertically(),
+                    ) {
+                        PinnedMessagesBannerView(
+                            state = state.pinnedMessagesBannerState,
+                        )
+                    }
+                }
             },
             sheetContent = { subcomposing: Boolean ->
                 MessagesViewComposerBottomSheetContents(

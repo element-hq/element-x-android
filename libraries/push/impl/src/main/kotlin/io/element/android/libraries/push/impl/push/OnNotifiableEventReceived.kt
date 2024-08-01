@@ -18,9 +18,6 @@ package io.element.android.libraries.push.impl.push
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.push.impl.notifications.DefaultNotificationDrawerManager
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import kotlinx.coroutines.CoroutineScope
@@ -35,23 +32,12 @@ interface OnNotifiableEventReceived {
 class DefaultOnNotifiableEventReceived @Inject constructor(
     private val defaultNotificationDrawerManager: DefaultNotificationDrawerManager,
     private val coroutineScope: CoroutineScope,
-    private val matrixClientProvider: MatrixClientProvider,
-    private val featureFlagService: FeatureFlagService,
+    private val syncOnNotifiableEvent: SyncOnNotifiableEvent,
 ) : OnNotifiableEventReceived {
     override fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
         coroutineScope.launch {
-            subscribeToRoomIfNeeded(notifiableEvent)
+            launch { syncOnNotifiableEvent(notifiableEvent) }
             defaultNotificationDrawerManager.onNotifiableEventReceived(notifiableEvent)
-        }
-    }
-
-    private fun CoroutineScope.subscribeToRoomIfNeeded(notifiableEvent: NotifiableEvent) = launch {
-        if (!featureFlagService.isFeatureEnabled(FeatureFlags.SyncOnPush)) {
-            return@launch
-        }
-        val client = matrixClientProvider.getOrRestore(notifiableEvent.sessionId).getOrNull() ?: return@launch
-        client.getRoom(notifiableEvent.roomId)?.use { room ->
-            room.subscribeToSync()
         }
     }
 }

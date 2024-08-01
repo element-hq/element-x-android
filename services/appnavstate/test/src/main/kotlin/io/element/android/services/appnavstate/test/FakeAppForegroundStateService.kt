@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.services.appnavstate.impl
+package io.element.android.services.appnavstate.test
 
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import kotlinx.coroutines.flow.MutableStateFlow

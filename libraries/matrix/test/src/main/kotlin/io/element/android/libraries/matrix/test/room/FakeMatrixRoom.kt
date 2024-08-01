@@ -139,6 +139,7 @@ class FakeMatrixRoom(
     private val saveComposerDraftLambda: (ComposerDraft) -> Result<Unit> = { _: ComposerDraft -> Result.success(Unit) },
     private val loadComposerDraftLambda: () -> Result<ComposerDraft?> = { Result.success<ComposerDraft?>(null) },
     private val clearComposerDraftLambda: () -> Result<Unit> = { Result.success(Unit) },
+    private val subscribeToSyncLambda: () -> Unit = { lambdaError() },
 ) : MatrixRoom {
     private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
     override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
@@ -181,7 +182,9 @@ class FakeMatrixRoom(
         timelineFocusedOnEventResult(eventId)
     }
 
-    override suspend fun subscribeToSync() = Unit
+    override suspend fun subscribeToSync() {
+        subscribeToSyncLambda()
+    }
 
     override suspend fun powerLevels(): Result<MatrixRoomPowerLevels> {
         return powerLevelsResult()

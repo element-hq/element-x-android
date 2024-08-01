@@ -30,6 +30,7 @@ import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.messagecomposer.DefaultMessageComposerContext
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
+import io.element.android.features.messages.impl.pinned.banner.aPinnedMessagesBannerState
 import io.element.android.features.messages.impl.textcomposer.TestRichTextEditorStateFactory
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineItemIndexer
@@ -158,7 +159,7 @@ class MessagesPresenterTest {
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
-            )
+        )
         assertThat(room.markAsReadCalls).isEmpty()
         val presenter = createMessagesPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -179,7 +180,7 @@ class MessagesPresenterTest {
             canRedactOtherResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
-            ).apply {
+        ).apply {
             givenRoomInfo(aRoomInfo(hasRoomCall = true))
         }
         val presenter = createMessagesPresenter(matrixRoom = room)
@@ -208,7 +209,7 @@ class MessagesPresenterTest {
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
-            )
+        )
         val presenter = createMessagesPresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -246,7 +247,7 @@ class MessagesPresenterTest {
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
-            )
+        )
         val presenter = createMessagesPresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -305,7 +306,7 @@ class MessagesPresenterTest {
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
-            )
+        )
         val presenter = createMessagesPresenter(
             clipboardHelper = clipboardHelper,
             matrixRoom = matrixRoom,
@@ -495,7 +496,7 @@ class MessagesPresenterTest {
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
-            )
+        )
 
         val redactEventLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String? -> Result.success(true) }
         liveTimeline.redactEventLambda = redactEventLambda
@@ -570,7 +571,7 @@ class MessagesPresenterTest {
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
-            )
+        )
         val presenter = createMessagesPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -606,7 +607,7 @@ class MessagesPresenterTest {
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
-            )
+        )
         val presenter = createMessagesPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -631,7 +632,7 @@ class MessagesPresenterTest {
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
-            )
+        )
         val presenter = createMessagesPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -656,7 +657,7 @@ class MessagesPresenterTest {
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
-            )
+        )
         room.givenRoomMembersState(
             MatrixRoomMembersState.Ready(
                 persistentListOf(
@@ -692,7 +693,7 @@ class MessagesPresenterTest {
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
-            )
+        )
         room.givenRoomMembersState(
             MatrixRoomMembersState.Error(
                 failure = Throwable(),
@@ -729,7 +730,7 @@ class MessagesPresenterTest {
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
-            )
+        )
         room.givenRoomMembersState(MatrixRoomMembersState.Unknown)
         val presenter = createMessagesPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -756,7 +757,7 @@ class MessagesPresenterTest {
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
-            )
+        )
         room.givenRoomMembersState(
             MatrixRoomMembersState.Ready(
                 persistentListOf(
@@ -797,7 +798,7 @@ class MessagesPresenterTest {
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
-            )
+        )
         val presenter = createMessagesPresenter(matrixRoom = matrixRoom)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -822,7 +823,7 @@ class MessagesPresenterTest {
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
-            )
+        )
         val presenter = createMessagesPresenter(matrixRoom = matrixRoom)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -844,7 +845,7 @@ class MessagesPresenterTest {
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
-            )
+        )
         val presenter = createMessagesPresenter(matrixRoom = matrixRoom)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -865,7 +866,7 @@ class MessagesPresenterTest {
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
-            )
+        )
         val presenter = createMessagesPresenter(matrixRoom = matrixRoom)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -1060,6 +1061,7 @@ class MessagesPresenterTest {
         val readReceiptBottomSheetPresenter = ReadReceiptBottomSheetPresenter()
         val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
         val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)
+
         return MessagesPresenter(
             room = matrixRoom,
             composerPresenter = messageComposerPresenter,
@@ -1070,6 +1072,7 @@ class MessagesPresenterTest {
             customReactionPresenter = customReactionPresenter,
             reactionSummaryPresenter = reactionSummaryPresenter,
             readReceiptBottomSheetPresenter = readReceiptBottomSheetPresenter,
+            pinnedMessagesBannerPresenter = { aPinnedMessagesBannerState() },
             networkMonitor = FakeNetworkMonitor(),
             snackbarDispatcher = SnackbarDispatcher(),
             navigator = navigator,
