@@ -16,7 +16,10 @@
 
 package io.element.android.features.messages.impl.pinned.banner
 
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.matrix.api.core.EventId
+import kotlin.random.Random
 
 internal class PinnedMessagesBannerStateProvider : PreviewParameterProvider<PinnedMessagesBannerState> {
     override val values: Sequence<PinnedMessagesBannerState>
@@ -33,9 +36,14 @@ internal class PinnedMessagesBannerStateProvider : PreviewParameterProvider<Pinn
 internal fun aPinnedMessagesBannerState(
     pinnedMessagesCount: Int = 0,
     currentPinnedMessageIndex: Int = -1,
+    currentPinnedMessage: PinnedMessagesBannerItem = PinnedMessagesBannerItem(
+        eventId = EventId("\$" + Random.nextInt().toString()),
+        formatted = AnnotatedString("This is a pinned message")
+    ),
     eventSink: (PinnedMessagesBannerEvents) -> Unit = {}
 ) = PinnedMessagesBannerState(
     pinnedMessagesCount = pinnedMessagesCount,
     currentPinnedMessageIndex = currentPinnedMessageIndex,
+    currentPinnedMessage = currentPinnedMessage,
     eventSink = eventSink
 )

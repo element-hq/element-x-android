@@ -73,6 +73,7 @@ import io.element.android.features.messages.impl.messagecomposer.AttachmentsStat
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerView
+import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineView
 import io.element.android.features.messages.impl.timeline.components.JoinCallMenuItem
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
@@ -401,6 +402,9 @@ private fun MessagesViewContent(
                     ) {
                         PinnedMessagesBannerView(
                             state = state.pinnedMessagesBannerState,
+                            onClick = { pinnedEventId ->
+                                //state.timelineState.eventSink(TimelineEvents.FocusOnEvent(pinnedEventId))
+                            },
                         )
                     }
                 }

@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.pinned.banner
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement.spacedBy
@@ -32,8 +33,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +41,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -55,39 +55,44 @@ import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.pinnedMessageBannerBorder
 import io.element.android.libraries.designsystem.theme.pinnedMessageBannerIndicator
 import io.element.android.libraries.designsystem.utils.annotatedTextWithBold
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun PinnedMessagesBannerView(
     state: PinnedMessagesBannerState,
+    onClick: (EventId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    if (state.currentPinnedMessage == null) return
+
     val borderColor = ElementTheme.colors.pinnedMessageBannerBorder
     Row(
         modifier = modifier
-                .background(color = ElementTheme.colors.bgCanvasDefault)
-                .fillMaxWidth()
-                .drawBehind {
-                    val strokeWidth = 0.5.dp.toPx()
-                    val y = size.height - strokeWidth / 2
-                    drawLine(
-                            borderColor,
-                            Offset(0f, y),
-                            Offset(size.width, y),
-                            strokeWidth
-                    )
-                    drawLine(
-                            borderColor,
-                            Offset(0f, 0f),
-                            Offset(size.width, 0f),
-                            strokeWidth
-                    )
-                }
-                .shadow(elevation = 5.dp, spotColor = Color.Transparent)
-                .heightIn(min = 64.dp)
-                .clickable {
-                    state.eventSink(PinnedMessagesBannerEvents.MoveToNextPinned)
-                },
+            .background(color = ElementTheme.colors.bgCanvasDefault)
+            .fillMaxWidth()
+            .drawBehind {
+                val strokeWidth = 0.5.dp.toPx()
+                val y = size.height - strokeWidth / 2
+                drawLine(
+                    borderColor,
+                    Offset(0f, y),
+                    Offset(size.width, y),
+                    strokeWidth
+                )
+                drawLine(
+                    borderColor,
+                    Offset(0f, 0f),
+                    Offset(size.width, 0f),
+                    strokeWidth
+                )
+            }
+            .shadow(elevation = 5.dp, spotColor = Color.Transparent)
+            .heightIn(min = 64.dp)
+            .clickable {
+                onClick(state.currentPinnedMessage.eventId)
+                state.eventSink(PinnedMessagesBannerEvents.MoveToNextPinned)
+            },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = spacedBy(10.dp)
     ) {
@@ -106,7 +111,7 @@ fun PinnedMessagesBannerView(
         PinnedMessageItem(
             index = state.currentPinnedMessageIndex,
             totalCount = state.pinnedMessagesCount,
-            message = "This is a pinned message",
+            message = state.currentPinnedMessage.formatted,
             modifier = Modifier.weight(1f)
         )
         TextButton(text = stringResource(id = CommonStrings.screen_room_pinned_banner_view_all_button_title), onClick = { /*TODO*/ })
@@ -119,14 +124,12 @@ private fun PinIndicators(
     pinsCount: Int,
     modifier: Modifier = Modifier,
 ) {
-    val indicatorHeight by remember {
-        derivedStateOf {
-            when (pinsCount) {
-                0 -> 0
-                1 -> 32
-                2 -> 18
-                else -> 11
-            }
+    val indicatorHeight = remember(pinsCount) {
+        when (pinsCount) {
+            0 -> 0
+            1 -> 32
+            2 -> 18
+            else -> 11
         }
     }
     val lazyListState = rememberLazyListState()
@@ -141,20 +144,21 @@ private fun PinIndicators(
         modifier = modifier,
         state = lazyListState,
         verticalArrangement = spacedBy(2.dp),
-        userScrollEnabled = false
+        userScrollEnabled = false,
+        reverseLayout = true
     ) {
         items(pinsCount) { index ->
             Box(
                 modifier = Modifier
-                        .width(2.dp)
-                        .height(indicatorHeight.dp)
-                        .background(
-                                color = if (index == pinIndex) {
-                                    ElementTheme.colors.iconAccentPrimary
-                                } else {
-                                    ElementTheme.colors.pinnedMessageBannerIndicator
-                                }
-                        )
+                    .width(2.dp)
+                    .height(indicatorHeight.dp)
+                    .background(
+                        color = if (index == pinIndex) {
+                            ElementTheme.colors.iconAccentPrimary
+                        } else {
+                            ElementTheme.colors.pinnedMessageBannerIndicator
+                        }
+                    )
             )
         }
     }
@@ -164,13 +168,13 @@ private fun PinIndicators(
 private fun PinnedMessageItem(
     index: Int,
     totalCount: Int,
-    message: String,
+    message: AnnotatedString,
     modifier: Modifier = Modifier,
 ) {
     val countMessage = stringResource(id = CommonStrings.screen_room_pinned_banner_indicator, index + 1, totalCount)
     val fullCountMessage = stringResource(id = CommonStrings.screen_room_pinned_banner_indicator_description, countMessage)
     Column(modifier = modifier) {
-        if (totalCount > 1) {
+        AnimatedVisibility (totalCount > 1) {
             Text(
                 text = annotatedTextWithBold(
                     text = fullCountMessage,
@@ -179,6 +183,7 @@ private fun PinnedMessageItem(
                 style = ElementTheme.typography.fontBodySmMedium,
                 color = ElementTheme.colors.textActionAccent,
                 maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
         }
         Text(
@@ -196,5 +201,6 @@ private fun PinnedMessageItem(
 internal fun PinnedMessagesBannerViewPreview(@PreviewParameter(PinnedMessagesBannerStateProvider::class) state: PinnedMessagesBannerState) = ElementPreview {
     PinnedMessagesBannerView(
         state = state,
+        onClick = {},
     )
 }

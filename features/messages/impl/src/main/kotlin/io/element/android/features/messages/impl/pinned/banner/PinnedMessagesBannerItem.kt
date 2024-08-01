@@ -16,11 +16,10 @@
 
 package io.element.android.features.messages.impl.pinned.banner
 
-data class PinnedMessagesBannerState(
-    val pinnedMessagesCount: Int,
-    val currentPinnedMessageIndex: Int,
-    val currentPinnedMessage: PinnedMessagesBannerItem?,
-    val eventSink: (PinnedMessagesBannerEvents) -> Unit
-) {
-    val displayBanner = pinnedMessagesCount > 0 && currentPinnedMessage != null
-}
+import androidx.compose.ui.text.AnnotatedString
+import io.element.android.libraries.matrix.api.core.EventId
+
+data class PinnedMessagesBannerItem(
+    val eventId: EventId,
+    val formatted: AnnotatedString,
+)

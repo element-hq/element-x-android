@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.pinned.banner
+package io.element.android.libraries.eventformatter.test
 
-data class PinnedMessagesBannerState(
-    val pinnedMessagesCount: Int,
-    val currentPinnedMessageIndex: Int,
-    val currentPinnedMessage: PinnedMessagesBannerItem?,
-    val eventSink: (PinnedMessagesBannerEvents) -> Unit
-) {
-    val displayBanner = pinnedMessagesCount > 0 && currentPinnedMessage != null
+import io.element.android.libraries.eventformatter.api.PinnedMessagesBannerFormatter
+import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+
+class FakePinnedMessagesBannerFormatter(
+    val formatLambda: (event: EventTimelineItem) -> CharSequence
+) : PinnedMessagesBannerFormatter {
+    override fun format(event: EventTimelineItem): CharSequence {
+        return formatLambda(event)
+    }
 }

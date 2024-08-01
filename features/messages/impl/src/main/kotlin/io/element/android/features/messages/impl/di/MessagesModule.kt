@@ -22,9 +22,9 @@ import dagger.Module
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerPresenter
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.RoomScope
 
-@ContributesTo(SessionScope::class)
+@ContributesTo(RoomScope::class)
 @Module
 interface MessagesModule {
     @Binds

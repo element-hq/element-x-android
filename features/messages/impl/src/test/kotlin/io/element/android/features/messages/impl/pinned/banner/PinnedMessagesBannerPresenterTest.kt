@@ -17,6 +17,10 @@
 package io.element.android.features.messages.impl.pinned.banner
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.eventformatter.api.PinnedMessagesBannerFormatter
+import io.element.android.libraries.eventformatter.test.FakePinnedMessagesBannerFormatter
+import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -29,6 +33,7 @@ class PinnedMessagesBannerPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.pinnedMessagesCount).isEqualTo(0)
             assertThat(initialState.currentPinnedMessageIndex).isEqualTo(0)
+            assertThat(initialState.currentPinnedMessage).isNull()
         }
     }
 
@@ -43,7 +48,15 @@ class PinnedMessagesBannerPresenterTest {
         }
     }
 
-    private fun createPinnedMessagesBannerPresenter(): PinnedMessagesBannerPresenter {
-        return PinnedMessagesBannerPresenter()
+    private fun createPinnedMessagesBannerPresenter(
+        room: MatrixRoom = FakeMatrixRoom(),
+        formatter: PinnedMessagesBannerFormatter = FakePinnedMessagesBannerFormatter(
+            formatLambda = { event -> "Content ${event.content}" }
+        )
+    ): PinnedMessagesBannerPresenter {
+        return PinnedMessagesBannerPresenter(
+            room = room,
+            pinnedMessagesBannerFormatter = formatter
+        )
     }
 }
