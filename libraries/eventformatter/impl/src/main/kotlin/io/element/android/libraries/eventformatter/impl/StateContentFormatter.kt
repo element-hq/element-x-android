@@ -80,6 +80,13 @@ class StateContentFormatter @Inject constructor(
                     else -> sp.getString(R.string.state_event_room_topic_removed, senderDisambiguatedDisplayName)
                 }
             }
+            OtherState.RoomPinnedEvents -> {
+                when {
+                    //TODO manage all cases when available
+                    senderIsYou -> sp.getString(R.string.state_event_room_pinned_events_changed_by_you)
+                    else -> sp.getString(R.string.state_event_room_pinned_events_changed, senderDisambiguatedDisplayName)
+                }
+            }
             is OtherState.Custom -> when (renderingMode) {
                 RenderingMode.RoomList -> {
                     Timber.v("Filtering timeline item for room state change: $content")
@@ -159,15 +166,6 @@ class StateContentFormatter @Inject constructor(
                 }
                 RenderingMode.Timeline -> {
                     "RoomJoinRules"
-                }
-            }
-            OtherState.RoomPinnedEvents -> when (renderingMode) {
-                RenderingMode.RoomList -> {
-                    Timber.v("Filtering timeline item for room state change: $content")
-                    null
-                }
-                RenderingMode.Timeline -> {
-                    "RoomPinnedEvents"
                 }
             }
             is OtherState.RoomUserPowerLevels -> when (renderingMode) {
