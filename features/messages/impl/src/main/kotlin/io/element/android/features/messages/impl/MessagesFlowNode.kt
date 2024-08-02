@@ -41,6 +41,7 @@ import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewNode
 import io.element.android.features.messages.impl.forward.ForwardMessagesNode
+import io.element.android.features.messages.impl.pinned.list.PinnedMessagesListNode
 import io.element.android.features.messages.impl.report.ReportMessageNode
 import io.element.android.features.messages.impl.timeline.debug.EventDebugInfoNode
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -81,7 +82,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
-import timber.log.Timber
 
 @ContributesNode(RoomScope::class)
 class MessagesFlowNode @AssistedInject constructor(
@@ -148,6 +148,9 @@ class MessagesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class EditPoll(val eventId: EventId) : NavTarget
+
+        @Parcelize
+        data object PinnedEvents : NavTarget
     }
 
     private val callbacks = plugins<MessagesEntryPoint.Callback>()
@@ -220,7 +223,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     }
 
                     override fun onViewAllPinnedEvents() {
-                        Timber.d("On View All Pinned Events not implemented yet.")
+                        backstack.push(NavTarget.PinnedEvents)
                     }
                 }
                 val inputs = MessagesNode.Inputs(
@@ -275,6 +278,9 @@ class MessagesFlowNode @AssistedInject constructor(
                 createPollEntryPoint.nodeBuilder(this, buildContext)
                     .params(CreatePollEntryPoint.Params(mode = CreatePollMode.EditPoll(eventId = navTarget.eventId)))
                     .build()
+            }
+            NavTarget.PinnedEvents -> {
+                createNode<PinnedMessagesListNode>(buildContext)
             }
             NavTarget.Empty -> {
                 node(buildContext) {}
