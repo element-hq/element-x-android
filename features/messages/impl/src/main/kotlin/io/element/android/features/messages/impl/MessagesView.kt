@@ -73,7 +73,6 @@ import io.element.android.features.messages.impl.messagecomposer.AttachmentsStat
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerView
-import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineView
 import io.element.android.features.messages.impl.timeline.components.JoinCallMenuItem
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
@@ -127,8 +126,9 @@ fun MessagesView(
     onSendLocationClick: () -> Unit,
     onCreatePollClick: () -> Unit,
     onJoinCallClick: () -> Unit,
+    onViewAllPinnedMessagesClick: () -> Unit,
     modifier: Modifier = Modifier,
-    forceJumpToBottomVisibility: Boolean = false
+    forceJumpToBottomVisibility: Boolean = false,
 ) {
     OnLifecycleEvent { _, event ->
         state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.LifecycleEvent(event))
@@ -229,6 +229,7 @@ fun MessagesView(
                 },
                 forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                 onJoinCallClick = onJoinCallClick,
+                onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
             )
         },
         snackbarHost = {
@@ -320,6 +321,7 @@ private fun MessagesViewContent(
     onSendLocationClick: () -> Unit,
     onCreatePollClick: () -> Unit,
     onJoinCallClick: () -> Unit,
+    onViewAllPinnedMessagesClick: () -> Unit,
     forceJumpToBottomVisibility: Boolean,
     modifier: Modifier = Modifier,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
@@ -405,6 +407,7 @@ private fun MessagesViewContent(
                             onClick = { pinnedEventId ->
                                 //state.timelineState.eventSink(TimelineEvents.FocusOnEvent(pinnedEventId))
                             },
+                            onViewAllClick = onViewAllPinnedMessagesClick,
                         )
                     }
                 }
@@ -576,12 +579,13 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onBackClick = {},
         onRoomDetailsClick = {},
         onEventClick = { false },
-        onPreviewAttachments = {},
         onUserDataClick = {},
         onLinkClick = {},
+        onPreviewAttachments = {},
         onSendLocationClick = {},
         onCreatePollClick = {},
         onJoinCallClick = {},
+        onViewAllPinnedMessagesClick = { },
         forceJumpToBottomVisibility = true,
     )
 }

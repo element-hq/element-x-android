@@ -471,6 +471,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
     onSendLocationClick: () -> Unit = EnsureNeverCalled(),
     onCreatePollClick: () -> Unit = EnsureNeverCalled(),
     onJoinCallClick: () -> Unit = EnsureNeverCalled(),
+    onViewAllPinnedMessagesClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         // Cannot use the RichTextEditor, so simulate a LocalInspectionMode
@@ -488,6 +489,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
                 onSendLocationClick = onSendLocationClick,
                 onCreatePollClick = onCreatePollClick,
                 onJoinCallClick = onJoinCallClick,
+                onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
             )
         }
     }

@@ -17,6 +17,7 @@
 package io.element.android.features.messages.impl
 
 import android.os.Parcelable
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
@@ -81,6 +82,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 
 @ContributesNode(RoomScope::class)
 class MessagesFlowNode @AssistedInject constructor(
@@ -216,6 +218,10 @@ class MessagesFlowNode @AssistedInject constructor(
                         )
                         analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
                         elementCallEntryPoint.startCall(callType)
+                    }
+
+                    override fun onViewAllPinnedEvents() {
+                        Timber.d("On View All Pinned Events not implemented yet.")
                     }
                 }
                 val inputs = MessagesNode.Inputs(
