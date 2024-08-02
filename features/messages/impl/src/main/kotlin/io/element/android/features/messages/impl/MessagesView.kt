@@ -36,7 +36,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -73,6 +72,8 @@ import io.element.android.features.messages.impl.messagecomposer.AttachmentsStat
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerView
+import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerViewDefaults
+import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineView
 import io.element.android.features.messages.impl.timeline.components.JoinCallMenuItem
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
@@ -105,14 +106,15 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.KeepScreenOn
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
-import io.element.android.libraries.designsystem.utils.isScrollingUp
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import timber.log.Timber
 import kotlin.random.Random
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun MessagesView(
@@ -380,7 +382,7 @@ private fun MessagesViewContent(
             },
             content = { paddingValues ->
                 Box(modifier = Modifier.padding(paddingValues)) {
-                    val timelineLazyListState = rememberLazyListState()
+                    val scrollBehavior = PinnedMessagesBannerViewDefaults.rememberExitOnScrollBehavior()
                     TimelineView(
                         state = state.timelineState,
                         typingNotificationState = state.typingNotificationState,
@@ -395,18 +397,21 @@ private fun MessagesViewContent(
                         onReadReceiptClick = onReadReceiptClick,
                         forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                         onJoinCallClick = onJoinCallClick,
-                        lazyListState = timelineLazyListState,
+                        nestedScrollConnection = scrollBehavior.nestedScrollConnection,
                     )
                     AnimatedVisibility(
-                        visible = state.pinnedMessagesBannerState.displayBanner && timelineLazyListState.isScrollingUp(),
+                        visible = state.pinnedMessagesBannerState.displayBanner && scrollBehavior.isVisible,
                         enter = expandVertically(),
                         exit = shrinkVertically(),
                     ) {
+                        fun focusOnPinnedEvent(eventId: EventId) {
+                            state.timelineState.eventSink(
+                                TimelineEvents.FocusOnEvent(eventId = eventId, debounce = 200.milliseconds)
+                            )
+                        }
                         PinnedMessagesBannerView(
                             state = state.pinnedMessagesBannerState,
-                            onClick = { pinnedEventId ->
-                                //state.timelineState.eventSink(TimelineEvents.FocusOnEvent(pinnedEventId))
-                            },
+                            onClick = ::focusOnPinnedEvent,
                             onViewAllClick = onViewAllPinnedMessagesClick,
                         )
                     }

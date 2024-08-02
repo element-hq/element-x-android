@@ -44,7 +44,6 @@ class PinnedMessagesBannerPresenter @Inject constructor(
     private val itemFactory: PinnedMessagesBannerItemFactory,
     private val featureFlagService: FeatureFlagService,
 ) : Presenter<PinnedMessagesBannerState> {
-
     @Composable
     override fun present(): PinnedMessagesBannerState {
         var pinnedItems by remember {
@@ -109,7 +108,8 @@ class PinnedMessagesBannerPresenter @Inject constructor(
                 }
                 .onEach { newItems ->
                     updatedOnItemsChange(newItems)
-                }.onCompletion {
+                }
+                .onCompletion {
                     pinnedEventsTimeline.close()
                 }
                 .launchIn(this)

@@ -33,13 +33,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
@@ -194,6 +200,34 @@ private fun PinnedMessageItem(
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
         )
+    }
+}
+
+@Stable
+internal interface PinnedMessagesBannerViewScrollBehavior {
+    val isVisible: Boolean
+    val nestedScrollConnection: NestedScrollConnection
+}
+
+internal object PinnedMessagesBannerViewDefaults {
+    @Composable
+    fun rememberExitOnScrollBehavior(): PinnedMessagesBannerViewScrollBehavior = remember {
+        ExitOnScrollBehavior()
+    }
+}
+
+private class ExitOnScrollBehavior : PinnedMessagesBannerViewScrollBehavior {
+    override var isVisible by mutableStateOf(true)
+    override val nestedScrollConnection: NestedScrollConnection = object : NestedScrollConnection {
+        override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+            if (available.y < -1) {
+                isVisible = true
+            }
+            if (available.y > 1) {
+                isVisible = false
+            }
+            return Offset.Zero
+        }
     }
 }
 

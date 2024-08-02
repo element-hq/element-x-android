@@ -51,7 +51,6 @@ class DefaultPinnedMessagesBannerFormatter @Inject constructor(
     private val sp: StringProvider,
     private val permalinkParser: PermalinkParser,
 ) : PinnedMessagesBannerFormatter {
-
     override fun format(event: EventTimelineItem): CharSequence {
         return when (val content = event.content) {
             is MessageContent -> processMessageContents(event, content)
@@ -77,7 +76,6 @@ class DefaultPinnedMessagesBannerFormatter @Inject constructor(
         event: EventTimelineItem,
         messageContent: MessageContent,
     ): CharSequence {
-
         return when (val messageType: MessageType = messageContent.type) {
             is EmoteMessageType -> {
                 val senderDisambiguatedDisplayName = event.senderProfile.getDisambiguatedDisplayName(event.sender)

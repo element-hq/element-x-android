@@ -17,7 +17,6 @@
 package io.element.android.features.messages.impl
 
 import android.os.Parcelable
-import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier

@@ -50,6 +50,7 @@ import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -136,13 +137,8 @@ class TimelinePresenter @AssistedInject constructor(
                 is TimelineEvents.EditPoll -> {
                     navigator.onEditPollClick(event.pollStartId)
                 }
-                is TimelineEvents.FocusOnEvent -> localScope.launch {
-                    if (timelineItemIndexer.isKnown(event.eventId)) {
-                        val index = timelineItemIndexer.indexOf(event.eventId)
-                        focusRequestState.value = FocusRequestState.Success(eventId = event.eventId, index = index)
-                    } else {
-                        focusRequestState.value = FocusRequestState.Loading(eventId = event.eventId)
-                    }
+                is TimelineEvents.FocusOnEvent -> {
+                    focusRequestState.value = FocusRequestState.Requested(event.eventId, event.debounce)
                 }
                 is TimelineEvents.OnFocusEventRender -> {
                     focusRequestState.value = focusRequestState.value.onFocusEventRender()
@@ -157,18 +153,29 @@ class TimelinePresenter @AssistedInject constructor(
         }
 
         LaunchedEffect(focusRequestState.value) {
-            val currentFocusRequestState = focusRequestState.value
-            if (currentFocusRequestState is FocusRequestState.Loading) {
-                val eventId = currentFocusRequestState.eventId
-                timelineController.focusOnEvent(eventId)
-                    .fold(
-                        onSuccess = {
-                            focusRequestState.value = FocusRequestState.Success(eventId = eventId)
-                        },
-                        onFailure = {
-                            focusRequestState.value = FocusRequestState.Failure(throwable = it)
-                        }
-                    )
+            when (val currentFocusRequestState = focusRequestState.value) {
+                is FocusRequestState.Requested -> {
+                    delay(currentFocusRequestState.debounce)
+                    if (timelineItemIndexer.isKnown(currentFocusRequestState.eventId)) {
+                        val index = timelineItemIndexer.indexOf(currentFocusRequestState.eventId)
+                        focusRequestState.value = FocusRequestState.Success(eventId = currentFocusRequestState.eventId, index = index)
+                    } else {
+                        focusRequestState.value = FocusRequestState.Loading(eventId = currentFocusRequestState.eventId)
+                    }
+                }
+                is FocusRequestState.Loading -> {
+                    val eventId = currentFocusRequestState.eventId
+                    timelineController.focusOnEvent(eventId)
+                        .fold(
+                            onSuccess = {
+                                focusRequestState.value = FocusRequestState.Success(eventId = eventId)
+                            },
+                            onFailure = {
+                                focusRequestState.value = FocusRequestState.Failure(throwable = it)
+                            }
+                        )
+                }
+                else -> Unit
             }
         }
 
