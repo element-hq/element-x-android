@@ -18,21 +18,20 @@ package io.element.android.features.messages.impl.pinned.banner
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.text.AnnotatedString
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.eventformatter.api.PinnedMessagesBannerFormatter
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
@@ -42,61 +41,37 @@ import kotlin.time.Duration.Companion.milliseconds
 
 class PinnedMessagesBannerPresenter @Inject constructor(
     private val room: MatrixRoom,
-    private val pinnedMessagesBannerFormatter: PinnedMessagesBannerFormatter,
+    private val itemFactory: PinnedMessagesBannerItemFactory,
+    private val featureFlagService: FeatureFlagService,
 ) : Presenter<PinnedMessagesBannerState> {
 
-    @OptIn(FlowPreview::class)
     @Composable
     override fun present(): PinnedMessagesBannerState {
-        var pinnedMessages by remember {
+        var pinnedItems by remember {
             mutableStateOf<List<PinnedMessagesBannerItem>>(emptyList())
         }
+
+        fun onItemsChange(newItems: List<PinnedMessagesBannerItem>) {
+            pinnedItems = newItems
+        }
+
         var currentPinnedMessageIndex by rememberSaveable {
             mutableIntStateOf(0)
         }
-        LaunchedEffect(pinnedMessages) {
-            val pinnedMessageCount = pinnedMessages.size
+
+        LaunchedEffect(pinnedItems) {
+            val pinnedMessageCount = pinnedItems.size
             if (currentPinnedMessageIndex >= pinnedMessageCount) {
                 currentPinnedMessageIndex = (pinnedMessageCount - 1).coerceAtLeast(0)
             }
         }
 
-        LaunchedEffect(Unit) {
-            val pinnedEventsTimeline = room.pinnedEventsTimeline().getOrNull() ?: return@LaunchedEffect
-            pinnedEventsTimeline.timelineItems
-                .debounce(300.milliseconds)
-                .map { timelineItems ->
-                    timelineItems.mapNotNull { timelineItem ->
-                        when (timelineItem) {
-                            is MatrixTimelineItem.Event -> {
-                                val eventId = timelineItem.eventId ?: return@mapNotNull null
-                                val formatted = pinnedMessagesBannerFormatter.format(timelineItem.event)
-                                PinnedMessagesBannerItem(
-                                    eventId = eventId,
-                                    formatted = if (formatted is AnnotatedString) {
-                                        formatted
-                                    } else {
-                                        AnnotatedString(formatted.toString())
-                                    },
-                                )
-                            }
-                            else -> null
-                        }
-                    }
-                }
-                .flowOn(Dispatchers.Default)
-                .onEach { newPinnedMessages ->
-                    pinnedMessages = newPinnedMessages
-                }.onCompletion {
-                    pinnedEventsTimeline.close()
-                }
-                .launchIn(this)
-        }
+        PinnedMessagesBannerItemsEffect(::onItemsChange)
 
         fun handleEvent(event: PinnedMessagesBannerEvents) {
             when (event) {
                 is PinnedMessagesBannerEvents.MoveToNextPinned -> {
-                    if (currentPinnedMessageIndex < pinnedMessages.size - 1) {
+                    if (currentPinnedMessageIndex < pinnedItems.size - 1) {
                         currentPinnedMessageIndex++
                     } else {
                         currentPinnedMessageIndex = 0
@@ -106,10 +81,38 @@ class PinnedMessagesBannerPresenter @Inject constructor(
         }
 
         return PinnedMessagesBannerState(
-            pinnedMessagesCount = pinnedMessages.size,
-            currentPinnedMessage = pinnedMessages.getOrNull(currentPinnedMessageIndex),
+            pinnedMessagesCount = pinnedItems.size,
+            currentPinnedMessage = pinnedItems.getOrNull(currentPinnedMessageIndex),
             currentPinnedMessageIndex = currentPinnedMessageIndex,
             eventSink = ::handleEvent
         )
+    }
+
+    @OptIn(FlowPreview::class)
+    @Composable
+    private fun PinnedMessagesBannerItemsEffect(
+        onItemsChange: (List<PinnedMessagesBannerItem>) -> Unit,
+    ) {
+        val isFeatureEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.PinnedEvents).collectAsState(initial = false)
+        val updatedOnItemsChange by rememberUpdatedState(onItemsChange)
+
+        LaunchedEffect(isFeatureEnabled) {
+            if (!isFeatureEnabled) return@LaunchedEffect
+
+            val pinnedEventsTimeline = room.pinnedEventsTimeline().getOrNull() ?: return@LaunchedEffect
+            pinnedEventsTimeline.timelineItems
+                .debounce(300.milliseconds)
+                .map { timelineItems ->
+                    timelineItems.mapNotNull { timelineItem ->
+                        itemFactory.create(timelineItem)
+                    }
+                }
+                .onEach { newItems ->
+                    updatedOnItemsChange(newItems)
+                }.onCompletion {
+                    pinnedEventsTimeline.close()
+                }
+                .launchIn(this)
+        }
     }
 }

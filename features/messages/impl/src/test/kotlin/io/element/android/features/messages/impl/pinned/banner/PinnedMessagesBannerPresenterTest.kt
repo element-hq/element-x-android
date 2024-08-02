@@ -17,11 +17,14 @@
 package io.element.android.features.messages.impl.pinned.banner
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.eventformatter.api.PinnedMessagesBannerFormatter
 import io.element.android.libraries.eventformatter.test.FakePinnedMessagesBannerFormatter
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.tests.testutils.test
+import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -48,15 +51,25 @@ class PinnedMessagesBannerPresenterTest {
         }
     }
 
-    private fun createPinnedMessagesBannerPresenter(
+    private fun TestScope.createPinnedMessagesBannerPresenter(
         room: MatrixRoom = FakeMatrixRoom(),
-        formatter: PinnedMessagesBannerFormatter = FakePinnedMessagesBannerFormatter(
-            formatLambda = { event -> "Content ${event.content}" }
-        )
+        itemFactory: PinnedMessagesBannerItemFactory = PinnedMessagesBannerItemFactory(
+            coroutineDispatchers = testCoroutineDispatchers(),
+            formatter = FakePinnedMessagesBannerFormatter(
+                formatLambda = { event -> "Content ${event.content}" }
+            )
+        ),
+        isFeatureEnabled: Boolean = true,
     ): PinnedMessagesBannerPresenter {
+        val featureFlagService = FakeFeatureFlagService(
+            initialState = mapOf(
+                FeatureFlags.PinnedEvents.key to isFeatureEnabled
+            )
+        )
         return PinnedMessagesBannerPresenter(
             room = room,
-            pinnedMessagesBannerFormatter = formatter
+            itemFactory = itemFactory,
+            featureFlagService = featureFlagService
         )
     }
 }
