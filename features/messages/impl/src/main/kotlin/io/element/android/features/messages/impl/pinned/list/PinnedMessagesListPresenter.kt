@@ -19,9 +19,12 @@ package io.element.android.features.messages.impl.pinned.list
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.roomMembers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -35,7 +38,15 @@ class PinnedMessagesListPresenter @Inject constructor(
     @Composable
     override fun present(): PinnedMessagesListState {
         val timelineItems by timelineItemsFactory.collectItemsAsState()
-
+        val timelineRoomInfo = remember {
+            TimelineRoomInfo(
+                isDm = room.isDm,
+                name = room.displayName,
+                userHasPermissionToSendMessage = false,
+                userHasPermissionToSendReaction = false,
+                isCallOngoing = false,
+            )
+        }
         LaunchedEffect(Unit) {
             val timeline = room.pinnedEventsTimeline().getOrNull() ?: return@LaunchedEffect
             combine(timeline.timelineItems, room.membersStateFlow) { items, membersState ->
@@ -51,6 +62,7 @@ class PinnedMessagesListPresenter @Inject constructor(
         }
 
         return PinnedMessagesListState(
+            timelineRoomInfo = timelineRoomInfo,
             timelineItems = timelineItems,
             eventSink = ::handleEvents
         )

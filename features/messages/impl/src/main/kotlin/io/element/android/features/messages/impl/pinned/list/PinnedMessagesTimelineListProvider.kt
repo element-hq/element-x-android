@@ -17,6 +17,8 @@
 package io.element.android.features.messages.impl.pinned.list
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
+import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import kotlinx.collections.immutable.toImmutableList
 
@@ -28,8 +30,10 @@ open class PinnedMessagesTimelineStateProvider : PreviewParameterProvider<Pinned
 }
 
 fun pinnedMessagesListState(
+    timelineRoomInfo: TimelineRoomInfo = aTimelineRoomInfo(),
     timelineItems: List<TimelineItem> = emptyList(),
 ) = PinnedMessagesListState(
+    timelineRoomInfo = timelineRoomInfo,
     timelineItems = timelineItems.toImmutableList(),
     eventSink = {}
 )
