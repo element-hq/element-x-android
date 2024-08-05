@@ -3,6 +3,7 @@
   <string name="screen_identity_confirmation_create_new_recovery_key">"建立新的復原金鑰"</string>
   <string name="screen_identity_confirmation_subtitle">"驗證這部裝置以設定安全通訊。"</string>
   <string name="screen_identity_confirmation_title">"確認這是你本人"</string>
+  <string name="screen_identity_confirmation_use_another_device">"使用另一部裝置"</string>
   <string name="screen_identity_confirmed_subtitle">"您可以安全地讀取和發送訊息了，與您聊天的人也可以信任這部裝置。"</string>
   <string name="screen_identity_confirmed_title">"裝置已驗證"</string>
   <string name="screen_identity_use_another_device">"使用另一部裝置"</string>

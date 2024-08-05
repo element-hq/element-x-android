@@ -3,6 +3,7 @@
   <string name="screen_identity_confirmation_create_new_recovery_key">"Creați o nouă cheie de recuperare"</string>
   <string name="screen_identity_confirmation_subtitle">"Verificați acest dispozitiv pentru a configura mesagerie securizată."</string>
   <string name="screen_identity_confirmation_title">"Confirmați că sunteți dumneavoastră"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Utilizați un alt dispozitiv"</string>
   <string name="screen_identity_confirmed_subtitle">"Acum puteți citi sau trimite mesaje în siguranță, iar oricine cu care conversați poate avea încredere în acest dispozitiv."</string>
   <string name="screen_identity_confirmed_title">"Dispozitiv verificat"</string>
   <string name="screen_identity_use_another_device">"Utilizați un alt dispozitiv"</string>
