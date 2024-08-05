@@ -17,21 +17,22 @@
 package io.element.android.libraries.matrix.impl.timeline.postprocessor
 
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 
 /**
  * This post processor is responsible for adding virtual items to indicate all the previous last forward item.
  */
 class LastForwardIndicatorsPostProcessor(
-    private val isTimelineLive: Boolean,
+    private val mode: Timeline.Mode,
 ) {
     private val lastForwardIdentifiers = LinkedHashSet<String>()
 
     fun process(
         items: List<MatrixTimelineItem>,
     ): List<MatrixTimelineItem> {
-        // If the timeline is live, we don't have any last forward indicator to display
-        if (isTimelineLive) {
+        // We don't need to add the last forward indicator if we are not in the FOCUSED_ON_EVENT mode
+        if (mode != Timeline.Mode.FOCUSED_ON_EVENT) {
             return items
         } else {
             return buildList {

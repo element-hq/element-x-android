@@ -46,6 +46,12 @@ interface Timeline : AutoCloseable {
         FORWARDS
     }
 
+    enum class Mode {
+        LIVE,
+        FOCUSED_ON_EVENT,
+        FOCUSED_ON_PINNED_EVENTS
+    }
+
     val membershipChangeEventReceived: Flow<Unit>
     suspend fun sendReadReceipt(eventId: EventId, receiptType: ReceiptType): Result<Unit>
     suspend fun paginate(direction: PaginationDirection): Result<Boolean>
