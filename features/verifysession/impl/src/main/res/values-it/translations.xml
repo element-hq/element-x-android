@@ -3,6 +3,7 @@
   <string name="screen_identity_confirmation_create_new_recovery_key">"Crea una nuova chiave di recupero"</string>
   <string name="screen_identity_confirmation_subtitle">"Verifica questo dispositivo per segnare i tuoi messaggi come sicuri."</string>
   <string name="screen_identity_confirmation_title">"Conferma la tua identità"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Usa un altro dispositivo"</string>
   <string name="screen_identity_confirmed_subtitle">"Ora puoi leggere o inviare messaggi in tutta sicurezza e anche chi chatta con te può fidarsi di questo dispositivo."</string>
   <string name="screen_identity_confirmed_title">"Dispositivo verificato"</string>
   <string name="screen_identity_use_another_device">"Usa un altro dispositivo"</string>

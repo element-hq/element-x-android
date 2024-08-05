@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_use_another_device">"Usar outro dispositivo"</string>
   <string name="screen_identity_confirmed_title">"Dispositivo verificado"</string>
   <string name="screen_identity_use_another_device">"Usar outro dispositivo"</string>
   <string name="screen_session_verification_cancelled_subtitle">"Algo não parece certo. Ou a solicitação atingiu o tempo limite ou a solicitação foi negada."</string>

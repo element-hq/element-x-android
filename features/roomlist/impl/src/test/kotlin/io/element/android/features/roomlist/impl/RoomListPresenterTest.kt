@@ -95,6 +95,7 @@ import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -219,7 +220,7 @@ class RoomListPresenterTest {
         val encryptionService = FakeEncryptionService().apply {
             emitRecoveryState(RecoveryState.INCOMPLETE)
         }
-        val syncService = FakeSyncService(initialState = SyncState.Running)
+        val syncService = FakeSyncService(MutableStateFlow(SyncState.Running))
         val presenter = createRoomListPresenter(
             client = FakeMatrixClient(roomListService = roomListService, encryptionService = encryptionService, syncService = syncService),
             coroutineScope = scope,
@@ -250,7 +251,7 @@ class RoomListPresenterTest {
             sessionVerificationService = FakeSessionVerificationService().apply {
                 givenNeedsSessionVerification(false)
             },
-            syncService = FakeSyncService(initialState = SyncState.Running)
+            syncService = FakeSyncService(MutableStateFlow(SyncState.Running))
         )
         val scope = CoroutineScope(context = coroutineContext + SupervisorJob())
         val presenter = createRoomListPresenter(
