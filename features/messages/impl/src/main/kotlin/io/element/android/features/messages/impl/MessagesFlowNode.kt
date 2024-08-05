@@ -280,7 +280,20 @@ class MessagesFlowNode @AssistedInject constructor(
                     .build()
             }
             NavTarget.PinnedEvents -> {
-                createNode<PinnedMessagesListNode>(buildContext)
+                val callback = object : PinnedMessagesListNode.Callback {
+                    override fun onEventClick(event: TimelineItem.Event) {
+                        processEventClick(event)
+                    }
+
+                    override fun onUserDataClick(userId: UserId) {
+                        callbacks.forEach { it.onUserDataClick(userId) }
+                    }
+
+                    override fun onPermalinkClick(data: PermalinkData) {
+                        callbacks.forEach { it.onPermalinkClick(data) }
+                    }
+                }
+                createNode<PinnedMessagesListNode>(buildContext, plugins = listOf(callback))
             }
             NavTarget.Empty -> {
                 node(buildContext) {}

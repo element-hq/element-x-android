@@ -16,10 +16,19 @@
 
 package io.element.android.features.messages.impl.pinned.list
 
+import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import kotlinx.collections.immutable.ImmutableList
 
 data class PinnedMessagesListState(
+    val timelineRoomInfo: TimelineRoomInfo,
     val timelineItems: ImmutableList<TimelineItem>,
-    val eventSink: (PinnedMessagesListEvents) -> Unit
+    val eventSink: (PinnedMessagesListEvents) -> Unit,
+
+    val pinnedMessagesCount: String =
+        timelineItems
+            .count { timelineItem -> timelineItem is TimelineItem.Event }
+            .takeIf { it > 0 }
+            ?.toString()
+            ?: ""
 )
