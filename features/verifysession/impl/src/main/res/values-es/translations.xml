@@ -2,8 +2,10 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_subtitle">"Verifica este dispositivo para configurar la mensajería segura."</string>
   <string name="screen_identity_confirmation_title">"Confirma que eres tú"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Usar otro dispositivo"</string>
   <string name="screen_identity_confirmed_subtitle">"Ahora puedes leer o enviar mensajes de forma segura y cualquier persona con la que chatees también puede confiar en este dispositivo."</string>
   <string name="screen_identity_confirmed_title">"Dispositivo verificado"</string>
+  <string name="screen_identity_use_another_device">"Usar otro dispositivo"</string>
   <string name="screen_session_verification_cancelled_subtitle">"Algo no fue bien. Se agotó el tiempo de espera de la solicitud o se rechazó."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Confirma que los emojis que aparecen a continuación coinciden con los que aparecen en tu otra sesión."</string>
   <string name="screen_session_verification_compare_emojis_title">"Comparar emojis"</string>
