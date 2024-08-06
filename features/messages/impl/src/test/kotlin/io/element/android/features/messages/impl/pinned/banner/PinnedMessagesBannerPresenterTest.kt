@@ -140,14 +140,6 @@ class PinnedMessagesBannerPresenterTest {
             skipItems(2)
             awaitItem().also { loadedState ->
                 loadedState as PinnedMessagesBannerState.Loaded
-                assertThat(loadedState.currentPinnedMessageIndex).isEqualTo(0)
-                assertThat(loadedState.knownPinnedMessagesCount).isEqualTo(2)
-                assertThat(loadedState.currentPinnedMessage.formatted.text).isEqualTo(messageContent1.toString())
-                loadedState.eventSink(PinnedMessagesBannerEvents.MoveToNextPinned)
-            }
-
-            awaitItem().also { loadedState ->
-                loadedState as PinnedMessagesBannerState.Loaded
                 assertThat(loadedState.currentPinnedMessageIndex).isEqualTo(1)
                 assertThat(loadedState.knownPinnedMessagesCount).isEqualTo(2)
                 assertThat(loadedState.currentPinnedMessage.formatted.text).isEqualTo(messageContent2.toString())
@@ -159,6 +151,14 @@ class PinnedMessagesBannerPresenterTest {
                 assertThat(loadedState.currentPinnedMessageIndex).isEqualTo(0)
                 assertThat(loadedState.knownPinnedMessagesCount).isEqualTo(2)
                 assertThat(loadedState.currentPinnedMessage.formatted.text).isEqualTo(messageContent1.toString())
+                loadedState.eventSink(PinnedMessagesBannerEvents.MoveToNextPinned)
+            }
+
+            awaitItem().also { loadedState ->
+                loadedState as PinnedMessagesBannerState.Loaded
+                assertThat(loadedState.currentPinnedMessageIndex).isEqualTo(1)
+                assertThat(loadedState.knownPinnedMessagesCount).isEqualTo(2)
+                assertThat(loadedState.currentPinnedMessage.formatted.text).isEqualTo(messageContent2.toString())
             }
         }
     }

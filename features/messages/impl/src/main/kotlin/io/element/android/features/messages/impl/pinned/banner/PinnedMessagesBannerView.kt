@@ -74,22 +74,11 @@ fun PinnedMessagesBannerView(
     Box(modifier = modifier) {
         when (state) {
             PinnedMessagesBannerState.Hidden -> Unit
-            is PinnedMessagesBannerState.Loading -> {
+            is PinnedMessagesBannerState.Visible -> {
                 PinnedMessagesBannerRow(
                     state = state,
+                    onClick = onClick,
                     onViewAllClick = onViewAllClick,
-                    modifier = Modifier.clickable(onClick = { }),
-                )
-            }
-            is PinnedMessagesBannerState.Loaded -> {
-                PinnedMessagesBannerRow(
-                    state = state,
-                    onViewAllClick = onViewAllClick,
-                    modifier = Modifier.clickable(
-                        onClick = {
-                            onClick(state.currentPinnedMessage.eventId)
-                            state.eventSink(PinnedMessagesBannerEvents.MoveToNextPinned)
-                        }),
                 )
             }
         }
@@ -99,6 +88,7 @@ fun PinnedMessagesBannerView(
 @Composable
 fun PinnedMessagesBannerRow(
     state: PinnedMessagesBannerState,
+    onClick: (EventId) -> Unit,
     onViewAllClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -108,7 +98,13 @@ fun PinnedMessagesBannerRow(
             .background(color = ElementTheme.colors.bgCanvasDefault)
             .fillMaxWidth()
             .drawBorder(borderColor)
-            .heightIn(min = 64.dp),
+            .heightIn(min = 64.dp)
+            .clickable {
+                if (state is PinnedMessagesBannerState.Loaded) {
+                    onClick(state.currentPinnedMessage.eventId)
+                    state.eventSink(PinnedMessagesBannerEvents.MoveToNextPinned)
+                }
+            },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = spacedBy(10.dp)
     ) {
@@ -202,7 +198,6 @@ private fun PinIndicators(
         state = lazyListState,
         verticalArrangement = spacedBy(2.dp),
         userScrollEnabled = false,
-        reverseLayout = true
     ) {
         items(pinsCount) { index ->
             Box(

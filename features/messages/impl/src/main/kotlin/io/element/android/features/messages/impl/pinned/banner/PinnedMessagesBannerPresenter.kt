@@ -53,10 +53,10 @@ class PinnedMessagesBannerPresenter @Inject constructor(
     override fun present(): PinnedMessagesBannerState {
         val isFeatureEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.PinnedEvents).collectAsState(initial = false)
         var hasTimelineFailedToLoad by rememberSaveable { mutableStateOf(false) }
-        var currentPinnedMessageIndex by rememberSaveable { mutableIntStateOf(0) }
+        var currentPinnedMessageIndex by rememberSaveable { mutableIntStateOf(-1) }
         val knownPinnedMessagesCount by remember {
             room.roomInfoFlow.map { roomInfo -> roomInfo.pinnedEventIds.size }
-        }.collectAsState(initial = null)
+        }.collectAsState(initial = 0)
 
         var pinnedItems by remember {
             mutableStateOf<ImmutableList<PinnedMessagesBannerItem>>(persistentListOf())
@@ -66,8 +66,8 @@ class PinnedMessagesBannerPresenter @Inject constructor(
             isFeatureEnabled = isFeatureEnabled,
             onItemsChange = { newItems ->
                 val pinnedMessageCount = newItems.size
-                if (currentPinnedMessageIndex >= pinnedMessageCount) {
-                    currentPinnedMessageIndex = 0
+                if (currentPinnedMessageIndex >= pinnedMessageCount || currentPinnedMessageIndex < 0) {
+                    currentPinnedMessageIndex = pinnedMessageCount - 1
                 }
                 pinnedItems = newItems
             },
@@ -102,7 +102,7 @@ class PinnedMessagesBannerPresenter @Inject constructor(
     private fun pinnedMessagesBannerState(
         isFeatureEnabled: Boolean,
         hasTimelineFailed: Boolean,
-        realPinnedMessagesCount: Int?,
+        realPinnedMessagesCount: Int,
         pinnedItems: ImmutableList<PinnedMessagesBannerItem>,
         currentPinnedMessageIndex: Int,
         eventSink: (PinnedMessagesBannerEvents) -> Unit
@@ -111,7 +111,7 @@ class PinnedMessagesBannerPresenter @Inject constructor(
         return when {
             !isFeatureEnabled -> PinnedMessagesBannerState.Hidden
             hasTimelineFailed -> PinnedMessagesBannerState.Hidden
-            realPinnedMessagesCount == null || realPinnedMessagesCount == 0 -> PinnedMessagesBannerState.Hidden
+            realPinnedMessagesCount == 0 -> PinnedMessagesBannerState.Hidden
             currentPinnedMessage == null -> PinnedMessagesBannerState.Loading(realPinnedMessagesCount = realPinnedMessagesCount)
             else -> {
                 PinnedMessagesBannerState.Loaded(
