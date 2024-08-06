@@ -82,15 +82,14 @@ fun PinnedMessagesBannerView(
                 )
             }
             is PinnedMessagesBannerState.Loaded -> {
-                fun onClick() {
-                    onClick(state.currentPinnedMessage.eventId)
-                    state.eventSink(PinnedMessagesBannerEvents.MoveToNextPinned)
-                }
-
                 PinnedMessagesBannerRow(
                     state = state,
                     onViewAllClick = onViewAllClick,
-                    modifier = Modifier.clickable(onClick = ::onClick),
+                    modifier = Modifier.clickable(
+                        onClick = {
+                            onClick(state.currentPinnedMessage.eventId)
+                            state.eventSink(PinnedMessagesBannerEvents.MoveToNextPinned)
+                        }),
                 )
             }
         }
