@@ -45,6 +45,12 @@
   <string name="state_event_room_name_removed_by_you">"Removeste o nome da sala"</string>
   <string name="state_event_room_none">"%1$s não fiz nenhuma alteração"</string>
   <string name="state_event_room_none_by_you">"Não fizeste nenhuma alteração"</string>
+  <string name="state_event_room_pinned_events_changed">"%1$s alterou as mensagens afixadas"</string>
+  <string name="state_event_room_pinned_events_changed_by_you">"Alteraste as mensagens afixadas"</string>
+  <string name="state_event_room_pinned_events_pinned">"%1$s afixou uma mensagem"</string>
+  <string name="state_event_room_pinned_events_pinned_by_you">"Afixaste uma mensagem"</string>
+  <string name="state_event_room_pinned_events_unpinned">"%1$s desafixou uma mensagem"</string>
+  <string name="state_event_room_pinned_events_unpinned_by_you">"Desafixaste uma mensagem"</string>
   <string name="state_event_room_reject">"%1$s rejeitou o convite"</string>
   <string name="state_event_room_reject_by_you">"Rejeitaste o convite"</string>
   <string name="state_event_room_remove">"%1$s removeu %2$s"</string>

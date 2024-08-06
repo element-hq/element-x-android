@@ -44,7 +44,7 @@ serialization_json = "1.6.3"
 showkase = "1.0.3"
 appyx = "1.4.0"
 sqldelight = "2.0.2"
-wysiwyg = "2.37.7"
+wysiwyg = "2.37.8"
 telephoto = "0.12.1"
 
 # DI
@@ -163,7 +163,7 @@ jsoup = "org.jsoup:jsoup:1.18.1"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.0.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.35"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.36"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
@@ -187,7 +187,7 @@ play_services_oss_licenses = "com.google.android.gms:play-services-oss-licenses:
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.4.2"
-sentry = "io.sentry:sentry-android:7.12.1"
+sentry = "io.sentry:sentry-android:7.13.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.23.1"
 
