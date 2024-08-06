@@ -50,6 +50,8 @@ import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.services.analytics.api.ScreenTracker
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -242,8 +244,11 @@ class CallScreenPresenter @AssistedInject constructor(
 
     private suspend fun MatrixClient.notifyCallStartIfNeeded(roomId: RoomId) {
         if (!notifiedCallStart) {
-            getRoom(roomId)?.sendCallNotificationIfNeeded()
-                ?.onSuccess { notifiedCallStart = true }
+            val room = getRoom(roomId) ?: return
+            // Wait until the room has an active call
+            room.roomInfoFlow.filter { it.hasRoomCall }.first()
+            room.sendCallNotificationIfNeeded()
+                .onSuccess { notifiedCallStart = true }
         }
     }
 
