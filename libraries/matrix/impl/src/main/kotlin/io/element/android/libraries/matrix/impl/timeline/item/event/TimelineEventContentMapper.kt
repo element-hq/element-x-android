@@ -176,7 +176,7 @@ private fun RustOtherState.map(): OtherState {
         RustOtherState.RoomHistoryVisibility -> OtherState.RoomHistoryVisibility
         RustOtherState.RoomJoinRules -> OtherState.RoomJoinRules
         is RustOtherState.RoomName -> OtherState.RoomName(name)
-        RustOtherState.RoomPinnedEvents -> OtherState.RoomPinnedEvents
+        is RustOtherState.RoomPinnedEvents -> OtherState.RoomPinnedEvents
         is RustOtherState.RoomPowerLevels -> OtherState.RoomUserPowerLevels(users)
         RustOtherState.RoomServerAcl -> OtherState.RoomServerAcl
         is RustOtherState.RoomThirdPartyInvite -> OtherState.RoomThirdPartyInvite(displayName)
