@@ -24,26 +24,38 @@ import kotlin.random.Random
 internal class PinnedMessagesBannerStateProvider : PreviewParameterProvider<PinnedMessagesBannerState> {
     override val values: Sequence<PinnedMessagesBannerState>
         get() = sequenceOf(
-            aPinnedMessagesBannerState(pinnedMessagesCount = 1, currentPinnedMessageIndex = 0),
-            aPinnedMessagesBannerState(pinnedMessagesCount = 2, currentPinnedMessageIndex = 0),
-            aPinnedMessagesBannerState(pinnedMessagesCount = 4, currentPinnedMessageIndex = 0),
-            aPinnedMessagesBannerState(pinnedMessagesCount = 4, currentPinnedMessageIndex = 1),
-            aPinnedMessagesBannerState(pinnedMessagesCount = 4, currentPinnedMessageIndex = 2),
-            aPinnedMessagesBannerState(pinnedMessagesCount = 4, currentPinnedMessageIndex = 3),
+            aHiddenPinnedMessagesBannerState(),
+            aLoadingPinnedMessagesBannerState(knownPinnedMessagesCount = 1),
+            aLoadingPinnedMessagesBannerState(knownPinnedMessagesCount = 4),
+            aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 1, currentPinnedMessageIndex = 0),
+            aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 2, currentPinnedMessageIndex = 0),
+            aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 3, currentPinnedMessageIndex = 0),
+            aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 4, currentPinnedMessageIndex = 0),
+            aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 4, currentPinnedMessageIndex = 1),
+            aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 4, currentPinnedMessageIndex = 2),
+            aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 4, currentPinnedMessageIndex = 3),
         )
 }
 
-internal fun aPinnedMessagesBannerState(
-    pinnedMessagesCount: Int = 0,
-    currentPinnedMessageIndex: Int = -1,
+internal fun aHiddenPinnedMessagesBannerState() = PinnedMessagesBannerState.Hidden
+
+internal fun aLoadingPinnedMessagesBannerState(
+    knownPinnedMessagesCount: Int = 4
+) = PinnedMessagesBannerState.Loading(
+    realPinnedMessagesCount = knownPinnedMessagesCount
+)
+
+internal fun aLoadedPinnedMessagesBannerState(
+    currentPinnedMessageIndex: Int = 0,
+    knownPinnedMessagesCount: Int = 1,
     currentPinnedMessage: PinnedMessagesBannerItem = PinnedMessagesBannerItem(
         eventId = EventId("\$" + Random.nextInt().toString()),
         formatted = AnnotatedString("This is a pinned message")
     ),
     eventSink: (PinnedMessagesBannerEvents) -> Unit = {}
-) = PinnedMessagesBannerState(
-    pinnedMessagesCount = pinnedMessagesCount,
-    currentPinnedMessageIndex = currentPinnedMessageIndex,
+) = PinnedMessagesBannerState.Loaded(
     currentPinnedMessage = currentPinnedMessage,
+    currentPinnedMessageIndex = currentPinnedMessageIndex,
+    knownPinnedMessagesCount = knownPinnedMessagesCount,
     eventSink = eventSink
 )

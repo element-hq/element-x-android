@@ -71,42 +71,52 @@ fun PinnedMessagesBannerView(
     onViewAllClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (state.currentPinnedMessage == null) return
+    Box(modifier = modifier) {
+        when (state) {
+            PinnedMessagesBannerState.Hidden -> Unit
+            is PinnedMessagesBannerState.Loading -> {
+                PinnedMessagesBannerRow(
+                    state = state,
+                    onViewAllClick = onViewAllClick,
+                    modifier = Modifier.clickable(onClick = { }),
+                )
+            }
+            is PinnedMessagesBannerState.Loaded -> {
+                fun onClick() {
+                    onClick(state.currentPinnedMessage.eventId)
+                    state.eventSink(PinnedMessagesBannerEvents.MoveToNextPinned)
+                }
 
+                PinnedMessagesBannerRow(
+                    state = state,
+                    onViewAllClick = onViewAllClick,
+                    modifier = Modifier.clickable(onClick = ::onClick),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun PinnedMessagesBannerRow(
+    state: PinnedMessagesBannerState,
+    onViewAllClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val borderColor = ElementTheme.colors.pinnedMessageBannerBorder
     Row(
         modifier = modifier
-                .background(color = ElementTheme.colors.bgCanvasDefault)
-                .fillMaxWidth()
-                .drawBehind {
-                    val strokeWidth = 0.5.dp.toPx()
-                    val y = size.height - strokeWidth / 2
-                    drawLine(
-                            borderColor,
-                            Offset(0f, y),
-                            Offset(size.width, y),
-                            strokeWidth
-                    )
-                    drawLine(
-                            borderColor,
-                            Offset(0f, 0f),
-                            Offset(size.width, 0f),
-                            strokeWidth
-                    )
-                }
-                .shadow(elevation = 5.dp, spotColor = Color.Transparent)
-                .heightIn(min = 64.dp)
-                .clickable {
-                    onClick(state.currentPinnedMessage.eventId)
-                    state.eventSink(PinnedMessagesBannerEvents.MoveToNextPinned)
-                },
+            .background(color = ElementTheme.colors.bgCanvasDefault)
+            .fillMaxWidth()
+            .drawBorder(borderColor)
+            .heightIn(min = 64.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = spacedBy(10.dp)
     ) {
         Spacer(modifier = Modifier.width(16.dp))
         PinIndicators(
-            pinIndex = state.currentPinnedMessageIndex,
-            pinsCount = state.pinnedMessagesCount,
+            pinIndex = state.currentPinnedMessageIndex(),
+            pinsCount = state.pinnedMessagesCount(),
             modifier = Modifier.heightIn(max = 40.dp)
         )
         Icon(
@@ -116,13 +126,54 @@ fun PinnedMessagesBannerView(
             modifier = Modifier.size(20.dp)
         )
         PinnedMessageItem(
-            index = state.currentPinnedMessageIndex,
-            totalCount = state.pinnedMessagesCount,
-            message = state.currentPinnedMessage.formatted,
+            index = state.currentPinnedMessageIndex(),
+            totalCount = state.pinnedMessagesCount(),
+            message = state.formattedMessage(),
             modifier = Modifier.weight(1f)
         )
-        TextButton(text = stringResource(id = CommonStrings.screen_room_pinned_banner_view_all_button_title), onClick = onViewAllClick)
+        ViewAllButton(state, onViewAllClick)
     }
+}
+
+@Composable
+private fun ViewAllButton(
+    state: PinnedMessagesBannerState,
+    onViewAllClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier) {
+        val text = if (state is PinnedMessagesBannerState.Loaded) {
+            stringResource(id = CommonStrings.screen_room_pinned_banner_view_all_button_title)
+        } else {
+            ""
+        }
+        TextButton(
+            text = text,
+            showProgress = state is PinnedMessagesBannerState.Loading,
+            onClick = onViewAllClick
+        )
+    }
+}
+
+private fun Modifier.drawBorder(borderColor: Color): Modifier {
+    return this
+        .drawBehind {
+            val strokeWidth = 0.5.dp.toPx()
+            val y = size.height - strokeWidth / 2
+            drawLine(
+                borderColor,
+                Offset(0f, y),
+                Offset(size.width, y),
+                strokeWidth
+            )
+            drawLine(
+                borderColor,
+                Offset(0f, 0f),
+                Offset(size.width, 0f),
+                strokeWidth
+            )
+        }
+        .shadow(elevation = 5.dp, spotColor = Color.Transparent)
 }
 
 @Composable
@@ -157,15 +208,15 @@ private fun PinIndicators(
         items(pinsCount) { index ->
             Box(
                 modifier = Modifier
-                        .width(2.dp)
-                        .height(indicatorHeight.dp)
-                        .background(
-                                color = if (index == pinIndex) {
-                                    ElementTheme.colors.iconAccentPrimary
-                                } else {
-                                    ElementTheme.colors.pinnedMessageBannerIndicator
-                                }
-                        )
+                    .width(2.dp)
+                    .height(indicatorHeight.dp)
+                    .background(
+                        color = if (index == pinIndex) {
+                            ElementTheme.colors.iconAccentPrimary
+                        } else {
+                            ElementTheme.colors.pinnedMessageBannerIndicator
+                        }
+                    )
             )
         }
     }
@@ -175,7 +226,7 @@ private fun PinIndicators(
 private fun PinnedMessageItem(
     index: Int,
     totalCount: Int,
-    message: AnnotatedString,
+    message: AnnotatedString?,
     modifier: Modifier = Modifier,
 ) {
     val countMessage = stringResource(id = CommonStrings.screen_room_pinned_banner_indicator, index + 1, totalCount)
@@ -193,13 +244,15 @@ private fun PinnedMessageItem(
                 overflow = TextOverflow.Ellipsis,
             )
         }
-        Text(
-            text = message,
-            style = ElementTheme.typography.fontBodyMdRegular,
-            color = ElementTheme.colors.textPrimary,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 1,
-        )
+        if (message != null) {
+            Text(
+                text = message,
+                style = ElementTheme.typography.fontBodyMdRegular,
+                color = ElementTheme.colors.textPrimary,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+            )
+        }
     }
 }
 

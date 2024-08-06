@@ -71,6 +71,7 @@ import io.element.android.features.messages.impl.messagecomposer.AttachmentsBott
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
+import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerView
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerViewDefaults
 import io.element.android.features.messages.impl.timeline.TimelineEvents
@@ -400,7 +401,7 @@ private fun MessagesViewContent(
                         nestedScrollConnection = scrollBehavior.nestedScrollConnection,
                     )
                     AnimatedVisibility(
-                        visible = state.pinnedMessagesBannerState.displayBanner && scrollBehavior.isVisible,
+                        visible = state.pinnedMessagesBannerState != PinnedMessagesBannerState.Hidden && scrollBehavior.isVisible,
                         enter = expandVertically(),
                         exit = shrinkVertically(),
                     ) {
