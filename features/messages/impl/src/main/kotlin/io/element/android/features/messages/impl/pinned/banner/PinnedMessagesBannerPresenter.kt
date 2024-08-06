@@ -52,15 +52,15 @@ class PinnedMessagesBannerPresenter @Inject constructor(
     @Composable
     override fun present(): PinnedMessagesBannerState {
         val isFeatureEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.PinnedEvents).collectAsState(initial = false)
-        var timelineFailed by rememberSaveable { mutableStateOf(false) }
-        var pinnedItems by remember {
-            mutableStateOf<ImmutableList<PinnedMessagesBannerItem>>(persistentListOf())
-        }
+        var hasTimelineFailedToLoad by rememberSaveable { mutableStateOf(false) }
+        var currentPinnedMessageIndex by rememberSaveable { mutableIntStateOf(0) }
         val knownPinnedMessagesCount by remember {
             room.roomInfoFlow.map { roomInfo -> roomInfo.pinnedEventIds.size }
         }.collectAsState(initial = null)
 
-        var currentPinnedMessageIndex by rememberSaveable { mutableIntStateOf(0) }
+        var pinnedItems by remember {
+            mutableStateOf<ImmutableList<PinnedMessagesBannerItem>>(persistentListOf())
+        }
 
         PinnedMessagesBannerItemsEffect(
             isFeatureEnabled = isFeatureEnabled,
@@ -72,7 +72,7 @@ class PinnedMessagesBannerPresenter @Inject constructor(
                 pinnedItems = newItems
             },
             onTimelineFail = { hasTimelineFailed ->
-                timelineFailed = hasTimelineFailed
+                hasTimelineFailedToLoad = hasTimelineFailed
             }
         )
 
@@ -90,7 +90,7 @@ class PinnedMessagesBannerPresenter @Inject constructor(
 
         return pinnedMessagesBannerState(
             isFeatureEnabled = isFeatureEnabled,
-            hasTimelineFailed = timelineFailed,
+            hasTimelineFailed = hasTimelineFailedToLoad,
             realPinnedMessagesCount = knownPinnedMessagesCount,
             pinnedItems = pinnedItems,
             currentPinnedMessageIndex = currentPinnedMessageIndex,
@@ -117,7 +117,7 @@ class PinnedMessagesBannerPresenter @Inject constructor(
                 PinnedMessagesBannerState.Loaded(
                     currentPinnedMessage = currentPinnedMessage,
                     currentPinnedMessageIndex = currentPinnedMessageIndex,
-                    knownPinnedMessagesCount = realPinnedMessagesCount,
+                    knownPinnedMessagesCount = pinnedItems.size,
                     eventSink = eventSink
                 )
             }
