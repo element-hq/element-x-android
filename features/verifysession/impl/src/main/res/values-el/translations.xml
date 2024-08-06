@@ -3,6 +3,7 @@
   <string name="screen_identity_confirmation_create_new_recovery_key">"Δημιουργία νέου κλειδιού ανάκτησης"</string>
   <string name="screen_identity_confirmation_subtitle">"Επαλήθευσε αυτήν τη συσκευή για να ρυθμίσεις την ασφαλή επικοινωνία."</string>
   <string name="screen_identity_confirmation_title">"Επιβεβαίωσε ότι είσαι εσύ"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Χρήση άλλης συσκευής"</string>
   <string name="screen_identity_confirmed_subtitle">"Τώρα μπορείς να διαβάζεις ή να στέλνεις μηνύματα με ασφάλεια και επίσης μπορεί να εμπιστευτεί αυτήν τη συσκευή οποιοσδήποτε με τον οποίο συνομιλείς."</string>
   <string name="screen_identity_confirmed_title">"Επαληθευμένη συσκευή"</string>
   <string name="screen_identity_use_another_device">"Χρήση άλλης συσκευής"</string>
