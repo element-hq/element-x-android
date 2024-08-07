@@ -79,10 +79,10 @@ class PinnedMessagesBannerPresenter @Inject constructor(
         fun handleEvent(event: PinnedMessagesBannerEvents) {
             when (event) {
                 is PinnedMessagesBannerEvents.MoveToNextPinned -> {
-                    if (currentPinnedMessageIndex < pinnedItems.size - 1) {
-                        currentPinnedMessageIndex++
+                    if (currentPinnedMessageIndex > 0) {
+                        currentPinnedMessageIndex--
                     } else {
-                        currentPinnedMessageIndex = 0
+                        currentPinnedMessageIndex = pinnedItems.size - 1
                     }
                 }
             }
