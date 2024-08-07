@@ -57,6 +57,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+const val FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS = 200L
+
 class TimelinePresenter @AssistedInject constructor(
     private val timelineItemsFactory: TimelineItemsFactory,
     private val timelineItemIndexer: TimelineItemIndexer,
