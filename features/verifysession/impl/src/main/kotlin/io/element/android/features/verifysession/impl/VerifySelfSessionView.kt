@@ -20,6 +20,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -53,6 +54,7 @@ import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -66,6 +68,7 @@ import io.element.android.features.verifysession.impl.VerifySelfSessionState.Ver
 fun VerifySelfSessionView(
     state: VerifySelfSessionState,
     onEnterRecoveryKey: () -> Unit,
+    onResetKey: () -> Unit,
     onFinish: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -115,6 +118,7 @@ fun VerifySelfSessionView(
                 goBack = ::resetFlow,
                 onEnterRecoveryKey = onEnterRecoveryKey,
                 onFinish = onFinish,
+                onResetKey = onResetKey,
             )
         }
     ) {
@@ -226,6 +230,7 @@ private fun EmojiItemView(emoji: VerificationEmoji, modifier: Modifier = Modifie
 private fun BottomMenu(
     screenState: VerifySelfSessionState,
     onEnterRecoveryKey: () -> Unit,
+    onResetKey: () -> Unit,
     goBack: () -> Unit,
     onFinish: () -> Unit,
 ) {
@@ -236,42 +241,69 @@ private fun BottomMenu(
 
     when (verificationViewState) {
         is FlowStep.Initial -> {
-            if (verificationViewState.isLastDevice) {
-                BottomMenu(
-                    positiveButtonTitle = stringResource(R.string.screen_session_verification_enter_recovery_key),
-                    onPositiveButtonClick = onEnterRecoveryKey,
-                )
-            } else {
-                BottomMenu(
-                    positiveButtonTitle = stringResource(R.string.screen_identity_use_another_device),
-                    onPositiveButtonClick = { eventSink(VerifySelfSessionViewEvents.RequestVerification) },
-                    negativeButtonTitle = stringResource(R.string.screen_session_verification_enter_recovery_key),
-                    onNegativeButtonClick = onEnterRecoveryKey,
+            BottomMenu {
+                if (verificationViewState.isLastDevice) {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.screen_session_verification_enter_recovery_key),
+                        onClick = onEnterRecoveryKey,
+                    )
+                } else {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.screen_identity_use_another_device),
+                        onClick = { eventSink(VerifySelfSessionViewEvents.RequestVerification) },
+                    )
+                    OutlinedButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.screen_session_verification_enter_recovery_key),
+                        onClick = onEnterRecoveryKey,
+                    )
+                }
+                TextButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.screen_identity_confirmation_cannot_confirm),
+                    onClick = onResetKey,
                 )
             }
         }
         is FlowStep.Canceled -> {
-            BottomMenu(
-                positiveButtonTitle = stringResource(R.string.screen_session_verification_positive_button_canceled),
-                onPositiveButtonClick = { eventSink(VerifySelfSessionViewEvents.RequestVerification) },
-                negativeButtonTitle = stringResource(CommonStrings.action_cancel),
-                onNegativeButtonClick = goBack,
-            )
+            BottomMenu {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.screen_session_verification_positive_button_canceled),
+                    onClick = { eventSink(VerifySelfSessionViewEvents.RequestVerification) },
+                )
+                TextButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(CommonStrings.action_cancel),
+                    onClick = goBack,
+                )
+            }
         }
         is FlowStep.Ready -> {
-            BottomMenu(
-                positiveButtonTitle = stringResource(CommonStrings.action_start),
-                onPositiveButtonClick = { eventSink(VerifySelfSessionViewEvents.StartSasVerification) },
-                negativeButtonTitle = stringResource(CommonStrings.action_cancel),
-                onNegativeButtonClick = goBack,
-            )
+            BottomMenu {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(CommonStrings.action_start),
+                    onClick = { eventSink(VerifySelfSessionViewEvents.StartSasVerification) },
+                )
+                TextButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(CommonStrings.action_cancel),
+                    onClick = goBack,
+                )
+            }
         }
         is FlowStep.AwaitingOtherDeviceResponse -> {
-            BottomMenu(
-                positiveButtonTitle = stringResource(R.string.screen_identity_waiting_on_other_device),
-                onPositiveButtonClick = {},
-                isLoading = true,
-            )
+            BottomMenu {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.screen_identity_waiting_on_other_device),
+                    onClick = {},
+                    showProgress = true,
+                )
+            }
         }
         is FlowStep.Verifying -> {
             val positiveButtonTitle = if (isVerifying) {
@@ -279,23 +311,32 @@ private fun BottomMenu(
             } else {
                 stringResource(R.string.screen_session_verification_they_match)
             }
-            BottomMenu(
-                positiveButtonTitle = positiveButtonTitle,
-                onPositiveButtonClick = {
-                    if (!isVerifying) {
-                        eventSink(VerifySelfSessionViewEvents.ConfirmVerification)
-                    }
-                },
-                negativeButtonTitle = stringResource(R.string.screen_session_verification_they_dont_match),
-                onNegativeButtonClick = { eventSink(VerifySelfSessionViewEvents.DeclineVerification) },
-                isLoading = isVerifying,
-            )
+            BottomMenu {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = positiveButtonTitle,
+                    showProgress = isVerifying,
+                    onClick = {
+                        if (!isVerifying) {
+                            eventSink(VerifySelfSessionViewEvents.ConfirmVerification)
+                        }
+                    },
+                )
+                TextButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.screen_session_verification_they_dont_match),
+                    onClick = { eventSink(VerifySelfSessionViewEvents.DeclineVerification) },
+                )
+            }
         }
         is FlowStep.Completed -> {
-            BottomMenu(
-                positiveButtonTitle = stringResource(CommonStrings.action_continue),
-                onPositiveButtonClick = onFinish,
-            )
+            BottomMenu {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(CommonStrings.action_continue),
+                    onClick = onFinish,
+                )
+            }
         }
         is FlowStep.Skipped -> return
     }
@@ -303,35 +344,13 @@ private fun BottomMenu(
 
 @Composable
 private fun BottomMenu(
-    positiveButtonTitle: String?,
-    onPositiveButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
-    negativeButtonTitle: String? = null,
-    negativeButtonEnabled: Boolean = negativeButtonTitle != null,
-    onNegativeButtonClick: () -> Unit = {},
-    isLoading: Boolean = false,
+    buttons: @Composable ColumnScope.() -> Unit,
 ) {
     ButtonColumnMolecule(
         modifier = modifier.padding(bottom = 16.dp)
     ) {
-        if (positiveButtonTitle != null) {
-            Button(
-                text = positiveButtonTitle,
-                showProgress = isLoading,
-                modifier = Modifier.fillMaxWidth(),
-                onClick = onPositiveButtonClick,
-            )
-        }
-        if (negativeButtonTitle != null) {
-            TextButton(
-                text = negativeButtonTitle,
-                modifier = Modifier.fillMaxWidth(),
-                onClick = onNegativeButtonClick,
-                enabled = negativeButtonEnabled,
-            )
-        } else {
-            Spacer(modifier = Modifier.height(48.dp))
-        }
+        buttons()
     }
 }
 
@@ -341,6 +360,7 @@ internal fun VerifySelfSessionViewPreview(@PreviewParameter(VerifySelfSessionSta
     VerifySelfSessionView(
         state = state,
         onEnterRecoveryKey = {},
+        onResetKey = {},
         onFinish = {},
     )
 }

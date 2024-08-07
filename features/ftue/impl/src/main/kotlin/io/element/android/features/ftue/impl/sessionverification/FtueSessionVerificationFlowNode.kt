@@ -35,6 +35,12 @@ import io.element.android.features.verifysession.api.VerifySessionEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
+import io.element.android.libraries.sessionstorage.api.LoginType
+import io.element.android.libraries.sessionstorage.api.SessionStore
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
@@ -44,6 +50,8 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val verifySessionEntryPoint: VerifySessionEntryPoint,
     private val secureBackupEntryPoint: SecureBackupEntryPoint,
+    private val matrixClient: MatrixClient,
+    @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
 ) : BaseFlowNode<FtueSessionVerificationFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -58,10 +66,24 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object EnterRecoveryKey : NavTarget
+
+        @Parcelize
+        data object ResetKey : NavTarget
     }
 
     interface Callback : Plugin {
         fun onDone()
+    }
+
+    // If present, an OIDC setup is used
+    private var accountManagementUrl: String? = null
+
+    override fun onBuilt() {
+        super.onBuilt()
+
+        sessionCoroutineScope.launch {
+            accountManagementUrl = matrixClient.getAccountManagementUrl(AccountManagementAction.ResetKey).getOrNull()
+        }
     }
 
     private val secureBackupEntryPointCallback = object : SecureBackupEntryPoint.Callback {
@@ -85,12 +107,22 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
                         override fun onDone() {
                             plugins<Callback>().forEach { it.onDone() }
                         }
+
+                        override fun onResetKey() {
+                            backstack.push(NavTarget.ResetKey)
+                        }
                     })
                     .build()
             }
             is NavTarget.EnterRecoveryKey -> {
                 secureBackupEntryPoint.nodeBuilder(this, buildContext)
                     .params(SecureBackupEntryPoint.Params(SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey))
+                    .callback(secureBackupEntryPointCallback)
+                    .build()
+            }
+            is NavTarget.ResetKey -> {
+                secureBackupEntryPoint.nodeBuilder(this, buildContext)
+                    .params(SecureBackupEntryPoint.Params(SecureBackupEntryPoint.InitialTarget.ResetKey(accountManagementUrl)))
                     .callback(secureBackupEntryPointCallback)
                     .build()
             }

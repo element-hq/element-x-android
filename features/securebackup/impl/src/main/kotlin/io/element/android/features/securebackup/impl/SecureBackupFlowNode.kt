@@ -34,6 +34,7 @@ import io.element.android.features.securebackup.impl.createkey.CreateNewRecovery
 import io.element.android.features.securebackup.impl.disable.SecureBackupDisableNode
 import io.element.android.features.securebackup.impl.enable.SecureBackupEnableNode
 import io.element.android.features.securebackup.impl.enter.SecureBackupEnterRecoveryKeyNode
+import io.element.android.features.securebackup.impl.reset.ResetKeyFlowNode
 import io.element.android.features.securebackup.impl.root.SecureBackupRootNode
 import io.element.android.features.securebackup.impl.setup.SecureBackupSetupNode
 import io.element.android.libraries.architecture.BackstackView
@@ -48,10 +49,11 @@ class SecureBackupFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
 ) : BaseFlowNode<SecureBackupFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = when (plugins.filterIsInstance(SecureBackupEntryPoint.Params::class.java).first().initialElement) {
+        initialElement = when (val initial = plugins.filterIsInstance<SecureBackupEntryPoint.Params>().first().initialElement) {
             SecureBackupEntryPoint.InitialTarget.Root -> NavTarget.Root
             SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey -> NavTarget.EnterRecoveryKey
             SecureBackupEntryPoint.InitialTarget.CreateNewRecoveryKey -> NavTarget.CreateNewRecoveryKey
+            is SecureBackupEntryPoint.InitialTarget.ResetKey -> NavTarget.ResetKey(initial.resetUrl)
         },
         savedStateMap = buildContext.savedStateMap,
     ),
@@ -79,6 +81,9 @@ class SecureBackupFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object CreateNewRecoveryKey : NavTarget
+
+        @Parcelize
+        data class ResetKey(val resetUrl: String?) : NavTarget
     }
 
     private val callbacks = plugins<SecureBackupEntryPoint.Callback>()
@@ -145,6 +150,9 @@ class SecureBackupFlowNode @AssistedInject constructor(
             }
             NavTarget.CreateNewRecoveryKey -> {
                 createNode<CreateNewRecoveryKeyNode>(buildContext)
+            }
+            is NavTarget.ResetKey -> {
+                createNode<ResetKeyFlowNode>(buildContext, listOf(ResetKeyFlowNode.Inputs(navTarget.resetUrl)))
             }
         }
     }
