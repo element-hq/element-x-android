@@ -86,7 +86,7 @@ fun PinnedMessagesBannerView(
 }
 
 @Composable
-fun PinnedMessagesBannerRow(
+private fun PinnedMessagesBannerRow(
     state: PinnedMessagesBannerState,
     onClick: (EventId) -> Unit,
     onViewAllClick: () -> Unit,
