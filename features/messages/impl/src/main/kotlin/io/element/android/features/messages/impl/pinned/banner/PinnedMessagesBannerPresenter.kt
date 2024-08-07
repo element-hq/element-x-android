@@ -26,10 +26,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import io.element.android.features.messages.impl.pinned.IsPinnedMessagesFeatureEnabled
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -46,21 +45,20 @@ import kotlin.time.Duration.Companion.milliseconds
 class PinnedMessagesBannerPresenter @Inject constructor(
     private val room: MatrixRoom,
     private val itemFactory: PinnedMessagesBannerItemFactory,
-    private val featureFlagService: FeatureFlagService,
+    private val isFeatureEnabled: IsPinnedMessagesFeatureEnabled,
     private val networkMonitor: NetworkMonitor,
 ) : Presenter<PinnedMessagesBannerState> {
+    private val pinnedItems = mutableStateOf<ImmutableList<PinnedMessagesBannerItem>>(persistentListOf())
+
     @Composable
     override fun present(): PinnedMessagesBannerState {
-        val isFeatureEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.PinnedEvents).collectAsState(initial = false)
-        var hasTimelineFailedToLoad by rememberSaveable { mutableStateOf(false) }
-        var currentPinnedMessageIndex by rememberSaveable { mutableIntStateOf(-1) }
+        val isFeatureEnabled = isFeatureEnabled()
         val knownPinnedMessagesCount by remember {
             room.roomInfoFlow.map { roomInfo -> roomInfo.pinnedEventIds.size }
         }.collectAsState(initial = 0)
 
-        var pinnedItems by remember {
-            mutableStateOf<ImmutableList<PinnedMessagesBannerItem>>(persistentListOf())
-        }
+        var hasTimelineFailedToLoad by rememberSaveable { mutableStateOf(false) }
+        var currentPinnedMessageIndex by rememberSaveable { mutableIntStateOf(-1) }
 
         PinnedMessagesBannerItemsEffect(
             isFeatureEnabled = isFeatureEnabled,
@@ -69,7 +67,7 @@ class PinnedMessagesBannerPresenter @Inject constructor(
                 if (currentPinnedMessageIndex >= pinnedMessageCount || currentPinnedMessageIndex < 0) {
                     currentPinnedMessageIndex = pinnedMessageCount - 1
                 }
-                pinnedItems = newItems
+                pinnedItems.value = newItems
             },
             onTimelineFail = { hasTimelineFailed ->
                 hasTimelineFailedToLoad = hasTimelineFailed
@@ -82,7 +80,7 @@ class PinnedMessagesBannerPresenter @Inject constructor(
                     if (currentPinnedMessageIndex > 0) {
                         currentPinnedMessageIndex--
                     } else {
-                        currentPinnedMessageIndex = pinnedItems.size - 1
+                        currentPinnedMessageIndex = pinnedItems.value.size - 1
                     }
                 }
             }
@@ -92,7 +90,7 @@ class PinnedMessagesBannerPresenter @Inject constructor(
             isFeatureEnabled = isFeatureEnabled,
             hasTimelineFailed = hasTimelineFailedToLoad,
             realPinnedMessagesCount = knownPinnedMessagesCount,
-            pinnedItems = pinnedItems,
+            pinnedItems = pinnedItems.value,
             currentPinnedMessageIndex = currentPinnedMessageIndex,
             eventSink = ::handleEvent
         )
@@ -111,16 +109,14 @@ class PinnedMessagesBannerPresenter @Inject constructor(
         return when {
             !isFeatureEnabled -> PinnedMessagesBannerState.Hidden
             hasTimelineFailed -> PinnedMessagesBannerState.Hidden
+            currentPinnedMessage != null -> PinnedMessagesBannerState.Loaded(
+                currentPinnedMessage = currentPinnedMessage,
+                currentPinnedMessageIndex = currentPinnedMessageIndex,
+                knownPinnedMessagesCount = pinnedItems.size,
+                eventSink = eventSink
+            )
             realPinnedMessagesCount == 0 -> PinnedMessagesBannerState.Hidden
-            currentPinnedMessage == null -> PinnedMessagesBannerState.Loading(realPinnedMessagesCount = realPinnedMessagesCount)
-            else -> {
-                PinnedMessagesBannerState.Loaded(
-                    currentPinnedMessage = currentPinnedMessage,
-                    currentPinnedMessageIndex = currentPinnedMessageIndex,
-                    knownPinnedMessagesCount = pinnedItems.size,
-                    eventSink = eventSink
-                )
-            }
+            else -> PinnedMessagesBannerState.Loading(realPinnedMessagesCount = realPinnedMessagesCount)
         }
     }
 
@@ -136,8 +132,10 @@ class PinnedMessagesBannerPresenter @Inject constructor(
         val networkStatus by networkMonitor.connectivity.collectAsState()
 
         LaunchedEffect(isFeatureEnabled, networkStatus) {
-            if (!isFeatureEnabled) return@LaunchedEffect
-
+            if (!isFeatureEnabled) {
+                updatedOnItemsChange(persistentListOf())
+                return@LaunchedEffect
+            }
             val pinnedEventsTimeline = room.pinnedEventsTimeline()
                 .onFailure { updatedOnTimelineFail(true) }
                 .onSuccess { updatedOnTimelineFail(false) }

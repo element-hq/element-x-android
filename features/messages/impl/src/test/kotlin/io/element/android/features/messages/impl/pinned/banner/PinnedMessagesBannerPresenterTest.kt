@@ -20,8 +20,6 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.eventformatter.test.FakePinnedMessagesBannerFormatter
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -195,15 +193,10 @@ class PinnedMessagesBannerPresenterTest {
         networkMonitor: NetworkMonitor = FakeNetworkMonitor(),
         isFeatureEnabled: Boolean = true,
     ): PinnedMessagesBannerPresenter {
-        val featureFlagService = FakeFeatureFlagService(
-            initialState = mapOf(
-                FeatureFlags.PinnedEvents.key to isFeatureEnabled
-            )
-        )
         return PinnedMessagesBannerPresenter(
             room = room,
             itemFactory = itemFactory,
-            featureFlagService = featureFlagService,
+            isFeatureEnabled = { isFeatureEnabled },
             networkMonitor = networkMonitor,
         )
     }
