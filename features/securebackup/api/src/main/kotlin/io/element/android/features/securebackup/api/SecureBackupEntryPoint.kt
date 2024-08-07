@@ -34,6 +34,9 @@ interface SecureBackupEntryPoint : FeatureEntryPoint {
 
         @Parcelize
         data object CreateNewRecoveryKey : InitialTarget
+
+        @Parcelize
+        data object ResetIdentity : InitialTarget
     }
 
     data class Params(val initialElement: InitialTarget) : NodeInputs

@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.verifysession.impl
+package io.element.android.features.securebackup.impl.reset.password
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,26 +25,31 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.verifysession.api.VerifySessionEntryPoint
+import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.encryption.IdentityPasswordResetHandle
 
 @ContributesNode(SessionScope::class)
-class VerifySelfSessionNode @AssistedInject constructor(
+class ResetKeyPasswordNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: VerifySelfSessionPresenter,
 ) : Node(buildContext, plugins = plugins) {
-    private val callback = plugins<VerifySessionEntryPoint.Callback>().first()
+
+    data class Inputs(val userId: UserId, val handle: IdentityPasswordResetHandle) : NodeInputs
+
+    private val presenter by lazy {
+        val inputs = inputs<Inputs>()
+        ResetKeyPasswordPresenter(inputs.userId, inputs.handle)
+    }
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        VerifySelfSessionView(
+        ResetKeyPasswordView(
             state = state,
-            modifier = modifier,
-            onEnterRecoveryKey = callback::onEnterRecoveryKey,
-            onResetKey = callback::onResetKey,
-            onFinish = callback::onDone,
+            onBack = ::navigateUp
         )
     }
 }

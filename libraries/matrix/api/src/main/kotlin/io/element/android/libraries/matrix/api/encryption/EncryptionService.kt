@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.api.encryption
 
+import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -62,4 +63,17 @@ interface EncryptionService {
      * called the fingerprint of the device.
      */
     suspend fun deviceEd25519(): String?
+
+    suspend fun startIdentityReset(): Result<IdentityResetHandle?>
+}
+
+interface IdentityResetHandle
+
+interface IdentityPasswordResetHandle : IdentityResetHandle {
+    suspend fun resetPassword(userId: UserId, password: String): Result<Unit>
+}
+
+interface IdentityOidcResetHandle : IdentityResetHandle {
+    val url: String
+    suspend fun resetOidc(): Result<Unit>
 }
