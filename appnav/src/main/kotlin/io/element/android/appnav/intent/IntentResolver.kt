@@ -17,12 +17,12 @@
 package io.element.android.appnav.intent
 
 import android.content.Intent
-import io.element.android.features.login.api.oidc.OidcAction
-import io.element.android.features.login.api.oidc.OidcIntentResolver
 import io.element.android.libraries.deeplink.DeeplinkData
 import io.element.android.libraries.deeplink.DeeplinkParser
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.oidc.api.OidcAction
+import io.element.android.libraries.oidc.api.OidcIntentResolver
 import timber.log.Timber
 import javax.inject.Inject
 

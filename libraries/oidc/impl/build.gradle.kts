@@ -22,7 +22,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.features.login.impl"
+    namespace = "io.element.android.libraries.oidc.impl"
 
     testOptions {
         unitTests {
@@ -50,12 +50,11 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.qrcode)
-    implementation(projects.libraries.oidc.api)
     implementation(libs.androidx.browser)
     implementation(platform(libs.network.retrofit.bom))
     implementation(libs.network.retrofit)
     implementation(libs.serialization.json)
-    api(projects.features.login.api)
+    api(projects.libraries.oidc.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.androidx.compose.ui.test.junit)
@@ -66,7 +65,6 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.libraries.oidc.impl)
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.tests.testutils)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
