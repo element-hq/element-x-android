@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.EnableRecoveryProgress
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
+import io.element.android.libraries.matrix.api.encryption.IdentityResetHandle
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
@@ -197,5 +198,9 @@ internal class RustEncryptionService(
 
     override suspend fun deviceEd25519(): String? {
         return service.ed25519Key()
+    }
+
+    override suspend fun startIdentityReset(): Result<IdentityResetHandle?> {
+        return runCatching { service.resetIdentity()?.let(RustIdentityResetHandleFactory::create)?.getOrNull() }
     }
 }

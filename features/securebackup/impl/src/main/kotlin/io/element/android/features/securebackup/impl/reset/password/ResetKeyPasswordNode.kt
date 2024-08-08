@@ -25,21 +25,31 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.encryption.IdentityPasswordResetHandle
 
 @ContributesNode(SessionScope::class)
 class ResetKeyPasswordNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
 ) : Node(buildContext, plugins = plugins) {
-    interface Callback : Plugin {
-        fun onResetSuccess()
-    }
 
-    private val callback = plugins<Callback>().first()
+    data class Inputs(val userId: UserId, val handle: IdentityPasswordResetHandle) : NodeInputs
+
+    private val presenter by lazy {
+        val inputs = inputs<Inputs>()
+        ResetKeyPasswordPresenter(inputs.userId, inputs.handle)
+    }
 
     @Composable
     override fun View(modifier: Modifier) {
-
+        val state = presenter.present()
+        ResetKeyPasswordView(
+            state = state,
+            onBack = ::navigateUp
+        )
     }
 }
