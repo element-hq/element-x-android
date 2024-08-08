@@ -21,9 +21,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.core.net.toUri
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.login.api.oidc.OidcAction
-import io.element.android.features.login.impl.oidc.DefaultOidcIntentResolver
-import io.element.android.features.login.impl.oidc.OidcUrlParser
 import io.element.android.libraries.deeplink.DeepLinkCreator
 import io.element.android.libraries.deeplink.DeeplinkData
 import io.element.android.libraries.deeplink.DeeplinkParser
@@ -33,6 +30,9 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
+import io.element.android.libraries.oidc.api.OidcAction
+import io.element.android.libraries.oidc.impl.DefaultOidcIntentResolver
+import io.element.android.libraries.oidc.impl.OidcUrlParser
 import io.element.android.tests.testutils.lambda.lambdaError
 import org.junit.Assert.assertThrows
 import org.junit.Test

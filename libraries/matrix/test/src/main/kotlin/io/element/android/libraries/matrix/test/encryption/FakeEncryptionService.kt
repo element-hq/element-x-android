@@ -20,13 +20,16 @@ import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.EnableRecoveryProgress
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
+import io.element.android.libraries.matrix.api.encryption.IdentityResetHandle
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 
-class FakeEncryptionService : EncryptionService {
+class FakeEncryptionService(
+    var startIdentityResetLambda: () -> Result<IdentityResetHandle?> = { error("Not implemented") },
+) : EncryptionService {
     private var disableRecoveryFailure: Exception? = null
     override val backupStateStateFlow: MutableStateFlow<BackupState> = MutableStateFlow(BackupState.UNKNOWN)
     override val recoveryStateStateFlow: MutableStateFlow<RecoveryState> = MutableStateFlow(RecoveryState.UNKNOWN)
@@ -116,6 +119,10 @@ class FakeEncryptionService : EncryptionService {
 
     suspend fun emitEnableRecoveryProgress(state: EnableRecoveryProgress) {
         enableRecoveryProgressStateFlow.emit(state)
+    }
+
+    override suspend fun startIdentityReset(): Result<IdentityResetHandle?> {
+        return startIdentityResetLambda()
     }
 
     companion object {

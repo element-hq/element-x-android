@@ -27,15 +27,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.features.login.api.oidc.OidcAction
 import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.error.ChangeServerError
-import io.element.android.features.login.impl.oidc.customtab.DefaultOidcActionFlow
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.oidc.api.OidcAction
+import io.element.android.libraries.oidc.api.OidcActionFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -43,7 +43,7 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
     @Assisted private val params: Params,
     private val accountProviderDataSource: AccountProviderDataSource,
     private val authenticationService: MatrixAuthenticationService,
-    private val defaultOidcActionFlow: DefaultOidcActionFlow,
+    private val oidcActionFlow: OidcActionFlow,
     private val defaultLoginUserStory: DefaultLoginUserStory,
 ) : Presenter<ConfirmAccountProviderState> {
     data class Params(
@@ -65,7 +65,7 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
         }
 
         LaunchedEffect(Unit) {
-            defaultOidcActionFlow.collect { oidcAction ->
+            oidcActionFlow.collect { oidcAction ->
                 if (oidcAction != null) {
                     onOidcAction(oidcAction, loginFlowAction)
                 }
@@ -133,6 +133,6 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
                     }
             }
         }
-        defaultOidcActionFlow.reset()
+        oidcActionFlow.reset()
     }
 }

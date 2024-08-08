@@ -116,6 +116,7 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:mediaviewer:impl"))
     implementation(project(":libraries:troubleshoot:impl"))
     implementation(project(":libraries:fullscreenintent:impl"))
+    implementation(project(":libraries:oidc:impl"))
 }
 
 fun DependencyHandlerScope.allServicesImpl() {
