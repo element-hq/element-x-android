@@ -41,6 +41,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.encryption.IdentityOidcResetHandle
 import io.element.android.libraries.matrix.api.encryption.IdentityPasswordResetHandle
 import io.element.android.libraries.matrix.api.encryption.IdentityResetHandle
+import io.element.android.libraries.oidc.api.OidcEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
@@ -53,6 +54,7 @@ class ResetIdentityFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val resetIdentityFlowManager: ResetIdentityFlowManager,
     private val coroutineScope: CoroutineScope,
+    private val oidcEntryPoint: OidcEntryPoint,
 ) : BaseFlowNode<ResetIdentityFlowNode.NavTarget>(
     backstack = BackStack(initialElement = NavTarget.Root, savedStateMap = buildContext.savedStateMap),
     buildContext = buildContext,
@@ -69,8 +71,8 @@ class ResetIdentityFlowNode @AssistedInject constructor(
         @Parcelize
         data object ResetPassword : NavTarget
 
-//        @Parcelize
-//        data class ResetOidc(val url: String) : NavTarget
+        @Parcelize
+        data class ResetOidc(val url: String) : NavTarget
     }
 
     private lateinit var activity: Activity
@@ -100,6 +102,9 @@ class ResetIdentityFlowNode @AssistedInject constructor(
                     listOf(ResetKeyPasswordNode.Inputs(resetIdentityFlowManager.currentSessionId(), handle))
                 )
             }
+            is NavTarget.ResetOidc -> {
+                oidcEntryPoint.createFallbackWebViewNode(this, buildContext, navTarget.url)
+            }
         }
     }
 
@@ -111,7 +116,11 @@ class ResetIdentityFlowNode @AssistedInject constructor(
 
         when (handle) {
             is IdentityOidcResetHandle -> {
-                activity.openUrlInChromeCustomTab(null, false, handle.url)
+                if (oidcEntryPoint.canUseCustomTab()) {
+                    activity.openUrlInChromeCustomTab(null, false, handle.url)
+                } else {
+                    backstack.push(NavTarget.ResetOidc(handle.url))
+                }
                 handle.resetOidc()
             }
             is IdentityPasswordResetHandle -> backstack.push(NavTarget.ResetPassword)
