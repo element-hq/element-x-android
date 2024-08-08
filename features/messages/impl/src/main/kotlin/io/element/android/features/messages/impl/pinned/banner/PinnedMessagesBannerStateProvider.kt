@@ -42,7 +42,7 @@ internal fun aHiddenPinnedMessagesBannerState() = PinnedMessagesBannerState.Hidd
 internal fun aLoadingPinnedMessagesBannerState(
     knownPinnedMessagesCount: Int = 4
 ) = PinnedMessagesBannerState.Loading(
-    realPinnedMessagesCount = knownPinnedMessagesCount
+    expectedPinnedMessagesCount = knownPinnedMessagesCount
 )
 
 internal fun aLoadedPinnedMessagesBannerState(
@@ -56,6 +56,6 @@ internal fun aLoadedPinnedMessagesBannerState(
 ) = PinnedMessagesBannerState.Loaded(
     currentPinnedMessage = currentPinnedMessage,
     currentPinnedMessageIndex = currentPinnedMessageIndex,
-    knownPinnedMessagesCount = knownPinnedMessagesCount,
+    loadedPinnedMessagesCount = knownPinnedMessagesCount,
     eventSink = eventSink
 )

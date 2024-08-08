@@ -53,7 +53,7 @@ class PinnedMessagesBannerPresenter @Inject constructor(
     @Composable
     override fun present(): PinnedMessagesBannerState {
         val isFeatureEnabled = isFeatureEnabled()
-        val knownPinnedMessagesCount by remember {
+        val expectedPinnedMessagesCount by remember {
             room.roomInfoFlow.map { roomInfo -> roomInfo.pinnedEventIds.size }
         }.collectAsState(initial = 0)
 
@@ -77,11 +77,7 @@ class PinnedMessagesBannerPresenter @Inject constructor(
         fun handleEvent(event: PinnedMessagesBannerEvents) {
             when (event) {
                 is PinnedMessagesBannerEvents.MoveToNextPinned -> {
-                    if (currentPinnedMessageIndex > 0) {
-                        currentPinnedMessageIndex--
-                    } else {
-                        currentPinnedMessageIndex = pinnedItems.value.size - 1
-                    }
+                    currentPinnedMessageIndex = (currentPinnedMessageIndex - 1).mod(pinnedItems.value.size)
                 }
             }
         }
@@ -89,7 +85,7 @@ class PinnedMessagesBannerPresenter @Inject constructor(
         return pinnedMessagesBannerState(
             isFeatureEnabled = isFeatureEnabled,
             hasTimelineFailed = hasTimelineFailedToLoad,
-            realPinnedMessagesCount = knownPinnedMessagesCount,
+            expectedPinnedMessagesCount = expectedPinnedMessagesCount,
             pinnedItems = pinnedItems.value,
             currentPinnedMessageIndex = currentPinnedMessageIndex,
             eventSink = ::handleEvent
@@ -100,7 +96,7 @@ class PinnedMessagesBannerPresenter @Inject constructor(
     private fun pinnedMessagesBannerState(
         isFeatureEnabled: Boolean,
         hasTimelineFailed: Boolean,
-        realPinnedMessagesCount: Int,
+        expectedPinnedMessagesCount: Int,
         pinnedItems: ImmutableList<PinnedMessagesBannerItem>,
         currentPinnedMessageIndex: Int,
         eventSink: (PinnedMessagesBannerEvents) -> Unit
@@ -112,11 +108,11 @@ class PinnedMessagesBannerPresenter @Inject constructor(
             currentPinnedMessage != null -> PinnedMessagesBannerState.Loaded(
                 currentPinnedMessage = currentPinnedMessage,
                 currentPinnedMessageIndex = currentPinnedMessageIndex,
-                knownPinnedMessagesCount = pinnedItems.size,
+                loadedPinnedMessagesCount = pinnedItems.size,
                 eventSink = eventSink
             )
-            realPinnedMessagesCount == 0 -> PinnedMessagesBannerState.Hidden
-            else -> PinnedMessagesBannerState.Loading(realPinnedMessagesCount = realPinnedMessagesCount)
+            expectedPinnedMessagesCount == 0 -> PinnedMessagesBannerState.Hidden
+            else -> PinnedMessagesBannerState.Loading(expectedPinnedMessagesCount = expectedPinnedMessagesCount)
         }
     }
 

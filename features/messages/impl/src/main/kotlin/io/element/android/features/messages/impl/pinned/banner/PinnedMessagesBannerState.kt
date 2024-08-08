@@ -27,23 +27,23 @@ import io.element.android.libraries.ui.strings.CommonStrings
 sealed interface PinnedMessagesBannerState {
     data object Hidden : PinnedMessagesBannerState
     sealed interface Visible : PinnedMessagesBannerState
-    data class Loading(val realPinnedMessagesCount: Int) : Visible
+    data class Loading(val expectedPinnedMessagesCount: Int) : Visible
     data class Loaded(
         val currentPinnedMessage: PinnedMessagesBannerItem,
         val currentPinnedMessageIndex: Int,
-        val knownPinnedMessagesCount: Int,
+        val loadedPinnedMessagesCount: Int,
         val eventSink: (PinnedMessagesBannerEvents) -> Unit
     ) : Visible
 
     fun pinnedMessagesCount() = when (this) {
         is Hidden -> 0
-        is Loading -> realPinnedMessagesCount
-        is Loaded -> knownPinnedMessagesCount
+        is Loading -> expectedPinnedMessagesCount
+        is Loaded -> loadedPinnedMessagesCount
     }
 
     fun currentPinnedMessageIndex() = when (this) {
         is Hidden -> 0
-        is Loading -> realPinnedMessagesCount - 1
+        is Loading -> expectedPinnedMessagesCount - 1
         is Loaded -> currentPinnedMessageIndex
     }
 
