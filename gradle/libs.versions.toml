@@ -4,8 +4,8 @@
 [versions]
 # Project
 android_gradle_plugin = "8.4.1"
-kotlin = "1.9.24"
-ksp = "1.9.24-1.0.20"
+kotlin = "1.9.25"
+ksp = "1.9.25-1.0.20"
 firebaseAppDistribution = "5.0.0"
 
 # AndroidX
@@ -25,7 +25,7 @@ camera = "1.3.4"
 
 # Compose
 compose_bom = "2024.06.00"
-composecompiler = "1.5.14"
+composecompiler = "1.5.15"
 
 # Coroutines
 coroutines = "1.8.1"
@@ -56,7 +56,7 @@ autoservice = "1.1.1"
 
 # quality
 androidx-test-ext-junit = "1.2.1"
-kover = "0.8.0"
+kover = "0.8.3"
 
 [libraries]
 # Project
