@@ -16,9 +16,6 @@
 
 package io.element.android.features.messages.impl.timeline.factories
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
 import io.element.android.features.messages.impl.timeline.TimelineItemIndexer
 import io.element.android.features.messages.impl.timeline.diff.TimelineItemsCacheInvalidator
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemEventFactory
@@ -31,9 +28,11 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -46,7 +45,7 @@ class TimelineItemsFactory @Inject constructor(
     private val timelineItemGrouper: TimelineItemGrouper,
     private val timelineItemIndexer: TimelineItemIndexer,
 ) {
-    private val timelineItems = MutableStateFlow(persistentListOf<TimelineItem>())
+    private val _timelineItems = MutableSharedFlow<ImmutableList<TimelineItem>>(replay = 1)
     private val lock = Mutex()
     private val diffCache = MutableListDiffCache<TimelineItem>()
     private val diffCacheUpdater = DiffCacheUpdater<MatrixTimelineItem, TimelineItem>(
@@ -61,10 +60,7 @@ class TimelineItemsFactory @Inject constructor(
         }
     }
 
-    @Composable
-    fun collectItemsAsState(): State<ImmutableList<TimelineItem>> {
-        return timelineItems.collectAsState()
-    }
+    val timelineItems: Flow<ImmutableList<TimelineItem>> = _timelineItems.distinctUntilChanged()
 
     suspend fun replaceWith(
         timelineItems: List<MatrixTimelineItem>,
@@ -102,7 +98,7 @@ class TimelineItemsFactory @Inject constructor(
         }
         val result = timelineItemGrouper.group(newTimelineItemStates).toPersistentList()
         timelineItemIndexer.process(result)
-        this.timelineItems.emit(result)
+        this._timelineItems.emit(result)
     }
 
     private suspend fun buildAndCacheItem(

@@ -41,6 +41,7 @@ import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewNode
 import io.element.android.features.messages.impl.forward.ForwardMessagesNode
+import io.element.android.features.messages.impl.pinned.PinnedEventsTimelineProvider
 import io.element.android.features.messages.impl.pinned.list.PinnedMessagesListNode
 import io.element.android.features.messages.impl.report.ReportMessageNode
 import io.element.android.features.messages.impl.timeline.debug.EventDebugInfoNode
@@ -96,6 +97,7 @@ class MessagesFlowNode @AssistedInject constructor(
     private val room: MatrixRoom,
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
     private val mentionSpanTheme: MentionSpanTheme,
+    private val pinnedEventsTimelineProvider: PinnedEventsTimelineProvider,
 ) : BaseFlowNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Messages,
@@ -163,6 +165,9 @@ class MessagesFlowNode @AssistedInject constructor(
                 roomMemberProfilesCache.replace(membersState.joinedRoomMembers())
             }
             .launchIn(lifecycleScope)
+
+        pinnedEventsTimelineProvider.launchIn(lifecycleScope)
+
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {

@@ -25,15 +25,24 @@ import kotlinx.collections.immutable.toImmutableList
 open class PinnedMessagesTimelineStateProvider : PreviewParameterProvider<PinnedMessagesListState> {
     override val values: Sequence<PinnedMessagesListState>
         get() = sequenceOf(
-            pinnedMessagesListState(),
+            aFailedPinnedMessagesListState(),
+            aLoadingPinnedMessagesListState(),
+            anEmptyPinnedMessagesListState(),
+            aLoadedPinnedMessagesListState()
         )
 }
 
-fun pinnedMessagesListState(
+fun aFailedPinnedMessagesListState() = PinnedMessagesListState.Failed
+
+fun aLoadingPinnedMessagesListState() = PinnedMessagesListState.Loading
+
+fun anEmptyPinnedMessagesListState() = PinnedMessagesListState.Empty
+
+fun aLoadedPinnedMessagesListState(
     timelineRoomInfo: TimelineRoomInfo = aTimelineRoomInfo(),
     timelineItems: List<TimelineItem> = emptyList(),
-) = PinnedMessagesListState(
+) = PinnedMessagesListState.Filled(
     timelineRoomInfo = timelineRoomInfo,
     timelineItems = timelineItems.toImmutableList(),
-    eventSink = {}
+    eventSink = {},
 )

@@ -26,6 +26,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -33,9 +34,12 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.components.TimelineItemRow
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -63,8 +67,8 @@ fun PinnedMessagesListView(
                 onUserDataClick = onUserDataClick,
                 onLinkClick = onLinkClick,
                 modifier = Modifier
-                    .padding(padding)
-                    .consumeWindowInsets(padding),
+                        .padding(padding)
+                        .consumeWindowInsets(padding),
             )
         }
     )
@@ -80,7 +84,7 @@ private fun PinnedMessagesListTopBar(
     TopAppBar(
         title = {
             Text(
-                text = stringResource(id = CommonStrings.screen_room_pinned_banner_indicator_description, state.pinnedMessagesCount),
+                text = state.title(),
                 style = ElementTheme.typography.fontBodyLgMedium
             )
         },
@@ -97,38 +101,83 @@ private fun PinnedMessagesListContent(
     onLinkClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            state = rememberLazyListState(),
-            reverseLayout = true,
-            contentPadding = PaddingValues(vertical = 8.dp),
-        ) {
-            items(
-                items = state.timelineItems,
-                contentType = { timelineItem -> timelineItem.contentType() },
-                key = { timelineItem -> timelineItem.identifier() },
-            ) { timelineItem ->
-                TimelineItemRow(
-                    timelineItem = timelineItem,
-                    timelineRoomInfo = state.timelineRoomInfo,
-                    renderReadReceipts = false,
-                    isLastOutgoingMessage = false,
-                    focusedEventId = null,
-                    onClick = onEventClick,
-                    onLongClick = {},
-                    onUserDataClick = onUserDataClick,
-                    onLinkClick = onLinkClick,
-                    inReplyToClick = {},
-                    onReactionClick = { _, _ -> },
-                    onReactionLongClick = { _, _ -> },
-                    onMoreReactionsClick = {},
-                    onReadReceiptClick = {},
-                    eventSink = {},
-                    onSwipeToReply = {},
-                    onJoinCallClick = {},
-                )
+    Box(modifier.fillMaxSize()) {
+        when (state) {
+            PinnedMessagesListState.Failed -> Unit
+            PinnedMessagesListState.Empty -> PinnedMessagesListEmpty()
+            is PinnedMessagesListState.Filled -> PinnedMessagesListLoaded(
+                state = state,
+                onEventClick = onEventClick,
+                onUserDataClick = onUserDataClick,
+                onLinkClick = onLinkClick,
+            )
+            PinnedMessagesListState.Loading -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
             }
+        }
+    }
+}
+
+@Composable
+private fun PinnedMessagesListEmpty(
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier.padding(
+            horizontal = 16.dp,
+            vertical = 48.dp
+        )
+    ) {
+        val pinActionText = stringResource(id = CommonStrings.action_pin)
+        IconTitleSubtitleMolecule(
+            title = stringResource(id = CommonStrings.screen_pinned_timeline_empty_state_headline),
+            subTitle = stringResource(id = CommonStrings.screen_pinned_timeline_empty_state_description, pinActionText),
+            iconResourceId = CompoundDrawables.ic_compound_pin,
+            modifier = modifier,
+        )
+    }
+}
+
+@Composable
+private fun PinnedMessagesListLoaded(
+    state: PinnedMessagesListState.Filled,
+    onEventClick: (event: TimelineItem.Event) -> Unit,
+    onUserDataClick: (UserId) -> Unit,
+    onLinkClick: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        state = rememberLazyListState(),
+        reverseLayout = true,
+        contentPadding = PaddingValues(vertical = 8.dp),
+    ) {
+        items(
+            items = state.timelineItems,
+            contentType = { timelineItem -> timelineItem.contentType() },
+            key = { timelineItem -> timelineItem.identifier() },
+        ) { timelineItem ->
+            TimelineItemRow(
+                timelineItem = timelineItem,
+                timelineRoomInfo = state.timelineRoomInfo,
+                renderReadReceipts = false,
+                isLastOutgoingMessage = false,
+                focusedEventId = null,
+                onClick = onEventClick,
+                onLongClick = {},
+                onUserDataClick = onUserDataClick,
+                onLinkClick = onLinkClick,
+                inReplyToClick = {},
+                onReactionClick = { _, _ -> },
+                onReactionLongClick = { _, _ -> },
+                onMoreReactionsClick = {},
+                onReadReceiptClick = {},
+                eventSink = {},
+                onSwipeToReply = {},
+                onJoinCallClick = {},
+            )
         }
     }
 }
