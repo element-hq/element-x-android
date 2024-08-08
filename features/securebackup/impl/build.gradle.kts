@@ -45,6 +45,7 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.oidc.api)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.testtags)
     api(libs.statemachine)
