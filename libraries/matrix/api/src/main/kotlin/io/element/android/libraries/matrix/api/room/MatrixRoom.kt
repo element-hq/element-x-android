@@ -106,6 +106,11 @@ interface MatrixRoom : Closeable {
      */
     suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline>
 
+    /**
+     * Create a new timeline for the pinned events of the room.
+     */
+    suspend fun pinnedEventsTimeline(): Result<Timeline>
+
     fun destroy()
 
     suspend fun subscribeToSync()

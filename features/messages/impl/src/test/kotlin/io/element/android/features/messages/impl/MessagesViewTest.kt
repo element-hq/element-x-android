@@ -33,6 +33,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeRight
+import androidx.compose.ui.text.AnnotatedString
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.emojibasebindings.Emoji
 import io.element.android.emojibasebindings.EmojibaseCategory
@@ -43,6 +44,10 @@ import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
+import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerItem
+import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMessagesBannerState
+import io.element.android.features.messages.impl.timeline.FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS
+import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemReadReceipts
 import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
@@ -54,6 +59,7 @@ import io.element.android.features.messages.impl.timeline.components.receipt.aRe
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureCalledOnceWithParam
@@ -72,6 +78,7 @@ import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import kotlin.time.Duration.Companion.milliseconds
 
 @RunWith(AndroidJUnit4::class)
 class MessagesViewTest {
@@ -458,6 +465,25 @@ class MessagesViewTest {
         customReactionStateEventsRecorder.assertSingle(CustomReactionEvents.DismissCustomReactionSheet)
         eventsRecorder.assertSingle(MessagesEvents.ToggleReaction(aUnicode, timelineItem.eventId!!))
     }
+
+    @Test
+    fun `clicking on pinned messages banner emits the expected Event`() {
+        val eventsRecorder = EventsRecorder<TimelineEvents>()
+        val state = aMessagesState(
+            timelineState = aTimelineState(eventSink = eventsRecorder),
+            pinnedMessagesBannerState = aLoadedPinnedMessagesBannerState(
+                knownPinnedMessagesCount = 2,
+                currentPinnedMessageIndex = 0,
+                currentPinnedMessage = PinnedMessagesBannerItem(
+                    eventId = AN_EVENT_ID,
+                    formatted = AnnotatedString("This is a pinned message")
+                ),
+            ),
+        )
+        rule.setMessagesView(state = state)
+        rule.onNodeWithText("This is a pinned message").performClick()
+        eventsRecorder.assertSingle(TimelineEvents.FocusOnEvent(AN_EVENT_ID, debounce = FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS.milliseconds))
+    }
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessagesView(
@@ -471,6 +497,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
     onSendLocationClick: () -> Unit = EnsureNeverCalled(),
     onCreatePollClick: () -> Unit = EnsureNeverCalled(),
     onJoinCallClick: () -> Unit = EnsureNeverCalled(),
+    onViewAllPinnedMessagesClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         // Cannot use the RichTextEditor, so simulate a LocalInspectionMode
@@ -488,6 +515,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
                 onSendLocationClick = onSendLocationClick,
                 onCreatePollClick = onCreatePollClick,
                 onJoinCallClick = onJoinCallClick,
+                onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
             )
         }
     }

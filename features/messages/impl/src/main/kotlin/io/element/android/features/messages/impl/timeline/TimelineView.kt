@@ -48,7 +48,10 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -91,7 +94,8 @@ fun TimelineView(
     onJoinCallClick: () -> Unit,
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
-    forceJumpToBottomVisibility: Boolean = false
+    forceJumpToBottomVisibility: Boolean = false,
+    nestedScrollConnection: NestedScrollConnection = rememberNestedScrollInteropConnection(),
 ) {
     fun clearFocusRequestState() {
         state.eventSink(TimelineEvents.ClearFocusRequestState)
@@ -124,7 +128,9 @@ fun TimelineView(
     AnimatedVisibility(visible = true, enter = fadeIn()) {
         Box(modifier) {
             LazyColumn(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .nestedScroll(nestedScrollConnection),
                 state = lazyListState,
                 reverseLayout = useReverseLayout,
                 contentPadding = PaddingValues(vertical = 8.dp),

@@ -21,6 +21,7 @@ import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.matrix.api.core.EventId
 import kotlinx.collections.immutable.ImmutableList
+import kotlin.time.Duration
 
 @Immutable
 data class TimelineState(
@@ -39,6 +40,7 @@ data class TimelineState(
 @Immutable
 sealed interface FocusRequestState {
     data object None : FocusRequestState
+    data class Requested(val eventId: EventId, val debounce: Duration) : FocusRequestState
     data class Loading(val eventId: EventId) : FocusRequestState
     data class Success(
         val eventId: EventId,
@@ -54,6 +56,7 @@ sealed interface FocusRequestState {
 
     fun eventId(): EventId? {
         return when (this) {
+            is Requested -> eventId
             is Loading -> eventId
             is Success -> eventId
             else -> null
