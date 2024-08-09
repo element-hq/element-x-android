@@ -125,6 +125,7 @@ internal fun MessageComposerView(
         onError = ::onError,
         onTyping = ::onTyping,
         onSelectRichContent = ::sendUri,
+        hasAttachments = state.attachmentsState is AttachmentsState.Previewing,
     )
 }
 
