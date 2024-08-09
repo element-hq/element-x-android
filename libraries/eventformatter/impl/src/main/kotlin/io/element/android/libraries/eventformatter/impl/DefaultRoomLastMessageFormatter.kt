@@ -16,11 +16,6 @@
 
 package io.element.android.libraries.eventformatter.impl
 
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
@@ -79,7 +74,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
             RedactedContent -> {
                 val message = sp.getString(CommonStrings.common_message_removed)
                 if (!isDmRoom) {
-                    prefix(message, senderDisambiguatedDisplayName)
+                    message.prefixWith(senderDisambiguatedDisplayName)
                 } else {
                     message
                 }
@@ -90,7 +85,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
             is UnableToDecryptContent -> {
                 val message = sp.getString(CommonStrings.common_waiting_for_decryption_key)
                 if (!isDmRoom) {
-                    prefix(message, senderDisambiguatedDisplayName)
+                    message.prefixWith(senderDisambiguatedDisplayName)
                 } else {
                     message
                 }
@@ -113,7 +108,6 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
             }
             is LegacyCallInviteContent -> sp.getString(CommonStrings.common_call_invite)
             is CallNotifyContent -> sp.getString(CommonStrings.common_call_started)
-            else -> null
         }?.take(MAX_SAFE_LENGTH)
     }
 
@@ -168,16 +162,6 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
     ): CharSequence = if (isDmRoom) {
         message
     } else {
-        prefix(message, senderDisambiguatedDisplayName)
-    }
-
-    private fun prefix(message: String, senderDisambiguatedDisplayName: String): AnnotatedString {
-        return buildAnnotatedString {
-            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                append(senderDisambiguatedDisplayName)
-            }
-            append(": ")
-            append(message)
-        }
+        message.prefixWith(senderDisambiguatedDisplayName)
     }
 }

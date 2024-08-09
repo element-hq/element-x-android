@@ -23,7 +23,7 @@ import io.element.android.features.messages.impl.messagecomposer.AttachmentsStat
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
-import io.element.android.features.messages.impl.pinned.banner.aPinnedMessagesBannerState
+import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMessagesBannerState
 import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.aTimelineState
@@ -90,8 +90,8 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
                 callState = RoomCallState.DISABLED,
             ),
             aMessagesState(
-                pinnedMessagesBannerState = aPinnedMessagesBannerState(
-                    pinnedMessagesCount = 4,
+                pinnedMessagesBannerState = aLoadedPinnedMessagesBannerState(
+                    knownPinnedMessagesCount = 4,
                     currentPinnedMessageIndex = 0,
                 ),
             ),
@@ -121,7 +121,7 @@ fun aMessagesState(
     showReinvitePrompt: Boolean = false,
     enableVoiceMessages: Boolean = true,
     callState: RoomCallState = RoomCallState.ENABLED,
-    pinnedMessagesBannerState: PinnedMessagesBannerState = aPinnedMessagesBannerState(),
+    pinnedMessagesBannerState: PinnedMessagesBannerState = aLoadedPinnedMessagesBannerState(),
     eventSink: (MessagesEvents) -> Unit = {},
 ) = MessagesState(
     roomId = RoomId("!id:domain"),

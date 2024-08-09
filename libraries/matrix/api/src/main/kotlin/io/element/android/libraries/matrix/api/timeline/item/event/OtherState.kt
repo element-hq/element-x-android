@@ -32,7 +32,14 @@ sealed interface OtherState {
     data object RoomHistoryVisibility : OtherState
     data object RoomJoinRules : OtherState
     data class RoomName(val name: String?) : OtherState
-    data object RoomPinnedEvents : OtherState
+    data class RoomPinnedEvents(val change: Change) : OtherState {
+        enum class Change {
+            ADDED,
+            REMOVED,
+            CHANGED
+        }
+    }
+
     data class RoomUserPowerLevels(val users: Map<String, Long>) : OtherState
     data object RoomServerAcl : OtherState
     data class RoomThirdPartyInvite(val displayName: String?) : OtherState

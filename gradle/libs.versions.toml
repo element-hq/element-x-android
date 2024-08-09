@@ -4,8 +4,8 @@
 [versions]
 # Project
 android_gradle_plugin = "8.4.1"
-kotlin = "1.9.24"
-ksp = "1.9.24-1.0.20"
+kotlin = "1.9.25"
+ksp = "1.9.25-1.0.20"
 firebaseAppDistribution = "5.0.0"
 
 # AndroidX
@@ -25,7 +25,7 @@ camera = "1.3.4"
 
 # Compose
 compose_bom = "2024.06.00"
-composecompiler = "1.5.14"
+composecompiler = "1.5.15"
 
 # Coroutines
 coroutines = "1.8.1"
@@ -44,7 +44,7 @@ serialization_json = "1.6.3"
 showkase = "1.0.3"
 appyx = "1.4.0"
 sqldelight = "2.0.2"
-wysiwyg = "2.37.8"
+wysiwyg = "2.37.7"
 telephoto = "0.12.1"
 
 # DI
@@ -56,7 +56,7 @@ autoservice = "1.1.1"
 
 # quality
 androidx-test-ext-junit = "1.2.1"
-kover = "0.8.0"
+kover = "0.8.3"
 
 [libraries]
 # Project
@@ -75,7 +75,7 @@ oss_licenses_plugin = "com.google.android.gms:oss-licenses-plugin:0.10.6"
 # AndroidX
 androidx_core = { module = "androidx.core:core", version.ref = "core" }
 androidx_corektx = { module = "androidx.core:core-ktx", version.ref = "core" }
-androidx_annotationjvm = "androidx.annotation:annotation-jvm:1.8.1"
+androidx_annotationjvm = "androidx.annotation:annotation-jvm:1.8.2"
 androidx_datastore_preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 androidx_datastore_datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 androidx_exifinterface = "androidx.exifinterface:exifinterface:1.3.7"
@@ -163,7 +163,7 @@ jsoup = "org.jsoup:jsoup:1.18.1"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.0.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.36"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.38"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
@@ -187,7 +187,7 @@ play_services_oss_licenses = "com.google.android.gms:play-services-oss-licenses:
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.4.2"
-sentry = "io.sentry:sentry-android:7.13.0"
+sentry = "io.sentry:sentry-android:7.12.1"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.23.1"
 
