@@ -28,6 +28,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventTimeline
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
@@ -58,6 +59,7 @@ fun anEventTimelineItem(
     timestamp: Long = 0L,
     content: EventContent = aProfileChangeMessageContent(),
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
+    messageShield: MessageShield? = null,
 ) = EventTimelineItem(
     eventId = eventId,
     transactionId = transactionId,
@@ -75,6 +77,7 @@ fun anEventTimelineItem(
     content = content,
     debugInfo = debugInfo,
     origin = null,
+    messageShield = messageShield,
 )
 
 fun aProfileTimelineDetails(

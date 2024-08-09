@@ -86,6 +86,7 @@ class TimelineItemEventFactory @Inject constructor(
             isThreaded = currentTimelineItem.event.isThreaded(),
             debugInfo = currentTimelineItem.event.debugInfo,
             origin = currentTimelineItem.event.origin,
+            messageShield = currentTimelineItem.event.messageShield,
         )
     }
 

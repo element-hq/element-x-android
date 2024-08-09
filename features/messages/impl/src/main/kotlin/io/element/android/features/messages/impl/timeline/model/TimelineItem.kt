@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
@@ -83,6 +84,7 @@ sealed interface TimelineItem {
         val isThreaded: Boolean,
         val debugInfo: TimelineItemDebugInfo,
         val origin: TimelineItemEventOrigin?,
+        val messageShield: MessageShield?,
     ) : TimelineItem {
         val showSenderInformation = groupPosition.isNew() && !isMine
 

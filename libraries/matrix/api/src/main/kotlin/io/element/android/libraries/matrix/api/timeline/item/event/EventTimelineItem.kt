@@ -39,6 +39,7 @@ data class EventTimelineItem(
     val content: EventContent,
     val debugInfo: TimelineItemDebugInfo,
     val origin: TimelineItemEventOrigin?,
+    val messageShield: MessageShield?,
 ) {
     fun inReplyTo(): InReplyTo? {
         return (content as? MessageContent)?.inReplyTo
