@@ -58,7 +58,7 @@ dependencyResolutionManagement {
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-rootProject.name = "ElementX"
+rootProject.name = "TchapX"
 include(":app")
 include(":appnav")
 include(":appconfig")
