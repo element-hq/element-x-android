@@ -17,8 +17,6 @@
 package io.element.android.features.securebackup.impl.reset
 
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -28,11 +26,8 @@ import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatu
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -75,5 +70,10 @@ class ResetIdentityFlowManager @Inject constructor(
 
             resetHandleFlow
         }
+    }
+
+    suspend fun cancel() {
+        currentHandleFlow.value.dataOrNull()?.cancel()
+        resetHandleFlow.value = AsyncData.Uninitialized
     }
 }

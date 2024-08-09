@@ -47,12 +47,19 @@ fun Activity.openUrlInChromeCustomTab(
                     true -> CustomTabsIntent.COLOR_SCHEME_DARK
                 }
             )
+            .setShareIdentityEnabled(false)
             // Note: setting close button icon does not work
             // .setCloseButtonIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_back_24dp))
             // .setStartAnimations(context, R.anim.enter_fade_in, R.anim.exit_fade_out)
             // .setExitAnimations(context, R.anim.enter_fade_in, R.anim.exit_fade_out)
             .apply { session?.let { setSession(it) } }
             .build()
+            .apply {
+                // Disable download button
+                intent.putExtra("org.chromium.chrome.browser.customtabs.EXTRA_DISABLE_DOWNLOAD_BUTTON", true)
+                // Disable bookmark button
+                intent.putExtra("org.chromium.chrome.browser.customtabs.EXTRA_DISABLE_START_BUTTON", true)
+            }
             .launchUrl(this, Uri.parse(url))
     } catch (activityNotFoundException: ActivityNotFoundException) {
         // TODO context.toast(R.string.error_no_external_application_found)

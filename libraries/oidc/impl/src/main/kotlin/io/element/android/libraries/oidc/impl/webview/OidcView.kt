@@ -16,10 +16,11 @@
 
 package io.element.android.libraries.oidc.impl.webview
 
+import android.annotation.SuppressLint
 import android.webkit.WebView
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,10 +31,14 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.viewinterop.AndroidView
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
+import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.oidc.impl.OidcUrlParser
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OidcView(
     state: OidcState,
@@ -55,7 +60,7 @@ fun OidcView(
         OidcWebViewClient(::shouldOverrideUrl)
     }
 
-    BackHandler {
+    fun onBack() {
         if (webView?.canGoBack().orFalse()) {
             webView?.goBack()
         } else {
@@ -64,11 +69,32 @@ fun OidcView(
         }
     }
 
-    Box(modifier = modifier.statusBarsPadding()) {
+    BackHandler { onBack() }
+
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                title = {},
+                navigationIcon = {
+                    BackButton(onClick = ::onBack)
+                },
+            )
+        }
+    ) { contentPadding ->
         AndroidView(
+            modifier = Modifier.padding(contentPadding),
             factory = { context ->
                 WebView(context).apply {
                     webViewClient = oidcWebViewClient
+                    settings.apply {
+                        @SuppressLint("SetJavaScriptEnabled")
+                        javaScriptEnabled = true
+                        allowContentAccess = true
+                        allowFileAccess = true
+                        databaseEnabled = true
+                        domStorageEnabled = true
+                    }
                     loadUrl(state.oidcDetails.url)
                 }.also {
                     webView = it

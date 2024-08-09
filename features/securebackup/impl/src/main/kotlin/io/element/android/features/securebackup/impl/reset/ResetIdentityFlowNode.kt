@@ -19,8 +19,12 @@ package io.element.android.features.securebackup.impl.reset
 import android.app.Activity
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -37,12 +41,14 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.encryption.IdentityOidcResetHandle
 import io.element.android.libraries.matrix.api.encryption.IdentityPasswordResetHandle
 import io.element.android.libraries.matrix.api.encryption.IdentityResetHandle
 import io.element.android.libraries.oidc.api.OidcEntryPoint
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -76,6 +82,7 @@ class ResetIdentityFlowNode @AssistedInject constructor(
     }
 
     private lateinit var activity: Activity
+    private var resetJob: Job? = null
 
     override fun onBuilt() {
         super.onBuilt()
@@ -83,6 +90,19 @@ class ResetIdentityFlowNode @AssistedInject constructor(
         resetIdentityFlowManager.whenResetIsDone {
             plugins<Callback>().forEach { it.onDone() }
         }
+
+        lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onStart(owner: LifecycleOwner) {
+                // If the custom tab was opened, we need to cancel the reset job
+                // when we come back to the node if it the reset wasn't successful
+                cancelResetJob()
+            }
+
+            override fun onDestroy(owner: LifecycleOwner) {
+                // Make sure we cancel the reset job when the node is destroyed, just in case
+                cancelResetJob()
+            }
+        })
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -121,15 +141,29 @@ class ResetIdentityFlowNode @AssistedInject constructor(
                 } else {
                     backstack.push(NavTarget.ResetOidc(handle.url))
                 }
-                handle.resetOidc()
+                resetJob = launch { handle.resetOidc() }
             }
             is IdentityPasswordResetHandle -> backstack.push(NavTarget.ResetPassword)
         }
     }
 
+    private fun cancelResetJob() {
+        resetJob?.cancel()
+        resetJob = null
+        coroutineScope.launch { resetIdentityFlowManager.cancel() }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
-        (LocalContext.current as? Activity)?.let { activity = it }
+        // Workaround to get the current activity
+        if (!this::activity.isInitialized) {
+            activity = LocalContext.current as Activity
+        }
+
+        val startResetState by resetIdentityFlowManager.currentHandleFlow.collectAsState()
+        if (startResetState.isLoading()) {
+            ProgressDialog()
+        }
 
         BackstackView(modifier)
     }
