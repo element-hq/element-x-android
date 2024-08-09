@@ -42,6 +42,10 @@ class RustPasswordIdentityResetHandle(
     override suspend fun resetPassword(userId: UserId, password: String): Result<Unit> {
         return runCatching { identityResetHandle.reset(AuthData.Password(AuthDataPasswordDetails(userId.value, password))) }
     }
+
+    override suspend fun cancel() {
+        identityResetHandle.cancelAndDestroy()
+    }
 }
 
 class RustOidcIdentityResetHandle(
@@ -51,4 +55,13 @@ class RustOidcIdentityResetHandle(
     override suspend fun resetOidc(): Result<Unit> {
         return runCatching { identityResetHandle.reset(null) }
     }
+
+    override suspend fun cancel() {
+        identityResetHandle.cancelAndDestroy()
+    }
+}
+
+private suspend fun org.matrix.rustcomponents.sdk.IdentityResetHandle.cancelAndDestroy() {
+    cancel()
+    destroy()
 }
