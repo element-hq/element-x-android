@@ -26,7 +26,6 @@ android {
 
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = true
             consumerProguardFiles("consumer-proguard-rules.pro")
             resValue(
                 type = "string",
