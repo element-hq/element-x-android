@@ -32,7 +32,7 @@ object RoomAliasResolverModule {
         client: MatrixClient,
     ): RoomAliasResolverPresenter.Factory {
         return object : RoomAliasResolverPresenter.Factory {
-            override fun create(roomAlias: RoomAlias): RoomAliasResolverPresenter {
+            override fun create(roomAlias: String): RoomAliasResolverPresenter {
                 return RoomAliasResolverPresenter(
                     roomAlias = roomAlias,
                     matrixClient = client,

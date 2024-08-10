@@ -26,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.createroom.api.StartDMAction
 import io.element.android.features.userprofile.shared.UserProfileEvents
@@ -50,15 +49,16 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class RoomMemberDetailsPresenter @AssistedInject constructor(
-    @Assisted private val roomMemberId: UserId,
+    @Assisted id: String,
     private val client: MatrixClient,
     private val room: MatrixRoom,
     private val startDMAction: StartDMAction,
 ) : Presenter<UserProfileState> {
-    @AssistedFactory
     interface Factory {
-        fun create(roomMemberId: UserId): RoomMemberDetailsPresenter
+        fun create(roomMemberId: String): RoomMemberDetailsPresenter
     }
+
+    private val roomMemberId = UserId(id)
 
     private val userProfilePresenterHelper = UserProfilePresenterHelper(
         userId = roomMemberId,

@@ -40,7 +40,7 @@ anvil {
 
 dependencies {
     ksp(projects.anvilcodegen)
-//    ksp(libs.dagger.compiler)
+    ksp(libs.dagger.compiler)
     implementation(projects.anvilannotations)
 
     implementation(projects.libraries.core)

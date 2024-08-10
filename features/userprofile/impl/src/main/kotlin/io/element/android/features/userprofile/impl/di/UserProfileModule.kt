@@ -34,7 +34,7 @@ object UserProfileModule {
         startDMAction: StartDMAction,
     ): UserProfilePresenter.Factory {
         return object : UserProfilePresenter.Factory {
-            override fun create(userId: UserId): UserProfilePresenter {
+            override fun create(userId: String): UserProfilePresenter {
                 return UserProfilePresenter(userId, matrixClient, startDMAction)
             }
         }

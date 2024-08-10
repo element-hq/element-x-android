@@ -49,7 +49,7 @@ wysiwyg = "2.37.8"
 telephoto = "0.12.1"
 
 # DI
-dagger = "2.51.1"
+dagger = "2.52"
 anvil = "0.2.3"
 
 # Auto service

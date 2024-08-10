@@ -35,14 +35,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class RoomAliasResolverPresenter @AssistedInject constructor(
-    @Assisted private val roomAlias: RoomAlias,
+    @Assisted roomAlias: String,
     private val matrixClient: MatrixClient,
 ) : Presenter<RoomAliasResolverState> {
     interface Factory {
         fun create(
-            roomAlias: RoomAlias,
+            roomAlias: String,
         ): RoomAliasResolverPresenter
     }
+
+    private val roomAlias = RoomAlias(roomAlias)
 
     @Composable
     override fun present(): RoomAliasResolverState {

@@ -45,7 +45,7 @@ object JoinRoomModule {
     ): JoinRoomPresenter.Factory {
         return object : JoinRoomPresenter.Factory {
             override fun create(
-                roomId: RoomId,
+                roomId: String,
                 roomIdOrAlias: RoomIdOrAlias,
                 roomDescription: Optional<RoomDescription>,
                 serverNames: List<String>,

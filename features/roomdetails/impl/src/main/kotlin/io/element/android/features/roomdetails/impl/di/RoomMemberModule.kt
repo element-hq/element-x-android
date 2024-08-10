@@ -36,7 +36,7 @@ object RoomMemberModule {
         startDMAction: StartDMAction,
     ): RoomMemberDetailsPresenter.Factory {
         return object : RoomMemberDetailsPresenter.Factory {
-            override fun create(roomMemberId: UserId): RoomMemberDetailsPresenter {
+            override fun create(roomMemberId: String): RoomMemberDetailsPresenter {
                 return RoomMemberDetailsPresenter(roomMemberId, matrixClient, room, startDMAction)
             }
         }

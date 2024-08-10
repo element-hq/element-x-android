@@ -47,16 +47,18 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class UserProfilePresenter @AssistedInject constructor(
-    @Assisted private val userId: UserId,
+    @Assisted userId: String,
     private val client: MatrixClient,
     private val startDMAction: StartDMAction,
 ) : Presenter<UserProfileState> {
     interface Factory {
-        fun create(userId: UserId): UserProfilePresenter
+        fun create(userId: String): UserProfilePresenter
     }
 
+    private val userId = UserId(userId)
+
     private val userProfilePresenterHelper = UserProfilePresenterHelper(
-        userId = userId,
+        userId = this.userId,
         client = client,
     )
 

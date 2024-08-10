@@ -348,7 +348,7 @@ class RoomMemberDetailsPresenterTest {
         startDMAction: StartDMAction = FakeStartDMAction()
     ): RoomMemberDetailsPresenter {
         return RoomMemberDetailsPresenter(
-            roomMemberId = roomMemberId,
+            id = roomMemberId,
             client = client,
             room = room,
             startDMAction = startDMAction

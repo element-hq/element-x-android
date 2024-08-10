@@ -53,7 +53,7 @@ class RoomMemberDetailsNode @AssistedInject constructor(
 
     private val inputs = inputs<RoomMemberDetailsInput>()
     private val callback = inputs<UserProfileNodeHelper.Callback>()
-    private val presenter = presenterFactory.create(inputs.roomMemberId)
+    private val presenter = presenterFactory.create(inputs.roomMemberId.value)
     private val userProfileNodeHelper = UserProfileNodeHelper(inputs.roomMemberId)
 
     init {

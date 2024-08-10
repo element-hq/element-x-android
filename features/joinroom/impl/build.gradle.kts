@@ -40,7 +40,7 @@ anvil {
 
 dependencies {
     implementation(projects.anvilannotations)
-//    ksp(libs.dagger.compiler)
+    ksp(libs.dagger.compiler)
     ksp(projects.anvilcodegen)
 
     api(projects.features.joinroom.api)

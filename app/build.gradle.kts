@@ -26,6 +26,8 @@ import extension.gitRevision
 import extension.koverDependencies
 import extension.locales
 import extension.setupKover
+import org.gradle.internal.extensions.stdlib.capitalized
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("io.element.android-compose-application")
@@ -189,6 +191,10 @@ android {
             buildConfigField("String", "SHORT_FLAVOR_DESCRIPTION", "\"F\"")
             buildConfigField("String", "FLAVOR_DESCRIPTION", "\"FDroid\"")
         }
+    }
+
+    packaging {
+        resources.pickFirsts += listOf("META-INF/gradle/incremental.annotation.processors")
     }
 }
 

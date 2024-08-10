@@ -55,7 +55,7 @@ import kotlinx.coroutines.launch
 import java.util.Optional
 
 class JoinRoomPresenter @AssistedInject constructor(
-    @Assisted private val roomId: RoomId,
+    @Assisted roomId: String,
     @Assisted private val roomIdOrAlias: RoomIdOrAlias,
     @Assisted private val roomDescription: Optional<RoomDescription>,
     @Assisted private val serverNames: List<String>,
@@ -68,13 +68,15 @@ class JoinRoomPresenter @AssistedInject constructor(
 ) : Presenter<JoinRoomState> {
     interface Factory {
         fun create(
-            roomId: RoomId,
+            roomId: String,
             roomIdOrAlias: RoomIdOrAlias,
             roomDescription: Optional<RoomDescription>,
             serverNames: List<String>,
             trigger: JoinedRoom.Trigger,
         ): JoinRoomPresenter
     }
+
+    private val roomId = RoomId(roomId)
 
     @Composable
     override fun present(): JoinRoomState {

@@ -1,3 +1,6 @@
+import org.gradle.internal.extensions.stdlib.capitalized
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 /*
  * Copyright (c) 2023 New Vector Ltd
  *
@@ -15,8 +18,9 @@
  */
 plugins {
     id("io.element.android-library")
-    alias(libs.plugins.anvil)
     alias(libs.plugins.sqldelight)
+    alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -32,7 +36,9 @@ anvil {
 }
 
 dependencies {
-    implementation(libs.dagger)
+    ksp(libs.dagger.compiler)
+    implementation(libs.dagger.compiler)
+
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.encryptedDb)
@@ -62,6 +68,17 @@ sqldelight {
             // ./gradlew verifySqlDelightMigration
             schemaOutputDirectory = File("src/main/sqldelight/databases")
             verifyMigrations = true
+        }
+    }
+}
+
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        afterEvaluate {
+            val variantName = variant.name.capitalized()
+            tasks.getByName<KotlinCompile>("ksp${variantName}Kotlin") {
+                setSource(tasks.getByName("generate${variantName}SessionDatabaseInterface").outputs)
+            }
         }
     }
 }

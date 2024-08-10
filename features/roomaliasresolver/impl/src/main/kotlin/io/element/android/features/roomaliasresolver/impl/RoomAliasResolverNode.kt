@@ -39,7 +39,7 @@ class RoomAliasResolverNode @AssistedInject constructor(
     private val inputs = inputs<RoomAliasResolverEntryPoint.Params>()
 
     private val presenter = presenterFactory.create(
-        inputs.roomAlias
+        inputs.roomAlias.value
     )
 
     private fun onAliasResolved(data: ResolvedRoomAlias) {

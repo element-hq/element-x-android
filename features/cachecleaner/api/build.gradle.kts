@@ -24,7 +24,15 @@ android {
     namespace = "io.element.android.features.cachecleaner.api"
 }
 
+anvil {
+    useKsp(
+        contributesAndFactoryGeneration = true,
+        componentMerging = true,
+    )
+}
+
 dependencies {
+    ksp(libs.dagger.compiler)
     implementation(projects.libraries.architecture)
     implementation(libs.androidx.startup)
 }
