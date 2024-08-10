@@ -16,6 +16,7 @@
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -23,12 +24,18 @@ android {
 }
 
 anvil {
-    generateDaggerFactories.set(true)
+    useKsp(
+        contributesAndFactoryGeneration = true,
+        componentMerging = true,
+    )
+//    generateDaggerFactories = true
 }
 
 dependencies {
+    ksp(libs.dagger.compiler)
     implementation(libs.dagger)
-    implementation(projects.libraries.architecture)
     implementation(projects.libraries.di)
+
+    implementation(projects.libraries.architecture)
     api(projects.services.analytics.api)
 }

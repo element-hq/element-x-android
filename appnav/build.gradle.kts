@@ -21,7 +21,7 @@ import extension.allFeaturesApi
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
-    alias(libs.plugins.kapt)
+    alias(libs.plugins.ksp)
     id("kotlin-parcelize")
 }
 
@@ -29,11 +29,18 @@ android {
     namespace = "io.element.android.appnav"
 }
 
+anvil {
+    useKsp(
+        contributesAndFactoryGeneration = true,
+        componentMerging = true,
+    )
+}
+
 dependencies {
     implementation(projects.anvilannotations)
-    anvil(projects.anvilcodegen)
+    ksp(projects.anvilcodegen)
     implementation(libs.dagger)
-    kapt(libs.dagger.compiler)
+    ksp(libs.dagger.compiler)
 
     allFeaturesApi(rootDir, logger)
 

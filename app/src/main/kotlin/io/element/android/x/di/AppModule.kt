@@ -82,7 +82,7 @@ object AppModule {
         @ApplicationContext context: Context,
         buildType: BuildType,
         enterpriseService: EnterpriseService,
-    ) = BuildMeta(
+    ): BuildMeta = BuildMeta(
         isDebuggable = BuildConfig.DEBUG,
         buildType = buildType,
         applicationName = ApplicationConfig.APPLICATION_NAME.takeIf { it.isNotEmpty() } ?: context.getString(R.string.app_name),

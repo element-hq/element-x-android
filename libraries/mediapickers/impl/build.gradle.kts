@@ -21,11 +21,19 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.mediapickers.impl"
+}
 
-    dependencies {
-        implementation(projects.libraries.core)
-        implementation(projects.libraries.di)
-        implementation(libs.inject)
-        api(projects.libraries.mediapickers.api)
-    }
+dependencies {
+    implementation(projects.libraries.core)
+    implementation(projects.libraries.di)
+    implementation(libs.inject)
+    implementation(libs.dagger)
+    api(projects.libraries.mediapickers.api)
+}
+
+anvil {
+    useKsp(
+        contributesAndFactoryGeneration = true,
+        componentMerging = true,
+    )
 }

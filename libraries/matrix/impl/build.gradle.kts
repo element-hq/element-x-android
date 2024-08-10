@@ -17,6 +17,7 @@
 plugins {
     id("io.element.android-library")
     alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
 }
 
@@ -25,7 +26,11 @@ android {
 }
 
 anvil {
-    generateDaggerFactories.set(true)
+    useKsp(
+        contributesAndFactoryGeneration = true,
+        componentMerging = true,
+    )
+//    generateDaggerFactories = true
 }
 
 dependencies {
@@ -45,12 +50,16 @@ dependencies {
     implementation(projects.services.analytics.api)
     implementation(projects.services.toolbox.api)
     api(projects.libraries.matrix.api)
-    implementation(libs.dagger)
     implementation(projects.libraries.core)
     implementation("net.java.dev.jna:jna:5.14.0@aar")
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.serialization.json)
     implementation(libs.kotlinx.collections.immutable)
+
+    implementation(projects.anvilannotations)
+    ksp(projects.anvilcodegen)
+    implementation(libs.dagger)
+    ksp(libs.dagger.compiler)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)

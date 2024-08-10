@@ -41,6 +41,7 @@ plugins {
     alias(libs.plugins.ktlint)
     alias(libs.plugins.dependencygraph)
     alias(libs.plugins.sonarqube)
+    alias(libs.plugins.compose.compiler)
 }
 
 tasks.register<Delete>("clean").configure {
@@ -238,5 +239,12 @@ subprojects {
                 )
             }
         }
+    }
+}
+
+allprojects {
+    //Support @JvmDefault
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java).all {
+        compilerOptions.freeCompilerArgs.add("-Xjvm-default=all")
     }
 }

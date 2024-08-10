@@ -17,6 +17,7 @@
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
     id("kotlin-parcelize")
 }
 
@@ -31,12 +32,17 @@ android {
 }
 
 anvil {
-    generateDaggerFactories.set(true)
+    useKsp(
+        contributesAndFactoryGeneration = true,
+        componentMerging = true,
+    )
+//    generateDaggerFactories = true
 }
 
 dependencies {
     implementation(projects.anvilannotations)
-    anvil(projects.anvilcodegen)
+    ksp(projects.anvilcodegen)
+    ksp(libs.dagger.compiler)
     implementation(projects.appconfig)
     implementation(projects.services.toolbox.api)
     implementation(projects.libraries.androidutils)

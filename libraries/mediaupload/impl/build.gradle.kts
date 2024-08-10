@@ -17,43 +17,47 @@
 plugins {
     id("io.element.android-library")
     alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "io.element.android.libraries.mediaupload.impl"
-
-    anvil {
-        generateDaggerFactories.set(true)
-    }
 
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
         }
     }
+}
 
-    dependencies {
-        implementation(projects.anvilannotations)
-        anvil(projects.anvilcodegen)
+anvil {
+    useKsp(
+        contributesAndFactoryGeneration = true,
+        componentMerging = true,
+    )
+}
 
-        api(projects.libraries.mediaupload.api)
-        implementation(projects.libraries.architecture)
-        implementation(projects.libraries.androidutils)
-        implementation(projects.libraries.core)
-        implementation(projects.libraries.di)
-        implementation(projects.libraries.matrix.api)
-        implementation(projects.services.toolbox.api)
-        implementation(libs.inject)
-        implementation(libs.androidx.exifinterface)
-        implementation(libs.coroutines.core)
-        implementation(libs.otaliastudios.transcoder)
-        implementation(libs.vanniktech.blurhash)
+dependencies {
+    implementation(projects.anvilannotations)
+    ksp(projects.anvilcodegen)
 
-        testImplementation(libs.test.junit)
-        testImplementation(libs.test.robolectric)
-        testImplementation(libs.coroutines.test)
-        testImplementation(libs.test.truth)
-        testImplementation(projects.tests.testutils)
-        testImplementation(projects.services.toolbox.test)
-    }
+    api(projects.libraries.mediaupload.api)
+    implementation(projects.libraries.architecture)
+    implementation(projects.libraries.androidutils)
+    implementation(projects.libraries.core)
+    implementation(projects.libraries.di)
+    implementation(projects.libraries.matrix.api)
+    implementation(projects.services.toolbox.api)
+    implementation(libs.inject)
+    implementation(libs.androidx.exifinterface)
+    implementation(libs.coroutines.core)
+    implementation(libs.otaliastudios.transcoder)
+    implementation(libs.vanniktech.blurhash)
+
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.robolectric)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.test.truth)
+    testImplementation(projects.tests.testutils)
+    testImplementation(projects.services.toolbox.test)
 }

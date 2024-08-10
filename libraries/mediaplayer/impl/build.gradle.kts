@@ -16,6 +16,7 @@
 plugins {
     id("io.element.android-library")
     alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -23,15 +24,20 @@ android {
 }
 
 anvil {
-    generateDaggerFactories.set(true)
+    useKsp(
+        contributesAndFactoryGeneration = true,
+        componentMerging = true,
+    )
+//    generateDaggerFactories = true
 }
 
 dependencies {
-    api(projects.libraries.mediaplayer.api)
-    implementation(libs.androidx.media3.exoplayer)
-
+    ksp(libs.dagger.compiler)
     implementation(libs.dagger)
     implementation(projects.libraries.di)
+
+    api(projects.libraries.mediaplayer.api)
+    implementation(libs.androidx.media3.exoplayer)
 
     implementation(libs.coroutines.core)
 

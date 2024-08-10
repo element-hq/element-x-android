@@ -16,7 +16,7 @@
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.kapt)
+//    alias(libs.plugins.kapt)
 }
 
 dependencies {
@@ -26,5 +26,7 @@ dependencies {
     implementation(libs.kotlinpoet)
     implementation(libs.dagger)
     compileOnly(libs.google.autoservice.annotations)
-    kapt(libs.google.autoservice)
+//    kapt(libs.google.autoservice)
+    implementation(libs.ksp.plugin)
+    implementation(libs.kotlinpoet.ksp)
 }

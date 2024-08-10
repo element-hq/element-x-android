@@ -17,6 +17,7 @@
 plugins {
     id("io.element.android-library")
     alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -28,7 +29,7 @@ android {
 
     dependencies {
         implementation(projects.anvilannotations)
-        anvil(projects.anvilcodegen)
+        ksp(projects.anvilcodegen)
 
         implementation(projects.libraries.architecture)
         implementation(projects.libraries.androidutils)

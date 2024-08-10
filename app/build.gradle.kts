@@ -31,7 +31,8 @@ plugins {
     id("io.element.android-compose-application")
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.anvil)
-    alias(libs.plugins.kapt)
+    alias(libs.plugins.ksp)
+//    alias(libs.plugins.kapt)
     // When using precompiled plugins, we need to apply the firebase plugin like this
     id(libs.plugins.firebaseAppDistribution.get().pluginId)
     alias(libs.plugins.knit)
@@ -217,6 +218,14 @@ androidComponents {
     }
 }
 
+anvil {
+    useKsp(
+        contributesAndFactoryGeneration = true,
+        componentMerging = true,
+    )
+//    generateDaggerFactories = true
+}
+
 // Knit
 apply {
     plugin("kotlinx-knit")
@@ -252,7 +261,7 @@ dependencies {
     implementation(projects.appnav)
     implementation(projects.appconfig)
     implementation(projects.libraries.uiStrings)
-    anvil(projects.anvilcodegen)
+    ksp(projects.anvilcodegen)
 
     // Comment to not include firebase in the project
     "gplayImplementation"(projects.libraries.pushproviders.firebase)
@@ -277,9 +286,10 @@ dependencies {
     implementation(libs.serialization.json)
 
     implementation(libs.matrix.emojibase.bindings)
+    implementation(libs.matrix.sdk)
 
     implementation(libs.dagger)
-    kapt(libs.dagger.compiler)
+    ksp(libs.dagger.compiler)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.test.robolectric)

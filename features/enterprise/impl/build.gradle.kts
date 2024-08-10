@@ -18,6 +18,13 @@ plugins {
     alias(libs.plugins.anvil)
 }
 
+anvil {
+    useKsp(
+        contributesAndFactoryGeneration = true,
+        componentMerging = true,
+    )
+}
+
 android {
     namespace = "io.element.android.features.enterprise.impl"
 }
