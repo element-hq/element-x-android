@@ -5,7 +5,6 @@ buildscript {
     dependencies {
         classpath(libs.kotlin.gradle.plugin)
         classpath(libs.gms.google.services)
-        classpath(libs.oss.licenses.plugin)
     }
 }
 
@@ -201,24 +200,6 @@ subprojects {
     tasks.findByName("recordPaparazzi")?.dependsOn(removeOldScreenshotsTask)
     tasks.findByName("recordPaparazziDebug")?.dependsOn(removeOldScreenshotsTask)
     tasks.findByName("recordPaparazziRelease")?.dependsOn(removeOldScreenshotsTask)
-}
-
-// Workaround for https://github.com/airbnb/Showkase/issues/335
-subprojects {
-    tasks.withType<KspTask> {
-        doLast {
-            fileTree(layout.buildDirectory).apply { include("**/*ShowkaseExtension*.kt") }.files.forEach { file ->
-                ReplaceRegExp().apply {
-                    setMatch("^public fun Showkase.getMetadata")
-                    setReplace("@Suppress(\"DEPRECATION\") public fun Showkase.getMetadata")
-                    setFlags("g")
-                    setByLine(true)
-                    setFile(file)
-                    execute()
-                }
-            }
-        }
-    }
 }
 
 subprojects {

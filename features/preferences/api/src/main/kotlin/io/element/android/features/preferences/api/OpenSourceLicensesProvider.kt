@@ -16,9 +16,10 @@
 
 package io.element.android.features.preferences.api
 
-import android.app.Activity
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
 
 interface OpenSourceLicensesProvider {
     val hasOpenSourceLicenses: Boolean
-    fun navigateToOpenSourceLicenses(activity: Activity)
+    fun getLicensesNode(node: Node, buildContext: BuildContext): Node?
 }

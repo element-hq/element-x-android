@@ -73,7 +73,6 @@ gms_google_services = "com.google.gms:google-services:4.4.2"
 google_firebase_bom = "com.google.firebase:firebase-bom:33.1.2"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
-oss_licenses_plugin = "com.google.android.gms:oss-licenses-plugin:0.10.6"
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 
 # AndroidX
@@ -187,7 +186,6 @@ maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.0"
 opusencoder = "io.element.android:opusencoder:1.1.0"
 kotlinpoet = "com.squareup:kotlinpoet:1.18.1"
 zxing_cpp = "io.github.zxing-cpp:android:2.2.0"
-play_services_oss_licenses = "com.google.android.gms:play-services-oss-licenses:17.1.0"
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.5.0"
@@ -238,3 +236,4 @@ firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.
 knit = { id = "org.jetbrains.kotlinx.knit", version = "0.5.0" }
 sonarqube = "org.sonarqube:5.1.0.4882"
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+licensee = "app.cash.licensee:1.11.0"

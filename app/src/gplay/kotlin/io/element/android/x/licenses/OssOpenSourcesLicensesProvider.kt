@@ -16,22 +16,19 @@
 
 package io.element.android.x.licenses
 
-import android.app.Activity
-import android.content.Intent
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.preferences.api.OpenSourceLicensesProvider
+import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.ui.strings.CommonStrings
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class OssOpenSourcesLicensesProvider @Inject constructor() : OpenSourceLicensesProvider {
     override val hasOpenSourceLicenses: Boolean = true
 
-    override fun navigateToOpenSourceLicenses(activity: Activity) {
-        val title = activity.getString(CommonStrings.common_open_source_licenses)
-        OssLicensesMenuActivity.setActivityTitle(title)
-        activity.startActivity(Intent(activity, OssLicensesMenuActivity::class.java))
+    override fun getLicensesNode(node: Node, buildContext: BuildContext): Node? {
+        return node.createNode<DependenciesFlowNode>(buildContext)
     }
 }

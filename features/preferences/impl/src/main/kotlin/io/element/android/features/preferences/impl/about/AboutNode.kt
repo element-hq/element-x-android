@@ -36,8 +36,10 @@ class AboutNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: AboutPresenter,
-    private val openSourceLicensesProvider: OpenSourceLicensesProvider,
 ) : Node(buildContext, plugins = plugins) {
+    interface Callback : Plugin {
+        fun openOssLicenses()
+    }
     private fun onElementLegalClick(
         activity: Activity,
         darkTheme: Boolean,
@@ -58,7 +60,7 @@ class AboutNode @AssistedInject constructor(
                 onElementLegalClick(activity, isDark, elementLegal)
             },
             onOpenSourceLicensesClick = {
-                openSourceLicensesProvider.navigateToOpenSourceLicenses(activity)
+                plugins.filterIsInstance<Callback>().forEach { it.openOssLicenses() }
             },
             modifier = modifier
         )

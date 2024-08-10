@@ -26,7 +26,7 @@ import javax.inject.Inject
 class FdroidOpenSourceLicensesProvider @Inject constructor() : OpenSourceLicensesProvider {
     override val hasOpenSourceLicenses: Boolean = false
 
-    override fun navigateToOpenSourceLicenses(activity: Activity) {
-        error("Not supported, please ensure that hasOpenSourcesLicenses is true before calling this method")
+    override fun getLicensesNode(node: Node, buildContext: BuildContext): Node? {
+        return null
     }
 }
