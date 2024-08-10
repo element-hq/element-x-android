@@ -189,6 +189,8 @@ class RoomSummaryListProcessorTest {
         override fun syncIndicator(delayBeforeShowingInMs: UInt, delayBeforeHidingInMs: UInt, listener: RoomListServiceSyncIndicatorListener): TaskHandle {
             return TaskHandle(Pointer.NULL)
         }
+
+        override fun subscribeToRooms(roomIds: List<String>, settings: RoomSubscription?) = Unit
     }
 }
 
@@ -270,6 +272,4 @@ class FakeRoomListItem(
     override suspend fun latestEvent(): EventTimelineItem? {
         return latestEvent
     }
-
-    override fun subscribe(settings: RoomSubscription?) = Unit
 }
