@@ -27,6 +27,7 @@ android {
     buildTypes {
         getByName("release") {
             consumerProguardFiles("consumer-proguard-rules.pro")
+            proguardFiles("proguard-rules.pro")
             resValue(
                 type = "string",
                 name = "google_app_id",
