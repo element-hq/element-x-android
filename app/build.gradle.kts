@@ -23,10 +23,10 @@ import extension.AssetCopyTask
 import extension.GitBranchNameValueSource
 import extension.GitRevisionValueSource
 import extension.allEnterpriseImpl
-import extension.allFeaturesImpl
 import extension.allLibrariesImpl
 import extension.allServicesImpl
 import extension.koverDependencies
+import extension.allFeaturesImpl
 import extension.locales
 import extension.setupKover
 import java.util.Locale
@@ -259,12 +259,12 @@ dependencies {
     allLibrariesImpl()
     allServicesImpl()
     if (isEnterpriseBuild) {
-        allEnterpriseImpl(rootDir, logger)
+        allEnterpriseImpl(project)
         implementation(projects.appicon.enterprise)
     } else {
         implementation(projects.appicon.element)
     }
-    allFeaturesImpl(rootDir, logger)
+    allFeaturesImpl(project)
     implementation(projects.features.migration.api)
     implementation(projects.anvilannotations)
     implementation(projects.appnav)

@@ -42,7 +42,7 @@ dependencies {
     implementation(libs.dagger)
     ksp(libs.dagger.compiler)
 
-    allFeaturesApi(rootDir, logger)
+    allFeaturesApi(project)
 
     implementation(projects.libraries.core)
     implementation(projects.libraries.androidutils)

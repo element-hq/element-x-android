@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import extension.allFeaturesImpl
 import extension.allLibrariesImpl
 import extension.allServicesImpl
+import extension.allFeaturesImpl
 
 plugins {
     id("io.element.android-compose-library")
@@ -61,7 +61,7 @@ dependencies {
     implementation(projects.appnav)
     allLibrariesImpl()
     allServicesImpl()
-    allFeaturesImpl(rootDir, logger)
+    allFeaturesImpl(project)
     implementation(projects.appicon.element)
     implementation(projects.appicon.enterprise)
 
