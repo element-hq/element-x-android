@@ -27,7 +27,6 @@ android {
     buildTypes {
         getByName("release") {
             consumerProguardFiles("consumer-proguard-rules.pro")
-            proguardFiles("proguard-rules.pro")
             resValue(
                 type = "string",
                 name = "google_app_id",
@@ -50,9 +49,7 @@ android {
             )
         }
         register("nightly") {
-            isMinifyEnabled = true
             consumerProguardFiles("consumer-proguard-rules.pro")
-            proguardFiles("proguard-rules.pro")
             matchingFallbacks += listOf("release")
             resValue(
                 type = "string",
