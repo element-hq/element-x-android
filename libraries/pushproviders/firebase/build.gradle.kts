@@ -49,7 +49,6 @@ android {
             )
         }
         register("nightly") {
-            isMinifyEnabled = true
             consumerProguardFiles("consumer-proguard-rules.pro")
             matchingFallbacks += listOf("release")
             resValue(
