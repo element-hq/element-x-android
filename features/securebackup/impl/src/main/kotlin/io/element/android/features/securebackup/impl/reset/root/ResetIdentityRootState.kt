@@ -16,7 +16,7 @@
 
 package io.element.android.features.securebackup.impl.reset.root
 
-data class ResetKeyRootState(
+data class ResetIdentityRootState(
     val displayConfirmationDialog: Boolean,
-    val eventSink: (ResetKeyRootEvent) -> Unit,
+    val eventSink: (ResetIdentityRootEvent) -> Unit,
 )

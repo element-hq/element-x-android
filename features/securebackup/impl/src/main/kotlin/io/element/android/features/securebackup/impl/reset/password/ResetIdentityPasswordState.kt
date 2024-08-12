@@ -14,20 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.features.securebackup.impl.reset.root
+package io.element.android.features.securebackup.impl.reset.password
 
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.AsyncAction
 
-class ResetKeyRootStateProvider : PreviewParameterProvider<ResetKeyRootState> {
-    override val values: Sequence<ResetKeyRootState>
-        get() = sequenceOf(
-            ResetKeyRootState(
-                displayConfirmationDialog = false,
-                eventSink = {}
-            ),
-            ResetKeyRootState(
-                displayConfirmationDialog = true,
-                eventSink = {}
-            )
-        )
-}
+data class ResetIdentityPasswordState(
+    val resetAction: AsyncAction<Unit>,
+    val eventSink: (ResetIdentityPasswordEvent) -> Unit,
+)

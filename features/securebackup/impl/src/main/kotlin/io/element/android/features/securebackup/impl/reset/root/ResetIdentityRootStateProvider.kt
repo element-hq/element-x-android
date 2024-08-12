@@ -16,7 +16,18 @@
 
 package io.element.android.features.securebackup.impl.reset.root
 
-sealed interface ResetKeyRootEvent {
-    data object Continue : ResetKeyRootEvent
-    data object DismissDialog : ResetKeyRootEvent
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+
+class ResetIdentityRootStateProvider : PreviewParameterProvider<ResetIdentityRootState> {
+    override val values: Sequence<ResetIdentityRootState>
+        get() = sequenceOf(
+            ResetIdentityRootState(
+                displayConfirmationDialog = false,
+                eventSink = {}
+            ),
+            ResetIdentityRootState(
+                displayConfirmationDialog = true,
+                eventSink = {}
+            )
+        )
 }

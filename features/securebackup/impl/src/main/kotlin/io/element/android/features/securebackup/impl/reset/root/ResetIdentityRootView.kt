@@ -43,8 +43,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-fun ResetKeyRootView(
-    state: ResetKeyRootState,
+fun ResetIdentityRootView(
+    state: ResetIdentityRootState,
     onContinue: () -> Unit,
     onBack: () -> Unit,
 ) {
@@ -58,7 +58,7 @@ fun ResetKeyRootView(
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(id = CommonStrings.action_continue),
-                onClick = { state.eventSink(ResetKeyRootEvent.Continue) },
+                onClick = { state.eventSink(ResetIdentityRootEvent.Continue) },
                 destructive = true,
             )
         },
@@ -71,11 +71,11 @@ fun ResetKeyRootView(
             content = stringResource(CommonStrings.screen_reset_encryption_confirmation_alert_subtitle),
             submitText = stringResource(CommonStrings.screen_reset_encryption_confirmation_alert_action),
             onSubmitClick = {
-                state.eventSink(ResetKeyRootEvent.DismissDialog)
+                state.eventSink(ResetIdentityRootEvent.DismissDialog)
                 onContinue()
             },
             destructiveSubmit = true,
-            onDismiss = { state.eventSink(ResetKeyRootEvent.DismissDialog) }
+            onDismiss = { state.eventSink(ResetIdentityRootEvent.DismissDialog) }
         )
     }
 }
@@ -138,9 +138,9 @@ private fun Content() {
 
 @PreviewsDayNight
 @Composable
-internal fun ResetKeyRootViewPreview(@PreviewParameter(ResetKeyRootStateProvider::class) state: ResetKeyRootState) {
+internal fun ResetIdentityRootViewPreview(@PreviewParameter(ResetIdentityRootStateProvider::class) state: ResetIdentityRootState) {
     ElementPreview {
-        ResetKeyRootView(
+        ResetIdentityRootView(
             state = state,
             onContinue = {},
             onBack = {},

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.securebackup.impl.reset.root
+package io.element.android.features.securebackup.impl.reset.password
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,27 +24,32 @@ import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.inputs
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.encryption.IdentityPasswordResetHandle
 
 @ContributesNode(SessionScope::class)
-class ResetKeyRootNode @AssistedInject constructor(
+class ResetIdentityPasswordNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val coroutineDispatchers: CoroutineDispatchers,
 ) : Node(buildContext, plugins = plugins) {
-    interface Callback : Plugin {
-        fun onContinue()
-    }
 
-    private val presenter = ResetKeyRootPresenter()
-    private val callback: Callback = plugins.filterIsInstance<Callback>().first()
+    data class Inputs(val handle: IdentityPasswordResetHandle) : NodeInputs
+
+    private val presenter by lazy {
+        val inputs = inputs<Inputs>()
+        ResetIdentityPasswordPresenter(inputs.handle, dispatchers = coroutineDispatchers)
+    }
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
-        ResetKeyRootView(
+        ResetIdentityPasswordView(
             state = state,
-            onContinue = callback::onContinue,
-            onBack = ::navigateUp,
+            onBack = ::navigateUp
         )
     }
 }

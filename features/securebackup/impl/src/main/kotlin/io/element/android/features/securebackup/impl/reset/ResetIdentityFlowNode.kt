@@ -34,8 +34,8 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.securebackup.impl.reset.password.ResetKeyPasswordNode
-import io.element.android.features.securebackup.impl.reset.root.ResetKeyRootNode
+import io.element.android.features.securebackup.impl.reset.password.ResetIdentityPasswordNode
+import io.element.android.features.securebackup.impl.reset.root.ResetIdentityRootNode
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.BackstackView
@@ -108,18 +108,18 @@ class ResetIdentityFlowNode @AssistedInject constructor(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             is NavTarget.Root -> {
-                val callback = object : ResetKeyRootNode.Callback {
+                val callback = object : ResetIdentityRootNode.Callback {
                     override fun onContinue() {
                         coroutineScope.startReset()
                     }
                 }
-                createNode<ResetKeyRootNode>(buildContext, listOf(callback))
+                createNode<ResetIdentityRootNode>(buildContext, listOf(callback))
             }
             is NavTarget.ResetPassword -> {
                 val handle = resetIdentityFlowManager.currentHandleFlow.value.dataOrNull() as? IdentityPasswordResetHandle ?: error("No password handle found")
-                createNode<ResetKeyPasswordNode>(
+                createNode<ResetIdentityPasswordNode>(
                     buildContext,
-                    listOf(ResetKeyPasswordNode.Inputs(resetIdentityFlowManager.currentSessionId(), handle))
+                    listOf(ResetIdentityPasswordNode.Inputs(handle))
                 )
             }
             is NavTarget.ResetOidc -> {

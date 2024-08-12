@@ -25,21 +25,25 @@ import org.matrix.rustcomponents.sdk.AuthDataPasswordDetails
 import org.matrix.rustcomponents.sdk.CrossSigningResetAuthType
 
 object RustIdentityResetHandleFactory {
-    fun create(identityResetHandle: org.matrix.rustcomponents.sdk.IdentityResetHandle): Result<IdentityResetHandle> {
+    fun create(
+        userId: UserId,
+        identityResetHandle: org.matrix.rustcomponents.sdk.IdentityResetHandle
+    ): Result<IdentityResetHandle> {
         return runCatching {
             when (val authType = identityResetHandle.authType()) {
                 is CrossSigningResetAuthType.Oidc -> RustOidcIdentityResetHandle(identityResetHandle, authType.info.approvalUrl)
                 // User interactive authentication (user + password)
-                CrossSigningResetAuthType.Uiaa -> RustPasswordIdentityResetHandle(identityResetHandle)
+                CrossSigningResetAuthType.Uiaa -> RustPasswordIdentityResetHandle(userId, identityResetHandle)
             }
         }
     }
 }
 
 class RustPasswordIdentityResetHandle(
+    private val userId: UserId,
     private val identityResetHandle: org.matrix.rustcomponents.sdk.IdentityResetHandle,
 ) : IdentityPasswordResetHandle {
-    override suspend fun resetPassword(userId: UserId, password: String): Result<Unit> {
+    override suspend fun resetPassword(password: String): Result<Unit> {
         return runCatching { identityResetHandle.reset(AuthData.Password(AuthDataPasswordDetails(userId.value, password))) }
     }
 

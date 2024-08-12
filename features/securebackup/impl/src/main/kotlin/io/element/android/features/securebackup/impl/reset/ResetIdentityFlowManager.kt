@@ -19,7 +19,6 @@ package io.element.android.features.securebackup.impl.reset
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.encryption.IdentityResetHandle
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
@@ -44,10 +43,6 @@ class ResetIdentityFlowManager @Inject constructor(
             sessionVerificationService.sessionVerifiedStatus.filterIsInstance<SessionVerifiedStatus.Verified>().first()
             block()
         }
-    }
-
-    fun currentSessionId(): SessionId {
-        return matrixClient.sessionId
     }
 
     fun getResetHandle(): StateFlow<AsyncData<IdentityResetHandle>> {

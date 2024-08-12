@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.test.encryption
 
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.IdentityOidcResetHandle
 import io.element.android.libraries.matrix.api.encryption.IdentityPasswordResetHandle
 
@@ -35,11 +34,11 @@ class FakeIdentityOidcResetHandle(
 }
 
 class FakeIdentityPasswordResetHandle(
-    var resetPasswordLambda: (UserId, String) -> Result<Unit> = { _, _ -> error("Not implemented") },
+    var resetPasswordLambda: (String) -> Result<Unit> = { _ -> error("Not implemented") },
     var cancelLambda: () -> Unit = { error("Not implemented") },
 ) : IdentityPasswordResetHandle {
-    override suspend fun resetPassword(userId: UserId, password: String): Result<Unit> {
-        return resetPasswordLambda(userId, password)
+    override suspend fun resetPassword(password: String): Result<Unit> {
+        return resetPasswordLambda(password)
     }
 
     override suspend fun cancel() {

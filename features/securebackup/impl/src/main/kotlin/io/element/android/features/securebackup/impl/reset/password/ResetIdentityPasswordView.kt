@@ -46,8 +46,8 @@ import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKe
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
-fun ResetKeyPasswordView(
-    state: ResetKeyPasswordState,
+fun ResetIdentityPasswordView(
+    state: ResetIdentityPasswordState,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -63,7 +63,7 @@ fun ResetKeyPasswordView(
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(CommonStrings.action_reset_identity),
-                onClick = { state.eventSink(ResetKeyPasswordEvent.Reset(passwordState.value)) },
+                onClick = { state.eventSink(ResetIdentityPasswordEvent.Reset(passwordState.value)) },
                 destructive = true,
             )
         }
@@ -74,7 +74,7 @@ fun ResetKeyPasswordView(
     } else if (state.resetAction.isFailure()) {
         ErrorDialog(
             content = stringResource(CommonStrings.error_unknown),
-            onDismiss = { state.eventSink(ResetKeyPasswordEvent.DismissError) }
+            onDismiss = { state.eventSink(ResetIdentityPasswordEvent.DismissError) }
         )
     }
 }
@@ -107,10 +107,10 @@ private fun Content(textFieldState: MutableState<String>) {
 
 @PreviewsDayNight
 @Composable
-internal fun ResetKeyPasswordViewPreview() {
+internal fun ResetIdentityPasswordViewPreview() {
     ElementPreview {
-        ResetKeyPasswordView(
-            state = ResetKeyPasswordState(
+        ResetIdentityPasswordView(
+            state = ResetIdentityPasswordState(
                 resetAction = AsyncAction.Uninitialized,
                 eventSink = {}
             ),

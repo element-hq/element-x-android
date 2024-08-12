@@ -24,37 +24,37 @@ import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
-import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.encryption.IdentityPasswordResetHandle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-class ResetKeyPasswordPresenter(
-    private val userId: UserId,
+class ResetIdentityPasswordPresenter(
     private val identityPasswordResetHandle: IdentityPasswordResetHandle,
-) : Presenter<ResetKeyPasswordState> {
+    private val dispatchers: CoroutineDispatchers,
+) : Presenter<ResetIdentityPasswordState> {
     @Composable
-    override fun present(): ResetKeyPasswordState {
+    override fun present(): ResetIdentityPasswordState {
         val coroutineScope = rememberCoroutineScope()
 
         val resetAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
 
-        fun handleEvent(event: ResetKeyPasswordEvent) {
+        fun handleEvent(event: ResetIdentityPasswordEvent) {
             when (event) {
-                is ResetKeyPasswordEvent.Reset -> coroutineScope.reset(userId, event.password, resetAction)
-                ResetKeyPasswordEvent.DismissError -> resetAction.value = AsyncAction.Uninitialized
+                is ResetIdentityPasswordEvent.Reset -> coroutineScope.reset(event.password, resetAction)
+                ResetIdentityPasswordEvent.DismissError -> resetAction.value = AsyncAction.Uninitialized
             }
         }
 
-        return ResetKeyPasswordState(
+        return ResetIdentityPasswordState(
             resetAction = resetAction.value,
             eventSink = ::handleEvent
         )
     }
 
-    private fun CoroutineScope.reset(userId: UserId, password: String, action: MutableState<AsyncAction<Unit>>) = launch {
+    private fun CoroutineScope.reset(password: String, action: MutableState<AsyncAction<Unit>>) = launch(dispatchers.io) {
         suspend {
-            identityPasswordResetHandle.resetPassword(userId, password).getOrThrow()
+            identityPasswordResetHandle.resetPassword(password).getOrThrow()
         }.runCatchingUpdatingState(action)
     }
 }

@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package io.element.android.features.securebackup.impl.reset.password
+package io.element.android.features.securebackup.impl.reset.root
 
-import io.element.android.libraries.architecture.AsyncAction
-
-data class ResetKeyPasswordState(
-    val resetAction: AsyncAction<Unit>,
-    val eventSink: (ResetKeyPasswordEvent) -> Unit,
-)
+sealed interface ResetIdentityRootEvent {
+    data object Continue : ResetIdentityRootEvent
+    data object DismissDialog : ResetIdentityRootEvent
+}

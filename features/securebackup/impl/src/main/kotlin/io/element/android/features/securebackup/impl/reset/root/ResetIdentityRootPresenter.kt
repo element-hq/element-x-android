@@ -23,19 +23,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Presenter
 
-class ResetKeyRootPresenter : Presenter<ResetKeyRootState> {
+class ResetIdentityRootPresenter : Presenter<ResetIdentityRootState> {
     @Composable
-    override fun present(): ResetKeyRootState {
+    override fun present(): ResetIdentityRootState {
         var displayConfirmDialog by remember { mutableStateOf(false) }
 
-        fun handleEvent(event: ResetKeyRootEvent) {
+        fun handleEvent(event: ResetIdentityRootEvent) {
             displayConfirmDialog = when (event) {
-                ResetKeyRootEvent.Continue -> true
-                ResetKeyRootEvent.DismissDialog -> false
+                ResetIdentityRootEvent.Continue -> true
+                ResetIdentityRootEvent.DismissDialog -> false
             }
         }
 
-        return ResetKeyRootState(
+        return ResetIdentityRootState(
             displayConfirmationDialog = displayConfirmDialog,
             eventSink = ::handleEvent
         )

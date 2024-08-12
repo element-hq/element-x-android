@@ -16,7 +16,6 @@
 
 package io.element.android.libraries.matrix.api.encryption
 
-import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -90,10 +89,9 @@ interface IdentityPasswordResetHandle : IdentityResetHandle {
      * This method will block the coroutine it's running on and keep polling indefinitely until either the coroutine is cancelled, the [cancel] method is
      * called, or the identity is reset.
      *
-     * @param userId the user id of the user to reset the password for.
      * @param password the current password, which will be validated before the process takes place.
      */
-    suspend fun resetPassword(userId: UserId, password: String): Result<Unit>
+    suspend fun resetPassword(password: String): Result<Unit>
 }
 
 /**

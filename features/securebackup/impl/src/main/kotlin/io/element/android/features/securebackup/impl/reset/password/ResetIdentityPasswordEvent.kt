@@ -16,7 +16,7 @@
 
 package io.element.android.features.securebackup.impl.reset.password
 
-sealed interface ResetKeyPasswordEvent {
-    data class Reset(val password: String) : ResetKeyPasswordEvent
-    data object DismissError : ResetKeyPasswordEvent
+sealed interface ResetIdentityPasswordEvent {
+    data class Reset(val password: String) : ResetIdentityPasswordEvent
+    data object DismissError : ResetIdentityPasswordEvent
 }
