@@ -81,8 +81,9 @@ allprojects {
             // To have XML report for Danger
             reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
         }
+        val generatedPath = "${layout.buildDirectory.asFile.get()}/generated/"
         filter {
-            exclude { element -> element.file.path.contains("${layout.buildDirectory.asFile.get()}/generated/") }
+            exclude { element -> element.file.path.contains(generatedPath) }
         }
     }
     // Dependency check
@@ -201,25 +202,30 @@ subprojects {
 
 subprojects {
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-        kotlinOptions {
+        compilerOptions {
             if (project.findProperty("composeCompilerReports") == "true") {
-                freeCompilerArgs += listOf(
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
-                        "${project.layout.buildDirectory.asFile.get().absolutePath}/compose_compiler"
+                freeCompilerArgs.addAll(
+                    listOf(
+                        "-P",
+                        "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+                            "${project.layout.buildDirectory.asFile.get().absolutePath}/compose_compiler"
+                    )
                 )
             }
             if (project.findProperty("composeCompilerMetrics") == "true") {
-                freeCompilerArgs += listOf(
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
-                        "${project.layout.buildDirectory.asFile.get().absolutePath}/compose_compiler"
+                freeCompilerArgs.addAll(
+                    listOf(
+                        "-P",
+                        "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
+                            "${project.layout.buildDirectory.asFile.get().absolutePath}/compose_compiler"
+                    )
                 )
             }
         }
     }
 }
 
+// Needed for Anvil + KSP code generation
 allprojects {
     // Support @JvmDefault
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java).all {
