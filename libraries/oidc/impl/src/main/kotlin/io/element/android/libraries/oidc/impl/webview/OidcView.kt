@@ -27,6 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.viewinterop.AndroidView
 import io.element.android.libraries.core.bool.orFalse
@@ -45,6 +46,7 @@ fun OidcView(
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val isPreview = LocalInspectionMode.current
     val oidcUrlParser = remember { OidcUrlParser() }
     var webView by remember { mutableStateOf<WebView?>(null) }
     fun shouldOverrideUrl(url: String): Boolean {
@@ -86,16 +88,18 @@ fun OidcView(
             modifier = Modifier.padding(contentPadding),
             factory = { context ->
                 WebView(context).apply {
-                    webViewClient = oidcWebViewClient
-                    settings.apply {
-                        @SuppressLint("SetJavaScriptEnabled")
-                        javaScriptEnabled = true
-                        allowContentAccess = true
-                        allowFileAccess = true
-                        databaseEnabled = true
-                        domStorageEnabled = true
+                    if (!isPreview) {
+                        webViewClient = oidcWebViewClient
+                        settings.apply {
+                            @SuppressLint("SetJavaScriptEnabled")
+                            javaScriptEnabled = true
+                            allowContentAccess = true
+                            allowFileAccess = true
+                            databaseEnabled = true
+                            domStorageEnabled = true
+                        }
+                        loadUrl(state.oidcDetails.url)
                     }
-                    loadUrl(state.oidcDetails.url)
                 }.also {
                     webView = it
                 }
