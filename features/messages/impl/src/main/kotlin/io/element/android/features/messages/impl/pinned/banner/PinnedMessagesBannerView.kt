@@ -71,16 +71,15 @@ fun PinnedMessagesBannerView(
     onViewAllClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier) {
-        when (state) {
-            PinnedMessagesBannerState.Hidden -> Unit
-            is PinnedMessagesBannerState.Visible -> {
-                PinnedMessagesBannerRow(
-                    state = state,
-                    onClick = onClick,
-                    onViewAllClick = onViewAllClick,
-                )
-            }
+    when (state) {
+        PinnedMessagesBannerState.Hidden -> Unit
+        is PinnedMessagesBannerState.Visible -> {
+            PinnedMessagesBannerRow(
+                state = state,
+                onClick = onClick,
+                onViewAllClick = onViewAllClick,
+                modifier = modifier,
+            )
         }
     }
 }
@@ -136,18 +135,17 @@ private fun ViewAllButton(
     onViewAllClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier) {
-        val text = if (state is PinnedMessagesBannerState.Loaded) {
-            stringResource(id = CommonStrings.screen_room_pinned_banner_view_all_button_title)
-        } else {
-            ""
-        }
-        TextButton(
-            text = text,
-            showProgress = state is PinnedMessagesBannerState.Loading,
-            onClick = onViewAllClick
-        )
+    val text = if (state is PinnedMessagesBannerState.Loaded) {
+        stringResource(id = CommonStrings.screen_room_pinned_banner_view_all_button_title)
+    } else {
+        ""
     }
+    TextButton(
+        text = text,
+        showProgress = state is PinnedMessagesBannerState.Loading,
+        onClick = onViewAllClick,
+        modifier = modifier,
+    )
 }
 
 private fun Modifier.drawBorder(borderColor: Color): Modifier {
