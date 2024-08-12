@@ -70,7 +70,8 @@ class RustMatrixAuthenticationService @Inject constructor(
     // Passphrase which will be used for new sessions. Existing sessions will use the passphrase
     // stored in the SessionData.
     private val pendingPassphrase = getDatabasePassphrase()
-    // Need to keep a copy of the current session path to delete it.
+
+    // Need to keep a copy of the current session path to eventually delete it.
     // Ideally it would be possible to get the sessionPath from the Client to avoid doing this.
     private var sessionPath: File? = null
     private var currentClient: Client? = null
