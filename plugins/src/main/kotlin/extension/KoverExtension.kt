@@ -153,7 +153,7 @@ fun Project.setupKover() {
                 filters {
                     includes {
                         classes(
-                            "*Presenter",
+                            "*.*Presenter",
                         )
                     }
                     excludes {
