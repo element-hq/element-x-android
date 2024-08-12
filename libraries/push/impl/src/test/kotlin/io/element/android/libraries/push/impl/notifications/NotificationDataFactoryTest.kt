@@ -117,7 +117,7 @@ class NotificationDataFactoryTest {
         val roomWithMessage = listOf(A_MESSAGE_EVENT)
 
         val fakeImageLoader = FakeImageLoader()
-        val result = toNotifications(
+        val result = toInviteNotifications(
             messages = roomWithMessage,
             currentUser = MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
             imageLoader = fakeImageLoader.getImageLoader(),
@@ -133,7 +133,7 @@ class NotificationDataFactoryTest {
         val redactedRoom = listOf(A_MESSAGE_EVENT.copy(isRedacted = true))
 
         val fakeImageLoader = FakeImageLoader()
-        val result = toNotifications(
+        val result = toInviteNotifications(
             messages = redactedRoom,
             currentUser = MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
             imageLoader = fakeImageLoader.getImageLoader(),
@@ -168,7 +168,7 @@ class NotificationDataFactoryTest {
         )
 
         val fakeImageLoader = FakeImageLoader()
-        val result = toNotifications(
+        val result = toInviteNotifications(
             messages = roomWithRedactedMessage,
             currentUser = MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
             imageLoader = fakeImageLoader.getImageLoader(),

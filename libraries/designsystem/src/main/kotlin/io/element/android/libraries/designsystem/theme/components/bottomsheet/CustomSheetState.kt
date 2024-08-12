@@ -304,8 +304,6 @@ internal object AnchoredDraggableDefaults {
     /**
      * The default animation used by [AnchoredDraggableState].
      */
-    @get:ExperimentalMaterial3Api
-    @Suppress("OPT_IN_MARKER_ON_WRONG_TARGET")
     @ExperimentalMaterial3Api
     val AnimationSpec = SpringSpec<Float>()
 }
