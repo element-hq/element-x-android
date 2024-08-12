@@ -34,7 +34,7 @@ import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
-class ResetIdentityRootViewTests {
+class ResetIdentityRootViewTest {
     @get:Rule
     val rule = createAndroidComposeRule<ComponentActivity>()
 

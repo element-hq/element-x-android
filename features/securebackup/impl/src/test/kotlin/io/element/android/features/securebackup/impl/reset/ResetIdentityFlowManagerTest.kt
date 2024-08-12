@@ -30,7 +30,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class ResetIdentityFlowManagerTests {
+class ResetIdentityFlowManagerTest {
     @Test
     fun `getResetHandle - emits a reset handle`() = runTest {
         val startResetLambda = lambdaRecorder<Result<IdentityResetHandle?>> { Result.success(FakeIdentityPasswordResetHandle()) }
