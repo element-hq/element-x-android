@@ -25,11 +25,11 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.libraries.oidc.api.OidcAction
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.oidc.api.OidcAction
 import kotlinx.coroutines.launch
 
 class OidcPresenter @AssistedInject constructor(

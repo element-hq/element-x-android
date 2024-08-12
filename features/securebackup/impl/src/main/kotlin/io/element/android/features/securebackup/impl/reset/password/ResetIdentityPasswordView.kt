@@ -18,7 +18,6 @@ package io.element.android.features.securebackup.impl.reset.password
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -58,7 +57,12 @@ fun ResetIdentityPasswordView(
         title = stringResource(CommonStrings.screen_reset_encryption_password_title),
         subTitle = stringResource(CommonStrings.screen_reset_encryption_password_subtitle),
         onBackClick = onBack,
-        content = { Content(textFieldState = passwordState) },
+        content = {
+            Content(
+                text = passwordState.value,
+                onTextChange = { passwordState.value = it }
+            )
+        },
         buttons = {
             Button(
                 modifier = Modifier.fillMaxWidth(),
@@ -80,14 +84,14 @@ fun ResetIdentityPasswordView(
 }
 
 @Composable
-private fun Content(textFieldState: MutableState<String>) {
+private fun Content(text: String, onTextChange: (String) -> Unit) {
     var showPassword by remember { mutableStateOf(false) }
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth()
             .onTabOrEnterKeyFocusNext(LocalFocusManager.current),
-        value = textFieldState.value,
-        onValueChange = { text -> textFieldState.value = text },
+        value = text,
+        onValueChange = onTextChange,
         label = { Text(stringResource(CommonStrings.common_password)) },
         placeholder = { Text(stringResource(CommonStrings.screen_reset_encryption_password_placeholder)) },
         singleLine = true,

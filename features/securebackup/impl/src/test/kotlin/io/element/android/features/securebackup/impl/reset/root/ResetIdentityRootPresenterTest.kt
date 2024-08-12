@@ -23,7 +23,7 @@ import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class ResetIdentityRootPresenterTests {
+class ResetIdentityRootPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = ResetIdentityRootPresenter()

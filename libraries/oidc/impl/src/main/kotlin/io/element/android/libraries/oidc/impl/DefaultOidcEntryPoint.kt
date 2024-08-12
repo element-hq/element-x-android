@@ -24,8 +24,8 @@ import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTa
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.OidcDetails
-import io.element.android.libraries.oidc.impl.webview.OidcNode
 import io.element.android.libraries.oidc.api.OidcEntryPoint
+import io.element.android.libraries.oidc.impl.webview.OidcNode
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)

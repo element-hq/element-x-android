@@ -47,8 +47,10 @@ fun ResetIdentityRootView(
     state: ResetIdentityRootState,
     onContinue: () -> Unit,
     onBack: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     FlowStepPage(
+        modifier = modifier,
         iconStyle = BigIcon.Style.AlertSolid,
         title = stringResource(io.element.android.libraries.ui.strings.R.string.screen_encryption_reset_title),
         subTitle = stringResource(io.element.android.libraries.ui.strings.R.string.screen_encryption_reset_subtitle),

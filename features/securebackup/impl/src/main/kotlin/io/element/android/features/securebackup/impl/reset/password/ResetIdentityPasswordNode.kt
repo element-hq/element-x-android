@@ -36,7 +36,6 @@ class ResetIdentityPasswordNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : Node(buildContext, plugins = plugins) {
-
     data class Inputs(val handle: IdentityPasswordResetHandle) : NodeInputs
 
     private val presenter by lazy {

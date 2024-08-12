@@ -42,6 +42,7 @@ class ResetIdentityRootNode @AssistedInject constructor(
     override fun View(modifier: Modifier) {
         val state = presenter.present()
         ResetIdentityRootView(
+            modifier = modifier,
             state = state,
             onContinue = callback::onContinue,
             onBack = ::navigateUp,

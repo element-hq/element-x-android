@@ -66,7 +66,7 @@ class ResetIdentityFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins,
 ) {
-    interface Callback: Plugin {
+    interface Callback : Plugin {
         fun onDone()
     }
 
