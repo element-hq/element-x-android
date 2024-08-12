@@ -16,7 +16,6 @@
 
 package io.element.android.x.licenses
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -71,9 +70,11 @@ class DependencyLicensesListNode @AssistedInject constructor(
                 )
             },
         ) { contentPadding ->
-            LazyColumn(modifier = Modifier
+            LazyColumn(
+                modifier = Modifier
                 .padding(contentPadding)
-                .padding(horizontal = 16.dp)) {
+                .padding(horizontal = 16.dp)
+            ) {
                 items(licenses) { license ->
                     ListItem(
                         headlineContent = { Text(license.name!!) },

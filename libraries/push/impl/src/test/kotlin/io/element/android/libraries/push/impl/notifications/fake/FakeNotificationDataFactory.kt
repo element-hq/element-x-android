@@ -48,7 +48,11 @@ class FakeNotificationDataFactory(
     var fallbackEventToNotificationsResult: LambdaOneParamRecorder<List<FallbackNotifiableEvent>, List<OneShotNotification>> =
         lambdaRecorder { _ -> emptyList() },
 ) : NotificationDataFactory {
-    override suspend fun toMessageNotifications(messages: List<NotifiableMessageEvent>, currentUser: MatrixUser, imageLoader: ImageLoader): List<RoomNotification> {
+    override suspend fun toMessageNotifications(
+        messages: List<NotifiableMessageEvent>,
+        currentUser: MatrixUser,
+        imageLoader: ImageLoader
+    ): List<RoomNotification> {
         return messageEventToNotificationsResult(messages, currentUser, imageLoader)
     }
 

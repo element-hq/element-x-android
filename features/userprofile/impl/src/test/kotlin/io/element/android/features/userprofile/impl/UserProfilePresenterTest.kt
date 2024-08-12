@@ -232,7 +232,7 @@ class UserProfilePresenterTest {
         startDMAction: StartDMAction = FakeStartDMAction()
     ): UserProfilePresenter {
         return UserProfilePresenter(
-            userId = userId,
+            userId = userId.value,
             client = client,
             startDMAction = startDMAction
         )

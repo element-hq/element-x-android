@@ -23,10 +23,10 @@ import extension.AssetCopyTask
 import extension.GitBranchNameValueSource
 import extension.GitRevisionValueSource
 import extension.allEnterpriseImpl
+import extension.allFeaturesImpl
 import extension.allLibrariesImpl
 import extension.allServicesImpl
 import extension.koverDependencies
-import extension.allFeaturesImpl
 import extension.locales
 import extension.setupKover
 import java.util.Locale

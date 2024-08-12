@@ -23,7 +23,6 @@ import io.element.android.features.createroom.api.StartDMAction
 import io.element.android.features.userprofile.impl.root.UserProfilePresenter
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.UserId
 
 @Module
 @ContributesTo(SessionScope::class)

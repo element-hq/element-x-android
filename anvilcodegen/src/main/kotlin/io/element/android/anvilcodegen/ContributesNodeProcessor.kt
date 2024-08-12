@@ -61,14 +61,14 @@ class ContributesNodeProcessor(
         while (annotatedSymbols.hasNext()) {
             val ksClass = annotatedSymbols.next()
             logger.warn("Processing ${ksClass.qualifiedName?.asString()}")
-            generateModule(ksClass, logger)
+            generateModule(ksClass)
             generateFactory(ksClass)
         }
 
         return emptyList()
     }
 
-    private fun generateModule(ksClass: KSClassDeclaration, logger: KSPLogger) {
+    private fun generateModule(ksClass: KSClassDeclaration) {
         val annotation = ksClass.annotations.find { it.shortName.asString() == "ContributesNode" }!!
         val scope = annotation.arguments.find { it.name?.asString() == "scope" }!!.value as KSType
         val modulePackage = ksClass.packageName.asString()
@@ -98,7 +98,8 @@ class ContributesNodeProcessor(
                             .build(),
                     )
                     .build(),
-            ).build()
+            )
+            .build()
 
         content.writeTo(
             codeGenerator = codeGenerator,
@@ -116,19 +117,19 @@ class ContributesNodeProcessor(
         val constructor = ksClass.getConstructors().singleOrNull { it.isAnnotationPresent(AssistedInject::class) }
         val assistedParameters = constructor?.parameters?.filter { it.isAnnotationPresent(Assisted::class) }.orEmpty()
         if (constructor == null || assistedParameters.size != 2) {
-            throw IllegalStateException(
+            error(
                 "${ksClass.qualifiedName} must have an @AssistedInject constructor with 2 @Assisted parameters",
             )
         }
         val contextAssistedParam = assistedParameters[0]
         if (contextAssistedParam.name?.asString() != "buildContext") {
-            throw IllegalStateException(
+            error(
                 "${ksClass.qualifiedName} @Assisted parameter must be named buildContext",
             )
         }
         val pluginsAssistedParam = assistedParameters[1]
         if (pluginsAssistedParam.name?.asString() != "plugins") {
-            throw IllegalStateException(
+            error(
                 "${ksClass.qualifiedName} @Assisted parameter must be named plugins",
             )
         }

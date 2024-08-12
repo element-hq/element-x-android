@@ -16,11 +16,14 @@
 
 package io.element.android.features.preferences.impl.about
 
-import android.app.Activity
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
 import io.element.android.features.preferences.api.OpenSourceLicensesProvider
 
 class FakeOpenSourceLicensesProvider(
     override val hasOpenSourceLicenses: Boolean,
 ) : OpenSourceLicensesProvider {
-    override fun navigateToOpenSourceLicenses(activity: Activity) = Unit
+    override fun getLicensesNode(node: Node, buildContext: BuildContext): Node? {
+        return null
+    }
 }

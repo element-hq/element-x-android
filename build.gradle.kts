@@ -1,6 +1,3 @@
-import com.google.devtools.ksp.gradle.KspTask
-import org.apache.tools.ant.taskdefs.optional.ReplaceRegExp
-
 buildscript {
     dependencies {
         classpath(libs.kotlin.gradle.plugin)
@@ -224,7 +221,7 @@ subprojects {
 }
 
 allprojects {
-    //Support @JvmDefault
+    // Support @JvmDefault
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java).all {
         compilerOptions.freeCompilerArgs.add("-Xjvm-default=all")
     }

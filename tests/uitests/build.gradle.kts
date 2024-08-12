@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
+import extension.allFeaturesImpl
 import extension.allLibrariesImpl
 import extension.allServicesImpl
-import extension.allFeaturesImpl
 
 plugins {
     id("io.element.android-compose-library")

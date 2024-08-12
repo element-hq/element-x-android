@@ -22,7 +22,6 @@ import dagger.Provides
 import io.element.android.features.roomaliasresolver.impl.RoomAliasResolverPresenter
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.RoomAlias
 
 @Module
 @ContributesTo(SessionScope::class)

@@ -92,7 +92,7 @@ class RoomAliasResolverPresenterTest {
         roomAlias: RoomAlias = A_ROOM_ALIAS,
         matrixClient: MatrixClient = FakeMatrixClient(),
     ) = RoomAliasResolverPresenter(
-        roomAlias = roomAlias,
+        roomAlias = roomAlias.value,
         matrixClient = matrixClient,
     )
 }

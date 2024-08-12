@@ -62,7 +62,7 @@ class NotificationDataFactoryTest {
         val expectedNotification = notificationCreator.createRoomInvitationNotificationResult(AN_INVITATION_EVENT)
         val roomInvitation = listOf(AN_INVITATION_EVENT)
 
-        val result = toNotifications(roomInvitation)
+        val result = toInviteNotifications(roomInvitation)
 
         assertThat(result).isEqualTo(
             listOf(
@@ -82,7 +82,7 @@ class NotificationDataFactoryTest {
         val expectedNotification = notificationCreator.createRoomInvitationNotificationResult(AN_INVITATION_EVENT)
         val roomInvitation = listOf(A_SIMPLE_EVENT)
 
-        val result = toNotifications(roomInvitation)
+        val result = toSimpleNotifications(roomInvitation)
 
         assertThat(result).isEqualTo(
             listOf(
@@ -117,7 +117,7 @@ class NotificationDataFactoryTest {
         val roomWithMessage = listOf(A_MESSAGE_EVENT)
 
         val fakeImageLoader = FakeImageLoader()
-        val result = toInviteNotifications(
+        val result = toMessageNotifications(
             messages = roomWithMessage,
             currentUser = MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
             imageLoader = fakeImageLoader.getImageLoader(),
@@ -133,7 +133,7 @@ class NotificationDataFactoryTest {
         val redactedRoom = listOf(A_MESSAGE_EVENT.copy(isRedacted = true))
 
         val fakeImageLoader = FakeImageLoader()
-        val result = toInviteNotifications(
+        val result = toMessageNotifications(
             messages = redactedRoom,
             currentUser = MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
             imageLoader = fakeImageLoader.getImageLoader(),
@@ -168,7 +168,7 @@ class NotificationDataFactoryTest {
         )
 
         val fakeImageLoader = FakeImageLoader()
-        val result = toInviteNotifications(
+        val result = toMessageNotifications(
             messages = roomWithRedactedMessage,
             currentUser = MatrixUser(A_SESSION_ID, A_SESSION_ID.value, MY_AVATAR_URL),
             imageLoader = fakeImageLoader.getImageLoader(),

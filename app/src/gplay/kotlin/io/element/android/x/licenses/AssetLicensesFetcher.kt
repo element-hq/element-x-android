@@ -47,7 +47,6 @@ class AssetLicensesFetcher @Inject constructor(
                     val json = Json {
                         ignoreUnknownKeys = true
                         explicitNulls = false
-
                     }
                     json.decodeFromStream<List<DependencyLicenseItem>?>(inputStream)
                         ?.map {

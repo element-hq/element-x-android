@@ -16,7 +16,6 @@
 
 package io.element.android.x.licenses
 
-import android.app.Activity
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.preferences.api.OpenSourceLicensesProvider
 import io.element.android.libraries.di.AppScope

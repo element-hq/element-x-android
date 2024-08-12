@@ -69,7 +69,7 @@ class DependenciesDetailsNode @AssistedInject constructor(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LicenseItemDetails(
+private fun LicenseItemDetails(
     licenseItem: DependencyLicenseItem,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,

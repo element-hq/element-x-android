@@ -483,7 +483,7 @@ class JoinRoomPresenterTest {
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() }
     ): JoinRoomPresenter {
         return JoinRoomPresenter(
-            roomId = roomId,
+            roomId = roomId.value,
             roomIdOrAlias = roomId.toRoomIdOrAlias(),
             roomDescription = roomDescription,
             serverNames = serverNames,
