@@ -93,6 +93,7 @@
   <string name="action_report_bug">"Паведаміць пра памылку"</string>
   <string name="action_report_content">"Паскардзіцца на змест"</string>
   <string name="action_reset">"Скінуць"</string>
+  <string name="action_reset_identity">"Скінуць ідэнтыфікацыйныя дадзеныя"</string>
   <string name="action_retry">"Паўтарыць"</string>
   <string name="action_retry_decryption">"Паўтарыць расшыфроўку"</string>
   <string name="action_save">"Захаваць"</string>
@@ -112,6 +113,7 @@
   <string name="action_take_photo">"Зрабіць фота"</string>
   <string name="action_tap_for_options">"Дакраніцеся, каб убачыць параметры"</string>
   <string name="action_try_again">"Паўтарыць спробу"</string>
+  <string name="action_unpin">"Адмацаваць"</string>
   <string name="action_view_source">"Прагляд зыходнага кода"</string>
   <string name="action_yes">"Так"</string>
   <string name="common_about">"Аб праграме"</string>
@@ -262,6 +264,7 @@
   <string name="error_some_messages_have_not_been_sent">"Некаторыя паведамленні не былі адпраўлены"</string>
   <string name="error_unknown">"Выбачце, адбылася памылка"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Сапраўднасць гэтага зашыфраванага паведамлення не можа быць гарантаваная на гэтай прыладзе."</string>
+  <string name="event_shield_reason_sent_in_clear">"Не зашыфраваны."</string>
   <string name="event_shield_reason_unknown_device">"Зашыфравана невядомай ці выдаленай прыладай."</string>
   <string name="event_shield_reason_unsigned_device">"Зашыфравана прыладай, не пацверджанай яе ўладальнікам."</string>
   <string name="event_shield_reason_unverified_identity">"Зашыфравана неправераным карыстальнікам."</string>
@@ -269,9 +272,30 @@
   <string name="invite_friends_text">"Гэй, пагавары са мной у %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Паведаміць аб памылцы з дапамогай Rageshake"</string>
+  <string name="screen_encryption_reset_bullet_1">"Дадзеныя вашага ўліковага запісу, кантакты, налады і спіс чатаў будуць захаваны"</string>
+  <string name="screen_encryption_reset_bullet_2">"Вы страціце існуючую гісторыю паведамленняў"</string>
+  <string name="screen_encryption_reset_bullet_3">"Вам трэба будзе зноў запэўніць ўсе вашы існуючыя прылады і кантакты"</string>
+  <string name="screen_encryption_reset_footer">"Працягвайце, толькі калі вы ўпэўненыя, што страцілі ўсе астатнія прылады і ключ аднаўлення."</string>
+  <string name="screen_encryption_reset_subtitle">"Калі вы не ўвайшлі ў сістэму на іншых прыладах і страцілі ключ аднаўлення, вам неабходна скінуць ключы пацверджання, каб працягнуць выкарыстанне прыкладання."</string>
+  <string name="screen_encryption_reset_title">"Скіньце ключы пацверджання, калі вы не можаце пацвердзіць яго іншым спосабам"</string>
   <string name="screen_media_picker_error_failed_selection">"Не ўдалося выбраць носьбіт, паўтарыце спробу."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не атрымалася загрузіць медыяфайлы, паспрабуйце яшчэ раз."</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Націсніце на паведамленне і абярыце «%1$s », каб уключыць сюды."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Замацуеце важныя паведамленні, каб іх можна было лёгка знайсці"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d Замацаванае паведамленне"</item>
+    <item quantity="few">"%1$d Замацаваныя паведамленні"</item>
+    <item quantity="many">"%1$d Замацаваных паведамленняў"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Замацаваныя паведамленні"</string>
+  <string name="screen_reset_encryption_confirmation_alert_action">"Так, скінуць зараз"</string>
+  <string name="screen_reset_encryption_confirmation_alert_subtitle">"Гэты працэс незваротны."</string>
+  <string name="screen_reset_encryption_confirmation_alert_title">"Вы ўпэўнены, што хочаце скінуць шыфраванне?"</string>
+  <string name="screen_reset_encryption_password_placeholder">"Увод…"</string>
+  <string name="screen_reset_encryption_password_subtitle">"Пацвердзіце, што вы хочаце скінуць шыфраванне"</string>
+  <string name="screen_reset_encryption_password_title">"Каб працягнуць, увядзіце пароль уліковага запісу"</string>
+  <string name="screen_room_details_pinned_events_row_title">"Замацаваныя паведамленні"</string>
   <string name="screen_room_error_failed_processing_media">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не ўдалося атрымаць інфармацыю пра карыстальніка"</string>
   <string name="screen_room_member_details_block_alert_action">"Заблакіраваць"</string>
@@ -283,6 +307,7 @@
   <string name="screen_room_member_details_unblock_user">"Разблакіраваць карыстальніка"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s з %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Замацаваныя паведамленні"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Загрузка паведамлення…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Паглядзець усе"</string>
   <string name="screen_room_title">"Чат"</string>
   <string name="screen_share_location_title">"Падзяліцца месцазнаходжаннем"</string>

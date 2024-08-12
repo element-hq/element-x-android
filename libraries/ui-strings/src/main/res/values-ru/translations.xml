@@ -266,6 +266,7 @@
   <string name="error_some_messages_have_not_been_sent">"Некоторые сообщения не были отправлены"</string>
   <string name="error_unknown">"Извините, произошла ошибка"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Подлинность этого зашифрованного сообщения не может быть гарантирована на этом устройстве."</string>
+  <string name="event_shield_reason_sent_in_clear">"Не зашифровано."</string>
   <string name="event_shield_reason_unknown_device">"Зашифровано неизвестным или удаленным устройством."</string>
   <string name="event_shield_reason_unsigned_device">"Зашифровано устройством, не проверенным его владельцем."</string>
   <string name="event_shield_reason_unverified_identity">"Зашифровано непроверенным пользователем."</string>
@@ -282,12 +283,21 @@
   <string name="screen_media_picker_error_failed_selection">"Не удалось выбрать носитель, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не удалось загрузить медиафайлы, попробуйте еще раз."</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Нажмите на сообщение и выберите “%1$s”, чтобы добавить его сюда."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Закрепите важные сообщения, чтобы их можно было легко найти"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d Закрепленное сообщение"</item>
+    <item quantity="few">"%1$d Закрепленных сообщений"</item>
+    <item quantity="many">"%1$d Закрепленных сообщений"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Закрепленные сообщения"</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"Да, сбросить сейчас"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Этот процесс необратим."</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"Вы действительно хотите сбросить шифрование?"</string>
   <string name="screen_reset_encryption_password_placeholder">"Ввод…"</string>
   <string name="screen_reset_encryption_password_subtitle">"Подтвердите, что вы хотите сбросить шифрование."</string>
   <string name="screen_reset_encryption_password_title">"Введите пароль своей учетной записи, чтобы продолжить"</string>
+  <string name="screen_room_details_pinned_events_row_title">"Закрепленные сообщения"</string>
   <string name="screen_room_error_failed_processing_media">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не удалось получить данные о пользователе"</string>
   <string name="screen_room_member_details_block_alert_action">"Заблокировать"</string>
@@ -299,6 +309,7 @@
   <string name="screen_room_member_details_unblock_user">"Разблокировать пользователя"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s из %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Закрепленные сообщения"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Загрузка сообщения…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Посмотреть все"</string>
   <string name="screen_room_title">"Чат"</string>
   <string name="screen_share_location_title">"Поделиться местоположением"</string>

@@ -260,6 +260,7 @@ Reason: %1$s."</string>
   <string name="error_some_messages_have_not_been_sent">"Some messages have not been sent"</string>
   <string name="error_unknown">"Sorry, an error occurred"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"The authenticity of this encrypted message can\'t be guaranteed on this device."</string>
+  <string name="event_shield_reason_sent_in_clear">"Not encrypted."</string>
   <string name="event_shield_reason_unknown_device">"Encrypted by an unknown or deleted device."</string>
   <string name="event_shield_reason_unsigned_device">"Encrypted by a device not verified by its owner."</string>
   <string name="event_shield_reason_unverified_identity">"Encrypted by an unverified user."</string>
@@ -276,12 +277,20 @@ Reason: %1$s."</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Failed uploading media, please try again."</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Press on a message and choose “%1$s” to include here."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Pin important messages so that they can be easily discovered"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d Pinned message"</item>
+    <item quantity="other">"%1$d Pinned messages"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Pinned messages"</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"Yes, reset now"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"This process is irreversible."</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"Are you sure you want to reset your encryption?"</string>
   <string name="screen_reset_encryption_password_placeholder">"Enter…"</string>
   <string name="screen_reset_encryption_password_subtitle">"Confirm that you want to reset your encryption."</string>
   <string name="screen_reset_encryption_password_title">"Enter your account password to continue"</string>
+  <string name="screen_room_details_pinned_events_row_title">"Pinned messages"</string>
   <string name="screen_room_error_failed_processing_media">"Failed processing media to upload, please try again."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Could not retrieve user details"</string>
   <string name="screen_room_member_details_block_alert_action">"Block"</string>
