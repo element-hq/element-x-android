@@ -25,6 +25,7 @@
   <string name="screen_room_change_role_confirm_demote_self_title">"Degradera dig själv?"</string>
   <string name="screen_room_change_role_invited_member_name">"%1$s (Väntar)"</string>
   <string name="screen_room_change_role_invited_member_name_android">"(Väntar)"</string>
+  <string name="screen_room_change_role_moderators_admin_section_footer">"Administratörer har automatiskt moderatorbehörighet"</string>
   <string name="screen_room_change_role_moderators_title">"Redigera moderatorer"</string>
   <string name="screen_room_change_role_section_administrators">"Administratörer"</string>
   <string name="screen_room_change_role_section_moderators">"Moderatorer"</string>
@@ -34,6 +35,9 @@
   <string name="screen_room_details_add_topic_title">"Lägg till ämne"</string>
   <string name="screen_room_details_already_a_member">"Redan medlem"</string>
   <string name="screen_room_details_already_invited">"Redan inbjuden"</string>
+  <string name="screen_room_details_badge_encrypted">"Krypterat"</string>
+  <string name="screen_room_details_badge_not_encrypted">"Inte krypterat"</string>
+  <string name="screen_room_details_badge_public">"Offentligt rum"</string>
   <string name="screen_room_details_edit_room_title">"Redigera rummet"</string>
   <string name="screen_room_details_edition_error">"Ett okänt fel uppstod och informationen kunde inte ändras."</string>
   <string name="screen_room_details_edition_error_title">"Kunde inte uppdatera rummet"</string>

@@ -45,6 +45,12 @@
   <string name="state_event_room_name_removed_by_you">"Eltávolította a szoba nevét"</string>
   <string name="state_event_room_none">"%1$s nem változtatott semmin"</string>
   <string name="state_event_room_none_by_you">"Nem változtatott semmin"</string>
+  <string name="state_event_room_pinned_events_changed">"%1$s megváltoztatta a kitűzött üzeneteket"</string>
+  <string name="state_event_room_pinned_events_changed_by_you">"Megváltoztatta a kitűzött üzeneteket"</string>
+  <string name="state_event_room_pinned_events_pinned">"%1$s kitűzött egy üzenetet"</string>
+  <string name="state_event_room_pinned_events_pinned_by_you">"Kitűzött egy üzenetet"</string>
+  <string name="state_event_room_pinned_events_unpinned">"%1$s feloldotta egy üzenet kitűzését"</string>
+  <string name="state_event_room_pinned_events_unpinned_by_you">"Feloldotta egy üzenet kitűzését"</string>
   <string name="state_event_room_reject">"%1$s elutasította a meghívást"</string>
   <string name="state_event_room_reject_by_you">"Elutasította a meghívást"</string>
   <string name="state_event_room_remove">"%1$s eltávolította: %2$s"</string>

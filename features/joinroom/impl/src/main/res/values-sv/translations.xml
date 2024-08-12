@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_join_action">"Gå med i rummet"</string>
+  <string name="screen_join_room_knock_action">"Knacka för att gå med"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s stöder inte utrymmen än. Du kan komma åt utrymmen på webben."</string>
+  <string name="screen_join_room_space_not_supported_title">"Utrymmen stöds inte ännu"</string>
+  <string name="screen_join_room_subtitle_knock">"Klicka på knappen nedan så kommer en rumsadministratör att meddelas. Du kommer att kunna gå med i konversationen när den har godkänts."</string>
+  <string name="screen_join_room_subtitle_no_preview">"Du måste vara medlem i det här rummet för att se meddelandehistoriken."</string>
+  <string name="screen_join_room_title_knock">"Vill du gå med i det här rummet?"</string>
+  <string name="screen_join_room_title_no_preview">"Förhandsgranskning är inte tillgänglig"</string>
+</resources>

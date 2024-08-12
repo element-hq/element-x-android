@@ -43,6 +43,7 @@ Se você continuar, algumas de suas configurações poderão mudar."</string>
   <string name="screen_notification_settings_mode_mentions">"Menções"</string>
   <string name="screen_notification_settings_notification_section_title">"Me notifique para"</string>
   <string name="screen_notification_settings_room_mention_label">"Notifique-me em @room"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"Para receber notificações, altere seu %1$s."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"configurações do sistema"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Notificações do sistema desativadas"</string>
   <string name="screen_notification_settings_title">"Notificações"</string>
