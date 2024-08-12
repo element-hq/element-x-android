@@ -152,8 +152,8 @@ fun Project.setupKover() {
                 }
                 filters {
                     includes {
-                        classes(
-                            "*.*Presenter",
+                        inheritedFrom(
+                            "io.element.android.libraries.architecture.Presenter",
                         )
                     }
                     excludes {
