@@ -54,6 +54,7 @@ import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
@@ -260,6 +261,7 @@ private fun BottomMenu(
                         onClick = onEnterRecoveryKey,
                     )
                 }
+                // This option should always be displayed
                 TextButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.screen_identity_confirmation_cannot_confirm),
@@ -303,6 +305,8 @@ private fun BottomMenu(
                     onClick = {},
                     showProgress = true,
                 )
+                // Placeholder so the 1st button keeps its vertical position
+                Spacer(modifier = Modifier.height(40.dp))
             }
         }
         is FlowStep.Verifying -> {
@@ -336,6 +340,8 @@ private fun BottomMenu(
                     text = stringResource(CommonStrings.action_continue),
                     onClick = onFinish,
                 )
+                // Placeholder so the 1st button keeps its vertical position
+                Spacer(modifier = Modifier.height(48.dp))
             }
         }
         is FlowStep.Skipped -> return
