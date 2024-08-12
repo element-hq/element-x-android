@@ -58,12 +58,6 @@ data class RoomListState(
     }
 }
 
-enum class InvitesState {
-    NoInvites,
-    SeenInvites,
-    NewInvites,
-}
-
 enum class SecurityBannerState {
     None,
     RecoveryKeyConfirmation,

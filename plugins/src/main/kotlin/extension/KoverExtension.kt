@@ -186,11 +186,12 @@ fun Project.setupKover() {
                 filters {
                     includes {
                         classes(
-                            "^*State$",
+                            "*State",
                         )
                     }
                     excludes {
                         classes(
+                            "*State$*",
                             "io.element.android.appnav.root.RootNavState*",
                             "io.element.android.libraries.matrix.api.timeline.item.event.OtherState$*",
                             "io.element.android.libraries.matrix.api.timeline.item.event.EventSendState$*",
@@ -209,6 +210,9 @@ fun Project.setupKover() {
                             "io.element.android.libraries.maplibre.compose.SymbolState*",
                             "io.element.android.features.ftue.api.state.*",
                             "io.element.android.features.ftue.impl.welcome.state.*",
+                            "io.element.android.libraries.designsystem.theme.components.bottomsheet.CustomSheetState",
+                            "io.element.android.libraries.mediaviewer.api.local.pdf.PdfViewerState",
+                            "io.element.android.libraries.textcomposer.model.TextEditorState",
                         )
                     }
                 }
