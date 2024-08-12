@@ -3,6 +3,7 @@
   <string name="notification_channel_call">"Виклик"</string>
   <string name="notification_channel_listening_for_events">"Прослуховування подій"</string>
   <string name="notification_channel_noisy">"Гучні сповіщення"</string>
+  <string name="notification_channel_ringing_calls">"Дзвінки"</string>
   <string name="notification_channel_silent">"Тихі сповіщення"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d повідомлення"</item>
@@ -15,6 +16,7 @@
     <item quantity="many">"%d сповіщень"</item>
   </plurals>
   <string name="notification_fallback_content">"Сповіщення"</string>
+  <string name="notification_incoming_call">"Вхідний дзвінок"</string>
   <string name="notification_inline_reply_failed">"** Не вдалося надіслати - будь ласка, відкрийте кімнату"</string>
   <string name="notification_invitation_action_join">"Доєднатися"</string>
   <string name="notification_invitation_action_reject">"Відхилити"</string>
@@ -32,7 +34,7 @@
     <item quantity="many">"%d нових повідомлень"</item>
   </plurals>
   <string name="notification_reaction_body">"Відреагував (-ла) з %1$s"</string>
-  <string name="notification_room_action_mark_as_read">"Позначити як прочитане"</string>
+  <string name="notification_room_action_mark_as_read">"Позначити прочитаним"</string>
   <string name="notification_room_action_quick_reply">"Швидка відповідь"</string>
   <string name="notification_room_invite_body">"Запросив (-ла) Вас приєднатися до кімнати"</string>
   <string name="notification_sender_me">"Я"</string>
@@ -55,5 +57,27 @@
   <string name="push_distributor_background_sync_android">"Фонова синхронізація"</string>
   <string name="push_distributor_firebase_android">"Сервіси Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Не знайдено дійсних сервісів Google Play. Сповіщення можуть не працювати належним чином."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Отримує назву поточного постачальника."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Постачальників push-сповіщень не обрано."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Поточний постачальник: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Поточний провайдер push"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Переконайтеся, що програма має принаймні один push провайдер."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Не знайдено постачальників push-повідомлень."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"Виявлено %1$d постачальника: %2$s"</item>
+    <item quantity="few">"Виявлено %1$d постачальників: %2$s"</item>
+    <item quantity="many">"Виявлено %1$d постачальників: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Виявлення push-провайдерів"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Перевірте, чи може програма відображати сповіщення."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"Ви не натиснули на сповіщення."</string>
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Не вдається відобразити сповіщення."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"Ви натиснули на сповіщення!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Відображення сповіщення"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Будь ласка, натисніть на сповіщення, щоб продовжити тест."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"Переконується, що застосунок отримує push-сповіщення."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Помилка: постачальник push-сповіщень відхилив запит."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Помилка: %1$s."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Помилка, неможливо перевірити push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"Перевірка зворотного надсилання"</string>
 </resources>
