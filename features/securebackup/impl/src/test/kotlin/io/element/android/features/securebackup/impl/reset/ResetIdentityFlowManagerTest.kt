@@ -20,13 +20,16 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.encryption.IdentityResetHandle
+import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.encryption.FakeIdentityPasswordResetHandle
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -104,6 +107,32 @@ class ResetIdentityFlowManagerTest {
             cancelLambda.assertions().isCalledOnce()
             assertThat(awaitItem().isUninitialized()).isTrue()
         }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `whenResetIsDone - will trigger the lambda when verification status is verified`() = runTest {
+        val verificationService = FakeSessionVerificationService()
+        val flowManager = createFlowManager(sessionVerificationService = verificationService)
+        var isDone = false
+
+        flowManager.whenResetIsDone {
+            isDone = true
+        }
+
+        assertThat(isDone).isFalse()
+
+        verificationService.emitVerifiedStatus(SessionVerifiedStatus.Unknown)
+        advanceUntilIdle()
+        assertThat(isDone).isFalse()
+
+        verificationService.emitVerifiedStatus(SessionVerifiedStatus.NotVerified)
+        advanceUntilIdle()
+        assertThat(isDone).isFalse()
+
+        verificationService.emitVerifiedStatus(SessionVerifiedStatus.Verified)
+        advanceUntilIdle()
+        assertThat(isDone).isTrue()
     }
 
     private fun TestScope.createFlowManager(
