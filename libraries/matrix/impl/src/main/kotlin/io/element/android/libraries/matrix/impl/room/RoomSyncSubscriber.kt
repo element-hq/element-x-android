@@ -51,23 +51,15 @@ class RoomSyncSubscriber(
         includeHeroes = false,
     )
 
-    suspend fun subscribe(roomId: RoomId) = mutex.withLock {
-        withContext(dispatchers.io) {
-            try {
-                subscribeToRoom(roomId)
-            } catch (exception: Exception) {
-                Timber.e("Failed to subscribe to room $roomId")
-            }
-        }
-    }
-
-    suspend fun batchSubscribe(roomIds: List<RoomId>) = mutex.withLock {
-        withContext(dispatchers.io) {
-            for (roomId in roomIds) {
+    suspend fun subscribe(roomId: RoomId) {
+        mutex.withLock {
+            withContext(dispatchers.io) {
                 try {
-                    subscribeToRoom(roomId)
-                } catch (cancellationException: CancellationException) {
-                    throw cancellationException
+                    if (!isSubscribedTo(roomId)) {
+                        Timber.d("Subscribing to room $roomId}")
+                        roomListService.subscribeToRooms(listOf(roomId.value), settings)
+                    }
+                    subscribedRoomIds.add(roomId)
                 } catch (exception: Exception) {
                     Timber.e("Failed to subscribe to room $roomId")
                 }
@@ -75,14 +67,21 @@ class RoomSyncSubscriber(
         }
     }
 
-    private fun subscribeToRoom(roomId: RoomId) {
-        if (!isSubscribedTo(roomId)) {
-            Timber.d("Subscribing to room $roomId}")
-            roomListService.room(roomId.value).use { roomListItem ->
-                roomListItem.subscribe(settings)
+    suspend fun batchSubscribe(roomIds: List<RoomId>) = mutex.withLock {
+        withContext(dispatchers.io) {
+            try {
+                val roomIdsToSubscribeTo = roomIds.filterNot { isSubscribedTo(it) }
+                if (roomIdsToSubscribeTo.isNotEmpty()) {
+                    Timber.d("Subscribing to rooms: $roomIds")
+                    roomListService.subscribeToRooms(roomIdsToSubscribeTo.map { it.value }, settings)
+                    subscribedRoomIds.addAll(roomIds)
+                }
+            } catch (cancellationException: CancellationException) {
+                throw cancellationException
+            } catch (exception: Exception) {
+                Timber.e(exception, "Failed to subscribe to rooms: $roomIds")
             }
         }
-        subscribedRoomIds.add(roomId)
     }
 
     fun isSubscribedTo(roomId: RoomId): Boolean {

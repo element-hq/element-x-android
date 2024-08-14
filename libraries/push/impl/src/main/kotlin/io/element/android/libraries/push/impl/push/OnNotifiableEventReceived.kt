@@ -32,9 +32,11 @@ interface OnNotifiableEventReceived {
 class DefaultOnNotifiableEventReceived @Inject constructor(
     private val defaultNotificationDrawerManager: DefaultNotificationDrawerManager,
     private val coroutineScope: CoroutineScope,
+    private val syncOnNotifiableEvent: SyncOnNotifiableEvent,
 ) : OnNotifiableEventReceived {
     override fun onNotifiableEventReceived(notifiableEvent: NotifiableEvent) {
         coroutineScope.launch {
+            launch { syncOnNotifiableEvent(notifiableEvent) }
             defaultNotificationDrawerManager.onNotifiableEventReceived(notifiableEvent)
         }
     }

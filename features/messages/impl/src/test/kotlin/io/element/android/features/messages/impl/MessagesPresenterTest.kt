@@ -30,6 +30,7 @@ import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.messagecomposer.DefaultMessageComposerContext
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
+import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMessagesBannerState
 import io.element.android.features.messages.impl.textcomposer.TestRichTextEditorStateFactory
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineItemIndexer
@@ -43,6 +44,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.typing.TypingNotificationPresenter
 import io.element.android.features.messages.impl.utils.FakeTextPillificationHelper
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPlayer
@@ -77,6 +79,7 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
+import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
@@ -137,8 +140,8 @@ class MessagesPresenterTest {
             assertThat(initialState.roomName).isEqualTo(AsyncData.Success(""))
             assertThat(initialState.roomAvatar)
                 .isEqualTo(AsyncData.Success(AvatarData(id = A_ROOM_ID.value, name = "", url = AN_AVATAR_URL, size = AvatarSize.TimelineRoom)))
-            assertThat(initialState.userHasPermissionToSendMessage).isTrue()
-            assertThat(initialState.userHasPermissionToRedactOwn).isTrue()
+            assertThat(initialState.userEventPermissions.canSendMessage).isTrue()
+            assertThat(initialState.userEventPermissions.canRedactOwn).isTrue()
             assertThat(initialState.hasNetworkConnection).isTrue()
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.inviteProgress).isEqualTo(AsyncData.Uninitialized)
@@ -155,6 +158,7 @@ class MessagesPresenterTest {
             canRedactOtherResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
         )
         assertThat(room.markAsReadCalls).isEmpty()
         val presenter = createMessagesPresenter(matrixRoom = room)
@@ -175,6 +179,7 @@ class MessagesPresenterTest {
             canRedactOwnResult = { Result.success(true) },
             canRedactOtherResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
         ).apply {
             givenRoomInfo(aRoomInfo(hasRoomCall = true))
         }
@@ -203,6 +208,7 @@ class MessagesPresenterTest {
             canRedactOtherResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
         )
         val presenter = createMessagesPresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -240,6 +246,7 @@ class MessagesPresenterTest {
             canRedactOtherResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
         )
         val presenter = createMessagesPresenter(matrixRoom = room, coroutineDispatchers = coroutineDispatchers)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -298,6 +305,7 @@ class MessagesPresenterTest {
             canRedactOtherResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
         )
         val presenter = createMessagesPresenter(
             clipboardHelper = clipboardHelper,
@@ -487,6 +495,7 @@ class MessagesPresenterTest {
             canRedactOtherResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
         )
 
         val redactEventLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String? -> Result.success(true) }
@@ -561,6 +570,7 @@ class MessagesPresenterTest {
             canRedactOtherResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
         )
         val presenter = createMessagesPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -596,6 +606,7 @@ class MessagesPresenterTest {
             canRedactOtherResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
         )
         val presenter = createMessagesPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -620,6 +631,7 @@ class MessagesPresenterTest {
             canRedactOtherResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
         )
         val presenter = createMessagesPresenter(matrixRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -644,6 +656,7 @@ class MessagesPresenterTest {
             canRedactOtherResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
         )
         room.givenRoomMembersState(
             MatrixRoomMembersState.Ready(
@@ -679,6 +692,7 @@ class MessagesPresenterTest {
             canRedactOtherResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
         )
         room.givenRoomMembersState(
             MatrixRoomMembersState.Error(
@@ -715,6 +729,7 @@ class MessagesPresenterTest {
             canRedactOtherResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
         )
         room.givenRoomMembersState(MatrixRoomMembersState.Unknown)
         val presenter = createMessagesPresenter(matrixRoom = room)
@@ -741,6 +756,7 @@ class MessagesPresenterTest {
             canRedactOtherResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
         )
         room.givenRoomMembersState(
             MatrixRoomMembersState.Ready(
@@ -781,13 +797,14 @@ class MessagesPresenterTest {
             canRedactOtherResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
         )
         val presenter = createMessagesPresenter(matrixRoom = matrixRoom)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val state = awaitFirstItem()
-            assertThat(state.userHasPermissionToSendMessage).isTrue()
+            assertThat(state.userEventPermissions.canSendMessage).isTrue()
         }
     }
 
@@ -805,15 +822,16 @@ class MessagesPresenterTest {
             canRedactOtherResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
         )
         val presenter = createMessagesPresenter(matrixRoom = matrixRoom)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             // Default value
-            assertThat(awaitItem().userHasPermissionToSendMessage).isTrue()
+            assertThat(awaitItem().userEventPermissions.canSendMessage).isTrue()
             skipItems(1)
-            assertThat(awaitItem().userHasPermissionToSendMessage).isFalse()
+            assertThat(awaitItem().userEventPermissions.canSendMessage).isFalse()
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -826,14 +844,15 @@ class MessagesPresenterTest {
             canRedactOtherResult = { Result.success(false) },
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
         )
         val presenter = createMessagesPresenter(matrixRoom = matrixRoom)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = consumeItemsUntilPredicate { it.userHasPermissionToRedactOwn }.last()
-            assertThat(initialState.userHasPermissionToRedactOwn).isTrue()
-            assertThat(initialState.userHasPermissionToRedactOther).isFalse()
+            val initialState = consumeItemsUntilPredicate { it.userEventPermissions.canRedactOwn }.last()
+            assertThat(initialState.userEventPermissions.canRedactOwn).isTrue()
+            assertThat(initialState.userEventPermissions.canRedactOther).isFalse()
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -846,14 +865,15 @@ class MessagesPresenterTest {
             canRedactOwnResult = { Result.success(false) },
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
         )
         val presenter = createMessagesPresenter(matrixRoom = matrixRoom)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = consumeItemsUntilPredicate { it.userHasPermissionToRedactOther }.last()
-            assertThat(initialState.userHasPermissionToRedactOwn).isFalse()
-            assertThat(initialState.userHasPermissionToRedactOther).isTrue()
+            val initialState = consumeItemsUntilPredicate { it.userEventPermissions.canRedactOther }.last()
+            assertThat(initialState.userEventPermissions.canRedactOwn).isFalse()
+            assertThat(initialState.userEventPermissions.canRedactOther).isTrue()
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -878,6 +898,74 @@ class MessagesPresenterTest {
         }
     }
 
+    @Test
+    fun `present - handle action pin`() = runTest {
+        val successPinEventLambda = lambdaRecorder { _: EventId -> Result.success(true) }
+        val failurePinEventLambda = lambdaRecorder { _: EventId -> Result.failure<Boolean>(A_THROWABLE) }
+        val timeline = FakeTimeline()
+        val room = FakeMatrixRoom(
+            liveTimeline = timeline,
+            canUserSendMessageResult = { _, _ -> Result.success(true) },
+            canRedactOwnResult = { Result.success(true) },
+            canRedactOtherResult = { Result.success(true) },
+            canUserJoinCallResult = { Result.success(true) },
+            typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
+        )
+        val presenter = createMessagesPresenter(matrixRoom = room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val messageEvent = aMessageEvent(
+                content = aTimelineItemTextContent()
+            )
+            val initialState = awaitFirstItem()
+
+            timeline.pinEventLambda = successPinEventLambda
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Pin, messageEvent))
+            assert(successPinEventLambda).isCalledOnce().with(value(messageEvent.eventId))
+
+            timeline.pinEventLambda = failurePinEventLambda
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Pin, messageEvent))
+            assert(failurePinEventLambda).isCalledOnce().with(value(messageEvent.eventId))
+            assertThat(awaitItem().snackbarMessage).isNotNull()
+        }
+    }
+
+    @Test
+    fun `present - handle action unpin`() = runTest {
+        val successUnpinEventLambda = lambdaRecorder { _: EventId -> Result.success(true) }
+        val failureUnpinEventLambda = lambdaRecorder { _: EventId -> Result.failure<Boolean>(A_THROWABLE) }
+        val timeline = FakeTimeline()
+        val room = FakeMatrixRoom(
+            liveTimeline = timeline,
+            canUserSendMessageResult = { _, _ -> Result.success(true) },
+            canRedactOwnResult = { Result.success(true) },
+            canRedactOtherResult = { Result.success(true) },
+            canUserJoinCallResult = { Result.success(true) },
+            typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
+        )
+        val presenter = createMessagesPresenter(matrixRoom = room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val messageEvent = aMessageEvent(
+                content = aTimelineItemTextContent()
+            )
+            val initialState = awaitFirstItem()
+
+            timeline.unpinEventLambda = successUnpinEventLambda
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Unpin, messageEvent))
+            assert(successUnpinEventLambda).isCalledOnce().with(value(messageEvent.eventId))
+
+            timeline.unpinEventLambda = failureUnpinEventLambda
+            initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Unpin, messageEvent))
+            assert(failureUnpinEventLambda).isCalledOnce().with(value(messageEvent.eventId))
+            assertThat(awaitItem().snackbarMessage).isNotNull()
+        }
+    }
+
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
         // Skip 2 item if Mentions feature is enabled, else 1
         skipItems(if (FeatureFlags.Mentions.defaultValue(aBuildMeta())) 2 else 1)
@@ -892,6 +980,7 @@ class MessagesPresenterTest {
             canRedactOtherResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
             typingNoticeResult = { Result.success(Unit) },
+            canUserPinUnpinResult = { Result.success(true) },
         ).apply {
             givenRoomInfo(aRoomInfo(id = roomId, name = ""))
         },
@@ -958,14 +1047,21 @@ class MessagesPresenterTest {
                 return timelinePresenter
             }
         }
-        val actionListPresenter = ActionListPresenter(appPreferencesStore = appPreferencesStore)
+        val featureFlagService = FakeFeatureFlagService()
+        val actionListPresenter = ActionListPresenter(
+            appPreferencesStore = appPreferencesStore,
+            featureFlagsService = featureFlagService,
+            room = matrixRoom,
+        )
         val typingNotificationPresenter = TypingNotificationPresenter(
             room = matrixRoom,
             sessionPreferencesStore = sessionPreferencesStore,
         )
+
         val readReceiptBottomSheetPresenter = ReadReceiptBottomSheetPresenter()
         val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
         val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)
+
         return MessagesPresenter(
             room = matrixRoom,
             composerPresenter = messageComposerPresenter,
@@ -976,11 +1072,12 @@ class MessagesPresenterTest {
             customReactionPresenter = customReactionPresenter,
             reactionSummaryPresenter = reactionSummaryPresenter,
             readReceiptBottomSheetPresenter = readReceiptBottomSheetPresenter,
+            pinnedMessagesBannerPresenter = { aLoadedPinnedMessagesBannerState() },
             networkMonitor = FakeNetworkMonitor(),
             snackbarDispatcher = SnackbarDispatcher(),
             navigator = navigator,
             clipboardHelper = clipboardHelper,
-            featureFlagsService = FakeFeatureFlagService(),
+            featureFlagsService = featureFlagService,
             buildMeta = aBuildMeta(),
             dispatchers = coroutineDispatchers,
             htmlConverterProvider = FakeHtmlConverterProvider(),

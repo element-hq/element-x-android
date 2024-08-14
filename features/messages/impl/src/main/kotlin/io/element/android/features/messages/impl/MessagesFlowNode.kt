@@ -81,6 +81,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 
 @ContributesNode(RoomScope::class)
 class MessagesFlowNode @AssistedInject constructor(
@@ -216,6 +217,10 @@ class MessagesFlowNode @AssistedInject constructor(
                         )
                         analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
                         elementCallEntryPoint.startCall(callType)
+                    }
+
+                    override fun onViewAllPinnedEvents() {
+                        Timber.d("On View All Pinned Events not implemented yet.")
                     }
                 }
                 val inputs = MessagesNode.Inputs(

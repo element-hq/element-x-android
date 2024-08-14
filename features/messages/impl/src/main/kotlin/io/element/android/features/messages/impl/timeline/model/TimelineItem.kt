@@ -75,6 +75,7 @@ sealed interface TimelineItem {
         val sentTime: String = "",
         val isMine: Boolean = false,
         val isEditable: Boolean,
+        val canBeRepliedTo: Boolean,
         val groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
         val reactionsState: TimelineItemReactions,
         val readReceiptState: TimelineItemReadReceipts,

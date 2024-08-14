@@ -169,4 +169,22 @@ interface Timeline : AutoCloseable {
     ): Result<MediaUploadHandler>
 
     suspend fun loadReplyDetails(eventId: EventId): InReplyTo
+
+    /**
+     * Adds a new pinned event by sending an updated `m.room.pinned_events`
+     * event containing the new event id.
+     *
+     * Returns `true` if we sent the request, `false` if the event was already
+     * pinned.
+     */
+    suspend fun pinEvent(eventId: EventId): Result<Boolean>
+
+    /**
+     * Adds a new pinned event by sending an updated `m.room.pinned_events`
+     * event without the event id we want to remove.
+     *
+     * Returns `true` if we sent the request, `false` if the event wasn't
+     * pinned
+     */
+    suspend fun unpinEvent(eventId: EventId): Result<Boolean>
 }

@@ -82,7 +82,6 @@ import io.element.android.features.messages.impl.timeline.model.event.aGreyShiel
 import io.element.android.features.messages.impl.timeline.model.event.aRedShield
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
-import io.element.android.features.messages.impl.timeline.model.event.canBeRepliedTo
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -153,7 +152,7 @@ fun TimelineItemEventRow(
         } else {
             Spacer(modifier = Modifier.height(2.dp))
         }
-        val canReply = timelineRoomInfo.userHasPermissionToSendMessage && event.content.canBeRepliedTo()
+        val canReply = timelineRoomInfo.userHasPermissionToSendMessage && event.canBeRepliedTo
         if (canReply) {
             val state: SwipeableActionsState = rememberSwipeableActionsState()
             val offset = state.offset.floatValue
@@ -410,6 +409,7 @@ private fun MessageSenderInformation(
     }
 }
 
+@Suppress("MultipleEmitters") // False positive
 @Composable
 private fun MessageEventBubbleContent(
     event: TimelineItem.Event,

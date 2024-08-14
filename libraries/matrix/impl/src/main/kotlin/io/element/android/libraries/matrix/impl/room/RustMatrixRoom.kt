@@ -192,6 +192,21 @@ class RustMatrixRoom(
         }
     }
 
+    override suspend fun pinnedEventsTimeline(): Result<Timeline> {
+        return runCatching {
+            innerRoom.pinnedEventsTimeline(
+                internalIdPrefix = "pinned_events",
+                maxEventsToLoad = 100u,
+            ).let { inner ->
+                createTimeline(inner, isLive = false)
+            }
+        }.onFailure {
+            if (it is CancellationException) {
+                throw it
+            }
+        }
+    }
+
     override fun destroy() {
         roomCoroutineScope.cancel()
         liveTimeline.close()
@@ -400,6 +415,12 @@ class RustMatrixRoom(
     override suspend fun canUserTriggerRoomNotification(userId: UserId): Result<Boolean> {
         return runCatching {
             innerRoom.canUserTriggerRoomNotification(userId.value)
+        }
+    }
+
+    override suspend fun canUserPinUnpin(userId: UserId): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserPinUnpin(userId.value)
         }
     }
 

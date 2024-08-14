@@ -24,27 +24,27 @@ sealed interface TimelineItemEventContent {
 }
 
 /**
- * Only text based content and states can be copied.
+ * Only text based content can be copied.
  */
 fun TimelineItemEventContent.canBeCopied(): Boolean =
-    when (this) {
-        is TimelineItemTextBasedContent,
-        is TimelineItemStateContent,
-        is TimelineItemRedactedContent -> true
-        else -> false
-    }
+    this is TimelineItemTextBasedContent
 
 /**
- * Determine if the event content can be replied to.
- * Note: it should match the logic in [io.element.android.features.messages.impl.actionlist.ActionListPresenter].
+ * Returns true if the event content can be forwarded.
  */
-fun TimelineItemEventContent.canBeRepliedTo(): Boolean =
+fun TimelineItemEventContent.canBeForwarded(): Boolean =
     when (this) {
-        is TimelineItemRedactedContent,
-        is TimelineItemLegacyCallInviteContent,
-        is TimelineItemCallNotifyContent,
-        is TimelineItemStateContent -> false
-        else -> true
+        is TimelineItemTextBasedContent,
+        is TimelineItemImageContent,
+        is TimelineItemFileContent,
+        is TimelineItemAudioContent,
+        is TimelineItemVideoContent,
+        is TimelineItemLocationContent,
+        is TimelineItemVoiceContent -> true
+        // Stickers can't be forwarded (yet) so we don't show the option
+        // See https://github.com/element-hq/element-x-android/issues/2161
+        is TimelineItemStickerContent -> false
+        else -> false
     }
 
 /**

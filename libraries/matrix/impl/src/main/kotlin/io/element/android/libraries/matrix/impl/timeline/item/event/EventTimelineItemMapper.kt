@@ -47,6 +47,7 @@ class EventTimelineItemMapper(private val contentMapper: TimelineEventContentMap
             eventId = it.eventId()?.let(::EventId),
             transactionId = it.transactionId()?.let(::TransactionId),
             isEditable = it.isEditable(),
+            canBeRepliedTo = it.canBeRepliedTo(),
             isLocal = it.isLocal(),
             isOwn = it.isOwn(),
             isRemote = it.isRemote(),

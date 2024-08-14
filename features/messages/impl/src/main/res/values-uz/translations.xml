@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Faoliyatlar"</string>
+  <string name="emoji_picker_category_flags">"Bayroqlar"</string>
+  <string name="emoji_picker_category_foods">"Oziq-ovqat va ichimliklar"</string>
+  <string name="emoji_picker_category_nature">"Hayvonlar va tabiat"</string>
+  <string name="emoji_picker_category_objects">"Ob\'ektlar"</string>
+  <string name="emoji_picker_category_people">"Smayllar va odamlar"</string>
+  <string name="emoji_picker_category_places">"Sayohat va Joylar"</string>
+  <string name="emoji_picker_category_symbols">"Belgilar"</string>
+  <string name="screen_report_content_block_user">"Foydalanuvchini bloklash"</string>
+  <string name="screen_report_content_block_user_hint">"Ushbu foydalanuvchidan barcha joriy va kelajakdagi xabarlarni yashirishni xohlayotganingizni tekshiring"</string>
+  <string name="screen_report_content_explanation">"Bu xabar uy serveringiz administratoriga xabar qilinadi. Ular hech qanday shifrlangan xabarlarni o\'qiy olmaydi."</string>
+  <string name="screen_report_content_hint">"Ushbu kontent haqida xabar berish sababi"</string>
+  <string name="screen_room_attachment_source_camera">"Kamera"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Rasmga olmoq"</string>
+  <string name="screen_room_attachment_source_camera_video">"Video yozib olish"</string>
+  <string name="screen_room_attachment_source_files">"Biriktirma"</string>
+  <string name="screen_room_attachment_source_gallery">"Fotosurat va video kutubxonasi"</string>
+  <string name="screen_room_attachment_source_location">"Joylashuv"</string>
+  <string name="screen_room_attachment_source_poll">"So\'ro\'vnoma"</string>
+  <string name="screen_room_attachment_text_formatting">"Matnni formatlash"</string>
+  <string name="screen_room_encrypted_history_banner">"Xabarlar tarixi hozirda mavjud emas."</string>
+  <string name="screen_room_invite_again_alert_message">"Ularni yana taklif qilmoqchimisiz?"</string>
+  <string name="screen_room_invite_again_alert_title">"Siz bu chatda yolg\'izsiz"</string>
+  <string name="screen_room_mentions_at_room_title">"Har kim"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"Yana yuboring"</string>
+  <string name="screen_room_retry_send_menu_title">"Xabaringiz yuborilmadi"</string>
+  <string name="screen_room_timeline_add_reaction">"Emoji qo\'shmoq"</string>
+  <string name="screen_room_timeline_beginning_of_room">"Bu %1$sni boshlanishi"</string>
+  <string name="screen_room_timeline_beginning_of_room_no_name">"Bu suhbatning boshlanishi."</string>
+  <string name="screen_room_timeline_less_reactions">"Kamroq ko\'rsatish"</string>
+  <string name="screen_room_timeline_message_copied">"Xabar nusxalandi"</string>
+  <string name="screen_room_timeline_no_permission_to_post">"Sizda bu xonaga post yozishga ruxsat yo‘q"</string>
+  <string name="screen_room_timeline_reactions_show_less">"Kamroq ko\'rsatish"</string>
+  <string name="screen_room_timeline_reactions_show_more">"Ko\'proq ko\'rsatish"</string>
+  <string name="screen_room_timeline_read_marker_title">"Yangi"</string>
+  <plurals name="screen_room_timeline_state_changes">
+    <item quantity="one">"%1$dxonani almashtirish"</item>
+    <item quantity="other">"%1$dxona o\'zgarishi"</item>
+  </plurals>
+</resources>

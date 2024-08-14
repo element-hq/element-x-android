@@ -125,6 +125,7 @@ class FakeMatrixRoom(
     private val getWidgetDriverResult: (MatrixWidgetSettings) -> Result<MatrixWidgetDriver> = { lambdaError() },
     private val canUserTriggerRoomNotificationResult: (UserId) -> Result<Boolean> = { lambdaError() },
     private val canUserJoinCallResult: (UserId) -> Result<Boolean> = { lambdaError() },
+    private val canUserPinUnpinResult: (UserId) -> Result<Boolean> = { lambdaError() },
     private val setIsFavoriteResult: (Boolean) -> Result<Unit> = { lambdaError() },
     private val powerLevelsResult: () -> Result<MatrixRoomPowerLevels> = { lambdaError() },
     private val updatePowerLevelsResult: () -> Result<Unit> = { lambdaError() },
@@ -134,10 +135,12 @@ class FakeMatrixRoom(
     private val updateMembersResult: () -> Unit = { lambdaError() },
     private val getMembersResult: (Int) -> Result<List<RoomMember>> = { lambdaError() },
     private val timelineFocusedOnEventResult: (EventId) -> Result<Timeline> = { lambdaError() },
+    private val pinnedEventsTimelineResult: () -> Result<Timeline> = { lambdaError() },
     private val setSendQueueEnabledLambda: (Boolean) -> Unit = { _: Boolean -> },
     private val saveComposerDraftLambda: (ComposerDraft) -> Result<Unit> = { _: ComposerDraft -> Result.success(Unit) },
     private val loadComposerDraftLambda: () -> Result<ComposerDraft?> = { Result.success<ComposerDraft?>(null) },
     private val clearComposerDraftLambda: () -> Result<Unit> = { Result.success(Unit) },
+    private val subscribeToSyncLambda: () -> Unit = { lambdaError() },
 ) : MatrixRoom {
     private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
     override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
@@ -180,7 +183,13 @@ class FakeMatrixRoom(
         timelineFocusedOnEventResult(eventId)
     }
 
-    override suspend fun subscribeToSync() = Unit
+    override suspend fun pinnedEventsTimeline(): Result<Timeline> = simulateLongTask {
+        pinnedEventsTimelineResult()
+    }
+
+    override suspend fun subscribeToSync() {
+        subscribeToSyncLambda()
+    }
 
     override suspend fun powerLevels(): Result<MatrixRoomPowerLevels> {
         return powerLevelsResult()
@@ -287,6 +296,10 @@ class FakeMatrixRoom(
 
     override suspend fun canUserJoinCall(userId: UserId): Result<Boolean> {
         return canUserJoinCallResult(userId)
+    }
+
+    override suspend fun canUserPinUnpin(userId: UserId): Result<Boolean> {
+        return canUserPinUnpinResult(userId)
     }
 
     override suspend fun sendImage(
@@ -517,6 +530,7 @@ fun aRoomInfo(
     userPowerLevels: ImmutableMap<UserId, Long> = persistentMapOf(),
     activeRoomCallParticipants: List<String> = emptyList(),
     heroes: List<MatrixUser> = emptyList(),
+    pinnedEventIds: List<EventId> = emptyList(),
 ) = MatrixRoomInfo(
     id = id,
     name = name,
@@ -542,6 +556,7 @@ fun aRoomInfo(
     userPowerLevels = userPowerLevels,
     activeRoomCallParticipants = activeRoomCallParticipants.toImmutableList(),
     heroes = heroes.toImmutableList(),
+    pinnedEventIds = pinnedEventIds.toImmutableList(),
 )
 
 fun defaultRoomPowerLevels() = MatrixRoomPowerLevels(

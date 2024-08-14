@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_join_action">"Приєднатися до кімнати"</string>
+  <string name="screen_join_room_knock_action">"Постукати, щоб приєднатися"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s ще не підтримує простори. Ви можете отримати доступ до них в вебверсії."</string>
+  <string name="screen_join_room_space_not_supported_title">"Простори поки що не підтримуються"</string>
+  <string name="screen_join_room_subtitle_knock">"Натисніть кнопку нижче, і адміністратор кімнати отримає сповіщення. Ви зможете приєднатися до розмови після схвалення."</string>
+  <string name="screen_join_room_subtitle_no_preview">"Ви мусите бути учасником цієї кімнати, щоб переглядати історію повідомлень."</string>
+  <string name="screen_join_room_title_knock">"Хочете приєднатися до цієї кімнати?"</string>
+  <string name="screen_join_room_title_no_preview">"Попередній перегляд недоступний"</string>
+</resources>

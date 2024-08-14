@@ -48,7 +48,10 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -90,7 +93,9 @@ fun TimelineView(
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     onJoinCallClick: () -> Unit,
     modifier: Modifier = Modifier,
-    forceJumpToBottomVisibility: Boolean = false
+    lazyListState: LazyListState = rememberLazyListState(),
+    forceJumpToBottomVisibility: Boolean = false,
+    nestedScrollConnection: NestedScrollConnection = rememberNestedScrollInteropConnection(),
 ) {
     fun clearFocusRequestState() {
         state.eventSink(TimelineEvents.ClearFocusRequestState)
@@ -109,7 +114,6 @@ fun TimelineView(
     }
 
     val context = LocalContext.current
-    val lazyListState = rememberLazyListState()
     // Disable reverse layout when TalkBack is enabled to avoid incorrect ordering issues seen in the current Compose UI version
     val useReverseLayout = remember {
         val accessibilityManager = context.getSystemService(AccessibilityManager::class.java)
@@ -124,7 +128,9 @@ fun TimelineView(
     AnimatedVisibility(visible = true, enter = fadeIn()) {
         Box(modifier) {
             LazyColumn(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .nestedScroll(nestedScrollConnection),
                 state = lazyListState,
                 reverseLayout = useReverseLayout,
                 contentPadding = PaddingValues(vertical = 8.dp),

@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Не можете підтвердити?"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Створити новий ключ відновлення"</string>
   <string name="screen_identity_confirmation_subtitle">"Перевірте цей пристрій, щоб налаштувати безпечний обмін повідомленнями."</string>
   <string name="screen_identity_confirmation_title">"Підтвердіть, що це ви"</string>
   <string name="screen_identity_confirmed_subtitle">"Тепер ви можете безпечно читати або надсилати повідомлення, і кожен, з ким ви спілкуєтесь, також може довіряти цьому пристрою."</string>
   <string name="screen_identity_confirmed_title">"Пристрій перевірено"</string>
+  <string name="screen_identity_waiting_on_other_device">"Чекає на інше пристрій…"</string>
   <string name="screen_session_verification_cancelled_subtitle">"Щось не так. Або час очікування запиту минув, або в запиті було відмовлено."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Переконайтеся, що емодзі нижче збігаються з тими, що відображаються під час іншого сеансу."</string>
   <string name="screen_session_verification_compare_emojis_title">"Порівняти емодзі"</string>

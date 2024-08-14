@@ -31,6 +31,7 @@ import io.element.android.services.appnavstate.test.A_ROOM_OWNER
 import io.element.android.services.appnavstate.test.A_SESSION_OWNER
 import io.element.android.services.appnavstate.test.A_SPACE_OWNER
 import io.element.android.services.appnavstate.test.A_THREAD_OWNER
+import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
 import io.element.android.tests.testutils.runCancellableScopeTest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first

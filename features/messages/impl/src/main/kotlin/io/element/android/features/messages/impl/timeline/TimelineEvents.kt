@@ -18,10 +18,11 @@ package io.element.android.features.messages.impl.timeline
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import kotlin.time.Duration
 
 sealed interface TimelineEvents {
     data class OnScrollFinished(val firstIndex: Int) : TimelineEvents
-    data class FocusOnEvent(val eventId: EventId) : TimelineEvents
+    data class FocusOnEvent(val eventId: EventId, val debounce: Duration = Duration.ZERO) : TimelineEvents
     data object ClearFocusRequestState : TimelineEvents
     data object OnFocusEventRender : TimelineEvents
     data object JumpToLive : TimelineEvents

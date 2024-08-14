@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Nem tudja megerősíteni?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Új helyreállítási kulcs létrehozása"</string>
   <string name="screen_identity_confirmation_subtitle">"A biztonságos üzenetkezelés beállításához ellenőrizze ezt az eszközt."</string>
   <string name="screen_identity_confirmation_title">"Erősítse meg, hogy Ön az"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Másik eszköz használata"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Helyreállítási kulcs használata"</string>
   <string name="screen_identity_confirmed_subtitle">"Mostantól biztonságosan olvashat vagy küldhet üzeneteket, és bármelyik csevegőpartnere megbízhat ebben az eszközben."</string>
   <string name="screen_identity_confirmed_title">"Eszköz ellenőrizve"</string>
   <string name="screen_identity_use_another_device">"Másik eszköz használata"</string>

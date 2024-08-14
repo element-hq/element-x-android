@@ -91,6 +91,7 @@
   <string name="action_report_bug">"Report bug"</string>
   <string name="action_report_content">"Report content"</string>
   <string name="action_reset">"Reset"</string>
+  <string name="action_reset_identity">"Reset identity"</string>
   <string name="action_retry">"Retry"</string>
   <string name="action_retry_decryption">"Retry decryption"</string>
   <string name="action_save">"Save"</string>
@@ -110,6 +111,7 @@
   <string name="action_take_photo">"Take photo"</string>
   <string name="action_tap_for_options">"Tap for options"</string>
   <string name="action_try_again">"Try again"</string>
+  <string name="action_unpin">"Unpin"</string>
   <string name="action_view_source">"View source"</string>
   <string name="action_yes">"Yes"</string>
   <string name="common_about">"About"</string>
@@ -258,6 +260,7 @@ Reason: %1$s."</string>
   <string name="error_some_messages_have_not_been_sent">"Some messages have not been sent"</string>
   <string name="error_unknown">"Sorry, an error occurred"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"The authenticity of this encrypted message can\'t be guaranteed on this device."</string>
+  <string name="event_shield_reason_sent_in_clear">"Not encrypted."</string>
   <string name="event_shield_reason_unknown_device">"Encrypted by an unknown or deleted device."</string>
   <string name="event_shield_reason_unsigned_device">"Encrypted by a device not verified by its owner."</string>
   <string name="event_shield_reason_unverified_identity">"Encrypted by an unverified user."</string>
@@ -265,9 +268,29 @@ Reason: %1$s."</string>
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
+  <string name="screen_encryption_reset_bullet_1">"Your account details, contacts, preferences, and chat list will be kept"</string>
+  <string name="screen_encryption_reset_bullet_2">"You will lose your existing message history"</string>
+  <string name="screen_encryption_reset_bullet_3">"You will need to verify all your existing devices and contacts again"</string>
+  <string name="screen_encryption_reset_footer">"Only reset your identity if you don’t have access to another signed-in device and you’ve lost your recovery key."</string>
+  <string name="screen_encryption_reset_subtitle">"If you’re not signed in to any other devices and you’ve lost your recovery key, then you’ll need to reset your identity to continue using the app. "</string>
+  <string name="screen_encryption_reset_title">"Reset your identity in case you can’t confirm another way"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Failed uploading media, please try again."</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Press on a message and choose “%1$s” to include here."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Pin important messages so that they can be easily discovered"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d Pinned message"</item>
+    <item quantity="other">"%1$d Pinned messages"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Pinned messages"</string>
+  <string name="screen_reset_encryption_confirmation_alert_action">"Yes, reset now"</string>
+  <string name="screen_reset_encryption_confirmation_alert_subtitle">"This process is irreversible."</string>
+  <string name="screen_reset_encryption_confirmation_alert_title">"Are you sure you want to reset your encryption?"</string>
+  <string name="screen_reset_encryption_password_placeholder">"Enter…"</string>
+  <string name="screen_reset_encryption_password_subtitle">"Confirm that you want to reset your encryption."</string>
+  <string name="screen_reset_encryption_password_title">"Enter your account password to continue"</string>
+  <string name="screen_room_details_pinned_events_row_title">"Pinned messages"</string>
   <string name="screen_room_error_failed_processing_media">"Failed processing media to upload, please try again."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Could not retrieve user details"</string>
   <string name="screen_room_member_details_block_alert_action">"Block"</string>
@@ -279,6 +302,7 @@ Reason: %1$s."</string>
   <string name="screen_room_member_details_unblock_user">"Unblock user"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s of %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Pinned messages"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Loading message…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"View All"</string>
   <string name="screen_room_title">"Chat"</string>
   <string name="screen_share_location_title">"Share location"</string>

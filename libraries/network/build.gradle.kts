@@ -23,7 +23,6 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = true
             consumerProguardFiles("consumer-rules.pro")
         }
     }

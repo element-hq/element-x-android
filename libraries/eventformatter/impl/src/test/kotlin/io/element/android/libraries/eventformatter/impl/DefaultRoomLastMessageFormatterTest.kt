@@ -660,7 +660,7 @@ class DefaultRoomLastMessageFormatterTest {
             OtherState.RoomGuestAccess,
             OtherState.RoomHistoryVisibility,
             OtherState.RoomJoinRules,
-            OtherState.RoomPinnedEvents,
+            OtherState.RoomPinnedEvents(OtherState.RoomPinnedEvents.Change.CHANGED),
             OtherState.RoomUserPowerLevels(emptyMap()),
             OtherState.RoomServerAcl,
             OtherState.RoomTombstone,

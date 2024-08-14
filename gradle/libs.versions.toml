@@ -3,9 +3,9 @@
 
 [versions]
 # Project
-android_gradle_plugin = "8.4.1"
-kotlin = "1.9.24"
-ksp = "1.9.24-1.0.20"
+android_gradle_plugin = "8.5.2"
+kotlin = "1.9.25"
+ksp = "1.9.25-1.0.20"
 firebaseAppDistribution = "5.0.0"
 
 # AndroidX
@@ -19,13 +19,13 @@ datastore = "1.0.0"
 constraintlayout = "2.1.4"
 constraintlayout_compose = "1.0.1"
 lifecycle = "2.7.0"
-activity = "1.9.0"
-media3 = "1.3.1"
+activity = "1.9.1"
+media3 = "1.4.0"
 camera = "1.3.4"
 
 # Compose
 compose_bom = "2024.06.00"
-composecompiler = "1.5.14"
+composecompiler = "1.5.15"
 
 # Coroutines
 coroutines = "1.8.1"
@@ -39,12 +39,12 @@ test_core = "1.6.1"
 #other
 coil = "2.7.0"
 datetime = "0.6.0"
-dependencyAnalysis = "1.32.0"
+dependencyAnalysis = "1.33.0"
 serialization_json = "1.6.3"
 showkase = "1.0.3"
 appyx = "1.4.0"
 sqldelight = "2.0.2"
-wysiwyg = "2.37.7"
+wysiwyg = "2.37.8"
 telephoto = "0.12.1"
 
 # DI
@@ -56,7 +56,7 @@ autoservice = "1.1.1"
 
 # quality
 androidx-test-ext-junit = "1.2.1"
-kover = "0.8.0"
+kover = "0.8.3"
 
 [libraries]
 # Project
@@ -75,7 +75,7 @@ oss_licenses_plugin = "com.google.android.gms:oss-licenses-plugin:0.10.6"
 # AndroidX
 androidx_core = { module = "androidx.core:core", version.ref = "core" }
 androidx_corektx = { module = "androidx.core:core-ktx", version.ref = "core" }
-androidx_annotationjvm = "androidx.annotation:annotation-jvm:1.8.0"
+androidx_annotationjvm = "androidx.annotation:annotation-jvm:1.8.2"
 androidx_datastore_preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 androidx_datastore_datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 androidx_exifinterface = "androidx.exifinterface:exifinterface:1.3.7"
@@ -163,7 +163,7 @@ jsoup = "org.jsoup:jsoup:1.18.1"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.0.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.34"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.39"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
@@ -177,7 +177,7 @@ vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.2"
-maplibre = "org.maplibre.gl:android-sdk:11.0.1"
+maplibre = "org.maplibre.gl:android-sdk:11.1.0"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:3.0.0"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.0"
 opusencoder = "io.element.android:opusencoder:1.1.0"
@@ -186,8 +186,8 @@ zxing_cpp = "io.github.zxing-cpp:android:2.2.0"
 play_services_oss_licenses = "com.google.android.gms:play-services-oss-licenses:17.1.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.4.2"
-sentry = "io.sentry:sentry-android:7.12.0"
+posthog = "com.posthog:posthog-android:3.5.0"
+sentry = "io.sentry:sentry-android:7.14.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.23.1"
 

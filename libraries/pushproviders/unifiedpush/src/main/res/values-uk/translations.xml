@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_unified_push_description">"Переконується, що дистриб\'ютори UnifiedPush доступні."</string>
+  <string name="troubleshoot_notifications_test_unified_push_failure">"Дистриб\'юторів не знайдено."</string>
+  <plurals name="troubleshoot_notifications_test_unified_push_success">
+    <item quantity="one">"%1$d дистриб\'ютора знайдено: %2$s."</item>
+    <item quantity="few">"%1$d дистриб\'юторів знайдено: %2$s."</item>
+    <item quantity="many">"%1$d дистриб\'юторів знайдено: %2$s."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_unified_push_title">"Перевірка UnifiedPush"</string>
+</resources>

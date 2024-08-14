@@ -218,6 +218,7 @@ private fun SheetContent(
     }
 }
 
+@Suppress("MultipleEmitters") // False positive
 @Composable
 private fun MessageSummary(event: TimelineItem.Event, modifier: Modifier = Modifier) {
     val content: @Composable () -> Unit
