@@ -20,6 +20,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.features.securebackup.impl.R
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
@@ -80,7 +81,7 @@ class ResetIdentityRootViewTest {
                 ResetIdentityRootState(displayConfirmationDialog = true, eventSink = {}),
                 onContinue = it,
             )
-            rule.clickOn(CommonStrings.screen_reset_encryption_confirmation_alert_action)
+            rule.clickOn(R.string.screen_reset_encryption_confirmation_alert_action)
         }
     }
 

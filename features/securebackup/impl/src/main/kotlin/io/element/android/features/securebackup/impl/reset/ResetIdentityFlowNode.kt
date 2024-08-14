@@ -23,6 +23,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.bumble.appyx.core.modality.BuildContext
@@ -45,14 +46,13 @@ import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.encryption.IdentityOidcResetHandle
 import io.element.android.libraries.matrix.api.encryption.IdentityPasswordResetHandle
-import io.element.android.libraries.matrix.api.encryption.IdentityResetHandle
 import io.element.android.libraries.oidc.api.OidcEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 
 @ContributesNode(SessionScope::class)
 class ResetIdentityFlowNode @AssistedInject constructor(
@@ -94,7 +94,7 @@ class ResetIdentityFlowNode @AssistedInject constructor(
         lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onStart(owner: LifecycleOwner) {
                 // If the custom tab was opened, we need to cancel the reset job
-                // when we come back to the node if it the reset wasn't successful
+                // when we come back to the node if the reset wasn't successful
                 cancelResetJob()
             }
 
@@ -129,22 +129,29 @@ class ResetIdentityFlowNode @AssistedInject constructor(
     }
 
     private fun CoroutineScope.startReset() = launch {
-        val handle = resetIdentityFlowManager.getResetHandle()
-            .filterIsInstance<AsyncData.Success<IdentityResetHandle>>()
-            .first()
-            .data
-
-        when (handle) {
-            is IdentityOidcResetHandle -> {
-                if (oidcEntryPoint.canUseCustomTab()) {
-                    activity.openUrlInChromeCustomTab(null, false, handle.url)
-                } else {
-                    backstack.push(NavTarget.ResetOidc(handle.url))
+        resetIdentityFlowManager.getResetHandle()
+            .collectLatest { state ->
+                when (state) {
+                    is AsyncData.Failure -> {
+                        cancelResetJob()
+                        Timber.e(state.error, "Could not load the reset identity handle.")
+                    }
+                    is AsyncData.Success -> {
+                        when (val handle = state.data) {
+                            is IdentityOidcResetHandle -> {
+                                if (oidcEntryPoint.canUseCustomTab()) {
+                                    activity.openUrlInChromeCustomTab(null, false, handle.url)
+                                } else {
+                                    backstack.push(NavTarget.ResetOidc(handle.url))
+                                }
+                                resetJob = launch { handle.resetOidc() }
+                            }
+                            is IdentityPasswordResetHandle -> backstack.push(NavTarget.ResetPassword)
+                        }
+                    }
+                    else -> Unit
                 }
-                resetJob = launch { handle.resetOidc() }
             }
-            is IdentityPasswordResetHandle -> backstack.push(NavTarget.ResetPassword)
-        }
     }
 
     private fun cancelResetJob() {
@@ -162,7 +169,10 @@ class ResetIdentityFlowNode @AssistedInject constructor(
 
         val startResetState by resetIdentityFlowManager.currentHandleFlow.collectAsState()
         if (startResetState.isLoading()) {
-            ProgressDialog()
+            ProgressDialog(
+                properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true),
+                onDismissRequest = { cancelResetJob() }
+            )
         }
 
         BackstackView(modifier)

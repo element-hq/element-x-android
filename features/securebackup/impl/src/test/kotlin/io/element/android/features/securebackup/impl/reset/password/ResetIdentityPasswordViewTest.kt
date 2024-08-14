@@ -76,12 +76,12 @@ class ResetIdentityPasswordViewTest {
     }
 
     @Test
-    fun `clicking OK dismisses the error dialog`() {
+    fun `modifying the password dismisses the error state`() {
         val eventsRecorder = EventsRecorder<ResetIdentityPasswordEvent>()
         rule.setResetPasswordView(
             ResetIdentityPasswordState(resetAction = AsyncAction.Failure(IllegalStateException("A failure")), eventSink = eventsRecorder),
         )
-        rule.clickOn(CommonStrings.action_ok)
+        rule.onNodeWithText("Password").performTextInput("A password")
 
         eventsRecorder.assertSingle(ResetIdentityPasswordEvent.DismissError)
     }

@@ -27,12 +27,12 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.features.securebackup.impl.R
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.ProgressDialog
-import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -54,13 +54,19 @@ fun ResetIdentityPasswordView(
     FlowStepPage(
         modifier = modifier,
         iconStyle = BigIcon.Style.Default(CompoundIcons.LockSolid()),
-        title = stringResource(CommonStrings.screen_reset_encryption_password_title),
-        subTitle = stringResource(CommonStrings.screen_reset_encryption_password_subtitle),
+        title = stringResource(R.string.screen_reset_encryption_password_title),
+        subTitle = stringResource(R.string.screen_reset_encryption_password_subtitle),
         onBackClick = onBack,
         content = {
             Content(
                 text = passwordState.value,
-                onTextChange = { passwordState.value = it }
+                onTextChange = { newText ->
+                    if (state.resetAction.isFailure()) {
+                        state.eventSink(ResetIdentityPasswordEvent.DismissError)
+                    }
+                    passwordState.value = newText
+                },
+                hasError = state.resetAction.isFailure(),
             )
         },
         buttons = {
@@ -69,22 +75,19 @@ fun ResetIdentityPasswordView(
                 text = stringResource(CommonStrings.action_reset_identity),
                 onClick = { state.eventSink(ResetIdentityPasswordEvent.Reset(passwordState.value)) },
                 destructive = true,
+                enabled = passwordState.value.isNotEmpty(),
             )
         }
     )
 
+    // On success we need to wait until the screen is automatically dismissed, so we keep the progress dialog
     if (state.resetAction.isLoading() || state.resetAction.isSuccess()) {
         ProgressDialog()
-    } else if (state.resetAction.isFailure()) {
-        ErrorDialog(
-            content = stringResource(CommonStrings.error_unknown),
-            onDismiss = { state.eventSink(ResetIdentityPasswordEvent.DismissError) }
-        )
     }
 }
 
 @Composable
-private fun Content(text: String, onTextChange: (String) -> Unit) {
+private fun Content(text: String, onTextChange: (String) -> Unit, hasError: Boolean) {
     var showPassword by remember { mutableStateOf(false) }
     OutlinedTextField(
         modifier = Modifier
@@ -93,7 +96,7 @@ private fun Content(text: String, onTextChange: (String) -> Unit) {
         value = text,
         onValueChange = onTextChange,
         label = { Text(stringResource(CommonStrings.common_password)) },
-        placeholder = { Text(stringResource(CommonStrings.screen_reset_encryption_password_placeholder)) },
+        placeholder = { Text(stringResource(R.string.screen_reset_encryption_password_placeholder)) },
         singleLine = true,
         visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
@@ -105,19 +108,22 @@ private fun Content(text: String, onTextChange: (String) -> Unit) {
             IconButton(onClick = { showPassword = !showPassword }) {
                 Icon(imageVector = image, description)
             }
+        },
+        isError = hasError,
+        supportingText = if (hasError) {
+            { Text(stringResource(R.string.screen_reset_encryption_password_error)) }
+        } else {
+            null
         }
     )
 }
 
 @PreviewsDayNight
 @Composable
-internal fun ResetIdentityPasswordViewPreview() {
+internal fun ResetIdentityPasswordViewPreview(@PreviewParameter(ResetIdentityPasswordStateProvider::class) state: ResetIdentityPasswordState) {
     ElementPreview {
         ResetIdentityPasswordView(
-            state = ResetIdentityPasswordState(
-                resetAction = AsyncAction.Uninitialized,
-                eventSink = {}
-            ),
+            state = state,
             onBack = {}
         )
     }

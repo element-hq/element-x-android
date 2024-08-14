@@ -34,14 +34,14 @@ import io.element.android.libraries.matrix.api.encryption.IdentityPasswordResetH
 class ResetIdentityPasswordNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val coroutineDispatchers: CoroutineDispatchers,
+    coroutineDispatchers: CoroutineDispatchers,
 ) : Node(buildContext, plugins = plugins) {
     data class Inputs(val handle: IdentityPasswordResetHandle) : NodeInputs
 
-    private val presenter by lazy {
-        val inputs = inputs<Inputs>()
-        ResetIdentityPasswordPresenter(inputs.handle, dispatchers = coroutineDispatchers)
-    }
+    private val presenter = ResetIdentityPasswordPresenter(
+        identityPasswordResetHandle = inputs<Inputs>().handle,
+        dispatchers = coroutineDispatchers
+    )
 
     @Composable
     override fun View(modifier: Modifier) {

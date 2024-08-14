@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,13 +43,8 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.network)
     implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
-    implementation(projects.libraries.permissions.api)
-    implementation(projects.libraries.qrcode)
     implementation(libs.androidx.browser)
     implementation(platform(libs.network.retrofit.bom))
     implementation(libs.network.retrofit)
@@ -57,15 +52,12 @@ dependencies {
     api(projects.libraries.oidc.api)
 
     testImplementation(libs.test.junit)
-    testImplementation(libs.androidx.compose.ui.test.junit)
     testImplementation(libs.androidx.test.ext.junit)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)
-    testImplementation(libs.test.robolectric)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.tests.testutils)
-    testReleaseImplementation(libs.androidx.compose.ui.test.manifest)
 }

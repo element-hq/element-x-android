@@ -16,6 +16,12 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Follow the instructions to create a new recovery key"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Save your new recovery key in a password manager or encrypted note"</string>
   <string name="screen_create_new_recovery_key_title">"Reset the encryption for your account using another device"</string>
+  <string name="screen_encryption_reset_bullet_1">"Your account details, contacts, preferences, and chat list will be kept"</string>
+  <string name="screen_encryption_reset_bullet_2">"You will lose your existing message history"</string>
+  <string name="screen_encryption_reset_bullet_3">"You will need to verify all your existing devices and contacts again"</string>
+  <string name="screen_encryption_reset_footer">"Only reset your identity if you don’t have access to another signed-in device and you’ve lost your recovery key."</string>
+  <string name="screen_encryption_reset_subtitle">"If you’re not signed in to any other devices and you’ve lost your recovery key, then you’ll need to reset your identity to continue using the app. "</string>
+  <string name="screen_encryption_reset_title">"Reset your identity in case you can’t confirm another way"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Turn off"</string>
   <string name="screen_key_backup_disable_confirmation_description">"You will lose your encrypted messages if you are signed out of all devices."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Are you sure you want to turn off backup?"</string>
@@ -51,4 +57,11 @@
   <string name="screen_recovery_key_setup_generate_key_description">"Make sure you can store your recovery key somewhere safe"</string>
   <string name="screen_recovery_key_setup_success">"Recovery setup successful"</string>
   <string name="screen_recovery_key_setup_title">"Set up recovery"</string>
+  <string name="screen_reset_encryption_confirmation_alert_action">"Yes, reset now"</string>
+  <string name="screen_reset_encryption_confirmation_alert_subtitle">"This process is irreversible."</string>
+  <string name="screen_reset_encryption_confirmation_alert_title">"Are you sure you want to reset your encryption?"</string>
+  <string name="screen_reset_encryption_password_error">"An unknown error happened. Please check your account password is correct and try again."</string>
+  <string name="screen_reset_encryption_password_placeholder">"Enter…"</string>
+  <string name="screen_reset_encryption_password_subtitle">"Confirm that you want to reset your encryption."</string>
+  <string name="screen_reset_encryption_password_title">"Enter your account password to continue"</string>
 </resources>

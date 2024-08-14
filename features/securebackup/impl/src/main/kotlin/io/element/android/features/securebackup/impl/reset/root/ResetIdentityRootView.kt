@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.securebackup.impl.R
 import io.element.android.libraries.designsystem.atomic.organisms.InfoListItem
 import io.element.android.libraries.designsystem.atomic.organisms.InfoListOrganism
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
@@ -52,8 +53,8 @@ fun ResetIdentityRootView(
     FlowStepPage(
         modifier = modifier,
         iconStyle = BigIcon.Style.AlertSolid,
-        title = stringResource(io.element.android.libraries.ui.strings.R.string.screen_encryption_reset_title),
-        subTitle = stringResource(io.element.android.libraries.ui.strings.R.string.screen_encryption_reset_subtitle),
+        title = stringResource(R.string.screen_encryption_reset_title),
+        subTitle = stringResource(R.string.screen_encryption_reset_subtitle),
         isScrollable = true,
         content = { Content() },
         buttons = {
@@ -69,9 +70,9 @@ fun ResetIdentityRootView(
 
     if (state.displayConfirmationDialog) {
         ConfirmationDialog(
-            title = stringResource(CommonStrings.screen_reset_encryption_confirmation_alert_title),
-            content = stringResource(CommonStrings.screen_reset_encryption_confirmation_alert_subtitle),
-            submitText = stringResource(CommonStrings.screen_reset_encryption_confirmation_alert_action),
+            title = stringResource(R.string.screen_reset_encryption_confirmation_alert_title),
+            content = stringResource(R.string.screen_reset_encryption_confirmation_alert_subtitle),
+            submitText = stringResource(R.string.screen_reset_encryption_confirmation_alert_action),
             onSubmitClick = {
                 state.eventSink(ResetIdentityRootEvent.DismissDialog)
                 onContinue()
@@ -92,7 +93,7 @@ private fun Content() {
             modifier = Modifier.fillMaxWidth(),
             items = persistentListOf(
                 InfoListItem(
-                    message = stringResource(CommonStrings.screen_encryption_reset_bullet_1),
+                    message = stringResource(R.string.screen_encryption_reset_bullet_1),
                     iconComposable = {
                         Icon(
                             modifier = Modifier.size(20.dp),
@@ -103,7 +104,7 @@ private fun Content() {
                     },
                 ),
                 InfoListItem(
-                    message = stringResource(CommonStrings.screen_encryption_reset_bullet_2),
+                    message = stringResource(R.string.screen_encryption_reset_bullet_2),
                     iconComposable = {
                         Icon(
                             modifier = Modifier.size(20.dp),
@@ -114,7 +115,7 @@ private fun Content() {
                     },
                 ),
                 InfoListItem(
-                    message = stringResource(CommonStrings.screen_encryption_reset_bullet_3),
+                    message = stringResource(R.string.screen_encryption_reset_bullet_3),
                     iconComposable = {
                         Icon(
                             modifier = Modifier.size(20.dp),
@@ -130,7 +131,7 @@ private fun Content() {
 
         Text(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(CommonStrings.screen_encryption_reset_footer),
+            text = stringResource(R.string.screen_encryption_reset_footer),
             style = ElementTheme.typography.fontBodyMdMedium,
             color = ElementTheme.colors.textActionPrimary,
             textAlign = TextAlign.Center,

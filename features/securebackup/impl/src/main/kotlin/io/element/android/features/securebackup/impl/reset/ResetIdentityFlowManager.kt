@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.encryption.IdentityResetHandle
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -37,9 +38,10 @@ class ResetIdentityFlowManager @Inject constructor(
 ) {
     private val resetHandleFlow: MutableStateFlow<AsyncData<IdentityResetHandle>> = MutableStateFlow(AsyncData.Uninitialized)
     val currentHandleFlow: StateFlow<AsyncData<IdentityResetHandle>> = resetHandleFlow
+    private var whenResetIsDoneWaitingJob: Job? = null
 
     fun whenResetIsDone(block: () -> Unit) {
-        sessionCoroutineScope.launch {
+        whenResetIsDoneWaitingJob = sessionCoroutineScope.launch {
             sessionVerificationService.sessionVerifiedStatus.filterIsInstance<SessionVerifiedStatus.Verified>().first()
             block()
         }
@@ -70,5 +72,8 @@ class ResetIdentityFlowManager @Inject constructor(
     suspend fun cancel() {
         currentHandleFlow.value.dataOrNull()?.cancel()
         resetHandleFlow.value = AsyncData.Uninitialized
+
+        whenResetIsDoneWaitingJob?.cancel()
+        whenResetIsDoneWaitingJob = null
     }
 }
