@@ -120,6 +120,7 @@ class KonsistPreviewTest {
                 "TextComposerVoicePreview",
                 "TimelineImageWithCaptionRowPreview",
                 "TimelineItemEventRowForDirectRoomPreview",
+                "TimelineItemEventRowShieldPreview",
                 "TimelineItemEventRowTimestampPreview",
                 "TimelineItemEventRowWithManyReactionsPreview",
                 "TimelineItemEventRowWithRRPreview",

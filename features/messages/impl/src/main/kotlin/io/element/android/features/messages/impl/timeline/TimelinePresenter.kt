@@ -45,6 +45,7 @@ import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
@@ -97,6 +98,7 @@ class TimelinePresenter @AssistedInject constructor(
         val prevMostRecentItemId = rememberSaveable { mutableStateOf<String?>(null) }
 
         val newEventState = remember { mutableStateOf(NewEventState.None) }
+        val messageShield: MutableState<MessageShield?> = remember { mutableStateOf(null) }
 
         val isSendPublicReadReceiptsEnabled by sessionPreferencesStore.isSendPublicReadReceiptsEnabled().collectAsState(initial = true)
         val renderReadReceipts by sessionPreferencesStore.isRenderReadReceiptsEnabled().collectAsState(initial = true)
@@ -151,6 +153,8 @@ class TimelinePresenter @AssistedInject constructor(
                 is TimelineEvents.JumpToLive -> {
                     timelineController.focusOnLive()
                 }
+                TimelineEvents.HideShieldDialog -> messageShield.value = null
+                is TimelineEvents.ShowShieldDialog -> messageShield.value = event.messageShield
             }
         }
 
@@ -226,6 +230,7 @@ class TimelinePresenter @AssistedInject constructor(
             newEventState = newEventState.value,
             isLive = isLive,
             focusRequestState = focusRequestState.value,
+            messageShield = messageShield.value,
             eventSink = { handleEvents(it) }
         )
     }

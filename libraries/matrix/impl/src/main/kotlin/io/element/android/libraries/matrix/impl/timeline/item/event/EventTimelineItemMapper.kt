@@ -27,13 +27,13 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
-import io.element.android.libraries.matrix.api.timeline.item.event.ShieldColor
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.matrix.rustcomponents.sdk.Reaction
 import org.matrix.rustcomponents.sdk.ShieldState
+import uniffi.matrix_sdk_common.ShieldStateCode
 import org.matrix.rustcomponents.sdk.EventSendState as RustEventSendState
 import org.matrix.rustcomponents.sdk.EventTimelineItem as RustEventTimelineItem
 import org.matrix.rustcomponents.sdk.EventTimelineItemDebugInfo as RustEventTimelineItemDebugInfo
@@ -135,10 +135,22 @@ private fun RustEventItemOrigin.map(): TimelineItemEventOrigin {
 }
 
 private fun ShieldState?.map(): MessageShield? {
-    return when (this) {
-        is ShieldState.Grey -> MessageShield(message = this.message, color = ShieldColor.GREY)
-        is ShieldState.Red -> MessageShield(message = this.message, color = ShieldColor.RED)
+    this ?: return null
+    val shieldStateCode = when (this) {
+        is ShieldState.Grey -> code
+        is ShieldState.Red -> code
+        ShieldState.None -> null
+    } ?: return null
+    val isCritical = when (this) {
         ShieldState.None,
-        null -> null
+        is ShieldState.Grey -> false
+        is ShieldState.Red -> true
+    }
+    return when (shieldStateCode) {
+        ShieldStateCode.AUTHENTICITY_NOT_GUARANTEED -> MessageShield.AuthenticityNotGuaranteed(isCritical)
+        ShieldStateCode.UNKNOWN_DEVICE -> MessageShield.UnknownDevice(isCritical)
+        ShieldStateCode.UNSIGNED_DEVICE -> MessageShield.UnsignedDevice(isCritical)
+        ShieldStateCode.UNVERIFIED_IDENTITY -> MessageShield.UnverifiedIdentity(isCritical)
+        ShieldStateCode.SENT_IN_CLEAR -> MessageShield.SentInClear(isCritical)
     }
 }

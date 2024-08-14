@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.timeline.components.MessageShieldView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
@@ -181,7 +182,14 @@ private fun SheetContent(
                                 .fillMaxWidth()
                                 .padding(horizontal = 16.dp)
                         )
-                        Spacer(modifier = Modifier.height(14.dp))
+                        if (target.event.messageShield != null) {
+                            MessageShieldView(
+                                shield = target.event.messageShield,
+                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+                            )
+                        } else {
+                            Spacer(modifier = Modifier.height(14.dp))
+                        }
                         HorizontalDivider()
                     }
                 }

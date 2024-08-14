@@ -36,6 +36,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 
 @Composable
 fun TimelineItemGroupedEventsRow(
@@ -46,6 +47,7 @@ fun TimelineItemGroupedEventsRow(
     focusedEventId: EventId?,
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
+    onShieldClick: (MessageShield) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onUserDataClick: (UserId) -> Unit,
     onLinkClick: (String) -> Unit,
@@ -72,6 +74,7 @@ fun TimelineItemGroupedEventsRow(
         isLastOutgoingMessage = isLastOutgoingMessage,
         onClick = onClick,
         onLongClick = onLongClick,
+        onShieldClick = onShieldClick,
         inReplyToClick = inReplyToClick,
         onUserDataClick = onUserDataClick,
         onLinkClick = onLinkClick,
@@ -95,6 +98,7 @@ private fun TimelineItemGroupedEventsRowContent(
     isLastOutgoingMessage: Boolean,
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
+    onShieldClick: (MessageShield) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onUserDataClick: (UserId) -> Unit,
     onLinkClick: (String) -> Unit,
@@ -127,6 +131,7 @@ private fun TimelineItemGroupedEventsRowContent(
                         focusedEventId = focusedEventId,
                         onClick = onClick,
                         onLongClick = onLongClick,
+                        onShieldClick = onShieldClick,
                         inReplyToClick = inReplyToClick,
                         onUserDataClick = onUserDataClick,
                         onLinkClick = onLinkClick,
@@ -168,6 +173,7 @@ internal fun TimelineItemGroupedEventsRowContentExpandedPreview() = ElementPrevi
         isLastOutgoingMessage = false,
         onClick = {},
         onLongClick = {},
+        onShieldClick = {},
         inReplyToClick = {},
         onUserDataClick = {},
         onLinkClick = {},
@@ -192,6 +198,7 @@ internal fun TimelineItemGroupedEventsRowContentCollapsePreview() = ElementPrevi
         isLastOutgoingMessage = false,
         onClick = {},
         onLongClick = {},
+        onShieldClick = {},
         inReplyToClick = {},
         onUserDataClick = {},
         onLinkClick = {},

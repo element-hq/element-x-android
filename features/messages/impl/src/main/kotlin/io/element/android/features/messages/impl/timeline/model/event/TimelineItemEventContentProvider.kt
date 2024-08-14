@@ -21,8 +21,6 @@ import android.text.style.StyleSpan
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
-import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
-import io.element.android.libraries.matrix.api.timeline.item.event.ShieldColor
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 
 class TimelineItemEventContentProvider : PreviewParameterProvider<TimelineItemEventContent> {
@@ -103,14 +101,4 @@ fun aTimelineItemStateEventContent(
     body: String = "A state event",
 ) = TimelineItemStateEventContent(
     body = body,
-)
-
-fun aGreyShield() = MessageShield(
-    message = "The authenticity of this encrypted message can't be guaranteed on this device.",
-    color = ShieldColor.GREY
-)
-
-fun aRedShield() = MessageShield(
-    message = "Encrypted by a device not verified by its owner.",
-    color = ShieldColor.RED
 )

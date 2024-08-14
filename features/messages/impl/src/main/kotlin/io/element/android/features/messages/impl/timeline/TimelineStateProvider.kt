@@ -51,6 +51,7 @@ fun aTimelineState(
     timelineRoomInfo: TimelineRoomInfo = aTimelineRoomInfo(),
     focusedEventIndex: Int = -1,
     isLive: Boolean = true,
+    messageShield: MessageShield? = null,
     eventSink: (TimelineEvents) -> Unit = {},
 ): TimelineState {
     val focusedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().getOrNull(focusedEventIndex)?.eventId
@@ -66,6 +67,7 @@ fun aTimelineState(
         newEventState = NewEventState.None,
         isLive = isLive,
         focusRequestState = focusRequestState,
+        messageShield = messageShield,
         eventSink = eventSink,
     )
 }

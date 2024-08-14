@@ -16,19 +16,18 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -36,52 +35,71 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.messageFromMeBackground
-import io.element.android.libraries.designsystem.theme.messageFromOtherBackground
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
-import io.element.android.libraries.matrix.api.timeline.item.event.ShieldColor
+import io.element.android.libraries.matrix.api.timeline.item.event.isCritical
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 internal fun MessageShieldView(
-    isMine: Boolean = false,
     shield: MessageShield,
     modifier: Modifier = Modifier
 ) {
-    val borderColor = if (shield.color == ShieldColor.RED) ElementTheme.colors.borderCriticalPrimary else ElementTheme.colors.bgSubtlePrimary
-    val iconColor = if (shield.color == ShieldColor.RED) ElementTheme.colors.iconCriticalPrimary else ElementTheme.colors.iconSecondary
-
-    val backgroundBubbleColor = when {
-        isMine -> ElementTheme.colors.messageFromMeBackground
-        else -> ElementTheme.colors.messageFromOtherBackground
-    }
     Row(
-        verticalAlignment = Alignment.Top,
-        modifier = modifier
-            .background(backgroundBubbleColor, RoundedCornerShape(8.dp))
-            .border(1.dp, borderColor, RoundedCornerShape(8.dp))
-            .padding(8.dp)
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier,
     ) {
         Icon(
             imageVector = shield.toIcon(),
             contentDescription = null,
             modifier = Modifier.size(15.dp),
-            tint = iconColor,
+            tint = shield.toIconColor(),
         )
         Spacer(modifier = Modifier.size(4.dp))
-        val textColor = if (shield.color == ShieldColor.RED) ElementTheme.colors.textCriticalPrimary else ElementTheme.colors.textSecondary
         Text(
-            text = shield.message,
-            style = ElementTheme.typography.fontBodyXsRegular,
-            color = textColor
+            text = shield.toText(),
+            style = ElementTheme.typography.fontBodySmMedium,
+            color = shield.toTextColor()
         )
     }
 }
 
 @Composable
-private fun MessageShield.toIcon(): ImageVector {
-    return when (this.color) {
-        ShieldColor.RED -> CompoundIcons.Error()
-        ShieldColor.GREY -> CompoundIcons.InfoSolid()
+internal fun MessageShield.toIconColor(): Color {
+    return when (isCritical()) {
+        true -> ElementTheme.colors.iconCriticalPrimary
+        false -> ElementTheme.colors.iconSecondary
+    }
+}
+
+@Composable
+private fun MessageShield.toTextColor(): Color {
+    return when (isCritical()) {
+        true -> ElementTheme.colors.textCriticalPrimary
+        false -> ElementTheme.colors.textSecondary
+    }
+}
+
+@Composable
+internal fun MessageShield.toText(): String {
+    return stringResource(
+        id = when (this) {
+            is MessageShield.AuthenticityNotGuaranteed -> CommonStrings.event_shield_reason_authenticity_not_guaranteed
+            is MessageShield.UnknownDevice -> CommonStrings.event_shield_reason_unknown_device
+            is MessageShield.UnsignedDevice -> CommonStrings.event_shield_reason_unsigned_device
+            is MessageShield.UnverifiedIdentity -> CommonStrings.event_shield_reason_unverified_identity
+            is MessageShield.SentInClear -> CommonStrings.event_shield_reason_sent_in_clear
+        }
+    )
+}
+
+@Composable
+internal fun MessageShield.toIcon(): ImageVector {
+    return when (this) {
+        is MessageShield.AuthenticityNotGuaranteed,
+        is MessageShield.UnverifiedIdentity -> CompoundIcons.Admin()
+        is MessageShield.UnknownDevice,
+        is MessageShield.UnsignedDevice -> CompoundIcons.HelpSolid()
+        is MessageShield.SentInClear -> CompoundIcons.KeyOff()
     }
 }
 
@@ -89,31 +107,24 @@ private fun MessageShield.toIcon(): ImageVector {
 @Composable
 internal fun MessageShieldViewPreview() {
     ElementPreview {
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
             MessageShieldView(
-                shield = MessageShield(
-                    message = "The authenticity of this encrypted message can't be guaranteed on this device.",
-                    color = ShieldColor.GREY
-                )
+                shield = MessageShield.UnknownDevice(true)
             )
             MessageShieldView(
-                isMine = true,
-                shield = MessageShield(
-                    message = "The authenticity of this encrypted message can't be guaranteed on this device.",
-                    color = ShieldColor.GREY
-                )
+                shield = MessageShield.UnverifiedIdentity(true)
             )
             MessageShieldView(
-                shield = MessageShield(
-                    message = "Encrypted by a device not verified by its owner.",
-                    color = ShieldColor.RED
-                )
+                shield = MessageShield.AuthenticityNotGuaranteed(false)
             )
             MessageShieldView(
-                shield = MessageShield(
-                    message = "Encrypted by an unknown or deleted device.",
-                    color = ShieldColor.RED
-                )
+                shield = MessageShield.UnsignedDevice(false)
+            )
+            MessageShieldView(
+                shield = MessageShield.SentInClear(false)
             )
         }
     }

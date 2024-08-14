@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -48,6 +49,7 @@ internal fun aMessageEvent(
     isThreaded: Boolean = false,
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
     sendState: LocalEventSendState = LocalEventSendState.Sent(AN_EVENT_ID),
+    messageShield: MessageShield? = null,
 ) = TimelineItem.Event(
     id = eventId?.value.orEmpty(),
     eventId = eventId,
@@ -66,5 +68,6 @@ internal fun aMessageEvent(
     inReplyTo = inReplyTo,
     debugInfo = debugInfo,
     isThreaded = isThreaded,
-    origin = null
+    origin = null,
+    messageShield = messageShield,
 )
