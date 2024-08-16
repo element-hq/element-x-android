@@ -58,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.components.TimelineItemRow
+import io.element.android.features.messages.impl.timeline.components.toText
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.aFakeTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.focus.FocusRequestStateView
@@ -68,12 +69,14 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.messages.impl.typing.TypingNotificationView
 import io.element.android.features.messages.impl.typing.aTypingNotificationState
+import io.element.android.libraries.designsystem.components.dialogs.AlertDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -124,6 +127,10 @@ fun TimelineView(
         state.eventSink(TimelineEvents.FocusOnEvent(eventId))
     }
 
+    fun onShieldClick(shield: MessageShield) {
+        state.eventSink(TimelineEvents.ShowShieldDialog(shield))
+    }
+
     // Animate alpha when timeline is first displayed, to avoid flashes or glitching when viewing rooms
     AnimatedVisibility(visible = true, enter = fadeIn()) {
         Box(modifier) {
@@ -154,6 +161,7 @@ fun TimelineView(
                         focusedEventId = state.focusedEventId,
                         onClick = onMessageClick,
                         onLongClick = onMessageLongClick,
+                        onShieldClick = ::onShieldClick,
                         onUserDataClick = onUserDataClick,
                         onLinkClick = onLinkClick,
                         inReplyToClick = ::inReplyToClick,
@@ -186,6 +194,17 @@ fun TimelineView(
             )
         }
     }
+
+    MessageShieldDialog(state)
+}
+
+@Composable
+private fun MessageShieldDialog(state: TimelineState) {
+    val messageShield = state.messageShield ?: return
+    AlertDialog(
+        content = messageShield.toText(),
+        onDismiss = { state.eventSink.invoke(TimelineEvents.HideShieldDialog) },
+    )
 }
 
 @Composable

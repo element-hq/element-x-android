@@ -101,7 +101,8 @@ fun aRedactedMatrixTimeline(eventId: EventId) = listOf<MatrixTimelineItem>(
                 originalJson = null,
                 latestEditedJson = null
             ),
-            origin = null
+            origin = null,
+            messageShield = null,
         ),
     )
 )

@@ -138,7 +138,7 @@ test_core = { module = "androidx.test:core", version.ref = "test_core" }
 test_corektx = { module = "androidx.test:core-ktx", version.ref = "test_core" }
 test_arch_core = "androidx.arch.core:core-testing:2.2.0"
 test_junit = "junit:junit:4.13.2"
-test_runner = "androidx.test:runner:1.6.1"
+test_runner = "androidx.test:runner:1.6.2"
 test_mockk = "io.mockk:mockk:1.13.12"
 test_konsist = "com.lemonappdev:konsist:0.15.1"
 test_turbine = "app.cash.turbine:turbine:1.1.0"
@@ -172,7 +172,7 @@ sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", 
 sqlcipher = "net.zetetic:android-database-sqlcipher:4.5.4"
 sqlite = "androidx.sqlite:sqlite-ktx:2.4.0"
 unifiedpush = "com.github.UnifiedPush:android-connector:2.4.0"
-otaliastudios_transcoder = "com.otaliastudios:transcoder:0.10.5"
+otaliastudios_transcoder = "com.otaliastudios:transcoder:0.11.0"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
