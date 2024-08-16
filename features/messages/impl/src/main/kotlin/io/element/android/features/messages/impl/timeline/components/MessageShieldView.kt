@@ -65,7 +65,7 @@ internal fun MessageShieldView(
 
 @Composable
 internal fun MessageShield.toIconColor(): Color {
-    return when (isCritical()) {
+    return when (isCritical) {
         true -> ElementTheme.colors.iconCriticalPrimary
         false -> ElementTheme.colors.iconSecondary
     }
@@ -73,7 +73,7 @@ internal fun MessageShield.toIconColor(): Color {
 
 @Composable
 private fun MessageShield.toTextColor(): Color {
-    return when (isCritical()) {
+    return when (isCritical) {
         true -> ElementTheme.colors.textCriticalPrimary
         false -> ElementTheme.colors.textSecondary
     }

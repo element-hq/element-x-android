@@ -52,7 +52,7 @@ fun TimelineEventTimestampView(
 ) {
     val formattedTime = event.sentTime
     val hasUnrecoverableError = event.localSendState is LocalEventSendState.SendingFailed.Unrecoverable
-    val hasEncryptionCritical = event.messageShield?.isCritical().orFalse()
+    val hasEncryptionCritical = event.messageShield?.isCritical.orFalse()
     val isMessageEdited = event.content.isEdited()
     val tint = if (hasUnrecoverableError || hasEncryptionCritical) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary
     Row(
