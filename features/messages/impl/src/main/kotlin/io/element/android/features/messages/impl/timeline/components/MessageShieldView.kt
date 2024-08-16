@@ -95,11 +95,11 @@ internal fun MessageShield.toText(): String {
 @Composable
 internal fun MessageShield.toIcon(): ImageVector {
     return when (this) {
-        is MessageShield.AuthenticityNotGuaranteed,
-        is MessageShield.UnverifiedIdentity -> CompoundIcons.Admin()
+        is MessageShield.AuthenticityNotGuaranteed -> CompoundIcons.Info()
         is MessageShield.UnknownDevice,
-        is MessageShield.UnsignedDevice -> CompoundIcons.HelpSolid()
-        is MessageShield.SentInClear -> CompoundIcons.KeyOff()
+        is MessageShield.UnsignedDevice,
+        is MessageShield.UnverifiedIdentity -> CompoundIcons.HelpSolid()
+        is MessageShield.SentInClear -> CompoundIcons.LockOff()
     }
 }
 
