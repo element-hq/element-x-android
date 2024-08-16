@@ -62,4 +62,52 @@ interface EncryptionService {
      * called the fingerprint of the device.
      */
     suspend fun deviceEd25519(): String?
+
+    /**
+     * Starts the identity reset process. This will return a handle that can be used to reset the identity.
+     */
+    suspend fun startIdentityReset(): Result<IdentityResetHandle?>
+}
+
+/**
+ * A handle to reset the user's identity.
+ */
+interface IdentityResetHandle {
+    /**
+     * Cancel the reset process and drops the existing handle in the SDK.
+     */
+    suspend fun cancel()
+}
+
+/**
+ * A handle to reset the user's identity with a password login type.
+ */
+interface IdentityPasswordResetHandle : IdentityResetHandle {
+    /**
+     * Reset the password of the user.
+     *
+     * This method will block the coroutine it's running on and keep polling indefinitely until either the coroutine is cancelled, the [cancel] method is
+     * called, or the identity is reset.
+     *
+     * @param password the current password, which will be validated before the process takes place.
+     */
+    suspend fun resetPassword(password: String): Result<Unit>
+}
+
+/**
+ * A handle to reset the user's identity with an OIDC login type.
+ */
+interface IdentityOidcResetHandle : IdentityResetHandle {
+    /**
+     * The URL to open in a webview/custom tab to reset the identity.
+     */
+    val url: String
+
+    /**
+     * Reset the identity using the OIDC flow.
+     *
+     * This method will block the coroutine it's running on and keep polling indefinitely until either the coroutine is cancelled, the [cancel] method is
+     * called, or the identity is reset.
+     */
+    suspend fun resetOidc(): Result<Unit>
 }

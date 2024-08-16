@@ -18,10 +18,12 @@ package io.element.android.libraries.matrix.impl.encryption
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.mapFailure
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.EnableRecoveryProgress
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
+import io.element.android.libraries.matrix.api.encryption.IdentityResetHandle
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
@@ -54,6 +56,7 @@ internal class RustEncryptionService(
     private val dispatchers: CoroutineDispatchers,
 ) : EncryptionService {
     private val service: Encryption = client.encryption()
+    private val sessionId = SessionId(client.session().userId)
 
     private val enableRecoveryProgressMapper = EnableRecoveryProgressMapper()
     private val backupUploadStateMapper = BackupUploadStateMapper()
@@ -197,5 +200,13 @@ internal class RustEncryptionService(
 
     override suspend fun deviceEd25519(): String? {
         return service.ed25519Key()
+    }
+
+    override suspend fun startIdentityReset(): Result<IdentityResetHandle?> {
+        return runCatching {
+            service.resetIdentity()?.let { handle ->
+                RustIdentityResetHandleFactory.create(sessionId, handle)
+            }?.getOrNull()
+        }
     }
 }
