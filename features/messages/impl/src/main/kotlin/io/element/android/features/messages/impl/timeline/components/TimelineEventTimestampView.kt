@@ -87,7 +87,7 @@ fun TimelineEventTimestampView(
             Spacer(modifier = Modifier.width(2.dp))
             Icon(
                 imageVector = shield.toIcon(),
-                contentDescription = null,
+                contentDescription = shield.toText(),
                 modifier = Modifier
                     .size(15.dp)
                     .clickable { onShieldClick(shield) },
