@@ -41,7 +41,7 @@
   <string name="screen_room_details_edit_room_title">"编辑聊天室"</string>
   <string name="screen_room_details_edition_error">"出现未知错误，无法更改信息。"</string>
   <string name="screen_room_details_edition_error_title">"无法更新聊天室"</string>
-  <string name="screen_room_details_encryption_enabled_subtitle">"你的消息受加密保护，并且只有你和消息接收者拥有唯一解密密钥。"</string>
+  <string name="screen_room_details_encryption_enabled_subtitle">"消息已加密，只有你和消息接收者拥有唯一解密密钥。"</string>
   <string name="screen_room_details_encryption_enabled_title">"消息加密已启用"</string>
   <string name="screen_room_details_error_loading_notification_settings">"加载通知设置时出错。"</string>
   <string name="screen_room_details_error_muting">"无法将此房间静音，请重试。"</string>

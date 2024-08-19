@@ -80,6 +80,7 @@
   <string name="action_ok">"OK"</string>
   <string name="action_open_settings">"Ouvrir les paramètres"</string>
   <string name="action_open_with">"Ouvrir avec"</string>
+  <string name="action_pin">"Épingler"</string>
   <string name="action_quick_reply">"Réponse rapide"</string>
   <string name="action_quote">"Citer"</string>
   <string name="action_react">"Réagissez"</string>
@@ -109,6 +110,7 @@
   <string name="action_take_photo">"Prendre une photo"</string>
   <string name="action_tap_for_options">"Appuyez pour afficher les options"</string>
   <string name="action_try_again">"Essayer à nouveau"</string>
+  <string name="action_unpin">"Désépingler"</string>
   <string name="action_view_source">"Afficher la source"</string>
   <string name="action_yes">"Oui"</string>
   <string name="common_about">"À propos"</string>
@@ -168,6 +170,7 @@ Raison: %1$s."</string>
   <string name="common_no_results">"Aucun résultat"</string>
   <string name="common_no_room_name">"Salon sans nom"</string>
   <string name="common_offline">"Hors ligne"</string>
+  <string name="common_open_source_licenses">"Licences open source"</string>
   <string name="common_or">"ou"</string>
   <string name="common_password">"Mot de passe"</string>
   <string name="common_people">"Personnes"</string>
@@ -255,6 +258,11 @@ Raison: %1$s."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s n’a pas l’autorisation d’utiliser le microphone. Autorisez l’utilisation pour enregistrer un message vocal."</string>
   <string name="error_some_messages_have_not_been_sent">"Certains messages n’ont pas été envoyés"</string>
   <string name="error_unknown">"Désolé, une erreur s’est produite"</string>
+  <string name="event_shield_reason_authenticity_not_guaranteed">"L’authenticité de ce message chiffré ne peut être garantie sur cet appareil."</string>
+  <string name="event_shield_reason_sent_in_clear">"Non chiffré."</string>
+  <string name="event_shield_reason_unknown_device">"Chiffré par un appareil inconnu ou supprimé."</string>
+  <string name="event_shield_reason_unsigned_device">"Chiffré par un appareil non vérifié par son propriétaire."</string>
+  <string name="event_shield_reason_unverified_identity">"Chiffré par un utilisateur non vérifié."</string>
   <string name="invite_friends_rich_title">"🔐️ Rejoignez-moi sur %1$s"</string>
   <string name="invite_friends_text">"Salut, parle-moi sur %1$s : %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
@@ -262,6 +270,14 @@ Raison: %1$s."</string>
   <string name="screen_media_picker_error_failed_selection">"Échec de la sélection du média, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Échec du téléchargement du média, veuillez réessayer."</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Cliquez (clic long) sur un message et choisissez « %1$s » pour qu‘il apparaisse ici."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Épinglez les messages importants pour leur donner plus de visibilité"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d message épinglé"</item>
+    <item quantity="other">"%1$d messages épinglés"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Messages épinglés"</string>
+  <string name="screen_room_details_pinned_events_row_title">"Messages épinglés"</string>
   <string name="screen_room_error_failed_processing_media">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Impossible de récupérer les détails de l’utilisateur"</string>
   <string name="screen_room_member_details_block_alert_action">"Bloquer"</string>
@@ -271,6 +287,10 @@ Raison: %1$s."</string>
   <string name="screen_room_member_details_unblock_alert_action">"Débloquer"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Vous pourrez à nouveau voir tous ses messages."</string>
   <string name="screen_room_member_details_unblock_user">"Débloquer l’utilisateur"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s sur %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Messages épinglés"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Chargement du message…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Voir tout"</string>
   <string name="screen_room_title">"Discussion"</string>
   <string name="screen_share_location_title">"Partage de position"</string>
   <string name="screen_share_my_location_action">"Partager ma position"</string>

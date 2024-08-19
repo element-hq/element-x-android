@@ -268,12 +268,6 @@ Anledning:%1$s."</string>
   <string name="invite_friends_text">"Hallå, prata med mig på %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Raseriskaka för att rapportera bugg"</string>
-  <string name="screen_encryption_reset_bullet_1">"Dina kontouppgifter, kontakter, inställningar och chattlistor kommer bevaras"</string>
-  <string name="screen_encryption_reset_bullet_2">"Du kommer att förlora din befintliga meddelandehistorik"</string>
-  <string name="screen_encryption_reset_bullet_3">"Du måste verifiera alla dina befintliga enheter och kontakter igen"</string>
-  <string name="screen_encryption_reset_footer">"Återställ bara din identitet om du inte har tillgång till en annan inloggad enhet och du har tappat bort din återställningsnyckel."</string>
-  <string name="screen_encryption_reset_subtitle">"Om du inte är inloggad på någon annan enhet och du har tappat bort din återställningsnyckel måste du återställa din identitet för att fortsätta använda appen. "</string>
-  <string name="screen_encryption_reset_title">"Återställ din identitet ifall du inte kan bekräfta på annat sätt"</string>
   <string name="screen_media_picker_error_failed_selection">"Misslyckades att välja media, vänligen pröva igen."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Misslyckades att bearbeta media för uppladdning, vänligen pröva igen."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Misslyckades att ladda upp media, vänligen pröva igen."</string>
@@ -284,12 +278,6 @@ Anledning:%1$s."</string>
     <item quantity="other">"%1$d Fästa meddelanden"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Fästa meddelanden"</string>
-  <string name="screen_reset_encryption_confirmation_alert_action">"Ja, återställ nu"</string>
-  <string name="screen_reset_encryption_confirmation_alert_subtitle">"Denna process är irreversibel."</string>
-  <string name="screen_reset_encryption_confirmation_alert_title">"Är du säker på att du vill återställa din kryptering?"</string>
-  <string name="screen_reset_encryption_password_placeholder">"Ange …"</string>
-  <string name="screen_reset_encryption_password_subtitle">"Bekräfta att du vill återställa din kryptering."</string>
-  <string name="screen_reset_encryption_password_title">"Ange ditt kontolösenord för att fortsätta"</string>
   <string name="screen_room_details_pinned_events_row_title">"Fästa meddelanden"</string>
   <string name="screen_room_error_failed_processing_media">"Misslyckades att bearbeta media för uppladdning, vänligen pröva igen."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kunde inte hämta användarinformation"</string>

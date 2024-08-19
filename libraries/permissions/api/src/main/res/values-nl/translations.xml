@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_permission_camera">"Geef toestemming in de systeeminstellingen om de applicatie de camera te laten gebruiken."</string>
+  <string name="dialog_permission_generic">"Geef hiervoor toestemming in de systeeminstellingen."</string>
+  <string name="dialog_permission_microphone">"Geef toestemming in de systeeminstellingen om de applicatie de microfoon te laten gebruiken."</string>
+  <string name="dialog_permission_notification">"Geef toestemming in de systeeminstellingen om de applicatie meldingen te laten weergeven."</string>
+</resources>

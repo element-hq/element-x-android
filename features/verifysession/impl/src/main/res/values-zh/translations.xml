@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"无法确认？"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"创建新的恢复密钥"</string>
   <string name="screen_identity_confirmation_subtitle">"验证此设备以开始安全地收发消息。"</string>
   <string name="screen_identity_confirmation_title">"确认这是你"</string>
   <string name="screen_identity_confirmation_use_another_device">"使用其他设备"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"使用恢复密钥"</string>
   <string name="screen_identity_confirmed_subtitle">"现在，您可以安全地阅读或发送消息，与您聊天的人也会信任此设备。"</string>
   <string name="screen_identity_confirmed_title">"设备已验证"</string>
   <string name="screen_identity_use_another_device">"使用其他设备"</string>
@@ -13,7 +15,7 @@
   <string name="screen_session_verification_compare_emojis_title">"比较表情符号"</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"确认以下数字与其他会话中显示的一致。"</string>
   <string name="screen_session_verification_compare_numbers_title">"比较数字"</string>
-  <string name="screen_session_verification_complete_subtitle">"你的新设备已经成功验证。现在新设备可以访问加密信息，别的用户也会信任这个设备。"</string>
+  <string name="screen_session_verification_complete_subtitle">"新设备已经成功验证。现在新设备可以访问加密信息，其他用户也会信任这个设备。"</string>
   <string name="screen_session_verification_enter_recovery_key">"输入恢复密钥"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"证明自己的身份以访问加密历史消息。"</string>
   <string name="screen_session_verification_open_existing_session_title">"打开已有会话"</string>

@@ -5,7 +5,7 @@
   <string name="screen_create_room_error_creating_room">"创建房间时出错"</string>
   <string name="screen_create_room_private_option_description">"此聊天室中的消息已加密。加密无法禁用。"</string>
   <string name="screen_create_room_private_option_title">"私人房间（仅限受邀者）"</string>
-  <string name="screen_create_room_public_option_description">"消息未加密，任何人都可以查看。你可以稍后启用加密。"</string>
+  <string name="screen_create_room_public_option_description">"消息未加密，任何人都可以查看。可以稍后启用加密。"</string>
   <string name="screen_create_room_public_option_title">"公共房间（任何人）"</string>
   <string name="screen_create_room_room_name_label">"房间名称"</string>
   <string name="screen_create_room_title">"创建房间"</string>

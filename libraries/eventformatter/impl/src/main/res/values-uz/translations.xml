@@ -31,7 +31,7 @@
   <string name="state_event_room_knock_denied">"%1$s %2$sning qo\'shilish haqidagi iltimosini rad etdi"</string>
   <string name="state_event_room_knock_denied_by_you">"Siz %1$sning qo\'shiliz iltimosini rad etdingiz"</string>
   <string name="state_event_room_knock_denied_you">"%1$s sizni qo\'shilish iltimosingizni rad etdi"</string>
-  <string name="state_event_room_knock_retracted">"%1$ endi qo\'shilishdan manfaatdor emas"</string>
+  <string name="state_event_room_knock_retracted">"%1$s endi qo\'shilishdan manfaatdor emas"</string>
   <string name="state_event_room_knock_retracted_by_you">"Siz qoʻshilish soʻrovingizni bekor qildingiz"</string>
   <string name="state_event_room_leave">"%1$sxonani tark etdi"</string>
   <string name="state_event_room_leave_by_you">"Siz xonani tark etdingiz"</string>
@@ -41,12 +41,12 @@
   <string name="state_event_room_name_removed_by_you">"Siz xonani nomini o\'chirib tashladingiz"</string>
   <string name="state_event_room_reject">"%1$staklifni rad etdi"</string>
   <string name="state_event_room_reject_by_you">"Siz taklifni rad etdingiz"</string>
-  <string name="state_event_room_remove">"%1$o\'chirildi%2$s"</string>
-  <string name="state_event_room_remove_by_you">"siz o\'chirildingiz%1$s"</string>
+  <string name="state_event_room_remove">"%1$s o\'chirildi %2$s"</string>
+  <string name="state_event_room_remove_by_you">"Siz o\'chirildingiz %1$s"</string>
   <string name="state_event_room_third_party_invite">"%1$s taklifnoma yubordi %2$sga xonaga qo\'shilish uchun"</string>
-  <string name="state_event_room_third_party_invite_by_you">"Siz taklifnoma yubordingiz %1$sga xonaga qo\'shilishi uchun"</string>
-  <string name="state_event_room_third_party_revoked_invite">"%1$s taklifni %2$sga  xonaga qo\'shilish uchun bekor qildi"</string>
-  <string name="state_event_room_third_party_revoked_invite_by_you">"Siz xonaga qo\'shilish taklifini $1$s ga bekor qildingiz"</string>
+  <string name="state_event_room_third_party_invite_by_you">"Siz taklifnoma yubordingiz %1$s ga xonaga qo\'shilishi uchun"</string>
+  <string name="state_event_room_third_party_revoked_invite">"%1$s taklifni %2$s ga xonaga qo\'shilish uchun bekor qildi"</string>
+  <string name="state_event_room_third_party_revoked_invite_by_you">"Siz xonaga qo\'shilish taklifini %1$s ga bekor qildingiz"</string>
   <string name="state_event_room_topic_changed">"%1$s mavzuni %2$s o\'zgartirdi"</string>
   <string name="state_event_room_topic_changed_by_you">"Siz mavzuni %1$s ga o\'zgartirdingiz"</string>
   <string name="state_event_room_topic_removed">"%1$s xonani mavzusini o\'chirib tashladi"</string>

@@ -60,7 +60,7 @@
   <string name="action_end_poll">"Zakończ ankietę"</string>
   <string name="action_enter_pin">"Wprowadź PIN"</string>
   <string name="action_forgot_password">"Nie pamiętasz hasła?"</string>
-  <string name="action_forward">"Dalej"</string>
+  <string name="action_forward">"Przekaż dalej"</string>
   <string name="action_go_back">"Wróć"</string>
   <string name="action_invite">"Zaproś"</string>
   <string name="action_invite_friends">"Zaproś znajomych"</string>
@@ -82,6 +82,7 @@
   <string name="action_ok">"Ok"</string>
   <string name="action_open_settings">"Ustawienia"</string>
   <string name="action_open_with">"Otwórz za pomocą"</string>
+  <string name="action_pin">"Przypnij"</string>
   <string name="action_quick_reply">"Szybka odpowiedź"</string>
   <string name="action_quote">"Cytuj"</string>
   <string name="action_react">"Dodaj reakcję"</string>
@@ -92,6 +93,7 @@
   <string name="action_report_bug">"Zgłoś błąd"</string>
   <string name="action_report_content">"Zgłoś treść"</string>
   <string name="action_reset">"Resetuj"</string>
+  <string name="action_reset_identity">"Zresetuj tożsamość"</string>
   <string name="action_retry">"Spróbuj ponownie"</string>
   <string name="action_retry_decryption">"Ponów próbę odszyfrowania"</string>
   <string name="action_save">"Zapisz"</string>
@@ -101,8 +103,8 @@
   <string name="action_share">"Udostępnij"</string>
   <string name="action_share_link">"Udostępnij link"</string>
   <string name="action_sign_in_again">"Zaloguj się ponownie"</string>
-  <string name="action_signout">"Wyloguj się"</string>
-  <string name="action_signout_anyway">"Wyloguj się mimo to"</string>
+  <string name="action_signout">"Wyloguj"</string>
+  <string name="action_signout_anyway">"Wyloguj mimo to"</string>
   <string name="action_skip">"Pomiń"</string>
   <string name="action_start">"Rozpocznij"</string>
   <string name="action_start_chat">"Rozpocznij chat"</string>
@@ -111,6 +113,7 @@
   <string name="action_take_photo">"Zrób zdjęcie"</string>
   <string name="action_tap_for_options">"Stuknij, by wyświetlić opcje"</string>
   <string name="action_try_again">"Spróbuj ponownie"</string>
+  <string name="action_unpin">"Odepnij"</string>
   <string name="action_view_source">"Wyświetl źródło"</string>
   <string name="action_yes">"Tak"</string>
   <string name="common_about">"O programie"</string>
@@ -280,6 +283,9 @@ Powód: %1$s."</string>
   <string name="screen_room_member_details_unblock_alert_action">"Odblokuj"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Będziesz mógł ponownie zobaczyć wszystkie wiadomości od tego użytkownika."</string>
   <string name="screen_room_member_details_unblock_user">"Odblokuj użytkownika"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s z %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s przypiętych wiadomości"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Wyświetl wszystkie"</string>
   <string name="screen_room_title">"Czat"</string>
   <string name="screen_share_location_title">"Udostępnij lokalizację"</string>
   <string name="screen_share_my_location_action">"Udostępnij moją lokalizację"</string>

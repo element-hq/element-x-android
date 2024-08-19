@@ -16,6 +16,12 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Uue taastevõtme loomiseks palun järgi juhendit"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Salvesta oma uus taastevõti kas salasõnahalduris, krüptitud failis või mõnel muul turvalisel viisil"</string>
   <string name="screen_create_new_recovery_key_title">"Lähtesta oma konto krüptimine mõnest muust oma seadmest"</string>
+  <string name="screen_encryption_reset_bullet_1">"Sinu kasutajakonto andmed, kontaktid, eelistused ja vestluste loend säiluvad"</string>
+  <string name="screen_encryption_reset_bullet_2">"Sa kaotad seniste sõnumite ajaloo"</string>
+  <string name="screen_encryption_reset_bullet_3">"Sa pead kõik oma olemasolevad seadmed ja kontaktid uuesti verifitseerima"</string>
+  <string name="screen_encryption_reset_footer">"Lähtesta oma identiteet vaid siis, kui sul pole ligipääsu mitte ühelegi oma seadmele ja sa oled kaotanud oma taastevõtme."</string>
+  <string name="screen_encryption_reset_subtitle">"Kui sa soovid jätkata selle rakenduse kasutamist ja sa pole mitte üheski seadmes sisse logitud ning oled kaotanud oma taastevõtme, siis tõesti pead lähtestama oma identiteedi. "</string>
+  <string name="screen_encryption_reset_title">"Kui sa ühtegi muud võimalust ei leia, siis lähtesta oma identiteet."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Lülita välja"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Kui sa logid välja kõikidest oma seadmetest, siis sa kaotad ligipääsu oma krüptitud sõnumitele."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Kas sa oled kindel, et soovid varukoopiate tegemise välja lülitada?"</string>
@@ -51,4 +57,11 @@
   <string name="screen_recovery_key_setup_generate_key_description">"Palun hoia taastevõtit turvaliselt, näiteks vana kooli seifis või digitaalses salasõnalaekas"</string>
   <string name="screen_recovery_key_setup_success">"Andmete taastamise seadistamine õnnestus"</string>
   <string name="screen_recovery_key_setup_title">"Seadista andmete taastamine"</string>
+  <string name="screen_reset_encryption_confirmation_alert_action">"Jah, lähtesta nüüd"</string>
+  <string name="screen_reset_encryption_confirmation_alert_subtitle">"See tegevus on tagasipöördumatu."</string>
+  <string name="screen_reset_encryption_confirmation_alert_title">"Kas sa oled kindel, et soovid oma andmete krüptimist lähtestada?"</string>
+  <string name="screen_reset_encryption_password_error">"Tekkis teadmata viga. Palun kontrolli, kas sinu kasutajakonto salasõna on õige ja proovi uuesti."</string>
+  <string name="screen_reset_encryption_password_placeholder">"Sisesta…"</string>
+  <string name="screen_reset_encryption_password_subtitle">"Palun kinnita, et soovid oma andmete krüptimist lähtestada."</string>
+  <string name="screen_reset_encryption_password_title">"Jätkamaks sisesta oma kasutajakonto salasõna"</string>
 </resources>

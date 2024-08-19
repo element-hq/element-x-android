@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crash_detection_dialog_content">"%1$s crashte de laatste keer dat het werd gebruikt. Wil je een crashrapport met ons delen?"</string>
+  <string name="rageshake_detection_dialog_content">"Het lijkt erop dat je gefrustreerd de telefoon hebt geschud. Wil je het scherm openen om een bug te rapporteren?"</string>
+  <string name="settings_rageshake">"Schudden uit woede"</string>
+  <string name="settings_rageshake_detection_threshold">"Drempel voor detectie"</string>
+</resources>
