@@ -12,6 +12,6 @@
   <string name="screen_bug_report_include_logs">"允许日志"</string>
   <string name="screen_bug_report_include_screenshot">"发送屏幕截图"</string>
   <string name="screen_bug_report_logs_description">"为确认一切正常运行，您的消息中将包含日志。如要发送不带日志的消息，请关闭此设置。"</string>
-  <string name="screen_bug_report_rash_logs_alert_title">"%1$s 上次使用时崩溃了。你想和我们分享崩溃报告吗？"</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s 上次使用时崩溃了。想和我们分享崩溃报告吗？"</string>
   <string name="screen_bug_report_view_logs">"查看日志"</string>
 </resources>

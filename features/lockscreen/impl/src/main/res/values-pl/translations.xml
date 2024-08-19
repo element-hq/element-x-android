@@ -16,7 +16,7 @@
   <string name="screen_app_lock_setup_confirm_pin">"Potwierdź PIN"</string>
   <string name="screen_app_lock_setup_pin_context">"Zablokuj %1$s, aby zwiększyć bezpieczeństwo swoich czatów.
 
-Wybierz coś łatwego do zapamiętania. Jeśli zapomnisz tego PIN\'u, zostaniesz wylogowany z aplikacji."</string>
+Wybierz coś łatwego do zapamiętania. Jeśli zapomnisz ten PIN, zostaniesz wylogowany z aplikacji."</string>
   <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"Nie możesz wybrać tego PIN\'u ze względów bezpieczeństwa"</string>
   <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"Wybierz inny kod PIN"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Wprowadź ten sam kod PIN dwa razy"</string>

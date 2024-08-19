@@ -272,12 +272,6 @@
   <string name="invite_friends_text">"Гэй, пагавары са мной у %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Паведаміць аб памылцы з дапамогай Rageshake"</string>
-  <string name="screen_encryption_reset_bullet_1">"Дадзеныя вашага ўліковага запісу, кантакты, налады і спіс чатаў будуць захаваны"</string>
-  <string name="screen_encryption_reset_bullet_2">"Вы страціце існуючую гісторыю паведамленняў"</string>
-  <string name="screen_encryption_reset_bullet_3">"Вам трэба будзе зноў запэўніць ўсе вашы існуючыя прылады і кантакты"</string>
-  <string name="screen_encryption_reset_footer">"Працягвайце, толькі калі вы ўпэўненыя, што страцілі ўсе астатнія прылады і ключ аднаўлення."</string>
-  <string name="screen_encryption_reset_subtitle">"Калі вы не ўвайшлі ў сістэму на іншых прыладах і страцілі ключ аднаўлення, вам неабходна скінуць ключы пацверджання, каб працягнуць выкарыстанне прыкладання."</string>
-  <string name="screen_encryption_reset_title">"Скіньце ключы пацверджання, калі вы не можаце пацвердзіць яго іншым спосабам"</string>
   <string name="screen_media_picker_error_failed_selection">"Не ўдалося выбраць носьбіт, паўтарыце спробу."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не атрымалася загрузіць медыяфайлы, паспрабуйце яшчэ раз."</string>
@@ -289,12 +283,6 @@
     <item quantity="many">"%1$d Замацаваных паведамленняў"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Замацаваныя паведамленні"</string>
-  <string name="screen_reset_encryption_confirmation_alert_action">"Так, скінуць зараз"</string>
-  <string name="screen_reset_encryption_confirmation_alert_subtitle">"Гэты працэс незваротны."</string>
-  <string name="screen_reset_encryption_confirmation_alert_title">"Вы ўпэўнены, што хочаце скінуць шыфраванне?"</string>
-  <string name="screen_reset_encryption_password_placeholder">"Увод…"</string>
-  <string name="screen_reset_encryption_password_subtitle">"Пацвердзіце, што вы хочаце скінуць шыфраванне"</string>
-  <string name="screen_reset_encryption_password_title">"Каб працягнуць, увядзіце пароль уліковага запісу"</string>
   <string name="screen_room_details_pinned_events_row_title">"Замацаваныя паведамленні"</string>
   <string name="screen_room_error_failed_processing_media">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не ўдалося атрымаць інфармацыю пра карыстальніка"</string>

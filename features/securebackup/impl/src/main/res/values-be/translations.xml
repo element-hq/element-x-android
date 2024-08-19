@@ -16,6 +16,12 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Выконвайце інструкцыі, каб стварыць новы ключ аднаўлення"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Захавайце новы ключ аднаўлення ў ме́неджэры пароляў або ў зашыфраванай нататке"</string>
   <string name="screen_create_new_recovery_key_title">"Скіньце шыфраванне для вашага ўліковага запісу з дапамогай іншай прылады"</string>
+  <string name="screen_encryption_reset_bullet_1">"Дадзеныя вашага ўліковага запісу, кантакты, налады і спіс чатаў будуць захаваны"</string>
+  <string name="screen_encryption_reset_bullet_2">"Вы страціце існуючую гісторыю паведамленняў"</string>
+  <string name="screen_encryption_reset_bullet_3">"Вам трэба будзе зноў запэўніць ўсе вашы існуючыя прылады і кантакты"</string>
+  <string name="screen_encryption_reset_footer">"Працягвайце, толькі калі вы ўпэўненыя, што страцілі ўсе астатнія прылады і ключ аднаўлення."</string>
+  <string name="screen_encryption_reset_subtitle">"Калі вы не ўвайшлі ў сістэму на іншых прыладах і страцілі ключ аднаўлення, вам неабходна скінуць ключы пацверджання, каб працягнуць выкарыстанне прыкладання."</string>
+  <string name="screen_encryption_reset_title">"Скіньце ключы пацверджання, калі вы не можаце пацвердзіць яго іншым спосабам"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Адключыць"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Вы страціце зашыфраваныя паведамленні, калі выйдзеце з усіх прылад."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Вы ўпэўнены, што хочаце адключыць рэзервовае капіраванне?"</string>
@@ -51,4 +57,11 @@
   <string name="screen_recovery_key_setup_generate_key_description">"Пераканайцеся, што вы можаце захаваць ключ аднаўлення ў бяспечным месцы"</string>
   <string name="screen_recovery_key_setup_success">"Наладка аднаўлення прайшла паспяхова"</string>
   <string name="screen_recovery_key_setup_title">"Наладзьце аднаўленне"</string>
+  <string name="screen_reset_encryption_confirmation_alert_action">"Так, скінуць зараз"</string>
+  <string name="screen_reset_encryption_confirmation_alert_subtitle">"Гэты працэс незваротны."</string>
+  <string name="screen_reset_encryption_confirmation_alert_title">"Вы ўпэўнены, што хочаце скінуць шыфраванне?"</string>
+  <string name="screen_reset_encryption_password_error">"Адбылася невядомая памылка. Калі ласка, праверце правільнасць пароля вашага ўліковага запісу і паўтарыце спробу."</string>
+  <string name="screen_reset_encryption_password_placeholder">"Увод…"</string>
+  <string name="screen_reset_encryption_password_subtitle">"Пацвердзіце, што вы хочаце скінуць шыфраванне"</string>
+  <string name="screen_reset_encryption_password_title">"Каб працягнуць, увядзіце пароль уліковага запісу"</string>
 </resources>

@@ -7,5 +7,5 @@
   <string name="troubleshoot_notifications_screen_quick_fix_action">"尝试修复"</string>
   <string name="troubleshoot_notifications_screen_success">"所有测试均成功通过。"</string>
   <string name="troubleshoot_notifications_screen_title">"排查通知问题"</string>
-  <string name="troubleshoot_notifications_screen_waiting">"有些测试需要你注意。请查看详情。"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"有些测试需要注意。请查看详情。"</string>
 </resources>

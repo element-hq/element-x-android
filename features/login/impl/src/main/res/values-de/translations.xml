@@ -39,6 +39,20 @@
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Die Verbindung ist nicht sicher"</string>
   <string name="screen_qr_code_login_device_code_subtitle">"Du wirst aufgefordert, die beiden unten abgebildeten Ziffern einzugeben."</string>
   <string name="screen_qr_code_login_device_code_title">"Trage die unten angezeigte Zahl auf einem anderen Device ein"</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_description">"Melde dich auf deinem anderen Gerät an und versuche es dann noch einmal oder verwende ein anderes Gerät, das bereits angemeldet ist."</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_subtitle">"Anderes Gerät ist nicht angemeldet"</string>
+  <string name="screen_qr_code_login_error_cancelled_subtitle">"Die Anmeldung wurde auf dem anderen Gerät abgebrochen."</string>
+  <string name="screen_qr_code_login_error_cancelled_title">"Anmeldeanfrage abgebrochen"</string>
+  <string name="screen_qr_code_login_error_declined_subtitle">"Die Anmeldung auf dem anderen Gerät wurde abgelehnt."</string>
+  <string name="screen_qr_code_login_error_declined_title">"Anmelden abgelehnt"</string>
+  <string name="screen_qr_code_login_error_expired_subtitle">"Die Anmeldung ist abgelaufen. Bitte versuchen Sie es erneut."</string>
+  <string name="screen_qr_code_login_error_expired_title">"Die Anmeldung wurde nicht rechtzeitig abgeschlossen"</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Dein anderes Gerät unterstützt die Anmeldung bei %s mit einem QR-Code nicht.
+
+Versuche, dich manuell anzumelden, oder scanne den QR-Code mit einem anderen Gerät."</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_title">"QR-Code wird nicht unterstützt"</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"Ihr Kontoanbieter unterstützt %1$s nicht."</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"%1$swird nicht unterstützt"</string>
   <string name="screen_qr_code_login_initial_state_button_title">"Bereit zum Scannen"</string>
   <string name="screen_qr_code_login_initial_state_item_1">"%1$s auf einem Desktop-Gerät öffnen"</string>
   <string name="screen_qr_code_login_initial_state_item_2">"Klick auf deinen Avatar"</string>
