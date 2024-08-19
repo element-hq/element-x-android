@@ -16,7 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -33,6 +33,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.highlightedMessageBackgroundColor
 import io.element.android.libraries.matrix.api.core.EventId
@@ -61,20 +62,26 @@ internal fun TimelineItemRow(
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val backgroundModifier = if (timelineItem.isEvent(focusedEventId)) {
-        val focusedEventOffset = if ((timelineItem as? TimelineItem.Event)?.showSenderInformation == true) {
-            14.dp
-        } else {
-            2.dp
+    Column(modifier = modifier) {
+        if ((timelineItem as? TimelineItem.Event)?.isPinned.orFalse()) {
+            TimelinePinnedHeaderView()
         }
-        Modifier.focusedEvent(focusedEventOffset)
-    } else {
-        Modifier
-    }
-    Box(modifier = modifier.then(backgroundModifier)) {
+        val backgroundModifier = if (timelineItem.isEvent(focusedEventId)) {
+            val focusedEventOffset = if ((timelineItem as? TimelineItem.Event)?.showSenderInformation == true &&
+                timelineRoomInfo.isDm.not() &&
+                !(timelineItem as? TimelineItem.Event)?.isPinned.orFalse()) {
+                14.dp
+            } else {
+                2.dp
+            }
+            Modifier.focusedEvent(focusedEventOffset)
+        } else {
+            Modifier
+        }
         when (timelineItem) {
             is TimelineItem.Virtual -> {
                 TimelineItemVirtualRow(
+                    modifier = backgroundModifier,
                     virtual = timelineItem,
                     timelineRoomInfo = timelineRoomInfo,
                     eventSink = eventSink,
@@ -84,6 +91,7 @@ internal fun TimelineItemRow(
                 when (timelineItem.content) {
                     is TimelineItemStateContent, is TimelineItemLegacyCallInviteContent -> {
                         TimelineItemStateEventRow(
+                            modifier = backgroundModifier,
                             event = timelineItem,
                             renderReadReceipts = renderReadReceipts,
                             isLastOutgoingMessage = isLastOutgoingMessage,
@@ -96,7 +104,7 @@ internal fun TimelineItemRow(
                     }
                     is TimelineItemCallNotifyContent -> {
                         TimelineItemCallNotifyView(
-                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                            modifier = backgroundModifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
                             event = timelineItem,
                             isCallOngoing = timelineRoomInfo.isCallOngoing,
                             onLongClick = onLongClick,
@@ -105,6 +113,7 @@ internal fun TimelineItemRow(
                     }
                     else -> {
                         TimelineItemEventRow(
+                            modifier = backgroundModifier,
                             event = timelineItem,
                             timelineRoomInfo = timelineRoomInfo,
                             renderReadReceipts = renderReadReceipts,
@@ -128,6 +137,7 @@ internal fun TimelineItemRow(
             }
             is TimelineItem.GroupedEvents -> {
                 TimelineItemGroupedEventsRow(
+                    modifier = backgroundModifier,
                     timelineItem = timelineItem,
                     timelineRoomInfo = timelineRoomInfo,
                     renderReadReceipts = renderReadReceipts,

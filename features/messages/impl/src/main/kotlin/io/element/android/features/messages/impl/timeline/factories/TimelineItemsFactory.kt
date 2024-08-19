@@ -28,6 +28,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
 import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import kotlinx.collections.immutable.ImmutableList
@@ -69,22 +70,24 @@ class TimelineItemsFactory @Inject constructor(
     suspend fun replaceWith(
         timelineItems: List<MatrixTimelineItem>,
         roomMembers: List<RoomMember>,
+        pinnedEvents: List<EventId>,
     ) = withContext(dispatchers.computation) {
         lock.withLock {
             diffCacheUpdater.updateWith(timelineItems)
-            buildAndEmitTimelineItemStates(timelineItems, roomMembers)
+            buildAndEmitTimelineItemStates(timelineItems, roomMembers, pinnedEvents)
         }
     }
 
     private suspend fun buildAndEmitTimelineItemStates(
         timelineItems: List<MatrixTimelineItem>,
         roomMembers: List<RoomMember>,
+        pinnedEvents: List<EventId>,
     ) {
         val newTimelineItemStates = ArrayList<TimelineItem>()
         for (index in diffCache.indices().reversed()) {
             val cacheItem = diffCache.get(index)
             if (cacheItem == null) {
-                buildAndCacheItem(timelineItems, index, roomMembers)?.also { timelineItemState ->
+                buildAndCacheItem(timelineItems, index, roomMembers, pinnedEvents)?.also { timelineItemState ->
                     newTimelineItemStates.add(timelineItemState)
                 }
             } else {
@@ -109,10 +112,11 @@ class TimelineItemsFactory @Inject constructor(
         timelineItems: List<MatrixTimelineItem>,
         index: Int,
         roomMembers: List<RoomMember>,
+        pinnedEvents: List<EventId>,
     ): TimelineItem? {
         val timelineItem =
             when (val currentTimelineItem = timelineItems[index]) {
-                is MatrixTimelineItem.Event -> eventItemFactory.create(currentTimelineItem, index, timelineItems, roomMembers)
+                is MatrixTimelineItem.Event -> eventItemFactory.create(currentTimelineItem, index, timelineItems, roomMembers, pinnedEvents)
                 is MatrixTimelineItem.Virtual -> virtualItemFactory.create(currentTimelineItem)
                 MatrixTimelineItem.Other -> null
             }

@@ -30,7 +30,9 @@ open class TimelineItemImageContentProvider : PreviewParameterProvider<TimelineI
         )
 }
 
-fun aTimelineItemImageContent() = TimelineItemImageContent(
+fun aTimelineItemImageContent(
+    aspectRatio: Float = 0.5f
+) = TimelineItemImageContent(
     body = "a body",
     formatted = null,
     filename = null,
@@ -40,7 +42,7 @@ fun aTimelineItemImageContent() = TimelineItemImageContent(
     blurhash = A_BLUR_HASH,
     width = null,
     height = 300,
-    aspectRatio = 0.5f,
+    aspectRatio = aspectRatio,
     formattedFileSize = "4MB",
     fileExtension = "jpg"
 )

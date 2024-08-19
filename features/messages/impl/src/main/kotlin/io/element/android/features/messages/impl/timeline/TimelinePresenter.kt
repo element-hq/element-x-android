@@ -201,10 +201,15 @@ class TimelinePresenter @AssistedInject constructor(
         }
 
         LaunchedEffect(Unit) {
-            combine(timelineController.timelineItems(), room.membersStateFlow) { items, membersState ->
+            combine(
+                timelineController.timelineItems(),
+                room.membersStateFlow,
+                room.roomInfoFlow,
+            ) { items, membersState, info ->
                 timelineItemsFactory.replaceWith(
                     timelineItems = items,
-                    roomMembers = membersState.roomMembers().orEmpty()
+                    roomMembers = membersState.roomMembers().orEmpty(),
+                    pinnedEvents = info.pinnedEventIds,
                 )
                 items
             }

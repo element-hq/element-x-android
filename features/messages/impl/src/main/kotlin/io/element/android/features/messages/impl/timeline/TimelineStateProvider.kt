@@ -138,6 +138,7 @@ internal fun aTimelineItemEvent(
     sendState: LocalEventSendState? = null,
     inReplyTo: InReplyToDetails? = null,
     isThreaded: Boolean = false,
+    isPinned: Boolean = false,
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
     timelineItemReactions: TimelineItemReactions = aTimelineItemReactions(),
     readReceiptState: TimelineItemReadReceipts = aTimelineItemReadReceipts(),
@@ -165,6 +166,7 @@ internal fun aTimelineItemEvent(
         inReplyTo = inReplyTo,
         debugInfo = debugInfo,
         isThreaded = isThreaded,
+        isPinned = isPinned,
         origin = null,
         messageShield = messageShield,
     )

@@ -29,6 +29,7 @@ import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormat
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
@@ -51,6 +52,7 @@ class TimelineItemEventFactory @Inject constructor(
         index: Int,
         timelineItems: List<MatrixTimelineItem>,
         roomMembers: List<RoomMember>,
+        pinnedEvents: List<EventId>,
     ): TimelineItem.Event {
         val currentSender = currentTimelineItem.event.sender
         val groupPosition =
@@ -84,6 +86,7 @@ class TimelineItemEventFactory @Inject constructor(
             localSendState = currentTimelineItem.event.localSendState,
             inReplyTo = currentTimelineItem.event.inReplyTo()?.map(permalinkParser = permalinkParser),
             isThreaded = currentTimelineItem.event.isThreaded(),
+            isPinned = currentTimelineItem.eventId in pinnedEvents,
             debugInfo = currentTimelineItem.event.debugInfo,
             origin = currentTimelineItem.event.origin,
             messageShield = currentTimelineItem.event.messageShield,

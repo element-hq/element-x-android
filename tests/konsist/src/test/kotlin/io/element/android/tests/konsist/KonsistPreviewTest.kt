@@ -130,6 +130,7 @@ class KonsistPreviewTest {
                 "TimelineItemVoiceViewUnifiedPreview",
                 "TimelineVideoWithCaptionRowPreview",
                 "TimelineViewMessageShieldPreview",
+                "TimelineWithPinnedEventsPreview",
                 "UserAvatarColorsPreview",
             )
             .assertTrue(

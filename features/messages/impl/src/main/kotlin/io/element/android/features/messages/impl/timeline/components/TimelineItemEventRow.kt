@@ -144,7 +144,7 @@ fun TimelineItemEventRow(
     }
 
     Column(modifier = modifier.fillMaxWidth()) {
-        if (event.groupPosition.isNew()) {
+        if (event.groupPosition.isNew() && !event.isPinned) {
             Spacer(modifier = Modifier.height(16.dp))
         } else {
             Spacer(modifier = Modifier.height(2.dp))
