@@ -2,6 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="confirm_recovery_key_banner_message">"Dein Chat-Backup ist derzeit nicht synchronisiert. Du musst deinen Wiederherstellungsschlüssel bestätigen, um Zugriff auf dein Chat-Backup zu erhalten."</string>
   <string name="confirm_recovery_key_banner_title">"Wiederherstellungsschlüssel bestätigen."</string>
+  <string name="full_screen_intent_banner_message">"Damit du keinen wichtigen Anruf verpasst, ändere bitte deine Einstellungen so, dass du bei gesperrtem Telefon Benachrichtigungen im Vollbildmodus erhältst."</string>
+  <string name="full_screen_intent_banner_title">"Verbessere dein Anruferlebnis"</string>
   <string name="screen_invites_decline_chat_message">"Möchtest du die Einladung zum Betreten von %1$s wirklich ablehnen?"</string>
   <string name="screen_invites_decline_chat_title">"Einladung ablehnen"</string>
   <string name="screen_invites_decline_direct_chat_message">"Bist du sicher, dass du diese Direktnachricht von %1$s ablehnen möchtest?"</string>

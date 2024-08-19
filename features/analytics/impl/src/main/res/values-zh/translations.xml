@@ -4,7 +4,7 @@
   <string name="screen_analytics_prompt_help_us_improve">"共享匿名使用数据以帮助我们排查问题。"</string>
   <string name="screen_analytics_prompt_read_terms">"您可以阅读我们的所有条款 %1$s。"</string>
   <string name="screen_analytics_prompt_read_terms_content_link">"此处"</string>
-  <string name="screen_analytics_prompt_settings">"你可以随时关闭此功能"</string>
+  <string name="screen_analytics_prompt_settings">"可以随时关闭此功能"</string>
   <string name="screen_analytics_prompt_third_party_sharing">"我们不会与第三方共享您的数据"</string>
   <string name="screen_analytics_prompt_title">"帮助改进 %1$s"</string>
 </resources>

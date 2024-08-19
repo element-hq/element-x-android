@@ -16,6 +16,12 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Postupujte podle pokynů k vytvoření nového obnovovacího klíče"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Uložte nový klíč pro obnovení do správce hesel nebo do zašifrované poznámky"</string>
   <string name="screen_create_new_recovery_key_title">"Obnovte šifrování účtu pomocí jiného zařízení"</string>
+  <string name="screen_encryption_reset_bullet_1">"Podrobnosti o vašem účtu, kontaktech, preferencích a seznamu chatu budou zachovány"</string>
+  <string name="screen_encryption_reset_bullet_2">"Ztratíte svou stávající historii zpráv"</string>
+  <string name="screen_encryption_reset_bullet_3">"Budete muset znovu ověřit všechna stávající zařízení a kontakty"</string>
+  <string name="screen_encryption_reset_footer">"Obnovte svou identitu pouze v případě, že nemáte přístup k jinému přihlášenému zařízení a ztratili jste klíč pro obnovení."</string>
+  <string name="screen_encryption_reset_subtitle">"Pokud nejste přihlášeni k žádnému jinému zařízení a ztratili jste klíč pro obnovení, budete muset obnovit svou identitu, abyste mohli pokračovat v používání aplikace. "</string>
+  <string name="screen_encryption_reset_title">"Obnovte svou identitu v případě, že nemůžete potvrdit jiným způsobem"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Vypnout"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Pokud se odhlásíte ze všech zařízení, přijdete o zašifrované zprávy."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Opravdu chcete vypnout zálohování?"</string>
@@ -51,4 +57,11 @@
   <string name="screen_recovery_key_setup_generate_key_description">"Ujistěte se, že můžete klíč pro obnovení uložit někde v bezpečí"</string>
   <string name="screen_recovery_key_setup_success">"Nastavení obnovení bylo úspěšné"</string>
   <string name="screen_recovery_key_setup_title">"Nastavení obnovy"</string>
+  <string name="screen_reset_encryption_confirmation_alert_action">"Ano, resetovat nyní"</string>
+  <string name="screen_reset_encryption_confirmation_alert_subtitle">"Tento proces je nevratný."</string>
+  <string name="screen_reset_encryption_confirmation_alert_title">"Opravdu chcete obnovit šifrování?"</string>
+  <string name="screen_reset_encryption_password_error">"Došlo k neznámé chybě. Zkontrolujte, zda je heslo k účtu správné a zkuste to znovu."</string>
+  <string name="screen_reset_encryption_password_placeholder">"Zadat…"</string>
+  <string name="screen_reset_encryption_password_subtitle">"Potvrďte, že chcete obnovit šifrování."</string>
+  <string name="screen_reset_encryption_password_title">"Pro pokračování zadejte heslo k účtu"</string>
 </resources>

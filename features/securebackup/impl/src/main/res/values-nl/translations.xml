@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_chat_backup_key_backup_action_disable">"Back-up uitschakelen"</string>
+  <string name="screen_chat_backup_key_backup_action_enable">"Back-up inschakelen"</string>
+  <string name="screen_chat_backup_key_backup_description">"Een back-up maken zorgt ervoor dat je je berichtgeschiedenis niet verliest. %1$s."</string>
+  <string name="screen_chat_backup_key_backup_title">"Back-up"</string>
+  <string name="screen_chat_backup_recovery_action_change">"Wijzig recovery key"</string>
+  <string name="screen_chat_backup_recovery_action_confirm">"Voer recovery key in"</string>
+  <string name="screen_chat_backup_recovery_action_confirm_description">"Je chatback-up is momenteel niet gesynchroniseerd."</string>
+  <string name="screen_chat_backup_recovery_action_setup">"Herstelmogelijkheid instellen"</string>
+  <string name="screen_chat_backup_recovery_action_setup_description">"Krijg toegang tot je versleutelde berichten als je al je apparaten kwijtraakt of overal uit %1$s bent uitgelogd."</string>
+  <string name="screen_key_backup_disable_title">"Weet je zeker dat je de back-up wilt uitschakelen?"</string>
+</resources>

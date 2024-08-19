@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"Bijlage toevoegen"</string>
+  <string name="rich_text_editor_bullet_list">"Lijst met opsommingstekens in-/uitschakelen"</string>
+  <string name="rich_text_editor_close_formatting_options">"Opmaakopties sluiten"</string>
+  <string name="rich_text_editor_code_block">"Codeblok in-/uitschakelen"</string>
+  <string name="rich_text_editor_composer_placeholder">"Bericht…"</string>
+  <string name="rich_text_editor_create_link">"Maak een link"</string>
+  <string name="rich_text_editor_edit_link">"Link bewerken"</string>
+  <string name="rich_text_editor_format_bold">"Vetgedrukte opmaak toepassen"</string>
+  <string name="rich_text_editor_format_italic">"Cursieve opmaak toepassen"</string>
+  <string name="rich_text_editor_format_strikethrough">"Doorgestreepte opmaak toepassen"</string>
+  <string name="rich_text_editor_format_underline">"Onderstreepte opmaak toepassen"</string>
+  <string name="rich_text_editor_full_screen_toggle">"Modus volledig scherm in-/uitschakelen"</string>
+  <string name="rich_text_editor_indent">"Inspringen"</string>
+  <string name="rich_text_editor_inline_code">"Inline code-opmaak toepassen"</string>
+  <string name="rich_text_editor_link">"Link instellen"</string>
+  <string name="rich_text_editor_numbered_list">"Genummerde lijst in-/uitschakelen"</string>
+  <string name="rich_text_editor_open_compose_options">"Open opstelopties"</string>
+  <string name="rich_text_editor_quote">"Citaat in-/uitschakelen"</string>
+  <string name="rich_text_editor_remove_link">"Link verwijderen"</string>
+  <string name="rich_text_editor_unindent">"Inspringing ongedaan maken"</string>
+  <string name="rich_text_editor_url_placeholder">"Link"</string>
+  <string name="screen_room_voice_message_tooltip">"Vasthouden om op te nemen"</string>
+</resources>

@@ -45,6 +45,12 @@
   <string name="state_event_room_name_removed_by_you">"Usunąłeś nazwę pokoju"</string>
   <string name="state_event_room_none">"%1$s nie wprowadził żadnych zmian"</string>
   <string name="state_event_room_none_by_you">"Nie wprowadzono żadnych zmian"</string>
+  <string name="state_event_room_pinned_events_changed">"%1$s zmienił przypięte wiadomości"</string>
+  <string name="state_event_room_pinned_events_changed_by_you">"Zmieniłeś przypięte wiadomości"</string>
+  <string name="state_event_room_pinned_events_pinned">"%1$s przypiął wiadomość"</string>
+  <string name="state_event_room_pinned_events_pinned_by_you">"Przypiąłeś wiadomość"</string>
+  <string name="state_event_room_pinned_events_unpinned">"%1$s odpiął wiadomość"</string>
+  <string name="state_event_room_pinned_events_unpinned_by_you">"Odpiąłeś wiadomość"</string>
   <string name="state_event_room_reject">"%1$s odrzucił zaproszenie"</string>
   <string name="state_event_room_reject_by_you">"Odrzuciłeś zaproszenie"</string>
   <string name="state_event_room_remove">"%1$s usunął %2$s"</string>

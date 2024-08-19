@@ -16,6 +16,12 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Postępuj zgodnie z instrukcjami, aby utworzyć nowy klucz przywracania"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Zapisz nowy klucz przywracania w menedżerze haseł lub notatce szyfrowanej"</string>
   <string name="screen_create_new_recovery_key_title">"Resetuj szyfrowanie swojego konta za pomocą drugiego urządzenia"</string>
+  <string name="screen_encryption_reset_bullet_1">"Szczegóły konta, kontakty, preferencje i lista czatów zostaną zachowane"</string>
+  <string name="screen_encryption_reset_bullet_2">"Utracisz istniejącą historię wiadomości"</string>
+  <string name="screen_encryption_reset_bullet_3">"Wymagana będzie ponowna weryfikacja istniejących urządzeń i kontaktów"</string>
+  <string name="screen_encryption_reset_footer">"Zresetuj swoją tożsamość tylko wtedy, gdy nie jesteś zalogowany na żadnym urządzeniu i straciłeś swój klucz przywracania."</string>
+  <string name="screen_encryption_reset_subtitle">"Jeśli nie jesteś zalogowany na żadnym innym urządzeniu i straciłeś swój klucz przywracania, musisz zresetować swoją tożsamość, aby kontynuować korzystanie z aplikacji. "</string>
+  <string name="screen_encryption_reset_title">"Zresetuj swoją tożsamość, jeśli nie możesz jej potwierdzić w inny sposób"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Wyłącz"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Jeśli wylogujesz się ze wszystkich urządzeń, stracisz wszystkie wiadomości szyfrowane."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Czy na pewno chcesz wyłączyć backup?"</string>
@@ -51,4 +57,10 @@
   <string name="screen_recovery_key_setup_generate_key_description">"Upewnij się, że klucz przywracania możesz przechowywać w bezpiecznym miejscu"</string>
   <string name="screen_recovery_key_setup_success">"Skonfigurowano przywracanie pomyślnie"</string>
   <string name="screen_recovery_key_setup_title">"Skonfiguruj przywracanie"</string>
+  <string name="screen_reset_encryption_confirmation_alert_action">"Tak, zresetuj teraz"</string>
+  <string name="screen_reset_encryption_confirmation_alert_subtitle">"Tego procesu nie można odwrócić."</string>
+  <string name="screen_reset_encryption_confirmation_alert_title">"Czy na pewno chcesz zresetować szyfrowanie?"</string>
+  <string name="screen_reset_encryption_password_placeholder">"Wprowadź…"</string>
+  <string name="screen_reset_encryption_password_subtitle">"Potwierdź, że chcesz zresetować szyfrowanie."</string>
+  <string name="screen_reset_encryption_password_title">"Wprowadź hasło, aby kontynuować"</string>
 </resources>

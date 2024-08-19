@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_bug_report_attach_screenshot">"Załącz zrzut ekranu"</string>
-  <string name="screen_bug_report_contact_me">"Możecie skontaktować się ze mną, jeśli macie jakiekolwiek dodatkowe pytania."</string>
-  <string name="screen_bug_report_contact_me_title">"Napisz do mnie"</string>
+  <string name="screen_bug_report_contact_me">"Zezwól na kontakt ze mną, jeśli są jakiekolwiek dodatkowe pytania."</string>
+  <string name="screen_bug_report_contact_me_title">"Kontakt ze mną"</string>
   <string name="screen_bug_report_edit_screenshot">"Edytuj zrzut ekranu"</string>
   <string name="screen_bug_report_editor_description">"Opisz problem. Co zrobiłeś? Czego oczekiwałeś? Co się stało zamiast tego. Podaj jak najwięcej szczegółów."</string>
   <string name="screen_bug_report_editor_placeholder">"Opisz problem…"</string>

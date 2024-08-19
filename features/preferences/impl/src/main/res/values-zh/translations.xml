@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="full_screen_intent_banner_message">"为确保您不会错过重要来电，请更改设置以允许锁屏时的全屏通知。"</string>
+  <string name="full_screen_intent_banner_title">"提升通话体验"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"选择如何接收通知"</string>
   <string name="screen_advanced_settings_developer_mode">"开发者模式"</string>
   <string name="screen_advanced_settings_developer_mode_description">"允许开发人员访问特性和功能。"</string>
-  <string name="screen_advanced_settings_element_call_base_url">"自定义 Element 通话 URL"</string>
+  <string name="screen_advanced_settings_element_call_base_url">"自定义 Element Call URL"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"为 Element 通话设置根 URL。"</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL 无效，请确保包含协议（http/https）和正确的地址。"</string>
   <string name="screen_advanced_settings_push_provider_android">"通知推送提供者"</string>
@@ -12,10 +14,10 @@
   <string name="screen_advanced_settings_send_read_receipts_description">"如果关闭，您的已读回执将不会发送给别人。您仍能收到别人的已读回执。"</string>
   <string name="screen_advanced_settings_share_presence">"分享在线状态"</string>
   <string name="screen_advanced_settings_share_presence_description">"如果关闭，您将无法发送或接收已读回执、输入通知"</string>
-  <string name="screen_advanced_settings_view_source_description">"启用在时间轴中查看消息来源的选项。"</string>
+  <string name="screen_advanced_settings_view_source_description">"启用在时间轴中查看消息源码的选项。"</string>
   <string name="screen_blocked_users_empty">"您没有屏蔽用户"</string>
   <string name="screen_blocked_users_unblock_alert_action">"解封"</string>
-  <string name="screen_blocked_users_unblock_alert_description">"你可以重新接收他们的消息。"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"可以重新接收他们的消息。"</string>
   <string name="screen_blocked_users_unblock_alert_title">"解封用户"</string>
   <string name="screen_blocked_users_unblocking">"正在解除屏蔽……"</string>
   <string name="screen_edit_profile_display_name">"显示名称"</string>
