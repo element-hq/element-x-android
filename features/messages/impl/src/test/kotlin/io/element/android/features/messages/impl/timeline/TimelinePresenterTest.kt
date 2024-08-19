@@ -48,6 +48,7 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
@@ -489,7 +490,9 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
             liveTimeline = liveTimeline,
             timelineFocusedOnEventResult = { Result.success(detachedTimeline) },
             canUserSendMessageResult = { _, _ -> Result.success(true) },
-        )
+        ).apply {
+            givenRoomInfo(aRoomInfo())
+        }
         val presenter = createTimelinePresenter(
             room = room,
         )
@@ -636,6 +639,7 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
             liveTimeline = timeline,
             canUserSendMessageResult = { _, _ -> Result.success(true) },
         ).apply {
+            givenRoomInfo(aRoomInfo())
             givenRoomMembersState(MatrixRoomMembersState.Unknown)
         }
 
@@ -670,7 +674,9 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
         room: FakeMatrixRoom = FakeMatrixRoom(
             liveTimeline = timeline,
             canUserSendMessageResult = { _, _ -> Result.success(true) }
-        ),
+        ).apply {
+            givenRoomInfo(aRoomInfo())
+        },
         timelineItemsFactory: TimelineItemsFactory = aTimelineItemsFactory(),
         redactedVoiceMessageManager: RedactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
         messagesNavigator: FakeMessagesNavigator = FakeMessagesNavigator(),
