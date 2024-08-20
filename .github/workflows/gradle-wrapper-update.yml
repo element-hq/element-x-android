@@ -23,3 +23,4 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           target-branch: develop
+          labels: PR-Build
