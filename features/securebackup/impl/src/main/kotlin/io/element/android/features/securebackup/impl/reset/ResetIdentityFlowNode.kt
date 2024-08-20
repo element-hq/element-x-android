@@ -87,20 +87,22 @@ class ResetIdentityFlowNode @AssistedInject constructor(
     override fun onBuilt() {
         super.onBuilt()
 
-        resetIdentityFlowManager.whenResetIsDone {
-            plugins<Callback>().forEach { it.onDone() }
-        }
-
         lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onStart(owner: LifecycleOwner) {
                 // If the custom tab was opened, we need to cancel the reset job
                 // when we come back to the node if the reset wasn't successful
-                cancelResetJob()
+                coroutineScope.launch {
+                    cancelResetJob()
+
+                    resetIdentityFlowManager.whenResetIsDone {
+                        plugins<Callback>().forEach { it.onDone() }
+                    }
+                }
             }
 
             override fun onDestroy(owner: LifecycleOwner) {
                 // Make sure we cancel the reset job when the node is destroyed, just in case
-                cancelResetJob()
+                coroutineScope.launch { cancelResetJob() }
             }
         })
     }
@@ -154,10 +156,10 @@ class ResetIdentityFlowNode @AssistedInject constructor(
             }
     }
 
-    private fun cancelResetJob() {
+    private suspend fun cancelResetJob() {
         resetJob?.cancel()
         resetJob = null
-        coroutineScope.launch { resetIdentityFlowManager.cancel() }
+        resetIdentityFlowManager.cancel()
     }
 
     @Composable
@@ -171,7 +173,7 @@ class ResetIdentityFlowNode @AssistedInject constructor(
         if (startResetState.isLoading()) {
             ProgressDialog(
                 properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true),
-                onDismissRequest = { cancelResetJob() }
+                onDismissRequest = { coroutineScope.launch { cancelResetJob() } }
             )
         }
 
