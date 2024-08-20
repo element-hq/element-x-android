@@ -21,6 +21,6 @@ jobs:
       - name: Update Gradle Wrapper
         uses: gradle-update/update-gradle-wrapper-action@v1
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
           target-branch: develop
           labels: PR-Build
