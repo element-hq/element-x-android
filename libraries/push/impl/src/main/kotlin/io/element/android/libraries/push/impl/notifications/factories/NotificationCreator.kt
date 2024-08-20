@@ -446,10 +446,10 @@ class DefaultNotificationCreator @Inject constructor(
     ): MessagingStyle {
         return MessagingStyle(
             Person.Builder()
-            .setName(user.displayName?.annotateForDebug(50))
-            .setIcon(bitmapLoader.getUserIcon(user.avatarUrl, imageLoader))
-            .setKey(sessionId.value)
-            .build()
+                .setName(user.displayName?.annotateForDebug(50))
+                .setIcon(bitmapLoader.getUserIcon(user.avatarUrl, imageLoader))
+                .setKey(sessionId.value)
+                .build()
         ).also {
             it.conversationTitle = roomName.takeIf { roomIsGroup }
             it.isGroupConversation = roomIsGroup
