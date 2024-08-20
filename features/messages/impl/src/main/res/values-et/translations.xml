@@ -8,6 +8,8 @@
   <string name="emoji_picker_category_people">"Emotikonid ja inimesed"</string>
   <string name="emoji_picker_category_places">"Reisimine ja kohad"</string>
   <string name="emoji_picker_category_symbols">"Sümbolid"</string>
+  <string name="screen_report_content_block_user">"Blokeeri kasutaja"</string>
+  <string name="screen_report_content_block_user_hint">"Vali see eelistus, kui sa soovid peita selle kasutaja kõik senised ja tulevased sõnumid"</string>
   <string name="screen_report_content_explanation">"Teade selle sõnumi kohta edastatakse sinu koduserveri haldajale. Haldajal ei ole võimalik lugeda krüptitud sõnumite sisu."</string>
   <string name="screen_report_content_hint">"Sellest sisust teatamise põhjus"</string>
   <string name="screen_room_attachment_source_camera">"Kaamera"</string>
@@ -20,10 +22,20 @@
   <string name="screen_room_attachment_text_formatting">"Tekstivorming"</string>
   <string name="screen_room_encrypted_history_banner">"Sõnumite ajalugu pole hetkel saadaval"</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Selle jututoa sõnumite ajalugu pole hetkel saadaval. Verifitseeri see seade ja näed tervet oma sõnumiteajalugu."</string>
+  <string name="screen_room_invite_again_alert_message">"Kas sa sooviksid neid tagasi kutsuda?"</string>
+  <string name="screen_room_invite_again_alert_title">"Sa oled selles vestluses üksinda"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Teavita kogu jututuba"</string>
   <string name="screen_room_mentions_at_room_title">"Kõik"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"Saada uuesti"</string>
+  <string name="screen_room_retry_send_menu_title">"Sinu sõnumi saatmine ei õnnestunud"</string>
+  <string name="screen_room_timeline_add_reaction">"Lisa emotikon"</string>
   <string name="screen_room_timeline_beginning_of_room">"See on %1$s jututoa algus."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"See on antud vestluse algus."</string>
+  <string name="screen_room_timeline_less_reactions">"Näita vähem"</string>
+  <string name="screen_room_timeline_message_copied">"Sõnum on kopeeritud"</string>
+  <string name="screen_room_timeline_no_permission_to_post">"Sul pole õigusi siia jututuppa kirjutada"</string>
+  <string name="screen_room_timeline_reactions_show_less">"Näita vähem"</string>
+  <string name="screen_room_timeline_reactions_show_more">"Näita rohkem"</string>
   <string name="screen_room_timeline_read_marker_title">"Uus"</string>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d jututoa muudatus"</item>
@@ -37,4 +49,5 @@
     <item quantity="one">"%1$s kirjutab"</item>
     <item quantity="other">"%1$s kirjutavad"</item>
   </plurals>
+  <string name="screen_room_typing_two_members">"%1$s ja %2$s"</string>
 </resources>

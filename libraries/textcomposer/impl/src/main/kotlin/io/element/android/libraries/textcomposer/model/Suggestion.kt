@@ -33,17 +33,19 @@ data class Suggestion(
     )
 }
 
-enum class SuggestionType {
-    Mention,
-    Command,
-    Room;
+sealed interface SuggestionType {
+    data object Mention : SuggestionType
+    data object Command : SuggestionType
+    data object Room : SuggestionType
+    data class Custom(val pattern: String) : SuggestionType
 
     companion object {
         fun fromPatternKey(key: PatternKey): SuggestionType {
             return when (key) {
-                PatternKey.AT -> Mention
-                PatternKey.SLASH -> Command
-                PatternKey.HASH -> Room
+                PatternKey.At -> Mention
+                PatternKey.Slash -> Command
+                PatternKey.Hash -> Room
+                is PatternKey.Custom -> Custom(key.v1)
             }
         }
     }

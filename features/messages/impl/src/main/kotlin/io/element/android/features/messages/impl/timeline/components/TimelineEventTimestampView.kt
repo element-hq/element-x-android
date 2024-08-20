@@ -16,6 +16,7 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,26 +34,31 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.isEdited
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
+import io.element.android.libraries.matrix.api.timeline.item.event.isCritical
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun TimelineEventTimestampView(
     event: TimelineItem.Event,
+    onShieldClick: (MessageShield) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val formattedTime = event.sentTime
     val hasUnrecoverableError = event.localSendState is LocalEventSendState.SendingFailed.Unrecoverable
+    val hasEncryptionCritical = event.messageShield?.isCritical.orFalse()
     val isMessageEdited = event.content.isEdited()
-    val tint = if (hasUnrecoverableError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary
+    val tint = if (hasUnrecoverableError || hasEncryptionCritical) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary
     Row(
         modifier = Modifier
-                .padding(PaddingValues(start = TimelineEventTimestampViewDefaults.spacing))
-                .then(modifier),
+            .padding(PaddingValues(start = TimelineEventTimestampViewDefaults.spacing))
+            .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (isMessageEdited) {
@@ -77,13 +83,28 @@ fun TimelineEventTimestampView(
                 modifier = Modifier.size(15.dp, 18.dp),
             )
         }
+        event.messageShield?.let { shield ->
+            Spacer(modifier = Modifier.width(2.dp))
+            Icon(
+                imageVector = shield.toIcon(),
+                contentDescription = shield.toText(),
+                modifier = Modifier
+                    .size(15.dp)
+                    .clickable { onShieldClick(shield) },
+                tint = shield.toIconColor(),
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+        }
     }
 }
 
 @PreviewsDayNight
 @Composable
 internal fun TimelineEventTimestampViewPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) = ElementPreview {
-    TimelineEventTimestampView(event = event)
+    TimelineEventTimestampView(
+        event = event,
+        onShieldClick = {},
+    )
 }
 
 object TimelineEventTimestampViewDefaults {

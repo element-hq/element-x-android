@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_notification_optin_subtitle">"Μπορείς να αλλάξεις τις ρυθμίσεις σου αργότερα."</string>
+  <string name="screen_notification_optin_title">"Επέτρεψε τις ειδοποιήσεις και μην χάσεις ούτε ένα μήνυμα"</string>
+  <string name="screen_welcome_bullet_1">"Κλήσεις, δημοσκοπήσεις, αναζήτηση και άλλα, θα προστεθούν αργότερα φέτος."</string>
+  <string name="screen_welcome_bullet_2">"Το ιστορικό μηνυμάτων για κρυπτογραφημένα δωμάτια δεν είναι ακόμα διαθέσιμο."</string>
+  <string name="screen_welcome_bullet_3">"Θα θέλαμε να ακούσουμε τη γνώμη σου, πες μας τη γνώμη σου μέσω της σελίδας ρυθμίσεων."</string>
+  <string name="screen_welcome_button">"Πάμε!"</string>
+  <string name="screen_welcome_subtitle">"Να τί πρέπει να ξέρεις:"</string>
+  <string name="screen_welcome_title">"Καλώς ήρθες στο %1$s!"</string>
+</resources>

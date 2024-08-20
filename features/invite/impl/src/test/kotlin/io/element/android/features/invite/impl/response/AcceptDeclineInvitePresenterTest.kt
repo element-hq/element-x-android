@@ -23,15 +23,17 @@ import io.element.android.features.invite.api.response.InviteData
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.join.FakeJoinRoom
-import io.element.android.libraries.push.api.notifications.NotificationDrawerManager
-import io.element.android.libraries.push.test.notifications.FakeNotificationDrawerManager
+import io.element.android.libraries.push.api.notifications.NotificationCleaner
+import io.element.android.libraries.push.test.notifications.FakeNotificationCleaner
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -92,9 +94,9 @@ class AcceptDeclineInvitePresenterTest {
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(
                 roomId = A_ROOM_ID,
-                result = FakeMatrixRoom().apply {
+                result = FakeMatrixRoom(
                     leaveRoomLambda = declineInviteFailure
-                }
+                )
             )
         }
         val presenter = createAcceptDeclineInvitePresenter(client = client)
@@ -133,7 +135,7 @@ class AcceptDeclineInvitePresenterTest {
         val clearMembershipNotificationForRoomLambda = lambdaRecorder<SessionId, RoomId, Unit> { _, _ ->
             Result.success(Unit)
         }
-        val notificationDrawerManager = FakeNotificationDrawerManager(
+        val fakeNotificationCleaner = FakeNotificationCleaner(
             clearMembershipNotificationForRoomLambda = clearMembershipNotificationForRoomLambda
         )
         val declineInviteSuccess = lambdaRecorder { ->
@@ -142,14 +144,14 @@ class AcceptDeclineInvitePresenterTest {
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(
                 roomId = A_ROOM_ID,
-                result = FakeMatrixRoom().apply {
+                result = FakeMatrixRoom(
                     leaveRoomLambda = declineInviteSuccess
-                }
+                )
             )
         }
         val presenter = createAcceptDeclineInvitePresenter(
             client = client,
-            notificationDrawerManager = notificationDrawerManager,
+            notificationCleaner = fakeNotificationCleaner,
         )
         presenter.test {
             val inviteData = anInviteData()
@@ -178,8 +180,8 @@ class AcceptDeclineInvitePresenterTest {
 
     @Test
     fun `present - accepting invite error flow`() = runTest {
-        val joinRoomFailure = lambdaRecorder { roomId: RoomId, _: List<String>, _: JoinedRoom.Trigger ->
-            Result.failure<Unit>(RuntimeException("Failed to join room $roomId"))
+        val joinRoomFailure = lambdaRecorder { roomIdOrAlias: RoomIdOrAlias, _: List<String>, _: JoinedRoom.Trigger ->
+            Result.failure<Unit>(RuntimeException("Failed to join room $roomIdOrAlias"))
         }
         val presenter = createAcceptDeclineInvitePresenter(joinRoomLambda = joinRoomFailure)
         presenter.test {
@@ -208,7 +210,7 @@ class AcceptDeclineInvitePresenterTest {
         assert(joinRoomFailure)
             .isCalledOnce()
             .with(
-                value(A_ROOM_ID),
+                value(A_ROOM_ID.toRoomIdOrAlias()),
                 value(emptyList<String>()),
                 value(JoinedRoom.Trigger.Invite)
             )
@@ -219,15 +221,15 @@ class AcceptDeclineInvitePresenterTest {
         val clearMembershipNotificationForRoomLambda = lambdaRecorder<SessionId, RoomId, Unit> { _, _ ->
             Result.success(Unit)
         }
-        val notificationDrawerManager = FakeNotificationDrawerManager(
+        val fakeNotificationCleaner = FakeNotificationCleaner(
             clearMembershipNotificationForRoomLambda = clearMembershipNotificationForRoomLambda
         )
-        val joinRoomSuccess = lambdaRecorder { _: RoomId, _: List<String>, _: JoinedRoom.Trigger ->
+        val joinRoomSuccess = lambdaRecorder { _: RoomIdOrAlias, _: List<String>, _: JoinedRoom.Trigger ->
             Result.success(Unit)
         }
         val presenter = createAcceptDeclineInvitePresenter(
             joinRoomLambda = joinRoomSuccess,
-            notificationDrawerManager = notificationDrawerManager,
+            notificationCleaner = fakeNotificationCleaner,
         )
         presenter.test {
             val inviteData = anInviteData()
@@ -248,7 +250,7 @@ class AcceptDeclineInvitePresenterTest {
         assert(joinRoomSuccess)
             .isCalledOnce()
             .with(
-                value(A_ROOM_ID),
+                value(A_ROOM_ID.toRoomIdOrAlias()),
                 value(emptyList<String>()),
                 value(JoinedRoom.Trigger.Invite)
             )
@@ -260,26 +262,26 @@ class AcceptDeclineInvitePresenterTest {
     private fun anInviteData(
         roomId: RoomId = A_ROOM_ID,
         name: String = A_ROOM_NAME,
-        isDirect: Boolean = false
+        isDm: Boolean = false
     ): InviteData {
         return InviteData(
             roomId = roomId,
             roomName = name,
-            isDirect = isDirect
+            isDm = isDm
         )
     }
 
     private fun createAcceptDeclineInvitePresenter(
         client: MatrixClient = FakeMatrixClient(),
-        joinRoomLambda: (RoomId, List<String>, JoinedRoom.Trigger) -> Result<Unit> = { _, _, _ ->
+        joinRoomLambda: (RoomIdOrAlias, List<String>, JoinedRoom.Trigger) -> Result<Unit> = { _, _, _ ->
             Result.success(Unit)
         },
-        notificationDrawerManager: NotificationDrawerManager = FakeNotificationDrawerManager(),
+        notificationCleaner: NotificationCleaner = FakeNotificationCleaner(),
     ): AcceptDeclineInvitePresenter {
         return AcceptDeclineInvitePresenter(
             client = client,
             joinRoom = FakeJoinRoom(joinRoomLambda),
-            notificationDrawerManager = notificationDrawerManager,
+            notificationCleaner = notificationCleaner,
         )
     }
 }

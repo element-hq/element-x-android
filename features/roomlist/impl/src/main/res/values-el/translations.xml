@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="confirm_recovery_key_banner_message">"Το αντίγραφο ασφαλείας της συνομιλίας σου δεν είναι συγχρονισμένο αυτήν τη στιγμή. Πρέπει να εισαγάγεις το κλειδί ανάκτησης για να διατηρήσεις την πρόσβαση στο αντίγραφο ασφαλείας της συνομιλίας σου."</string>
+  <string name="confirm_recovery_key_banner_title">"Εισήγαγε το κλειδί ανάκτησης"</string>
+  <string name="full_screen_intent_banner_message">"Για να διασφαλίσεις ότι δεν θα χάσεις ποτέ μια σημαντική κλήση, άλλαξε τις ρυθμίσεις σου για να επιτρέψεις τις ειδοποιήσεις πλήρους οθόνης όταν το τηλέφωνό σου είναι κλειδωμένο."</string>
+  <string name="full_screen_intent_banner_title">"Βελτίωσε την εμπειρία κλήσεων"</string>
+  <string name="screen_invites_decline_chat_message">"Σίγουρα θες να απορρίψεις την πρόσκληση συμμετοχής στο %1$s;"</string>
+  <string name="screen_invites_decline_chat_title">"Απόρριψη πρόσκλησης"</string>
+  <string name="screen_invites_decline_direct_chat_message">"Σίγουρα θες να απορρίψεις την ιδιωτική συνομιλία με τον χρήστη %1$s;"</string>
+  <string name="screen_invites_decline_direct_chat_title">"Απόρριψη συνομιλίας"</string>
+  <string name="screen_invites_empty_list">"Χωρίς προσκλήσεις"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) σέ προσκάλεσε"</string>
+  <string name="screen_migration_message">"Αυτή είναι μια εφάπαξ διαδικασία, ευχαριστώ που περίμενες."</string>
+  <string name="screen_migration_title">"Ρύθμιση του λογαριασμού σου."</string>
+  <string name="screen_roomlist_a11y_create_message">"Δημιουργία νέας συνομιλίας ή δωματίου"</string>
+  <string name="screen_roomlist_empty_message">"Ξεκίνησε στέλνοντας μηνύματα σε κάποιον."</string>
+  <string name="screen_roomlist_empty_title">"Δεν υπάρχουν συνομιλίες ακόμα."</string>
+  <string name="screen_roomlist_filter_favourites">"Αγαπημένα"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Μπορείς να προσθέσεις μια συνομιλία στα αγαπημένα σου στις ρυθμίσεις συνομιλίας.
+Προς το παρόν, μπορείς να καταργήσεις την επιλογή φίλτρων για να δεις τις άλλες συνομιλίες σου"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Δεν έχεις ακόμα αγαπημένες συνομιλίες"</string>
+  <string name="screen_roomlist_filter_invites">"Προσκλήσεις"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Δεν έχεις εκκρεμείς προσκλήσεις."</string>
+  <string name="screen_roomlist_filter_low_priority">"Χαμηλής Προτεραιότητας"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Μπορείς να καταργήσεις την επιλογή φίλτρων για να δεις τις άλλες συνομιλίες σου"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Δεν έχεις συνομιλίες για αυτήν την επιλογή"</string>
+  <string name="screen_roomlist_filter_people">"Άτομα"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Δεν έχεις ακόμα ΠΜ"</string>
+  <string name="screen_roomlist_filter_rooms">"Δωμάτια"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Δεν είσαι ακόμα σε κανένα δωμάτιο"</string>
+  <string name="screen_roomlist_filter_unreads">"Μη αναγνωσμένα"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Συγχαρητήρια!
+Δεν έχεις μη αναγνωσμένα μηνύματα!"</string>
+  <string name="screen_roomlist_main_space_title">"Συνομιλίες"</string>
+  <string name="screen_roomlist_mark_as_read">"Επισήμανση ως αναγνωσμένου"</string>
+  <string name="screen_roomlist_mark_as_unread">"Επισήμανση ως μη αναγνωσμένου"</string>
+  <string name="screen_roomlist_room_directory_button_title">"Περιήγηση σε όλα τα δωμάτια"</string>
+  <string name="session_verification_banner_message">"Φαίνεται ότι χρησιμοποιείς μια νέα συσκευή. Επαλήθευσε με άλλη συσκευή για πρόσβαση στα κρυπτογραφημένα σου μηνύματα."</string>
+  <string name="session_verification_banner_title">"Επαλήθευσε ότι είσαι εσύ"</string>
+</resources>

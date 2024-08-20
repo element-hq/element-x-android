@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
+import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
@@ -55,9 +56,6 @@ interface MatrixRoom : Closeable {
     val isPublic: Boolean
     val activeMemberCount: Long
     val joinedMemberCount: Long
-
-    /** Whether the room is a direct message. */
-    val isDm: Boolean get() = isDirect && isOneToOne
 
     val roomInfoFlow: Flow<MatrixRoomInfo>
     val roomTypingMembersFlow: Flow<List<UserId>>
@@ -108,11 +106,14 @@ interface MatrixRoom : Closeable {
      */
     suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline>
 
+    /**
+     * Create a new timeline for the pinned events of the room.
+     */
+    suspend fun pinnedEventsTimeline(): Result<Timeline>
+
     fun destroy()
 
     suspend fun subscribeToSync()
-
-    suspend fun unsubscribeFromSync()
 
     suspend fun powerLevels(): Result<MatrixRoomPowerLevels>
 
@@ -129,6 +130,8 @@ interface MatrixRoom : Closeable {
     suspend fun userAvatarUrl(userId: UserId): Result<String?>
 
     suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
+
+    suspend fun editMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
 
     suspend fun sendImage(
         file: File,
@@ -181,6 +184,8 @@ interface MatrixRoom : Closeable {
     suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean>
 
     suspend fun canUserTriggerRoomNotification(userId: UserId): Result<Boolean>
+
+    suspend fun canUserPinUnpin(userId: UserId): Result<Boolean>
 
     suspend fun canUserJoinCall(userId: UserId): Result<Boolean> =
         canUserSendState(userId, StateEventType.CALL_MEMBER)
@@ -307,8 +312,8 @@ interface MatrixRoom : Closeable {
     suspend fun generateWidgetWebViewUrl(
         widgetSettings: MatrixWidgetSettings,
         clientId: String,
-        languageTag: String? = null,
-        theme: String? = null,
+        languageTag: String?,
+        theme: String?,
     ): Result<String>
 
     /**
@@ -336,6 +341,21 @@ interface MatrixRoom : Closeable {
     suspend fun sendCallNotificationIfNeeded(): Result<Unit>
 
     suspend fun setSendQueueEnabled(enabled: Boolean)
+
+    /**
+     * Store the given `ComposerDraft` in the state store of this room.
+     */
+    suspend fun saveComposerDraft(composerDraft: ComposerDraft): Result<Unit>
+
+    /**
+     * Retrieve the `ComposerDraft` stored in the state store for this room.
+     */
+    suspend fun loadComposerDraft(): Result<ComposerDraft?>
+
+    /**
+     * Clear the `ComposerDraft` stored in the state store for this room.
+     */
+    suspend fun clearComposerDraft(): Result<Unit>
 
     override fun close() = destroy()
 }

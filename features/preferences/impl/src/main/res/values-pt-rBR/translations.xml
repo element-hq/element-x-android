@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Escolha como receber notificações"</string>
+  <string name="screen_advanced_settings_developer_mode">"Modo de desenvolvedor"</string>
+  <string name="screen_advanced_settings_developer_mode_description">"Habilite para ter acesso a recursos e funcionalidades para desenvolvedores."</string>
+  <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL inválida, por favor verifique se o protocolo (http/https) e o endereço correto estão presentes."</string>
+  <string name="screen_advanced_settings_rich_text_editor_description">"Desative o editor de rich text para digitar Markdown manualmente."</string>
+  <string name="screen_advanced_settings_send_read_receipts">"Confirmações de leitura"</string>
+  <string name="screen_advanced_settings_send_read_receipts_description">"Se desligado, suas confirmações de leitura não serão enviadas para ninguém. Você ainda receberá confirmações de leitura de outros usuários."</string>
+  <string name="screen_advanced_settings_share_presence">"Compartilhar presença"</string>
+  <string name="screen_advanced_settings_share_presence_description">"Se desligado, você não poderá enviar ou receber confirmações de leitura ou notificações de digitação."</string>
+  <string name="screen_advanced_settings_view_source_description">"Ativar a opção de visualizar o fonte da mensagem na linha do tempo."</string>
+  <string name="screen_blocked_users_empty">"Você não tem usuários bloqueados"</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Desbloquear"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Você poderá ver todas as mensagens deles novamente."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Desbloquear usuário"</string>
+  <string name="screen_blocked_users_unblocking">"Desbloqueando…"</string>
+  <string name="screen_edit_profile_display_name">"Nome de exibição"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"Seu nome de exibição"</string>
+  <string name="screen_edit_profile_error">"Um erro desconhecido foi encontrado e as informações não puderam ser alteradas."</string>
+  <string name="screen_edit_profile_error_title">"Não foi possível atualizar o perfil"</string>
+  <string name="screen_edit_profile_title">"Editar perfil"</string>
+  <string name="screen_edit_profile_updating_details">"Atualizando o perfil…"</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"Configurações adicionais"</string>
+  <string name="screen_notification_settings_calls_label">"Chamadas de áudio e vídeo"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"Incompatibilidade de configuração"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"Simplificamos as configurações de notificações para facilitar a localização das opções. Algumas configurações personalizadas que você escolheu no passado não são mostradas aqui, mas ainda estão ativas.
+
+Se você continuar, algumas de suas configurações poderão mudar."</string>
+  <string name="screen_notification_settings_direct_chats">"Conversas privadas"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Configuração personalizada por chat"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Ocorreu um erro ao atualizar a configuração de notificação."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"Todas as mensagens"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Somente menções e palavras-chave"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"Em conversas privadas, me notifique para"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"Em conversas em grupos, me notifique para"</string>
+  <string name="screen_notification_settings_enable_notifications">"Ativar notificações neste dispositivo"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"A configuração não foi corrigida, tente novamente."</string>
+  <string name="screen_notification_settings_group_chats">"Bate-papos em grupo"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"Convites"</string>
+  <string name="screen_notification_settings_mentions_section_title">"Menções"</string>
+  <string name="screen_notification_settings_mode_all">"Todos"</string>
+  <string name="screen_notification_settings_mode_mentions">"Menções"</string>
+  <string name="screen_notification_settings_notification_section_title">"Me notifique para"</string>
+  <string name="screen_notification_settings_room_mention_label">"Notifique-me em @room"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"Para receber notificações, altere seu %1$s."</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"configurações do sistema"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"Notificações do sistema desativadas"</string>
+  <string name="screen_notification_settings_title">"Notificações"</string>
+</resources>

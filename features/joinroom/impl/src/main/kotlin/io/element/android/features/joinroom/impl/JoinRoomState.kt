@@ -37,7 +37,11 @@ data class JoinRoomState(
     val eventSink: (JoinRoomEvents) -> Unit
 ) {
     val joinAuthorisationStatus = when (contentState) {
+        // Use the join authorisation status from the loaded content state
         is ContentState.Loaded -> contentState.joinAuthorisationStatus
+        // Assume that if the room is unknown, the user can join it
+        is ContentState.UnknownRoom -> JoinAuthorisationStatus.CanJoin
+        // Otherwise assume that the user can't join the room
         else -> JoinAuthorisationStatus.Unknown
     }
 }
@@ -53,7 +57,7 @@ sealed interface ContentState {
         val topic: String?,
         val alias: RoomAlias?,
         val numberOfMembers: Long?,
-        val isDirect: Boolean,
+        val isDm: Boolean,
         val roomType: RoomType,
         val roomAvatarUrl: String?,
         val joinAuthorisationStatus: JoinAuthorisationStatus,

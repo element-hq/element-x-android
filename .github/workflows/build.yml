@@ -16,8 +16,6 @@ jobs:
   debug:
     name: Build APKs
     runs-on: ubuntu-latest
-    # Skip for `main`
-    if: github.ref != 'refs/heads/main'
     strategy:
       matrix:
         variant: [debug, release, nightly, samples]
@@ -38,7 +36,7 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
       - name: Configure gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Assemble debug Gplay APK

@@ -17,7 +17,6 @@
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
-    alias(libs.plugins.ksp)
     id("kotlin-parcelize")
 }
 
@@ -72,7 +71,6 @@ dependencies {
     implementation(libs.androidx.browser)
     implementation(libs.androidx.datastore.preferences)
     api(projects.features.preferences.api)
-    ksp(libs.showkase.processor)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
@@ -92,6 +90,7 @@ dependencies {
     testImplementation(projects.features.ftue.test)
     testImplementation(projects.features.rageshake.test)
     testImplementation(projects.features.rageshake.impl)
+    testImplementation(projects.features.logout.test)
     testImplementation(projects.features.roomlist.test)
     testImplementation(projects.libraries.indicator.impl)
     testImplementation(projects.libraries.pushproviders.test)

@@ -105,11 +105,12 @@ class DefaultRoomLastMessageFormatterTest {
     @Test
     @Config(qualifiers = "en")
     fun `Sticker content`() {
-        val body = "body"
+        val body = "a sticker body"
         val info = ImageInfo(null, null, null, null, null, null, null)
         val message = createRoomEvent(false, null, StickerContent(body, info, aMediaSource(url = "url")))
         val result = formatter.format(message, false)
-        assertThat(result).isEqualTo(body)
+        val expectedBody = someoneElseId.toString() + ": Sticker (a sticker body)"
+        assertThat(result.toString()).isEqualTo(expectedBody)
     }
 
     @Test
@@ -659,7 +660,7 @@ class DefaultRoomLastMessageFormatterTest {
             OtherState.RoomGuestAccess,
             OtherState.RoomHistoryVisibility,
             OtherState.RoomJoinRules,
-            OtherState.RoomPinnedEvents,
+            OtherState.RoomPinnedEvents(OtherState.RoomPinnedEvents.Change.CHANGED),
             OtherState.RoomUserPowerLevels(emptyMap()),
             OtherState.RoomServerAcl,
             OtherState.RoomTombstone,

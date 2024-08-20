@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Νέο δωμάτιο"</string>
+  <string name="screen_create_room_add_people_title">"Πρόσκληση ατόμων"</string>
+  <string name="screen_create_room_error_creating_room">"Παρουσιάστηκε σφάλμα κατά τη δημιουργία του δωματίου"</string>
+  <string name="screen_create_room_private_option_description">"Τα μηνύματα σε αυτό το δωμάτιο είναι κρυπτογραφημένα. Η κρυπτογράφηση δεν μπορεί να απενεργοποιηθεί αργότερα."</string>
+  <string name="screen_create_room_private_option_title">"Ιδιωτικό δωμάτιο (μόνο με πρόσκληση)"</string>
+  <string name="screen_create_room_public_option_description">"Τα μηνύματα δεν είναι κρυπτογραφημένα και ο καθένας μπορεί να τα διαβάσει. Μπορείς να ενεργοποιήσεις την κρυπτογράφηση αργότερα."</string>
+  <string name="screen_create_room_public_option_title">"Δημόσιο δωμάτιο (οποιοσδήποτε)"</string>
+  <string name="screen_create_room_room_name_label">"Όνομα δωματίου"</string>
+  <string name="screen_create_room_title">"Δημιούργησε ένα δωμάτιο"</string>
+  <string name="screen_create_room_topic_label">"Θέμα (προαιρετικό)"</string>
+  <string name="screen_start_chat_error_starting_chat">"Παρουσιάστηκε σφάλμα κατά την προσπάθεια έναρξης μιας συνομιλίας"</string>
+</resources>

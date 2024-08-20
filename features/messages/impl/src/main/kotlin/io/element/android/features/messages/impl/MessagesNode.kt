@@ -26,6 +26,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.Lifecycle
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -35,6 +36,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
@@ -45,6 +47,7 @@ import io.element.android.libraries.androidutils.system.toast
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.analytics.toAnalyticsViewRoom
@@ -75,7 +78,7 @@ class MessagesNode @AssistedInject constructor(
     private val timelineController: TimelineController,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
     private val presenter = presenterFactory.create(this)
-    private val callback = plugins<Callback>().firstOrNull()
+    private val callbacks = plugins<Callback>()
 
     data class Inputs(val focusedEventId: EventId?) : NodeInputs
 
@@ -94,6 +97,7 @@ class MessagesNode @AssistedInject constructor(
         fun onCreatePollClick()
         fun onEditPollClick(eventId: EventId)
         fun onJoinCallClick(roomId: RoomId)
+        fun onViewAllPinnedEvents()
     }
 
     override fun onBuilt() {
@@ -110,19 +114,25 @@ class MessagesNode @AssistedInject constructor(
     }
 
     private fun onRoomDetailsClick() {
-        callback?.onRoomDetailsClick()
+        callbacks.forEach { it.onRoomDetailsClick() }
     }
 
     private fun onEventClick(event: TimelineItem.Event): Boolean {
-        return callback?.onEventClick(event).orFalse()
+        // Note: cannot use `callbacks.all { it.onEventClick(event) }` because:
+        // - if callbacks is empty, it will return true and we want to return false.
+        // - if a callback returns false, the other callback will not be invoked.
+        return callbacks.takeIf { it.isNotEmpty() }
+            ?.map { it.onEventClick(event) }
+            ?.all { it }
+            .orFalse()
     }
 
     private fun onPreviewAttachments(attachments: ImmutableList<Attachment>) {
-        callback?.onPreviewAttachments(attachments)
+        callbacks.forEach { it.onPreviewAttachments(attachments) }
     }
 
     private fun onUserDataClick(userId: UserId) {
-        callback?.onUserDataClick(userId)
+        callbacks.forEach { it.onUserDataClick(userId) }
     }
 
     private fun onLinkClick(
@@ -134,7 +144,7 @@ class MessagesNode @AssistedInject constructor(
             is PermalinkData.UserLink -> {
                 // Open the room member profile, it will fallback to
                 // the user profile if the user is not in the room
-                callback?.onUserDataClick(permalink.userId)
+                callbacks.forEach { it.onUserDataClick(permalink.userId) }
             }
             is PermalinkData.RoomLink -> {
                 handleRoomLinkClick(permalink, eventSink)
@@ -156,36 +166,40 @@ class MessagesNode @AssistedInject constructor(
                 context.toast("Already viewing this room!")
             }
         } else {
-            callback?.onPermalinkClick(roomLink)
+            callbacks.forEach { it.onPermalinkClick(roomLink) }
         }
     }
 
     override fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
-        callback?.onShowEventDebugInfoClick(eventId, debugInfo)
+        callbacks.forEach { it.onShowEventDebugInfoClick(eventId, debugInfo) }
     }
 
     override fun onForwardEventClick(eventId: EventId) {
-        callback?.onForwardEventClick(eventId)
+        callbacks.forEach { it.onForwardEventClick(eventId) }
     }
 
     override fun onReportContentClick(eventId: EventId, senderId: UserId) {
-        callback?.onReportMessage(eventId, senderId)
+        callbacks.forEach { it.onReportMessage(eventId, senderId) }
     }
 
     override fun onEditPollClick(eventId: EventId) {
-        callback?.onEditPollClick(eventId)
+        callbacks.forEach { it.onEditPollClick(eventId) }
+    }
+
+    private fun onViewAllPinnedMessagesClick() {
+        callbacks.forEach { it.onViewAllPinnedEvents() }
     }
 
     private fun onSendLocationClick() {
-        callback?.onSendLocationClick()
+        callbacks.forEach { it.onSendLocationClick() }
     }
 
     private fun onCreatePollClick() {
-        callback?.onCreatePollClick()
+        callbacks.forEach { it.onCreatePollClick() }
     }
 
     private fun onJoinCallClick() {
-        callback?.onJoinCallClick(room.roomId)
+        callbacks.forEach { it.onJoinCallClick(room.roomId) }
     }
 
     @Composable
@@ -195,6 +209,12 @@ class MessagesNode @AssistedInject constructor(
             LocalTimelineItemPresenterFactories provides timelineItemPresenterFactories,
         ) {
             val state = presenter.present()
+            OnLifecycleEvent { _, event ->
+                when (event) {
+                    Lifecycle.Event.ON_PAUSE -> state.composerState.eventSink(MessageComposerEvents.SaveDraft)
+                    else -> Unit
+                }
+            }
             MessagesView(
                 state = state,
                 onBackClick = this::navigateUp,
@@ -206,6 +226,7 @@ class MessagesNode @AssistedInject constructor(
                 onSendLocationClick = this::onSendLocationClick,
                 onCreatePollClick = this::onCreatePollClick,
                 onJoinCallClick = this::onJoinCallClick,
+                onViewAllPinnedMessagesClick = this::onViewAllPinnedMessagesClick,
                 modifier = modifier,
             )
 

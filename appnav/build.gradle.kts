@@ -21,7 +21,6 @@ import extension.allFeaturesApi
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.kapt)
     id("kotlin-parcelize")
 }
@@ -43,6 +42,8 @@ dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.deeplink)
     implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.oidc.api)
+    implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.push.api)
     implementation(projects.libraries.pushproviders.api)
     implementation(projects.libraries.designsystem)
@@ -66,6 +67,7 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.oidc.impl)
     testImplementation(projects.libraries.push.test)
     testImplementation(projects.libraries.pushproviders.test)
     testImplementation(projects.features.networkmonitor.test)
@@ -78,6 +80,4 @@ dependencies {
     testImplementation(projects.services.analytics.test)
     testImplementation(libs.test.appyx.junit)
     testImplementation(libs.test.arch.core)
-
-    ksp(libs.showkase.processor)
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_screen_action">"Εκτέλεση δοκιμών"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Επανεκτέλεση δοκιμών"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Ορισμένες δοκιμές απέτυχαν. Παρακαλώ έλεγξε τις λεπτομέρειες."</string>
+  <string name="troubleshoot_notifications_screen_notice">"Εκτέλεσε τις δοκιμές για να εντοπίσεις οποιοδήποτε πρόβλημα στη διαμόρφωσή σου που ενδέχεται να κάνει τις ειδοποιήσεις να μην συμπεριφέρονται όπως αναμένεται."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Προσπάθεια διόρθωσης"</string>
+  <string name="troubleshoot_notifications_screen_success">"Όλες οι δοκιμές έγιναν με επιτυχία."</string>
+  <string name="troubleshoot_notifications_screen_title">"Αντιμετώπιση προβλημάτων ειδοποιήσεων"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Ορισμένες δοκιμές απαιτούν την προσοχή σου. Έλεγξε τις λεπτομέρειες."</string>
+</resources>

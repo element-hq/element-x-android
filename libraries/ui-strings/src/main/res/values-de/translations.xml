@@ -83,6 +83,7 @@
   <string name="action_quick_reply">"Schnelle Antwort"</string>
   <string name="action_quote">"Zitat"</string>
   <string name="action_react">"Reagieren"</string>
+  <string name="action_reject">"Ablehnen"</string>
   <string name="action_remove">"Entfernen"</string>
   <string name="action_reply">"Antworten"</string>
   <string name="action_reply_in_thread">"Im Thread antworten"</string>
@@ -108,6 +109,7 @@
   <string name="action_take_photo">"Foto aufnehmen"</string>
   <string name="action_tap_for_options">"Für Optionen tippen"</string>
   <string name="action_try_again">"Erneut versuchen"</string>
+  <string name="action_unpin">"Entpinnen"</string>
   <string name="action_view_source">"Quellcode anzeigen"</string>
   <string name="action_yes">"Ja"</string>
   <string name="common_about">"Über"</string>
@@ -119,6 +121,7 @@
   <string name="common_blocked_users">"Blockierte Nutzer"</string>
   <string name="common_bubbles">"Sprechblasen"</string>
   <string name="common_call_invite">"Aktiver Anruf (nicht unterstützt)"</string>
+  <string name="common_call_started">"Aufruf gestartet"</string>
   <string name="common_chat_backup">"Chat-Backup"</string>
   <string name="common_copyright">"Copyright"</string>
   <string name="common_creating_room">"Raum wird erstellt…"</string>
@@ -127,12 +130,16 @@
   <string name="common_decryption_error">"Dekodierungsfehler"</string>
   <string name="common_developer_options">"Entwickleroptionen"</string>
   <string name="common_direct_chat">"Direktnachricht"</string>
+  <string name="common_do_not_show_this_again">"Nicht mehr anzeigen"</string>
   <string name="common_edited_suffix">"(bearbeitet)"</string>
   <string name="common_editing">"Bearbeitung"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Verschlüsselung aktiviert"</string>
   <string name="common_enter_your_pin">"PIN eingeben"</string>
   <string name="common_error">"Fehler"</string>
+  <string name="common_error_registering_pusher_android">"Es ist ein Fehler aufgetreten, du erhältst möglicherweise keine Benachrichtigungen für neue Nachrichten. Bitte behebe das Problem mit den Benachrichtigungen in den Einstellungen.
+
+Grund: %1$s."</string>
   <string name="common_everyone">"Alle"</string>
   <string name="common_failed">"Fehlgeschlagen"</string>
   <string name="common_favourite">"Favorit"</string>
@@ -162,6 +169,7 @@
   <string name="common_no_results">"Keine Ergebnisse"</string>
   <string name="common_no_room_name">"Kein Raumname"</string>
   <string name="common_offline">"Offline"</string>
+  <string name="common_open_source_licenses">"Open-Source-Lizenzen"</string>
   <string name="common_or">"oder"</string>
   <string name="common_password">"Passwort"</string>
   <string name="common_people">"Personen"</string>
@@ -196,6 +204,7 @@
   <string name="common_search_results">"Suchergebnisse"</string>
   <string name="common_security">"Sicherheit"</string>
   <string name="common_seen_by">"Gesehen von"</string>
+  <string name="common_send_to">"Senden an"</string>
   <string name="common_sending">"Wird gesendet…"</string>
   <string name="common_sending_failed">"Senden fehlgeschlagen"</string>
   <string name="common_sent">"Gesendet"</string>
@@ -248,6 +257,10 @@
   <string name="error_missing_microphone_voice_rationale_android">"%1$s hat nicht die Erlaubnis auf dein Mikrofon zuzugreifen. Aktiviere den Zugriff, um eine Sprachnachricht aufzunehmen."</string>
   <string name="error_some_messages_have_not_been_sent">"Einige Nachrichten wurden nicht gesendet"</string>
   <string name="error_unknown">"Entschuldigung, es ist ein Fehler aufgetreten"</string>
+  <string name="event_shield_reason_authenticity_not_guaranteed">"Die Authentizität dieser verschlüsselten Nachricht kann auf diesem Gerät nicht garantiert werden."</string>
+  <string name="event_shield_reason_unknown_device">"Verschlüsselt von einem unbekannten oder gelöschten Gerät."</string>
+  <string name="event_shield_reason_unsigned_device">"Verschlüsselt durch ein Gerät, das nicht von seinem Besitzer verifiziert wurde."</string>
+  <string name="event_shield_reason_unverified_identity">"Verschlüsselt durch einen nicht verifizierten Benutzer."</string>
   <string name="invite_friends_rich_title">"🔐️ Begleite mich auf %1$s"</string>
   <string name="invite_friends_text">"Hey, sprich mit mir auf %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
@@ -264,6 +277,9 @@
   <string name="screen_room_member_details_unblock_alert_action">"Blockierung aufheben"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Der Nutzer kann dir wieder Nachrichten senden &amp; alle Nachrichten des Nutzers werden wieder angezeigt."</string>
   <string name="screen_room_member_details_unblock_user">"Blockierung aufheben"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$svon %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Angepinnte Nachrichten"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Alle anzeigen"</string>
   <string name="screen_room_title">"Chat"</string>
   <string name="screen_share_location_title">"Standort teilen"</string>
   <string name="screen_share_my_location_action">"Meinen Standort teilen"</string>

@@ -20,16 +20,12 @@ import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.model.RoomSummaryDisplayType
 import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.toInviteSender
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 
@@ -37,37 +33,7 @@ class RoomListRoomSummaryFactory @Inject constructor(
     private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
     private val roomLastMessageFormatter: RoomLastMessageFormatter,
 ) {
-    companion object {
-        fun createPlaceholder(id: String): RoomListRoomSummary {
-            return RoomListRoomSummary(
-                id = id,
-                roomId = RoomId(id),
-                displayType = RoomSummaryDisplayType.PLACEHOLDER,
-                name = "Short name",
-                timestamp = "hh:mm",
-                lastMessage = "Last message for placeholder",
-                avatarData = AvatarData(id, "S", size = AvatarSize.RoomListItem),
-                numberOfUnreadMessages = 0,
-                numberOfUnreadMentions = 0,
-                numberOfUnreadNotifications = 0,
-                isMarkedUnread = false,
-                userDefinedNotificationMode = null,
-                hasRoomCall = false,
-                isDirect = false,
-                isFavorite = false,
-                inviteSender = null,
-                isDm = false,
-                canonicalAlias = null,
-                heroes = persistentListOf(),
-            )
-        }
-    }
-
-    fun create(roomSummary: RoomSummary.Filled): RoomListRoomSummary {
-        return create(roomSummary.details)
-    }
-
-    private fun create(details: RoomSummaryDetails): RoomListRoomSummary {
+    fun create(details: RoomSummary): RoomListRoomSummary {
         val avatarData = details.getAvatarData(size = AvatarSize.RoomListItem)
         return RoomListRoomSummary(
             id = details.roomId.value,
@@ -79,7 +45,7 @@ class RoomListRoomSummaryFactory @Inject constructor(
             isMarkedUnread = details.isMarkedUnread,
             timestamp = lastMessageTimestampFormatter.format(details.lastMessageTimestamp),
             lastMessage = details.lastMessage?.let { message ->
-                roomLastMessageFormatter.format(message.event, details.isDirect)
+                roomLastMessageFormatter.format(message.event, details.isDm)
             }.orEmpty(),
             avatarData = avatarData,
             userDefinedNotificationMode = details.userDefinedNotificationMode,

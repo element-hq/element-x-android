@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Não é possível confirmar?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Criar uma nova chave de recuperação"</string>
   <string name="screen_identity_confirmation_subtitle">"Verifica este dispositivo para configurar o envio seguro de mensagens."</string>
   <string name="screen_identity_confirmation_title">"Confirma que és tu"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Utilizar outro dispositivo"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Utilizar chave de recuperação"</string>
   <string name="screen_identity_confirmed_subtitle">"Agora podes ler ou enviar mensagens de forma segura, e qualquer pessoa com quem converses também pode confiar neste dispositivo."</string>
   <string name="screen_identity_confirmed_title">"Dispositivo verificado"</string>
   <string name="screen_identity_use_another_device">"Utilizar outro dispositivo"</string>
@@ -16,7 +19,7 @@
   <string name="screen_session_verification_enter_recovery_key">"Insere a chave de recuperação"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Prova que és tu para acederes ao teu histórico de mensagens cifradas."</string>
   <string name="screen_session_verification_open_existing_session_title">"Abrir sessão existente"</string>
-  <string name="screen_session_verification_positive_button_canceled">"Repetir verficiação"</string>
+  <string name="screen_session_verification_positive_button_canceled">"Repetir verificação"</string>
   <string name="screen_session_verification_positive_button_initial">"Estou pronto"</string>
   <string name="screen_session_verification_positive_button_verifying_ongoing">"A aguardar correspondência"</string>
   <string name="screen_session_verification_ready_subtitle">"Compara um conjunto único de emojis."</string>

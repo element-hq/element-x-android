@@ -24,7 +24,6 @@ import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.MessagingStyle
 import androidx.core.app.Person
-import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import coil.ImageLoader
 import com.squareup.anvil.annotations.ContributesBinding
@@ -107,6 +106,8 @@ class DefaultNotificationCreator @Inject constructor(
     private val acceptInvitationActionFactory: AcceptInvitationActionFactory,
     private val rejectInvitationActionFactory: RejectInvitationActionFactory
 ) : NotificationCreator {
+    private val accentColor = NotificationConfig.NOTIFICATION_ACCENT_COLOR
+
     /**
      * Create a notification for a Room.
      */
@@ -121,7 +122,6 @@ class DefaultNotificationCreator @Inject constructor(
         imageLoader: ImageLoader,
         events: List<NotifiableMessageEvent>,
     ): Notification {
-        val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         // Build the pending intent for when the notification is clicked
         val openIntent = when {
             threadId != null -> pendingIntentFactory.createOpenThreadPendingIntent(roomInfo, threadId)
@@ -157,7 +157,7 @@ class DefaultNotificationCreator @Inject constructor(
 
         val messagingStyle = existingNotification?.let {
             MessagingStyle.extractMessagingStyleFromNotification(it)
-        } ?: messagingStyleFromCurrentUser(roomInfo.sessionId, currentUser, imageLoader, roomInfo.roomDisplayName, !roomInfo.isDirect)
+        } ?: messagingStyleFromCurrentUser(roomInfo.sessionId, currentUser, imageLoader, roomInfo.roomDisplayName, !roomInfo.isDm)
 
         messagingStyle.addMessagesFromEvents(events, imageLoader)
 
@@ -228,7 +228,6 @@ class DefaultNotificationCreator @Inject constructor(
     override fun createRoomInvitationNotification(
         inviteNotifiableEvent: InviteNotifiableEvent
     ): Notification {
-        val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         val smallIcon = CommonDrawables.ic_notification_small
         val channelId = notificationChannels.getChannelIdForMessage(inviteNotifiableEvent.noisy)
         return NotificationCompat.Builder(context, channelId)
@@ -273,7 +272,6 @@ class DefaultNotificationCreator @Inject constructor(
     override fun createSimpleEventNotification(
         simpleNotifiableEvent: SimpleNotifiableEvent,
     ): Notification {
-        val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         val smallIcon = CommonDrawables.ic_notification_small
 
         val channelId = notificationChannels.getChannelIdForMessage(simpleNotifiableEvent.noisy)
@@ -307,7 +305,6 @@ class DefaultNotificationCreator @Inject constructor(
     override fun createFallbackNotification(
         fallbackNotifiableEvent: FallbackNotifiableEvent,
     ): Notification {
-        val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         val smallIcon = CommonDrawables.ic_notification_small
 
         val channelId = notificationChannels.getChannelIdForMessage(false)
@@ -344,7 +341,6 @@ class DefaultNotificationCreator @Inject constructor(
         noisy: Boolean,
         lastMessageTimestamp: Long
     ): Notification {
-        val accentColor = ContextCompat.getColor(context, R.color.notification_accent_color)
         val smallIcon = CommonDrawables.ic_notification_small
         val channelId = notificationChannels.getChannelIdForMessage(noisy)
         return NotificationCompat.Builder(context, channelId)
@@ -384,7 +380,7 @@ class DefaultNotificationCreator @Inject constructor(
             .setContentText(stringProvider.getString(R.string.notification_test_push_notification_content))
             .setSmallIcon(CommonDrawables.ic_notification_small)
             .setLargeIcon(getBitmap(R.drawable.element_logo_green))
-            .setColor(ContextCompat.getColor(context, R.color.notification_accent_color))
+            .setColor(accentColor)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(NotificationCompat.CATEGORY_STATUS)
             .setAutoCancel(true)

@@ -30,28 +30,26 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.core.content.IntentCompat
-import io.element.android.compound.theme.ElementTheme
-import io.element.android.compound.theme.Theme
-import io.element.android.compound.theme.isDark
-import io.element.android.compound.theme.mapToTheme
+import androidx.lifecycle.Lifecycle
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.impl.DefaultElementCallEntryPoint
 import io.element.android.features.call.impl.di.CallBindings
+import io.element.android.features.call.impl.pip.PictureInPicturePresenter
 import io.element.android.features.call.impl.services.CallForegroundService
 import io.element.android.features.call.impl.utils.CallIntentDataParser
 import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.designsystem.theme.ElementThemeApp
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import timber.log.Timber
 import javax.inject.Inject
 
 class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
     @Inject lateinit var callIntentDataParser: CallIntentDataParser
     @Inject lateinit var presenterFactory: CallScreenPresenter.Factory
     @Inject lateinit var appPreferencesStore: AppPreferencesStore
+    @Inject lateinit var pictureInPicturePresenter: PictureInPicturePresenter
 
     private lateinit var presenter: CallScreenPresenter
 
@@ -66,6 +64,8 @@ class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
 
     private var isDarkMode = false
     private val webViewTarget = mutableStateOf<CallType?>(null)
+
+    private var eventSink: ((CallScreenEvents) -> Unit)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,20 +86,19 @@ class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
             updateUiMode(resources.configuration)
         }
 
+        pictureInPicturePresenter.onCreate(this)
+
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         requestAudioFocus()
 
         setContent {
-            val theme by remember {
-                appPreferencesStore.getThemeFlow().mapToTheme()
-            }
-                .collectAsState(initial = Theme.System)
-            val state = presenter.present()
-            ElementTheme(
-                darkTheme = theme.isDark()
-            ) {
+            val pipState = pictureInPicturePresenter.present()
+            ElementThemeApp(appPreferencesStore) {
+                val state = presenter.present()
+                eventSink = state.eventSink
                 CallScreenView(
                     state = state,
+                    pipState = pipState,
                     requestPermissions = { permissions, callback ->
                         requestPermissionCallback = callback
                         requestPermissionsLauncher.launch(permissions)
@@ -112,6 +111,16 @@ class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         updateUiMode(newConfig)
+    }
+
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+        pictureInPicturePresenter.onPictureInPictureModeChanged(isInPictureInPictureMode)
+
+        if (!isInPictureInPictureMode && !lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+            Timber.d("Exiting PiP mode: Hangup the call")
+            eventSink?.invoke(CallScreenEvents.Hangup)
+        }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -131,10 +140,16 @@ class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
         }
     }
 
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        pictureInPicturePresenter.onUserLeaveHint()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         releaseAudioFocus()
         CallForegroundService.stop(this)
+        pictureInPicturePresenter.onDestroy()
     }
 
     override fun finish() {

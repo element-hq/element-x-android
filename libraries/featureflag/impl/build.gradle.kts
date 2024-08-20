@@ -17,7 +17,6 @@
 plugins {
     id("io.element.android-library")
     alias(libs.plugins.anvil)
-    alias(libs.plugins.ksp)
     id("kotlin-parcelize")
 }
 
@@ -41,4 +40,5 @@ dependencies {
     testImplementation(libs.coroutines.test)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
+    testImplementation(projects.libraries.matrix.test)
 }

@@ -13,7 +13,7 @@
   <string name="screen_advanced_settings_send_read_receipts">"Potvrdenia o prečítaní"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Ak je táto funkcia vypnutá, vaše potvrdenia o prečítaní sa nebudú nikomu odosielať. Stále budete dostávať potvrdenia o prečítaní od ostatných používateľov."</string>
   <string name="screen_advanced_settings_share_presence">"Zdieľať prítomnosť"</string>
-  <string name="screen_advanced_settings_share_presence_description">"Ak je vypnuté, nebudete môcť odosielať ani prijímať potvrdenia o prečítaní alebo písať upozornenia"</string>
+  <string name="screen_advanced_settings_share_presence_description">"Ak je vypnuté, nebudete môcť odosielať ani prijímať potvrdenia o prečítaní alebo upozornenia o písaní"</string>
   <string name="screen_advanced_settings_view_source_description">"Povoliť možnosť zobrazenia zdroja správy na časovej osi."</string>
   <string name="screen_blocked_users_empty">"Nemáte žiadnych blokovaných používateľov"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Odblokovať"</string>

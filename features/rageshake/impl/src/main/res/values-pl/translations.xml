@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"Załącz zrzut ekranu"</string>
+  <string name="screen_bug_report_contact_me">"Zezwól na kontakt ze mną, jeśli są jakiekolwiek dodatkowe pytania."</string>
+  <string name="screen_bug_report_contact_me_title">"Kontakt ze mną"</string>
+  <string name="screen_bug_report_edit_screenshot">"Edytuj zrzut ekranu"</string>
+  <string name="screen_bug_report_editor_description">"Opisz problem. Co zrobiłeś? Czego oczekiwałeś? Co się stało zamiast tego. Podaj jak najwięcej szczegółów."</string>
+  <string name="screen_bug_report_editor_placeholder">"Opisz problem…"</string>
+  <string name="screen_bug_report_editor_supporting">"Jeśli to możliwe, napisz zgłoszenje w języku angielskim."</string>
+  <string name="screen_bug_report_error_description_too_short">"Opis jest zbyt krótki, podaj więcej szczegółów na temat tego co się stało. Dzięki!"</string>
+  <string name="screen_bug_report_include_crash_logs">"Wyślij logi awarii"</string>
+  <string name="screen_bug_report_include_logs">"Zezwól na logi"</string>
+  <string name="screen_bug_report_include_screenshot">"Wyślij zrzut ekranu"</string>
+  <string name="screen_bug_report_logs_description">"Logi zostaną dołączone do Twojej wiadomości, aby upewnić się, że wszystko działa poprawnie. Aby wysłać wiadomość bez logów, wyłącz to ustawienie."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s uległ awarii podczas ostatniego użycia. Czy chcesz przesłać nam raport o awarii?"</string>
+  <string name="screen_bug_report_view_logs">"Wyświetl logi"</string>
+</resources>

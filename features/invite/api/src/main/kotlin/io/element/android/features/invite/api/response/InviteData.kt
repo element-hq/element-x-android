@@ -21,5 +21,5 @@ import io.element.android.libraries.matrix.api.core.RoomId
 data class InviteData(
     val roomId: RoomId,
     val roomName: String,
-    val isDirect: Boolean,
+    val isDm: Boolean,
 )

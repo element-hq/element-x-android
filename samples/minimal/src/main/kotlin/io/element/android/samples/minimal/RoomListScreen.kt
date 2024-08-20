@@ -35,6 +35,8 @@ import io.element.android.features.roomlist.impl.migration.SharedPreferencesMigr
 import io.element.android.features.roomlist.impl.search.RoomListSearchDataSource
 import io.element.android.features.roomlist.impl.search.RoomListSearchPresenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.dateformatter.impl.DateFormatters
 import io.element.android.libraries.dateformatter.impl.DefaultLastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.impl.LocalDateTimeProvider
@@ -44,7 +46,7 @@ import io.element.android.libraries.eventformatter.impl.ProfileChangeContentForm
 import io.element.android.libraries.eventformatter.impl.RoomMembershipContentFormatter
 import io.element.android.libraries.eventformatter.impl.StateContentFormatter
 import io.element.android.libraries.featureflag.impl.DefaultFeatureFlagService
-import io.element.android.libraries.featureflag.impl.StaticFeatureFlagProvider
+import io.element.android.libraries.featureflag.impl.PreferencesFeatureFlagProvider
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsPresenter
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.indicator.impl.DefaultIndicatorService
@@ -54,7 +56,7 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.impl.room.join.DefaultJoinRoom
 import io.element.android.libraries.preferences.impl.store.DefaultSessionPreferencesStore
-import io.element.android.libraries.push.test.notifications.FakeNotificationDrawerManager
+import io.element.android.libraries.push.test.notifications.FakeNotificationCleaner
 import io.element.android.services.analytics.noop.NoopAnalyticsService
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import kotlinx.coroutines.launch
@@ -78,8 +80,12 @@ class RoomListScreen(
     private val sessionVerificationService = matrixClient.sessionVerificationService()
     private val encryptionService = matrixClient.encryptionService()
     private val stringProvider = AndroidStringProvider(context.resources)
+    private val buildMeta = getBuildMeta(context)
     private val featureFlagService = DefaultFeatureFlagService(
-        providers = setOf(StaticFeatureFlagProvider())
+        providers = setOf(
+            PreferencesFeatureFlagProvider(context = context, buildMeta = buildMeta)
+        ),
+        buildMeta = buildMeta,
     )
     private val roomListRoomSummaryFactory = RoomListRoomSummaryFactory(
         lastMessageTimestampFormatter = DefaultLastMessageTimestampFormatter(
@@ -138,7 +144,7 @@ class RoomListScreen(
         acceptDeclineInvitePresenter = AcceptDeclineInvitePresenter(
             client = matrixClient,
             joinRoom = DefaultJoinRoom(matrixClient, NoopAnalyticsService()),
-            notificationDrawerManager = FakeNotificationDrawerManager(),
+            notificationCleaner = FakeNotificationCleaner(),
         ),
         analyticsService = NoopAnalyticsService(),
         fullScreenIntentPermissionsPresenter = object : FullScreenIntentPermissionsPresenter {
@@ -152,6 +158,7 @@ class RoomListScreen(
                 )
             }
         },
+        notificationCleaner = FakeNotificationCleaner(),
     )
 
     @Composable
@@ -194,5 +201,26 @@ class RoomListScreen(
                 }
             }
         }
+    }
+
+    private fun getBuildMeta(context: Context): BuildMeta {
+        val buildType = BuildType.valueOf(BuildConfig.BUILD_TYPE.uppercase())
+        val name = context.getString(R.string.app_name)
+        return BuildMeta(
+            isDebuggable = BuildConfig.DEBUG,
+            buildType = buildType,
+            applicationName = name,
+            productionApplicationName = name,
+            desktopApplicationName = name,
+            applicationId = BuildConfig.APPLICATION_ID,
+            lowPrivacyLoggingEnabled = false,
+            versionName = BuildConfig.VERSION_NAME,
+            versionCode = BuildConfig.VERSION_CODE.toLong(),
+            gitRevision = "",
+            gitBranchName = "",
+            flavorDescription = "",
+            flavorShortDescription = "",
+            isEnterpriseBuild = false,
+        )
     }
 }

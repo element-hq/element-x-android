@@ -16,11 +16,13 @@
 
 package io.element.android.libraries.matrix.impl.roomlist
 
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.DynamicRoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.loadAllIncrementally
+import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
@@ -29,10 +31,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
-import org.matrix.rustcomponents.sdk.RoomListException
-import org.matrix.rustcomponents.sdk.RoomListInput
-import org.matrix.rustcomponents.sdk.RoomListRange
 import org.matrix.rustcomponents.sdk.RoomListServiceState
 import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicator
 import timber.log.Timber
@@ -45,6 +43,7 @@ internal class RustRoomListService(
     private val sessionCoroutineScope: CoroutineScope,
     private val sessionDispatcher: CoroutineDispatcher,
     private val roomListFactory: RoomListFactory,
+    private val roomSyncSubscriber: RoomSyncSubscriber,
 ) : RoomListService {
     override fun createRoomList(
         pageSize: Int,
@@ -62,6 +61,14 @@ internal class RustRoomListService(
         }
     }
 
+    override suspend fun subscribeToVisibleRooms(roomIds: List<RoomId>) {
+        val toSubscribe = roomIds.filterNot { roomSyncSubscriber.isSubscribedTo(it) }
+        if (toSubscribe.isNotEmpty()) {
+            Timber.d("Subscribe to ${toSubscribe.size} rooms: $toSubscribe")
+            roomSyncSubscriber.batchSubscribe(toSubscribe)
+        }
+    }
+
     override val allRooms: DynamicRoomList = roomListFactory.createRoomList(
         pageSize = DEFAULT_PAGE_SIZE,
         coroutineContext = sessionDispatcher,
@@ -71,20 +78,6 @@ internal class RustRoomListService(
 
     init {
         allRooms.loadAllIncrementally(sessionCoroutineScope)
-    }
-
-    override fun updateAllRoomsVisibleRange(range: IntRange) {
-        Timber.v("setVisibleRange=$range")
-        sessionCoroutineScope.launch {
-            try {
-                val ranges = listOf(RoomListRange(range.first.toUInt(), range.last.toUInt()))
-                innerRoomListService.applyInput(
-                    RoomListInput.Viewport(ranges)
-                )
-            } catch (exception: RoomListException) {
-                Timber.e(exception, "Failed updating visible range")
-            }
-        }
     }
 
     override val syncIndicator: StateFlow<RoomListService.SyncIndicator> =

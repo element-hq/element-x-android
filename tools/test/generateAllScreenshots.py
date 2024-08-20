@@ -34,26 +34,26 @@ def generateAllScreenshots(languages):
         print("Generating all screenshots...")
         os.system("./gradlew recordPaparazziDebug -PallLanguages")
     else:
-        tFile = "tests/uitests/src/test/kotlin/ui/T.kt"
+        tFile = "tests/uitests/src/test/kotlin/translations/TranslationsScreenshotTest.kt"
         print("Generating screenshots for languages: %s" % languages)
         # Record the languages one by one, else it's getting too slow
         for lang in languages:
             print("Generating screenshots for language: %s" % lang)
-            # Patch file T.kt, replace `@TestParameter(value = ["de"]) localeStr: String,` with `@TestParameter(value = [<the languages>]) localeStr: String,`
+            # Patch file TranslationsScreenshotTest.kt, replace `@TestParameter(value = ["de"])` with `@TestParameter(value = [<the languages>])`
             with open(tFile, "r") as file:
                 data = file.read()
-            data = data.replace("@TestParameter(value = [\"de\"]) localeStr: String,", "@TestParameter(value = [\"%s\"]) localeStr: String," % lang)
+            data = data.replace("@TestParameter(value = [\"de\"])", "@TestParameter(value = [\"%s\"])" % lang)
             with open(tFile, "w") as file:
                 file.write(data)
             os.system("./gradlew recordPaparazziDebug -PallLanguagesNoEnglish")
-            # Git reset the change on file T.kt
+            # Git reset the change on file TranslationsScreenshotTest.kt
             os.system("git checkout HEAD -- %s" % tFile)
 
 
 def detectLanguages():
     __doc__ = "Detect languages from screenshots, other than English"
     files = os.listdir("tests/uitests/src/test/snapshots/images/")
-    languages = set(map(lambda file: file[-7:-5], files))
+    languages = set(map(lambda file: file[-6:-4], files))
     languages = [lang for lang in languages if re.match("[a-z]", lang) and lang != "en"]
     print("Detected languages: %s" % languages)
     return languages
@@ -64,11 +64,11 @@ def deleteDuplicatedScreenshots(lang):
     print("Deleting screenshots identical to the English version for language %s..." % lang)
     files = os.listdir("tests/uitests/src/test/snapshots/images/")
     # Filter files by language
-    files = [file for file in files if file[-7:-5] == lang]
+    files = [file for file in files if file[-6:-4] == lang]
     identicalFileCounter = 0
     differentFileCounter = 0
     for file in files:
-        englishFile = file[:3] + "S" + file[4:-7] + "en" + file[-5:]
+        englishFile = file[:-6] + "en" + file[-4:]
         fullFile = "tests/uitests/src/test/snapshots/images/" + file
         fullEnglishFile = "tests/uitests/src/test/snapshots/images/" + englishFile
         isDifferent = compare(fullFile, fullEnglishFile)
@@ -88,7 +88,7 @@ def moveScreenshots(lang):
     print("Moving screenshots for %s to %s..." % (lang, targetFolder))
     files = os.listdir("tests/uitests/src/test/snapshots/images/")
     # Filter files by language
-    files = [file for file in files if file[-7:-5] == lang]
+    files = [file for file in files if file[-6:-4] == lang]
     # Create the folder "./screenshots/<lang>"
     os.makedirs(targetFolder, exist_ok=True)
     for file in files:
@@ -102,11 +102,11 @@ def detectRecordedLanguages():
 
 
 def computeDarkFileName(lightFileName):
-    if "-Day_0" in lightFileName:
-        return lightFileName.replace("-Day_0", "-Night_1")
-    match = re.match("(.*)-Day-(\\d+)_(\\d+)(.*)", lightFileName, flags=re.ASCII)
+    if "_Day" in lightFileName:
+        return lightFileName.replace("_Day", "_Night")
+    match = re.match("(.*)_Day_(\\d+)_(.*)", lightFileName, flags=re.ASCII)
     if match:
-        return match.group(1) + "-Night-" + match.group(2) + "_" + str((int(match.group(3)) + 1)) + match.group(4)
+        return match.group(1) + "_Night_" + match.group(2) + "_" + match.group(3)
     return ""
 
 def generateJavascriptFile():
@@ -117,11 +117,11 @@ def generateJavascriptFile():
     data = [["en", "en-dark"] + languages]
     files = sorted(
         os.listdir("tests/uitests/src/test/snapshots/images/"),
-        key=lambda file: file[file.find("_", 6):],
+        key=lambda file: file[file.find("_", 1):],
     )
     for file in files:
-        # Continue if file contains "-Night", keep only light screenshots
-        if "-Night" in file:
+        # Continue if file contains "_Night", keep only light screenshots
+        if "_Night" in file:
             continue
         dataForFile = [file[:-4]]
         darkFile = computeDarkFileName(file)
@@ -130,7 +130,7 @@ def generateJavascriptFile():
         else:
             dataForFile.append("")
         for l in languages:
-            simpleFile = file[:3] + "T" + file[4:-7] + l + file[-5:-4]
+            simpleFile = file[:-6] + l
             translatedFile = "./screenshots/" + l + "/" + simpleFile + ".png"
             if os.path.exists(translatedFile):
                 # Get the last modified date of the file in seconds and round to days
@@ -166,6 +166,5 @@ def main():
         deleteDuplicatedScreenshots(l)
         moveScreenshots(l)
     generateJavascriptFile()
-
 
 main()

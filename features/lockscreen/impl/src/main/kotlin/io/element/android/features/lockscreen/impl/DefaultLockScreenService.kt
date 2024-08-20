@@ -17,7 +17,6 @@
 package io.element.android.features.lockscreen.impl
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.appconfig.LockScreenConfig
 import io.element.android.features.lockscreen.api.LockScreenLockState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.lockscreen.impl.biometric.BiometricUnlockManager
@@ -55,7 +54,7 @@ class DefaultLockScreenService @Inject constructor(
     private val coroutineScope: CoroutineScope,
     private val sessionObserver: SessionObserver,
     private val appForegroundStateService: AppForegroundStateService,
-    private val biometricUnlockManager: BiometricUnlockManager,
+    biometricUnlockManager: BiometricUnlockManager,
 ) : LockScreenService {
     private val _lockState = MutableStateFlow<LockScreenLockState>(LockScreenLockState.Unlocked)
     override val lockState: StateFlow<LockScreenLockState> = _lockState

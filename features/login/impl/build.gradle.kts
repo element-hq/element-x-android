@@ -17,7 +17,6 @@
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
-    alias(libs.plugins.ksp)
     id("kotlin-parcelize")
     alias(libs.plugins.kotlin.serialization)
 }
@@ -51,12 +50,12 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.qrcode)
+    implementation(projects.libraries.oidc.api)
     implementation(libs.androidx.browser)
     implementation(platform(libs.network.retrofit.bom))
     implementation(libs.network.retrofit)
     implementation(libs.serialization.json)
     api(projects.features.login.api)
-    ksp(libs.showkase.processor)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.androidx.compose.ui.test.junit)
@@ -67,6 +66,7 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.oidc.impl)
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.tests.testutils)
     testReleaseImplementation(libs.androidx.compose.ui.test.manifest)

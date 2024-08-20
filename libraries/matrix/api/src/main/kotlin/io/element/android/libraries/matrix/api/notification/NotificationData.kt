@@ -33,6 +33,7 @@ data class NotificationData(
     val roomAvatarUrl: String?,
     val roomDisplayName: String?,
     val isDirect: Boolean,
+    val isDm: Boolean,
     val isEncrypted: Boolean,
     val isNoisy: Boolean,
     val timestamp: Long,

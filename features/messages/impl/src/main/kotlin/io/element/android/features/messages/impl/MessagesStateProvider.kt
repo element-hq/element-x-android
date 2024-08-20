@@ -22,6 +22,8 @@ import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
+import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
+import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMessagesBannerState
 import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.aTimelineState
@@ -53,7 +55,7 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
             aMessagesState(),
             aMessagesState(hasNetworkConnection = false),
             aMessagesState(composerState = aMessageComposerState(showAttachmentSourcePicker = true)),
-            aMessagesState(userHasPermissionToSendMessage = false),
+            aMessagesState(userEventPermissions = aUserEventPermissions(canSendMessage = false)),
             aMessagesState(showReinvitePrompt = true),
             aMessagesState(
                 roomName = AsyncData.Uninitialized,
@@ -87,16 +89,19 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
             aMessagesState(
                 callState = RoomCallState.DISABLED,
             ),
+            aMessagesState(
+                pinnedMessagesBannerState = aLoadedPinnedMessagesBannerState(
+                    knownPinnedMessagesCount = 4,
+                    currentPinnedMessageIndex = 0,
+                ),
+            ),
         )
 }
 
 fun aMessagesState(
     roomName: AsyncData<String> = AsyncData.Success("Room name"),
     roomAvatar: AsyncData<AvatarData> = AsyncData.Success(AvatarData("!id:domain", "Room name", size = AvatarSize.TimelineRoom)),
-    userHasPermissionToSendMessage: Boolean = true,
-    userHasPermissionToRedactOwn: Boolean = false,
-    userHasPermissionToRedactOther: Boolean = false,
-    userHasPermissionToSendReaction: Boolean = true,
+    userEventPermissions: UserEventPermissions = aUserEventPermissions(),
     composerState: MessageComposerState = aMessageComposerState(
         textEditorState = TextEditorState.Rich(aRichTextEditorState(initialText = "Hello", initialFocus = true)),
         isFullScreen = false,
@@ -116,16 +121,14 @@ fun aMessagesState(
     showReinvitePrompt: Boolean = false,
     enableVoiceMessages: Boolean = true,
     callState: RoomCallState = RoomCallState.ENABLED,
+    pinnedMessagesBannerState: PinnedMessagesBannerState = aLoadedPinnedMessagesBannerState(),
     eventSink: (MessagesEvents) -> Unit = {},
 ) = MessagesState(
     roomId = RoomId("!id:domain"),
     roomName = roomName,
     roomAvatar = roomAvatar,
     heroes = persistentListOf(),
-    userHasPermissionToSendMessage = userHasPermissionToSendMessage,
-    userHasPermissionToRedactOwn = userHasPermissionToRedactOwn,
-    userHasPermissionToRedactOther = userHasPermissionToRedactOther,
-    userHasPermissionToSendReaction = userHasPermissionToSendReaction,
+    userEventPermissions = userEventPermissions,
     composerState = composerState,
     voiceMessageComposerState = voiceMessageComposerState,
     typingNotificationState = aTypingNotificationState(),
@@ -142,7 +145,22 @@ fun aMessagesState(
     enableVoiceMessages = enableVoiceMessages,
     callState = callState,
     appName = "Element",
+    pinnedMessagesBannerState = pinnedMessagesBannerState,
     eventSink = eventSink,
+)
+
+fun aUserEventPermissions(
+    canRedactOwn: Boolean = false,
+    canRedactOther: Boolean = false,
+    canSendMessage: Boolean = true,
+    canSendReaction: Boolean = true,
+    canPinUnpin: Boolean = false,
+) = UserEventPermissions(
+    canRedactOwn = canRedactOwn,
+    canRedactOther = canRedactOther,
+    canSendMessage = canSendMessage,
+    canSendReaction = canSendReaction,
+    canPinUnpin = canPinUnpin,
 )
 
 fun aReactionSummaryState(

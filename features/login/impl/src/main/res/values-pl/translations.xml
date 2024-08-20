@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_account_provider_change">"Zmień dostawcę konta"</string>
+  <string name="screen_account_provider_form_hint">"Adres serwera domowego"</string>
+  <string name="screen_account_provider_form_notice">"Wprowadź wyszukiwane hasło lub adres domeny."</string>
+  <string name="screen_account_provider_form_subtitle">"Szukaj serwera firmowego, społeczności lub prywatnego."</string>
+  <string name="screen_account_provider_form_title">"Znajdź dostawcę konta"</string>
+  <string name="screen_account_provider_signin_subtitle">"Tutaj będą przechowywane Twoje konwersacje - w podobnej formie jak wiadomości widnieją na skrzynce e-mail."</string>
+  <string name="screen_account_provider_signin_title">"Zamierzasz zalogować się do %s"</string>
+  <string name="screen_account_provider_signup_subtitle">"Tutaj będą przechowywane Twoje konwersacje - w podobnej formie jak wiadomości widnieją na skrzynce e-mail."</string>
+  <string name="screen_account_provider_signup_title">"Zamierzasz założyć konto na %s"</string>
+  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org jest ogromnym i darmowym serwerem na publicznej sieci Matrix zapewniający bezpieczną i zdecentralizowaną komunikację zarządzaną przez Fundację Matrix.org."</string>
+  <string name="screen_change_account_provider_other">"Inne"</string>
+  <string name="screen_change_account_provider_subtitle">"Użyj innego dostawcy konta, takiego jak własny serwer lub konta służbowego."</string>
+  <string name="screen_change_account_provider_title">"Zmień dostawcę konta"</string>
+  <string name="screen_change_server_error_invalid_homeserver">"Nie mogliśmy połączyć się z tym serwerem domowym. Sprawdź, czy adres URL serwera został wprowadzony poprawnie. Jeśli adres URL jest poprawny, skontaktuj się z administratorem serwera w celu uzyskania dalszej pomocy."</string>
+  <string name="screen_change_server_error_invalid_well_known">"Sliding sync nie jest dostępny z powodu problemu w znanym pliku:
+%1$s"</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Ten serwer obecnie nie obsługuje technologii Sliding Sync."</string>
+  <string name="screen_change_server_form_header">"URL serwera domowego"</string>
+  <string name="screen_change_server_form_notice">"Możesz połączyć się tylko z serwerem, który obsługuje technologię Sliding Sync. Administrator serwera domowego będzie musiał ją skonfigurować. %1$s"</string>
+  <string name="screen_change_server_subtitle">"Jaki jest adres Twojego serwera?"</string>
+  <string name="screen_change_server_title">"Wybierz swój serwer"</string>
+  <string name="screen_login_error_deactivated_account">"To konto zostało dezaktywowane."</string>
+  <string name="screen_login_error_invalid_credentials">"Nieprawidłowa nazwa użytkownika i/lub hasło"</string>
+  <string name="screen_login_error_invalid_user_id">"To nie jest prawidłowy identyfikator użytkownika. Oczekiwany format: \'@user:homeserver.org\'"</string>
+  <string name="screen_login_error_refresh_tokens">"Ten serwer został skonfigurowany do korzystania z tokenów odświeżania. Nie są one obsługiwane, gdy korzystasz z hasła."</string>
+  <string name="screen_login_error_unsupported_authentication">"Wybrany serwer domowy nie obsługuje uwierzytelniania hasłem, ani OIDC. Skontaktuj się z jego administratorem lub wybierz inny serwer domowy."</string>
+  <string name="screen_login_form_header">"Wprowadź swoje dane"</string>
+  <string name="screen_login_subtitle">"Matrix to otwarta sieć do bezpiecznej i zdecentralizowanej komunikacji."</string>
+  <string name="screen_login_title">"Witaj ponownie!"</string>
+  <string name="screen_login_title_with_homeserver">"Zaloguj się do %1$s"</string>
+  <string name="screen_qr_code_login_connecting_subtitle">"Nawiązanie bezpiecznego połączenia"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_description">"Nie udało się nawiązać bezpiecznego połączenia z nowym urządzeniem. Twoje istniejące urządzenia są nadal bezpieczne i nie musisz się o nie martwić."</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Co teraz?"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_1">"Spróbuj zalogować się ponownie za pomocą kodu QR, jeśli byłby to problem z siecią"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Jeśli napotkasz ten sam problem, użyj innej sieci Wi-FI lub danych mobilnych"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Jeśli to nie zadziała, zaloguj się ręcznie"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_title">"Połączenie nie jest bezpieczne"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Zostaniesz poproszony o wprowadzenie dwóch cyfr widocznych na tym urządzeniu."</string>
+  <string name="screen_qr_code_login_device_code_title">"Wprowadź numer poniżej na innym urządzeniu"</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_description">"Zaloguj się na drugie urządzenie lub użyj tego, które jest już zalogowane, a następnie spróbuj ponownie."</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_subtitle">"Drugie urządzenie nie jest zalogowane"</string>
+  <string name="screen_qr_code_login_error_cancelled_subtitle">"Logowanie zostało anulowane na drugim urządzeniu."</string>
+  <string name="screen_qr_code_login_error_cancelled_title">"Prośba o logowanie została anulowana"</string>
+  <string name="screen_qr_code_login_error_declined_subtitle">"Logowanie zostało odrzucone na drugim urządzeniu."</string>
+  <string name="screen_qr_code_login_error_declined_title">"Logowanie odrzucone"</string>
+  <string name="screen_qr_code_login_error_expired_subtitle">"Logowanie wygasło. Spróbuj ponownie."</string>
+  <string name="screen_qr_code_login_error_expired_title">"Logowanie nie zostało ukończone na czas"</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Twoje drugie urządzenie nie wspiera logowania się do %s za pomocą kodu QR.
+
+Spróbuj zalogować się ręcznie lub zeskanuj kod QR na innym urządzeniu."</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_title">"Kod QR nie jest wspierany"</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"Twój dostawca konta nie obsługuje %1$s."</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"%1$s nie jest wspierany"</string>
+  <string name="screen_qr_code_login_initial_state_button_title">"Gotowy do skanowania"</string>
+  <string name="screen_qr_code_login_initial_state_item_1">"Otwórz %1$s na urządzeniu stacjonarnym"</string>
+  <string name="screen_qr_code_login_initial_state_item_2">"Kliknij na swój awatar"</string>
+  <string name="screen_qr_code_login_initial_state_item_3">"Wybierz %1$s"</string>
+  <string name="screen_qr_code_login_initial_state_item_3_action">"“Powiąż nowe urządzenie”"</string>
+  <string name="screen_qr_code_login_initial_state_item_4">"Zeskanuj kod QR za pomocą tego urządzenia"</string>
+  <string name="screen_qr_code_login_initial_state_title">"Otwórz %1$s na innym urządzeniu, aby uzyskać kod QR"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_description">"Użyj kodu QR widocznego na drugim urządzeniu."</string>
+  <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Spróbuj ponownie"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_subtitle">"Błędny kod QR"</string>
+  <string name="screen_qr_code_login_no_camera_permission_button">"Przejdź do ustawień aparatu"</string>
+  <string name="screen_qr_code_login_no_camera_permission_state_description">"Musisz przyznać uprawnienia %1$s do korzystania z kamery, aby kontynuować."</string>
+  <string name="screen_qr_code_login_no_camera_permission_state_title">"Zezwól na dostęp do kamery, aby zeskanować kod QR"</string>
+  <string name="screen_qr_code_login_scanning_state_title">"Skanuj kod QR"</string>
+  <string name="screen_qr_code_login_start_over_button">"Zacznij od nowa"</string>
+  <string name="screen_qr_code_login_unknown_error_description">"Wystąpił nieoczekiwany błąd. Spróbuj ponownie."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Oczekiwanie na drugie urządzenie"</string>
+  <string name="screen_qr_code_login_verify_code_subtitle">"Twój dostawca konta może poprosić o podany kod, aby zweryfikować logowanie."</string>
+  <string name="screen_qr_code_login_verify_code_title">"Twój kod weryfikacyjny"</string>
+  <string name="screen_server_confirmation_change_server">"Zmień dostawcę konta"</string>
+  <string name="screen_server_confirmation_message_login_element_dot_io">"Serwer prywatny dla pracowników Element."</string>
+  <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix to otwarta sieć do bezpiecznej i zdecentralizowanej komunikacji."</string>
+  <string name="screen_server_confirmation_message_register">"Tutaj będą przechowywane Twoje konwersacje - w podobnej formie jak wiadomości widnieją na skrzynce e-mail."</string>
+  <string name="screen_server_confirmation_title_login">"Zamierzasz się zalogować do %1$s"</string>
+  <string name="screen_server_confirmation_title_register">"Zamierzasz utworzyć konto na %1$s"</string>
+  <string name="screen_waitlist_message">"Obecnie istnieje duże zapotrzebowanie na %1$s na %2$s. Wróć do aplikacji za kilka dni i spróbuj ponownie.
+
+Dziękujemy za Twoją cierpliwość!"</string>
+  <string name="screen_waitlist_message_success">"Witamy w %1$s!"</string>
+  <string name="screen_waitlist_title">"Już prawie gotowe!"</string>
+  <string name="screen_waitlist_title_success">"Witamy!"</string>
+</resources>

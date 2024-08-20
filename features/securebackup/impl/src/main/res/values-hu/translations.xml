@@ -16,12 +16,18 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Kövesse az utasításokat egy új helyreállítási kulcs létrehozásához"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Mentse az új helyreállítási kulcsot egy jelszókezelőbe vagy egy titkosított jegyzetbe."</string>
   <string name="screen_create_new_recovery_key_title">"A fiók titkosításának visszaállítása egy másik eszköz használatával"</string>
+  <string name="screen_encryption_reset_bullet_1">"A fiókadatok, a kapcsolatok, a beállítások és a csevegéslista megmarad"</string>
+  <string name="screen_encryption_reset_bullet_2">"Elveszíti meglévő üzenetelőzményeit"</string>
+  <string name="screen_encryption_reset_bullet_3">"Újból ellenőriznie kell az összes meglévő eszközét és csevegőpartnerét"</string>
+  <string name="screen_encryption_reset_footer">"Csak akkor állítsa vissza a személyazonosságát, ha nem fér hozzá másik bejelentkezett eszközhöz, és elvesztette a helyreállítási kulcsot."</string>
+  <string name="screen_encryption_reset_subtitle">"Ha nincs bejelentkezve más eszközre, és elvesztette a helyreállítási kulcsot, akkor az alkalmazás használatának folytatásához vissza kell állítania személyazonosságát. "</string>
+  <string name="screen_encryption_reset_title">"Állítsa vissza a személyazonosságát, ha más módon nem tudja megerősíteni"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Kikapcsolás"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Ha kijelentkezik az összes eszközéről, akkor elveszti a titkosított üzeneteit."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Biztos, hogy kikapcsolja a biztonsági mentéseket?"</string>
   <string name="screen_key_backup_disable_description">"A biztonsági mentés kikapcsolása eltávolítja a jelenlegi titkosítási kulcsának mentését, és kikapcsol más biztonsági funkciókat is. Ebben az esetben:"</string>
   <string name="screen_key_backup_disable_description_point_1">"Nem lesznek meg a titkosított üzenetek előzményei az új eszközein"</string>
-  <string name="screen_key_backup_disable_description_point_2">"Elveszti a titkosított üzenetei hozzáférését, ha mindenhol kilép az %1$sből"</string>
+  <string name="screen_key_backup_disable_description_point_2">"Elveszti a hozzáférését a titkosított üzeneteihez, ha mindenhol kilép az %1$sből"</string>
   <string name="screen_key_backup_disable_title">"Biztos, hogy kikapcsolja a biztonsági mentéseket?"</string>
   <string name="screen_recovery_key_change_description">"Szerezzen új helyreállítási kulcsot, ha elvesztette a meglévőt. A helyreállítása kulcsa módosítása után a régi már nem fog működni."</string>
   <string name="screen_recovery_key_change_generate_key">"Új helyreállítási kulcs előállítása"</string>
@@ -51,4 +57,10 @@
   <string name="screen_recovery_key_setup_generate_key_description">"Gondoskodjon arról, hogy biztonságos helyen tárolja a helyreállítási kulcsát"</string>
   <string name="screen_recovery_key_setup_success">"A helyreállítás beállítása sikeres"</string>
   <string name="screen_recovery_key_setup_title">"Helyreállítás beállítása"</string>
+  <string name="screen_reset_encryption_confirmation_alert_action">"Igen, visszaállítás most"</string>
+  <string name="screen_reset_encryption_confirmation_alert_subtitle">"Ez a folyamat visszafordíthatatlan."</string>
+  <string name="screen_reset_encryption_confirmation_alert_title">"Biztos, hogy visszaállítja a titkosítást?"</string>
+  <string name="screen_reset_encryption_password_placeholder">"Adja meg…"</string>
+  <string name="screen_reset_encryption_password_subtitle">"Erősítse meg, hogy vissza szeretné állítani a titkosítást."</string>
+  <string name="screen_reset_encryption_password_title">"A folytatáshoz adja meg fiókja jelszavát"</string>
 </resources>

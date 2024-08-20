@@ -21,10 +21,14 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 open class AboutStateProvider : PreviewParameterProvider<AboutState> {
     override val values: Sequence<AboutState>
         get() = sequenceOf(
-            aAboutState(),
+            anAboutState(),
+            anAboutState(hasOpenSourcesLicenses = true),
         )
 }
 
-fun aAboutState() = AboutState(
+fun anAboutState(
+    hasOpenSourcesLicenses: Boolean = false,
+) = AboutState(
     elementLegals = getAllLegals(),
+    hasOpenSourcesLicenses = hasOpenSourcesLicenses,
 )

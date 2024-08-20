@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"Adicionar opção"</string>
+  <string name="screen_create_poll_anonymous_desc">"Mostrar resultados somente após o término da enquete"</string>
+  <string name="screen_create_poll_anonymous_headline">"Ocultar votos"</string>
+  <string name="screen_create_poll_answer_hint">"Opção %1$d"</string>
+  <string name="screen_create_poll_question_desc">"Pergunta ou tópico"</string>
+  <string name="screen_create_poll_question_hint">"Sobre o que é a enquete?"</string>
+  <string name="screen_create_poll_title">"Criar enquete"</string>
+  <string name="screen_edit_poll_delete_confirmation">"Tem certeza de que quer deletar esta enquete?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Excluir Enquete"</string>
+  <string name="screen_edit_poll_title">"Editar enquete"</string>
+  <string name="screen_polls_history_empty_ongoing">"Não foi possível encontrar nenhuma enquete em andamento."</string>
+  <string name="screen_polls_history_empty_past">"Não foi possível encontrar nenhuma enquete anterior."</string>
+  <string name="screen_polls_history_filter_ongoing">"Em andamento"</string>
+  <string name="screen_polls_history_filter_past">"Anteriores"</string>
+  <string name="screen_polls_history_title">"Enquetes"</string>
+</resources>

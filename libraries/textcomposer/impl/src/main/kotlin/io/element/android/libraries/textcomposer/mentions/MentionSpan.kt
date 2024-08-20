@@ -31,15 +31,16 @@ class MentionSpan(
     text: String,
     val rawValue: String,
     val type: Type,
-    val backgroundColor: Int,
-    val textColor: Int,
-    val startPadding: Int,
-    val endPadding: Int,
-    val typeface: Typeface = Typeface.DEFAULT,
 ) : ReplacementSpan() {
     companion object {
         private const val MAX_LENGTH = 20
     }
+
+    var backgroundColor: Int = 0
+    var textColor: Int = 0
+    var startPadding: Int = 0
+    var endPadding: Int = 0
+    var typeface: Typeface = Typeface.DEFAULT
 
     private var textWidth = 0
     private val backgroundPaint = Paint().apply {
@@ -54,6 +55,25 @@ class MentionSpan(
         }
 
     private var mentionText: CharSequence = getActualText(text)
+
+    fun update(mentionSpanTheme: MentionSpanTheme) {
+        val isCurrentUser = rawValue == mentionSpanTheme.currentUserId?.value
+        backgroundColor = when (type) {
+            Type.USER -> if (isCurrentUser) mentionSpanTheme.currentUserBackgroundColor else mentionSpanTheme.otherBackgroundColor
+            Type.ROOM -> mentionSpanTheme.otherBackgroundColor
+            Type.EVERYONE -> mentionSpanTheme.otherBackgroundColor
+        }
+        textColor = when (type) {
+            Type.USER -> if (isCurrentUser) mentionSpanTheme.currentUserTextColor else mentionSpanTheme.otherTextColor
+            Type.ROOM -> mentionSpanTheme.otherTextColor
+            Type.EVERYONE -> mentionSpanTheme.otherTextColor
+        }
+        backgroundPaint.color = backgroundColor
+        val (startPaddingPx, endPaddingPx) = mentionSpanTheme.paddingValuesPx.value
+        startPadding = startPaddingPx
+        endPadding = endPaddingPx
+        typeface = mentionSpanTheme.typeface.value
+    }
 
     override fun getSize(paint: Paint, text: CharSequence?, start: Int, end: Int, fm: Paint.FontMetricsInt?): Int {
         paint.typeface = typeface
@@ -87,6 +107,7 @@ class MentionSpan(
                         append("#")
                     }
                 }
+                Type.EVERYONE -> Unit
             }
             append(mentionText.substring(0, min(mentionText.length, MAX_LENGTH)))
             if (mentionText.length > MAX_LENGTH) {
@@ -98,6 +119,7 @@ class MentionSpan(
     enum class Type {
         USER,
         ROOM,
+        EVERYONE,
     }
 }
 

@@ -5,6 +5,7 @@ buildscript {
     dependencies {
         classpath(libs.kotlin.gradle.plugin)
         classpath(libs.gms.google.services)
+        classpath(libs.oss.licenses.plugin)
     }
 }
 
@@ -60,7 +61,7 @@ allprojects {
         config.from(files("$rootDir/tools/detekt/detekt.yml"))
     }
     dependencies {
-        detektPlugins("io.nlopez.compose.rules:detekt:0.4.4")
+        detektPlugins("io.nlopez.compose.rules:detekt:0.4.10")
     }
 
     // KtLint
@@ -128,11 +129,11 @@ dependencyAnalysis {
 // To run a sonar analysis:
 // Run './gradlew sonar -Dsonar.login=<SONAR_LOGIN>'
 // The SONAR_LOGIN is stored in passbolt as Token Sonar Cloud Bma
-// Sonar result can be found here: https://sonarcloud.io/project/overview?id=vector-im_element-x-android
+// Sonar result can be found here: https://sonarcloud.io/project/overview?id=element-x-android
 sonar {
     properties {
         property("sonar.projectName", "element-x-android")
-        property("sonar.projectKey", "vector-im_element-x-android")
+        property("sonar.projectKey", "element-x-android")
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.projectVersion", "1.0") // TODO project(":app").android.defaultConfig.versionName)
         property("sonar.sourceEncoding", "UTF-8")
@@ -140,7 +141,7 @@ sonar {
         property("sonar.links.ci", "https://github.com/element-hq/element-x-android/actions")
         property("sonar.links.scm", "https://github.com/element-hq/element-x-android/")
         property("sonar.links.issue", "https://github.com/element-hq/element-x-android/issues")
-        property("sonar.organization", "new_vector_ltd_organization")
+        property("sonar.organization", "element-hq")
         property("sonar.login", if (project.hasProperty("SONAR_LOGIN")) project.property("SONAR_LOGIN")!! else "invalid")
 
         // exclude source code from analyses separated by a colon (:)
@@ -160,15 +161,15 @@ allprojects {
             // Record all the languages?
             if (project.hasProperty("allLanguagesNoEnglish")) {
                 // Do not record English language
-                exclude("ui/S.class")
+                exclude("ui/*.class")
             } else if (project.hasProperty("allLanguages").not()) {
                 // Do not record other languages
-                exclude("ui/T.class")
+                exclude("translations/*.class")
             }
         } else {
             // Disable screenshot tests by default
-            exclude("ui/S.class")
-            exclude("ui/T.class")
+            exclude("ui/*.class")
+            exclude("translations/*.class")
         }
     }
 }

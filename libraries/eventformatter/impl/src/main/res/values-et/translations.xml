@@ -30,7 +30,7 @@
   <string name="state_event_room_join_by_you">"Sina liitusid jututoaga"</string>
   <string name="state_event_room_knock">"%1$s palus liitumist"</string>
   <string name="state_event_room_knock_accepted">"%1$s lubas kasutajal %2$s liituda"</string>
-  <string name="state_event_room_knock_accepted_by_you">"Sina lubasid kasutajal %1$s liituda"</string>
+  <string name="state_event_room_knock_accepted_by_you">"Sina lubasid kasutajal %1$s liituda!"</string>
   <string name="state_event_room_knock_by_you">"Sina palusid liitumist"</string>
   <string name="state_event_room_knock_denied">"%1$s lükkas tagasi kasutaja %2$s liitumispalve"</string>
   <string name="state_event_room_knock_denied_by_you">"Sina lükkasid tagasi kasutaja %1$s liitumispalve"</string>
@@ -45,6 +45,12 @@
   <string name="state_event_room_name_removed_by_you">"Sina eemaldasid jututoa nime"</string>
   <string name="state_event_room_none">"%1$s ei teinud ühtegi muudatust"</string>
   <string name="state_event_room_none_by_you">"Sina ei teinud ühtegi muudatust"</string>
+  <string name="state_event_room_pinned_events_changed">"%1$s muutis esiletõstetud sõnumeid"</string>
+  <string name="state_event_room_pinned_events_changed_by_you">"Sina muutsid esiletõstetud sõnumeid"</string>
+  <string name="state_event_room_pinned_events_pinned">"%1$s tõstis sõnumi esile"</string>
+  <string name="state_event_room_pinned_events_pinned_by_you">"Sina tõstsid sõnumi esile"</string>
+  <string name="state_event_room_pinned_events_unpinned">"%1$s eemaldas esiletõstetud sõnumi"</string>
+  <string name="state_event_room_pinned_events_unpinned_by_you">"Sina eemaldasid esiletõstetud sõnumi"</string>
   <string name="state_event_room_reject">"%1$s lükkas kutse tagasi"</string>
   <string name="state_event_room_reject_by_you">"Sina lükkasid kutse tagasi"</string>
   <string name="state_event_room_remove">"%1$s eemaldas jututoast kasutaja %2$s"</string>

@@ -25,7 +25,6 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -44,25 +43,19 @@ fun aRoomSummaryFilled(
     numUnreadMessages: Int = 0,
     notificationMode: RoomNotificationMode? = null,
     currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,
-) = RoomSummary.Filled(
-    aRoomSummaryDetails(
-        roomId = roomId,
-        name = name,
-        isDirect = isDirect,
-        avatarUrl = avatarUrl,
-        lastMessage = lastMessage,
-        numUnreadMentions = numUnreadMentions,
-        numUnreadMessages = numUnreadMessages,
-        notificationMode = notificationMode,
-        currentUserMembership = currentUserMembership,
-    )
+) = aRoomSummary(
+    roomId = roomId,
+    name = name,
+    isDirect = isDirect,
+    avatarUrl = avatarUrl,
+    lastMessage = lastMessage,
+    numUnreadMentions = numUnreadMentions,
+    numUnreadMessages = numUnreadMessages,
+    notificationMode = notificationMode,
+    currentUserMembership = currentUserMembership,
 )
 
-fun aRoomSummaryFilled(
-    details: RoomSummaryDetails = aRoomSummaryDetails(),
-) = RoomSummary.Filled(details)
-
-fun aRoomSummaryDetails(
+fun aRoomSummary(
     roomId: RoomId = A_ROOM_ID,
     name: String? = A_ROOM_NAME,
     isDirect: Boolean = false,
@@ -75,12 +68,13 @@ fun aRoomSummaryDetails(
     notificationMode: RoomNotificationMode? = null,
     inviter: RoomMember? = null,
     canonicalAlias: RoomAlias? = null,
+    alternativeAliases: List<RoomAlias> = emptyList(),
     hasRoomCall: Boolean = false,
     isDm: Boolean = false,
     isFavorite: Boolean = false,
     currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,
     heroes: List<MatrixUser> = emptyList(),
-) = RoomSummaryDetails(
+) = RoomSummary(
     roomId = roomId,
     name = name,
     isDirect = isDirect,
@@ -93,6 +87,7 @@ fun aRoomSummaryDetails(
     userDefinedNotificationMode = notificationMode,
     inviter = inviter,
     canonicalAlias = canonicalAlias,
+    alternativeAliases = alternativeAliases,
     hasRoomCall = hasRoomCall,
     isDm = isDm,
     isFavorite = isFavorite,

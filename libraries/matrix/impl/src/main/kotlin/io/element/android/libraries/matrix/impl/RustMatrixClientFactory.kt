@@ -21,15 +21,19 @@ import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.matrix.impl.analytics.UtdTracker
 import io.element.android.libraries.matrix.impl.certificates.UserCertificatesProvider
 import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
+import io.element.android.libraries.matrix.impl.util.anonymizedTokens
 import io.element.android.libraries.network.useragent.UserAgentProvider
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.use
+import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
@@ -44,13 +48,20 @@ class RustMatrixClientFactory @Inject constructor(
     private val proxyProvider: ProxyProvider,
     private val clock: SystemClock,
     private val utdTracker: UtdTracker,
+    private val appPreferencesStore: AppPreferencesStore,
 ) {
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
-        val client = getBaseClientBuilder(sessionData.sessionPath)
+        val client = getBaseClientBuilder(
+            sessionPath = sessionData.sessionPath,
+            passphrase = sessionData.passphrase,
+            slidingSync = if (appPreferencesStore.isSimplifiedSlidingSyncEnabledFlow().first()) {
+                ClientBuilderSlidingSync.Simplified
+            } else {
+                ClientBuilderSlidingSync.Restored
+            },
+        )
             .homeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
-            .passphrase(sessionData.passphrase)
-            // FIXME Quick and dirty fix for stopping version requests on startup https://github.com/matrix-org/matrix-rust-sdk/pull/1376
             .use { it.build() }
 
         client.restoreSession(sessionData.toSession())
@@ -58,6 +69,8 @@ class RustMatrixClientFactory @Inject constructor(
         val syncService = client.syncService()
             .withUtdHook(utdTracker)
             .finish()
+
+        val (anonymizedAccessToken, anonymizedRefreshToken) = sessionData.anonymizedTokens()
 
         RustMatrixClient(
             client = client,
@@ -68,26 +81,48 @@ class RustMatrixClientFactory @Inject constructor(
             baseDirectory = baseDirectory,
             baseCacheDirectory = cacheDirectory,
             clock = clock,
-        )
+        ).also {
+            Timber.tag(it.toString()).d("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
+        }
     }
 
-    internal fun getBaseClientBuilder(sessionPath: String): ClientBuilder {
+    internal fun getBaseClientBuilder(
+        sessionPath: String,
+        passphrase: String?,
+        slidingSyncProxy: String? = null,
+        slidingSync: ClientBuilderSlidingSync,
+    ): ClientBuilder {
         return ClientBuilder()
             .sessionPath(sessionPath)
+            .passphrase(passphrase)
+            .slidingSyncProxy(slidingSyncProxy)
             .userAgent(userAgentProvider.provide())
             .addRootCertificates(userCertificatesProvider.provides())
-            .serverVersions(listOf("v1.0", "v1.1", "v1.2", "v1.3", "v1.4", "v1.5"))
-            .let {
-                // Sadly ClientBuilder.proxy() does not accept null :/
-                // Tracked by https://github.com/matrix-org/matrix-rust-sdk/issues/3159
-                val proxy = proxyProvider.provides()
-                if (proxy != null) {
-                    it.proxy(proxy)
-                } else {
-                    it
+            .autoEnableBackups(true)
+            .autoEnableCrossSigning(true)
+            .run {
+                when (slidingSync) {
+                    ClientBuilderSlidingSync.Restored -> this
+                    ClientBuilderSlidingSync.Discovered -> requiresSlidingSync()
+                    ClientBuilderSlidingSync.Simplified -> simplifiedSlidingSync(true)
                 }
             }
+            .run {
+                // Workaround for non-nullable proxy parameter in the SDK, since each call to the ClientBuilder returns a new reference we need to keep
+                proxyProvider.provides()?.let { proxy(it) } ?: this
+            }
     }
+}
+
+enum class ClientBuilderSlidingSync {
+    // The proxy will be supplied when restoring the Session.
+    Restored,
+
+    // A proxy must be discovered whilst building the session.
+    Discovered,
+
+    // Use Simplified Sliding Sync (discovery isn't a thing yet).
+    Simplified,
 }
 
 private fun SessionData.toSession() = Session(

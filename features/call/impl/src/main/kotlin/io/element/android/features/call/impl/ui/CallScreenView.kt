@@ -36,6 +36,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.viewinterop.AndroidView
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.call.impl.R
+import io.element.android.features.call.impl.pip.PictureInPictureEvents
+import io.element.android.features.call.impl.pip.PictureInPictureState
+import io.element.android.features.call.impl.pip.PictureInPictureStateProvider
+import io.element.android.features.call.impl.pip.aPictureInPictureState
 import io.element.android.features.call.impl.utils.WebViewWidgetMessageInterceptor
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.ProgressDialog
@@ -58,25 +62,36 @@ interface CallScreenNavigator {
 @Composable
 internal fun CallScreenView(
     state: CallScreenState,
+    pipState: PictureInPictureState,
     requestPermissions: (Array<String>, RequestPermissionCallback) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    fun handleBack() {
+        if (pipState.supportPip) {
+            pipState.eventSink.invoke(PictureInPictureEvents.EnterPictureInPicture)
+        } else {
+            state.eventSink(CallScreenEvents.Hangup)
+        }
+    }
+
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.element_call)) },
-                navigationIcon = {
-                    BackButton(
-                        imageVector = CompoundIcons.Close(),
-                        onClick = { state.eventSink(CallScreenEvents.Hangup) }
-                    )
-                }
-            )
+            if (!pipState.isInPictureInPicture) {
+                TopAppBar(
+                    title = { Text(stringResource(R.string.element_call)) },
+                    navigationIcon = {
+                        BackButton(
+                            imageVector = if (pipState.supportPip) CompoundIcons.ArrowLeft() else CompoundIcons.Close(),
+                            onClick = ::handleBack,
+                        )
+                    }
+                )
+            }
         }
     ) { padding ->
         BackHandler {
-            state.eventSink(CallScreenEvents.Hangup)
+            handleBack()
         }
         CallWebView(
             modifier = Modifier
@@ -177,6 +192,19 @@ internal fun CallScreenViewPreview(
 ) = ElementPreview {
     CallScreenView(
         state = state,
+        pipState = aPictureInPictureState(),
+        requestPermissions = { _, _ -> },
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun CallScreenPipViewPreview(
+    @PreviewParameter(PictureInPictureStateProvider::class) state: PictureInPictureState,
+) = ElementPreview {
+    CallScreenView(
+        state = aCallScreenState(),
+        pipState = state,
         requestPermissions = { _, _ -> },
     )
 }

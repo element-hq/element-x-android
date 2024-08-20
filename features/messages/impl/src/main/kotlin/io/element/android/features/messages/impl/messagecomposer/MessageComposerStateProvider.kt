@@ -17,12 +17,11 @@
 package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.matrix.api.permalink.PermalinkData
-import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.textcomposer.aRichTextEditorState
 import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.TextEditorState
+import io.element.android.wysiwyg.display.TextDisplay
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -45,9 +44,6 @@ fun aMessageComposerState(
     memberSuggestions: ImmutableList<ResolvedMentionSuggestion> = persistentListOf(),
 ) = MessageComposerState(
     textEditorState = textEditorState,
-    permalinkParser = object : PermalinkParser {
-        override fun parse(uriString: String): PermalinkData = TODO()
-    },
     isFullScreen = isFullScreen,
     mode = mode,
     showTextFormatting = showTextFormatting,
@@ -56,5 +52,6 @@ fun aMessageComposerState(
     canCreatePoll = canCreatePoll,
     attachmentsState = attachmentsState,
     memberSuggestions = memberSuggestions,
+    resolveMentionDisplay = { _, _ -> TextDisplay.Plain },
     eventSink = {},
 )

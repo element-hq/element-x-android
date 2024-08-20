@@ -25,14 +25,25 @@ import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.notifications.RingingCallNotificationCreator
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.push.api.notifications.ForegroundServiceType
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.element.android.libraries.push.api.notifications.OnMissedCallNotificationHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -79,10 +90,15 @@ class DefaultActiveCallManager @Inject constructor(
     private val onMissedCallNotificationHandler: OnMissedCallNotificationHandler,
     private val ringingCallNotificationCreator: RingingCallNotificationCreator,
     private val notificationManagerCompat: NotificationManagerCompat,
+    private val matrixClientProvider: MatrixClientProvider,
 ) : ActiveCallManager {
     private var timedOutCallJob: Job? = null
 
     override val activeCall = MutableStateFlow<ActiveCall?>(null)
+
+    init {
+        observeRingingCall()
+    }
 
     override fun registerIncomingCall(notificationData: CallNotificationData) {
         if (activeCall.value != null) {
@@ -172,6 +188,35 @@ class DefaultActiveCallManager @Inject constructor(
                 eventId = notificationData.eventId,
             )
         }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun observeRingingCall() {
+        // This will observe ringing calls and ensure they're terminated if the room call is cancelled
+        activeCall
+            .filterNotNull()
+            .filter { it.callState is CallState.Ringing && it.callType is CallType.RoomCall }
+            .flatMapLatest { activeCall ->
+                val callType = activeCall.callType as CallType.RoomCall
+                // Get a flow of updated `hasRoomCall` values for the room
+                matrixClientProvider.getOrRestore(callType.sessionId).getOrNull()
+                    ?.getRoom(callType.roomId)
+                    ?.roomInfoFlow
+                    ?.map { it.hasRoomCall }
+                    ?: flowOf()
+            }
+            // We only want to check if the room active call status changes
+            .distinctUntilChanged()
+            // Skip the first one, we're not interested in it (if the check below passes, it had to be active anyway)
+            .drop(1)
+            .onEach { roomHasActiveCall ->
+                if (!roomHasActiveCall) {
+                    // The call was cancelled
+                    timedOutCallJob?.cancel()
+                    incomingCallTimedOut()
+                }
+            }
+            .launchIn(coroutineScope)
     }
 }
 

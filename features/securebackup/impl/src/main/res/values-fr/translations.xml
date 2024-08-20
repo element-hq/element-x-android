@@ -16,6 +16,9 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Suivez les instructions pour créer une nouvelle clé de récupération"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Enregistrez votre nouvelle clé dans un gestionnaire de mots de passe ou dans une note chiffrée"</string>
   <string name="screen_create_new_recovery_key_title">"Réinitialisez le chiffrement de votre compte en utilisant un autre appareil"</string>
+  <string name="screen_encryption_reset_bullet_1">"Les détails de votre compte, vos contacts, vos préférences et votre liste de discussions seront conservés"</string>
+  <string name="screen_encryption_reset_bullet_2">"Vous perdrez l’historique de vos messages"</string>
+  <string name="screen_encryption_reset_bullet_3">"Vous devrez vérifier à nouveau tous vos appareils et tous vos contacts"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Désactiver"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Vous perdrez vos messages chiffrés si vous vous déconnectez de toutes vos sessions."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Êtes-vous certain de vouloir désactiver la sauvegarde?"</string>
@@ -29,8 +32,8 @@
   <string name="screen_recovery_key_change_success">"Clé de récupération modifée"</string>
   <string name="screen_recovery_key_change_title">"Changer la clé de récupération?"</string>
   <string name="screen_recovery_key_confirm_create_new_recovery_key">"Créer une nouvelle clé de récupération"</string>
-  <string name="screen_recovery_key_confirm_description">"Assurez vous que personne d’autre ne regarde l’écran!"</string>
-  <string name="screen_recovery_key_confirm_error_content">"Veuillez réessayer pour accéder à votre historique chiffré."</string>
+  <string name="screen_recovery_key_confirm_description">"Assurez vous que personne d’autre ne regarde votre écran!"</string>
+  <string name="screen_recovery_key_confirm_error_content">"Veuillez réessayer afin de pouvoir accéder à vos anciens messages."</string>
   <string name="screen_recovery_key_confirm_error_title">"Clé de récupération incorrecte"</string>
   <string name="screen_recovery_key_confirm_key_description">"Si vous avez une clé de sécurité ou une phrase de sécurité, cela fonctionnera également."</string>
   <string name="screen_recovery_key_confirm_key_label">"Clé de récupération"</string>
@@ -51,4 +54,8 @@
   <string name="screen_recovery_key_setup_generate_key_description">"Assurez-vous de conserver la clé dans un endroit sûr"</string>
   <string name="screen_recovery_key_setup_success">"Sauvegarde mise en place avec succès"</string>
   <string name="screen_recovery_key_setup_title">"Configurer la sauvegarde"</string>
+  <string name="screen_reset_encryption_confirmation_alert_action">"Oui, réinitialisez maintenant"</string>
+  <string name="screen_reset_encryption_confirmation_alert_subtitle">"Cette opération ne peut pas être annulée."</string>
+  <string name="screen_reset_encryption_password_placeholder">"Saisissez…"</string>
+  <string name="screen_reset_encryption_password_title">"Saisissez le mot de passe de votre compte pour continuer"</string>
 </resources>

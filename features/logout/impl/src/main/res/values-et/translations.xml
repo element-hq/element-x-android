@@ -4,5 +4,15 @@
   <string name="screen_signout_confirmation_dialog_submit">"Logi välja"</string>
   <string name="screen_signout_confirmation_dialog_title">"Logi välja"</string>
   <string name="screen_signout_in_progress_dialog_content">"Logime välja…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"Oled oma viimasest seansist välja logimas. Kui logid nüüd välja, kaotad ligipääsu oma krüptitud sõnumitele."</string>
+  <string name="screen_signout_key_backup_disabled_title">"Sa oled varukoopiate tegemise välja lülitanud"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"Kui su võrguühendus katkes, siis sinu krüptovõtmed oli parasjagu varundamisel. Loo võrguühendus uuesti, oota kuni krüptovõtmete varundamine lõppeb ja alles siis logi rakendusest välja."</string>
+  <string name="screen_signout_key_backup_offline_title">"Sinu krüptovõtmed on veel varundamisel"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Enne väljalogimist palun oota, et pooleliolev toiming lõppeb."</string>
+  <string name="screen_signout_key_backup_ongoing_title">"Sinu krüptovõtmed on veel varundamisel"</string>
   <string name="screen_signout_preference_item">"Logi välja"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"Sa oled logimas välja oma viimasest sessioonist. Kui teed seda nüüd, siis kaotad ligipääsu oma krüptitud sõnumitele."</string>
+  <string name="screen_signout_recovery_disabled_title">"Andmete taastamine on seadistamata"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"Sa oled logimas välja oma viimasest sessioonist. Kui teed seda nüüd, siis ilmselt kaotad ligipääsu oma krüptitud sõnumitele."</string>
+  <string name="screen_signout_save_recovery_key_title">"Kas sa oled oma taastevõtme salvestanud?"</string>
 </resources>

@@ -89,7 +89,7 @@ fun EditDefaultNotificationSettingView(
         if (state.roomsWithUserDefinedMode.isNotEmpty()) {
             PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_edit_custom_settings_section_title)) {
                 state.roomsWithUserDefinedMode.forEach { summary ->
-                    val subtitle = when (summary.details.userDefinedNotificationMode) {
+                    val subtitle = when (summary.userDefinedNotificationMode) {
                         RoomNotificationMode.ALL_MESSAGES -> stringResource(id = R.string.screen_notification_settings_edit_mode_all_messages)
                         RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> {
                             stringResource(id = R.string.screen_notification_settings_edit_mode_mentions_and_keywords)
@@ -99,7 +99,7 @@ fun EditDefaultNotificationSettingView(
                     }
                     ListItem(
                         headlineContent = {
-                            val roomName = summary.details.name
+                            val roomName = summary.name
                             Text(
                                 text = roomName ?: stringResource(id = CommonStrings.common_no_room_name),
                                 fontStyle = FontStyle.Italic.takeIf { roomName == null }
@@ -110,14 +110,14 @@ fun EditDefaultNotificationSettingView(
                         },
                         leadingContent = ListItemContent.Custom {
                             CompositeAvatar(
-                                avatarData = summary.details.getAvatarData(size = AvatarSize.CustomRoomNotificationSetting),
-                                heroes = summary.details.heroes.map { user ->
+                                avatarData = summary.getAvatarData(size = AvatarSize.CustomRoomNotificationSetting),
+                                heroes = summary.heroes.map { user ->
                                     user.getAvatarData(size = AvatarSize.CustomRoomNotificationSetting)
                                 }.toPersistentList()
                             )
                         },
                         onClick = {
-                            openRoomNotificationSettings(summary.details.roomId)
+                            openRoomNotificationSettings(summary.roomId)
                         }
                     )
                 }

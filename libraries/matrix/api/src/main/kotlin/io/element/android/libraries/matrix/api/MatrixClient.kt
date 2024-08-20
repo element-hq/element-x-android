@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.api
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
@@ -35,6 +36,7 @@ import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -65,8 +67,8 @@ interface MatrixClient : Closeable {
     suspend fun setDisplayName(displayName: String): Result<Unit>
     suspend fun uploadAvatar(mimeType: String, data: ByteArray): Result<Unit>
     suspend fun removeAvatar(): Result<Unit>
-    suspend fun joinRoom(roomId: RoomId): Result<Unit>
-    suspend fun joinRoomByIdOrAlias(roomId: RoomId, serverNames: List<String>): Result<Unit>
+    suspend fun joinRoom(roomId: RoomId): Result<RoomSummary?>
+    suspend fun joinRoomByIdOrAlias(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomSummary?>
     suspend fun knockRoom(roomId: RoomId): Result<Unit>
     fun syncService(): SyncService
     fun sessionVerificationService(): SessionVerificationService
@@ -104,7 +106,6 @@ interface MatrixClient : Closeable {
     suspend fun trackRecentlyVisitedRoom(roomId: RoomId): Result<Unit>
     suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>>
     suspend fun resolveRoomAlias(roomAlias: RoomAlias): Result<ResolvedRoomAlias>
-    suspend fun getRoomPreviewFromRoomId(roomId: RoomId, serverNames: List<String>): Result<RoomPreview>
 
     /**
      * Enables or disables the sending queue, according to the given parameter.
@@ -121,4 +122,16 @@ interface MatrixClient : Closeable {
      * This flow will emit a new value whenever the send queue is disabled for a room.
      */
     fun sendQueueDisabledFlow(): Flow<RoomId>
+
+    /**
+     * Return the server name part of the current user ID, using the SDK, and if a failure occurs,
+     * compute it manually.
+     */
+    fun userIdServerName(): String
+
+    /**
+     * Execute generic GET requests through the SDKs internal HTTP client.
+     */
+    suspend fun getUrl(url: String): Result<String>
+    suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreview>
 }

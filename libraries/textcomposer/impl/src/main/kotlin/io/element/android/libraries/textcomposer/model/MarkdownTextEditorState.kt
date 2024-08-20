@@ -38,6 +38,7 @@ import io.element.android.libraries.textcomposer.components.markdown.StableCharS
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
+import io.element.android.libraries.textcomposer.mentions.getMentionSpans
 import kotlinx.parcelize.Parcelize
 
 @Stable
@@ -63,7 +64,7 @@ class MarkdownTextEditorState(
                 val currentText = SpannableStringBuilder(text.value())
                 val replaceText = "@room"
                 val roomPill = mentionSpanProvider.getMentionSpanFor(replaceText, "")
-                currentText.replace(suggestion.start, suggestion.end, ". ")
+                currentText.replace(suggestion.start, suggestion.end, "@ ")
                 val end = suggestion.start + 1
                 currentText.setSpan(roomPill, suggestion.start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 text.update(currentText, true)
@@ -74,7 +75,7 @@ class MarkdownTextEditorState(
                 val text = mention.roomMember.displayName?.prependIndent("@") ?: mention.roomMember.userId.value
                 val link = permalinkBuilder.permalinkForUser(mention.roomMember.userId).getOrNull() ?: return
                 val mentionPill = mentionSpanProvider.getMentionSpanFor(text, link)
-                currentText.replace(suggestion.start, suggestion.end, ". ")
+                currentText.replace(suggestion.start, suggestion.end, "@ ")
                 val end = suggestion.start + 1
                 currentText.setSpan(mentionPill, suggestion.start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 this.text.update(currentText, true)
@@ -86,20 +87,23 @@ class MarkdownTextEditorState(
     fun getMessageMarkdown(permalinkBuilder: PermalinkBuilder): String {
         val charSequence = text.value()
         return if (charSequence is Spanned) {
-            val mentions = charSequence.getSpans(0, charSequence.length, MentionSpan::class.java)
+            val mentions = charSequence.getMentionSpans()
             buildString {
                 append(charSequence.toString())
-                if (mentions != null && mentions.isNotEmpty()) {
-                    for (mention in mentions.reversed()) {
+                if (mentions.isNotEmpty()) {
+                    for (mention in mentions.sortedByDescending { charSequence.getSpanEnd(it) }) {
                         val start = charSequence.getSpanStart(mention)
                         val end = charSequence.getSpanEnd(mention)
-                        if (mention.type == MentionSpan.Type.USER) {
-                            if (mention.rawValue == "@room") {
-                                replace(start, end, "@room")
-                            } else {
+                        when (mention.type) {
+                            MentionSpan.Type.USER -> {
                                 val link = permalinkBuilder.permalinkForUser(UserId(mention.rawValue)).getOrNull() ?: continue
                                 replace(start, end, "[${mention.rawValue}]($link)")
                             }
+                            MentionSpan.Type.EVERYONE -> {
+                                replace(start, end, "@room")
+                            }
+                            // Nothing to do here yet
+                            MentionSpan.Type.ROOM -> Unit
                         }
                     }
                 }
@@ -114,14 +118,9 @@ class MarkdownTextEditorState(
         val mentionSpans = text.getSpans<MentionSpan>(0, text.length)
         return mentionSpans.mapNotNull { mentionSpan ->
             when (mentionSpan.type) {
-                MentionSpan.Type.USER -> {
-                    if (mentionSpan.rawValue == "@room") {
-                        Mention.AtRoom
-                    } else {
-                        Mention.User(UserId(mentionSpan.rawValue))
-                    }
-                }
-                else -> null
+                MentionSpan.Type.USER -> Mention.User(UserId(mentionSpan.rawValue))
+                MentionSpan.Type.EVERYONE -> Mention.AtRoom
+                MentionSpan.Type.ROOM -> null
             }
         }
     }

@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="full_screen_intent_banner_message">"För att säkerställa att du aldrig missar ett viktigt samtal, ändra dina inställningar för att tillåta helskärmsmeddelanden när telefonen är låst."</string>
+  <string name="full_screen_intent_banner_title">"Förbättra din samtalsupplevelse"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Välj hur du vill ta emot aviseringar"</string>
   <string name="screen_advanced_settings_developer_mode">"Utvecklarläge"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Aktivera för att ha tillgång till funktionalitet för utvecklare."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Anpassad bas-URL för Element Call"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Ange en anpassad bas-URL för Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Ogiltig URL, se till att du inkluderar protokollet (http/https) och rätt adress."</string>
+  <string name="screen_advanced_settings_push_provider_android">"Pushnotisleverantör"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Inaktivera rik-text-redigeraren för att skriva Markdown manuellt."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Läskvitton"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Om det är avstängt kommer dina läskvitton inte att skickas till någon. Du kommer fortfarande att få läskvitton från andra användare."</string>

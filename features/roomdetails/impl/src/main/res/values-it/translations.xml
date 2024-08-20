@@ -35,6 +35,9 @@
   <string name="screen_room_details_add_topic_title">"Aggiungi argomento"</string>
   <string name="screen_room_details_already_a_member">"Già membro"</string>
   <string name="screen_room_details_already_invited">"Già invitato"</string>
+  <string name="screen_room_details_badge_encrypted">"Cifrata"</string>
+  <string name="screen_room_details_badge_not_encrypted">"Non cifrata"</string>
+  <string name="screen_room_details_badge_public">"Stanza pubblica"</string>
   <string name="screen_room_details_edit_room_title">"Modifica stanza"</string>
   <string name="screen_room_details_edition_error">"Si è verificato un errore sconosciuto e non è stato possibile modificare le informazioni."</string>
   <string name="screen_room_details_edition_error_title">"Impossibile aggiornare la stanza"</string>

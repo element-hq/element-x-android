@@ -79,7 +79,7 @@ class DefaultNotificationDataFactory @Inject constructor(
             .groupBy { it.roomId }
         return messagesToDisplay.map { (roomId, events) ->
             val roomName = events.lastOrNull()?.roomName ?: roomId.value
-            val isDirect = events.lastOrNull()?.roomIsDirect ?: false
+            val isDm = events.lastOrNull()?.roomIsDm ?: false
             val notification = roomGroupMessageCreator.createRoomMessage(
                 currentUser = currentUser,
                 events = events,
@@ -90,7 +90,7 @@ class DefaultNotificationDataFactory @Inject constructor(
             RoomNotification(
                 notification = notification,
                 roomId = roomId,
-                summaryLine = createRoomMessagesGroupSummaryLine(events, roomName, isDirect),
+                summaryLine = createRoomMessagesGroupSummaryLine(events, roomName, isDm),
                 messageCount = events.size,
                 latestTimestamp = events.maxOf { it.timestamp },
                 shouldBing = events.any { it.noisy }
@@ -167,9 +167,9 @@ class DefaultNotificationDataFactory @Inject constructor(
         }
     }
 
-    private fun createRoomMessagesGroupSummaryLine(events: List<NotifiableMessageEvent>, roomName: String, roomIsDirect: Boolean): CharSequence {
+    private fun createRoomMessagesGroupSummaryLine(events: List<NotifiableMessageEvent>, roomName: String, roomIsDm: Boolean): CharSequence {
         return when (events.size) {
-            1 -> createFirstMessageSummaryLine(events.first(), roomName, roomIsDirect)
+            1 -> createFirstMessageSummaryLine(events.first(), roomName, roomIsDm)
             else -> {
                 stringProvider.getQuantityString(
                     R.plurals.notification_compat_summary_line_for_room,
@@ -181,8 +181,8 @@ class DefaultNotificationDataFactory @Inject constructor(
         }
     }
 
-    private fun createFirstMessageSummaryLine(event: NotifiableMessageEvent, roomName: String, roomIsDirect: Boolean): CharSequence {
-        return if (roomIsDirect) {
+    private fun createFirstMessageSummaryLine(event: NotifiableMessageEvent, roomName: String, roomIsDm: Boolean): CharSequence {
+        return if (roomIsDm) {
             buildSpannedString {
                 event.senderDisambiguatedDisplayName?.let {
                     inSpans(StyleSpan(Typeface.BOLD)) {

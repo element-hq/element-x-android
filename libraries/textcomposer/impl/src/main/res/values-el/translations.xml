@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"Προσθήκη συνημμένου"</string>
+  <string name="rich_text_editor_bullet_list">"Διακόπτης λίστας κουκκίδων"</string>
+  <string name="rich_text_editor_close_formatting_options">"Κλείσε τις επιλογές μορφοποίησης"</string>
+  <string name="rich_text_editor_code_block">"Διακόπτης μπλοκ κώδικα"</string>
+  <string name="rich_text_editor_composer_placeholder">"Μήνυμα…"</string>
+  <string name="rich_text_editor_create_link">"Δημιούργησε έναν σύνδεσμο"</string>
+  <string name="rich_text_editor_edit_link">"Επεξεργασία συνδέσμου"</string>
+  <string name="rich_text_editor_format_bold">"Εφαρμογή έντονης μορφής"</string>
+  <string name="rich_text_editor_format_italic">"Εφαρμογή πλάγιας μορφής"</string>
+  <string name="rich_text_editor_format_strikethrough">"Εφαρμογή μορφής διαγραφής"</string>
+  <string name="rich_text_editor_format_underline">"Εφαρμογή μορφής υπογράμμισης"</string>
+  <string name="rich_text_editor_full_screen_toggle">"Εναλλαγή λειτουργίας πλήρους οθόνης"</string>
+  <string name="rich_text_editor_indent">"Εσοχή"</string>
+  <string name="rich_text_editor_inline_code">"Εφαρμογή ενσωματωμένης μορφής κώδικα"</string>
+  <string name="rich_text_editor_link">"Ορισμός συνδέσμου"</string>
+  <string name="rich_text_editor_numbered_list">"Διακόπτης αριθμημένης λίστας"</string>
+  <string name="rich_text_editor_open_compose_options">"Άνοιξε τις επιλογές σύνθεσης"</string>
+  <string name="rich_text_editor_quote">"Διακόπτης παράθεσης"</string>
+  <string name="rich_text_editor_remove_link">"Κατάργηση συνδέσμου"</string>
+  <string name="rich_text_editor_unindent">"Χωρίς εσοχή"</string>
+  <string name="rich_text_editor_url_placeholder">"Σύνδεσμος"</string>
+  <string name="screen_room_voice_message_tooltip">"Κράτα για εγγραφή"</string>
+</resources>

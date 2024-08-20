@@ -18,9 +18,9 @@ package io.element.android.features.call.utils
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.call.impl.utils.DefaultCallWidgetProvider
-import io.element.android.features.call.impl.utils.ElementCallBaseUrlProvider
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
-import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.call.ElementCallBaseUrlProvider
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -54,9 +54,9 @@ class DefaultCallWidgetProviderTest {
 
     @Test
     fun `getWidget - fails if it can't generate the URL for the widget`() = runTest {
-        val room = FakeMatrixRoom().apply {
-            givenGenerateWidgetWebViewUrlResult(Result.failure(Exception("Can't generate URL for widget")))
-        }
+        val room = FakeMatrixRoom(
+            generateWidgetWebViewUrlResult = { _, _, _, _ -> Result.failure(Exception("Can't generate URL for widget")) }
+        )
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
         }
@@ -66,10 +66,10 @@ class DefaultCallWidgetProviderTest {
 
     @Test
     fun `getWidget - fails if it can't get the widget driver`() = runTest {
-        val room = FakeMatrixRoom().apply {
-            givenGenerateWidgetWebViewUrlResult(Result.success("url"))
-            givenGetWidgetDriverResult(Result.failure(Exception("Can't get a widget driver")))
-        }
+        val room = FakeMatrixRoom(
+            generateWidgetWebViewUrlResult = { _, _, _, _ -> Result.success("url") },
+            getWidgetDriverResult = { Result.failure(Exception("Can't get a widget driver")) }
+        )
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
         }
@@ -79,10 +79,10 @@ class DefaultCallWidgetProviderTest {
 
     @Test
     fun `getWidget - returns a widget driver when all steps are successful`() = runTest {
-        val room = FakeMatrixRoom().apply {
-            givenGenerateWidgetWebViewUrlResult(Result.success("url"))
-            givenGetWidgetDriverResult(Result.success(FakeMatrixWidgetDriver()))
-        }
+        val room = FakeMatrixRoom(
+            generateWidgetWebViewUrlResult = { _, _, _, _ -> Result.success("url") },
+            getWidgetDriverResult = { Result.success(FakeMatrixWidgetDriver()) },
+        )
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
         }
@@ -92,10 +92,10 @@ class DefaultCallWidgetProviderTest {
 
     @Test
     fun `getWidget - will use a custom base url if it exists`() = runTest {
-        val room = FakeMatrixRoom().apply {
-            givenGenerateWidgetWebViewUrlResult(Result.success("url"))
-            givenGetWidgetDriverResult(Result.success(FakeMatrixWidgetDriver()))
-        }
+        val room = FakeMatrixRoom(
+            generateWidgetWebViewUrlResult = { _, _, _, _ -> Result.success("url") },
+            getWidgetDriverResult = { Result.success(FakeMatrixWidgetDriver()) },
+        )
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
         }
@@ -116,14 +116,14 @@ class DefaultCallWidgetProviderTest {
     @Test
     fun `getWidget - will use a wellknown base url if it exists`() = runTest {
         val aCustomUrl = "https://custom.element.io"
-        val providesLambda = lambdaRecorder<SessionId, String?> { _ -> aCustomUrl }
-        val elementCallBaseUrlProvider = FakeElementCallBaseUrlProvider { sessionId ->
-            providesLambda(sessionId)
+        val providesLambda = lambdaRecorder<MatrixClient, String?> { _ -> aCustomUrl }
+        val elementCallBaseUrlProvider = FakeElementCallBaseUrlProvider { matrixClient ->
+            providesLambda(matrixClient)
         }
-        val room = FakeMatrixRoom().apply {
-            givenGenerateWidgetWebViewUrlResult(Result.success("url"))
-            givenGetWidgetDriverResult(Result.success(FakeMatrixWidgetDriver()))
-        }
+        val room = FakeMatrixRoom(
+            generateWidgetWebViewUrlResult = { _, _, _, _ -> Result.success("url") },
+            getWidgetDriverResult = { Result.success(FakeMatrixWidgetDriver()) },
+        )
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
         }
@@ -137,7 +137,7 @@ class DefaultCallWidgetProviderTest {
         assertThat(settingsProvider.providedBaseUrls).containsExactly(aCustomUrl)
         providesLambda.assertions()
             .isCalledOnce()
-            .with(value(A_SESSION_ID))
+            .with(value(client))
     }
 
     private fun createProvider(

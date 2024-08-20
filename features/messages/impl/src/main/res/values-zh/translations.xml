@@ -10,7 +10,7 @@
   <string name="emoji_picker_category_symbols">"符号"</string>
   <string name="screen_report_content_block_user">"封禁用户"</string>
   <string name="screen_report_content_block_user_hint">"请确认是否要隐藏该用户当前和未来的所有信息"</string>
-  <string name="screen_report_content_explanation">"此消息将举报给您的主服务器管理员。他们无法读取任何加密消息。"</string>
+  <string name="screen_report_content_explanation">"此消息将举报给您的服务器管理员。他们无法读取任何加密消息。"</string>
   <string name="screen_report_content_hint">"举报此内容的原因"</string>
   <string name="screen_room_attachment_source_camera">"相机"</string>
   <string name="screen_room_attachment_source_camera_photo">"拍摄照片"</string>
@@ -26,7 +26,7 @@
   <string name="screen_room_invite_again_alert_title">"聊天中只有你一个人"</string>
   <string name="screen_room_mentions_at_room_subtitle">"通知整个房间"</string>
   <string name="screen_room_mentions_at_room_title">"所有人"</string>
-  <string name="screen_room_retry_send_menu_send_again_action">"重新发送"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"再次发送"</string>
   <string name="screen_room_retry_send_menu_title">"消息发送失败"</string>
   <string name="screen_room_timeline_add_reaction">"添加表情符号"</string>
   <string name="screen_room_timeline_beginning_of_room">"这是 %1$s 聊天室的开始。"</string>

@@ -24,7 +24,6 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
-import io.element.android.features.messages.impl.timeline.model.map
 import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -35,6 +34,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
+import io.element.android.libraries.matrix.ui.messages.reply.map
 import kotlinx.collections.immutable.toImmutableList
 import java.text.DateFormat
 import java.util.Date
@@ -76,6 +76,7 @@ class TimelineItemEventFactory @Inject constructor(
             content = contentFactory.create(currentTimelineItem.event),
             isMine = currentTimelineItem.event.isOwn,
             isEditable = currentTimelineItem.event.isEditable,
+            canBeRepliedTo = currentTimelineItem.event.canBeRepliedTo,
             sentTime = sentTime,
             groupPosition = groupPosition,
             reactionsState = currentTimelineItem.computeReactionsState(),
@@ -85,6 +86,7 @@ class TimelineItemEventFactory @Inject constructor(
             isThreaded = currentTimelineItem.event.isThreaded(),
             debugInfo = currentTimelineItem.event.debugInfo,
             origin = currentTimelineItem.event.origin,
+            messageShield = currentTimelineItem.event.messageShield,
         )
     }
 
@@ -117,6 +119,7 @@ class TimelineItemEventFactory @Inject constructor(
                             sentTime = timeFormatter.format(date),
                         )
                     }
+                    .toImmutableList()
             )
         }
         // Sort aggregated reactions by count and then timestamp ascending, using
@@ -127,7 +130,9 @@ class TimelineItemEventFactory @Inject constructor(
                 compareByDescending<AggregatedReaction> { it.count }
                     .thenBy { it.senders[0].timestamp }
             )
-        return TimelineItemReactions(aggregatedReactions.toImmutableList())
+        return TimelineItemReactions(
+            reactions = aggregatedReactions.toImmutableList()
+        )
     }
 
     private fun MatrixTimelineItem.Event.computeReadReceiptState(

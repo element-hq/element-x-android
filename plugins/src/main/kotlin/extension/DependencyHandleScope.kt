@@ -116,6 +116,7 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:mediaviewer:impl"))
     implementation(project(":libraries:troubleshoot:impl"))
     implementation(project(":libraries:fullscreenintent:impl"))
+    implementation(project(":libraries:oidc:impl"))
 }
 
 fun DependencyHandlerScope.allServicesImpl() {
@@ -128,6 +129,11 @@ fun DependencyHandlerScope.allServicesImpl() {
     implementation(project(":services:apperror:impl"))
     implementation(project(":services:appnavstate:impl"))
     implementation(project(":services:toolbox:impl"))
+}
+
+fun DependencyHandlerScope.allEnterpriseImpl(rootDir: File, logger: Logger) {
+    val enterpriseDir = File(rootDir, "enterprise")
+    addImplementationProjects(enterpriseDir, ":enterprise", "impl", logger)
 }
 
 fun DependencyHandlerScope.allFeaturesApi(rootDir: File, logger: Logger) {

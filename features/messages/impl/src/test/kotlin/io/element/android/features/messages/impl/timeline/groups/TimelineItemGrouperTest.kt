@@ -20,7 +20,6 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemDebugInfo
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
-import io.element.android.features.messages.impl.timeline.components.aProfileTimelineDetailsReady
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
@@ -30,6 +29,7 @@ import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.ui.messages.reply.aProfileTimelineDetailsReady
 import kotlinx.collections.immutable.toImmutableList
 import org.junit.Test
 
@@ -46,10 +46,12 @@ class TimelineItemGrouperTest {
         readReceiptState = TimelineItemReadReceipts(emptyList<ReadReceiptData>().toImmutableList()),
         localSendState = LocalEventSendState.Sent(AN_EVENT_ID),
         isEditable = false,
+        canBeRepliedTo = false,
         inReplyTo = null,
         isThreaded = false,
         debugInfo = aTimelineItemDebugInfo(),
-        origin = null
+        origin = null,
+        messageShield = null,
     )
     private val aNonGroupableItem = aMessageEvent()
     private val aNonGroupableItemNoEvent = TimelineItem.Virtual("virtual", aTimelineItemDaySeparatorModel("Today"))

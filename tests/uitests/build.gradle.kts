@@ -20,7 +20,6 @@ import extension.allServicesImpl
 
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.ksp)
     alias(libs.plugins.paparazzi)
 }
 
@@ -40,10 +39,6 @@ tasks.withType<Test> {
 }
 
 dependencies {
-    testImplementation(libs.test.junit)
-    testImplementation(libs.test.parameter.injector)
-    testImplementation(projects.libraries.designsystem)
-
     // Paparazzi 1.3.2 workaround (see https://github.com/cashapp/paparazzi/blob/master/CHANGELOG.md#132---2024-01-13)
     constraints.add("testImplementation", "com.google.guava:guava") {
         attributes {
@@ -58,9 +53,6 @@ dependencies {
         )
     }
 
-    ksp(libs.showkase.processor)
-    kspTest(libs.showkase.processor)
-
     implementation(libs.showkase)
 
     // TODO There is a Resources.NotFoundException maybe due to the mipmap, even if we have
@@ -70,4 +62,11 @@ dependencies {
     allLibrariesImpl()
     allServicesImpl()
     allFeaturesImpl(rootDir, logger)
+    implementation(projects.appicon.element)
+    implementation(projects.appicon.enterprise)
+
+    testImplementation(libs.test.junit)
+    testImplementation(libs.test.parameter.injector)
+    testImplementation(projects.libraries.designsystem)
+    testImplementation(libs.test.composable.preview.scanner)
 }

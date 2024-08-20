@@ -17,10 +17,7 @@
 package io.element.android.libraries.matrix.api.auth
 
 sealed class AuthenticationException(message: String) : Exception(message) {
-    class ClientMissing(message: String) : AuthenticationException(message)
     class InvalidServerName(message: String) : AuthenticationException(message)
     class SlidingSyncNotAvailable(message: String) : AuthenticationException(message)
-    class SessionMissing(message: String) : AuthenticationException(message)
     class Generic(message: String) : AuthenticationException(message)
-    data class OidcError(val type: String, override val message: String) : AuthenticationException(message)
 }

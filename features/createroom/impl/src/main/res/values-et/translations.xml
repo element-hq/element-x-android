@@ -2,8 +2,13 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_create_room_action_create_room">"Uus jututuba"</string>
   <string name="screen_create_room_add_people_title">"Kutsu osalejaid"</string>
+  <string name="screen_create_room_error_creating_room">"Jututoa loomisel tekkis viga"</string>
   <string name="screen_create_room_private_option_description">"Sõnumid siin jututoas on krüptitud ja seda ei saa hiljem välja lülitada."</string>
+  <string name="screen_create_room_private_option_title">"Privaatne jututuba (liitumine vaid kutsega)"</string>
   <string name="screen_create_room_public_option_description">"Sõnumid pole krüptitud ja neid saavad kõik lugeda. Soovi korral saad hiljem krüptimise sisse lülitada."</string>
+  <string name="screen_create_room_public_option_title">"Avalik jututuba (avatud kõigile)"</string>
   <string name="screen_create_room_room_name_label">"Jututoa nimi"</string>
   <string name="screen_create_room_title">"Loo jututuba"</string>
+  <string name="screen_create_room_topic_label">"Teema (kui soovid lisada)"</string>
+  <string name="screen_start_chat_error_starting_chat">"Vestluse alustamisel tekkis viga"</string>
 </resources>

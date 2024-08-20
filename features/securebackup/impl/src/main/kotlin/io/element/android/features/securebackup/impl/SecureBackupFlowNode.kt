@@ -34,6 +34,7 @@ import io.element.android.features.securebackup.impl.createkey.CreateNewRecovery
 import io.element.android.features.securebackup.impl.disable.SecureBackupDisableNode
 import io.element.android.features.securebackup.impl.enable.SecureBackupEnableNode
 import io.element.android.features.securebackup.impl.enter.SecureBackupEnterRecoveryKeyNode
+import io.element.android.features.securebackup.impl.reset.ResetIdentityFlowNode
 import io.element.android.features.securebackup.impl.root.SecureBackupRootNode
 import io.element.android.features.securebackup.impl.setup.SecureBackupSetupNode
 import io.element.android.libraries.architecture.BackstackView
@@ -48,10 +49,11 @@ class SecureBackupFlowNode @AssistedInject constructor(
     @Assisted plugins: List<Plugin>,
 ) : BaseFlowNode<SecureBackupFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = when (plugins.filterIsInstance(SecureBackupEntryPoint.Params::class.java).first().initialElement) {
+        initialElement = when (plugins.filterIsInstance<SecureBackupEntryPoint.Params>().first().initialElement) {
             SecureBackupEntryPoint.InitialTarget.Root -> NavTarget.Root
             SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey -> NavTarget.EnterRecoveryKey
             SecureBackupEntryPoint.InitialTarget.CreateNewRecoveryKey -> NavTarget.CreateNewRecoveryKey
+            is SecureBackupEntryPoint.InitialTarget.ResetIdentity -> NavTarget.ResetIdentity
         },
         savedStateMap = buildContext.savedStateMap,
     ),
@@ -79,9 +81,12 @@ class SecureBackupFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object CreateNewRecoveryKey : NavTarget
+
+        @Parcelize
+        data object ResetIdentity : NavTarget
     }
 
-    private val callback = plugins<SecureBackupEntryPoint.Callback>().firstOrNull()
+    private val callbacks = plugins<SecureBackupEntryPoint.Callback>()
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
@@ -130,8 +135,8 @@ class SecureBackupFlowNode @AssistedInject constructor(
             NavTarget.EnterRecoveryKey -> {
                 val callback = object : SecureBackupEnterRecoveryKeyNode.Callback {
                     override fun onEnterRecoveryKeySuccess() {
-                        if (callback != null) {
-                            callback.onDone()
+                        if (callbacks.isNotEmpty()) {
+                            callbacks.forEach { it.onDone() }
                         } else {
                             backstack.pop()
                         }
@@ -145,6 +150,14 @@ class SecureBackupFlowNode @AssistedInject constructor(
             }
             NavTarget.CreateNewRecoveryKey -> {
                 createNode<CreateNewRecoveryKeyNode>(buildContext)
+            }
+            is NavTarget.ResetIdentity -> {
+                val callback = object : ResetIdentityFlowNode.Callback {
+                    override fun onDone() {
+                        callbacks.forEach { it.onDone() }
+                    }
+                }
+                createNode<ResetIdentityFlowNode>(buildContext, listOf(callback))
             }
         }
     }

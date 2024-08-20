@@ -17,7 +17,6 @@
 plugins {
     id("io.element.android-compose-library")
     alias(libs.plugins.anvil)
-    alias(libs.plugins.ksp)
     id("kotlin-parcelize")
 }
 
@@ -33,5 +32,4 @@ dependencies {
     implementation(projects.anvilannotations)
     anvil(projects.anvilcodegen)
     implementation(projects.libraries.designsystem)
-    ksp(libs.showkase.processor)
 }

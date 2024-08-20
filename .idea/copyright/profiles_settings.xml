@@ -1,3 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="NewVector" />
+  <settings default="Element FOSS">
+    <module2copyright>
+      <element module="Enterprise" copyright="Element Enterprise" />
+    </module2copyright>
+  </settings>
 </component>

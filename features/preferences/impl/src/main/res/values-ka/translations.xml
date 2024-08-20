@@ -7,6 +7,7 @@
   <string name="screen_advanced_settings_element_call_base_url_description">"დააყენეთ საბაზისო URL Element-ის ზარებისათვის."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"არასწორი URL, გთხოვთ, დარწმუნდეთ, რომ შეიტანეთ პროტოკოლი (http/https) და სწორი მისამართი."</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"გამორთეთ მდიდარი ტექსტის რედაქტორი, რათა ხელით აკრიფოთ Markdown."</string>
+  <string name="screen_advanced_settings_view_source_description">"ჩართეთ ოპცია რათა შეტყობინების წყაროს დროის ისტორია ნახოთ."</string>
   <string name="screen_blocked_users_unblock_alert_action">"განბლოკვა"</string>
   <string name="screen_blocked_users_unblock_alert_description">"თქვენ კვლავ შეძლებთ მათგან ყველა შეტყობინების ნახვას."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Მომხმარებლის განბლოკვა"</string>
@@ -32,6 +33,8 @@
   <string name="screen_notification_settings_enable_notifications">"შეტყობინებების ჩართვა ამ მოწყობილობაზე"</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"კონფიგურაცია არ გამოსწორებულა, გთხოვთ, კვლავ სცადოთ."</string>
   <string name="screen_notification_settings_group_chats">"ჯგუფური ჩატები"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"მოსაწვევები"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"თქვენი სახლის სერვერი არ უჭერს მხარს ამ პარამეტრს დაშიფრულ ოთახებში, ზოგიერთ ოთახში შეიძლება არ მიიღოთ შეტყობინება."</string>
   <string name="screen_notification_settings_mentions_section_title">"ხსენებები"</string>
   <string name="screen_notification_settings_mode_all">"ყველა"</string>
   <string name="screen_notification_settings_mode_mentions">"ხსენებები"</string>

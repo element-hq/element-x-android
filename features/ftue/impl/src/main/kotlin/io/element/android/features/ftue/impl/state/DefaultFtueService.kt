@@ -24,6 +24,7 @@ import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.permissions.api.PermissionStateProvider
@@ -34,6 +35,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
@@ -47,7 +49,7 @@ import kotlin.time.Duration.Companion.seconds
 @ContributesBinding(SessionScope::class)
 class DefaultFtueService @Inject constructor(
     private val sdkVersionProvider: BuildVersionSdkIntProvider,
-    coroutineScope: CoroutineScope,
+    @SessionCoroutineScope sessionCoroutineScope: CoroutineScope,
     private val analyticsService: AnalyticsService,
     private val permissionStateProvider: PermissionStateProvider,
     private val lockScreenService: LockScreenService,
@@ -66,11 +68,12 @@ class DefaultFtueService @Inject constructor(
     init {
         sessionVerificationService.sessionVerifiedStatus
             .onEach { updateState() }
-            .launchIn(coroutineScope)
+            .launchIn(sessionCoroutineScope)
 
         analyticsService.didAskUserConsent()
+            .distinctUntilChanged()
             .onEach { updateState() }
-            .launchIn(coroutineScope)
+            .launchIn(sessionCoroutineScope)
     }
 
     suspend fun getNextStep(currentStep: FtueStep? = null): FtueStep? =
@@ -119,12 +122,14 @@ class DefaultFtueService @Inject constructor(
                 emit(SessionVerifiedStatus.NotVerified)
             }
             .first()
-        val skipVerification = suspend { sessionPreferencesStore.isSessionVerificationSkipped().first() }
-        return readyVerifiedSessionStatus == SessionVerifiedStatus.NotVerified && !skipVerification()
+        return readyVerifiedSessionStatus == SessionVerifiedStatus.NotVerified && !canSkipVerification()
+    }
+
+    private suspend fun canSkipVerification(): Boolean {
+        return sessionPreferencesStore.isSessionVerificationSkipped().first()
     }
 
     private suspend fun needsAnalyticsOptIn(): Boolean {
-        // We need this function to not be suspend, so we need to load the value through runBlocking
         return analyticsService.didAskUserConsent().first().not()
     }
 

@@ -95,8 +95,8 @@ internal fun RoomSummaryRow(
                 modifier = modifier
             ) {
                 InviteNameAndIndicatorRow(name = room.name)
-                InviteSubtitle(isDirect = room.isDirect, inviteSender = room.inviteSender, canonicalAlias = room.canonicalAlias)
-                if (!room.isDirect && room.inviteSender != null) {
+                InviteSubtitle(isDm = room.isDm, inviteSender = room.inviteSender, canonicalAlias = room.canonicalAlias)
+                if (!room.isDm && room.inviteSender != null) {
                     Spacer(modifier = Modifier.height(4.dp))
                     InviteSenderView(
                         modifier = Modifier.fillMaxWidth(),
@@ -206,12 +206,12 @@ private fun NameAndTimestampRow(
 
 @Composable
 private fun InviteSubtitle(
-    isDirect: Boolean,
+    isDm: Boolean,
     inviteSender: InviteSender?,
     canonicalAlias: RoomAlias?,
     modifier: Modifier = Modifier
 ) {
-    val subtitle = if (isDirect) {
+    val subtitle = if (isDm) {
         inviteSender?.userId?.value
     } else {
         canonicalAlias?.value
@@ -307,19 +307,19 @@ private fun InviteButtonsRow(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier.padding(),
+        modifier = modifier,
         horizontalArrangement = spacedBy(12.dp)
     ) {
         OutlinedButton(
             text = stringResource(CommonStrings.action_decline),
             onClick = onDeclineClick,
-            size = ButtonSize.Medium,
+            size = ButtonSize.MediumLowPadding,
             modifier = Modifier.weight(1f),
         )
         Button(
             text = stringResource(CommonStrings.action_accept),
             onClick = onAcceptClick,
-            size = ButtonSize.Medium,
+            size = ButtonSize.MediumLowPadding,
             modifier = Modifier.weight(1f),
         )
     }

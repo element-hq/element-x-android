@@ -16,43 +16,35 @@
 
 package io.element.android.libraries.textcomposer.model
 
-import android.os.Parcelable
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
-import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
-import kotlinx.parcelize.Parcelize
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
+import io.element.android.libraries.matrix.ui.messages.reply.eventId
 
 @Immutable
-sealed interface MessageComposerMode : Parcelable {
-    @Parcelize
+sealed interface MessageComposerMode {
     data object Normal : MessageComposerMode
 
-    sealed class Special(open val eventId: EventId?, open val defaultContent: String) :
-        MessageComposerMode
+    sealed interface Special : MessageComposerMode
 
-    @Parcelize
-    data class Edit(override val eventId: EventId?, override val defaultContent: String, val transactionId: TransactionId?) :
-        Special(eventId, defaultContent)
+    data class Edit(
+        val eventId: EventId?,
+        val transactionId: TransactionId?,
+        val content: String
+    ) : Special
 
-    @Parcelize
-    class Quote(override val eventId: EventId, override val defaultContent: String) :
-        Special(eventId, defaultContent)
-
-    @Parcelize
-    class Reply(
-        val senderName: String,
-        val attachmentThumbnailInfo: AttachmentThumbnailInfo?,
-        val isThreaded: Boolean,
-        override val eventId: EventId,
-        override val defaultContent: String
-    ) : Special(eventId, defaultContent)
+    data class Reply(
+        val replyToDetails: InReplyToDetails
+    ) : Special {
+        val eventId: EventId = replyToDetails.eventId()
+    }
 
     val relatedEventId: EventId?
         get() = when (this) {
             is Normal -> null
             is Edit -> eventId
-            is Quote -> eventId
             is Reply -> eventId
         }
 
@@ -63,5 +55,8 @@ sealed interface MessageComposerMode : Parcelable {
         get() = this is Reply
 
     val inThread: Boolean
-        get() = this is Reply && isThreaded
+        get() = this is Reply &&
+            replyToDetails is InReplyToDetails.Ready &&
+            replyToDetails.eventContent is MessageContent &&
+            (replyToDetails.eventContent as MessageContent).isThreaded
 }

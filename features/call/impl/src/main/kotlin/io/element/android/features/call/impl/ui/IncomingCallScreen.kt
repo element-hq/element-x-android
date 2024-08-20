@@ -64,67 +64,65 @@ internal fun IncomingCallScreen(
     onAnswer: (CallNotificationData) -> Unit,
     onCancel: () -> Unit,
 ) {
-    ElementTheme {
-        OnboardingBackground()
+    OnboardingBackground()
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Bottom
+    ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Bottom
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp, end = 20.dp, top = 124.dp)
+                .weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 20.dp, end = 20.dp, top = 124.dp)
-                    .weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Avatar(
-                    avatarData = AvatarData(
-                        id = notificationData.senderId.value,
-                        name = notificationData.senderName,
-                        url = notificationData.avatarUrl,
-                        size = AvatarSize.IncomingCall,
-                    )
+            Avatar(
+                avatarData = AvatarData(
+                    id = notificationData.senderId.value,
+                    name = notificationData.senderName,
+                    url = notificationData.avatarUrl,
+                    size = AvatarSize.IncomingCall,
                 )
-                Spacer(modifier = Modifier.height(24.dp))
-                Text(
-                    text = notificationData.senderName ?: notificationData.senderId.value,
-                    style = ElementTheme.typography.fontHeadingMdBold,
-                    textAlign = TextAlign.Center,
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = stringResource(R.string.screen_incoming_call_subtitle_android),
-                    style = ElementTheme.typography.fontBodyLgRegular,
-                    color = ElementTheme.colors.textSecondary,
-                    textAlign = TextAlign.Center,
-                )
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp, bottom = 64.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                ActionButton(
-                    size = 64.dp,
-                    onClick = { onAnswer(notificationData) },
-                    icon = CompoundIcons.VoiceCall(),
-                    title = stringResource(CommonStrings.action_accept),
-                    backgroundColor = ElementTheme.colors.iconSuccessPrimary,
-                    borderColor = ElementTheme.colors.borderSuccessSubtle
-                )
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                text = notificationData.senderName ?: notificationData.senderId.value,
+                style = ElementTheme.typography.fontHeadingMdBold,
+                textAlign = TextAlign.Center,
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = stringResource(R.string.screen_incoming_call_subtitle_android),
+                style = ElementTheme.typography.fontBodyLgRegular,
+                color = ElementTheme.colors.textSecondary,
+                textAlign = TextAlign.Center,
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 24.dp, end = 24.dp, bottom = 64.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            ActionButton(
+                size = 64.dp,
+                onClick = { onAnswer(notificationData) },
+                icon = CompoundIcons.VoiceCall(),
+                title = stringResource(CommonStrings.action_accept),
+                backgroundColor = ElementTheme.colors.iconSuccessPrimary,
+                borderColor = ElementTheme.colors.borderSuccessSubtle
+            )
 
-                ActionButton(
-                    size = 64.dp,
-                    onClick = onCancel,
-                    icon = CompoundIcons.EndCall(),
-                    title = stringResource(CommonStrings.action_reject),
-                    backgroundColor = ElementTheme.colors.iconCriticalPrimary,
-                    borderColor = ElementTheme.colors.borderCriticalSubtle
-                )
-            }
+            ActionButton(
+                size = 64.dp,
+                onClick = onCancel,
+                icon = CompoundIcons.EndCall(),
+                title = stringResource(CommonStrings.action_reject),
+                backgroundColor = ElementTheme.colors.iconCriticalPrimary,
+                borderColor = ElementTheme.colors.borderCriticalSubtle
+            )
         }
     }
 }
@@ -145,7 +143,8 @@ private fun ActionButton(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         FilledIconButton(
-            modifier = Modifier.size(size + borderSize)
+            modifier = Modifier
+                .size(size + borderSize)
                 .border(borderSize, borderColor, CircleShape),
             onClick = onClick,
             colors = IconButtonDefaults.filledIconButtonColors(
@@ -171,22 +170,20 @@ private fun ActionButton(
 
 @PreviewsDayNight
 @Composable
-internal fun IncomingCallScreenPreview() {
-    ElementPreview {
-        IncomingCallScreen(
-            notificationData = CallNotificationData(
-                sessionId = SessionId("@alice:matrix.org"),
-                roomId = RoomId("!1234:matrix.org"),
-                eventId = EventId("\$asdadadsad:matrix.org"),
-                senderId = UserId("@bob:matrix.org"),
-                roomName = "A room",
-                senderName = "Bob",
-                avatarUrl = null,
-                notificationChannelId = "incoming_call",
-                timestamp = 0L,
-            ),
-            onAnswer = {},
-            onCancel = {},
-        )
-    }
+internal fun IncomingCallScreenPreview() = ElementPreview {
+    IncomingCallScreen(
+        notificationData = CallNotificationData(
+            sessionId = SessionId("@alice:matrix.org"),
+            roomId = RoomId("!1234:matrix.org"),
+            eventId = EventId("\$asdadadsad:matrix.org"),
+            senderId = UserId("@bob:matrix.org"),
+            roomName = "A room",
+            senderName = "Bob",
+            avatarUrl = null,
+            notificationChannelId = "incoming_call",
+            timestamp = 0L,
+        ),
+        onAnswer = {},
+        onCancel = {},
+    )
 }

@@ -4,5 +4,11 @@
   <string name="screen_bug_report_contact_me">"如果有其他問題，你可以聯絡我。"</string>
   <string name="screen_bug_report_contact_me_title">"聯絡我"</string>
   <string name="screen_bug_report_edit_screenshot">"編輯螢幕截圖"</string>
+  <string name="screen_bug_report_editor_description">"請描述問題。你做了什麼？你預期的結果是什麼？實際上發生了什麼事情？請盡可能提供越多細節越好。"</string>
+  <string name="screen_bug_report_editor_placeholder">"描述問題…"</string>
+  <string name="screen_bug_report_editor_supporting">"如果方便的話，請使用英文。"</string>
+  <string name="screen_bug_report_error_description_too_short">"您的描述太短了，請提供更多細節。謝謝！"</string>
+  <string name="screen_bug_report_include_logs">"提供日誌"</string>
   <string name="screen_bug_report_include_screenshot">"傳送螢幕截圖"</string>
+  <string name="screen_bug_report_view_logs">"查看日誌"</string>
 </resources>

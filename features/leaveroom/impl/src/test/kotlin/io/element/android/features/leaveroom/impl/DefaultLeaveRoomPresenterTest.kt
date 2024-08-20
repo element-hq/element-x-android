@@ -119,7 +119,7 @@ class DefaultLeaveRoomPresenterTest {
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
-                    result = FakeMatrixRoom(activeMemberCount = 2, isDirect = true, isOneToOne = true),
+                    result = FakeMatrixRoom(activeMemberCount = 2, isDirect = true),
                 )
             }
         )
@@ -140,7 +140,9 @@ class DefaultLeaveRoomPresenterTest {
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
-                    result = FakeMatrixRoom(),
+                    result = FakeMatrixRoom(
+                        leaveRoomLambda = { Result.success(Unit) }
+                    ),
                 )
             },
             roomMembershipObserver = roomMembershipObserver
@@ -162,9 +164,9 @@ class DefaultLeaveRoomPresenterTest {
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
-                    result = FakeMatrixRoom().apply {
-                        this.leaveRoomLambda = { Result.failure(RuntimeException("Blimey!")) }
-                    },
+                    result = FakeMatrixRoom(
+                        leaveRoomLambda = { Result.failure(RuntimeException("Blimey!")) }
+                    ),
                 )
             }
         )
@@ -186,7 +188,9 @@ class DefaultLeaveRoomPresenterTest {
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
-                    result = FakeMatrixRoom(),
+                    result = FakeMatrixRoom(
+                        leaveRoomLambda = { Result.success(Unit) }
+                    ),
                 )
             }
         )
@@ -208,9 +212,9 @@ class DefaultLeaveRoomPresenterTest {
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
-                    result = FakeMatrixRoom().apply {
-                        this.leaveRoomLambda = { Result.failure(RuntimeException("Blimey!")) }
-                    },
+                    result = FakeMatrixRoom(
+                        leaveRoomLambda = { Result.failure(RuntimeException("Blimey!")) }
+                    ),
                 )
             }
         )

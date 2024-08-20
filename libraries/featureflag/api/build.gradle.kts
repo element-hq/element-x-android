@@ -23,5 +23,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.appconfig)
+    implementation(projects.libraries.core)
     implementation(libs.coroutines.core)
 }

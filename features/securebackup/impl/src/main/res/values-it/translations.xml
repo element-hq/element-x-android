@@ -16,6 +16,12 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Segui le istruzioni per creare una nuova chiave di recupero"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Salva la tua nuova chiave di recupero in un gestore di password o in una nota cifrata."</string>
   <string name="screen_create_new_recovery_key_title">"Reimposta la crittografia del tuo account utilizzando un altro dispositivo"</string>
+  <string name="screen_encryption_reset_bullet_1">"I dettagli del tuo account, i contatti, le preferenze e l\'elenco delle conversazioni verranno conservati"</string>
+  <string name="screen_encryption_reset_bullet_2">"Perderai la cronologia dei messaggi esistente"</string>
+  <string name="screen_encryption_reset_bullet_3">"Dovrai verificare nuovamente tutti i dispositivi e i contatti esistenti"</string>
+  <string name="screen_encryption_reset_footer">"Reimposta la tua identità solo se non hai accesso a un altro dispositivo su cui hai effettuato l\'accesso e hai perso la chiave di recupero."</string>
+  <string name="screen_encryption_reset_subtitle">"Se non hai effettuato l\'accesso su nessun altro dispositivo e hai perso la chiave di recupero, dovrai reimpostare la tua identità per continuare a utilizzare l\'app."</string>
+  <string name="screen_encryption_reset_title">"Reimposta la tua identità nel caso in cui non riesci a confermare in un altro modo"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Disattiva"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Perderai i tuoi messaggi cifrati se sei disconnesso da tutti i dispositivi."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Vuoi davvero disattivare il backup?"</string>
@@ -51,4 +57,10 @@
   <string name="screen_recovery_key_setup_generate_key_description">"Assicurati di conservare la chiave di recupero in un posto sicuro"</string>
   <string name="screen_recovery_key_setup_success">"Configurazione del recupero completata"</string>
   <string name="screen_recovery_key_setup_title">"Configura il recupero"</string>
+  <string name="screen_reset_encryption_confirmation_alert_action">"Sì, reimposta ora"</string>
+  <string name="screen_reset_encryption_confirmation_alert_subtitle">"Questo processo è irreversibile."</string>
+  <string name="screen_reset_encryption_confirmation_alert_title">"Sei sicuro di voler reimpostare la crittografia?"</string>
+  <string name="screen_reset_encryption_password_placeholder">"Inserisci…"</string>
+  <string name="screen_reset_encryption_password_subtitle">"Conferma di voler reimpostare la crittografia."</string>
+  <string name="screen_reset_encryption_password_title">"Inserisci la password del tuo account per continuare"</string>
 </resources>

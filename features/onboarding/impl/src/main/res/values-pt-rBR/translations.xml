@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_onboarding_sign_in_manually">"Iniciar sessão manualmente"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"Iniciar sessão com código QR"</string>
+  <string name="screen_onboarding_sign_up">"Criar conta"</string>
+  <string name="screen_onboarding_welcome_message">"Bem-vindo ao mais rápido %1$s de todos os tempos. Turbinado para velocidade e simplicidade."</string>
+  <string name="screen_onboarding_welcome_subtitle">"Bem-vindo ao %1$s. Turbinado, para velocidade e simplicidade"</string>
+  <string name="screen_onboarding_welcome_title">"Esteja no seu elemento"</string>
+</resources>

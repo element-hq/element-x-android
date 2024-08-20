@@ -26,12 +26,18 @@
     " в менеджере паролей или зашифрованной заметке"
   </string>
   <string name="screen_create_new_recovery_key_title">"Сбросьте шифрование вашей учетной записи с помощью другого устройства."</string>
+  <string name="screen_encryption_reset_bullet_1">"Данные вашей учетной записи, контакты, настройки и список чатов будут сохранены"</string>
+  <string name="screen_encryption_reset_bullet_2">"Вы потеряете существующую историю сообщений"</string>
+  <string name="screen_encryption_reset_bullet_3">"Вам нужно будет заново подтвердить все существующие устройства и контакты."</string>
+  <string name="screen_encryption_reset_footer">"Сбрасывайте данные только в том случае, если у вас нет доступа к другому устройству, на котором выполнен вход, и вы потеряли ключ восстановления."</string>
+  <string name="screen_encryption_reset_subtitle">"Если вы не вошли в систему на других устройствах и потеряли ключ восстановления, вам необходимо сбросить учетные данные, чтобы продолжить использование приложения. "</string>
+  <string name="screen_encryption_reset_title">"Сбросьте ключи подтверждения, если вы не можете подтвердить свою личность другим способом."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Выключить"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Вы потеряете зашифрованные сообщения, если выйдете из всех устройств."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Вы действительно хотите отключить резервное копирование?"</string>
   <string name="screen_key_backup_disable_description">"Отключение резервного копирования удалит текущую резервную копию ключа шифрования и отключит другие функции безопасности. В этом случае вы выполните следующие действия:"</string>
   <string name="screen_key_backup_disable_description_point_1">"Нет зашифрованной истории сообщений на новых устройствах"</string>
-  <string name="screen_key_backup_disable_description_point_2">"Потерять доступ к зашифрованным сообщениям, если вы вышли из %1$s любой точки мира"</string>
+  <string name="screen_key_backup_disable_description_point_2">"Вы потеряете доступ к зашифрованным сообщениям, если выйдете из %1$s везде"</string>
   <string name="screen_key_backup_disable_title">"Вы действительно хотите отключить резервное копирование?"</string>
   <string name="screen_recovery_key_change_description">"Получите новый ключ восстановления, если вы потеряли существующий. После смены ключа восстановления старый ключ больше не будет работать."</string>
   <string name="screen_recovery_key_change_generate_key">
@@ -94,4 +100,11 @@
   <string name="screen_recovery_key_setup_generate_key_description">"Убедитесь, что вы можете хранить ключ восстановления в безопасном месте"</string>
   <string name="screen_recovery_key_setup_success">"Настройка восстановления выполнена успешно"</string>
   <string name="screen_recovery_key_setup_title">"Настроить восстановление"</string>
+  <string name="screen_reset_encryption_confirmation_alert_action">"Да, сбросить сейчас"</string>
+  <string name="screen_reset_encryption_confirmation_alert_subtitle">"Этот процесс необратим."</string>
+  <string name="screen_reset_encryption_confirmation_alert_title">"Вы действительно хотите сбросить шифрование?"</string>
+  <string name="screen_reset_encryption_password_error">"Произошла неизвестная ошибка. Проверьте правильность пароля учетной записи и повторите попытку."</string>
+  <string name="screen_reset_encryption_password_placeholder">"Ввод…"</string>
+  <string name="screen_reset_encryption_password_subtitle">"Подтвердите, что вы хотите сбросить шифрование."</string>
+  <string name="screen_reset_encryption_password_title">"Введите пароль своей учетной записи, чтобы продолжить"</string>
 </resources>

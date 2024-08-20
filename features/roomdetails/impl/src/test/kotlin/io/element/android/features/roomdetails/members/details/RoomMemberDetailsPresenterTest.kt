@@ -34,6 +34,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -53,9 +54,11 @@ class RoomMemberDetailsPresenterTest {
     @Test
     fun `present - returns the room member's data, then updates it if needed`() = runTest {
         val roomMember = aRoomMember(displayName = "Alice")
-        val room = aMatrixRoom().apply {
-            givenUserDisplayNameResult(Result.success("A custom name"))
-            givenUserAvatarUrlResult(Result.success("A custom avatar"))
+        val room = aMatrixRoom(
+            userDisplayNameResult = { Result.success("A custom name") },
+            userAvatarUrlResult = { Result.success("A custom avatar") },
+            getUpdatedMemberResult = { Result.success(roomMember) },
+        ).apply {
             givenRoomMembersState(MatrixRoomMembersState.Ready(persistentListOf(roomMember)))
         }
         val presenter = createRoomMemberDetailsPresenter(
@@ -82,11 +85,14 @@ class RoomMemberDetailsPresenterTest {
     @Test
     fun `present - will recover when retrieving room member details fails`() = runTest {
         val roomMember = aRoomMember(displayName = "Alice")
-        val room = aMatrixRoom().apply {
-            givenUserDisplayNameResult(Result.failure(Throwable()))
-            givenUserAvatarUrlResult(Result.failure(Throwable()))
+        val room = aMatrixRoom(
+            userDisplayNameResult = { Result.failure(Throwable()) },
+            userAvatarUrlResult = { Result.failure(Throwable()) },
+            getUpdatedMemberResult = { Result.failure(AN_EXCEPTION) },
+        ).apply {
             givenRoomMembersState(MatrixRoomMembersState.Ready(persistentListOf(roomMember)))
         }
+
         val presenter = createRoomMemberDetailsPresenter(
             room = room,
             roomMemberId = roomMember.userId
@@ -105,9 +111,11 @@ class RoomMemberDetailsPresenterTest {
     @Test
     fun `present - will fallback to original data if the updated data is null`() = runTest {
         val roomMember = aRoomMember(displayName = "Alice")
-        val room = aMatrixRoom().apply {
-            givenUserDisplayNameResult(Result.success(null))
-            givenUserAvatarUrlResult(Result.success(null))
+        val room = aMatrixRoom(
+            userDisplayNameResult = { Result.success(null) },
+            userAvatarUrlResult = { Result.success(null) },
+            getUpdatedMemberResult = { Result.success(roomMember) }
+        ).apply {
             givenRoomMembersState(MatrixRoomMembersState.Ready(persistentListOf(roomMember)))
         }
         val presenter = createRoomMemberDetailsPresenter(
@@ -128,10 +136,11 @@ class RoomMemberDetailsPresenterTest {
     @Test
     fun `present - will fallback to user profile if user is not a member of the room`() = runTest {
         val bobProfile = aMatrixUser("@bob:server.org", "Bob", avatarUrl = "anAvatarUrl")
-        val room = aMatrixRoom().apply {
-            givenUserDisplayNameResult(Result.failure(Exception("Not a member!")))
-            givenUserAvatarUrlResult(Result.failure(Exception("Not a member!")))
-        }
+        val room = aMatrixRoom(
+            userDisplayNameResult = { Result.failure(Exception("Not a member!")) },
+            userAvatarUrlResult = { Result.failure(Exception("Not a member!")) },
+            getUpdatedMemberResult = { Result.failure(AN_EXCEPTION) },
+        )
         val client = FakeMatrixClient().apply {
             givenGetProfileResult(bobProfile.userId, Result.success(bobProfile))
         }
@@ -154,7 +163,13 @@ class RoomMemberDetailsPresenterTest {
 
     @Test
     fun `present - BlockUser needing confirmation displays confirmation dialog`() = runTest {
-        val presenter = createRoomMemberDetailsPresenter()
+        val presenter = createRoomMemberDetailsPresenter(
+            room = aMatrixRoom(
+                getUpdatedMemberResult = { Result.failure(AN_EXCEPTION) },
+                userDisplayNameResult = { Result.success("Alice") },
+                userAvatarUrlResult = { Result.success("anAvatarUrl") },
+            )
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -176,6 +191,11 @@ class RoomMemberDetailsPresenterTest {
         val client = FakeMatrixClient()
         val roomMember = aRoomMember()
         val presenter = createRoomMemberDetailsPresenter(
+            room = aMatrixRoom(
+                getUpdatedMemberResult = { Result.failure(AN_EXCEPTION) },
+                userDisplayNameResult = { Result.success("Alice") },
+                userAvatarUrlResult = { Result.success("anAvatarUrl") },
+            ),
             client = client,
             roomMemberId = roomMember.userId
         )
@@ -199,13 +219,21 @@ class RoomMemberDetailsPresenterTest {
     fun `present - BlockUser with error`() = runTest {
         val matrixClient = FakeMatrixClient()
         matrixClient.givenIgnoreUserResult(Result.failure(A_THROWABLE))
-        val presenter = createRoomMemberDetailsPresenter(client = matrixClient)
+        val presenter = createRoomMemberDetailsPresenter(
+            client = matrixClient,
+            room = aMatrixRoom(
+                getUpdatedMemberResult = { Result.success(aRoomMember(displayName = "Alice")) },
+                userDisplayNameResult = { Result.success("Alice") },
+                userAvatarUrlResult = { Result.success("anAvatarUrl") },
+            ),
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(UserProfileEvents.BlockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
+            skipItems(2)
             val errorState = awaitItem()
             assertThat(errorState.isBlocked.errorOrNull()).isEqualTo(A_THROWABLE)
             // Clear error
@@ -218,13 +246,21 @@ class RoomMemberDetailsPresenterTest {
     fun `present - UnblockUser with error`() = runTest {
         val matrixClient = FakeMatrixClient()
         matrixClient.givenUnignoreUserResult(Result.failure(A_THROWABLE))
-        val presenter = createRoomMemberDetailsPresenter(client = matrixClient)
+        val presenter = createRoomMemberDetailsPresenter(
+            room = aMatrixRoom(
+                getUpdatedMemberResult = { Result.success(aRoomMember(displayName = "Alice")) },
+                userDisplayNameResult = { Result.success("Alice") },
+                userAvatarUrlResult = { Result.success("anAvatarUrl") },
+            ),
+            client = matrixClient,
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(UserProfileEvents.UnblockUser(needsConfirmation = false))
             assertThat(awaitItem().isBlocked.isLoading()).isTrue()
+            skipItems(2)
             val errorState = awaitItem()
             assertThat(errorState.isBlocked.errorOrNull()).isEqualTo(A_THROWABLE)
             // Clear error
@@ -235,7 +271,13 @@ class RoomMemberDetailsPresenterTest {
 
     @Test
     fun `present - UnblockUser needing confirmation displays confirmation dialog`() = runTest {
-        val presenter = createRoomMemberDetailsPresenter()
+        val presenter = createRoomMemberDetailsPresenter(
+            room = aMatrixRoom(
+                getUpdatedMemberResult = { Result.failure(AN_EXCEPTION) },
+                userDisplayNameResult = { Result.success("Alice") },
+                userAvatarUrlResult = { Result.success("anAvatarUrl") },
+            ),
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -255,7 +297,14 @@ class RoomMemberDetailsPresenterTest {
     @Test
     fun `present - start DM action complete scenario`() = runTest {
         val startDMAction = FakeStartDMAction()
-        val presenter = createRoomMemberDetailsPresenter(startDMAction = startDMAction)
+        val presenter = createRoomMemberDetailsPresenter(
+            room = aMatrixRoom(
+                getUpdatedMemberResult = { Result.success(aRoomMember(displayName = "Alice")) },
+                userDisplayNameResult = { Result.success("Alice") },
+                userAvatarUrlResult = { Result.success("anAvatarUrl") },
+            ),
+            startDMAction = startDMAction,
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -268,6 +317,7 @@ class RoomMemberDetailsPresenterTest {
             startDMAction.givenExecuteResult(startDMFailureResult)
             initialState.eventSink(UserProfileEvents.StartDM)
             assertThat(awaitItem().startDmActionState).isInstanceOf(AsyncAction.Loading::class.java)
+            skipItems(2)
             awaitItem().also { state ->
                 assertThat(state.startDmActionState).isEqualTo(startDMFailureResult)
                 state.eventSink(UserProfileEvents.ClearStartDMState)
@@ -292,8 +342,8 @@ class RoomMemberDetailsPresenterTest {
     }
 
     private fun createRoomMemberDetailsPresenter(
+        room: MatrixRoom,
         client: MatrixClient = FakeMatrixClient(),
-        room: MatrixRoom = aMatrixRoom(),
         roomMemberId: UserId = UserId("@alice:server.org"),
         startDMAction: StartDMAction = FakeStartDMAction()
     ): RoomMemberDetailsPresenter {

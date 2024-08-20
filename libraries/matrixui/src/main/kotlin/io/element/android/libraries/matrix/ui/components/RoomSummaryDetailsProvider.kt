@@ -23,11 +23,11 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.message.RoomMessage
-import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
-open class RoomSummaryDetailsProvider : PreviewParameterProvider<RoomSummaryDetails> {
-    override val values: Sequence<RoomSummaryDetails>
+open class RoomSummaryDetailsProvider : PreviewParameterProvider<RoomSummary> {
+    override val values: Sequence<RoomSummary>
         get() = sequenceOf(
             aRoomSummaryDetails(),
             aRoomSummaryDetails(name = null),
@@ -38,6 +38,7 @@ fun aRoomSummaryDetails(
     roomId: RoomId = RoomId("!room:domain"),
     name: String? = "roomName",
     canonicalAlias: RoomAlias? = null,
+    alternativeAliases: List<RoomAlias> = emptyList(),
     isDirect: Boolean = true,
     avatarUrl: String? = null,
     lastMessage: RoomMessage? = null,
@@ -52,10 +53,11 @@ fun aRoomSummaryDetails(
     isFavorite: Boolean = false,
     currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,
     heroes: List<MatrixUser> = emptyList(),
-) = RoomSummaryDetails(
+) = RoomSummary(
     roomId = roomId,
     name = name,
     canonicalAlias = canonicalAlias,
+    alternativeAliases = alternativeAliases,
     isDirect = isDirect,
     avatarUrl = avatarUrl,
     lastMessage = lastMessage,

@@ -18,6 +18,7 @@ package extension
 
 import Versions
 import com.android.build.api.dsl.CommonExtension
+import isEnterpriseBuild
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
@@ -46,6 +47,11 @@ fun CommonExtension<*, *, *, *, *, *>.androidConfig(project: Project) {
 
     lint {
         lintConfig = File("${project.rootDir}/tools/lint/lint.xml")
+        if (isEnterpriseBuild) {
+            // Disable check on ObsoleteSdkInt for Enterprise builds
+            // since the min sdk is higher for Enterprise builds
+            disable.add("ObsoleteSdkInt")
+        }
         checkDependencies = false
         abortOnError = true
         ignoreTestFixturesSources = true

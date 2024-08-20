@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_a11y_add_attachment">"新增附件"</string>
   <string name="rich_text_editor_bullet_list">"切換項目編號"</string>
+  <string name="rich_text_editor_close_formatting_options">"關閉格式化選項"</string>
   <string name="rich_text_editor_code_block">"切換程式碼區塊"</string>
   <string name="rich_text_editor_composer_placeholder">"訊息"</string>
   <string name="rich_text_editor_create_link">"建立連結"</string>
@@ -12,6 +13,7 @@
   <string name="rich_text_editor_format_underline">"套用底線"</string>
   <string name="rich_text_editor_full_screen_toggle">"切換全螢幕模式"</string>
   <string name="rich_text_editor_indent">"增加縮排"</string>
+  <string name="rich_text_editor_inline_code">"套用行內程式碼"</string>
   <string name="rich_text_editor_link">"設定連結"</string>
   <string name="rich_text_editor_numbered_list">"切換數字編號"</string>
   <string name="rich_text_editor_quote">"切換引用"</string>

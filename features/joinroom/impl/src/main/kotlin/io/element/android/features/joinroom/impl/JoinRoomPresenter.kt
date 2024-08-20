@@ -45,6 +45,7 @@ import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomType
+import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
 import io.element.android.libraries.matrix.ui.model.toInviteSender
@@ -95,7 +96,7 @@ class JoinRoomPresenter @AssistedInject constructor(
                 }
                 else -> {
                     value = ContentState.Loading(roomIdOrAlias)
-                    val result = matrixClient.getRoomPreviewFromRoomId(roomId, serverNames)
+                    val result = matrixClient.getRoomPreview(roomIdOrAlias, serverNames)
                     value = result.fold(
                         onSuccess = { roomPreview ->
                             roomPreview.toContentState()
@@ -152,7 +153,7 @@ class JoinRoomPresenter @AssistedInject constructor(
     private fun CoroutineScope.joinRoom(joinAction: MutableState<AsyncAction<Unit>>) = launch {
         joinAction.runUpdatingState {
             joinRoom.invoke(
-                roomId = roomId,
+                roomIdOrAlias = roomIdOrAlias,
                 serverNames = serverNames,
                 trigger = trigger
             )
@@ -173,7 +174,7 @@ private fun RoomPreview.toContentState(): ContentState {
         topic = topic,
         alias = canonicalAlias,
         numberOfMembers = numberOfJoinedMembers,
-        isDirect = false,
+        isDm = false,
         roomType = roomType,
         roomAvatarUrl = avatarUrl,
         joinAuthorisationStatus = when {
@@ -194,7 +195,7 @@ internal fun RoomDescription.toContentState(): ContentState {
         topic = topic,
         alias = alias,
         numberOfMembers = numberOfMembers,
-        isDirect = false,
+        isDm = false,
         roomType = RoomType.Room,
         roomAvatarUrl = avatarUrl,
         joinAuthorisationStatus = when (joinRule) {
@@ -213,7 +214,7 @@ internal fun MatrixRoomInfo.toContentState(): ContentState {
         topic = topic,
         alias = canonicalAlias,
         numberOfMembers = activeMembersCount,
-        isDirect = isDirect,
+        isDm = isDm,
         roomType = if (isSpace) RoomType.Space else RoomType.Room,
         roomAvatarUrl = avatarUrl,
         joinAuthorisationStatus = when {
@@ -233,7 +234,7 @@ internal fun ContentState.toInviteData(): InviteData? {
             roomId = roomId,
             // Note: name should not be null at this point, but use Id just in case...
             roomName = name ?: roomId.value,
-            isDirect = isDirect
+            isDm = isDm
         )
         else -> null
     }

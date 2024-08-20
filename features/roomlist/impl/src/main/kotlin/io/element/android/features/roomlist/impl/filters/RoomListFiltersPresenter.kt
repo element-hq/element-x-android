@@ -17,13 +17,13 @@
 package io.element.android.features.roomlist.impl.filters
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import io.element.android.features.roomlist.impl.filters.selection.FilterSelectionStrategy
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter as MatrixRoomListFilter
 
@@ -31,10 +31,10 @@ class RoomListFiltersPresenter @Inject constructor(
     private val roomListService: RoomListService,
     private val filterSelectionStrategy: FilterSelectionStrategy,
 ) : Presenter<RoomListFiltersState> {
+    private val initialFilters = filterSelectionStrategy.filterSelectionStates.value.toPersistentList()
+
     @Composable
     override fun present(): RoomListFiltersState {
-        val filters by filterSelectionStrategy.filterSelectionStates.collectAsState()
-
         fun handleEvents(event: RoomListFiltersEvents) {
             when (event) {
                 RoomListFiltersEvents.ClearSelectedFilters -> {
@@ -46,12 +46,15 @@ class RoomListFiltersPresenter @Inject constructor(
             }
         }
 
-        LaunchedEffect(filters) {
-            val allRoomsFilter = MatrixRoomListFilter.All(
-                filters
-                    .filter { it.isSelected }
-                    .map { roomListFilter ->
-                        when (roomListFilter.filter) {
+        val filters by produceState(initialValue = initialFilters) {
+            filterSelectionStrategy.filterSelectionStates
+                .map { filters ->
+                    value = filters.toPersistentList()
+                    filters.mapNotNull { filterState ->
+                        if (!filterState.isSelected) {
+                            return@mapNotNull null
+                        }
+                        when (filterState.filter) {
                             RoomListFilter.Rooms -> MatrixRoomListFilter.Category.Group
                             RoomListFilter.People -> MatrixRoomListFilter.Category.People
                             RoomListFilter.Unread -> MatrixRoomListFilter.Unread
@@ -59,12 +62,15 @@ class RoomListFiltersPresenter @Inject constructor(
                             RoomListFilter.Invites -> MatrixRoomListFilter.Invite
                         }
                     }
-            )
-            roomListService.allRooms.updateFilter(allRoomsFilter)
+                }
+                .collect { filters ->
+                    val result = MatrixRoomListFilter.All(filters)
+                    roomListService.allRooms.updateFilter(result)
+                }
         }
 
         return RoomListFiltersState(
-            filterSelectionStates = filters.toPersistentList(),
+            filterSelectionStates = filters,
             eventSink = ::handleEvents
         )
     }

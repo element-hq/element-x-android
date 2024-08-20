@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Nowy pokój"</string>
+  <string name="screen_create_room_add_people_title">"Zaproś znajomych"</string>
+  <string name="screen_create_room_error_creating_room">"Wystąpił błąd w trakcie tworzenia pokoju"</string>
+  <string name="screen_create_room_private_option_description">"Wiadomości w tym pokoju są szyfrowane. Szyfrowania nie można później wyłączyć."</string>
+  <string name="screen_create_room_private_option_title">"Pokój prywatny (tylko zaproszenie)"</string>
+  <string name="screen_create_room_public_option_description">"Wiadomości nie są szyfrowane i każdy może je odczytać. Możesz aktywować szyfrowanie później."</string>
+  <string name="screen_create_room_public_option_title">"Pokój publiczny (wszyscy)"</string>
+  <string name="screen_create_room_room_name_label">"Nazwa pokoju"</string>
+  <string name="screen_create_room_title">"Utwórz pokój"</string>
+  <string name="screen_create_room_topic_label">"Temat (opcjonalnie)"</string>
+  <string name="screen_start_chat_error_starting_chat">"Wystąpił błąd podczas próby rozpoczęcia czatu"</string>
+</resources>

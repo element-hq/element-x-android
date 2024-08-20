@@ -82,6 +82,7 @@
   <string name="action_ok">"Добра"</string>
   <string name="action_open_settings">"Налады"</string>
   <string name="action_open_with">"Адкрыць з дапамогай"</string>
+  <string name="action_pin">"Замацаваць"</string>
   <string name="action_quick_reply">"Хуткі адказ"</string>
   <string name="action_quote">"Цытата"</string>
   <string name="action_react">"Рэакцыя"</string>
@@ -92,6 +93,7 @@
   <string name="action_report_bug">"Паведаміць пра памылку"</string>
   <string name="action_report_content">"Паскардзіцца на змест"</string>
   <string name="action_reset">"Скінуць"</string>
+  <string name="action_reset_identity">"Скінуць ідэнтыфікацыйныя дадзеныя"</string>
   <string name="action_retry">"Паўтарыць"</string>
   <string name="action_retry_decryption">"Паўтарыць расшыфроўку"</string>
   <string name="action_save">"Захаваць"</string>
@@ -111,6 +113,7 @@
   <string name="action_take_photo">"Зрабіць фота"</string>
   <string name="action_tap_for_options">"Дакраніцеся, каб убачыць параметры"</string>
   <string name="action_try_again">"Паўтарыць спробу"</string>
+  <string name="action_unpin">"Адмацаваць"</string>
   <string name="action_view_source">"Прагляд зыходнага кода"</string>
   <string name="action_yes">"Так"</string>
   <string name="common_about">"Аб праграме"</string>
@@ -171,6 +174,7 @@
   <string name="common_no_results">"Вынікаў няма"</string>
   <string name="common_no_room_name">"Няма назвы пакоя"</string>
   <string name="common_offline">"Па-за сеткай"</string>
+  <string name="common_open_source_licenses">"Ліцэнзіі з адкрытым зыходным кодам"</string>
   <string name="common_or">"або"</string>
   <string name="common_password">"Пароль"</string>
   <string name="common_people">"Людзі"</string>
@@ -221,7 +225,7 @@
   <string name="common_success">"Поспех"</string>
   <string name="common_suggestions">"Прапановы"</string>
   <string name="common_syncing">"Сінхранізацыя"</string>
-  <string name="common_system">"Сістэма"</string>
+  <string name="common_system">"Сістэмная"</string>
   <string name="common_text">"Тэкст"</string>
   <string name="common_third_party_notices">"Паведамленні трэціх асоб"</string>
   <string name="common_thread">"Гутарка"</string>
@@ -258,7 +262,12 @@
   <string name="error_missing_location_rationale_android">"У %1$s няма дазволу на доступ да вашага месцазнаходжання. Дазвольце доступ ніжэй."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s не мае дазволу на доступ да вашага мікрафона. Дазвольце доступ да запісу галасавога паведамлення."</string>
   <string name="error_some_messages_have_not_been_sent">"Некаторыя паведамленні не былі адпраўлены"</string>
-  <string name="error_unknown">"На жаль, адбылася памылка"</string>
+  <string name="error_unknown">"Выбачце, адбылася памылка"</string>
+  <string name="event_shield_reason_authenticity_not_guaranteed">"Сапраўднасць гэтага зашыфраванага паведамлення не можа быць гарантаваная на гэтай прыладзе."</string>
+  <string name="event_shield_reason_sent_in_clear">"Не зашыфраваны."</string>
+  <string name="event_shield_reason_unknown_device">"Зашыфравана невядомай ці выдаленай прыладай."</string>
+  <string name="event_shield_reason_unsigned_device">"Зашыфравана прыладай, не пацверджанай яе ўладальнікам."</string>
+  <string name="event_shield_reason_unverified_identity">"Зашыфравана неправераным карыстальнікам."</string>
   <string name="invite_friends_rich_title">"🔐️ Далучайцеся да мяне %1$s"</string>
   <string name="invite_friends_text">"Гэй, пагавары са мной у %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
@@ -266,6 +275,15 @@
   <string name="screen_media_picker_error_failed_selection">"Не ўдалося выбраць носьбіт, паўтарыце спробу."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не атрымалася загрузіць медыяфайлы, паспрабуйце яшчэ раз."</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Націсніце на паведамленне і абярыце «%1$s », каб уключыць сюды."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Замацуеце важныя паведамленні, каб іх можна было лёгка знайсці"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d Замацаванае паведамленне"</item>
+    <item quantity="few">"%1$d Замацаваныя паведамленні"</item>
+    <item quantity="many">"%1$d Замацаваных паведамленняў"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Замацаваныя паведамленні"</string>
+  <string name="screen_room_details_pinned_events_row_title">"Замацаваныя паведамленні"</string>
   <string name="screen_room_error_failed_processing_media">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не ўдалося атрымаць інфармацыю пра карыстальніка"</string>
   <string name="screen_room_member_details_block_alert_action">"Заблакіраваць"</string>
@@ -275,6 +293,10 @@
   <string name="screen_room_member_details_unblock_alert_action">"Разблакіраваць"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Вы зноў зможаце ўбачыць усе паведамленні."</string>
   <string name="screen_room_member_details_unblock_user">"Разблакіраваць карыстальніка"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s з %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Замацаваныя паведамленні"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Загрузка паведамлення…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Паглядзець усе"</string>
   <string name="screen_room_title">"Чат"</string>
   <string name="screen_share_location_title">"Падзяліцца месцазнаходжаннем"</string>
   <string name="screen_share_my_location_action">"Падзяліцца маім месцазнаходжаннем"</string>

@@ -72,6 +72,7 @@ class KonsistPreviewTest {
                 "AsyncIndicatorLoadingPreview",
                 "BloomInitialsPreview",
                 "BloomPreview",
+                "CallScreenPipViewPreview",
                 "ColorAliasesPreview",
                 "DefaultRoomListTopBarWithIndicatorPreview",
                 "GradientFloatingActionButtonCircleShapePreview",
@@ -119,6 +120,7 @@ class KonsistPreviewTest {
                 "TextComposerVoicePreview",
                 "TimelineImageWithCaptionRowPreview",
                 "TimelineItemEventRowForDirectRoomPreview",
+                "TimelineItemEventRowShieldPreview",
                 "TimelineItemEventRowTimestampPreview",
                 "TimelineItemEventRowWithManyReactionsPreview",
                 "TimelineItemEventRowWithRRPreview",
@@ -127,6 +129,7 @@ class KonsistPreviewTest {
                 "TimelineItemGroupedEventsRowContentExpandedPreview",
                 "TimelineItemVoiceViewUnifiedPreview",
                 "TimelineVideoWithCaptionRowPreview",
+                "TimelineViewMessageShieldPreview",
                 "UserAvatarColorsPreview",
             )
             .assertTrue(

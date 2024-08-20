@@ -9,7 +9,7 @@ jobs:
   sync-localazy:
     runs-on: ubuntu-latest
     # Skip in forks
-    if: github.repository == 'element-hq/element-x-android'
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
     steps:
       - uses: actions/checkout@v4
       - name: Use JDK 17
@@ -18,7 +18,7 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
       - name: Configure gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Set up Python 3.12
@@ -45,3 +45,4 @@ jobs:
             - Update Strings from Localazy
           branch: sync-localazy
           base: develop
+          labels: PR-i18n

@@ -9,6 +9,19 @@
   <string name="screen_chat_backup_recovery_action_confirm_description">"Ваша резервна копія чату наразі не синхронізована."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Налаштувати відновлення"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Отримайте доступ до своїх зашифрованих повідомлень, якщо ви втратите всі свої пристрої або вийшли з %1$s системи."</string>
+  <string name="screen_create_new_recovery_key_list_item_1">"Відкрийте %1$s на комп\'ютері"</string>
+  <string name="screen_create_new_recovery_key_list_item_2">"Увійдіть до вашого облікового запису знову"</string>
+  <string name="screen_create_new_recovery_key_list_item_3">"Коли вас попросять підтвердити пристрій, виберіть %1$s"</string>
+  <string name="screen_create_new_recovery_key_list_item_3_reset_all">"“Скинути все”"</string>
+  <string name="screen_create_new_recovery_key_list_item_4">"Дотримуйтесь інструкцій, щоб створити новий ключ відновлення"</string>
+  <string name="screen_create_new_recovery_key_list_item_5">"Збережіть новий ключ відновлення у менеджері паролів або зашифрованій нотатці"</string>
+  <string name="screen_create_new_recovery_key_title">"Скинути шифрування облікового запису за допомогою іншого пристрою"</string>
+  <string name="screen_encryption_reset_bullet_1">"Дані вашого облікового запису, контакти, налаштування й чати будуть збережені"</string>
+  <string name="screen_encryption_reset_bullet_2">"Ви втратите свою наявну історію повідомлень"</string>
+  <string name="screen_encryption_reset_bullet_3">"Вам доведеться підтвердити всі наявні пристрої та контакти знову"</string>
+  <string name="screen_encryption_reset_footer">"Скидайте ідентичність тільки якщо ви не маєте доступу до інших пристроїв в обліковому записі та втратили свій ключ відновлення."</string>
+  <string name="screen_encryption_reset_subtitle">"Якщо ви не увійшли на інших пристроях та втратили свій ключ відновлення, то вам доведеться скинути свою ідентичність, щоб продовжити використовувати застосунок. "</string>
+  <string name="screen_encryption_reset_title">"Скиньте свою ідентичність, якщо не можете підтвердити іншим способом"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Вимкнути"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Ви втратите зашифровані повідомлення, якщо вийдете з усіх пристроїв."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Ви впевнені, що хочете вимкнути резервне копіювання?"</string>
@@ -21,11 +34,14 @@
   <string name="screen_recovery_key_change_generate_key_description">"Переконайтеся, що ви можете зберігати ключ відновлення в безпечному місці"</string>
   <string name="screen_recovery_key_change_success">"Ключ відновлення змінено"</string>
   <string name="screen_recovery_key_change_title">"Змінити ключ відновлення?"</string>
-  <string name="screen_recovery_key_confirm_description">"Введіть ключ відновлення, щоб підтвердити доступ до резервної копії чату."</string>
+  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Створити новий ключ відновлення"</string>
+  <string name="screen_recovery_key_confirm_description">"Впевніться, що ніхто не дивиться!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Будь ласка, спробуйте ще раз, щоб підтвердити доступ до резервної копії чату."</string>
   <string name="screen_recovery_key_confirm_error_title">"Неправильний ключ відновлення"</string>
-  <string name="screen_recovery_key_confirm_key_description">"Введіть код із 48 символів."</string>
+  <string name="screen_recovery_key_confirm_key_description">"Якщо у вас є ключ безпеки або фраза безпеки, це теж спрацює."</string>
+  <string name="screen_recovery_key_confirm_key_label">"Ключ відновлення або код допуску"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Ввести…"</string>
+  <string name="screen_recovery_key_confirm_lost_recovery_key">"Загубили ключ відновлення?"</string>
   <string name="screen_recovery_key_confirm_success">"Ключ відновлення підтверджено"</string>
   <string name="screen_recovery_key_confirm_title">"Підтвердіть ключ відновлення"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Скопійовано ключ відновлення"</string>
@@ -41,4 +57,10 @@
   <string name="screen_recovery_key_setup_generate_key_description">"Переконайтеся, що ви можете зберігати ключ відновлення в безпечному місці"</string>
   <string name="screen_recovery_key_setup_success">"Налаштування відновлення виконано успішно"</string>
   <string name="screen_recovery_key_setup_title">"Налаштувати відновлення"</string>
+  <string name="screen_reset_encryption_confirmation_alert_action">"Так, скинути зараз"</string>
+  <string name="screen_reset_encryption_confirmation_alert_subtitle">"Цей процес незворотний."</string>
+  <string name="screen_reset_encryption_confirmation_alert_title">"Ви впевнені, що хочете скинути шифрування?"</string>
+  <string name="screen_reset_encryption_password_placeholder">"Ввести…"</string>
+  <string name="screen_reset_encryption_password_subtitle">"Підтвердьте, що ви хочете скинути шифрування."</string>
+  <string name="screen_reset_encryption_password_title">"Введіть пароль облікового запису, щоб продовжити"</string>
 </resources>

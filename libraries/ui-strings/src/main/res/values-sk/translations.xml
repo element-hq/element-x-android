@@ -82,6 +82,7 @@
   <string name="action_ok">"OK"</string>
   <string name="action_open_settings">"Otvoriť nastavenia"</string>
   <string name="action_open_with">"Otvoriť pomocou"</string>
+  <string name="action_pin">"Pripnúť"</string>
   <string name="action_quick_reply">"Rýchla odpoveď"</string>
   <string name="action_quote">"Citovať"</string>
   <string name="action_react">"Reagovať"</string>
@@ -92,6 +93,7 @@
   <string name="action_report_bug">"Nahlásiť chybu"</string>
   <string name="action_report_content">"Nahlásiť obsah"</string>
   <string name="action_reset">"Obnoviť"</string>
+  <string name="action_reset_identity">"Obnoviť identitu"</string>
   <string name="action_retry">"Skúsiť znova"</string>
   <string name="action_retry_decryption">"Opakovať dešifrovanie"</string>
   <string name="action_save">"Uložiť"</string>
@@ -111,6 +113,7 @@
   <string name="action_take_photo">"Urobiť fotku"</string>
   <string name="action_tap_for_options">"Klepnutím získate možnosti"</string>
   <string name="action_try_again">"Skúste to znova"</string>
+  <string name="action_unpin">"Odopnúť"</string>
   <string name="action_view_source">"Zobraziť zdroj"</string>
   <string name="action_yes">"Áno"</string>
   <string name="common_about">"O aplikácii"</string>
@@ -171,6 +174,7 @@ Dôvod: %1$s."</string>
   <string name="common_no_results">"Žiadne výsledky"</string>
   <string name="common_no_room_name">"Žiadny názov miestnosti"</string>
   <string name="common_offline">"Offline"</string>
+  <string name="common_open_source_licenses">"Licencie s otvoreným zdrojom"</string>
   <string name="common_or">"alebo"</string>
   <string name="common_password">"Heslo"</string>
   <string name="common_people">"Ľudia"</string>
@@ -259,6 +263,11 @@ Dôvod: %1$s."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s nemá povolenie na prístup k vášmu mikrofónu. Povoľte prístup na nahrávanie hlasovej správy."</string>
   <string name="error_some_messages_have_not_been_sent">"Niektoré správy neboli odoslané"</string>
   <string name="error_unknown">"Prepáčte, vyskytla sa chyba"</string>
+  <string name="event_shield_reason_authenticity_not_guaranteed">"Pravosť tejto šifrovanej správy nie je možné zaručiť na tomto zariadení."</string>
+  <string name="event_shield_reason_sent_in_clear">"Nie je šifrované."</string>
+  <string name="event_shield_reason_unknown_device">"Zašifrované neznámym alebo odstráneným zariadením."</string>
+  <string name="event_shield_reason_unsigned_device">"Šifrované zariadením, ktoré nie je overené jeho majiteľom."</string>
+  <string name="event_shield_reason_unverified_identity">"Šifrované neovereným používateľom."</string>
   <string name="invite_friends_rich_title">"🔐️ Pripojte sa ku mne na %1$s"</string>
   <string name="invite_friends_text">"Ahoj, porozprávajte sa so mnou na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
@@ -266,6 +275,15 @@ Dôvod: %1$s."</string>
   <string name="screen_media_picker_error_failed_selection">"Nepodarilo sa vybrať médium, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nepodarilo sa nahrať médiá, skúste to prosím znova."</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Stlačte správu a vyberte možnosť „%1$s“, ktorú chcete zahrnúť sem."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Pripnite dôležité správy, aby sa dali ľahko nájsť"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d pripnutá správa"</item>
+    <item quantity="few">"%1$d pripnuté správy"</item>
+    <item quantity="other">"%1$d pripnutých správ"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Pripnuté správy"</string>
+  <string name="screen_room_details_pinned_events_row_title">"Pripnuté správy"</string>
   <string name="screen_room_error_failed_processing_media">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepodarilo sa získať údaje o používateľovi"</string>
   <string name="screen_room_member_details_block_alert_action">"Zablokovať"</string>
@@ -275,6 +293,10 @@ Dôvod: %1$s."</string>
   <string name="screen_room_member_details_unblock_alert_action">"Odblokovať"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Všetky správy od nich budete môcť opäť vidieť."</string>
   <string name="screen_room_member_details_unblock_user">"Odblokovať používateľa"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s z %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Pripnutých správ"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Načítava sa správa…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Zobraziť všetko"</string>
   <string name="screen_room_title">"Konverzácia"</string>
   <string name="screen_share_location_title">"Zdieľať polohu"</string>
   <string name="screen_share_my_location_action">"Zdieľať moju polohu"</string>

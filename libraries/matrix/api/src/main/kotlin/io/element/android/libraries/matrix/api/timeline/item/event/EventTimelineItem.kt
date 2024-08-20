@@ -26,6 +26,7 @@ data class EventTimelineItem(
     val eventId: EventId?,
     val transactionId: TransactionId?,
     val isEditable: Boolean,
+    val canBeRepliedTo: Boolean,
     val isLocal: Boolean,
     val isOwn: Boolean,
     val isRemote: Boolean,
@@ -38,6 +39,7 @@ data class EventTimelineItem(
     val content: EventContent,
     val debugInfo: TimelineItemDebugInfo,
     val origin: TimelineItemEventOrigin?,
+    val messageShield: MessageShield?,
 ) {
     fun inReplyTo(): InReplyTo? {
         return (content as? MessageContent)?.inReplyTo

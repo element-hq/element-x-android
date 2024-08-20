@@ -22,7 +22,6 @@ import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
 import io.element.android.libraries.matrix.api.roomlist.loadAllIncrementally
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
@@ -48,11 +47,9 @@ class RoomSelectSearchDataSource @Inject constructor(
         source = RoomList.Source.All,
     )
 
-    val roomSummaries: Flow<PersistentList<RoomSummaryDetails>> = roomList.filteredSummaries
+    val roomSummaries: Flow<PersistentList<RoomSummary>> = roomList.filteredSummaries
         .map { roomSummaries ->
             roomSummaries
-                .filterIsInstance<RoomSummary.Filled>()
-                .map { it.details }
                 .filter { it.currentUserMembership == CurrentUserMembership.JOINED }
                 .distinctBy { it.roomId } // This should be removed once we're sure no duplicate Rooms can be received
                 .toPersistentList()

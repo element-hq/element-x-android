@@ -25,18 +25,15 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -53,9 +50,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -64,8 +58,6 @@ import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstraintLayout
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.messages.impl.sender.SenderName
-import io.element.android.features.messages.impl.sender.SenderNameMode
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
@@ -74,8 +66,6 @@ import io.element.android.features.messages.impl.timeline.components.layout.Cont
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
 import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
-import io.element.android.features.messages.impl.timeline.model.InReplyToDetails
-import io.element.android.features.messages.impl.timeline.model.InReplyToMetadata
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
@@ -87,15 +77,10 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
-import io.element.android.features.messages.impl.timeline.model.event.canBeRepliedTo
-import io.element.android.features.messages.impl.timeline.model.eventId
-import io.element.android.features.messages.impl.timeline.model.metadata
-import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.swipe.SwipeableActionsState
@@ -105,9 +90,13 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
-import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
-import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToView
+import io.element.android.libraries.matrix.ui.messages.reply.eventId
+import io.element.android.libraries.matrix.ui.messages.sender.SenderName
+import io.element.android.libraries.matrix.ui.messages.sender.SenderNameMode
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
@@ -130,6 +119,7 @@ fun TimelineItemEventRow(
     isHighlighted: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
+    onShieldClick: (MessageShield) -> Unit,
     onLinkClick: (String) -> Unit,
     onUserDataClick: (UserId) -> Unit,
     inReplyToClick: (EventId) -> Unit,
@@ -159,7 +149,7 @@ fun TimelineItemEventRow(
         } else {
             Spacer(modifier = Modifier.height(2.dp))
         }
-        val canReply = timelineRoomInfo.userHasPermissionToSendMessage && event.content.canBeRepliedTo()
+        val canReply = timelineRoomInfo.userHasPermissionToSendMessage && event.canBeRepliedTo
         if (canReply) {
             val state: SwipeableActionsState = rememberSwipeableActionsState()
             val offset = state.offset.floatValue
@@ -192,6 +182,7 @@ fun TimelineItemEventRow(
                         interactionSource = interactionSource,
                         onClick = onClick,
                         onLongClick = onLongClick,
+                        onShieldClick = onShieldClick,
                         inReplyToClick = ::inReplyToClick,
                         onUserDataClick = ::onUserDataClick,
                         onReactionClick = { emoji -> onReactionClick(emoji, event) },
@@ -210,6 +201,7 @@ fun TimelineItemEventRow(
                 interactionSource = interactionSource,
                 onClick = onClick,
                 onLongClick = onLongClick,
+                onShieldClick = onShieldClick,
                 inReplyToClick = ::inReplyToClick,
                 onUserDataClick = ::onUserDataClick,
                 onReactionClick = { emoji -> onReactionClick(emoji, event) },
@@ -265,6 +257,7 @@ private fun TimelineItemEventRowContent(
     interactionSource: MutableInteractionSource,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
+    onShieldClick: (MessageShield) -> Unit,
     inReplyToClick: () -> Unit,
     onUserDataClick: () -> Unit,
     onReactionClick: (emoji: String) -> Unit,
@@ -332,6 +325,7 @@ private fun TimelineItemEventRowContent(
         ) {
             MessageEventBubbleContent(
                 event = event,
+                onShieldClick = onShieldClick,
                 onMessageLongClick = onLongClick,
                 inReplyToClick = inReplyToClick,
                 onLinkClick = onLinkClick,
@@ -388,9 +382,11 @@ private fun MessageSenderInformation(
     }
 }
 
+@Suppress("MultipleEmitters") // False positive
 @Composable
 private fun MessageEventBubbleContent(
     event: TimelineItem.Event,
+    onShieldClick: (MessageShield) -> Unit,
     onMessageLongClick: () -> Unit,
     inReplyToClick: () -> Unit,
     onLinkClick: (String) -> Unit,
@@ -431,6 +427,7 @@ private fun MessageEventBubbleContent(
     @Composable
     fun WithTimestampLayout(
         timestampPosition: TimestampPosition,
+        onShieldClick: (MessageShield) -> Unit,
         modifier: Modifier = Modifier,
         canShrinkContent: Boolean = false,
         content: @Composable (onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit) -> Unit,
@@ -441,6 +438,7 @@ private fun MessageEventBubbleContent(
                     content {}
                     TimelineEventTimestampView(
                         event = event,
+                        onShieldClick = onShieldClick,
                         modifier = Modifier
                             // Outer padding
                             .padding(horizontal = 4.dp, vertical = 4.dp)
@@ -461,6 +459,7 @@ private fun MessageEventBubbleContent(
                     overlay = {
                         TimelineEventTimestampView(
                             event = event,
+                            onShieldClick = onShieldClick,
                             modifier = Modifier
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                         )
@@ -471,6 +470,7 @@ private fun MessageEventBubbleContent(
                     content {}
                     TimelineEventTimestampView(
                         event = event,
+                        onShieldClick = onShieldClick,
                         modifier = Modifier
                             .align(Alignment.End)
                             .padding(horizontal = 8.dp, vertical = 4.dp)
@@ -518,6 +518,7 @@ private fun MessageEventBubbleContent(
         val contentWithTimestamp = @Composable {
             WithTimestampLayout(
                 timestampPosition = timestampPosition,
+                onShieldClick = onShieldClick,
                 canShrinkContent = canShrinkContent,
                 modifier = timestampLayoutModifier,
             ) { onContentLayoutChange ->
@@ -530,6 +531,7 @@ private fun MessageEventBubbleContent(
                 )
             }
         }
+
         val inReplyTo = @Composable { inReplyTo: InReplyToDetails ->
             val topPadding = if (showThreadDecoration) 0.dp else 8.dp
             val inReplyToModifier = Modifier
@@ -537,25 +539,7 @@ private fun MessageEventBubbleContent(
                 .clip(RoundedCornerShape(6.dp))
                 // FIXME when a node is clickable, its contents won't be added to the semantics tree of its parent
                 .clickable(onClick = inReplyToClick)
-            when (inReplyTo) {
-                is InReplyToDetails.Ready -> {
-                    ReplyToContent(
-                        senderId = inReplyTo.senderId,
-                        senderProfile = inReplyTo.senderProfile,
-                        metadata = inReplyTo.metadata(),
-                        modifier = inReplyToModifier,
-                    )
-                }
-                is InReplyToDetails.Error ->
-                    ReplyToErrorContent(
-                        data = inReplyTo,
-                        modifier = inReplyToModifier,
-                    )
-                is InReplyToDetails.Loading ->
-                    ReplyToLoadingContent(
-                        modifier = inReplyToModifier,
-                    )
-            }
+            InReplyToView(inReplyTo, modifier = inReplyToModifier)
         }
         if (inReplyToDetails != null) {
             // Use SubComposeLayout only if necessary as it can have consequences on the performance.
@@ -591,128 +575,6 @@ private fun MessageEventBubbleContent(
     )
 }
 
-@Composable
-private fun ReplyToContent(
-    senderId: UserId,
-    senderProfile: ProfileTimelineDetails,
-    metadata: InReplyToMetadata?,
-    modifier: Modifier = Modifier,
-) {
-    val paddings = if (metadata is InReplyToMetadata.Thumbnail) {
-        PaddingValues(start = 4.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)
-    } else {
-        PaddingValues(horizontal = 12.dp, vertical = 4.dp)
-    }
-    Row(
-        modifier
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(paddings)
-    ) {
-        if (metadata is InReplyToMetadata.Thumbnail) {
-            AttachmentThumbnail(
-                info = metadata.attachmentThumbnailInfo,
-                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-                modifier = Modifier
-                    .size(36.dp)
-                    .clip(RoundedCornerShape(4.dp))
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-        }
-        val a11InReplyToText = stringResource(CommonStrings.common_in_reply_to, senderProfile.getDisambiguatedDisplayName(senderId))
-        Column(verticalArrangement = Arrangement.SpaceBetween) {
-            SenderName(
-                senderId = senderId,
-                senderProfile = senderProfile,
-                senderNameMode = SenderNameMode.Reply,
-                modifier = Modifier.semantics {
-                    contentDescription = a11InReplyToText
-                },
-            )
-            ReplyToContentText(metadata)
-        }
-    }
-}
-
-@Composable
-private fun ReplyToLoadingContent(
-    modifier: Modifier = Modifier,
-) {
-    val paddings = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
-    Row(
-        modifier
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(paddings)
-    ) {
-        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            PlaceholderAtom(width = 80.dp, height = 12.dp)
-            PlaceholderAtom(width = 140.dp, height = 14.dp)
-        }
-    }
-}
-
-@Composable
-private fun ReplyToErrorContent(
-    data: InReplyToDetails.Error,
-    modifier: Modifier = Modifier,
-) {
-    val paddings = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
-    Row(
-        modifier
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(paddings)
-    ) {
-        Text(
-            text = data.message,
-            style = ElementTheme.typography.fontBodyMdRegular,
-            color = MaterialTheme.colorScheme.error,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
-        )
-    }
-}
-
-@Composable
-private fun ReplyToContentText(metadata: InReplyToMetadata?) {
-    val text = when (metadata) {
-        InReplyToMetadata.Redacted -> stringResource(id = CommonStrings.common_message_removed)
-        InReplyToMetadata.UnableToDecrypt -> stringResource(id = CommonStrings.common_waiting_for_decryption_key)
-        is InReplyToMetadata.Text -> metadata.text
-        is InReplyToMetadata.Thumbnail -> metadata.text
-        null -> ""
-    }
-    val iconResourceId = when (metadata) {
-        InReplyToMetadata.Redacted -> CompoundDrawables.ic_compound_delete
-        InReplyToMetadata.UnableToDecrypt -> CompoundDrawables.ic_compound_time
-        else -> null
-    }
-    val fontStyle = when (metadata) {
-        is InReplyToMetadata.Informative -> FontStyle.Italic
-        else -> FontStyle.Normal
-    }
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        if (iconResourceId != null) {
-            Icon(
-                resourceId = iconResourceId,
-                tint = MaterialTheme.colorScheme.secondary,
-                contentDescription = null,
-                modifier = Modifier.size(16.dp)
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-        }
-        Text(
-            text = text,
-            style = ElementTheme.typography.fontBodyMdRegular,
-            fontStyle = fontStyle,
-            textAlign = TextAlign.Start,
-            color = MaterialTheme.colorScheme.secondary,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
-        )
-    }
-}
-
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemEventRowPreview() = ElementPreview {
@@ -722,7 +584,7 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
                 event = aTimelineItemEvent(
                     senderDisplayName = "Sender with a super long name that should ellipsize",
                     isMine = isMine,
-                    content = aTimelineItemTextContent().copy(
+                    content = aTimelineItemTextContent(
                         body = "A long text which will be displayed on several lines and" +
                             " hopefully can be manually adjusted to test different behaviors."
                     ),

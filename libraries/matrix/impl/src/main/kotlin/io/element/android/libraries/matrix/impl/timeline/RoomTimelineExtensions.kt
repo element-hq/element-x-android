@@ -25,13 +25,13 @@ import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.catch
 import org.matrix.rustcomponents.sdk.PaginationStatusListener
-import org.matrix.rustcomponents.sdk.Timeline
 import org.matrix.rustcomponents.sdk.TimelineDiff
+import org.matrix.rustcomponents.sdk.TimelineInterface
 import org.matrix.rustcomponents.sdk.TimelineListener
 import timber.log.Timber
 import uniffi.matrix_sdk_ui.LiveBackPaginationStatus
 
-internal fun Timeline.liveBackPaginationStatus(): Flow<LiveBackPaginationStatus> = callbackFlow {
+internal fun TimelineInterface.liveBackPaginationStatus(): Flow<LiveBackPaginationStatus> = callbackFlow {
     val listener = object : PaginationStatusListener {
         override fun onUpdate(status: LiveBackPaginationStatus) {
             trySend(status)
@@ -45,7 +45,7 @@ internal fun Timeline.liveBackPaginationStatus(): Flow<LiveBackPaginationStatus>
     Timber.d(it, "liveBackPaginationStatus() failed")
 }.buffer(Channel.UNLIMITED)
 
-internal fun Timeline.timelineDiffFlow(): Flow<List<TimelineDiff>> =
+internal fun TimelineInterface.timelineDiffFlow(): Flow<List<TimelineDiff>> =
     callbackFlow {
         val listener = object : TimelineListener {
             override fun onUpdate(diff: List<TimelineDiff>) {
@@ -62,7 +62,7 @@ internal fun Timeline.timelineDiffFlow(): Flow<List<TimelineDiff>> =
         Timber.d(it, "timelineDiffFlow() failed")
     }.buffer(Channel.UNLIMITED)
 
-internal suspend fun Timeline.runWithTimelineListenerRegistered(action: suspend () -> Unit) {
+internal suspend fun TimelineInterface.runWithTimelineListenerRegistered(action: suspend () -> Unit) {
     val result = addListener(NoOpTimelineListener)
     try {
         action()

@@ -251,7 +251,7 @@ class DefaultFtueServiceTest {
         // First version where notification permission is required
         sdkIntVersion: Int = Build.VERSION_CODES.TIRAMISU,
     ) = DefaultFtueService(
-        coroutineScope = coroutineScope,
+        sessionCoroutineScope = coroutineScope,
         sessionVerificationService = sessionVerificationService,
         sdkVersionProvider = FakeBuildVersionSdkIntProvider(sdkIntVersion),
         analyticsService = analyticsService,

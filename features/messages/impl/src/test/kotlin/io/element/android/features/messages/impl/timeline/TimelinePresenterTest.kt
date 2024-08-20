@@ -24,6 +24,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.FakeMessagesNavigator
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactory
+import io.element.android.features.messages.impl.timeline.components.aCriticalShield
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -75,6 +76,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import java.util.Date
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 private const val FAKE_UNIQUE_ID = "FAKE_UNIQUE_ID"
@@ -133,7 +135,10 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
                 )
             )
         )
-        val room = FakeMatrixRoom(liveTimeline = timeline)
+        val room = FakeMatrixRoom(
+            liveTimeline = timeline,
+            canUserSendMessageResult = { _, _ -> Result.success(true) },
+        )
         val sessionPreferencesStore = InMemorySessionPreferencesStore(isSendPublicReadReceiptsEnabled = false)
         val presenter = createTimelinePresenter(
             timeline = timeline,
@@ -482,9 +487,9 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
         )
         val room = FakeMatrixRoom(
             liveTimeline = liveTimeline,
-        ).apply {
-            givenTimelineFocusedOnEventResult(Result.success(detachedTimeline))
-        }
+            timelineFocusedOnEventResult = { Result.success(detachedTimeline) },
+            canUserSendMessageResult = { _, _ -> Result.success(true) },
+        )
         val presenter = createTimelinePresenter(
             room = room,
         )
@@ -493,6 +498,10 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
         }.test {
             val initialState = awaitFirstItem()
             initialState.eventSink.invoke(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
+            awaitItem().also { state ->
+                assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
+                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Requested(AN_EVENT_ID, Duration.ZERO))
+            }
             awaitItem().also { state ->
                 assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
                 assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Loading(AN_EVENT_ID))
@@ -529,6 +538,7 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
                         )
                     )
                 ),
+                canUserSendMessageResult = { _, _ -> Result.success(true) },
             ),
             timelineItemIndexer = timelineItemIndexer,
         )
@@ -537,6 +547,10 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
         }.test {
             val initialState = awaitFirstItem()
             initialState.eventSink.invoke(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
+            awaitItem().also { state ->
+                assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
+                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Requested(AN_EVENT_ID, Duration.ZERO))
+            }
             awaitItem().also { state ->
                 assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
                 assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Success(AN_EVENT_ID, 0))
@@ -551,15 +565,19 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
                 liveTimeline = FakeTimeline(
                     timelineItems = flowOf(emptyList()),
                 ),
-            ).apply {
-                givenTimelineFocusedOnEventResult(Result.failure(Throwable("An error")))
-            },
+                timelineFocusedOnEventResult = { Result.failure(Throwable("An error")) },
+                canUserSendMessageResult = { _, _ -> Result.success(true) },
+            )
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
+            awaitItem().also { state ->
+                assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
+                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Requested(AN_EVENT_ID, Duration.ZERO))
+            }
             awaitItem().also { state ->
                 assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
                 assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Loading(AN_EVENT_ID))
@@ -570,6 +588,26 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
             }
             awaitItem().also { state ->
                 assertThat(state.focusRequestState).isEqualTo(FocusRequestState.None)
+            }
+        }
+    }
+
+    @Test
+    fun `present - show shield hide shield`() = runTest {
+        val presenter = createTimelinePresenter()
+        val shield = aCriticalShield()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.messageShield).isNull()
+            initialState.eventSink(TimelineEvents.ShowShieldDialog(shield))
+            awaitItem().also { state ->
+                assertThat(state.messageShield).isEqualTo(shield)
+                state.eventSink(TimelineEvents.HideShieldDialog)
+            }
+            awaitItem().also { state ->
+                assertThat(state.messageShield).isNull()
             }
         }
     }
@@ -594,7 +632,10 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
                 )
             )
         )
-        val room = FakeMatrixRoom(liveTimeline = timeline).apply {
+        val room = FakeMatrixRoom(
+            liveTimeline = timeline,
+            canUserSendMessageResult = { _, _ -> Result.success(true) },
+        ).apply {
             givenRoomMembersState(MatrixRoomMembersState.Unknown)
         }
 
@@ -626,7 +667,10 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
 
     private fun TestScope.createTimelinePresenter(
         timeline: Timeline = FakeTimeline(),
-        room: FakeMatrixRoom = FakeMatrixRoom(liveTimeline = timeline),
+        room: FakeMatrixRoom = FakeMatrixRoom(
+            liveTimeline = timeline,
+            canUserSendMessageResult = { _, _ -> Result.success(true) }
+        ),
         timelineItemsFactory: TimelineItemsFactory = aTimelineItemsFactory(),
         redactedVoiceMessageManager: RedactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
         messagesNavigator: FakeMessagesNavigator = FakeMessagesNavigator(),

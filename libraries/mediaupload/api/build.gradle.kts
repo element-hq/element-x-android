@@ -17,7 +17,6 @@
 plugins {
     id("io.element.android-library")
     alias(libs.plugins.anvil)
-    alias(libs.plugins.ksp)
 }
 
 android {
@@ -41,6 +40,7 @@ android {
 
         testImplementation(projects.libraries.matrix.test)
         testImplementation(projects.libraries.mediaupload.test)
+        testImplementation(projects.tests.testutils)
         testImplementation(libs.test.junit)
         testImplementation(libs.test.truth)
         testImplementation(libs.coroutines.test)

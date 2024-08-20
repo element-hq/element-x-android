@@ -159,10 +159,6 @@ class TimelineTextViewTest {
         text = text,
         rawValue = rawValue,
         type = type,
-        backgroundColor = 0,
-        textColor = 0,
-        startPadding = 0,
-        endPadding = 0,
     )
 
     private fun aTextContentWithFormattedBody(formattedBody: CharSequence?, body: String = "") =

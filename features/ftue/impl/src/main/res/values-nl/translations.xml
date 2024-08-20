@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_notification_optin_subtitle">"Je kunt je instellingen later wijzigen."</string>
+  <string name="screen_notification_optin_title">"Sta meldingen toe en mis nooit meer een bericht"</string>
+  <string name="screen_welcome_bullet_1">"Oproepen, peilingen, zoekopdrachten en meer zullen later dit jaar worden toegevoegd."</string>
+  <string name="screen_welcome_bullet_2">"Berichtgeschiedenis voor versleutelde kamers is nog niet beschikbaar."</string>
+  <string name="screen_welcome_bullet_3">"We horen graag van je, laat ons weten wat je ervan vindt via de instellingenpagina."</string>
+  <string name="screen_welcome_button">"Aan de slag!"</string>
+  <string name="screen_welcome_subtitle">"Dit is wat je moet weten:"</string>
+  <string name="screen_welcome_title">"Welkom bij %1$s!"</string>
+</resources>

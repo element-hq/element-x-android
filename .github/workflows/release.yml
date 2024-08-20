@@ -25,7 +25,7 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
       - name: Configure gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
       - name: Create app bundle
         env:
           ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
@@ -36,6 +36,42 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: elementx-app-gplay-bundle-unsigned
+          path: |
+            app/build/outputs/bundle/gplayRelease/app-gplay-release.aab
+
+  enterprise:
+    name: Create App Bundle Enterprise
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
+    concurrency:
+      group: ${{ format('build-release-main-gplay-{0}', github.sha) }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add SSH private keys for submodule repositories
+        uses: webfactory/ssh-agent@v0.9.0
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
+        with:
+          ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
+      - name: Clone submodules
+        run: git submodule update --init --recursive
+      - name: Use JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
+      - name: Configure gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Create Enterprise app bundle
+        env:
+          ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
+          ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
+          ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: ${{ secrets.MAPTILER_DARK_MAP_ID }}
+        run: ./gradlew bundleGplayRelease $CI_GRADLE_ARG_PROPERTIES
+      - name: Upload bundle as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: elementx-enterprise-app-gplay-bundle-unsigned
           path: |
             app/build/outputs/bundle/gplayRelease/app-gplay-release.aab
 
@@ -53,7 +89,7 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
       - name: Configure gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
       - name: Create APKs
         env:
           ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}

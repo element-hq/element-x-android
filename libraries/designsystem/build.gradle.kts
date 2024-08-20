@@ -29,7 +29,6 @@ android {
 
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = true
             consumerProguardFiles("consumer-rules.pro")
         }
     }
@@ -42,11 +41,11 @@ android {
         implementation(libs.coil.compose)
         implementation(libs.vanniktech.blurhash)
         implementation(projects.libraries.architecture)
+        implementation(projects.libraries.preferences.api)
         implementation(projects.libraries.testtags)
         implementation(projects.libraries.uiStrings)
 
         ksp(libs.showkase.processor)
-        kspTest(libs.showkase.processor)
 
         testImplementation(libs.test.junit)
         testImplementation(libs.coroutines.test)

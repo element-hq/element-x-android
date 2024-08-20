@@ -26,12 +26,14 @@ import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
+import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeRight
+import androidx.compose.ui.text.AnnotatedString
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.emojibasebindings.Emoji
 import io.element.android.emojibasebindings.EmojibaseCategory
@@ -42,8 +44,11 @@ import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
+import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerItem
+import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMessagesBannerState
+import io.element.android.features.messages.impl.timeline.FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS
+import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
-import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.aTimelineItemReadReceipts
 import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aTimelineState
@@ -53,8 +58,8 @@ import io.element.android.features.messages.impl.timeline.components.reactionsum
 import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvents
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureCalledOnceWithParam
@@ -73,6 +78,7 @@ import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import kotlin.time.Duration.Companion.milliseconds
 
 @RunWith(AndroidJUnit4::class)
 class MessagesViewTest {
@@ -169,16 +175,20 @@ class MessagesViewTest {
         userHasPermissionToRedactOwn: Boolean = false,
         userHasPermissionToRedactOther: Boolean = false,
         userHasPermissionToSendReaction: Boolean = false,
+        userCanPinEvent: Boolean = false,
     ) {
         val eventsRecorder = EventsRecorder<ActionListEvents>()
         val state = aMessagesState(
             actionListState = anActionListState(
                 eventSink = eventsRecorder
             ),
-            userHasPermissionToSendMessage = userHasPermissionToSendMessage,
-            userHasPermissionToRedactOwn = userHasPermissionToRedactOwn,
-            userHasPermissionToRedactOther = userHasPermissionToRedactOther,
-            userHasPermissionToSendReaction = userHasPermissionToSendReaction,
+            userEventPermissions = UserEventPermissions(
+                canSendMessage = userHasPermissionToSendMessage,
+                canRedactOwn = userHasPermissionToRedactOwn,
+                canRedactOther = userHasPermissionToRedactOther,
+                canSendReaction = userHasPermissionToSendReaction,
+                canPinUnpin = userCanPinEvent,
+            ),
         )
         val timelineItem = state.timelineState.timelineItems.first() as TimelineItem.Event
         rule.setMessagesView(
@@ -189,10 +199,7 @@ class MessagesViewTest {
         eventsRecorder.assertSingle(
             ActionListEvents.ComputeForMessage(
                 event = timelineItem,
-                canRedactOwn = state.userHasPermissionToRedactOwn,
-                canRedactOther = state.userHasPermissionToRedactOther,
-                canSendMessage = state.userHasPermissionToSendMessage,
-                canSendReaction = state.userHasPermissionToSendReaction,
+                userEventPermissions = state.userEventPermissions,
             )
         )
     }
@@ -237,9 +244,11 @@ class MessagesViewTest {
 
     private fun swipeTest(userHasPermissionToSendMessage: Boolean) {
         val eventsRecorder = EventsRecorder<MessagesEvents>()
+        val canBeRepliedEvent = aTimelineItemEvent(canBeRepliedTo = true)
+        val cannotBeRepliedEvent = aTimelineItemEvent(canBeRepliedTo = false)
         val state = aMessagesState(
             timelineState = aTimelineState(
-                timelineItems = aTimelineItemList(aTimelineItemTextContent()),
+                timelineItems = persistentListOf(canBeRepliedEvent, cannotBeRepliedEvent),
                 timelineRoomInfo = aTimelineRoomInfo(
                     userHasPermissionToSendMessage = userHasPermissionToSendMessage
                 ),
@@ -249,10 +258,12 @@ class MessagesViewTest {
         rule.setMessagesView(
             state = state,
         )
-        rule.onAllNodesWithTag(TestTags.messageBubble.value).onFirst().performTouchInput { swipeRight(endX = 200f) }
+        rule.onAllNodesWithTag(TestTags.messageBubble.value).apply {
+            onFirst().performTouchInput { swipeRight(endX = 200f) }
+            onLast().performTouchInput { swipeRight(endX = 200f) }
+        }
         if (userHasPermissionToSendMessage) {
-            val timelineItem = state.timelineState.timelineItems.first() as TimelineItem.Event
-            eventsRecorder.assertSingle(MessagesEvents.HandleAction(TimelineItemAction.Reply, timelineItem))
+            eventsRecorder.assertSingle(MessagesEvents.HandleAction(TimelineItemAction.Reply, canBeRepliedEvent))
         } else {
             eventsRecorder.assertEmpty()
         }
@@ -454,6 +465,25 @@ class MessagesViewTest {
         customReactionStateEventsRecorder.assertSingle(CustomReactionEvents.DismissCustomReactionSheet)
         eventsRecorder.assertSingle(MessagesEvents.ToggleReaction(aUnicode, timelineItem.eventId!!))
     }
+
+    @Test
+    fun `clicking on pinned messages banner emits the expected Event`() {
+        val eventsRecorder = EventsRecorder<TimelineEvents>()
+        val state = aMessagesState(
+            timelineState = aTimelineState(eventSink = eventsRecorder),
+            pinnedMessagesBannerState = aLoadedPinnedMessagesBannerState(
+                knownPinnedMessagesCount = 2,
+                currentPinnedMessageIndex = 0,
+                currentPinnedMessage = PinnedMessagesBannerItem(
+                    eventId = AN_EVENT_ID,
+                    formatted = AnnotatedString("This is a pinned message")
+                ),
+            ),
+        )
+        rule.setMessagesView(state = state)
+        rule.onNodeWithText("This is a pinned message").performClick()
+        eventsRecorder.assertSingle(TimelineEvents.FocusOnEvent(AN_EVENT_ID, debounce = FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS.milliseconds))
+    }
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessagesView(
@@ -467,6 +497,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
     onSendLocationClick: () -> Unit = EnsureNeverCalled(),
     onCreatePollClick: () -> Unit = EnsureNeverCalled(),
     onJoinCallClick: () -> Unit = EnsureNeverCalled(),
+    onViewAllPinnedMessagesClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         // Cannot use the RichTextEditor, so simulate a LocalInspectionMode
@@ -484,6 +515,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
                 onSendLocationClick = onSendLocationClick,
                 onCreatePollClick = onCreatePollClick,
                 onJoinCallClick = onJoinCallClick,
+                onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
             )
         }
     }

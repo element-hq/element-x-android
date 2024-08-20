@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_app_lock_biometric_authentication">"βιομετρική ταυτοποίηση"</string>
+  <string name="screen_app_lock_biometric_unlock">"βιομετρικό ξεκλείδωμα"</string>
+  <string name="screen_app_lock_biometric_unlock_title_android">"Ξεκλείδωμα με βιομετρικά"</string>
+  <string name="screen_app_lock_forgot_pin">"Ξέχασες το PIN;"</string>
+  <string name="screen_app_lock_settings_change_pin">"Αλλαγή κωδικού PIN"</string>
+  <string name="screen_app_lock_settings_enable_biometric_unlock">"Να επιτρέπεται το βιομετρικό ξεκλείδωμα"</string>
+  <string name="screen_app_lock_settings_remove_pin">"Αφαίρεση PIN"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_message">"Θες σίγουρα να καταργήσεις το PIN;"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_title">"Κατάργηση PIN;"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_allow_title">"Επέτρεψε %1$s"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_skip">"Θα προτιμούσα να χρησιμοποιήσω PIN"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Εξοικονόμησε χρόνο και χρησιμοποίησε %1$s για να ξεκλειδώσεις την εφαρμογή κάθε φορά"</string>
+  <string name="screen_app_lock_setup_choose_pin">"Επέλεξε PIN"</string>
+  <string name="screen_app_lock_setup_confirm_pin">"Επιβεβαίωση PIN"</string>
+  <string name="screen_app_lock_setup_pin_context">"Κλείδωμα του %1$s για να προσθέσεις επιπλέον ασφάλεια στις συνομιλίες σου.
+
+Επέλεξε κάτι αξιομνημόνευτο. Εάν ξεχάσεις αυτό το PIN, θα αποσυνδεθείς από την εφαρμογή."</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"Δεν μπορείς να το επιλέξεις ως κωδικό PIN για λόγους ασφαλείας"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"Επέλεξε διαφορετικό PIN"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Παρακαλώ εισήγαγε το ίδιο PIN δύο φορές"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"Τα PIN δεν ταιριάζουν"</string>
+  <string name="screen_app_lock_signout_alert_message">"Θα χρειαστεί να συνδεθείς ξανά και να δημιουργήσεις ένα νέο PIN για να προχωρήσεις"</string>
+  <string name="screen_app_lock_signout_alert_title">"Έχεις αποσυνδεθεί"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"Έχεις %1$d προσπάθεια για ξεκλείδωμα"</item>
+    <item quantity="other">"Έχεις %1$d προσπάθειες για ξεκλείδωμα"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"Λάθος PIN. Έχεις %1$d ακόμη ευκαιρία"</item>
+    <item quantity="other">"Λάθος PIN. Έχεις %1$d ακόμη ευκαιρίες"</item>
+  </plurals>
+  <string name="screen_app_lock_use_biometric_android">"Χρήση βιομετρικών"</string>
+  <string name="screen_app_lock_use_pin_android">"Χρήση PIN"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Αποσύνδεση…"</string>
+</resources>

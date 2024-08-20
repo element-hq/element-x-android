@@ -27,6 +27,13 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        maven {
+            url = URI("https://jitpack.io")
+            content {
+                includeModule("com.github.sergio-sastre.ComposablePreviewScanner", "android")
+                includeModule("com.github.sergio-sastre.ComposablePreviewScanner", "core")
+            }
+        }
         // Snapshot versions
         maven {
             url = URI("https://s01.oss.sonatype.org/content/repositories/snapshots")
@@ -64,6 +71,8 @@ rootProject.name = "ElementX"
 include(":app")
 include(":appnav")
 include(":appconfig")
+include(":appicon:element")
+include(":appicon:enterprise")
 include(":tests:konsist")
 include(":tests:uitests")
 include(":tests:testutils")
@@ -87,6 +96,7 @@ fun includeProjects(directory: File, path: String, maxDepth: Int = 1) {
     }
 }
 
+includeProjects(File(rootDir, "enterprise"), ":enterprise", maxDepth = 2)
 includeProjects(File(rootDir, "features"), ":features")
 includeProjects(File(rootDir, "libraries"), ":libraries")
 includeProjects(File(rootDir, "services"), ":services")

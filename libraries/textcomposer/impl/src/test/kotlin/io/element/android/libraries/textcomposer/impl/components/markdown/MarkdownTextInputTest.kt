@@ -155,7 +155,7 @@ class MarkdownTextInputTest {
     @Test
     fun `inserting a mention replaces the existing text with a span`() = runTest {
         val permalinkParser = FakePermalinkParser(result = { PermalinkData.UserLink(A_SESSION_ID) })
-        val permalinkBuilder = FakePermalinkBuilder(result = { Result.success("https://matrix.to/#/$A_SESSION_ID") })
+        val permalinkBuilder = FakePermalinkBuilder(permalinkForUserLambda = { Result.success("https://matrix.to/#/$A_SESSION_ID") })
         val state = aMarkdownTextEditorState(initialText = "@", initialFocus = true)
         state.currentMentionSuggestion = Suggestion(0, 1, SuggestionType.Mention, "")
         rule.setMarkdownTextInput(state = state)
@@ -164,14 +164,14 @@ class MarkdownTextInputTest {
             editor = it.findEditor()
             state.insertMention(
                 ResolvedMentionSuggestion.Member(roomMember = aRoomMember()),
-                MentionSpanProvider(currentSessionId = A_SESSION_ID.value, permalinkParser = permalinkParser),
+                MentionSpanProvider(permalinkParser = permalinkParser),
                 permalinkBuilder,
             )
         }
         rule.awaitIdle()
 
         // Text is replaced with a placeholder
-        assertThat(editor?.editableText.toString()).isEqualTo(". ")
+        assertThat(editor?.editableText.toString()).isEqualTo("@ ")
         // The placeholder contains a MentionSpan
         val mentionSpans = editor?.editableText?.getSpans<MentionSpan>(0, 2).orEmpty()
         assertThat(mentionSpans).isNotEmpty()

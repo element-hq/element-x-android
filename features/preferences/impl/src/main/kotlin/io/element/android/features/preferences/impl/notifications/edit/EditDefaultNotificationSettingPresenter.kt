@@ -66,7 +66,7 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
 
         val changeNotificationSettingAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
-        val roomsWithUserDefinedMode: MutableState<List<RoomSummary.Filled>> = remember {
+        val roomsWithUserDefinedMode: MutableState<List<RoomSummary>> = remember {
             mutableStateOf(listOf())
         }
 
@@ -115,7 +115,7 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
             .launchIn(this)
     }
 
-    private fun CoroutineScope.observeRoomSummaries(roomsWithUserDefinedMode: MutableState<List<RoomSummary.Filled>>) {
+    private fun CoroutineScope.observeRoomSummaries(roomsWithUserDefinedMode: MutableState<List<RoomSummary>>) {
         roomListService.allRooms
             .summaries
             .onEach {
@@ -126,18 +126,18 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
 
     private fun CoroutineScope.updateRoomsWithUserDefinedMode(
         summaries: List<RoomSummary>,
-        roomsWithUserDefinedMode: MutableState<List<RoomSummary.Filled>>
+        roomsWithUserDefinedMode: MutableState<List<RoomSummary>>
     ) = launch {
         val roomWithUserDefinedRules: Set<String> = notificationSettingsService.getRoomsWithUserDefinedRules().getOrThrow().toSet()
 
         val sortedSummaries = summaries
-            .filterIsInstance<RoomSummary.Filled>()
+            .filterIsInstance<RoomSummary>()
             .filter {
-                val room = matrixClient.getRoom(it.details.roomId) ?: return@filter false
-                roomWithUserDefinedRules.contains(it.identifier()) && isOneToOne == room.isOneToOne
+                val room = matrixClient.getRoom(it.roomId) ?: return@filter false
+                roomWithUserDefinedRules.contains(it.roomId.value) && isOneToOne == room.isOneToOne
             }
             // locale sensitive sorting
-            .sortedWith(compareBy(Collator.getInstance()) { it.details.name })
+            .sortedWith(compareBy(Collator.getInstance()) { it.name })
 
         roomsWithUserDefinedMode.value = sortedSummaries
     }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_join_action">"Συμμετοχή στο δωμάτιο"</string>
+  <string name="screen_join_room_knock_action">"Χτύπα για συμμετοχή"</string>
+  <string name="screen_join_room_space_not_supported_description">"Το %1$s δεν υποστηρίζει ακόμα χώρους. Μπορείς να έχεις πρόσβαση σε χώρους στον ιστό."</string>
+  <string name="screen_join_room_space_not_supported_title">"Οι Χώροι δεν υποστηρίζονται ακόμα"</string>
+  <string name="screen_join_room_subtitle_knock">"Κάνε κλικ στο παρακάτω κουμπί και ένας διαχειριστής δωματίου θα ειδοποιηθεί. Θα μπορείς να συμμετάσχεις στη συνομιλία μόλις εγκριθεί."</string>
+  <string name="screen_join_room_subtitle_no_preview">"Πρέπει να είσαι μέλος αυτού του δωματίου για να δεις το ιστορικό μηνυμάτων."</string>
+  <string name="screen_join_room_title_knock">"Θες να συμμετάσχεις σε αυτό το δωμάτιο;"</string>
+  <string name="screen_join_room_title_no_preview">"Η προεπισκόπηση δεν είναι διαθέσιμη"</string>
+</resources>

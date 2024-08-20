@@ -36,6 +36,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
+import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -69,6 +70,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
     private val featureFlagService: FeatureFlagService,
     private val htmlConverterProvider: HtmlConverterProvider,
     private val permalinkParser: PermalinkParser,
+    private val textPillificationHelper: TextPillificationHelper,
 ) {
     suspend fun create(
         content: MessageContent,
@@ -126,6 +128,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                     val body = messageType.body.trimEnd()
                     TimelineItemTextContent(
                         body = body,
+                        pillifiedBody = textPillificationHelper.pillify(body),
                         htmlDocument = null,
                         plainText = body,
                         formattedBody = null,
@@ -215,6 +218,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 val body = messageType.body.trimEnd()
                 TimelineItemTextContent(
                     body = body,
+                    pillifiedBody = textPillificationHelper.pillify(body),
                     htmlDocument = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser),
                     formattedBody = parseHtml(messageType.formatted) ?: body.withLinks(),
                     isEdited = content.isEdited,
@@ -224,6 +228,7 @@ class TimelineItemContentMessageFactory @Inject constructor(
                 val body = messageType.body.trimEnd()
                 TimelineItemTextContent(
                     body = body,
+                    pillifiedBody = textPillificationHelper.pillify(body),
                     htmlDocument = null,
                     formattedBody = body.withLinks(),
                     isEdited = content.isEdited,
@@ -259,27 +264,27 @@ class TimelineItemContentMessageFactory @Inject constructor(
     }
 
     private fun CharSequence.withFixedURLSpans(): CharSequence {
-        if (this !is Spannable) return this
+        val spannable = this.toSpannable()
         // Get all URL spans, as they will be removed by LinkifyCompat.addLinks
-        val oldURLSpans = getSpans<URLSpan>(0, length).associateWith {
-            val start = getSpanStart(it)
-            val end = getSpanEnd(it)
+        val oldURLSpans = spannable.getSpans<URLSpan>(0, length).associateWith {
+            val start = spannable.getSpanStart(it)
+            val end = spannable.getSpanEnd(it)
             Pair(start, end)
         }
         // Find and set as URLSpans any links present in the text
-        LinkifyCompat.addLinks(this, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS or Linkify.EMAIL_ADDRESSES)
+        LinkifyCompat.addLinks(spannable, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS or Linkify.EMAIL_ADDRESSES)
         // Restore old spans, remove new ones if there is a conflict
         for ((urlSpan, location) in oldURLSpans) {
             val (start, end) = location
-            val addedSpans = getSpans<URLSpan>(start, end).orEmpty()
+            val addedSpans = spannable.getSpans<URLSpan>(start, end).orEmpty()
             if (addedSpans.isNotEmpty()) {
                 for (span in addedSpans) {
-                    removeSpan(span)
+                    spannable.removeSpan(span)
                 }
             }
-            setSpan(urlSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannable.setSpan(urlSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
-        return this
+        return spannable
     }
 }
 

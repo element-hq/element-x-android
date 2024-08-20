@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"Anexar captura de tela"</string>
+  <string name="screen_bug_report_contact_me">"Você pode entrar em contato comigo se tiver alguma pergunta adicional."</string>
+  <string name="screen_bug_report_contact_me_title">"Entre em contato comigo"</string>
+  <string name="screen_bug_report_edit_screenshot">"Editar captura de tela"</string>
+  <string name="screen_bug_report_editor_description">"Descreva o problema. O que você fez? O que você esperava que acontecesse? O que realmente aconteceu? Por favor, forneça o máximo de detalhes possível."</string>
+  <string name="screen_bug_report_editor_placeholder">"Descreva o problema…"</string>
+  <string name="screen_bug_report_editor_supporting">"Se possível, escreva a descrição em inglês."</string>
+  <string name="screen_bug_report_include_crash_logs">"Enviar registros de falhas"</string>
+  <string name="screen_bug_report_include_logs">"Permitir registros"</string>
+  <string name="screen_bug_report_include_screenshot">"Enviar captura de tela"</string>
+  <string name="screen_bug_report_logs_description">"Os registros serão incluídos com sua mensagem para garantir que tudo esteja funcionando corretamente. Para enviar sua mensagem sem registros, desative essa configuração."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s fechou inesperadamente na última vez que foi usado. Gostaria de compartilhar um relatório de falhas conosco?"</string>
+  <string name="screen_bug_report_view_logs">"Ver registros"</string>
+</resources>

@@ -50,6 +50,8 @@ import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.fullscreenintent.test.FakeFullScreenIntentPermissionsPresenter
 import io.element.android.libraries.indicator.impl.DefaultIndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
@@ -61,6 +63,9 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_ROOM_ID_2
+import io.element.android.libraries.matrix.test.A_ROOM_ID_3
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -68,12 +73,14 @@ import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
-import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
+import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
+import io.element.android.libraries.push.api.notifications.NotificationCleaner
+import io.element.android.libraries.push.test.notifications.FakeNotificationCleaner
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.EventsRecorder
@@ -88,6 +95,7 @@ import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -183,7 +191,7 @@ class RoomListPresenterTest {
             roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
             roomListService.postAllRooms(
                 listOf(
-                    aRoomSummaryFilled(
+                    aRoomSummary(
                         numUnreadMentions = 1,
                         numUnreadMessages = 2,
                     )
@@ -204,48 +212,6 @@ class RoomListPresenterTest {
     }
 
     @Test
-    fun `present - update visible range`() = runTest {
-        val roomListService = FakeRoomListService()
-        val matrixClient = FakeMatrixClient(
-            roomListService = roomListService
-        )
-        val scope = CoroutineScope(coroutineContext + SupervisorJob())
-        val presenter = createRoomListPresenter(client = matrixClient, coroutineScope = scope)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            roomListService.postAllRooms(listOf(aRoomSummaryFilled()))
-            val loadedState = awaitItem()
-            // check initial value
-            assertThat(roomListService.latestSlidingSyncRange).isNull()
-            // Test empty range
-            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(1, 0)))
-            assertThat(roomListService.latestSlidingSyncRange).isNull()
-            // Update visible range and check that range is transmitted to the SDK after computation
-            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(0, 0)))
-            assertThat(roomListService.latestSlidingSyncRange)
-                .isEqualTo(IntRange(0, 20))
-            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(0, 1)))
-            assertThat(roomListService.latestSlidingSyncRange)
-                .isEqualTo(IntRange(0, 21))
-            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(19, 29)))
-            assertThat(roomListService.latestSlidingSyncRange)
-                .isEqualTo(IntRange(0, 49))
-            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(49, 59)))
-            assertThat(roomListService.latestSlidingSyncRange)
-                .isEqualTo(IntRange(29, 79))
-            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(149, 159)))
-            assertThat(roomListService.latestSlidingSyncRange)
-                .isEqualTo(IntRange(129, 179))
-            loadedState.eventSink.invoke(RoomListEvents.UpdateVisibleRange(IntRange(149, 259)))
-            assertThat(roomListService.latestSlidingSyncRange)
-                .isEqualTo(IntRange(129, 279))
-            cancelAndIgnoreRemainingEvents()
-            scope.cancel()
-        }
-    }
-
-    @Test
     fun `present - handle DismissRequestVerificationPrompt`() = runTest {
         val scope = CoroutineScope(context = coroutineContext + SupervisorJob())
         val roomListService = FakeRoomListService().apply {
@@ -254,7 +220,7 @@ class RoomListPresenterTest {
         val encryptionService = FakeEncryptionService().apply {
             emitRecoveryState(RecoveryState.INCOMPLETE)
         }
-        val syncService = FakeSyncService(initialState = SyncState.Running)
+        val syncService = FakeSyncService(MutableStateFlow(SyncState.Running))
         val presenter = createRoomListPresenter(
             client = FakeMatrixClient(roomListService = roomListService, encryptionService = encryptionService, syncService = syncService),
             coroutineScope = scope,
@@ -285,7 +251,7 @@ class RoomListPresenterTest {
             sessionVerificationService = FakeSessionVerificationService().apply {
                 givenNeedsSessionVerification(false)
             },
-            syncService = FakeSyncService(initialState = SyncState.Running)
+            syncService = FakeSyncService(MutableStateFlow(SyncState.Running))
         )
         val scope = CoroutineScope(context = coroutineContext + SupervisorJob())
         val presenter = createRoomListPresenter(
@@ -449,7 +415,7 @@ class RoomListPresenterTest {
         val notificationSettingsService = FakeNotificationSettingsService()
         val roomListService = FakeRoomListService()
         roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
-        roomListService.postAllRooms(listOf(aRoomSummaryFilled(notificationMode = userDefinedMode)))
+        roomListService.postAllRooms(listOf(aRoomSummary(notificationMode = userDefinedMode)))
         val matrixClient = FakeMatrixClient(
             roomListService = roomListService,
             notificationSettingsService = notificationSettingsService
@@ -476,7 +442,10 @@ class RoomListPresenterTest {
     @Test
     fun `present - when set is favorite event is emitted, then the action is called`() = runTest {
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
-        val room = FakeMatrixRoom()
+        val setIsFavoriteResult = lambdaRecorder { _: Boolean -> Result.success(Unit) }
+        val room = FakeMatrixRoom(
+            setIsFavoriteResult = setIsFavoriteResult
+        )
         val analyticsService = FakeAnalyticsService()
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
@@ -487,9 +456,13 @@ class RoomListPresenterTest {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(RoomListEvents.SetRoomIsFavorite(A_ROOM_ID, true))
-            assertThat(room.setIsFavoriteCalls).isEqualTo(listOf(true))
+            setIsFavoriteResult.assertions().isCalledOnce().with(value(true))
             initialState.eventSink(RoomListEvents.SetRoomIsFavorite(A_ROOM_ID, false))
-            assertThat(room.setIsFavoriteCalls).isEqualTo(listOf(true, false))
+            setIsFavoriteResult.assertions().isCalledExactly(2)
+                .withSequence(
+                    listOf(value(true)),
+                    listOf(value(false)),
+                )
             assertThat(analyticsService.capturedEvents).containsExactly(
                 Interaction(name = Interaction.Name.MobileRoomListRoomContextMenuFavouriteToggle),
                 Interaction(name = Interaction.Name.MobileRoomListRoomContextMenuFavouriteToggle)
@@ -544,35 +517,54 @@ class RoomListPresenterTest {
     @Test
     fun `present - check that the room is marked as read with correct RR and as unread`() = runTest {
         val room = FakeMatrixRoom()
+        val room2 = FakeMatrixRoom(roomId = A_ROOM_ID_2)
+        val room3 = FakeMatrixRoom(roomId = A_ROOM_ID_3)
+        val allRooms = setOf(room, room2, room3)
         val sessionPreferencesStore = InMemorySessionPreferencesStore()
         val matrixClient = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
+            givenGetRoomResult(A_ROOM_ID_2, room2)
+            givenGetRoomResult(A_ROOM_ID_3, room3)
         }
         val analyticsService = FakeAnalyticsService()
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val clearMessagesForRoomLambda = lambdaRecorder<SessionId, RoomId, Unit> { _, _ -> }
+        val notificationCleaner = FakeNotificationCleaner(
+            clearMessagesForRoomLambda = clearMessagesForRoomLambda,
+        )
         val presenter = createRoomListPresenter(
             client = matrixClient,
             coroutineScope = scope,
             sessionPreferencesStore = sessionPreferencesStore,
             analyticsService = analyticsService,
+            notificationCleaner = notificationCleaner,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(room.markAsReadCalls).isEmpty()
-            assertThat(room.setUnreadFlagCalls).isEmpty()
+            allRooms.forEach {
+                assertThat(it.markAsReadCalls).isEmpty()
+                assertThat(it.setUnreadFlagCalls).isEmpty()
+            }
             initialState.eventSink.invoke(RoomListEvents.MarkAsRead(A_ROOM_ID))
             assertThat(room.markAsReadCalls).isEqualTo(listOf(ReceiptType.READ))
             assertThat(room.setUnreadFlagCalls).isEqualTo(listOf(false))
-            initialState.eventSink.invoke(RoomListEvents.MarkAsUnread(A_ROOM_ID))
-            assertThat(room.markAsReadCalls).isEqualTo(listOf(ReceiptType.READ))
-            assertThat(room.setUnreadFlagCalls).isEqualTo(listOf(false, true))
+            clearMessagesForRoomLambda.assertions().isCalledOnce()
+                .with(value(A_SESSION_ID), value(A_ROOM_ID))
+            initialState.eventSink.invoke(RoomListEvents.MarkAsUnread(A_ROOM_ID_2))
+            assertThat(room2.markAsReadCalls).isEmpty()
+            assertThat(room2.setUnreadFlagCalls).isEqualTo(listOf(true))
             // Test again with private read receipts
             sessionPreferencesStore.setSendPublicReadReceipts(false)
-            initialState.eventSink.invoke(RoomListEvents.MarkAsRead(A_ROOM_ID))
-            assertThat(room.markAsReadCalls).isEqualTo(listOf(ReceiptType.READ, ReceiptType.READ_PRIVATE))
-            assertThat(room.setUnreadFlagCalls).isEqualTo(listOf(false, true, false))
+            initialState.eventSink.invoke(RoomListEvents.MarkAsRead(A_ROOM_ID_3))
+            assertThat(room3.markAsReadCalls).isEqualTo(listOf(ReceiptType.READ_PRIVATE))
+            assertThat(room3.setUnreadFlagCalls).isEqualTo(listOf(false))
+            clearMessagesForRoomLambda.assertions().isCalledExactly(2)
+                .withSequence(
+                    listOf(value(A_SESSION_ID), value(A_ROOM_ID)),
+                    listOf(value(A_SESSION_ID), value(A_ROOM_ID_3)),
+                )
             assertThat(analyticsService.capturedEvents).containsExactly(
                 Interaction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle),
                 Interaction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle),
@@ -594,7 +586,7 @@ class RoomListPresenterTest {
         val matrixClient = FakeMatrixClient(
             roomListService = roomListService,
         )
-        val roomSummary = aRoomSummaryFilled(
+        val roomSummary = aRoomSummary(
             currentUserMembership = CurrentUserMembership.INVITED
         )
         roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
@@ -610,7 +602,7 @@ class RoomListPresenterTest {
             }.last()
 
             val roomListRoomSummary = state.contentAsRooms().summaries.first {
-                it.id == roomSummary.identifier()
+                it.id == roomSummary.roomId.value
             }
             state.eventSink(RoomListEvents.AcceptInvite(roomListRoomSummary))
             state.eventSink(RoomListEvents.DeclineInvite(roomListRoomSummary))
@@ -623,6 +615,37 @@ class RoomListPresenterTest {
                     listOf(value(AcceptDeclineInviteEvents.AcceptInvite(inviteData))),
                     listOf(value(AcceptDeclineInviteEvents.DeclineInvite(inviteData))),
                 )
+        }
+    }
+
+    @Test
+    fun `present - UpdateVisibleRange subscribes to rooms in visible range`() = runTest {
+        val subscribeToVisibleRoomsLambda = lambdaRecorder { _: List<RoomId> -> }
+        val roomListService = FakeRoomListService(subscribeToVisibleRoomsLambda = subscribeToVisibleRoomsLambda)
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val matrixClient = FakeMatrixClient(
+            roomListService = roomListService,
+        )
+        val roomSummary = aRoomSummary(
+            currentUserMembership = CurrentUserMembership.INVITED
+        )
+        roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
+        roomListService.postAllRooms(listOf(roomSummary))
+        val presenter = createRoomListPresenter(
+            coroutineScope = scope,
+            client = matrixClient,
+        )
+        presenter.test {
+            val state = consumeItemsUntilPredicate {
+                it.contentState is RoomListContentState.Rooms
+            }.last()
+
+            state.eventSink(RoomListEvents.UpdateVisibleRange(IntRange(0, 10)))
+            subscribeToVisibleRoomsLambda.assertions().isCalledOnce()
+
+            // If called again, it will cancel the current one, which should not result in a test failure
+            state.eventSink(RoomListEvents.UpdateVisibleRange(IntRange(0, 11)))
+            subscribeToVisibleRoomsLambda.assertions().isCalledExactly(2)
         }
     }
 
@@ -643,6 +666,7 @@ class RoomListPresenterTest {
         filtersPresenter: Presenter<RoomListFiltersState> = Presenter { aRoomListFiltersState() },
         searchPresenter: Presenter<RoomListSearchState> = Presenter { aRoomListSearchState() },
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() },
+        notificationCleaner: NotificationCleaner = FakeNotificationCleaner(),
     ) = RoomListPresenter(
         client = client,
         networkMonitor = networkMonitor,
@@ -670,5 +694,6 @@ class RoomListPresenterTest {
         analyticsService = analyticsService,
         acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
         fullScreenIntentPermissionsPresenter = FakeFullScreenIntentPermissionsPresenter(),
+        notificationCleaner = notificationCleaner,
     )
 }

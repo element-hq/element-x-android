@@ -4,10 +4,11 @@
     "config:base"
   ],
   "labels" : [
-    "dependencies"
+    "PR-Dependencies"
   ],
   "ignoreDeps" : [
-    "string:app_name"
+    "string:app_name",
+    "gradle"
   ],
   "packageRules" : [
     {

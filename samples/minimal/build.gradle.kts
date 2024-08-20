@@ -30,6 +30,10 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -56,6 +60,7 @@ dependencies {
     implementation(projects.libraries.eventformatter.impl)
     implementation(projects.libraries.fullscreenintent.impl)
     implementation(projects.libraries.preferences.impl)
+    implementation(projects.libraries.preferences.test)
     implementation(projects.libraries.indicator.impl)
     implementation(projects.features.invite.impl)
     implementation(projects.features.roomlist.impl)

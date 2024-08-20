@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.roomlist.RoomSummaryDetails
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.ui.components.aRoomSummaryDetails
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import kotlinx.collections.immutable.ImmutableList
@@ -52,10 +52,10 @@ open class RoomSelectStateProvider : PreviewParameterProvider<RoomSelectState> {
 
 private fun aRoomSelectState(
     mode: RoomSelectMode = RoomSelectMode.Forward,
-    resultState: SearchBarResultState<ImmutableList<RoomSummaryDetails>> = SearchBarResultState.Initial(),
+    resultState: SearchBarResultState<ImmutableList<RoomSummary>> = SearchBarResultState.Initial(),
     query: String = "",
     isSearchActive: Boolean = false,
-    selectedRooms: ImmutableList<RoomSummaryDetails> = persistentListOf(),
+    selectedRooms: ImmutableList<RoomSummary> = persistentListOf(),
 ) = RoomSelectState(
     mode = mode,
     resultState = resultState,

@@ -16,8 +16,6 @@
 
 package io.element.android.libraries.matrix.impl.timeline.item.event
 
-import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
@@ -33,42 +31,20 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.impl.media.map
+import io.element.android.libraries.matrix.impl.timeline.reply.InReplyToMapper
 import org.matrix.rustcomponents.sdk.Message
 import org.matrix.rustcomponents.sdk.MessageType
-import org.matrix.rustcomponents.sdk.RepliedToEventDetails
 import org.matrix.rustcomponents.sdk.use
 import org.matrix.rustcomponents.sdk.FormattedBody as RustFormattedBody
 import org.matrix.rustcomponents.sdk.MessageFormat as RustMessageFormat
 import org.matrix.rustcomponents.sdk.MessageType as RustMessageType
 
 class EventMessageMapper {
-    private val timelineEventContentMapper by lazy { TimelineEventContentMapper() }
+    private val inReplyToMapper by lazy { InReplyToMapper(TimelineEventContentMapper()) }
 
     fun map(message: Message): MessageContent = message.use {
         val type = it.msgtype().use(this::mapMessageType)
-        val inReplyToEvent: InReplyTo? = it.inReplyTo()?.use { details ->
-            val inReplyToId = EventId(details.eventId)
-            when (val event = details.event) {
-                is RepliedToEventDetails.Ready -> {
-                    InReplyTo.Ready(
-                        eventId = inReplyToId,
-                        content = timelineEventContentMapper.map(event.content),
-                        senderId = UserId(event.sender),
-                        senderProfile = event.senderProfile.map(),
-                    )
-                }
-                is RepliedToEventDetails.Error -> InReplyTo.Error(
-                    eventId = inReplyToId,
-                    message = event.message,
-                )
-                RepliedToEventDetails.Pending -> InReplyTo.Pending(
-                    eventId = inReplyToId,
-                )
-                is RepliedToEventDetails.Unavailable -> InReplyTo.NotLoaded(
-                    eventId = inReplyToId
-                )
-            }
-        }
+        val inReplyToEvent: InReplyTo? = it.inReplyTo()?.use(inReplyToMapper::map)
         MessageContent(
             body = it.body(),
             inReplyTo = inReplyToEvent,

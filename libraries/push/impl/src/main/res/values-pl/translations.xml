@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="notification_channel_call">"Zadzwoń"</string>
+  <string name="notification_channel_listening_for_events">"Nasłuchiwanie wydarzeń"</string>
+  <string name="notification_channel_noisy">"Głośne powiadomienia"</string>
+  <string name="notification_channel_ringing_calls">"Dzwoniące połączenia"</string>
+  <string name="notification_channel_silent">"Ciche powiadomienia"</string>
+  <plurals name="notification_compat_summary_line_for_room">
+    <item quantity="one">"%1$s: %2$d wiadomość"</item>
+    <item quantity="few">"%1$s: %2$d wiadomości"</item>
+    <item quantity="many">"%1$s: %2$d wiadomości"</item>
+  </plurals>
+  <plurals name="notification_compat_summary_title">
+    <item quantity="one">"%d powiadomienie"</item>
+    <item quantity="few">"%d powiadomienia"</item>
+    <item quantity="many">"%d powiadomień"</item>
+  </plurals>
+  <string name="notification_fallback_content">"Powiadomienie"</string>
+  <string name="notification_incoming_call">"Przychodzące połączenie"</string>
+  <string name="notification_inline_reply_failed">"** Nie udało się wysłać - proszę otworzyć pokój"</string>
+  <string name="notification_invitation_action_join">"Dołącz"</string>
+  <string name="notification_invitation_action_reject">"Odrzuć"</string>
+  <plurals name="notification_invitations">
+    <item quantity="one">"%d zaproszenie"</item>
+    <item quantity="few">"%d zaproszenia"</item>
+    <item quantity="many">"%d zaproszeń"</item>
+  </plurals>
+  <string name="notification_invite_body">"Zaprosił(a) cię do czatu"</string>
+  <string name="notification_mentioned_you_body">"Wspomniano o Tobie: %1$s"</string>
+  <string name="notification_new_messages">"Nowe wiadomości"</string>
+  <plurals name="notification_new_messages_for_room">
+    <item quantity="one">"%d nowa wiadomość"</item>
+    <item quantity="few">"%d nowe wiadomości"</item>
+    <item quantity="many">"%d nowych wiadomości"</item>
+  </plurals>
+  <string name="notification_reaction_body">"Zareagował z %1$s"</string>
+  <string name="notification_room_action_mark_as_read">"Oznacz jako przeczytane"</string>
+  <string name="notification_room_action_quick_reply">"Szybka odpowiedź"</string>
+  <string name="notification_room_invite_body">"Zaprosił Cię do dołączenia do pokoju"</string>
+  <string name="notification_sender_me">"Ja"</string>
+  <string name="notification_test_push_notification_content">"Wyświetlasz powiadomienie! Kliknij mnie!"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
+  <plurals name="notification_unread_notified_messages">
+    <item quantity="one">"%d nieprzeczytana wiadomość"</item>
+    <item quantity="few">"%d nieprzeczytane wiadomość"</item>
+    <item quantity="many">"%d nieprzeczytanych wiadomości"</item>
+  </plurals>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s i %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%1$s w %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s w %2$s i %3$s"</string>
+  <plurals name="notification_unread_notified_messages_in_room_rooms">
+    <item quantity="one">"%d pokój"</item>
+    <item quantity="few">"%d pokoje"</item>
+    <item quantity="many">"%d pokoi"</item>
+  </plurals>
+  <string name="push_distributor_background_sync_android">"Synchronizacja w tle"</string>
+  <string name="push_distributor_firebase_android">"Usługi Google"</string>
+  <string name="push_no_valid_google_play_services_apk_android">"Nie znaleziono usług Google Play. Powiadomienia mogą nie działać prawidłowo."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Uzyskaj nazwę bieżącego dostawcy."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Nie wybrano dostawców push."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Bieżący dostawca push: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Bieżący dostawca push"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Upewnij się, że aplikacja ma co najmniej jednego dostawcę push."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nie znaleziono dostawców push."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"Znaleziono %1$d dostawcę push: %2$s"</item>
+    <item quantity="few">"Znaleziono %1$d dostawców push: %2$s"</item>
+    <item quantity="many">"Znaleziono %1$d dostawców push: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Wykryj dostawców powiadomień push"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Sprawdź, czy aplikacja może wyświetlać powiadomienie."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"Powiadomienie nie zostało kliknięte."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Nie można wyświetlić powiadomienia."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"Powiadomienie zostało kliknięte!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Wyświetl powiadomienie"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Kliknij powiadomienie, aby kontynuować test."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"Upewnij się, że aplikacja otrzymuje powiadomienie push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Błąd: pusher odrzucił żądanie."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Błąd: %1$s."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Błąd, nie można przetestować push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Błąd, upłynął limit czasu powiadomienia push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"Pętla powrotna push zajęła %1$d ms."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"Przetestuj pętlę Push back"</string>
+</resources>
