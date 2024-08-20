@@ -79,8 +79,8 @@ sealed interface NotificationContent {
         ) : MessageLike
 
         data class RoomRedaction(
-            val redactedEventId: String?,
-            val reason: String?
+            val redactedEventId: EventId?,
+            val reason: String?,
         ) : MessageLike
 
         data object Sticker : MessageLike
