@@ -95,7 +95,8 @@ class TimelineItemsFactory @Inject constructor(
                     eventItemFactory.update(
                         timelineItem = cacheItem,
                         receivedMatrixTimelineItem = timelineItems[index] as MatrixTimelineItem.Event,
-                        roomMembers = roomMembers
+                        roomMembers = roomMembers,
+                        pinnedEvents = pinnedEvents,
                     )
                 } else {
                     cacheItem

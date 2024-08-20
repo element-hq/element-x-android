@@ -97,9 +97,11 @@ class TimelineItemEventFactory @Inject constructor(
         timelineItem: TimelineItem.Event,
         receivedMatrixTimelineItem: MatrixTimelineItem.Event,
         roomMembers: List<RoomMember>,
+        pinnedEvents: List<EventId>,
     ): TimelineItem.Event {
         return timelineItem.copy(
-            readReceiptState = receivedMatrixTimelineItem.computeReadReceiptState(roomMembers)
+            readReceiptState = receivedMatrixTimelineItem.computeReadReceiptState(roomMembers),
+            isPinned = receivedMatrixTimelineItem.eventId in pinnedEvents,
         )
     }
 
