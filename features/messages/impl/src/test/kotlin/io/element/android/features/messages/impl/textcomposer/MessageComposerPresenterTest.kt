@@ -431,10 +431,9 @@ class MessageComposerPresenterTest {
         }
         val fakeMatrixRoom = FakeMatrixRoom(
             liveTimeline = timeline,
-            typingNoticeResult = { Result.success(Unit) }
-        ).apply {
-            this.editMessageLambda = roomEditMessageLambda
-        }
+            typingNoticeResult = { Result.success(Unit) },
+            editMessageLambda = roomEditMessageLambda,
+        )
         val presenter = createPresenter(
             this,
             fakeMatrixRoom,
