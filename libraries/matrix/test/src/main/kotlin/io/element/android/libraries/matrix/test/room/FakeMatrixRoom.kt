@@ -105,6 +105,7 @@ class FakeMatrixRoom(
     private val setTopicResult: (String) -> Result<Unit> = { lambdaError() },
     private val updateAvatarResult: (String, ByteArray) -> Result<Unit> = { _, _ -> lambdaError() },
     private val removeAvatarResult: () -> Result<Unit> = { lambdaError() },
+    private val editMessageLambda: (EventId, String, String?, List<Mention>) -> Result<Unit> = { _, _, _, _ -> lambdaError() },
     private val sendMessageResult: (String, String?, List<Mention>) -> Result<Unit> = { _, _, _ -> lambdaError() },
     private val updateUserRoleResult: () -> Result<Unit> = { lambdaError() },
     private val toggleReactionResult: (String, EventId) -> Result<Unit> = { _, _ -> lambdaError() },
@@ -221,9 +222,8 @@ class FakeMatrixRoom(
         return updateUserRoleResult()
     }
 
-    var editMessageLambda: (EventId, String, String?, List<Mention>) -> Result<Unit> = { _, _, _, _ -> lambdaError() }
-    override suspend fun editMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> {
-        return editMessageLambda(eventId, body, htmlBody, mentions)
+    override suspend fun editMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>) = simulateLongTask {
+        editMessageLambda(eventId, body, htmlBody, mentions)
     }
 
     override suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>) = simulateLongTask {

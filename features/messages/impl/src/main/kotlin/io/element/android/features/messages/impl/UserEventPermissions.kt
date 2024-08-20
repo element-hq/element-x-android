@@ -29,7 +29,7 @@ data class UserEventPermissions(
 ) {
     companion object {
         val DEFAULT = UserEventPermissions(
-            canRedactOwn = false,
+            canRedactOwn = true,
             canRedactOther = false,
             canSendMessage = true,
             canSendReaction = true,

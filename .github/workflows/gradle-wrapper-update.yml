@@ -1,18 +1,25 @@
 name: Update Gradle Wrapper
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: "0 0 * * *"
 
 jobs:
   update-gradle-wrapper:
     runs-on: ubuntu-latest
+    # Skip in forks
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        name: Use JDK 17
+        if: (github.event_name == 'pull_request' && github.event.pull_request.fork == null) || github.event_name == 'workflow_dispatch'
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
       - name: Update Gradle Wrapper
         uses: gradle-update/update-gradle-wrapper-action@v1
-        # Skip in forks
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           target-branch: develop
