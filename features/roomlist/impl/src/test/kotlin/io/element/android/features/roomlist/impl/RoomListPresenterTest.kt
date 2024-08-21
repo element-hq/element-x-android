@@ -495,7 +495,7 @@ class RoomListPresenterTest {
     }
 
     @Test
-    fun `present - when room service returns no room, then contentState is Empty `() = runTest {
+    fun `present - when room service returns no room, then contentState is Empty`() = runTest {
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
         val roomListService = FakeRoomListService()
         roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(0))
