@@ -39,7 +39,7 @@ data class InviteSender(
     @Composable
     fun annotatedString(): AnnotatedString {
         return stringResource(R.string.screen_invites_invited_you, displayName, userId.value).let { text ->
-            val senderNameStart = LocalContext.current.getString(R.string.screen_invites_invited_you).indexOf("%1\$s")
+            val senderNameStart = LocalContext.current.getString(R.string.screen_invites_invited_you).indexOf("%1\$s") // TCHAP text should be changed to hide the user id
             AnnotatedString(
                 text = text,
                 spanStyles = listOf(

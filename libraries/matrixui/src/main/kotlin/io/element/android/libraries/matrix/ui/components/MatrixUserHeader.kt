@@ -88,16 +88,17 @@ private fun MatrixUserHeaderContent(
                 overflow = TextOverflow.Ellipsis,
                 color = ElementTheme.materialColors.primary,
             )
-            // Id
-            if (matrixUser.displayName.isNullOrEmpty().not()) {
-                Text(
-                    text = matrixUser.userId.value,
-                    style = ElementTheme.typography.fontBodyMdRegular,
-                    color = ElementTheme.materialColors.secondary,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
+            // TCHAP hide the Matrix Id
+//            // Id
+//            if (matrixUser.displayName.isNullOrEmpty().not()) {
+//                Text(
+//                    text = matrixUser.userId.value,
+//                    style = ElementTheme.typography.fontBodyMdRegular,
+//                    color = ElementTheme.materialColors.secondary,
+//                    maxLines = 1,
+//                    overflow = TextOverflow.Ellipsis
+//                )
+//            }
         }
     }
 }

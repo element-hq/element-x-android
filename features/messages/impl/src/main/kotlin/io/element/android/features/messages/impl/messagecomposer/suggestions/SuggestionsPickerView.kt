@@ -45,6 +45,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.room.getBestName
 import io.element.android.libraries.matrix.ui.components.aRoomSummaryDetails
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
@@ -109,7 +110,7 @@ private fun SuggestionItemView(
         }
         val title = when (suggestion) {
             is ResolvedSuggestion.AtRoom -> stringResource(R.string.screen_room_mentions_at_room_title)
-            is ResolvedSuggestion.Member -> suggestion.roomMember.displayName
+            is ResolvedSuggestion.Member -> suggestion.roomMember.getBestName() // TCHAP should be applied in Element X
             is ResolvedSuggestion.Alias -> suggestion.roomSummary.name
         }
         val subtitle = when (suggestion) {
@@ -134,13 +135,16 @@ private fun SuggestionItemView(
                     overflow = TextOverflow.Ellipsis,
                 )
             }
-            Text(
-                text = subtitle,
-                style = ElementTheme.typography.fontBodySmRegular,
-                color = ElementTheme.colors.textSecondary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
+            // TCHAP hide the Matrix Id
+            if (subtitle != null) {
+                Text(
+                    text = subtitle,
+                    style = ElementTheme.typography.fontBodySmRegular,
+                    color = ElementTheme.colors.textSecondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         }
     }
 }

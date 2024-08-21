@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.api.room
 
+import fr.gouv.tchap.android.libraries.matrix.api.core.toDisplayName
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
@@ -56,7 +57,7 @@ data class RoomMember(
      * Otherwise, the display name is returned.
      */
     val disambiguatedDisplayName: String = when {
-        displayName == null -> userId.value
+        displayName == null -> userId.toDisplayName() // TCHAP hide the Matrix Id
         isNameAmbiguous -> "$displayName ($userId)"
         else -> displayName
     }
@@ -77,7 +78,7 @@ enum class RoomMembershipState {
  * If the [RoomMember.displayName] is present and not empty it'll be used, otherwise the [RoomMember.userId] will be used.
  */
 fun RoomMember.getBestName(): String {
-    return displayName?.takeIf { it.isNotEmpty() } ?: userId.value
+    return displayName?.takeIf { it.isNotEmpty() } ?: userId.toDisplayName() // TCHAP hide the Matrix Id
 }
 
 fun RoomMember.toMatrixUser() = MatrixUser(

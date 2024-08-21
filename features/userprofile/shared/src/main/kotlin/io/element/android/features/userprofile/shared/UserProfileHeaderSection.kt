@@ -70,15 +70,16 @@ fun UserProfileHeaderSection(
             )
             Spacer(modifier = Modifier.height(6.dp))
         }
-        Text(
-            text = userId.value,
-            style = ElementTheme.typography.fontBodyLgRegular,
-            color = MaterialTheme.colorScheme.secondary,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            textAlign = TextAlign.Center,
-        )
+        // TCHAP hide the Matrix Id
+//        Text(
+//            text = userId.value,
+//            style = ElementTheme.typography.fontBodyLgRegular,
+//            color = MaterialTheme.colorScheme.secondary,
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(horizontal = 16.dp),
+//            textAlign = TextAlign.Center,
+//        )
         Spacer(Modifier.height(40.dp))
     }
 }

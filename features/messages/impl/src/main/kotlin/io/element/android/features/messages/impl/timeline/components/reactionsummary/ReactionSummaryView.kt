@@ -76,6 +76,7 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.matrix.ui.model.getAvatarData
+import io.element.android.libraries.matrix.ui.model.getBestName
 import kotlinx.coroutines.launch
 
 internal val REACTION_SUMMARY_LINE_HEIGHT = 25.sp
@@ -156,7 +157,7 @@ private fun SheetContent(
 
                     SenderRow(
                         avatarData = user.getAvatarData(AvatarSize.UserListItem),
-                        name = user.displayName ?: user.userId.value,
+                        name = user.getBestName(), // TCHAP should be applied in Element X
                         userId = user.userId.value,
                         sentTime = sender.sentTime
                     )
@@ -270,13 +271,14 @@ private fun SenderRow(
                     style = ElementTheme.typography.fontBodySmRegular,
                 )
             }
-            Text(
-                text = userId,
-                color = MaterialTheme.colorScheme.secondary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                style = ElementTheme.typography.fontBodySmRegular,
-            )
+            // TCHAP hide the Matrix Id
+//            Text(
+//                text = userId,
+//                color = MaterialTheme.colorScheme.secondary,
+//                maxLines = 1,
+//                overflow = TextOverflow.Ellipsis,
+//                style = ElementTheme.typography.fontBodySmRegular,
+//            )
         }
     }
 }

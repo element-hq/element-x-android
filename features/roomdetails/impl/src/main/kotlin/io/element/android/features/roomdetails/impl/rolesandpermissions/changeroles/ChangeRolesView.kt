@@ -378,16 +378,17 @@ private fun MemberRow(
                     )
                 }
             }
-            // Id
-            userId?.let {
-                Text(
-                    text = userId,
-                    color = MaterialTheme.colorScheme.secondary,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    style = ElementTheme.typography.fontBodySmRegular,
-                )
-            }
+            // TCHAP hide the Matrix Id
+//            // Id
+//            userId?.let {
+//                Text(
+//                    text = userId,
+//                    color = MaterialTheme.colorScheme.secondary,
+//                    maxLines = 1,
+//                    overflow = TextOverflow.Ellipsis,
+//                    style = ElementTheme.typography.fontBodySmRegular,
+//                )
+//            }
         }
         trailingContent?.invoke()
     }

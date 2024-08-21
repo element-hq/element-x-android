@@ -63,16 +63,17 @@ internal fun UserRow(
                 color = MaterialTheme.colorScheme.primary,
                 style = ElementTheme.typography.fontBodyLgRegular,
             )
-            // Id
-            subtext?.let {
-                Text(
-                    text = subtext,
-                    color = MaterialTheme.colorScheme.secondary,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    style = ElementTheme.typography.fontBodySmRegular,
-                )
-            }
+            // TCHAP hide the Matrix Id
+//            // Id
+//            subtext?.let {
+//                Text(
+//                    text = subtext,
+//                    color = MaterialTheme.colorScheme.secondary,
+//                    maxLines = 1,
+//                    overflow = TextOverflow.Ellipsis,
+//                    style = ElementTheme.typography.fontBodySmRegular,
+//                )
+//            }
         }
         trailingContent?.invoke()
     }

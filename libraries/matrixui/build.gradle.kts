@@ -43,6 +43,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.core)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.tchaputils)
     implementation(projects.libraries.testtags)
     implementation(libs.coil.compose)
     implementation(libs.coil.gif)
