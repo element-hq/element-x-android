@@ -48,34 +48,28 @@ class MentionSuggestionsProcessor @Inject constructor() {
         currentUserId: UserId,
         canSendRoomMention: suspend () -> Boolean,
     ): List<ResolvedSuggestion> {
-        val members = roomMembersState.roomMembers()
-        return when {
-            members.isNullOrEmpty() || suggestion == null -> {
+        suggestion ?: return emptyList()
+        return when (suggestion.type) {
+            SuggestionType.Mention -> {
+                // Replace suggestions
+                val members = roomMembersState.roomMembers()
+                val matchingMembers = getMemberSuggestions(
+                    query = suggestion.text,
+                    roomMembers = members,
+                    currentUserId = currentUserId,
+                    canSendRoomMention = canSendRoomMention()
+                )
+                matchingMembers
+            }
+            SuggestionType.Room -> {
+                roomAliasSuggestions
+                    .filter { it.roomAlias.value.contains(suggestion.text, ignoreCase = true) }
+                    .map { ResolvedSuggestion.Alias(it.roomAlias, it.roomSummary) }
+            }
+            SuggestionType.Command,
+            is SuggestionType.Custom -> {
                 // Clear suggestions
                 emptyList()
-            }
-            else -> {
-                when (suggestion.type) {
-                    SuggestionType.Mention -> {
-                        // Replace suggestions
-                        val matchingMembers = getMemberSuggestions(
-                            query = suggestion.text,
-                            roomMembers = members,
-                            currentUserId = currentUserId,
-                            canSendRoomMention = canSendRoomMention()
-                        )
-                        matchingMembers
-                    }
-                    SuggestionType.Room -> {
-                        roomAliasSuggestions
-                            .filter { it.roomAlias.value.contains(suggestion.text, ignoreCase = true) }
-                            .map { ResolvedSuggestion.Alias(it.roomAlias, it.roomSummary) }
-                    }
-                    else -> {
-                        // Clear suggestions
-                        emptyList()
-                    }
-                }
             }
         }
     }
