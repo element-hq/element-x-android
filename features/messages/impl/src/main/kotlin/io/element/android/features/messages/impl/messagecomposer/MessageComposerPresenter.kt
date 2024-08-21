@@ -150,8 +150,10 @@ class MessageComposerPresenter @Inject constructor(
         }
         val markdownTextEditorState = rememberMarkdownTextEditorState(initialText = null, initialFocus = false)
         var isMentionsEnabled by remember { mutableStateOf(false) }
+        var isRoomAliasSuggestionsEnabled by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
             isMentionsEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.Mentions)
+            isRoomAliasSuggestionsEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.RoomAliasSuggestions)
         }
 
         val cameraPermissionState = cameraPermissionPresenter.present()
@@ -235,7 +237,7 @@ class MessageComposerPresenter @Inject constructor(
                     val result = MentionSuggestionsProcessor.process(
                         suggestion = suggestion,
                         roomMembersState = roomMembersState,
-                        roomAliasSuggestions = roomAliasSuggestions,
+                        roomAliasSuggestions = if (isRoomAliasSuggestionsEnabled) roomAliasSuggestions else emptyList(),
                         currentUserId = currentUserId,
                         canSendRoomMention = ::canSendRoomMention,
                     )
