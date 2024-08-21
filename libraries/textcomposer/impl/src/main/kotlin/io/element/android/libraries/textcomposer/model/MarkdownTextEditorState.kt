@@ -76,7 +76,7 @@ class MarkdownTextEditorState(
                 val text = resolvedSuggestion.roomMember.displayName?.prependIndent("@") ?: resolvedSuggestion.roomMember.userId.value
                 val link = permalinkBuilder.permalinkForUser(resolvedSuggestion.roomMember.userId).getOrNull() ?: return
                 val mentionPill = mentionSpanProvider.getMentionSpanFor(text, link)
-                currentText.replace(suggestion.start, suggestion.end, ". ")
+                currentText.replace(suggestion.start, suggestion.end, "@ ")
                 val end = suggestion.start + 1
                 currentText.setSpan(mentionPill, suggestion.start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 this.text.update(currentText, true)
@@ -87,7 +87,7 @@ class MarkdownTextEditorState(
                 val text = resolvedSuggestion.roomAlias.value
                 val link = permalinkBuilder.permalinkForRoomAlias(resolvedSuggestion.roomAlias).getOrNull() ?: return
                 val mentionPill = mentionSpanProvider.getMentionSpanFor(text, link)
-                currentText.replace(suggestion.start, suggestion.end, "@ ")
+                currentText.replace(suggestion.start, suggestion.end, "# ")
                 val end = suggestion.start + 1
                 currentText.setSpan(mentionPill, suggestion.start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 this.text.update(currentText, true)
