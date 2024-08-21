@@ -55,8 +55,8 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.isDm
@@ -72,7 +72,7 @@ import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
-import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
+import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
@@ -117,6 +117,7 @@ class MessageComposerPresenter @Inject constructor(
     private val analyticsService: AnalyticsService,
     private val messageComposerContext: DefaultMessageComposerContext,
     private val richTextEditorStateFactory: RichTextEditorStateFactory,
+    private val roomAliasSuggestionsDataSource: RoomAliasSuggestionsDataSource,
     private val permalinkParser: PermalinkParser,
     private val permalinkBuilder: PermalinkBuilder,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
@@ -189,6 +190,8 @@ class MessageComposerPresenter @Inject constructor(
 
         val sendTypingNotifications by sessionPreferencesStore.isSendTypingNotificationsEnabled().collectAsState(initial = true)
 
+        val roomAliasSuggestions by roomAliasSuggestionsDataSource.getAllRoomAliasSuggestions().collectAsState(initial = emptyList())
+
         LaunchedEffect(attachmentsState.value) {
             when (val attachmentStateValue = attachmentsState.value) {
                 is AttachmentsState.Sending.Processing -> {
@@ -212,7 +215,7 @@ class MessageComposerPresenter @Inject constructor(
             }
         }
 
-        val memberSuggestions = remember { mutableStateListOf<ResolvedMentionSuggestion>() }
+        val suggestions = remember { mutableStateListOf<ResolvedSuggestion>() }
         LaunchedEffect(isMentionsEnabled) {
             if (!isMentionsEnabled) return@LaunchedEffect
             val currentUserId = room.sessionId
@@ -228,15 +231,16 @@ class MessageComposerPresenter @Inject constructor(
             val mentionCompletionTrigger = suggestionSearchTrigger.debounce(0.3.seconds).filter { !it?.text.isNullOrEmpty() }
             merge(mentionStartTrigger, mentionCompletionTrigger)
                 .combine(room.membersStateFlow) { suggestion, roomMembersState ->
-                    memberSuggestions.clear()
+                    suggestions.clear()
                     val result = MentionSuggestionsProcessor.process(
                         suggestion = suggestion,
                         roomMembersState = roomMembersState,
+                        roomAliasSuggestions = roomAliasSuggestions,
                         currentUserId = currentUserId,
                         canSendRoomMention = ::canSendRoomMention,
                     )
                     if (result.isNotEmpty()) {
-                        memberSuggestions.addAll(result)
+                        suggestions.addAll(result)
                     }
                 }
                 .collect()
@@ -362,22 +366,27 @@ class MessageComposerPresenter @Inject constructor(
                 is MessageComposerEvents.SuggestionReceived -> {
                     suggestionSearchTrigger.value = event.suggestion
                 }
-                is MessageComposerEvents.InsertMention -> {
+                is MessageComposerEvents.InsertSuggestion -> {
                     localCoroutineScope.launch {
                         if (showTextFormatting) {
-                            when (val mention = event.mention) {
-                                is ResolvedMentionSuggestion.AtRoom -> {
+                            when (val suggestion = event.resolvedSuggestion) {
+                                is ResolvedSuggestion.AtRoom -> {
                                     richTextEditorState.insertAtRoomMentionAtSuggestion()
                                 }
-                                is ResolvedMentionSuggestion.Member -> {
-                                    val text = mention.roomMember.userId.value
-                                    val link = permalinkBuilder.permalinkForUser(mention.roomMember.userId).getOrNull() ?: return@launch
+                                is ResolvedSuggestion.Member -> {
+                                    val text = suggestion.roomMember.userId.value
+                                    val link = permalinkBuilder.permalinkForUser(suggestion.roomMember.userId).getOrNull() ?: return@launch
+                                    richTextEditorState.insertMentionAtSuggestion(text = text, link = link)
+                                }
+                                is ResolvedSuggestion.Alias -> {
+                                    val text = suggestion.roomAlias.value
+                                    val link = permalinkBuilder.permalinkForRoomAlias(suggestion.roomAlias).getOrNull() ?: return@launch
                                     richTextEditorState.insertMentionAtSuggestion(text = text, link = link)
                                 }
                             }
-                        } else if (markdownTextEditorState.currentMentionSuggestion != null) {
-                            markdownTextEditorState.insertMention(
-                                mention = event.mention,
+                        } else if (markdownTextEditorState.currentSuggestion != null) {
+                            markdownTextEditorState.insertSuggestion(
+                                resolvedSuggestion = event.resolvedSuggestion,
                                 mentionSpanProvider = mentionSpanProvider,
                                 permalinkBuilder = permalinkBuilder,
                             )
@@ -417,7 +426,7 @@ class MessageComposerPresenter @Inject constructor(
             canShareLocation = canShareLocation.value,
             canCreatePoll = canCreatePoll.value,
             attachmentsState = attachmentsState.value,
-            memberSuggestions = memberSuggestions.toPersistentList(),
+            suggestions = suggestions.toPersistentList(),
             resolveMentionDisplay = resolveMentionDisplay,
             eventSink = { handleEvents(it) },
         )
@@ -432,17 +441,21 @@ class MessageComposerPresenter @Inject constructor(
         // Reset composer right away
         resetComposer(markdownTextEditorState, richTextEditorState, fromEdit = capturedMode is MessageComposerMode.Edit)
         when (capturedMode) {
-            is MessageComposerMode.Normal -> room.sendMessage(body = message.markdown, htmlBody = message.html, mentions = message.mentions)
+            is MessageComposerMode.Normal -> room.sendMessage(
+                body = message.markdown,
+                htmlBody = message.html,
+                intentionalMentions = message.intentionalMentions
+            )
             is MessageComposerMode.Edit -> {
                 val eventId = capturedMode.eventId
                 val transactionId = capturedMode.transactionId
                 timelineController.invokeOnCurrentTimeline {
                     // First try to edit the message in the current timeline
-                    editMessage(eventId, transactionId, message.markdown, message.html, message.mentions)
+                    editMessage(eventId, transactionId, message.markdown, message.html, message.intentionalMentions)
                         .onFailure { cause ->
                             if (cause is TimelineException.EventNotFound && eventId != null) {
                                 // if the event is not found in the timeline, try to edit the message directly
-                                room.editMessage(eventId, message.markdown, message.html, message.mentions)
+                                room.editMessage(eventId, message.markdown, message.html, message.intentionalMentions)
                             }
                         }
                 }
@@ -450,7 +463,7 @@ class MessageComposerPresenter @Inject constructor(
 
             is MessageComposerMode.Reply -> {
                 timelineController.invokeOnCurrentTimeline {
-                    replyMessage(capturedMode.eventId, message.markdown, message.html, message.mentions)
+                    replyMessage(capturedMode.eventId, message.markdown, message.html, message.intentionalMentions)
                 }
             }
         }
@@ -623,15 +636,15 @@ class MessageComposerPresenter @Inject constructor(
                 ?.let { state ->
                     buildList {
                         if (state.hasAtRoomMention) {
-                            add(Mention.AtRoom)
+                            add(IntentionalMention.Room)
                         }
                         for (userId in state.userIds) {
-                            add(Mention.User(UserId(userId)))
+                            add(IntentionalMention.User(UserId(userId)))
                         }
                     }
                 }
                 .orEmpty()
-            Message(html = html, markdown = markdown, mentions = mentions)
+            Message(html = html, markdown = markdown, intentionalMentions = mentions)
         } else {
             val markdown = markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
             val mentions = if (withMentions) {
@@ -639,7 +652,7 @@ class MessageComposerPresenter @Inject constructor(
             } else {
                 emptyList()
             }
-            Message(html = null, markdown = markdown, mentions = mentions)
+            Message(html = null, markdown = markdown, intentionalMentions = mentions)
         }
     }
 

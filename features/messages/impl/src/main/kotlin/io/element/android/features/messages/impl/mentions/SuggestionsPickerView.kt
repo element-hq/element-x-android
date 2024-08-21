@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -39,38 +40,41 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
-import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
+import io.element.android.libraries.matrix.ui.components.aRoomSummaryDetails
+import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-fun MentionSuggestionsPickerView(
+fun SuggestionsPickerView(
     roomId: RoomId,
     roomName: String?,
     roomAvatarData: AvatarData?,
-    memberSuggestions: ImmutableList<ResolvedMentionSuggestion>,
-    onSelectSuggestion: (ResolvedMentionSuggestion) -> Unit,
+    suggestions: ImmutableList<ResolvedSuggestion>,
+    onSelectSuggestion: (ResolvedSuggestion) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
     ) {
         items(
-            memberSuggestions,
+            suggestions,
             key = { suggestion ->
                 when (suggestion) {
-                    is ResolvedMentionSuggestion.AtRoom -> "@room"
-                    is ResolvedMentionSuggestion.Member -> suggestion.roomMember.userId.value
+                    is ResolvedSuggestion.AtRoom -> "@room"
+                    is ResolvedSuggestion.Member -> suggestion.roomMember.userId.value
+                    is ResolvedSuggestion.Alias -> suggestion.roomAlias.value
                 }
             }
         ) {
             Column(modifier = Modifier.fillParentMaxWidth()) {
-                RoomMemberSuggestionItemView(
-                    memberSuggestion = it,
+                SuggestionItemView(
+                    suggestion = it,
                     roomId = roomId.value,
                     roomName = roomName,
                     roomAvatar = roomAvatarData,
@@ -84,33 +88,44 @@ fun MentionSuggestionsPickerView(
 }
 
 @Composable
-private fun RoomMemberSuggestionItemView(
-    memberSuggestion: ResolvedMentionSuggestion,
+private fun SuggestionItemView(
+    suggestion: ResolvedSuggestion,
     roomId: String,
     roomName: String?,
     roomAvatar: AvatarData?,
-    onSelectSuggestion: (ResolvedMentionSuggestion) -> Unit,
+    onSelectSuggestion: (ResolvedSuggestion) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(modifier = modifier.clickable { onSelectSuggestion(memberSuggestion) }, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-        val avatarData = when (memberSuggestion) {
-            is ResolvedMentionSuggestion.AtRoom -> roomAvatar?.copy(size = AvatarSize.Suggestion)
-                ?: AvatarData(roomId, roomName, null, AvatarSize.Suggestion)
-            is ResolvedMentionSuggestion.Member -> AvatarData(
-                id = memberSuggestion.roomMember.userId.value,
-                name = memberSuggestion.roomMember.displayName,
-                url = memberSuggestion.roomMember.avatarUrl,
-                size = AvatarSize.Suggestion,
+    Row(
+        modifier = modifier.clickable { onSelectSuggestion(suggestion) },
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        val avatarSize = AvatarSize.Suggestion
+        val avatarData = when (suggestion) {
+            is ResolvedSuggestion.AtRoom -> roomAvatar?.copy(size = avatarSize) ?: AvatarData(roomId, roomName, null, avatarSize)
+            is ResolvedSuggestion.Member -> AvatarData(
+                suggestion.roomMember.userId.value,
+                suggestion.roomMember.displayName,
+                suggestion.roomMember.avatarUrl,
+                avatarSize,
+            )
+            is ResolvedSuggestion.Alias -> AvatarData(
+                suggestion.roomSummary.roomId.value,
+                suggestion.roomSummary.name,
+                suggestion.roomSummary.avatarUrl,
+                avatarSize,
             )
         }
-        val title = when (memberSuggestion) {
-            is ResolvedMentionSuggestion.AtRoom -> stringResource(R.string.screen_room_mentions_at_room_title)
-            is ResolvedMentionSuggestion.Member -> memberSuggestion.roomMember.displayName
+        val title = when (suggestion) {
+            is ResolvedSuggestion.AtRoom -> stringResource(R.string.screen_room_mentions_at_room_title)
+            is ResolvedSuggestion.Member -> suggestion.roomMember.displayName
+            is ResolvedSuggestion.Alias -> suggestion.roomSummary.name
         }
 
-        val subtitle = when (memberSuggestion) {
-            is ResolvedMentionSuggestion.AtRoom -> "@room"
-            is ResolvedMentionSuggestion.Member -> memberSuggestion.roomMember.userId.value
+        val subtitle = when (suggestion) {
+            is ResolvedSuggestion.AtRoom -> "@room"
+            is ResolvedSuggestion.Member -> suggestion.roomMember.userId.value
+            is ResolvedSuggestion.Alias -> suggestion.roomAlias.value
         }
 
         Avatar(avatarData = avatarData, modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 12.dp))
@@ -142,7 +157,7 @@ private fun RoomMemberSuggestionItemView(
 
 @PreviewsDayNight
 @Composable
-internal fun MentionSuggestionsPickerViewPreview() {
+internal fun SuggestionsPickerViewPreview() {
     ElementPreview {
         val roomMember = RoomMember(
             userId = UserId("@alice:server.org"),
@@ -155,14 +170,24 @@ internal fun MentionSuggestionsPickerViewPreview() {
             isIgnored = false,
             role = RoomMember.Role.USER,
         )
-        MentionSuggestionsPickerView(
+        val anAlias = remember { RoomAlias("#room:domain.org") }
+        val roomSummaryDetails = remember {
+            aRoomSummaryDetails(
+                name = "My room",
+            )
+        }
+        SuggestionsPickerView(
             roomId = RoomId("!room:matrix.org"),
             roomName = "Room",
             roomAvatarData = null,
-            memberSuggestions = persistentListOf(
-                ResolvedMentionSuggestion.AtRoom,
-                ResolvedMentionSuggestion.Member(roomMember),
-                ResolvedMentionSuggestion.Member(roomMember.copy(userId = UserId("@bob:server.org"), displayName = "Bob")),
+            suggestions = persistentListOf(
+                ResolvedSuggestion.AtRoom,
+                ResolvedSuggestion.Member(roomMember),
+                ResolvedSuggestion.Member(roomMember.copy(userId = UserId("@bob:server.org"), displayName = "Bob")),
+                ResolvedSuggestion.Alias(
+                    anAlias,
+                    roomSummaryDetails,
+                )
             ),
             onSelectSuggestion = {}
         )

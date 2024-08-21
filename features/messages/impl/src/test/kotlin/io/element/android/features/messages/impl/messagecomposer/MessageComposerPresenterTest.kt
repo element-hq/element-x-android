@@ -16,7 +16,7 @@
 
 @file:OptIn(ExperimentalCoroutinesApi::class)
 
-package io.element.android.features.messages.impl.textcomposer
+package io.element.android.features.messages.impl.messagecomposer
 
 import android.net.Uri
 import androidx.compose.runtime.remember
@@ -29,11 +29,6 @@ import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.messages.impl.draft.ComposerDraftService
 import io.element.android.features.messages.impl.draft.FakeComposerDraftService
-import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
-import io.element.android.features.messages.impl.messagecomposer.DefaultMessageComposerContext
-import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
-import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
-import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.utils.FakeTextPillificationHelper
 import io.element.android.features.messages.impl.utils.TextPillificationHelper
@@ -52,7 +47,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
-import io.element.android.libraries.matrix.api.room.Mention
+import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
@@ -90,7 +85,7 @@ import io.element.android.libraries.permissions.test.FakePermissionsPresenterFac
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
-import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
+import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
@@ -368,7 +363,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - edit sent message`() = runTest {
-        val editMessageLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String, _: String?, _: List<Mention> ->
+        val editMessageLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String, _: String?, _: List<IntentionalMention> ->
             Result.success(Unit)
         }
         val timeline = FakeTimeline().apply {
@@ -420,13 +415,13 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - edit sent message event not found`() = runTest {
-        val timelineEditMessageLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String, _: String?, _: List<Mention> ->
+        val timelineEditMessageLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String, _: String?, _: List<IntentionalMention> ->
             Result.failure<Unit>(TimelineException.EventNotFound)
         }
         val timeline = FakeTimeline().apply {
             this.editMessageLambda = timelineEditMessageLambda
         }
-        val roomEditMessageLambda = lambdaRecorder { _: EventId?, _: String, _: String?, _: List<Mention> ->
+        val roomEditMessageLambda = lambdaRecorder { _: EventId?, _: String, _: String?, _: List<IntentionalMention> ->
             Result.success(Unit)
         }
         val fakeMatrixRoom = FakeMatrixRoom(
@@ -480,7 +475,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - edit not sent message`() = runTest {
-        val editMessageLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String, _: String?, _: List<Mention> ->
+        val editMessageLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String, _: String?, _: List<IntentionalMention> ->
             Result.success(Unit)
         }
         val timeline = FakeTimeline().apply {
@@ -532,7 +527,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - reply message`() = runTest {
-        val replyMessageLambda = lambdaRecorder { _: EventId, _: String, _: String?, _: List<Mention>, _: Boolean ->
+        val replyMessageLambda = lambdaRecorder { _: EventId, _: String, _: String?, _: List<IntentionalMention>, _: Boolean ->
             Result.success(Unit)
         }
         val timeline = FakeTimeline().apply {
@@ -974,34 +969,34 @@ class MessageComposerPresenterTest {
 
             // A null suggestion (no suggestion was received) returns nothing
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(null))
-            assertThat(awaitItem().memberSuggestions).isEmpty()
+            assertThat(awaitItem().suggestions).isEmpty()
 
             // An empty suggestion returns the room and joined members that are not the current user
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
-            assertThat(awaitItem().memberSuggestions)
-                .containsExactly(ResolvedMentionSuggestion.AtRoom, ResolvedMentionSuggestion.Member(bob), ResolvedMentionSuggestion.Member(david))
+            assertThat(awaitItem().suggestions)
+                .containsExactly(ResolvedSuggestion.AtRoom, ResolvedSuggestion.Member(bob), ResolvedSuggestion.Member(david))
 
             // A suggestion containing a part of "room" will also return the room mention
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "roo")))
-            assertThat(awaitItem().memberSuggestions).containsExactly(ResolvedMentionSuggestion.AtRoom)
+            assertThat(awaitItem().suggestions).containsExactly(ResolvedSuggestion.AtRoom)
 
             // A non-empty suggestion will return those joined members whose user id matches it
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "bob")))
-            assertThat(awaitItem().memberSuggestions).containsExactly(ResolvedMentionSuggestion.Member(bob))
+            assertThat(awaitItem().suggestions).containsExactly(ResolvedSuggestion.Member(bob))
 
             // A non-empty suggestion will return those joined members whose display name matches it
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "dave")))
-            assertThat(awaitItem().memberSuggestions).containsExactly(ResolvedMentionSuggestion.Member(david))
+            assertThat(awaitItem().suggestions).containsExactly(ResolvedSuggestion.Member(david))
 
             // If the suggestion isn't a mention, no suggestions are returned
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Command, "")))
-            assertThat(awaitItem().memberSuggestions).isEmpty()
+            assertThat(awaitItem().suggestions).isEmpty()
 
             // If user has no permission to send `@room` mentions, `RoomMemberSuggestion.Room` is not returned
             canUserTriggerRoomNotificationResult = false
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
-            assertThat(awaitItem().memberSuggestions)
-                .containsExactly(ResolvedMentionSuggestion.Member(bob), ResolvedMentionSuggestion.Member(david))
+            assertThat(awaitItem().suggestions)
+                .containsExactly(ResolvedSuggestion.Member(bob), ResolvedSuggestion.Member(david))
         }
     }
 
@@ -1039,13 +1034,12 @@ class MessageComposerPresenterTest {
             // An empty suggestion returns the joined members that are not the current user, but not the room
             initialState.eventSink(MessageComposerEvents.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
             skipItems(1)
-            assertThat(awaitItem().memberSuggestions)
-                .containsExactly(ResolvedMentionSuggestion.Member(bob), ResolvedMentionSuggestion.Member(david))
+            assertThat(awaitItem().suggestions)
+                .containsExactly(ResolvedSuggestion.Member(bob), ResolvedSuggestion.Member(david))
         }
     }
 
-    @Test
-    fun `present - insertMention for user in rich text editor`() = runTest {
+    fun `present - InsertSuggestion`() = runTest {
         val presenter = createPresenter(
             coroutineScope = this,
             permalinkBuilder = FakePermalinkBuilder(
@@ -1059,7 +1053,7 @@ class MessageComposerPresenterTest {
         }.test {
             val initialState = awaitFirstItem()
             initialState.textEditorState.setHtml("Hey @bo")
-            initialState.eventSink(MessageComposerEvents.InsertMention(ResolvedMentionSuggestion.Member(aRoomMember(userId = A_USER_ID_2))))
+            initialState.eventSink(MessageComposerEvents.InsertSuggestion(ResolvedSuggestion.Member(aRoomMember(userId = A_USER_ID_2))))
 
             assertThat(initialState.textEditorState.messageHtml())
                 .isEqualTo("Hey <a href='https://matrix.to/#/${A_USER_ID_2.value}'>${A_USER_ID_2.value}</a>")
@@ -1069,17 +1063,17 @@ class MessageComposerPresenterTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - send messages with intentional mentions`() = runTest {
-        val replyMessageLambda = lambdaRecorder { _: EventId, _: String, _: String?, _: List<Mention>, _: Boolean ->
+        val replyMessageLambda = lambdaRecorder { _: EventId, _: String, _: String?, _: List<IntentionalMention>, _: Boolean ->
             Result.success(Unit)
         }
-        val editMessageLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String, _: String?, _: List<Mention> ->
+        val editMessageLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String, _: String?, _: List<IntentionalMention> ->
             Result.success(Unit)
         }
         val timeline = FakeTimeline().apply {
             this.replyMessageLambda = replyMessageLambda
             this.editMessageLambda = editMessageLambda
         }
-        val sendMessageResult = lambdaRecorder { _: String, _: String?, _: List<Mention> ->
+        val sendMessageResult = lambdaRecorder { _: String, _: String?, _: List<IntentionalMention> ->
             Result.success(Unit)
         }
         val room = FakeMatrixRoom(
@@ -1107,7 +1101,7 @@ class MessageComposerPresenterTest {
             advanceUntilIdle()
 
             sendMessageResult.assertions().isCalledOnce()
-                .with(value(A_MESSAGE), any(), value(listOf(Mention.User(A_USER_ID))))
+                .with(value(A_MESSAGE), any(), value(listOf(IntentionalMention.User(A_USER_ID))))
 
             // Check intentional mentions on reply sent
             initialState.eventSink(MessageComposerEvents.SetMode(aReplyMode()))
@@ -1124,7 +1118,7 @@ class MessageComposerPresenterTest {
 
             assert(replyMessageLambda)
                 .isCalledOnce()
-                .with(any(), any(), any(), value(listOf(Mention.User(A_USER_ID_2))), value(false))
+                .with(any(), any(), any(), value(listOf(IntentionalMention.User(A_USER_ID_2))), value(false))
 
             // Check intentional mentions on edit message
             skipItems(1)
@@ -1142,7 +1136,7 @@ class MessageComposerPresenterTest {
 
             assert(editMessageLambda)
                 .isCalledOnce()
-                .with(any(), any(), any(), any(), value(listOf(Mention.User(A_USER_ID_3))))
+                .with(any(), any(), any(), any(), value(listOf(IntentionalMention.User(A_USER_ID_3))))
 
             skipItems(1)
         }
@@ -1507,6 +1501,7 @@ class MessageComposerPresenterTest {
         analyticsService,
         DefaultMessageComposerContext(),
         TestRichTextEditorStateFactory(),
+        roomAliasSuggestionsDataSource = FakeRoomAliasSuggestionsDataSource(),
         permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionPresenter),
         permalinkParser = permalinkParser,
         permalinkBuilder = permalinkBuilder,

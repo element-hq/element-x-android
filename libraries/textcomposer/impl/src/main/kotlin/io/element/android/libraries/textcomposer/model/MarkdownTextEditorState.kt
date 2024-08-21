@@ -31,13 +31,14 @@ import androidx.compose.runtime.saveable.SaverScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.core.text.getSpans
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
-import io.element.android.libraries.matrix.api.room.Mention
+import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.textcomposer.components.markdown.StableCharSequence
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
-import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
+import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.mentions.getMentionSpans
 import kotlinx.parcelize.Parcelize
 
@@ -51,16 +52,16 @@ class MarkdownTextEditorState(
     var hasFocus by mutableStateOf(initialFocus)
     var requestFocusAction by mutableStateOf({})
     var lineCount by mutableIntStateOf(1)
-    var currentMentionSuggestion by mutableStateOf<Suggestion?>(null)
+    var currentSuggestion by mutableStateOf<Suggestion?>(null)
 
-    fun insertMention(
-        mention: ResolvedMentionSuggestion,
+    fun insertSuggestion(
+        resolvedSuggestion: ResolvedSuggestion,
         mentionSpanProvider: MentionSpanProvider,
         permalinkBuilder: PermalinkBuilder,
     ) {
-        val suggestion = currentMentionSuggestion ?: return
-        when (mention) {
-            is ResolvedMentionSuggestion.AtRoom -> {
+        val suggestion = currentSuggestion ?: return
+        when (resolvedSuggestion) {
+            is ResolvedSuggestion.AtRoom -> {
                 val currentText = SpannableStringBuilder(text.value())
                 val replaceText = "@room"
                 val roomPill = mentionSpanProvider.getMentionSpanFor(replaceText, "")
@@ -70,10 +71,21 @@ class MarkdownTextEditorState(
                 text.update(currentText, true)
                 selection = IntRange(end + 1, end + 1)
             }
-            is ResolvedMentionSuggestion.Member -> {
+            is ResolvedSuggestion.Member -> {
                 val currentText = SpannableStringBuilder(text.value())
-                val text = mention.roomMember.displayName?.prependIndent("@") ?: mention.roomMember.userId.value
-                val link = permalinkBuilder.permalinkForUser(mention.roomMember.userId).getOrNull() ?: return
+                val text = resolvedSuggestion.roomMember.displayName?.prependIndent("@") ?: resolvedSuggestion.roomMember.userId.value
+                val link = permalinkBuilder.permalinkForUser(resolvedSuggestion.roomMember.userId).getOrNull() ?: return
+                val mentionPill = mentionSpanProvider.getMentionSpanFor(text, link)
+                currentText.replace(suggestion.start, suggestion.end, ". ")
+                val end = suggestion.start + 1
+                currentText.setSpan(mentionPill, suggestion.start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                this.text.update(currentText, true)
+                this.selection = IntRange(end + 1, end + 1)
+            }
+            is ResolvedSuggestion.Alias -> {
+                val currentText = SpannableStringBuilder(text.value())
+                val text = resolvedSuggestion.roomAlias.value
+                val link = permalinkBuilder.permalinkForRoomAlias(resolvedSuggestion.roomAlias).getOrNull() ?: return
                 val mentionPill = mentionSpanProvider.getMentionSpanFor(text, link)
                 currentText.replace(suggestion.start, suggestion.end, "@ ")
                 val end = suggestion.start + 1
@@ -96,14 +108,18 @@ class MarkdownTextEditorState(
                         val end = charSequence.getSpanEnd(mention)
                         when (mention.type) {
                             MentionSpan.Type.USER -> {
-                                val link = permalinkBuilder.permalinkForUser(UserId(mention.rawValue)).getOrNull() ?: continue
-                                replace(start, end, "[${mention.rawValue}]($link)")
+                                permalinkBuilder.permalinkForUser(UserId(mention.rawValue)).getOrNull()?.let { link ->
+                                    replace(start, end, "[${mention.rawValue}]($link)")
+                                }
                             }
                             MentionSpan.Type.EVERYONE -> {
                                 replace(start, end, "@room")
                             }
-                            // Nothing to do here yet
-                            MentionSpan.Type.ROOM -> Unit
+                            MentionSpan.Type.ROOM -> {
+                                permalinkBuilder.permalinkForRoomAlias(RoomAlias(mention.rawValue)).getOrNull()?.let { link ->
+                                    replace(start, end, "[${mention.text}]($link)")
+                                }
+                            }
                         }
                     }
                 }
@@ -113,13 +129,13 @@ class MarkdownTextEditorState(
         }
     }
 
-    fun getMentions(): List<Mention> {
+    fun getMentions(): List<IntentionalMention> {
         val text = SpannableString(text.value())
         val mentionSpans = text.getSpans<MentionSpan>(0, text.length)
         return mentionSpans.mapNotNull { mentionSpan ->
             when (mentionSpan.type) {
-                MentionSpan.Type.USER -> Mention.User(UserId(mentionSpan.rawValue))
-                MentionSpan.Type.EVERYONE -> Mention.AtRoom
+                MentionSpan.Type.USER -> IntentionalMention.User(UserId(mentionSpan.rawValue))
+                MentionSpan.Type.EVERYONE -> IntentionalMention.Room
                 MentionSpan.Type.ROOM -> null
             }
         }

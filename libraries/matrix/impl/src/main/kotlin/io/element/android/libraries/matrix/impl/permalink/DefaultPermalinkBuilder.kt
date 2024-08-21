@@ -31,7 +31,7 @@ import javax.inject.Inject
 class DefaultPermalinkBuilder @Inject constructor() : PermalinkBuilder {
     override fun permalinkForUser(userId: UserId): Result<String> {
         if (!MatrixPatterns.isUserId(userId.value)) {
-            return Result.failure(PermalinkBuilderError.InvalidUserId)
+            return Result.failure(PermalinkBuilderError.InvalidData)
         }
         return runCatching {
             matrixToUserPermalink(userId.value)
@@ -40,7 +40,7 @@ class DefaultPermalinkBuilder @Inject constructor() : PermalinkBuilder {
 
     override fun permalinkForRoomAlias(roomAlias: RoomAlias): Result<String> {
         if (!MatrixPatterns.isRoomAlias(roomAlias.value)) {
-            return Result.failure(PermalinkBuilderError.InvalidRoomAlias)
+            return Result.failure(PermalinkBuilderError.InvalidData)
         }
         return runCatching {
             matrixToRoomAliasPermalink(roomAlias.value)

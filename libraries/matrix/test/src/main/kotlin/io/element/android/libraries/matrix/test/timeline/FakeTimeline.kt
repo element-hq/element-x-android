@@ -26,7 +26,7 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
-import io.element.android.libraries.matrix.api.room.Mention
+import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
@@ -60,7 +60,7 @@ class FakeTimeline(
     var sendMessageLambda: (
         body: String,
         htmlBody: String?,
-        mentions: List<Mention>,
+        intentionalMentions: List<IntentionalMention>,
     ) -> Result<Unit> = { _, _, _ ->
         Result.success(Unit)
     }
@@ -68,8 +68,8 @@ class FakeTimeline(
     override suspend fun sendMessage(
         body: String,
         htmlBody: String?,
-        mentions: List<Mention>,
-    ): Result<Unit> = sendMessageLambda(body, htmlBody, mentions)
+        intentionalMentions: List<IntentionalMention>,
+    ): Result<Unit> = sendMessageLambda(body, htmlBody, intentionalMentions)
 
     var redactEventLambda: (eventId: EventId?, transactionId: TransactionId?, reason: String?) -> Result<Boolean> = { _, _, _ ->
         Result.success(true)
@@ -86,7 +86,7 @@ class FakeTimeline(
         transactionId: TransactionId?,
         body: String,
         htmlBody: String?,
-        mentions: List<Mention>,
+        intentionalMentions: List<IntentionalMention>,
     ) -> Result<Unit> = { _, _, _, _, _ ->
         Result.success(Unit)
     }
@@ -96,20 +96,20 @@ class FakeTimeline(
         transactionId: TransactionId?,
         body: String,
         htmlBody: String?,
-        mentions: List<Mention>,
+        intentionalMentions: List<IntentionalMention>,
     ): Result<Unit> = editMessageLambda(
         originalEventId,
         transactionId,
         body,
         htmlBody,
-        mentions
+        intentionalMentions
     )
 
     var replyMessageLambda: (
         eventId: EventId,
         body: String,
         htmlBody: String?,
-        mentions: List<Mention>,
+        intentionalMentions: List<IntentionalMention>,
         fromNotification: Boolean,
     ) -> Result<Unit> = { _, _, _, _, _ ->
         Result.success(Unit)
@@ -119,13 +119,13 @@ class FakeTimeline(
         eventId: EventId,
         body: String,
         htmlBody: String?,
-        mentions: List<Mention>,
+        intentionalMentions: List<IntentionalMention>,
         fromNotification: Boolean,
     ): Result<Unit> = replyMessageLambda(
         eventId,
         body,
         htmlBody,
-        mentions,
+        intentionalMentions,
         fromNotification,
     )
 
