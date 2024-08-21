@@ -55,4 +55,3 @@ class DefaultRoomAliasSuggestionsDataSource @Inject constructor(
             }
     }
 }
-
