@@ -237,7 +237,7 @@ private fun InviteSubtitle(
     modifier: Modifier = Modifier
 ) {
     val subtitle = if (isDm) {
-        inviteSender?.userId?.value
+        null // TCHAP hide the Matrix Id
     } else {
         canonicalAlias?.value
     }

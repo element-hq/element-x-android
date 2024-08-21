@@ -69,12 +69,13 @@ fun UserProfileHeaderSection(
             )
             Spacer(modifier = Modifier.height(6.dp))
         }
-        Text(
-            text = userId.value,
-            style = ElementTheme.typography.fontBodyLgRegular,
-            color = MaterialTheme.colorScheme.secondary,
-            textAlign = TextAlign.Center,
-        )
+        // TCHAP hide the Matrix Id
+//        Text(
+//            text = userId.value,
+//            style = ElementTheme.typography.fontBodyLgRegular,
+//            color = MaterialTheme.colorScheme.secondary,
+//            textAlign = TextAlign.Center,
+//        )
         if (isUserVerified.dataOrNull() == true) {
             MatrixBadgeRowMolecule(
                 data = listOf(

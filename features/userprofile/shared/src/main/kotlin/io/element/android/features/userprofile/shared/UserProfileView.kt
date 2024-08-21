@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import fr.gouv.tchap.android.libraries.matrix.api.core.toDisplayName
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.userprofile.api.UserProfileEvents
 import io.element.android.features.userprofile.api.UserProfileState
@@ -67,7 +68,7 @@ fun UserProfileView(
             UserProfileHeaderSection(
                 avatarUrl = state.avatarUrl,
                 userId = state.userId,
-                userName = state.userName,
+                userName = state.userName ?: state.userId.toDisplayName(), // TCHAP hide the Matrix Id
                 isUserVerified = state.isVerified,
                 openAvatarPreview = { avatarUrl ->
                     openAvatarPreview(state.userName ?: state.userId.value, avatarUrl)

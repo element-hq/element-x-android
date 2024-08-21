@@ -25,6 +25,7 @@ setupAnvil()
 
 dependencies {
     implementation(projects.libraries.di)
+    implementation(projects.libraries.tchaputils)
     implementation(libs.dagger)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)

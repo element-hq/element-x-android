@@ -402,7 +402,7 @@ private fun DmHeaderSection(
         )
         TitleAndSubtitle(
             title = roomName,
-            subtitle = otherMember.userId.value,
+            subtitle = null, // TCHAP hide the Matrix Id
         )
     }
 }
