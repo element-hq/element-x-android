@@ -21,11 +21,14 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.IntentionalMention
+import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.aRoomMember
+import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
@@ -37,6 +40,40 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class MarkdownTextEditorStateTest {
+    @Test
+    fun `insertMention - room alias - getMentions return empty list`() {
+        val state = MarkdownTextEditorState(initialText = "Hello @", initialFocus = true)
+        val suggestion = ResolvedSuggestion.Alias(A_ROOM_ALIAS, aRoomSummary(canonicalAlias = A_ROOM_ALIAS))
+        val permalinkBuilder = FakePermalinkBuilder()
+        val mentionSpanProvider = aMentionSpanProvider()
+        state.insertSuggestion(suggestion, mentionSpanProvider, permalinkBuilder)
+        assertThat(state.getMentions()).isEmpty()
+    }
+
+    @Test
+    fun `insertMention - room alias - with member but failed PermalinkBuilder result`() {
+        val state = MarkdownTextEditorState(initialText = "Hello #", initialFocus = true).apply {
+            currentSuggestion = Suggestion(start = 6, end = 7, type = SuggestionType.Room, text = "")
+        }
+        val suggestion = ResolvedSuggestion.Alias(A_ROOM_ALIAS, aRoomSummary(canonicalAlias = A_ROOM_ALIAS))
+        val permalinkParser = FakePermalinkParser(result = { PermalinkData.RoomLink(A_ROOM_ALIAS.toRoomIdOrAlias()) })
+        val permalinkBuilder = FakePermalinkBuilder(permalinkForRoomAliasLambda = { Result.failure(IllegalStateException("Failed")) })
+        val mentionSpanProvider = aMentionSpanProvider(permalinkParser = permalinkParser)
+        state.insertSuggestion(suggestion, mentionSpanProvider, permalinkBuilder)
+    }
+
+    @Test
+    fun `insertMention - room alias`() {
+        val state = MarkdownTextEditorState(initialText = "Hello #", initialFocus = true).apply {
+            currentSuggestion = Suggestion(start = 6, end = 7, type = SuggestionType.Room, text = "")
+        }
+        val suggestion = ResolvedSuggestion.Alias(A_ROOM_ALIAS, aRoomSummary(canonicalAlias = A_ROOM_ALIAS))
+        val permalinkParser = FakePermalinkParser(result = { PermalinkData.RoomLink(A_ROOM_ALIAS.toRoomIdOrAlias()) })
+        val permalinkBuilder = FakePermalinkBuilder(permalinkForRoomAliasLambda = { Result.success("https://matrix.to/#/${A_ROOM_ALIAS.value}") })
+        val mentionSpanProvider = aMentionSpanProvider(permalinkParser = permalinkParser)
+        state.insertSuggestion(suggestion, mentionSpanProvider, permalinkBuilder)
+    }
+
     @Test
     fun `insertMention - with no currentMentionSuggestion does nothing`() {
         val state = MarkdownTextEditorState(initialText = "Hello @", initialFocus = true)
