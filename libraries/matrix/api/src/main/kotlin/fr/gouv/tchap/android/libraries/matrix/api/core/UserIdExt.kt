@@ -24,7 +24,7 @@
 
 package fr.gouv.tchap.android.libraries.matrix.api.core
 
-import fr.gouv.tchap.libraries.tchaputils.TchapPatterns.toDisplayName
+import fr.gouv.tchap.libraries.tchaputils.TchapPatterns.toUserDisplayName
 import io.element.android.libraries.matrix.api.core.UserId
 
-fun UserId.toDisplayName() = this.value.toDisplayName()
+fun UserId.toDisplayName() = this.value.toUserDisplayName()

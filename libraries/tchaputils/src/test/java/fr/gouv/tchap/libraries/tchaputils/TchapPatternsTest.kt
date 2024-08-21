@@ -24,7 +24,10 @@
 
 package fr.gouv.tchap.libraries.tchaputils
 
-import fr.gouv.tchap.libraries.tchaputils.TchapPatterns.toDisplayName
+import fr.gouv.tchap.libraries.tchaputils.TchapPatterns.getUserDomain
+import fr.gouv.tchap.libraries.tchaputils.TchapPatterns.getUserName
+import fr.gouv.tchap.libraries.tchaputils.TchapPatterns.toUserDisplayName
+import fr.gouv.tchap.libraries.tchaputils.TchapPatterns.toHomeserverDisplayName
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -36,26 +39,12 @@ class TchapPatternsTest {
 
     @Test
     fun `given a displayName if it contains brackets then return its first element after split`() {
-        // Given
-        val displayNameTest = "Nom Prenom [Modernisation]"
-
-        // When
-        val result = fr.gouv.tchap.libraries.tchaputils.TchapPatterns.getNameFromDisplayName(displayNameTest)
-
-        // Then
-        assertEquals(result, "Nom Prenom")
+        assertEquals( "Nom Prenom", "Nom Prenom [Modernisation]".getUserName())
     }
 
     @Test
     fun `given a displayName if it doesn't contain brackets then return the original display name`() {
-        // Given
-        val displayNameTest = "Nom Prenom"
-
-        // When
-        val result = fr.gouv.tchap.libraries.tchaputils.TchapPatterns.getNameFromDisplayName(displayNameTest)
-
-        // Then
-        assertEquals(result, "Nom Prenom")
+        assertEquals("Nom Prenom", "Nom Prenom ".getUserName())
     }
 
     /**
@@ -64,60 +53,51 @@ class TchapPatternsTest {
 
     @Test
     fun `given a displayName if it contains brackets then return domain name inside`() {
-        // Given
-        val displayNameTest = "Nom Prenom [Modernisation]"
-
-        // When
-        val result = fr.gouv.tchap.libraries.tchaputils.TchapPatterns.getDomainFromDisplayName(displayNameTest)
-
-        // Then
-        assertEquals(result, "Modernisation")
+        assertEquals("Modernisation", "Nom Prenom [Modernisation]".getUserDomain())
     }
 
     @Test
     fun `given a displayName if it doesn't contain brackets then return empty string`() {
-        // Given
-        val displayNameTest = "Nom Prenom"
+        assertEquals("", "Nom Prenom ".getUserDomain())
+    }
 
-        // When
-        val result = fr.gouv.tchap.libraries.tchaputils.TchapPatterns.getDomainFromDisplayName(displayNameTest)
-
-        // Then
-        assertEquals(result, "")
+    @Test
+    fun `given a display name of a homeserver mentioned in a matrix identifier`() {
+        assertEquals("A", "@jean-philippe.martin-modernisation.fr:a.tchap.gouv.fr".toHomeserverDisplayName())
     }
 
     @Test
     fun computeDisplayNameFromUserId_simple() {
-        assertEquals("Jean Martin", "@jean.martin-modernisation.fr:matrix.org".toDisplayName())
+        assertEquals("Jean Martin", "@jean.martin-modernisation.fr:matrix.org".toUserDisplayName())
     }
 
     @Test
     fun computeDisplayNameFromUserId_dash() {
-        assertEquals("Jean-Philippe Martin", "@jean-philippe.martin-modernisation.fr:matrix.org".toDisplayName())
+        assertEquals("Jean-Philippe Martin", "@jean-philippe.martin-modernisation.fr:matrix.org".toUserDisplayName())
     }
 
     @Test
     fun computeDisplayNameFromUserId_dashes() {
-        assertEquals("Jean Martin De-La-Rampe", "@jean.martin.de-la-rampe-modernisation.gouv.fr:a.tchap.gouv.fr".toDisplayName())
+        assertEquals("Jean Martin De-La-Rampe", "@jean.martin.de-la-rampe-modernisation.gouv.fr:a.tchap.gouv.fr".toUserDisplayName())
     }
 
     @Test
     fun computeDisplayNameFromUserId_emptydashes() {
-        assertEquals("Jean Martin De-La-Rampe", "@jean..martin..de--la--rampe-modernisation.gouv.fr:a.tchap.gouv.fr".toDisplayName())
+        assertEquals("Jean Martin De-La-Rampe", "@jean..martin..de--la--rampe-modernisation.gouv.fr:a.tchap.gouv.fr".toUserDisplayName())
     }
 
     @Test
     fun computeDisplayNameFromUserId_dash_in_domain() {
-        assertEquals("Jerome Ploquin4-Developpement", "@jerome.ploquin4-developpement-durable.gouv.fr:a.tchap.gouv.fr".toDisplayName())
+        assertEquals("Jerome Ploquin4-Developpement", "@jerome.ploquin4-developpement-durable.gouv.fr:a.tchap.gouv.fr".toUserDisplayName())
     }
 
     @Test
     fun computeDisplayNameFromUserId_external_user() {
-        assertEquals("jerome.ploquin@otherdomain.fr", "@jerome.ploquin-otherdomain.fr:agent.externe.gouv.fr".toDisplayName())
+        assertEquals("jerome.ploquin@otherdomain.fr", "@jerome.ploquin-otherdomain.fr:agent.externe.gouv.fr".toUserDisplayName())
     }
 
     @Test
     fun computeDisplayNameFromUserId_external_user_dashes() {
-        assertEquals("jean-philippe.martin-other-domain.fr", "@jean-philippe.martin-other-domain.fr:agent.externe.gouv.fr".toDisplayName())
+        assertEquals("jean-philippe.martin-other-domain.fr", "@jean-philippe.martin-other-domain.fr:agent.externe.gouv.fr".toUserDisplayName())
     }
 }

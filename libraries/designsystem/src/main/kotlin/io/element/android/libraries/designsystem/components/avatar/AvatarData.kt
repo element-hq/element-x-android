@@ -8,7 +8,7 @@
 package io.element.android.libraries.designsystem.components.avatar
 
 import androidx.compose.runtime.Immutable
-import fr.gouv.tchap.libraries.tchaputils.TchapPatterns.toDisplayName
+import fr.gouv.tchap.libraries.tchaputils.TchapPatterns.toUserDisplayName
 
 @Immutable
 data class AvatarData(
@@ -52,5 +52,5 @@ data class AvatarData(
 }
 
 fun AvatarData.getBestName(): String {
-    return name?.takeIf { it.isNotEmpty() } ?: id.toDisplayName()
+    return name?.takeIf { it.isNotEmpty() } ?: id.toUserDisplayName()
 }
