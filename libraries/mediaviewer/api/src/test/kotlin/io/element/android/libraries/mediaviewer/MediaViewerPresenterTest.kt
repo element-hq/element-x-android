@@ -70,7 +70,7 @@ class MediaViewerPresenterTest {
     }
 
     @Test
-    fun `present - check all actions `() = runTest {
+    fun `present - check all actions`() = runTest {
         val matrixMediaLoader = FakeMatrixMediaLoader()
         val mediaActions = FakeLocalMediaActions()
         val snackbarDispatcher = SnackbarDispatcher()
