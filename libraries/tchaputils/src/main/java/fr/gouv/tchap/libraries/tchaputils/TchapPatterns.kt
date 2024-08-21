@@ -37,7 +37,7 @@ object TchapPatterns {
      * @param mxId the matrix identifier.
      * @return the homeserver name, if any.
      */
-    fun getHomeserverNameFromMxId(mxId: String): String = mxId.substringAfter(":", "")
+    fun String.toHomeserverName() = this.substringAfter(":", "")
 
     /**
      * Get the Tchap display name of the homeserver mentioned in a matrix identifier.
@@ -50,10 +50,10 @@ object TchapPatterns {
      * @param mxId the matrix identifier.
      * @return the Tchap display name of the homeserver.
      */
-    fun getHomeserverDisplayNameFromMxId(mxId: String): String {
-        var homeserverName = getHomeserverNameFromMxId(mxId)
+    fun String.toHomeserverDisplayName(): String {
+        var homeserverName = this.toHomeserverName()
         if (homeserverName.contains("tchap.gouv.fr")) {
-            homeserverName.split("\\.".toRegex()).let {
+            homeserverName.split('.').let {
                 if (it.size >= 4) homeserverName = it[it.size - 4]
             }
         }
@@ -67,19 +67,6 @@ object TchapPatterns {
      * @return true if external.
      */
      fun String.isExternalTchapServer() = this.isEmpty() || this.startsWith("e.") || this.startsWith("agent.externe.")
-
-    /**
-     * Get name part of a display name by removing the domain part if any.
-     * For example in case of "Jean Martin `[Modernisation]`", this will return "Jean Martin".
-     *
-     * @param displayName the display name to compute.
-     * @return displayName without domain (or the display name itself if no domain has been found).
-     */
-    fun getNameFromDisplayName(displayName: String): String {
-        return displayName.split(DISPLAY_NAME_FIRST_DELIMITER)
-            .first()
-            .trim()
-    }
 
     /**
      * Get the room name from a display name according to the given room type.
@@ -101,20 +88,22 @@ object TchapPatterns {
 //    }
 
     /**
+     * Get name part of a display name by removing the domain part if any.
+     * For example in case of "Jean Martin `[Modernisation]`", this will return "Jean Martin".
+     *
+     * @param displayName the display name to compute.
+     * @return displayName without domain (or the display name itself if no domain has been found).
+     */
+    fun String.getUserName() = this.substringBefore('[').trim()
+
+    /**
      * Get the potential domain name from a display name.
      * For example in case of "Jean Martin `[Modernisation]`", this will return "Modernisation".
      *
      * @param displayName the display name to compute.
      * @return displayName without name, empty string if no domain is available.
      */
-    fun getDomainFromDisplayName(displayName: String): String {
-        return displayName.split(DISPLAY_NAME_FIRST_DELIMITER)
-            .elementAtOrNull(1)
-            ?.split(DISPLAY_NAME_SECOND_DELIMITER)
-            ?.first()
-            ?.trim()
-            ?: DEFAULT_EMPTY_STRING
-    }
+    fun String.getUserDomain() = this.substringBeforeLast(']', "").substringAfterLast('[', "").trim()
 
     /**
      * Build a display name from the tchap user identifier.
@@ -124,7 +113,7 @@ object TchapPatterns {
      *
      * @return displayName without domain, or null if the user identifier is not valid.
      */
-    fun String.toDisplayName(): String {
+    fun String.toUserDisplayName(): String {
         // Extract identifier from user ID.
         val identifier = this.substringAfter('@').substringBefore(':')
         val lastHyphenIndex = identifier.lastIndexOf('-')
@@ -172,10 +161,7 @@ object TchapPatterns {
      * @param tchapUserId user identifier (ie. the matrix identifier).
      * @return true if external.
      */
-    fun String.isExternalTchapUser(): Boolean {
-        val homeServerName = getHomeserverNameFromMxId(this)
-        return homeServerName.isExternalTchapServer()
-    }
+    fun String.isExternalTchapUser() = this.toHomeserverName().isExternalTchapServer()
 
     /**
      * Create a room alias name with a prefix.
@@ -183,9 +169,7 @@ object TchapPatterns {
      * @param prefix the alias name prefix.
      * @return the suggested alias name.
      */
-    fun createRoomAliasName(prefix: String): String {
-        return prefix.trim().replace("[^a-zA-Z0-9]".toRegex(), "") + getRandomString(10)
-    }
+    fun createRoomAliasName(prefix: String) = "${prefix.trim().replace("[^a-zA-Z0-9]".toRegex(), "")}${getRandomString(10)}"
 
     /**
      * Create a room alias with a prefix.
@@ -194,9 +178,7 @@ object TchapPatterns {
      * @param prefix the alias name prefix.
      * @return the suggested alias.
      */
-    fun createRoomAlias(sessionId: String, prefix: String): String {
-        return "#${createRoomAliasName(prefix)}:${getHomeserverNameFromMxId(sessionId)}"
-    }
+    fun createRoomAlias(sessionId: String, prefix: String) = "#${createRoomAliasName(prefix)}:${sessionId.toHomeserverName()}"
 
     /**
      * Extract the local part of the given room alias.
@@ -204,9 +186,7 @@ object TchapPatterns {
      * @param roomAlias the room alias to parse.
      * @return the alias local part.
      */
-    fun extractRoomAliasName(roomAlias: String): String {
-        return roomAlias.substringAfter("#").substringBefore(":")
-    }
+    fun extractRoomAliasName(roomAlias: String) = roomAlias.substringAfter("#").substringBefore(":")
 
     /**
      * Generate a random string of the given number of characters.
@@ -218,8 +198,4 @@ object TchapPatterns {
         val charPool = ('a'..'z') + ('A'..'Z') + ('0'..'9')
         return (1..length).map { charPool.random() }.joinToString("")
     }
-
-    private const val DISPLAY_NAME_FIRST_DELIMITER = "["
-    private const val DISPLAY_NAME_SECOND_DELIMITER = "]"
-    private const val DEFAULT_EMPTY_STRING = ""
 }
