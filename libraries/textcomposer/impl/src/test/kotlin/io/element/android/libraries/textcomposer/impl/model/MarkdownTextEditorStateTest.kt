@@ -51,7 +51,7 @@ class MarkdownTextEditorStateTest {
     }
 
     @Test
-    fun `insertMention - room alias - with member but failed PermalinkBuilder result`() {
+    fun `insertSuggestion - room alias - with member but failed PermalinkBuilder result`() {
         val state = MarkdownTextEditorState(initialText = "Hello #", initialFocus = true).apply {
             currentSuggestion = Suggestion(start = 6, end = 7, type = SuggestionType.Room, text = "")
         }
@@ -63,7 +63,7 @@ class MarkdownTextEditorStateTest {
     }
 
     @Test
-    fun `insertMention - room alias`() {
+    fun `insertSuggestion - room alias`() {
         val state = MarkdownTextEditorState(initialText = "Hello #", initialFocus = true).apply {
             currentSuggestion = Suggestion(start = 6, end = 7, type = SuggestionType.Room, text = "")
         }
@@ -75,7 +75,7 @@ class MarkdownTextEditorStateTest {
     }
 
     @Test
-    fun `insertMention - with no currentMentionSuggestion does nothing`() {
+    fun `insertSuggestion - with no currentMentionSuggestion does nothing`() {
         val state = MarkdownTextEditorState(initialText = "Hello @", initialFocus = true)
         val member = aRoomMember()
         val mention = ResolvedSuggestion.Member(member)
@@ -88,7 +88,7 @@ class MarkdownTextEditorStateTest {
     }
 
     @Test
-    fun `insertMention - with member but failed PermalinkBuilder result`() {
+    fun `insertSuggestion - with member but failed PermalinkBuilder result`() {
         val state = MarkdownTextEditorState(initialText = "Hello @", initialFocus = true).apply {
             currentSuggestion = Suggestion(start = 6, end = 7, type = SuggestionType.Mention, text = "")
         }
@@ -105,7 +105,7 @@ class MarkdownTextEditorStateTest {
     }
 
     @Test
-    fun `insertMention - with member`() {
+    fun `insertSuggestion - with member`() {
         val state = MarkdownTextEditorState(initialText = "Hello @", initialFocus = true).apply {
             currentSuggestion = Suggestion(start = 6, end = 7, type = SuggestionType.Mention, text = "")
         }
@@ -123,7 +123,7 @@ class MarkdownTextEditorStateTest {
     }
 
     @Test
-    fun `insertMention - with @room`() {
+    fun `insertSuggestion - with @room`() {
         val state = MarkdownTextEditorState(initialText = "Hello @", initialFocus = true).apply {
             currentSuggestion = Suggestion(start = 6, end = 7, type = SuggestionType.Mention, text = "")
         }
