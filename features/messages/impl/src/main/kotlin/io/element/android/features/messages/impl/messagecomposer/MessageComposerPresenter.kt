@@ -126,6 +126,7 @@ class MessageComposerPresenter @Inject constructor(
     private val mentionSpanProvider: MentionSpanProvider,
     private val pillificationHelper: TextPillificationHelper,
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
+    private val mentionSuggestionsProcessor: MentionSuggestionsProcessor,
 ) : Presenter<MessageComposerState> {
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
     private var pendingEvent: MessageComposerEvents? = null
@@ -234,7 +235,7 @@ class MessageComposerPresenter @Inject constructor(
             merge(mentionStartTrigger, mentionCompletionTrigger)
                 .combine(room.membersStateFlow) { suggestion, roomMembersState ->
                     suggestions.clear()
-                    val result = MentionSuggestionsProcessor.process(
+                    val result = mentionSuggestionsProcessor.process(
                         suggestion = suggestion,
                         roomMembersState = roomMembersState,
                         roomAliasSuggestions = if (isRoomAliasSuggestionsEnabled) roomAliasSuggestions else emptyList(),
