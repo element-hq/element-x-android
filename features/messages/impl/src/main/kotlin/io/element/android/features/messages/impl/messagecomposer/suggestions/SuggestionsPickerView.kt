@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.mentions
+package io.element.android.features.messages.impl.messagecomposer.suggestions
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

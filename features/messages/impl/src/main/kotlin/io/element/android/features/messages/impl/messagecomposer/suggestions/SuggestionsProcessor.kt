@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.mentions
+package io.element.android.features.messages.impl.messagecomposer.suggestions
 
 import io.element.android.features.messages.impl.messagecomposer.RoomAliasSuggestion
 import io.element.android.libraries.core.data.filterUpTo
