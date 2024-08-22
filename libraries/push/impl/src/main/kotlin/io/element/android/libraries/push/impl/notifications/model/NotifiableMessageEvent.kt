@@ -52,7 +52,8 @@ data class NotifiableMessageEvent(
     val outGoingMessageFailed: Boolean = false,
     override val isRedacted: Boolean = false,
     override val isUpdated: Boolean = false,
-    val type: String = EventType.MESSAGE
+    val type: String = EventType.MESSAGE,
+    val hasMentionOrReply: Boolean = false,
 ) : NotifiableEvent {
     override val description: String = body ?: ""
 
