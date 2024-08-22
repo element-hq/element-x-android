@@ -27,7 +27,7 @@ import org.junit.Test
 
 class DefaultRoomAliasSuggestionsDataSourceTest {
     @Test
-    fun `DefaultRoomAliasSuggestionsDataSource must emit a list of room alias suggestions`() = runTest {
+    fun `getAllRoomAliasSuggestions must emit a list of room alias suggestions`() = runTest {
         val roomListService = FakeRoomListService()
         val sut = DefaultRoomAliasSuggestionsDataSource(
             roomListService
