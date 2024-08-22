@@ -29,17 +29,17 @@ import io.element.android.libraries.textcomposer.model.SuggestionType
 import javax.inject.Inject
 
 /**
- * This class is responsible for processing mention suggestions when `@`, `/` or `#` are type in the composer.
+ * This class is responsible for processing suggestions when `@`, `/` or `#` are type in the composer.
  */
-class MentionSuggestionsProcessor @Inject constructor() {
+class SuggestionsProcessor @Inject constructor() {
     /**
-     *  Process the mention suggestions.
+     *  Process the suggestion.
      *  @param suggestion The current suggestion input
      *  @param roomMembersState The room members state, it contains the current users in the room
      *  @param roomAliasSuggestions The available room alias suggestions
      *  @param currentUserId The current user id
      *  @param canSendRoomMention Should return true if the current user can send room mentions
-     *  @return The list of mentions to display
+     *  @return The list of suggestions to display
      */
     suspend fun process(
         suggestion: Suggestion?,

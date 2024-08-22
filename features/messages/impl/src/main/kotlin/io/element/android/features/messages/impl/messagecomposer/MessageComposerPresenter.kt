@@ -40,7 +40,7 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.draft.ComposerDraftService
-import io.element.android.features.messages.impl.mentions.MentionSuggestionsProcessor
+import io.element.android.features.messages.impl.mentions.SuggestionsProcessor
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.architecture.Presenter
@@ -126,7 +126,7 @@ class MessageComposerPresenter @Inject constructor(
     private val mentionSpanProvider: MentionSpanProvider,
     private val pillificationHelper: TextPillificationHelper,
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
-    private val mentionSuggestionsProcessor: MentionSuggestionsProcessor,
+    private val suggestionsProcessor: SuggestionsProcessor,
 ) : Presenter<MessageComposerState> {
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
     private var pendingEvent: MessageComposerEvents? = null
@@ -235,7 +235,7 @@ class MessageComposerPresenter @Inject constructor(
             merge(mentionStartTrigger, mentionCompletionTrigger)
                 .combine(room.membersStateFlow) { suggestion, roomMembersState ->
                     suggestions.clear()
-                    val result = mentionSuggestionsProcessor.process(
+                    val result = suggestionsProcessor.process(
                         suggestion = suggestion,
                         roomMembersState = roomMembersState,
                         roomAliasSuggestions = if (isRoomAliasSuggestionsEnabled) roomAliasSuggestions else emptyList(),

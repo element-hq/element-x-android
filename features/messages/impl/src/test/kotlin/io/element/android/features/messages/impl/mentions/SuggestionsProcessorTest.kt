@@ -33,17 +33,17 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class MentionSuggestionsProcessorTest {
+class SuggestionsProcessorTest {
     private fun aMentionSuggestion(text: String) = Suggestion(0, 1, SuggestionType.Mention, text)
     private fun aRoomSuggestion(text: String) = Suggestion(0, 1, SuggestionType.Room, text)
     private val aCommandSuggestion = Suggestion(0, 1, SuggestionType.Command, "")
     private val aCustomSuggestion = Suggestion(0, 1, SuggestionType.Custom("*"), "")
 
-    private val mentionSuggestionsProcessor = MentionSuggestionsProcessor()
+    private val suggestionsProcessor = SuggestionsProcessor()
 
     @Test
     fun `processing null suggestion will return empty suggestion`() = runTest {
-        val result = mentionSuggestionsProcessor.process(
+        val result = suggestionsProcessor.process(
             suggestion = null,
             roomMembersState = MatrixRoomMembersState.Ready(persistentListOf(aRoomMember())),
             roomAliasSuggestions = emptyList(),
@@ -55,7 +55,7 @@ class MentionSuggestionsProcessorTest {
 
     @Test
     fun `processing Command will return empty suggestion`() = runTest {
-        val result = mentionSuggestionsProcessor.process(
+        val result = suggestionsProcessor.process(
             suggestion = aCommandSuggestion,
             roomMembersState = MatrixRoomMembersState.Ready(persistentListOf(aRoomMember())),
             roomAliasSuggestions = emptyList(),
@@ -67,7 +67,7 @@ class MentionSuggestionsProcessorTest {
 
     @Test
     fun `processing Custom will return empty suggestion`() = runTest {
-        val result = mentionSuggestionsProcessor.process(
+        val result = suggestionsProcessor.process(
             suggestion = aCustomSuggestion,
             roomMembersState = MatrixRoomMembersState.Ready(persistentListOf(aRoomMember())),
             roomAliasSuggestions = emptyList(),
@@ -79,7 +79,7 @@ class MentionSuggestionsProcessorTest {
 
     @Test
     fun `processing Mention suggestion with not loaded members will return empty suggestion`() = runTest {
-        val result = mentionSuggestionsProcessor.process(
+        val result = suggestionsProcessor.process(
             suggestion = aMentionSuggestion(""),
             roomMembersState = MatrixRoomMembersState.Unknown,
             roomAliasSuggestions = emptyList(),
@@ -91,7 +91,7 @@ class MentionSuggestionsProcessorTest {
 
     @Test
     fun `processing Mention suggestion with no members will return empty suggestion`() = runTest {
-        val result = mentionSuggestionsProcessor.process(
+        val result = suggestionsProcessor.process(
             suggestion = aMentionSuggestion(""),
             roomMembersState = MatrixRoomMembersState.Ready(persistentListOf()),
             roomAliasSuggestions = emptyList(),
@@ -103,7 +103,7 @@ class MentionSuggestionsProcessorTest {
 
     @Test
     fun `processing Room suggestion with no aliases will return empty suggestion`() = runTest {
-        val result = mentionSuggestionsProcessor.process(
+        val result = suggestionsProcessor.process(
             suggestion = aRoomSuggestion(""),
             roomMembersState = MatrixRoomMembersState.Ready(persistentListOf()),
             roomAliasSuggestions = emptyList(),
@@ -116,7 +116,7 @@ class MentionSuggestionsProcessorTest {
     @Test
     fun `processing Room suggestion with aliases ignoring cases will return a suggestion`() = runTest {
         val aRoomSummary = aRoomSummary(canonicalAlias = A_ROOM_ALIAS)
-        val result = mentionSuggestionsProcessor.process(
+        val result = suggestionsProcessor.process(
             suggestion = aRoomSuggestion("ALI"),
             roomMembersState = MatrixRoomMembersState.Ready(persistentListOf()),
             roomAliasSuggestions = listOf(RoomAliasSuggestion(A_ROOM_ALIAS, aRoomSummary)),
@@ -133,7 +133,7 @@ class MentionSuggestionsProcessorTest {
     @Test
     fun `processing Room suggestion with aliases will return a suggestion`() = runTest {
         val aRoomSummary = aRoomSummary(canonicalAlias = A_ROOM_ALIAS)
-        val result = mentionSuggestionsProcessor.process(
+        val result = suggestionsProcessor.process(
             suggestion = aRoomSuggestion("ali"),
             roomMembersState = MatrixRoomMembersState.Ready(persistentListOf()),
             roomAliasSuggestions = listOf(RoomAliasSuggestion(A_ROOM_ALIAS, aRoomSummary)),
@@ -150,7 +150,7 @@ class MentionSuggestionsProcessorTest {
     @Test
     fun `processing Room suggestion with aliases not found will return no suggestions`() = runTest {
         val aRoomSummary = aRoomSummary(canonicalAlias = A_ROOM_ALIAS)
-        val result = mentionSuggestionsProcessor.process(
+        val result = suggestionsProcessor.process(
             suggestion = aRoomSuggestion("tot"),
             roomMembersState = MatrixRoomMembersState.Ready(persistentListOf()),
             roomAliasSuggestions = listOf(RoomAliasSuggestion(A_ROOM_ALIAS, aRoomSummary)),
@@ -163,7 +163,7 @@ class MentionSuggestionsProcessorTest {
     @Test
     fun `processing Mention suggestion with return matching matrix Id`() = runTest {
         val aRoomMember = aRoomMember(userId = UserId("@alice:server.org"), displayName = null)
-        val result = mentionSuggestionsProcessor.process(
+        val result = suggestionsProcessor.process(
             suggestion = aMentionSuggestion("ali"),
             roomMembersState = MatrixRoomMembersState.Ready(persistentListOf(aRoomMember)),
             roomAliasSuggestions = emptyList(),
@@ -180,7 +180,7 @@ class MentionSuggestionsProcessorTest {
     @Test
     fun `processing Mention suggestion with not return the current user`() = runTest {
         val aRoomMember = aRoomMember(userId = UserId("@alice:server.org"), displayName = null)
-        val result = mentionSuggestionsProcessor.process(
+        val result = suggestionsProcessor.process(
             suggestion = aMentionSuggestion("ali"),
             roomMembersState = MatrixRoomMembersState.Ready(persistentListOf(aRoomMember)),
             roomAliasSuggestions = emptyList(),
@@ -193,7 +193,7 @@ class MentionSuggestionsProcessorTest {
     @Test
     fun `processing Mention suggestion with return empty list if there is no matches`() = runTest {
         val aRoomMember = aRoomMember(userId = UserId("@alice:server.org"), displayName = "alice")
-        val result = mentionSuggestionsProcessor.process(
+        val result = suggestionsProcessor.process(
             suggestion = aMentionSuggestion("bo"),
             roomMembersState = MatrixRoomMembersState.Ready(persistentListOf(aRoomMember)),
             roomAliasSuggestions = emptyList(),
@@ -206,7 +206,7 @@ class MentionSuggestionsProcessorTest {
     @Test
     fun `processing Mention suggestion with not return not joined member`() = runTest {
         val aRoomMember = aRoomMember(userId = UserId("@alice:server.org"), membership = RoomMembershipState.INVITE)
-        val result = mentionSuggestionsProcessor.process(
+        val result = suggestionsProcessor.process(
             suggestion = aMentionSuggestion("ali"),
             roomMembersState = MatrixRoomMembersState.Ready(persistentListOf(aRoomMember)),
             roomAliasSuggestions = emptyList(),
@@ -219,7 +219,7 @@ class MentionSuggestionsProcessorTest {
     @Test
     fun `processing Mention suggestion with return matching display name`() = runTest {
         val aRoomMember = aRoomMember(userId = UserId("@alice:server.org"), displayName = "bob")
-        val result = mentionSuggestionsProcessor.process(
+        val result = suggestionsProcessor.process(
             suggestion = aMentionSuggestion("bo"),
             roomMembersState = MatrixRoomMembersState.Ready(persistentListOf(aRoomMember)),
             roomAliasSuggestions = emptyList(),
@@ -236,7 +236,7 @@ class MentionSuggestionsProcessorTest {
     @Test
     fun `processing Mention suggestion with return matching display name and room if allowed`() = runTest {
         val aRoomMember = aRoomMember(userId = UserId("@alice:server.org"), displayName = "ro")
-        val result = mentionSuggestionsProcessor.process(
+        val result = suggestionsProcessor.process(
             suggestion = aMentionSuggestion("ro"),
             roomMembersState = MatrixRoomMembersState.Ready(persistentListOf(aRoomMember)),
             roomAliasSuggestions = emptyList(),
@@ -254,7 +254,7 @@ class MentionSuggestionsProcessorTest {
     @Test
     fun `processing Mention suggestion with return matching display name but not room if not allowed`() = runTest {
         val aRoomMember = aRoomMember(userId = UserId("@alice:server.org"), displayName = "ro")
-        val result = mentionSuggestionsProcessor.process(
+        val result = suggestionsProcessor.process(
             suggestion = aMentionSuggestion("ro"),
             roomMembersState = MatrixRoomMembersState.Ready(persistentListOf(aRoomMember)),
             roomAliasSuggestions = emptyList(),

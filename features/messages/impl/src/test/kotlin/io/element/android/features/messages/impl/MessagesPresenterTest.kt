@@ -28,7 +28,7 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.draft.FakeComposerDraftService
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactory
-import io.element.android.features.messages.impl.mentions.MentionSuggestionsProcessor
+import io.element.android.features.messages.impl.mentions.SuggestionsProcessor
 import io.element.android.features.messages.impl.messagecomposer.DefaultMessageComposerContext
 import io.element.android.features.messages.impl.messagecomposer.FakeRoomAliasSuggestionsDataSource
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
@@ -1019,7 +1019,7 @@ class MessagesPresenterTest {
             mentionSpanProvider = mentionSpanProvider,
             pillificationHelper = FakeTextPillificationHelper(),
             roomMemberProfilesCache = RoomMemberProfilesCache(),
-            mentionSuggestionsProcessor = MentionSuggestionsProcessor(),
+            suggestionsProcessor = SuggestionsProcessor(),
         ).apply {
             showTextFormatting = true
             isTesting = true
