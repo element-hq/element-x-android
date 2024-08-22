@@ -25,6 +25,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -50,11 +51,11 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 @Composable
 fun FlowStepPage(
     iconStyle: BigIcon.Style,
-    title: String,
+    title: AnnotatedString,
     modifier: Modifier = Modifier,
     isScrollable: Boolean = false,
     onBackClick: (() -> Unit)? = null,
-    subTitle: String? = null,
+    subTitle: AnnotatedString? = null,
     buttons: @Composable ColumnScope.() -> Unit = {},
     content: @Composable () -> Unit = {},
 ) {
@@ -89,6 +90,29 @@ fun FlowStepPage(
                 buttons()
             }
         }
+    )
+}
+
+@Composable
+fun FlowStepPage(
+    iconStyle: BigIcon.Style,
+    title: String,
+    modifier: Modifier = Modifier,
+    isScrollable: Boolean = false,
+    onBackClick: (() -> Unit)? = null,
+    subTitle: String? = null,
+    buttons: @Composable ColumnScope.() -> Unit = {},
+    content: @Composable () -> Unit = {},
+) {
+    FlowStepPage(
+        iconStyle = iconStyle,
+        title = AnnotatedString(title),
+        modifier = modifier,
+        isScrollable = isScrollable,
+        onBackClick = onBackClick,
+        subTitle = subTitle?.let { AnnotatedString(it) },
+        buttons = buttons,
+        content = content
     )
 }
 
