@@ -46,6 +46,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.ui.components.aRoomSummaryDetails
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -103,25 +104,14 @@ private fun SuggestionItemView(
         val avatarSize = AvatarSize.Suggestion
         val avatarData = when (suggestion) {
             is ResolvedSuggestion.AtRoom -> roomAvatar?.copy(size = avatarSize) ?: AvatarData(roomId, roomName, null, avatarSize)
-            is ResolvedSuggestion.Member -> AvatarData(
-                suggestion.roomMember.userId.value,
-                suggestion.roomMember.displayName,
-                suggestion.roomMember.avatarUrl,
-                avatarSize,
-            )
-            is ResolvedSuggestion.Alias -> AvatarData(
-                suggestion.roomSummary.roomId.value,
-                suggestion.roomSummary.name,
-                suggestion.roomSummary.avatarUrl,
-                avatarSize,
-            )
+            is ResolvedSuggestion.Member -> suggestion.roomMember.getAvatarData(avatarSize)
+            is ResolvedSuggestion.Alias -> suggestion.roomSummary.getAvatarData(avatarSize)
         }
         val title = when (suggestion) {
             is ResolvedSuggestion.AtRoom -> stringResource(R.string.screen_room_mentions_at_room_title)
             is ResolvedSuggestion.Member -> suggestion.roomMember.displayName
             is ResolvedSuggestion.Alias -> suggestion.roomSummary.name
         }
-
         val subtitle = when (suggestion) {
             is ResolvedSuggestion.AtRoom -> "@room"
             is ResolvedSuggestion.Member -> suggestion.roomMember.userId.value
