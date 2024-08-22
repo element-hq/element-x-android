@@ -33,7 +33,6 @@ import io.element.android.libraries.designsystem.components.async.AsyncActionVie
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -41,7 +40,6 @@ fun SecureBackupEnterRecoveryKeyView(
     state: SecureBackupEnterRecoveryKeyState,
     onSuccess: () -> Unit,
     onBackClick: () -> Unit,
-    onCreateNewRecoveryKey: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     AsyncActionView(
@@ -60,7 +58,7 @@ fun SecureBackupEnterRecoveryKeyView(
         iconStyle = BigIcon.Style.Default(CompoundIcons.KeySolid()),
         title = stringResource(id = R.string.screen_recovery_key_confirm_title),
         subTitle = stringResource(id = R.string.screen_recovery_key_confirm_description),
-        buttons = { Buttons(state = state, onCreateRecoveryKey = onCreateNewRecoveryKey) }
+        buttons = { Buttons(state = state) }
     ) {
         Content(state = state)
     }
@@ -86,7 +84,6 @@ private fun Content(
 @Composable
 private fun ColumnScope.Buttons(
     state: SecureBackupEnterRecoveryKeyState,
-    onCreateRecoveryKey: () -> Unit,
 ) {
     Button(
         text = stringResource(id = CommonStrings.action_continue),
@@ -96,12 +93,6 @@ private fun ColumnScope.Buttons(
         onClick = {
             state.eventSink.invoke(SecureBackupEnterRecoveryKeyEvents.Submit)
         }
-    )
-    TextButton(
-        text = stringResource(id = R.string.screen_recovery_key_confirm_lost_recovery_key),
-        enabled = !state.submitAction.isLoading(),
-        modifier = Modifier.fillMaxWidth(),
-        onClick = onCreateRecoveryKey,
     )
 }
 
@@ -114,6 +105,5 @@ internal fun SecureBackupEnterRecoveryKeyViewPreview(
         state = state,
         onSuccess = {},
         onBackClick = {},
-        onCreateNewRecoveryKey = {},
     )
 }
