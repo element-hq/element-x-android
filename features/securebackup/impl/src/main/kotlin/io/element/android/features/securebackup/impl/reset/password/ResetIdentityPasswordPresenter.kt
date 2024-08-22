@@ -41,7 +41,14 @@ class ResetIdentityPasswordPresenter(
 
         fun handleEvent(event: ResetIdentityPasswordEvent) {
             when (event) {
-                is ResetIdentityPasswordEvent.Reset -> coroutineScope.reset(event.password, resetAction)
+                is ResetIdentityPasswordEvent.Reset -> {
+                    if (resetAction.value is AsyncAction.Confirming) {
+                        coroutineScope.reset(event.password, resetAction)
+                    } else {
+                        resetAction.value = AsyncAction.Confirming
+                    }
+                }
+                ResetIdentityPasswordEvent.DismissConfirmationDialog,
                 ResetIdentityPasswordEvent.DismissError -> resetAction.value = AsyncAction.Uninitialized
             }
         }

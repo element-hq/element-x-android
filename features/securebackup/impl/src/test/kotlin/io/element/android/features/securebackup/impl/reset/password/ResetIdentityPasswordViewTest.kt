@@ -22,6 +22,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.features.securebackup.impl.R
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -73,6 +74,27 @@ class ResetIdentityPasswordViewTest {
         rule.clickOn(CommonStrings.action_reset_identity)
 
         eventsRecorder.assertSingle(ResetIdentityPasswordEvent.Reset("A password"))
+    }
+
+    @Test
+    fun `clicking on confirmation dialog 'Yes, reset now' confirms the reset`() {
+        val eventsRecorder = EventsRecorder<ResetIdentityPasswordEvent>()
+        rule.setResetPasswordView(
+            ResetIdentityPasswordState(resetAction = AsyncAction.Confirming, eventSink = eventsRecorder),
+        )
+        rule.onNodeWithText("Password").performTextInput("A password")
+        rule.clickOn(R.string.screen_reset_encryption_confirmation_alert_action)
+        eventsRecorder.assertSingle(ResetIdentityPasswordEvent.Reset("A password"))
+    }
+
+    @Test
+    fun `clicking on confirmation dialog 'Cancel' emits the expected event`() {
+        val eventsRecorder = EventsRecorder<ResetIdentityPasswordEvent>()
+        rule.setResetPasswordView(
+            ResetIdentityPasswordState(resetAction = AsyncAction.Confirming, eventSink = eventsRecorder),
+        )
+        rule.clickOn(CommonStrings.action_cancel)
+        eventsRecorder.assertSingle(ResetIdentityPasswordEvent.DismissConfirmationDialog)
     }
 
     @Test

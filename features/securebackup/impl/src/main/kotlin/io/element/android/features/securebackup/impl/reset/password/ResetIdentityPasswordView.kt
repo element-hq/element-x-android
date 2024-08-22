@@ -33,6 +33,7 @@ import io.element.android.features.securebackup.impl.R
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -84,6 +85,17 @@ fun ResetIdentityPasswordView(
     if (state.resetAction.isLoading() || state.resetAction.isSuccess()) {
         ProgressDialog()
     }
+
+    if (state.resetAction.isConfirming()) {
+        ConfirmationDialog(
+            title = stringResource(R.string.screen_reset_encryption_confirmation_alert_title),
+            content = stringResource(R.string.screen_reset_encryption_confirmation_alert_subtitle),
+            submitText = stringResource(R.string.screen_reset_encryption_confirmation_alert_action),
+            onSubmitClick = { state.eventSink(ResetIdentityPasswordEvent.Reset(passwordState.value)) },
+            destructiveSubmit = true,
+            onDismiss = { state.eventSink(ResetIdentityPasswordEvent.DismissConfirmationDialog) }
+        )
+    }
 }
 
 @Composable
@@ -91,8 +103,8 @@ private fun Content(text: String, onTextChange: (String) -> Unit, hasError: Bool
     var showPassword by remember { mutableStateOf(false) }
     OutlinedTextField(
         modifier = Modifier
-            .fillMaxWidth()
-            .onTabOrEnterKeyFocusNext(LocalFocusManager.current),
+                .fillMaxWidth()
+                .onTabOrEnterKeyFocusNext(LocalFocusManager.current),
         value = text,
         onValueChange = onTextChange,
         label = { Text(stringResource(CommonStrings.common_password)) },

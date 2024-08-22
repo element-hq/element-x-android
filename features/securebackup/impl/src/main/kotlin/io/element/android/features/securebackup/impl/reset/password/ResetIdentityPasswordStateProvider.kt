@@ -23,6 +23,7 @@ class ResetIdentityPasswordStateProvider : PreviewParameterProvider<ResetIdentit
     override val values: Sequence<ResetIdentityPasswordState>
         get() = sequenceOf(
             aResetIdentityPasswordState(),
+            aResetIdentityPasswordState(resetAction = AsyncAction.Confirming),
             aResetIdentityPasswordState(resetAction = AsyncAction.Loading),
             aResetIdentityPasswordState(resetAction = AsyncAction.Success(Unit)),
             aResetIdentityPasswordState(resetAction = AsyncAction.Failure(IllegalStateException("Failed"))),

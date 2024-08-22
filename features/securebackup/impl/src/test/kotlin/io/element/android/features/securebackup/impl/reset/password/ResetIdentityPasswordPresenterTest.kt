@@ -49,6 +49,8 @@ class ResetIdentityPasswordPresenterTest {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(ResetIdentityPasswordEvent.Reset("password"))
+            assertThat(awaitItem().resetAction.isConfirming()).isTrue()
+            initialState.eventSink(ResetIdentityPasswordEvent.Reset("password"))
             assertThat(awaitItem().resetAction.isLoading()).isTrue()
             assertThat(awaitItem().resetAction.isSuccess()).isTrue()
         }
@@ -63,6 +65,8 @@ class ResetIdentityPasswordPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+            initialState.eventSink(ResetIdentityPasswordEvent.Reset("password"))
+            assertThat(awaitItem().resetAction.isConfirming()).isTrue()
             initialState.eventSink(ResetIdentityPasswordEvent.Reset("password"))
             assertThat(awaitItem().resetAction.isLoading()).isTrue()
             assertThat(awaitItem().resetAction.isFailure()).isTrue()
@@ -79,10 +83,28 @@ class ResetIdentityPasswordPresenterTest {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(ResetIdentityPasswordEvent.Reset("password"))
+            assertThat(awaitItem().resetAction.isConfirming()).isTrue()
+            initialState.eventSink(ResetIdentityPasswordEvent.Reset("password"))
             assertThat(awaitItem().resetAction.isLoading()).isTrue()
             assertThat(awaitItem().resetAction.isFailure()).isTrue()
 
             initialState.eventSink(ResetIdentityPasswordEvent.DismissError)
+            assertThat(awaitItem().resetAction.isUninitialized()).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - Dismiss confirmation dialog reset the state`() = runTest {
+        val resetLambda = lambdaRecorder<String, Result<Unit>> { _ -> Result.failure(IllegalStateException("Failed")) }
+        val resetHandle = FakeIdentityPasswordResetHandle(resetPasswordLambda = resetLambda)
+        val presenter = createPresenter(identityResetHandle = resetHandle)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(ResetIdentityPasswordEvent.Reset("password"))
+            assertThat(awaitItem().resetAction.isConfirming()).isTrue()
+            initialState.eventSink(ResetIdentityPasswordEvent.DismissConfirmationDialog)
             assertThat(awaitItem().resetAction.isUninitialized()).isTrue()
         }
     }
