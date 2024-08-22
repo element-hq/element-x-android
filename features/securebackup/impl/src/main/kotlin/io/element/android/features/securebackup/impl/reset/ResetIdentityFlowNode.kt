@@ -17,6 +17,7 @@
 package io.element.android.features.securebackup.impl.reset
 
 import android.app.Activity
+import android.net.Uri
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -35,6 +36,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.securebackup.impl.reset.confirmation.ResetIdentityConfirmationNode
 import io.element.android.features.securebackup.impl.reset.password.ResetIdentityPasswordNode
 import io.element.android.features.securebackup.impl.reset.root.ResetIdentityRootNode
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
@@ -78,6 +80,9 @@ class ResetIdentityFlowNode @AssistedInject constructor(
         data object ResetPassword : NavTarget
 
         @Parcelize
+        data class ConfirmationOidc(val host: String) : NavTarget
+
+        @Parcelize
         data class ResetOidc(val url: String) : NavTarget
     }
 
@@ -112,7 +117,7 @@ class ResetIdentityFlowNode @AssistedInject constructor(
             is NavTarget.Root -> {
                 val callback = object : ResetIdentityRootNode.Callback {
                     override fun onContinue() {
-                        coroutineScope.startReset()
+                        coroutineScope.startReset(true)
                     }
                 }
                 createNode<ResetIdentityRootNode>(buildContext, listOf(callback))
@@ -127,10 +132,24 @@ class ResetIdentityFlowNode @AssistedInject constructor(
             is NavTarget.ResetOidc -> {
                 oidcEntryPoint.createFallbackWebViewNode(this, buildContext, navTarget.url)
             }
+            is NavTarget.ConfirmationOidc -> {
+                val callback = object : ResetIdentityConfirmationNode.Callback {
+                    override fun onContinue() {
+                        coroutineScope.startReset(false)
+                    }
+
+                    override fun onCancel() {
+                        // Fully cancel the reset identity flow
+                        navigateUp()
+                    }
+                }
+                val inputs = ResetIdentityConfirmationNode.Inputs(host = navTarget.host)
+                createNode<ResetIdentityConfirmationNode>(buildContext, listOf(callback, inputs))
+            }
         }
     }
 
-    private fun CoroutineScope.startReset() = launch {
+    private fun CoroutineScope.startReset(askForConfirmation: Boolean) = launch {
         resetIdentityFlowManager.getResetHandle()
             .collectLatest { state ->
                 when (state) {
@@ -140,7 +159,10 @@ class ResetIdentityFlowNode @AssistedInject constructor(
                     }
                     is AsyncData.Success -> {
                         when (val handle = state.data) {
-                            is IdentityOidcResetHandle -> {
+                            is IdentityOidcResetHandle -> if (askForConfirmation) {
+                                val host = Uri.parse(handle.url).host ?: handle.url
+                                backstack.push(NavTarget.ConfirmationOidc(host))
+                            } else {
                                 if (oidcEntryPoint.canUseCustomTab()) {
                                     activity.openUrlInChromeCustomTab(null, false, handle.url)
                                 } else {
@@ -148,7 +170,10 @@ class ResetIdentityFlowNode @AssistedInject constructor(
                                 }
                                 resetJob = launch { handle.resetOidc() }
                             }
-                            is IdentityPasswordResetHandle -> backstack.push(NavTarget.ResetPassword)
+                            is IdentityPasswordResetHandle -> {
+                                // Note: in this case, a confirmation dialog will be displayed later.
+                                backstack.push(NavTarget.ResetPassword)
+                            }
                         }
                     }
                     else -> Unit

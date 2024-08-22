@@ -64,4 +64,6 @@
   <string name="screen_reset_encryption_password_placeholder">"Enter…"</string>
   <string name="screen_reset_encryption_password_subtitle">"Confirm that you want to reset your identity."</string>
   <string name="screen_reset_encryption_password_title">"Enter your account password to continue"</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"You\'re about to go to your %1$s account to reset your identity. Afterwards you\'ll be taken back to the app."</string>
+  <string name="screen_reset_identity_confirmation_title">"Can\'t confirm? Go to your account to reset your identity."</string>
 </resources>
