@@ -43,7 +43,6 @@ class ResetIdentityRootViewTest {
     fun `pressing the back HW button invokes the expected callback`() {
         ensureCalledOnce {
             rule.setResetRootView(
-                ResetIdentityRootState(displayConfirmationDialog = false, eventSink = {}),
                 onBack = it,
             )
             rule.pressBackKey()
@@ -54,7 +53,6 @@ class ResetIdentityRootViewTest {
     fun `clicking on the back navigation button invokes the expected callback`() {
         ensureCalledOnce {
             rule.setResetRootView(
-                ResetIdentityRootState(displayConfirmationDialog = false, eventSink = {}),
                 onBack = it,
             )
             rule.pressBack()
@@ -63,46 +61,21 @@ class ResetIdentityRootViewTest {
 
     @Test
     @Config(qualifiers = "h720dp")
-    fun `clicking Continue displays the confirmation dialog`() {
-        val eventsRecorder = EventsRecorder<ResetIdentityRootEvent>()
-        rule.setResetRootView(
-            ResetIdentityRootState(displayConfirmationDialog = false, eventSink = eventsRecorder),
-        )
-
-        rule.clickOn(CommonStrings.action_continue)
-
-        eventsRecorder.assertSingle(ResetIdentityRootEvent.Continue)
-    }
-
-    @Test
-    fun `clicking 'Yes, reset now' confirms the reset`() {
+    fun `clicking 'Continue' invokes the expected callback`() {
         ensureCalledOnce {
             rule.setResetRootView(
-                ResetIdentityRootState(displayConfirmationDialog = true, eventSink = {}),
                 onContinue = it,
             )
-            rule.clickOn(R.string.screen_reset_encryption_confirmation_alert_action)
+            rule.clickOn(CommonStrings.action_continue)
         }
-    }
-
-    @Test
-    fun `clicking Cancel dismisses the dialog`() {
-        val eventsRecorder = EventsRecorder<ResetIdentityRootEvent>()
-        rule.setResetRootView(
-            ResetIdentityRootState(displayConfirmationDialog = true, eventSink = eventsRecorder),
-        )
-
-        rule.clickOn(CommonStrings.action_cancel)
-        eventsRecorder.assertSingle(ResetIdentityRootEvent.DismissDialog)
     }
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setResetRootView(
-    state: ResetIdentityRootState,
     onBack: () -> Unit = EnsureNeverCalled(),
     onContinue: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
-        ResetIdentityRootView(state = state, onContinue = onContinue, onBack = onBack)
+        ResetIdentityRootView(onContinue = onContinue, onBack = onBack)
     }
 }

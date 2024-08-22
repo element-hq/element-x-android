@@ -25,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -34,7 +33,6 @@ import io.element.android.libraries.designsystem.atomic.organisms.InfoListItem
 import io.element.android.libraries.designsystem.atomic.organisms.InfoListOrganism
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.BigIcon
-import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -45,7 +43,6 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun ResetIdentityRootView(
-    state: ResetIdentityRootState,
     onContinue: () -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
@@ -61,26 +58,12 @@ fun ResetIdentityRootView(
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(id = CommonStrings.action_continue),
-                onClick = { state.eventSink(ResetIdentityRootEvent.Continue) },
+                onClick = onContinue,
                 destructive = true,
             )
         },
         onBackClick = onBack,
     )
-
-    if (state.displayConfirmationDialog) {
-        ConfirmationDialog(
-            title = stringResource(R.string.screen_reset_encryption_confirmation_alert_title),
-            content = stringResource(R.string.screen_reset_encryption_confirmation_alert_subtitle),
-            submitText = stringResource(R.string.screen_reset_encryption_confirmation_alert_action),
-            onSubmitClick = {
-                state.eventSink(ResetIdentityRootEvent.DismissDialog)
-                onContinue()
-            },
-            destructiveSubmit = true,
-            onDismiss = { state.eventSink(ResetIdentityRootEvent.DismissDialog) }
-        )
-    }
 }
 
 @Composable
@@ -141,10 +124,9 @@ private fun Content() {
 
 @PreviewsDayNight
 @Composable
-internal fun ResetIdentityRootViewPreview(@PreviewParameter(ResetIdentityRootStateProvider::class) state: ResetIdentityRootState) {
+internal fun ResetIdentityRootViewPreview() {
     ElementPreview {
         ResetIdentityRootView(
-            state = state,
             onContinue = {},
             onBack = {},
         )

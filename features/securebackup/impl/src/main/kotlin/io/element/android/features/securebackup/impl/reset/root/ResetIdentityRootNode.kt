@@ -35,15 +35,12 @@ class ResetIdentityRootNode @AssistedInject constructor(
         fun onContinue()
     }
 
-    private val presenter = ResetIdentityRootPresenter()
     private val callback: Callback = plugins.filterIsInstance<Callback>().first()
 
     @Composable
     override fun View(modifier: Modifier) {
-        val state = presenter.present()
         ResetIdentityRootView(
             modifier = modifier,
-            state = state,
             onContinue = callback::onContinue,
             onBack = ::navigateUp,
         )
