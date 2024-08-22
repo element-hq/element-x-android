@@ -158,4 +158,39 @@ class MatrixRoomMembersTest {
             assertThat(awaitItem().value).isEqualTo(roomMember2)
         }
     }
+
+    @Test
+    fun `getCurrentRoomMember returns the current user`() = runTest {
+        val matrixRoom = FakeMatrixRoom(sessionId = A_USER_ID)
+        moleculeFlow(RecompositionMode.Immediate) {
+            matrixRoom.getCurrentRoomMember(
+                MatrixRoomMembersState.Ready(
+                    persistentListOf(
+                        roomMember1,
+                        roomMember2,
+                        roomMember3,
+                    )
+                )
+            )
+        }.test {
+            assertThat(awaitItem().value).isEqualTo(roomMember1)
+        }
+    }
+
+    @Test
+    fun `getCurrentRoomMember returns null if the member is not found`() = runTest {
+        val matrixRoom = FakeMatrixRoom(sessionId = A_USER_ID)
+        moleculeFlow(RecompositionMode.Immediate) {
+            matrixRoom.getCurrentRoomMember(
+                MatrixRoomMembersState.Ready(
+                    persistentListOf(
+                        roomMember2,
+                        roomMember3,
+                    )
+                )
+            )
+        }.test {
+            assertThat(awaitItem().value).isNull()
+        }
+    }
 }
