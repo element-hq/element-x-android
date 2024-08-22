@@ -123,7 +123,7 @@ class DefaultNotifiableEventResolverTest {
             )
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
-        val expectedResult = createNotifiableMessageEvent(body = "Mentioned you: Hello world")
+        val expectedResult = createNotifiableMessageEvent(body = "Hello world", hasMentionOrReply = true)
         assertThat(result).isEqualTo(expectedResult)
     }
 
@@ -687,7 +687,10 @@ class DefaultNotifiableEventResolverTest {
         )
     }
 
-    private fun createNotifiableMessageEvent(body: String): NotifiableMessageEvent {
+    private fun createNotifiableMessageEvent(
+        body: String,
+        hasMentionOrReply: Boolean = false,
+    ): NotifiableMessageEvent {
         return NotifiableMessageEvent(
             sessionId = A_SESSION_ID,
             roomId = A_ROOM_ID,
@@ -708,7 +711,8 @@ class DefaultNotifiableEventResolverTest {
             outGoingMessage = false,
             outGoingMessageFailed = false,
             isRedacted = false,
-            isUpdated = false
+            isUpdated = false,
+            hasMentionOrReply = hasMentionOrReply,
         )
     }
 }
