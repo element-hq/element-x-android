@@ -16,7 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.util
 
-import io.element.android.libraries.matrix.api.room.Mention
+import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.impl.room.map
 import org.matrix.rustcomponents.sdk.RoomMessageEventContentWithoutRelation
 import org.matrix.rustcomponents.sdk.messageEventContentFromHtml
@@ -26,11 +26,11 @@ import org.matrix.rustcomponents.sdk.messageEventContentFromMarkdown
  * Creates a [RoomMessageEventContentWithoutRelation] from a body, an html body and a list of mentions.
  */
 object MessageEventContent {
-    fun from(body: String, htmlBody: String?, mentions: List<Mention>): RoomMessageEventContentWithoutRelation {
+    fun from(body: String, htmlBody: String?, intentionalMentions: List<IntentionalMention>): RoomMessageEventContentWithoutRelation {
         return if (htmlBody != null) {
             messageEventContentFromHtml(body, htmlBody)
         } else {
             messageEventContentFromMarkdown(body)
-        }.withMentions(mentions.map())
+        }.withMentions(intentionalMentions.map())
     }
 }

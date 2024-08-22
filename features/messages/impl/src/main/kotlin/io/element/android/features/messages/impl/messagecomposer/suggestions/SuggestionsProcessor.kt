@@ -14,62 +14,62 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.mentions
+package io.element.android.features.messages.impl.messagecomposer.suggestions
 
+import io.element.android.features.messages.impl.messagecomposer.RoomAliasSuggestion
 import io.element.android.libraries.core.data.filterUpTo
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.roomMembers
-import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
+import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
+import javax.inject.Inject
 
 /**
- * This class is responsible for processing mention suggestions when `@`, `/` or `#` are type in the composer.
+ * This class is responsible for processing suggestions when `@`, `/` or `#` are type in the composer.
  */
-object MentionSuggestionsProcessor {
-    // We don't want to retrieve thousands of members
-    private const val MAX_BATCH_ITEMS = 100
-
+class SuggestionsProcessor @Inject constructor() {
     /**
-     *  Process the mention suggestions.
+     *  Process the suggestion.
      *  @param suggestion The current suggestion input
      *  @param roomMembersState The room members state, it contains the current users in the room
+     *  @param roomAliasSuggestions The available room alias suggestions
      *  @param currentUserId The current user id
      *  @param canSendRoomMention Should return true if the current user can send room mentions
-     *  @return The list of mentions to display
+     *  @return The list of suggestions to display
      */
     suspend fun process(
         suggestion: Suggestion?,
         roomMembersState: MatrixRoomMembersState,
+        roomAliasSuggestions: List<RoomAliasSuggestion>,
         currentUserId: UserId,
         canSendRoomMention: suspend () -> Boolean,
-    ): List<ResolvedMentionSuggestion> {
-        val members = roomMembersState.roomMembers()
-        return when {
-            members.isNullOrEmpty() || suggestion == null -> {
+    ): List<ResolvedSuggestion> {
+        suggestion ?: return emptyList()
+        return when (suggestion.type) {
+            SuggestionType.Mention -> {
+                // Replace suggestions
+                val members = roomMembersState.roomMembers()
+                val matchingMembers = getMemberSuggestions(
+                    query = suggestion.text,
+                    roomMembers = members,
+                    currentUserId = currentUserId,
+                    canSendRoomMention = canSendRoomMention()
+                )
+                matchingMembers
+            }
+            SuggestionType.Room -> {
+                roomAliasSuggestions
+                    .filter { it.roomAlias.value.contains(suggestion.text, ignoreCase = true) }
+                    .map { ResolvedSuggestion.Alias(it.roomAlias, it.roomSummary) }
+            }
+            SuggestionType.Command,
+            is SuggestionType.Custom -> {
                 // Clear suggestions
                 emptyList()
-            }
-            else -> {
-                when (suggestion.type) {
-                    SuggestionType.Mention -> {
-                        // Replace suggestions
-                        val matchingMembers = getMemberSuggestions(
-                            query = suggestion.text,
-                            roomMembers = members,
-                            currentUserId = currentUserId,
-                            canSendRoomMention = canSendRoomMention()
-                        )
-                        matchingMembers
-                    }
-                    else -> {
-                        // Clear suggestions
-                        emptyList()
-                    }
-                }
             }
         }
     }
@@ -79,7 +79,7 @@ object MentionSuggestionsProcessor {
         roomMembers: List<RoomMember>?,
         currentUserId: UserId,
         canSendRoomMention: Boolean,
-    ): List<ResolvedMentionSuggestion> {
+    ): List<ResolvedSuggestion> {
         return if (roomMembers.isNullOrEmpty()) {
             emptyList()
         } else {
@@ -97,13 +97,18 @@ object MentionSuggestionsProcessor {
                 .filterUpTo(MAX_BATCH_ITEMS) { member ->
                     isJoinedMemberAndNotSelf(member) && memberMatchesQuery(member, query)
                 }
-                .map(ResolvedMentionSuggestion::Member)
+                .map(ResolvedSuggestion::Member)
 
             if ("room".contains(query) && canSendRoomMention) {
-                listOf(ResolvedMentionSuggestion.AtRoom) + matchingMembers
+                listOf(ResolvedSuggestion.AtRoom) + matchingMembers
             } else {
                 matchingMembers
             }
         }
+    }
+
+    companion object {
+        // We don't want to retrieve thousands of members
+        private const val MAX_BATCH_ITEMS = 100
     }
 }

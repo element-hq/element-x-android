@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.permalink
+package io.element.android.libraries.textcomposer.mentions
 
+import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.RoomAlias
-import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 
-interface PermalinkBuilder {
-    fun permalinkForUser(userId: UserId): Result<String>
-    fun permalinkForRoomAlias(roomAlias: RoomAlias): Result<String>
-}
-
-sealed class PermalinkBuilderError : Throwable() {
-    data object InvalidData : PermalinkBuilderError()
+@Immutable
+sealed interface ResolvedSuggestion {
+    data object AtRoom : ResolvedSuggestion
+    data class Member(val roomMember: RoomMember) : ResolvedSuggestion
+    data class Alias(val roomAlias: RoomAlias, val roomSummary: RoomSummary) : ResolvedSuggestion
 }

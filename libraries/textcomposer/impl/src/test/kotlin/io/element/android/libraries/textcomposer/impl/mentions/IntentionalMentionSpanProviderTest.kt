@@ -32,7 +32,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class MentionSpanProviderTest {
+class IntentionalMentionSpanProviderTest {
     @JvmField @Rule
     val warmUpRule = WarmUpRule()
 

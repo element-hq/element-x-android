@@ -26,7 +26,7 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
-import io.element.android.libraries.matrix.api.room.Mention
+import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import kotlinx.coroutines.flow.Flow
@@ -52,15 +52,24 @@ interface Timeline : AutoCloseable {
     fun paginationStatus(direction: PaginationDirection): StateFlow<PaginationStatus>
     val timelineItems: Flow<List<MatrixTimelineItem>>
 
-    suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
+    suspend fun sendMessage(
+        body: String,
+        htmlBody: String?,
+        intentionalMentions: List<IntentionalMention>,
+    ): Result<Unit>
 
-    suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
+    suspend fun editMessage(
+        originalEventId: EventId?,
+        transactionId: TransactionId?,
+        body: String, htmlBody: String?,
+        intentionalMentions: List<IntentionalMention>,
+    ): Result<Unit>
 
     suspend fun replyMessage(
         eventId: EventId,
         body: String,
         htmlBody: String?,
-        mentions: List<Mention>,
+        intentionalMentions: List<IntentionalMention>,
         fromNotification: Boolean = false,
     ): Result<Unit>
 

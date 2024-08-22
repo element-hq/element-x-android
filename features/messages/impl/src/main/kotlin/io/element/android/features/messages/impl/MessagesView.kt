@@ -66,11 +66,11 @@ import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.features.messages.impl.mentions.MentionSuggestionsPickerView
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsBottomSheet
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
+import io.element.android.features.messages.impl.messagecomposer.suggestions.SuggestionsPickerView
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerView
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerViewDefaults
@@ -377,7 +377,7 @@ private fun MessagesViewContent(
                 @Composable {}
             },
             sheetSwipeEnabled = state.composerState.showTextFormatting,
-            sheetShape = if (state.composerState.showTextFormatting || state.composerState.memberSuggestions.isNotEmpty()) {
+            sheetShape = if (state.composerState.showTextFormatting || state.composerState.suggestions.isNotEmpty()) {
                 MaterialTheme.shapes.large
             } else {
                 RectangleShape
@@ -427,7 +427,7 @@ private fun MessagesViewContent(
             },
             sheetContentKey = sheetResizeContentKey.intValue,
             sheetTonalElevation = 0.dp,
-            sheetShadowElevation = if (state.composerState.memberSuggestions.isNotEmpty()) 16.dp else 0.dp,
+            sheetShadowElevation = if (state.composerState.suggestions.isNotEmpty()) 16.dp else 0.dp,
         )
     }
 }
@@ -439,7 +439,7 @@ private fun MessagesViewComposerBottomSheetContents(
 ) {
     if (state.userEventPermissions.canSendMessage) {
         Column(modifier = Modifier.fillMaxWidth()) {
-            MentionSuggestionsPickerView(
+            SuggestionsPickerView(
                 modifier = Modifier
                     .heightIn(max = 230.dp)
                     // Consume all scrolling, preventing the bottom sheet from being dragged when interacting with the list of suggestions
@@ -451,9 +451,9 @@ private fun MessagesViewComposerBottomSheetContents(
                 roomId = state.roomId,
                 roomName = state.roomName.dataOrNull(),
                 roomAvatarData = state.roomAvatar.dataOrNull(),
-                memberSuggestions = state.composerState.memberSuggestions,
+                suggestions = state.composerState.suggestions,
                 onSelectSuggestion = {
-                    state.composerState.eventSink(MessageComposerEvents.InsertMention(it))
+                    state.composerState.eventSink(MessageComposerEvents.InsertSuggestion(it))
                 }
             )
             MessageComposerView(
