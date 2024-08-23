@@ -47,18 +47,13 @@ fun getRoomMemberAsState(roomMembersState: MatrixRoomMembersState, userId: UserI
 }
 
 @Composable
-fun MatrixRoom.getDirectRoomMember(): State<RoomMember?> {
-    val roomMembersState by membersStateFlow.collectAsState()
-    return getDirectRoomMember(roomMembersState = roomMembersState)
-}
-
-@Composable
 fun MatrixRoom.getDirectRoomMember(roomMembersState: MatrixRoomMembersState): State<RoomMember?> {
     val roomMembers = roomMembersState.roomMembers()
     return remember(roomMembersState) {
         derivedStateOf {
             roomMembers
-                ?.takeIf { it.size == 2 && isDirect }
+                ?.filter { it.membership.isActive() }
+                ?.takeIf { it.size == 2 && isDirect && isEncrypted }
                 ?.find { it.userId != sessionId }
         }
     }
@@ -66,11 +61,5 @@ fun MatrixRoom.getDirectRoomMember(roomMembersState: MatrixRoomMembersState): St
 
 @Composable
 fun MatrixRoom.getCurrentRoomMember(roomMembersState: MatrixRoomMembersState): State<RoomMember?> {
-    val roomMembers = roomMembersState.roomMembers()
-    return remember(roomMembersState) {
-        derivedStateOf {
-            roomMembers
-                ?.find { it.userId == sessionId }
-        }
-    }
+    return getRoomMemberAsState(roomMembersState = roomMembersState, userId = sessionId)
 }
