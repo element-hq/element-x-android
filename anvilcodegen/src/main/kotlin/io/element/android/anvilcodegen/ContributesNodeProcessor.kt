@@ -27,6 +27,7 @@ import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSType
+import com.google.devtools.ksp.validate
 import com.squareup.anvil.annotations.ContributesTo
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
@@ -50,22 +51,29 @@ import org.jetbrains.kotlin.name.FqName
 class ContributesNodeProcessor(
     private val logger: KSPLogger,
     private val codeGenerator: CodeGenerator,
+    private val config: Config,
 ) : SymbolProcessor {
+    data class Config(
+        val enableLogging: Boolean = false,
+    )
+
     override fun process(resolver: Resolver): List<KSAnnotated> {
         val annotatedSymbols = resolver.getSymbolsWithAnnotation(ContributesNode::class.qualifiedName!!)
             .filterIsInstance<KSClassDeclaration>()
-            .iterator()
 
-        if (!annotatedSymbols.hasNext()) return emptyList()
+        val (validSymbols, invalidSymbols) = annotatedSymbols.partition { it.validate() }
 
-        while (annotatedSymbols.hasNext()) {
-            val ksClass = annotatedSymbols.next()
-            logger.warn("Processing ${ksClass.qualifiedName?.asString()}")
+        if (validSymbols.isEmpty()) return invalidSymbols
+
+        for (ksClass in validSymbols) {
+            if (config.enableLogging) {
+                logger.warn("Processing ${ksClass.qualifiedName?.asString()}")
+            }
             generateModule(ksClass)
             generateFactory(ksClass)
         }
 
-        return emptyList()
+        return invalidSymbols
     }
 
     private fun generateModule(ksClass: KSClassDeclaration) {
