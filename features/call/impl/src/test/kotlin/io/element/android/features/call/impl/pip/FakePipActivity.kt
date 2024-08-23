@@ -16,10 +16,14 @@
 
 package io.element.android.features.call.impl.pip
 
-import io.element.android.features.call.impl.utils.WebPipApi
+import io.element.android.tests.testutils.lambda.lambdaError
 
-sealed interface PictureInPictureEvents {
-    data class SetupWebPipApi(val webPipApi: WebPipApi) : PictureInPictureEvents
-    data object EnterPictureInPicture : PictureInPictureEvents
-    data class OnPictureInPictureModeChanged(val isInPip: Boolean) : PictureInPictureEvents
+class FakePipActivity(
+    private val setPipParamsResult: () -> Unit = { lambdaError() },
+    private val enterPipModeResult: () -> Boolean = { lambdaError() },
+    private val handUpResult: () -> Unit = { lambdaError() }
+) : PipActivity {
+    override fun setPipParams() = setPipParamsResult()
+    override fun enterPipMode(): Boolean = enterPipModeResult()
+    override fun hangUp() = handUpResult()
 }

@@ -16,23 +16,16 @@
 
 package io.element.android.features.call.impl.pip
 
-import android.os.Build.VERSION_CODES
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.call.impl.ui.ElementCallActivity
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.Robolectric
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 
-@RunWith(RobolectricTestRunner::class)
 class PictureInPicturePresenterTest {
     @Test
-    @Config(sdk = [VERSION_CODES.O, VERSION_CODES.S])
     fun `when pip is not supported, the state value supportPip is false`() = runTest {
         val presenter = createPictureInPicturePresenter(supportPip = false)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -41,68 +34,119 @@ class PictureInPicturePresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.supportPip).isFalse()
         }
-        presenter.onDestroy()
+        presenter.setPipActivity(null)
     }
 
     @Test
-    @Config(sdk = [VERSION_CODES.O, VERSION_CODES.S])
     fun `when pip is supported, the state value supportPip is true`() = runTest {
-        val presenter = createPictureInPicturePresenter(supportPip = true)
+        val presenter = createPictureInPicturePresenter(
+            supportPip = true,
+            pipActivity = FakePipActivity(setPipParamsResult = { }),
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.supportPip).isTrue()
         }
-        presenter.onDestroy()
     }
 
     @Test
-    @Config(sdk = [VERSION_CODES.S])
     fun `when entering pip is supported, the state value isInPictureInPicture is true`() = runTest {
-        val presenter = createPictureInPicturePresenter(supportPip = true)
+        val enterPipModeResult = lambdaRecorder<Boolean> { true }
+        val presenter = createPictureInPicturePresenter(
+            supportPip = true,
+            pipActivity = FakePipActivity(
+                setPipParamsResult = { },
+                enterPipModeResult = enterPipModeResult,
+            ),
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.isInPictureInPicture).isFalse()
             initialState.eventSink(PictureInPictureEvents.EnterPictureInPicture)
-            presenter.onPictureInPictureModeChanged(true)
+            enterPipModeResult.assertions().isCalledOnce()
+            initialState.eventSink(PictureInPictureEvents.OnPictureInPictureModeChanged(true))
             val pipState = awaitItem()
             assertThat(pipState.isInPictureInPicture).isTrue()
             // User stops pip
-            presenter.onPictureInPictureModeChanged(false)
+            initialState.eventSink(PictureInPictureEvents.OnPictureInPictureModeChanged(false))
             val finalState = awaitItem()
             assertThat(finalState.isInPictureInPicture).isFalse()
         }
-        presenter.onDestroy()
     }
 
     @Test
-    @Config(sdk = [VERSION_CODES.S])
-    fun `when onUserLeaveHint is called, the state value isInPictureInPicture becomes true`() = runTest {
-        val presenter = createPictureInPicturePresenter(supportPip = true)
+    fun `with webPipApi, when entering pip is supported, but web deny it, the call is finished`() = runTest {
+        val handUpResult = lambdaRecorder<Unit> { }
+        val presenter = createPictureInPicturePresenter(
+            supportPip = true,
+            pipActivity = FakePipActivity(
+                setPipParamsResult = { },
+                handUpResult = handUpResult
+            ),
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.isInPictureInPicture).isFalse()
-            presenter.onUserLeaveHint()
-            presenter.onPictureInPictureModeChanged(true)
+            initialState.eventSink(PictureInPictureEvents.SetupWebPipApi(FakeWebPipApi(canEnterPipResult = { false })))
+            initialState.eventSink(PictureInPictureEvents.EnterPictureInPicture)
+            handUpResult.assertions().isCalledOnce()
+        }
+    }
+
+    @Test
+    fun `with webPipApi, when entering pip is supported, and web allows it, the state value isInPictureInPicture is true`() = runTest {
+        val enterPipModeResult = lambdaRecorder<Boolean> { true }
+        val enterPipResult = lambdaRecorder<Unit> { }
+        val exitPipResult = lambdaRecorder<Unit> { }
+        val presenter = createPictureInPicturePresenter(
+            supportPip = true,
+            pipActivity = FakePipActivity(
+                setPipParamsResult = { },
+                enterPipModeResult = enterPipModeResult
+            ),
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(
+                PictureInPictureEvents.SetupWebPipApi(
+                    FakeWebPipApi(
+                        canEnterPipResult = { true },
+                        enterPipResult = enterPipResult,
+                        exitPipResult = exitPipResult,
+                    )
+                )
+            )
+            initialState.eventSink(PictureInPictureEvents.EnterPictureInPicture)
+            enterPipModeResult.assertions().isCalledOnce()
+            enterPipResult.assertions().isNeverCalled()
+            initialState.eventSink(PictureInPictureEvents.OnPictureInPictureModeChanged(true))
             val pipState = awaitItem()
             assertThat(pipState.isInPictureInPicture).isTrue()
+            enterPipResult.assertions().isCalledOnce()
+            // User stops pip
+            exitPipResult.assertions().isNeverCalled()
+            initialState.eventSink(PictureInPictureEvents.OnPictureInPictureModeChanged(false))
+            val finalState = awaitItem()
+            assertThat(finalState.isInPictureInPicture).isFalse()
+            exitPipResult.assertions().isCalledOnce()
         }
-        presenter.onDestroy()
     }
 
     private fun createPictureInPicturePresenter(
         supportPip: Boolean = true,
+        pipActivity: PipActivity? = FakePipActivity()
     ): PictureInPicturePresenter {
-        val activity = Robolectric.buildActivity(ElementCallActivity::class.java)
         return PictureInPicturePresenter(
             pipSupportProvider = FakePipSupportProvider(supportPip),
         ).apply {
-            onCreate(activity.get())
+            setPipActivity(pipActivity)
         }
     }
 }

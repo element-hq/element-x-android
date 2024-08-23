@@ -16,17 +16,17 @@
 
 package io.element.android.features.call.impl.pip
 
-import android.app.Activity
-import android.app.PictureInPictureParams
-import android.os.Build
-import android.util.Rational
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import io.element.android.features.call.impl.utils.WebPipApi
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.log.logger.LoggerTag
+import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 private val loggerTag = LoggerTag("PiP")
@@ -35,71 +35,69 @@ class PictureInPicturePresenter @Inject constructor(
     pipSupportProvider: PipSupportProvider,
 ) : Presenter<PictureInPictureState> {
     private val isPipSupported = pipSupportProvider.isPipSupported()
-    private var isInPictureInPicture = mutableStateOf(false)
-    private var hostActivity: WeakReference<Activity>? = null
+    private var pipActivity: PipActivity? = null
 
     @Composable
     override fun present(): PictureInPictureState {
+        val coroutineScope = rememberCoroutineScope()
+        var isInPictureInPicture by remember { mutableStateOf(false) }
+        var webPipApi by remember { mutableStateOf<WebPipApi?>(null) }
+
         fun handleEvent(event: PictureInPictureEvents) {
             when (event) {
-                PictureInPictureEvents.EnterPictureInPicture -> switchToPip()
+                is PictureInPictureEvents.SetupWebPipApi -> {
+                    webPipApi = event.webPipApi
+                }
+                PictureInPictureEvents.EnterPictureInPicture -> {
+                    coroutineScope.launch {
+                        switchToPip(webPipApi)
+                    }
+                }
+                is PictureInPictureEvents.OnPictureInPictureModeChanged -> {
+                    Timber.tag(loggerTag.value).d("onPictureInPictureModeChanged: ${event.isInPip}")
+                    isInPictureInPicture = event.isInPip
+                    if (event.isInPip) {
+                        webPipApi?.enterPip()
+                    } else {
+                        webPipApi?.exitPip()
+                    }
+                }
             }
         }
 
         return PictureInPictureState(
             supportPip = isPipSupported,
-            isInPictureInPicture = isInPictureInPicture.value,
+            isInPictureInPicture = isInPictureInPicture,
             eventSink = ::handleEvent,
         )
     }
 
-    fun onCreate(activity: Activity) {
+    fun setPipActivity(pipActivity: PipActivity?) {
         if (isPipSupported) {
-            Timber.tag(loggerTag.value).d("onCreate: Setting PiP params")
-            hostActivity = WeakReference(activity)
-            hostActivity?.get()?.setPictureInPictureParams(getPictureInPictureParams())
+            Timber.tag(loggerTag.value).d("Setting PiP params")
+            this.pipActivity = pipActivity
+            pipActivity?.setPipParams()
         } else {
             Timber.tag(loggerTag.value).d("onCreate: PiP is not supported")
         }
     }
 
-    fun onDestroy() {
-        Timber.tag(loggerTag.value).d("onDestroy")
-        hostActivity?.clear()
-        hostActivity = null
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun getPictureInPictureParams(): PictureInPictureParams {
-        return PictureInPictureParams.Builder()
-            // Portrait for calls seems more appropriate
-            .setAspectRatio(Rational(3, 5))
-            .apply {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    setAutoEnterEnabled(true)
-                }
-            }
-            .build()
-    }
-
     /**
-     * Enters Picture-in-Picture mode.
+     * Enters Picture-in-Picture mode, if allowed by Element Call.
      */
-    private fun switchToPip() {
+    private suspend fun switchToPip(webPipApi: WebPipApi?) {
         if (isPipSupported) {
-            Timber.tag(loggerTag.value).d("Switch to PiP mode")
-            hostActivity?.get()?.enterPictureInPictureMode(getPictureInPictureParams())
-                ?.also { Timber.tag(loggerTag.value).d("Switch to PiP mode result: $it") }
+            if (webPipApi == null) {
+                Timber.tag(loggerTag.value).w("webPipApi is not available")
+            }
+            if (webPipApi == null || webPipApi.canEnterPip()) {
+                Timber.tag(loggerTag.value).d("Switch to PiP mode")
+                pipActivity?.enterPipMode()
+                    ?.also { Timber.tag(loggerTag.value).d("Switch to PiP mode result: $it") }
+            } else {
+                Timber.tag(loggerTag.value).w("Cannot enter PiP mode, hangup the call")
+                pipActivity?.hangUp()
+            }
         }
-    }
-
-    fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
-        Timber.tag(loggerTag.value).d("onPictureInPictureModeChanged: $isInPictureInPictureMode")
-        isInPictureInPicture.value = isInPictureInPictureMode
-    }
-
-    fun onUserLeaveHint() {
-        Timber.tag(loggerTag.value).d("onUserLeaveHint")
-        switchToPip()
     }
 }
