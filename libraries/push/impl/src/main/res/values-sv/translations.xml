@@ -3,6 +3,7 @@
   <string name="notification_channel_call">"Samtal"</string>
   <string name="notification_channel_listening_for_events">"Lyssnar efter händelser"</string>
   <string name="notification_channel_noisy">"Högljudda aviseringar"</string>
+  <string name="notification_channel_ringing_calls">"Ringande samtal"</string>
   <string name="notification_channel_silent">"Tysta aviseringar"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d meddelande"</item>
@@ -12,6 +13,8 @@
     <item quantity="one">"%d avisering"</item>
     <item quantity="other">"%d aviseringar"</item>
   </plurals>
+  <string name="notification_fallback_content">"notis"</string>
+  <string name="notification_incoming_call">"Inkommande samtal"</string>
   <string name="notification_inline_reply_failed">"** Misslyckades att skicka - vänligen öppna rummet"</string>
   <string name="notification_invitation_action_join">"Gå med"</string>
   <string name="notification_invitation_action_reject">"Avvisa"</string>

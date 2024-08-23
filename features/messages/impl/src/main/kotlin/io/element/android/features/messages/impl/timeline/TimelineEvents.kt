@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.timeline
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import kotlin.time.Duration
 
 sealed interface TimelineEvents {
@@ -26,6 +27,9 @@ sealed interface TimelineEvents {
     data object ClearFocusRequestState : TimelineEvents
     data object OnFocusEventRender : TimelineEvents
     data object JumpToLive : TimelineEvents
+
+    data class ShowShieldDialog(val messageShield: MessageShield) : TimelineEvents
+    data object HideShieldDialog : TimelineEvents
 
     /**
      * Events coming from a timeline item.

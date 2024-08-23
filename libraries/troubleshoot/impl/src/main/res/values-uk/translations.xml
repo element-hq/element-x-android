@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_screen_action">"Запустити тести"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Запустити тести знову"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Деякі тести не пройшли. Будь ласка, перегляньте деталі."</string>
+  <string name="troubleshoot_notifications_screen_notice">"Запустіть тести, щоб виявити будь-яку проблему у вашій конфігурації, через яку сповіщення можуть не працювати належним чином."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Спробувати виправити"</string>
+  <string name="troubleshoot_notifications_screen_success">"Всі тести пройшли успішно."</string>
+  <string name="troubleshoot_notifications_screen_title">"Усунення неполадок сповіщень"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Деякі тести вимагають вашої уваги. Будь ласка, перегляньте деталі."</string>
+</resources>

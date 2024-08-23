@@ -34,6 +34,7 @@
   <string name="action_accept">"Godkänn"</string>
   <string name="action_add_to_timeline">"Lägg till i tidslinjen"</string>
   <string name="action_back">"Tillbaka"</string>
+  <string name="action_call">"Ring"</string>
   <string name="action_cancel">"Avbryt"</string>
   <string name="action_choose_photo">"Välj bild"</string>
   <string name="action_clear">"Rensa"</string>
@@ -72,21 +73,25 @@
   <string name="action_load_more">"Ladda mer"</string>
   <string name="action_manage_account">"Hantera konto"</string>
   <string name="action_manage_devices">"Hantera enheter"</string>
+  <string name="action_message">"Meddela"</string>
   <string name="action_next">"Nästa"</string>
   <string name="action_no">"Nej"</string>
   <string name="action_not_now">"Inte nu"</string>
   <string name="action_ok">"OK"</string>
   <string name="action_open_settings">"Inställningar"</string>
   <string name="action_open_with">"Öppna med"</string>
+  <string name="action_pin">"Fäst"</string>
   <string name="action_quick_reply">"Snabbsvar"</string>
   <string name="action_quote">"Citera"</string>
   <string name="action_react">"Reagera"</string>
+  <string name="action_reject">"Avvisa"</string>
   <string name="action_remove">"Ta bort"</string>
   <string name="action_reply">"Svara"</string>
   <string name="action_reply_in_thread">"Svara i tråd"</string>
   <string name="action_report_bug">"Rapportera bugg"</string>
   <string name="action_report_content">"Rapportera innehåll"</string>
   <string name="action_reset">"Återställ"</string>
+  <string name="action_reset_identity">"Återställ identitet"</string>
   <string name="action_retry">"Försök igen"</string>
   <string name="action_retry_decryption">"Försök att avkryptera igen"</string>
   <string name="action_save">"Spara"</string>
@@ -106,6 +111,7 @@
   <string name="action_take_photo">"Ta ett foto"</string>
   <string name="action_tap_for_options">"Tryck för alternativ"</string>
   <string name="action_try_again">"Försök igen"</string>
+  <string name="action_unpin">"Frigör"</string>
   <string name="action_view_source">"Visa källkod"</string>
   <string name="action_yes">"Ja"</string>
   <string name="common_about">"Om"</string>
@@ -117,6 +123,7 @@
   <string name="common_blocked_users">"Blockerade användare"</string>
   <string name="common_bubbles">"Bubblor"</string>
   <string name="common_call_invite">"Samtal pågår (stöds inte)"</string>
+  <string name="common_call_started">"Samtal startat"</string>
   <string name="common_chat_backup">"Chattsäkerhetskopia"</string>
   <string name="common_copyright">"Upphovsrätt"</string>
   <string name="common_creating_room">"Skapar rum …"</string>
@@ -125,12 +132,16 @@
   <string name="common_decryption_error">"Avkrypteringsfel"</string>
   <string name="common_developer_options">"Utvecklaralternativ"</string>
   <string name="common_direct_chat">"Direktchatt"</string>
+  <string name="common_do_not_show_this_again">"Visa inte detta igen"</string>
   <string name="common_edited_suffix">"(redigerad)"</string>
   <string name="common_editing">"Redigerar"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Kryptering aktiverad"</string>
   <string name="common_enter_your_pin">"Ange din PIN-kod"</string>
   <string name="common_error">"Fel"</string>
+  <string name="common_error_registering_pusher_android">"Ett fel inträffade, du kanske inte får aviseringar för nya meddelanden. Felsök aviseringar från inställningarna.
+
+Anledning:%1$s."</string>
   <string name="common_everyone">"Alla"</string>
   <string name="common_failed">"Misslyckades"</string>
   <string name="common_favourite">"Favorit"</string>
@@ -158,12 +169,15 @@
   <string name="common_modern">"Modernt"</string>
   <string name="common_mute">"Tysta"</string>
   <string name="common_no_results">"Inga resultat"</string>
+  <string name="common_no_room_name">"Inget rumsnamn"</string>
   <string name="common_offline">"Frånkopplad"</string>
+  <string name="common_open_source_licenses">"Licenser för öppen källkod"</string>
   <string name="common_or">"eller"</string>
   <string name="common_password">"Lösenord"</string>
   <string name="common_people">"Personer"</string>
   <string name="common_permalink">"Permalänk"</string>
   <string name="common_permission">"Behörighet"</string>
+  <string name="common_please_wait">"Vänligen vänta …"</string>
   <string name="common_poll_end_confirmation">"Är du säker på att du vill avsluta den här omröstningen?"</string>
   <string name="common_poll_summary">"Omröstning: %1$s"</string>
   <string name="common_poll_total_votes">"Totalt antal röster: %1$s"</string>
@@ -192,6 +206,7 @@
   <string name="common_search_results">"Sökresultat"</string>
   <string name="common_security">"Säkerhet"</string>
   <string name="common_seen_by">"Sett av"</string>
+  <string name="common_send_to">"Skicka till"</string>
   <string name="common_sending">"Skickar …"</string>
   <string name="common_sending_failed">"Misslyckades att skicka"</string>
   <string name="common_sent">"Skickat"</string>
@@ -200,6 +215,7 @@
   <string name="common_settings">"Inställningar"</string>
   <string name="common_shared_location">"Delade plats"</string>
   <string name="common_signing_out">"Loggar ut"</string>
+  <string name="common_something_went_wrong">"Något gick fel"</string>
   <string name="common_starting_chat">"Startar chatt …"</string>
   <string name="common_sticker">"Dekal"</string>
   <string name="common_success">"Lyckades"</string>
@@ -212,6 +228,7 @@
   <string name="common_topic">"Ämne"</string>
   <string name="common_topic_placeholder">"Vad handlar det här rummet om?"</string>
   <string name="common_unable_to_decrypt">"Kan inte avkryptera"</string>
+  <string name="common_unable_to_decrypt_no_access">"Du har inte tillgång till det här meddelandet"</string>
   <string name="common_unable_to_invite_message">"Inbjudan kunde inte skickas till en eller flera användare."</string>
   <string name="common_unable_to_invite_title">"Kunde inte skicka inbjudningar"</string>
   <string name="common_unlock">"Lås upp"</string>
@@ -236,11 +253,17 @@
   <string name="error_failed_loading_messages">"Misslyckades att ladda meddelanden"</string>
   <string name="error_failed_locating_user">"%1$s kunde inte komma åt din plats. Vänligen försök igen senare."</string>
   <string name="error_failed_uploading_voice_message">"Misslyckades med att ladda upp ditt röstmeddelande."</string>
+  <string name="error_message_not_found">"Meddelandet hittades inte"</string>
   <string name="error_missing_location_auth_android">"%1$s är inte behörig att komma åt din plats. Du kan aktivera åtkomst i Inställningar."</string>
   <string name="error_missing_location_rationale_android">"%1$s är inte behörig att komma åt din plats. Aktivera åtkomst nedan."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s är inte behörig att komma åt din mikrofon. Aktivera åtkomst för att spela in ett röstmeddelande."</string>
   <string name="error_some_messages_have_not_been_sent">"Vissa meddelanden har inte skickats"</string>
   <string name="error_unknown">"Tyvärr, ett fel uppstod"</string>
+  <string name="event_shield_reason_authenticity_not_guaranteed">"Detta krypterade meddelandes äkthet kan inte garanteras på den här enheten."</string>
+  <string name="event_shield_reason_sent_in_clear">"Inte krypterad."</string>
+  <string name="event_shield_reason_unknown_device">"Krypterad av en okänd eller raderad enhet."</string>
+  <string name="event_shield_reason_unsigned_device">"Krypterad av en enhet som inte verifierats av ägaren."</string>
+  <string name="event_shield_reason_unverified_identity">"Krypterad av en overifierad användare."</string>
   <string name="invite_friends_rich_title">"🔐️ Häng med mig på %1$s"</string>
   <string name="invite_friends_text">"Hallå, prata med mig på %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
@@ -248,6 +271,14 @@
   <string name="screen_media_picker_error_failed_selection">"Misslyckades att välja media, vänligen pröva igen."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Misslyckades att bearbeta media för uppladdning, vänligen pröva igen."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Misslyckades att ladda upp media, vänligen pröva igen."</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Tryck på ett meddelande och välj ”%1$s” för att inkludera det här."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Fäst viktiga meddelanden så att de lätt kan upptäckas"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d Fäst meddelande"</item>
+    <item quantity="other">"%1$d Fästa meddelanden"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Fästa meddelanden"</string>
+  <string name="screen_room_details_pinned_events_row_title">"Fästa meddelanden"</string>
   <string name="screen_room_error_failed_processing_media">"Misslyckades att bearbeta media för uppladdning, vänligen pröva igen."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kunde inte hämta användarinformation"</string>
   <string name="screen_room_member_details_block_alert_action">"Blockera"</string>
@@ -257,6 +288,11 @@
   <string name="screen_room_member_details_unblock_alert_action">"Avblockera"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Du kommer att kunna se alla meddelanden från dem igen."</string>
   <string name="screen_room_member_details_unblock_user">"Avblockera användare"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s av %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Fästa meddelanden"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Laddar meddelande …"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Visa alla"</string>
+  <string name="screen_room_title">"Chatt"</string>
   <string name="screen_share_location_title">"Dela plats"</string>
   <string name="screen_share_my_location_action">"Dela min plats"</string>
   <string name="screen_share_open_apple_maps">"Öppna i Apple Maps"</string>

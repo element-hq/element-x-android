@@ -21,6 +21,7 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 
 class TimelineItemEventForTimestampViewProvider : PreviewParameterProvider<TimelineItem.Event> {
     override val values: Sequence<TimelineItem.Event>
@@ -36,6 +37,12 @@ class TimelineItemEventForTimestampViewProvider : PreviewParameterProvider<Timel
             aTimelineItemEvent().copy(
                 localSendState = LocalEventSendState.SendingFailed.Unrecoverable("AN_ERROR"),
                 content = aTimelineItemTextContent().copy(isEdited = true),
+            ),
+            aTimelineItemEvent().copy(
+                messageShield = MessageShield.AuthenticityNotGuaranteed(isCritical = false),
+            ),
+            aTimelineItemEvent().copy(
+                messageShield = MessageShield.UnknownDevice(isCritical = true),
             ),
         )
 }

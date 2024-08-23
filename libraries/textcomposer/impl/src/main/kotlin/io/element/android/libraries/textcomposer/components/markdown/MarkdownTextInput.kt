@@ -111,13 +111,13 @@ fun MarkdownTextInput(
                         state.text.update(editable, false)
                         state.lineCount = lineCount
 
-                        state.currentMentionSuggestion = editable?.checkSuggestionNeeded()
-                        onReceiveSuggestion(state.currentMentionSuggestion)
+                        state.currentSuggestion = editable?.checkSuggestionNeeded()
+                        onReceiveSuggestion(state.currentSuggestion)
                     }
                     onSelectionChangeListener = { selStart, selEnd ->
                         state.selection = selStart..selEnd
-                        state.currentMentionSuggestion = editableText.checkSuggestionNeeded()
-                        onReceiveSuggestion(state.currentMentionSuggestion)
+                        state.currentSuggestion = editableText.checkSuggestionNeeded()
+                        onReceiveSuggestion(state.currentSuggestion)
                     }
                     if (onSelectRichContent != null) {
                         ViewCompat.setOnReceiveContentListener(

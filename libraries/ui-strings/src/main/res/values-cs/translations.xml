@@ -93,6 +93,7 @@
   <string name="action_report_bug">"Nahlásit chybu"</string>
   <string name="action_report_content">"Nahlásit obsah"</string>
   <string name="action_reset">"Obnovit"</string>
+  <string name="action_reset_identity">"Obnovit identitu"</string>
   <string name="action_retry">"Zkusit znovu"</string>
   <string name="action_retry_decryption">"Opakovat dešifrování"</string>
   <string name="action_save">"Uložit"</string>
@@ -263,6 +264,7 @@ Důvod: %1$s."</string>
   <string name="error_some_messages_have_not_been_sent">"Některé zprávy nebyly odeslány"</string>
   <string name="error_unknown">"Omlouváme se, došlo k chybě"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Autenticitu této zašifrované zprávy nelze na tomto zařízení zaručit."</string>
+  <string name="event_shield_reason_sent_in_clear">"Není zašifrováno."</string>
   <string name="event_shield_reason_unknown_device">"Šifrováno neznámým nebo smazaným zařízením."</string>
   <string name="event_shield_reason_unsigned_device">"Šifrováno zařízením, které nebylo ověřeno jeho vlastníkem."</string>
   <string name="event_shield_reason_unverified_identity">"Šifrováno neověřeným uživatelem."</string>
@@ -273,6 +275,15 @@ Důvod: %1$s."</string>
   <string name="screen_media_picker_error_failed_selection">"Výběr média se nezdařil, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Přidržte zprávu a vyberte „%1$s“, kterou chcete zahrnout sem."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Připněte důležité zprávy, aby je bylo možné snadno najít"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d Připnutá zpráva"</item>
+    <item quantity="few">"%1$d Připnuté zprávy"</item>
+    <item quantity="other">"%1$d Připnutých zpráv"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Připnuté zprávy"</string>
+  <string name="screen_room_details_pinned_events_row_title">"Připnuté zprávy"</string>
   <string name="screen_room_error_failed_processing_media">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepodařilo se načíst údaje o uživateli"</string>
   <string name="screen_room_member_details_block_alert_action">"Zablokovat"</string>
@@ -284,6 +295,7 @@ Důvod: %1$s."</string>
   <string name="screen_room_member_details_unblock_user">"Odblokovat uživatele"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s z %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Připnuté zprávy"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Načítání zprávy…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Zobrazit vše"</string>
   <string name="screen_room_title">"Chat"</string>
   <string name="screen_share_location_title">"Sdílet polohu"</string>

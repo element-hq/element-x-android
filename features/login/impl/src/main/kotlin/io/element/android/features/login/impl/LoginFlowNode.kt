@@ -36,12 +36,7 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.login.api.LoginFlowType
-import io.element.android.features.login.api.oidc.OidcAction
-import io.element.android.features.login.api.oidc.OidcActionFlow
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
-import io.element.android.features.login.impl.oidc.CustomTabAvailabilityChecker
-import io.element.android.features.login.impl.oidc.customtab.CustomTabHandler
-import io.element.android.features.login.impl.oidc.webview.OidcNode
 import io.element.android.features.login.impl.qrcode.QrCodeLoginFlowNode
 import io.element.android.features.login.impl.screens.changeaccountprovider.ChangeAccountProviderNode
 import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderNode
@@ -56,6 +51,9 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.oidc.api.OidcAction
+import io.element.android.libraries.oidc.api.OidcActionFlow
+import io.element.android.libraries.oidc.api.OidcEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -64,11 +62,10 @@ import kotlinx.parcelize.Parcelize
 class LoginFlowNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val customTabAvailabilityChecker: CustomTabAvailabilityChecker,
-    private val customTabHandler: CustomTabHandler,
     private val accountProviderDataSource: AccountProviderDataSource,
     private val defaultLoginUserStory: DefaultLoginUserStory,
     private val oidcActionFlow: OidcActionFlow,
+    private val oidcEntryPoint: OidcEntryPoint,
 ) : BaseFlowNode<LoginFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -146,11 +143,11 @@ class LoginFlowNode @AssistedInject constructor(
                 )
                 val callback = object : ConfirmAccountProviderNode.Callback {
                     override fun onOidcDetails(oidcDetails: OidcDetails) {
-                        if (customTabAvailabilityChecker.supportCustomTab()) {
+                        if (oidcEntryPoint.canUseCustomTab()) {
                             // In this case open a Chrome Custom tab
                             activity?.let {
                                 customChromeTabStarted = true
-                                customTabHandler.open(it, darkTheme, oidcDetails.url)
+                                oidcEntryPoint.openUrlInCustomTab(it, darkTheme, oidcDetails.url)
                             }
                         } else {
                             // Fallback to WebView mode
@@ -201,8 +198,7 @@ class LoginFlowNode @AssistedInject constructor(
                 createNode<LoginPasswordNode>(buildContext, plugins = listOf(callback))
             }
             is NavTarget.OidcView -> {
-                val input = OidcNode.Inputs(navTarget.oidcDetails)
-                createNode<OidcNode>(buildContext, plugins = listOf(input))
+                oidcEntryPoint.createFallbackWebViewNode(this, buildContext, navTarget.oidcDetails.url)
             }
             is NavTarget.WaitList -> {
                 val inputs = WaitListNode.Inputs(

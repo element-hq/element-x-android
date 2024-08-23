@@ -16,10 +16,10 @@
 
 package io.element.android.libraries.textcomposer.model
 
-import io.element.android.libraries.matrix.api.room.Mention
+import io.element.android.libraries.matrix.api.room.IntentionalMention
 
 data class Message(
     val html: String?,
     val markdown: String,
-    val mentions: List<Mention>,
+    val intentionalMentions: List<IntentionalMention>,
 )

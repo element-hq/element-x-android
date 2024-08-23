@@ -34,7 +34,7 @@ import io.element.android.libraries.textcomposer.components.markdown.MarkdownTex
 import io.element.android.libraries.textcomposer.components.markdown.aMarkdownTextEditorState
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
-import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
+import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
@@ -157,13 +157,13 @@ class MarkdownTextInputTest {
         val permalinkParser = FakePermalinkParser(result = { PermalinkData.UserLink(A_SESSION_ID) })
         val permalinkBuilder = FakePermalinkBuilder(permalinkForUserLambda = { Result.success("https://matrix.to/#/$A_SESSION_ID") })
         val state = aMarkdownTextEditorState(initialText = "@", initialFocus = true)
-        state.currentMentionSuggestion = Suggestion(0, 1, SuggestionType.Mention, "")
+        state.currentSuggestion = Suggestion(0, 1, SuggestionType.Mention, "")
         rule.setMarkdownTextInput(state = state)
         var editor: EditText? = null
         rule.activityRule.scenario.onActivity {
             editor = it.findEditor()
-            state.insertMention(
-                ResolvedMentionSuggestion.Member(roomMember = aRoomMember()),
+            state.insertSuggestion(
+                ResolvedSuggestion.Member(roomMember = aRoomMember()),
                 MentionSpanProvider(permalinkParser = permalinkParser),
                 permalinkBuilder,
             )

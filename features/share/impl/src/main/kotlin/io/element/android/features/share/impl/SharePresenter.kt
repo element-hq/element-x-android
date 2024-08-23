@@ -100,7 +100,7 @@ class SharePresenter @AssistedInject constructor(
                             matrixClient.getRoom(roomId)?.sendMessage(
                                 body = text,
                                 htmlBody = null,
-                                mentions = emptyList(),
+                                intentionalMentions = emptyList(),
                             )?.isSuccess.orFalse()
                         }
                         .all { it }

@@ -58,6 +58,9 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object EnterRecoveryKey : NavTarget
+
+        @Parcelize
+        data object ResetIdentity : NavTarget
     }
 
     interface Callback : Plugin {
@@ -85,6 +88,10 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
                         override fun onDone() {
                             plugins<Callback>().forEach { it.onDone() }
                         }
+
+                        override fun onResetKey() {
+                            backstack.push(NavTarget.ResetIdentity)
+                        }
                     })
                     .build()
             }
@@ -92,6 +99,16 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
                 secureBackupEntryPoint.nodeBuilder(this, buildContext)
                     .params(SecureBackupEntryPoint.Params(SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey))
                     .callback(secureBackupEntryPointCallback)
+                    .build()
+            }
+            is NavTarget.ResetIdentity -> {
+                secureBackupEntryPoint.nodeBuilder(this, buildContext)
+                    .params(SecureBackupEntryPoint.Params(SecureBackupEntryPoint.InitialTarget.ResetIdentity))
+                    .callback(object : SecureBackupEntryPoint.Callback {
+                        override fun onDone() {
+                            plugins<Callback>().forEach { it.onDone() }
+                        }
+                    })
                     .build()
             }
         }

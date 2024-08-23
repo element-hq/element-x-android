@@ -80,6 +80,7 @@
   <string name="action_ok">"OK"</string>
   <string name="action_open_settings">"Impostazioni"</string>
   <string name="action_open_with">"Apri con"</string>
+  <string name="action_pin">"Pin"</string>
   <string name="action_quick_reply">"Risposta rapida"</string>
   <string name="action_quote">"Citazione"</string>
   <string name="action_react">"Reagisci"</string>
@@ -90,6 +91,7 @@
   <string name="action_report_bug">"Segnala un problema"</string>
   <string name="action_report_content">"Segnala contenuto"</string>
   <string name="action_reset">"Reimposta"</string>
+  <string name="action_reset_identity">"Reimposta identità"</string>
   <string name="action_retry">"Riprova"</string>
   <string name="action_retry_decryption">"Riprova la decrittazione"</string>
   <string name="action_save">"Salva"</string>
@@ -109,6 +111,7 @@
   <string name="action_take_photo">"Scatta foto"</string>
   <string name="action_tap_for_options">"Tocca per le opzioni"</string>
   <string name="action_try_again">"Riprova"</string>
+  <string name="action_unpin">"Rimuovi dai fissati"</string>
   <string name="action_view_source">"Vedi codice sorgente"</string>
   <string name="action_yes">"Sì"</string>
   <string name="common_about">"Informazioni"</string>
@@ -168,6 +171,7 @@ Motivo:. %1$s"</string>
   <string name="common_no_results">"Nessun risultato"</string>
   <string name="common_no_room_name">"Nessun nome della stanza"</string>
   <string name="common_offline">"Non in linea"</string>
+  <string name="common_open_source_licenses">"Licenze open source"</string>
   <string name="common_or">"o"</string>
   <string name="common_password">"Password"</string>
   <string name="common_people">"Persone"</string>
@@ -255,6 +259,11 @@ Motivo:. %1$s"</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s non ha l\'autorizzazione di accedere al microfono. Attiva l\'accesso per registrare un messaggio vocale."</string>
   <string name="error_some_messages_have_not_been_sent">"Alcuni messaggi non sono stati inviati"</string>
   <string name="error_unknown">"Siamo spiacenti, si è verificato un errore"</string>
+  <string name="event_shield_reason_authenticity_not_guaranteed">"L\'autenticità di questo messaggio cifrato non può essere garantita su questo dispositivo."</string>
+  <string name="event_shield_reason_sent_in_clear">"Non cifrato."</string>
+  <string name="event_shield_reason_unknown_device">"Cifrato da un dispositivo sconosciuto o eliminato."</string>
+  <string name="event_shield_reason_unsigned_device">"Cifrato da un dispositivo non verificato dal proprietario."</string>
+  <string name="event_shield_reason_unverified_identity">"Cifrato da un utente non verificato."</string>
   <string name="invite_friends_rich_title">"🔐️ Unisciti a me su %1$s"</string>
   <string name="invite_friends_text">"Ehi, parliamo su %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
@@ -262,6 +271,14 @@ Motivo:. %1$s"</string>
   <string name="screen_media_picker_error_failed_selection">"Selezione del file multimediale fallita, riprova."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Elaborazione del file multimediale da caricare fallita, riprova."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Caricamento del file multimediale fallito, riprova."</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Premi su un messaggio e scegli “%1$s” per includerlo qui."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Fissa i messaggi importanti così che possano essere trovati facilmente"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d Messaggio fissato"</item>
+    <item quantity="other">"%1$d Messaggi fissati"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Messaggi fissati"</string>
+  <string name="screen_room_details_pinned_events_row_title">"Messaggi fissati"</string>
   <string name="screen_room_error_failed_processing_media">"Elaborazione del file multimediale da caricare fallita, riprova."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Impossibile recuperare i dettagli dell\'utente"</string>
   <string name="screen_room_member_details_block_alert_action">"Blocca"</string>
@@ -271,6 +288,10 @@ Motivo:. %1$s"</string>
   <string name="screen_room_member_details_unblock_alert_action">"Sblocca"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Potrai vedere di nuovo tutti i suoi messaggi."</string>
   <string name="screen_room_member_details_unblock_user">"Sblocca utente"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s di %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Messaggi fissati"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Caricamento messaggio…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Mostra tutti"</string>
   <string name="screen_room_title">"Conversazione"</string>
   <string name="screen_share_location_title">"Condividi posizione"</string>
   <string name="screen_share_my_location_action">"Condividi la mia posizione"</string>

@@ -45,6 +45,12 @@
   <string name="state_event_room_name_removed_by_you">"Vous avez supprimé le nom du salon"</string>
   <string name="state_event_room_none">"%1$s n‘a fait aucun changement visible"</string>
   <string name="state_event_room_none_by_you">"Vous n‘avez fait aucun changement visible"</string>
+  <string name="state_event_room_pinned_events_changed">"%1$s a modifié les messages épinglés"</string>
+  <string name="state_event_room_pinned_events_changed_by_you">"Vous avez modifié les messages épinglés"</string>
+  <string name="state_event_room_pinned_events_pinned">"%1$s a épinglé un message"</string>
+  <string name="state_event_room_pinned_events_pinned_by_you">"Vous avez épinglé un message"</string>
+  <string name="state_event_room_pinned_events_unpinned">"%1$s a désépinglé un message"</string>
+  <string name="state_event_room_pinned_events_unpinned_by_you">"Vous avez désépinglé un message"</string>
   <string name="state_event_room_reject">"%1$s a rejeté l’invitation"</string>
   <string name="state_event_room_reject_by_you">"Vous avez refusé l’invitation"</string>
   <string name="state_event_room_remove">"%1$s a supprimé %2$s"</string>

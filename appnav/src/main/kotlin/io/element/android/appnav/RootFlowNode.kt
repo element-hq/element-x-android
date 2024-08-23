@@ -42,8 +42,6 @@ import io.element.android.appnav.intent.ResolvedIntent
 import io.element.android.appnav.root.RootNavStateFlowFactory
 import io.element.android.appnav.root.RootPresenter
 import io.element.android.appnav.root.RootView
-import io.element.android.features.login.api.oidc.OidcAction
-import io.element.android.features.login.api.oidc.OidcActionFlow
 import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
 import io.element.android.features.signedout.api.SignedOutEntryPoint
 import io.element.android.features.viewfolder.api.ViewFolderEntryPoint
@@ -58,6 +56,8 @@ import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.oidc.api.OidcAction
+import io.element.android.libraries.oidc.api.OidcActionFlow
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn

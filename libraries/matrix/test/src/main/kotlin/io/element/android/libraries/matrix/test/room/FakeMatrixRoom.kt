@@ -31,11 +31,11 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
+import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
-import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
@@ -105,7 +105,8 @@ class FakeMatrixRoom(
     private val setTopicResult: (String) -> Result<Unit> = { lambdaError() },
     private val updateAvatarResult: (String, ByteArray) -> Result<Unit> = { _, _ -> lambdaError() },
     private val removeAvatarResult: () -> Result<Unit> = { lambdaError() },
-    private val sendMessageResult: (String, String?, List<Mention>) -> Result<Unit> = { _, _, _ -> lambdaError() },
+    private val editMessageLambda: (EventId, String, String?, List<IntentionalMention>) -> Result<Unit> = { _, _, _, _ -> lambdaError() },
+    private val sendMessageResult: (String, String?, List<IntentionalMention>) -> Result<Unit> = { _, _, _ -> lambdaError() },
     private val updateUserRoleResult: () -> Result<Unit> = { lambdaError() },
     private val toggleReactionResult: (String, EventId) -> Result<Unit> = { _, _ -> lambdaError() },
     private val retrySendMessageResult: (TransactionId) -> Result<Unit> = { lambdaError() },
@@ -221,13 +222,12 @@ class FakeMatrixRoom(
         return updateUserRoleResult()
     }
 
-    var editMessageLambda: (EventId, String, String?, List<Mention>) -> Result<Unit> = { _, _, _, _ -> lambdaError() }
-    override suspend fun editMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> {
-        return editMessageLambda(eventId, body, htmlBody, mentions)
+    override suspend fun editMessage(eventId: EventId, body: String, htmlBody: String?, intentionalMentions: List<IntentionalMention>) = simulateLongTask {
+        editMessageLambda(eventId, body, htmlBody, intentionalMentions)
     }
 
-    override suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>) = simulateLongTask {
-        sendMessageResult(body, htmlBody, mentions)
+    override suspend fun sendMessage(body: String, htmlBody: String?, intentionalMentions: List<IntentionalMention>) = simulateLongTask {
+        sendMessageResult(body, htmlBody, intentionalMentions)
     }
 
     override suspend fun toggleReaction(emoji: String, eventId: EventId): Result<Unit> {

@@ -24,6 +24,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.FakeMessagesNavigator
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactory
+import io.element.android.features.messages.impl.timeline.components.aCriticalShield
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -587,6 +588,26 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
             }
             awaitItem().also { state ->
                 assertThat(state.focusRequestState).isEqualTo(FocusRequestState.None)
+            }
+        }
+    }
+
+    @Test
+    fun `present - show shield hide shield`() = runTest {
+        val presenter = createTimelinePresenter()
+        val shield = aCriticalShield()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.messageShield).isNull()
+            initialState.eventSink(TimelineEvents.ShowShieldDialog(shield))
+            awaitItem().also { state ->
+                assertThat(state.messageShield).isEqualTo(shield)
+                state.eventSink(TimelineEvents.HideShieldDialog)
+            }
+            awaitItem().also { state ->
+                assertThat(state.messageShield).isNull()
             }
         }
     }

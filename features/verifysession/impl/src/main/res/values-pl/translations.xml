@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Nie możesz potwierdzić?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Utwórz nowy klucz przywracania"</string>
   <string name="screen_identity_confirmation_subtitle">"Zweryfikuj to urządzenie, aby skonfigurować bezpieczne przesyłanie wiadomości."</string>
   <string name="screen_identity_confirmation_title">"Potwierdź, że to Ty"</string>
   <string name="screen_identity_confirmation_use_another_device">"Użyj innego urządzenia"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Użyj klucza przywracania"</string>
   <string name="screen_identity_confirmed_subtitle">"Teraz możesz bezpiecznie czytać i wysyłać wiadomości, każdy z kim czatujesz również może ufać temu urządzeniu."</string>
   <string name="screen_identity_confirmed_title">"Urządzenie zweryfikowane"</string>
   <string name="screen_identity_use_another_device">"Użyj innego urządzenia"</string>

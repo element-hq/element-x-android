@@ -16,11 +16,11 @@
 
 package io.element.android.libraries.matrix.impl.room
 
-import io.element.android.libraries.matrix.api.room.Mention
+import io.element.android.libraries.matrix.api.room.IntentionalMention
 import org.matrix.rustcomponents.sdk.Mentions
 
-fun List<Mention>.map(): Mentions {
-    val hasAtRoom = any { it is Mention.AtRoom }
-    val userIds = filterIsInstance<Mention.User>().map { it.userId.value }
-    return Mentions(userIds, hasAtRoom)
+fun List<IntentionalMention>.map(): Mentions {
+    val hasRoom = any { it is IntentionalMention.Room }
+    val userIds = filterIsInstance<IntentionalMention.User>().map { it.userId.value }
+    return Mentions(userIds, hasRoom)
 }
