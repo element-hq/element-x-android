@@ -260,18 +260,14 @@ class ElementCallActivity :
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun setPipParams() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            setPictureInPictureParams(getPictureInPictureParams())
-        }
+        setPictureInPictureParams(getPictureInPictureParams())
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun enterPipMode(): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            enterPictureInPictureMode(getPictureInPictureParams())
-        } else {
-            false
-        }
+        return enterPictureInPictureMode(getPictureInPictureParams())
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
