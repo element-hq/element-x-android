@@ -26,7 +26,8 @@ class WebViewWebPipApi(
     override suspend fun canEnterPip(): Boolean {
         return suspendCoroutine { continuation ->
             webView.evaluateJavascript("controls.canEnterPip()") { result ->
-                continuation.resume(result == "true")
+                // Note if the method is not available, it will return "null"
+                continuation.resume(result == "true" || result == "null")
             }
         }
     }
