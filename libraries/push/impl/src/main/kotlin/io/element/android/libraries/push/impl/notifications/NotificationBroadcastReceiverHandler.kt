@@ -171,14 +171,14 @@ class NotificationBroadcastReceiverHandler @Inject constructor(
                 eventId = threadId.asEventId(),
                 body = message,
                 htmlBody = null,
-                mentions = emptyList(),
+                intentionalMentions = emptyList(),
                 fromNotification = true,
             )
         } else {
             room.liveTimeline.sendMessage(
                 body = message,
                 htmlBody = null,
-                mentions = emptyList()
+                intentionalMentions = emptyList()
             )
         }.onFailure {
             Timber.e(it, "Failed to send smart reply message")

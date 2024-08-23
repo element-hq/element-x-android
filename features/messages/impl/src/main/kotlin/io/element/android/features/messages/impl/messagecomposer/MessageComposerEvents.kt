@@ -18,7 +18,7 @@ package io.element.android.features.messages.impl.messagecomposer
 
 import android.net.Uri
 import androidx.compose.runtime.Immutable
-import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
+import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
 
@@ -44,6 +44,6 @@ sealed interface MessageComposerEvents {
     data class Error(val error: Throwable) : MessageComposerEvents
     data class TypingNotice(val isTyping: Boolean) : MessageComposerEvents
     data class SuggestionReceived(val suggestion: Suggestion?) : MessageComposerEvents
-    data class InsertMention(val mention: ResolvedMentionSuggestion) : MessageComposerEvents
+    data class InsertSuggestion(val resolvedSuggestion: ResolvedSuggestion) : MessageComposerEvents
     data object SaveDraft : MessageComposerEvents
 }

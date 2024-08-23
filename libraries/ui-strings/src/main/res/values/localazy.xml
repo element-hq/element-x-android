@@ -112,6 +112,7 @@
   <string name="action_tap_for_options">"Tap for options"</string>
   <string name="action_try_again">"Try again"</string>
   <string name="action_unpin">"Unpin"</string>
+  <string name="action_view_in_timeline">"View in timeline"</string>
   <string name="action_view_source">"View source"</string>
   <string name="action_yes">"Yes"</string>
   <string name="common_about">"About"</string>
@@ -177,6 +178,7 @@ Reason: %1$s."</string>
   <string name="common_people">"People"</string>
   <string name="common_permalink">"Permalink"</string>
   <string name="common_permission">"Permission"</string>
+  <string name="common_pinned">"Pinned"</string>
   <string name="common_please_wait">"Please wait…"</string>
   <string name="common_poll_end_confirmation">"Are you sure you want to end this poll?"</string>
   <string name="common_poll_summary">"Poll: %1$s"</string>

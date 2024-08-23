@@ -129,9 +129,9 @@ interface MatrixRoom : Closeable {
 
     suspend fun userAvatarUrl(userId: UserId): Result<String?>
 
-    suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
+    suspend fun sendMessage(body: String, htmlBody: String?, intentionalMentions: List<IntentionalMention>): Result<Unit>
 
-    suspend fun editMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
+    suspend fun editMessage(eventId: EventId, body: String, htmlBody: String?, intentionalMentions: List<IntentionalMention>): Result<Unit>
 
     suspend fun sendImage(
         file: File,

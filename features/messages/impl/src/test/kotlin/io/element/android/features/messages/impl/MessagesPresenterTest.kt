@@ -29,9 +29,11 @@ import io.element.android.features.messages.impl.draft.FakeComposerDraftService
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.messagecomposer.DefaultMessageComposerContext
+import io.element.android.features.messages.impl.messagecomposer.FakeRoomAliasSuggestionsDataSource
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
+import io.element.android.features.messages.impl.messagecomposer.TestRichTextEditorStateFactory
+import io.element.android.features.messages.impl.messagecomposer.suggestions.SuggestionsProcessor
 import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMessagesBannerState
-import io.element.android.features.messages.impl.textcomposer.TestRichTextEditorStateFactory
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineItemIndexer
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
@@ -1008,6 +1010,7 @@ class MessagesPresenterTest {
             analyticsService = analyticsService,
             messageComposerContext = DefaultMessageComposerContext(),
             richTextEditorStateFactory = TestRichTextEditorStateFactory(),
+            roomAliasSuggestionsDataSource = FakeRoomAliasSuggestionsDataSource(),
             permissionsPresenterFactory = permissionsPresenterFactory,
             permalinkParser = FakePermalinkParser(),
             permalinkBuilder = FakePermalinkBuilder(),
@@ -1016,6 +1019,7 @@ class MessagesPresenterTest {
             mentionSpanProvider = mentionSpanProvider,
             pillificationHelper = FakeTextPillificationHelper(),
             roomMemberProfilesCache = RoomMemberProfilesCache(),
+            suggestionsProcessor = SuggestionsProcessor(),
         ).apply {
             showTextFormatting = true
             isTesting = true
