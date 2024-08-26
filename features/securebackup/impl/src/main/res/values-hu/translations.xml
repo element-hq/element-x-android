@@ -60,6 +60,7 @@
   <string name="screen_reset_encryption_confirmation_alert_action">"Igen, visszaállítás most"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Ez a folyamat visszafordíthatatlan."</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"Biztos, hogy visszaállítja a titkosítást?"</string>
+  <string name="screen_reset_encryption_password_error">"Ismeretlen hiba történt. Ellenőrizze, hogy a fiókja jelszava helyes-e, és próbálja meg újra."</string>
   <string name="screen_reset_encryption_password_placeholder">"Adja meg…"</string>
   <string name="screen_reset_encryption_password_subtitle">"Erősítse meg, hogy vissza szeretné állítani a titkosítást."</string>
   <string name="screen_reset_encryption_password_title">"A folytatáshoz adja meg fiókja jelszavát"</string>

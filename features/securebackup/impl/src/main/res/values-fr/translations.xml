@@ -56,6 +56,7 @@
   <string name="screen_recovery_key_setup_title">"Configurer la sauvegarde"</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"Oui, réinitialisez maintenant"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Cette opération ne peut pas être annulée."</string>
+  <string name="screen_reset_encryption_password_error">"Une erreur s’est produite. Vérifiez que le mot de passe de votre compte est correct et réessayez."</string>
   <string name="screen_reset_encryption_password_placeholder">"Saisissez…"</string>
   <string name="screen_reset_encryption_password_title">"Saisissez le mot de passe de votre compte pour continuer"</string>
 </resources>

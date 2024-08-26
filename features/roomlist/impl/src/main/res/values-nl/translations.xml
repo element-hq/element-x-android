@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="confirm_recovery_key_banner_message">"Je chatback-up is momenteel niet gesynchroniseerd. Je moet je herstelsleutel invoeren om toegang te behouden tot je chatback-up."</string>
+  <string name="confirm_recovery_key_banner_title">"Voer je herstelsleutel in"</string>
   <string name="screen_invites_decline_chat_message">"Weet je zeker dat je de uitnodiging om toe te treden tot %1$s wilt weigeren?"</string>
   <string name="screen_invites_decline_chat_title">"Uitnodiging weigeren"</string>
   <string name="screen_invites_decline_direct_chat_message">"Weet je zeker dat je deze privéchat met %1$s wilt weigeren?"</string>
@@ -11,8 +13,14 @@
   <string name="screen_roomlist_a11y_create_message">"Begin een nieuw gesprek of maak een nieuwe kamer"</string>
   <string name="screen_roomlist_empty_message">"Ga aan de slag door iemand een bericht te sturen."</string>
   <string name="screen_roomlist_empty_title">"Nog geen chats."</string>
+  <string name="screen_roomlist_filter_favourites">"Favorieten"</string>
+  <string name="screen_roomlist_filter_low_priority">"Lage prioriteit"</string>
   <string name="screen_roomlist_filter_people">"Personen"</string>
+  <string name="screen_roomlist_filter_rooms">"Kamers"</string>
+  <string name="screen_roomlist_filter_unreads">"Ongelezen"</string>
   <string name="screen_roomlist_main_space_title">"Chats"</string>
+  <string name="screen_roomlist_mark_as_read">"Markeren als gelezen"</string>
+  <string name="screen_roomlist_mark_as_unread">"Markeren als ongelezen"</string>
   <string name="session_verification_banner_message">"Het lijkt erop dat je een nieuw apparaat gebruikt. Verifieer met een ander apparaat om toegang te krijgen tot je versleutelde berichten."</string>
   <string name="session_verification_banner_title">"Verifieer dat jij het bent"</string>
 </resources>

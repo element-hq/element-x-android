@@ -59,9 +59,9 @@
   <string name="screen_recovery_key_setup_title">"Set up recovery"</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"Yes, reset now"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"This process is irreversible."</string>
-  <string name="screen_reset_encryption_confirmation_alert_title">"Are you sure you want to reset your encryption?"</string>
+  <string name="screen_reset_encryption_confirmation_alert_title">"Are you sure you want to reset your identity?"</string>
   <string name="screen_reset_encryption_password_error">"An unknown error happened. Please check your account password is correct and try again."</string>
   <string name="screen_reset_encryption_password_placeholder">"Enter…"</string>
-  <string name="screen_reset_encryption_password_subtitle">"Confirm that you want to reset your encryption."</string>
+  <string name="screen_reset_encryption_password_subtitle">"Confirm that you want to reset your identity."</string>
   <string name="screen_reset_encryption_password_title">"Enter your account password to continue"</string>
 </resources>

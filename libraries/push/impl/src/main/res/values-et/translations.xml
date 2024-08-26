@@ -34,6 +34,7 @@
   <string name="notification_room_action_quick_reply">"Kiirvastus"</string>
   <string name="notification_room_invite_body">"Saatis sulle kutse jututuppa"</string>
   <string name="notification_sender_me">"Mina"</string>
+  <string name="notification_sender_mention_reply">"%1$s mainis või vastas"</string>
   <string name="notification_test_push_notification_content">"See ongi teavitus! Klõpsi mind!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>

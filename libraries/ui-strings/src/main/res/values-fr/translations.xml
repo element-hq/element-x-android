@@ -111,6 +111,7 @@
   <string name="action_tap_for_options">"Appuyez pour afficher les options"</string>
   <string name="action_try_again">"Essayer à nouveau"</string>
   <string name="action_unpin">"Désépingler"</string>
+  <string name="action_view_in_timeline">"Voir dans la discussion"</string>
   <string name="action_view_source">"Afficher la source"</string>
   <string name="action_yes">"Oui"</string>
   <string name="common_about">"À propos"</string>
@@ -176,6 +177,7 @@ Raison: %1$s."</string>
   <string name="common_people">"Personnes"</string>
   <string name="common_permalink">"Permalien"</string>
   <string name="common_permission">"Autorisation"</string>
+  <string name="common_pinned">"Épinglé"</string>
   <string name="common_please_wait">"Veuillez patienter…"</string>
   <string name="common_poll_end_confirmation">"Êtes-vous sûr de vouloir mettre fin à ce sondage ?"</string>
   <string name="common_poll_summary">"Sondage : %1$s"</string>

@@ -112,6 +112,7 @@
   <string name="action_tap_for_options">"Valikuteks klõpsa"</string>
   <string name="action_try_again">"Proovi uuesti"</string>
   <string name="action_unpin">"Eemalda esiletõstmine"</string>
+  <string name="action_view_in_timeline">"Vaata ajajoonel"</string>
   <string name="action_view_source">"Vaata lähtekoodi"</string>
   <string name="action_yes">"Jah"</string>
   <string name="common_about">"Rakenduse teave"</string>
@@ -177,6 +178,7 @@ Põhjus: %1$s."</string>
   <string name="common_people">"Inimesed"</string>
   <string name="common_permalink">"Püsilink"</string>
   <string name="common_permission">"Õigus"</string>
+  <string name="common_pinned">"Esiletõstetud"</string>
   <string name="common_please_wait">"Palun oota…"</string>
   <string name="common_poll_end_confirmation">"Kas oled kindel, et soovid selle küsitluse lõpetada?"</string>
   <string name="common_poll_summary">"Küsitlus: %1$s"</string>
@@ -260,6 +262,7 @@ Põhjus: %1$s."</string>
   <string name="error_some_messages_have_not_been_sent">"Mõned sõnumid on saatmata"</string>
   <string name="error_unknown">"Vabandust, ilmnes viga"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Selle krüptitud sõnumi tõepärasus pole selles seadmes tagatud."</string>
+  <string name="event_shield_reason_previously_verified">"Krüptitud varem verifitseeritud kasutaja poolt"</string>
   <string name="event_shield_reason_sent_in_clear">"Pole krüptitud."</string>
   <string name="event_shield_reason_unknown_device">"Krüptitud tundmatu või kustutatud seadme poolt."</string>
   <string name="event_shield_reason_unsigned_device">"Krüptitud seadme poolt, mida tema omanik pole verifitseerinud."</string>
@@ -278,6 +281,8 @@ Põhjus: %1$s."</string>
     <item quantity="other">"%1$d esiletõstetud sõnumit"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Esiletõstetud sõnumid"</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"Oma võrguidentiteedi lähtestamiseks suuname sind %1$s kasutajakonto halduse lehele. Hiljem suunatakse sind tagasi sama rakenduse juurde."</string>
+  <string name="screen_reset_identity_confirmation_title">"Sa ei saa seda kinnitada? Ava oma kasutajakonto haldus ja lähtesta oma võrguidentiteet."</string>
   <string name="screen_room_details_pinned_events_row_title">"Esiletõstetud sõnumid"</string>
   <string name="screen_room_error_failed_processing_media">"Meediafaili töötlemine enne üleslaadimist ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kasutaja andmete laadimine ei õnnestunud"</string>
