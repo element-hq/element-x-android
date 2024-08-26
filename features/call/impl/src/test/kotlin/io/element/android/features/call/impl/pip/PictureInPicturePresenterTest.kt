@@ -92,7 +92,7 @@ class PictureInPicturePresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            initialState.eventSink(PictureInPictureEvents.SetupWebPipApi(FakeWebPipApi(canEnterPipResult = { false })))
+            initialState.eventSink(PictureInPictureEvents.SetPipController(FakePipController(canEnterPipResult = { false })))
             initialState.eventSink(PictureInPictureEvents.EnterPictureInPicture)
             handUpResult.assertions().isCalledOnce()
         }
@@ -115,8 +115,8 @@ class PictureInPicturePresenterTest {
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(
-                PictureInPictureEvents.SetupWebPipApi(
-                    FakeWebPipApi(
+                PictureInPictureEvents.SetPipController(
+                    FakePipController(
                         canEnterPipResult = { true },
                         enterPipResult = enterPipResult,
                         exitPipResult = exitPipResult,

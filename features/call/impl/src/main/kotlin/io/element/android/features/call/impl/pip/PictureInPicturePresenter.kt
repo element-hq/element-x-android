@@ -22,7 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import io.element.android.features.call.impl.utils.WebPipApi
+import io.element.android.features.call.impl.utils.PipController
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.log.logger.LoggerTag
 import kotlinx.coroutines.launch
@@ -41,25 +41,25 @@ class PictureInPicturePresenter @Inject constructor(
     override fun present(): PictureInPictureState {
         val coroutineScope = rememberCoroutineScope()
         var isInPictureInPicture by remember { mutableStateOf(false) }
-        var webPipApi by remember { mutableStateOf<WebPipApi?>(null) }
+        var pipController by remember { mutableStateOf<PipController?>(null) }
 
         fun handleEvent(event: PictureInPictureEvents) {
             when (event) {
-                is PictureInPictureEvents.SetupWebPipApi -> {
-                    webPipApi = event.webPipApi
+                is PictureInPictureEvents.SetPipController -> {
+                    pipController = event.pipController
                 }
                 PictureInPictureEvents.EnterPictureInPicture -> {
                     coroutineScope.launch {
-                        switchToPip(webPipApi)
+                        switchToPip(pipController)
                     }
                 }
                 is PictureInPictureEvents.OnPictureInPictureModeChanged -> {
                     Timber.tag(loggerTag.value).d("onPictureInPictureModeChanged: ${event.isInPip}")
                     isInPictureInPicture = event.isInPip
                     if (event.isInPip) {
-                        webPipApi?.enterPip()
+                        pipController?.enterPip()
                     } else {
-                        webPipApi?.exitPip()
+                        pipController?.exitPip()
                     }
                 }
             }
@@ -85,12 +85,12 @@ class PictureInPicturePresenter @Inject constructor(
     /**
      * Enters Picture-in-Picture mode, if allowed by Element Call.
      */
-    private suspend fun switchToPip(webPipApi: WebPipApi?) {
+    private suspend fun switchToPip(pipController: PipController?) {
         if (isPipSupported) {
-            if (webPipApi == null) {
+            if (pipController == null) {
                 Timber.tag(loggerTag.value).w("webPipApi is not available")
             }
-            if (webPipApi == null || webPipApi.canEnterPip()) {
+            if (pipController == null || pipController.canEnterPip()) {
                 Timber.tag(loggerTag.value).d("Switch to PiP mode")
                 pipActivity?.enterPipMode()
                     ?.also { Timber.tag(loggerTag.value).d("Switch to PiP mode result: $it") }

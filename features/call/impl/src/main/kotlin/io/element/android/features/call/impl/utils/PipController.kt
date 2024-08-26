@@ -16,7 +16,7 @@
 
 package io.element.android.features.call.impl.utils
 
-interface WebPipApi {
+interface PipController {
     suspend fun canEnterPip(): Boolean
     fun enterPip()
     fun exitPip()

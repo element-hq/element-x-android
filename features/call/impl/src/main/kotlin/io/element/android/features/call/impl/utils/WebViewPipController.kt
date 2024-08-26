@@ -20,9 +20,9 @@ import android.webkit.WebView
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class WebViewWebPipApi(
+class WebViewPipController(
     private val webView: WebView,
-) : WebPipApi {
+) : PipController {
     override suspend fun canEnterPip(): Boolean {
         return suspendCoroutine { continuation ->
             webView.evaluateJavascript("controls.canEnterPip()") { result ->

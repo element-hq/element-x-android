@@ -52,7 +52,7 @@ class CallScreenViewTest {
         eventsRecorder.assertTrue(0) { it is CallScreenEvents.SetupMessageChannels }
         eventsRecorder.assertTrue(1) { it == CallScreenEvents.Hangup }
         pipEventsRecorder.assertSize(1)
-        pipEventsRecorder.assertTrue(0) { it is PictureInPictureEvents.SetupWebPipApi }
+        pipEventsRecorder.assertTrue(0) { it is PictureInPictureEvents.SetPipController }
     }
 
     @Test
@@ -72,7 +72,7 @@ class CallScreenViewTest {
         eventsRecorder.assertSize(1)
         eventsRecorder.assertTrue(0) { it is CallScreenEvents.SetupMessageChannels }
         pipEventsRecorder.assertSize(2)
-        pipEventsRecorder.assertTrue(0) { it is PictureInPictureEvents.SetupWebPipApi }
+        pipEventsRecorder.assertTrue(0) { it is PictureInPictureEvents.SetPipController }
         pipEventsRecorder.assertTrue(1) { it == PictureInPictureEvents.EnterPictureInPicture }
     }
 }
