@@ -34,14 +34,14 @@ class PictureInPicturePresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.supportPip).isFalse()
         }
-        presenter.setPipActivity(null)
+        presenter.setPipView(null)
     }
 
     @Test
     fun `when pip is supported, the state value supportPip is true`() = runTest {
         val presenter = createPictureInPicturePresenter(
             supportPip = true,
-            pipActivity = FakePipActivity(setPipParamsResult = { }),
+            pipView = FakePipView(setPipParamsResult = { }),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -56,7 +56,7 @@ class PictureInPicturePresenterTest {
         val enterPipModeResult = lambdaRecorder<Boolean> { true }
         val presenter = createPictureInPicturePresenter(
             supportPip = true,
-            pipActivity = FakePipActivity(
+            pipView = FakePipView(
                 setPipParamsResult = { },
                 enterPipModeResult = enterPipModeResult,
             ),
@@ -83,7 +83,7 @@ class PictureInPicturePresenterTest {
         val handUpResult = lambdaRecorder<Unit> { }
         val presenter = createPictureInPicturePresenter(
             supportPip = true,
-            pipActivity = FakePipActivity(
+            pipView = FakePipView(
                 setPipParamsResult = { },
                 handUpResult = handUpResult
             ),
@@ -105,7 +105,7 @@ class PictureInPicturePresenterTest {
         val exitPipResult = lambdaRecorder<Unit> { }
         val presenter = createPictureInPicturePresenter(
             supportPip = true,
-            pipActivity = FakePipActivity(
+            pipView = FakePipView(
                 setPipParamsResult = { },
                 enterPipModeResult = enterPipModeResult
             ),
@@ -141,12 +141,12 @@ class PictureInPicturePresenterTest {
 
     private fun createPictureInPicturePresenter(
         supportPip: Boolean = true,
-        pipActivity: PipActivity? = FakePipActivity()
+        pipView: PipView? = FakePipView()
     ): PictureInPicturePresenter {
         return PictureInPicturePresenter(
             pipSupportProvider = FakePipSupportProvider(supportPip),
         ).apply {
-            setPipActivity(pipActivity)
+            setPipView(pipView)
         }
     }
 }

@@ -16,7 +16,7 @@
 
 package io.element.android.features.call.impl.pip
 
-interface PipActivity {
+interface PipView {
     fun setPipParams()
     fun enterPipMode(): Boolean
     fun hangUp()

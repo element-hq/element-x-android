@@ -35,7 +35,7 @@ class PictureInPicturePresenter @Inject constructor(
     pipSupportProvider: PipSupportProvider,
 ) : Presenter<PictureInPictureState> {
     private val isPipSupported = pipSupportProvider.isPipSupported()
-    private var pipActivity: PipActivity? = null
+    private var pipView: PipView? = null
 
     @Composable
     override fun present(): PictureInPictureState {
@@ -72,13 +72,13 @@ class PictureInPicturePresenter @Inject constructor(
         )
     }
 
-    fun setPipActivity(pipActivity: PipActivity?) {
+    fun setPipView(pipView: PipView?) {
         if (isPipSupported) {
             Timber.tag(loggerTag.value).d("Setting PiP params")
-            this.pipActivity = pipActivity
-            pipActivity?.setPipParams()
+            this.pipView = pipView
+            pipView?.setPipParams()
         } else {
-            Timber.tag(loggerTag.value).d("onCreate: PiP is not supported")
+            Timber.tag(loggerTag.value).d("setPipView: PiP is not supported")
         }
     }
 
@@ -92,11 +92,11 @@ class PictureInPicturePresenter @Inject constructor(
             }
             if (pipController == null || pipController.canEnterPip()) {
                 Timber.tag(loggerTag.value).d("Switch to PiP mode")
-                pipActivity?.enterPipMode()
+                pipView?.enterPipMode()
                     ?.also { Timber.tag(loggerTag.value).d("Switch to PiP mode result: $it") }
             } else {
                 Timber.tag(loggerTag.value).w("Cannot enter PiP mode, hangup the call")
-                pipActivity?.hangUp()
+                pipView?.hangUp()
             }
         }
     }

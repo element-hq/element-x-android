@@ -48,7 +48,7 @@ import io.element.android.features.call.impl.di.CallBindings
 import io.element.android.features.call.impl.pip.PictureInPictureEvents
 import io.element.android.features.call.impl.pip.PictureInPicturePresenter
 import io.element.android.features.call.impl.pip.PictureInPictureState
-import io.element.android.features.call.impl.pip.PipActivity
+import io.element.android.features.call.impl.pip.PipView
 import io.element.android.features.call.impl.services.CallForegroundService
 import io.element.android.features.call.impl.utils.CallIntentDataParser
 import io.element.android.libraries.architecture.bindings
@@ -60,7 +60,7 @@ import javax.inject.Inject
 class ElementCallActivity :
     AppCompatActivity(),
     CallScreenNavigator,
-    PipActivity {
+    PipView {
     @Inject lateinit var callIntentDataParser: CallIntentDataParser
     @Inject lateinit var presenterFactory: CallScreenPresenter.Factory
     @Inject lateinit var appPreferencesStore: AppPreferencesStore
@@ -101,7 +101,7 @@ class ElementCallActivity :
             updateUiMode(resources.configuration)
         }
 
-        pictureInPicturePresenter.setPipActivity(this)
+        pictureInPicturePresenter.setPipView(this)
 
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         requestAudioFocus()
@@ -177,7 +177,7 @@ class ElementCallActivity :
         super.onDestroy()
         releaseAudioFocus()
         CallForegroundService.stop(this)
-        pictureInPicturePresenter.setPipActivity(null)
+        pictureInPicturePresenter.setPipView(null)
     }
 
     override fun finish() {

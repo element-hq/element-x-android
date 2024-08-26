@@ -18,11 +18,11 @@ package io.element.android.features.call.impl.pip
 
 import io.element.android.tests.testutils.lambda.lambdaError
 
-class FakePipActivity(
+class FakePipView(
     private val setPipParamsResult: () -> Unit = { lambdaError() },
     private val enterPipModeResult: () -> Boolean = { lambdaError() },
     private val handUpResult: () -> Unit = { lambdaError() }
-) : PipActivity {
+) : PipView {
     override fun setPipParams() = setPipParamsResult()
     override fun enterPipMode(): Boolean = enterPipModeResult()
     override fun hangUp() = handUpResult()
