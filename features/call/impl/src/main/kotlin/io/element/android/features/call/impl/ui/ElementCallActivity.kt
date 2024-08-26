@@ -17,6 +17,7 @@
 package io.element.android.features.call.impl.ui
 
 import android.Manifest
+import android.app.PictureInPictureParams
 import android.content.Intent
 import android.content.res.Configuration
 import android.media.AudioAttributes
@@ -24,19 +25,30 @@ import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Rational
 import android.view.WindowManager
 import android.webkit.PermissionRequest
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.core.app.PictureInPictureModeChangedInfo
 import androidx.core.content.IntentCompat
+import androidx.core.util.Consumer
 import androidx.lifecycle.Lifecycle
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.impl.DefaultElementCallEntryPoint
 import io.element.android.features.call.impl.di.CallBindings
+import io.element.android.features.call.impl.pip.PictureInPictureEvents
 import io.element.android.features.call.impl.pip.PictureInPicturePresenter
+import io.element.android.features.call.impl.pip.PictureInPictureState
+import io.element.android.features.call.impl.pip.PipView
 import io.element.android.features.call.impl.services.CallForegroundService
 import io.element.android.features.call.impl.utils.CallIntentDataParser
 import io.element.android.libraries.architecture.bindings
@@ -45,7 +57,10 @@ import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import timber.log.Timber
 import javax.inject.Inject
 
-class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
+class ElementCallActivity :
+    AppCompatActivity(),
+    CallScreenNavigator,
+    PipView {
     @Inject lateinit var callIntentDataParser: CallIntentDataParser
     @Inject lateinit var presenterFactory: CallScreenPresenter.Factory
     @Inject lateinit var appPreferencesStore: AppPreferencesStore
@@ -86,13 +101,14 @@ class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
             updateUiMode(resources.configuration)
         }
 
-        pictureInPicturePresenter.onCreate(this)
+        pictureInPicturePresenter.setPipView(this)
 
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         requestAudioFocus()
 
         setContent {
             val pipState = pictureInPicturePresenter.present()
+            ListenToAndroidEvents(pipState)
             ElementThemeApp(appPreferencesStore) {
                 val state = presenter.present()
                 eventSink = state.eventSink
@@ -108,19 +124,36 @@ class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
         }
     }
 
+    @Composable
+    private fun ListenToAndroidEvents(pipState: PictureInPictureState) {
+        val pipEventSink by rememberUpdatedState(pipState.eventSink)
+        DisposableEffect(Unit) {
+            val onUserLeaveHintListener = Runnable {
+                pipEventSink(PictureInPictureEvents.EnterPictureInPicture)
+            }
+            addOnUserLeaveHintListener(onUserLeaveHintListener)
+            onDispose {
+                removeOnUserLeaveHintListener(onUserLeaveHintListener)
+            }
+        }
+        DisposableEffect(Unit) {
+            val onPictureInPictureModeChangedListener = Consumer { _: PictureInPictureModeChangedInfo ->
+                pipEventSink(PictureInPictureEvents.OnPictureInPictureModeChanged(isInPictureInPictureMode))
+                if (!isInPictureInPictureMode && !lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+                    Timber.d("Exiting PiP mode: Hangup the call")
+                    eventSink?.invoke(CallScreenEvents.Hangup)
+                }
+            }
+            addOnPictureInPictureModeChangedListener(onPictureInPictureModeChangedListener)
+            onDispose {
+                removeOnPictureInPictureModeChangedListener(onPictureInPictureModeChangedListener)
+            }
+        }
+    }
+
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         updateUiMode(newConfig)
-    }
-
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
-        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-        pictureInPicturePresenter.onPictureInPictureModeChanged(isInPictureInPictureMode)
-
-        if (!isInPictureInPictureMode && !lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-            Timber.d("Exiting PiP mode: Hangup the call")
-            eventSink?.invoke(CallScreenEvents.Hangup)
-        }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -140,16 +173,11 @@ class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
         }
     }
 
-    override fun onUserLeaveHint() {
-        super.onUserLeaveHint()
-        pictureInPicturePresenter.onUserLeaveHint()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         releaseAudioFocus()
         CallForegroundService.stop(this)
-        pictureInPicturePresenter.onDestroy()
+        pictureInPicturePresenter.setPipView(null)
     }
 
     override fun finish() {
@@ -248,6 +276,33 @@ class ElementCallActivity : AppCompatActivity(), CallScreenNavigator {
                 window.setBackgroundDrawableResource(android.R.drawable.screen_background_light)
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun setPipParams() {
+        setPictureInPictureParams(getPictureInPictureParams())
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun enterPipMode(): Boolean {
+        return enterPictureInPictureMode(getPictureInPictureParams())
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getPictureInPictureParams(): PictureInPictureParams {
+        return PictureInPictureParams.Builder()
+            // Portrait for calls seems more appropriate
+            .setAspectRatio(Rational(3, 5))
+            .apply {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    setAutoEnterEnabled(true)
+                }
+            }
+            .build()
+    }
+
+    override fun hangUp() {
+        eventSink?.invoke(CallScreenEvents.Hangup)
     }
 }
 

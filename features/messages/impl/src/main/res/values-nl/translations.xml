@@ -21,8 +21,10 @@
   <string name="screen_room_attachment_source_poll">"Peiling"</string>
   <string name="screen_room_attachment_text_formatting">"Tekstopmaak"</string>
   <string name="screen_room_encrypted_history_banner">"Berichtgeschiedenis is momenteel niet beschikbaar."</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"Berichtgeschiedenis is niet beschikbaar in deze kamer. Verifieer dit apparaat om je berichtgeschiedenis te bekijken."</string>
   <string name="screen_room_invite_again_alert_message">"Wil je ze terug uitnodigen?"</string>
   <string name="screen_room_invite_again_alert_title">"Je bent alleen in deze chat"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Stuur een melding naar de hele kamer"</string>
   <string name="screen_room_mentions_at_room_title">"Iedereen"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Opnieuw verzenden"</string>
   <string name="screen_room_retry_send_menu_title">"Je bericht is niet verzonden"</string>
@@ -39,4 +41,13 @@
     <item quantity="one">"%1$d kamerverandering"</item>
     <item quantity="other">"%1$d kamerveranderingen"</item>
   </plurals>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="one">"%1$s, %2$s en %3$d andere"</item>
+    <item quantity="other">"%1$s, %2$s en %3$d anderen"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="one">"%1$s is aan het typen"</item>
+    <item quantity="other">"%1$s zijn aan het typen"</item>
+  </plurals>
+  <string name="screen_room_typing_two_members">"%1$s en %2$s"</string>
 </resources>

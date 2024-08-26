@@ -3,12 +3,16 @@
   <string name="screen_session_verification_cancelled_subtitle">"Er lijkt iets niet goed te gaan. Of er is een time-out opgetreden of het verzoek is geweigerd."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Bevestig dat de emoji\'s hieronder overeenkomen met de emoji\'s in je andere sessie."</string>
   <string name="screen_session_verification_compare_emojis_title">"Vergelijk emoji\'s"</string>
+  <string name="screen_session_verification_compare_numbers_subtitle">"Bevestig dat de onderstaande cijfers overeenkomen met de cijfers die worden weergegeven in je andere sessie."</string>
+  <string name="screen_session_verification_compare_numbers_title">"Vergelijk getallen"</string>
   <string name="screen_session_verification_complete_subtitle">"Je nieuwe sessie is nu geverifieerd. Het heeft toegang tot je versleutelde berichten en andere gebruikers zullen het als vertrouwd beschouwen."</string>
+  <string name="screen_session_verification_enter_recovery_key">"Voer recovery key in"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Bewijs dat jij het bent om toegang te krijgen tot je versleutelde berichtgeschiedenis."</string>
   <string name="screen_session_verification_open_existing_session_title">"Open een bestaande sessie"</string>
   <string name="screen_session_verification_positive_button_canceled">"Verificatie opnieuw proberen"</string>
   <string name="screen_session_verification_positive_button_initial">"Ik ben er klaar voor"</string>
   <string name="screen_session_verification_positive_button_verifying_ongoing">"Wachten om te vergelijken"</string>
+  <string name="screen_session_verification_ready_subtitle">"Vergelijk een unieke combinatie van emoji\'s."</string>
   <string name="screen_session_verification_request_accepted_subtitle">"Vergelijk de unieke emoji\'s, ze dienen in dezelfde volgorde te worden weergegeven."</string>
   <string name="screen_session_verification_they_dont_match">"Ze komen niet overeen"</string>
   <string name="screen_session_verification_they_match">"Ze komen overeen"</string>

@@ -17,9 +17,16 @@
 package io.element.android.features.call.impl.pip
 
 import io.element.android.features.call.impl.utils.PipController
+import io.element.android.tests.testutils.lambda.lambdaError
 
-sealed interface PictureInPictureEvents {
-    data class SetPipController(val pipController: PipController) : PictureInPictureEvents
-    data object EnterPictureInPicture : PictureInPictureEvents
-    data class OnPictureInPictureModeChanged(val isInPip: Boolean) : PictureInPictureEvents
+class FakePipController(
+    private val canEnterPipResult: () -> Boolean = { lambdaError() },
+    private val enterPipResult: () -> Unit = { lambdaError() },
+    private val exitPipResult: () -> Unit = { lambdaError() },
+) : PipController {
+    override suspend fun canEnterPip(): Boolean = canEnterPipResult()
+
+    override fun enterPip() = enterPipResult()
+
+    override fun exitPip() = exitPipResult()
 }

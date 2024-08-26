@@ -22,11 +22,13 @@
   <string name="screen_login_error_deactivated_account">"Dit account is gedeactiveerd."</string>
   <string name="screen_login_error_invalid_credentials">"Onjuiste gebruikersnaam en/of wachtwoord"</string>
   <string name="screen_login_error_invalid_user_id">"Dit is geen geldige gebruikers-ID. Verwacht formaat: \'@user:homeserver.org\'"</string>
+  <string name="screen_login_error_refresh_tokens">"Deze server is geconfigureerd om verversingstokens te gebruiken. Deze worden niet ondersteund bij inloggen met een wachtwoord."</string>
   <string name="screen_login_error_unsupported_authentication">"De geselecteerde homeserver ondersteunt geen wachtwoord of OIDC aanmelding. Neem contact op met je beheerder of kies een andere homeserver."</string>
   <string name="screen_login_form_header">"Vul je gegevens in"</string>
   <string name="screen_login_subtitle">"Matrix is een open netwerk voor veilige, gedecentraliseerde communicatie."</string>
   <string name="screen_login_title">"Welkom terug!"</string>
   <string name="screen_login_title_with_homeserver">"Inloggen bij %1$s"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Probeer het opnieuw"</string>
   <string name="screen_server_confirmation_change_server">"Accountprovider wijzigen"</string>
   <string name="screen_server_confirmation_message_login_element_dot_io">"Een privéserver voor medewerkers van Element."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix is een open netwerk voor veilige, gedecentraliseerde communicatie."</string>

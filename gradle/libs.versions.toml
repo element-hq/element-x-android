@@ -62,7 +62,7 @@ kover = "0.8.3"
 # Project
 android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "android_gradle_plugin" }
 # https://developer.android.com/studio/write/java8-support#library-desugaring-versions
-android_desugar = "com.android.tools:desugar_jdk_libs:2.0.4"
+android_desugar = "com.android.tools:desugar_jdk_libs:2.1.0"
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 gms_google_services = "com.google.gms:google-services:4.4.2"
@@ -186,7 +186,7 @@ zxing_cpp = "io.github.zxing-cpp:android:2.2.0"
 play_services_oss_licenses = "com.google.android.gms:play-services-oss-licenses:17.1.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.5.0"
+posthog = "com.posthog:posthog-android:3.5.1"
 sentry = "io.sentry:sentry-android:7.14.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.23.1"
