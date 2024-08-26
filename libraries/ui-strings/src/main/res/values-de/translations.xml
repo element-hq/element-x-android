@@ -277,7 +277,7 @@ Grund: %1$s."</string>
   <string name="screen_room_member_details_unblock_alert_action">"Blockierung aufheben"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Der Nutzer kann dir wieder Nachrichten senden &amp; alle Nachrichten des Nutzers werden wieder angezeigt."</string>
   <string name="screen_room_member_details_unblock_user">"Blockierung aufheben"</string>
-  <string name="screen_room_pinned_banner_indicator">"%1$svon %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s von %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Angepinnte Nachrichten"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Alle anzeigen"</string>
   <string name="screen_room_title">"Chat"</string>

@@ -114,6 +114,7 @@
   <string name="action_tap_for_options">"Дакраніцеся, каб убачыць параметры"</string>
   <string name="action_try_again">"Паўтарыць спробу"</string>
   <string name="action_unpin">"Адмацаваць"</string>
+  <string name="action_view_in_timeline">"Прагляд у хроніцы"</string>
   <string name="action_view_source">"Прагляд зыходнага кода"</string>
   <string name="action_yes">"Так"</string>
   <string name="common_about">"Аб праграме"</string>
@@ -180,6 +181,7 @@
   <string name="common_people">"Людзі"</string>
   <string name="common_permalink">"Пастаянная спасылка"</string>
   <string name="common_permission">"Дазвол"</string>
+  <string name="common_pinned">"Замацаваны"</string>
   <string name="common_please_wait">"Калі ласка, пачакайце…"</string>
   <string name="common_poll_end_confirmation">"Вы ўпэўнены, што хочаце скончыць гэтае апытанне?"</string>
   <string name="common_poll_summary">"Апытанне: %1$s"</string>

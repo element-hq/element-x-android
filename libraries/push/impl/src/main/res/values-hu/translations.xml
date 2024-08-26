@@ -34,6 +34,7 @@
   <string name="notification_room_action_quick_reply">"Gyors válasz"</string>
   <string name="notification_room_invite_body">"Meghívta, hogy csatlakozzon a szobához"</string>
   <string name="notification_sender_me">"Én"</string>
+  <string name="notification_sender_mention_reply">"%1$s megemlítette vagy válaszolt"</string>
   <string name="notification_test_push_notification_content">"Az értesítést nézi! Kattintson ide!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>

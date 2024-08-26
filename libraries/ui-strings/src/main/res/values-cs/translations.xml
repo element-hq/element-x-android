@@ -114,6 +114,7 @@
   <string name="action_tap_for_options">"Klepnutím zobrazíte možnosti"</string>
   <string name="action_try_again">"Zkusit znovu"</string>
   <string name="action_unpin">"Odepnout"</string>
+  <string name="action_view_in_timeline">"Zobrazit na časové ose"</string>
   <string name="action_view_source">"Zobrazit zdroj"</string>
   <string name="action_yes">"Ano"</string>
   <string name="common_about">"O aplikaci"</string>
@@ -180,6 +181,7 @@ Důvod: %1$s."</string>
   <string name="common_people">"Lidé"</string>
   <string name="common_permalink">"Trvalý odkaz"</string>
   <string name="common_permission">"Oprávnění"</string>
+  <string name="common_pinned">"Připnuto"</string>
   <string name="common_please_wait">"Počkejte prosím…"</string>
   <string name="common_poll_end_confirmation">"Opravdu chcete ukončit toto hlasování?"</string>
   <string name="common_poll_summary">"Hlasování: %1$s"</string>
@@ -264,6 +266,7 @@ Důvod: %1$s."</string>
   <string name="error_some_messages_have_not_been_sent">"Některé zprávy nebyly odeslány"</string>
   <string name="error_unknown">"Omlouváme se, došlo k chybě"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Autenticitu této zašifrované zprávy nelze na tomto zařízení zaručit."</string>
+  <string name="event_shield_reason_previously_verified">"Zašifrováno dříve ověřeným uživatelem."</string>
   <string name="event_shield_reason_sent_in_clear">"Není zašifrováno."</string>
   <string name="event_shield_reason_unknown_device">"Šifrováno neznámým nebo smazaným zařízením."</string>
   <string name="event_shield_reason_unsigned_device">"Šifrováno zařízením, které nebylo ověřeno jeho vlastníkem."</string>
@@ -283,6 +286,8 @@ Důvod: %1$s."</string>
     <item quantity="other">"%1$d Připnutých zpráv"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Připnuté zprávy"</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"Chystáte se přejít na svůj %1$s účet a obnovit svou identitu. Poté budete přesměrováni zpět do aplikace."</string>
+  <string name="screen_reset_identity_confirmation_title">"Nemůžete to potvrdit? Přejděte na svůj účet a resetujte svou identitu."</string>
   <string name="screen_room_details_pinned_events_row_title">"Připnuté zprávy"</string>
   <string name="screen_room_error_failed_processing_media">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepodařilo se načíst údaje o uživateli"</string>

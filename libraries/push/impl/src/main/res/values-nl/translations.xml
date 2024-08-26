@@ -21,12 +21,14 @@
     <item quantity="other">"%d uitnodigingen"</item>
   </plurals>
   <string name="notification_invite_body">"Nodigde je uit om te chatten"</string>
+  <string name="notification_mentioned_you_body">"Heeft je genoemd: %1$s"</string>
   <string name="notification_new_messages">"Nieuwe berichten"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d nieuw bericht"</item>
     <item quantity="other">"%d nieuwe berichten"</item>
   </plurals>
   <string name="notification_reaction_body">"Reageerde met %1$s"</string>
+  <string name="notification_room_action_mark_as_read">"Markeren als gelezen"</string>
   <string name="notification_room_action_quick_reply">"Snel antwoord"</string>
   <string name="notification_room_invite_body">"Nodigde je uit om tot de kamer toe te treden"</string>
   <string name="notification_sender_me">"Mij"</string>
