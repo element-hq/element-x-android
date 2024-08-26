@@ -37,7 +37,7 @@ class CallScreenViewTest {
     @Test
     fun `clicking on back when pip is not supported hangs up`() {
         val eventsRecorder = EventsRecorder<CallScreenEvents>()
-        val pipEventsRecorder = EventsRecorder<PictureInPictureEvents>(expectEvents = false)
+        val pipEventsRecorder = EventsRecorder<PictureInPictureEvents>()
         rule.setCallScreenView(
             aCallScreenState(
                 eventSink = eventsRecorder
@@ -51,6 +51,8 @@ class CallScreenViewTest {
         eventsRecorder.assertSize(2)
         eventsRecorder.assertTrue(0) { it is CallScreenEvents.SetupMessageChannels }
         eventsRecorder.assertTrue(1) { it == CallScreenEvents.Hangup }
+        pipEventsRecorder.assertSize(1)
+        pipEventsRecorder.assertTrue(0) { it is PictureInPictureEvents.SetPipController }
     }
 
     @Test
@@ -69,7 +71,9 @@ class CallScreenViewTest {
         rule.pressBack()
         eventsRecorder.assertSize(1)
         eventsRecorder.assertTrue(0) { it is CallScreenEvents.SetupMessageChannels }
-        pipEventsRecorder.assertSingle(PictureInPictureEvents.EnterPictureInPicture)
+        pipEventsRecorder.assertSize(2)
+        pipEventsRecorder.assertTrue(0) { it is PictureInPictureEvents.SetPipController }
+        pipEventsRecorder.assertTrue(1) { it == PictureInPictureEvents.EnterPictureInPicture }
     }
 }
 
