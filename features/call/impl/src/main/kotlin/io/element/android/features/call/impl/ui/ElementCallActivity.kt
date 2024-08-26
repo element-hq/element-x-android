@@ -33,14 +33,21 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.core.app.PictureInPictureModeChangedInfo
 import androidx.core.content.IntentCompat
+import androidx.core.util.Consumer
 import androidx.lifecycle.Lifecycle
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.impl.DefaultElementCallEntryPoint
 import io.element.android.features.call.impl.di.CallBindings
 import io.element.android.features.call.impl.pip.PictureInPictureEvents
 import io.element.android.features.call.impl.pip.PictureInPicturePresenter
+import io.element.android.features.call.impl.pip.PictureInPictureState
 import io.element.android.features.call.impl.pip.PipActivity
 import io.element.android.features.call.impl.services.CallForegroundService
 import io.element.android.features.call.impl.utils.CallIntentDataParser
@@ -74,7 +81,6 @@ class ElementCallActivity :
     private val webViewTarget = mutableStateOf<CallType?>(null)
 
     private var eventSink: ((CallScreenEvents) -> Unit)? = null
-    private var pipEventSink: ((PictureInPictureEvents) -> Unit)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,7 +108,7 @@ class ElementCallActivity :
 
         setContent {
             val pipState = pictureInPicturePresenter.present()
-            pipEventSink = pipState.eventSink
+            ListenToAndroidEvents(pipState)
             ElementThemeApp(appPreferencesStore) {
                 val state = presenter.present()
                 eventSink = state.eventSink
@@ -118,19 +124,36 @@ class ElementCallActivity :
         }
     }
 
+    @Composable
+    private fun ListenToAndroidEvents(pipState: PictureInPictureState) {
+        val pipEventSink by rememberUpdatedState(pipState.eventSink)
+        DisposableEffect(Unit) {
+            val onUserLeaveHintListener = Runnable {
+                pipEventSink(PictureInPictureEvents.EnterPictureInPicture)
+            }
+            addOnUserLeaveHintListener(onUserLeaveHintListener)
+            onDispose {
+                removeOnUserLeaveHintListener(onUserLeaveHintListener)
+            }
+        }
+        DisposableEffect(Unit) {
+            val onPictureInPictureModeChangedListener = Consumer { _: PictureInPictureModeChangedInfo ->
+                pipEventSink(PictureInPictureEvents.OnPictureInPictureModeChanged(isInPictureInPictureMode))
+                if (!isInPictureInPictureMode && !lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+                    Timber.d("Exiting PiP mode: Hangup the call")
+                    eventSink?.invoke(CallScreenEvents.Hangup)
+                }
+            }
+            addOnPictureInPictureModeChangedListener(onPictureInPictureModeChangedListener)
+            onDispose {
+                removeOnPictureInPictureModeChangedListener(onPictureInPictureModeChangedListener)
+            }
+        }
+    }
+
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         updateUiMode(newConfig)
-    }
-
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
-        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-        pipEventSink?.invoke(PictureInPictureEvents.OnPictureInPictureModeChanged(isInPictureInPictureMode))
-
-        if (!isInPictureInPictureMode && !lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-            Timber.d("Exiting PiP mode: Hangup the call")
-            eventSink?.invoke(CallScreenEvents.Hangup)
-        }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -148,11 +171,6 @@ class ElementCallActivity :
         if (!isFinishing && !isChangingConfigurations) {
             CallForegroundService.start(this)
         }
-    }
-
-    override fun onUserLeaveHint() {
-        super.onUserLeaveHint()
-        pipEventSink?.invoke(PictureInPictureEvents.EnterPictureInPicture)
     }
 
     override fun onDestroy() {
