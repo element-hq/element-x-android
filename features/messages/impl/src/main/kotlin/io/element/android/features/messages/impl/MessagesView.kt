@@ -257,8 +257,8 @@ fun MessagesView(
     CustomReactionBottomSheet(
         state = state.customReactionState,
         onSelectEmoji = { eventId, emoji ->
-            state.eventSink(MessagesEvents.ToggleReaction(emoji.unicode, eventId))
-        }
+            state.eventSink(MessagesEvents.ToggleReaction(emoji, eventId))
+        },
     )
 
     ReactionSummaryView(state = state.reactionSummaryState)

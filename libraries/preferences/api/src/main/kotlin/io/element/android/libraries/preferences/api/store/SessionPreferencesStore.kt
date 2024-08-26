@@ -37,5 +37,8 @@ interface SessionPreferencesStore {
     suspend fun setSkipSessionVerification(skip: Boolean)
     fun isSessionVerificationSkipped(): Flow<Boolean>
 
+    suspend fun setSkinTone(modifier: String?)
+    fun getSkinTone(): Flow<String?>
+
     suspend fun clear()
 }

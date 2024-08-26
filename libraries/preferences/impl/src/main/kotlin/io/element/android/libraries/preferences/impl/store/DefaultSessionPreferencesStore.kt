@@ -21,6 +21,7 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStoreFile
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.androidutils.hash.hash
@@ -50,6 +51,7 @@ class DefaultSessionPreferencesStore(
     private val sendTypingNotificationsKey = booleanPreferencesKey("sendTypingNotifications")
     private val renderTypingNotificationsKey = booleanPreferencesKey("renderTypingNotifications")
     private val skipSessionVerification = booleanPreferencesKey("skipSessionVerification")
+    private val skinToneKey = stringPreferencesKey("skinTone")
 
     private val dataStoreFile = storeFile(context, sessionId)
     private val store = PreferenceDataStoreFactory.create(
@@ -89,6 +91,14 @@ class DefaultSessionPreferencesStore(
 
     override suspend fun setSkipSessionVerification(skip: Boolean) = update(skipSessionVerification, skip)
     override fun isSessionVerificationSkipped(): Flow<Boolean> = get(skipSessionVerification) { false }
+
+    override suspend fun setSkinTone(modifier: String?) {
+        update(skinToneKey, modifier.orEmpty())
+    }
+
+    override fun getSkinTone(): Flow<String?> {
+        return get(skinToneKey) { "" }.map { it.ifEmpty { null } }
+    }
 
     override suspend fun clear() {
         dataStoreFile.safeDelete()

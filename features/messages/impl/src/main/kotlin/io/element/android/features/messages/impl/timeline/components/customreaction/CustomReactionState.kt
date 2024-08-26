@@ -23,6 +23,7 @@ import kotlinx.collections.immutable.ImmutableSet
 data class CustomReactionState(
     val target: Target,
     val selectedEmoji: ImmutableSet<String>,
+    val skinTone: String?,
     val eventSink: (CustomReactionEvents) -> Unit,
 ) {
     sealed interface Target {

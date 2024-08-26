@@ -27,6 +27,7 @@ class InMemorySessionPreferencesStore(
     isSendTypingNotificationsEnabled: Boolean = true,
     isRenderTypingNotificationsEnabled: Boolean = true,
     isSessionVerificationSkipped: Boolean = false,
+    skinTone: String? = null,
 ) : SessionPreferencesStore {
     private val isSharePresenceEnabled = MutableStateFlow(isSharePresenceEnabled)
     private val isSendPublicReadReceiptsEnabled = MutableStateFlow(isSendPublicReadReceiptsEnabled)
@@ -34,6 +35,7 @@ class InMemorySessionPreferencesStore(
     private val isSendTypingNotificationsEnabled = MutableStateFlow(isSendTypingNotificationsEnabled)
     private val isRenderTypingNotificationsEnabled = MutableStateFlow(isRenderTypingNotificationsEnabled)
     private val isSessionVerificationSkipped = MutableStateFlow(isSessionVerificationSkipped)
+    private val skinTone = MutableStateFlow(skinTone)
     var clearCallCount = 0
         private set
 
@@ -73,6 +75,14 @@ class InMemorySessionPreferencesStore(
 
     override fun isSessionVerificationSkipped(): Flow<Boolean> {
         return isSessionVerificationSkipped
+    }
+
+    override suspend fun setSkinTone(modifier: String?) {
+        skinTone.tryEmit(modifier)
+    }
+
+    override fun getSkinTone(): Flow<String?> {
+        return skinTone
     }
 
     override suspend fun clear() {

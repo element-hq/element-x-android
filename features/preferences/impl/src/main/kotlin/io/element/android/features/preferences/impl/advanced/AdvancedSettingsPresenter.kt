@@ -44,10 +44,14 @@ class AdvancedSettingsPresenter @Inject constructor(
         val isSharePresenceEnabled by sessionPreferencesStore
             .isSharePresenceEnabled()
             .collectAsState(initial = true)
+        val skinTone by sessionPreferencesStore
+            .getSkinTone()
+            .collectAsState(initial = null)
         val theme by remember {
             appPreferencesStore.getThemeFlow().mapToTheme()
         }
             .collectAsState(initial = Theme.System)
+        var showChangeSkinToneDialog by remember { mutableStateOf(false) }
         var showChangeThemeDialog by remember { mutableStateOf(false) }
 
         fun handleEvents(event: AdvancedSettingsEvents) {
@@ -64,6 +68,12 @@ class AdvancedSettingsPresenter @Inject constructor(
                     appPreferencesStore.setTheme(event.theme.name)
                     showChangeThemeDialog = false
                 }
+                AdvancedSettingsEvents.CancelChangeSkinTone -> showChangeSkinToneDialog = false
+                AdvancedSettingsEvents.ChangeSkinTone -> showChangeSkinToneDialog = true
+                is AdvancedSettingsEvents.SetSkinTone -> localCoroutineScope.launch {
+                    sessionPreferencesStore.setSkinTone(event.modifier)
+                    showChangeSkinToneDialog = false
+                }
             }
         }
 
@@ -72,6 +82,8 @@ class AdvancedSettingsPresenter @Inject constructor(
             isSharePresenceEnabled = isSharePresenceEnabled,
             theme = theme,
             showChangeThemeDialog = showChangeThemeDialog,
+            skinTone = skinTone,
+            showChangeSkinToneDialog = showChangeSkinToneDialog,
             eventSink = { handleEvents(it) }
         )
     }

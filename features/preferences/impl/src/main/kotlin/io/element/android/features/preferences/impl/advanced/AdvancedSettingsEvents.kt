@@ -21,6 +21,9 @@ import io.element.android.compound.theme.Theme
 sealed interface AdvancedSettingsEvents {
     data class SetDeveloperModeEnabled(val enabled: Boolean) : AdvancedSettingsEvents
     data class SetSharePresenceEnabled(val enabled: Boolean) : AdvancedSettingsEvents
+    data object ChangeSkinTone : AdvancedSettingsEvents
+    data object CancelChangeSkinTone : AdvancedSettingsEvents
+    data class SetSkinTone(val modifier: String?) : AdvancedSettingsEvents
     data object ChangeTheme : AdvancedSettingsEvents
     data object CancelChangeTheme : AdvancedSettingsEvents
     data class SetTheme(val theme: Theme) : AdvancedSettingsEvents

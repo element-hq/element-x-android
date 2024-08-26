@@ -23,5 +23,7 @@ data class AdvancedSettingsState(
     val isSharePresenceEnabled: Boolean,
     val theme: Theme,
     val showChangeThemeDialog: Boolean,
+    val skinTone: String?,
+    val showChangeSkinToneDialog: Boolean,
     val eventSink: (AdvancedSettingsEvents) -> Unit
 )
