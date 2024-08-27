@@ -27,15 +27,13 @@ class TimelineItemEventForTimestampViewProvider : PreviewParameterProvider<Timel
     override val values: Sequence<TimelineItem.Event>
         get() = sequenceOf(
             aTimelineItemEvent(),
-            // Sending failed recoverable
-            aTimelineItemEvent().copy(localSendState = LocalEventSendState.SendingFailed.Recoverable("AN_ERROR")),
-            // Sending failed unrecoverable
-            aTimelineItemEvent().copy(localSendState = LocalEventSendState.SendingFailed.Unrecoverable("AN_ERROR")),
+            aTimelineItemEvent().copy(localSendState = LocalEventSendState.Sending),
+            aTimelineItemEvent().copy(localSendState = LocalEventSendState.Failed.Unknown("AN_ERROR")),
             // Edited
             aTimelineItemEvent().copy(content = aTimelineItemTextContent().copy(isEdited = true)),
             // Sending failed + Edited (not sure this is possible IRL, but should be covered by test)
             aTimelineItemEvent().copy(
-                localSendState = LocalEventSendState.SendingFailed.Unrecoverable("AN_ERROR"),
+                localSendState = LocalEventSendState.Failed.Unknown("AN_ERROR"),
                 content = aTimelineItemTextContent().copy(isEdited = true),
             ),
             aTimelineItemEvent().copy(

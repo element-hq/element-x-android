@@ -51,10 +51,10 @@ fun TimelineEventTimestampView(
     modifier: Modifier = Modifier,
 ) {
     val formattedTime = event.sentTime
-    val hasUnrecoverableError = event.localSendState is LocalEventSendState.SendingFailed.Unrecoverable
+    val hasError = event.localSendState is LocalEventSendState.Failed
     val hasEncryptionCritical = event.messageShield?.isCritical.orFalse()
     val isMessageEdited = event.content.isEdited()
-    val tint = if (hasUnrecoverableError || hasEncryptionCritical) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary
+    val tint = if (hasError || hasEncryptionCritical) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary
     Row(
         modifier = Modifier
             .padding(PaddingValues(start = TimelineEventTimestampViewDefaults.spacing))
@@ -74,7 +74,7 @@ fun TimelineEventTimestampView(
             style = ElementTheme.typography.fontBodyXsRegular,
             color = tint,
         )
-        if (hasUnrecoverableError) {
+        if (hasError) {
             Spacer(modifier = Modifier.width(2.dp))
             Icon(
                 imageVector = CompoundIcons.Error(),

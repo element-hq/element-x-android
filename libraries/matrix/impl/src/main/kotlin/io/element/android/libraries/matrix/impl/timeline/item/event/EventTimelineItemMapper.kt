@@ -81,15 +81,23 @@ fun RustProfileDetails.map(): ProfileTimelineDetails {
 fun RustEventSendState?.map(): LocalEventSendState? {
     return when (this) {
         null -> null
-        RustEventSendState.NotSentYet -> LocalEventSendState.NotSentYet
+        RustEventSendState.NotSentYet -> LocalEventSendState.Sending
         is RustEventSendState.SendingFailed -> {
-            if (this.isRecoverable) {
-                LocalEventSendState.SendingFailed.Recoverable(this.error)
+            if (isRecoverable) {
+                LocalEventSendState.Sending
             } else {
-                LocalEventSendState.SendingFailed.Unrecoverable(this.error)
+                LocalEventSendState.Failed.Unknown(error)
             }
         }
         is RustEventSendState.Sent -> LocalEventSendState.Sent(EventId(eventId))
+        is RustEventSendState.VerifiedUserChangedIdentity -> {
+            LocalEventSendState.Failed.VerifiedUserChangedIdentity(users.map { UserId(it) })
+        }
+        is RustEventSendState.VerifiedUserHasUnsignedDevice -> {
+            LocalEventSendState.Failed.VerifiedUserHasUnsignedDevice(
+                devices = devices.mapKeys { UserId(it.key) }
+            )
+        }
     }
 }
 
