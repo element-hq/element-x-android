@@ -93,7 +93,8 @@ class RustMatrixClientFactory @Inject constructor(
         slidingSync: ClientBuilderSlidingSync,
     ): ClientBuilder {
         return ClientBuilder()
-            .sessionPath(sessionPath)
+            // TODO SDK claims it's valid to use the same path for data and cache, but would be better to use different paths
+            .sessionPaths(dataPath = sessionPath, cachePath = sessionPath)
             .passphrase(passphrase)
             .slidingSyncProxy(slidingSyncProxy)
             .userAgent(userAgentProvider.provide())
