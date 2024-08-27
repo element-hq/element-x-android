@@ -177,6 +177,7 @@ private fun PinnedMessagesListLoaded(
                 eventSink = {},
                 onSwipeToReply = {},
                 onJoinCallClick = {},
+                onShieldClick = {},
             )
         }
     }
