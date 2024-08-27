@@ -73,7 +73,9 @@ class ResetIdentityFlowManagerTest {
 
         flowManager.getResetHandle().test {
             assertThat(awaitItem().isLoading()).isTrue()
-            assertThat(awaitItem().isFailure()).isTrue()
+            val finalItem = awaitItem()
+            assertThat(finalItem.isSuccess()).isTrue()
+            assertThat(finalItem.dataOrNull()).isNull()
             startResetLambda.assertions().isCalledOnce()
         }
     }

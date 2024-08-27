@@ -27,13 +27,17 @@ import org.matrix.rustcomponents.sdk.CrossSigningResetAuthType
 object RustIdentityResetHandleFactory {
     fun create(
         userId: UserId,
-        identityResetHandle: org.matrix.rustcomponents.sdk.IdentityResetHandle
-    ): Result<IdentityResetHandle> {
+        identityResetHandle: org.matrix.rustcomponents.sdk.IdentityResetHandle?
+    ): Result<IdentityResetHandle?> {
         return runCatching {
-            when (val authType = identityResetHandle.authType()) {
-                is CrossSigningResetAuthType.Oidc -> RustOidcIdentityResetHandle(identityResetHandle, authType.info.approvalUrl)
-                // User interactive authentication (user + password)
-                CrossSigningResetAuthType.Uiaa -> RustPasswordIdentityResetHandle(userId, identityResetHandle)
+            if (identityResetHandle == null) {
+                null
+            } else {
+                when (val authType = identityResetHandle.authType()) {
+                    is CrossSigningResetAuthType.Oidc -> RustOidcIdentityResetHandle(identityResetHandle, authType.info.approvalUrl)
+                    // User interactive authentication (user + password)
+                    CrossSigningResetAuthType.Uiaa -> RustPasswordIdentityResetHandle(userId, identityResetHandle)
+                }
             }
         }
     }
