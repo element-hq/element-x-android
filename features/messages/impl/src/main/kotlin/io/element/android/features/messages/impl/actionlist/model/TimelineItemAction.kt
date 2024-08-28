@@ -29,6 +29,7 @@ sealed class TimelineItemAction(
     @DrawableRes val icon: Int,
     val destructive: Boolean = false
 ) {
+    data object ViewInTimeline: TimelineItemAction(CommonStrings.action_view_in_timeline, CompoundDrawables.ic_compound_visibility_on)
     data object Forward : TimelineItemAction(CommonStrings.action_forward, CompoundDrawables.ic_compound_forward)
     data object Copy : TimelineItemAction(CommonStrings.action_copy, CompoundDrawables.ic_compound_copy)
     data object CopyLink : TimelineItemAction(CommonStrings.action_copy_link_to_message, CompoundDrawables.ic_compound_link)

@@ -33,6 +33,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
@@ -241,10 +242,12 @@ internal fun aTimelineRoomInfo(
     name: String = "Room name",
     isDm: Boolean = false,
     userHasPermissionToSendMessage: Boolean = true,
+    isMainTimeline: Boolean = true,
 ) = TimelineRoomInfo(
     isDm = isDm,
     name = name,
     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
     userHasPermissionToSendReaction = true,
     isCallOngoing = false,
+    isMainTimeline = isMainTimeline,
 )

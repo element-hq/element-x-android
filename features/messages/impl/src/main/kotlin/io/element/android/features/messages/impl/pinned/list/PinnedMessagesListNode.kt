@@ -28,31 +28,37 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.messages.impl.MessagesNode.Callback
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
+import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactory
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 
 @ContributesNode(RoomScope::class)
 class PinnedMessagesListNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: PinnedMessagesListPresenter,
+    presenterFactory: PinnedMessagesListPresenter.Factory,
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
     private val permalinkParser: PermalinkParser,
-) : Node(buildContext, plugins = plugins) {
+) : Node(buildContext, plugins = plugins), PinnedMessagesListNavigator {
 
     interface Callback : Plugin {
         fun onEventClick(event: TimelineItem.Event)
         fun onUserDataClick(userId: UserId)
-        fun onPermalinkClick(data: PermalinkData)
+        fun onViewInTimelineClick(eventId: EventId)
+        fun onRoomPermalinkClick(data: PermalinkData.RoomLink)
+        fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
+        fun onForwardEventClick(eventId: EventId)
     }
 
+    private val presenter = presenterFactory.create(this)
     private val callbacks = plugins<Callback>()
 
     private fun onEventClick(event: TimelineItem.Event) {
@@ -71,13 +77,25 @@ class PinnedMessagesListNode @AssistedInject constructor(
                 callbacks.forEach { it.onUserDataClick(permalink.userId) }
             }
             is PermalinkData.RoomLink -> {
-                callbacks.forEach { it.onPermalinkClick(permalink) }
+                callbacks.forEach { it.onRoomPermalinkClick(permalink) }
             }
             is PermalinkData.FallbackLink,
             is PermalinkData.RoomEmailInviteLink -> {
                 context.openUrlInExternalApp(url)
             }
         }
+    }
+
+    override fun onViewInTimelineClick(eventId: EventId) {
+        callbacks.forEach { it.onViewInTimelineClick(eventId) }
+    }
+
+    override fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
+        callbacks.forEach { it.onShowEventDebugInfoClick(eventId, debugInfo) }
+    }
+
+    override fun onForwardEventClick(eventId: EventId) {
+        callbacks.forEach { it.onForwardEventClick(eventId) }
     }
 
     @Composable

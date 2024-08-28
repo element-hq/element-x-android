@@ -18,15 +18,17 @@ package io.element.android.features.messages.impl.pinned
 
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion
@@ -38,8 +40,15 @@ class PinnedEventsTimelineProvider @Inject constructor(
     private val room: MatrixRoom,
     private val networkMonitor: NetworkMonitor,
     private val featureFlagService: FeatureFlagService,
-) {
+) : TimelineProvider {
     private val _timelineStateFlow: MutableStateFlow<AsyncData<Timeline>> = MutableStateFlow(AsyncData.Uninitialized)
+
+    override fun activeTimelineFlow(): StateFlow<Timeline?> {
+        return _timelineStateFlow
+            .mapState { value ->
+                value.dataOrNull()
+            }
+    }
 
     val timelineStateFlow = _timelineStateFlow
 
@@ -56,12 +65,12 @@ class PinnedEventsTimelineProvider @Inject constructor(
                 }
             }
             .onCompletion {
-                invokeOnTimeline { it.close() }
+                invokeOnTimeline { close() }
             }
             .launchIn(scope)
     }
 
-    suspend fun invokeOnTimeline(action: suspend (Timeline) -> Unit) {
+    suspend fun invokeOnTimeline(action: suspend Timeline.() -> Unit) {
         when (val asyncTimeline = timelineStateFlow.value) {
             is AsyncData.Success -> action(asyncTimeline.data)
             else -> Unit

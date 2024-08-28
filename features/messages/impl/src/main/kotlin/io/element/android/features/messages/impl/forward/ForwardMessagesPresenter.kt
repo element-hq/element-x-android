@@ -18,6 +18,7 @@ package io.element.android.features.messages.impl.forward
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -27,23 +28,27 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.api.timeline.getActiveTimeline
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.sql.Time
 
 class ForwardMessagesPresenter @AssistedInject constructor(
     @Assisted eventId: String,
+    @Assisted private val timelineProvider: TimelineProvider,
     private val appCoroutineScope: CoroutineScope,
-    private val timelineProvider: TimelineProvider,
 ) : Presenter<ForwardMessagesState> {
     private val eventId: EventId = EventId(eventId)
 
     @AssistedFactory
     interface Factory {
-        fun create(eventId: String): ForwardMessagesPresenter
+        fun create(eventId: String, timelineProvider: TimelineProvider): ForwardMessagesPresenter
     }
 
     private val forwardingActionState: MutableState<AsyncAction<List<RoomId>>> = mutableStateOf(AsyncAction.Uninitialized)

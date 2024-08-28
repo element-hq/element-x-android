@@ -21,12 +21,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
+import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -44,6 +46,7 @@ import io.element.android.features.messages.impl.forward.ForwardMessagesNode
 import io.element.android.features.messages.impl.pinned.PinnedEventsTimelineProvider
 import io.element.android.features.messages.impl.pinned.list.PinnedMessagesListNode
 import io.element.android.features.messages.impl.report.ReportMessageNode
+import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.debug.EventDebugInfoNode
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
@@ -69,6 +72,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.room.joinedRoomMembers
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
@@ -98,9 +102,10 @@ class MessagesFlowNode @AssistedInject constructor(
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
     private val mentionSpanTheme: MentionSpanTheme,
     private val pinnedEventsTimelineProvider: PinnedEventsTimelineProvider,
+    private val timelineController: TimelineController,
 ) : BaseFlowNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.Messages,
+        initialElement = NavTarget.Messages(overriddenFocusedEventId = null),
         savedStateMap = buildContext.savedStateMap,
     ),
     overlay = Overlay(
@@ -118,7 +123,7 @@ class MessagesFlowNode @AssistedInject constructor(
         data object Empty : NavTarget
 
         @Parcelize
-        data object Messages : NavTarget
+        data class Messages(val overriddenFocusedEventId: EventId?) : NavTarget
 
         @Parcelize
         data class MediaViewer(
@@ -137,7 +142,7 @@ class MessagesFlowNode @AssistedInject constructor(
         data class EventDebugInfo(val eventId: EventId?, val debugInfo: TimelineItemDebugInfo) : NavTarget
 
         @Parcelize
-        data class ForwardEvent(val eventId: EventId) : NavTarget
+        data class ForwardEvent(val eventId: EventId, val fromPinnedEvents: Boolean) : NavTarget
 
         @Parcelize
         data class ReportMessage(val eventId: EventId, val senderId: UserId) : NavTarget
@@ -159,7 +164,11 @@ class MessagesFlowNode @AssistedInject constructor(
 
     override fun onBuilt() {
         super.onBuilt()
-
+        lifecycle.subscribe(
+            onDestroy = {
+                timelineController.close()
+            }
+        )
         room.membersStateFlow
             .onEach { membersState ->
                 roomMemberProfilesCache.replace(membersState.joinedRoomMembers())
@@ -167,7 +176,6 @@ class MessagesFlowNode @AssistedInject constructor(
             .launchIn(lifecycleScope)
 
         pinnedEventsTimelineProvider.launchIn(lifecycleScope)
-
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -199,7 +207,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     }
 
                     override fun onForwardEventClick(eventId: EventId) {
-                        backstack.push(NavTarget.ForwardEvent(eventId))
+                        backstack.push(NavTarget.ForwardEvent(eventId, fromPinnedEvents = false))
                     }
 
                     override fun onReportMessage(eventId: EventId, senderId: UserId) {
@@ -232,7 +240,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     }
                 }
                 val inputs = MessagesNode.Inputs(
-                    focusedEventId = inputs.focusedEventId,
+                    focusedEventId = navTarget.overriddenFocusedEventId ?: inputs.focusedEventId,
                 )
                 createNode<MessagesNode>(buildContext, listOf(callback, inputs))
             }
@@ -259,7 +267,12 @@ class MessagesFlowNode @AssistedInject constructor(
                 createNode<EventDebugInfoNode>(buildContext, listOf(inputs))
             }
             is NavTarget.ForwardEvent -> {
-                val inputs = ForwardMessagesNode.Inputs(navTarget.eventId)
+                val timelineProvider = if (navTarget.fromPinnedEvents) {
+                    pinnedEventsTimelineProvider
+                } else {
+                    timelineController
+                }
+                val inputs = ForwardMessagesNode.Inputs(navTarget.eventId, timelineProvider)
                 val callback = object : ForwardMessagesNode.Callback {
                     override fun onForwardedToSingleRoom(roomId: RoomId) {
                         callbacks.forEach { it.onForwardedToSingleRoom(roomId) }
@@ -294,8 +307,25 @@ class MessagesFlowNode @AssistedInject constructor(
                         callbacks.forEach { it.onUserDataClick(userId) }
                     }
 
-                    override fun onPermalinkClick(data: PermalinkData) {
-                        callbacks.forEach { it.onPermalinkClick(data) }
+                    override fun onViewInTimelineClick(eventId: EventId) {
+                        backstack.newRoot(NavTarget.Messages(overriddenFocusedEventId = eventId))
+                    }
+
+                    override fun onRoomPermalinkClick(data: PermalinkData.RoomLink) {
+                        if (room.matches(data.roomIdOrAlias)) {
+                            val eventId = data.eventId
+                            backstack.newRoot(NavTarget.Messages(overriddenFocusedEventId = eventId))
+                        } else {
+                            callbacks.forEach { it.onPermalinkClick(data) }
+                        }
+                    }
+
+                    override fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
+                        backstack.push(NavTarget.EventDebugInfo(eventId, debugInfo))
+                    }
+
+                    override fun onForwardEventClick(eventId: EventId) {
+                        backstack.push(NavTarget.ForwardEvent(eventId = eventId, fromPinnedEvents = true))
                     }
                 }
                 createNode<PinnedMessagesListNode>(buildContext, plugins = listOf(callback))

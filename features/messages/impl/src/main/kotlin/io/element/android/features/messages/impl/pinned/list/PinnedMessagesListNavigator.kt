@@ -16,10 +16,11 @@
 
 package io.element.android.features.messages.impl.pinned.list
 
-import io.element.android.features.messages.impl.MessagesEvents
-import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 
-sealed interface PinnedMessagesListEvents {
-    data class HandleAction(val action: TimelineItemAction, val event: TimelineItem.Event) : PinnedMessagesListEvents
+interface PinnedMessagesListNavigator {
+    fun onViewInTimelineClick(eventId: EventId)
+    fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
+    fun onForwardEventClick(eventId: EventId)
 }

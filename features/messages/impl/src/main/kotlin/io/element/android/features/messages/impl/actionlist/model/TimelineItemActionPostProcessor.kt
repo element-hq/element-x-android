@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.pinned.list
+package io.element.android.features.messages.impl.actionlist.model
 
-import io.element.android.features.messages.impl.MessagesEvents
-import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.impl.timeline.model.TimelineItem
+fun interface TimelineItemActionPostProcessor {
+    fun process(actions: List<TimelineItemAction>): List<TimelineItemAction>
 
-sealed interface PinnedMessagesListEvents {
-    data class HandleAction(val action: TimelineItemAction, val event: TimelineItem.Event) : PinnedMessagesListEvents
+    object Default : TimelineItemActionPostProcessor {
+        override fun process(actions: List<TimelineItemAction>): List<TimelineItemAction> {
+            return actions
+        }
+    }
+
 }

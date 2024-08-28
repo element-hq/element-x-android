@@ -20,6 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import io.element.android.features.messages.impl.UserEventPermissions
+import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.ui.strings.CommonPlurals
@@ -33,7 +35,9 @@ sealed interface PinnedMessagesListState {
     data object Empty : PinnedMessagesListState
     data class Filled(
         val timelineRoomInfo: TimelineRoomInfo,
+        val userEventPermissions: UserEventPermissions,
         val timelineItems: ImmutableList<TimelineItem>,
+        val actionListState: ActionListState,
         val eventSink: (PinnedMessagesListEvents) -> Unit,
     ) : PinnedMessagesListState {
         val loadedPinnedMessagesCount = timelineItems.count { timelineItem -> timelineItem is TimelineItem.Event }

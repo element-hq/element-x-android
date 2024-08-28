@@ -32,6 +32,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.actionlist.ActionListEvents
+import io.element.android.features.messages.impl.actionlist.ActionListView
+import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.timeline.components.TimelineItemRow
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
@@ -148,6 +151,33 @@ private fun PinnedMessagesListLoaded(
     onLinkClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    fun onActionSelected(timelineItemAction: TimelineItemAction, event: TimelineItem.Event) {
+        state.actionListState.eventSink(
+            ActionListEvents.Clear
+        )
+        state.eventSink(
+            PinnedMessagesListEvents.HandleAction(
+                action = timelineItemAction,
+                event = event,
+            )
+        )
+    }
+
+    fun onMessageLongClick(event: TimelineItem.Event) {
+        state.actionListState.eventSink(
+            ActionListEvents.ComputeForMessage(
+                event = event,
+                userEventPermissions = state.userEventPermissions,
+            )
+        )
+    }
+
+    ActionListView(
+        state = state.actionListState,
+        onSelectAction = ::onActionSelected,
+        onCustomReactionClick = {},
+        onEmojiReactionClick = { _, _ -> },
+    )
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         state = rememberLazyListState(),
@@ -166,7 +196,7 @@ private fun PinnedMessagesListLoaded(
                 isLastOutgoingMessage = false,
                 focusedEventId = null,
                 onClick = onEventClick,
-                onLongClick = {},
+                onLongClick = ::onMessageLongClick,
                 onUserDataClick = onUserDataClick,
                 onLinkClick = onLinkClick,
                 inReplyToClick = {},
