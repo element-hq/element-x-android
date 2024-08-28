@@ -58,7 +58,7 @@ fun Project.setupKover() {
     task("koverVerifyAll") {
         group = "verification"
         description = "Verifies the code coverage of all subprojects."
-        val dependencies = listOf(":app:koverVerifyGplayDebug") + koverVariants.map { ":app:koverVerify${it.capitalized()}" }
+        val dependencies = listOf(":app:koverVerifyGplayDebug") + koverVariants.map { ":app:koverVerify${it.replaceFirstChar(Char::titlecase)}" }
         dependsOn(dependencies)
 
     }
