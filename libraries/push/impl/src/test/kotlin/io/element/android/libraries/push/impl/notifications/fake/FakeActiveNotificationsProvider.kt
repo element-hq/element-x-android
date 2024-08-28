@@ -24,10 +24,6 @@ import io.element.android.libraries.push.impl.notifications.ActiveNotificationsP
 class FakeActiveNotificationsProvider(
     var activeNotifications: MutableList<StatusBarNotification> = mutableListOf(),
 ) : ActiveNotificationsProvider {
-    override fun getAllNotifications(): List<StatusBarNotification> {
-        return activeNotifications
-    }
-
     override fun getMessageNotificationsForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification> {
         return activeNotifications
     }
