@@ -598,7 +598,7 @@ class DefaultNotifiableEventResolverTest {
         testNull(NotificationContent.MessageLike.KeyVerificationMac)
         testNull(NotificationContent.MessageLike.KeyVerificationDone)
         testNull(NotificationContent.MessageLike.ReactionContent(relatedEventId = AN_EVENT_ID_2.value))
-        testNull(NotificationContent.MessageLike.RoomRedaction)
+        testNull(NotificationContent.MessageLike.RoomRedaction(redactedEventId = AN_EVENT_ID_2.value, reason = null))
         testNull(NotificationContent.MessageLike.Sticker)
         testNull(NotificationContent.StateEvent.PolicyRuleRoom)
         testNull(NotificationContent.StateEvent.PolicyRuleServer)

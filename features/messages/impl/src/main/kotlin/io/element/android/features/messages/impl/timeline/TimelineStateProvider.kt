@@ -84,7 +84,7 @@ internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList
             isMine = false,
             content = content,
             groupPosition = TimelineItemGroupPosition.Middle,
-            sendState = LocalEventSendState.SendingFailed.Unrecoverable("Message failed to send"),
+            sendState = LocalEventSendState.Failed.Unknown("Message failed to send"),
         ),
         aTimelineItemEvent(
             isMine = false,
@@ -107,7 +107,7 @@ internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList
             isMine = true,
             content = content,
             groupPosition = TimelineItemGroupPosition.Middle,
-            sendState = LocalEventSendState.SendingFailed.Unrecoverable("Message failed to send"),
+            sendState = LocalEventSendState.Failed.Unknown("Message failed to send"),
         ),
         aTimelineItemEvent(
             isMine = true,

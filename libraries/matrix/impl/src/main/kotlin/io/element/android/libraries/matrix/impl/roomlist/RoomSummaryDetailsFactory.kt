@@ -47,7 +47,7 @@ class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFacto
             isMarkedUnread = roomInfo.isMarkedUnread,
             lastMessage = latestRoomMessage,
             inviter = roomInfo.inviter?.let(RoomMemberMapper::map),
-            userDefinedNotificationMode = roomInfo.userDefinedNotificationMode?.let(RoomNotificationSettingsMapper::mapMode),
+            userDefinedNotificationMode = roomInfo.cachedUserDefinedNotificationMode?.let(RoomNotificationSettingsMapper::mapMode),
             hasRoomCall = roomInfo.hasRoomCall,
             isDm = isDm(isDirect = roomInfo.isDirect, activeMembersCount = roomInfo.activeMembersCount.toInt()),
             isFavorite = roomInfo.isFavourite,
