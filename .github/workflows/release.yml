@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
     concurrency:
-      group: ${{ format('build-release-main-gplay-{0}', github.sha) }}
+      group: ${{ format('build-release-main-enterprise-{0}', github.sha) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
