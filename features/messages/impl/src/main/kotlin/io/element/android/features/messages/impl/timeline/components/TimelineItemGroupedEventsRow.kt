@@ -58,7 +58,7 @@ fun TimelineItemGroupedEventsRow(
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val isExpanded = rememberSaveable(key = timelineItem.identifier()) { mutableStateOf(false) }
+    val isExpanded = rememberSaveable(key = timelineItem.identifier().value) { mutableStateOf(false) }
 
     fun onExpandGroupClick() {
         isExpanded.value = !isExpanded.value

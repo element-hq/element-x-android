@@ -17,6 +17,7 @@
 package io.element.android.features.poll.impl
 
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
@@ -32,8 +33,8 @@ fun aPollTimelineItems(
     return flowOf(
         polls.map { entry ->
             MatrixTimelineItem.Event(
-                entry.key.value,
-                anEventTimelineItem(
+                uniqueId = UniqueId(entry.key.value),
+                event = anEventTimelineItem(
                     eventId = entry.key,
                     content = entry.value,
                 )
