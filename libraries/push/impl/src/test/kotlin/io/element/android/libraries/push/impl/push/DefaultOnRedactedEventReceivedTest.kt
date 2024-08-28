@@ -73,9 +73,7 @@ class DefaultOnRedactedEventReceivedTest {
                 getSummaryNotificationResult = { lambdaError() },
                 countResult = { lambdaError() },
             ),
-            notificationDisplayer = FakeNotificationDisplayer(
-
-            ),
+            notificationDisplayer = FakeNotificationDisplayer(),
             coroutineScope = this,
             context = context,
             stringProvider = FakeStringProvider(),
