@@ -204,7 +204,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
             NotificationContent.MessageLike.RoomEncrypted -> fallbackNotifiableEvent(userId, roomId, eventId).also {
                 Timber.tag(loggerTag.value).w("Notification with encrypted content -> fallback")
             }
-            NotificationContent.MessageLike.RoomRedaction -> null.also {
+            is NotificationContent.MessageLike.RoomRedaction -> null.also {
                 Timber.tag(loggerTag.value).d("Ignoring notification for redaction")
             }
             NotificationContent.MessageLike.Sticker -> null.also {

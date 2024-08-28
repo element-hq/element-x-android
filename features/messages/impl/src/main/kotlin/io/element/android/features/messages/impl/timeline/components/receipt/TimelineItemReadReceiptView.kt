@@ -70,19 +70,18 @@ fun TimelineItemReadReceiptView(
                 ReadReceiptsAvatars(
                     receipts = state.receipts,
                     modifier = Modifier
-                        .testTag(TestTags.messageReadReceipts)
-                        .clip(RoundedCornerShape(4.dp))
-                        .clickable {
-                            onReadReceiptsClick()
-                        }
-                        .padding(2.dp)
+                            .testTag(TestTags.messageReadReceipts)
+                            .clip(RoundedCornerShape(4.dp))
+                            .clickable {
+                                onReadReceiptsClick()
+                            }
+                            .padding(2.dp)
                 )
             }
         }
     } else {
         when (state.sendState) {
-            LocalEventSendState.NotSentYet,
-            is LocalEventSendState.SendingFailed.Recoverable -> {
+            LocalEventSendState.Sending -> {
                 ReadReceiptsRow(modifier) {
                     Icon(
                         modifier = Modifier.padding(2.dp),
@@ -92,7 +91,7 @@ fun TimelineItemReadReceiptView(
                     )
                 }
             }
-            is LocalEventSendState.SendingFailed.Unrecoverable -> {
+            is LocalEventSendState.Failed -> {
                 // Error? The timestamp is already displayed in red
             }
             null,
@@ -119,9 +118,9 @@ private fun ReadReceiptsRow(
 ) {
     Row(
         modifier = modifier
-            .fillMaxWidth()
-            .height(AvatarSize.TimelineReadReceipt.dp + 8.dp)
-            .padding(horizontal = 18.dp),
+                .fillMaxWidth()
+                .height(AvatarSize.TimelineReadReceipt.dp + 8.dp)
+                .padding(horizontal = 18.dp),
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -160,11 +159,11 @@ private fun ReadReceiptsAvatars(
                 .forEachIndexed { index, readReceiptData ->
                     Box(
                         modifier = Modifier
-                            .padding(end = (12.dp + avatarStrokeSize * 2) * index)
-                            .size(size = avatarSize + avatarStrokeSize * 2)
-                            .clip(CircleShape)
-                            .background(avatarStrokeColor)
-                            .zIndex(index.toFloat()),
+                                .padding(end = (12.dp + avatarStrokeSize * 2) * index)
+                                .size(size = avatarSize + avatarStrokeSize * 2)
+                                .clip(CircleShape)
+                                .background(avatarStrokeColor)
+                                .zIndex(index.toFloat()),
                         contentAlignment = Alignment.Center,
                     ) {
                         Avatar(

@@ -56,7 +56,7 @@ class MatrixRoomInfoMapper {
             userPowerLevels = mapPowerLevels(it.userPowerLevels),
             highlightCount = it.highlightCount.toLong(),
             notificationCount = it.notificationCount.toLong(),
-            userDefinedNotificationMode = it.userDefinedNotificationMode?.map(),
+            userDefinedNotificationMode = it.cachedUserDefinedNotificationMode?.map(),
             hasRoomCall = it.hasRoomCall,
             activeRoomCallParticipants = it.activeRoomCallParticipants.toImmutableList(),
             heroes = it.elementHeroes().toImmutableList(),
