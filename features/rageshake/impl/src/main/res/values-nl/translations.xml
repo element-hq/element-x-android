@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"Schermafbeelding bijvoegen"</string>
+  <string name="screen_bug_report_contact_me">"Je mag contact met mij opnemen als je nog vervolg vragen hebt."</string>
+  <string name="screen_bug_report_contact_me_title">"Neem contact met mij op"</string>
+  <string name="screen_bug_report_edit_screenshot">"Schermafbeelding bewerken"</string>
+  <string name="screen_bug_report_editor_description">"Beschrijf het probleem. Wat heb je gedaan? Wat had je verwacht? Wat is er daadwerkelijk gebeurd. Beschrijf het zo gedetailleerd mogelijk."</string>
+  <string name="screen_bug_report_editor_placeholder">"Beschrijf het probleem…"</string>
+  <string name="screen_bug_report_editor_supporting">"Geeft de beschrijving in het Engels indien mogelijk."</string>
+  <string name="screen_bug_report_error_description_too_short">"De beschrijving is te kort, geef meer details over wat er is gebeurd. Bedankt!"</string>
+  <string name="screen_bug_report_include_crash_logs">"Crashlogboeken verzenden"</string>
+  <string name="screen_bug_report_include_logs">"Logboeken toestaan"</string>
+  <string name="screen_bug_report_include_screenshot">"Schermafbeelding verzenden"</string>
+  <string name="screen_bug_report_logs_description">"Er worden logbestanden bij uw bericht gevoegd om er zeker van te zijn dat alles goed werkt. Als u uw bericht zonder logbestanden wilt verzenden, schakelt u deze instelling uit."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s crashte de laatste keer dat het werd gebruikt. Wil je een crashrapport met ons delen?"</string>
+  <string name="screen_bug_report_view_logs">"Logboeken weergeven"</string>
+</resources>

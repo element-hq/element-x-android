@@ -13,12 +13,12 @@
   <string name="screen_change_account_provider_other">"其他"</string>
   <string name="screen_change_account_provider_subtitle">"使用其他帐户提供者，例如您自己的私人服务器或工作帐户。"</string>
   <string name="screen_change_account_provider_title">"更改账户提供者"</string>
-  <string name="screen_change_server_error_invalid_homeserver">"我们无法访问此主服务器。请检查您输入的主服务器网址是否正确。如果 URL 正确，请联系您的主服务器管理员寻求进一步帮助。"</string>
+  <string name="screen_change_server_error_invalid_homeserver">"我们无法访问此服务器。请检查您输入的服务器网址是否正确。如果 URL 正确，请联系您的服务器管理员寻求进一步帮助。"</string>
   <string name="screen_change_server_error_invalid_well_known">"由于 Well Known 文件中的问题，Sliding Sync 不可用：
 %1$s"</string>
-  <string name="screen_change_server_error_no_sliding_sync_message">"该服务器目前不支持sliding sync。"</string>
-  <string name="screen_change_server_form_header">"主服务器网址"</string>
-  <string name="screen_change_server_form_notice">"您只能连接到支持sliding sync的现有服务器。您的主服务器管理员需要对其进行配置。%1$s"</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"该服务器目前不支持 Sliding Sync。"</string>
+  <string name="screen_change_server_form_header">"服务器网址"</string>
+  <string name="screen_change_server_form_notice">"您只能连接到支持 Sliding Sync 的现有服务器。您的服务器管理员需要对其进行配置。%1$s"</string>
   <string name="screen_change_server_subtitle">"您的服务器地址是什么？"</string>
   <string name="screen_change_server_title">"选择服务器"</string>
   <string name="screen_login_error_deactivated_account">"该账户已被停用。"</string>
@@ -34,11 +34,13 @@
   <string name="screen_qr_code_login_connection_note_secure_state_description">"无法与新设备建立安全连接。您现有的设备仍然安全，无需担心。"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"现在怎么办？"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_1">"如果这是网络问题，请尝试使用二维码再次登录"</string>
-  <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"如果你遇到同样的问题，请尝试使用不同的 WiFi 网络或使用你的移动数据代替 WiFi"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"如果遇到同样的问题，请尝试使用不同的 WiFi 网络或使用移动数据代替 WiFi"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"如果不起作用，请手动登录"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"连接不安全"</string>
   <string name="screen_qr_code_login_device_code_subtitle">"您会被要求输入此设备上显示的两位数。"</string>
   <string name="screen_qr_code_login_device_code_title">"在您的其他设备上输入下面的数字"</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_description">"在其他设备登录后重试，或使用另一个已登录的设备。"</string>
+  <string name="screen_qr_code_login_device_not_signed_in_scan_state_subtitle">"其他设备未登录"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"登录被另一台设备取消"</string>
   <string name="screen_qr_code_login_error_cancelled_title">"登录请求已取消"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"其它设备未接受请求"</string>
@@ -74,8 +76,8 @@
   <string name="screen_server_confirmation_message_login_element_dot_io">"专为 Element 员工提供的私人服务器。"</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix 是一个用于安全、去中心化通信的开放网络。"</string>
   <string name="screen_server_confirmation_message_register">"这是您的对话将进行的地方，就像您使用电子邮件提供商来保存电子邮件一样。"</string>
-  <string name="screen_server_confirmation_title_login">"你即将登录 %1$s"</string>
-  <string name="screen_server_confirmation_title_register">"你即将在 %1$s 上创建一个账户"</string>
+  <string name="screen_server_confirmation_title_login">"即将登录 %1$s"</string>
+  <string name="screen_server_confirmation_title_register">"即将在 %1$s 上创建一个账户"</string>
   <string name="screen_waitlist_message">"目前 %1$s 上 %2$s 的负载很大。过几天再回来试试吧。
 
 感谢您的耐心！"</string>

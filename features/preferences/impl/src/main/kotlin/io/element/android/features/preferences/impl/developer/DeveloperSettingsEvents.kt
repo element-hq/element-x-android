@@ -21,5 +21,6 @@ import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
 sealed interface DeveloperSettingsEvents {
     data class UpdateEnabledFeature(val feature: FeatureUiModel, val isEnabled: Boolean) : DeveloperSettingsEvents
     data class SetCustomElementCallBaseUrl(val baseUrl: String?) : DeveloperSettingsEvents
+    data class SetSimplifiedSlidingSyncEnabled(val isEnabled: Boolean) : DeveloperSettingsEvents
     data object ClearCache : DeveloperSettingsEvents
 }

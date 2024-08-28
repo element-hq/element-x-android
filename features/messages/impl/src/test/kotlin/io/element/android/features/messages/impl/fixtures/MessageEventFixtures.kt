@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -42,11 +43,13 @@ internal fun aMessageEvent(
     transactionId: TransactionId? = null,
     isMine: Boolean = true,
     isEditable: Boolean = true,
+    canBeRepliedTo: Boolean = true,
     content: TimelineItemEventContent = TimelineItemTextContent(body = A_MESSAGE, htmlDocument = null, formattedBody = null, isEdited = false),
     inReplyTo: InReplyToDetails? = null,
     isThreaded: Boolean = false,
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
     sendState: LocalEventSendState = LocalEventSendState.Sent(AN_EVENT_ID),
+    messageShield: MessageShield? = null,
 ) = TimelineItem.Event(
     id = eventId?.value.orEmpty(),
     eventId = eventId,
@@ -58,11 +61,13 @@ internal fun aMessageEvent(
     sentTime = "",
     isMine = isMine,
     isEditable = isEditable,
+    canBeRepliedTo = canBeRepliedTo,
     reactionsState = aTimelineItemReactions(count = 0),
     readReceiptState = TimelineItemReadReceipts(emptyList<ReadReceiptData>().toImmutableList()),
     localSendState = sendState,
     inReplyTo = inReplyTo,
     debugInfo = debugInfo,
     isThreaded = isThreaded,
-    origin = null
+    origin = null,
+    messageShield = messageShield,
 )

@@ -38,6 +38,7 @@
   <string name="notification_room_action_quick_reply">"Rýchla odpoveď"</string>
   <string name="notification_room_invite_body">"Vás pozval do miestnosti"</string>
   <string name="notification_sender_me">"Ja"</string>
+  <string name="notification_sender_mention_reply">"%1$s spomenul/a alebo odpovedal/a"</string>
   <string name="notification_test_push_notification_content">"Prezeráte si oznámenie! Kliknite na mňa!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>

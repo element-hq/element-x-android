@@ -25,6 +25,5 @@ interface PermalinkBuilder {
 }
 
 sealed class PermalinkBuilderError : Throwable() {
-    data object InvalidUserId : PermalinkBuilderError()
-    data object InvalidRoomAlias : PermalinkBuilderError()
+    data object InvalidData : PermalinkBuilderError()
 }

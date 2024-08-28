@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.aProfileTimelineDetailsReady
 import kotlinx.collections.immutable.ImmutableList
@@ -50,6 +51,7 @@ fun aTimelineState(
     timelineRoomInfo: TimelineRoomInfo = aTimelineRoomInfo(),
     focusedEventIndex: Int = -1,
     isLive: Boolean = true,
+    messageShield: MessageShield? = null,
     eventSink: (TimelineEvents) -> Unit = {},
 ): TimelineState {
     val focusedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().getOrNull(focusedEventIndex)?.eventId
@@ -65,6 +67,7 @@ fun aTimelineState(
         newEventState = NewEventState.None,
         isLive = isLive,
         focusRequestState = focusRequestState,
+        messageShield = messageShield,
         eventSink = eventSink,
     )
 }
@@ -81,7 +84,7 @@ internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList
             isMine = false,
             content = content,
             groupPosition = TimelineItemGroupPosition.Middle,
-            sendState = LocalEventSendState.SendingFailed.Unrecoverable("Message failed to send"),
+            sendState = LocalEventSendState.Failed.Unknown("Message failed to send"),
         ),
         aTimelineItemEvent(
             isMine = false,
@@ -104,7 +107,7 @@ internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList
             isMine = true,
             content = content,
             groupPosition = TimelineItemGroupPosition.Middle,
-            sendState = LocalEventSendState.SendingFailed.Unrecoverable("Message failed to send"),
+            sendState = LocalEventSendState.Failed.Unknown("Message failed to send"),
         ),
         aTimelineItemEvent(
             isMine = true,
@@ -127,6 +130,7 @@ internal fun aTimelineItemEvent(
     transactionId: TransactionId? = null,
     isMine: Boolean = false,
     isEditable: Boolean = false,
+    canBeRepliedTo: Boolean = false,
     senderDisplayName: String = "Sender",
     displayNameAmbiguous: Boolean = false,
     content: TimelineItemEventContent = aTimelineItemTextContent(),
@@ -137,6 +141,7 @@ internal fun aTimelineItemEvent(
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
     timelineItemReactions: TimelineItemReactions = aTimelineItemReactions(),
     readReceiptState: TimelineItemReadReceipts = aTimelineItemReadReceipts(),
+    messageShield: MessageShield? = null,
 ): TimelineItem.Event {
     return TimelineItem.Event(
         id = UUID.randomUUID().toString(),
@@ -150,6 +155,7 @@ internal fun aTimelineItemEvent(
         sentTime = "12:34",
         isMine = isMine,
         isEditable = isEditable,
+        canBeRepliedTo = canBeRepliedTo,
         senderProfile = aProfileTimelineDetailsReady(
             displayName = senderDisplayName,
             displayNameAmbiguous = displayNameAmbiguous,
@@ -159,7 +165,8 @@ internal fun aTimelineItemEvent(
         inReplyTo = inReplyTo,
         debugInfo = debugInfo,
         isThreaded = isThreaded,
-        origin = null
+        origin = null,
+        messageShield = messageShield,
     )
 }
 

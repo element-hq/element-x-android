@@ -26,13 +26,14 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
-import io.element.android.libraries.matrix.api.room.Mention
+import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
+import io.element.android.tests.testutils.lambda.lambdaError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -59,7 +60,7 @@ class FakeTimeline(
     var sendMessageLambda: (
         body: String,
         htmlBody: String?,
-        mentions: List<Mention>,
+        intentionalMentions: List<IntentionalMention>,
     ) -> Result<Unit> = { _, _, _ ->
         Result.success(Unit)
     }
@@ -67,8 +68,8 @@ class FakeTimeline(
     override suspend fun sendMessage(
         body: String,
         htmlBody: String?,
-        mentions: List<Mention>,
-    ): Result<Unit> = sendMessageLambda(body, htmlBody, mentions)
+        intentionalMentions: List<IntentionalMention>,
+    ): Result<Unit> = sendMessageLambda(body, htmlBody, intentionalMentions)
 
     var redactEventLambda: (eventId: EventId?, transactionId: TransactionId?, reason: String?) -> Result<Boolean> = { _, _, _ ->
         Result.success(true)
@@ -85,7 +86,7 @@ class FakeTimeline(
         transactionId: TransactionId?,
         body: String,
         htmlBody: String?,
-        mentions: List<Mention>,
+        intentionalMentions: List<IntentionalMention>,
     ) -> Result<Unit> = { _, _, _, _, _ ->
         Result.success(Unit)
     }
@@ -95,20 +96,20 @@ class FakeTimeline(
         transactionId: TransactionId?,
         body: String,
         htmlBody: String?,
-        mentions: List<Mention>,
+        intentionalMentions: List<IntentionalMention>,
     ): Result<Unit> = editMessageLambda(
         originalEventId,
         transactionId,
         body,
         htmlBody,
-        mentions
+        intentionalMentions
     )
 
     var replyMessageLambda: (
         eventId: EventId,
         body: String,
         htmlBody: String?,
-        mentions: List<Mention>,
+        intentionalMentions: List<IntentionalMention>,
         fromNotification: Boolean,
     ) -> Result<Unit> = { _, _, _, _, _ ->
         Result.success(Unit)
@@ -118,13 +119,13 @@ class FakeTimeline(
         eventId: EventId,
         body: String,
         htmlBody: String?,
-        mentions: List<Mention>,
+        intentionalMentions: List<IntentionalMention>,
         fromNotification: Boolean,
     ): Result<Unit> = replyMessageLambda(
         eventId,
         body,
         htmlBody,
-        mentions,
+        intentionalMentions,
         fromNotification,
     )
 
@@ -370,6 +371,16 @@ class FakeTimeline(
     }
 
     override suspend fun loadReplyDetails(eventId: EventId) = loadReplyDetailsLambda(eventId)
+
+    var pinEventLambda: (eventId: EventId) -> Result<Boolean> = { lambdaError() }
+    override suspend fun pinEvent(eventId: EventId): Result<Boolean> {
+        return pinEventLambda(eventId)
+    }
+
+    var unpinEventLambda: (eventId: EventId) -> Result<Boolean> = { lambdaError() }
+    override suspend fun unpinEvent(eventId: EventId): Result<Boolean> {
+        return unpinEventLambda(eventId)
+    }
 
     var closeCounter = 0
         private set

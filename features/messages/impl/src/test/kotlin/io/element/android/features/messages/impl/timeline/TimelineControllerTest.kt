@@ -18,7 +18,7 @@ package io.element.android.features.messages.impl.timeline
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.api.room.Mention
+import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -162,10 +162,10 @@ class TimelineControllerTest {
 
     @Test
     fun `test invokeOnCurrentTimeline use the detached timeline and not the live timeline`() = runTest {
-        val lambdaForDetached = lambdaRecorder { _: String, _: String?, _: List<Mention> ->
+        val lambdaForDetached = lambdaRecorder { _: String, _: String?, _: List<IntentionalMention> ->
             Result.success(Unit)
         }
-        val lambdaForLive = lambdaRecorder(ensureNeverCalled = true) { _: String, _: String?, _: List<Mention> ->
+        val lambdaForLive = lambdaRecorder(ensureNeverCalled = true) { _: String, _: String?, _: List<IntentionalMention> ->
             Result.success(Unit)
         }
         val liveTimeline = FakeTimeline(name = "live").apply {

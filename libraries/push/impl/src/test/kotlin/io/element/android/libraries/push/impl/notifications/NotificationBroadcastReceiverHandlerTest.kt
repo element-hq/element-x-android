@@ -24,7 +24,8 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.asEventId
-import io.element.android.libraries.matrix.api.room.Mention
+import io.element.android.libraries.matrix.api.room.IntentionalMention
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
@@ -261,7 +262,7 @@ class NotificationBroadcastReceiverHandlerTest {
 
     @Test
     fun `Test join room`() = runTest {
-        val joinRoom = lambdaRecorder<RoomId, Result<Unit>> { _ -> Result.success(Unit) }
+        val joinRoom = lambdaRecorder<RoomId, Result<RoomSummary?>> { _ -> Result.success(null) }
         val clearMembershipNotificationForRoomLambda = lambdaRecorder<SessionId, RoomId, Unit> { _, _ -> }
         val fakeNotificationCleaner = FakeNotificationCleaner(
             clearMembershipNotificationForRoomLambda = clearMembershipNotificationForRoomLambda,
@@ -336,8 +337,8 @@ class NotificationBroadcastReceiverHandlerTest {
 
     @Test
     fun `Test send reply`() = runTest {
-        val sendMessage = lambdaRecorder<String, String?, List<Mention>, Result<Unit>> { _, _, _ -> Result.success(Unit) }
-        val replyMessage = lambdaRecorder<EventId, String, String?, List<Mention>, Boolean, Result<Unit>> { _, _, _, _, _ -> Result.success(Unit) }
+        val sendMessage = lambdaRecorder<String, String?, List<IntentionalMention>, Result<Unit>> { _, _, _ -> Result.success(Unit) }
+        val replyMessage = lambdaRecorder<EventId, String, String?, List<IntentionalMention>, Boolean, Result<Unit>> { _, _, _, _, _ -> Result.success(Unit) }
         val liveTimeline = FakeTimeline().apply {
             sendMessageLambda = sendMessage
             replyMessageLambda = replyMessage
@@ -362,7 +363,7 @@ class NotificationBroadcastReceiverHandlerTest {
         runCurrent()
         sendMessage.assertions()
             .isCalledOnce()
-            .with(value(A_MESSAGE), value(null), value(emptyList<Mention>()))
+            .with(value(A_MESSAGE), value(null), value(emptyList<IntentionalMention>()))
         onNotifiableEventReceivedResult.assertions()
             .isCalledOnce()
         replyMessage.assertions()
@@ -371,7 +372,7 @@ class NotificationBroadcastReceiverHandlerTest {
 
     @Test
     fun `Test send reply blank message`() = runTest {
-        val sendMessage = lambdaRecorder<String, String?, List<Mention>, Result<Unit>> { _, _, _ -> Result.success(Unit) }
+        val sendMessage = lambdaRecorder<String, String?, List<IntentionalMention>, Result<Unit>> { _, _, _ -> Result.success(Unit) }
         val liveTimeline = FakeTimeline().apply {
             sendMessageLambda = sendMessage
         }
@@ -395,8 +396,8 @@ class NotificationBroadcastReceiverHandlerTest {
 
     @Test
     fun `Test send reply to thread`() = runTest {
-        val sendMessage = lambdaRecorder<String, String?, List<Mention>, Result<Unit>> { _, _, _ -> Result.success(Unit) }
-        val replyMessage = lambdaRecorder<EventId, String, String?, List<Mention>, Boolean, Result<Unit>> { _, _, _, _, _ -> Result.success(Unit) }
+        val sendMessage = lambdaRecorder<String, String?, List<IntentionalMention>, Result<Unit>> { _, _, _ -> Result.success(Unit) }
+        val replyMessage = lambdaRecorder<EventId, String, String?, List<IntentionalMention>, Boolean, Result<Unit>> { _, _, _, _, _ -> Result.success(Unit) }
         val liveTimeline = FakeTimeline().apply {
             sendMessageLambda = sendMessage
             replyMessageLambda = replyMessage
@@ -426,7 +427,7 @@ class NotificationBroadcastReceiverHandlerTest {
             .isCalledOnce()
         replyMessage.assertions()
             .isCalledOnce()
-            .with(value(A_THREAD_ID.asEventId()), value(A_MESSAGE), value(null), value(emptyList<Mention>()), value(true))
+            .with(value(A_THREAD_ID.asEventId()), value(A_MESSAGE), value(null), value(emptyList<IntentionalMention>()), value(true))
     }
 
     private fun createIntent(
@@ -444,7 +445,7 @@ class NotificationBroadcastReceiverHandlerTest {
 
     private fun TestScope.createNotificationBroadcastReceiverHandler(
         matrixRoom: FakeMatrixRoom? = FakeMatrixRoom(),
-        joinRoom: (RoomId) -> Result<Unit> = { lambdaError() },
+        joinRoom: (RoomId) -> Result<RoomSummary?> = { lambdaError() },
         matrixClient: MatrixClient? = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, matrixRoom)
             joinRoomLambda = joinRoom

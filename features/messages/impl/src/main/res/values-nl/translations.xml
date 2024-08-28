@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Activiteiten"</string>
+  <string name="emoji_picker_category_flags">"Vlaggen"</string>
+  <string name="emoji_picker_category_foods">"Eten &amp; Drinken"</string>
+  <string name="emoji_picker_category_nature">"Dieren &amp; Natuur"</string>
+  <string name="emoji_picker_category_objects">"Voorwerpen"</string>
+  <string name="emoji_picker_category_people">"Smileys &amp; Mensen"</string>
+  <string name="emoji_picker_category_places">"Reizen &amp; Locaties"</string>
+  <string name="emoji_picker_category_symbols">"Symbolen"</string>
+  <string name="screen_report_content_block_user">"Gebruiker blokkeren"</string>
+  <string name="screen_report_content_block_user_hint">"Vink aan als je alle huidige en toekomstige berichten van deze gebruiker wilt verbergen"</string>
+  <string name="screen_report_content_explanation">"Dit bericht wordt gerapporteerd aan de beheerder van je homeserver. Ze zullen geen versleutelde berichten kunnen lezen."</string>
+  <string name="screen_report_content_hint">"Reden voor het melden van deze inhoud"</string>
+  <string name="screen_room_attachment_source_camera">"Camera"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Foto maken"</string>
+  <string name="screen_room_attachment_source_camera_video">"Video opnemen"</string>
+  <string name="screen_room_attachment_source_files">"Bijlage"</string>
+  <string name="screen_room_attachment_source_gallery">"Foto &amp; Video Bibliotheek"</string>
+  <string name="screen_room_attachment_source_location">"Locatie"</string>
+  <string name="screen_room_attachment_source_poll">"Peiling"</string>
+  <string name="screen_room_attachment_text_formatting">"Tekstopmaak"</string>
+  <string name="screen_room_encrypted_history_banner">"Berichtgeschiedenis is momenteel niet beschikbaar."</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"Berichtgeschiedenis is niet beschikbaar in deze kamer. Verifieer dit apparaat om je berichtgeschiedenis te bekijken."</string>
+  <string name="screen_room_invite_again_alert_message">"Wil je ze terug uitnodigen?"</string>
+  <string name="screen_room_invite_again_alert_title">"Je bent alleen in deze chat"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"Stuur een melding naar de hele kamer"</string>
+  <string name="screen_room_mentions_at_room_title">"Iedereen"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"Opnieuw verzenden"</string>
+  <string name="screen_room_retry_send_menu_title">"Je bericht is niet verzonden"</string>
+  <string name="screen_room_timeline_add_reaction">"Emoji toevoegen"</string>
+  <string name="screen_room_timeline_beginning_of_room">"Dit is het begin van %1$s."</string>
+  <string name="screen_room_timeline_beginning_of_room_no_name">"Dit is het begin van dit gesprek."</string>
+  <string name="screen_room_timeline_less_reactions">"Toon minder"</string>
+  <string name="screen_room_timeline_message_copied">"Bericht gekopieerd"</string>
+  <string name="screen_room_timeline_no_permission_to_post">"Je hebt geen toestemming om berichten in deze kamer te plaatsen"</string>
+  <string name="screen_room_timeline_reactions_show_less">"Minder tonen"</string>
+  <string name="screen_room_timeline_reactions_show_more">"Meer tonen"</string>
+  <string name="screen_room_timeline_read_marker_title">"Nieuw"</string>
+  <plurals name="screen_room_timeline_state_changes">
+    <item quantity="one">"%1$d kamerverandering"</item>
+    <item quantity="other">"%1$d kamerveranderingen"</item>
+  </plurals>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="one">"%1$s, %2$s en %3$d andere"</item>
+    <item quantity="other">"%1$s, %2$s en %3$d anderen"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="one">"%1$s is aan het typen"</item>
+    <item quantity="other">"%1$s zijn aan het typen"</item>
+  </plurals>
+  <string name="screen_room_typing_two_members">"%1$s en %2$s"</string>
+</resources>

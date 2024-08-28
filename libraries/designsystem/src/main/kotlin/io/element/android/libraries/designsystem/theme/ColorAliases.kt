@@ -179,6 +179,14 @@ val SemanticColors.badgeNegativeBackgroundColor
 val SemanticColors.badgeNegativeContentColor
     get() = if (isLight) LightColorTokens.colorRed1100 else DarkColorTokens.colorRed1100
 
+@OptIn(CoreColorToken::class)
+val SemanticColors.pinnedMessageBannerIndicator
+    get() = if (isLight) LightColorTokens.colorAlphaGray600 else DarkColorTokens.colorAlphaGray600
+
+@OptIn(CoreColorToken::class)
+val SemanticColors.pinnedMessageBannerBorder
+    get() = if (isLight) LightColorTokens.colorAlphaGray400 else DarkColorTokens.colorAlphaGray400
+
 @PreviewsDayNight
 @Composable
 internal fun ColorAliasesPreview() = ElementPreview {

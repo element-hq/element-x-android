@@ -23,10 +23,12 @@ import io.element.android.libraries.matrix.impl.certificates.UserCertificatesPro
 import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
 import io.element.android.libraries.matrix.impl.util.anonymizedTokens
 import io.element.android.libraries.network.useragent.UserAgentProvider
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.Session
@@ -46,9 +48,18 @@ class RustMatrixClientFactory @Inject constructor(
     private val proxyProvider: ProxyProvider,
     private val clock: SystemClock,
     private val utdTracker: UtdTracker,
+    private val appPreferencesStore: AppPreferencesStore,
 ) {
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
-        val client = getBaseClientBuilder(sessionData.sessionPath, sessionData.passphrase)
+        val client = getBaseClientBuilder(
+            sessionPath = sessionData.sessionPath,
+            passphrase = sessionData.passphrase,
+            slidingSync = if (appPreferencesStore.isSimplifiedSlidingSyncEnabledFlow().first()) {
+                ClientBuilderSlidingSync.Simplified
+            } else {
+                ClientBuilderSlidingSync.Restored
+            },
+        )
             .homeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
             .use { it.build() }
@@ -79,9 +90,11 @@ class RustMatrixClientFactory @Inject constructor(
         sessionPath: String,
         passphrase: String?,
         slidingSyncProxy: String? = null,
+        slidingSync: ClientBuilderSlidingSync,
     ): ClientBuilder {
         return ClientBuilder()
-            .sessionPath(sessionPath)
+            // TODO SDK claims it's valid to use the same path for data and cache, but would be better to use different paths
+            .sessionPaths(dataPath = sessionPath, cachePath = sessionPath)
             .passphrase(passphrase)
             .slidingSyncProxy(slidingSyncProxy)
             .userAgent(userAgentProvider.provide())
@@ -89,10 +102,28 @@ class RustMatrixClientFactory @Inject constructor(
             .autoEnableBackups(true)
             .autoEnableCrossSigning(true)
             .run {
+                when (slidingSync) {
+                    ClientBuilderSlidingSync.Restored -> this
+                    ClientBuilderSlidingSync.Discovered -> requiresSlidingSync()
+                    ClientBuilderSlidingSync.Simplified -> simplifiedSlidingSync(true)
+                }
+            }
+            .run {
                 // Workaround for non-nullable proxy parameter in the SDK, since each call to the ClientBuilder returns a new reference we need to keep
                 proxyProvider.provides()?.let { proxy(it) } ?: this
             }
     }
+}
+
+enum class ClientBuilderSlidingSync {
+    // The proxy will be supplied when restoring the Session.
+    Restored,
+
+    // A proxy must be discovered whilst building the session.
+    Discovered,
+
+    // Use Simplified Sliding Sync (discovery isn't a thing yet).
+    Simplified,
 }
 
 private fun SessionData.toSession() = Session(

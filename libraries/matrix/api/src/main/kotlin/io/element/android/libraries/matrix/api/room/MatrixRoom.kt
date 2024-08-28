@@ -106,6 +106,11 @@ interface MatrixRoom : Closeable {
      */
     suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline>
 
+    /**
+     * Create a new timeline for the pinned events of the room.
+     */
+    suspend fun pinnedEventsTimeline(): Result<Timeline>
+
     fun destroy()
 
     suspend fun subscribeToSync()
@@ -124,9 +129,9 @@ interface MatrixRoom : Closeable {
 
     suspend fun userAvatarUrl(userId: UserId): Result<String?>
 
-    suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
+    suspend fun sendMessage(body: String, htmlBody: String?, intentionalMentions: List<IntentionalMention>): Result<Unit>
 
-    suspend fun editMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
+    suspend fun editMessage(eventId: EventId, body: String, htmlBody: String?, intentionalMentions: List<IntentionalMention>): Result<Unit>
 
     suspend fun sendImage(
         file: File,
@@ -179,6 +184,8 @@ interface MatrixRoom : Closeable {
     suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean>
 
     suspend fun canUserTriggerRoomNotification(userId: UserId): Result<Boolean>
+
+    suspend fun canUserPinUnpin(userId: UserId): Result<Boolean>
 
     suspend fun canUserJoinCall(userId: UserId): Result<Boolean> =
         canUserSendState(userId, StateEventType.CALL_MEMBER)

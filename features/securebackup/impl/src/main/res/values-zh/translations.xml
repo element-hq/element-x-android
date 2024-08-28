@@ -16,12 +16,18 @@
   <string name="screen_create_new_recovery_key_list_item_4">"按照说明创建新的恢复密钥"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"将新的恢复密钥保存在密码管理器或加密备忘录中"</string>
   <string name="screen_create_new_recovery_key_title">"使用其他设备重置账户的加密"</string>
+  <string name="screen_encryption_reset_bullet_1">"您的账户信息、联系人、偏好设置和聊天列表将被保留"</string>
+  <string name="screen_encryption_reset_bullet_2">"您将丢失现有的消息历史记录"</string>
+  <string name="screen_encryption_reset_bullet_3">"您将需要再次验证所有您的现有设备和联系人"</string>
+  <string name="screen_encryption_reset_footer">"仅当您无法访问其他已登录设备并且丢失了恢复密钥时才重置您的身份。"</string>
+  <string name="screen_encryption_reset_subtitle">"如果您未登录任何其他设备，并且丢失了恢复密钥，则需要重置身份才能继续使用该应用。"</string>
+  <string name="screen_encryption_reset_title">"如果您无法通过其他方式确认，请重置您的身份"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"关闭"</string>
   <string name="screen_key_backup_disable_confirmation_description">"如果您登出所有设备，您的加密消息将丢失。"</string>
   <string name="screen_key_backup_disable_confirmation_title">"您确定要关闭备份吗？"</string>
   <string name="screen_key_backup_disable_description">"关闭备份将删除您当前的加密密钥备份并关闭其他安全功能。在这种情况下，你将："</string>
   <string name="screen_key_backup_disable_description_point_1">"新设备上没有加密消息的历史记录"</string>
-  <string name="screen_key_backup_disable_description_point_2">"如果您在所有设备上登出了 %1$s，那将无法访问加密的消息"</string>
+  <string name="screen_key_backup_disable_description_point_2">"如果您在所有设备上登出了 %1$s，那将无法访问加密消息"</string>
   <string name="screen_key_backup_disable_title">"您确定要关闭备份吗？"</string>
   <string name="screen_recovery_key_change_description">"如果您丢失了现有的恢复密钥，请获取新的恢复密钥。更改恢复密钥后，您的旧密钥将不再起作用。"</string>
   <string name="screen_recovery_key_change_generate_key">"生成新的恢复密钥"</string>
@@ -51,4 +57,10 @@
   <string name="screen_recovery_key_setup_generate_key_description">"确保将恢复密钥存储在安全的地方"</string>
   <string name="screen_recovery_key_setup_success">"恢复设置成功"</string>
   <string name="screen_recovery_key_setup_title">"设置恢复"</string>
+  <string name="screen_reset_encryption_confirmation_alert_action">"是的，立即重置"</string>
+  <string name="screen_reset_encryption_confirmation_alert_subtitle">"此过程不可逆。"</string>
+  <string name="screen_reset_encryption_confirmation_alert_title">"您确定要重置加密吗？"</string>
+  <string name="screen_reset_encryption_password_placeholder">"输入…"</string>
+  <string name="screen_reset_encryption_password_subtitle">"确认您要重置加密。"</string>
+  <string name="screen_reset_encryption_password_title">"输入您的账户密码以继续"</string>
 </resources>

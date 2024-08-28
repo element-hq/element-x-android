@@ -18,13 +18,27 @@ package io.element.android.libraries.matrix.api.timeline.item.event
 
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UserId
 
 @Immutable
 sealed interface LocalEventSendState {
-    data object NotSentYet : LocalEventSendState
-    sealed class SendingFailed(open val error: String) : LocalEventSendState {
-        data class Recoverable(override val error: String) : SendingFailed(error)
-        data class Unrecoverable(override val error: String) : SendingFailed(error)
+    data object Sending : LocalEventSendState
+    sealed interface Failed : LocalEventSendState {
+        data class Unknown(val error: String) : Failed
+        data class VerifiedUserHasUnsignedDevice(
+            /**
+             * The unsigned devices belonging to verified users. A map from user ID
+             * to a list of device IDs.
+             */
+            val devices: Map<UserId, List<String>>
+        ) : Failed
+
+        data class VerifiedUserChangedIdentity(
+            /**
+             * The users that were previously verified but are no longer.
+             */
+            val users: List<UserId>
+        ) : Failed
     }
     data class Sent(
         val eventId: EventId

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_room_alert_empty_subtitle">"Bu xonani tark etmoqchi ekanligingizga ishonchingiz komilmi? Siz bu yerda yagona odamsiz. Agar siz tark etsangiz, kelajakda hech kim qo\'shila olmaydi, jumladan siz ham."</string>
+  <string name="leave_room_alert_private_subtitle">"Bu xonani tark etmoqchi ekanligingizga ishonchingiz komilmi? Bu xona ochiq emas va siz taklifsiz qayta qo‘shila olmaysiz."</string>
+  <string name="leave_room_alert_subtitle">"Xonani tark etmoqchi ekanligingizga ishonchingiz komilmi?"</string>
+</resources>

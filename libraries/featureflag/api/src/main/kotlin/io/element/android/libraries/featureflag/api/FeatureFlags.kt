@@ -72,6 +72,13 @@ enum class FeatureFlags(
         defaultValue = { true },
         isFinished = false,
     ),
+    RoomAliasSuggestions(
+        key = "feature.roomAliasSuggestions",
+        title = "Room alias suggestions",
+        description = "Type `#` to get room alias suggestions and insert them",
+        defaultValue = { false },
+        isFinished = false,
+    ),
     MarkAsUnread(
         key = "feature.markAsUnread",
         title = "Mark as unread",
@@ -113,11 +120,18 @@ enum class FeatureFlags(
         defaultValue = { true },
         isFinished = false,
     ),
-    PictureInPicture(
-        key = "feature.pictureInPicture",
-        title = "Picture in Picture for Calls",
-        description = "Allow the Call to be rendered in PiP mode",
-        defaultValue = { it.buildType != BuildType.RELEASE },
+    PinnedEvents(
+        key = "feature.pinnedEvents",
+        title = "Pinned Events",
+        description = "Allow user to pin events in a room",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    SyncOnPush(
+        key = "feature.syncOnPush",
+        title = "Sync on push",
+        description = "Subscribe to room sync when a push is received",
+        defaultValue = { true },
         isFinished = false,
     ),
 }

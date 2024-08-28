@@ -80,6 +80,15 @@ class StateContentFormatter @Inject constructor(
                     else -> sp.getString(R.string.state_event_room_topic_removed, senderDisambiguatedDisplayName)
                 }
             }
+            is OtherState.RoomPinnedEvents -> when (renderingMode) {
+                RenderingMode.RoomList -> {
+                    Timber.v("Filtering timeline item for room state change: $content")
+                    null
+                }
+                RenderingMode.Timeline -> {
+                    formatRoomPinnedEvents(content, senderIsYou, senderDisambiguatedDisplayName)
+                }
+            }
             is OtherState.Custom -> when (renderingMode) {
                 RenderingMode.RoomList -> {
                     Timber.v("Filtering timeline item for room state change: $content")
@@ -161,15 +170,6 @@ class StateContentFormatter @Inject constructor(
                     "RoomJoinRules"
                 }
             }
-            OtherState.RoomPinnedEvents -> when (renderingMode) {
-                RenderingMode.RoomList -> {
-                    Timber.v("Filtering timeline item for room state change: $content")
-                    null
-                }
-                RenderingMode.Timeline -> {
-                    "RoomPinnedEvents"
-                }
-            }
             is OtherState.RoomUserPowerLevels -> when (renderingMode) {
                 RenderingMode.RoomList -> {
                     Timber.v("Filtering timeline item for room state change: $content")
@@ -215,6 +215,25 @@ class StateContentFormatter @Inject constructor(
                     "SpaceParent"
                 }
             }
+        }
+    }
+
+    private fun formatRoomPinnedEvents(
+        content: OtherState.RoomPinnedEvents,
+        senderIsYou: Boolean,
+        senderDisambiguatedDisplayName: String
+    ) = when (content.change) {
+        OtherState.RoomPinnedEvents.Change.ADDED -> when {
+            senderIsYou -> sp.getString(R.string.state_event_room_pinned_events_pinned_by_you)
+            else -> sp.getString(R.string.state_event_room_pinned_events_pinned, senderDisambiguatedDisplayName)
+        }
+        OtherState.RoomPinnedEvents.Change.REMOVED -> when {
+            senderIsYou -> sp.getString(R.string.state_event_room_pinned_events_unpinned_by_you)
+            else -> sp.getString(R.string.state_event_room_pinned_events_unpinned, senderDisambiguatedDisplayName)
+        }
+        OtherState.RoomPinnedEvents.Change.CHANGED -> when {
+            senderIsYou -> sp.getString(R.string.state_event_room_pinned_events_changed_by_you)
+            else -> sp.getString(R.string.state_event_room_pinned_events_changed, senderDisambiguatedDisplayName)
         }
     }
 }

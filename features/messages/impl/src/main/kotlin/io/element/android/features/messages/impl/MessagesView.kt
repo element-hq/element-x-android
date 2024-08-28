@@ -16,6 +16,9 @@
 
 package io.element.android.features.messages.impl
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -63,11 +66,16 @@ import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.features.messages.impl.mentions.MentionSuggestionsPickerView
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsBottomSheet
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
+import io.element.android.features.messages.impl.messagecomposer.suggestions.SuggestionsPickerView
+import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
+import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerView
+import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerViewDefaults
+import io.element.android.features.messages.impl.timeline.FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS
+import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineView
 import io.element.android.features.messages.impl.timeline.components.JoinCallMenuItem
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
@@ -102,11 +110,13 @@ import io.element.android.libraries.designsystem.utils.KeepScreenOn
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import timber.log.Timber
 import kotlin.random.Random
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun MessagesView(
@@ -120,8 +130,9 @@ fun MessagesView(
     onSendLocationClick: () -> Unit,
     onCreatePollClick: () -> Unit,
     onJoinCallClick: () -> Unit,
+    onViewAllPinnedMessagesClick: () -> Unit,
     modifier: Modifier = Modifier,
-    forceJumpToBottomVisibility: Boolean = false
+    forceJumpToBottomVisibility: Boolean = false,
 ) {
     OnLifecycleEvent { _, event ->
         state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.LifecycleEvent(event))
@@ -154,10 +165,7 @@ fun MessagesView(
         state.actionListState.eventSink(
             ActionListEvents.ComputeForMessage(
                 event = event,
-                canRedactOwn = state.userHasPermissionToRedactOwn,
-                canRedactOther = state.userHasPermissionToRedactOther,
-                canSendMessage = state.userHasPermissionToSendMessage,
-                canSendReaction = state.userHasPermissionToSendReaction,
+                userEventPermissions = state.userEventPermissions,
             )
         )
     }
@@ -225,6 +233,7 @@ fun MessagesView(
                 },
                 forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                 onJoinCallClick = onJoinCallClick,
+                onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
             )
         },
         snackbarHost = {
@@ -316,6 +325,7 @@ private fun MessagesViewContent(
     onSendLocationClick: () -> Unit,
     onCreatePollClick: () -> Unit,
     onJoinCallClick: () -> Unit,
+    onViewAllPinnedMessagesClick: () -> Unit,
     forceJumpToBottomVisibility: Boolean,
     modifier: Modifier = Modifier,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
@@ -367,28 +377,47 @@ private fun MessagesViewContent(
                 @Composable {}
             },
             sheetSwipeEnabled = state.composerState.showTextFormatting,
-            sheetShape = if (state.composerState.showTextFormatting || state.composerState.memberSuggestions.isNotEmpty()) {
+            sheetShape = if (state.composerState.showTextFormatting || state.composerState.suggestions.isNotEmpty()) {
                 MaterialTheme.shapes.large
             } else {
                 RectangleShape
             },
             content = { paddingValues ->
-                TimelineView(
-                    state = state.timelineState,
-                    typingNotificationState = state.typingNotificationState,
-                    onUserDataClick = onUserDataClick,
-                    onLinkClick = onLinkClick,
-                    onMessageClick = onMessageClick,
-                    onMessageLongClick = onMessageLongClick,
-                    onSwipeToReply = onSwipeToReply,
-                    onReactionClick = onReactionClick,
-                    onReactionLongClick = onReactionLongClick,
-                    onMoreReactionsClick = onMoreReactionsClick,
-                    onReadReceiptClick = onReadReceiptClick,
-                    modifier = Modifier.padding(paddingValues),
-                    forceJumpToBottomVisibility = forceJumpToBottomVisibility,
-                    onJoinCallClick = onJoinCallClick,
-                )
+                Box(modifier = Modifier.padding(paddingValues)) {
+                    val scrollBehavior = PinnedMessagesBannerViewDefaults.rememberExitOnScrollBehavior()
+                    TimelineView(
+                        state = state.timelineState,
+                        typingNotificationState = state.typingNotificationState,
+                        onUserDataClick = onUserDataClick,
+                        onLinkClick = onLinkClick,
+                        onMessageClick = onMessageClick,
+                        onMessageLongClick = onMessageLongClick,
+                        onSwipeToReply = onSwipeToReply,
+                        onReactionClick = onReactionClick,
+                        onReactionLongClick = onReactionLongClick,
+                        onMoreReactionsClick = onMoreReactionsClick,
+                        onReadReceiptClick = onReadReceiptClick,
+                        forceJumpToBottomVisibility = forceJumpToBottomVisibility,
+                        onJoinCallClick = onJoinCallClick,
+                        nestedScrollConnection = scrollBehavior.nestedScrollConnection,
+                    )
+                    AnimatedVisibility(
+                        visible = state.pinnedMessagesBannerState is PinnedMessagesBannerState.Visible && scrollBehavior.isVisible,
+                        enter = expandVertically(),
+                        exit = shrinkVertically(),
+                    ) {
+                        fun focusOnPinnedEvent(eventId: EventId) {
+                            state.timelineState.eventSink(
+                                TimelineEvents.FocusOnEvent(eventId = eventId, debounce = FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS.milliseconds)
+                            )
+                        }
+                        PinnedMessagesBannerView(
+                            state = state.pinnedMessagesBannerState,
+                            onClick = ::focusOnPinnedEvent,
+                            onViewAllClick = onViewAllPinnedMessagesClick,
+                        )
+                    }
+                }
             },
             sheetContent = { subcomposing: Boolean ->
                 MessagesViewComposerBottomSheetContents(
@@ -398,7 +427,7 @@ private fun MessagesViewContent(
             },
             sheetContentKey = sheetResizeContentKey.intValue,
             sheetTonalElevation = 0.dp,
-            sheetShadowElevation = if (state.composerState.memberSuggestions.isNotEmpty()) 16.dp else 0.dp,
+            sheetShadowElevation = if (state.composerState.suggestions.isNotEmpty()) 16.dp else 0.dp,
         )
     }
 }
@@ -408,9 +437,9 @@ private fun MessagesViewComposerBottomSheetContents(
     subcomposing: Boolean,
     state: MessagesState,
 ) {
-    if (state.userHasPermissionToSendMessage) {
+    if (state.userEventPermissions.canSendMessage) {
         Column(modifier = Modifier.fillMaxWidth()) {
-            MentionSuggestionsPickerView(
+            SuggestionsPickerView(
                 modifier = Modifier
                     .heightIn(max = 230.dp)
                     // Consume all scrolling, preventing the bottom sheet from being dragged when interacting with the list of suggestions
@@ -422,9 +451,9 @@ private fun MessagesViewComposerBottomSheetContents(
                 roomId = state.roomId,
                 roomName = state.roomName.dataOrNull(),
                 roomAvatarData = state.roomAvatar.dataOrNull(),
-                memberSuggestions = state.composerState.memberSuggestions,
+                suggestions = state.composerState.suggestions,
                 onSelectSuggestion = {
-                    state.composerState.eventSink(MessageComposerEvents.InsertMention(it))
+                    state.composerState.eventSink(MessageComposerEvents.InsertSuggestion(it))
                 }
             )
             MessageComposerView(
@@ -557,12 +586,13 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onBackClick = {},
         onRoomDetailsClick = {},
         onEventClick = { false },
-        onPreviewAttachments = {},
         onUserDataClick = {},
         onLinkClick = {},
+        onPreviewAttachments = {},
         onSendLocationClick = {},
         onCreatePollClick = {},
         onJoinCallClick = {},
+        onViewAllPinnedMessagesClick = { },
         forceJumpToBottomVisibility = true,
     )
 }

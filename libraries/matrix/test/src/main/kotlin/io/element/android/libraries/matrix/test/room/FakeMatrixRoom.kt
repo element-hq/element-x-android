@@ -31,11 +31,11 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
+import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
-import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
@@ -105,7 +105,8 @@ class FakeMatrixRoom(
     private val setTopicResult: (String) -> Result<Unit> = { lambdaError() },
     private val updateAvatarResult: (String, ByteArray) -> Result<Unit> = { _, _ -> lambdaError() },
     private val removeAvatarResult: () -> Result<Unit> = { lambdaError() },
-    private val sendMessageResult: (String, String?, List<Mention>) -> Result<Unit> = { _, _, _ -> lambdaError() },
+    private val editMessageLambda: (EventId, String, String?, List<IntentionalMention>) -> Result<Unit> = { _, _, _, _ -> lambdaError() },
+    private val sendMessageResult: (String, String?, List<IntentionalMention>) -> Result<Unit> = { _, _, _ -> lambdaError() },
     private val updateUserRoleResult: () -> Result<Unit> = { lambdaError() },
     private val toggleReactionResult: (String, EventId) -> Result<Unit> = { _, _ -> lambdaError() },
     private val retrySendMessageResult: (TransactionId) -> Result<Unit> = { lambdaError() },
@@ -125,6 +126,7 @@ class FakeMatrixRoom(
     private val getWidgetDriverResult: (MatrixWidgetSettings) -> Result<MatrixWidgetDriver> = { lambdaError() },
     private val canUserTriggerRoomNotificationResult: (UserId) -> Result<Boolean> = { lambdaError() },
     private val canUserJoinCallResult: (UserId) -> Result<Boolean> = { lambdaError() },
+    private val canUserPinUnpinResult: (UserId) -> Result<Boolean> = { lambdaError() },
     private val setIsFavoriteResult: (Boolean) -> Result<Unit> = { lambdaError() },
     private val powerLevelsResult: () -> Result<MatrixRoomPowerLevels> = { lambdaError() },
     private val updatePowerLevelsResult: () -> Result<Unit> = { lambdaError() },
@@ -134,10 +136,12 @@ class FakeMatrixRoom(
     private val updateMembersResult: () -> Unit = { lambdaError() },
     private val getMembersResult: (Int) -> Result<List<RoomMember>> = { lambdaError() },
     private val timelineFocusedOnEventResult: (EventId) -> Result<Timeline> = { lambdaError() },
+    private val pinnedEventsTimelineResult: () -> Result<Timeline> = { lambdaError() },
     private val setSendQueueEnabledLambda: (Boolean) -> Unit = { _: Boolean -> },
     private val saveComposerDraftLambda: (ComposerDraft) -> Result<Unit> = { _: ComposerDraft -> Result.success(Unit) },
     private val loadComposerDraftLambda: () -> Result<ComposerDraft?> = { Result.success<ComposerDraft?>(null) },
     private val clearComposerDraftLambda: () -> Result<Unit> = { Result.success(Unit) },
+    private val subscribeToSyncLambda: () -> Unit = { lambdaError() },
 ) : MatrixRoom {
     private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
     override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
@@ -180,7 +184,13 @@ class FakeMatrixRoom(
         timelineFocusedOnEventResult(eventId)
     }
 
-    override suspend fun subscribeToSync() = Unit
+    override suspend fun pinnedEventsTimeline(): Result<Timeline> = simulateLongTask {
+        pinnedEventsTimelineResult()
+    }
+
+    override suspend fun subscribeToSync() {
+        subscribeToSyncLambda()
+    }
 
     override suspend fun powerLevels(): Result<MatrixRoomPowerLevels> {
         return powerLevelsResult()
@@ -212,13 +222,12 @@ class FakeMatrixRoom(
         return updateUserRoleResult()
     }
 
-    var editMessageLambda: (EventId, String, String?, List<Mention>) -> Result<Unit> = { _, _, _, _ -> lambdaError() }
-    override suspend fun editMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> {
-        return editMessageLambda(eventId, body, htmlBody, mentions)
+    override suspend fun editMessage(eventId: EventId, body: String, htmlBody: String?, intentionalMentions: List<IntentionalMention>) = simulateLongTask {
+        editMessageLambda(eventId, body, htmlBody, intentionalMentions)
     }
 
-    override suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>) = simulateLongTask {
-        sendMessageResult(body, htmlBody, mentions)
+    override suspend fun sendMessage(body: String, htmlBody: String?, intentionalMentions: List<IntentionalMention>) = simulateLongTask {
+        sendMessageResult(body, htmlBody, intentionalMentions)
     }
 
     override suspend fun toggleReaction(emoji: String, eventId: EventId): Result<Unit> {
@@ -287,6 +296,10 @@ class FakeMatrixRoom(
 
     override suspend fun canUserJoinCall(userId: UserId): Result<Boolean> {
         return canUserJoinCallResult(userId)
+    }
+
+    override suspend fun canUserPinUnpin(userId: UserId): Result<Boolean> {
+        return canUserPinUnpinResult(userId)
     }
 
     override suspend fun sendImage(
@@ -517,6 +530,7 @@ fun aRoomInfo(
     userPowerLevels: ImmutableMap<UserId, Long> = persistentMapOf(),
     activeRoomCallParticipants: List<String> = emptyList(),
     heroes: List<MatrixUser> = emptyList(),
+    pinnedEventIds: List<EventId> = emptyList(),
 ) = MatrixRoomInfo(
     id = id,
     name = name,
@@ -542,6 +556,7 @@ fun aRoomInfo(
     userPowerLevels = userPowerLevels,
     activeRoomCallParticipants = activeRoomCallParticipants.toImmutableList(),
     heroes = heroes.toImmutableList(),
+    pinnedEventIds = pinnedEventIds.toImmutableList(),
 )
 
 fun defaultRoomPowerLevels() = MatrixRoomPowerLevels(

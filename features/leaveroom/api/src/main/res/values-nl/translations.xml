@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_conversation_alert_subtitle">"Weet je zeker dat je dit gesprek wilt verlaten? Dit gesprek is niet openbaar en je kunt niet opnieuw deelnemen zonder een uitnodiging."</string>
+  <string name="leave_room_alert_empty_subtitle">"Weet je zeker dat je deze kamer wilt verlaten? Je bent de enige persoon hier. Als je weggaat, kan er in de toekomst niemand meer toetreden, ook jij niet."</string>
+  <string name="leave_room_alert_private_subtitle">"Weet je zeker dat je deze kamer wilt verlaten? Deze kamer is niet openbaar en je kunt niet opnieuw deelnemen zonder een uitnodiging."</string>
+  <string name="leave_room_alert_subtitle">"Weet je zeker dat je de kamer wilt verlaten?"</string>
+</resources>

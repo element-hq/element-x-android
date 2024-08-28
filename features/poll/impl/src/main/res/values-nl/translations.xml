@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"Optie toevoegen"</string>
+  <string name="screen_create_poll_anonymous_desc">"Resultaten pas weergeven nadat de peiling is afgelopen"</string>
+  <string name="screen_create_poll_anonymous_headline">"Stemmen verbergen"</string>
+  <string name="screen_create_poll_answer_hint">"Optie %1$d"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Je wijzigingen zijn niet opgeslagen. Weet je zeker dat je terug wilt gaan?"</string>
+  <string name="screen_create_poll_question_desc">"Vraag of onderwerp"</string>
+  <string name="screen_create_poll_question_hint">"Waar gaat de peiling over?"</string>
+  <string name="screen_create_poll_title">"Peiling maken"</string>
+  <string name="screen_edit_poll_delete_confirmation">"Weet je zeker dat je deze peiling wilt verwijderen?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Peiling verwijderen"</string>
+  <string name="screen_edit_poll_title">"Peiling wijzigen"</string>
+  <string name="screen_polls_history_empty_ongoing">"Kan geen actieve peilingen vinden."</string>
+  <string name="screen_polls_history_empty_past">"Kan geen eerdere peilingen vinden."</string>
+  <string name="screen_polls_history_filter_ongoing">"Actief"</string>
+  <string name="screen_polls_history_filter_past">"Afgelopen"</string>
+  <string name="screen_polls_history_title">"Peilingen"</string>
+</resources>

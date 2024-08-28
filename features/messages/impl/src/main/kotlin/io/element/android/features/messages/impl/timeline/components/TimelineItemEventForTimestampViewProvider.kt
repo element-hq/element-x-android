@@ -21,21 +21,26 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 
 class TimelineItemEventForTimestampViewProvider : PreviewParameterProvider<TimelineItem.Event> {
     override val values: Sequence<TimelineItem.Event>
         get() = sequenceOf(
             aTimelineItemEvent(),
-            // Sending failed recoverable
-            aTimelineItemEvent().copy(localSendState = LocalEventSendState.SendingFailed.Recoverable("AN_ERROR")),
-            // Sending failed unrecoverable
-            aTimelineItemEvent().copy(localSendState = LocalEventSendState.SendingFailed.Unrecoverable("AN_ERROR")),
+            aTimelineItemEvent().copy(localSendState = LocalEventSendState.Sending),
+            aTimelineItemEvent().copy(localSendState = LocalEventSendState.Failed.Unknown("AN_ERROR")),
             // Edited
             aTimelineItemEvent().copy(content = aTimelineItemTextContent().copy(isEdited = true)),
             // Sending failed + Edited (not sure this is possible IRL, but should be covered by test)
             aTimelineItemEvent().copy(
-                localSendState = LocalEventSendState.SendingFailed.Unrecoverable("AN_ERROR"),
+                localSendState = LocalEventSendState.Failed.Unknown("AN_ERROR"),
                 content = aTimelineItemTextContent().copy(isEdited = true),
+            ),
+            aTimelineItemEvent().copy(
+                messageShield = MessageShield.AuthenticityNotGuaranteed(isCritical = false),
+            ),
+            aTimelineItemEvent().copy(
+                messageShield = MessageShield.UnknownDevice(isCritical = true),
             ),
         )
 }

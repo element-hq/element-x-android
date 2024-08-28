@@ -26,8 +26,8 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
+import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
@@ -263,8 +263,12 @@ class RustTimeline(
         }
     }
 
-    override suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> = withContext(dispatcher) {
-        MessageEventContent.from(body, htmlBody, mentions).use { content ->
+    override suspend fun sendMessage(
+        body: String,
+        htmlBody: String?,
+        intentionalMentions: List<IntentionalMention>,
+    ): Result<Unit> = withContext(dispatcher) {
+        MessageEventContent.from(body, htmlBody, intentionalMentions).use { content ->
             runCatching<Unit> {
                 inner.send(content)
             }
@@ -284,13 +288,13 @@ class RustTimeline(
         transactionId: TransactionId?,
         body: String,
         htmlBody: String?,
-        mentions: List<Mention>,
+        intentionalMentions: List<IntentionalMention>,
     ): Result<Unit> =
         withContext(dispatcher) {
             runCatching<Unit> {
                 getEventTimelineItem(originalEventId, transactionId).use { item ->
                     inner.edit(
-                        newContent = MessageEventContent.from(body, htmlBody, mentions),
+                        newContent = MessageEventContent.from(body, htmlBody, intentionalMentions),
                         item = item,
                     )
                 }
@@ -301,11 +305,11 @@ class RustTimeline(
         eventId: EventId,
         body: String,
         htmlBody: String?,
-        mentions: List<Mention>,
+        intentionalMentions: List<IntentionalMention>,
         fromNotification: Boolean,
     ): Result<Unit> = withContext(dispatcher) {
         runCatching {
-            val msg = MessageEventContent.from(body, htmlBody, mentions)
+            val msg = MessageEventContent.from(body, htmlBody, intentionalMentions)
             inner.sendReply(msg, eventId.value)
         }
     }
@@ -522,6 +526,18 @@ class RustTimeline(
             )
         } else {
             inner.loadReplyDetails(eventId.value).use(inReplyToMapper::map)
+        }
+    }
+
+    override suspend fun pinEvent(eventId: EventId): Result<Boolean> = withContext(dispatcher) {
+        runCatching {
+            inner.pinEvent(eventId = eventId.value)
+        }
+    }
+
+    override suspend fun unpinEvent(eventId: EventId): Result<Boolean> = withContext(dispatcher) {
+        runCatching {
+            inner.unpinEvent(eventId = eventId.value)
         }
     }
 

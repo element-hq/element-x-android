@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="confirm_recovery_key_banner_message">"您的聊天备份当前不同步。您需要输入恢复密钥才能访问聊天备份。"</string>
-  <string name="confirm_recovery_key_banner_title">"输入您的恢复密钥"</string>
+  <string name="confirm_recovery_key_banner_message">"聊天备份目前不同步，需要输入恢复密钥才能访问聊天备份。"</string>
+  <string name="confirm_recovery_key_banner_title">"输入恢复密钥"</string>
+  <string name="full_screen_intent_banner_message">"为确保您不会错过重要来电，请更改设置以允许锁屏时的全屏通知。"</string>
+  <string name="full_screen_intent_banner_title">"提升通话体验"</string>
   <string name="screen_invites_decline_chat_message">"您确定要拒绝加入 %1$s 的邀请吗？"</string>
   <string name="screen_invites_decline_chat_title">"拒绝邀请"</string>
   <string name="screen_invites_decline_direct_chat_message">"您确定要拒绝与 %1$s 开始私聊吗？"</string>
@@ -14,11 +16,11 @@
   <string name="screen_roomlist_empty_message">"通过向某人发送消息来开始。"</string>
   <string name="screen_roomlist_empty_title">"还没有聊天。"</string>
   <string name="screen_roomlist_filter_favourites">"收藏夹"</string>
-  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"您可以在聊天设置中将聊天添加到收藏夹中。
-现在，你可以取消选择过滤器以查看你的其他对话。"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"可以在聊天设置里将聊天添加到收藏夹中。
+现在，可以取消选择过滤器以查看其他对话。"</string>
   <string name="screen_roomlist_filter_favourites_empty_state_title">"您未收藏任何聊天"</string>
   <string name="screen_roomlist_filter_invites">"邀请"</string>
-  <string name="screen_roomlist_filter_invites_empty_state_title">"你没有任何待处理的邀请。"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"没有待处理的邀请。"</string>
   <string name="screen_roomlist_filter_low_priority">"低优先级"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"您可以取消选择过滤器以查看其他对话"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"您没有关于此选项的聊天"</string>
@@ -28,7 +30,7 @@
   <string name="screen_roomlist_filter_rooms_empty_state_title">"您尚未进入任何聊天室"</string>
   <string name="screen_roomlist_filter_unreads">"未读"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"恭喜！
-你没有任何未读消息！"</string>
+没有任何未读消息！"</string>
   <string name="screen_roomlist_main_space_title">"全部聊天"</string>
   <string name="screen_roomlist_mark_as_read">"标记为已读"</string>
   <string name="screen_roomlist_mark_as_unread">"标记为未读"</string>

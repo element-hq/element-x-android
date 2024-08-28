@@ -40,6 +40,7 @@ import kotlinx.collections.immutable.toImmutableMap
 import org.matrix.rustcomponents.sdk.TimelineItemContent
 import org.matrix.rustcomponents.sdk.TimelineItemContentKind
 import org.matrix.rustcomponents.sdk.use
+import uniffi.matrix_sdk_ui.RoomPinnedEventsChange
 import org.matrix.rustcomponents.sdk.EncryptedMessage as RustEncryptedMessage
 import org.matrix.rustcomponents.sdk.MembershipChange as RustMembershipChange
 import org.matrix.rustcomponents.sdk.OtherState as RustOtherState
@@ -176,7 +177,7 @@ private fun RustOtherState.map(): OtherState {
         RustOtherState.RoomHistoryVisibility -> OtherState.RoomHistoryVisibility
         RustOtherState.RoomJoinRules -> OtherState.RoomJoinRules
         is RustOtherState.RoomName -> OtherState.RoomName(name)
-        RustOtherState.RoomPinnedEvents -> OtherState.RoomPinnedEvents
+        is RustOtherState.RoomPinnedEvents -> OtherState.RoomPinnedEvents(change.map())
         is RustOtherState.RoomPowerLevels -> OtherState.RoomUserPowerLevels(users)
         RustOtherState.RoomServerAcl -> OtherState.RoomServerAcl
         is RustOtherState.RoomThirdPartyInvite -> OtherState.RoomThirdPartyInvite(displayName)
@@ -184,6 +185,14 @@ private fun RustOtherState.map(): OtherState {
         is RustOtherState.RoomTopic -> OtherState.RoomTopic(topic)
         RustOtherState.SpaceChild -> OtherState.SpaceChild
         RustOtherState.SpaceParent -> OtherState.SpaceParent
+    }
+}
+
+private fun RoomPinnedEventsChange.map(): OtherState.RoomPinnedEvents.Change {
+    return when (this) {
+        RoomPinnedEventsChange.ADDED -> OtherState.RoomPinnedEvents.Change.ADDED
+        RoomPinnedEventsChange.REMOVED -> OtherState.RoomPinnedEvents.Change.REMOVED
+        RoomPinnedEventsChange.CHANGED -> OtherState.RoomPinnedEvents.Change.CHANGED
     }
 }
 

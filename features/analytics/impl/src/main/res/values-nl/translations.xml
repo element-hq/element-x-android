@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_analytics_prompt_data_usage">"We zullen geen persoonlijke gegevens registreren of er een profiel van maken"</string>
+  <string name="screen_analytics_prompt_help_us_improve">"Deel anonieme gebruiksgegevens om ons te helpen problemen te identificeren."</string>
+  <string name="screen_analytics_prompt_read_terms">"Je kunt al onze voorwaarden %1$s lezen."</string>
+  <string name="screen_analytics_prompt_read_terms_content_link">"hier"</string>
+  <string name="screen_analytics_prompt_settings">"Je kunt dit op elk moment uitschakelen"</string>
+  <string name="screen_analytics_prompt_third_party_sharing">"We delen je gegevens niet met derden"</string>
+  <string name="screen_analytics_prompt_title">"Help %1$s te verbeteren"</string>
+</resources>

@@ -24,6 +24,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.FakeMessagesNavigator
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactory
+import io.element.android.features.messages.impl.timeline.components.aCriticalShield
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -75,6 +76,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import java.util.Date
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 private const val FAKE_UNIQUE_ID = "FAKE_UNIQUE_ID"
@@ -498,6 +500,10 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
             initialState.eventSink.invoke(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
             awaitItem().also { state ->
                 assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
+                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Requested(AN_EVENT_ID, Duration.ZERO))
+            }
+            awaitItem().also { state ->
+                assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
                 assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Loading(AN_EVENT_ID))
             }
             skipItems(2)
@@ -543,6 +549,10 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
             initialState.eventSink.invoke(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
             awaitItem().also { state ->
                 assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
+                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Requested(AN_EVENT_ID, Duration.ZERO))
+            }
+            awaitItem().also { state ->
+                assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
                 assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Success(AN_EVENT_ID, 0))
             }
         }
@@ -566,6 +576,10 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
             initialState.eventSink(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
             awaitItem().also { state ->
                 assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
+                assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Requested(AN_EVENT_ID, Duration.ZERO))
+            }
+            awaitItem().also { state ->
+                assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
                 assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Loading(AN_EVENT_ID))
             }
             awaitItem().also { state ->
@@ -574,6 +588,26 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
             }
             awaitItem().also { state ->
                 assertThat(state.focusRequestState).isEqualTo(FocusRequestState.None)
+            }
+        }
+    }
+
+    @Test
+    fun `present - show shield hide shield`() = runTest {
+        val presenter = createTimelinePresenter()
+        val shield = aCriticalShield()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.messageShield).isNull()
+            initialState.eventSink(TimelineEvents.ShowShieldDialog(shield))
+            awaitItem().also { state ->
+                assertThat(state.messageShield).isEqualTo(shield)
+                state.eventSink(TimelineEvents.HideShieldDialog)
+            }
+            awaitItem().also { state ->
+                assertThat(state.messageShield).isNull()
             }
         }
     }

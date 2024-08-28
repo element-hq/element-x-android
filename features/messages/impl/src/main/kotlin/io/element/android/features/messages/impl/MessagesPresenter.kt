@@ -20,10 +20,12 @@ import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -39,6 +41,7 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
+import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
@@ -73,12 +76,13 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.room.powerlevels.canPinUnpin
+import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
+import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
+import io.element.android.libraries.matrix.api.room.powerlevels.canSendMessage
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.room.canCall
-import io.element.android.libraries.matrix.ui.room.canRedactOtherAsState
-import io.element.android.libraries.matrix.ui.room.canRedactOwnAsState
-import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toPersistentList
@@ -98,6 +102,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val customReactionPresenter: CustomReactionPresenter,
     private val reactionSummaryPresenter: ReactionSummaryPresenter,
     private val readReceiptBottomSheetPresenter: ReadReceiptBottomSheetPresenter,
+    private val pinnedMessagesBannerPresenter: Presenter<PinnedMessagesBannerState>,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val dispatchers: CoroutineDispatchers,
@@ -129,12 +134,12 @@ class MessagesPresenter @AssistedInject constructor(
         val customReactionState = customReactionPresenter.present()
         val reactionSummaryState = reactionSummaryPresenter.present()
         val readReceiptBottomSheetState = readReceiptBottomSheetPresenter.present()
+        val pinnedMessagesBannerState = pinnedMessagesBannerPresenter.present()
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
-        val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
-        val userHasPermissionToRedactOwn by room.canRedactOwnAsState(updateKey = syncUpdateFlow.value)
-        val userHasPermissionToRedactOther by room.canRedactOtherAsState(updateKey = syncUpdateFlow.value)
-        val userHasPermissionToSendReaction by room.canSendMessageAsState(type = MessageEventType.REACTION, updateKey = syncUpdateFlow.value)
+
+        val userEventPermissions by userEventPermissions(syncUpdateFlow.value)
+
         val roomName: AsyncData<String> by remember {
             derivedStateOf { roomInfo?.name?.let { AsyncData.Success(it) } ?: AsyncData.Uninitialized }
         }
@@ -211,11 +216,8 @@ class MessagesPresenter @AssistedInject constructor(
             roomName = roomName,
             roomAvatar = roomAvatar,
             heroes = heroes,
-            userHasPermissionToSendMessage = userHasPermissionToSendMessage,
-            userHasPermissionToRedactOwn = userHasPermissionToRedactOwn,
-            userHasPermissionToRedactOther = userHasPermissionToRedactOther,
-            userHasPermissionToSendReaction = userHasPermissionToSendReaction,
             composerState = composerState,
+            userEventPermissions = userEventPermissions,
             voiceMessageComposerState = voiceMessageComposerState,
             timelineState = timelineState,
             typingNotificationState = typingNotificationState,
@@ -231,8 +233,22 @@ class MessagesPresenter @AssistedInject constructor(
             enableVoiceMessages = enableVoiceMessages,
             appName = buildMeta.applicationName,
             callState = callState,
+            pinnedMessagesBannerState = pinnedMessagesBannerState,
             eventSink = { handleEvents(it) }
         )
+    }
+
+    @Composable
+    private fun userEventPermissions(updateKey: Long): State<UserEventPermissions> {
+        return produceState(UserEventPermissions.DEFAULT, key1 = updateKey) {
+            value = UserEventPermissions(
+                canSendMessage = room.canSendMessage(type = MessageEventType.ROOM_MESSAGE).getOrElse { true },
+                canSendReaction = room.canSendMessage(type = MessageEventType.REACTION).getOrElse { true },
+                canRedactOwn = room.canRedactOwn().getOrElse { false },
+                canRedactOther = room.canRedactOther().getOrElse { false },
+                canPinUnpin = room.canPinUnpin().getOrElse { false },
+            )
+        }
     }
 
     private fun MatrixRoomInfo.avatarData(): AvatarData {
@@ -268,6 +284,30 @@ class MessagesPresenter @AssistedInject constructor(
             TimelineItemAction.Forward -> handleForwardAction(targetEvent)
             TimelineItemAction.ReportContent -> handleReportAction(targetEvent)
             TimelineItemAction.EndPoll -> handleEndPollAction(targetEvent, timelineState)
+            TimelineItemAction.Pin -> handlePinAction(targetEvent)
+            TimelineItemAction.Unpin -> handleUnpinAction(targetEvent)
+        }
+    }
+
+    private suspend fun handlePinAction(targetEvent: TimelineItem.Event) {
+        if (targetEvent.eventId == null) return
+        timelineController.invokeOnCurrentTimeline {
+            pinEvent(targetEvent.eventId)
+                .onFailure {
+                    Timber.e(it, "Failed to pin event ${targetEvent.eventId}")
+                    snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_error))
+                }
+        }
+    }
+
+    private suspend fun handleUnpinAction(targetEvent: TimelineItem.Event) {
+        if (targetEvent.eventId == null) return
+        timelineController.invokeOnCurrentTimeline {
+            unpinEvent(targetEvent.eventId)
+                .onFailure {
+                    Timber.e(it, "Failed to unpin event ${targetEvent.eventId}")
+                    snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_error))
+                }
         }
     }
 

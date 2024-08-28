@@ -63,7 +63,7 @@
   <string name="screen_room_member_list_ban_member_confirmation_description">"Δεν θα μπορεί να συμμετέχει ξανά σε αυτό το δωμάτιο εάν προσκληθεί."</string>
   <string name="screen_room_member_list_ban_member_confirmation_title">"Θες σίγουρα να αποκλείσεις αυτό το μέλος;"</string>
   <string name="screen_room_member_list_banned_empty">"Δεν υπάρχουν αποκλεισμένοι χρήστες σε αυτό το δωμάτιο."</string>
-  <string name="screen_room_member_list_banning_user">"Αποκλεισμός του χρήστη %1$s"</string>
+  <string name="screen_room_member_list_banning_user">"Αποκλεισμός %1$s"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d άτομο"</item>
     <item quantity="other">"%1$d άτομα"</item>

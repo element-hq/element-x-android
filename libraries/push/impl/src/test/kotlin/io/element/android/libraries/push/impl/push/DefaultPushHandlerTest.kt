@@ -306,7 +306,7 @@ class DefaultPushHandlerTest {
     }
 
     @Test
-    fun `when diagnostic PushData is received, the diagnostic push handler is informed `() =
+    fun `when diagnostic PushData is received, the diagnostic push handler is informed`() =
         runTest {
             val aPushData = PushData(
                 eventId = DefaultTestPush.TEST_EVENT_ID,

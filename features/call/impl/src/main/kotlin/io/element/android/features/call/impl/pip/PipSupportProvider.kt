@@ -24,9 +24,6 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 interface PipSupportProvider {
@@ -37,15 +34,10 @@ interface PipSupportProvider {
 @ContributesBinding(AppScope::class)
 class DefaultPipSupportProvider @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val featureFlagService: FeatureFlagService,
 ) : PipSupportProvider {
     override fun isPipSupported(): Boolean {
         val isSupportedByTheOs = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
             context.packageManager?.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE).orFalse()
-        return if (isSupportedByTheOs) {
-            runBlocking { featureFlagService.isFeatureEnabled(FeatureFlags.PictureInPicture) }
-        } else {
-            false
-        }
+        return isSupportedByTheOs
     }
 }

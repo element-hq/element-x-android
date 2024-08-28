@@ -40,3 +40,5 @@
 -keepclassmembers class android.view.JavaViewSpy {
     static int windowAttachCount(android.view.View);
 }
+
+-keep class io.element.android.x.di.** { *; }

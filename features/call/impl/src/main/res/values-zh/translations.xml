@@ -3,4 +3,5 @@
   <string name="call_foreground_service_channel_title_android">"通话进行中"</string>
   <string name="call_foreground_service_message_android">"点按即可返回通话"</string>
   <string name="call_foreground_service_title_android">"☎️ 通话中"</string>
+  <string name="screen_incoming_call_subtitle_android">"Element 来电"</string>
 </resources>

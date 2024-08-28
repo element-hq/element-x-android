@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Kan du inte bekräfta?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Skapa en ny återställningsnyckel"</string>
   <string name="screen_identity_confirmation_subtitle">"Verifiera den här enheten för att konfigurera säkra meddelanden."</string>
   <string name="screen_identity_confirmation_title">"Bekräfta att det är du"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Använd en annan enhet"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Använd återställningsnyckel"</string>
   <string name="screen_identity_confirmed_subtitle">"Nu kan du läsa eller skicka meddelanden säkert, och alla du chattar med kan också lita på den här enheten."</string>
   <string name="screen_identity_confirmed_title">"Enhet verifierad"</string>
   <string name="screen_identity_use_another_device">"Använd en annan enhet"</string>

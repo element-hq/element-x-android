@@ -21,6 +21,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.ElementCallConfig
+import io.element.android.features.logout.test.FakeLogoutUseCase
 import io.element.android.features.preferences.impl.tasks.FakeClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.FakeComputeCacheSizeUseCase
 import io.element.android.features.rageshake.impl.preferences.DefaultRageshakePreferencesPresenter
@@ -35,6 +36,8 @@ import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -55,6 +58,7 @@ class DeveloperSettingsPresenterTest {
             assertThat(initialState.cacheSize).isEqualTo(AsyncData.Uninitialized)
             assertThat(initialState.customElementCallBaseUrlState).isNotNull()
             assertThat(initialState.customElementCallBaseUrlState.baseUrl).isNull()
+            assertThat(initialState.isSimpleSlidingSyncEnabled).isFalse()
             val loadedState = awaitItem()
             assertThat(loadedState.rageshakeState.isEnabled).isFalse()
             assertThat(loadedState.rageshakeState.isSupported).isTrue()
@@ -160,6 +164,30 @@ class DeveloperSettingsPresenterTest {
         }
     }
 
+    @Test
+    fun `present - toggling simplified sliding sync changes the preferences and logs out the user`() = runTest {
+        val logoutCallRecorder = lambdaRecorder<Boolean, String> { "" }
+        val logoutUseCase = FakeLogoutUseCase(logoutLambda = logoutCallRecorder)
+        val preferences = InMemoryAppPreferencesStore()
+        val presenter = createDeveloperSettingsPresenter(preferencesStore = preferences, logoutUseCase = logoutUseCase)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitLastSequentialItem()
+            assertThat(initialState.isSimpleSlidingSyncEnabled).isFalse()
+
+            initialState.eventSink(DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled(true))
+            assertThat(awaitItem().isSimpleSlidingSyncEnabled).isTrue()
+            assertThat(preferences.isSimplifiedSlidingSyncEnabledFlow().first()).isTrue()
+            logoutCallRecorder.assertions().isCalledOnce()
+
+            initialState.eventSink(DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled(false))
+            assertThat(awaitItem().isSimpleSlidingSyncEnabled).isFalse()
+            assertThat(preferences.isSimplifiedSlidingSyncEnabledFlow().first()).isFalse()
+            logoutCallRecorder.assertions().isCalledExactly(times = 2)
+        }
+    }
+
     private fun createDeveloperSettingsPresenter(
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
         cacheSizeUseCase: FakeComputeCacheSizeUseCase = FakeComputeCacheSizeUseCase(),
@@ -167,6 +195,7 @@ class DeveloperSettingsPresenterTest {
         rageshakePresenter: DefaultRageshakePreferencesPresenter = DefaultRageshakePreferencesPresenter(FakeRageShake(), FakeRageshakeDataStore()),
         preferencesStore: InMemoryAppPreferencesStore = InMemoryAppPreferencesStore(),
         buildMeta: BuildMeta = aBuildMeta(),
+        logoutUseCase: FakeLogoutUseCase = FakeLogoutUseCase(logoutLambda = { "" })
     ): DeveloperSettingsPresenter {
         return DeveloperSettingsPresenter(
             featureFlagService = featureFlagService,
@@ -175,6 +204,7 @@ class DeveloperSettingsPresenterTest {
             rageshakePresenter = rageshakePresenter,
             appPreferencesStore = preferencesStore,
             buildMeta = buildMeta,
+            logoutUseCase = logoutUseCase,
         )
     }
 }

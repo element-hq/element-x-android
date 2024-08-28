@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Kies hoe je meldingen wilt ontvangen"</string>
+  <string name="screen_advanced_settings_developer_mode">"Ontwikkelaarsmodus"</string>
+  <string name="screen_advanced_settings_developer_mode_description">"Schakel in om toegang te krijgen tot tools en functies voor ontwikkelaars."</string>
+  <string name="screen_advanced_settings_element_call_base_url">"Aangepaste basis-URL voor Element Call"</string>
+  <string name="screen_advanced_settings_element_call_base_url_description">"Stel een aangepaste basis-URL in voor Element Call."</string>
+  <string name="screen_advanced_settings_element_call_base_url_validation_error">"Ongeldige URL, zorg ervoor dat je het protocol (http/https) en het juiste adres invult."</string>
+  <string name="screen_advanced_settings_rich_text_editor_description">"Schakel de uitgebreide tekstverwerker uit om Markdown handmatig te typen."</string>
+  <string name="screen_advanced_settings_send_read_receipts">"Leesbevestigingen"</string>
+  <string name="screen_advanced_settings_send_read_receipts_description">"Indien uitgeschakeld worden er geen leesbevestigingen verstuurd. Je ontvangt nog steeds leesbevestigingen van andere gebruikers."</string>
+  <string name="screen_advanced_settings_share_presence">"Aanwezigheid delen"</string>
+  <string name="screen_advanced_settings_share_presence_description">"Indien uitgeschakeld kun je geen leesbevestigingen en typmeldingen verzenden of ontvangen."</string>
+  <string name="screen_advanced_settings_view_source_description">"Schakel optie in om de berichtbron in de tijdlijn te bekijken."</string>
+  <string name="screen_blocked_users_unblock_alert_action">"Deblokkeren"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"Je zult alle berichten van hen weer kunnen zien."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"Gebruiker deblokkeren"</string>
+  <string name="screen_blocked_users_unblocking">"Deblokkeren…"</string>
+  <string name="screen_edit_profile_display_name">"Weergavenaam"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"Je weergavenaam"</string>
+  <string name="screen_edit_profile_error">"Er is een onbekende fout opgetreden en de informatie kon niet worden gewijzigd."</string>
+  <string name="screen_edit_profile_error_title">"Kan profiel niet bijwerken"</string>
+  <string name="screen_edit_profile_title">"Profiel bewerken"</string>
+  <string name="screen_edit_profile_updating_details">"Profiel bijwerken…"</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"Aanvullende instellingen"</string>
+  <string name="screen_notification_settings_calls_label">"Audio- en videogesprekken"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"Configuratie komt niet overeen"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"We hebben de instellingen voor meldingen vereenvoudigd, zodat je de opties gemakkelijker kunt vinden. Sommige instellingen die je in het verleden hebt aangepast, worden hier niet getoond, maar zijn nog steeds actief.
+
+Als je doorgaat, kunnen sommige van je instellingen veranderen."</string>
+  <string name="screen_notification_settings_direct_chats">"Directe chats"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"Aangepaste instelling per chat"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"Er is een fout opgetreden bij het bijwerken van de meldingsinstelling."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"Alle berichten"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Alleen vermeldingen en trefwoorden"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"Bij directe chats, stuur me een melding voor"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"Bij groep chats, stuur me een melding voor"</string>
+  <string name="screen_notification_settings_enable_notifications">"Meldingen op dit apparaat inschakelen"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"De configuratie is niet gecorrigeerd. Probeer het opnieuw."</string>
+  <string name="screen_notification_settings_group_chats">"Groep chats"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"Uitnodigingen"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Je homeserver ondersteunt deze optie niet in versleutelde kamers; in sommige kamers krijg je mogelijk geen meldingen."</string>
+  <string name="screen_notification_settings_mentions_section_title">"Vermeldingen"</string>
+  <string name="screen_notification_settings_mode_all">"Alles"</string>
+  <string name="screen_notification_settings_mode_mentions">"Vermeldingen"</string>
+  <string name="screen_notification_settings_notification_section_title">"Stuur me een melding voor"</string>
+  <string name="screen_notification_settings_room_mention_label">"Stuur me een melding bij @kamer"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"Wijzig je %1$s om meldingen te ontvangen."</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"systeeminstellingen"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"Systeemmeldingen uitgeschakeld"</string>
+  <string name="screen_notification_settings_title">"Meldingen"</string>
+</resources>

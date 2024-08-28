@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_app_lock_biometric_authentication">"biometrische authenticatie"</string>
+  <string name="screen_app_lock_biometric_unlock">"biometrische ontgrendeling"</string>
+  <string name="screen_app_lock_biometric_unlock_title_android">"Ontgrendelen met biometrie"</string>
+  <string name="screen_app_lock_forgot_pin">"Pincode vergeten?"</string>
+  <string name="screen_app_lock_settings_change_pin">"Pincode wijzigen"</string>
+  <string name="screen_app_lock_settings_enable_biometric_unlock">"Biometrische ontgrendeling toestaan"</string>
+  <string name="screen_app_lock_settings_remove_pin">"Pincode verwijderen"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_message">"Weet je zeker dat je de pincode wilt verwijderen?"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_title">"Pincode verwijderen?"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_allow_title">"%1$s toestaan"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_skip">"Ik gebruik liever een pincode"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Bespaar jezelf tijd en gebruik %1$s om de app elke keer te ontgrendelen"</string>
+  <string name="screen_app_lock_setup_choose_pin">"Kies je pincode"</string>
+  <string name="screen_app_lock_setup_confirm_pin">"Bevestig pincode"</string>
+  <string name="screen_app_lock_setup_pin_context">"Vergrendel %1$s om je chats extra te beveiligen.
+
+Kies iets dat je kunt onthouden. Als je deze pincode vergeet, word je uitgelogd bij de app."</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"Vanwege veiligheidsredenen kun je dit niet als je pincode kiezen"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"Kies een andere pincode"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Voer dezelfde pincode twee keer in"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"Pincodes komen niet overeen"</string>
+  <string name="screen_app_lock_signout_alert_message">"Je moet opnieuw inloggen en een nieuwe pincode aanmaken om verder te gaan"</string>
+  <string name="screen_app_lock_signout_alert_title">"Je wordt uitgelogd"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"Je hebt %1$d poging om te ontgrendelen"</item>
+    <item quantity="other">"Je hebt %1$d pogingen om te ontgrendelen"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"Verkeerde pincode. Je hebt nog %1$d kans"</item>
+    <item quantity="other">"Verkeerde pincode. Je hebt nog %1$d kansen"</item>
+  </plurals>
+  <string name="screen_app_lock_use_biometric_android">"Biometrie gebruiken"</string>
+  <string name="screen_app_lock_use_pin_android">"Pincode gebruiken"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Uitloggen…"</string>
+</resources>

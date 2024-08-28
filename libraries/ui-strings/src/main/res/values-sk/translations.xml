@@ -93,6 +93,7 @@
   <string name="action_report_bug">"Nahlásiť chybu"</string>
   <string name="action_report_content">"Nahlásiť obsah"</string>
   <string name="action_reset">"Obnoviť"</string>
+  <string name="action_reset_identity">"Obnoviť identitu"</string>
   <string name="action_retry">"Skúsiť znova"</string>
   <string name="action_retry_decryption">"Opakovať dešifrovanie"</string>
   <string name="action_save">"Uložiť"</string>
@@ -112,6 +113,8 @@
   <string name="action_take_photo">"Urobiť fotku"</string>
   <string name="action_tap_for_options">"Klepnutím získate možnosti"</string>
   <string name="action_try_again">"Skúste to znova"</string>
+  <string name="action_unpin">"Odopnúť"</string>
+  <string name="action_view_in_timeline">"Zobraziť na časovej osi"</string>
   <string name="action_view_source">"Zobraziť zdroj"</string>
   <string name="action_yes">"Áno"</string>
   <string name="common_about">"O aplikácii"</string>
@@ -178,6 +181,7 @@ Dôvod: %1$s."</string>
   <string name="common_people">"Ľudia"</string>
   <string name="common_permalink">"Trvalý odkaz"</string>
   <string name="common_permission">"Povolenie"</string>
+  <string name="common_pinned">"Pripnuté"</string>
   <string name="common_please_wait">"Prosím, počkajte…"</string>
   <string name="common_poll_end_confirmation">"Ste si istí, že chcete ukončiť túto anketu?"</string>
   <string name="common_poll_summary">"Anketa: %1$s"</string>
@@ -262,6 +266,8 @@ Dôvod: %1$s."</string>
   <string name="error_some_messages_have_not_been_sent">"Niektoré správy neboli odoslané"</string>
   <string name="error_unknown">"Prepáčte, vyskytla sa chyba"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Pravosť tejto šifrovanej správy nie je možné zaručiť na tomto zariadení."</string>
+  <string name="event_shield_reason_previously_verified">"Šifrované predtým overeným používateľom."</string>
+  <string name="event_shield_reason_sent_in_clear">"Nie je šifrované."</string>
   <string name="event_shield_reason_unknown_device">"Zašifrované neznámym alebo odstráneným zariadením."</string>
   <string name="event_shield_reason_unsigned_device">"Šifrované zariadením, ktoré nie je overené jeho majiteľom."</string>
   <string name="event_shield_reason_unverified_identity">"Šifrované neovereným používateľom."</string>
@@ -272,6 +278,17 @@ Dôvod: %1$s."</string>
   <string name="screen_media_picker_error_failed_selection">"Nepodarilo sa vybrať médium, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nepodarilo sa nahrať médiá, skúste to prosím znova."</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Stlačte správu a vyberte možnosť „%1$s“, ktorú chcete zahrnúť sem."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Pripnite dôležité správy, aby sa dali ľahko nájsť"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d pripnutá správa"</item>
+    <item quantity="few">"%1$d pripnuté správy"</item>
+    <item quantity="other">"%1$d pripnutých správ"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Pripnuté správy"</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"Chystáte sa prejsť na svoj %1$s účet, aby ste obnovili svoju identitu. Potom budete vrátení späť do aplikácie."</string>
+  <string name="screen_reset_identity_confirmation_title">"Neviete potvrdiť? Prejdite do svojho účtu a obnovte svoju identitu."</string>
+  <string name="screen_room_details_pinned_events_row_title">"Pripnuté správy"</string>
   <string name="screen_room_error_failed_processing_media">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepodarilo sa získať údaje o používateľovi"</string>
   <string name="screen_room_member_details_block_alert_action">"Zablokovať"</string>
@@ -283,6 +300,7 @@ Dôvod: %1$s."</string>
   <string name="screen_room_member_details_unblock_user">"Odblokovať používateľa"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s z %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Pripnutých správ"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Načítava sa správa…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Zobraziť všetko"</string>
   <string name="screen_room_title">"Konverzácia"</string>
   <string name="screen_share_location_title">"Zdieľať polohu"</string>

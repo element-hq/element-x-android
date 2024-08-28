@@ -110,7 +110,7 @@ fun TimelineItemReactionsLayout(
             }
             val rows = rowsIn.toMutableList()
             val secondLastRow = rows[rows.size - 2].toMutableList()
-            val expandButtonPlaceable = secondLastRow.removeLast()
+            val expandButtonPlaceable = secondLastRow.removeAt(secondLastRow.lastIndex)
             lastRow.add(0, expandButtonPlaceable)
             rows[rows.size - 2] = secondLastRow
             rows[rows.size - 1] = lastRow

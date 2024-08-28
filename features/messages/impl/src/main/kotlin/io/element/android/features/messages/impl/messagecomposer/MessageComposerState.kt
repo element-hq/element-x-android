@@ -19,7 +19,7 @@ package io.element.android.features.messages.impl.messagecomposer
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
+import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.wysiwyg.display.TextDisplay
@@ -35,7 +35,7 @@ data class MessageComposerState(
     val canShareLocation: Boolean,
     val canCreatePoll: Boolean,
     val attachmentsState: AttachmentsState,
-    val memberSuggestions: ImmutableList<ResolvedMentionSuggestion>,
+    val suggestions: ImmutableList<ResolvedSuggestion>,
     val resolveMentionDisplay: (String, String) -> TextDisplay,
     val eventSink: (MessageComposerEvents) -> Unit,
 )

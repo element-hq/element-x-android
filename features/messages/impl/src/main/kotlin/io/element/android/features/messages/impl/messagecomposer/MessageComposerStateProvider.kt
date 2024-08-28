@@ -18,7 +18,7 @@ package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.textcomposer.aRichTextEditorState
-import io.element.android.libraries.textcomposer.mentions.ResolvedMentionSuggestion
+import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.wysiwyg.display.TextDisplay
@@ -41,7 +41,7 @@ fun aMessageComposerState(
     canShareLocation: Boolean = true,
     canCreatePoll: Boolean = true,
     attachmentsState: AttachmentsState = AttachmentsState.None,
-    memberSuggestions: ImmutableList<ResolvedMentionSuggestion> = persistentListOf(),
+    suggestions: ImmutableList<ResolvedSuggestion> = persistentListOf(),
 ) = MessageComposerState(
     textEditorState = textEditorState,
     isFullScreen = isFullScreen,
@@ -51,7 +51,7 @@ fun aMessageComposerState(
     canShareLocation = canShareLocation,
     canCreatePoll = canCreatePoll,
     attachmentsState = attachmentsState,
-    memberSuggestions = memberSuggestions,
+    suggestions = suggestions,
     resolveMentionDisplay = { _, _ -> TextDisplay.Plain },
     eventSink = {},
 )

@@ -104,11 +104,6 @@ class DefaultNotifiableEventResolver @Inject constructor(
             is NotificationContent.MessageLike.RoomMessage -> {
                 val senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId)
                 val messageBody = descriptionFromMessageContent(content, senderDisambiguatedDisplayName)
-                val notificationBody = if (hasMention) {
-                    stringProvider.getString(R.string.notification_mentioned_you_body, messageBody)
-                } else {
-                    messageBody
-                }
                 buildNotifiableMessageEvent(
                     sessionId = userId,
                     senderId = content.senderId,
@@ -117,12 +112,13 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     noisy = isNoisy,
                     timestamp = this.timestamp,
                     senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
-                    body = notificationBody,
+                    body = messageBody,
                     imageUriString = fetchImageIfPresent(client)?.toString(),
                     roomName = roomDisplayName,
                     roomIsDm = isDm,
                     roomAvatarPath = roomAvatarUrl,
                     senderAvatarPath = senderAvatarUrl,
+                    hasMentionOrReply = hasMention,
                 )
             }
             is NotificationContent.StateEvent.RoomMemberContent -> {
@@ -208,7 +204,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
             NotificationContent.MessageLike.RoomEncrypted -> fallbackNotifiableEvent(userId, roomId, eventId).also {
                 Timber.tag(loggerTag.value).w("Notification with encrypted content -> fallback")
             }
-            NotificationContent.MessageLike.RoomRedaction -> null.also {
+            is NotificationContent.MessageLike.RoomRedaction -> null.also {
                 Timber.tag(loggerTag.value).d("Ignoring notification for redaction")
             }
             NotificationContent.MessageLike.Sticker -> null.also {
@@ -340,6 +336,7 @@ internal fun buildNotifiableMessageEvent(
     isRedacted: Boolean = false,
     isUpdated: Boolean = false,
     type: String = EventType.MESSAGE,
+    hasMentionOrReply: Boolean = false,
 ) = NotifiableMessageEvent(
     sessionId = sessionId,
     senderId = senderId,
@@ -363,4 +360,5 @@ internal fun buildNotifiableMessageEvent(
     isRedacted = isRedacted,
     isUpdated = isUpdated,
     type = type,
+    hasMentionOrReply = hasMentionOrReply,
 )

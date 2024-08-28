@@ -20,8 +20,9 @@ import com.squareup.anvil.annotations.ContributesBinding
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.impl.analytics.toAnalyticsJoinedRoom
 import io.element.android.services.analytics.api.AnalyticsService
 import javax.inject.Inject
@@ -32,18 +33,30 @@ class DefaultJoinRoom @Inject constructor(
     private val analyticsService: AnalyticsService,
 ) : JoinRoom {
     override suspend fun invoke(
-        roomId: RoomId,
+        roomIdOrAlias: RoomIdOrAlias,
         serverNames: List<String>,
-        trigger: JoinedRoom.Trigger,
+        trigger: JoinedRoom.Trigger
     ): Result<Unit> {
-        return if (serverNames.isEmpty()) {
-            client.joinRoom(roomId)
-        } else {
-            client.joinRoomByIdOrAlias(roomId, serverNames)
-        }.onSuccess {
-            client.getRoom(roomId)?.use { room ->
-                analyticsService.capture(room.toAnalyticsJoinedRoom(trigger))
+        return when (roomIdOrAlias) {
+            is RoomIdOrAlias.Id -> {
+                if (serverNames.isEmpty()) {
+                    client.joinRoom(roomIdOrAlias.roomId)
+                } else {
+                    client.joinRoomByIdOrAlias(roomIdOrAlias, serverNames)
+                }
             }
+            is RoomIdOrAlias.Alias -> {
+                client.joinRoomByIdOrAlias(roomIdOrAlias, serverNames = emptyList())
+            }
+        }.onSuccess { roomSummary ->
+            client.captureJoinedRoomAnalytics(roomSummary, trigger)
+        }.map { }
+    }
+
+    private suspend fun MatrixClient.captureJoinedRoomAnalytics(roomSummary: RoomSummary?, trigger: JoinedRoom.Trigger) {
+        if (roomSummary == null) return
+        getRoom(roomSummary.roomId)?.use { room ->
+            analyticsService.capture(room.toAnalyticsJoinedRoom(trigger))
         }
     }
 }

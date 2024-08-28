@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="confirm_recovery_key_banner_message">"Ваша резервна копія чату наразі не синхронізована. Вам потрібно підтвердити ключ відновлення, щоб зберегти доступ до резервної копії чату."</string>
   <string name="confirm_recovery_key_banner_title">"Підтвердіть ключ відновлення"</string>
+  <string name="full_screen_intent_banner_message">"Щоб ніколи не пропустити важливий дзвінок, змініть налаштування, щоб увімкнути повноекранні сповіщення, коли телефон заблоковано."</string>
   <string name="screen_invites_decline_chat_message">"Ви впевнені, що хочете відхилити запрошення приєднатися до %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Відхилити запрошення"</string>
   <string name="screen_invites_decline_direct_chat_message">"Ви дійсно хочете відмовитися від приватного чату з %1$s?"</string>
@@ -17,6 +18,8 @@
   <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Ви можете додати чат до улюблених у налаштуваннях чату.
 Наразі ви можете зняти фільтри, щоб побачити інші ваші чати"</string>
   <string name="screen_roomlist_filter_favourites_empty_state_title">"Ви ще не маєте улюблених чатів"</string>
+  <string name="screen_roomlist_filter_invites">"Запрошення"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"У вас немає запрошень, що очікують на розгляд."</string>
   <string name="screen_roomlist_filter_low_priority">"Низький пріоритет"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Ви можете зняти фільтри, щоб побачити інші ваші чати"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Ви не маєте чатів для цієї категорії"</string>
@@ -28,8 +31,9 @@
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Вітаємо!
 У вас немає непрочитаних повідомлень!"</string>
   <string name="screen_roomlist_main_space_title">"Усі чати"</string>
-  <string name="screen_roomlist_mark_as_read">"Позначити як прочитане"</string>
-  <string name="screen_roomlist_mark_as_unread">"Позначити як непрочитане"</string>
+  <string name="screen_roomlist_mark_as_read">"Позначити прочитаним"</string>
+  <string name="screen_roomlist_mark_as_unread">"Позначити непрочитаним"</string>
+  <string name="screen_roomlist_room_directory_button_title">"Переглянути всі кімнати"</string>
   <string name="session_verification_banner_message">"Схоже, Ви використовуєте новий пристрій. Щоб отримати доступ до зашифрованих повідомлень, підтвердьте особу за допомогою іншого пристрою."</string>
   <string name="session_verification_banner_title">"Підтвердьте, що це Ви"</string>
 </resources>

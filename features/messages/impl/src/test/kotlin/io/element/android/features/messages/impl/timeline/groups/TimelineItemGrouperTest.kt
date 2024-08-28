@@ -46,10 +46,12 @@ class TimelineItemGrouperTest {
         readReceiptState = TimelineItemReadReceipts(emptyList<ReadReceiptData>().toImmutableList()),
         localSendState = LocalEventSendState.Sent(AN_EVENT_ID),
         isEditable = false,
+        canBeRepliedTo = false,
         inReplyTo = null,
         isThreaded = false,
         debugInfo = aTimelineItemDebugInfo(),
-        origin = null
+        origin = null,
+        messageShield = null,
     )
     private val aNonGroupableItem = aMessageEvent()
     private val aNonGroupableItemNoEvent = TimelineItem.Virtual("virtual", aTimelineItemDaySeparatorModel("Today"))

@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Не можете подтвердить?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">
     "Создайте новый "
     <b>"ключ восстановления"</b>
   </string>
   <string name="screen_identity_confirmation_subtitle">"Подтвердите это устройство, чтобы настроить безопасный обмен сообщениями."</string>
   <string name="screen_identity_confirmation_title">"Подтвердите, что это вы"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Используйте другое устройство"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Используйте recovery key"</string>
   <string name="screen_identity_confirmed_subtitle">"Теперь вы можете безопасно читать и отправлять сообщения, и все, с кем вы общаетесь в чате, также могут доверять этому устройству."</string>
   <string name="screen_identity_confirmed_title">"Устройство проверено"</string>
   <string name="screen_identity_use_another_device">"Используйте другое устройство"</string>

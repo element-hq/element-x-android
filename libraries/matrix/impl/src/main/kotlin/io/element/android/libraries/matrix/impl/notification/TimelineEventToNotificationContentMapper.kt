@@ -94,7 +94,7 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
             is MessageLikeEventContent.RoomMessage -> {
                 NotificationContent.MessageLike.RoomMessage(senderId, EventMessageMapper().mapMessageType(messageType))
             }
-            MessageLikeEventContent.RoomRedaction -> NotificationContent.MessageLike.RoomRedaction
+            is MessageLikeEventContent.RoomRedaction -> NotificationContent.MessageLike.RoomRedaction(redactedEventId = redactedEventId, reason = reason)
             MessageLikeEventContent.Sticker -> NotificationContent.MessageLike.Sticker
             is MessageLikeEventContent.Poll -> NotificationContent.MessageLike.Poll(senderId, question)
         }

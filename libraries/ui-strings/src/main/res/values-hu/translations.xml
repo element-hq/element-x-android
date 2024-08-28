@@ -91,6 +91,7 @@
   <string name="action_report_bug">"Hiba jelentése"</string>
   <string name="action_report_content">"Tartalom jelentése"</string>
   <string name="action_reset">"Visszaállítás"</string>
+  <string name="action_reset_identity">"Személyazonosság visszaállítása"</string>
   <string name="action_retry">"Újra"</string>
   <string name="action_retry_decryption">"Visszafejtés újbóli megpróbálása"</string>
   <string name="action_save">"Mentés"</string>
@@ -110,6 +111,8 @@
   <string name="action_take_photo">"Fénykép készítése"</string>
   <string name="action_tap_for_options">"Koppintson a beállításokért"</string>
   <string name="action_try_again">"Próbálja újra"</string>
+  <string name="action_unpin">"Kitűzés feloldása"</string>
+  <string name="action_view_in_timeline">"Megtekintés az idővonalon"</string>
   <string name="action_view_source">"Forrás megtekintése"</string>
   <string name="action_yes">"Igen"</string>
   <string name="common_about">"Névjegy"</string>
@@ -175,6 +178,7 @@ Ok: %1$s."</string>
   <string name="common_people">"Emberek"</string>
   <string name="common_permalink">"Állandó hivatkozás"</string>
   <string name="common_permission">"Engedély"</string>
+  <string name="common_pinned">"Kitűzve"</string>
   <string name="common_please_wait">"Kis türelmet…"</string>
   <string name="common_poll_end_confirmation">"Biztos, hogy befejezi ezt a szavazást?"</string>
   <string name="common_poll_summary">"Szavazás: %1$s"</string>
@@ -258,6 +262,8 @@ Ok: %1$s."</string>
   <string name="error_some_messages_have_not_been_sent">"Néhány üzenet nem került elküldésre"</string>
   <string name="error_unknown">"Elnézést, hiba történt"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"A titkosított üzenetek valódiságát ezen az eszközön nem lehet garantálni."</string>
+  <string name="event_shield_reason_previously_verified">"Egy korábban ellenőrzött felhasználó által titkosítva."</string>
+  <string name="event_shield_reason_sent_in_clear">"Nincs titkosítva."</string>
   <string name="event_shield_reason_unknown_device">"Ismeretlen vagy törölt eszköz által titkosítva."</string>
   <string name="event_shield_reason_unsigned_device">"A tulajdonos által nem ellenőrzött eszköz által titkosítva."</string>
   <string name="event_shield_reason_unverified_identity">"Nem ellenőrzött felhasználó által titkosítva."</string>
@@ -268,6 +274,16 @@ Ok: %1$s."</string>
   <string name="screen_media_picker_error_failed_selection">"Nem sikerült kiválasztani a médiát, próbálja újra."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nem sikerült feldolgozni a feltöltendő médiát, próbálja újra."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nem sikerült a média feltöltése, próbálja újra."</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Nyomjon hosszan az üzenetre, és válassza a „%1$s” lehetőséget, hogy itt szerepeljen."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Tűzze ki a fontos üzeneteket, hogy könnyen felfedezhetők legyenek"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d kitűzött üzenet"</item>
+    <item quantity="other">"%1$d kitűzött üzenet"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Kitűzött üzenetek"</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"Arra készül, hogy belépjen a(z) %1$s fiókjába, hogy visszaállítsa a személyazonosságát. Ezután vissza fog térni az alkalmazásba."</string>
+  <string name="screen_reset_identity_confirmation_title">"Nem tudja megerősíteni? Ugorjon a fiókjához, és állítsa vissza a személyazonosságát."</string>
+  <string name="screen_room_details_pinned_events_row_title">"Kitűzött üzenetek"</string>
   <string name="screen_room_error_failed_processing_media">"Nem sikerült feldolgozni a feltöltendő médiát, próbálja újra."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nem sikerült letölteni a felhasználói adatokat"</string>
   <string name="screen_room_member_details_block_alert_action">"Letiltás"</string>
@@ -277,6 +293,10 @@ Ok: %1$s."</string>
   <string name="screen_room_member_details_unblock_alert_action">"Letiltás feloldása"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Újra láthatja az összes üzenetét."</string>
   <string name="screen_room_member_details_unblock_user">"Felhasználó kitiltásának feloldása"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s kitűzött üzenet"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Üzenet betöltése…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Összes megtekintése"</string>
   <string name="screen_room_title">"Csevegés"</string>
   <string name="screen_share_location_title">"Hely megosztása"</string>
   <string name="screen_share_my_location_action">"Saját hely megosztása"</string>

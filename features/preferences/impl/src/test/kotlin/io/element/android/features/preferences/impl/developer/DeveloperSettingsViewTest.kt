@@ -109,6 +109,19 @@ class DeveloperSettingsViewTest {
         rule.onNodeWithText("Clear cache").performClick()
         eventsRecorder.assertSingle(DeveloperSettingsEvents.ClearCache)
     }
+
+    @Config(qualifiers = "h1500dp")
+    @Test
+    fun `clicking on the simplified sliding sync switch emits the expected event`() {
+        val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>()
+        rule.setDeveloperSettingsView(
+            state = aDeveloperSettingsState(
+                eventSink = eventsRecorder
+            ),
+        )
+        rule.onNodeWithText("Enable Simplified Sliding Sync").performClick()
+        eventsRecorder.assertSingle(DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled(true))
+    }
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setDeveloperSettingsView(

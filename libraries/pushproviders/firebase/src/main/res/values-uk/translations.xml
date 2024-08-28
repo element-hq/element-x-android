@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_firebase_availability_description">"Переконується, що Firebase доступний."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_failure">"Firebase недоступний."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_success">"Firebase доступний."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_title">"Перевірка Firebase"</string>
+  <string name="troubleshoot_notifications_test_firebase_token_description">"Переконується, що токен Firebase доступний."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_failure">"Токен Firebase невідомий."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_success">"Токен Firebase: %1$s."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_title">"Перевірка токена Firebase"</string>
+</resources>

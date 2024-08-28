@@ -217,12 +217,14 @@ class VerifySelfSessionViewTest {
         state: VerifySelfSessionState,
         onEnterRecoveryKey: () -> Unit = EnsureNeverCalled(),
         onFinished: () -> Unit = EnsureNeverCalled(),
+        onResetKey: () -> Unit = EnsureNeverCalled(),
     ) {
         setContent {
             VerifySelfSessionView(
                 state = state,
                 onEnterRecoveryKey = onEnterRecoveryKey,
                 onFinish = onFinished,
+                onResetKey = onResetKey,
             )
         }
     }

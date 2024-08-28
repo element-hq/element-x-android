@@ -33,11 +33,11 @@ import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.poll.PollKind
+import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
-import io.element.android.libraries.matrix.api.room.Mention
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.StateEventType
@@ -192,6 +192,21 @@ class RustMatrixRoom(
         }
     }
 
+    override suspend fun pinnedEventsTimeline(): Result<Timeline> {
+        return runCatching {
+            innerRoom.pinnedEventsTimeline(
+                internalIdPrefix = "pinned_events",
+                maxEventsToLoad = 100u,
+            ).let { inner ->
+                createTimeline(inner, isLive = false)
+            }
+        }.onFailure {
+            if (it is CancellationException) {
+                throw it
+            }
+        }
+    }
+
     override fun destroy() {
         roomCoroutineScope.cancel()
         liveTimeline.close()
@@ -325,16 +340,21 @@ class RustMatrixRoom(
         }
     }
 
-    override suspend fun editMessage(eventId: EventId, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> = withContext(roomDispatcher) {
+    override suspend fun editMessage(
+        eventId: EventId,
+        body: String,
+        htmlBody: String?,
+        intentionalMentions: List<IntentionalMention>
+    ): Result<Unit> = withContext(roomDispatcher) {
         runCatching {
-            MessageEventContent.from(body, htmlBody, mentions).use { newContent ->
+            MessageEventContent.from(body, htmlBody, intentionalMentions).use { newContent ->
                 innerRoom.edit(eventId.value, newContent)
             }
         }
     }
 
-    override suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit> {
-        return liveTimeline.sendMessage(body, htmlBody, mentions)
+    override suspend fun sendMessage(body: String, htmlBody: String?, intentionalMentions: List<IntentionalMention>): Result<Unit> {
+        return liveTimeline.sendMessage(body, htmlBody, intentionalMentions)
     }
 
     override suspend fun leave(): Result<Unit> = withContext(roomDispatcher) {
@@ -400,6 +420,12 @@ class RustMatrixRoom(
     override suspend fun canUserTriggerRoomNotification(userId: UserId): Result<Boolean> {
         return runCatching {
             innerRoom.canUserTriggerRoomNotification(userId.value)
+        }
+    }
+
+    override suspend fun canUserPinUnpin(userId: UserId): Result<Boolean> {
+        return runCatching {
+            innerRoom.canUserPinUnpin(userId.value)
         }
     }
 

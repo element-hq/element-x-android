@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.room
 
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -55,10 +56,11 @@ class MatrixRoomInfoMapper {
             userPowerLevels = mapPowerLevels(it.userPowerLevels),
             highlightCount = it.highlightCount.toLong(),
             notificationCount = it.notificationCount.toLong(),
-            userDefinedNotificationMode = it.userDefinedNotificationMode?.map(),
+            userDefinedNotificationMode = it.cachedUserDefinedNotificationMode?.map(),
             hasRoomCall = it.hasRoomCall,
             activeRoomCallParticipants = it.activeRoomCallParticipants.toImmutableList(),
-            heroes = it.elementHeroes().toImmutableList()
+            heroes = it.elementHeroes().toImmutableList(),
+            pinnedEventIds = it.pinnedEventIds.map(::EventId).toImmutableList(),
         )
     }
 }

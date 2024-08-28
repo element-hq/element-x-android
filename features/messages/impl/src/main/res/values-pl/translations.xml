@@ -39,12 +39,18 @@
   <string name="screen_room_timeline_read_marker_title">"Nowe"</string>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d zmiana pokoju"</item>
-    <item quantity="few">"%1$d zmian pokoju"</item>
-    <item quantity="many">"%1$d zmiany pokoju"</item>
+    <item quantity="few">"%1$d zmiany pokoju"</item>
+    <item quantity="many">"%1$d zmian pokoju"</item>
+  </plurals>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="one">"%1$s, %2$s i %3$d inny"</item>
+    <item quantity="few">"%1$s, %2$s i %3$d innych"</item>
+    <item quantity="many">"%1$s, %2$s i %3$d innych"</item>
   </plurals>
   <plurals name="screen_room_typing_notification">
-    <item quantity="one">"%1$s piszę"</item>
+    <item quantity="one">"%1$s pisze"</item>
     <item quantity="few">"%1$s piszą"</item>
     <item quantity="many">"%1$s piszą"</item>
   </plurals>
+  <string name="screen_room_typing_two_members">"%1$s i %2$s"</string>
 </resources>

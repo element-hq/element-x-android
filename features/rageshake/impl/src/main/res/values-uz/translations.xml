@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"Ekran tasvirini biriktirish"</string>
+  <string name="screen_bug_report_contact_me">"Agar sizda keyingi savollar bo\'lsa, men bilan bog\'lanishingiz mumkin."</string>
+  <string name="screen_bug_report_contact_me_title">"Men bilan bog\'laning"</string>
+  <string name="screen_bug_report_edit_screenshot">"Ekran tasvirini tahrirlash"</string>
+  <string name="screen_bug_report_editor_description">"Iltimos, muammoni tasvirlab bering. Nima qildingiz? Nima bo\'lishini kutgan edingiz? Aslida nima bo\'ldi. Iltimos, iloji boricha batafsilroq ma\'lumot bering."</string>
+  <string name="screen_bug_report_editor_placeholder">"Muammoni tasvirlab bering…"</string>
+  <string name="screen_bug_report_editor_supporting">"Iloji bo\'lsa, tavsifni ingliz tilida yozing."</string>
+  <string name="screen_bug_report_include_crash_logs">"Buzilish jurnallarini yuboring"</string>
+  <string name="screen_bug_report_include_logs">"Jurnallarga ruxsat bering"</string>
+  <string name="screen_bug_report_include_screenshot">"Ekran tasvirini yuboring "</string>
+  <string name="screen_bug_report_logs_description">"Har bir narsa to\'ri ishlayotganiga ishonch hosil qilish uchun xabaringizga jurnallar kiritiladi. Xabarni jurnallarsiz yuborish uchun ushbu sozlamani oʻchiring."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$soxirgi marta ishlatilganda qulab tushdi. Biz bilan nosozlik hisobotini baham ko\'rmoqchimisiz?"</string>
+</resources>

@@ -80,6 +80,7 @@
   <string name="action_ok">"OK"</string>
   <string name="action_open_settings">"Configurações"</string>
   <string name="action_open_with">"Abrir com"</string>
+  <string name="action_pin">"Afixar"</string>
   <string name="action_quick_reply">"Resposta rápida"</string>
   <string name="action_quote">"Citação"</string>
   <string name="action_react">"Reagir"</string>
@@ -90,6 +91,7 @@
   <string name="action_report_bug">"Comunicar problema"</string>
   <string name="action_report_content">"Denunciar conteúdo"</string>
   <string name="action_reset">"Repor"</string>
+  <string name="action_reset_identity">"Repor identidade"</string>
   <string name="action_retry">"Tentar novamente"</string>
   <string name="action_retry_decryption">"Tentar decifragem novamente"</string>
   <string name="action_save">"Guardar"</string>
@@ -109,6 +111,7 @@
   <string name="action_take_photo">"Tirar foto"</string>
   <string name="action_tap_for_options">"Toca para ver as opções"</string>
   <string name="action_try_again">"Tentar novamente"</string>
+  <string name="action_unpin">"Desafixar"</string>
   <string name="action_view_source">"Ver fonte"</string>
   <string name="action_yes">"Sim"</string>
   <string name="common_about">"Sobre"</string>
@@ -168,6 +171,7 @@ Razão: %1$s."</string>
   <string name="common_no_results">"Sem resultados"</string>
   <string name="common_no_room_name">"Sala sem nome"</string>
   <string name="common_offline">"Desligado"</string>
+  <string name="common_open_source_licenses">"Licenças de código aberto"</string>
   <string name="common_or">"ou"</string>
   <string name="common_password">"Senha"</string>
   <string name="common_people">"Pessoas"</string>
@@ -255,6 +259,10 @@ Razão: %1$s."</string>
   <string name="error_missing_microphone_voice_rationale_android">"A %1$s não tem permissão para aceder ao teu microfone. Permite o acesso para gravar uma mensagem de voz."</string>
   <string name="error_some_messages_have_not_been_sent">"Algumas mensagens não foram enviadas"</string>
   <string name="error_unknown">"Ocorreu um erro, desculpa"</string>
+  <string name="event_shield_reason_authenticity_not_guaranteed">"A autenticidade desta mensagem cifrada não pode ser garantida neste dispositivo."</string>
+  <string name="event_shield_reason_unknown_device">"Cifragem com origem num dispositivo eliminado ou desconhecido."</string>
+  <string name="event_shield_reason_unsigned_device">"Cifragem com origem num dispositivo não verificado pelo seu dono."</string>
+  <string name="event_shield_reason_unverified_identity">"Cifragem com origem num utilizador não verificado."</string>
   <string name="invite_friends_rich_title">"🔐️ Junta-te a mim na %1$s"</string>
   <string name="invite_friends_text">"Alô! Fala comigo na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
@@ -271,6 +279,9 @@ Razão: %1$s."</string>
   <string name="screen_room_member_details_unblock_alert_action">"Desbloquear"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Poderás voltar a ver todas as suas mensagens."</string>
   <string name="screen_room_member_details_unblock_user">"Desbloquear utilizador"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s de %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s mensagens afixadas"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Ver todas"</string>
   <string name="screen_room_title">"Conversa"</string>
   <string name="screen_share_location_title">"Partilhar localização"</string>
   <string name="screen_share_my_location_action">"Partilhar a minha localização"</string>

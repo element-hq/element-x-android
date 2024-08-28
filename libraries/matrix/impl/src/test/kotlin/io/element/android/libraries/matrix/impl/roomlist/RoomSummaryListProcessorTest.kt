@@ -189,6 +189,8 @@ class RoomSummaryListProcessorTest {
         override fun syncIndicator(delayBeforeShowingInMs: UInt, delayBeforeHidingInMs: UInt, listener: RoomListServiceSyncIndicatorListener): TaskHandle {
             return TaskHandle(Pointer.NULL)
         }
+
+        override fun subscribeToRooms(roomIds: List<String>, settings: RoomSubscription?) = Unit
     }
 }
 
@@ -221,6 +223,7 @@ private fun aRustRoomInfo(
     numUnreadMessages: ULong = 0uL,
     numUnreadNotifications: ULong = 0uL,
     numUnreadMentions: ULong = 0uL,
+    pinnedEventIds: List<String> = listOf(),
 ) = RoomInfo(
     id = id,
     displayName = displayName,
@@ -243,13 +246,14 @@ private fun aRustRoomInfo(
     userPowerLevels = userPowerLevels,
     highlightCount = highlightCount,
     notificationCount = notificationCount,
-    userDefinedNotificationMode = userDefinedNotificationMode,
+    cachedUserDefinedNotificationMode = userDefinedNotificationMode,
     hasRoomCall = hasRoomCall,
     activeRoomCallParticipants = activeRoomCallParticipants,
     isMarkedUnread = isMarkedUnread,
     numUnreadMessages = numUnreadMessages,
     numUnreadNotifications = numUnreadNotifications,
-    numUnreadMentions = numUnreadMentions
+    numUnreadMentions = numUnreadMentions,
+    pinnedEventIds = pinnedEventIds,
 )
 
 class FakeRoomListItem(
@@ -268,6 +272,4 @@ class FakeRoomListItem(
     override suspend fun latestEvent(): EventTimelineItem? {
         return latestEvent
     }
-
-    override fun subscribe(settings: RoomSubscription?) = Unit
 }

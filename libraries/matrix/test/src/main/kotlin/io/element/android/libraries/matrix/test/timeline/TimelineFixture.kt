@@ -28,6 +28,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventTimeline
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
@@ -46,6 +47,7 @@ fun anEventTimelineItem(
     eventId: EventId = AN_EVENT_ID,
     transactionId: TransactionId? = null,
     isEditable: Boolean = false,
+    canBeRepliedTo: Boolean = false,
     isLocal: Boolean = false,
     isOwn: Boolean = false,
     isRemote: Boolean = false,
@@ -57,10 +59,12 @@ fun anEventTimelineItem(
     timestamp: Long = 0L,
     content: EventContent = aProfileChangeMessageContent(),
     debugInfo: TimelineItemDebugInfo = aTimelineItemDebugInfo(),
+    messageShield: MessageShield? = null,
 ) = EventTimelineItem(
     eventId = eventId,
     transactionId = transactionId,
     isEditable = isEditable,
+    canBeRepliedTo = canBeRepliedTo,
     isLocal = isLocal,
     isOwn = isOwn,
     isRemote = isRemote,
@@ -73,6 +77,7 @@ fun anEventTimelineItem(
     content = content,
     debugInfo = debugInfo,
     origin = null,
+    messageShield = messageShield,
 )
 
 fun aProfileTimelineDetails(

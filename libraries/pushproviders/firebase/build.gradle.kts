@@ -26,7 +26,6 @@ android {
 
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = true
             consumerProguardFiles("consumer-proguard-rules.pro")
             resValue(
                 type = "string",
@@ -50,7 +49,6 @@ android {
             )
         }
         register("nightly") {
-            isMinifyEnabled = true
             consumerProguardFiles("consumer-proguard-rules.pro")
             matchingFallbacks += listOf("release")
             resValue(

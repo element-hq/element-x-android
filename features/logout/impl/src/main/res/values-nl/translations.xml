@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signout_confirmation_dialog_content">"Weet je zeker dat je je wilt uitloggen?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Uitloggen"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Uitloggen"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Uitloggen…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"Je staat op het punt uit te loggen bij je laatste sessie. Als je je nu uitlogt, verlies je de toegang tot je versleutelde berichten."</string>
+  <string name="screen_signout_key_backup_disabled_title">"Je hebt de back-up uitgeschakeld"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"De backup van je sleutels was nog bezig toen je offline ging. Maak opnieuw verbinding zodat er een back-up van je sleutels kan worden gemaakt voordat je uitlogt."</string>
+  <string name="screen_signout_key_backup_offline_title">"De backup van je sleutels is nog bezig"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Wacht tot dit voltooid is voordat je uitlogt."</string>
+  <string name="screen_signout_key_backup_ongoing_title">"De backup van je sleutels is nog bezig"</string>
+  <string name="screen_signout_preference_item">"Uitloggen"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"Je staat op het punt uit te loggen bij je laatste sessie. Als je je nu uitlogt, verlies je de toegang tot je versleutelde berichten."</string>
+  <string name="screen_signout_recovery_disabled_title">"Herstelmogelijkheid niet ingesteld"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"Je staat op het punt uit te loggen bij je laatste sessie. Als je je nu uitlogt, kan het dat je de toegang tot je versleutelde berichten verliest."</string>
+  <string name="screen_signout_save_recovery_key_title">"Heb je je herstelsleutel opgeslagen?"</string>
+</resources>

@@ -53,6 +53,7 @@ sealed interface NotificationContent {
         data class CallInvite(
             val senderId: UserId,
         ) : MessageLike
+
         data class CallNotify(
             val senderId: UserId,
             val type: CallNotifyType,
@@ -77,7 +78,11 @@ sealed interface NotificationContent {
             val messageType: MessageType
         ) : MessageLike
 
-        data object RoomRedaction : MessageLike
+        data class RoomRedaction(
+            val redactedEventId: String?,
+            val reason: String?
+        ) : MessageLike
+
         data object Sticker : MessageLike
         data class Poll(
             val senderId: UserId,

@@ -26,7 +26,7 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
-import io.element.android.libraries.matrix.api.room.Mention
+import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import kotlinx.coroutines.flow.Flow
@@ -52,15 +52,24 @@ interface Timeline : AutoCloseable {
     fun paginationStatus(direction: PaginationDirection): StateFlow<PaginationStatus>
     val timelineItems: Flow<List<MatrixTimelineItem>>
 
-    suspend fun sendMessage(body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
+    suspend fun sendMessage(
+        body: String,
+        htmlBody: String?,
+        intentionalMentions: List<IntentionalMention>,
+    ): Result<Unit>
 
-    suspend fun editMessage(originalEventId: EventId?, transactionId: TransactionId?, body: String, htmlBody: String?, mentions: List<Mention>): Result<Unit>
+    suspend fun editMessage(
+        originalEventId: EventId?,
+        transactionId: TransactionId?,
+        body: String, htmlBody: String?,
+        intentionalMentions: List<IntentionalMention>,
+    ): Result<Unit>
 
     suspend fun replyMessage(
         eventId: EventId,
         body: String,
         htmlBody: String?,
-        mentions: List<Mention>,
+        intentionalMentions: List<IntentionalMention>,
         fromNotification: Boolean = false,
     ): Result<Unit>
 
@@ -169,4 +178,22 @@ interface Timeline : AutoCloseable {
     ): Result<MediaUploadHandler>
 
     suspend fun loadReplyDetails(eventId: EventId): InReplyTo
+
+    /**
+     * Adds a new pinned event by sending an updated `m.room.pinned_events`
+     * event containing the new event id.
+     *
+     * Returns `true` if we sent the request, `false` if the event was already
+     * pinned.
+     */
+    suspend fun pinEvent(eventId: EventId): Result<Boolean>
+
+    /**
+     * Adds a new pinned event by sending an updated `m.room.pinned_events`
+     * event without the event id we want to remove.
+     *
+     * Returns `true` if we sent the request, `false` if the event wasn't
+     * pinned
+     */
+    suspend fun unpinEvent(eventId: EventId): Result<Boolean>
 }
