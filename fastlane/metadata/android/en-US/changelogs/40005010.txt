@@ -1,0 +1,2 @@
+Main changes in this version: Element Call improvements and bug fixes.
+Full changelog: https://github.com/element-hq/element-x-android/releases
