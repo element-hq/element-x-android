@@ -652,6 +652,22 @@ class DefaultNotifiableEventResolverTest {
     }
 
     @Test
+    fun `resolve RoomRedaction with null redactedEventId should return null`() = runTest {
+        val sut = createDefaultNotifiableEventResolver(
+            notificationResult = Result.success(
+                createNotificationData(
+                    content = NotificationContent.MessageLike.RoomRedaction(
+                        null,
+                        A_REDACTION_REASON,
+                    )
+                )
+            )
+        )
+        val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
+        assertThat(result).isNull()
+    }
+
+    @Test
     fun `resolve null cases`() {
         testNull(NotificationContent.MessageLike.CallAnswer)
         testNull(NotificationContent.MessageLike.CallHangup)
