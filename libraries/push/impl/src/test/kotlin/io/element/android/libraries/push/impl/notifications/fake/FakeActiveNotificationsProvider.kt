@@ -22,29 +22,34 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.notifications.ActiveNotificationsProvider
 
 class FakeActiveNotificationsProvider(
-    var activeNotifications: MutableList<StatusBarNotification> = mutableListOf(),
+    private val getMessageNotificationsForRoomResult: (SessionId, RoomId) -> List<StatusBarNotification> = { _, _ -> emptyList() },
+    private val getNotificationsForSessionResult: (SessionId) -> List<StatusBarNotification> = { emptyList() },
+    private val getMembershipNotificationForSessionResult: (SessionId) -> List<StatusBarNotification> = { emptyList() },
+    private val getMembershipNotificationForRoomResult: (SessionId, RoomId) -> List<StatusBarNotification> = { _, _ -> emptyList() },
+    private val getSummaryNotificationResult: (SessionId) -> StatusBarNotification? = { null },
+    private val countResult: (SessionId) -> Int = { 0 },
 ) : ActiveNotificationsProvider {
     override fun getMessageNotificationsForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification> {
-        return activeNotifications
+        return getMessageNotificationsForRoomResult(sessionId, roomId)
     }
 
     override fun getNotificationsForSession(sessionId: SessionId): List<StatusBarNotification> {
-        return activeNotifications
+        return getNotificationsForSessionResult(sessionId)
     }
 
     override fun getMembershipNotificationForSession(sessionId: SessionId): List<StatusBarNotification> {
-        return activeNotifications
+        return getMembershipNotificationForSessionResult(sessionId)
     }
 
     override fun getMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification> {
-        return activeNotifications
+        return getMembershipNotificationForRoomResult(sessionId, roomId)
     }
 
     override fun getSummaryNotification(sessionId: SessionId): StatusBarNotification? {
-        return activeNotifications.firstOrNull()
+        return getSummaryNotificationResult(sessionId)
     }
 
     override fun count(sessionId: SessionId): Int {
-        return activeNotifications.size
+        return countResult(sessionId)
     }
 }
