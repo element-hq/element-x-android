@@ -370,7 +370,8 @@ private fun DmHeaderSection(
         )
         TitleAndSubtitle(
             title = roomName,
-            subtitle = otherMember.userId.value.takeIf { isDebugBuild }, // TCHAP hide the Matrix Id in release mode
+            // TCHAP hide the Matrix Id in release mode
+            subtitle = otherMember.userId.value.takeIf { isDebugBuild },
         )
     }
 }

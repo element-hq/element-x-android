@@ -33,7 +33,6 @@ object TchapPatterns {
      * For example in case of "@jean-philippe.martin-modernisation.fr:matrix.test.org", this will return "matrix.test.org".
      * in case of "!AAAAAAA:matrix.test.org", this will return "matrix.test.org".
      *
-     * @param mxId the matrix identifier.
      * @return the homeserver name, if any.
      */
     fun String.toHomeserverName() = this.substringAfter(":", "")
@@ -46,7 +45,6 @@ object TchapPatterns {
      * For example in case of "@jean-philippe.martin-modernisation.fr:name1.tchap.gouv.fr", this will return "Name1".
      * in case of "@jean-philippe.martin-modernisation.fr:agent.name2.tchap.gouv.fr", this will return "Name2".
      *
-     * @param mxId the matrix identifier.
      * @return the Tchap display name of the homeserver.
      */
     fun String.toHomeserverDisplayName(): String {
@@ -62,7 +60,6 @@ object TchapPatterns {
     /**
      * Tells whether a homeserver name corresponds to an external server or not.
      *
-     * @param homeServerName the homeserver name to check.
      * @return true if external.
      */
      fun String.isExternalTchapServer() = this.isEmpty() || this.startsWith("e.") || this.startsWith("agent.externe.")
@@ -71,7 +68,6 @@ object TchapPatterns {
      * Get name part of a display name by removing the domain part if any.
      * For example in case of "Jean Martin `[Modernisation]`", this will return "Jean Martin".
      *
-     * @param displayName the display name to compute.
      * @return displayName without domain (or the display name itself if no domain has been found).
      */
     fun String.getUserName() = this.substringBefore('[').trim()
@@ -80,7 +76,6 @@ object TchapPatterns {
      * Get the potential domain name from a display name.
      * For example in case of "Jean Martin `[Modernisation]`", this will return "Modernisation".
      *
-     * @param displayName the display name to compute.
      * @return displayName without name, empty string if no domain is available.
      */
     fun String.getUserDomain() = this.substringBeforeLast(']', "").substringAfterLast('[', "").trim()
@@ -115,7 +110,7 @@ object TchapPatterns {
                 for (i in 0 until lastHyphenIndex) {
                     val char = identifier[i]
                     when {
-                        (capitalizeNext && (char == '.' || char == '-')) -> continue
+                        capitalizeNext && (char == '.' || char == '-') -> continue
                         char == '.' -> {
                             // Replace the dot character by space character
                             append(' ')
@@ -140,7 +135,6 @@ object TchapPatterns {
      * Tells whether the provided tchap identifier corresponds to an extern user.
      * Note: invalid tchap identifier will be considered as external.
      *
-     * @param tchapUserId user identifier (ie. the matrix identifier).
      * @return true if external.
      */
     fun String.isExternalTchapUser() = this.toHomeserverName().isExternalTchapServer()
@@ -156,7 +150,7 @@ object TchapPatterns {
     /**
      * Create a room alias with a prefix.
      *
-     * @param session the user's session.
+     * @param sessionId the user's id session.
      * @param prefix the alias name prefix.
      * @return the suggested alias.
      */

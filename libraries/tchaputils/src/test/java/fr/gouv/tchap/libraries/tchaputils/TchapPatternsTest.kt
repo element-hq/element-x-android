@@ -26,20 +26,19 @@ package fr.gouv.tchap.libraries.tchaputils
 
 import fr.gouv.tchap.libraries.tchaputils.TchapPatterns.getUserDomain
 import fr.gouv.tchap.libraries.tchaputils.TchapPatterns.getUserName
-import fr.gouv.tchap.libraries.tchaputils.TchapPatterns.toUserDisplayName
 import fr.gouv.tchap.libraries.tchaputils.TchapPatterns.toHomeserverDisplayName
+import fr.gouv.tchap.libraries.tchaputils.TchapPatterns.toUserDisplayName
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class TchapPatternsTest {
-
     /**
      * Test getting full name without domain.
      */
 
     @Test
     fun `given a displayName if it contains brackets then return its first element after split`() {
-        assertEquals( "Nom Prenom", "Nom Prenom [Modernisation]".getUserName())
+        assertEquals("Nom Prenom", "Nom Prenom [Modernisation]".getUserName())
     }
 
     @Test

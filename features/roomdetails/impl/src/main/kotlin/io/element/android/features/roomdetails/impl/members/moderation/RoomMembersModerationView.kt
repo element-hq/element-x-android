@@ -225,7 +225,8 @@ private fun RoomMemberActionsBottomSheet(
                         .align(Alignment.CenterHorizontally)
                 )
                 Text(
-                    text = roomMember.getBestName(), // TCHAP display a value generated from userId if displayname does not exist
+                    // TCHAP display a value generated from userId if displayname does not exist
+                    text = roomMember.getBestName(),
                     style = ElementTheme.typography.fontHeadingLgBold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -234,8 +235,7 @@ private fun RoomMemberActionsBottomSheet(
                         .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
                         .fillMaxWidth()
                 )
-                // TCHAP hide the Matrix Id in release mode
-                if (isDebugBuild) {
+                if (isDebugBuild) { // TCHAP hide the Matrix Id in release mode
                     Text(
                         text = roomMember.userId.toString(),
                         style = ElementTheme.typography.fontBodyLgRegular,
