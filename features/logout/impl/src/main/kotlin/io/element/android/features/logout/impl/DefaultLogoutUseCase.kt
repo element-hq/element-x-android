@@ -35,9 +35,9 @@ class DefaultLogoutUseCase @AssistedInject constructor(
         override fun create(sessionId: String): DefaultLogoutUseCase
     }
 
-    override suspend fun logout(ignoreSdkError: Boolean): String {
+    override suspend fun logout(ignoreSdkError: Boolean): String? {
         val matrixClient = matrixClientProvider.getOrRestore(SessionId(sessionId)).getOrThrow()
-        matrixClient.logout(ignoreSdkError = ignoreSdkError)
-        return sessionId
+        val result = matrixClient.logout(ignoreSdkError = ignoreSdkError)
+        return result
     }
 }

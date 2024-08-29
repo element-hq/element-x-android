@@ -19,6 +19,7 @@ package io.element.android.features.lockscreen.impl.unlock
 import io.element.android.features.lockscreen.impl.biometric.BiometricUnlock
 import io.element.android.features.lockscreen.impl.biometric.BiometricUnlockError
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 
 data class PinUnlockState(
@@ -26,7 +27,7 @@ data class PinUnlockState(
     val showWrongPinTitle: Boolean,
     val remainingAttempts: AsyncData<Int>,
     val showSignOutPrompt: Boolean,
-    val signOutAction: AsyncData<String?>,
+    val signOutAction: AsyncAction<String?>,
     val showBiometricUnlock: Boolean,
     val isUnlocked: Boolean,
     val biometricUnlockResult: BiometricUnlock.AuthenticationResult?,
