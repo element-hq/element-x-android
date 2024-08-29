@@ -125,6 +125,7 @@ class RoomMembersModerationPresenter @Inject constructor(
         }
 
         return RoomMembersModerationState(
+            isDebugBuild = false,
             canDisplayModerationActions = canDisplayModerationActions,
             selectedRoomMember = selectedMember,
             actions = moderationActions,

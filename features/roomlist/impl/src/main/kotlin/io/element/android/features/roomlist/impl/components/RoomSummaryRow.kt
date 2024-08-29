@@ -69,6 +69,7 @@ internal val minHeight = 84.dp
 
 @Composable
 internal fun RoomSummaryRow(
+    isDebugBuild: Boolean,
     room: RoomListRoomSummary,
     onClick: (RoomListRoomSummary) -> Unit,
     eventSink: (RoomListEvents) -> Unit,
@@ -88,7 +89,7 @@ internal fun RoomSummaryRow(
                     },
                 ) {
                     InviteNameAndIndicatorRow(name = room.name)
-                    InviteSubtitle(isDm = room.isDm, inviteSender = room.inviteSender, canonicalAlias = room.canonicalAlias)
+                    InviteSubtitle(isDebugBuild = isDebugBuild, isDm = room.isDm, inviteSender = room.inviteSender, canonicalAlias = room.canonicalAlias)
                     if (!room.isDm && room.inviteSender != null) {
                         Spacer(modifier = Modifier.height(4.dp))
                         InviteSenderView(
@@ -231,13 +232,14 @@ private fun NameAndTimestampRow(
 
 @Composable
 private fun InviteSubtitle(
+    isDebugBuild: Boolean,
     isDm: Boolean,
     inviteSender: InviteSender?,
     canonicalAlias: RoomAlias?,
     modifier: Modifier = Modifier
 ) {
     val subtitle = if (isDm) {
-        null // TCHAP hide the Matrix Id
+        inviteSender?.userId?.value.takeIf { isDebugBuild } // TCHAP hide the Matrix Id in release mode
     } else {
         canonicalAlias?.value
     }
@@ -386,6 +388,7 @@ private fun MentionIndicatorAtom() {
 @Composable
 internal fun RoomSummaryRowPreview(@PreviewParameter(RoomListRoomSummaryProvider::class) data: RoomListRoomSummary) = ElementPreview {
     RoomSummaryRow(
+        isDebugBuild = false,
         room = data,
         onClick = {},
         eventSink = {},

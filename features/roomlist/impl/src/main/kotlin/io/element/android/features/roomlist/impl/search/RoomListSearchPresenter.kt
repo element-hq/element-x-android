@@ -15,12 +15,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import kotlinx.collections.immutable.persistentListOf
 import javax.inject.Inject
 
 class RoomListSearchPresenter @Inject constructor(
+    private val buildMeta: BuildMeta,
     private val dataSource: RoomListSearchDataSource,
     private val featureFlagService: FeatureFlagService,
 ) : Presenter<RoomListSearchState> {
@@ -61,6 +63,7 @@ class RoomListSearchPresenter @Inject constructor(
         val searchResults by dataSource.roomSummaries.collectAsState(initial = persistentListOf())
 
         return RoomListSearchState(
+            isDebugBuild = buildMeta.isDebuggable,
             isSearchActive = isSearchActive,
             query = searchQuery,
             results = searchResults,

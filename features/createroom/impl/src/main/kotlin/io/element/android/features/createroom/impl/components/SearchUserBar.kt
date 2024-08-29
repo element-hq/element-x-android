@@ -39,6 +39,7 @@ import kotlinx.collections.immutable.ImmutableList
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchUserBar(
+    isDebugBuild: Boolean,
     query: String,
     state: SearchBarResultState<ImmutableList<UserSearchResult>>,
     showLoader: Boolean,
@@ -103,6 +104,7 @@ fun SearchUserBar(
                 if (isMultiSelectionEnable) {
                     itemsIndexed(users) { index, searchResult ->
                         SearchMultipleUsersResultItem(
+                            isDebugBuild = isDebugBuild,
                             modifier = Modifier.fillMaxWidth(),
                             searchResult = searchResult,
                             isUserSelected = selectedUsers.contains(searchResult.matrixUser),
@@ -121,6 +123,7 @@ fun SearchUserBar(
                 } else {
                     itemsIndexed(users) { index, searchResult ->
                         SearchSingleUserResultItem(
+                            isDebugBuild = isDebugBuild,
                             modifier = Modifier.fillMaxWidth(),
                             searchResult = searchResult,
                             onClick = { onUserSelect(searchResult.matrixUser) }

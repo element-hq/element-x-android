@@ -14,6 +14,7 @@ import io.element.android.libraries.usersearch.api.UserSearchResult
 import kotlinx.collections.immutable.ImmutableList
 
 data class UserListState(
+    val isDebugBuild: Boolean,
     val searchQuery: String,
     val searchResults: SearchBarResultState<ImmutableList<UserSearchResult>>,
     val showSearchLoader: Boolean,

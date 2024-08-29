@@ -26,6 +26,7 @@ import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -42,6 +43,7 @@ import timber.log.Timber
 class EditUserProfilePresenter @AssistedInject constructor(
     @Assisted private val matrixUser: MatrixUser,
     private val matrixClient: MatrixClient,
+    private val buildMeta: BuildMeta,
     private val mediaPickerProvider: PickerProvider,
     private val mediaPreProcessor: MediaPreProcessor,
     private val temporaryUriDeleter: TemporaryUriDeleter,
@@ -127,6 +129,7 @@ class EditUserProfilePresenter @AssistedInject constructor(
         }
 
         return EditUserProfileState(
+            isDebugBuild = buildMeta.isDebuggable,
             userId = matrixUser.userId,
             displayName = userDisplayName.orEmpty(),
             userAvatarUrl = userAvatarUri,

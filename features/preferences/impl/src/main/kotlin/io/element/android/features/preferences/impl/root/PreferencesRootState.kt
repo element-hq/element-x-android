@@ -13,6 +13,7 @@ import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
 data class PreferencesRootState(
+    val isDebugBuild: Boolean,
     val myUser: MatrixUser,
     val version: String,
     val deviceId: DeviceId?,

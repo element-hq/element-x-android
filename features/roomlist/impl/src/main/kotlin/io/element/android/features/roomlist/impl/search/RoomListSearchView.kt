@@ -191,6 +191,7 @@ private fun RoomListSearchContent(
                     contentType = { room -> room.contentType() },
                 ) { room ->
                     RoomSummaryRow(
+                        isDebugBuild = state.isDebugBuild,
                         room = room,
                         onClick = ::onRoomClick,
                         eventSink = eventSink,

@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.MessagesState
 import io.element.android.features.messages.impl.R
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -44,6 +45,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun SuggestionsPickerView(
+    isDebugBuild: Boolean,
     roomId: RoomId,
     roomName: String?,
     roomAvatarData: AvatarData?,
@@ -66,6 +68,7 @@ fun SuggestionsPickerView(
         ) {
             Column(modifier = Modifier.fillParentMaxWidth()) {
                 SuggestionItemView(
+                    isDebugBuild = isDebugBuild,
                     suggestion = it,
                     roomId = roomId.value,
                     roomName = roomName,
@@ -81,6 +84,7 @@ fun SuggestionsPickerView(
 
 @Composable
 private fun SuggestionItemView(
+    isDebugBuild: Boolean,
     suggestion: ResolvedSuggestion,
     roomId: String,
     roomName: String?,
@@ -105,7 +109,7 @@ private fun SuggestionItemView(
         }
         val subtitle = when (suggestion) {
             is ResolvedSuggestion.AtRoom -> "@room"
-            is ResolvedSuggestion.Member -> suggestion.roomMember.userId.value
+            is ResolvedSuggestion.Member -> suggestion.roomMember.userId.value.takeIf { isDebugBuild } // TCHAP hide the Matrix Id in release mode
             is ResolvedSuggestion.Alias -> suggestion.roomAlias.value
         }
 
@@ -125,8 +129,7 @@ private fun SuggestionItemView(
                     overflow = TextOverflow.Ellipsis,
                 )
             }
-            // TCHAP hide the Matrix Id
-            if (subtitle != null) {
+            subtitle?.let {
                 Text(
                     text = subtitle,
                     style = ElementTheme.typography.fontBodySmRegular,
@@ -156,6 +159,7 @@ internal fun SuggestionsPickerViewPreview() {
         )
         val anAlias = remember { RoomAlias("#room:domain.org") }
         SuggestionsPickerView(
+            isDebugBuild = false,
             roomId = RoomId("!room:matrix.org"),
             roomName = "Room",
             roomAvatarData = null,

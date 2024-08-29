@@ -44,6 +44,7 @@ fun UserListView(
         modifier = modifier,
     ) {
         SearchUserBar(
+            isDebugBuild = state.isDebugBuild,
             modifier = Modifier.fillMaxWidth(),
             query = state.searchQuery,
             state = state.searchResults,
@@ -89,6 +90,7 @@ fun UserListView(
                             recentDirectRoom.matrixUser.userId == it.userId
                         }
                         CheckableUserRow(
+                            isDebugBuild = state.isDebugBuild,
                             checked = isSelected,
                             onCheckedChange = {
                                 if (isSelected) {

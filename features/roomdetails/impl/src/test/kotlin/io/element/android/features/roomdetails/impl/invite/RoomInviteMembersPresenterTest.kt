@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
@@ -42,10 +43,12 @@ import org.junit.Test
 internal class RoomInviteMembersPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
+    val buildMeta = aBuildMeta()
 
     @Test
     fun `present - initial state has no results and no search`() = runTest {
         val presenter = RoomInviteMembersPresenter(
+            buildMeta = buildMeta,
             userRepository = FakeUserRepository(),
             roomMemberListDataSource = createDataSource(FakeMatrixRoom()),
             coroutineDispatchers = testCoroutineDispatchers()
@@ -68,6 +71,7 @@ internal class RoomInviteMembersPresenterTest {
     @Test
     fun `present - updates search active state`() = runTest {
         val presenter = RoomInviteMembersPresenter(
+            buildMeta = buildMeta,
             userRepository = FakeUserRepository(),
             roomMemberListDataSource = createDataSource(FakeMatrixRoom()),
             coroutineDispatchers = testCoroutineDispatchers()
@@ -90,6 +94,7 @@ internal class RoomInviteMembersPresenterTest {
     fun `present - performs search and handles empty result list`() = runTest {
         val repository = FakeUserRepository()
         val presenter = RoomInviteMembersPresenter(
+            buildMeta = buildMeta,
             userRepository = repository,
             roomMemberListDataSource = createDataSource(FakeMatrixRoom()),
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
@@ -117,6 +122,7 @@ internal class RoomInviteMembersPresenterTest {
     fun `present - performs search and handles user results`() = runTest {
         val repository = FakeUserRepository()
         val presenter = RoomInviteMembersPresenter(
+            buildMeta = buildMeta,
             userRepository = repository,
             roomMemberListDataSource = createDataSource(FakeMatrixRoom()),
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
@@ -157,6 +163,7 @@ internal class RoomInviteMembersPresenterTest {
         val repository = FakeUserRepository()
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         val presenter = RoomInviteMembersPresenter(
+            buildMeta = buildMeta,
             userRepository = repository,
             roomMemberListDataSource = createDataSource(
                 matrixRoom = FakeMatrixRoom().apply {
@@ -218,6 +225,7 @@ internal class RoomInviteMembersPresenterTest {
 
         val repository = FakeUserRepository()
         val presenter = RoomInviteMembersPresenter(
+            buildMeta = buildMeta,
             userRepository = repository,
             roomMemberListDataSource = createDataSource(FakeMatrixRoom().apply {
                 givenRoomMembersState(
@@ -265,6 +273,7 @@ internal class RoomInviteMembersPresenterTest {
     fun `present - toggle users updates selected user state`() = runTest {
         val repository = FakeUserRepository()
         val presenter = RoomInviteMembersPresenter(
+            buildMeta = buildMeta,
             userRepository = repository,
             roomMemberListDataSource = createDataSource(),
             coroutineDispatchers = testCoroutineDispatchers()
@@ -294,6 +303,7 @@ internal class RoomInviteMembersPresenterTest {
     fun `present - selected users appear as such in search results`() = runTest {
         val repository = FakeUserRepository()
         val presenter = RoomInviteMembersPresenter(
+            buildMeta = buildMeta,
             userRepository = repository,
             roomMemberListDataSource = createDataSource(FakeMatrixRoom()),
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
@@ -335,6 +345,7 @@ internal class RoomInviteMembersPresenterTest {
     fun `present - toggling a user updates existing search results`() = runTest {
         val repository = FakeUserRepository()
         val presenter = RoomInviteMembersPresenter(
+            buildMeta = buildMeta,
             userRepository = repository,
             roomMemberListDataSource = createDataSource(FakeMatrixRoom()),
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)

@@ -107,6 +107,7 @@ internal fun aRoomMemberListState(
     searchResults: SearchBarResultState<AsyncData<RoomMembers>> = SearchBarResultState.Initial(),
     moderationState: RoomMembersModerationState = aRoomMembersModerationState(),
 ) = RoomMemberListState(
+    isDebugBuild = false,
     roomMembers = roomMembers,
     searchQuery = "",
     searchResults = searchResults,

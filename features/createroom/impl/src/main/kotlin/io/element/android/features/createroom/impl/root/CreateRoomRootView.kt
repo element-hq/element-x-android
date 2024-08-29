@@ -166,6 +166,7 @@ private fun CreateRoomActionButtonsList(
             state.userListState.recentDirectRooms.forEach { recentDirectRoom ->
                 item {
                     MatrixUserRow(
+                        isDebugBuild = state.isDebugBuild,
                         modifier = Modifier.clickable(
                             onClick = {
                                 onDmClick(recentDirectRoom.roomId)

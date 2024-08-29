@@ -78,6 +78,7 @@ import io.element.android.features.messages.impl.voicemessages.composer.VoiceMes
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.androidutils.ui.hideKeyboard
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitlePlaceholdersRowMolecule
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -401,6 +402,7 @@ private fun MessagesViewComposerBottomSheetContents(
     if (state.userEventPermissions.canSendMessage) {
         Column(modifier = Modifier.fillMaxWidth()) {
             SuggestionsPickerView(
+                isDebugBuild = state.isDebugBuild,
                 modifier = Modifier
                         .heightIn(max = 230.dp)
                         // Consume all scrolling, preventing the bottom sheet from being dragged when interacting with the list of suggestions

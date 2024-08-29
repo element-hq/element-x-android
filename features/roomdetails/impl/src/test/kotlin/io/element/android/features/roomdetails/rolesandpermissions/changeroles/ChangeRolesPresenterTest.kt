@@ -17,12 +17,14 @@ import io.element.android.features.roomdetails.impl.rolesandpermissions.changero
 import io.element.android.features.roomdetails.impl.rolesandpermissions.changeroles.ChangeRolesPresenter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.services.analytics.test.FakeAnalyticsService
@@ -375,12 +377,14 @@ class ChangeRolesPresenterTest {
 
     private fun TestScope.createChangeRolesPresenter(
         role: RoomMember.Role = RoomMember.Role.ADMIN,
+        buildMeta: BuildMeta = aBuildMeta(),
         room: FakeMatrixRoom = FakeMatrixRoom(),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
     ): ChangeRolesPresenter {
         return ChangeRolesPresenter(
             role = role,
+            buildMeta = buildMeta,
             room = room,
             dispatchers = dispatchers,
             analyticsService = analyticsService,

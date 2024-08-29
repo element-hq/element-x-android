@@ -137,6 +137,7 @@ fun ChangeRolesView(
                     resultState = state.searchResults,
                 ) { members ->
                     SearchResultsList(
+                        isDebugBuild = state.isDebugBuild,
                         currentRole = state.role,
                         lazyListState = lazyListState,
                         searchResults = members,
@@ -153,6 +154,7 @@ fun ChangeRolesView(
                 ) {
                     Column {
                         SearchResultsList(
+                            isDebugBuild = state.isDebugBuild,
                             currentRole = state.role,
                             lazyListState = lazyListState,
                             searchResults = (state.searchResults as? SearchBarResultState.Results)?.results ?: MembersByRole(emptyList()),
@@ -228,6 +230,7 @@ fun ChangeRolesView(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun SearchResultsList(
+    isDebugBuild: Boolean,
     currentRole: RoomMember.Role,
     searchResults: MembersByRole,
     selectedUsers: ImmutableList<MatrixUser>,
@@ -258,6 +261,7 @@ private fun SearchResultsList(
             }
             items(searchResults.admins, key = { it.userId }) { roomMember ->
                 ListMemberItem(
+                    isDebugBuild = isDebugBuild,
                     roomMember = roomMember,
                     canRemoveMember = canRemoveMember,
                     onToggleSelection = onToggleSelection,
@@ -269,6 +273,7 @@ private fun SearchResultsList(
             stickyHeader { ListSectionHeader(text = stringResource(R.string.screen_room_roles_and_permissions_moderators)) }
             items(searchResults.moderators, key = { it.userId }) { roomMember ->
                 ListMemberItem(
+                    isDebugBuild = isDebugBuild,
                     roomMember = roomMember,
                     canRemoveMember = canRemoveMember,
                     onToggleSelection = onToggleSelection,
@@ -280,6 +285,7 @@ private fun SearchResultsList(
             stickyHeader { ListSectionHeader(text = stringResource(R.string.screen_room_member_list_mode_members)) }
             items(searchResults.members, key = { it.userId }) { roomMember ->
                 ListMemberItem(
+                    isDebugBuild = isDebugBuild,
                     roomMember = roomMember,
                     canRemoveMember = canRemoveMember,
                     onToggleSelection = onToggleSelection,
@@ -304,6 +310,7 @@ private fun ListSectionHeader(text: String) {
 
 @Composable
 private fun ListMemberItem(
+    isDebugBuild: Boolean,
     roomMember: RoomMember,
     canRemoveMember: (UserId) -> Boolean,
     onToggleSelection: (RoomMember) -> Unit,
@@ -318,6 +325,7 @@ private fun ListMemberItem(
         )
     }
     MemberRow(
+        isDebugBuild = isDebugBuild,
         modifier = Modifier.clickable(enabled = canToggle, onClick = { onToggleSelection(roomMember) }),
         avatarData = roomMember.getAvatarData(size = AvatarSize.UserListItem),
         name = roomMember.getBestName(),
@@ -329,6 +337,7 @@ private fun ListMemberItem(
 
 @Composable
 private fun MemberRow(
+    isDebugBuild: Boolean,
     avatarData: AvatarData,
     name: String,
     userId: String?,
@@ -369,17 +378,18 @@ private fun MemberRow(
                     )
                 }
             }
-            // TCHAP hide the Matrix Id
-//            // Id
-//            userId?.let {
-//                Text(
-//                    text = userId,
-//                    color = MaterialTheme.colorScheme.secondary,
-//                    maxLines = 1,
-//                    overflow = TextOverflow.Ellipsis,
-//                    style = ElementTheme.typography.fontBodySmRegular,
-//                )
-//            }
+            // Id
+            if (isDebugBuild) { // TCHAP hide the Matrix Id in release mode
+                userId?.let {
+                    Text(
+                        text = userId,
+                        color = MaterialTheme.colorScheme.secondary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        style = ElementTheme.typography.fontBodySmRegular,
+                    )
+                }
+            }
         }
         trailingContent?.invoke()
     }
@@ -401,6 +411,7 @@ internal fun ChangeRolesViewPreview(@PreviewParameter(ChangeRolesStateProvider::
 internal fun PendingMemberRowWithLongNamePreview() {
     ElementPreview {
         MemberRow(
+            isDebugBuild = false,
             avatarData = AvatarData("userId", "A very long name that should be truncated", "https://example.com/avatar.png", AvatarSize.UserListItem),
             name = "A very long name that should be truncated",
             userId = "@alice:matrix.org",

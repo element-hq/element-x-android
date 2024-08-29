@@ -33,6 +33,7 @@ fun aRoomListSearchState(
     isRoomDirectorySearchEnabled: Boolean = false,
     eventSink: (RoomListSearchEvents) -> Unit = { },
 ) = RoomListSearchState(
+    isDebugBuild = false,
     isSearchActive = isSearchActive,
     query = query,
     results = results,

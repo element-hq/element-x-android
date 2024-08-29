@@ -57,6 +57,7 @@ class CreateRoomRootPresenter @Inject constructor(
         }
 
         return CreateRoomRootState(
+            isDebugBuild = buildMeta.isDebuggable,
             applicationName = buildMeta.applicationName,
             userListState = userListState,
             startDmAction = startDmActionState.value,

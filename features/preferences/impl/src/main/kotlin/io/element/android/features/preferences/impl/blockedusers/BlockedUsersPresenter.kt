@@ -19,6 +19,7 @@ import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -30,6 +31,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class BlockedUsersPresenter @Inject constructor(
+    private val buildMeta: BuildMeta,
     private val matrixClient: MatrixClient,
     private val featureFlagService: FeatureFlagService,
 ) : Presenter<BlockedUsersState> {
@@ -82,6 +84,7 @@ class BlockedUsersPresenter @Inject constructor(
             }
         }
         return BlockedUsersState(
+            isDebugBuild = buildMeta.isDebuggable,
             blockedUsers = ignoredMatrixUser.toPersistentList(),
             unblockUserAction = unblockUserAction.value,
             eventSink = ::handleEvents

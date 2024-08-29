@@ -21,6 +21,7 @@ class ReadReceiptBottomSheetStateProvider : PreviewParameterProvider<ReadReceipt
         .filter { it.sendState is LocalEventSendState.Sent }
         .map { readReceiptViewState ->
             ReadReceiptBottomSheetState(
+                isDebugBuild = false,
                 selectedEvent = aTimelineItemEvent(
                     readReceiptState = TimelineItemReadReceipts(
                         receipts = readReceiptViewState.receipts.map { readReceiptData ->

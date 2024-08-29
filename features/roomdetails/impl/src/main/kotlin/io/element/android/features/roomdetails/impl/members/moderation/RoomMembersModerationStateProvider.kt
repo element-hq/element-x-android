@@ -80,6 +80,7 @@ fun aRoomMembersModerationState(
     canDisplayBannedUsers: Boolean = false,
     eventSink: (RoomMembersModerationEvents) -> Unit = {},
 ) = RoomMembersModerationState(
+    isDebugBuild = false,
     canDisplayModerationActions = canDisplayModerationActions,
     selectedRoomMember = selectedRoomMember,
     actions = actions.toPersistentList(),

@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.tests.testutils.WarmUpRule
@@ -32,10 +33,11 @@ class ReactionSummaryPresenterTest {
     private val aggregatedReaction = anAggregatedReaction(userId = A_USER_ID, key = "👍", isHighlighted = true)
     private val roomMember = aRoomMember(userId = A_USER_ID, avatarUrl = AN_AVATAR_URL, displayName = A_USER_NAME)
     private val summaryEvent = ReactionSummaryEvents.ShowReactionSummary(AN_EVENT_ID, listOf(aggregatedReaction), aggregatedReaction.key)
+    private val buildMeta = aBuildMeta()
     private val room = FakeMatrixRoom().apply {
         givenRoomMembersState(MatrixRoomMembersState.Ready(persistentListOf(roomMember)))
     }
-    private val presenter = ReactionSummaryPresenter(room)
+    private val presenter = ReactionSummaryPresenter(buildMeta, room)
 
     @Test
     fun `present - handle showing and hiding the reaction summary`() = runTest {

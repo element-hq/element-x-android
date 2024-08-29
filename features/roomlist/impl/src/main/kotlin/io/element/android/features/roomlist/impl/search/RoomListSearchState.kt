@@ -11,6 +11,7 @@ import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import kotlinx.collections.immutable.ImmutableList
 
 data class RoomListSearchState(
+    val isDebugBuild: Boolean,
     val isSearchActive: Boolean,
     val query: String,
     val results: ImmutableList<RoomListRoomSummary>,

@@ -12,6 +12,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
 data class RoomInviteMembersState(
+    val isDebugBuild: Boolean,
     val canInvite: Boolean,
     val searchQuery: String,
     val showSearchLoader: Boolean,

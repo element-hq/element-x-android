@@ -12,6 +12,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.roomlist.impl.datasource.aRoomListRoomSummaryFactory
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -19,6 +20,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -64,7 +66,8 @@ class RoomListSearchPresenterTest {
     @Test
     fun `present - query search changes`() = runTest {
         val roomListService = FakeRoomListService()
-        val presenter = createRoomListSearchPresenter(roomListService)
+        val buildMeta = aBuildMeta()
+        val presenter = createRoomListSearchPresenter(buildMeta, roomListService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -99,7 +102,8 @@ class RoomListSearchPresenterTest {
     @Test
     fun `present - room list changes`() = runTest {
         val roomListService = FakeRoomListService()
-        val presenter = createRoomListSearchPresenter(roomListService)
+        val buildMeta = aBuildMeta()
+        val presenter = createRoomListSearchPresenter(buildMeta, roomListService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -136,10 +140,12 @@ class RoomListSearchPresenterTest {
 }
 
 fun TestScope.createRoomListSearchPresenter(
+    buildMeta: BuildMeta = aBuildMeta(),
     roomListService: RoomListService = FakeRoomListService(),
     featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
 ): RoomListSearchPresenter {
     return RoomListSearchPresenter(
+        buildMeta = buildMeta,
         dataSource = RoomListSearchDataSource(
             roomListService = roomListService,
             roomSummaryFactory = aRoomListRoomSummaryFactory(

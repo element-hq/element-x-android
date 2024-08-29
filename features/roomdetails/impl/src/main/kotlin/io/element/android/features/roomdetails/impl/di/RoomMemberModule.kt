@@ -12,6 +12,7 @@ import dagger.Module
 import dagger.Provides
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.userprofile.api.UserProfilePresenterFactory
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -21,6 +22,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 object RoomMemberModule {
     @Provides
     fun provideRoomMemberDetailsPresenterFactory(
+        buildMeta: BuildMeta,
         room: MatrixRoom,
         userProfilePresenterFactory: UserProfilePresenterFactory,
     ): RoomMemberDetailsPresenter.Factory {
@@ -28,6 +30,7 @@ object RoomMemberModule {
             override fun create(roomMemberId: UserId): RoomMemberDetailsPresenter {
                 return RoomMemberDetailsPresenter(
                     roomMemberId = roomMemberId,
+                    buildMeta = buildMeta,
                     room = room,
                     userProfilePresenterFactory = userProfilePresenterFactory,
                 )

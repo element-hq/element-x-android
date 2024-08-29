@@ -12,6 +12,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
 data class BlockedUsersState(
+    val isDebugBuild: Boolean,
     val blockedUsers: ImmutableList<MatrixUser>,
     val unblockUserAction: AsyncAction<Unit>,
     val eventSink: (BlockedUsersEvents) -> Unit,

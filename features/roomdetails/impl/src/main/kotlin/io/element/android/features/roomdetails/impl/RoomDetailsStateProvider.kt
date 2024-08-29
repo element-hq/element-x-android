@@ -107,6 +107,7 @@ fun aRoomDetailsState(
     knockRequestsCount: Int? = null,
     eventSink: (RoomDetailsEvent) -> Unit = {},
 ) = RoomDetailsState(
+    isDebugBuild = false,
     roomId = roomId,
     roomName = roomName,
     roomAlias = roomAlias,

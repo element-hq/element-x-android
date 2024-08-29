@@ -42,7 +42,7 @@ object TchapPatterns {
     /**
      * Get the Tchap display name of the homeserver mentioned in a matrix identifier.
      * The identifier type may be any matrix identifier type: user id, room id, ...
-     * The returned name is capitalize.
+     * The returned name is capitalized.
      * The Tchap HS display name is the component mentioned before the suffix "tchap.gouv.fr"
      * For example in case of "@jean-philippe.martin-modernisation.fr:name1.tchap.gouv.fr", this will return "Name1".
      * in case of "@jean-philippe.martin-modernisation.fr:agent.name2.tchap.gouv.fr", this will return "Name2".

@@ -28,6 +28,7 @@ import io.element.android.features.roomdetails.impl.members.RoomMemberListDataSo
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -50,6 +51,7 @@ import kotlinx.coroutines.launch
 
 class ChangeRolesPresenter @AssistedInject constructor(
     @Assisted private val role: RoomMember.Role,
+    private val buildMeta: BuildMeta,
     private val room: MatrixRoom,
     private val dispatchers: CoroutineDispatchers,
     private val analyticsService: AnalyticsService,
@@ -160,6 +162,7 @@ class ChangeRolesPresenter @AssistedInject constructor(
             }
         }
         return ChangeRolesState(
+            isDebugBuild = buildMeta.isDebuggable,
             role = role,
             query = query,
             isSearchActive = searchActive,

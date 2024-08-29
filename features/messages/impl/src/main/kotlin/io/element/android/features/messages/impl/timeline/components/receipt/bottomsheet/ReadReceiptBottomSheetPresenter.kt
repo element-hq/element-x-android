@@ -14,9 +14,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.meta.BuildMeta
 import javax.inject.Inject
 
-class ReadReceiptBottomSheetPresenter @Inject constructor() : Presenter<ReadReceiptBottomSheetState> {
+class ReadReceiptBottomSheetPresenter @Inject constructor(
+    private val buildMeta: BuildMeta,
+) : Presenter<ReadReceiptBottomSheetState> {
     @Composable
     override fun present(): ReadReceiptBottomSheetState {
         var selectedEvent: TimelineItem.Event? by remember { mutableStateOf(null) }
@@ -34,6 +37,7 @@ class ReadReceiptBottomSheetPresenter @Inject constructor() : Presenter<ReadRece
         }
 
         return ReadReceiptBottomSheetState(
+            isDebugBuild = buildMeta.isDebuggable,
             selectedEvent = selectedEvent,
             eventSink = { handleEvent(it) },
         )

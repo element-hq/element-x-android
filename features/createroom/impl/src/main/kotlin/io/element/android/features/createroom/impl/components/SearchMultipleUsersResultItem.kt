@@ -23,6 +23,7 @@ import io.element.android.libraries.usersearch.api.UserSearchResult
 
 @Composable
 fun SearchMultipleUsersResultItem(
+    isDebugBuild: Boolean,
     searchResult: UserSearchResult,
     isUserSelected: Boolean,
     onCheckedChange: (Boolean) -> Unit,
@@ -41,6 +42,7 @@ fun SearchMultipleUsersResultItem(
         )
     }
     CheckableUserRow(
+        isDebugBuild = isDebugBuild,
         checked = isUserSelected,
         modifier = modifier,
         data = data,
@@ -53,6 +55,7 @@ fun SearchMultipleUsersResultItem(
 internal fun SearchMultipleUsersResultItemPreview() = ElementThemedPreview {
     Column {
         SearchMultipleUsersResultItem(
+            isDebugBuild = false,
             searchResult = UserSearchResult(
                 aMatrixUser(),
                 isUnresolved = false
@@ -62,6 +65,7 @@ internal fun SearchMultipleUsersResultItemPreview() = ElementThemedPreview {
         )
         HorizontalDivider()
         SearchMultipleUsersResultItem(
+            isDebugBuild = false,
             searchResult = UserSearchResult(
                 aMatrixUser(),
                 isUnresolved = false
@@ -71,6 +75,7 @@ internal fun SearchMultipleUsersResultItemPreview() = ElementThemedPreview {
         )
         HorizontalDivider()
         SearchMultipleUsersResultItem(
+            isDebugBuild = false,
             searchResult = UserSearchResult(
                 aMatrixUser(),
                 isUnresolved = true
@@ -80,6 +85,7 @@ internal fun SearchMultipleUsersResultItemPreview() = ElementThemedPreview {
         )
         HorizontalDivider()
         SearchMultipleUsersResultItem(
+            isDebugBuild = false,
             searchResult = UserSearchResult(
                 aMatrixUser(),
                 isUnresolved = true

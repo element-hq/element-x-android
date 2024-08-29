@@ -58,6 +58,7 @@ fun aCreateRoomRootState(
     startDmAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
     eventSink: (CreateRoomRootEvents) -> Unit = {},
 ) = CreateRoomRootState(
+    isDebugBuild = false,
     applicationName = applicationName,
     userListState = userListState,
     startDmAction = startDmAction,

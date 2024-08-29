@@ -43,6 +43,7 @@ fun aUserProfileState(
     canCall: Boolean = false,
     eventSink: (UserProfileEvents) -> Unit = {},
 ) = UserProfileState(
+    isDebugBuild = false,
     userId = userId,
     userName = userName,
     avatarUrl = avatarUrl,

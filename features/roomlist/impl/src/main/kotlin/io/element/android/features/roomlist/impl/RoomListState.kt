@@ -66,6 +66,7 @@ sealed interface RoomListContentState {
         val securityBannerState: SecurityBannerState,
     ) : RoomListContentState
     data class Rooms(
+        val isDebugBuild: Boolean,
         val securityBannerState: SecurityBannerState,
         val fullScreenIntentPermissionsState: FullScreenIntentPermissionsState,
         val summaries: ImmutableList<RoomListRoomSummary>,

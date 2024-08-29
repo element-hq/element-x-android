@@ -17,6 +17,7 @@ fun aPreferencesRootState(
     myUser: MatrixUser,
     eventSink: (PreferencesRootEvents) -> Unit = { _ -> },
 ) = PreferencesRootState(
+    isDebugBuild = false,
     myUser = myUser,
     version = "Version 1.1 (1)",
     deviceId = DeviceId("ILAKNDNASDLK"),

@@ -16,6 +16,7 @@ import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.impl.root.UserProfilePresenter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -25,6 +26,7 @@ import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
@@ -289,10 +291,12 @@ class UserProfilePresenterTest {
     private fun createUserProfilePresenter(
         client: MatrixClient = createFakeMatrixClient(),
         userId: UserId = UserId("@alice:server.org"),
+        buildMeta: BuildMeta = aBuildMeta(),
         startDMAction: StartDMAction = FakeStartDMAction()
     ): UserProfilePresenter {
         return UserProfilePresenter(
             userId = userId,
+            buildMeta = buildMeta,
             client = client,
             startDMAction = startDMAction
         )

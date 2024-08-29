@@ -20,6 +20,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
 data class RoomDetailsState(
+    val isDebugBuild: Boolean,
     val roomId: RoomId,
     val roomName: String,
     val roomAlias: RoomAlias?,

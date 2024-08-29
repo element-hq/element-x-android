@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.roomMembers
@@ -24,6 +25,7 @@ import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 
 class ReactionSummaryPresenter @Inject constructor(
+    private val buildMeta: BuildMeta,
     private val room: MatrixRoom,
 ) : Presenter<ReactionSummaryState> {
     @Composable
@@ -38,6 +40,7 @@ class ReactionSummaryPresenter @Inject constructor(
         fun handleEvents(event: ReactionSummaryEvents) {
             when (event) {
                 is ReactionSummaryEvents.ShowReactionSummary -> target.value = ReactionSummaryState.Summary(
+                    isDebugBuild = buildMeta.isDebuggable,
                     reactions = event.reactions.toImmutableList(),
                     selectedKey = event.selectedKey,
                     selectedEventId = event.eventId

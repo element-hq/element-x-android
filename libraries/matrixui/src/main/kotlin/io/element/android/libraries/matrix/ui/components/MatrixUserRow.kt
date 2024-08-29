@@ -19,11 +19,13 @@ import io.element.android.libraries.matrix.ui.model.getBestName
 
 @Composable
 fun MatrixUserRow(
+    isDebugBuild: Boolean,
     matrixUser: MatrixUser,
     modifier: Modifier = Modifier,
     avatarSize: AvatarSize = AvatarSize.UserListItem,
     trailingContent: @Composable (() -> Unit)? = null,
 ) = UserRow(
+    isDebugBuild = isDebugBuild,
     avatarData = matrixUser.getAvatarData(avatarSize),
     name = matrixUser.getBestName(),
     subtext = if (matrixUser.displayName.isNullOrEmpty()) null else matrixUser.userId.value,
@@ -34,5 +36,5 @@ fun MatrixUserRow(
 @PreviewsDayNight
 @Composable
 internal fun MatrixUserRowPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) = ElementPreview {
-    MatrixUserRow(matrixUser)
+    MatrixUserRow(isDebugBuild = false, matrixUser)
 }

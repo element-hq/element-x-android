@@ -23,6 +23,7 @@ import io.element.android.libraries.usersearch.api.UserSearchResult
 
 @Composable
 fun SearchSingleUserResultItem(
+    isDebugBuild: Boolean,
     searchResult: UserSearchResult,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -35,6 +36,7 @@ fun SearchSingleUserResultItem(
         )
     } else {
         MatrixUserRow(
+            isDebugBuild = isDebugBuild,
             modifier = modifier.clickable(onClick = onClick),
             matrixUser = searchResult.matrixUser,
             avatarSize = AvatarSize.UserListItem,
@@ -47,11 +49,13 @@ fun SearchSingleUserResultItem(
 internal fun SearchSingleUserResultItemPreview() = ElementThemedPreview {
     Column {
         SearchSingleUserResultItem(
+            isDebugBuild = false,
             searchResult = UserSearchResult(aMatrixUser(), isUnresolved = false),
             onClick = {},
         )
         HorizontalDivider()
         SearchSingleUserResultItem(
+            isDebugBuild = false,
             searchResult = UserSearchResult(aMatrixUser(), isUnresolved = true),
             onClick = {},
         )

@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.collections.immutable.ImmutableList
 
 data class RoomMemberListState(
+    val isDebugBuild: Boolean,
     val roomMembers: AsyncData<RoomMembers>,
     val searchQuery: String,
     val searchResults: SearchBarResultState<AsyncData<RoomMembers>>,

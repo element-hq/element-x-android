@@ -13,6 +13,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.collections.immutable.ImmutableList
 
 data class RoomMembersModerationState(
+    val isDebugBuild: Boolean,
     val canDisplayModerationActions: Boolean,
     val selectedRoomMember: RoomMember?,
     val actions: ImmutableList<ModerationAction>,

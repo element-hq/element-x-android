@@ -12,6 +12,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
@@ -20,6 +21,7 @@ import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -177,9 +179,11 @@ class BlockedUsersPresenterTest {
     }
 
     private fun aBlockedUsersPresenter(
+        buildMeta: BuildMeta = aBuildMeta(),
         matrixClient: FakeMatrixClient = FakeMatrixClient(),
         featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
     ) = BlockedUsersPresenter(
+        buildMeta = buildMeta,
         matrixClient = matrixClient,
         featureFlagService = featureFlagService,
     )

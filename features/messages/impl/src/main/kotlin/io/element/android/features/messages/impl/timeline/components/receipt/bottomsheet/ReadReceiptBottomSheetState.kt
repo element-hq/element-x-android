@@ -12,6 +12,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 
 @Immutable
 data class ReadReceiptBottomSheetState(
+    val isDebugBuild: Boolean,
     val selectedEvent: TimelineItem.Event?,
     val eventSink: (ReadReceiptBottomSheetEvents) -> Unit,
 )

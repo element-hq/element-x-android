@@ -64,6 +64,7 @@ fun RoomMembersModerationView(
     Box(modifier = modifier) {
         if (state.selectedRoomMember != null && state.actions.isNotEmpty()) {
             RoomMemberActionsBottomSheet(
+                isDebugBuild = state.isDebugBuild,
                 roomMember = state.selectedRoomMember,
                 actions = state.actions,
                 onSelectAction = { action ->
@@ -185,6 +186,7 @@ fun RoomMembersModerationView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RoomMemberActionsBottomSheet(
+    isDebugBuild: Boolean,
     roomMember: RoomMember,
     actions: ImmutableList<ModerationAction>,
     onSelectAction: (ModerationAction) -> Unit,
@@ -211,9 +213,8 @@ private fun RoomMemberActionsBottomSheet(
                     .padding(bottom = 28.dp)
                     .align(Alignment.CenterHorizontally)
             )
-            // TCHAP hide the Matrix Id
             Text(
-                text = roomMember.getBestName(),
+                text = roomMember.getBestName(), // TCHAP display a value generated from userId if displayname does not exist
                 style = ElementTheme.typography.fontHeadingLgBold,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -222,17 +223,20 @@ private fun RoomMemberActionsBottomSheet(
                     .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
                     .fillMaxWidth()
             )
-//            Text(
-//                text = roomMember.userId.toString(),
-//                style = ElementTheme.typography.fontBodyLgRegular,
-//                color = ElementTheme.colors.textSecondary,
-//                maxLines = 1,
-//                overflow = TextOverflow.Ellipsis,
-//                textAlign = TextAlign.Center,
-//                modifier = Modifier
-//                    .padding(horizontal = 16.dp)
-//                    .fillMaxWidth()
-//            )
+            // TCHAP hide the Matrix Id in release mode
+            if (isDebugBuild) {
+                Text(
+                    text = roomMember.userId.toString(),
+                    style = ElementTheme.typography.fontBodyLgRegular,
+                    color = ElementTheme.colors.textSecondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth()
+                )
+            }
             Spacer(modifier = Modifier.height(32.dp))
 
             for (action in actions) {

@@ -39,6 +39,7 @@ import io.element.android.features.roomlist.impl.search.RoomListSearchEvents
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -75,6 +76,7 @@ private const val EXTENDED_RANGE_SIZE = 40
 private const val SUBSCRIBE_TO_VISIBLE_ROOMS_DEBOUNCE_IN_MILLIS = 300L
 
 class RoomListPresenter @Inject constructor(
+    private val buildMeta: BuildMeta,
     private val client: MatrixClient,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
@@ -240,6 +242,7 @@ class RoomListPresenter @Inject constructor(
             showSkeleton -> RoomListContentState.Skeleton(count = 16)
             else -> {
                 RoomListContentState.Rooms(
+                    isDebugBuild = buildMeta.isDebuggable,
                     securityBannerState = securityBannerState,
                     fullScreenIntentPermissionsState = fullScreenIntentPermissionsPresenter.present(),
                     summaries = roomSummaries.dataOrNull().orEmpty().toPersistentList()

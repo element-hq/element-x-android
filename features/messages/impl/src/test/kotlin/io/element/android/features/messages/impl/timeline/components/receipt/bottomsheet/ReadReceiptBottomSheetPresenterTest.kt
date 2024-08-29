@@ -12,6 +12,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -49,5 +50,5 @@ class ReadReceiptBottomSheetPresenterTest {
         }
     }
 
-    private fun createPresenter() = ReadReceiptBottomSheetPresenter()
+    private fun createPresenter() = ReadReceiptBottomSheetPresenter(buildMeta = aBuildMeta())
 }
