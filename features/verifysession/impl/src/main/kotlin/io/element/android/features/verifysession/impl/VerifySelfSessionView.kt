@@ -105,13 +105,15 @@ fun VerifySelfSessionView(
             TopAppBar(
                 title = {},
                 actions = {
-                    if (state.verificationFlowStep != FlowStep.Completed) {
-                        if (state.displaySkipButton && LocalInspectionMode.current.not()) {
-                            TextButton(
-                                text = stringResource(CommonStrings.action_skip),
-                                onClick = { state.eventSink(VerifySelfSessionViewEvents.SkipVerification) }
-                            )
-                        }
+                    if (state.verificationFlowStep != FlowStep.Completed &&
+                        state.displaySkipButton &&
+                        LocalInspectionMode.current.not()) {
+                        TextButton(
+                            text = stringResource(CommonStrings.action_skip),
+                            onClick = { state.eventSink(VerifySelfSessionViewEvents.SkipVerification) }
+                        )
+                    }
+                    if (state.verificationFlowStep is FlowStep.Initial) {
                         TextButton(
                             text = stringResource(CommonStrings.action_signout),
                             onClick = { state.eventSink(VerifySelfSessionViewEvents.SignOut) }
