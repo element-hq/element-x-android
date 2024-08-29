@@ -24,6 +24,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.lockscreen.api.LockScreenLockState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.lockscreen.impl.unlock.PinUnlockPresenter
@@ -54,10 +55,11 @@ class PinUnlockActivity : AppCompatActivity() {
         setContent {
             ElementThemeApp(appPreferencesStore) {
                 val state = presenter.present()
+                val isDark = ElementTheme.isLightTheme.not()
                 PinUnlockView(
                     state = state,
                     isInAppUnlock = false,
-                    onSuccessLogout = { onSuccessLogout(this, it) },
+                    onSuccessLogout = { onSuccessLogout(this, isDark, it) },
                 )
             }
         }

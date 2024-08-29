@@ -146,7 +146,7 @@ class PreferencesRootNode @AssistedInject constructor(
         directLogoutView.Render(
             state = state.directLogoutState,
             onSuccessLogout = {
-                onSuccessLogout(activity, it)
+                onSuccessLogout(activity, isDark, it)
             }
         )
     }

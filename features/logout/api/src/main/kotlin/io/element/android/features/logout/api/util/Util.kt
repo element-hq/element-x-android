@@ -22,10 +22,11 @@ import timber.log.Timber
 
 fun onSuccessLogout(
     activity: Activity,
+    darkTheme: Boolean,
     url: String?,
 ) {
     Timber.d("Success logout with result url: $url")
     url?.let {
-        activity.openUrlInChromeCustomTab(null, false, it)
+        activity.openUrlInChromeCustomTab(null, darkTheme, it)
     }
 }
