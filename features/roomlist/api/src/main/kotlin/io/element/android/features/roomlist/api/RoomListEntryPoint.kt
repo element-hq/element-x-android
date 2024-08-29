@@ -33,6 +33,7 @@ interface RoomListEntryPoint : FeatureEntryPoint {
         fun onRoomClick(roomId: RoomId)
         fun onCreateRoomClick()
         fun onSettingsClick()
+        fun onSetUpRecoveryClick()
         fun onSessionConfirmRecoveryKeyClick()
         fun onRoomSettingsClick(roomId: RoomId)
         fun onReportBugClick()
