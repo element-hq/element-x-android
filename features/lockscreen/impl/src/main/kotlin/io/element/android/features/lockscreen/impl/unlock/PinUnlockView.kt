@@ -39,7 +39,9 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -75,6 +77,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun PinUnlockView(
     state: PinUnlockState,
     isInAppUnlock: Boolean,
+    onSuccessLogout: (logoutUrlResult: String?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     OnLifecycleEvent { _, event ->
@@ -92,9 +95,21 @@ fun PinUnlockView(
                 onDismiss = { state.eventSink(PinUnlockEvents.ClearSignOutPrompt) },
             )
         }
-        if (state.signOutAction == AsyncAction.Loading) {
-            ProgressDialog(text = stringResource(id = R.string.screen_signout_in_progress_dialog_content))
+        when (state.signOutAction) {
+            AsyncAction.Loading -> {
+                ProgressDialog(text = stringResource(id = R.string.screen_signout_in_progress_dialog_content))
+            }
+            is AsyncAction.Success -> {
+                val latestOnSuccessLogout by rememberUpdatedState(onSuccessLogout)
+                LaunchedEffect(state) {
+                    latestOnSuccessLogout(state.signOutAction.data)
+                }
+            }
+            AsyncAction.Confirming,
+            is AsyncAction.Failure,
+            AsyncAction.Uninitialized -> Unit
         }
+
         if (state.showBiometricUnlockError) {
             ErrorDialog(
                 content = state.biometricUnlockErrorMessage ?: "",
@@ -364,6 +379,7 @@ internal fun PinUnlockViewInAppPreview(@PreviewParameter(PinUnlockStateProvider:
         PinUnlockView(
             state = state,
             isInAppUnlock = true,
+            onSuccessLogout = {},
         )
     }
 }
@@ -375,6 +391,7 @@ internal fun PinUnlockViewPreview(@PreviewParameter(PinUnlockStateProvider::clas
         PinUnlockView(
             state = state,
             isInAppUnlock = false,
+            onSuccessLogout = {},
         )
     }
 }

@@ -29,6 +29,7 @@ import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.lockscreen.impl.unlock.PinUnlockPresenter
 import io.element.android.features.lockscreen.impl.unlock.PinUnlockView
 import io.element.android.features.lockscreen.impl.unlock.di.PinUnlockBindings
+import io.element.android.features.logout.api.util.onSuccessLogout
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
@@ -53,7 +54,11 @@ class PinUnlockActivity : AppCompatActivity() {
         setContent {
             ElementThemeApp(appPreferencesStore) {
                 val state = presenter.present()
-                PinUnlockView(state = state, isInAppUnlock = false)
+                PinUnlockView(
+                    state = state,
+                    isInAppUnlock = false,
+                    onSuccessLogout = { onSuccessLogout(this, it) },
+                )
             }
         }
         lifecycleScope.launch {

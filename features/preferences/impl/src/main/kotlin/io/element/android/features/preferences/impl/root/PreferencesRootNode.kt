@@ -30,10 +30,10 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.logout.api.direct.DirectLogoutEvents
 import io.element.android.features.logout.api.direct.DirectLogoutView
+import io.element.android.features.logout.api.util.onSuccessLogout
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import timber.log.Timber
 
 @ContributesNode(SessionScope::class)
 class PreferencesRootNode @AssistedInject constructor(
@@ -91,13 +91,6 @@ class PreferencesRootNode @AssistedInject constructor(
                 darkTheme = isDark,
                 url = it
             )
-        }
-    }
-
-    private fun onSuccessLogout(activity: Activity, url: String?) {
-        Timber.d("Success (direct) logout with result url: $url")
-        url?.let {
-            activity.openUrlInChromeCustomTab(null, false, it)
         }
     }
 

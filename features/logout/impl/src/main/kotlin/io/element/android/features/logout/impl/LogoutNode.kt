@@ -28,9 +28,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.logout.api.LogoutEntryPoint
-import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
+import io.element.android.features.logout.api.util.onSuccessLogout
 import io.element.android.libraries.di.SessionScope
-import timber.log.Timber
 
 @ContributesNode(SessionScope::class)
 class LogoutNode @AssistedInject constructor(
@@ -40,13 +39,6 @@ class LogoutNode @AssistedInject constructor(
 ) : Node(buildContext, plugins = plugins) {
     private fun onChangeRecoveryKeyClick() {
         plugins<LogoutEntryPoint.Callback>().forEach { it.onChangeRecoveryKeyClick() }
-    }
-
-    private fun onSuccessLogout(activity: Activity, url: String?) {
-        Timber.d("Success logout with result url: $url")
-        url?.let {
-            activity.openUrlInChromeCustomTab(null, false, it)
-        }
     }
 
     @Composable
