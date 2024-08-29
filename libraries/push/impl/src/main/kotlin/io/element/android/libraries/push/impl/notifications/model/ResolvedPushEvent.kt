@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.push.impl.notifications
+package io.element.android.libraries.push.impl.notifications.model
 
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
-import io.element.android.tests.testutils.lambda.lambdaError
 
-class FakeNotifiableEventResolver(
-    private val notifiableEventResult: (SessionId, RoomId, EventId) -> ResolvedPushEvent? = { _, _, _ -> lambdaError() }
-) : NotifiableEventResolver {
-    override suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): ResolvedPushEvent? {
-        return notifiableEventResult(sessionId, roomId, eventId)
-    }
+sealed interface ResolvedPushEvent {
+    data class Event(val notifiableEvent: NotifiableEvent) : ResolvedPushEvent
+
+    data class Redaction(
+        val sessionId: SessionId,
+        val roomId: RoomId,
+        val redactedEventId: EventId,
+        val reason: String?,
+    ) : ResolvedPushEvent
 }

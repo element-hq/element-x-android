@@ -50,8 +50,8 @@ import io.element.android.libraries.matrix.ui.messages.toPlainText
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
-import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
+import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -67,7 +67,7 @@ private val loggerTag = LoggerTag("DefaultNotifiableEventResolver", LoggerTag.No
  * this pattern allow decoupling between the object responsible of displaying notifications and the matrix sdk.
  */
 interface NotifiableEventResolver {
-    suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): NotifiableEvent?
+    suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): ResolvedPushEvent?
 }
 
 @ContributesBinding(AppScope::class)
@@ -80,7 +80,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
     private val permalinkParser: PermalinkParser,
     private val callNotificationEventResolver: CallNotificationEventResolver,
 ) : NotifiableEventResolver {
-    override suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): NotifiableEvent? {
+    override suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): ResolvedPushEvent? {
         // Restore session
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return null
         val notificationService = client.notificationService()
@@ -99,8 +99,9 @@ class DefaultNotifiableEventResolver @Inject constructor(
     private suspend fun NotificationData.asNotifiableEvent(
         client: MatrixClient,
         userId: SessionId,
-    ): NotifiableEvent? {
-        return when (val content = this.content) {
+    ): ResolvedPushEvent? {
+        val content = this.content
+        val notifiableEvent = when (content) {
             is NotificationContent.MessageLike.RoomMessage -> {
                 val senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId)
                 val messageBody = descriptionFromMessageContent(content, senderDisambiguatedDisplayName)
@@ -204,8 +205,9 @@ class DefaultNotifiableEventResolver @Inject constructor(
             NotificationContent.MessageLike.RoomEncrypted -> fallbackNotifiableEvent(userId, roomId, eventId).also {
                 Timber.tag(loggerTag.value).w("Notification with encrypted content -> fallback")
             }
-            is NotificationContent.MessageLike.RoomRedaction -> null.also {
-                Timber.tag(loggerTag.value).d("Ignoring notification for redaction")
+            is NotificationContent.MessageLike.RoomRedaction -> {
+                // Note: this case will be handled below
+                null
             }
             NotificationContent.MessageLike.Sticker -> null.also {
                 Timber.tag(loggerTag.value).d("Ignoring notification for sticker")
@@ -232,6 +234,25 @@ class DefaultNotifiableEventResolver @Inject constructor(
             NotificationContent.StateEvent.SpaceParent -> null.also {
                 Timber.tag(loggerTag.value).d("Ignoring notification for state event ${content.javaClass.simpleName}")
             }
+        }
+
+        return if (notifiableEvent != null) {
+            ResolvedPushEvent.Event(notifiableEvent)
+        } else if (content is NotificationContent.MessageLike.RoomRedaction) {
+            val redactedEventId = content.redactedEventId
+            if (redactedEventId == null) {
+                Timber.tag(loggerTag.value).d("redactedEventId is null.")
+                null
+            } else {
+                ResolvedPushEvent.Redaction(
+                    sessionId = userId,
+                    roomId = roomId,
+                    redactedEventId = redactedEventId,
+                    reason = content.reason,
+                )
+            }
+        } else {
+            null
         }
     }
 

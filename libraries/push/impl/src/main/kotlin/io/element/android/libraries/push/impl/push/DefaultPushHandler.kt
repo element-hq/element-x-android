@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.push.impl.notifications.NotifiableEventResolver
 import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels
 import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
+import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
 import io.element.android.libraries.push.impl.test.DefaultTestPush
 import io.element.android.libraries.push.impl.troubleshoot.DiagnosticPushHandler
 import io.element.android.libraries.pushproviders.api.PushData
@@ -41,6 +42,7 @@ private val loggerTag = LoggerTag("PushHandler", LoggerTag.PushLoggerTag)
 @ContributesBinding(AppScope::class)
 class DefaultPushHandler @Inject constructor(
     private val onNotifiableEventReceived: OnNotifiableEventReceived,
+    private val onRedactedEventReceived: OnRedactedEventReceived,
     private val notifiableEventResolver: NotifiableEventResolver,
     private val incrementPushDataStore: IncrementPushDataStore,
     private val userPushStoreFactory: UserPushStoreFactory,
@@ -96,18 +98,25 @@ class DefaultPushHandler @Inject constructor(
                 Timber.w("Unable to get a session")
                 return
             }
-            val notifiableEvent = notifiableEventResolver.resolveEvent(userId, pushData.roomId, pushData.eventId)
-            when (notifiableEvent) {
+            val resolvedPushEvent = notifiableEventResolver.resolveEvent(userId, pushData.roomId, pushData.eventId)
+            when (resolvedPushEvent) {
                 null -> Timber.tag(loggerTag.value).w("Unable to get a notification data")
-                is NotifiableRingingCallEvent -> handleRingingCallEvent(notifiableEvent)
-                else -> {
-                    val userPushStore = userPushStoreFactory.getOrCreate(userId)
-                    val areNotificationsEnabled = userPushStore.getNotificationEnabledForDevice().first()
-                    if (areNotificationsEnabled) {
-                        onNotifiableEventReceived.onNotifiableEventReceived(notifiableEvent)
-                    } else {
-                        Timber.tag(loggerTag.value).i("Notification are disabled for this device, ignore push.")
+                is ResolvedPushEvent.Event -> {
+                    when (resolvedPushEvent.notifiableEvent) {
+                        is NotifiableRingingCallEvent -> handleRingingCallEvent(resolvedPushEvent.notifiableEvent)
+                        else -> {
+                            val userPushStore = userPushStoreFactory.getOrCreate(userId)
+                            val areNotificationsEnabled = userPushStore.getNotificationEnabledForDevice().first()
+                            if (areNotificationsEnabled) {
+                                onNotifiableEventReceived.onNotifiableEventReceived(resolvedPushEvent.notifiableEvent)
+                            } else {
+                                Timber.tag(loggerTag.value).i("Notification are disabled for this device, ignore push.")
+                            }
+                        }
                     }
+                }
+                is ResolvedPushEvent.Redaction -> {
+                    onRedactedEventReceived.onRedactedEventReceived(resolvedPushEvent)
                 }
             }
         } catch (e: Exception) {
