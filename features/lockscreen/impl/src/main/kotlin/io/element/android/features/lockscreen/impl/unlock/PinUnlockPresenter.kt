@@ -30,6 +30,7 @@ import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
 import io.element.android.features.logout.api.LogoutUseCase
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -61,7 +62,7 @@ class PinUnlockPresenter @Inject constructor(
             mutableStateOf(false)
         }
         val signOutAction = remember {
-            mutableStateOf<AsyncData<String?>>(AsyncData.Uninitialized)
+            mutableStateOf<AsyncAction<String?>>(AsyncAction.Uninitialized)
         }
         var biometricUnlockResult by remember {
             mutableStateOf<BiometricUnlock.AuthenticationResult?>(null)
@@ -177,7 +178,7 @@ class PinUnlockPresenter @Inject constructor(
         }
     }
 
-    private fun CoroutineScope.signOut(signOutAction: MutableState<AsyncData<String?>>) = launch {
+    private fun CoroutineScope.signOut(signOutAction: MutableState<AsyncAction<String?>>) = launch {
         suspend {
             logoutUseCase.logout(ignoreSdkError = true)
         }.runCatchingUpdatingState(signOutAction)
