@@ -75,6 +75,7 @@ sealed interface RoomListContentState {
     data class Skeleton(val count: Int) : RoomListContentState
     data object Empty : RoomListContentState
     data class Rooms(
+        val isDebugBuild: Boolean,
         val securityBannerState: SecurityBannerState,
         val fullScreenIntentPermissionsState: FullScreenIntentPermissionsState,
         val summaries: ImmutableList<RoomListRoomSummary>,

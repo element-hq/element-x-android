@@ -24,6 +24,7 @@ import io.element.android.libraries.permissions.api.PermissionsState
 import kotlinx.collections.immutable.ImmutableList
 
 data class EditUserProfileState(
+    val isDebugBuild: Boolean,
     val userId: UserId,
     val displayName: String,
     val userAvatarUrl: Uri?,

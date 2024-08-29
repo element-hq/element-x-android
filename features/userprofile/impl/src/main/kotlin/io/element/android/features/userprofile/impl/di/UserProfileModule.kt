@@ -21,6 +21,7 @@ import dagger.Module
 import dagger.Provides
 import io.element.android.features.createroom.api.StartDMAction
 import io.element.android.features.userprofile.impl.root.UserProfilePresenter
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
@@ -30,12 +31,13 @@ import io.element.android.libraries.matrix.api.core.UserId
 object UserProfileModule {
     @Provides
     fun provideUserProfilePresenterFactory(
+        buildMeta: BuildMeta,
         matrixClient: MatrixClient,
         startDMAction: StartDMAction,
     ): UserProfilePresenter.Factory {
         return object : UserProfilePresenter.Factory {
             override fun create(userId: UserId): UserProfilePresenter {
-                return UserProfilePresenter(userId, matrixClient, startDMAction)
+                return UserProfilePresenter(userId, buildMeta, matrixClient, startDMAction)
             }
         }
     }

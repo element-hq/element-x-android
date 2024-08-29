@@ -47,6 +47,7 @@ import io.element.android.features.roomlist.impl.search.RoomListSearchEvents
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -83,6 +84,7 @@ import javax.inject.Inject
 private const val EXTENDED_RANGE_SIZE = 40
 
 class RoomListPresenter @Inject constructor(
+    private val buildMeta: BuildMeta,
     private val client: MatrixClient,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
@@ -224,6 +226,7 @@ class RoomListPresenter @Inject constructor(
             else -> {
                 val securityBannerState by securityBannerState(securityBannerDismissed)
                 RoomListContentState.Rooms(
+                    isDebugBuild = buildMeta.isDebuggable,
                     securityBannerState = securityBannerState,
                     fullScreenIntentPermissionsState = fullScreenIntentPermissionsPresenter.present(),
                     summaries = roomSummaries.dataOrNull().orEmpty().toPersistentList()

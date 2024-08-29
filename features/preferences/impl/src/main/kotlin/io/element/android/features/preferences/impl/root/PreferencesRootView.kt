@@ -77,6 +77,7 @@ fun PreferencesRootView(
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) {
         UserPreferences(
+            isDebugBuild = state.isDebugBuild,
             modifier = Modifier.clickable {
                 onOpenUserProfile(state.myUser)
             },

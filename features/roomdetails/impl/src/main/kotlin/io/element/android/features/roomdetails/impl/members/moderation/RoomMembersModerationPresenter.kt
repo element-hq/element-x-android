@@ -24,6 +24,7 @@ interface RoomMembersModerationPresenter : Presenter<RoomMembersModerationState>
     suspend fun canDisplayModerationActions(): Boolean
 
     fun dummyState() = RoomMembersModerationState(
+        isDebugBuild = false,
         selectedRoomMember = null,
         actions = persistentListOf(),
         kickUserAsyncAction = AsyncAction.Uninitialized,

@@ -35,6 +35,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
 internal fun UserRow(
+    isDebugBuild: Boolean,
     avatarData: AvatarData,
     name: String,
     subtext: String?,
@@ -63,17 +64,18 @@ internal fun UserRow(
                 color = MaterialTheme.colorScheme.primary,
                 style = ElementTheme.typography.fontBodyLgRegular,
             )
-            // TCHAP hide the Matrix Id
-//            // Id
-//            subtext?.let {
-//                Text(
-//                    text = subtext,
-//                    color = MaterialTheme.colorScheme.secondary,
-//                    maxLines = 1,
-//                    overflow = TextOverflow.Ellipsis,
-//                    style = ElementTheme.typography.fontBodySmRegular,
-//                )
-//            }
+            // Id
+            if (isDebugBuild) { // TCHAP hide the Matrix Id in release mode
+                subtext?.let {
+                    Text(
+                        text = subtext,
+                        color = MaterialTheme.colorScheme.secondary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        style = ElementTheme.typography.fontBodySmRegular,
+                    )
+                }
+            }
         }
         trailingContent?.invoke()
     }

@@ -45,6 +45,7 @@ import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
@@ -83,15 +84,17 @@ class RoomDetailsPresenterTest {
         analyticsService: AnalyticsService = FakeAnalyticsService(),
     ): RoomDetailsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
+        val buildMeta = aBuildMeta()
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
             override fun create(roomMemberId: UserId): RoomMemberDetailsPresenter {
-                return RoomMemberDetailsPresenter(roomMemberId, matrixClient, room, FakeStartDMAction())
+                return RoomMemberDetailsPresenter(roomMemberId, buildMeta, matrixClient, room, FakeStartDMAction())
             }
         }
         val featureFlagService = FakeFeatureFlagService(
             mapOf(FeatureFlags.NotificationSettings.key to true)
         )
         return RoomDetailsPresenter(
+            buildMeta = buildMeta,
             client = matrixClient,
             room = room,
             featureFlagService = featureFlagService,

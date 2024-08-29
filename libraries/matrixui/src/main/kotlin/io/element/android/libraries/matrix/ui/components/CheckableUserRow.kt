@@ -37,6 +37,7 @@ import io.element.android.libraries.matrix.ui.model.getAvatarData
 
 @Composable
 fun CheckableUserRow(
+    isDebugBuild: Boolean,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     data: CheckableUserRowData,
@@ -55,6 +56,7 @@ fun CheckableUserRow(
         when (data) {
             is CheckableUserRowData.Resolved -> {
                 UserRow(
+                    isDebugBuild = isDebugBuild,
                     modifier = rowModifier,
                     avatarData = data.avatarData,
                     name = data.name,
@@ -104,18 +106,21 @@ internal fun CheckableResolvedUserRowPreview() = ElementThemedPreview {
     )
     Column {
         CheckableUserRow(
+            isDebugBuild = false,
             checked = false,
             onCheckedChange = { },
             data = data,
         )
         HorizontalDivider()
         CheckableUserRow(
+            isDebugBuild = false,
             checked = true,
             onCheckedChange = { },
             data = data,
         )
         HorizontalDivider()
         CheckableUserRow(
+            isDebugBuild = false,
             checked = false,
             onCheckedChange = { },
             data = data,
@@ -123,6 +128,7 @@ internal fun CheckableResolvedUserRowPreview() = ElementThemedPreview {
         )
         HorizontalDivider()
         CheckableUserRow(
+            isDebugBuild = false,
             checked = true,
             onCheckedChange = { },
             data = data,
@@ -141,18 +147,21 @@ internal fun CheckableUnresolvedUserRowPreview() = ElementThemedPreview {
     )
     Column {
         CheckableUserRow(
+            isDebugBuild = false,
             checked = false,
             onCheckedChange = { },
             data = data,
         )
         HorizontalDivider()
         CheckableUserRow(
+            isDebugBuild = false,
             checked = true,
             onCheckedChange = { },
             data = data,
         )
         HorizontalDivider()
         CheckableUserRow(
+            isDebugBuild = false,
             checked = false,
             onCheckedChange = { },
             data = data,
@@ -160,6 +169,7 @@ internal fun CheckableUnresolvedUserRowPreview() = ElementThemedPreview {
         )
         HorizontalDivider()
         CheckableUserRow(
+            isDebugBuild = false,
             checked = true,
             onCheckedChange = { },
             data = data,

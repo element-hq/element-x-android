@@ -33,6 +33,7 @@ import io.element.android.features.roomdetails.impl.members.details.RoomMemberDe
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -59,6 +60,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RoomDetailsPresenter @Inject constructor(
+    private val buildMeta: BuildMeta,
     private val client: MatrixClient,
     private val room: MatrixRoom,
     private val featureFlagService: FeatureFlagService,
@@ -137,6 +139,7 @@ class RoomDetailsPresenter @Inject constructor(
         val roomMemberDetailsState = roomMemberDetailsPresenter?.present()
 
         return RoomDetailsState(
+            isDebugBuild = buildMeta.isDebuggable,
             roomId = room.roomId,
             roomName = roomName,
             roomAlias = room.alias,

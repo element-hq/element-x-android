@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
 data class RoomDetailsState(
+    val isDebugBuild: Boolean,
     val roomId: RoomId,
     val roomName: String,
     val roomAlias: RoomAlias?,

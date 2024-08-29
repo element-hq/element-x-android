@@ -42,6 +42,7 @@ import io.element.android.libraries.testtags.testTag
 
 @Composable
 fun UserProfileHeaderSection(
+    isDebugBuild: Boolean,
     avatarUrl: String?,
     userId: UserId,
     userName: String?,
@@ -70,16 +71,17 @@ fun UserProfileHeaderSection(
             )
             Spacer(modifier = Modifier.height(6.dp))
         }
-        // TCHAP hide the Matrix Id
-//        Text(
-//            text = userId.value,
-//            style = ElementTheme.typography.fontBodyLgRegular,
-//            color = MaterialTheme.colorScheme.secondary,
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(horizontal = 16.dp),
-//            textAlign = TextAlign.Center,
-//        )
+        if (isDebugBuild) { // TCHAP hide the Matrix Id in release mode
+            Text(
+                text = userId.value,
+                style = ElementTheme.typography.fontBodyLgRegular,
+                color = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                textAlign = TextAlign.Center,
+            )
+        }
         Spacer(Modifier.height(40.dp))
     }
 }
@@ -88,6 +90,7 @@ fun UserProfileHeaderSection(
 @Composable
 internal fun UserProfileHeaderSectionPreview() = ElementPreview {
     UserProfileHeaderSection(
+        isDebugBuild = false,
         avatarUrl = null,
         userId = UserId("@alice:example.com"),
         userName = "Alice",

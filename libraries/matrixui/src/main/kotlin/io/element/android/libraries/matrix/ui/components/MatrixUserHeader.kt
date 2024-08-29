@@ -41,6 +41,7 @@ import io.element.android.libraries.matrix.ui.model.getBestName
 
 @Composable
 fun MatrixUserHeader(
+    isDebugBuild: Boolean,
     matrixUser: MatrixUser?,
     modifier: Modifier = Modifier,
     // TODO handle click on this item, to let the user be able to update their profile.
@@ -50,6 +51,7 @@ fun MatrixUserHeader(
         MatrixUserHeaderPlaceholder(modifier = modifier)
     } else {
         MatrixUserHeaderContent(
+            isDebugBuild = isDebugBuild,
             matrixUser = matrixUser,
             modifier = modifier,
             // onClick = onClick
@@ -59,6 +61,7 @@ fun MatrixUserHeader(
 
 @Composable
 private fun MatrixUserHeaderContent(
+    isDebugBuild: Boolean,
     matrixUser: MatrixUser,
     modifier: Modifier = Modifier,
     // onClick: () -> Unit,
@@ -88,17 +91,16 @@ private fun MatrixUserHeaderContent(
                 overflow = TextOverflow.Ellipsis,
                 color = ElementTheme.materialColors.primary,
             )
-            // TCHAP hide the Matrix Id
-//            // Id
-//            if (matrixUser.displayName.isNullOrEmpty().not()) {
-//                Text(
-//                    text = matrixUser.userId.value,
-//                    style = ElementTheme.typography.fontBodyMdRegular,
-//                    color = ElementTheme.materialColors.secondary,
-//                    maxLines = 1,
-//                    overflow = TextOverflow.Ellipsis
-//                )
-//            }
+            // Id
+            if (isDebugBuild && matrixUser.displayName.isNullOrEmpty().not()) { // TCHAP hide the Matrix Id in release mode
+                Text(
+                    text = matrixUser.userId.value,
+                    style = ElementTheme.typography.fontBodyMdRegular,
+                    color = ElementTheme.materialColors.secondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
     }
 }
@@ -106,5 +108,5 @@ private fun MatrixUserHeaderContent(
 @PreviewsDayNight
 @Composable
 internal fun MatrixUserHeaderPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) = ElementPreview {
-    MatrixUserHeader(matrixUser)
+    MatrixUserHeader(isDebugBuild = false, matrixUser)
 }

@@ -212,6 +212,7 @@ class MessagesPresenter @AssistedInject constructor(
         }
 
         return MessagesState(
+            isDebugBuild =  buildMeta.isDebuggable,
             roomId = room.roomId,
             roomName = roomName,
             roomAvatar = roomAvatar,

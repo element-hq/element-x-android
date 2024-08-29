@@ -156,6 +156,7 @@ private fun SheetContent(
                     val user = sender.user ?: MatrixUser(userId = sender.senderId)
 
                     SenderRow(
+                        isDebugBuild = summary.isDebugBuild,
                         avatarData = user.getAvatarData(AvatarSize.UserListItem),
                         name = user.getBestName(), // TCHAP should be applied in Element X
                         userId = user.userId.value,
@@ -233,6 +234,7 @@ private fun AggregatedReactionButton(
 
 @Composable
 private fun SenderRow(
+    isDebugBuild: Boolean,
     avatarData: AvatarData,
     name: String,
     userId: String,
@@ -271,14 +273,15 @@ private fun SenderRow(
                     style = ElementTheme.typography.fontBodySmRegular,
                 )
             }
-            // TCHAP hide the Matrix Id
-//            Text(
-//                text = userId,
-//                color = MaterialTheme.colorScheme.secondary,
-//                maxLines = 1,
-//                overflow = TextOverflow.Ellipsis,
-//                style = ElementTheme.typography.fontBodySmRegular,
-//            )
+            if (isDebugBuild) { // TCHAP hide the Matrix Id in release mode
+                Text(
+                    text = userId,
+                    color = MaterialTheme.colorScheme.secondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = ElementTheme.typography.fontBodySmRegular,
+                )
+            }
         }
     }
 }

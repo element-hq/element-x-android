@@ -28,6 +28,7 @@ fun anActionListState(): ReactionSummaryState {
     val reactions = aTimelineItemReactions(8, true).reactions
     return ReactionSummaryState(
         target = ReactionSummaryState.Summary(
+            isDebugBuild = false,
             reactions = reactions,
             selectedKey = reactions[0].key,
             selectedEventId = EventId("$1234"),

@@ -25,6 +25,7 @@ import io.element.android.features.logout.api.direct.DirectLogoutPresenter
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
@@ -125,10 +126,12 @@ class PreferencesRootPresenterTest {
     }
 
     private fun createPresenter(
+        buildMeta: BuildMeta = aBuildMeta(),
         matrixClient: FakeMatrixClient = FakeMatrixClient(),
         sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
         showDeveloperSettingsProvider: ShowDeveloperSettingsProvider = ShowDeveloperSettingsProvider(aBuildMeta(BuildType.DEBUG)),
     ) = PreferencesRootPresenter(
+        buildMeta = buildMeta,
         matrixClient = matrixClient,
         sessionVerificationService = sessionVerificationService,
         analyticsService = FakeAnalyticsService(),

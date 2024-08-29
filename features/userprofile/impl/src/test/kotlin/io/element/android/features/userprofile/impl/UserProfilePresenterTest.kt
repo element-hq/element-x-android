@@ -28,6 +28,7 @@ import io.element.android.features.userprofile.shared.UserProfileEvents
 import io.element.android.features.userprofile.shared.UserProfileState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
@@ -35,6 +36,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -229,10 +231,12 @@ class UserProfilePresenterTest {
     private fun createUserProfilePresenter(
         client: MatrixClient = FakeMatrixClient(),
         userId: UserId = UserId("@alice:server.org"),
+        buildMeta: BuildMeta = aBuildMeta(),
         startDMAction: StartDMAction = FakeStartDMAction()
     ): UserProfilePresenter {
         return UserProfilePresenter(
             userId = userId,
+            buildMeta = buildMeta,
             client = client,
             startDMAction = startDMAction
         )

@@ -29,6 +29,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
@@ -43,6 +44,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RoomInviteMembersPresenter @Inject constructor(
+    private val buildMeta: BuildMeta,
     private val userRepository: UserRepository,
     private val roomMemberListDataSource: RoomMemberListDataSource,
     private val coroutineDispatchers: CoroutineDispatchers,
@@ -70,6 +72,7 @@ class RoomInviteMembersPresenter @Inject constructor(
         }
 
         return RoomInviteMembersState(
+            isDebugBuild = buildMeta.isDebuggable,
             canInvite = selectedUsers.value.isNotEmpty(),
             selectedUsers = selectedUsers.value,
             searchQuery = searchQuery,

@@ -102,6 +102,7 @@ class RoomListScreen(
         ),
     )
     private val presenter = RoomListPresenter(
+        buildMeta = buildMeta,
         client = matrixClient,
         networkMonitor = DefaultNetworkMonitor(context, Singleton.appScope),
         snackbarDispatcher = SnackbarDispatcher(),
@@ -119,6 +120,7 @@ class RoomListScreen(
         ),
         featureFlagService = featureFlagService,
         searchPresenter = RoomListSearchPresenter(
+            buildMeta = buildMeta,
             RoomListSearchDataSource(
                 roomListService = matrixClient.roomListService,
                 roomSummaryFactory = roomListRoomSummaryFactory,

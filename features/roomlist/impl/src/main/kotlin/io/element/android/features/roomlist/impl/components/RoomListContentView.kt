@@ -220,6 +220,7 @@ private fun RoomsViewList(
             contentType = { _, room -> room.contentType() },
         ) { index, room ->
             RoomSummaryRow(
+                isDebugBuild = state.isDebugBuild,
                 room = room,
                 onClick = onRoomClick,
                 eventSink = eventSink,

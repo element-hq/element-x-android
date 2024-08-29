@@ -25,6 +25,7 @@ data class ReactionSummaryState(
     val eventSink: (ReactionSummaryEvents) -> Unit
 ) {
     data class Summary(
+        val isDebugBuild: Boolean,
         val reactions: ImmutableList<AggregatedReaction>,
         val selectedKey: String,
         val selectedEventId: EventId

@@ -41,6 +41,7 @@ internal fun aBlockedUsersState(
     eventSink: (BlockedUsersEvents) -> Unit = {},
 ): BlockedUsersState {
     return BlockedUsersState(
+        isDebugBuild = false,
         blockedUsers = blockedUsers.toPersistentList(),
         unblockUserAction = unblockUserAction,
         eventSink = eventSink,

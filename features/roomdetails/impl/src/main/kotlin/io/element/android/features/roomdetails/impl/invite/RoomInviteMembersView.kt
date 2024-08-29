@@ -85,6 +85,7 @@ fun RoomInviteMembersView(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             RoomInviteMembersSearchBar(
+                isDebugBuild = state.isDebugBuild,
                 modifier = Modifier.fillMaxWidth(),
                 query = state.searchQuery,
                 showLoader = state.showSearchLoader,
@@ -137,6 +138,7 @@ private fun RoomInviteMembersTopBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RoomInviteMembersSearchBar(
+    isDebugBuild: Boolean,
     query: String,
     state: SearchBarResultState<ImmutableList<InvitableUser>>,
     showLoader: Boolean,
@@ -207,6 +209,7 @@ private fun RoomInviteMembersSearchBar(
                         )
                     }
                     CheckableUserRow(
+                        isDebugBuild = isDebugBuild,
                         checked = invitableUser.isSelected,
                         enabled = enabled,
                         data = data,

@@ -34,6 +34,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
 data class MessagesState(
+    val isDebugBuild: Boolean,
     val roomId: RoomId,
     val roomName: AsyncData<String>,
     val roomAvatar: AsyncData<AvatarData>,

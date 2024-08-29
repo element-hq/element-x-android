@@ -22,11 +22,13 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
@@ -80,12 +82,14 @@ class EditUserProfilePresenterTest {
 
     private fun createEditUserProfilePresenter(
         matrixClient: MatrixClient = FakeMatrixClient(),
+        buildMeta: BuildMeta = aBuildMeta(),
         matrixUser: MatrixUser = aMatrixUser(),
         permissionsPresenter: PermissionsPresenter = FakePermissionsPresenter(),
     ): EditUserProfilePresenter {
         return EditUserProfilePresenter(
             matrixClient = matrixClient,
             matrixUser = matrixUser,
+            buildMeta = buildMeta,
             mediaPickerProvider = fakePickerProvider,
             mediaPreProcessor = fakeMediaPreProcessor,
             permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter),

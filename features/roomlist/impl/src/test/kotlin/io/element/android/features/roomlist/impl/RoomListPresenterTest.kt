@@ -38,6 +38,7 @@ import io.element.android.features.roomlist.impl.search.RoomListSearchEvents
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.features.roomlist.impl.search.aRoomListSearchState
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.test.A_FORMATTED_DATE
 import io.element.android.libraries.dateformatter.test.FakeLastMessageTimestampFormatter
@@ -68,6 +69,7 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
@@ -637,6 +639,7 @@ class RoomListPresenterTest {
     }
 
     private fun TestScope.createRoomListPresenter(
+        buildMeta: BuildMeta = aBuildMeta(),
         client: MatrixClient = FakeMatrixClient(),
         networkMonitor: NetworkMonitor = FakeNetworkMonitor(),
         snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
@@ -654,6 +657,7 @@ class RoomListPresenterTest {
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() },
         notificationCleaner: NotificationCleaner = FakeNotificationCleaner(),
     ) = RoomListPresenter(
+        buildMeta = buildMeta,
         client = client,
         networkMonitor = networkMonitor,
         snackbarDispatcher = snackbarDispatcher,

@@ -30,6 +30,7 @@ import io.element.android.features.userprofile.shared.UserProfileEvents
 import io.element.android.features.userprofile.shared.UserProfileState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -38,6 +39,7 @@ import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.collections.immutable.persistentListOf
@@ -343,12 +345,14 @@ class RoomMemberDetailsPresenterTest {
 
     private fun createRoomMemberDetailsPresenter(
         room: MatrixRoom,
+        buildMeta: BuildMeta = aBuildMeta(),
         client: MatrixClient = FakeMatrixClient(),
         roomMemberId: UserId = UserId("@alice:server.org"),
         startDMAction: StartDMAction = FakeStartDMAction()
     ): RoomMemberDetailsPresenter {
         return RoomMemberDetailsPresenter(
             roomMemberId = roomMemberId,
+            buildMeta = buildMeta,
             client = client,
             room = room,
             startDMAction = startDMAction

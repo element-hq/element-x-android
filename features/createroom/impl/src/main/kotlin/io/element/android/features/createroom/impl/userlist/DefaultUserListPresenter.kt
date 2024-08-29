@@ -28,6 +28,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -44,6 +45,7 @@ class DefaultUserListPresenter @AssistedInject constructor(
     @Assisted val args: UserListPresenterArgs,
     @Assisted val userRepository: UserRepository,
     @Assisted val userListDataStore: UserListDataStore,
+    private val buildMeta: BuildMeta,
     private val matrixClient: MatrixClient,
 ) : UserListPresenter {
     @AssistedFactory
@@ -84,6 +86,7 @@ class DefaultUserListPresenter @AssistedInject constructor(
         }
 
         return UserListState(
+            isDebugBuild = buildMeta.isDebuggable,
             searchQuery = searchQuery,
             searchResults = searchResults,
             selectedUsers = selectedUsers.toImmutableList(),

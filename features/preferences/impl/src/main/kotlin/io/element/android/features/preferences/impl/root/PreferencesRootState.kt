@@ -21,6 +21,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
 data class PreferencesRootState(
+    val isDebugBuild: Boolean,
     val myUser: MatrixUser,
     val version: String,
     val deviceId: String?,

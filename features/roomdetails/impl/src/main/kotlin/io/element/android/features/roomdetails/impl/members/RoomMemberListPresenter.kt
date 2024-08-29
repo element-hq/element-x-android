@@ -34,6 +34,7 @@ import io.element.android.features.roomdetails.impl.members.moderation.RoomMembe
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
@@ -46,6 +47,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class RoomMemberListPresenter @AssistedInject constructor(
+    private val buildMeta: BuildMeta,
     private val room: MatrixRoom,
     private val roomMemberListDataSource: RoomMemberListDataSource,
     private val coroutineDispatchers: CoroutineDispatchers,
@@ -155,6 +157,7 @@ class RoomMemberListPresenter @AssistedInject constructor(
         }
 
         return RoomMemberListState(
+            isDebugBuild = buildMeta.isDebuggable,
             roomMembers = roomMembers,
             searchQuery = searchQuery,
             searchResults = searchResults,

@@ -31,10 +31,12 @@ import io.element.android.features.roomdetails.impl.members.moderation.RoomMembe
 import io.element.android.features.roomdetails.impl.members.moderation.aRoomMembersModerationState
 import io.element.android.features.roomdetails.members.moderation.FakeRoomMembersModerationPresenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.tests.testutils.WarmUpRule
@@ -270,6 +272,7 @@ private fun TestScope.createDataSource(
 
 @ExperimentalCoroutinesApi
 private fun TestScope.createPresenter(
+    buildMeta: BuildMeta = aBuildMeta(),
     coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
     matrixRoom: MatrixRoom = FakeMatrixRoom(
         updateMembersResult = { Result.success(Unit) }
@@ -278,6 +281,7 @@ private fun TestScope.createPresenter(
     moderationPresenter: FakeRoomMembersModerationPresenter = FakeRoomMembersModerationPresenter(),
     navigator: RoomMemberListNavigator = object : RoomMemberListNavigator {}
 ) = RoomMemberListPresenter(
+    buildMeta = buildMeta,
     room = matrixRoom,
     roomMemberListDataSource = roomMemberListDataSource,
     coroutineDispatchers = coroutineDispatchers,

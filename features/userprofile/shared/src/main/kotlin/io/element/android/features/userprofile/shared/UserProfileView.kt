@@ -68,9 +68,10 @@ fun UserProfileView(
                 .verticalScroll(rememberScrollState())
         ) {
             UserProfileHeaderSection(
+                isDebugBuild = state.isDebugBuild,
                 avatarUrl = state.avatarUrl,
                 userId = state.userId,
-                userName = state.userName ?: state.userId.toDisplayName(), // TCHAP hide the Matrix Id
+                userName = state.userName ?: state.userId.toDisplayName(), // TCHAP display a value generated from userId if displayname does not exist
                 openAvatarPreview = { avatarUrl ->
                     openAvatarPreview(state.userName ?: state.userId.value, avatarUrl)
                 },

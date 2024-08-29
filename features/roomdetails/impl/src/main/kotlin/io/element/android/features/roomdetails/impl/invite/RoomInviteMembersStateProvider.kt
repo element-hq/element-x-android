@@ -87,6 +87,7 @@ private fun aRoomInviteMembersState(
     showSearchLoader: Boolean = false,
 ): RoomInviteMembersState {
     return RoomInviteMembersState(
+        isDebugBuild = false,
         canInvite = canInvite,
         searchQuery = searchQuery,
         searchResults = searchResults,
