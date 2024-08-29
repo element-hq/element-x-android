@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package io.element.android.features.logout.test
+package io.element.android.features.logout.api.util
 
-import io.element.android.features.logout.api.LogoutUseCase
-import io.element.android.tests.testutils.lambda.lambdaError
+import android.app.Activity
+import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
+import timber.log.Timber
 
-class FakeLogoutUseCase(
-    var logoutLambda: (Boolean) -> String? = { lambdaError() }
-) : LogoutUseCase {
-    override suspend fun logout(ignoreSdkError: Boolean): String? {
-        return logoutLambda(ignoreSdkError)
+fun onSuccessLogout(
+    activity: Activity,
+    darkTheme: Boolean,
+    url: String?,
+) {
+    Timber.d("Success logout with result url: $url")
+    url?.let {
+        activity.openUrlInChromeCustomTab(null, darkTheme, it)
     }
 }

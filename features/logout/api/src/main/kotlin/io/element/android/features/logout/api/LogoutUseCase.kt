@@ -23,9 +23,10 @@ interface LogoutUseCase {
     /**
      * Log out the current user and then perform any needed cleanup tasks.
      * @param ignoreSdkError if true, the SDK error will be ignored and the user will be logged out anyway.
-     * @return the session id of the logged out user.
+     * @return an optional URL. When the URL is there, it should be presented to the user after logout for
+     * Relying Party (RP) initiated logout on their account page.
      */
-    suspend fun logout(ignoreSdkError: Boolean): String
+    suspend fun logout(ignoreSdkError: Boolean): String?
 
     interface Factory {
         fun create(sessionId: String): LogoutUseCase

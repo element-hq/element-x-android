@@ -33,9 +33,6 @@ interface SecureBackupEntryPoint : FeatureEntryPoint {
         data object EnterRecoveryKey : InitialTarget
 
         @Parcelize
-        data object CreateNewRecoveryKey : InitialTarget
-
-        @Parcelize
         data object ResetIdentity : InitialTarget
     }
 

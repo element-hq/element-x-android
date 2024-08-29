@@ -140,6 +140,9 @@ class ResetIdentityFlowNode @AssistedInject constructor(
                     }
                     is AsyncData.Success -> {
                         when (val handle = state.data) {
+                            null -> {
+                                Timber.d("No reset handle return, the reset is done.")
+                            }
                             is IdentityOidcResetHandle -> {
                                 if (oidcEntryPoint.canUseCustomTab()) {
                                     activity.openUrlInChromeCustomTab(null, false, handle.url)

@@ -26,7 +26,6 @@ import io.element.android.libraries.push.api.notifications.NotificationIdProvide
 import javax.inject.Inject
 
 interface ActiveNotificationsProvider {
-    fun getAllNotifications(): List<StatusBarNotification>
     fun getMessageNotificationsForRoom(sessionId: SessionId, roomId: RoomId): List<StatusBarNotification>
     fun getNotificationsForSession(sessionId: SessionId): List<StatusBarNotification>
     fun getMembershipNotificationForSession(sessionId: SessionId): List<StatusBarNotification>
@@ -39,10 +38,6 @@ interface ActiveNotificationsProvider {
 class DefaultActiveNotificationsProvider @Inject constructor(
     private val notificationManager: NotificationManagerCompat,
 ) : ActiveNotificationsProvider {
-    override fun getAllNotifications(): List<StatusBarNotification> {
-        return notificationManager.activeNotifications
-    }
-
     override fun getNotificationsForSession(sessionId: SessionId): List<StatusBarNotification> {
         return notificationManager.activeNotifications.filter { it.notification.group == sessionId.value }
     }
