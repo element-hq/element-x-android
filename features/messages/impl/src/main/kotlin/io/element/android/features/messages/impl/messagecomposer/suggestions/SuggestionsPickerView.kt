@@ -114,7 +114,7 @@ private fun SuggestionItemView(
         }
         val title = when (suggestion) {
             is ResolvedSuggestion.AtRoom -> stringResource(R.string.screen_room_mentions_at_room_title)
-            is ResolvedSuggestion.Member -> suggestion.roomMember.getBestName() // TCHAP should be applied in Element X
+            is ResolvedSuggestion.Member -> suggestion.roomMember.getBestName() // TCHAP TODO should be applied in Element X
             is ResolvedSuggestion.Alias -> suggestion.roomSummary.name
         }
         val subtitle = when (suggestion) {

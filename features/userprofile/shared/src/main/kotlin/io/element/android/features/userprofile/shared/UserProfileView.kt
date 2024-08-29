@@ -67,13 +67,14 @@ fun UserProfileView(
                 .consumeWindowInsets(padding)
                 .verticalScroll(rememberScrollState())
         ) {
+            // TCHAP display a value generated from userId if displayname does not exist
             UserProfileHeaderSection(
                 isDebugBuild = state.isDebugBuild,
                 avatarUrl = state.avatarUrl,
                 userId = state.userId,
-                userName = state.userName ?: state.userId.toDisplayName(), // TCHAP display a value generated from userId if displayname does not exist
+                userName = state.userName ?: state.userId.toDisplayName(),
                 openAvatarPreview = { avatarUrl ->
-                    openAvatarPreview(state.userName ?: state.userId.value, avatarUrl)
+                    openAvatarPreview(state.userName ?: state.userId.toDisplayName(), avatarUrl)
                 },
             )
 

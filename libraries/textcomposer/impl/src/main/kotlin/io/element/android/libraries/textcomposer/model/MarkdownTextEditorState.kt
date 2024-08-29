@@ -73,7 +73,7 @@ class MarkdownTextEditorState(
             }
             is ResolvedSuggestion.Member -> {
                 val currentText = SpannableStringBuilder(text.value())
-                val text = resolvedSuggestion.roomMember.displayName?.prependIndent("@") ?: resolvedSuggestion.roomMember.userId.value // TCHAP check needed about mxid displaying
+                val text = resolvedSuggestion.roomMember.displayName?.prependIndent("@") ?: resolvedSuggestion.roomMember.userId.value // TCHAP TODO check needed about mxid displaying
                 val link = permalinkBuilder.permalinkForUser(resolvedSuggestion.roomMember.userId).getOrNull() ?: return
                 val mentionPill = mentionSpanProvider.getMentionSpanFor(text, link)
                 currentText.replace(suggestion.start, suggestion.end, "@ ")

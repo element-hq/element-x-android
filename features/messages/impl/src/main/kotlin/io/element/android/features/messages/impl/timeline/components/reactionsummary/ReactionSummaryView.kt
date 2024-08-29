@@ -158,7 +158,7 @@ private fun SheetContent(
                     SenderRow(
                         isDebugBuild = summary.isDebugBuild,
                         avatarData = user.getAvatarData(AvatarSize.UserListItem),
-                        name = user.getBestName(), // TCHAP should be applied in Element X
+                        name = user.getBestName(), // TCHAP TODO should be applied in Element X
                         userId = user.userId.value,
                         sentTime = sender.sentTime
                     )
