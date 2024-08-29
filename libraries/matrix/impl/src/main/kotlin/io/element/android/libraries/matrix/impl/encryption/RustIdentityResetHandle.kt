@@ -30,9 +30,7 @@ object RustIdentityResetHandleFactory {
         identityResetHandle: org.matrix.rustcomponents.sdk.IdentityResetHandle?
     ): Result<IdentityResetHandle?> {
         return runCatching {
-            if (identityResetHandle == null) {
-                null
-            } else {
+            identityResetHandle?.let {
                 when (val authType = identityResetHandle.authType()) {
                     is CrossSigningResetAuthType.Oidc -> RustOidcIdentityResetHandle(identityResetHandle, authType.info.approvalUrl)
                     // User interactive authentication (user + password)
