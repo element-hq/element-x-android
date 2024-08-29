@@ -106,7 +106,7 @@ class PinUnlockPresenterTest {
 
     @Test
     fun `present - forgot pin flow`() = runTest {
-        val signOutLambda = lambdaRecorder<Boolean, String> { "" }
+        val signOutLambda = lambdaRecorder<Boolean, String?> { "" }
         val signOut = FakeLogoutUseCase(signOutLambda)
         val presenter = createPinUnlockPresenter(this, logoutUseCase = signOut)
         moleculeFlow(RecompositionMode.Immediate) {
