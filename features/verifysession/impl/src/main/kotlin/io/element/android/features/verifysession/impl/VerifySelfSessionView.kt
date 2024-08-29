@@ -37,6 +37,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -46,11 +47,13 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.verifysession.impl.emoji.toEmojiResource
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.PageTitle
+import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -70,11 +73,13 @@ fun VerifySelfSessionView(
     onEnterRecoveryKey: () -> Unit,
     onResetKey: () -> Unit,
     onFinish: () -> Unit,
+    onSuccessLogout: (String?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun resetFlow() {
         state.eventSink(VerifySelfSessionViewEvents.Reset)
     }
+
     val latestOnFinish by rememberUpdatedState(newValue = onFinish)
     LaunchedEffect(state.verificationFlowStep, latestOnFinish) {
         if (state.verificationFlowStep is FlowStep.Skipped) {
@@ -97,17 +102,23 @@ fun VerifySelfSessionView(
     HeaderFooterPage(
         modifier = modifier,
         topBar = {
-             TopAppBar(
-                 title = {},
-                 actions = {
-                     if (state.displaySkipButton && state.verificationFlowStep != FlowStep.Completed) {
-                         TextButton(
-                             text = stringResource(CommonStrings.action_skip),
-                             onClick = { state.eventSink(VerifySelfSessionViewEvents.SkipVerification) }
-                         )
-                     }
-                 }
-             )
+            TopAppBar(
+                title = {},
+                actions = {
+                    if (state.verificationFlowStep != FlowStep.Completed) {
+                        if (state.displaySkipButton && LocalInspectionMode.current.not()) {
+                            TextButton(
+                                text = stringResource(CommonStrings.action_skip),
+                                onClick = { state.eventSink(VerifySelfSessionViewEvents.SkipVerification) }
+                            )
+                        }
+                        TextButton(
+                            text = stringResource(CommonStrings.action_signout),
+                            onClick = { state.eventSink(VerifySelfSessionViewEvents.SignOut) }
+                        )
+                    }
+                }
+            )
         },
         header = {
             HeaderContent(verificationFlowStep = verificationFlowStep)
@@ -123,6 +134,21 @@ fun VerifySelfSessionView(
         }
     ) {
         Content(flowState = verificationFlowStep)
+    }
+
+    when (state.signOutAction) {
+        AsyncAction.Loading -> {
+            ProgressDialog(text = stringResource(id = R.string.screen_signout_in_progress_dialog_content))
+        }
+        is AsyncAction.Success -> {
+            val latestOnSuccessLogout by rememberUpdatedState(onSuccessLogout)
+            LaunchedEffect(state) {
+                latestOnSuccessLogout(state.signOutAction.data)
+            }
+        }
+        AsyncAction.Confirming,
+        is AsyncAction.Failure,
+        AsyncAction.Uninitialized -> Unit
     }
 }
 
@@ -367,5 +393,6 @@ internal fun VerifySelfSessionViewPreview(@PreviewParameter(VerifySelfSessionSta
         onEnterRecoveryKey = {},
         onResetKey = {},
         onFinish = {},
+        onSuccessLogout = {},
     )
 }

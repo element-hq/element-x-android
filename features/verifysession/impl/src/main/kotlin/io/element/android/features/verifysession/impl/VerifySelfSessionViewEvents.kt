@@ -23,5 +23,6 @@ sealed interface VerifySelfSessionViewEvents {
     data object DeclineVerification : VerifySelfSessionViewEvents
     data object Cancel : VerifySelfSessionViewEvents
     data object Reset : VerifySelfSessionViewEvents
+    data object SignOut : VerifySelfSessionViewEvents
     data object SkipVerification : VerifySelfSessionViewEvents
 }

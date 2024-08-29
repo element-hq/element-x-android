@@ -55,6 +55,7 @@
       "name" : ":features:verifysession:impl",
       "includeRegex" : [
         "screen_session_verification_.*",
+        "screen_signout_in_progress_dialog_content",
         "screen_identity_.*"
       ]
     },

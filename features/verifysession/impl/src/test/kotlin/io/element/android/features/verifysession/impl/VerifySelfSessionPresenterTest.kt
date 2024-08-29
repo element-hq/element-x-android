@@ -21,6 +21,8 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.logout.api.LogoutUseCase
+import io.element.android.features.logout.test.FakeLogoutUseCase
 import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.meta.BuildMeta
@@ -36,6 +38,8 @@ import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -309,6 +313,31 @@ class VerifySelfSessionPresenterTest {
         }
     }
 
+    @Test
+    fun `present - When user request to sign out, the sign out use case is invoked`() = runTest {
+        val service = FakeSessionVerificationService().apply {
+            givenNeedsSessionVerification(false)
+            givenVerifiedStatus(SessionVerifiedStatus.Verified)
+            givenVerificationFlowState(VerificationFlowState.Finished)
+        }
+        val signOutLambda = lambdaRecorder<Boolean, String?> { "aUrl" }
+        val presenter = createVerifySelfSessionPresenter(
+            service,
+            logoutUseCase = FakeLogoutUseCase(signOutLambda)
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            val initialItem = awaitItem()
+            initialItem.eventSink(VerifySelfSessionViewEvents.SignOut)
+            val finalItem = awaitItem()
+            assertThat(finalItem.signOutAction.isSuccess()).isTrue()
+            assertThat(finalItem.signOutAction.dataOrNull()).isEqualTo("aUrl")
+            signOutLambda.assertions().isCalledOnce().with(value(true))
+        }
+    }
+
     private suspend fun ReceiveTurbine<VerifySelfSessionState>.requestVerificationAndAwaitVerifyingState(
         fakeService: FakeSessionVerificationService,
         sessionVerificationData: SessionVerificationData = SessionVerificationData.Emojis(emptyList()),
@@ -344,6 +373,7 @@ class VerifySelfSessionPresenterTest {
         encryptionService: EncryptionService = FakeEncryptionService(),
         buildMeta: BuildMeta = aBuildMeta(),
         sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
+        logoutUseCase: LogoutUseCase = FakeLogoutUseCase(),
     ): VerifySelfSessionPresenter {
         return VerifySelfSessionPresenter(
             sessionVerificationService = service,
@@ -351,6 +381,7 @@ class VerifySelfSessionPresenterTest {
             stateMachine = VerifySelfSessionStateMachine(service, encryptionService),
             buildMeta = buildMeta,
             sessionPreferencesStore = sessionPreferencesStore,
+            logoutUseCase = logoutUseCase,
         )
     }
 }

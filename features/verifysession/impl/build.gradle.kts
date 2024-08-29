@@ -43,6 +43,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.features.logout.api)
     api(libs.statemachine)
     api(projects.features.verifysession.api)
 
@@ -52,6 +53,7 @@ dependencies {
     testImplementation(libs.test.robolectric)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)
+    testImplementation(projects.features.logout.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.tests.testutils)
