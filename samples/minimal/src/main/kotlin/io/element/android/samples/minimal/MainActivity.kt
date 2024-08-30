@@ -50,6 +50,7 @@ class MainActivity : ComponentActivity() {
         val proxyProvider = NoOpProxyProvider()
         RustMatrixAuthenticationService(
             baseDirectory = baseDirectory,
+            cacheDirectory = applicationContext.cacheDir,
             coroutineDispatchers = Singleton.coroutineDispatchers,
             sessionStore = sessionStore,
             rustMatrixClientFactory = RustMatrixClientFactory(

@@ -56,6 +56,7 @@ import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
 import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
 import io.element.android.libraries.matrix.impl.oidc.toRustAction
+import io.element.android.libraries.matrix.impl.paths.getSessionPaths
 import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
@@ -67,7 +68,7 @@ import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
-import io.element.android.libraries.matrix.impl.util.SessionDirectoryProvider
+import io.element.android.libraries.matrix.impl.util.SessionPathsProvider
 import io.element.android.libraries.matrix.impl.util.anonymizedTokens
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
@@ -161,7 +162,7 @@ class RustMatrixClient(
         sessionDispatcher = sessionDispatcher,
     )
 
-    private val sessionDirectoryProvider = SessionDirectoryProvider(sessionStore)
+    private val sessionPathsProvider = SessionPathsProvider(sessionStore)
 
     private val isLoggingOut = AtomicBoolean(false)
 
@@ -186,7 +187,7 @@ class RustMatrixClient(
                             isTokenValid = false,
                             loginType = existingData.loginType,
                             passphrase = existingData.passphrase,
-                            sessionPath = existingData.sessionPath,
+                            sessionPaths = existingData.getSessionPaths(),
                         )
                         sessionStore.updateData(newData)
                         clientLog.d("Removed session data with access token: '$anonymizedAccessToken'.")
@@ -217,7 +218,7 @@ class RustMatrixClient(
                     isTokenValid = true,
                     loginType = existingData.loginType,
                     passphrase = existingData.passphrase,
-                    sessionPath = existingData.sessionPath,
+                    sessionPaths = existingData.getSessionPaths(),
                 )
                 sessionStore.updateData(newData)
                 clientLog.d("Saved new session data with access token: '$anonymizedAccessToken'.")
@@ -617,16 +618,17 @@ class RustMatrixClient(
     private suspend fun File.getCacheSize(
         includeCryptoDb: Boolean = false,
     ): Long = withContext(sessionDispatcher) {
-        val sessionDirectory = sessionDirectoryProvider.provides(sessionId) ?: return@withContext 0L
+        val sessionDirectory = sessionPathsProvider.provides(sessionId) ?: return@withContext 0L
+        val cacheSize = sessionDirectory.cacheDirectory.getSizeOfFiles()
         if (includeCryptoDb) {
-            sessionDirectory.getSizeOfFiles()
+            cacheSize + sessionDirectory.fileDirectory.getSizeOfFiles()
         } else {
-            listOf(
+            cacheSize + listOf(
                 "matrix-sdk-state.sqlite3",
                 "matrix-sdk-state.sqlite3-shm",
                 "matrix-sdk-state.sqlite3-wal",
             ).map { fileName ->
-                File(sessionDirectory, fileName)
+                File(sessionDirectory.fileDirectory, fileName)
             }.sumOf { file ->
                 file.length()
             }
@@ -636,13 +638,15 @@ class RustMatrixClient(
     private suspend fun deleteSessionDirectory(
         deleteCryptoDb: Boolean = false,
     ): Boolean = withContext(sessionDispatcher) {
-        val sessionDirectory = sessionDirectoryProvider.provides(sessionId) ?: return@withContext false
+        val sessionPaths = sessionPathsProvider.provides(sessionId) ?: return@withContext false
+        // Always delete the cache directory
+        sessionPaths.cacheDirectory.deleteRecursively()
         if (deleteCryptoDb) {
             // Delete the folder and all its content
-            sessionDirectory.deleteRecursively()
+            sessionPaths.fileDirectory.deleteRecursively()
         } else {
             // Delete only the state.db file
-            sessionDirectory.listFiles().orEmpty()
+            sessionPaths.fileDirectory.listFiles().orEmpty()
                 .filter { it.name.contains("matrix-sdk-state") }
                 .forEach { file ->
                     Timber.w("Deleting file ${file.name}...")
