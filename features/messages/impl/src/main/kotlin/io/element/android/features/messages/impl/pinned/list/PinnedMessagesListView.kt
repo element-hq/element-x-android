@@ -36,7 +36,11 @@ import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.timeline.components.TimelineItemRow
+import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
+import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
+import io.element.android.features.poll.api.pollcontent.PollTitleView
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.icons.CompoundDrawables
@@ -70,8 +74,8 @@ fun PinnedMessagesListView(
                 onUserDataClick = onUserDataClick,
                 onLinkClick = onLinkClick,
                 modifier = Modifier
-                        .padding(padding)
-                        .consumeWindowInsets(padding),
+                    .padding(padding)
+                    .consumeWindowInsets(padding),
             )
         }
     )
@@ -208,8 +212,40 @@ private fun PinnedMessagesListLoaded(
                 onSwipeToReply = {},
                 onJoinCallClick = {},
                 onShieldClick = {},
+                eventContentView = { event, contentModifier, onContentLayoutChange ->
+                    TimelineItemEventContentViewWrapper(
+                        event = event,
+                        onLinkClick = onLinkClick,
+                        modifier = contentModifier,
+                        onContentLayoutChange = onContentLayoutChange
+                    )
+                },
             )
         }
+    }
+}
+
+@Composable
+private fun TimelineItemEventContentViewWrapper(
+    event: TimelineItem.Event,
+    onLinkClick: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
+) {
+    if (event.content is TimelineItemPollContent) {
+        PollTitleView(
+            title = event.content.question,
+            isPollEnded = event.content.isEnded,
+            modifier = modifier
+        )
+    } else {
+        TimelineItemEventContentView(
+            content = event.content,
+            onLinkClick = onLinkClick,
+            eventSink = { },
+            modifier = modifier,
+            onContentLayoutChange = onContentLayoutChange
+        )
     }
 }
 
