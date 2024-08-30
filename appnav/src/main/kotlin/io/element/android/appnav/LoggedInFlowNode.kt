@@ -34,8 +34,10 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.replace
+import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.JoinedRoom
@@ -290,21 +292,24 @@ class LoggedInFlowNode @AssistedInject constructor(
                         coroutineScope.launch { attachRoom(roomId.toRoomIdOrAlias()) }
                     }
 
-                    override fun onPermalinkClick(data: PermalinkData) {
+                    override fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean) {
                         when (data) {
                             is PermalinkData.UserLink -> {
                                 // Should not happen (handled by MessagesNode)
                                 Timber.e("User link clicked: ${data.userId}.")
                             }
                             is PermalinkData.RoomLink -> {
-                                backstack.push(
-                                    NavTarget.Room(
-                                        roomIdOrAlias = data.roomIdOrAlias,
-                                        serverNames = data.viaParameters,
-                                        trigger = JoinedRoom.Trigger.Timeline,
-                                        initialElement = RoomNavigationTarget.Messages(data.eventId),
-                                    )
+                                val target = NavTarget.Room(
+                                    roomIdOrAlias = data.roomIdOrAlias,
+                                    serverNames = data.viaParameters,
+                                    trigger = JoinedRoom.Trigger.Timeline,
+                                    initialElement = RoomNavigationTarget.Messages(data.eventId),
                                 )
+                                if (pushToBackstack) {
+                                    backstack.push(target)
+                                } else {
+                                    backstack.singleTop(target)
+                                }
                             }
                             is PermalinkData.FallbackLink,
                             is PermalinkData.RoomEmailInviteLink -> {

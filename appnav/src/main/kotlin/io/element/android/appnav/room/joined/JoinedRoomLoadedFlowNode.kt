@@ -77,7 +77,7 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
 ), DaggerComponentOwner {
     interface Callback : Plugin {
         fun onOpenRoom(roomId: RoomId)
-        fun onPermalinkClick(data: PermalinkData)
+        fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean)
         fun onForwardedToSingleRoom(roomId: RoomId)
         fun onOpenGlobalNotificationSettings()
     }
@@ -147,8 +147,8 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.RoomMemberDetails(userId))
                     }
 
-                    override fun onPermalinkClick(data: PermalinkData) {
-                        callbacks.forEach { it.onPermalinkClick(data) }
+                    override fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean) {
+                        callbacks.forEach { it.onPermalinkClick(data, pushToBackstack) }
                     }
 
                     override fun onForwardedToSingleRoom(roomId: RoomId) {

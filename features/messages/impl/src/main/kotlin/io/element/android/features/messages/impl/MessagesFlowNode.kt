@@ -28,7 +28,6 @@ import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
-import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -69,6 +68,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -308,16 +308,15 @@ class MessagesFlowNode @AssistedInject constructor(
                     }
 
                     override fun onViewInTimelineClick(eventId: EventId) {
-                        backstack.newRoot(NavTarget.Messages(overriddenFocusedEventId = eventId))
+                        val permalinkData = PermalinkData.RoomLink(
+                            roomIdOrAlias = room.roomId.toRoomIdOrAlias(),
+                            eventId = eventId,
+                        )
+                        callbacks.forEach { it.onPermalinkClick(permalinkData, pushToBackstack = false) }
                     }
 
                     override fun onRoomPermalinkClick(data: PermalinkData.RoomLink) {
-                        if (room.matches(data.roomIdOrAlias)) {
-                            val eventId = data.eventId
-                            backstack.newRoot(NavTarget.Messages(overriddenFocusedEventId = eventId))
-                        } else {
-                            callbacks.forEach { it.onPermalinkClick(data) }
-                        }
+                        callbacks.forEach { it.onPermalinkClick(data, pushToBackstack = !room.matches(data.roomIdOrAlias)) }
                     }
 
                     override fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
