@@ -16,16 +16,12 @@
 
 package io.element.android.libraries.matrix.ui.media
 
-import android.content.Context
-import coil.ImageLoader
 import coil.decode.DataSource
 import coil.decode.ImageSource
 import coil.fetch.FetchResult
 import coil.fetch.Fetcher
 import coil.fetch.SourceResult
 import coil.request.Options
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.media.toFile
@@ -101,42 +97,5 @@ internal class CoilMediaFetcher(
             mimeType = null,
             dataSource = DataSource.MEMORY
         )
-    }
-
-    class MediaRequestDataFactory(
-        private val context: Context,
-        private val client: MatrixClient
-    ) :
-        Fetcher.Factory<MediaRequestData> {
-        override fun create(
-            data: MediaRequestData,
-            options: Options,
-            imageLoader: ImageLoader
-        ): Fetcher {
-            return CoilMediaFetcher(
-                scalingFunction = { context.resources.displayMetrics.density * it },
-                mediaLoader = client.mediaLoader,
-                mediaData = data,
-                options = options
-            )
-        }
-    }
-
-    class AvatarFactory(
-        private val context: Context,
-        private val client: MatrixClient
-    ) : Fetcher.Factory<AvatarData> {
-        override fun create(
-            data: AvatarData,
-            options: Options,
-            imageLoader: ImageLoader
-        ): Fetcher {
-            return CoilMediaFetcher(
-                scalingFunction = { context.resources.displayMetrics.density * it },
-                mediaLoader = client.mediaLoader,
-                mediaData = data.toMediaRequestData(),
-                options = options
-            )
-        }
     }
 }

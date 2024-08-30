@@ -52,8 +52,8 @@ class DefaultLoggedInImageLoaderFactory @Inject constructor(
                 }
                 add(AvatarDataKeyer())
                 add(MediaRequestDataKeyer())
-                add(CoilMediaFetcher.AvatarFactory(context, matrixClient))
-                add(CoilMediaFetcher.MediaRequestDataFactory(context, matrixClient))
+                add(AvatarDataFetcherFactory(context, matrixClient))
+                add(MediaRequestDataFetcherFactory(context, matrixClient))
             }
             .build()
     }
