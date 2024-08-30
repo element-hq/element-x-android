@@ -21,7 +21,6 @@ import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -32,13 +31,14 @@ import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.impl.ClientBuilderSlidingSync
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
-import io.element.android.libraries.matrix.impl.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.auth.qrlogin.QrErrorMapper
 import io.element.android.libraries.matrix.impl.auth.qrlogin.SdkQrCodeLoginData
 import io.element.android.libraries.matrix.impl.auth.qrlogin.toStep
 import io.element.android.libraries.matrix.impl.exception.mapClientException
 import io.element.android.libraries.matrix.impl.keys.PassphraseGenerator
 import io.element.android.libraries.matrix.impl.mapper.toSessionData
+import io.element.android.libraries.matrix.impl.paths.SessionPaths
+import io.element.android.libraries.matrix.impl.paths.SessionPathsFactory
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -55,15 +55,12 @@ import org.matrix.rustcomponents.sdk.QrLoginProgressListener
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk.OidcAuthorizationData
-import java.io.File
-import java.util.UUID
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
 class RustMatrixAuthenticationService @Inject constructor(
-    private val baseDirectory: File,
-    @CacheDirectory private val cacheDirectory: File,
+    private val sessionPathsFactory: SessionPathsFactory,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val sessionStore: SessionStore,
     private val rustMatrixClientFactory: RustMatrixClientFactory,
@@ -82,11 +79,7 @@ class RustMatrixAuthenticationService @Inject constructor(
 
     private fun rotateSessionPath(): SessionPaths {
         sessionPaths?.deleteRecursively()
-        val subPath = UUID.randomUUID().toString()
-        return SessionPaths(
-            fileDirectory = File(baseDirectory, subPath),
-            cacheDirectory = File(cacheDirectory, subPath),
-        )
+        return sessionPathsFactory.create()
             .also { sessionPaths = it }
     }
 
