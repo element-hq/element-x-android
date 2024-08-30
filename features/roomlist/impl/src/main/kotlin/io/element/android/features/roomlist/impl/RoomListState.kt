@@ -66,6 +66,7 @@ enum class InvitesState {
 
 enum class SecurityBannerState {
     None,
+    SetUpRecovery,
     RecoveryKeyConfirmation,
 }
 

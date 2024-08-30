@@ -138,6 +138,7 @@
         "screen_roomlist_.*",
         "session_verification_banner_.*",
         "confirm_recovery_key_banner_.*",
+        "banner\\.set_up_recovery\\..*",
         "full_screen_intent_banner_.*",
         "screen_migration_.*",
         "screen_invites_.*"

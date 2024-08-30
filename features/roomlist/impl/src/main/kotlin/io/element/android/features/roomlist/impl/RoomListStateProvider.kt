@@ -52,6 +52,7 @@ open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
             aRoomListState(contentState = aSkeletonContentState()),
             aRoomListState(matrixUser = MatrixUser(userId = UserId("@id:domain")), contentState = aMigrationContentState()),
             aRoomListState(searchState = aRoomListSearchState(isSearchActive = true, query = "Test")),
+            aRoomListState(contentState = aRoomsContentState(securityBannerState = SecurityBannerState.SetUpRecovery)),
         )
 }
 
