@@ -20,14 +20,19 @@ package io.element.android.features.verifysession.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import com.freeletics.flowredux.compose.rememberStateAndDispatch
+import io.element.android.features.logout.api.LogoutUseCase
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
@@ -49,6 +54,7 @@ class VerifySelfSessionPresenter @Inject constructor(
     private val stateMachine: VerifySelfSessionStateMachine,
     private val buildMeta: BuildMeta,
     private val sessionPreferencesStore: SessionPreferencesStore,
+    private val logoutUseCase: LogoutUseCase,
 ) : Presenter<VerifySelfSessionState> {
     @Composable
     override fun present(): VerifySelfSessionState {
@@ -61,6 +67,9 @@ class VerifySelfSessionPresenter @Inject constructor(
         val stateAndDispatch = stateMachine.rememberStateAndDispatch()
         val skipVerification by sessionPreferencesStore.isSessionVerificationSkipped().collectAsState(initial = false)
         val needsVerification by sessionVerificationService.needsSessionVerification.collectAsState(initial = true)
+        val signOutAction = remember {
+            mutableStateOf<AsyncAction<String?>>(AsyncAction.Uninitialized)
+        }
         val verificationFlowStep by remember {
             derivedStateOf {
                 when {
@@ -85,6 +94,7 @@ class VerifySelfSessionPresenter @Inject constructor(
                 VerifySelfSessionViewEvents.DeclineVerification -> stateAndDispatch.dispatchAction(StateMachineEvent.DeclineChallenge)
                 VerifySelfSessionViewEvents.Cancel -> stateAndDispatch.dispatchAction(StateMachineEvent.Cancel)
                 VerifySelfSessionViewEvents.Reset -> stateAndDispatch.dispatchAction(StateMachineEvent.Reset)
+                VerifySelfSessionViewEvents.SignOut -> coroutineScope.signOut(signOutAction)
                 VerifySelfSessionViewEvents.SkipVerification -> coroutineScope.launch {
                     sessionPreferencesStore.setSkipSessionVerification(true)
                 }
@@ -92,6 +102,7 @@ class VerifySelfSessionPresenter @Inject constructor(
         }
         return VerifySelfSessionState(
             verificationFlowStep = verificationFlowStep,
+            signOutAction = signOutAction.value,
             displaySkipButton = buildMeta.isDebuggable,
             eventSink = ::handleEvents,
         )
@@ -159,5 +170,11 @@ class VerifySelfSessionPresenter @Inject constructor(
                 }
             }
         }.launchIn(this)
+    }
+
+    private fun CoroutineScope.signOut(signOutAction: MutableState<AsyncAction<String?>>) = launch {
+        suspend {
+            logoutUseCase.logout(ignoreSdkError = true)
+        }.runCatchingUpdatingState(signOutAction)
     }
 }

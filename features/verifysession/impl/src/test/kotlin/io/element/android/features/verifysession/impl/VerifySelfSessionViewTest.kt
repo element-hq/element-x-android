@@ -20,6 +20,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -27,6 +28,7 @@ import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
+import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBackKey
 import org.junit.Rule
 import org.junit.Test
@@ -213,11 +215,26 @@ class VerifySelfSessionViewTest {
         }
     }
 
+    @Test
+    fun `on success logout - onFinished callback is called immediately`() {
+        val aUrl = "aUrl"
+        ensureCalledOnceWithParam<String?>(aUrl) { callback ->
+            rule.setVerifySelfSessionView(
+                aVerifySelfSessionState(
+                    signOutAction = AsyncAction.Success(aUrl),
+                    eventSink = EnsureNeverCalledWithParam(),
+                ),
+                onSuccessLogout = callback,
+            )
+        }
+    }
+
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setVerifySelfSessionView(
         state: VerifySelfSessionState,
         onEnterRecoveryKey: () -> Unit = EnsureNeverCalled(),
         onFinished: () -> Unit = EnsureNeverCalled(),
         onResetKey: () -> Unit = EnsureNeverCalled(),
+        onSuccessLogout: (String?) -> Unit = EnsureNeverCalledWithParam(),
     ) {
         setContent {
             VerifySelfSessionView(
@@ -225,6 +242,7 @@ class VerifySelfSessionViewTest {
                 onEnterRecoveryKey = onEnterRecoveryKey,
                 onFinish = onFinished,
                 onResetKey = onResetKey,
+                onSuccessLogout = onSuccessLogout,
             )
         }
     }
