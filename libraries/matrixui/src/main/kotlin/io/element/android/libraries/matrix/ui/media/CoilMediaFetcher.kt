@@ -34,12 +34,13 @@ import kotlin.math.roundToLong
 internal class CoilMediaFetcher(
     private val scalingFunction: (Float) -> Float,
     private val mediaLoader: MatrixMediaLoader,
-    private val mediaData: MediaRequestData?,
+    private val mediaData: MediaRequestData,
     private val options: Options
 ) : Fetcher {
     override suspend fun fetch(): FetchResult? {
-        if (mediaData?.source == null) return null.also {
+        if (mediaData.source == null) {
             Timber.e("MediaData source is null")
+            return null
         }
         return when (mediaData.kind) {
             is MediaRequestData.Kind.Content -> fetchContent(mediaData.source, options)
