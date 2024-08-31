@@ -50,6 +50,7 @@ class SecureBackupFlowNode @AssistedInject constructor(
     backstack = BackStack(
         initialElement = when (plugins.filterIsInstance<SecureBackupEntryPoint.Params>().first().initialElement) {
             SecureBackupEntryPoint.InitialTarget.Root -> NavTarget.Root
+            SecureBackupEntryPoint.InitialTarget.SetUpRecovery -> NavTarget.Setup
             SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey -> NavTarget.EnterRecoveryKey
             is SecureBackupEntryPoint.InitialTarget.ResetIdentity -> NavTarget.ResetIdentity
         },

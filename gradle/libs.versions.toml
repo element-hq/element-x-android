@@ -3,7 +3,7 @@
 
 [versions]
 # Project
-android_gradle_plugin = "8.5.2"
+android_gradle_plugin = "8.6.0"
 kotlin = "1.9.25"
 ksp = "1.9.25-1.0.20"
 firebaseAppDistribution = "5.0.0"
@@ -39,7 +39,7 @@ test_core = "1.6.1"
 #other
 coil = "2.7.0"
 datetime = "0.6.0"
-dependencyAnalysis = "2.0.0"
+dependencyAnalysis = "2.0.1"
 serialization_json = "1.6.3"
 showkase = "1.0.3"
 appyx = "1.4.0"
@@ -187,7 +187,7 @@ zxing_cpp = "io.github.zxing-cpp:android:2.2.0"
 play_services_oss_licenses = "com.google.android.gms:play-services-oss-licenses:17.1.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.5.1"
+posthog = "com.posthog:posthog-android:3.6.0"
 sentry = "io.sentry:sentry-android:7.14.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.23.1"
