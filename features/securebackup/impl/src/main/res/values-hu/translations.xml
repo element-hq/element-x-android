@@ -16,11 +16,11 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Kövesse az utasításokat egy új helyreállítási kulcs létrehozásához"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Mentse az új helyreállítási kulcsot egy jelszókezelőbe vagy egy titkosított jegyzetbe."</string>
   <string name="screen_create_new_recovery_key_title">"A fiók titkosításának visszaállítása egy másik eszköz használatával"</string>
+  <string name="screen_encryption_reset_action_continue_reset">"Visszaállítás folytatása"</string>
   <string name="screen_encryption_reset_bullet_1">"A fiókadatok, a kapcsolatok, a beállítások és a csevegéslista megmarad"</string>
   <string name="screen_encryption_reset_bullet_2">"Elveszíti meglévő üzenetelőzményeit"</string>
   <string name="screen_encryption_reset_bullet_3">"Újból ellenőriznie kell az összes meglévő eszközét és csevegőpartnerét"</string>
   <string name="screen_encryption_reset_footer">"Csak akkor állítsa vissza a személyazonosságát, ha nem fér hozzá másik bejelentkezett eszközhöz, és elvesztette a helyreállítási kulcsot."</string>
-  <string name="screen_encryption_reset_subtitle">"Ha nincs bejelentkezve más eszközre, és elvesztette a helyreállítási kulcsot, akkor az alkalmazás használatának folytatásához vissza kell állítania személyazonosságát. "</string>
   <string name="screen_encryption_reset_title">"Állítsa vissza a személyazonosságát, ha más módon nem tudja megerősíteni"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Kikapcsolás"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Ha kijelentkezik az összes eszközéről, akkor elveszti a titkosított üzeneteit."</string>

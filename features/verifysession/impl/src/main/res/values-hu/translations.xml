@@ -28,4 +28,5 @@
   <string name="screen_session_verification_they_match">"Megegyeznek"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"A folytatáshoz fogadja el az ellenőrzési folyamat indítási kérését a másik munkamenetében."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Várakozás a kérés elfogadására"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Kijelentkezés…"</string>
 </resources>

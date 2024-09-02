@@ -24,4 +24,5 @@
   <string name="screen_session_verification_they_match">"Coinciden"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Acepta la solicitud para iniciar el proceso de verificación en tu otra sesión para continuar."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"A la espera de aceptar la solicitud"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Cerrando sesión…"</string>
 </resources>

@@ -18,4 +18,5 @@
   <string name="screen_session_verification_they_match">"Ze komen overeen"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Accepteer het verzoek tot verificatie in je andere sessie om door te gaan."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Wachten om verzoek te accepteren"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Uitloggen…"</string>
 </resources>

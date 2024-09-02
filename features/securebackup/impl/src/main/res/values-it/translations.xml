@@ -20,7 +20,6 @@
   <string name="screen_encryption_reset_bullet_2">"Perderai la cronologia dei messaggi esistente"</string>
   <string name="screen_encryption_reset_bullet_3">"Dovrai verificare nuovamente tutti i dispositivi e i contatti esistenti"</string>
   <string name="screen_encryption_reset_footer">"Reimposta la tua identità solo se non hai accesso a un altro dispositivo su cui hai effettuato l\'accesso e hai perso la chiave di recupero."</string>
-  <string name="screen_encryption_reset_subtitle">"Se non hai effettuato l\'accesso su nessun altro dispositivo e hai perso la chiave di recupero, dovrai reimpostare la tua identità per continuare a utilizzare l\'app."</string>
   <string name="screen_encryption_reset_title">"Reimposta la tua identità nel caso in cui non riesci a confermare in un altro modo"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Disattiva"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Perderai i tuoi messaggi cifrati se sei disconnesso da tutti i dispositivi."</string>
