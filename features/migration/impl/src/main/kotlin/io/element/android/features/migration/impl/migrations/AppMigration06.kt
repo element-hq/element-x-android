@@ -39,8 +39,22 @@ class AppMigration06 @Inject constructor(
             if (session.cachePath.isEmpty()) {
                 val sessionFile = File(session.sessionPath)
                 val sessionFolder = sessionFile.name
-                val cachePath = File(cacheDirectory, sessionFolder).absolutePath
-                sessionStore.updateData(session.copy(cachePath = cachePath))
+                val cachePath = File(cacheDirectory, sessionFolder)
+                sessionStore.updateData(session.copy(cachePath = cachePath.absolutePath))
+                // Move existing cache files
+                listOf(
+                    "matrix-sdk-event-cache.sqlite3",
+                    "matrix-sdk-event-cache.sqlite3-shm",
+                    "matrix-sdk-event-cache.sqlite3-wal",
+                ).map { fileName ->
+                    File(sessionFile, fileName)
+                }.takeIf { files ->
+                    files.all { it.exists() }
+                }?.forEach { cacheFile ->
+                    val targetFile = File(cachePath, cacheFile.name)
+                    cacheFile.copyTo(targetFile)
+                    cacheFile.delete()
+                }
             }
         }
     }
