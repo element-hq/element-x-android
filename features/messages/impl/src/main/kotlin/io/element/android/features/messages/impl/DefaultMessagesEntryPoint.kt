@@ -32,7 +32,7 @@ class DefaultMessagesEntryPoint @Inject constructor() : MessagesEntryPoint {
 
         return object : MessagesEntryPoint.NodeBuilder {
             override fun params(params: MessagesEntryPoint.Params): MessagesEntryPoint.NodeBuilder {
-                plugins += MessagesFlowNode.Inputs(focusedEventId = params.focusedEventId)
+                plugins += MessagesEntryPoint.Params(params.initialTarget)
                 return this
             }
 
@@ -46,4 +46,10 @@ class DefaultMessagesEntryPoint @Inject constructor() : MessagesEntryPoint {
             }
         }
     }
+}
+
+
+internal fun MessagesEntryPoint.InitialTarget.toNavTarget() = when (this) {
+    is MessagesEntryPoint.InitialTarget.Messages -> MessagesFlowNode.NavTarget.Messages(focusedEventId)
+    MessagesEntryPoint.InitialTarget.PinnedMessages -> MessagesFlowNode.NavTarget.PinnedMessagesList
 }

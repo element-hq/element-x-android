@@ -23,17 +23,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.features.messages.api.pinned.IsPinnedMessagesFeatureEnabled
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
-
-fun interface IsPinnedMessagesFeatureEnabled {
-    @Composable
-    operator fun invoke(): Boolean
-}
 
 @ContributesBinding(AppScope::class)
 class DefaultIsPinnedMessagesFeatureEnabled @Inject constructor(

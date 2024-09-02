@@ -105,7 +105,7 @@ class MessagesFlowNode @AssistedInject constructor(
     private val timelineController: TimelineController,
 ) : BaseFlowNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.Messages(overriddenFocusedEventId = null),
+        initialElement = plugins.filterIsInstance<MessagesEntryPoint.Params>().first().initialTarget.toNavTarget(),
         savedStateMap = buildContext.savedStateMap,
     ),
     overlay = Overlay(
@@ -114,16 +114,13 @@ class MessagesFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins
 ) {
-    data class Inputs(val focusedEventId: EventId?) : NodeInputs
-
-    private val inputs = inputs<Inputs>()
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
         data object Empty : NavTarget
 
         @Parcelize
-        data class Messages(val overriddenFocusedEventId: EventId?) : NavTarget
+        data class Messages(val focusedEventId: EventId?) : NavTarget
 
         @Parcelize
         data class MediaViewer(
@@ -157,7 +154,7 @@ class MessagesFlowNode @AssistedInject constructor(
         data class EditPoll(val eventId: EventId) : NavTarget
 
         @Parcelize
-        data object PinnedEvents : NavTarget
+        data object PinnedMessagesList : NavTarget
     }
 
     private val callbacks = plugins<MessagesEntryPoint.Callback>()
@@ -236,12 +233,10 @@ class MessagesFlowNode @AssistedInject constructor(
                     }
 
                     override fun onViewAllPinnedEvents() {
-                        backstack.push(NavTarget.PinnedEvents)
+                        backstack.push(NavTarget.PinnedMessagesList)
                     }
                 }
-                val inputs = MessagesNode.Inputs(
-                    focusedEventId = navTarget.overriddenFocusedEventId ?: inputs.focusedEventId,
-                )
+                val inputs = MessagesNode.Inputs(focusedEventId = navTarget.focusedEventId)
                 createNode<MessagesNode>(buildContext, listOf(callback, inputs))
             }
             is NavTarget.MediaViewer -> {
@@ -297,7 +292,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     .params(CreatePollEntryPoint.Params(mode = CreatePollMode.EditPoll(eventId = navTarget.eventId)))
                     .build()
             }
-            NavTarget.PinnedEvents -> {
+            NavTarget.PinnedMessagesList -> {
                 val callback = object : PinnedMessagesListNode.Callback {
                     override fun onEventClick(event: TimelineItem.Event) {
                         processEventClick(event)

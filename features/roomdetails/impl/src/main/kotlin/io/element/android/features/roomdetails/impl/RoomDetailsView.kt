@@ -103,6 +103,7 @@ fun RoomDetailsView(
     openPollHistory: () -> Unit,
     openAdminSettings: () -> Unit,
     onJoinCallClick: () -> Unit,
+    onPinnedMessagesClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -182,6 +183,13 @@ fun RoomDetailsView(
                         state.eventSink(RoomDetailsEvent.SetFavorite(it))
                     }
                 )
+
+                if(state.canShowPinnedMessages) {
+                    PinnedMessagesItem(
+                        pinnedMessagesCount = state.pinnedMessagesCount,
+                        onPinnedMessagesClick = onPinnedMessagesClick
+                    )
+                }
 
                 if (state.displayRolesAndPermissionsSettings) {
                     ListItem(
@@ -504,6 +512,19 @@ private fun MembersItem(
 }
 
 @Composable
+private fun PinnedMessagesItem(
+    pinnedMessagesCount: Int,
+    onPinnedMessagesClick: () -> Unit,
+) {
+    ListItem(
+        headlineContent = { Text(stringResource(CommonStrings.screen_room_details_pinned_events_row_title)) },
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Pin())),
+        trailingContent = ListItemContent.Text(pinnedMessagesCount.toString()),
+        onClick = onPinnedMessagesClick,
+    )
+}
+
+@Composable
 private fun PollsSection(
     openPollHistory: () -> Unit,
 ) {
@@ -573,5 +594,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
         openPollHistory = {},
         openAdminSettings = {},
         onJoinCallClick = {},
+        onPinnedMessagesClick = {},
     )
 }

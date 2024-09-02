@@ -105,6 +105,8 @@ fun aRoomDetailsState(
     displayAdminSettings: Boolean = false,
     isPublic: Boolean = true,
     heroes: List<MatrixUser> = emptyList(),
+    canShowPinnedMessages: Boolean = true,
+    pinnedMessagesCount: Int = 3,
     eventSink: (RoomDetailsEvent) -> Unit = {},
 ) = RoomDetailsState(
     roomId = roomId,
@@ -126,6 +128,8 @@ fun aRoomDetailsState(
     displayRolesAndPermissionsSettings = displayAdminSettings,
     isPublic = isPublic,
     heroes = heroes.toPersistentList(),
+    canShowPinnedMessages = canShowPinnedMessages,
+    pinnedMessagesCount = pinnedMessagesCount,
     eventSink = eventSink
 )
 

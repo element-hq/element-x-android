@@ -55,6 +55,7 @@ class RoomDetailsNode @AssistedInject constructor(
         fun openAvatarPreview(name: String, url: String)
         fun openPollHistory()
         fun openAdminSettings()
+        fun openPinnedMessagesList()
         fun onJoinCall()
     }
 
@@ -115,6 +116,10 @@ class RoomDetailsNode @AssistedInject constructor(
         callbacks.forEach { it.openAdminSettings() }
     }
 
+    private fun openPinnedMessages() {
+        callbacks.forEach { it.openPinnedMessagesList() }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val context = LocalContext.current
@@ -144,6 +149,9 @@ class RoomDetailsNode @AssistedInject constructor(
             openPollHistory = ::openPollHistory,
             openAdminSettings = this::openAdminSettings,
             onJoinCallClick = ::onJoinCall,
+            onPinnedMessagesClick = ::openPinnedMessages
         )
     }
+
+
 }
