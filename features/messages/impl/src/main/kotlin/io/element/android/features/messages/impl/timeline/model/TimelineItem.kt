@@ -90,7 +90,7 @@ sealed interface TimelineItem {
 
         val safeSenderName: String = senderProfile.getDisambiguatedDisplayName(senderId)
 
-        val failedToSend: Boolean = localSendState is LocalEventSendState.SendingFailed
+        val failedToSend: Boolean = localSendState is LocalEventSendState.Failed
 
         val isTextMessage: Boolean = content is TimelineItemTextBasedContent
 

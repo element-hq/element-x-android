@@ -26,7 +26,7 @@ class ReadReceiptViewStateForTimelineItemEventRowProvider :
     override val values: Sequence<ReadReceiptViewState>
         get() = sequenceOf(
             aReadReceiptViewState(
-                sendState = LocalEventSendState.NotSentYet
+                sendState = LocalEventSendState.Sending,
             ),
             aReadReceiptViewState(
                 sendState = LocalEventSendState.Sent(EventId("\$eventId")),

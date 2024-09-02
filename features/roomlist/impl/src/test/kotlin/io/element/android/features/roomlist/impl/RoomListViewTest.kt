@@ -81,6 +81,24 @@ class RoomListViewTest {
     }
 
     @Test
+    fun `clicking on close setup key banner emits the expected Event`() {
+        val eventsRecorder = EventsRecorder<RoomListEvents>()
+        rule.setRoomListView(
+            state = aRoomListState(
+                contentState = aRoomsContentState(securityBannerState = SecurityBannerState.SetUpRecovery),
+                eventSink = eventsRecorder,
+            )
+        )
+
+        // Remove automatic initial events
+        eventsRecorder.clear()
+
+        val close = rule.activity.getString(CommonStrings.action_close)
+        rule.onNodeWithContentDescription(close).performClick()
+        eventsRecorder.assertSingle(RoomListEvents.DismissRecoveryKeyPrompt)
+    }
+
+    @Test
     fun `clicking on continue recovery key banner invokes the expected callback`() {
         val eventsRecorder = EventsRecorder<RoomListEvents>()
         ensureCalledOnce { callback ->
@@ -90,6 +108,27 @@ class RoomListViewTest {
                     eventSink = eventsRecorder,
                 ),
                 onConfirmRecoveryKeyClick = callback,
+            )
+
+            // Remove automatic initial events
+            eventsRecorder.clear()
+
+            rule.clickOn(CommonStrings.action_continue)
+
+            eventsRecorder.assertEmpty()
+        }
+    }
+
+    @Test
+    fun `clicking on continue setup key banner invokes the expected callback`() {
+        val eventsRecorder = EventsRecorder<RoomListEvents>()
+        ensureCalledOnce { callback ->
+            rule.setRoomListView(
+                state = aRoomListState(
+                    contentState = aRoomsContentState(securityBannerState = SecurityBannerState.SetUpRecovery),
+                    eventSink = eventsRecorder,
+                ),
+                onSetUpRecoveryClick = callback,
             )
 
             // Remove automatic initial events
@@ -208,6 +247,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomL
     state: RoomListState,
     onRoomClick: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
     onSettingsClick: () -> Unit = EnsureNeverCalled(),
+    onSetUpRecoveryClick: () -> Unit = EnsureNeverCalled(),
     onConfirmRecoveryKeyClick: () -> Unit = EnsureNeverCalled(),
     onCreateRoomClick: () -> Unit = EnsureNeverCalled(),
     onRoomSettingsClick: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
@@ -219,6 +259,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomL
             state = state,
             onRoomClick = onRoomClick,
             onSettingsClick = onSettingsClick,
+            onSetUpRecoveryClick = onSetUpRecoveryClick,
             onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
             onCreateRoomClick = onCreateRoomClick,
             onRoomSettingsClick = onRoomSettingsClick,

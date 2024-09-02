@@ -40,6 +40,7 @@ import io.element.android.features.call.impl.pip.PictureInPictureEvents
 import io.element.android.features.call.impl.pip.PictureInPictureState
 import io.element.android.features.call.impl.pip.PictureInPictureStateProvider
 import io.element.android.features.call.impl.pip.aPictureInPictureState
+import io.element.android.features.call.impl.utils.WebViewPipController
 import io.element.android.features.call.impl.utils.WebViewWidgetMessageInterceptor
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.ProgressDialog
@@ -95,9 +96,9 @@ internal fun CallScreenView(
         }
         CallWebView(
             modifier = Modifier
-                .padding(padding)
-                .consumeWindowInsets(padding)
-                .fillMaxSize(),
+                    .padding(padding)
+                    .consumeWindowInsets(padding)
+                    .fillMaxSize(),
             url = state.urlState,
             userAgent = state.userAgent,
             onPermissionsRequest = { request ->
@@ -108,6 +109,8 @@ internal fun CallScreenView(
             onWebViewCreate = { webView ->
                 val interceptor = WebViewWidgetMessageInterceptor(webView)
                 state.eventSink(CallScreenEvents.SetupMessageChannels(interceptor))
+                val pipController = WebViewPipController(webView)
+                pipState.eventSink(PictureInPictureEvents.SetPipController(pipController))
             }
         )
         when (state.urlState) {

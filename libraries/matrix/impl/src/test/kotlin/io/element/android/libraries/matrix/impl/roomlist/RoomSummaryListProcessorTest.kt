@@ -246,7 +246,7 @@ private fun aRustRoomInfo(
     userPowerLevels = userPowerLevels,
     highlightCount = highlightCount,
     notificationCount = notificationCount,
-    userDefinedNotificationMode = userDefinedNotificationMode,
+    cachedUserDefinedNotificationMode = userDefinedNotificationMode,
     hasRoomCall = hasRoomCall,
     activeRoomCallParticipants = activeRoomCallParticipants,
     isMarkedUnread = isMarkedUnread,

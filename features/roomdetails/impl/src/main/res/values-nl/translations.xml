@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Er is een fout opgetreden bij het bijwerken van de meldingsinstelling."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Je homeserver ondersteunt deze optie niet in versleutelde kamers; in sommige kamers krijg je mogelijk geen meldingen."</string>
+  <string name="screen_polls_history_title">"Peilingen"</string>
   <string name="screen_room_change_permissions_everyone">"Iedereen"</string>
+  <string name="screen_room_change_role_confirm_add_admin_description">"Je kunt deze actie niet ongedaan maken. Je bevordert deze gebruiker tot hetzelfde machtsniveau als jij."</string>
+  <string name="screen_room_change_role_confirm_add_admin_title">"Beheerder toevoegen?"</string>
+  <string name="screen_room_change_role_confirm_demote_self_title">"Jezelf degraderen?"</string>
+  <string name="screen_room_change_role_section_users">"Leden"</string>
   <string name="screen_room_details_add_topic_title">"Onderwerp toevoegen"</string>
   <string name="screen_room_details_already_a_member">"Reeds lid"</string>
   <string name="screen_room_details_already_invited">"Reeds uitgenodigd"</string>
@@ -14,6 +20,7 @@
   <string name="screen_room_details_error_muting">"Het dempen van deze kamer is mislukt. Probeer het opnieuw."</string>
   <string name="screen_room_details_error_unmuting">"Het dempen opheffen voor deze kamer is mislukt. Probeer het opnieuw."</string>
   <string name="screen_room_details_invite_people_title">"Mensen uitnodigen"</string>
+  <string name="screen_room_details_leave_conversation_title">"Gesprek verlaten"</string>
   <string name="screen_room_details_leave_room_title">"Ruimte verlaten"</string>
   <string name="screen_room_details_notification_mode_custom">"Aangepast"</string>
   <string name="screen_room_details_notification_mode_default">"Standaard"</string>
@@ -27,7 +34,18 @@
     <item quantity="one">"%1$d persoon"</item>
     <item quantity="other">"%1$d personen"</item>
   </plurals>
+  <string name="screen_room_member_list_manage_member_remove">"Verwijderen uit kamer"</string>
+  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Lid verwijderen en verbannen"</string>
+  <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Alleen lid verwijderen"</string>
+  <string name="screen_room_member_list_manage_member_remove_confirmation_title">"Lid verwijderen en toekomstige deelname verbieden?"</string>
+  <string name="screen_room_member_list_manage_member_unban_action">"Ontbannen"</string>
+  <string name="screen_room_member_list_manage_member_user_info">"Profiel bekijken"</string>
+  <string name="screen_room_member_list_mode_banned">"Verbannen"</string>
+  <string name="screen_room_member_list_mode_members">"Leden"</string>
   <string name="screen_room_member_list_pending_header_title">"In behandeling"</string>
+  <string name="screen_room_member_list_removing_user">"%1$s wordt verwijderd…"</string>
+  <string name="screen_room_member_list_role_administrator">"Beheerder"</string>
+  <string name="screen_room_member_list_role_moderator">"Moderator"</string>
   <string name="screen_room_member_list_room_members_header_title">"Kamerleden"</string>
   <string name="screen_room_notification_settings_allow_custom">"Aanpassen toestaan"</string>
   <string name="screen_room_notification_settings_allow_custom_footnote">"Als je dit inschakelt, wordt je standaardinstelling overschreven"</string>
@@ -39,6 +57,7 @@
   <string name="screen_room_notification_settings_error_loading_settings">"Er is een fout opgetreden bij het laden van de meldingsinstellingen."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Het herstellen van de standaardmeldingen is mislukt. Probeer het opnieuw."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Het instellen van de meldingen is mislukt. Probeer het opnieuw."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Je homeserver ondersteunt deze optie niet in versleutelde kamers; in deze kamer krijg je geen meldingen."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Alle berichten"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Alleen vermeldingen en trefwoorden"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"In deze kamer, stuur me een melding voor"</string>

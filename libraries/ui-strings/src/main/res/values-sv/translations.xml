@@ -112,6 +112,7 @@
   <string name="action_tap_for_options">"Tryck för alternativ"</string>
   <string name="action_try_again">"Försök igen"</string>
   <string name="action_unpin">"Frigör"</string>
+  <string name="action_view_in_timeline">"Visa i tidslinjen"</string>
   <string name="action_view_source">"Visa källkod"</string>
   <string name="action_yes">"Ja"</string>
   <string name="common_about">"Om"</string>
@@ -177,6 +178,7 @@ Anledning:%1$s."</string>
   <string name="common_people">"Personer"</string>
   <string name="common_permalink">"Permalänk"</string>
   <string name="common_permission">"Behörighet"</string>
+  <string name="common_pinned">"Fäst"</string>
   <string name="common_please_wait">"Vänligen vänta …"</string>
   <string name="common_poll_end_confirmation">"Är du säker på att du vill avsluta den här omröstningen?"</string>
   <string name="common_poll_summary">"Omröstning: %1$s"</string>

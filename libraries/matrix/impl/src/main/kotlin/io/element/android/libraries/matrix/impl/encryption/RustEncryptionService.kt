@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.impl.encryption
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.encryption.BackupState
@@ -204,9 +205,9 @@ internal class RustEncryptionService(
 
     override suspend fun startIdentityReset(): Result<IdentityResetHandle?> {
         return runCatching {
-            service.resetIdentity()?.let { handle ->
-                RustIdentityResetHandleFactory.create(sessionId, handle)
-            }?.getOrNull()
+            service.resetIdentity()
+        }.flatMap { handle ->
+            RustIdentityResetHandleFactory.create(sessionId, handle)
         }
     }
 }

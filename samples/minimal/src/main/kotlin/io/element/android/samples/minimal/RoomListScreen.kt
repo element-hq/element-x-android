@@ -178,6 +178,7 @@ class RoomListScreen(
             state = state,
             onRoomClick = ::onRoomClick,
             onSettingsClick = {},
+            onSetUpRecoveryClick = {},
             onConfirmRecoveryKeyClick = {},
             onCreateRoomClick = {},
             onRoomSettingsClick = {},

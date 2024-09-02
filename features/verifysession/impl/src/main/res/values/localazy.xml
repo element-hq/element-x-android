@@ -3,7 +3,7 @@
   <string name="screen_identity_confirmation_cannot_confirm">"Can\'t confirm?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Create a new recovery key"</string>
   <string name="screen_identity_confirmation_subtitle">"Verify this device to set up secure messaging."</string>
-  <string name="screen_identity_confirmation_title">"Confirm that it\'s you"</string>
+  <string name="screen_identity_confirmation_title">"Confirm your identity"</string>
   <string name="screen_identity_confirmation_use_another_device">"Use another device"</string>
   <string name="screen_identity_confirmation_use_recovery_key">"Use recovery key"</string>
   <string name="screen_identity_confirmed_subtitle">"Now you can read or send messages securely, and anyone you chat with can also trust this device."</string>
@@ -28,4 +28,5 @@
   <string name="screen_session_verification_they_match">"They match"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Accept the request to start the verification process in your other session to continue."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Waiting to accept request"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Signing out…"</string>
 </resources>

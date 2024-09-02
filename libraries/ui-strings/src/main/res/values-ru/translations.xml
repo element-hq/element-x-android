@@ -114,6 +114,7 @@
   <string name="action_tap_for_options">"Нажмите для просмотра вариантов"</string>
   <string name="action_try_again">"Повторить попытку"</string>
   <string name="action_unpin">"Открепить"</string>
+  <string name="action_view_in_timeline">"Просмотр в хронологии"</string>
   <string name="action_view_source">"Показать источник"</string>
   <string name="action_yes">"Да"</string>
   <string name="common_about">"О приложении"</string>
@@ -180,6 +181,7 @@
   <string name="common_people">"Люди"</string>
   <string name="common_permalink">"Постоянная ссылка"</string>
   <string name="common_permission">"Разрешение"</string>
+  <string name="common_pinned">"Закрепленный"</string>
   <string name="common_please_wait">"Подождите…"</string>
   <string name="common_poll_end_confirmation">"Вы действительно хотите завершить данный опрос?"</string>
   <string name="common_poll_summary">"Опрос: %1$s"</string>

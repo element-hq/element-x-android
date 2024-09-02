@@ -98,7 +98,10 @@ class DefaultFtueService @Inject constructor(
             } else {
                 getNextStep(FtueStep.AnalyticsOptIn)
             }
-            FtueStep.AnalyticsOptIn -> null
+            FtueStep.AnalyticsOptIn -> {
+                updateState()
+                null
+            }
         }
 
     private suspend fun isAnyStepIncomplete(): Boolean {

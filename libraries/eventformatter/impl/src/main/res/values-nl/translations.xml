@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="state_event_avatar_changed_too">"(afbeelding is ook gewijzigd)"</string>
+  <string name="state_event_avatar_url_changed">"%1$s wijzigde van afbeelding"</string>
   <string name="state_event_avatar_url_changed_by_you">"Je hebt je afbeelding gewijzigd"</string>
   <string name="state_event_display_name_changed_from">"%1$s heeft de weergavenaam aangepast van %2$s naar %3$s"</string>
   <string name="state_event_display_name_changed_from_by_you">"Je hebt je weergavenaam aangepast van %1$s naar %2$s"</string>
@@ -38,6 +39,8 @@
   <string name="state_event_room_name_changed_by_you">"Je hebt de kamernaam gewijzigd naar: %1$s"</string>
   <string name="state_event_room_name_removed">"%1$s heeft de kamernaam verwijderd"</string>
   <string name="state_event_room_name_removed_by_you">"Je hebt de kamernaam verwijderd"</string>
+  <string name="state_event_room_none">"%1$s heeft geen wijzigingen aangebracht"</string>
+  <string name="state_event_room_none_by_you">"Je hebt geen wijzigingen aangebracht"</string>
   <string name="state_event_room_reject">"%1$s heeft de uitnodiging afgewezen"</string>
   <string name="state_event_room_reject_by_you">"Je hebt de uitnodiging afgewezen"</string>
   <string name="state_event_room_remove">"%1$s heeft %2$s verwijderd"</string>

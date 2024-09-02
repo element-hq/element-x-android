@@ -166,7 +166,7 @@ class DeveloperSettingsPresenterTest {
 
     @Test
     fun `present - toggling simplified sliding sync changes the preferences and logs out the user`() = runTest {
-        val logoutCallRecorder = lambdaRecorder<Boolean, String> { "" }
+        val logoutCallRecorder = lambdaRecorder<Boolean, String?> { "" }
         val logoutUseCase = FakeLogoutUseCase(logoutLambda = logoutCallRecorder)
         val preferences = InMemoryAppPreferencesStore()
         val presenter = createDeveloperSettingsPresenter(preferencesStore = preferences, logoutUseCase = logoutUseCase)
