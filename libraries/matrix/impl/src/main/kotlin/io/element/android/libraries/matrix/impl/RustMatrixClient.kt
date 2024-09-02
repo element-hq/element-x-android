@@ -645,9 +645,9 @@ class RustMatrixClient(
             // Delete the folder and all its content
             sessionPaths.fileDirectory.deleteRecursively()
         } else {
-            // Delete only the state.db file
+            // Do not delete the crypto database files.
             sessionPaths.fileDirectory.listFiles().orEmpty()
-                .filter { it.name.contains("matrix-sdk-state") }
+                .filterNot { it.name.contains("matrix-sdk-crypto") }
                 .forEach { file ->
                     Timber.w("Deleting file ${file.name}...")
                     file.safeDelete()
