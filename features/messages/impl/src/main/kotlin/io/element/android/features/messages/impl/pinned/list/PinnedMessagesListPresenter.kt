@@ -50,13 +50,16 @@ import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import kotlin.time.Duration.Companion.milliseconds
 
 class PinnedMessagesListPresenter @AssistedInject constructor(
     @Assisted private val navigator: PinnedMessagesListNavigator,
@@ -171,6 +174,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
         }
     }
 
+    @OptIn(FlowPreview::class)
     @Composable
     private fun PinnedMessagesListEffect(onItemsChange: (AsyncData<ImmutableList<TimelineItem>>) -> Unit) {
         val updatedOnItemsChange by rememberUpdatedState(onItemsChange)
@@ -183,7 +187,8 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
                 is AsyncData.Failure -> flowOf(AsyncData.Failure(asyncTimeline.error))
                 is AsyncData.Loading -> flowOf(AsyncData.Loading())
                 is AsyncData.Success -> {
-                    combine(asyncTimeline.data.timelineItems, room.membersStateFlow) { items, membersState ->
+                    val timelineItemsFlow = asyncTimeline.data.timelineItems.debounce(300.milliseconds)
+                    combine(timelineItemsFlow, room.membersStateFlow) { items, membersState ->
                         timelineItemsFactory.replaceWith(
                             timelineItems = items,
                             roomMembers = membersState.roomMembers().orEmpty()

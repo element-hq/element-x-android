@@ -46,7 +46,7 @@ import kotlin.time.Duration.Companion.milliseconds
 class PinnedMessagesBannerPresenter @Inject constructor(
     private val room: MatrixRoom,
     private val itemFactory: PinnedMessagesBannerItemFactory,
-    private val timelineController: PinnedEventsTimelineProvider,
+    private val pinnedEventsTimelineProvider: PinnedEventsTimelineProvider,
 ) : Presenter<PinnedMessagesBannerState> {
     private val pinnedItems = mutableStateOf<AsyncData<ImmutableList<PinnedMessagesBannerItem>>>(AsyncData.Uninitialized)
 
@@ -124,7 +124,7 @@ class PinnedMessagesBannerPresenter @Inject constructor(
     ) {
         val updatedOnItemsChange by rememberUpdatedState(onItemsChange)
         LaunchedEffect(Unit) {
-            timelineController.timelineStateFlow
+            pinnedEventsTimelineProvider.timelineStateFlow
                 .flatMapLatest { asyncTimeline ->
                     when (asyncTimeline) {
                         AsyncData.Uninitialized -> flowOf(AsyncData.Uninitialized)
