@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package io.element.android.features.preferences.impl.about
-
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-
-open class AboutStateProvider : PreviewParameterProvider<AboutState> {
-    override val values: Sequence<AboutState>
-        get() = sequenceOf(
-            anAboutState(),
-        )
+plugins {
+    id("io.element.android-compose-library")
 }
 
-fun anAboutState(
-    elementLegals: List<ElementLegal> = getAllLegals(),
-) = AboutState(
-    elementLegals = elementLegals,
-)
+android {
+    namespace = "io.element.android.features.licenses.api"
+}
+
+dependencies {
+    implementation(projects.libraries.architecture)
+    implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.uiStrings)
+}

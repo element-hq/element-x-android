@@ -45,12 +45,10 @@ fun AboutView(
                 onClick = { onElementLegalClick(elementLegal) }
             )
         }
-        if (state.hasOpenSourcesLicenses) {
-            PreferenceText(
-                title = stringResource(id = CommonStrings.common_open_source_licenses),
-                onClick = onOpenSourceLicensesClick,
-            )
-        }
+        PreferenceText(
+            title = stringResource(id = CommonStrings.common_open_source_licenses),
+            onClick = onOpenSourceLicensesClick,
+        )
     }
 }
 

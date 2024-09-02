@@ -17,13 +17,35 @@
 package extension
 
 import org.gradle.api.Project
+import org.gradle.api.provider.ValueSource
+import org.gradle.api.provider.ValueSourceParameters
+import org.gradle.process.ExecOperations
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+import javax.inject.Inject
 
-private fun Project.runCommand(cmd: String): String {
+abstract class GitRevisionValueSource : ValueSource<String, ValueSourceParameters.None> {
+    @get:Inject
+    abstract val execOperations: ExecOperations
+
+    override fun obtain(): String? {
+        return execOperations.runCommand("git rev-parse --short=8 HEAD")
+    }
+}
+
+abstract class GitBranchNameValueSource : ValueSource<String, ValueSourceParameters.None> {
+    @get:Inject
+    abstract val execOperations: ExecOperations
+
+    override fun obtain(): String? {
+        return execOperations.runCommand("git rev-parse --abbrev-ref HEAD")
+    }
+}
+
+private fun ExecOperations.runCommand(cmd: String): String {
     val outputStream = ByteArrayOutputStream()
     val errorStream = ByteArrayOutputStream()
-    project.exec {
+    exec {
         commandLine = cmd.split(" ")
         standardOutput = outputStream
         errorOutput = errorStream
@@ -34,7 +56,3 @@ private fun Project.runCommand(cmd: String): String {
     }
     return String(outputStream.toByteArray()).trim()
 }
-
-fun Project.gitRevision() = runCommand("git rev-parse --short=8 HEAD")
-
-fun Project.gitBranchName() = runCommand("git rev-parse --abbrev-ref HEAD")

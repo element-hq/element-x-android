@@ -62,6 +62,7 @@ dependencies {
     implementation(projects.features.lockscreen.api)
     implementation(projects.features.analytics.api)
     implementation(projects.features.ftue.api)
+    implementation(projects.features.licenses.api)
     implementation(projects.features.logout.api)
     implementation(projects.features.roomlist.api)
     implementation(projects.services.analytics.api)
