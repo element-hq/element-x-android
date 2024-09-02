@@ -34,6 +34,7 @@
   <string name="notification_room_action_quick_reply">"Snabbsvar"</string>
   <string name="notification_room_invite_body">"Bjöd in dig att gå med i rummet"</string>
   <string name="notification_sender_me">"Jag"</string>
+  <string name="notification_sender_mention_reply">"%1$s nämnde eller svarade"</string>
   <string name="notification_test_push_notification_content">"Du tittar på aviseringen! Klicka på mig!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>

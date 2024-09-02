@@ -20,7 +20,6 @@
   <string name="screen_encryption_reset_bullet_2">"Ви втратите свою наявну історію повідомлень"</string>
   <string name="screen_encryption_reset_bullet_3">"Вам доведеться підтвердити всі наявні пристрої та контакти знову"</string>
   <string name="screen_encryption_reset_footer">"Скидайте ідентичність тільки якщо ви не маєте доступу до інших пристроїв в обліковому записі та втратили свій ключ відновлення."</string>
-  <string name="screen_encryption_reset_subtitle">"Якщо ви не увійшли на інших пристроях та втратили свій ключ відновлення, то вам доведеться скинути свою ідентичність, щоб продовжити використовувати застосунок. "</string>
   <string name="screen_encryption_reset_title">"Скиньте свою ідентичність, якщо не можете підтвердити іншим способом"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Вимкнути"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Ви втратите зашифровані повідомлення, якщо вийдете з усіх пристроїв."</string>

@@ -20,7 +20,6 @@
   <string name="screen_encryption_reset_bullet_2">"Utracisz istniejącą historię wiadomości"</string>
   <string name="screen_encryption_reset_bullet_3">"Wymagana będzie ponowna weryfikacja istniejących urządzeń i kontaktów"</string>
   <string name="screen_encryption_reset_footer">"Zresetuj swoją tożsamość tylko wtedy, gdy nie jesteś zalogowany na żadnym urządzeniu i straciłeś swój klucz przywracania."</string>
-  <string name="screen_encryption_reset_subtitle">"Jeśli nie jesteś zalogowany na żadnym innym urządzeniu i straciłeś swój klucz przywracania, musisz zresetować swoją tożsamość, aby kontynuować korzystanie z aplikacji. "</string>
   <string name="screen_encryption_reset_title">"Zresetuj swoją tożsamość, jeśli nie możesz jej potwierdzić w inny sposób"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Wyłącz"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Jeśli wylogujesz się ze wszystkich urządzeń, stracisz wszystkie wiadomości szyfrowane."</string>

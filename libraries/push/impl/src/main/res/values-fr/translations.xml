@@ -34,6 +34,7 @@
   <string name="notification_room_action_quick_reply">"Réponse rapide"</string>
   <string name="notification_room_invite_body">"Vous a invité(e) à rejoindre le salon"</string>
   <string name="notification_sender_me">"Moi"</string>
+  <string name="notification_sender_mention_reply">"%1$s mentionné ou en réponse"</string>
   <string name="notification_test_push_notification_content">"Vous êtes en train de voir la notification ! Cliquez-moi !"</string>
   <string name="notification_ticker_text_dm">"%1$s : %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s : %2$s %3$s"</string>
