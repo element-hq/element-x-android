@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_set_up_recovery_content">"Skapa en ny återställningsnyckel som kan användas för att återställa din krypterade meddelandehistorik om du förlorar åtkomst till dina enheter."</string>
+  <string name="banner_set_up_recovery_title">"Ställ in återställning"</string>
   <string name="confirm_recovery_key_banner_message">"Din chattsäkerhetskopia är för närvarande inte synkroniserad. Du måste ange din återställningsnyckel för att behålla åtkomsten till din chattsäkerhetskopia."</string>
   <string name="confirm_recovery_key_banner_title">"Ange din återställningsnyckel"</string>
   <string name="full_screen_intent_banner_message">"För att säkerställa att du aldrig missar ett viktigt samtal, ändra dina inställningar för att tillåta helskärmsmeddelanden när telefonen är låst."</string>

@@ -14,4 +14,5 @@
   <string name="screen_session_verification_they_match">"Ular mos keladi"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Davom etish uchun boshqa seansda tekshirish jarayonini boshlash soʻrovini qabul qiling."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Soʻrovni qabul qilish kutilmoqda"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Chiqish…"</string>
 </resources>
