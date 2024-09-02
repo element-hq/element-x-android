@@ -89,8 +89,9 @@ interface MatrixClient : Closeable {
      * Returns an optional URL. When the URL is there, it should be presented to the user after logout for
      * Relying Party (RP) initiated logout on their account page.
      * @param ignoreSdkError if true, the SDK will ignore any error and delete the session data anyway.
+     * @param forced if true, the logout came from the HS, no request will be made and the data will be kept.
      */
-    suspend fun logout(ignoreSdkError: Boolean): String?
+    suspend fun logout(ignoreSdkError: Boolean, forced: Boolean): String?
 
     /**
      * Retrieve the user profile, will also eventually emit a new value to [userProfile].
