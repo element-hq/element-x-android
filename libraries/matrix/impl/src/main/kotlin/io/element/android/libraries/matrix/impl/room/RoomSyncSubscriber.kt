@@ -45,6 +45,7 @@ class RoomSyncSubscriber(
             RequiredState(key = EventType.STATE_ROOM_CANONICAL_ALIAS, value = ""),
             RequiredState(key = EventType.STATE_ROOM_JOIN_RULES, value = ""),
             RequiredState(key = EventType.STATE_ROOM_POWER_LEVELS, value = ""),
+            RequiredState(key = EventType.STATE_ROOM_PINNED_EVENT, value = ""),
         ),
         timelineLimit = DEFAULT_TIMELINE_LIMIT,
         // We don't need heroes here as they're already included in the `all_rooms` list
