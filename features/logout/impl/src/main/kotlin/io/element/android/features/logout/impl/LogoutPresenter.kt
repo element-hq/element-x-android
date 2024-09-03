@@ -104,7 +104,7 @@ class LogoutPresenter @Inject constructor(
         ignoreSdkError: Boolean,
     ) = launch {
         suspend {
-            matrixClient.logout(ignoreSdkError, forced = false)
+            matrixClient.logout(userInitiated = true, ignoreSdkError)
         }.runCatchingUpdatingState(logoutAction)
     }
 }

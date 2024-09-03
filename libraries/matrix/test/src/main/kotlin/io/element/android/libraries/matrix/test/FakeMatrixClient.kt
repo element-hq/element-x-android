@@ -170,8 +170,8 @@ class FakeMatrixClient(
         clearCacheLambda()
     }
 
-    override suspend fun logout(ignoreSdkError: Boolean, forced: Boolean): String? = simulateLongTask {
-        return logoutLambda(ignoreSdkError, forced)
+    override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean): String? = simulateLongTask {
+        return logoutLambda(ignoreSdkError, userInitiated)
     }
 
     override fun close() = Unit

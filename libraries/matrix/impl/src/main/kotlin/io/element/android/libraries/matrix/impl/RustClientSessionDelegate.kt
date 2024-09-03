@@ -51,8 +51,16 @@ class RustClientSessionDelegate(
     // To make sure only one coroutine affecting the token persistence can run at a time
     private val updateTokensDispatcher = coroutineDispatchers.io.limitedParallelism(1)
 
-    /** This [RustMatrixClient] needs to be set up as soon as possible so `didReceiveAuthError` can work properly. */
-    var client: RustMatrixClient? = null
+    // This Client needs to be set up as soon as possible so `didReceiveAuthError` can work properly.
+    private var client: RustMatrixClient? = null
+
+    /**
+     * Sets the [ClientDelegate] for the [RustMatrixClient], and keeps a reference to the client so it can be used later.
+     */
+    fun bindClient(client: RustMatrixClient) {
+        this.client = client
+        client.setDelegate(this)
+    }
 
     override fun saveSessionInKeychain(session: Session) {
         appCoroutineScope.launch(updateTokensDispatcher) {
@@ -83,9 +91,10 @@ class RustClientSessionDelegate(
             clientLog.v("didReceiveAuthError -> do the cleanup")
             // TODO handle isSoftLogout parameter.
             appCoroutineScope.launch(updateTokensDispatcher) {
-                val currentClient = this@RustClientSessionDelegate.client
+                val currentClient = client
                 if (currentClient == null) {
                     clientLog.w("didReceiveAuthError -> no client, exiting")
+                    isLoggingOut.set(false)
                     return@launch
                 }
                 val existingData = sessionStore.getSession(currentClient.sessionId.value)
@@ -102,7 +111,7 @@ class RustClientSessionDelegate(
                 } else {
                     clientLog.d("No session data found.")
                 }
-                client?.logout(ignoreSdkError = true, forced = true)
+                client?.logout(userInitiated = false, ignoreSdkError = true)
             }.invokeOnCompletion {
                 if (it != null) {
                     clientLog.e(it, "Failed to remove session data.")

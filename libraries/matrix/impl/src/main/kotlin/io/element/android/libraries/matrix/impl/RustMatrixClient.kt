@@ -224,7 +224,7 @@ class RustMatrixClient(
 
     init {
         // Make sure the session delegate has a reference to the client to be able to logout on auth error
-        client.setDelegate(sessionDelegate)
+        sessionDelegate.bindClient(this)
 
         sessionCoroutineScope.launch {
             // Force a refresh of the profile
@@ -467,21 +467,11 @@ class RustMatrixClient(
         deleteSessionDirectory(deleteCryptoDb = false)
     }
 
-    override suspend fun logout(ignoreSdkError: Boolean, forced: Boolean): String? = doLogout(
-        doRequest = !forced,
-        removeSession = !forced,
-        ignoreSdkError = ignoreSdkError,
-    )
-
-    private suspend fun doLogout(
-        doRequest: Boolean,
-        removeSession: Boolean,
-        ignoreSdkError: Boolean,
-    ): String? {
+    override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean): String? {
         var result: String? = null
         syncService.stop()
         withContext(sessionDispatcher) {
-            if (doRequest) {
+            if (userInitiated) {
                 try {
                     result = client.logout()
                 } catch (failure: Throwable) {
@@ -495,7 +485,7 @@ class RustMatrixClient(
             }
             close()
             deleteSessionDirectory(deleteCryptoDb = true)
-            if (removeSession) {
+            if (userInitiated) {
                 sessionStore.removeSession(sessionId.value)
             }
         }
@@ -545,6 +535,10 @@ class RustMatrixClient(
             }
         })
     }.buffer(Channel.UNLIMITED)
+
+    internal fun setDelegate(delegate: RustClientSessionDelegate) {
+        client.setDelegate(delegate)
+    }
 
     private suspend fun File.getCacheSize(
         includeCryptoDb: Boolean = false,
