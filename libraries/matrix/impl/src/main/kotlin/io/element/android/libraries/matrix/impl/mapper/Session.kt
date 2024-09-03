@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.mapper
 
+import io.element.android.libraries.matrix.impl.paths.SessionPaths
 import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionData
 import org.matrix.rustcomponents.sdk.Session
@@ -25,7 +26,7 @@ internal fun Session.toSessionData(
     isTokenValid: Boolean,
     loginType: LoginType,
     passphrase: String?,
-    sessionPath: String,
+    sessionPaths: SessionPaths,
     homeserverUrl: String? = null,
 ) = SessionData(
     userId = userId,
@@ -39,5 +40,6 @@ internal fun Session.toSessionData(
     isTokenValid = isTokenValid,
     loginType = loginType,
     passphrase = passphrase,
-    sessionPath = sessionPath,
+    sessionPath = sessionPaths.fileDirectory.absolutePath,
+    cachePath = sessionPaths.cacheDirectory.absolutePath,
 )

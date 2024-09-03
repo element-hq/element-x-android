@@ -52,5 +52,6 @@ fun aSessionData(
         loginType = LoginType.UNKNOWN,
         passphrase = null,
         sessionPath = "/a/path/to/a/session",
+        cachePath = "/a/path/to/a/cache",
     )
 }

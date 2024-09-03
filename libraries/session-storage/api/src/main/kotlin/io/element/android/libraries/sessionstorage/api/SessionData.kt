@@ -44,6 +44,8 @@ data class SessionData(
     val loginType: LoginType,
     /** The optional passphrase used to encrypt data in the SDK local store. */
     val passphrase: String?,
-    /** The path to the session data stored in the filesystem. */
+    /** The paths to the session data stored in the filesystem. */
     val sessionPath: String,
+    /** The path to the cache data stored for the session in the filesystem. */
+    val cachePath: String,
 )
