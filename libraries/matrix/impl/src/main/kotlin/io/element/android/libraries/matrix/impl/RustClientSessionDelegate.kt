@@ -45,7 +45,7 @@ class RustClientSessionDelegate(
 ) : ClientSessionDelegate, ClientDelegate {
     private val clientLog = Timber.tag("$this")
 
-    // Used to ensure a single coroutine will be modifying the token data at a time.
+    // Used to ensure several calls to `didReceiveAuthError` don't trigger multiple logouts
     private val isLoggingOut = AtomicBoolean(false)
 
     // To make sure only one coroutine affecting the token persistence can run at a time

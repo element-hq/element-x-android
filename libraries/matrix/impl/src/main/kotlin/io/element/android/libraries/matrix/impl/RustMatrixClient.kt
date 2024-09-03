@@ -223,6 +223,9 @@ class RustMatrixClient(
         .stateIn(sessionCoroutineScope, started = SharingStarted.Eagerly, initialValue = persistentListOf())
 
     init {
+        // Make sure the session delegate has a reference to the client to be able to logout on auth error
+        client.setDelegate(sessionDelegate)
+
         sessionCoroutineScope.launch {
             // Force a refresh of the profile
             getUserProfile()

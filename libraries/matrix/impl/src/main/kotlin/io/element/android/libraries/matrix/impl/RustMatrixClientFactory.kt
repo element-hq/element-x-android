@@ -89,9 +89,6 @@ class RustMatrixClientFactory @Inject constructor(
             sessionDelegate = sessionDelegate,
         ).also {
             Timber.tag(it.toString()).d("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
-
-            // Make sure the session delegate has a reference to the client to be able to logout on auth error
-            sessionDelegate.client = it
         }
     }
 
