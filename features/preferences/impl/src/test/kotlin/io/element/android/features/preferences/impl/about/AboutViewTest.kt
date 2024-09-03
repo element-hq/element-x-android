@@ -19,7 +19,6 @@ package io.element.android.features.preferences.impl.about
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -61,21 +60,10 @@ class AboutViewTest {
     }
 
     @Test
-    fun `if open source licenses are not available, the entry is not displayed`() {
-        rule.setAboutView(
-            anAboutState(),
-        )
-        val text = rule.activity.getString(CommonStrings.common_open_source_licenses)
-        rule.onNodeWithText(text).assertDoesNotExist()
-    }
-
-    @Test
-    fun `if open source licenses are available, clicking on the entry invokes the expected callback`() {
+    fun `clicking on the open source licenses invokes the expected callback`() {
         ensureCalledOnce { callback ->
             rule.setAboutView(
-                anAboutState(
-                    hasOpenSourcesLicenses = true,
-                ),
+                anAboutState(),
                 onOpenSourceLicensesClick = callback,
             )
             rule.clickOn(CommonStrings.common_open_source_licenses)
