@@ -19,6 +19,7 @@ package io.element.android.features.messages.impl.voicemessages.timeline
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
@@ -80,7 +81,7 @@ fun TestScope.aDefaultRedactedVoiceMessageManager(
 
 fun aRedactedMatrixTimeline(eventId: EventId) = listOf<MatrixTimelineItem>(
     MatrixTimelineItem.Event(
-        uniqueId = "0",
+        uniqueId = UniqueId("0"),
         event = EventTimelineItem(
             eventId = eventId,
             transactionId = null,

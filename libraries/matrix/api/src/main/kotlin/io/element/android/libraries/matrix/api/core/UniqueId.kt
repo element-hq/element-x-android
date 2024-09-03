@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright (c) 2024 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package io.element.android.libraries.matrix.api.auth
+package io.element.android.libraries.matrix.api.core
 
-sealed class AuthenticationException(message: String) : Exception(message) {
-    class InvalidServerName(message: String) : AuthenticationException(message)
-    class SlidingSyncVersion(message: String) : AuthenticationException(message)
-    class Generic(message: String) : AuthenticationException(message)
+import java.io.Serializable
+
+@JvmInline
+value class UniqueId(val value: String) : Serializable {
+    override fun toString(): String = value
 }

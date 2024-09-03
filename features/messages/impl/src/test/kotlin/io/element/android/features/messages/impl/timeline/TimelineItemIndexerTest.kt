@@ -20,6 +20,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import org.junit.Test
 
@@ -34,7 +35,7 @@ class TimelineItemIndexerTest {
                 groupedEvents.events.forEach { eventIds.add(it.eventId!!) }
             },
             TimelineItem.Virtual(
-                id = "dummy",
+                id = UniqueId("dummy"),
                 model = TimelineItemReadMarkerModel
             ),
         )

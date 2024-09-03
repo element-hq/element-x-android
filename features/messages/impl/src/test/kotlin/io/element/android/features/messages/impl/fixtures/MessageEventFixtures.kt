@@ -27,6 +27,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
@@ -51,7 +52,7 @@ internal fun aMessageEvent(
     sendState: LocalEventSendState = LocalEventSendState.Sent(AN_EVENT_ID),
     messageShield: MessageShield? = null,
 ) = TimelineItem.Event(
-    id = eventId?.value.orEmpty(),
+    id = UniqueId(eventId?.value.orEmpty()),
     eventId = eventId,
     transactionId = transactionId,
     senderId = A_USER_ID,

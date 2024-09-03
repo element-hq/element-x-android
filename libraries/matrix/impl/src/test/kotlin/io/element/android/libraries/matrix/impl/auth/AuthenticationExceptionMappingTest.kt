@@ -48,8 +48,8 @@ class AuthenticationExceptionMappingTest {
         assertThat(ClientBuildException.Sdk("SDK issue").mapAuthenticationException())
             .isException<AuthenticationException.Generic>("SDK issue")
 
-        assertThat(ClientBuildException.SlidingSyncNotAvailable("Sliding sync not available").mapAuthenticationException())
-            .isException<AuthenticationException.SlidingSyncNotAvailable>("Sliding sync not available")
+        assertThat(ClientBuildException.SlidingSyncVersion("Sliding sync not available").mapAuthenticationException())
+            .isException<AuthenticationException.SlidingSyncVersion>("Sliding sync not available")
     }
 
     private inline fun <reified T> ThrowableSubject.isException(message: String) {
