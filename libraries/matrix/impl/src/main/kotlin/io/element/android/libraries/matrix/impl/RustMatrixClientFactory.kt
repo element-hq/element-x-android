@@ -20,6 +20,8 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.matrix.impl.analytics.UtdTracker
 import io.element.android.libraries.matrix.impl.certificates.UserCertificatesProvider
+import io.element.android.libraries.matrix.impl.paths.SessionPaths
+import io.element.android.libraries.matrix.impl.paths.getSessionPaths
 import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
 import io.element.android.libraries.matrix.impl.util.anonymizedTokens
 import io.element.android.libraries.network.useragent.UserAgentProvider
@@ -52,7 +54,7 @@ class RustMatrixClientFactory @Inject constructor(
 ) {
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
         val client = getBaseClientBuilder(
-            sessionPath = sessionData.sessionPath,
+            sessionPaths = sessionData.getSessionPaths(),
             passphrase = sessionData.passphrase,
             slidingSync = if (appPreferencesStore.isSimplifiedSlidingSyncEnabledFlow().first()) {
                 ClientBuilderSlidingSync.Simplified
@@ -87,14 +89,16 @@ class RustMatrixClientFactory @Inject constructor(
     }
 
     internal fun getBaseClientBuilder(
-        sessionPath: String,
+        sessionPaths: SessionPaths,
         passphrase: String?,
         slidingSyncProxy: String? = null,
         slidingSync: ClientBuilderSlidingSync,
     ): ClientBuilder {
         return ClientBuilder()
-            // TODO SDK claims it's valid to use the same path for data and cache, but would be better to use different paths
-            .sessionPaths(dataPath = sessionPath, cachePath = sessionPath)
+            .sessionPaths(
+                dataPath = sessionPaths.fileDirectory.absolutePath,
+                cachePath = sessionPaths.cacheDirectory.absolutePath,
+            )
             .passphrase(passphrase)
             .slidingSyncProxy(slidingSyncProxy)
             .userAgent(userAgentProvider.provide())

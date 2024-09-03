@@ -32,4 +32,5 @@ internal fun aSessionData() = SessionData(
     loginType = LoginType.UNKNOWN.name,
     passphrase = null,
     sessionPath = "sessionPath",
+    cachePath = "cachePath",
 )

@@ -18,6 +18,7 @@ package io.element.android.libraries.textcomposer.mentions
 
 import android.graphics.Color
 import android.graphics.Typeface
+import android.net.Uri
 import android.text.Spanned
 import android.view.ViewGroup
 import android.widget.TextView
@@ -129,6 +130,7 @@ val LocalMentionSpanTheme = staticCompositionLocalOf {
                                 eventId = null,
                                 viaParameters = persistentListOf(),
                             )
+                            "@room" -> PermalinkData.FallbackLink(Uri.EMPTY, false)
                             else -> throw AssertionError("Unexpected value $uriString")
                         }
                     }
@@ -139,7 +141,8 @@ val LocalMentionSpanTheme = staticCompositionLocalOf {
         val textColor = ElementTheme.colors.textPrimary.toArgb()
         fun mentionSpanMe() = provider.getMentionSpanFor("mention", "https://matrix.to/#/@me:matrix.org")
         fun mentionSpanOther() = provider.getMentionSpanFor("mention", "https://matrix.to/#/@other:matrix.org")
-        fun mentionSpanRoom() = provider.getMentionSpanFor("room", "https://matrix.to/#/#room:matrix.org")
+        fun mentionSpanRoom() = provider.getMentionSpanFor("room:matrix.org", "https://matrix.to/#/#room:matrix.org")
+        fun mentionSpanEveryone() = provider.getMentionSpanFor("@room", "@room")
         mentionSpanTheme.updateStyles(currentUserId = UserId("@me:matrix.org"))
 
         CompositionLocalProvider(
@@ -154,7 +157,9 @@ val LocalMentionSpanTheme = staticCompositionLocalOf {
                         append("@mention", mentionSpanMe(), 0)
                         append(" to the current user and this is a ")
                         append("@mention", mentionSpanOther(), 0)
-                        append(" to other user. This one is for a room: ")
+                        append(" to other user. This is for everyone in the ")
+                        append("@room", mentionSpanEveryone(), 0)
+                        append(". This one is for a link to another room: ")
                         append("#room:matrix.org", mentionSpanRoom(), 0)
                         append("\n\n")
                         append("This ")

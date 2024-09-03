@@ -37,6 +37,8 @@ import io.element.android.libraries.matrix.impl.auth.qrlogin.toStep
 import io.element.android.libraries.matrix.impl.exception.mapClientException
 import io.element.android.libraries.matrix.impl.keys.PassphraseGenerator
 import io.element.android.libraries.matrix.impl.mapper.toSessionData
+import io.element.android.libraries.matrix.impl.paths.SessionPaths
+import io.element.android.libraries.matrix.impl.paths.SessionPathsFactory
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -53,14 +55,12 @@ import org.matrix.rustcomponents.sdk.QrLoginProgressListener
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk.OidcAuthorizationData
-import java.io.File
-import java.util.UUID
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
 class RustMatrixAuthenticationService @Inject constructor(
-    private val baseDirectory: File,
+    private val sessionPathsFactory: SessionPathsFactory,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val sessionStore: SessionStore,
     private val rustMatrixClientFactory: RustMatrixClientFactory,
@@ -73,14 +73,14 @@ class RustMatrixAuthenticationService @Inject constructor(
 
     // Need to keep a copy of the current session path to eventually delete it.
     // Ideally it would be possible to get the sessionPath from the Client to avoid doing this.
-    private var sessionPath: File? = null
+    private var sessionPaths: SessionPaths? = null
     private var currentClient: Client? = null
     private var currentHomeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
 
-    private fun rotateSessionPath(): File {
-        sessionPath?.deleteRecursively()
-        return File(baseDirectory, UUID.randomUUID().toString())
-            .also { sessionPath = it }
+    private fun rotateSessionPath(): SessionPaths {
+        sessionPaths?.deleteRecursively()
+        return sessionPathsFactory.create()
+            .also { sessionPaths = it }
     }
 
     override fun loggedInStateFlow(): Flow<LoggedInState> {
@@ -145,14 +145,14 @@ class RustMatrixAuthenticationService @Inject constructor(
         withContext(coroutineDispatchers.io) {
             runCatching {
                 val client = currentClient ?: error("You need to call `setHomeserver()` first")
-                val currentSessionPath = sessionPath ?: error("You need to call `setHomeserver()` first")
+                val currentSessionPaths = sessionPaths ?: error("You need to call `setHomeserver()` first")
                 client.login(username, password, "Element X Android", null)
                 val sessionData = client.session()
                     .toSessionData(
                         isTokenValid = true,
                         loginType = LoginType.PASSWORD,
                         passphrase = pendingPassphrase,
-                        sessionPath = currentSessionPath.absolutePath,
+                        sessionPaths = currentSessionPaths,
                     )
                 clear()
                 sessionStore.storeData(sessionData)
@@ -196,14 +196,14 @@ class RustMatrixAuthenticationService @Inject constructor(
         return withContext(coroutineDispatchers.io) {
             runCatching {
                 val client = currentClient ?: error("You need to call `setHomeserver()` first")
-                val currentSessionPath = sessionPath ?: error("You need to call `setHomeserver()` first")
+                val currentSessionPaths = sessionPaths ?: error("You need to call `setHomeserver()` first")
                 val urlForOidcLogin = pendingOidcAuthorizationData ?: error("You need to call `getOidcUrl()` first")
                 client.loginWithOidcCallback(urlForOidcLogin, callbackUrl)
                 val sessionData = client.session().toSessionData(
                     isTokenValid = true,
                     loginType = LoginType.OIDC,
                     passphrase = pendingPassphrase,
-                    sessionPath = currentSessionPath.absolutePath,
+                    sessionPaths = currentSessionPaths,
                 )
                 clear()
                 pendingOidcAuthorizationData?.close()
@@ -218,10 +218,10 @@ class RustMatrixAuthenticationService @Inject constructor(
 
     override suspend fun loginWithQrCode(qrCodeData: MatrixQrCodeLoginData, progress: (QrCodeLoginStep) -> Unit) =
         withContext(coroutineDispatchers.io) {
-            val emptySessionPath = rotateSessionPath()
+            val emptySessionPaths = rotateSessionPath()
             runCatching {
                 val client = rustMatrixClientFactory.getBaseClientBuilder(
-                    sessionPath = emptySessionPath.absolutePath,
+                    sessionPaths = emptySessionPaths,
                     passphrase = pendingPassphrase,
                     slidingSyncProxy = AuthenticationConfig.SLIDING_SYNC_PROXY_URL,
                     slidingSync = ClientBuilderSlidingSync.Discovered,
@@ -242,7 +242,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                             isTokenValid = true,
                             loginType = LoginType.QR,
                             passphrase = pendingPassphrase,
-                            sessionPath = emptySessionPath.absolutePath,
+                            sessionPaths = emptySessionPaths,
                         )
                     sessionStore.storeData(sessionData)
                     SessionId(sessionData.userId)
@@ -262,10 +262,10 @@ class RustMatrixAuthenticationService @Inject constructor(
         }
 
     private fun getBaseClientBuilder(
-        sessionPath: File,
+        sessionPaths: SessionPaths,
     ) = rustMatrixClientFactory
         .getBaseClientBuilder(
-            sessionPath = sessionPath.absolutePath,
+            sessionPaths = sessionPaths,
             passphrase = pendingPassphrase,
             slidingSyncProxy = AuthenticationConfig.SLIDING_SYNC_PROXY_URL,
             slidingSync = ClientBuilderSlidingSync.Discovered,
