@@ -70,7 +70,6 @@ gms_google_services = "com.google.gms:google-services:4.4.2"
 google_firebase_bom = "com.google.firebase:firebase-bom:33.2.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
-oss_licenses_plugin = "com.google.android.gms:oss-licenses-plugin:0.10.6"
 
 # AndroidX
 androidx_core = { module = "androidx.core:core", version.ref = "core" }
@@ -163,7 +162,7 @@ jsoup = "org.jsoup:jsoup:1.18.1"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.0.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.40"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.41"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
@@ -184,10 +183,9 @@ mapbox_android_gestures = "com.mapbox.mapboxsdk:mapbox-android-gestures:0.7.0"
 opusencoder = "io.element.android:opusencoder:1.1.0"
 kotlinpoet = "com.squareup:kotlinpoet:1.18.1"
 zxing_cpp = "io.github.zxing-cpp:android:2.2.0"
-play_services_oss_licenses = "com.google.android.gms:play-services-oss-licenses:17.1.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.6.0"
+posthog = "com.posthog:posthog-android:3.6.1"
 sentry = "io.sentry:sentry-android:7.14.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.23.1"
@@ -234,3 +232,4 @@ sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppDistribution" }
 knit = { id = "org.jetbrains.kotlinx.knit", version = "0.5.0" }
 sonarqube = "org.sonarqube:5.1.0.4882"
+licensee = "app.cash.licensee:1.11.0"

@@ -16,16 +16,18 @@
 
 package io.element.android.libraries.matrix.impl.mapper
 
+import io.element.android.libraries.matrix.impl.paths.SessionPaths
 import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionData
 import org.matrix.rustcomponents.sdk.Session
+import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 import java.util.Date
 
 internal fun Session.toSessionData(
     isTokenValid: Boolean,
     loginType: LoginType,
     passphrase: String?,
-    sessionPath: String,
+    sessionPaths: SessionPaths,
     homeserverUrl: String? = null,
 ) = SessionData(
     userId = userId,
@@ -34,10 +36,11 @@ internal fun Session.toSessionData(
     refreshToken = refreshToken,
     homeserverUrl = homeserverUrl ?: this.homeserverUrl,
     oidcData = oidcData,
-    slidingSyncProxy = slidingSyncProxy,
+    slidingSyncProxy = (slidingSyncVersion as? SlidingSyncVersion.Proxy)?.url,
     loginTimestamp = Date(),
     isTokenValid = isTokenValid,
     loginType = loginType,
     passphrase = passphrase,
-    sessionPath = sessionPath,
+    sessionPath = sessionPaths.fileDirectory.absolutePath,
+    cachePath = sessionPaths.cacheDirectory.absolutePath,
 )

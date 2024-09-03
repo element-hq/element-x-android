@@ -108,6 +108,7 @@ class KonsistClassNameTest {
                 "Accompanist",
                 "AES",
                 "Android",
+                "Asset",
                 "Database",
                 "DBov",
                 "Default",
