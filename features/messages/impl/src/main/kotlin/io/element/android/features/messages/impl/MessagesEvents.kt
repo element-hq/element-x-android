@@ -18,10 +18,11 @@ package io.element.android.features.messages.impl
 
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.libraries.matrix.api.core.UniqueId
 
 sealed interface MessagesEvents {
     data class HandleAction(val action: TimelineItemAction, val event: TimelineItem.Event) : MessagesEvents
-    data class ToggleReaction(val emoji: String, val uniqueEventId: String) : MessagesEvents
+    data class ToggleReaction(val emoji: String, val uniqueId: UniqueId) : MessagesEvents
     data class InviteDialogDismissed(val action: InviteDialogAction) : MessagesEvents
     data object Dismiss : MessagesEvents
 }

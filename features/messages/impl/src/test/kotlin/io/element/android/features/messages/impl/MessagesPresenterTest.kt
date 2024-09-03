@@ -69,6 +69,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
@@ -197,8 +198,8 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle toggling a reaction`() = runTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
-        val toggleReactionSuccess = lambdaRecorder { _: String, _: String -> Result.success(Unit) }
-        val toggleReactionFailure = lambdaRecorder { _: String, _: String -> Result.failure<Unit>(IllegalStateException("Failed to send reaction")) }
+        val toggleReactionSuccess = lambdaRecorder { _: String, _: UniqueId -> Result.success(Unit) }
+        val toggleReactionFailure = lambdaRecorder { _: String, _: UniqueId -> Result.failure<Unit>(IllegalStateException("Failed to send reaction")) }
 
         val timeline = FakeTimeline().apply {
             this.toggleReactionLambda = toggleReactionSuccess
@@ -236,7 +237,7 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle toggling a reaction twice`() = runTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
-        val toggleReactionSuccess = lambdaRecorder { _: String, _: String -> Result.success(Unit) }
+        val toggleReactionSuccess = lambdaRecorder { _: String, _: UniqueId -> Result.success(Unit) }
 
         val timeline = FakeTimeline().apply {
             this.toggleReactionLambda = toggleReactionSuccess

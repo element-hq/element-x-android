@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.TransactionId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
@@ -459,8 +460,8 @@ class RustMatrixRoom(
         return liveTimeline.sendFile(file, fileInfo, progressCallback)
     }
 
-    override suspend fun toggleReaction(emoji: String, uniqueEventId: String): Result<Unit> {
-        return liveTimeline.toggleReaction(emoji, uniqueEventId)
+    override suspend fun toggleReaction(emoji: String, uniqueId: UniqueId): Result<Unit> {
+        return liveTimeline.toggleReaction(emoji, uniqueId)
     }
 
     override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> {

@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.TransactionId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -391,9 +392,9 @@ class RustTimeline(
         }
     }
 
-    override suspend fun toggleReaction(emoji: String, uniqueEventId: String): Result<Unit> = withContext(dispatcher) {
+    override suspend fun toggleReaction(emoji: String, uniqueId: UniqueId): Result<Unit> = withContext(dispatcher) {
         runCatching {
-            inner.toggleReaction(key = emoji, uniqueId = uniqueEventId)
+            inner.toggleReaction(key = emoji, uniqueId = uniqueId.value)
         }
     }
 

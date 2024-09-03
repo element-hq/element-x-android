@@ -16,12 +16,15 @@
 
 package io.element.android.libraries.matrix.impl.timeline.postprocessor
 
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.Date
+
+internal val encryptedHistoryBannerId = UniqueId("EncryptedHistoryBannerId")
 
 class TimelineEncryptedHistoryPostProcessor(
     private val dispatcher: CoroutineDispatcher,
@@ -44,7 +47,7 @@ class TimelineEncryptedHistoryPostProcessor(
         }
         return if (lastEncryptedHistoryBannerIndex >= 0) {
             val sublist = list.drop(lastEncryptedHistoryBannerIndex + 1).toMutableList()
-            sublist.add(0, MatrixTimelineItem.Virtual(VirtualTimelineItem.EncryptedHistoryBanner.toString(), VirtualTimelineItem.EncryptedHistoryBanner))
+            sublist.add(0, MatrixTimelineItem.Virtual(encryptedHistoryBannerId, VirtualTimelineItem.EncryptedHistoryBanner))
             sublist
         } else {
             list

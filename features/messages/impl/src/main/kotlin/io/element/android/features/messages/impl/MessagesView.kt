@@ -175,7 +175,6 @@ fun MessagesView(
     }
 
     fun onEmojiReactionClick(emoji: String, event: TimelineItem.Event) {
-        if (event.eventId == null) return
         state.eventSink(MessagesEvents.ToggleReaction(emoji, event.id))
     }
 
@@ -248,7 +247,6 @@ fun MessagesView(
         state = state.actionListState,
         onSelectAction = ::onActionSelected,
         onCustomReactionClick = { event ->
-            if (event.eventId == null) return@ActionListView
             state.customReactionState.eventSink(CustomReactionEvents.ShowCustomReactionSheet(event))
         },
         onEmojiReactionClick = ::onEmojiReactionClick,
@@ -256,8 +254,8 @@ fun MessagesView(
 
     CustomReactionBottomSheet(
         state = state.customReactionState,
-        onSelectEmoji = { uniqueEventId, emoji ->
-            state.eventSink(MessagesEvents.ToggleReaction(emoji.unicode, uniqueEventId))
+        onSelectEmoji = { uniqueId, emoji ->
+            state.eventSink(MessagesEvents.ToggleReaction(emoji.unicode, uniqueId))
         }
     )
 

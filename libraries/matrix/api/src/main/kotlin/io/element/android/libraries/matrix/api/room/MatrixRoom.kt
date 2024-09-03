@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.TransactionId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
@@ -155,7 +156,7 @@ interface MatrixRoom : Closeable {
 
     suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
 
-    suspend fun toggleReaction(emoji: String, uniqueEventId: String): Result<Unit>
+    suspend fun toggleReaction(emoji: String, uniqueId: UniqueId): Result<Unit>
 
     suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit>
 
