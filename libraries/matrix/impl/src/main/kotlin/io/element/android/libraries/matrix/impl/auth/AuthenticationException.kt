@@ -24,7 +24,7 @@ fun Throwable.mapAuthenticationException(): AuthenticationException {
     return when (this) {
         is RustAuthenticationException.Generic -> AuthenticationException.Generic(message)
         is RustAuthenticationException.InvalidServerName -> AuthenticationException.InvalidServerName(message)
-        is RustAuthenticationException.SlidingSyncVersion -> AuthenticationException.SlidingSyncVersionMismatch(message)
+        is RustAuthenticationException.SlidingSyncVersion -> AuthenticationException.SlidingSyncVersion(message)
         else -> AuthenticationException.Generic(message)
     }
 }

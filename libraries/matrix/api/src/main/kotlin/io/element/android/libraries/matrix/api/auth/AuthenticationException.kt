@@ -18,6 +18,6 @@ package io.element.android.libraries.matrix.api.auth
 
 sealed class AuthenticationException(message: String) : Exception(message) {
     class InvalidServerName(message: String) : AuthenticationException(message)
-    class SlidingSyncVersionMismatch(message: String) : AuthenticationException(message)
+    class SlidingSyncVersion(message: String) : AuthenticationException(message)
     class Generic(message: String) : AuthenticationException(message)
 }

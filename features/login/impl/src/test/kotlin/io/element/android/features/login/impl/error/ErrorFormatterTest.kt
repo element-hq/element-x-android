@@ -32,7 +32,7 @@ class ErrorFormatterTest {
 
     @Test
     fun `loginError - invalid auth error returns unknown error message`() {
-        val error = AuthenticationException.SlidingSyncVersionMismatch("Some message. Also contains M_FORBIDDEN, but won't be parsed")
+        val error = AuthenticationException.SlidingSyncVersion("Some message. Also contains M_FORBIDDEN, but won't be parsed")
         assertThat(loginError(error)).isEqualTo(CommonStrings.error_unknown)
     }
 
