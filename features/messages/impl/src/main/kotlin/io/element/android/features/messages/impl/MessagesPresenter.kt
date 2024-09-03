@@ -69,7 +69,6 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
@@ -192,7 +191,7 @@ class MessagesPresenter @AssistedInject constructor(
                     )
                 }
                 is MessagesEvents.ToggleReaction -> {
-                    localCoroutineScope.toggleReaction(event.emoji, event.eventId)
+                    localCoroutineScope.toggleReaction(event.emoji, event.uniqueEventId)
                 }
                 is MessagesEvents.InviteDialogDismissed -> {
                     hasDismissedInviteDialog = true
@@ -313,10 +312,10 @@ class MessagesPresenter @AssistedInject constructor(
 
     private fun CoroutineScope.toggleReaction(
         emoji: String,
-        eventId: EventId,
+        uniqueEventId: String,
     ) = launch(dispatchers.io) {
         timelineController.invokeOnCurrentTimeline {
-            toggleReaction(emoji, eventId)
+            toggleReaction(emoji, uniqueEventId)
                 .onFailure { Timber.e(it) }
         }
     }

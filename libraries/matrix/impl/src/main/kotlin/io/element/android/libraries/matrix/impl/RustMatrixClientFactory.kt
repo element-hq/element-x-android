@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl
 
+import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.matrix.impl.analytics.UtdTracker
@@ -34,6 +35,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.Session
+import org.matrix.rustcomponents.sdk.SlidingSyncVersion
+import org.matrix.rustcomponents.sdk.SlidingSyncVersionBuilder
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
@@ -56,11 +59,11 @@ class RustMatrixClientFactory @Inject constructor(
         val client = getBaseClientBuilder(
             sessionPaths = sessionData.getSessionPaths(),
             passphrase = sessionData.passphrase,
-            slidingSync = if (appPreferencesStore.isSimplifiedSlidingSyncEnabledFlow().first()) {
-                ClientBuilderSlidingSync.Simplified
-            } else {
-                ClientBuilderSlidingSync.Restored
-            },
+            slidingSync = when {
+                AuthenticationConfig.SLIDING_SYNC_PROXY_URL != null -> ClientBuilderSlidingSync.CustomProxy(AuthenticationConfig.SLIDING_SYNC_PROXY_URL!!)
+                appPreferencesStore.isSimplifiedSlidingSyncEnabledFlow().first() -> ClientBuilderSlidingSync.Simplified
+                else -> ClientBuilderSlidingSync.Restored
+            }
         )
             .homeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
@@ -91,7 +94,6 @@ class RustMatrixClientFactory @Inject constructor(
     internal fun getBaseClientBuilder(
         sessionPaths: SessionPaths,
         passphrase: String?,
-        slidingSyncProxy: String? = null,
         slidingSync: ClientBuilderSlidingSync,
     ): ClientBuilder {
         return ClientBuilder()
@@ -100,16 +102,17 @@ class RustMatrixClientFactory @Inject constructor(
                 cachePath = sessionPaths.cacheDirectory.absolutePath,
             )
             .passphrase(passphrase)
-            .slidingSyncProxy(slidingSyncProxy)
             .userAgent(userAgentProvider.provide())
             .addRootCertificates(userCertificatesProvider.provides())
             .autoEnableBackups(true)
             .autoEnableCrossSigning(true)
             .run {
+                // Apply sliding sync version settings
                 when (slidingSync) {
                     ClientBuilderSlidingSync.Restored -> this
-                    ClientBuilderSlidingSync.Discovered -> requiresSlidingSync()
-                    ClientBuilderSlidingSync.Simplified -> simplifiedSlidingSync(true)
+                    is ClientBuilderSlidingSync.CustomProxy -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.Proxy(slidingSync.url))
+                    ClientBuilderSlidingSync.Discovered -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.DiscoverProxy)
+                    ClientBuilderSlidingSync.Simplified -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.Native)
                 }
             }
             .run {
@@ -119,15 +122,18 @@ class RustMatrixClientFactory @Inject constructor(
     }
 }
 
-enum class ClientBuilderSlidingSync {
+sealed interface ClientBuilderSlidingSync {
+    // The proxy is set by the user.
+    data class CustomProxy(val url: String) : ClientBuilderSlidingSync
+
     // The proxy will be supplied when restoring the Session.
-    Restored,
+    data object Restored : ClientBuilderSlidingSync
 
     // A proxy must be discovered whilst building the session.
-    Discovered,
+    data object Discovered : ClientBuilderSlidingSync
 
     // Use Simplified Sliding Sync (discovery isn't a thing yet).
-    Simplified,
+    data object Simplified : ClientBuilderSlidingSync
 }
 
 private fun SessionData.toSession() = Session(
@@ -136,6 +142,6 @@ private fun SessionData.toSession() = Session(
     userId = userId,
     deviceId = deviceId,
     homeserverUrl = homeserverUrl,
-    slidingSyncProxy = slidingSyncProxy,
+    slidingSyncVersion = slidingSyncProxy?.let(SlidingSyncVersion::Proxy) ?: SlidingSyncVersion.Native,
     oidcData = oidcData,
 )

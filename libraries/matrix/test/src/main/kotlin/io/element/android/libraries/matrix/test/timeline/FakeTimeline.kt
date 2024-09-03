@@ -219,8 +219,8 @@ class FakeTimeline(
         progressCallback
     )
 
-    var toggleReactionLambda: (emoji: String, eventId: EventId) -> Result<Unit> = { _, _ -> Result.success(Unit) }
-    override suspend fun toggleReaction(emoji: String, eventId: EventId): Result<Unit> = toggleReactionLambda(emoji, eventId)
+    var toggleReactionLambda: (emoji: String, eventId: String) -> Result<Unit> = { _, _ -> Result.success(Unit) }
+    override suspend fun toggleReaction(emoji: String, uniqueEventId: String): Result<Unit> = toggleReactionLambda(emoji, uniqueEventId)
 
     var forwardEventLambda: (eventId: EventId, roomIds: List<RoomId>) -> Result<Unit> = { _, _ -> Result.success(Unit) }
     override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> = forwardEventLambda(eventId, roomIds)

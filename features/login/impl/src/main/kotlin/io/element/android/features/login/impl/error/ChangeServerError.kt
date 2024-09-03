@@ -31,7 +31,7 @@ sealed class ChangeServerError : Throwable() {
 
     companion object {
         fun from(error: Throwable): ChangeServerError = when (error) {
-            is AuthenticationException.SlidingSyncNotAvailable -> SlidingSyncAlert
+            is AuthenticationException.SlidingSyncVersionMismatch -> SlidingSyncAlert
             else -> Error(R.string.screen_change_server_error_invalid_homeserver)
         }
     }

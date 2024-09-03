@@ -108,7 +108,7 @@ class FakeMatrixRoom(
     private val editMessageLambda: (EventId, String, String?, List<IntentionalMention>) -> Result<Unit> = { _, _, _, _ -> lambdaError() },
     private val sendMessageResult: (String, String?, List<IntentionalMention>) -> Result<Unit> = { _, _, _ -> lambdaError() },
     private val updateUserRoleResult: () -> Result<Unit> = { lambdaError() },
-    private val toggleReactionResult: (String, EventId) -> Result<Unit> = { _, _ -> lambdaError() },
+    private val toggleReactionResult: (String, String) -> Result<Unit> = { _, _ -> lambdaError() },
     private val retrySendMessageResult: (TransactionId) -> Result<Unit> = { lambdaError() },
     private val cancelSendResult: (TransactionId) -> Result<Boolean> = { lambdaError() },
     private val forwardEventResult: (EventId, List<RoomId>) -> Result<Unit> = { _, _ -> lambdaError() },
@@ -230,8 +230,8 @@ class FakeMatrixRoom(
         sendMessageResult(body, htmlBody, intentionalMentions)
     }
 
-    override suspend fun toggleReaction(emoji: String, eventId: EventId): Result<Unit> {
-        return toggleReactionResult(emoji, eventId)
+    override suspend fun toggleReaction(emoji: String, uniqueEventId: String): Result<Unit> {
+        return toggleReactionResult(emoji, uniqueEventId)
     }
 
     override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> {

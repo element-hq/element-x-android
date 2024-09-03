@@ -97,7 +97,7 @@ interface Timeline : AutoCloseable {
 
     suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
 
-    suspend fun toggleReaction(emoji: String, eventId: EventId): Result<Unit>
+    suspend fun toggleReaction(emoji: String, uniqueEventId: String): Result<Unit>
 
     suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit>
 

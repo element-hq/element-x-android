@@ -459,8 +459,8 @@ class RustMatrixRoom(
         return liveTimeline.sendFile(file, fileInfo, progressCallback)
     }
 
-    override suspend fun toggleReaction(emoji: String, eventId: EventId): Result<Unit> {
-        return liveTimeline.toggleReaction(emoji, eventId)
+    override suspend fun toggleReaction(emoji: String, uniqueEventId: String): Result<Unit> {
+        return liveTimeline.toggleReaction(emoji, uniqueEventId)
     }
 
     override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> {

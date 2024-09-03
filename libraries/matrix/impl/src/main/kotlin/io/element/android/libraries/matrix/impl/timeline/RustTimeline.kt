@@ -391,9 +391,9 @@ class RustTimeline(
         }
     }
 
-    override suspend fun toggleReaction(emoji: String, eventId: EventId): Result<Unit> = withContext(dispatcher) {
+    override suspend fun toggleReaction(emoji: String, uniqueEventId: String): Result<Unit> = withContext(dispatcher) {
         runCatching {
-            inner.toggleReaction(key = emoji, eventId = eventId.value)
+            inner.toggleReaction(key = emoji, uniqueId = uniqueEventId)
         }
     }
 

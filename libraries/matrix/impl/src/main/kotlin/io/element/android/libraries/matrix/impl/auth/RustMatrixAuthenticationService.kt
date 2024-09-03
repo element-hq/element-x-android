@@ -17,7 +17,6 @@
 package io.element.android.libraries.matrix.impl.auth
 
 import com.squareup.anvil.annotations.ContributesBinding
-import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.di.AppScope
@@ -223,7 +222,6 @@ class RustMatrixAuthenticationService @Inject constructor(
                 val client = rustMatrixClientFactory.getBaseClientBuilder(
                     sessionPaths = emptySessionPaths,
                     passphrase = pendingPassphrase,
-                    slidingSyncProxy = AuthenticationConfig.SLIDING_SYNC_PROXY_URL,
                     slidingSync = ClientBuilderSlidingSync.Discovered,
                 )
                     .buildWithQrCode(
@@ -267,7 +265,6 @@ class RustMatrixAuthenticationService @Inject constructor(
         .getBaseClientBuilder(
             sessionPaths = sessionPaths,
             passphrase = pendingPassphrase,
-            slidingSyncProxy = AuthenticationConfig.SLIDING_SYNC_PROXY_URL,
             slidingSync = ClientBuilderSlidingSync.Discovered,
         )
 
