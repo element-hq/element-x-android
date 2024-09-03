@@ -83,7 +83,6 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
             TimelineRoomInfo(
                 isDm = room.isDm,
                 name = room.displayName,
-                isMainTimeline = false,
                 // We don't need to compute those values
                 userHasPermissionToSendMessage = false,
                 userHasPermissionToSendReaction = false,

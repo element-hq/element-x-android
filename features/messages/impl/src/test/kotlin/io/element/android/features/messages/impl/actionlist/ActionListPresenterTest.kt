@@ -22,6 +22,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.aUserEventPermissions
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
@@ -974,14 +975,10 @@ private fun createActionListPresenter(
     room: MatrixRoom = FakeMatrixRoom(),
 ): ActionListPresenter {
     val preferencesStore = InMemoryAppPreferencesStore(isDeveloperModeEnabled = isDeveloperModeEnabled)
-    val featureFlagsService = FakeFeatureFlagService(
-        initialState = mapOf(
-            FeatureFlags.PinnedEvents.key to isPinFeatureEnabled,
-        )
-    )
-    return ActionListPresenter(
+    return DefaultActionListPresenter(
+        postProcessor = TimelineItemActionPostProcessor.Default,
         appPreferencesStore = preferencesStore,
-        featureFlagsService = featureFlagsService,
+        isPinnedMessagesFeatureEnabled = {isPinFeatureEnabled},
         room = room
     )
 }

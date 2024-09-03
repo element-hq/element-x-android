@@ -23,9 +23,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import com.squareup.anvil.annotations.ContributesBinding
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.element.android.features.messages.api.pinned.IsPinnedMessagesFeatureEnabled
 import io.element.android.features.messages.impl.UserEventPermissions
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
@@ -40,8 +42,7 @@ import io.element.android.features.messages.impl.timeline.model.event.canBeCopie
 import io.element.android.features.messages.impl.timeline.model.event.canBeForwarded
 import io.element.android.features.messages.impl.timeline.model.event.canReact
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
@@ -52,16 +53,24 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-class ActionListPresenter @AssistedInject constructor(
+interface ActionListPresenter : Presenter<ActionListState> {
+    interface Factory {
+        fun create(postProcessor: TimelineItemActionPostProcessor): ActionListPresenter
+    }
+}
+
+class DefaultActionListPresenter @AssistedInject constructor(
     @Assisted
     private val postProcessor: TimelineItemActionPostProcessor,
     private val appPreferencesStore: AppPreferencesStore,
-    private val featureFlagsService: FeatureFlagService,
+    private val isPinnedMessagesFeatureEnabled: IsPinnedMessagesFeatureEnabled,
     private val room: MatrixRoom,
-) : Presenter<ActionListState> {
+) : ActionListPresenter {
+
     @AssistedFactory
-    interface Factory {
-        fun create(postProcessor: TimelineItemActionPostProcessor): ActionListPresenter
+    @ContributesBinding(RoomScope::class)
+    interface Factory: ActionListPresenter.Factory {
+        override fun create(postProcessor: TimelineItemActionPostProcessor): DefaultActionListPresenter
     }
 
     @Composable
@@ -73,7 +82,7 @@ class ActionListPresenter @AssistedInject constructor(
         }
 
         val isDeveloperModeEnabled by appPreferencesStore.isDeveloperModeEnabledFlow().collectAsState(initial = false)
-        val isPinnedEventsEnabled by featureFlagsService.isFeatureEnabledFlow(FeatureFlags.PinnedEvents).collectAsState(initial = false)
+        val isPinnedEventsEnabled = isPinnedMessagesFeatureEnabled()
         val pinnedEventIds by remember {
             room.roomInfoFlow.map { it.pinnedEventIds }
         }.collectAsState(initial = persistentListOf())

@@ -242,12 +242,10 @@ internal fun aTimelineRoomInfo(
     name: String = "Room name",
     isDm: Boolean = false,
     userHasPermissionToSendMessage: Boolean = true,
-    isMainTimeline: Boolean = true,
 ) = TimelineRoomInfo(
     isDm = isDm,
     name = name,
     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
     userHasPermissionToSendReaction = true,
     isCallOngoing = false,
-    isMainTimeline = isMainTimeline,
 )

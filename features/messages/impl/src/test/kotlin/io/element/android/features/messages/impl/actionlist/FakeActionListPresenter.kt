@@ -14,11 +14,21 @@
  * limitations under the License.
  */
 
-package io.element.android.features.messages.impl.pinned.list
+package io.element.android.features.messages.impl.actionlist
 
-import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import androidx.compose.runtime.Composable
+import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
 
-sealed interface PinnedMessagesListEvents {
-    data class HandleAction(val action: TimelineItemAction, val event: TimelineItem.Event) : PinnedMessagesListEvents
+class FakeActionListPresenter : ActionListPresenter {
+
+    object Factory : ActionListPresenter.Factory {
+        override fun create(postProcessor: TimelineItemActionPostProcessor): ActionListPresenter {
+            return FakeActionListPresenter()
+        }
+    }
+
+    @Composable
+    override fun present(): ActionListState {
+        return anActionListState()
+    }
 }
