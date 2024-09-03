@@ -232,7 +232,7 @@ anvil {
         contributesAndFactoryGeneration = true,
         componentMerging = true,
     )
-//    generateDaggerFactories = true
+    //    generateDaggerFactories = true
 }
 
 // Knit

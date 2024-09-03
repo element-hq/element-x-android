@@ -20,12 +20,18 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+anvil {
+    useKsp(
+        contributesAndFactoryGeneration = true,
+        componentMerging = true,
+    )
+    generateDaggerFactories = true
+    disableComponentMerging = true
+}
+
 android {
     namespace = "io.element.android.libraries.mediaupload.api"
 
-    anvil {
-        generateDaggerFactories.set(true)
-    }
 
     dependencies {
         implementation(projects.anvilannotations)

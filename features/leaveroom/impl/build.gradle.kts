@@ -29,13 +29,14 @@ anvil {
         contributesAndFactoryGeneration = true,
         componentMerging = true,
     )
-//    generateDaggerFactories = true
+    generateDaggerFactories = true
+    disableComponentMerging = true
 }
 
 dependencies {
     implementation(projects.anvilannotations)
     ksp(projects.anvilcodegen)
-    ksp(libs.dagger.compiler)
+//    ksp(libs.dagger.compiler)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)

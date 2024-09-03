@@ -37,12 +37,13 @@ anvil {
         contributesAndFactoryGeneration = true,
         componentMerging = true,
     )
-//    generateDaggerFactories = true
+    generateDaggerFactories = true
+    disableComponentMerging = true
 }
 
 dependencies {
     ksp(projects.anvilcodegen)
-    ksp(libs.dagger.compiler)
+//    ksp(libs.dagger.compiler)
     implementation(projects.anvilannotations)
     implementation(projects.appconfig)
     implementation(projects.libraries.core)

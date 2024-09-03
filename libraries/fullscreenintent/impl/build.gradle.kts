@@ -29,14 +29,15 @@ anvil {
         contributesAndFactoryGeneration = true,
         componentMerging = true,
     )
-//    generateDaggerFactories = true
+    generateDaggerFactories = true
+    disableComponentMerging = true
 }
 
 dependencies {
     api(projects.libraries.fullscreenintent.api)
     implementation(projects.anvilannotations)
     ksp(projects.anvilcodegen)
-    ksp(libs.dagger.compiler)
+//    ksp(libs.dagger.compiler)
 
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)

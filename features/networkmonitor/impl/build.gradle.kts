@@ -25,7 +25,8 @@ anvil {
         contributesAndFactoryGeneration = true,
         componentMerging = true,
     )
-//    generateDaggerFactories = true
+    generateDaggerFactories = true
+    disableComponentMerging = true
 }
 
 android {
@@ -33,7 +34,7 @@ android {
 }
 
 dependencies {
-    ksp(libs.dagger.compiler)
+//    ksp(libs.dagger.compiler)
     implementation(libs.coroutines.core)
     implementation(libs.dagger)
     implementation(projects.libraries.core)

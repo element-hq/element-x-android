@@ -35,6 +35,8 @@ anvil {
         contributesAndFactoryGeneration = true,
         componentMerging = true,
     )
+    generateDaggerFactories = true
+    disableComponentMerging = true
 }
 
 dependencies {

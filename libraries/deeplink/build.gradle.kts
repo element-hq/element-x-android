@@ -28,13 +28,14 @@ anvil {
         contributesAndFactoryGeneration = true,
         componentMerging = true,
     )
-//    generateDaggerFactories = true
+    generateDaggerFactories = true
+    disableComponentMerging = true
 }
 
 dependencies {
     implementation(projects.libraries.di)
     implementation(libs.dagger)
-    ksp(libs.dagger.compiler)
+//    ksp(libs.dagger.compiler)
 
     implementation(libs.androidx.corektx)
     implementation(projects.libraries.core)

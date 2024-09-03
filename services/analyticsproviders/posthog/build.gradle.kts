@@ -28,11 +28,12 @@ anvil {
         contributesAndFactoryGeneration = true,
         componentMerging = true,
     )
-//    generateDaggerFactories = true
+    generateDaggerFactories = true
+    disableComponentMerging = true
 }
 
 dependencies {
-    ksp(libs.dagger.compiler)
+//    ksp(libs.dagger.compiler)
     implementation(libs.dagger)
     implementation(libs.posthog) {
         exclude("com.android.support", "support-annotations")
