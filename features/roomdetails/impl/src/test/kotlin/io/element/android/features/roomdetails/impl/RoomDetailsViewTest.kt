@@ -127,6 +127,22 @@ class RoomDetailsViewTest {
         }
     }
 
+
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `click on pinned messages invokes expected callback`() {
+        ensureCalledOnce { callback ->
+            rule.setRoomDetailView(
+                state = aRoomDetailsState(
+                    eventSink = EventsRecorder(expectEvents = false),
+                    canInvite = true,
+                ),
+                onPinnedMessagesClick = callback,
+            )
+            rule.clickOn(CommonStrings.screen_room_details_pinned_events_row_title)
+        }
+    }
+
     @Config(qualifiers = "h1024dp")
     @Test
     fun `click on add topic emit expected event`() {
@@ -263,6 +279,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
     openPollHistory: () -> Unit = EnsureNeverCalled(),
     openAdminSettings: () -> Unit = EnsureNeverCalled(),
     onJoinCallClick: () -> Unit = EnsureNeverCalled(),
+    onPinnedMessagesClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         RoomDetailsView(
@@ -277,6 +294,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
             openPollHistory = openPollHistory,
             openAdminSettings = openAdminSettings,
             onJoinCallClick = onJoinCallClick,
+            onPinnedMessagesClick = onPinnedMessagesClick,
         )
     }
 }

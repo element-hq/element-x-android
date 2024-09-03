@@ -86,7 +86,7 @@ class RoomDetailsPresenter @Inject constructor(
         val isPublic by remember { derivedStateOf { roomInfo?.isPublic.orFalse() } }
 
         val canShowPinnedMessages = isPinnedMessagesFeatureEnabled()
-        val pinnedMessagesCount by remember { derivedStateOf { roomInfo?.pinnedEventIds?.size ?: 0 } }
+        val pinnedMessagesCount by remember { derivedStateOf { roomInfo?.pinnedEventIds?.size } }
 
         LaunchedEffect(Unit) {
             canShowNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
