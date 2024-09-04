@@ -192,6 +192,7 @@ matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.23.1"
 
 # Emojibase
 matrix_emojibase_bindings = "io.element.android:emojibase-bindings:1.1.3"
+sigpwned_emoji4j = "com.sigpwned:emoji4j-core:15.1.0"
 
 # Di
 inject = "javax.inject:javax.inject:1"
