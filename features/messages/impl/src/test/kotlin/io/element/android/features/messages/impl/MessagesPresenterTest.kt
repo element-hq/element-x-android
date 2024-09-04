@@ -999,7 +999,6 @@ class MessagesPresenterTest {
     ): MessagesPresenter {
         val mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom)
         val permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter)
-        val appPreferencesStore = InMemoryAppPreferencesStore()
         val sessionPreferencesStore = InMemorySessionPreferencesStore()
         val mentionSpanProvider = MentionSpanProvider(FakePermalinkParser())
         val messageComposerPresenter = MessageComposerPresenter(

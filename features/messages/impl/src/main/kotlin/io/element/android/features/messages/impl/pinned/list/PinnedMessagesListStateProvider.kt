@@ -27,7 +27,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import kotlinx.collections.immutable.toImmutableList
 
-open class PinnedMessagesTimelineStateProvider : PreviewParameterProvider<PinnedMessagesListState> {
+open class PinnedMessagesListStateProvider : PreviewParameterProvider<PinnedMessagesListState> {
     override val values: Sequence<PinnedMessagesListState>
         get() = sequenceOf(
             aFailedPinnedMessagesListState(),

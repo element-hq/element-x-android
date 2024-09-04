@@ -30,7 +30,6 @@ object PinnedMessagesListTimelineActionPostProcessor : TimelineItemActionPostPro
 
     private fun predicate(action: TimelineItemAction): Boolean {
         return when (action) {
-            is TimelineItemAction.Pin,
             is TimelineItemAction.Unpin,
             is TimelineItemAction.Redact,
             is TimelineItemAction.Forward,
