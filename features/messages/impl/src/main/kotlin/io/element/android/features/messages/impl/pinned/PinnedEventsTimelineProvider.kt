@@ -56,7 +56,10 @@ class PinnedEventsTimelineProvider @Inject constructor(
         combine(
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.PinnedEvents),
             networkMonitor.connectivity
-        ) { isEnabled, _ -> isEnabled }
+        ) {
+          // do not use connectivity here as data can be loaded from cache, it's just to trigger retry if needed
+          isEnabled, _ -> isEnabled
+        }
             .onEach { isFeatureEnabled ->
                 if (isFeatureEnabled) {
                     loadTimelineIfNeeded()
