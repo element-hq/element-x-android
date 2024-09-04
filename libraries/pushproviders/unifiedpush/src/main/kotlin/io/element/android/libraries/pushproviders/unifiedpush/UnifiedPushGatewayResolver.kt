@@ -18,6 +18,7 @@ package io.element.android.libraries.pushproviders.unifiedpush
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.di.AppScope
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -34,12 +35,18 @@ class DefaultUnifiedPushGatewayResolver @Inject constructor(
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : UnifiedPushGatewayResolver {
     override suspend fun getGateway(endpoint: String): String {
-        val gateway = UnifiedPushConfig.DEFAULT_PUSH_GATEWAY_HTTP_URL
-        try {
-            val url = URL(endpoint)
+        val url = tryOrNull(
+            onError = { Timber.d(it, "Cannot parse endpoint as an URL") }
+        ) {
+            URL(endpoint)
+        }
+        return if (url == null) {
+            Timber.d("Using default gateway")
+            UnifiedPushConfig.DEFAULT_PUSH_GATEWAY_HTTP_URL
+        } else {
             val port = if (url.port != -1) ":${url.port}" else ""
             val customBase = "${url.protocol}://${url.host}$port"
-            val customUrl = "$customBase/_matrix/push/v1/notify"
+            val customUrl = "$customBase/${UnifiedPushConfig.PUSH_GATEWAY_PATH}"
             Timber.i("Testing $customUrl")
             return withContext(coroutineDispatchers.io) {
                 val api = unifiedPushApiFactory.create(customBase)
@@ -47,16 +54,13 @@ class DefaultUnifiedPushGatewayResolver @Inject constructor(
                     val discoveryResponse = api.discover()
                     if (discoveryResponse.unifiedpush.gateway == "matrix") {
                         Timber.d("Using custom gateway")
-                        return@withContext customUrl
                     }
                 } catch (throwable: Throwable) {
                     Timber.tag("UnifiedPushHelper").e(throwable)
                 }
-                return@withContext gateway
+                // Always return the custom url.
+                customUrl
             }
-        } catch (e: Throwable) {
-            Timber.d(e, "Cannot try custom gateway")
         }
-        return gateway
     }
 }

@@ -18,7 +18,7 @@ package io.element.android.libraries.push.impl.test
 
 import io.element.android.appconfig.PushConfig
 import io.element.android.libraries.push.impl.pushgateway.PushGatewayNotifyRequest
-import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
+import io.element.android.libraries.pushproviders.test.aCurrentUserPushConfig
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.test.runTest
@@ -33,10 +33,7 @@ class DefaultTestPushTest {
                 executeResult = executeResult,
             )
         )
-        val aConfig = CurrentUserPushConfig(
-            url = "aUrl",
-            pushKey = "aPushKey",
-        )
+        val aConfig = aCurrentUserPushConfig()
         defaultTestPush.execute(aConfig)
         executeResult.assertions()
             .isCalledOnce()

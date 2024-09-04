@@ -25,23 +25,23 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
+internal val matrixDiscoveryResponse = {
+    DiscoveryResponse(
+        unifiedpush = DiscoveryUnifiedPush(
+            gateway = "matrix"
+        )
+    )
+}
+
+internal val invalidDiscoveryResponse = {
+    DiscoveryResponse(
+        unifiedpush = DiscoveryUnifiedPush(
+            gateway = ""
+        )
+    )
+}
+
 class DefaultUnifiedPushGatewayResolverTest {
-    private val matrixDiscoveryResponse = {
-        DiscoveryResponse(
-            unifiedpush = DiscoveryUnifiedPush(
-                gateway = "matrix"
-            )
-        )
-    }
-
-    private val invalidDiscoveryResponse = {
-        DiscoveryResponse(
-            unifiedpush = DiscoveryUnifiedPush(
-                gateway = ""
-            )
-        )
-    }
-
     @Test
     fun `when a custom url provide a correct matrix gateway, the custom url is returned`() = runTest {
         val unifiedPushApiFactory = FakeUnifiedPushApiFactory(
