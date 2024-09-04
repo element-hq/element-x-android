@@ -56,6 +56,8 @@ class RustMatrixClientFactory @Inject constructor(
     private val appPreferencesStore: AppPreferencesStore,
 ) {
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
+                val sessionDelegate = RustClientSessionDelegate(sessionStore, appCoroutineScope, coroutineDispatchers)
+
         val client = getBaseClientBuilder(
             sessionPaths = sessionData.getSessionPaths(),
             passphrase = sessionData.passphrase,
@@ -67,6 +69,7 @@ class RustMatrixClientFactory @Inject constructor(
         )
             .homeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
+            .setSessionDelegate(sessionDelegate)
             .use { it.build() }
 
         client.restoreSession(sessionData.toSession())
@@ -86,6 +89,7 @@ class RustMatrixClientFactory @Inject constructor(
             baseDirectory = baseDirectory,
             baseCacheDirectory = cacheDirectory,
             clock = clock,
+            sessionDelegate = sessionDelegate,
         ).also {
             Timber.tag(it.toString()).d("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
         }

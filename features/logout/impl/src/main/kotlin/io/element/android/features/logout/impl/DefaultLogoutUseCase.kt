@@ -33,7 +33,7 @@ class DefaultLogoutUseCase @Inject constructor(
         return if (currentSession != null) {
             matrixClientProvider.getOrRestore(currentSession)
                 .getOrThrow()
-                .logout(ignoreSdkError = true)
+                .logout(userInitiated = true, ignoreSdkError = true)
         } else {
             error("No session to sign out")
         }
