@@ -46,7 +46,7 @@ class DefaultUnifiedPushGatewayResolver @Inject constructor(
         } else {
             val port = if (url.port != -1) ":${url.port}" else ""
             val customBase = "${url.protocol}://${url.host}$port"
-            val customUrl = "$customBase/${UnifiedPushConfig.PUSH_GATEWAY_PATH}"
+            val customUrl = "$customBase/_matrix/push/v1/notify"
             Timber.i("Testing $customUrl")
             return withContext(coroutineDispatchers.io) {
                 val api = unifiedPushApiFactory.create(customBase)

@@ -59,7 +59,7 @@ class UnifiedPushMatrixGatewayTest @Inject constructor(
                 status = NotificationTroubleshootTestState.Status.Failure(false)
             )
         } else {
-            val gatewayBaseUrl = config.url.removeSuffix("/${UnifiedPushConfig.PUSH_GATEWAY_PATH}")
+            val gatewayBaseUrl = config.url.removeSuffix("/_matrix/push/v1/notify")
             // Checking if the gateway is a Matrix gateway
             coroutineScope.launch(coroutineDispatchers.io) {
                 val api = unifiedPushApiFactory.create(gatewayBaseUrl)

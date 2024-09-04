@@ -17,13 +17,11 @@
 package io.element.android.libraries.pushproviders.unifiedpush
 
 object UnifiedPushConfig {
-    const val PUSH_GATEWAY_PATH: String = "_matrix/push/v1/notify"
-
     /**
      * It is the push gateway for UnifiedPush.
      * Note: default_push_gateway_http_url should have path '/_matrix/push/v1/notify'
      */
-    const val DEFAULT_PUSH_GATEWAY_HTTP_URL: String = "https://matrix.gateway.unifiedpush.org/$PUSH_GATEWAY_PATH"
+    const val DEFAULT_PUSH_GATEWAY_HTTP_URL: String = "https://matrix.gateway.unifiedpush.org/_matrix/push/v1/notify"
 
     const val UNIFIED_PUSH_DISTRIBUTORS_URL = "https://unifiedpush.org/users/distributors/"
 
