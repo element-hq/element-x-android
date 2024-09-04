@@ -43,6 +43,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.poll.api.pollcontent.PollTitleView
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -73,6 +74,7 @@ fun PinnedMessagesListView(
                 onEventClick = onEventClick,
                 onUserDataClick = onUserDataClick,
                 onLinkClick = onLinkClick,
+                onErrorDismiss = onBackClick,
                 modifier = Modifier
                     .padding(padding)
                     .consumeWindowInsets(padding),
@@ -106,11 +108,18 @@ private fun PinnedMessagesListContent(
     onEventClick: (event: TimelineItem.Event) -> Unit,
     onUserDataClick: (UserId) -> Unit,
     onLinkClick: (String) -> Unit,
+    onErrorDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier.fillMaxSize()) {
         when (state) {
-            PinnedMessagesListState.Failed -> Unit
+            PinnedMessagesListState.Failed -> {
+                ErrorDialog(
+                    title = stringResource(id = CommonStrings.error_unknown),
+                    content = stringResource(id = CommonStrings.error_failed_loading_messages),
+                    onDismiss = onErrorDismiss
+                )
+            }
             PinnedMessagesListState.Empty -> PinnedMessagesListEmpty()
             is PinnedMessagesListState.Filled -> PinnedMessagesListLoaded(
                 state = state,
@@ -133,16 +142,16 @@ private fun PinnedMessagesListEmpty(
 ) {
     Box(
         modifier = modifier.padding(
-            horizontal = 16.dp,
-            vertical = 48.dp
-        )
+            horizontal = 32.dp,
+            vertical = 48.dp,
+        ),
+        contentAlignment = Alignment.Center,
     ) {
         val pinActionText = stringResource(id = CommonStrings.action_pin)
         IconTitleSubtitleMolecule(
             title = stringResource(id = CommonStrings.screen_pinned_timeline_empty_state_headline),
             subTitle = stringResource(id = CommonStrings.screen_pinned_timeline_empty_state_description, pinActionText),
             iconResourceId = CompoundDrawables.ic_compound_pin,
-            modifier = modifier,
         )
     }
 }
