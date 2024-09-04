@@ -30,15 +30,20 @@ import io.element.android.anvilannotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.logout.api.util.onSuccessLogout
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
 class VerifySelfSessionNode @AssistedInject constructor(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: VerifySelfSessionPresenter,
+    presenterFactory: VerifySelfSessionPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
     private val callback = plugins<VerifySessionEntryPoint.Callback>().first()
+
+    private val presenter = presenterFactory.create(
+        showDeviceVerifiedScreen = inputs<VerifySessionEntryPoint.Params>().showDeviceVerifiedScreen,
+    )
 
     @Composable
     override fun View(modifier: Modifier) {

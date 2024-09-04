@@ -20,12 +20,16 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
+import io.element.android.libraries.architecture.NodeInputs
 
 interface VerifySessionEntryPoint : FeatureEntryPoint {
+    data class Params(val showDeviceVerifiedScreen: Boolean) : NodeInputs
+
     fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
 
     interface NodeBuilder {
         fun callback(callback: Callback): NodeBuilder
+        fun params(params: Params): NodeBuilder
         fun build(): Node
     }
 

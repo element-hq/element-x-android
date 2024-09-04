@@ -36,6 +36,11 @@ class DefaultVerifySessionEntryPoint @Inject constructor() : VerifySessionEntryP
                 return this
             }
 
+            override fun params(params: VerifySessionEntryPoint.Params): VerifySessionEntryPoint.NodeBuilder {
+                plugins += params
+                return this
+            }
+
             override fun build(): Node {
                 return parentNode.createNode<VerifySelfSessionNode>(buildContext, plugins)
             }
