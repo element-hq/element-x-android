@@ -24,18 +24,14 @@ import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_SECRET
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 import io.element.android.libraries.pushproviders.api.Distributor
+import io.element.android.libraries.pushproviders.test.aCurrentUserPushConfig
+import io.element.android.libraries.pushproviders.unifiedpush.troubleshoot.FakeUnifiedPushCurrentUserPushConfigProvider
 import io.element.android.libraries.pushproviders.unifiedpush.troubleshoot.FakeUnifiedPushDistributorProvider
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.FakePushClientSecret
-import io.element.android.services.appnavstate.api.AppNavigationState
-import io.element.android.services.appnavstate.api.AppNavigationStateService
-import io.element.android.services.appnavstate.api.NavigationState
-import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -226,78 +222,15 @@ class UnifiedPushProviderTest {
     }
 
     @Test
-    fun `getCurrentUserPushConfig no session`() = runTest {
-        val unifiedPushProvider = createUnifiedPushProvider()
-        val result = unifiedPushProvider.getCurrentUserPushConfig()
-        assertThat(result).isNull()
-    }
-
-    @Test
-    fun `getCurrentUserPushConfig no push gateway`() = runTest {
+    fun `getCurrentUserPushConfig invokes the provider methods`() = runTest {
+        val currentUserPushConfig = aCurrentUserPushConfig()
         val unifiedPushProvider = createUnifiedPushProvider(
-            appNavigationStateService = FakeAppNavigationStateService(
-                appNavigationState = MutableStateFlow(
-                    AppNavigationState(
-                        navigationState = NavigationState.Session(owner = "owner", sessionId = A_SESSION_ID),
-                        isInForeground = true
-                    )
-                )
-            ),
-            pushClientSecret = FakePushClientSecret(
-                getSecretForUserResult = { A_SECRET }
-            ),
-            unifiedPushStore = FakeUnifiedPushStore(
-                getPushGatewayResult = { null }
-            ),
+            unifiedPushCurrentUserPushConfigProvider = FakeUnifiedPushCurrentUserPushConfigProvider(
+                currentUserPushConfig = { currentUserPushConfig }
+            )
         )
         val result = unifiedPushProvider.getCurrentUserPushConfig()
-        assertThat(result).isNull()
-    }
-
-    @Test
-    fun `getCurrentUserPushConfig no push key`() = runTest {
-        val unifiedPushProvider = createUnifiedPushProvider(
-            appNavigationStateService = FakeAppNavigationStateService(
-                appNavigationState = MutableStateFlow(
-                    AppNavigationState(
-                        navigationState = NavigationState.Session(owner = "owner", sessionId = A_SESSION_ID),
-                        isInForeground = true
-                    )
-                )
-            ),
-            pushClientSecret = FakePushClientSecret(
-                getSecretForUserResult = { A_SECRET }
-            ),
-            unifiedPushStore = FakeUnifiedPushStore(
-                getPushGatewayResult = { "aPushGateway" },
-                getEndpointResult = { null }
-            ),
-        )
-        val result = unifiedPushProvider.getCurrentUserPushConfig()
-        assertThat(result).isNull()
-    }
-
-    @Test
-    fun `getCurrentUserPushConfig ok`() = runTest {
-        val unifiedPushProvider = createUnifiedPushProvider(
-            appNavigationStateService = FakeAppNavigationStateService(
-                appNavigationState = MutableStateFlow(
-                    AppNavigationState(
-                        navigationState = NavigationState.Session(owner = "owner", sessionId = A_SESSION_ID),
-                        isInForeground = true
-                    )
-                )
-            ),
-            pushClientSecret = FakePushClientSecret(
-                getSecretForUserResult = { A_SECRET }
-            ),
-            unifiedPushStore = FakeUnifiedPushStore(
-                getPushGatewayResult = { "aPushGateway" },
-                getEndpointResult = { "aEndpoint" }
-            ),
-        )
-        val result = unifiedPushProvider.getCurrentUserPushConfig()
-        assertThat(result).isEqualTo(CurrentUserPushConfig("aPushGateway", "aEndpoint"))
+        assertThat(result).isEqualTo(currentUserPushConfig)
     }
 
     private fun createUnifiedPushProvider(
@@ -306,7 +239,7 @@ class UnifiedPushProviderTest {
         unRegisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase = FakeUnregisterUnifiedPushUseCase(),
         pushClientSecret: PushClientSecret = FakePushClientSecret(),
         unifiedPushStore: UnifiedPushStore = FakeUnifiedPushStore(),
-        appNavigationStateService: AppNavigationStateService = FakeAppNavigationStateService(),
+        unifiedPushCurrentUserPushConfigProvider: UnifiedPushCurrentUserPushConfigProvider = FakeUnifiedPushCurrentUserPushConfigProvider(),
     ): UnifiedPushProvider {
         return UnifiedPushProvider(
             unifiedPushDistributorProvider = unifiedPushDistributorProvider,
@@ -314,7 +247,7 @@ class UnifiedPushProviderTest {
             unRegisterUnifiedPushUseCase = unRegisterUnifiedPushUseCase,
             pushClientSecret = pushClientSecret,
             unifiedPushStore = unifiedPushStore,
-            appNavigationStateService = appNavigationStateService
+            unifiedPushCurrentUserPushConfigProvider = unifiedPushCurrentUserPushConfigProvider,
         )
     }
 }

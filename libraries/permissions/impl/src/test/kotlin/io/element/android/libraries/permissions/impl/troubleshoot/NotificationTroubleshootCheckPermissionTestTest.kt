@@ -101,4 +101,32 @@ class NotificationTroubleshootCheckPermissionTestTest {
             assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Success)
         }
     }
+
+    @Test
+    fun `test NotificationTroubleshootCheckPermissionTest error and reset`() = runTest {
+        val permissionStateProvider = FakePermissionStateProvider(
+            permissionGranted = false
+        )
+        val actions = FakePermissionActions(
+            openSettingsAction = {
+                permissionStateProvider.setPermissionGranted()
+            }
+        )
+        val sut = NotificationTroubleshootCheckPermissionTest(
+            permissionStateProvider = permissionStateProvider,
+            sdkVersionProvider = FakeBuildVersionSdkIntProvider(sdkInt = Build.VERSION_CODES.TIRAMISU),
+            permissionActions = actions,
+            stringProvider = FakeStringProvider(),
+        )
+        launch {
+            sut.run(this)
+        }
+        sut.state.test {
+            assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
+            assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
+            assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(true))
+            sut.reset()
+            assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
+        }
+    }
 }

@@ -23,8 +23,6 @@ import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
-import io.element.android.services.appnavstate.api.AppNavigationStateService
-import io.element.android.services.appnavstate.api.currentSessionId
 import javax.inject.Inject
 
 @ContributesMultibinding(AppScope::class)
@@ -34,7 +32,7 @@ class UnifiedPushProvider @Inject constructor(
     private val unRegisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
     private val pushClientSecret: PushClientSecret,
     private val unifiedPushStore: UnifiedPushStore,
-    private val appNavigationStateService: AppNavigationStateService,
+    private val unifiedPushCurrentUserPushConfigProvider: UnifiedPushCurrentUserPushConfigProvider,
 ) : PushProvider {
     override val index = UnifiedPushConfig.INDEX
     override val name = UnifiedPushConfig.NAME
@@ -62,13 +60,6 @@ class UnifiedPushProvider @Inject constructor(
     }
 
     override suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig? {
-        val currentSession = appNavigationStateService.appNavigationState.value.navigationState.currentSessionId() ?: return null
-        val clientSecret = pushClientSecret.getSecretForUser(currentSession)
-        val url = unifiedPushStore.getPushGateway(clientSecret) ?: return null
-        val pushKey = unifiedPushStore.getEndpoint(clientSecret) ?: return null
-        return CurrentUserPushConfig(
-            url = url,
-            pushKey = pushKey,
-        )
+        return unifiedPushCurrentUserPushConfigProvider.provide()
     }
 }
