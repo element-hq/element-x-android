@@ -33,8 +33,6 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
 import io.element.android.features.poll.api.pollcontent.aPollAnswerItemList
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
@@ -978,7 +976,7 @@ private fun createActionListPresenter(
     return DefaultActionListPresenter(
         postProcessor = TimelineItemActionPostProcessor.Default,
         appPreferencesStore = preferencesStore,
-        isPinnedMessagesFeatureEnabled = {isPinFeatureEnabled},
+        isPinnedMessagesFeatureEnabled = { isPinFeatureEnabled },
         room = room
     )
 }

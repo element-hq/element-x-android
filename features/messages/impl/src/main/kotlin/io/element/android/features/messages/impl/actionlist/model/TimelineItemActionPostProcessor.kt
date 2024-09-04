@@ -24,5 +24,4 @@ fun interface TimelineItemActionPostProcessor {
             return actions
         }
     }
-
 }

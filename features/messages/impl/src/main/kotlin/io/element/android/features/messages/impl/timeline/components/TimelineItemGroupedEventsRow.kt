@@ -59,15 +59,16 @@ fun TimelineItemGroupedEventsRow(
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier,
-    eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit = { event, contentModifier, onContentLayoutChange ->
-        TimelineItemEventContentView(
-            content = event.content,
-            onLinkClick = onLinkClick,
-            eventSink = eventSink,
-            modifier = contentModifier,
-            onContentLayoutChange = onContentLayoutChange
-        )
-    },
+    eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
+        { event, contentModifier, onContentLayoutChange ->
+            TimelineItemEventContentView(
+                content = event.content,
+                onLinkClick = onLinkClick,
+                eventSink = eventSink,
+                modifier = contentModifier,
+                onContentLayoutChange = onContentLayoutChange
+            )
+        },
 ) {
     val isExpanded = rememberSaveable(key = timelineItem.identifier().value) { mutableStateOf(false) }
 
@@ -120,15 +121,16 @@ private fun TimelineItemGroupedEventsRowContent(
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier,
-    eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit = { event, contentModifier, onContentLayoutChange ->
-        TimelineItemEventContentView(
-            content = event.content,
-            onLinkClick = onLinkClick,
-            eventSink = eventSink,
-            modifier = contentModifier,
-            onContentLayoutChange = onContentLayoutChange
-        )
-    },
+    eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
+        { event, contentModifier, onContentLayoutChange ->
+            TimelineItemEventContentView(
+                content = event.content,
+                onLinkClick = onLinkClick,
+                eventSink = eventSink,
+                modifier = contentModifier,
+                onContentLayoutChange = onContentLayoutChange
+            )
+        },
 ) {
     Column(modifier = modifier.animateContentSize()) {
         GroupHeaderView(

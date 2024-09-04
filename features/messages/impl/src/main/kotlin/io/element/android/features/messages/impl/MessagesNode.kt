@@ -199,8 +199,6 @@ class MessagesNode @AssistedInject constructor(
         callbacks.forEach { it.onJoinCallClick(room.roomId) }
     }
 
-
-
     @Composable
     override fun View(modifier: Modifier) {
         val context = LocalContext.current

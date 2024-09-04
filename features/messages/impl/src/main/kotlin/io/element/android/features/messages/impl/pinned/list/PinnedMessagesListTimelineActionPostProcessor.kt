@@ -20,7 +20,6 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
 
 object PinnedMessagesListTimelineActionPostProcessor : TimelineItemActionPostProcessor {
-
     override fun process(actions: List<TimelineItemAction>): List<TimelineItemAction> {
         return buildList {
             add(TimelineItemAction.ViewInTimeline)

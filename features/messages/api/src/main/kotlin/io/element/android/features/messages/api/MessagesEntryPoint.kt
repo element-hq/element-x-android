@@ -29,7 +29,6 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import kotlinx.parcelize.Parcelize
 
 interface MessagesEntryPoint : FeatureEntryPoint {
-
     sealed interface InitialTarget : Parcelable {
         @Parcelize
         data class Messages(val focusedEventId: EventId?) : InitialTarget

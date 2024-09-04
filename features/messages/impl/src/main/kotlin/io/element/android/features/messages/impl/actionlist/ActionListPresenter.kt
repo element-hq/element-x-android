@@ -66,10 +66,9 @@ class DefaultActionListPresenter @AssistedInject constructor(
     private val isPinnedMessagesFeatureEnabled: IsPinnedMessagesFeatureEnabled,
     private val room: MatrixRoom,
 ) : ActionListPresenter {
-
     @AssistedFactory
     @ContributesBinding(RoomScope::class)
-    interface Factory: ActionListPresenter.Factory {
+    interface Factory : ActionListPresenter.Factory {
         override fun create(postProcessor: TimelineItemActionPostProcessor): DefaultActionListPresenter
     }
 

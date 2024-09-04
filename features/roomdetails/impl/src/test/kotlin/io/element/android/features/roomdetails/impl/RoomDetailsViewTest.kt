@@ -127,7 +127,6 @@ class RoomDetailsViewTest {
         }
     }
 
-
     @Config(qualifiers = "h1024dp")
     @Test
     fun `click on pinned messages invokes expected callback`() {

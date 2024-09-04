@@ -40,7 +40,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class PinnedMessagesListPresenterTest {
-
     @Test
     fun `present - initial state feature disabled`() = runTest {
         val room = FakeMatrixRoom(

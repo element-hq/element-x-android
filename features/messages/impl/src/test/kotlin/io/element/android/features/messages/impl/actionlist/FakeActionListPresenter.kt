@@ -20,7 +20,6 @@ import androidx.compose.runtime.Composable
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
 
 class FakeActionListPresenter : ActionListPresenter {
-
     object Factory : ActionListPresenter.Factory {
         override fun create(postProcessor: TimelineItemActionPostProcessor): ActionListPresenter {
             return FakeActionListPresenter()

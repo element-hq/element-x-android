@@ -152,6 +152,4 @@ class RoomDetailsNode @AssistedInject constructor(
             onPinnedMessagesClick = ::openPinnedMessages
         )
     }
-
-
 }

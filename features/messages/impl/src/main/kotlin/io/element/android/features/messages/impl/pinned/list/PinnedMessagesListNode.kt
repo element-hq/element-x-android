@@ -30,7 +30,6 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
-import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactory
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 import io.element.android.libraries.di.RoomScope
@@ -48,7 +47,6 @@ class PinnedMessagesListNode @AssistedInject constructor(
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
     private val permalinkParser: PermalinkParser,
 ) : Node(buildContext, plugins = plugins), PinnedMessagesListNavigator {
-
     interface Callback : Plugin {
         fun onEventClick(event: TimelineItem.Event)
         fun onUserDataClick(userId: UserId)

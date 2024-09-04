@@ -69,7 +69,6 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
     private val snackbarDispatcher: SnackbarDispatcher,
     actionListPresenterFactory: ActionListPresenter.Factory,
 ) : Presenter<PinnedMessagesListState> {
-
     @AssistedFactory
     interface Factory {
         fun create(navigator: PinnedMessagesListNavigator): PinnedMessagesListPresenter

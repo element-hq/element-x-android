@@ -58,7 +58,8 @@ class PinnedEventsTimelineProvider @Inject constructor(
             networkMonitor.connectivity
         ) {
           // do not use connectivity here as data can be loaded from cache, it's just to trigger retry if needed
-          isEnabled, _ -> isEnabled
+          isEnabled, _ ->
+            isEnabled
         }
             .onEach { isFeatureEnabled ->
                 if (isFeatureEnabled) {
