@@ -21,8 +21,10 @@ import io.element.android.features.messages.impl.UserEventPermissions
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
+import io.element.android.features.messages.impl.timeline.aTimelineItemList
 import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import kotlinx.collections.immutable.toImmutableList
 
 open class PinnedMessagesTimelineStateProvider : PreviewParameterProvider<PinnedMessagesListState> {
@@ -31,7 +33,9 @@ open class PinnedMessagesTimelineStateProvider : PreviewParameterProvider<Pinned
             aFailedPinnedMessagesListState(),
             aLoadingPinnedMessagesListState(),
             anEmptyPinnedMessagesListState(),
-            aLoadedPinnedMessagesListState()
+            aLoadedPinnedMessagesListState(
+                timelineItems = aTimelineItemList(aTimelineItemTextContent())
+            )
         )
 }
 
@@ -46,10 +50,11 @@ fun aLoadedPinnedMessagesListState(
     timelineItems: List<TimelineItem> = emptyList(),
     actionListState: ActionListState = anActionListState(),
     aUserEventPermissions: UserEventPermissions = UserEventPermissions.DEFAULT,
+    eventSink: (PinnedMessagesListEvents) -> Unit = {}
 ) = PinnedMessagesListState.Filled(
     timelineRoomInfo = timelineRoomInfo,
     timelineItems = timelineItems.toImmutableList(),
     actionListState = actionListState,
     userEventPermissions = aUserEventPermissions,
-    eventSink = {},
+    eventSink = eventSink,
 )
