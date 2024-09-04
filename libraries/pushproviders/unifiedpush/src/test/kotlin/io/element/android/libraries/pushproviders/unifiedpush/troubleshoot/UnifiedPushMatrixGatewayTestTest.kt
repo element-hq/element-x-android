@@ -19,7 +19,6 @@ package io.element.android.libraries.pushproviders.unifiedpush.troubleshoot
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
-import io.element.android.libraries.pushproviders.test.FakePushProvider
 import io.element.android.libraries.pushproviders.test.aCurrentUserPushConfig
 import io.element.android.libraries.pushproviders.unifiedpush.FakeUnifiedPushApiFactory
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushConfig
@@ -120,7 +119,9 @@ class UnifiedPushMatrixGatewayTestTest {
         return UnifiedPushMatrixGatewayTest(
             unifiedPushApiFactory = FakeUnifiedPushApiFactory(discoveryResponse),
             coroutineDispatchers = testCoroutineDispatchers(),
-            pushProvider = FakePushProvider(currentUserPushConfig = currentUserPushConfig),
+            unifiedPushCurrentUserPushConfigProvider = FakeUnifiedPushCurrentUserPushConfigProvider(
+                currentUserPushConfig = { currentUserPushConfig }
+            ),
         )
     }
 }

@@ -19,9 +19,9 @@ package io.element.android.libraries.pushproviders.unifiedpush.troubleshoot
 import com.squareup.anvil.annotations.ContributesMultibinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushApiFactory
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushConfig
+import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushCurrentUserPushConfigProvider
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTest
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestDelegate
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
@@ -35,7 +35,7 @@ import javax.inject.Inject
 class UnifiedPushMatrixGatewayTest @Inject constructor(
     private val unifiedPushApiFactory: UnifiedPushApiFactory,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val pushProvider: PushProvider,
+    private val unifiedPushCurrentUserPushConfigProvider: UnifiedPushCurrentUserPushConfigProvider,
 ) : NotificationTroubleshootTest {
     override val order = 450
     private val delegate = NotificationTroubleshootTestDelegate(
@@ -52,7 +52,7 @@ class UnifiedPushMatrixGatewayTest @Inject constructor(
 
     override suspend fun run(coroutineScope: CoroutineScope) {
         delegate.start()
-        val config = pushProvider.getCurrentUserPushConfig()
+        val config = unifiedPushCurrentUserPushConfigProvider.provide()
         if (config == null) {
             delegate.updateState(
                 description = "No current push provider",
