@@ -35,7 +35,7 @@ fun String.containsOnlyEmojis(): Boolean {
         m = matcher.toMatchResult()
         // Many non-"emoji" characters are pictographics. We only want to identify this specific range
         // https://en.wikipedia.org/wiki/Miscellaneous_Symbols_and_Pictographs
-        val isEmoji = m!!.grapheme().type == EMOJI || (m.grapheme().type == PICTOGRAPHIC && m.group() in "🌍".."🗺")
+        val isEmoji = m!!.grapheme().type == EMOJI || m.grapheme().type == PICTOGRAPHIC && m.group() in "🌍".."🗺"
         contiguous = isEmoji and (m.start() == previous)
         previous = m.end()
     }
