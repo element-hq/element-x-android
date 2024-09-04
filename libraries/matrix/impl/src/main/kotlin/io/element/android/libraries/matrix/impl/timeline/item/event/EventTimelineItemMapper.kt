@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemE
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import org.matrix.rustcomponents.sdk.EventSendState
 import org.matrix.rustcomponents.sdk.Reaction
 import org.matrix.rustcomponents.sdk.ShieldState
 import uniffi.matrix_sdk_common.ShieldStateCode
@@ -98,6 +99,8 @@ fun RustEventSendState?.map(): LocalEventSendState? {
                 devices = devices.mapKeys { UserId(it.key) }
             )
         }
+        EventSendState.CrossSigningNotSetup -> LocalEventSendState.Failed.CrossSigningNotSetup
+        EventSendState.SendingFromUnverifiedDevice -> LocalEventSendState.Failed.SendingFromUnverifiedDevice
     }
 }
 
