@@ -126,7 +126,6 @@ class DefaultActionListPresenter @AssistedInject constructor(
         )
 
         val displayEmojiReactions = usersEventPermissions.canSendReaction &&
-            timelineItem.isRemote &&
             timelineItem.content.canReact()
         if (actions.isNotEmpty() || displayEmojiReactions) {
             target.value = ActionListState.Target.Success(

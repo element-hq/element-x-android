@@ -18,5 +18,4 @@ package io.element.android.features.preferences.impl.about
 
 data class AboutState(
     val elementLegals: List<ElementLegal>,
-    val hasOpenSourcesLicenses: Boolean,
 )

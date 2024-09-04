@@ -36,8 +36,8 @@ class ResetIdentityFlowManager @Inject constructor(
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val sessionVerificationService: SessionVerificationService,
 ) {
-    private val resetHandleFlow: MutableStateFlow<AsyncData<IdentityResetHandle>> = MutableStateFlow(AsyncData.Uninitialized)
-    val currentHandleFlow: StateFlow<AsyncData<IdentityResetHandle>> = resetHandleFlow
+    private val resetHandleFlow: MutableStateFlow<AsyncData<IdentityResetHandle?>> = MutableStateFlow(AsyncData.Uninitialized)
+    val currentHandleFlow: StateFlow<AsyncData<IdentityResetHandle?>> = resetHandleFlow
     private var whenResetIsDoneWaitingJob: Job? = null
 
     fun whenResetIsDone(block: () -> Unit) {
@@ -47,7 +47,7 @@ class ResetIdentityFlowManager @Inject constructor(
         }
     }
 
-    fun getResetHandle(): StateFlow<AsyncData<IdentityResetHandle>> {
+    fun getResetHandle(): StateFlow<AsyncData<IdentityResetHandle?>> {
         return if (resetHandleFlow.value.isLoading() || resetHandleFlow.value.isSuccess()) {
             resetHandleFlow
         } else {
@@ -56,13 +56,11 @@ class ResetIdentityFlowManager @Inject constructor(
             sessionCoroutineScope.launch {
                 matrixClient.encryptionService().startIdentityReset()
                     .onSuccess { handle ->
-                        resetHandleFlow.value = if (handle != null) {
-                            AsyncData.Success(handle)
-                        } else {
-                            AsyncData.Failure(IllegalStateException("Could not get a reset identity handle"))
-                        }
+                        resetHandleFlow.value = AsyncData.Success(handle)
                     }
-                    .onFailure { resetHandleFlow.value = AsyncData.Failure(it) }
+                    .onFailure {
+                        resetHandleFlow.value = AsyncData.Failure(it)
+                    }
             }
 
             resetHandleFlow

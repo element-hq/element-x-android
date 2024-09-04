@@ -28,4 +28,5 @@
   <string name="screen_session_verification_they_match">"Pasują do siebie"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Zaakceptuj prośbę o rozpoczęcie procesu weryfikacji w innej sesji, aby kontynuować."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Oczekiwanie na zaakceptowanie żądania"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Wylogowywanie…"</string>
 </resources>

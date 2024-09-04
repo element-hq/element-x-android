@@ -40,6 +40,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.isDm
@@ -97,7 +98,7 @@ class TimelinePresenter @AssistedInject constructor(
         val userHasPermissionToSendMessage by room.canSendMessageAsState(type = MessageEventType.ROOM_MESSAGE, updateKey = syncUpdateFlow.value)
         val userHasPermissionToSendReaction by room.canSendMessageAsState(type = MessageEventType.REACTION, updateKey = syncUpdateFlow.value)
 
-        val prevMostRecentItemId = rememberSaveable { mutableStateOf<String?>(null) }
+        val prevMostRecentItemId = rememberSaveable { mutableStateOf<UniqueId?>(null) }
 
         val newEventState = remember { mutableStateOf(NewEventState.None) }
         val messageShield: MutableState<MessageShield?> = remember { mutableStateOf(null) }
@@ -244,7 +245,7 @@ class TimelinePresenter @AssistedInject constructor(
      */
     private suspend fun computeNewItemState(
         timelineItems: ImmutableList<TimelineItem>,
-        prevMostRecentItemId: MutableState<String?>,
+        prevMostRecentItemId: MutableState<UniqueId?>,
         newEventState: MutableState<NewEventState>
     ) = withContext(dispatchers.computation) {
         // FromMe is prioritized over FromOther, so skip if we already have a FromMe

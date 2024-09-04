@@ -261,6 +261,10 @@ class LoggedInFlowNode @AssistedInject constructor(
                         backstack.push(NavTarget.CreateRoom)
                     }
 
+                    override fun onSetUpRecoveryClick() {
+                        backstack.push(NavTarget.SecureBackup(initialElement = SecureBackupEntryPoint.InitialTarget.SetUpRecovery))
+                    }
+
                     override fun onSessionConfirmRecoveryKeyClick() {
                         backstack.push(NavTarget.SecureBackup(initialElement = SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey))
                     }

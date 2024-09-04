@@ -14,4 +14,5 @@
   <string name="screen_session_verification_they_match">"Те съвпадат"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Приемете заявката, за да започнете процеса на потвърждаване в другата си сесия, за да продължите."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"В очакване на приемане на заявка"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Излизане…"</string>
 </resources>

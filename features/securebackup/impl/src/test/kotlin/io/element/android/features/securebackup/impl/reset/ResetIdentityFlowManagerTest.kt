@@ -66,14 +66,16 @@ class ResetIdentityFlowManagerTest {
     }
 
     @Test
-    fun `getResetHandle - will fail if it receives a null reset handle`() = runTest {
+    fun `getResetHandle - will success if it receives a null reset handle`() = runTest {
         val startResetLambda = lambdaRecorder<Result<IdentityResetHandle?>> { Result.success(null) }
         val encryptionService = FakeEncryptionService(startIdentityResetLambda = startResetLambda)
         val flowManager = createFlowManager(encryptionService = encryptionService)
 
         flowManager.getResetHandle().test {
             assertThat(awaitItem().isLoading()).isTrue()
-            assertThat(awaitItem().isFailure()).isTrue()
+            val finalItem = awaitItem()
+            assertThat(finalItem.isSuccess()).isTrue()
+            assertThat(finalItem.dataOrNull()).isNull()
             startResetLambda.assertions().isCalledOnce()
         }
     }

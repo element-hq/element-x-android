@@ -32,6 +32,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
@@ -123,7 +124,10 @@ internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList
 }
 
 fun aTimelineItemDaySeparator(): TimelineItem.Virtual {
-    return TimelineItem.Virtual(UUID.randomUUID().toString(), aTimelineItemDaySeparatorModel("Today"))
+    return TimelineItem.Virtual(
+        id = UniqueId(UUID.randomUUID().toString()),
+        model = aTimelineItemDaySeparatorModel("Today"),
+    )
 }
 
 internal fun aTimelineItemEvent(
@@ -145,7 +149,7 @@ internal fun aTimelineItemEvent(
     messageShield: MessageShield? = null,
 ): TimelineItem.Event {
     return TimelineItem.Event(
-        id = UUID.randomUUID().toString(),
+        id = UniqueId(UUID.randomUUID().toString()),
         eventId = eventId,
         transactionId = transactionId,
         senderId = UserId("@senderId:domain"),
@@ -211,7 +215,7 @@ internal fun aTimelineItemReadReceipts(
 }
 
 internal fun aGroupedEvents(
-    id: Long = 0,
+    id: UniqueId = UniqueId("0"),
     withReadReceipts: Boolean = false,
 ): TimelineItem.GroupedEvents {
     val event1 = aTimelineItemEvent(
@@ -232,7 +236,7 @@ internal fun aGroupedEvents(
     )
     val events = listOf(event1, event2)
     return TimelineItem.GroupedEvents(
-        id = id.toString(),
+        id = id,
         events = events.toImmutableList(),
         aggregatedReadReceipts = events.flatMap { it.readReceiptState.receipts }.toImmutableList(),
     )

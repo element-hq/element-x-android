@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.notification
 
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.CallNotifyType
 import io.element.android.libraries.matrix.api.notification.NotificationContent
@@ -94,7 +95,10 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
             is MessageLikeEventContent.RoomMessage -> {
                 NotificationContent.MessageLike.RoomMessage(senderId, EventMessageMapper().mapMessageType(messageType))
             }
-            is MessageLikeEventContent.RoomRedaction -> NotificationContent.MessageLike.RoomRedaction(redactedEventId = redactedEventId, reason = reason)
+            is MessageLikeEventContent.RoomRedaction -> NotificationContent.MessageLike.RoomRedaction(
+                redactedEventId = redactedEventId?.let(::EventId),
+                reason = reason,
+            )
             MessageLikeEventContent.Sticker -> NotificationContent.MessageLike.Sticker
             is MessageLikeEventContent.Poll -> NotificationContent.MessageLike.Poll(senderId, question)
         }

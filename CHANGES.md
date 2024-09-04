@@ -1,3 +1,92 @@
+Changes in Element X v0.5.1 (2024-08-28)
+=========================================
+
+### ✨ Features
+* Add simplified sliding sync toggle to developer options by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3222
+* Feature: identity reset by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3298
+* Timeline UI | MessageShield Support by @BillCarsonFr in https://github.com/element-hq/element-x-android/pull/3240
+* Suggestion for room alias (disabled for now) by @bmarty in https://github.com/element-hq/element-x-android/pull/3322
+* Allow `PictureInPicture` mode for Element Call. by @bmarty in https://github.com/element-hq/element-x-android/pull/3345
+
+### 🙌 Improvements
+* Join Room : allow to join by alias (and getPreview) by @ganfra in https://github.com/element-hq/element-x-android/pull/3241
+* [Feature] Pinned message : render m.room.pinned events in timeline by @ganfra in https://github.com/element-hq/element-x-android/pull/3276
+* Enable sync on push feature flag to partially sync when notifications arrive by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3290
+* Improve the text for mentions and replies in notifications by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3328
+* Use new functions exposed by Element Call about PiP by @bmarty in https://github.com/element-hq/element-x-android/pull/3334
+
+### 🐛 Bugfixes
+* Ensure sessionPath is not reused for different homeserver. Fixes not loading media issue. by @bmarty in https://github.com/element-hq/element-x-android/pull/3299
+* Fix reset identity with password stuck in loading state. by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3317
+
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/3252
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/3267
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/3297
+* Sync Strings - New language: Dutch. by @ElementBot in https://github.com/element-hq/element-x-android/pull/3308
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/3339
+
+### 🧱 Build
+* Update sonarcloud project key by @guillaumevillemont in https://github.com/element-hq/element-x-android/pull/3264
+* Fix `build_rust_sdk.sh` script to work on linux by @erikjohnston in https://github.com/element-hq/element-x-android/pull/3291
+* Fix proguard config for nightly and release builds by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3294
+* Gradle update action: Use JDK 17 and skip early in forks. by @bmarty in https://github.com/element-hq/element-x-android/pull/3311
+* Gradle update action: add label and use other token. by @bmarty in https://github.com/element-hq/element-x-android/pull/3313
+* Update Gradle Wrapper from 8.9 to 8.10 by @ElementBot in https://github.com/element-hq/element-x-android/pull/3314
+
+### 🚧 In development 🚧
+* WIP Pinned events : add feature flag and pin/unpin actions by @ganfra in https://github.com/element-hq/element-x-android/pull/3255
+* WIP Pinned events : start creating the banner ui, no logic. by @ganfra in https://github.com/element-hq/element-x-android/pull/3259
+* WIP Pinned events : banner logic by @ganfra in https://github.com/element-hq/element-x-android/pull/3275
+
+### Dependency upgrades
+* Update dependency org.maplibre.gl:android-sdk to v11.1.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3244
+* Update activity to v1.9.1 by @renovate in https://github.com/element-hq/element-x-android/pull/3242
+* Update media3 to v1.4.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3247
+* Update dependency androidx.annotation:annotation-jvm to v1.8.1 by @renovate in https://github.com/element-hq/element-x-android/pull/3243
+* Update dependencyAnalysis to v1.33.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3250
+* Update dependency org.matrix.rustcomponents:sdk-android to v0.2.35 by @renovate in https://github.com/element-hq/element-x-android/pull/3249
+* Update dependency io.sentry:sentry-android to v7.12.1 by @renovate in https://github.com/element-hq/element-x-android/pull/3246
+* Update dependency io.nlopez.compose.rules:detekt to v0.4.8 by @renovate in https://github.com/element-hq/element-x-android/pull/3254
+* Update dependency org.matrix.rustcomponents:sdk-android to v0.2.36 by @renovate in https://github.com/element-hq/element-x-android/pull/3269
+* Update wysiwyg to v2.37.8 by @renovate in https://github.com/element-hq/element-x-android/pull/3263
+* Update dependency io.sentry:sentry-android to v7.13.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3258
+* Update dependency io.nlopez.compose.rules:detekt to v0.4.9 by @renovate in https://github.com/element-hq/element-x-android/pull/3277
+* Update dependency org.matrix.rustcomponents:sdk-android to v0.2.38 by @renovate in https://github.com/element-hq/element-x-android/pull/3280
+* Update dependency androidx.annotation:annotation-jvm to v1.8.2 by @renovate in https://github.com/element-hq/element-x-android/pull/3282
+* Update kotlin by @renovate in https://github.com/element-hq/element-x-android/pull/2990
+* Update dependency io.nlopez.compose.rules:detekt to v0.4.10 by @renovate in https://github.com/element-hq/element-x-android/pull/3281
+* Update dependency com.posthog:posthog-android to v3.5.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3287
+* Update wysiwyg to v2.37.8 by @renovate in https://github.com/element-hq/element-x-android/pull/3284
+* Update the SDK bindings to `v0.2.39` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3288
+* Update gradle/actions action to v4 by @renovate in https://github.com/element-hq/element-x-android/pull/3265
+* Update android.gradle.plugin to v8.5.2 by @renovate in https://github.com/element-hq/element-x-android/pull/3004
+* Update dependency io.sentry:sentry-android to v7.13.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3285
+* Update dependency io.sentry:sentry-android to v7.14.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3302
+* Update dependency androidx.test:runner to v1.6.2 by @renovate in https://github.com/element-hq/element-x-android/pull/3304
+* Update dependency com.otaliastudios:transcoder to v0.11.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3306
+* Update lifecycle to v2.8.0 by @renovate in https://github.com/element-hq/element-x-android/pull/2848
+* Update lifecycle to v2.8.4 by @renovate in https://github.com/element-hq/element-x-android/pull/3315
+* Update dagger to v2.52 by @renovate in https://github.com/element-hq/element-x-android/pull/3270
+* Update telephoto to v0.13.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3325
+* Update dependency androidx.compose:compose-bom to v2024.08.00 by @renovate in https://github.com/element-hq/element-x-android/pull/3323
+* Update dependency com.google.firebase:firebase-bom to v33.2.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3331
+* Update dependency com.posthog:posthog-android to v3.5.1 by @renovate in https://github.com/element-hq/element-x-android/pull/3340
+* Update dependency com.android.tools:desugar_jdk_libs to v2.1.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3341
+* Update dependencyAnalysis to v2 (major) by @renovate in https://github.com/element-hq/element-x-android/pull/3346
+* Update dependency org.maplibre.gl:android-sdk to v11.2.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3347
+* Update media3 to v1.4.1 by @renovate in https://github.com/element-hq/element-x-android/pull/3344
+* Update dependency org.matrix.rustcomponents:sdk-android to v0.2.40 by @renovate in https://github.com/element-hq/element-x-android/pull/3343
+
+### Others
+* Feature/fga/push subscribe to room by @ganfra in https://github.com/element-hq/element-x-android/pull/3257
+* Feature/fga/start sync on push by @ganfra in https://github.com/element-hq/element-x-android/pull/3260
+* Cleanup and add unit test for DefaultPinnedMessagesBannerFormatter by @bmarty in https://github.com/element-hq/element-x-android/pull/3307
+* Add test on function name which may start or end with spaces by @bmarty in https://github.com/element-hq/element-x-android/pull/3318
+* Fix broken direct room member for rooms with old users that left by @networkException in https://github.com/element-hq/element-x-android/pull/3324
+* Add unit test on MatrixRoom extension by @bmarty in https://github.com/element-hq/element-x-android/pull/3327
+* Fix login navigation getting stuck when the app was compiled with no-op analytics provider by @SpiritCroc in https://github.com/element-hq/element-x-android/pull/3337
+
 Changes in Element X v0.5.0 (2024-07-24)
 =========================================
 

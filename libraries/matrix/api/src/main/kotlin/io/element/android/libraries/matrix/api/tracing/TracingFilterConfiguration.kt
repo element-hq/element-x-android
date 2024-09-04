@@ -30,6 +30,7 @@ data class TracingFilterConfiguration(
         Target.MATRIX_SDK_SLIDING_SYNC to LogLevel.INFO,
         Target.MATRIX_SDK_BASE_SLIDING_SYNC to LogLevel.INFO,
         Target.MATRIX_SDK_UI_TIMELINE to LogLevel.INFO,
+        Target.MATRIX_SDK_BASE_CLIENT to LogLevel.TRACE,
         // To debug OIDC logouts
         Target.MATRIX_SDK_OIDC to LogLevel.TRACE,
     )
@@ -69,6 +70,7 @@ enum class Target(open val filter: String) {
     MATRIX_SDK_BASE_SLIDING_SYNC("matrix_sdk_base::sliding_sync"),
     MATRIX_SDK_UI_TIMELINE("matrix_sdk_ui::timeline"),
     MATRIX_SDK_BASE_READ_RECEIPTS("matrix_sdk_base::read_receipts"),
+    MATRIX_SDK_BASE_CLIENT("matrix_sdk_base"),
 }
 
 enum class LogLevel(open val filter: String) {

@@ -758,7 +758,7 @@ class ActionListPresenterTest {
             assertThat(successState.target).isEqualTo(
                 ActionListState.Target.Success(
                     event = messageEvent,
-                    displayEmojiReactions = false,
+                    displayEmojiReactions = true,
                     actions = persistentListOf(
                         TimelineItemAction.Edit,
                         TimelineItemAction.Copy,

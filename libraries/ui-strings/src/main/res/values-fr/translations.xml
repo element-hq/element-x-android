@@ -261,6 +261,7 @@ Raison: %1$s."</string>
   <string name="error_some_messages_have_not_been_sent">"Certains messages n’ont pas été envoyés"</string>
   <string name="error_unknown">"Désolé, une erreur s’est produite"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"L’authenticité de ce message chiffré ne peut être garantie sur cet appareil."</string>
+  <string name="event_shield_reason_previously_verified">"Chiffré par un utilisateur précédemment vérifié."</string>
   <string name="event_shield_reason_sent_in_clear">"Non chiffré."</string>
   <string name="event_shield_reason_unknown_device">"Chiffré par un appareil inconnu ou supprimé."</string>
   <string name="event_shield_reason_unsigned_device">"Chiffré par un appareil non vérifié par son propriétaire."</string>

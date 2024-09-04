@@ -72,7 +72,7 @@ class DefaultNotificationDrawerManagerTest {
         // For now just call all the API. Later, add more valuable tests.
         val matrixUser = aMatrixUser(id = A_SESSION_ID.value, displayName = "alice", avatarUrl = "mxc://data")
         val mockRoomGroupMessageCreator = FakeRoomGroupMessageCreator(
-            createRoomMessageResult = lambdaRecorder { user, _, roomId, _, existingNotification, ->
+            createRoomMessageResult = lambdaRecorder { user, _, roomId, _, existingNotification ->
                 assertThat(user).isEqualTo(matrixUser)
                 assertThat(roomId).isEqualTo(A_ROOM_ID)
                 assertThat(existingNotification).isNull()
@@ -167,11 +167,12 @@ class DefaultNotificationDrawerManagerTest {
         }
         val summaryId = NotificationIdProvider.getSummaryNotificationId(A_SESSION_ID)
         val activeNotificationsProvider = FakeActiveNotificationsProvider(
-            mutableListOf(
+            getSummaryNotificationResult = {
                 mockk {
                     every { id } returns summaryId
                 }
-            )
+            },
+            countResult = { 1 },
         )
         val defaultNotificationDrawerManager = createDefaultNotificationDrawerManager(
             notificationManager = notificationManager,

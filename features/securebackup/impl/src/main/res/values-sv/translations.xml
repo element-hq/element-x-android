@@ -16,11 +16,11 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Följ anvisningarna för att skapa en ny återställningsnyckel"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Spara din nya återställningsnyckel i en lösenordshanterare eller krypterad anteckning"</string>
   <string name="screen_create_new_recovery_key_title">"Återställ krypteringen för ditt konto med en annan enhet"</string>
+  <string name="screen_encryption_reset_action_continue_reset">"Fortsätt återställning"</string>
   <string name="screen_encryption_reset_bullet_1">"Dina kontouppgifter, kontakter, inställningar och chattlistor kommer bevaras"</string>
   <string name="screen_encryption_reset_bullet_2">"Du kommer att förlora din befintliga meddelandehistorik"</string>
   <string name="screen_encryption_reset_bullet_3">"Du måste verifiera alla dina befintliga enheter och kontakter igen"</string>
   <string name="screen_encryption_reset_footer">"Återställ bara din identitet om du inte har tillgång till en annan inloggad enhet och du har tappat bort din återställningsnyckel."</string>
-  <string name="screen_encryption_reset_subtitle">"Om du inte är inloggad på någon annan enhet och du har tappat bort din återställningsnyckel måste du återställa din identitet för att fortsätta använda appen. "</string>
   <string name="screen_encryption_reset_title">"Återställ din identitet ifall du inte kan bekräfta på annat sätt"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Stäng av"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Du kommer att förlora dina krypterade meddelanden om du loggas ut från alla enheter."</string>

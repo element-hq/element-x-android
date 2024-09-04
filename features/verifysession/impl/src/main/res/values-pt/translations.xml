@@ -28,4 +28,5 @@
   <string name="screen_session_verification_they_match">"Correspondem"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Para continuar, aceita o pedido de verificação na tua outra sessão."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"À aguardar a aceitação do pedido"</string>
+  <string name="screen_signout_in_progress_dialog_content">"A terminar sessão…"</string>
 </resources>

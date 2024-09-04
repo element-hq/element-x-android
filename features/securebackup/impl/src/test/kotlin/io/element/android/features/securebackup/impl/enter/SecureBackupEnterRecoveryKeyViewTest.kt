@@ -102,18 +102,6 @@ class SecureBackupEnterRecoveryKeyViewTest {
     }
 
     @Test
-    @Config(qualifiers = "h1024dp")
-    fun `tapping on Lost your recovery key - calls onCreateNewRecoveryKey`() {
-        ensureCalledOnce { callback ->
-            rule.setSecureBackupEnterRecoveryKeyView(
-                aSecureBackupEnterRecoveryKeyState(),
-                onCreateNewRecoveryKey = callback,
-            )
-            rule.clickOn(R.string.screen_recovery_key_confirm_lost_recovery_key)
-        }
-    }
-
-    @Test
     fun `when submit action succeeds - calls onDone`() {
         ensureCalledOnce { callback ->
             rule.setSecureBackupEnterRecoveryKeyView(
@@ -127,14 +115,12 @@ class SecureBackupEnterRecoveryKeyViewTest {
         state: SecureBackupEnterRecoveryKeyState,
         onDone: () -> Unit = EnsureNeverCalled(),
         onBackClick: () -> Unit = EnsureNeverCalled(),
-        onCreateNewRecoveryKey: () -> Unit = EnsureNeverCalled(),
     ) {
         setContent {
             SecureBackupEnterRecoveryKeyView(
                 state = state,
                 onSuccess = onDone,
                 onBackClick = onBackClick,
-                onCreateNewRecoveryKey = onCreateNewRecoveryKey
             )
         }
     }

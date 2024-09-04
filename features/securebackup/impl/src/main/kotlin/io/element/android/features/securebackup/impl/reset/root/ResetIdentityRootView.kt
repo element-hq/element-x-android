@@ -54,7 +54,6 @@ fun ResetIdentityRootView(
         modifier = modifier,
         iconStyle = BigIcon.Style.AlertSolid,
         title = stringResource(R.string.screen_encryption_reset_title),
-        subTitle = stringResource(R.string.screen_encryption_reset_subtitle),
         isScrollable = true,
         content = { Content() },
         buttons = {

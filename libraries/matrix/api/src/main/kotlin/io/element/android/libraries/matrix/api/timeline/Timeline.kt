@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.TransactionId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -103,7 +104,7 @@ interface Timeline : AutoCloseable {
 
     suspend fun sendFile(file: File, fileInfo: FileInfo, progressCallback: ProgressCallback?): Result<MediaUploadHandler>
 
-    suspend fun toggleReaction(emoji: String, eventId: EventId): Result<Unit>
+    suspend fun toggleReaction(emoji: String, uniqueId: UniqueId): Result<Unit>
 
     suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit>
 
