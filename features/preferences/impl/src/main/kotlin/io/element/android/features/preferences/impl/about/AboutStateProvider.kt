@@ -22,13 +22,11 @@ open class AboutStateProvider : PreviewParameterProvider<AboutState> {
     override val values: Sequence<AboutState>
         get() = sequenceOf(
             anAboutState(),
-            anAboutState(hasOpenSourcesLicenses = true),
         )
 }
 
 fun anAboutState(
-    hasOpenSourcesLicenses: Boolean = false,
+    elementLegals: List<ElementLegal> = getAllLegals(),
 ) = AboutState(
-    elementLegals = getAllLegals(),
-    hasOpenSourcesLicenses = hasOpenSourcesLicenses,
+    elementLegals = elementLegals,
 )

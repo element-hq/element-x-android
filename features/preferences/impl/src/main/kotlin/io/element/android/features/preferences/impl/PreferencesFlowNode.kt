@@ -29,9 +29,9 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.licenses.api.OpenSourceLicensesEntryPoint
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.logout.api.LogoutEntryPoint
-import io.element.android.features.preferences.api.OpenSourceLicensesProvider
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.preferences.impl.about.AboutNode
 import io.element.android.features.preferences.impl.advanced.AdvancedSettingsNode
@@ -60,7 +60,7 @@ class PreferencesFlowNode @AssistedInject constructor(
     private val lockScreenEntryPoint: LockScreenEntryPoint,
     private val notificationTroubleShootEntryPoint: NotificationTroubleShootEntryPoint,
     private val logoutEntryPoint: LogoutEntryPoint,
-    private val ossLicensesProvider: OpenSourceLicensesProvider,
+    private val openSourceLicensesEntryPoint: OpenSourceLicensesEntryPoint,
 ) : BaseFlowNode<PreferencesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<PreferencesEntryPoint.Params>().first().initialElement.toNavTarget(),
@@ -243,7 +243,7 @@ class PreferencesFlowNode @AssistedInject constructor(
                     .build()
             }
             is NavTarget.OssLicenses -> {
-                ossLicensesProvider.getLicensesNode(this, buildContext) ?: Node(buildContext)
+                openSourceLicensesEntryPoint.getNode(this, buildContext)
             }
         }
     }

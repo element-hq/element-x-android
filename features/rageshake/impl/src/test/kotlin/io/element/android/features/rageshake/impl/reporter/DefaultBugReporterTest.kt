@@ -289,6 +289,7 @@ class DefaultBugReporterTest {
         slidingSyncProxy = null,
         passphrase = null,
         sessionPath = "session",
+        cachePath = "cache",
     )
     @Test
     fun `test sendBugReport error`() = runTest {

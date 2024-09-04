@@ -24,6 +24,8 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
+import io.element.android.libraries.matrix.test.A_UNIQUE_ID
+import io.element.android.libraries.matrix.test.A_UNIQUE_ID_2
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
@@ -80,7 +82,7 @@ class PinnedMessagesBannerPresenterTest {
             timelineItems = flowOf(
                 listOf(
                     MatrixTimelineItem.Event(
-                        uniqueId = "FAKE_UNIQUE_ID",
+                        uniqueId = A_UNIQUE_ID,
                         event = anEventTimelineItem(
                             eventId = AN_EVENT_ID,
                             content = messageContent,
@@ -112,14 +114,14 @@ class PinnedMessagesBannerPresenterTest {
             timelineItems = flowOf(
                 listOf(
                     MatrixTimelineItem.Event(
-                        uniqueId = "FAKE_UNIQUE_ID",
+                        uniqueId = A_UNIQUE_ID,
                         event = anEventTimelineItem(
                             eventId = AN_EVENT_ID,
                             content = messageContent1,
                         ),
                     ),
                     MatrixTimelineItem.Event(
-                        uniqueId = "FAKE_UNIQUE_ID_2",
+                        uniqueId = A_UNIQUE_ID_2,
                         event = anEventTimelineItem(
                             eventId = AN_EVENT_ID_2,
                             content = messageContent2,

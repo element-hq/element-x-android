@@ -32,7 +32,6 @@ anvil {
 android {
     namespace = "io.element.android.libraries.mediaupload.api"
 
-
     dependencies {
         implementation(projects.anvilannotations)
         ksp(projects.anvilcodegen)

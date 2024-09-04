@@ -48,11 +48,13 @@ fun BlurHashImage(
 
 @Composable
 fun rememberBlurHashImage(blurHash: String?): ImageBitmap? {
-    return if (LocalInspectionMode.current) {
-        blurHash?.let { BlurHash.decode(it, 10, 10)?.asImageBitmap() }
-    } else {
-        produceState<ImageBitmap?>(initialValue = null, blurHash) {
-            blurHash?.let { value = BlurHash.decode(it, 10, 10)?.asImageBitmap() }
-        }.value
+    return when {
+        blurHash == null -> null
+        LocalInspectionMode.current -> BlurHash.decode(blurHash, 10, 10)?.asImageBitmap()
+        else -> {
+            produceState<ImageBitmap?>(initialValue = null, blurHash) {
+                value = BlurHash.decode(blurHash, 10, 10)?.asImageBitmap()
+            }.value
+        }
     }
 }

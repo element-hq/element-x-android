@@ -106,7 +106,6 @@ class ActionListPresenter @Inject constructor(
             isEventPinned = pinnedEventIds.contains(timelineItem.eventId),
         )
         val displayEmojiReactions = usersEventPermissions.canSendReaction &&
-            timelineItem.isRemote &&
             timelineItem.content.canReact()
         if (actions.isNotEmpty() || displayEmojiReactions) {
             target.value = ActionListState.Target.Success(

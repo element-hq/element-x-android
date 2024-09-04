@@ -20,7 +20,6 @@
   <string name="screen_encryption_reset_bullet_2">"您将丢失现有的消息历史记录"</string>
   <string name="screen_encryption_reset_bullet_3">"您将需要再次验证所有您的现有设备和联系人"</string>
   <string name="screen_encryption_reset_footer">"仅当您无法访问其他已登录设备并且丢失了恢复密钥时才重置您的身份。"</string>
-  <string name="screen_encryption_reset_subtitle">"如果您未登录任何其他设备，并且丢失了恢复密钥，则需要重置身份才能继续使用该应用。"</string>
   <string name="screen_encryption_reset_title">"如果您无法通过其他方式确认，请重置您的身份"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"关闭"</string>
   <string name="screen_key_backup_disable_confirmation_description">"如果您登出所有设备，您的加密消息将丢失。"</string>

@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.TransactionId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
@@ -108,7 +109,7 @@ class FakeMatrixRoom(
     private val editMessageLambda: (EventId, String, String?, List<IntentionalMention>) -> Result<Unit> = { _, _, _, _ -> lambdaError() },
     private val sendMessageResult: (String, String?, List<IntentionalMention>) -> Result<Unit> = { _, _, _ -> lambdaError() },
     private val updateUserRoleResult: () -> Result<Unit> = { lambdaError() },
-    private val toggleReactionResult: (String, EventId) -> Result<Unit> = { _, _ -> lambdaError() },
+    private val toggleReactionResult: (String, UniqueId) -> Result<Unit> = { _, _ -> lambdaError() },
     private val retrySendMessageResult: (TransactionId) -> Result<Unit> = { lambdaError() },
     private val cancelSendResult: (TransactionId) -> Result<Boolean> = { lambdaError() },
     private val forwardEventResult: (EventId, List<RoomId>) -> Result<Unit> = { _, _ -> lambdaError() },
@@ -230,8 +231,8 @@ class FakeMatrixRoom(
         sendMessageResult(body, htmlBody, intentionalMentions)
     }
 
-    override suspend fun toggleReaction(emoji: String, eventId: EventId): Result<Unit> {
-        return toggleReactionResult(emoji, eventId)
+    override suspend fun toggleReaction(emoji: String, uniqueId: UniqueId): Result<Unit> {
+        return toggleReactionResult(emoji, uniqueId)
     }
 
     override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> {

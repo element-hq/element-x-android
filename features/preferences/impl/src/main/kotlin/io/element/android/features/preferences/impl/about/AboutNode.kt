@@ -39,6 +39,7 @@ class AboutNode @AssistedInject constructor(
     interface Callback : Plugin {
         fun openOssLicenses()
     }
+
     private fun onElementLegalClick(
         activity: Activity,
         darkTheme: Boolean,

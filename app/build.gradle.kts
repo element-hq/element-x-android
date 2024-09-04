@@ -356,7 +356,3 @@ fun Project.configureLicensesTasks(reportingExtension: ReportingExtension) {
         }
     }
 }
-
-ksp {
-    arg("anvil-ksp-enable-contributes-subcomponent-merging", "false")
-}

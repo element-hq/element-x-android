@@ -38,6 +38,7 @@
   <string name="notification_room_action_quick_reply">"Быстрый ответ"</string>
   <string name="notification_room_invite_body">"Пригласил вас в комнату"</string>
   <string name="notification_sender_me">"Я"</string>
+  <string name="notification_sender_mention_reply">"%1$s упомянул или ответил"</string>
   <string name="notification_test_push_notification_content">"Вы просматриваете уведомление! Нажмите на меня!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>

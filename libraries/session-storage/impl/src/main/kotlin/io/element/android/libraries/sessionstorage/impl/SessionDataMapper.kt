@@ -35,6 +35,7 @@ internal fun SessionData.toDbModel(): DbSessionData {
         loginType = loginType.name,
         passphrase = passphrase,
         sessionPath = sessionPath,
+        cachePath = cachePath,
     )
 }
 
@@ -52,5 +53,6 @@ internal fun DbSessionData.toApiModel(): SessionData {
         loginType = LoginType.fromName(loginType ?: LoginType.UNKNOWN.name),
         passphrase = passphrase,
         sessionPath = sessionPath,
+        cachePath = cachePath,
     )
 }

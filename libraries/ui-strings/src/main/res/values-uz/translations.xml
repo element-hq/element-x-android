@@ -43,8 +43,8 @@
   <string name="action_invites_list">"Takliflar"</string>
   <string name="action_join">"Qo\'shilish"</string>
   <string name="action_learn_more">"Batafsil malumot"</string>
-  <string name="action_leave">"Tark etish "</string>
-  <string name="action_leave_room">"Xonani tark etish "</string>
+  <string name="action_leave">"Tark etish"</string>
+  <string name="action_leave_room">"Xonani tark etish"</string>
   <string name="action_manage_account">"Hisobni boshqarish"</string>
   <string name="action_manage_devices">"Qurilmalarni boshqarish"</string>
   <string name="action_next">"Keyingisi"</string>
@@ -78,7 +78,7 @@
   <string name="action_start_verification">"Tasdiqlashni boshlang"</string>
   <string name="action_static_map_load">"Xaritani yuklash uchun bosing"</string>
   <string name="action_take_photo">"Rasmga olmoq"</string>
-  <string name="action_view_source">"Manbani korish "</string>
+  <string name="action_view_source">"Manbani korish"</string>
   <string name="action_yes">"Ha"</string>
   <string name="common_about">"Haqida"</string>
   <string name="common_acceptable_use_policy">"Qabul qilinadigan foydalanish siyosati"</string>

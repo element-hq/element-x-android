@@ -37,7 +37,7 @@ Wenn du fortfährst, können sich einige deiner Einstellungen ändern."</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Beim Aktualisieren der Benachrichtigungseinstellungen ist ein Fehler aufgetreten."</string>
   <string name="screen_notification_settings_edit_mode_all_messages">"Alle Nachrichten"</string>
   <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"Nur Erwähnungen und Schlüsselwörter"</string>
-  <string name="screen_notification_settings_edit_screen_direct_section_header">"Benachrichtige mich bei Direktnachrichten über "</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"Benachrichtige mich bei Direktnachrichten über"</string>
   <string name="screen_notification_settings_edit_screen_group_section_header">"Bei Gruppenchats benachrichtige mich bei"</string>
   <string name="screen_notification_settings_enable_notifications">"Benachrichtigungen auf diesem Gerät aktivieren"</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"Die Konfiguration wurde nicht korrigiert, bitte versuche es erneut."</string>

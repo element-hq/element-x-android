@@ -3,8 +3,10 @@
 style:
   AlsoCouldBeApply:
     active: true
-  OptionalWhenBraces:
+  BracesOnWhenStatements:
     active: false
+#  OptionalWhenBraces:
+#    active: false
   CascadingCallWrapping:
     active: true
     includeElvis: true

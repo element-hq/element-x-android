@@ -26,6 +26,7 @@ fun PackageManager.queryIntentActivitiesCompat(data: Intent, flags: Int): List<R
     return when {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> queryIntentActivities(
             data,
+            @Suppress("WrongConstant")
             PackageManager.ResolveInfoFlags.of(flags.toLong())
         )
         else -> @Suppress("DEPRECATION") queryIntentActivities(data, flags)
@@ -36,6 +37,7 @@ fun PackageManager.getApplicationInfoCompat(packageName: String, flags: Int): Ap
     return when {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> getApplicationInfo(
             packageName,
+            @Suppress("WrongConstant")
             PackageManager.ApplicationInfoFlags.of(flags.toLong())
         )
         else -> getApplicationInfo(packageName, flags)

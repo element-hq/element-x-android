@@ -17,27 +17,25 @@
 package io.element.android.features.logout.impl
 
 import com.squareup.anvil.annotations.ContributesBinding
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import io.element.android.features.logout.api.LogoutUseCase
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider
-import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import javax.inject.Inject
 
-class DefaultLogoutUseCase @AssistedInject constructor(
-    @Assisted private val sessionId: String,
+@ContributesBinding(AppScope::class)
+class DefaultLogoutUseCase @Inject constructor(
+    private val authenticationService: MatrixAuthenticationService,
     private val matrixClientProvider: MatrixClientProvider,
 ) : LogoutUseCase {
-    @ContributesBinding(AppScope::class)
-    @AssistedFactory
-    interface Factory : LogoutUseCase.Factory {
-        override fun create(sessionId: String): DefaultLogoutUseCase
-    }
-
     override suspend fun logout(ignoreSdkError: Boolean): String? {
-        val matrixClient = matrixClientProvider.getOrRestore(SessionId(sessionId)).getOrThrow()
-        val result = matrixClient.logout(ignoreSdkError = ignoreSdkError)
-        return result
+        val currentSession = authenticationService.getLatestSessionId()
+        return if (currentSession != null) {
+            matrixClientProvider.getOrRestore(currentSession)
+                .getOrThrow()
+                .logout(ignoreSdkError = true)
+        } else {
+            error("No session to sign out")
+        }
     }
 }

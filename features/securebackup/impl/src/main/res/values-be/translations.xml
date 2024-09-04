@@ -20,7 +20,6 @@
   <string name="screen_encryption_reset_bullet_2">"Вы страціце існуючую гісторыю паведамленняў"</string>
   <string name="screen_encryption_reset_bullet_3">"Вам трэба будзе зноў запэўніць ўсе вашы існуючыя прылады і кантакты"</string>
   <string name="screen_encryption_reset_footer">"Працягвайце, толькі калі вы ўпэўненыя, што страцілі ўсе астатнія прылады і ключ аднаўлення."</string>
-  <string name="screen_encryption_reset_subtitle">"Калі вы не ўвайшлі ў сістэму на іншых прыладах і страцілі ключ аднаўлення, вам неабходна скінуць ключы пацверджання, каб працягнуць выкарыстанне прыкладання."</string>
   <string name="screen_encryption_reset_title">"Скіньце ключы пацверджання, калі вы не можаце пацвердзіць яго іншым спосабам"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Адключыць"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Вы страціце зашыфраваныя паведамленні, калі выйдзеце з усіх прылад."</string>
