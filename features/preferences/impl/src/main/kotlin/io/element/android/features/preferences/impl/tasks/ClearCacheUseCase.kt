@@ -24,7 +24,6 @@ import coil.annotation.ExperimentalCoilApi
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.preferences.impl.DefaultCacheService
-import io.element.android.features.roomlist.api.migration.MigrationScreenStore
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.SessionScope
@@ -47,7 +46,6 @@ class DefaultClearCacheUseCase @Inject constructor(
     private val defaultCacheService: DefaultCacheService,
     private val okHttpClient: Provider<OkHttpClient>,
     private val ftueService: FtueService,
-    private val migrationScreenStore: MigrationScreenStore,
     private val pushService: PushService,
 ) : ClearCacheUseCase {
     override suspend fun invoke() = withContext(coroutineDispatchers.io) {
@@ -64,8 +62,6 @@ class DefaultClearCacheUseCase @Inject constructor(
         context.cacheDir.deleteRecursively()
         // Clear some settings
         ftueService.reset()
-        // Clear migration screen store
-        migrationScreenStore.reset()
         // Ensure any error will be displayed again
         pushService.setIgnoreRegistrationError(matrixClient.sessionId, false)
         // Ensure the app is restarted

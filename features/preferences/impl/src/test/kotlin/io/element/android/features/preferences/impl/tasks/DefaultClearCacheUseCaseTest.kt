@@ -21,7 +21,6 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.ftue.test.FakeFtueService
 import io.element.android.features.preferences.impl.DefaultCacheService
-import io.element.android.features.roomlist.impl.migration.InMemoryMigrationScreenStore
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.push.test.FakePushService
@@ -47,10 +46,6 @@ class DefaultClearCacheUseCaseTest {
         val ftueService = FakeFtueService(
             resetLambda = resetFtueLambda,
         )
-        val resetMigrationLambda = lambdaRecorder<Unit> { }
-        val migrationScreenStore = InMemoryMigrationScreenStore(
-            resetLambda = resetMigrationLambda,
-        )
         val setIgnoreRegistrationErrorLambda = lambdaRecorder<SessionId, Boolean, Unit> { _, _ -> }
         val pushService = FakePushService(
             setIgnoreRegistrationErrorLambda = setIgnoreRegistrationErrorLambda
@@ -62,14 +57,12 @@ class DefaultClearCacheUseCaseTest {
             defaultCacheService = defaultCacheService,
             okHttpClient = { OkHttpClient.Builder().build() },
             ftueService = ftueService,
-            migrationScreenStore = migrationScreenStore,
             pushService = pushService,
         )
         defaultCacheService.clearedCacheEventFlow.test {
             sut.invoke()
             clearCacheLambda.assertions().isCalledOnce()
             resetFtueLambda.assertions().isCalledOnce()
-            resetMigrationLambda.assertions().isCalledOnce()
             setIgnoreRegistrationErrorLambda.assertions().isCalledOnce()
                 .with(value(matrixClient.sessionId), value(false))
             assertThat(awaitItem()).isEqualTo(matrixClient.sessionId)

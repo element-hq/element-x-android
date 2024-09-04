@@ -43,7 +43,7 @@ data class RoomListState(
     val eventSink: (RoomListEvents) -> Unit,
 ) {
     val displayFilters = contentState is RoomListContentState.Rooms
-    val displayActions = contentState !is RoomListContentState.Migration
+    val displayActions = true
 
     sealed interface ContextMenu {
         data object Hidden : ContextMenu
@@ -72,7 +72,6 @@ enum class SecurityBannerState {
 
 @Immutable
 sealed interface RoomListContentState {
-    data object Migration : RoomListContentState
     data class Skeleton(val count: Int) : RoomListContentState
     data object Empty : RoomListContentState
     data class Rooms(
