@@ -93,7 +93,7 @@ class UnifiedPushMatrixGatewayTestTest {
     fun `test UnifiedPushMatrixGatewayTest network error`() = runTest {
         val sut = createUnifiedPushMatrixGatewayTest(
             currentUserPushConfig = aCurrentUserPushConfig(),
-            discoveryResponse = { throw RuntimeException("Network error") },
+            discoveryResponse = { error("Network error") },
         )
         launch {
             sut.run(this)
