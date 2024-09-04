@@ -59,6 +59,12 @@ open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfS
                 signOutAction = AsyncAction.Loading,
                 displaySkipButton = true,
             ),
+            aVerifySelfSessionState(
+                verificationFlowStep = VerificationStep.Loading
+            ),
+            aVerifySelfSessionState(
+                verificationFlowStep = VerificationStep.Skipped
+            ),
             // Add other state here
         )
 }

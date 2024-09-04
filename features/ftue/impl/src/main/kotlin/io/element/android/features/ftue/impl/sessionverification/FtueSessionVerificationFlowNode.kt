@@ -46,7 +46,7 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
     private val secureBackupEntryPoint: SecureBackupEntryPoint,
 ) : BaseFlowNode<FtueSessionVerificationFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.Root,
+        initialElement = NavTarget.Root(showDeviceVerifiedScreen = false),
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -54,7 +54,7 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
 ) {
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        data object Root : NavTarget
+        data class Root(val showDeviceVerifiedScreen: Boolean) : NavTarget
 
         @Parcelize
         data object EnterRecoveryKey : NavTarget
@@ -71,7 +71,7 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
         override fun onDone() {
             lifecycleScope.launch {
                 // Move to the completed state view in the verification flow
-                backstack.newRoot(NavTarget.Root)
+                backstack.newRoot(NavTarget.Root(showDeviceVerifiedScreen = true))
             }
         }
     }
@@ -80,6 +80,7 @@ class FtueSessionVerificationFlowNode @AssistedInject constructor(
         return when (navTarget) {
             is NavTarget.Root -> {
                 verifySessionEntryPoint.nodeBuilder(this, buildContext)
+                    .params(VerifySessionEntryPoint.Params(navTarget.showDeviceVerifiedScreen))
                     .callback(object : VerifySessionEntryPoint.Callback {
                         override fun onEnterRecoveryKey() {
                             backstack.push(NavTarget.EnterRecoveryKey)
