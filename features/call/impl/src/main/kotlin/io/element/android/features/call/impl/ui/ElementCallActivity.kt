@@ -133,13 +133,15 @@ class ElementCallActivity :
 
         val pipEventSink by rememberUpdatedState(pipState.eventSink)
         var onUserLeaveHintListener by remember { mutableStateOf<Runnable?>(null) }
-        DisposableEffect(lifecycleState.isAtLeast(Lifecycle.State.STARTED)) {
+        val isReadyToRegister = lifecycleState.isAtLeast(Lifecycle.State.STARTED)
+        DisposableEffect(isReadyToRegister) {
             val listener = onUserLeaveHintListener
-            if (listener != null) {
+            if (isReadyToRegister && listener == null) {
                 onUserLeaveHintListener = Runnable {
                     pipEventSink(PictureInPictureEvents.EnterPictureInPicture)
+                }.also {
+                    addOnUserLeaveHintListener(it)
                 }
-                addOnUserLeaveHintListener(listener)
             }
             onDispose {
                 if (listener != null) {
