@@ -7,7 +7,7 @@ on:
 
 # Enrich gradle.properties for CI/CD
 env:
-  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx6g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.incremental=false -XX:+UseG1GC
+  GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx9g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC -Dkotlin.daemon.jvm.options=-Xmx4g -Dkotlin.incremental=false
   CI_GRADLE_ARG_PROPERTIES: --stacktrace --no-daemon -Dsonar.gradle.skipCompile=true
 
 jobs:
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
     concurrency:
-      group: ${{ format('build-release-main-gplay-{0}', github.sha) }}
+      group: ${{ format('build-release-main-enterprise-{0}', github.sha) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4

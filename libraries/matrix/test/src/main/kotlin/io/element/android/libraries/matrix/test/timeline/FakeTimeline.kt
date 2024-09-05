@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.TransactionId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -219,8 +220,8 @@ class FakeTimeline(
         progressCallback
     )
 
-    var toggleReactionLambda: (emoji: String, eventId: EventId) -> Result<Unit> = { _, _ -> Result.success(Unit) }
-    override suspend fun toggleReaction(emoji: String, eventId: EventId): Result<Unit> = toggleReactionLambda(emoji, eventId)
+    var toggleReactionLambda: (emoji: String, uniqueId: UniqueId) -> Result<Unit> = { _, _ -> Result.success(Unit) }
+    override suspend fun toggleReaction(emoji: String, uniqueId: UniqueId): Result<Unit> = toggleReactionLambda(emoji, uniqueId)
 
     var forwardEventLambda: (eventId: EventId, roomIds: List<RoomId>) -> Result<Unit> = { _, _ -> Result.success(Unit) }
     override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> = forwardEventLambda(eventId, roomIds)

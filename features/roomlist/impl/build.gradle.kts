@@ -84,7 +84,6 @@ dependencies {
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.services.toolbox.test)
     testImplementation(projects.features.networkmonitor.test)
-    testImplementation(projects.features.roomlist.test)
     testImplementation(projects.tests.testutils)
     testImplementation(projects.features.leaveroom.test)
 }

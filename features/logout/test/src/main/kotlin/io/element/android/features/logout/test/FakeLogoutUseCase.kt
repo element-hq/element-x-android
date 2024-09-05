@@ -20,9 +20,9 @@ import io.element.android.features.logout.api.LogoutUseCase
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeLogoutUseCase(
-    var logoutLambda: (Boolean) -> String = lambdaError()
+    var logoutLambda: (Boolean) -> String? = { lambdaError() }
 ) : LogoutUseCase {
-    override suspend fun logout(ignoreSdkError: Boolean): String {
+    override suspend fun logout(ignoreSdkError: Boolean): String? {
         return logoutLambda(ignoreSdkError)
     }
 }

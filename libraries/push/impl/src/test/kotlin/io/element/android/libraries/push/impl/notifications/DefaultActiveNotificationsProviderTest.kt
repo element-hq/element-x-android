@@ -37,27 +37,6 @@ class DefaultActiveNotificationsProviderTest {
     private val notificationIdProvider = NotificationIdProvider
 
     @Test
-    fun `getAllNotifications with no active notifications returns empty list`() {
-        val activeNotificationsProvider = createActiveNotificationsProvider(activeNotifications = emptyList())
-
-        val emptyNotifications = activeNotificationsProvider.getAllNotifications()
-        assertThat(emptyNotifications).isEmpty()
-    }
-
-    @Test
-    fun `getAllNotifications with active notifications returns all`() {
-        val activeNotifications = listOf(
-            aStatusBarNotification(id = notificationIdProvider.getRoomMessagesNotificationId(A_SESSION_ID), groupId = A_SESSION_ID.value),
-            aStatusBarNotification(id = notificationIdProvider.getSummaryNotificationId(A_SESSION_ID), groupId = A_SESSION_ID.value),
-            aStatusBarNotification(id = notificationIdProvider.getRoomInvitationNotificationId(A_SESSION_ID), groupId = A_SESSION_ID.value),
-        )
-        val activeNotificationsProvider = createActiveNotificationsProvider(activeNotifications = activeNotifications)
-
-        val result = activeNotificationsProvider.getAllNotifications()
-        assertThat(result).hasSize(3)
-    }
-
-    @Test
     fun `getNotificationsForSession returns only notifications for that session id`() {
         val activeNotifications = listOf(
             aStatusBarNotification(id = notificationIdProvider.getRoomMessagesNotificationId(A_SESSION_ID), groupId = A_SESSION_ID.value),

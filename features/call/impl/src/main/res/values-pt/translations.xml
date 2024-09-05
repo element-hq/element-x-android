@@ -3,5 +3,5 @@
   <string name="call_foreground_service_channel_title_android">"Chamada em curso"</string>
   <string name="call_foreground_service_message_android">"Toca para voltar à chamada"</string>
   <string name="call_foreground_service_title_android">"☎️ Chamada em curso"</string>
-  <string name="screen_incoming_call_subtitle_android">"A receber chamada da Element "</string>
+  <string name="screen_incoming_call_subtitle_android">"A receber chamada da Element"</string>
 </resources>

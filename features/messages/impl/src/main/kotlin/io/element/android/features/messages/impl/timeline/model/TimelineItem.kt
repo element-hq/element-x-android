@@ -24,6 +24,7 @@ import io.element.android.features.messages.impl.timeline.model.virtual.Timeline
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
@@ -36,7 +37,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
 sealed interface TimelineItem {
-    fun identifier(): String = when (this) {
+    fun identifier(): UniqueId = when (this) {
         is Event -> id
         is Virtual -> id
         is GroupedEvents -> id
@@ -58,13 +59,13 @@ sealed interface TimelineItem {
 
     @Immutable
     data class Virtual(
-        val id: String,
+        val id: UniqueId,
         val model: TimelineItemVirtualModel
     ) : TimelineItem
 
     @Immutable
     data class Event(
-        val id: String,
+        val id: UniqueId,
         // Note: eventId can be null when the event is a local echo
         val eventId: EventId? = null,
         val transactionId: TransactionId? = null,
@@ -101,7 +102,7 @@ sealed interface TimelineItem {
 
     @Immutable
     data class GroupedEvents(
-        val id: String,
+        val id: UniqueId,
         val events: ImmutableList<Event>,
         val aggregatedReadReceipts: ImmutableList<ReadReceiptData>,
     ) : TimelineItem

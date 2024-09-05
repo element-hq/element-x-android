@@ -30,7 +30,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
-import io.element.android.features.securebackup.impl.createkey.CreateNewRecoveryKeyNode
 import io.element.android.features.securebackup.impl.disable.SecureBackupDisableNode
 import io.element.android.features.securebackup.impl.enable.SecureBackupEnableNode
 import io.element.android.features.securebackup.impl.enter.SecureBackupEnterRecoveryKeyNode
@@ -51,8 +50,8 @@ class SecureBackupFlowNode @AssistedInject constructor(
     backstack = BackStack(
         initialElement = when (plugins.filterIsInstance<SecureBackupEntryPoint.Params>().first().initialElement) {
             SecureBackupEntryPoint.InitialTarget.Root -> NavTarget.Root
+            SecureBackupEntryPoint.InitialTarget.SetUpRecovery -> NavTarget.Setup
             SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey -> NavTarget.EnterRecoveryKey
-            SecureBackupEntryPoint.InitialTarget.CreateNewRecoveryKey -> NavTarget.CreateNewRecoveryKey
             is SecureBackupEntryPoint.InitialTarget.ResetIdentity -> NavTarget.ResetIdentity
         },
         savedStateMap = buildContext.savedStateMap,
@@ -78,9 +77,6 @@ class SecureBackupFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object EnterRecoveryKey : NavTarget
-
-        @Parcelize
-        data object CreateNewRecoveryKey : NavTarget
 
         @Parcelize
         data object ResetIdentity : NavTarget
@@ -141,15 +137,8 @@ class SecureBackupFlowNode @AssistedInject constructor(
                             backstack.pop()
                         }
                     }
-
-                    override fun onCreateNewRecoveryKey() {
-                        backstack.push(NavTarget.CreateNewRecoveryKey)
-                    }
                 }
                 createNode<SecureBackupEnterRecoveryKeyNode>(buildContext, plugins = listOf(callback))
-            }
-            NavTarget.CreateNewRecoveryKey -> {
-                createNode<CreateNewRecoveryKeyNode>(buildContext)
             }
             is NavTarget.ResetIdentity -> {
                 val callback = object : ResetIdentityFlowNode.Callback {

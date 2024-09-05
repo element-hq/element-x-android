@@ -72,7 +72,7 @@ interface EncryptionService {
 /**
  * A handle to reset the user's identity.
  */
-interface IdentityResetHandle {
+sealed interface IdentityResetHandle {
     /**
      * Cancel the reset process and drops the existing handle in the SDK.
      */

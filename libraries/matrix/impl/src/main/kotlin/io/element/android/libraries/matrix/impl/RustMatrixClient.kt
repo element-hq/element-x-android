@@ -51,7 +51,6 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.impl.core.toProgressWatcher
 import io.element.android.libraries.matrix.impl.encryption.RustEncryptionService
-import io.element.android.libraries.matrix.impl.mapper.toSessionData
 import io.element.android.libraries.matrix.impl.media.RustMediaLoader
 import io.element.android.libraries.matrix.impl.notification.RustNotificationService
 import io.element.android.libraries.matrix.impl.notificationsettings.RustNotificationSettingsService
@@ -67,8 +66,7 @@ import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.usersearch.UserProfileMapper
 import io.element.android.libraries.matrix.impl.usersearch.UserSearchResultMapper
-import io.element.android.libraries.matrix.impl.util.SessionDirectoryProvider
-import io.element.android.libraries.matrix.impl.util.anonymizedTokens
+import io.element.android.libraries.matrix.impl.util.SessionPathsProvider
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
@@ -99,7 +97,6 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.BackupState
 import org.matrix.rustcomponents.sdk.Client
-import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.ClientException
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
@@ -110,7 +107,6 @@ import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
 import java.util.Optional
-import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.INFINITE
 import kotlin.time.Duration.Companion.seconds
@@ -129,6 +125,7 @@ class RustMatrixClient(
     private val baseDirectory: File,
     baseCacheDirectory: File,
     private val clock: SystemClock,
+    sessionDelegate: RustClientSessionDelegate,
 ) : MatrixClient {
     override val sessionId: UserId = UserId(client.userId())
     override val deviceId: String = client.deviceId()
@@ -137,8 +134,6 @@ class RustMatrixClient(
     private val innerRoomListService = syncService.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
 
-    // To make sure only one coroutine affecting the token persistence can run at a time
-    private val tokenRefreshDispatcher = sessionDispatcher.limitedParallelism(1)
     private val rustSyncService = RustSyncService(syncService, sessionCoroutineScope)
     private val pushersService = RustPushersService(
         client = client,
@@ -161,73 +156,7 @@ class RustMatrixClient(
         sessionDispatcher = sessionDispatcher,
     )
 
-    private val sessionDirectoryProvider = SessionDirectoryProvider(sessionStore)
-
-    private val isLoggingOut = AtomicBoolean(false)
-
-    private val clientDelegate = object : ClientDelegate {
-        private val clientLog get() = Timber.tag(this@RustMatrixClient.toString())
-
-        override fun didReceiveAuthError(isSoftLogout: Boolean) {
-            clientLog.w("didReceiveAuthError(isSoftLogout=$isSoftLogout)")
-            if (isLoggingOut.getAndSet(true).not()) {
-                clientLog.v("didReceiveAuthError -> do the cleanup")
-                // TODO handle isSoftLogout parameter.
-                appCoroutineScope.launch(tokenRefreshDispatcher) {
-                    val existingData = sessionStore.getSession(client.userId())
-                    val (anonymizedAccessToken, anonymizedRefreshToken) = existingData.anonymizedTokens()
-                    clientLog.d(
-                        "Removing session data with access token '$anonymizedAccessToken' " +
-                            "and refresh token '$anonymizedRefreshToken'."
-                    )
-                    if (existingData != null) {
-                        // Set isTokenValid to false
-                        val newData = client.session().toSessionData(
-                            isTokenValid = false,
-                            loginType = existingData.loginType,
-                            passphrase = existingData.passphrase,
-                            sessionPath = existingData.sessionPath,
-                        )
-                        sessionStore.updateData(newData)
-                        clientLog.d("Removed session data with access token: '$anonymizedAccessToken'.")
-                    } else {
-                        clientLog.d("No session data found.")
-                    }
-                    doLogout(doRequest = false, removeSession = false, ignoreSdkError = false)
-                }.invokeOnCompletion {
-                    if (it != null) {
-                        clientLog.e(it, "Failed to remove session data.")
-                    }
-                }
-            } else {
-                clientLog.v("didReceiveAuthError -> already cleaning up")
-            }
-        }
-
-        override fun didRefreshTokens() {
-            clientLog.w("didRefreshTokens()")
-            appCoroutineScope.launch(tokenRefreshDispatcher) {
-                val existingData = sessionStore.getSession(client.userId()) ?: return@launch
-                val (anonymizedAccessToken, anonymizedRefreshToken) = client.session().anonymizedTokens()
-                clientLog.d(
-                    "Saving new session data with token: access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'. " +
-                        "Was token valid: ${existingData.isTokenValid}"
-                )
-                val newData = client.session().toSessionData(
-                    isTokenValid = true,
-                    loginType = existingData.loginType,
-                    passphrase = existingData.passphrase,
-                    sessionPath = existingData.sessionPath,
-                )
-                sessionStore.updateData(newData)
-                clientLog.d("Saved new session data with access token: '$anonymizedAccessToken'.")
-            }.invokeOnCompletion {
-                if (it != null) {
-                    clientLog.e(it, "Failed to save new session data.")
-                }
-            }
-        }
-    }
+    private val sessionPathsProvider = SessionPathsProvider(sessionStore)
 
     private val roomSyncSubscriber: RoomSyncSubscriber = RoomSyncSubscriber(innerRoomListService, dispatchers)
 
@@ -270,7 +199,7 @@ class RustMatrixClient(
 
     private val roomMembershipObserver = RoomMembershipObserver()
 
-    private val clientDelegateTaskHandle: TaskHandle? = client.setDelegate(clientDelegate)
+    private val clientDelegateTaskHandle: TaskHandle? = client.setDelegate(sessionDelegate)
 
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(
         MatrixUser(
@@ -294,6 +223,9 @@ class RustMatrixClient(
         .stateIn(sessionCoroutineScope, started = SharingStarted.Eagerly, initialValue = persistentListOf())
 
     init {
+        // Make sure the session delegate has a reference to the client to be able to logout on auth error
+        sessionDelegate.bindClient(this)
+
         sessionCoroutineScope.launch {
             // Force a refresh of the profile
             getUserProfile()
@@ -535,21 +467,11 @@ class RustMatrixClient(
         deleteSessionDirectory(deleteCryptoDb = false)
     }
 
-    override suspend fun logout(ignoreSdkError: Boolean): String? = doLogout(
-        doRequest = true,
-        removeSession = true,
-        ignoreSdkError = ignoreSdkError,
-    )
-
-    private suspend fun doLogout(
-        doRequest: Boolean,
-        removeSession: Boolean,
-        ignoreSdkError: Boolean,
-    ): String? {
+    override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean): String? {
         var result: String? = null
         syncService.stop()
         withContext(sessionDispatcher) {
-            if (doRequest) {
+            if (userInitiated) {
                 try {
                     result = client.logout()
                 } catch (failure: Throwable) {
@@ -563,7 +485,7 @@ class RustMatrixClient(
             }
             close()
             deleteSessionDirectory(deleteCryptoDb = true)
-            if (removeSession) {
+            if (userInitiated) {
                 sessionStore.removeSession(sessionId.value)
             }
         }
@@ -614,19 +536,24 @@ class RustMatrixClient(
         })
     }.buffer(Channel.UNLIMITED)
 
+    internal fun setDelegate(delegate: RustClientSessionDelegate) {
+        client.setDelegate(delegate)
+    }
+
     private suspend fun File.getCacheSize(
         includeCryptoDb: Boolean = false,
     ): Long = withContext(sessionDispatcher) {
-        val sessionDirectory = sessionDirectoryProvider.provides(sessionId) ?: return@withContext 0L
+        val sessionDirectory = sessionPathsProvider.provides(sessionId) ?: return@withContext 0L
+        val cacheSize = sessionDirectory.cacheDirectory.getSizeOfFiles()
         if (includeCryptoDb) {
-            sessionDirectory.getSizeOfFiles()
+            cacheSize + sessionDirectory.fileDirectory.getSizeOfFiles()
         } else {
-            listOf(
+            cacheSize + listOf(
                 "matrix-sdk-state.sqlite3",
                 "matrix-sdk-state.sqlite3-shm",
                 "matrix-sdk-state.sqlite3-wal",
             ).map { fileName ->
-                File(sessionDirectory, fileName)
+                File(sessionDirectory.fileDirectory, fileName)
             }.sumOf { file ->
                 file.length()
             }
@@ -636,14 +563,16 @@ class RustMatrixClient(
     private suspend fun deleteSessionDirectory(
         deleteCryptoDb: Boolean = false,
     ): Boolean = withContext(sessionDispatcher) {
-        val sessionDirectory = sessionDirectoryProvider.provides(sessionId) ?: return@withContext false
+        val sessionPaths = sessionPathsProvider.provides(sessionId) ?: return@withContext false
+        // Always delete the cache directory
+        sessionPaths.cacheDirectory.deleteRecursively()
         if (deleteCryptoDb) {
             // Delete the folder and all its content
-            sessionDirectory.deleteRecursively()
+            sessionPaths.fileDirectory.deleteRecursively()
         } else {
-            // Delete only the state.db file
-            sessionDirectory.listFiles().orEmpty()
-                .filter { it.name.contains("matrix-sdk-state") }
+            // Do not delete the crypto database files.
+            sessionPaths.fileDirectory.listFiles().orEmpty()
+                .filterNot { it.name.contains("matrix-sdk-crypto") }
                 .forEach { file ->
                     Timber.w("Deleting file ${file.name}...")
                     file.safeDelete()

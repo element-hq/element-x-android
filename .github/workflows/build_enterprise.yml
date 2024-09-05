@@ -9,7 +9,7 @@ on:
 
 # Enrich gradle.properties for CI/CD
 env:
-  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx7g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.incremental=false -XX:+UseG1GC
+  GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx9g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC -Dkotlin.daemon.jvm.options=-Xmx4g -Dkotlin.incremental=false
   CI_GRADLE_ARG_PROPERTIES: --stacktrace -Dsonar.gradle.skipCompile=true
 
 jobs:
@@ -61,7 +61,7 @@ jobs:
           name: elementx-enterprise-debug
           path: |
             app/build/outputs/apk/gplay/debug/*-universal-debug.apk
-      - name: Compile release sources
+      - name: Compile nightly and release sources
         if: ${{ matrix.variant == 'release' }}
         run: ./gradlew compileReleaseSources -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
       - name: Compile nightly sources

@@ -36,6 +36,7 @@ import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.features.poll.test.actions.FakeEndPollAction
 import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
@@ -46,6 +47,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
+import io.element.android.libraries.matrix.test.A_UNIQUE_ID
+import io.element.android.libraries.matrix.test.A_UNIQUE_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomMember
@@ -78,9 +81,6 @@ import org.junit.Test
 import java.util.Date
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
-
-private const val FAKE_UNIQUE_ID = "FAKE_UNIQUE_ID"
-private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
 
 @OptIn(ExperimentalCoroutinesApi::class) class TimelinePresenterTest {
     @get:Rule
@@ -131,7 +131,7 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
         val timeline = FakeTimeline(
             timelineItems = flowOf(
                 listOf(
-                    MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem())
+                    MatrixTimelineItem.Event(A_UNIQUE_ID, anEventTimelineItem())
                 )
             )
         )
@@ -164,9 +164,9 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
         val timeline = FakeTimeline(
             timelineItems = flowOf(
                 listOf(
-                    MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem()),
+                    MatrixTimelineItem.Event(A_UNIQUE_ID, anEventTimelineItem()),
                     MatrixTimelineItem.Event(
-                        uniqueId = FAKE_UNIQUE_ID_2,
+                        uniqueId = A_UNIQUE_ID_2,
                         event = anEventTimelineItem(
                             eventId = AN_EVENT_ID_2,
                             content = aMessageContent("Test message")
@@ -201,9 +201,9 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
         val timeline = FakeTimeline(
             timelineItems = flowOf(
                 listOf(
-                    MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem()),
+                    MatrixTimelineItem.Event(A_UNIQUE_ID, anEventTimelineItem()),
                     MatrixTimelineItem.Event(
-                        uniqueId = FAKE_UNIQUE_ID_2,
+                        uniqueId = A_UNIQUE_ID_2,
                         event = anEventTimelineItem(
                             eventId = AN_EVENT_ID_2,
                             content = aMessageContent("Test message")
@@ -243,9 +243,9 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
         val timeline = FakeTimeline(
             timelineItems = flowOf(
                 listOf(
-                    MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem()),
+                    MatrixTimelineItem.Event(A_UNIQUE_ID, anEventTimelineItem()),
                     MatrixTimelineItem.Event(
-                        uniqueId = FAKE_UNIQUE_ID_2,
+                        uniqueId = A_UNIQUE_ID_2,
                         event = anEventTimelineItem(
                             eventId = AN_EVENT_ID_2,
                             content = aMessageContent("Test message")
@@ -279,8 +279,8 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
         val timeline = FakeTimeline(
             timelineItems = flowOf(
                 listOf(
-                    MatrixTimelineItem.Virtual(FAKE_UNIQUE_ID, VirtualTimelineItem.ReadMarker),
-                    MatrixTimelineItem.Virtual(FAKE_UNIQUE_ID, VirtualTimelineItem.ReadMarker)
+                    MatrixTimelineItem.Virtual(A_UNIQUE_ID, VirtualTimelineItem.ReadMarker),
+                    MatrixTimelineItem.Virtual(A_UNIQUE_ID, VirtualTimelineItem.ReadMarker)
                 )
             )
         ).apply {
@@ -310,13 +310,13 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
             assertThat(initialState.newEventState).isEqualTo(NewEventState.None)
             assertThat(initialState.timelineItems.size).isEqualTo(0)
             timelineItems.emit(
-                listOf(MatrixTimelineItem.Event("0", anEventTimelineItem(content = aMessageContent())))
+                listOf(MatrixTimelineItem.Event(UniqueId("0"), anEventTimelineItem(content = aMessageContent())))
             )
             consumeItemsUntilPredicate { it.timelineItems.size == 1 }
             // Mimics sending a message, and assert newEventState is FromMe
             timelineItems.getAndUpdate { items ->
                 val event = anEventTimelineItem(content = aMessageContent(), isOwn = true)
-                items + listOf(MatrixTimelineItem.Event("1", event))
+                items + listOf(MatrixTimelineItem.Event(UniqueId("1"), event))
             }
             consumeItemsUntilPredicate { it.timelineItems.size == 2 }
             awaitLastSequentialItem().also { state ->
@@ -325,7 +325,7 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
             // Mimics receiving a message without clearing the previous FromMe
             timelineItems.getAndUpdate { items ->
                 val event = anEventTimelineItem(content = aMessageContent())
-                items + listOf(MatrixTimelineItem.Event("2", event))
+                items + listOf(MatrixTimelineItem.Event(UniqueId("2"), event))
             }
             consumeItemsUntilPredicate { it.timelineItems.size == 3 }
 
@@ -337,7 +337,7 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
             // Mimics receiving a message and assert newEventState is FromOther
             timelineItems.getAndUpdate { items ->
                 val event = anEventTimelineItem(content = aMessageContent())
-                items + listOf(MatrixTimelineItem.Event("3", event))
+                items + listOf(MatrixTimelineItem.Event(UniqueId("3"), event))
             }
             consumeItemsUntilPredicate { it.timelineItems.size == 4 }
             awaitLastSequentialItem().also { state ->
@@ -381,7 +381,7 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
                 ),
             )
             timelineItems.emit(
-                listOf(MatrixTimelineItem.Event(FAKE_UNIQUE_ID, anEventTimelineItem(reactions = oneReaction)))
+                listOf(MatrixTimelineItem.Event(A_UNIQUE_ID, anEventTimelineItem(reactions = oneReaction)))
             )
             val item = awaitItem().timelineItems.first()
             assertThat(item).isInstanceOf(TimelineItem.Event::class.java)
@@ -476,7 +476,7 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
             timelineItems = flowOf(
                 listOf(
                     MatrixTimelineItem.Event(
-                        uniqueId = FAKE_UNIQUE_ID,
+                        uniqueId = A_UNIQUE_ID,
                         event = anEventTimelineItem(),
                     )
                 )
@@ -532,7 +532,7 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
                     timelineItems = flowOf(
                         listOf(
                             MatrixTimelineItem.Event(
-                                uniqueId = FAKE_UNIQUE_ID,
+                                uniqueId = A_UNIQUE_ID,
                                 event = anEventTimelineItem(eventId = AN_EVENT_ID),
                             )
                         )
@@ -618,7 +618,7 @@ private const val FAKE_UNIQUE_ID_2 = "FAKE_UNIQUE_ID_2"
             timelineItems = flowOf(
                 listOf(
                     MatrixTimelineItem.Event(
-                        FAKE_UNIQUE_ID,
+                        A_UNIQUE_ID,
                         anEventTimelineItem(
                             sender = A_USER_ID,
                             receipts = persistentListOf(

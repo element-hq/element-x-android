@@ -20,6 +20,7 @@ import androidx.annotation.VisibleForTesting
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.SingleIn
+import io.element.android.libraries.matrix.api.core.UniqueId
 import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 
@@ -71,7 +72,7 @@ private fun MutableList<TimelineItem>.addGroup(
         val groupId = groupIds.getOrPutGroupId(groupOfItems)
         add(
             TimelineItem.GroupedEvents(
-                id = groupId,
+                id = UniqueId(groupId),
                 events = groupOfItems.toImmutableList(),
                 aggregatedReadReceipts = groupOfItems.flatMap { it.readReceiptState.receipts }.toImmutableList()
             )
@@ -83,15 +84,15 @@ private fun MutableMap<String, String>.getOrPutGroupId(timelineItems: List<Timel
     assert(timelineItems.isNotEmpty())
     for (item in timelineItems) {
         val itemIdentifier = item.identifier()
-        if (this.contains(itemIdentifier)) {
-            return this[itemIdentifier]!!
+        if (this.contains(itemIdentifier.value)) {
+            return this[itemIdentifier.value]!!
         }
     }
     val timelineItem = timelineItems.first()
-    return computeGroupIdWith(timelineItem).also { groupId ->
-        this[timelineItem.identifier()] = groupId
+    return computeGroupIdWith(timelineItem).value.also { groupId ->
+        this[timelineItem.identifier().value] = groupId
     }
 }
 
 @VisibleForTesting
-internal fun computeGroupIdWith(timelineItem: TimelineItem): String = "${timelineItem.identifier()}_group"
+internal fun computeGroupIdWith(timelineItem: TimelineItem): UniqueId = UniqueId("${timelineItem.identifier()}_group")

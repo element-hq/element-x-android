@@ -28,4 +28,5 @@
   <string name="screen_session_verification_they_match">"Zhodujú sa"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Ak chcete pokračovať, prijmite žiadosť o spustenie procesu overenia vo vašej druhej relácii."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Čaká sa na prijatie žiadosti"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Prebieha odhlasovanie…"</string>
 </resources>

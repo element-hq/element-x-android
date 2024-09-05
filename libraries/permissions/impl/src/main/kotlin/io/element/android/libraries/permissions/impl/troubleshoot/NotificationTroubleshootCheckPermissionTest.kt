@@ -37,7 +37,7 @@ class NotificationTroubleshootCheckPermissionTest @Inject constructor(
     private val permissionStateProvider: PermissionStateProvider,
     private val sdkVersionProvider: BuildVersionSdkIntProvider,
     private val permissionActions: PermissionActions,
-    private val stringProvider: StringProvider,
+    stringProvider: StringProvider,
 ) : NotificationTroubleshootTest {
     override val order: Int = 0
 

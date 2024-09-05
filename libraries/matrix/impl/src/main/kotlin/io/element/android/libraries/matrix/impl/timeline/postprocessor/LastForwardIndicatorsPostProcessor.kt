@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.timeline.postprocessor
 
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 
@@ -25,7 +26,7 @@ import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTime
 class LastForwardIndicatorsPostProcessor(
     private val isTimelineLive: Boolean,
 ) {
-    private val lastForwardIdentifiers = LinkedHashSet<String>()
+    private val lastForwardIdentifiers = LinkedHashSet<UniqueId>()
 
     fun process(
         items: List<MatrixTimelineItem>,
@@ -56,17 +57,17 @@ class LastForwardIndicatorsPostProcessor(
     }
 }
 
-private fun createLastForwardIndicator(identifier: String): MatrixTimelineItem {
+private fun createLastForwardIndicator(identifier: UniqueId): MatrixTimelineItem {
     return MatrixTimelineItem.Virtual(
-        uniqueId = "last_forward_indicator_$identifier",
+        uniqueId = UniqueId("last_forward_indicator_$identifier"),
         virtual = VirtualTimelineItem.LastForwardIndicator
     )
 }
 
-private fun List<MatrixTimelineItem>.latestEventIdentifier(): String {
+private fun List<MatrixTimelineItem>.latestEventIdentifier(): UniqueId {
     return findLast {
         it is MatrixTimelineItem.Event
     }?.let {
         (it as MatrixTimelineItem.Event).uniqueId
-    } ?: "fake_id"
+    } ?: UniqueId("fake_id")
 }

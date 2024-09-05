@@ -35,7 +35,6 @@ class SecureBackupEnterRecoveryKeyNode @AssistedInject constructor(
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
         fun onEnterRecoveryKeySuccess()
-        fun onCreateNewRecoveryKey()
     }
 
     private val callback = plugins<Callback>().first()
@@ -48,7 +47,6 @@ class SecureBackupEnterRecoveryKeyNode @AssistedInject constructor(
             modifier = modifier,
             onSuccess = callback::onEnterRecoveryKeySuccess,
             onBackClick = ::navigateUp,
-            onCreateNewRecoveryKey = callback::onCreateNewRecoveryKey
         )
     }
 }

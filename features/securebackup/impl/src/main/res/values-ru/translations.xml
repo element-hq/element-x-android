@@ -30,7 +30,6 @@
   <string name="screen_encryption_reset_bullet_2">"Вы потеряете существующую историю сообщений"</string>
   <string name="screen_encryption_reset_bullet_3">"Вам нужно будет заново подтвердить все существующие устройства и контакты."</string>
   <string name="screen_encryption_reset_footer">"Сбрасывайте данные только в том случае, если у вас нет доступа к другому устройству, на котором выполнен вход, и вы потеряли ключ восстановления."</string>
-  <string name="screen_encryption_reset_subtitle">"Если вы не вошли в систему на других устройствах и потеряли ключ восстановления, вам необходимо сбросить учетные данные, чтобы продолжить использование приложения. "</string>
   <string name="screen_encryption_reset_title">"Сбросьте ключи подтверждения, если вы не можете подтвердить свою личность другим способом."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Выключить"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Вы потеряете зашифрованные сообщения, если выйдете из всех устройств."</string>

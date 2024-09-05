@@ -25,4 +25,5 @@
   <string name="screen_session_verification_they_match">"Вони збігаються"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Щоб продовжити, прийміть запит на початок процесу перевірки в іншому сеансі."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Очікування на прийняття запиту"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Вихід…"</string>
 </resources>

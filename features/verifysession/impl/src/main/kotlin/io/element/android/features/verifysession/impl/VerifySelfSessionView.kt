@@ -19,11 +19,13 @@ package io.element.android.features.verifysession.impl
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -37,6 +39,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -46,14 +49,17 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.verifysession.impl.emoji.toEmojiResource
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.PageTitle
+import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
@@ -70,11 +76,13 @@ fun VerifySelfSessionView(
     onEnterRecoveryKey: () -> Unit,
     onResetKey: () -> Unit,
     onFinish: () -> Unit,
+    onSuccessLogout: (String?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun resetFlow() {
         state.eventSink(VerifySelfSessionViewEvents.Reset)
     }
+
     val latestOnFinish by rememberUpdatedState(newValue = onFinish)
     LaunchedEffect(state.verificationFlowStep, latestOnFinish) {
         if (state.verificationFlowStep is FlowStep.Skipped) {
@@ -94,41 +102,77 @@ fun VerifySelfSessionView(
         }
     }
     val verificationFlowStep = state.verificationFlowStep
-    HeaderFooterPage(
-        modifier = modifier,
-        topBar = {
-             TopAppBar(
-                 title = {},
-                 actions = {
-                     if (state.displaySkipButton && state.verificationFlowStep != FlowStep.Completed) {
-                         TextButton(
-                             text = stringResource(CommonStrings.action_skip),
-                             onClick = { state.eventSink(VerifySelfSessionViewEvents.SkipVerification) }
-                         )
-                     }
-                 }
-             )
-        },
-        header = {
-            HeaderContent(verificationFlowStep = verificationFlowStep)
-        },
-        footer = {
-            BottomMenu(
-                screenState = state,
-                goBack = ::resetFlow,
-                onEnterRecoveryKey = onEnterRecoveryKey,
-                onFinish = onFinish,
-                onResetKey = onResetKey,
-            )
+
+    if (state.verificationFlowStep is FlowStep.Loading ||
+        state.verificationFlowStep is FlowStep.Skipped) {
+        // Just display a loader in this case, to avoid UI glitch.
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            CircularProgressIndicator()
         }
-    ) {
-        Content(flowState = verificationFlowStep)
+    } else {
+        HeaderFooterPage(
+            modifier = modifier,
+            topBar = {
+                TopAppBar(
+                    title = {},
+                    actions = {
+                        if (state.verificationFlowStep !is FlowStep.Completed &&
+                            state.displaySkipButton &&
+                            LocalInspectionMode.current.not()) {
+                            TextButton(
+                                text = stringResource(CommonStrings.action_skip),
+                                onClick = { state.eventSink(VerifySelfSessionViewEvents.SkipVerification) }
+                            )
+                        }
+                        if (state.verificationFlowStep is FlowStep.Initial) {
+                            TextButton(
+                                text = stringResource(CommonStrings.action_signout),
+                                onClick = { state.eventSink(VerifySelfSessionViewEvents.SignOut) }
+                            )
+                        }
+                    }
+                )
+            },
+            header = {
+                HeaderContent(verificationFlowStep = verificationFlowStep)
+            },
+            footer = {
+                BottomMenu(
+                    screenState = state,
+                    goBack = ::resetFlow,
+                    onEnterRecoveryKey = onEnterRecoveryKey,
+                    onFinish = onFinish,
+                    onResetKey = onResetKey,
+                )
+            }
+        ) {
+            Content(flowState = verificationFlowStep)
+        }
+    }
+
+    when (state.signOutAction) {
+        AsyncAction.Loading -> {
+            ProgressDialog(text = stringResource(id = R.string.screen_signout_in_progress_dialog_content))
+        }
+        is AsyncAction.Success -> {
+            val latestOnSuccessLogout by rememberUpdatedState(onSuccessLogout)
+            LaunchedEffect(state) {
+                latestOnSuccessLogout(state.signOutAction.data)
+            }
+        }
+        AsyncAction.Confirming,
+        is AsyncAction.Failure,
+        AsyncAction.Uninitialized -> Unit
     }
 }
 
 @Composable
 private fun HeaderContent(verificationFlowStep: FlowStep) {
     val iconStyle = when (verificationFlowStep) {
+        VerifySelfSessionState.VerificationStep.Loading -> error("Should not happen")
         is FlowStep.Initial, FlowStep.AwaitingOtherDeviceResponse -> BigIcon.Style.Default(CompoundIcons.LockSolid())
         FlowStep.Canceled -> BigIcon.Style.AlertSolid
         FlowStep.Ready, is FlowStep.Verifying -> BigIcon.Style.Default(CompoundIcons.Reaction())
@@ -136,6 +180,7 @@ private fun HeaderContent(verificationFlowStep: FlowStep) {
         is FlowStep.Skipped -> return
     }
     val titleTextId = when (verificationFlowStep) {
+        VerifySelfSessionState.VerificationStep.Loading -> error("Should not happen")
         is FlowStep.Initial, FlowStep.AwaitingOtherDeviceResponse -> R.string.screen_identity_confirmation_title
         FlowStep.Canceled -> CommonStrings.common_verification_cancelled
         FlowStep.Ready -> R.string.screen_session_verification_compare_emojis_title
@@ -147,6 +192,7 @@ private fun HeaderContent(verificationFlowStep: FlowStep) {
         is FlowStep.Skipped -> return
     }
     val subtitleTextId = when (verificationFlowStep) {
+        VerifySelfSessionState.VerificationStep.Loading -> error("Should not happen")
         is FlowStep.Initial, FlowStep.AwaitingOtherDeviceResponse -> R.string.screen_identity_confirmation_subtitle
         FlowStep.Canceled -> R.string.screen_session_verification_cancelled_subtitle
         FlowStep.Ready -> R.string.screen_session_verification_ready_subtitle
@@ -240,6 +286,7 @@ private fun BottomMenu(
     val isVerifying = (verificationViewState as? FlowStep.Verifying)?.state is AsyncData.Loading<Unit>
 
     when (verificationViewState) {
+        VerifySelfSessionState.VerificationStep.Loading -> error("Should not happen")
         is FlowStep.Initial -> {
             BottomMenu {
                 if (verificationViewState.isLastDevice) {
@@ -367,5 +414,6 @@ internal fun VerifySelfSessionViewPreview(@PreviewParameter(VerifySelfSessionSta
         onEnterRecoveryKey = {},
         onResetKey = {},
         onFinish = {},
+        onSuccessLogout = {},
     )
 }

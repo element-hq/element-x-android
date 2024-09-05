@@ -29,6 +29,7 @@ import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.pin.model.assertText
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
 import io.element.android.features.logout.test.FakeLogoutUseCase
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -51,7 +52,7 @@ class PinUnlockPresenterTest {
                 assertThat(state.showWrongPinTitle).isFalse()
                 assertThat(state.showSignOutPrompt).isFalse()
                 assertThat(state.isUnlocked).isFalse()
-                assertThat(state.signOutAction).isInstanceOf(AsyncData.Uninitialized::class.java)
+                assertThat(state.signOutAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
                 assertThat(state.remainingAttempts).isInstanceOf(AsyncData.Uninitialized::class.java)
             }
             awaitItem().also { state ->
@@ -106,7 +107,7 @@ class PinUnlockPresenterTest {
 
     @Test
     fun `present - forgot pin flow`() = runTest {
-        val signOutLambda = lambdaRecorder<Boolean, String> { "" }
+        val signOutLambda = lambdaRecorder<Boolean, String?> { "" }
         val signOut = FakeLogoutUseCase(signOutLambda)
         val presenter = createPinUnlockPresenter(this, logoutUseCase = signOut)
         moleculeFlow(RecompositionMode.Immediate) {
@@ -133,7 +134,7 @@ class PinUnlockPresenterTest {
             }
             skipItems(2)
             awaitItem().also { state ->
-                assertThat(state.signOutAction).isInstanceOf(AsyncData.Success::class.java)
+                assertThat(state.signOutAction).isInstanceOf(AsyncAction.Success::class.java)
             }
             assert(signOutLambda).isCalledOnce()
         }

@@ -1,0 +1,4 @@
+-- Migrate DB from version 8
+-- Add cachePath so we can track the anonymized path for the session cache dir
+
+ALTER TABLE SessionData ADD COLUMN cachePath TEXT NOT NULL DEFAULT "";

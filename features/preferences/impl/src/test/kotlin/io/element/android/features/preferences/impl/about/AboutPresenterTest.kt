@@ -31,25 +31,12 @@ class AboutPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = AboutPresenter(FakeOpenSourceLicensesProvider(hasOpenSourceLicenses = true))
+        val presenter = AboutPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.elementLegals).isEqualTo(getAllLegals())
-            assertThat(initialState.hasOpenSourcesLicenses).isTrue()
-        }
-    }
-
-    @Test
-    fun `present - initial state, no open source licenses`() = runTest {
-        val presenter = AboutPresenter(FakeOpenSourceLicensesProvider(hasOpenSourceLicenses = false))
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            assertThat(initialState.elementLegals).isEqualTo(getAllLegals())
-            assertThat(initialState.hasOpenSourcesLicenses).isFalse()
         }
     }
 }

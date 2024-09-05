@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.SpaceId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.TransactionId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
@@ -55,13 +56,17 @@ val AN_EVENT_ID = EventId("\$anEventId")
 val AN_EVENT_ID_2 = EventId("\$anEventId2")
 val A_ROOM_ALIAS = RoomAlias("#alias1:domain")
 val A_TRANSACTION_ID = TransactionId("aTransactionId")
-const val A_UNIQUE_ID = "aUniqueId"
+
+val A_UNIQUE_ID = UniqueId("aUniqueId")
+val A_UNIQUE_ID_2 = UniqueId("aUniqueId2")
 
 const val A_ROOM_NAME = "A room name"
 const val A_ROOM_RAW_NAME = "A room raw name"
 const val A_MESSAGE = "Hello world!"
 const val A_REPLY = "OK, I'll be there!"
 const val ANOTHER_MESSAGE = "Hello universe!"
+
+const val A_REDACTION_REASON = "A redaction reason"
 
 const val A_HOMESERVER_URL = "matrix.org"
 const val A_HOMESERVER_URL_2 = "matrix-client.org"

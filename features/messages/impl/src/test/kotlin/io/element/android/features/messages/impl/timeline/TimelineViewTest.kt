@@ -28,6 +28,7 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingIndicatorModel
 import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.messages.impl.typing.aTypingNotificationState
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
@@ -54,7 +55,7 @@ class TimelineViewTest {
             state = aTimelineState(
                 timelineItems = persistentListOf<TimelineItem>(
                     TimelineItem.Virtual(
-                        id = "backward_pagination",
+                        id = UniqueId("backward_pagination"),
                         model = TimelineItemLoadingIndicatorModel(Timeline.PaginationDirection.BACKWARDS, 0)
                     ),
                 ),

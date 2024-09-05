@@ -18,6 +18,7 @@ package io.element.android.features.verifysession.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.verifysession.impl.VerifySelfSessionState.VerificationStep
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.VerificationEmoji
@@ -54,6 +55,16 @@ open class VerifySelfSessionStateProvider : PreviewParameterProvider<VerifySelfS
                 verificationFlowStep = VerificationStep.Completed,
                 displaySkipButton = true,
             ),
+            aVerifySelfSessionState(
+                signOutAction = AsyncAction.Loading,
+                displaySkipButton = true,
+            ),
+            aVerifySelfSessionState(
+                verificationFlowStep = VerificationStep.Loading
+            ),
+            aVerifySelfSessionState(
+                verificationFlowStep = VerificationStep.Skipped
+            ),
             // Add other state here
         )
 }
@@ -72,12 +83,14 @@ private fun aDecimalsSessionVerificationData(
 
 internal fun aVerifySelfSessionState(
     verificationFlowStep: VerificationStep = VerificationStep.Initial(canEnterRecoveryKey = false),
+    signOutAction: AsyncAction<String?> = AsyncAction.Uninitialized,
     displaySkipButton: Boolean = false,
     eventSink: (VerifySelfSessionViewEvents) -> Unit = {},
 ) = VerifySelfSessionState(
     verificationFlowStep = verificationFlowStep,
     displaySkipButton = displaySkipButton,
     eventSink = eventSink,
+    signOutAction = signOutAction,
 )
 
 private fun aVerificationEmojiList() = listOf(

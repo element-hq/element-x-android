@@ -16,6 +16,7 @@
 
 package io.element.android.libraries.matrix.impl.timeline.postprocessor
 
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
@@ -33,7 +34,7 @@ class LoadingIndicatorsPostProcessor(private val systemClock: SystemClock) {
         return buildList {
             if (shouldAddBackwardLoadingIndicator) {
                 val backwardLoadingIndicator = MatrixTimelineItem.Virtual(
-                    uniqueId = "BackwardLoadingIndicator",
+                    uniqueId = UniqueId("BackwardLoadingIndicator"),
                     virtual = VirtualTimelineItem.LoadingIndicator(
                         direction = Timeline.PaginationDirection.BACKWARDS,
                         timestamp = currentTimestamp
@@ -44,7 +45,7 @@ class LoadingIndicatorsPostProcessor(private val systemClock: SystemClock) {
             addAll(items)
             if (shouldAddForwardLoadingIndicator) {
                 val forwardLoadingIndicator = MatrixTimelineItem.Virtual(
-                    uniqueId = "ForwardLoadingIndicator",
+                    uniqueId = UniqueId("ForwardLoadingIndicator"),
                     virtual = VirtualTimelineItem.LoadingIndicator(
                         direction = Timeline.PaginationDirection.FORWARDS,
                         timestamp = currentTimestamp

@@ -42,6 +42,7 @@ import androidx.core.app.PictureInPictureModeChangedInfo
 import androidx.core.content.IntentCompat
 import androidx.core.util.Consumer
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.impl.DefaultElementCallEntryPoint
 import io.element.android.features.call.impl.di.CallBindings
@@ -54,6 +55,7 @@ import io.element.android.features.call.impl.utils.CallIntentDataParser
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -128,12 +130,14 @@ class ElementCallActivity :
     private fun ListenToAndroidEvents(pipState: PictureInPictureState) {
         val pipEventSink by rememberUpdatedState(pipState.eventSink)
         DisposableEffect(Unit) {
-            val onUserLeaveHintListener = Runnable {
+            val listener = Runnable {
                 pipEventSink(PictureInPictureEvents.EnterPictureInPicture)
             }
-            addOnUserLeaveHintListener(onUserLeaveHintListener)
+            lifecycleScope.launch {
+                addOnUserLeaveHintListener(listener)
+            }
             onDispose {
-                removeOnUserLeaveHintListener(onUserLeaveHintListener)
+                removeOnUserLeaveHintListener(listener)
             }
         }
         DisposableEffect(Unit) {
