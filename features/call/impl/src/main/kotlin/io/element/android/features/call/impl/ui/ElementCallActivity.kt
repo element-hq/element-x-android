@@ -35,9 +35,12 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.core.app.PictureInPictureModeChangedInfo
 import androidx.core.content.IntentCompat
 import androidx.core.util.Consumer
@@ -126,14 +129,23 @@ class ElementCallActivity :
 
     @Composable
     private fun ListenToAndroidEvents(pipState: PictureInPictureState) {
+        val lifecycleState by lifecycle.currentStateFlow.collectAsState()
+
         val pipEventSink by rememberUpdatedState(pipState.eventSink)
-        DisposableEffect(Unit) {
-            val onUserLeaveHintListener = Runnable {
-                pipEventSink(PictureInPictureEvents.EnterPictureInPicture)
+        var onUserLeaveHintListener by remember { mutableStateOf<Runnable?>(null) }
+        DisposableEffect(lifecycleState.isAtLeast(Lifecycle.State.STARTED)) {
+            val listener = onUserLeaveHintListener
+            if (listener != null) {
+                onUserLeaveHintListener = Runnable {
+                    pipEventSink(PictureInPictureEvents.EnterPictureInPicture)
+                }
+                addOnUserLeaveHintListener(listener)
             }
-            addOnUserLeaveHintListener(onUserLeaveHintListener)
             onDispose {
-                removeOnUserLeaveHintListener(onUserLeaveHintListener)
+                if (listener != null) {
+                    removeOnUserLeaveHintListener(listener)
+                    onUserLeaveHintListener = null
+                }
             }
         }
         DisposableEffect(Unit) {
