@@ -376,6 +376,12 @@ private class MapDraggableAnchors<T>(private val anchors: Map<T, Float>) : Dragg
         return anchors == other.anchors
     }
 
+    override fun forEach(block: (anchor: T, position: Float) -> Unit) {
+        for (anchor in anchors) {
+            block(anchor.key, anchor.value)
+        }
+    }
+
     override fun hashCode() = 31 * anchors.hashCode()
 
     override fun toString() = "MapDraggableAnchors($anchors)"

@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -103,7 +104,7 @@ private fun EditingModeView(
                     enabled = true,
                     onClick = onResetComposerMode,
                     interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(bounded = false)
+                    indication = ripple(bounded = false)
                 ),
         )
     }
@@ -133,7 +134,7 @@ private fun ReplyToModeView(
                     enabled = true,
                     onClick = onResetComposerMode,
                     interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(bounded = false)
+                    indication = ripple(bounded = false)
                 ),
         )
     }

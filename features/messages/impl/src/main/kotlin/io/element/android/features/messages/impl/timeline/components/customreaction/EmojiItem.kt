@@ -24,8 +24,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -70,7 +70,7 @@ fun EmojiItem(
             .clickable(
                 enabled = true,
                 onClick = { onSelectEmoji(item) },
-                indication = rememberRipple(bounded = false, radius = emojiSize.toDp() / 2 + 10.dp),
+                indication = ripple(bounded = false, radius = emojiSize.toDp() / 2 + 10.dp),
                 interactionSource = remember { MutableInteractionSource() }
             )
             .clearAndSetSemantics {
