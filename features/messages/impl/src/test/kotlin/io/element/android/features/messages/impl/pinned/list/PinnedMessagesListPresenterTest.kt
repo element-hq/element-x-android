@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.A_UNIQUE_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
@@ -172,10 +173,10 @@ class PinnedMessagesListPresenterTest {
 
     @Test
     fun `present - unpin event`() = runTest {
-        val unpinEventLambda = lambdaRecorder { _: EventId? -> Result.success(true) }
-        val pinnedEventsTimeline = createPinnedMessagesTimeline().apply {
-            this.unpinEventLambda = unpinEventLambda
-        }
+        val successUnpinEventLambda = lambdaRecorder { _: EventId? -> Result.success(true) }
+        val failureUnpinEventLambda = lambdaRecorder { _: EventId? -> Result.failure<Boolean>(A_THROWABLE) }
+        val pinnedEventsTimeline = createPinnedMessagesTimeline()
+
         val room = FakeMatrixRoom(
             pinnedEventsTimelineResult = { Result.success(pinnedEventsTimeline) },
             canRedactOwnResult = { Result.success(true) },
@@ -189,9 +190,20 @@ class PinnedMessagesListPresenterTest {
             skipItems(3)
             val filledState = awaitItem() as PinnedMessagesListState.Filled
             val eventItem = filledState.timelineItems.first() as TimelineItem.Event
+
+            pinnedEventsTimeline.unpinEventLambda = successUnpinEventLambda
             filledState.eventSink(PinnedMessagesListEvents.HandleAction(TimelineItemAction.Unpin, eventItem))
+
+            pinnedEventsTimeline.unpinEventLambda = failureUnpinEventLambda
+            filledState.eventSink(PinnedMessagesListEvents.HandleAction(TimelineItemAction.Unpin, eventItem))
+
             cancelAndIgnoreRemainingEvents()
-            assert(unpinEventLambda)
+
+            assert(successUnpinEventLambda)
+                .isCalledOnce()
+                .with(value(AN_EVENT_ID))
+
+            assert(failureUnpinEventLambda)
                 .isCalledOnce()
                 .with(value(AN_EVENT_ID))
         }

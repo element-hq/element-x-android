@@ -50,7 +50,7 @@ interface Timeline : AutoCloseable {
     enum class Mode {
         LIVE,
         FOCUSED_ON_EVENT,
-        FOCUSED_ON_PINNED_EVENTS
+        PINNED_EVENTS
     }
 
     val membershipChangeEventReceived: Flow<Unit>

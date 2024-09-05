@@ -19,21 +19,14 @@ package io.element.android.features.messages.impl.pinned.list
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
 
-object PinnedMessagesListTimelineActionPostProcessor : TimelineItemActionPostProcessor {
+class PinnedMessagesListTimelineActionPostProcessor : TimelineItemActionPostProcessor {
     override fun process(actions: List<TimelineItemAction>): List<TimelineItemAction> {
         return buildList {
             add(TimelineItemAction.ViewInTimeline)
-            addAll(actions.filter(::predicate))
-        }
-    }
-
-    private fun predicate(action: TimelineItemAction): Boolean {
-        return when (action) {
-            is TimelineItemAction.Unpin,
-            is TimelineItemAction.Redact,
-            is TimelineItemAction.Forward,
-            is TimelineItemAction.ViewSource -> true
-            else -> false
+            actions.firstOrNull { it is TimelineItemAction.Unpin }?.let(::add)
+            actions.firstOrNull { it is TimelineItemAction.Forward }?.let(::add)
+            actions.firstOrNull { it is TimelineItemAction.ViewSource }?.let(::add)
+            actions.firstOrNull { it is TimelineItemAction.Redact }?.let(::add)
         }
     }
 }

@@ -137,7 +137,7 @@ class RustTimeline(
     private val lastForwardIndicatorsPostProcessor = LastForwardIndicatorsPostProcessor(mode)
 
     private val backPaginationStatus = MutableStateFlow(
-        Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode != Timeline.Mode.FOCUSED_ON_PINNED_EVENTS)
+        Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode != Timeline.Mode.PINNED_EVENTS)
     )
 
     private val forwardPaginationStatus = MutableStateFlow(

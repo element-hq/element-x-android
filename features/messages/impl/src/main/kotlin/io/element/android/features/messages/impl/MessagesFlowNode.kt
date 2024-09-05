@@ -194,7 +194,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     }
 
                     override fun onPermalinkClick(data: PermalinkData) {
-                        callbacks.forEach { it.onPermalinkClick(data) }
+                        callbacks.forEach { it.onPermalinkClick(data, pushToBackstack = true) }
                     }
 
                     override fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {

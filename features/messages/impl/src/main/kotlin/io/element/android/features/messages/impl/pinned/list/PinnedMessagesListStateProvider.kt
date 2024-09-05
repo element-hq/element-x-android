@@ -21,10 +21,17 @@ import io.element.android.features.messages.impl.UserEventPermissions
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
-import io.element.android.features.messages.impl.timeline.aTimelineItemList
+import io.element.android.features.messages.impl.timeline.aTimelineItemDaySeparator
+import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
+import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemAudioContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemFileContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 open class PinnedMessagesListStateProvider : PreviewParameterProvider<PinnedMessagesListState> {
@@ -34,7 +41,45 @@ open class PinnedMessagesListStateProvider : PreviewParameterProvider<PinnedMess
             aLoadingPinnedMessagesListState(),
             anEmptyPinnedMessagesListState(),
             aLoadedPinnedMessagesListState(
-                timelineItems = aTimelineItemList(aTimelineItemTextContent())
+                timelineItems = persistentListOf(
+                    aTimelineItemEvent(
+                        isMine = false,
+                        content = aTimelineItemTextContent("A pinned message"),
+                        groupPosition = TimelineItemGroupPosition.Last,
+                        timelineItemReactions = aTimelineItemReactions(0)
+                    ),
+                    aTimelineItemEvent(
+                        isMine = false,
+                        content = aTimelineItemAudioContent("A pinned file"),
+                        groupPosition = TimelineItemGroupPosition.Middle,
+                        timelineItemReactions = aTimelineItemReactions(0)
+                    ),
+                    aTimelineItemEvent(
+                        isMine = false,
+                        content = aTimelineItemPollContent("A pinned poll?"),
+                        groupPosition = TimelineItemGroupPosition.First,
+                        timelineItemReactions = aTimelineItemReactions(0)
+                    ),
+                    aTimelineItemDaySeparator(),
+                    aTimelineItemEvent(
+                        isMine = true,
+                        content = aTimelineItemTextContent("A pinned message"),
+                        groupPosition = TimelineItemGroupPosition.Last,
+                        timelineItemReactions = aTimelineItemReactions(0)
+                    ),
+                    aTimelineItemEvent(
+                        isMine = true,
+                        content = aTimelineItemFileContent("A pinned file?"),
+                        groupPosition = TimelineItemGroupPosition.Middle,
+                        timelineItemReactions = aTimelineItemReactions(0)
+                    ),
+                    aTimelineItemEvent(
+                        isMine = true,
+                        content = aTimelineItemPollContent("A pinned poll?"),
+                        groupPosition = TimelineItemGroupPosition.First,
+                        timelineItemReactions = aTimelineItemReactions(0)
+                    ),
+                )
             )
         )
 }

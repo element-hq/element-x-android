@@ -36,7 +36,6 @@ import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.replace
-import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.JoinedRoom
@@ -86,6 +85,7 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.util.Optional
+import java.util.UUID
 
 @ContributesNode(SessionScope::class)
 class LoggedInFlowNode @AssistedInject constructor(
@@ -204,7 +204,8 @@ class LoggedInFlowNode @AssistedInject constructor(
             val serverNames: List<String> = emptyList(),
             val trigger: JoinedRoom.Trigger? = null,
             val roomDescription: RoomDescription? = null,
-            val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages()
+            val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages(),
+            val targetId: UUID = UUID.randomUUID(),
         ) : NavTarget
 
         @Parcelize
@@ -311,7 +312,7 @@ class LoggedInFlowNode @AssistedInject constructor(
                                 if (pushToBackstack) {
                                     backstack.push(target)
                                 } else {
-                                    backstack.singleTop(target)
+                                    backstack.replace(target)
                                 }
                             }
                             is PermalinkData.FallbackLink,

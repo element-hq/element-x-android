@@ -46,7 +46,7 @@ interface MessagesEntryPoint : FeatureEntryPoint {
     interface Callback : Plugin {
         fun onRoomDetailsClick()
         fun onUserDataClick(userId: UserId)
-        fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean = true)
+        fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean)
         fun onForwardedToSingleRoom(roomId: RoomId)
     }
 

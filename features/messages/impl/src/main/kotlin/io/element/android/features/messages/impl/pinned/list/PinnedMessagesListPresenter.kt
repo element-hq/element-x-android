@@ -74,7 +74,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
         fun create(navigator: PinnedMessagesListNavigator): PinnedMessagesListPresenter
     }
 
-    private val actionListPresenter = actionListPresenterFactory.create(PinnedMessagesListTimelineActionPostProcessor)
+    private val actionListPresenter = actionListPresenterFactory.create(PinnedMessagesListTimelineActionPostProcessor())
 
     @Composable
     override fun present(): PinnedMessagesListState {

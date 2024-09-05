@@ -199,7 +199,7 @@ class RustMatrixRoom(
                 internalIdPrefix = "pinned_events",
                 maxEventsToLoad = 100u,
             ).let { inner ->
-                createTimeline(inner, mode = Timeline.Mode.FOCUSED_ON_PINNED_EVENTS)
+                createTimeline(inner, mode = Timeline.Mode.PINNED_EVENTS)
             }
         }.onFailure {
             if (it is CancellationException) {
