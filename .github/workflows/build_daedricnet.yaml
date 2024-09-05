@@ -5,6 +5,10 @@ on:
     - cron: '0 23 * * *' # run at 2 AM UTC
   # This can be used to allow manually triggering nightlies from the web interface
   workflow_dispatch:
+  pull_request:
+  merge_group:
+  push:
+    branches: [ main, develop ]
 
 env:
   GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx6g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.incremental=false -XX:+UseG1GC
