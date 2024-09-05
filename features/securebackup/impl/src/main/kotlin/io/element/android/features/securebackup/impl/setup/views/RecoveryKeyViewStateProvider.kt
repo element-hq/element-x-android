@@ -27,9 +27,11 @@ open class RecoveryKeyViewStateProvider : PreviewParameterProvider<RecoveryKeyVi
                     aRecoveryKeyViewState(recoveryKeyUserStory = it, inProgress = true),
                     aRecoveryKeyViewState(recoveryKeyUserStory = it, formattedRecoveryKey = aFormattedRecoveryKey()),
                     aRecoveryKeyViewState(recoveryKeyUserStory = it, formattedRecoveryKey = aFormattedRecoveryKey(), inProgress = true),
-                    // Add other states here
                 )
-            }
+            } + sequenceOf(
+            aRecoveryKeyViewState(recoveryKeyUserStory = RecoveryKeyUserStory.Enter, formattedRecoveryKey = aFormattedRecoveryKey().replace(" ", "")),
+            aRecoveryKeyViewState(recoveryKeyUserStory = RecoveryKeyUserStory.Enter, formattedRecoveryKey = "This is a passphrase with spaces"),
+        )
 }
 
 fun aRecoveryKeyViewState(
