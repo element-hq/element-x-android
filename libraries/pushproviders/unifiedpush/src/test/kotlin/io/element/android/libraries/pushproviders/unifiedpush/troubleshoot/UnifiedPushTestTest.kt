@@ -85,6 +85,35 @@ class UnifiedPushTestTest {
     }
 
     @Test
+    fun `test UnifiedPushTest error and reset`() = runTest {
+        val providers = FakeUnifiedPushDistributorProvider()
+        val sut = UnifiedPushTest(
+            unifiedPushDistributorProvider = providers,
+            openDistributorWebPageAction = FakeOpenDistributorWebPageAction(
+                executeAction = {
+                    providers.setDistributorsResult(
+                        listOf(
+                            Distributor("value", "Name"),
+                        )
+                    )
+                }
+            ),
+            stringProvider = FakeStringProvider(),
+        )
+        launch {
+            sut.run(this)
+        }
+        sut.state.test {
+            assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(false))
+            assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
+            val lastItem = awaitItem()
+            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(true))
+            sut.reset()
+            assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(false))
+        }
+    }
+
+    @Test
     fun `test isRelevant`() {
         val sut = UnifiedPushTest(
             unifiedPushDistributorProvider = FakeUnifiedPushDistributorProvider(),

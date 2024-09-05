@@ -92,7 +92,6 @@ dependencies {
     testImplementation(projects.features.rageshake.test)
     testImplementation(projects.features.rageshake.impl)
     testImplementation(projects.features.logout.test)
-    testImplementation(projects.features.roomlist.test)
     testImplementation(projects.libraries.indicator.impl)
     testImplementation(projects.libraries.pushproviders.test)
     testImplementation(projects.libraries.fullscreenintent.test)

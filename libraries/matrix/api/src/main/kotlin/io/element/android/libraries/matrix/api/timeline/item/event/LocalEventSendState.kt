@@ -25,6 +25,8 @@ sealed interface LocalEventSendState {
     data object Sending : LocalEventSendState
     sealed interface Failed : LocalEventSendState {
         data class Unknown(val error: String) : Failed
+        data object CrossSigningNotSetup : Failed
+        data object SendingFromUnverifiedDevice : Failed
         data class VerifiedUserHasUnsignedDevice(
             /**
              * The unsigned devices belonging to verified users. A map from user ID

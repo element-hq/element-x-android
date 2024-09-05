@@ -78,6 +78,31 @@ class FirebaseTokenTestTest {
     }
 
     @Test
+    fun `test FirebaseTokenTest error and reset`() = runTest {
+        val firebaseStore = InMemoryFirebaseStore(null)
+        val sut = FirebaseTokenTest(
+            firebaseStore = firebaseStore,
+            firebaseTroubleshooter = FakeFirebaseTroubleshooter(
+                troubleShootResult = {
+                    firebaseStore.storeFcmToken(FAKE_TOKEN)
+                    Result.success(Unit)
+                }
+            ),
+            stringProvider = FakeStringProvider(),
+        )
+        launch {
+            sut.run(this)
+        }
+        sut.state.test {
+            assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(false))
+            assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
+            assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Failure(true))
+            sut.reset()
+            assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(false))
+        }
+    }
+
+    @Test
     fun `test FirebaseTokenTest isRelevant`() {
         val sut = FirebaseTokenTest(
             firebaseStore = InMemoryFirebaseStore(null),

@@ -29,6 +29,7 @@ import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.pushproviders.test.FakePushProvider
+import io.element.android.libraries.pushproviders.test.aCurrentUserPushConfig
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStore
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
@@ -57,10 +58,7 @@ class DefaultPushServiceTest {
 
     @Test
     fun `test push ok`() = runTest {
-        val aConfig = CurrentUserPushConfig(
-            url = "aUrl",
-            pushKey = "aPushKey",
-        )
+        val aConfig = aCurrentUserPushConfig()
         val testPushResult = lambdaRecorder<CurrentUserPushConfig, Unit> { }
         val aPushProvider = FakePushProvider(
             currentUserPushConfig = aConfig

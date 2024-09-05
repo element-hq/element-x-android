@@ -298,18 +298,39 @@ class VerifySelfSessionPresenterTest {
     }
 
     @Test
-    fun `present - When verification is not needed, the flow is completed`() = runTest {
+    fun `present - When verification is done using recovery key, the flow is completed`() = runTest {
         val service = FakeSessionVerificationService().apply {
             givenNeedsSessionVerification(false)
             givenVerifiedStatus(SessionVerifiedStatus.Verified)
             givenVerificationFlowState(VerificationFlowState.Finished)
         }
-        val presenter = createVerifySelfSessionPresenter(service)
+        val presenter = createVerifySelfSessionPresenter(
+            service = service,
+            showDeviceVerifiedScreen = true,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Completed)
+        }
+    }
+
+    @Test
+    fun `present - When verification is not needed, the flow is skipped`() = runTest {
+        val service = FakeSessionVerificationService().apply {
+            givenNeedsSessionVerification(false)
+            givenVerifiedStatus(SessionVerifiedStatus.Verified)
+            givenVerificationFlowState(VerificationFlowState.Finished)
+        }
+        val presenter = createVerifySelfSessionPresenter(
+            service = service,
+            showDeviceVerifiedScreen = false,
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             skipItems(1)
-            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Completed)
+            assertThat(awaitItem().verificationFlowStep).isEqualTo(VerificationStep.Skipped)
         }
     }
 
@@ -374,8 +395,10 @@ class VerifySelfSessionPresenterTest {
         buildMeta: BuildMeta = aBuildMeta(),
         sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
         logoutUseCase: LogoutUseCase = FakeLogoutUseCase(),
+        showDeviceVerifiedScreen: Boolean = false,
     ): VerifySelfSessionPresenter {
         return VerifySelfSessionPresenter(
+            showDeviceVerifiedScreen = showDeviceVerifiedScreen,
             sessionVerificationService = service,
             encryptionService = encryptionService,
             stateMachine = VerifySelfSessionStateMachine(service, encryptionService),

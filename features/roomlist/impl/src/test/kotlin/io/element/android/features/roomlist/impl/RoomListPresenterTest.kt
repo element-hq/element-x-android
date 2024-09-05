@@ -33,7 +33,6 @@ import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
 import io.element.android.features.roomlist.impl.datasource.RoomListRoomSummaryFactory
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.filters.aRoomListFiltersState
-import io.element.android.features.roomlist.impl.migration.MigrationScreenState
 import io.element.android.features.roomlist.impl.model.createRoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchEvents
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
@@ -84,7 +83,6 @@ import io.element.android.libraries.push.test.notifications.FakeNotificationClea
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.EventsRecorder
-import io.element.android.tests.testutils.MutablePresenter
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.lambda.assert
@@ -484,28 +482,6 @@ class RoomListPresenterTest {
     }
 
     @Test
-    fun `present - change in migration presenter state modifies contentState`() = runTest {
-        val migrationScreenPresenter = MutablePresenter(MigrationScreenState(true))
-        val scope = CoroutineScope(coroutineContext + SupervisorJob())
-        val presenter = createRoomListPresenter(
-            coroutineScope = scope,
-            migrationScreenPresenter = migrationScreenPresenter,
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            // The migration screen is shown if the migration screen has not been shown before
-            assertThat(initialState.contentState).isInstanceOf(RoomListContentState.Migration::class.java)
-            // Set migration as done and set the room list service as running to trigger a refresh of the presenter value
-            migrationScreenPresenter.updateState(MigrationScreenState(false))
-            // The migration screen is not shown anymore
-            assertThat(awaitItem().contentState).isInstanceOf(RoomListContentState.Skeleton::class.java)
-            scope.cancel()
-        }
-    }
-
-    @Test
     fun `present - when room service returns no room, then contentState is Empty`() = runTest {
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
         val roomListService = FakeRoomListService()
@@ -672,7 +648,6 @@ class RoomListPresenterTest {
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
         featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
         coroutineScope: CoroutineScope,
-        migrationScreenPresenter: Presenter<MigrationScreenState> = Presenter { MigrationScreenState(false) },
         analyticsService: AnalyticsService = FakeAnalyticsService(),
         filtersPresenter: Presenter<RoomListFiltersState> = Presenter { aRoomListFiltersState() },
         searchPresenter: Presenter<RoomListSearchState> = Presenter { aRoomListSearchState() },
@@ -698,7 +673,6 @@ class RoomListPresenterTest {
             sessionVerificationService = client.sessionVerificationService(),
             encryptionService = client.encryptionService(),
         ),
-        migrationScreenPresenter = migrationScreenPresenter,
         searchPresenter = searchPresenter,
         sessionPreferencesStore = sessionPreferencesStore,
         filtersPresenter = filtersPresenter,
