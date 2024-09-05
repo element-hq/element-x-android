@@ -15,6 +15,7 @@ jobs:
   nightlyReports:
     name: Create kover report artifact and upload sonar result.
     runs-on: ubuntu-latest
+    # Skip in forks
     if: ${{ github.repository == 'element-hq/element-x-android' }}
     steps:
       - name: ⏬ Checkout with LFS

@@ -15,6 +15,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Clone submodules
+        # Skip in forks
         if: ${{ github.repository == 'element-hq/element-x-android' }}
         run: git submodule update --init --recursive
       - run: |
