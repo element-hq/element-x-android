@@ -14,17 +14,25 @@
  * limitations under the License.
  */
 
-package io.element.android.features.rageshake.test.logs
+package io.element.android.features.migration.impl.migrations
 
+import com.squareup.anvil.annotations.ContributesMultibinding
 import io.element.android.features.rageshake.api.logs.LogFilesRemover
-import io.element.android.tests.testutils.lambda.LambdaOneParamRecorder
-import io.element.android.tests.testutils.lambda.lambdaRecorder
-import java.io.File
+import io.element.android.libraries.di.AppScope
+import javax.inject.Inject
 
-class FakeLogFilesRemover(
-    var performLambda: LambdaOneParamRecorder<(File) -> Boolean, Unit> = lambdaRecorder<(File) -> Boolean, Unit> { },
-) : LogFilesRemover {
-    override suspend fun perform(predicate: (File) -> Boolean) {
-        performLambda(predicate)
+/**
+ * Delete the previous log files.
+ */
+@ContributesMultibinding(AppScope::class)
+class AppMigration07 @Inject constructor(
+    private val logFilesRemover: LogFilesRemover,
+) : AppMigration {
+    override val order: Int = 7
+
+    override suspend fun migrate() {
+        logFilesRemover.perform { file ->
+            file.name.startsWith("logs-")
+        }
     }
 }
