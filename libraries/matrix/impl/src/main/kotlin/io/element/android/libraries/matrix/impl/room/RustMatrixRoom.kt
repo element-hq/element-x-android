@@ -154,7 +154,7 @@ class RustMatrixRoom(
     private val _roomNotificationSettingsStateFlow = MutableStateFlow<MatrixRoomNotificationSettingsState>(MatrixRoomNotificationSettingsState.Unknown)
     override val roomNotificationSettingsStateFlow: StateFlow<MatrixRoomNotificationSettingsState> = _roomNotificationSettingsStateFlow
 
-    override val liveTimeline = createTimeline(innerTimeline, isLive = true) {
+    override val liveTimeline = createTimeline(innerTimeline, mode = Timeline.Mode.LIVE) {
         _syncUpdateFlow.value = systemClock.epochMillis()
     }
 
@@ -182,7 +182,7 @@ class RustMatrixRoom(
                 numContextEvents = 50u,
                 internalIdPrefix = "focus_$eventId",
             ).let { inner ->
-                createTimeline(inner, isLive = false)
+                createTimeline(inner, mode = Timeline.Mode.FOCUSED_ON_EVENT)
             }
         }.mapFailure {
             it.toFocusEventException()
@@ -199,7 +199,7 @@ class RustMatrixRoom(
                 internalIdPrefix = "pinned_events",
                 maxEventsToLoad = 100u,
             ).let { inner ->
-                createTimeline(inner, isLive = false)
+                createTimeline(inner, mode = Timeline.Mode.PINNED_EVENTS)
             }
         }.onFailure {
             if (it is CancellationException) {
@@ -656,13 +656,13 @@ class RustMatrixRoom(
 
     private fun createTimeline(
         timeline: InnerTimeline,
-        isLive: Boolean,
+        mode: Timeline.Mode,
         onNewSyncedEvent: () -> Unit = {},
     ): Timeline {
         val timelineCoroutineScope = roomCoroutineScope.childScope(coroutineDispatchers.main, "TimelineScope-$roomId-$timeline")
         return RustTimeline(
             isKeyBackupEnabled = isKeyBackupEnabled,
-            isLive = isLive,
+            mode = mode,
             matrixRoom = this,
             systemClock = systemClock,
             coroutineScope = timelineCoroutineScope,

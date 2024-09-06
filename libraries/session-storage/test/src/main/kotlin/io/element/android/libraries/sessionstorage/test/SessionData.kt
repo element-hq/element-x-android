@@ -23,6 +23,8 @@ import io.element.android.libraries.sessionstorage.api.SessionData
 fun aSessionData(
     sessionId: SessionId = SessionId("@alice:server.org"),
     isTokenValid: Boolean = false,
+    sessionPath: String = "/a/path/to/a/session",
+    cachePath: String = "/a/path/to/a/cache",
 ): SessionData {
     return SessionData(
         userId = sessionId.value,
@@ -36,7 +38,7 @@ fun aSessionData(
         isTokenValid = isTokenValid,
         loginType = LoginType.UNKNOWN,
         passphrase = null,
-        sessionPath = "/a/path/to/a/session",
-        cachePath = "/a/path/to/a/cache",
+        sessionPath = sessionPath,
+        cachePath = cachePath,
     )
 }

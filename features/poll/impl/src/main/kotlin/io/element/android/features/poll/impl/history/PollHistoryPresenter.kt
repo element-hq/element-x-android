@@ -32,8 +32,8 @@ import io.element.android.features.poll.impl.history.model.PollHistoryFilter
 import io.element.android.features.poll.impl.history.model.PollHistoryItems
 import io.element.android.features.poll.impl.history.model.PollHistoryItemsFactory
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -44,11 +44,11 @@ class PollHistoryPresenter @Inject constructor(
     private val sendPollResponseAction: SendPollResponseAction,
     private val endPollAction: EndPollAction,
     private val pollHistoryItemFactory: PollHistoryItemsFactory,
-    private val timelineProvider: TimelineProvider,
+    private val room: MatrixRoom,
 ) : Presenter<PollHistoryState> {
     @Composable
     override fun present(): PollHistoryState {
-        val timeline by timelineProvider.activeTimelineFlow().collectAsState()
+        val timeline = room.liveTimeline
         val paginationState by timeline.paginationStatus(Timeline.PaginationDirection.BACKWARDS).collectAsState()
         val pollHistoryItemsFlow = remember {
             timeline.timelineItems.map { items ->

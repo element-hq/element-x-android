@@ -26,14 +26,15 @@ internal class PinnedMessagesBannerStateProvider : PreviewParameterProvider<Pinn
         get() = sequenceOf(
             aHiddenPinnedMessagesBannerState(),
             aLoadingPinnedMessagesBannerState(knownPinnedMessagesCount = 1),
-            aLoadingPinnedMessagesBannerState(knownPinnedMessagesCount = 4),
+            aLoadingPinnedMessagesBannerState(knownPinnedMessagesCount = 5),
             aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 1, currentPinnedMessageIndex = 0),
             aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 2, currentPinnedMessageIndex = 0),
             aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 3, currentPinnedMessageIndex = 0),
-            aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 4, currentPinnedMessageIndex = 0),
-            aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 4, currentPinnedMessageIndex = 1),
-            aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 4, currentPinnedMessageIndex = 2),
-            aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 4, currentPinnedMessageIndex = 3),
+            aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 5, currentPinnedMessageIndex = 0),
+            aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 5, currentPinnedMessageIndex = 1),
+            aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 5, currentPinnedMessageIndex = 2),
+            aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 5, currentPinnedMessageIndex = 3),
+            aLoadedPinnedMessagesBannerState(knownPinnedMessagesCount = 5, currentPinnedMessageIndex = 4),
         )
 }
 

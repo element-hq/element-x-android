@@ -34,6 +34,7 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.roomselect.api.RoomSelectEntryPoint
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import kotlinx.parcelize.Parcelize
@@ -59,10 +60,13 @@ class ForwardMessagesNode @AssistedInject constructor(
         fun onForwardedToSingleRoom(roomId: RoomId)
     }
 
-    data class Inputs(val eventId: EventId) : NodeInputs
+    data class Inputs(
+        val eventId: EventId,
+        val timelineProvider: TimelineProvider,
+    ) : NodeInputs
 
     private val inputs = inputs<Inputs>()
-    private val presenter = presenterFactory.create(inputs.eventId.value)
+    private val presenter = presenterFactory.create(inputs.eventId.value, inputs.timelineProvider)
     private val callbacks = plugins.filterIsInstance<Callback>()
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {

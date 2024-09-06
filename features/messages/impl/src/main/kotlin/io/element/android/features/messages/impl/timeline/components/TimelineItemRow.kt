@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
+import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
+import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
@@ -59,7 +61,17 @@ internal fun TimelineItemRow(
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     onJoinCallClick: () -> Unit,
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
+        { event, contentModifier, onContentLayoutChange ->
+            TimelineItemEventContentView(
+                content = event.content,
+                onLinkClick = onLinkClick,
+                eventSink = eventSink,
+                modifier = contentModifier,
+                onContentLayoutChange = onContentLayoutChange
+            )
+        },
 ) {
     val backgroundModifier = if (timelineItem.isEvent(focusedEventId)) {
         val focusedEventOffset = if ((timelineItem as? TimelineItem.Event)?.showSenderInformation == true) {
@@ -122,6 +134,9 @@ internal fun TimelineItemRow(
                             onReadReceiptClick = onReadReceiptClick,
                             onSwipeToReply = { onSwipeToReply(timelineItem) },
                             eventSink = eventSink,
+                            eventContentView = { contentModifier, onContentLayoutChange ->
+                                eventContentView(timelineItem, contentModifier, onContentLayoutChange)
+                            },
                         )
                     }
                 }

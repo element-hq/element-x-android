@@ -37,7 +37,6 @@ import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
-import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
@@ -75,7 +74,6 @@ class MessagesNode @AssistedInject constructor(
     private val permalinkParser: PermalinkParser,
     @ApplicationContext
     private val context: Context,
-    private val timelineController: TimelineController,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
     private val presenter = presenterFactory.create(this)
     private val callbacks = plugins<Callback>()
@@ -107,7 +105,6 @@ class MessagesNode @AssistedInject constructor(
                 analyticsService.capture(room.toAnalyticsViewRoom())
             },
             onDestroy = {
-                timelineController.close()
                 mediaPlayer.close()
             }
         )

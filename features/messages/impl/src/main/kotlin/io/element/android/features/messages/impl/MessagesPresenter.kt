@@ -38,6 +38,7 @@ import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
@@ -98,7 +99,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val voiceMessageComposerPresenter: VoiceMessageComposerPresenter,
     timelinePresenterFactory: TimelinePresenter.Factory,
     private val typingNotificationPresenter: TypingNotificationPresenter,
-    private val actionListPresenter: ActionListPresenter,
+    private val actionListPresenterFactory: ActionListPresenter.Factory,
     private val customReactionPresenter: CustomReactionPresenter,
     private val reactionSummaryPresenter: ReactionSummaryPresenter,
     private val readReceiptBottomSheetPresenter: ReadReceiptBottomSheetPresenter,
@@ -114,6 +115,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val permalinkParser: PermalinkParser,
 ) : Presenter<MessagesState> {
     private val timelinePresenter = timelinePresenterFactory.create(navigator = navigator)
+    private val actionListPresenter = actionListPresenterFactory.create(TimelineItemActionPostProcessor.Default)
 
     @AssistedFactory
     interface Factory {
@@ -286,6 +288,7 @@ class MessagesPresenter @AssistedInject constructor(
             TimelineItemAction.EndPoll -> handleEndPollAction(targetEvent, timelineState)
             TimelineItemAction.Pin -> handlePinAction(targetEvent)
             TimelineItemAction.Unpin -> handleUnpinAction(targetEvent)
+            TimelineItemAction.ViewInTimeline -> Unit
         }
     }
 

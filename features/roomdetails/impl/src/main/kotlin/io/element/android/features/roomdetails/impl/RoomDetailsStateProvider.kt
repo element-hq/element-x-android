@@ -53,6 +53,7 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aRoomDetailsState(canCall = false, canInvite = false),
             aRoomDetailsState(isPublic = false),
             aRoomDetailsState(heroes = aMatrixUserList()),
+            aRoomDetailsState(pinnedMessagesCount = 3),
             // Add other state here
         )
 }
@@ -105,6 +106,8 @@ fun aRoomDetailsState(
     displayAdminSettings: Boolean = false,
     isPublic: Boolean = true,
     heroes: List<MatrixUser> = emptyList(),
+    canShowPinnedMessages: Boolean = true,
+    pinnedMessagesCount: Int? = null,
     eventSink: (RoomDetailsEvent) -> Unit = {},
 ) = RoomDetailsState(
     roomId = roomId,
@@ -126,6 +129,8 @@ fun aRoomDetailsState(
     displayRolesAndPermissionsSettings = displayAdminSettings,
     isPublic = isPublic,
     heroes = heroes.toPersistentList(),
+    canShowPinnedMessages = canShowPinnedMessages,
+    pinnedMessagesCount = pinnedMessagesCount,
     eventSink = eventSink
 )
 

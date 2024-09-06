@@ -46,7 +46,7 @@ class DefaultMigrationStore @Inject constructor(
 
     override fun applicationMigrationVersion(): Flow<Int> {
         return store.data.map { prefs ->
-            prefs[applicationMigrationVersion] ?: 0
+            prefs[applicationMigrationVersion] ?: -1
         }
     }
 }

@@ -22,8 +22,8 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.ActionListState
+import io.element.android.features.messages.impl.actionlist.FakeActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.draft.FakeComposerDraftService
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
@@ -100,7 +100,6 @@ import io.element.android.libraries.mediaviewer.test.FakeLocalMediaFactory
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
-import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
@@ -996,7 +995,6 @@ class MessagesPresenterTest {
     ): MessagesPresenter {
         val mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom)
         val permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter)
-        val appPreferencesStore = InMemoryAppPreferencesStore()
         val sessionPreferencesStore = InMemorySessionPreferencesStore()
         val mentionSpanProvider = MentionSpanProvider(FakePermalinkParser())
         val messageComposerPresenter = MessageComposerPresenter(
@@ -1053,11 +1051,6 @@ class MessagesPresenterTest {
             }
         }
         val featureFlagService = FakeFeatureFlagService()
-        val actionListPresenter = ActionListPresenter(
-            appPreferencesStore = appPreferencesStore,
-            featureFlagsService = featureFlagService,
-            room = matrixRoom,
-        )
         val typingNotificationPresenter = TypingNotificationPresenter(
             room = matrixRoom,
             sessionPreferencesStore = sessionPreferencesStore,
@@ -1073,7 +1066,7 @@ class MessagesPresenterTest {
             voiceMessageComposerPresenter = voiceMessageComposerPresenter,
             timelinePresenterFactory = timelinePresenterFactory,
             typingNotificationPresenter = typingNotificationPresenter,
-            actionListPresenter = actionListPresenter,
+            actionListPresenterFactory = FakeActionListPresenter.Factory,
             customReactionPresenter = customReactionPresenter,
             reactionSummaryPresenter = reactionSummaryPresenter,
             readReceiptBottomSheetPresenter = readReceiptBottomSheetPresenter,

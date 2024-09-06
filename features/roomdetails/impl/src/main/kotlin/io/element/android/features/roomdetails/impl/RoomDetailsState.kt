@@ -46,6 +46,8 @@ data class RoomDetailsState(
     val displayRolesAndPermissionsSettings: Boolean,
     val isPublic: Boolean,
     val heroes: ImmutableList<MatrixUser>,
+    val canShowPinnedMessages: Boolean,
+    val pinnedMessagesCount: Int?,
     val eventSink: (RoomDetailsEvent) -> Unit
 )
 

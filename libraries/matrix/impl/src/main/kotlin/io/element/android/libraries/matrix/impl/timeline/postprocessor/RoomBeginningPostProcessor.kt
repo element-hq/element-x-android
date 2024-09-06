@@ -19,6 +19,7 @@ package io.element.android.libraries.matrix.impl.timeline.postprocessor
 import androidx.annotation.VisibleForTesting
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
@@ -29,13 +30,14 @@ import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTime
  * This timeline post-processor removes the room creation event and the self-join event from the timeline for DMs
  * or add the RoomBeginning item for non DM room.
  */
-class RoomBeginningPostProcessor {
+class RoomBeginningPostProcessor(private val mode: Timeline.Mode) {
     fun process(
         items: List<MatrixTimelineItem>,
         isDm: Boolean,
         hasMoreToLoadBackwards: Boolean
     ): List<MatrixTimelineItem> {
         return when {
+            mode == Timeline.Mode.PINNED_EVENTS -> items
             hasMoreToLoadBackwards -> items
             isDm -> processForDM(items)
             else -> processForRoom(items)

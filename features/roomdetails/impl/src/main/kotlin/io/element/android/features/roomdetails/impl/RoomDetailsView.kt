@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -66,6 +67,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -103,6 +105,7 @@ fun RoomDetailsView(
     openPollHistory: () -> Unit,
     openAdminSettings: () -> Unit,
     onJoinCallClick: () -> Unit,
+    onPinnedMessagesClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -182,6 +185,13 @@ fun RoomDetailsView(
                         state.eventSink(RoomDetailsEvent.SetFavorite(it))
                     }
                 )
+
+                if (state.canShowPinnedMessages) {
+                    PinnedMessagesItem(
+                        pinnedMessagesCount = state.pinnedMessagesCount,
+                        onPinnedMessagesClick = onPinnedMessagesClick
+                    )
+                }
 
                 if (state.displayRolesAndPermissionsSettings) {
                     ListItem(
@@ -504,6 +514,26 @@ private fun MembersItem(
 }
 
 @Composable
+private fun PinnedMessagesItem(
+    pinnedMessagesCount: Int?,
+    onPinnedMessagesClick: () -> Unit,
+) {
+    ListItem(
+        headlineContent = { Text(stringResource(CommonStrings.screen_room_details_pinned_events_row_title)) },
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Pin())),
+        trailingContent =
+        if (pinnedMessagesCount == null) {
+            ListItemContent.Custom {
+                CircularProgressIndicator(strokeWidth = 2.dp, modifier = Modifier.size(24.dp))
+            }
+        } else {
+            ListItemContent.Text(pinnedMessagesCount.toString())
+        },
+        onClick = onPinnedMessagesClick,
+    )
+}
+
+@Composable
 private fun PollsSection(
     openPollHistory: () -> Unit,
 ) {
@@ -573,5 +603,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
         openPollHistory = {},
         openAdminSettings = {},
         onJoinCallClick = {},
+        onPinnedMessagesClick = {},
     )
 }

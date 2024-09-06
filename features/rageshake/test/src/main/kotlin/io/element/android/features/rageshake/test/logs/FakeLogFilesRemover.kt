@@ -17,13 +17,14 @@
 package io.element.android.features.rageshake.test.logs
 
 import io.element.android.features.rageshake.api.logs.LogFilesRemover
-import io.element.android.tests.testutils.lambda.LambdaNoParamRecorder
+import io.element.android.tests.testutils.lambda.LambdaOneParamRecorder
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import java.io.File
 
 class FakeLogFilesRemover(
-    var performLambda: LambdaNoParamRecorder<Unit> = lambdaRecorder { -> },
+    val performLambda: LambdaOneParamRecorder<(File) -> Boolean, Unit> = lambdaRecorder<(File) -> Boolean, Unit> { },
 ) : LogFilesRemover {
-    override suspend fun perform() {
-        performLambda()
+    override suspend fun perform(predicate: (File) -> Boolean) {
+        performLambda(predicate)
     }
 }

@@ -28,7 +28,6 @@ import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.impl.ClientBuilderSlidingSync
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
 import io.element.android.libraries.matrix.impl.auth.qrlogin.QrErrorMapper
 import io.element.android.libraries.matrix.impl.auth.qrlogin.SdkQrCodeLoginData
@@ -222,7 +221,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                 val client = rustMatrixClientFactory.getBaseClientBuilder(
                     sessionPaths = emptySessionPaths,
                     passphrase = pendingPassphrase,
-                    slidingSync = ClientBuilderSlidingSync.Discovered,
+                    restore = false,
                 )
                     .buildWithQrCode(
                         qrCodeData = (qrCodeData as SdkQrCodeLoginData).rustQrCodeData,
@@ -259,13 +258,13 @@ class RustMatrixAuthenticationService @Inject constructor(
             }
         }
 
-    private fun getBaseClientBuilder(
+    private suspend fun getBaseClientBuilder(
         sessionPaths: SessionPaths,
     ) = rustMatrixClientFactory
         .getBaseClientBuilder(
             sessionPaths = sessionPaths,
             passphrase = pendingPassphrase,
-            slidingSync = ClientBuilderSlidingSync.Discovered,
+            restore = false,
         )
 
     private fun clear() {

@@ -24,6 +24,7 @@ import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import kotlinx.parcelize.Parcelize
 
 interface RoomDetailsEntryPoint : FeatureEntryPoint {
@@ -43,6 +44,8 @@ interface RoomDetailsEntryPoint : FeatureEntryPoint {
     interface Callback : Plugin {
         fun onOpenGlobalNotificationSettings()
         fun onOpenRoom(roomId: RoomId)
+        fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean)
+        fun onForwardedToSingleRoom(roomId: RoomId)
     }
 
     interface NodeBuilder {

@@ -29,6 +29,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
+import io.element.android.features.messages.api.pinned.IsPinnedMessagesFeatureEnabled
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.bool.orFalse
@@ -67,6 +68,7 @@ class RoomDetailsPresenter @Inject constructor(
     private val leaveRoomPresenter: LeaveRoomPresenter,
     private val dispatchers: CoroutineDispatchers,
     private val analyticsService: AnalyticsService,
+    private val isPinnedMessagesFeatureEnabled: IsPinnedMessagesFeatureEnabled,
 ) : Presenter<RoomDetailsState> {
     @Composable
     override fun present(): RoomDetailsState {
@@ -82,6 +84,9 @@ class RoomDetailsPresenter @Inject constructor(
         val roomTopic by remember { derivedStateOf { roomInfo?.topic ?: room.topic } }
         val isFavorite by remember { derivedStateOf { roomInfo?.isFavorite.orFalse() } }
         val isPublic by remember { derivedStateOf { roomInfo?.isPublic.orFalse() } }
+
+        val canShowPinnedMessages = isPinnedMessagesFeatureEnabled()
+        val pinnedMessagesCount by remember { derivedStateOf { roomInfo?.pinnedEventIds?.size } }
 
         LaunchedEffect(Unit) {
             canShowNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
@@ -156,6 +161,8 @@ class RoomDetailsPresenter @Inject constructor(
             displayRolesAndPermissionsSettings = !room.isDm && isUserAdmin,
             isPublic = isPublic,
             heroes = roomInfo?.heroes.orEmpty().toPersistentList(),
+            canShowPinnedMessages = canShowPinnedMessages,
+            pinnedMessagesCount = pinnedMessagesCount,
             eventSink = ::handleEvents,
         )
     }
