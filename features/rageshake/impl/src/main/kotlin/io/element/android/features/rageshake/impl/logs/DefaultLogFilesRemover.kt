@@ -20,13 +20,14 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.rageshake.api.logs.LogFilesRemover
 import io.element.android.features.rageshake.impl.reporter.DefaultBugReporter
 import io.element.android.libraries.di.AppScope
+import java.io.File
 import javax.inject.Inject
 
 @ContributesBinding(AppScope::class)
 class DefaultLogFilesRemover @Inject constructor(
     private val bugReporter: DefaultBugReporter,
 ) : LogFilesRemover {
-    override suspend fun perform() {
-        bugReporter.deleteAllFiles()
+    override suspend fun perform(predicate: (File) -> Boolean) {
+        bugReporter.deleteAllFiles(predicate)
     }
 }

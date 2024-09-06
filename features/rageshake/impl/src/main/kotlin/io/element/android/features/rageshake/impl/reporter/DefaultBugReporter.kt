@@ -301,9 +301,11 @@ class DefaultBugReporter @Inject constructor(
         }
     }
 
-    suspend fun deleteAllFiles() {
+    suspend fun deleteAllFiles(predicate: (File) -> Boolean) {
         withContext(coroutineDispatchers.io) {
-            getLogFiles().forEach { it.safeDelete() }
+            getLogFiles()
+                .filter(predicate)
+                .forEach { it.safeDelete() }
         }
     }
 

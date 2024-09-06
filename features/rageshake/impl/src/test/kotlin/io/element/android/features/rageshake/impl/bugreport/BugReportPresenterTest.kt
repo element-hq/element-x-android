@@ -32,7 +32,7 @@ import io.element.android.features.rageshake.test.screenshot.FakeScreenshotHolde
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.test.A_FAILURE_REASON
 import io.element.android.tests.testutils.WarmUpRule
-import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.LambdaOneParamRecorder
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -120,11 +120,11 @@ class BugReportPresenterTest {
 
     @Test
     fun `present - reset all`() = runTest {
-        val logFilesRemoverLambda = lambdaRecorder { -> }
+        val logFilesRemover = FakeLogFilesRemover()
         val presenter = createPresenter(
             crashDataStore = FakeCrashDataStore(crashData = A_CRASH_DATA, appHasCrashed = true),
             screenshotHolder = FakeScreenshotHolder(screenshotUri = A_SCREENSHOT_URI),
-            logFilesRemover = FakeLogFilesRemover(logFilesRemoverLambda),
+            logFilesRemover = logFilesRemover,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -136,7 +136,7 @@ class BugReportPresenterTest {
             initialState.eventSink.invoke(BugReportEvents.ResetAll)
             val resetState = awaitItem()
             assertThat(resetState.hasCrashLogs).isFalse()
-            logFilesRemoverLambda.assertions().isCalledOnce()
+            logFilesRemover.performLambda.assertions().isCalledOnce()
             // TODO Make it live assertThat(resetState.screenshotUri).isNull()
         }
     }
@@ -245,7 +245,7 @@ class BugReportPresenterTest {
         bugReporter: BugReporter = FakeBugReporter(),
         crashDataStore: CrashDataStore = FakeCrashDataStore(),
         screenshotHolder: ScreenshotHolder = FakeScreenshotHolder(),
-        logFilesRemover: LogFilesRemover = FakeLogFilesRemover(lambdaRecorder(ensureNeverCalled = true) { -> }),
+        logFilesRemover: LogFilesRemover = FakeLogFilesRemover(LambdaOneParamRecorder(ensureNeverCalled = true) { }),
     ) = BugReportPresenter(
         bugReporter = bugReporter,
         crashDataStore = crashDataStore,
