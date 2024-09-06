@@ -22,7 +22,7 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import java.io.File
 
 class FakeLogFilesRemover(
-    var performLambda: LambdaOneParamRecorder<(File) -> Boolean, Unit> = lambdaRecorder<(File) -> Boolean, Unit> { },
+    val performLambda: LambdaOneParamRecorder<(File) -> Boolean, Unit> = lambdaRecorder<(File) -> Boolean, Unit> { },
 ) : LogFilesRemover {
     override suspend fun perform(predicate: (File) -> Boolean) {
         performLambda(predicate)

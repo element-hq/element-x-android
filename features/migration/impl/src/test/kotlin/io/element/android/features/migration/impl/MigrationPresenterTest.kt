@@ -115,7 +115,7 @@ private fun createPresenter(
 
 private class FakeAppMigration(
     override val order: Int,
-    var migrateLambda: LambdaNoParamRecorder<Unit> = lambdaRecorder { -> },
+    val migrateLambda: LambdaNoParamRecorder<Unit> = lambdaRecorder { -> },
 ) : AppMigration {
     override suspend fun migrate() {
         migrateLambda()
