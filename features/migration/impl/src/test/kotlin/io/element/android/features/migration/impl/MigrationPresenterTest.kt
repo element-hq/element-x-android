@@ -36,6 +36,32 @@ class MigrationPresenterTest {
     val warmUpRule = WarmUpRule()
 
     @Test
+    fun `present - no migration should occurs on fresh installation, and last version should be stored`() = runTest {
+        val migrations = (1..10).map { order ->
+            FakeAppMigration(
+                order = order,
+                migrateLambda = LambdaNoParamRecorder(ensureNeverCalled = true) { },
+            )
+        }
+        val store = InMemoryMigrationStore(initialApplicationMigrationVersion = -1)
+        val presenter = createPresenter(
+            migrationStore = store,
+            migrations = migrations.toSet(),
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.migrationAction).isEqualTo(AsyncData.Uninitialized)
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat(state.migrationAction).isEqualTo(AsyncData.Success(Unit))
+            }
+            assertThat(store.applicationMigrationVersion().first()).isEqualTo(migrations.maxOf { it.order })
+        }
+    }
+
+    @Test
     fun `present - no migration should occurs if ApplicationMigrationVersion is the last one`() = runTest {
         val migrations = (1..10).map { FakeAppMigration(it) }
         val store = InMemoryMigrationStore(migrations.maxOf { it.order })
