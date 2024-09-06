@@ -96,9 +96,10 @@ class RustMatrixClientFactory @Inject constructor(
         restore: Boolean,
     ): ClientBuilder {
         val slidingSync = when {
+            // Always check restore first, since otherwise other values could accidentally override the already persisted config
+            restore -> ClientBuilderSlidingSync.Restored
             AuthenticationConfig.SLIDING_SYNC_PROXY_URL != null -> ClientBuilderSlidingSync.CustomProxy(AuthenticationConfig.SLIDING_SYNC_PROXY_URL!!)
             appPreferencesStore.isSimplifiedSlidingSyncEnabledFlow().first() -> ClientBuilderSlidingSync.Simplified
-            restore -> ClientBuilderSlidingSync.Restored
             else -> ClientBuilderSlidingSync.Discovered
         }
 
