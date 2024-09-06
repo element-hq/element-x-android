@@ -24,6 +24,7 @@ fun aSessionData(
     sessionId: SessionId = SessionId("@alice:server.org"),
     isTokenValid: Boolean = false,
     sessionPath: String = "/a/path/to/a/session",
+    cachePath: String = "/a/path/to/a/cache",
 ): SessionData {
     return SessionData(
         userId = sessionId.value,
@@ -38,6 +39,6 @@ fun aSessionData(
         loginType = LoginType.UNKNOWN,
         passphrase = null,
         sessionPath = sessionPath,
-        cachePath = "/a/path/to/a/cache",
+        cachePath = cachePath,
     )
 }
