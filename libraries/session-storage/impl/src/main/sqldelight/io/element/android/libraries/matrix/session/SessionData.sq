@@ -25,7 +25,9 @@ CREATE TABLE SessionData (
     -- added in version 5
     passphrase TEXT,
     -- added in version 6
-    sessionPath TEXT NOT NULL DEFAULT ""
+    sessionPath TEXT NOT NULL DEFAULT "",
+    -- added in version 9
+    cachePath TEXT NOT NULL DEFAULT ""
 );
 
 

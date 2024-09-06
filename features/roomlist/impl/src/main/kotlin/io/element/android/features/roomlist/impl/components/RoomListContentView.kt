@@ -54,7 +54,6 @@ import io.element.android.features.roomlist.impl.filters.RoomListFiltersEmptySta
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.filters.aRoomListFiltersState
 import io.element.android.features.roomlist.impl.filters.selection.FilterSelectionState
-import io.element.android.features.roomlist.impl.migration.MigrationScreenView
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -78,9 +77,6 @@ fun RoomListContentView(
 ) {
     Box(modifier = modifier) {
         when (contentState) {
-            is RoomListContentState.Migration -> {
-                MigrationScreenView(isMigrating = true)
-            }
             is RoomListContentState.Skeleton -> {
                 SkeletonView(
                     count = contentState.count,

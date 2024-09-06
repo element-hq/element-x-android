@@ -29,7 +29,6 @@ open class RoomListContentStateProvider : PreviewParameterProvider<RoomListConte
             aRoomsContentState(summaries = persistentListOf()),
             aSkeletonContentState(),
             anEmptyContentState(),
-            aMigrationContentState(),
         )
 }
 
@@ -42,8 +41,6 @@ internal fun aRoomsContentState(
     fullScreenIntentPermissionsState = fullScreenIntentPermissionsState,
     summaries = summaries,
 )
-
-internal fun aMigrationContentState() = RoomListContentState.Migration
 
 internal fun aSkeletonContentState() = RoomListContentState.Skeleton(16)
 

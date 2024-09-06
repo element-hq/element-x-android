@@ -69,6 +69,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
@@ -77,11 +78,11 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
-import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.A_THROWABLE
+import io.element.android.libraries.matrix.test.A_UNIQUE_ID
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
@@ -197,8 +198,8 @@ class MessagesPresenterTest {
     @Test
     fun `present - handle toggling a reaction`() = runTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
-        val toggleReactionSuccess = lambdaRecorder { _: String, _: EventId -> Result.success(Unit) }
-        val toggleReactionFailure = lambdaRecorder { _: String, _: EventId -> Result.failure<Unit>(IllegalStateException("Failed to send reaction")) }
+        val toggleReactionSuccess = lambdaRecorder { _: String, _: UniqueId -> Result.success(Unit) }
+        val toggleReactionFailure = lambdaRecorder { _: String, _: UniqueId -> Result.failure<Unit>(IllegalStateException("Failed to send reaction")) }
 
         val timeline = FakeTimeline().apply {
             this.toggleReactionLambda = toggleReactionSuccess
@@ -218,25 +219,25 @@ class MessagesPresenterTest {
         }.test {
             skipItems(1)
             val initialState = awaitItem()
-            initialState.eventSink.invoke(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID))
+            initialState.eventSink.invoke(MessagesEvents.ToggleReaction("👍", A_UNIQUE_ID))
             // No crashes when sending a reaction failed
             timeline.apply { toggleReactionLambda = toggleReactionFailure }
-            initialState.eventSink.invoke(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID))
+            initialState.eventSink.invoke(MessagesEvents.ToggleReaction("👍", A_UNIQUE_ID))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
 
             assert(toggleReactionSuccess)
                 .isCalledOnce()
-                .with(value("👍"), value(AN_EVENT_ID))
+                .with(value("👍"), value(A_UNIQUE_ID))
             assert(toggleReactionFailure)
                 .isCalledOnce()
-                .with(value("👍"), value(AN_EVENT_ID))
+                .with(value("👍"), value(A_UNIQUE_ID))
         }
     }
 
     @Test
     fun `present - handle toggling a reaction twice`() = runTest {
         val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
-        val toggleReactionSuccess = lambdaRecorder { _: String, _: EventId -> Result.success(Unit) }
+        val toggleReactionSuccess = lambdaRecorder { _: String, _: UniqueId -> Result.success(Unit) }
 
         val timeline = FakeTimeline().apply {
             this.toggleReactionLambda = toggleReactionSuccess
@@ -255,13 +256,13 @@ class MessagesPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink.invoke(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID))
-            initialState.eventSink.invoke(MessagesEvents.ToggleReaction("👍", AN_EVENT_ID))
+            initialState.eventSink.invoke(MessagesEvents.ToggleReaction("👍", A_UNIQUE_ID))
+            initialState.eventSink.invoke(MessagesEvents.ToggleReaction("👍", A_UNIQUE_ID))
             assert(toggleReactionSuccess)
                 .isCalledExactly(2)
                 .withSequence(
-                    listOf(value("👍"), value(AN_EVENT_ID)),
-                    listOf(value("👍"), value(AN_EVENT_ID)),
+                    listOf(value("👍"), value(A_UNIQUE_ID)),
+                    listOf(value("👍"), value(A_UNIQUE_ID)),
                 )
         }
     }

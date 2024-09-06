@@ -42,6 +42,7 @@ class TimelineItemEventContentProvider : PreviewParameterProvider<TimelineItemEv
         aTimelineItemTextContent(),
         aTimelineItemUnknownContent(),
         aTimelineItemTextContent().copy(isEdited = true),
+        aTimelineItemTextContent(body = "😁")
     )
 }
 

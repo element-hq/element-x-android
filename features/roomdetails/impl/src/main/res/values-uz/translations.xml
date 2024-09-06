@@ -14,7 +14,7 @@
   <string name="screen_room_details_error_muting">"Bu xona ovozini o‘chirib bo‘lmadi, qayta urinib ko‘ring."</string>
   <string name="screen_room_details_error_unmuting">"Bu xonaning ovozi yoqilmadi, qayta urinib ko‘ring."</string>
   <string name="screen_room_details_invite_people_title">"Odamlarni taklif qiling"</string>
-  <string name="screen_room_details_leave_room_title">"Xonani tark etish "</string>
+  <string name="screen_room_details_leave_room_title">"Xonani tark etish"</string>
   <string name="screen_room_details_notification_mode_custom">"Maxsus"</string>
   <string name="screen_room_details_notification_mode_default">"Standart"</string>
   <string name="screen_room_details_notification_title">"Bildirishnomalar"</string>

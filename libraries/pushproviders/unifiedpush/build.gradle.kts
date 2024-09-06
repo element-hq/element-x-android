@@ -60,6 +60,7 @@ dependencies {
     testImplementation(libs.test.turbine)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.push.test)
+    testImplementation(projects.libraries.pushproviders.test)
     testImplementation(projects.libraries.pushstore.test)
     testImplementation(projects.tests.testutils)
     testImplementation(projects.services.toolbox.test)

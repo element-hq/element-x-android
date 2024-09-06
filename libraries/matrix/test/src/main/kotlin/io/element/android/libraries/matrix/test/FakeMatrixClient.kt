@@ -122,7 +122,7 @@ class FakeMatrixClient(
     var getRoomInfoFlowLambda = { _: RoomId ->
         flowOf<Optional<MatrixRoomInfo>>(Optional.empty())
     }
-    var logoutLambda: (Boolean) -> String? = {
+    var logoutLambda: (Boolean, Boolean) -> String? = { _, _ ->
         null
     }
 
@@ -170,8 +170,8 @@ class FakeMatrixClient(
         clearCacheLambda()
     }
 
-    override suspend fun logout(ignoreSdkError: Boolean): String? = simulateLongTask {
-        return logoutLambda(ignoreSdkError)
+    override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean): String? = simulateLongTask {
+        return logoutLambda(ignoreSdkError, userInitiated)
     }
 
     override fun close() = Unit

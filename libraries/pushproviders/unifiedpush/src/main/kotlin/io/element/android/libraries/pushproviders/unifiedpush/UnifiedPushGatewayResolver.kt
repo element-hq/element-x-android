@@ -18,6 +18,7 @@ package io.element.android.libraries.pushproviders.unifiedpush
 
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.di.AppScope
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -33,30 +34,37 @@ class DefaultUnifiedPushGatewayResolver @Inject constructor(
     private val unifiedPushApiFactory: UnifiedPushApiFactory,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : UnifiedPushGatewayResolver {
+    private val logger = Timber.tag("DefaultUnifiedPushGatewayResolver")
+
     override suspend fun getGateway(endpoint: String): String {
-        val gateway = UnifiedPushConfig.DEFAULT_PUSH_GATEWAY_HTTP_URL
-        try {
-            val url = URL(endpoint)
+        val url = tryOrNull(
+            onError = { logger.d(it, "Cannot parse endpoint as an URL") }
+        ) {
+            URL(endpoint)
+        }
+        return if (url == null) {
+            logger.d("Using default gateway")
+            UnifiedPushConfig.DEFAULT_PUSH_GATEWAY_HTTP_URL
+        } else {
             val port = if (url.port != -1) ":${url.port}" else ""
             val customBase = "${url.protocol}://${url.host}$port"
             val customUrl = "$customBase/_matrix/push/v1/notify"
-            Timber.i("Testing $customUrl")
+            logger.i("Testing $customUrl")
             return withContext(coroutineDispatchers.io) {
                 val api = unifiedPushApiFactory.create(customBase)
                 try {
                     val discoveryResponse = api.discover()
                     if (discoveryResponse.unifiedpush.gateway == "matrix") {
-                        Timber.d("Using custom gateway")
-                        return@withContext customUrl
+                        logger.d("The endpoint seems to be a valid UnifiedPush gateway")
+                    } else {
+                        logger.e("The endpoint does not seem to be a valid UnifiedPush gateway")
                     }
                 } catch (throwable: Throwable) {
-                    Timber.tag("UnifiedPushHelper").e(throwable)
+                    logger.e(throwable, "Error checking for UnifiedPush endpoint")
                 }
-                return@withContext gateway
+                // Always return the custom url.
+                customUrl
             }
-        } catch (e: Throwable) {
-            Timber.d(e, "Cannot try custom gateway")
         }
-        return gateway
     }
 }

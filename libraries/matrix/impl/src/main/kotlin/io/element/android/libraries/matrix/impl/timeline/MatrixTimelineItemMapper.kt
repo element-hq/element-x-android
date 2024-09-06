@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.impl.timeline
 
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
@@ -31,7 +32,7 @@ class MatrixTimelineItemMapper(
     private val eventTimelineItemMapper: EventTimelineItemMapper = EventTimelineItemMapper(),
 ) {
     fun map(timelineItem: TimelineItem): MatrixTimelineItem = timelineItem.use {
-        val uniqueId = timelineItem.uniqueId()
+        val uniqueId = UniqueId(timelineItem.uniqueId())
         val asEvent = it.asEvent()
         if (asEvent != null) {
             val eventTimelineItem = eventTimelineItemMapper.map(asEvent)

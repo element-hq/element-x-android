@@ -23,4 +23,5 @@
   <string name="screen_session_verification_they_match">"一樣"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"準備開始驗證，請到您的其他工作階段接受請求。"</string>
   <string name="screen_session_verification_waiting_to_accept_title">"等待接受請求"</string>
+  <string name="screen_signout_in_progress_dialog_content">"正在登出…"</string>
 </resources>

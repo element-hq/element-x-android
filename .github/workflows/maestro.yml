@@ -8,7 +8,7 @@ on:
 
 # Enrich gradle.properties for CI/CD
 env:
-  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx7g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.incremental=false -XX:+UseG1GC
+  GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx9g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC -Dkotlin.daemon.jvm.options=-Xmx4g -Dkotlin.incremental=false
   CI_GRADLE_ARG_PROPERTIES: --stacktrace --no-daemon -Dsonar.gradle.skipCompile=true
 
 jobs:
@@ -79,7 +79,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: elementx-apk-maestro
-      - uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
+      - uses: mobile-dev-inc/action-maestro-cloud@v1.9.1
         if: (github.event_name == 'pull_request' && github.event.pull_request.fork == null) || github.event_name == 'workflow_dispatch'
         with:
           api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}

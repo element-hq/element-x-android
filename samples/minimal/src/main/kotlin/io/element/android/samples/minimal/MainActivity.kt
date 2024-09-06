@@ -32,6 +32,7 @@ import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
 import io.element.android.libraries.matrix.impl.analytics.UtdTracker
 import io.element.android.libraries.matrix.impl.auth.OidcConfigurationProvider
 import io.element.android.libraries.matrix.impl.auth.RustMatrixAuthenticationService
+import io.element.android.libraries.matrix.impl.paths.SessionPathsFactory
 import io.element.android.libraries.network.useragent.SimpleUserAgentProvider
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.sessionstorage.api.LoggedInState
@@ -49,7 +50,7 @@ class MainActivity : ComponentActivity() {
         val userCertificatesProvider = NoOpUserCertificatesProvider()
         val proxyProvider = NoOpProxyProvider()
         RustMatrixAuthenticationService(
-            baseDirectory = baseDirectory,
+            sessionPathsFactory = SessionPathsFactory(baseDirectory, applicationContext.cacheDir),
             coroutineDispatchers = Singleton.coroutineDispatchers,
             sessionStore = sessionStore,
             rustMatrixClientFactory = RustMatrixClientFactory(

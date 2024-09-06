@@ -29,6 +29,7 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.features.licenses.api.OpenSourceLicensesEntryPoint
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.logout.api.LogoutEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
@@ -59,6 +60,7 @@ class PreferencesFlowNode @AssistedInject constructor(
     private val lockScreenEntryPoint: LockScreenEntryPoint,
     private val notificationTroubleShootEntryPoint: NotificationTroubleShootEntryPoint,
     private val logoutEntryPoint: LogoutEntryPoint,
+    private val openSourceLicensesEntryPoint: OpenSourceLicensesEntryPoint,
 ) : BaseFlowNode<PreferencesFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<PreferencesEntryPoint.Params>().first().initialElement.toNavTarget(),
@@ -106,6 +108,9 @@ class PreferencesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object SignOut : NavTarget
+
+        @Parcelize
+        data object OssLicenses : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -170,7 +175,12 @@ class PreferencesFlowNode @AssistedInject constructor(
                 createNode<ConfigureTracingNode>(buildContext)
             }
             NavTarget.About -> {
-                createNode<AboutNode>(buildContext)
+                val callback = object : AboutNode.Callback {
+                    override fun openOssLicenses() {
+                        backstack.push(NavTarget.OssLicenses)
+                    }
+                }
+                createNode<AboutNode>(buildContext, listOf(callback))
             }
             NavTarget.AnalyticsSettings -> {
                 createNode<AnalyticsSettingsNode>(buildContext)
@@ -231,6 +241,9 @@ class PreferencesFlowNode @AssistedInject constructor(
                 logoutEntryPoint.nodeBuilder(this, buildContext)
                     .callback(callBack)
                     .build()
+            }
+            is NavTarget.OssLicenses -> {
+                openSourceLicensesEntryPoint.getNode(this, buildContext)
             }
         }
     }

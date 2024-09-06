@@ -17,6 +17,7 @@
 package io.element.android.libraries.matrix.impl.timeline.postprocessor
 
 import androidx.annotation.VisibleForTesting
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
@@ -77,7 +78,7 @@ class RoomBeginningPostProcessor {
     @VisibleForTesting
     fun createRoomBeginningItem(): MatrixTimelineItem.Virtual {
         return MatrixTimelineItem.Virtual(
-            uniqueId = VirtualTimelineItem.RoomBeginning.toString(),
+            uniqueId = UniqueId("RoomBeginning"),
             virtual = VirtualTimelineItem.RoomBeginning
         )
     }

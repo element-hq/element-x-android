@@ -262,6 +262,7 @@ Anledning:%1$s."</string>
   <string name="error_some_messages_have_not_been_sent">"Vissa meddelanden har inte skickats"</string>
   <string name="error_unknown">"Tyvärr, ett fel uppstod"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Detta krypterade meddelandes äkthet kan inte garanteras på den här enheten."</string>
+  <string name="event_shield_reason_previously_verified">"Krypterat av en tidigare verifierad användare."</string>
   <string name="event_shield_reason_sent_in_clear">"Inte krypterad."</string>
   <string name="event_shield_reason_unknown_device">"Krypterad av en okänd eller raderad enhet."</string>
   <string name="event_shield_reason_unsigned_device">"Krypterad av en enhet som inte verifierats av ägaren."</string>
@@ -280,6 +281,8 @@ Anledning:%1$s."</string>
     <item quantity="other">"%1$d Fästa meddelanden"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Fästa meddelanden"</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"Du är på väg att gå till ditt %1$s-konto för att återställa din identitet. Därefter kommer du att tas tillbaka till appen."</string>
+  <string name="screen_reset_identity_confirmation_title">"Kan du inte bekräfta? Gå till ditt konto för att återställa din identitet."</string>
   <string name="screen_room_details_pinned_events_row_title">"Fästa meddelanden"</string>
   <string name="screen_room_error_failed_processing_media">"Misslyckades att bearbeta media för uppladdning, vänligen pröva igen."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kunde inte hämta användarinformation"</string>

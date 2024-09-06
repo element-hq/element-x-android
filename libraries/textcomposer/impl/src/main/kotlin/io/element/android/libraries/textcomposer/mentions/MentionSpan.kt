@@ -61,12 +61,12 @@ class MentionSpan(
         backgroundColor = when (type) {
             Type.USER -> if (isCurrentUser) mentionSpanTheme.currentUserBackgroundColor else mentionSpanTheme.otherBackgroundColor
             Type.ROOM -> mentionSpanTheme.otherBackgroundColor
-            Type.EVERYONE -> mentionSpanTheme.otherBackgroundColor
+            Type.EVERYONE -> mentionSpanTheme.currentUserBackgroundColor
         }
         textColor = when (type) {
             Type.USER -> if (isCurrentUser) mentionSpanTheme.currentUserTextColor else mentionSpanTheme.otherTextColor
             Type.ROOM -> mentionSpanTheme.otherTextColor
-            Type.EVERYONE -> mentionSpanTheme.otherTextColor
+            Type.EVERYONE -> mentionSpanTheme.currentUserTextColor
         }
         backgroundPaint.color = backgroundColor
         val (startPaddingPx, endPaddingPx) = mentionSpanTheme.paddingValuesPx.value

@@ -35,6 +35,7 @@ import io.element.android.features.messages.impl.timeline.components.layout.Cont
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContentProvider
+import io.element.android.features.messages.impl.utils.containsOnlyEmojis
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.UserId
@@ -54,9 +55,15 @@ fun TimelineItemTextView(
     modifier: Modifier = Modifier,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit = {},
 ) {
+    val emojiOnly = (content.formattedBody == null || content.formattedBody.toString() == content.body) &&
+        content.body.replace(" ", "").containsOnlyEmojis()
+    val textStyle = when {
+        emojiOnly -> ElementTheme.typography.fontHeadingXlRegular
+        else -> ElementTheme.typography.fontBodyLgRegular
+    }
     CompositionLocalProvider(
         LocalContentColor provides ElementTheme.colors.textPrimary,
-        LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular
+        LocalTextStyle provides textStyle
     ) {
         val body = getTextWithResolvedMentions(content)
         Box(modifier.semantics { contentDescription = content.plainText }) {

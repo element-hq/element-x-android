@@ -20,7 +20,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.media.MediaSource
 import kotlin.math.roundToLong
 
-fun AvatarData.toMediaRequestData(): MediaRequestData {
+internal fun AvatarData.toMediaRequestData(): MediaRequestData {
     return MediaRequestData(
         source = url?.let { MediaSource(it) },
         kind = MediaRequestData.Kind.Thumbnail(size.dp.value.roundToLong())

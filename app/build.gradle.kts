@@ -17,15 +17,19 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.android.build.api.variant.FilterConfiguration.FilterType.ABI
+import com.android.build.gradle.internal.tasks.factory.dependsOn
+import com.android.build.gradle.tasks.GenerateBuildConfig
+import extension.AssetCopyTask
+import extension.GitBranchNameValueSource
+import extension.GitRevisionValueSource
 import extension.allEnterpriseImpl
 import extension.allFeaturesImpl
 import extension.allLibrariesImpl
 import extension.allServicesImpl
-import extension.gitBranchName
-import extension.gitRevision
 import extension.koverDependencies
 import extension.locales
 import extension.setupKover
+import java.util.Locale
 
 plugins {
     id("io.element.android-compose-application")
@@ -36,7 +40,8 @@ plugins {
     id(libs.plugins.firebaseAppDistribution.get().pluginId)
     alias(libs.plugins.knit)
     id("kotlin-parcelize")
-    id("com.google.android.gms.oss-licenses-plugin")
+    alias(libs.plugins.licensee)
+    alias(libs.plugins.kotlin.serialization)
     // To be able to update the firebase.xml files, uncomment and build the project
     // id("com.google.gms.google-services")
 }
@@ -60,9 +65,6 @@ android {
         ndk {
             abiFilters += listOf("armeabi-v7a", "x86", "arm64-v8a", "x86_64")
         }
-
-        buildConfigField("String", "GIT_REVISION", "\"${gitRevision()}\"")
-        buildConfigField("String", "GIT_BRANCH_NAME", "\"${gitBranchName()}\"")
 
         // Ref: https://developer.android.com/studio/build/configure-apk-splits.html#configure-abi-split
         splits {
@@ -215,6 +217,9 @@ androidComponents {
             output.versionCode.set((output.versionCode.orNull ?: 0) * 10 + abiCode)
         }
     }
+
+    val reportingExtension: ReportingExtension = project.extensions.getByType(ReportingExtension::class.java)
+    configureLicensesTasks(reportingExtension)
 }
 
 // Knit
@@ -259,8 +264,6 @@ dependencies {
     // Comment to not include unified push in the project
     implementation(projects.libraries.pushproviders.unifiedpush)
 
-    "gplayImplementation"(libs.play.services.oss.licenses)
-
     implementation(libs.appyx.core)
     implementation(libs.androidx.splash)
     implementation(libs.androidx.core)
@@ -290,4 +293,52 @@ dependencies {
     testImplementation(projects.libraries.matrix.test)
 
     koverDependencies()
+}
+
+tasks.withType<GenerateBuildConfig>().configureEach {
+    outputs.upToDateWhen { false }
+    val gitRevision = providers.of(GitRevisionValueSource::class.java) {}.get()
+    val gitBranchName = providers.of(GitBranchNameValueSource::class.java) {}.get()
+    android.defaultConfig.buildConfigField("String", "GIT_REVISION", "\"$gitRevision\"")
+    android.defaultConfig.buildConfigField("String", "GIT_BRANCH_NAME", "\"$gitBranchName\"")
+}
+
+licensee {
+    allow("Apache-2.0")
+    allow("MIT")
+    allow("GPL-2.0-with-classpath-exception")
+    allow("BSD-2-Clause")
+    allowUrl("https://opensource.org/licenses/MIT")
+    allowUrl("https://developer.android.com/studio/terms.html")
+    allowUrl("http://openjdk.java.net/legal/gplv2+ce.html")
+    allowUrl("https://www.zetetic.net/sqlcipher/license/")
+    allowUrl("https://jsoup.org/license")
+    allowUrl("https://asm.ow2.io/license.html")
+    ignoreDependencies("com.github.matrix-org", "matrix-analytics-events")
+}
+
+fun Project.configureLicensesTasks(reportingExtension: ReportingExtension) {
+    androidComponents {
+        onVariants { variant ->
+            val capitalizedVariantName = variant.name.replaceFirstChar {
+                if (it.isLowerCase()) {
+                    it.titlecase(Locale.getDefault())
+                } else {
+                    it.toString()
+                }
+            }
+            val artifactsFile = reportingExtension.file("licensee/android$capitalizedVariantName/artifacts.json")
+
+            val copyArtifactsTask =
+                project.tasks.register<AssetCopyTask>("copy${capitalizedVariantName}LicenseeReportToAssets") {
+                    inputFile.set(artifactsFile)
+                    targetFileName.set("licensee-artifacts.json")
+                }
+            variant.sources.assets?.addGeneratedSourceDirectory(
+                copyArtifactsTask,
+                AssetCopyTask::outputDirectory,
+            )
+            copyArtifactsTask.dependsOn("licenseeAndroid$capitalizedVariantName")
+        }
+    }
 }

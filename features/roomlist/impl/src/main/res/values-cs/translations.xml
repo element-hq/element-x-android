@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_set_up_recovery_content">"Vygenerujte nový klíč pro obnovení, který lze použít k obnovení historie šifrovaných zpráv v případě, že ztratíte přístup ke svým zařízením."</string>
+  <string name="banner_set_up_recovery_title">"Nastavení obnovy"</string>
   <string name="confirm_recovery_key_banner_message">"Vaše záloha chatu není aktuálně synchronizována. Abyste si zachovali přístup k záloze chatu, musíte potvrdit klíč pro obnovení."</string>
   <string name="confirm_recovery_key_banner_title">"Potvrďte klíč pro obnovení"</string>
   <string name="full_screen_intent_banner_message">"Abyste nikdy nezmeškali důležitý hovor, změňte nastavení tak, abyste povolili oznámení na celé obrazovce, když je telefon uzamčen."</string>
