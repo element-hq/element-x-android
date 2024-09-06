@@ -29,10 +29,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -94,16 +91,16 @@ private fun PinnedMessagesBannerRow(
     val borderColor = ElementTheme.colors.pinnedMessageBannerBorder
     Row(
         modifier = modifier
-            .background(color = ElementTheme.colors.bgCanvasDefault)
-            .fillMaxWidth()
-            .drawBorder(borderColor)
-            .heightIn(min = 64.dp)
-            .clickable {
-                if (state is PinnedMessagesBannerState.Loaded) {
-                    onClick(state.currentPinnedMessage.eventId)
-                    state.eventSink(PinnedMessagesBannerEvents.MoveToNextPinned)
-                }
-            },
+                .background(color = ElementTheme.colors.bgCanvasDefault)
+                .fillMaxWidth()
+                .drawBorder(borderColor)
+                .heightIn(min = 64.dp)
+                .clickable {
+                    if (state is PinnedMessagesBannerState.Loaded) {
+                        onClick(state.currentPinnedMessage.eventId)
+                        state.eventSink(PinnedMessagesBannerEvents.MoveToNextPinned)
+                    }
+                },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = spacedBy(10.dp)
     ) {
@@ -111,7 +108,6 @@ private fun PinnedMessagesBannerRow(
         PinIndicators(
             pinIndex = state.currentPinnedMessageIndex(),
             pinsCount = state.pinnedMessagesCount(),
-            modifier = Modifier.heightIn(max = 40.dp)
         )
         Icon(
             imageVector = CompoundIcons.PinSolid(),
@@ -150,23 +146,23 @@ private fun ViewAllButton(
 
 private fun Modifier.drawBorder(borderColor: Color): Modifier {
     return this
-        .drawBehind {
-            val strokeWidth = 0.5.dp.toPx()
-            val y = size.height - strokeWidth / 2
-            drawLine(
-                borderColor,
-                Offset(0f, y),
-                Offset(size.width, y),
-                strokeWidth
-            )
-            drawLine(
-                borderColor,
-                Offset(0f, 0f),
-                Offset(size.width, 0f),
-                strokeWidth
-            )
-        }
-        .shadow(elevation = 5.dp, spotColor = Color.Transparent)
+            .drawBehind {
+                val strokeWidth = 0.5.dp.toPx()
+                val y = size.height - strokeWidth / 2
+                drawLine(
+                        borderColor,
+                        Offset(0f, y),
+                        Offset(size.width, y),
+                        strokeWidth
+                )
+                drawLine(
+                        borderColor,
+                        Offset(0f, 0f),
+                        Offset(size.width, 0f),
+                        strokeWidth
+                )
+            }
+            .shadow(elevation = 5.dp, spotColor = Color.Transparent)
 }
 
 @Composable
@@ -183,32 +179,41 @@ private fun PinIndicators(
             else -> 11
         }
     }
-    val lazyListState = rememberLazyListState()
-    LaunchedEffect(pinIndex) {
-        val viewportSize = lazyListState.layoutInfo.viewportSize
-        lazyListState.animateScrollToItem(
-            pinIndex,
-            indicatorHeight / 2 - viewportSize.height / 2
-        )
+    val activeIndex = remember(pinIndex) {
+        pinIndex % 3
     }
-    LazyColumn(
+    val shownIndicators = remember(pinsCount, pinIndex) {
+        if (pinsCount <= 3) {
+            pinsCount
+        } else {
+            val isLastPage = pinIndex >= pinsCount - pinsCount % 3
+            if (isLastPage) {
+                pinsCount % 3
+            } else {
+                3
+            }
+        }
+    }
+    val indicatorsCount = pinsCount.coerceAtMost(3)
+
+    Column(
         modifier = modifier,
-        state = lazyListState,
-        verticalArrangement = spacedBy(2.dp),
-        userScrollEnabled = false,
+        verticalArrangement = spacedBy(2.dp)
     ) {
-        items(pinsCount) { index ->
+        for (index in 0 until indicatorsCount) {
             Box(
                 modifier = Modifier
-                    .width(2.dp)
-                    .height(indicatorHeight.dp)
-                    .background(
-                        color = if (index == pinIndex) {
-                            ElementTheme.colors.iconAccentPrimary
-                        } else {
-                            ElementTheme.colors.pinnedMessageBannerIndicator
-                        }
-                    )
+                        .width(2.dp)
+                        .height(indicatorHeight.dp)
+                        .background(
+                                color = if (index == activeIndex) {
+                                    ElementTheme.colors.iconAccentPrimary
+                                } else if (index < shownIndicators) {
+                                    ElementTheme.colors.pinnedMessageBannerIndicator
+                                } else {
+                                    Color.Transparent
+                                }
+                        ),
             )
         }
     }
