@@ -91,16 +91,16 @@ private fun PinnedMessagesBannerRow(
     val borderColor = ElementTheme.colors.pinnedMessageBannerBorder
     Row(
         modifier = modifier
-                .background(color = ElementTheme.colors.bgCanvasDefault)
-                .fillMaxWidth()
-                .drawBorder(borderColor)
-                .heightIn(min = 64.dp)
-                .clickable {
-                    if (state is PinnedMessagesBannerState.Loaded) {
-                        onClick(state.currentPinnedMessage.eventId)
-                        state.eventSink(PinnedMessagesBannerEvents.MoveToNextPinned)
-                    }
-                },
+            .background(color = ElementTheme.colors.bgCanvasDefault)
+            .fillMaxWidth()
+            .drawBorder(borderColor)
+            .heightIn(min = 64.dp)
+            .clickable {
+                if (state is PinnedMessagesBannerState.Loaded) {
+                    onClick(state.currentPinnedMessage.eventId)
+                    state.eventSink(PinnedMessagesBannerEvents.MoveToNextPinned)
+                }
+            },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = spacedBy(10.dp)
     ) {
@@ -146,23 +146,23 @@ private fun ViewAllButton(
 
 private fun Modifier.drawBorder(borderColor: Color): Modifier {
     return this
-            .drawBehind {
-                val strokeWidth = 0.5.dp.toPx()
-                val y = size.height - strokeWidth / 2
-                drawLine(
-                        borderColor,
-                        Offset(0f, y),
-                        Offset(size.width, y),
-                        strokeWidth
-                )
-                drawLine(
-                        borderColor,
-                        Offset(0f, 0f),
-                        Offset(size.width, 0f),
-                        strokeWidth
-                )
-            }
-            .shadow(elevation = 5.dp, spotColor = Color.Transparent)
+        .drawBehind {
+            val strokeWidth = 0.5.dp.toPx()
+            val y = size.height - strokeWidth / 2
+            drawLine(
+                borderColor,
+                Offset(0f, y),
+                Offset(size.width, y),
+                strokeWidth
+            )
+            drawLine(
+                borderColor,
+                Offset(0f, 0f),
+                Offset(size.width, 0f),
+                strokeWidth
+            )
+        }
+        .shadow(elevation = 5.dp, spotColor = Color.Transparent)
 }
 
 @Composable
@@ -203,17 +203,17 @@ private fun PinIndicators(
         for (index in 0 until indicatorsCount) {
             Box(
                 modifier = Modifier
-                        .width(2.dp)
-                        .height(indicatorHeight.dp)
-                        .background(
-                                color = if (index == activeIndex) {
-                                    ElementTheme.colors.iconAccentPrimary
-                                } else if (index < shownIndicators) {
-                                    ElementTheme.colors.pinnedMessageBannerIndicator
-                                } else {
-                                    Color.Transparent
-                                }
-                        ),
+                    .width(2.dp)
+                    .height(indicatorHeight.dp)
+                    .background(
+                        color = if (index == activeIndex) {
+                            ElementTheme.colors.iconAccentPrimary
+                        } else if (index < shownIndicators) {
+                            ElementTheme.colors.pinnedMessageBannerIndicator
+                        } else {
+                            Color.Transparent
+                        }
+                    ),
             )
         }
     }
