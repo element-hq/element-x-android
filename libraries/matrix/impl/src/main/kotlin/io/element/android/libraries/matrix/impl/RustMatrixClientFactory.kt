@@ -56,16 +56,11 @@ class RustMatrixClientFactory @Inject constructor(
     private val appPreferencesStore: AppPreferencesStore,
 ) {
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
-                val sessionDelegate = RustClientSessionDelegate(sessionStore, appCoroutineScope, coroutineDispatchers)
-
+        val sessionDelegate = RustClientSessionDelegate(sessionStore, appCoroutineScope, coroutineDispatchers)
         val client = getBaseClientBuilder(
             sessionPaths = sessionData.getSessionPaths(),
             passphrase = sessionData.passphrase,
-            slidingSync = when {
-                AuthenticationConfig.SLIDING_SYNC_PROXY_URL != null -> ClientBuilderSlidingSync.CustomProxy(AuthenticationConfig.SLIDING_SYNC_PROXY_URL!!)
-                appPreferencesStore.isSimplifiedSlidingSyncEnabledFlow().first() -> ClientBuilderSlidingSync.Simplified
-                else -> ClientBuilderSlidingSync.Restored
-            }
+            restore = true,
         )
             .homeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
@@ -95,11 +90,19 @@ class RustMatrixClientFactory @Inject constructor(
         }
     }
 
-    internal fun getBaseClientBuilder(
+    internal suspend fun getBaseClientBuilder(
         sessionPaths: SessionPaths,
         passphrase: String?,
-        slidingSync: ClientBuilderSlidingSync,
+        restore: Boolean,
     ): ClientBuilder {
+        val slidingSync = when {
+            // Always check restore first, since otherwise other values could accidentally override the already persisted config
+            restore -> ClientBuilderSlidingSync.Restored
+            AuthenticationConfig.SLIDING_SYNC_PROXY_URL != null -> ClientBuilderSlidingSync.CustomProxy(AuthenticationConfig.SLIDING_SYNC_PROXY_URL!!)
+            appPreferencesStore.isSimplifiedSlidingSyncEnabledFlow().first() -> ClientBuilderSlidingSync.Simplified
+            else -> ClientBuilderSlidingSync.Discovered
+        }
+
         return ClientBuilder()
             .sessionPaths(
                 dataPath = sessionPaths.fileDirectory.absolutePath,
@@ -116,7 +119,8 @@ class RustMatrixClientFactory @Inject constructor(
                     ClientBuilderSlidingSync.Restored -> this
                     is ClientBuilderSlidingSync.CustomProxy -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.Proxy(slidingSync.url))
                     ClientBuilderSlidingSync.Discovered -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.DiscoverProxy)
-                    ClientBuilderSlidingSync.Simplified -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.Native)
+                    ClientBuilderSlidingSync.Simplified -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.DiscoverNative)
+                    ClientBuilderSlidingSync.ForcedSimplified -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.Native)
                 }
             }
             .run {
@@ -136,8 +140,12 @@ sealed interface ClientBuilderSlidingSync {
     // A proxy must be discovered whilst building the session.
     data object Discovered : ClientBuilderSlidingSync
 
-    // Use Simplified Sliding Sync (discovery isn't a thing yet).
+    // Use Simplified Sliding Sync.
     data object Simplified : ClientBuilderSlidingSync
+
+    // Force using Simplified Sliding Sync.
+    // TODO allow the user to select between proxy, simplified or force simplified in developer options.
+    data object ForcedSimplified : ClientBuilderSlidingSync
 }
 
 private fun SessionData.toSession() = Session(
