@@ -61,6 +61,7 @@ dependencies {
     implementation(projects.features.userprofile.shared)
     implementation(projects.services.analytics.api)
     implementation(projects.features.poll.api)
+    implementation(projects.features.messages.api)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

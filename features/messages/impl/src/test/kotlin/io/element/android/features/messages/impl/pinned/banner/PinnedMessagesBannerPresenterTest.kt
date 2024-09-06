@@ -17,9 +17,12 @@
 package io.element.android.features.messages.impl.pinned.banner
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.messages.impl.pinned.PinnedEventsTimelineProvider
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.eventformatter.test.FakePinnedMessagesBannerFormatter
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -67,7 +70,7 @@ class PinnedMessagesBannerPresenterTest {
         }
         val presenter = createPinnedMessagesBannerPresenter(room = room)
         presenter.test {
-            skipItems(1)
+            skipItems(2)
             val loadingState = awaitItem()
             assertThat(loadingState).isEqualTo(PinnedMessagesBannerState.Loading(1))
             assertThat(loadingState.pinnedMessagesCount()).isEqualTo(1)
@@ -98,7 +101,7 @@ class PinnedMessagesBannerPresenterTest {
         }
         val presenter = createPinnedMessagesBannerPresenter(room = room)
         presenter.test {
-            skipItems(2)
+            skipItems(3)
             val loadedState = awaitItem() as PinnedMessagesBannerState.Loaded
             assertThat(loadedState.currentPinnedMessageIndex).isEqualTo(0)
             assertThat(loadedState.loadedPinnedMessagesCount).isEqualTo(1)
@@ -137,7 +140,7 @@ class PinnedMessagesBannerPresenterTest {
         }
         val presenter = createPinnedMessagesBannerPresenter(room = room)
         presenter.test {
-            skipItems(2)
+            skipItems(3)
             awaitItem().also { loadedState ->
                 loadedState as PinnedMessagesBannerState.Loaded
                 assertThat(loadedState.currentPinnedMessageIndex).isEqualTo(1)
@@ -172,7 +175,7 @@ class PinnedMessagesBannerPresenterTest {
         }
         val presenter = createPinnedMessagesBannerPresenter(room = room)
         presenter.test {
-            skipItems(1)
+            skipItems(2)
             awaitItem().also { loadingState ->
                 assertThat(loadingState).isEqualTo(PinnedMessagesBannerState.Loading(1))
                 assertThat(loadingState.pinnedMessagesCount()).isEqualTo(1)
@@ -195,11 +198,19 @@ class PinnedMessagesBannerPresenterTest {
         networkMonitor: NetworkMonitor = FakeNetworkMonitor(),
         isFeatureEnabled: Boolean = true,
     ): PinnedMessagesBannerPresenter {
+        val timelineProvider = PinnedEventsTimelineProvider(
+            room = room,
+            networkMonitor = networkMonitor,
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.PinnedEvents.key to isFeatureEnabled)
+            )
+        )
+        timelineProvider.launchIn(backgroundScope)
+
         return PinnedMessagesBannerPresenter(
             room = room,
             itemFactory = itemFactory,
-            isFeatureEnabled = { isFeatureEnabled },
-            networkMonitor = networkMonitor,
+            pinnedEventsTimelineProvider = timelineProvider,
         )
     }
 }

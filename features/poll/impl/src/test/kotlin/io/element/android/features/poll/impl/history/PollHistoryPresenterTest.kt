@@ -38,7 +38,6 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
-import io.element.android.libraries.matrix.test.timeline.LiveTimelineProvider
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -180,7 +179,7 @@ class PollHistoryPresenterTest {
             sendPollResponseAction = sendPollResponseAction,
             endPollAction = endPollAction,
             pollHistoryItemFactory = pollHistoryItemFactory,
-            timelineProvider = LiveTimelineProvider(room),
+            room = room,
         )
     }
 }

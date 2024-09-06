@@ -51,6 +51,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemE
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
@@ -88,7 +89,7 @@ class TimelinePresenter @AssistedInject constructor(
 
         val lastReadReceiptId = rememberSaveable { mutableStateOf<EventId?>(null) }
 
-        val timelineItems by timelineItemsFactory.collectItemsAsState()
+        val timelineItems by timelineItemsFactory.timelineItems.collectAsState(initial = persistentListOf())
         val roomInfo by room.roomInfoFlow.collectAsState(initial = null)
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()

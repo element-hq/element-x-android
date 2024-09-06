@@ -22,6 +22,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.aUserEventPermissions
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
@@ -32,8 +33,6 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
 import io.element.android.features.poll.api.pollcontent.aPollAnswerItemList
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
@@ -974,14 +973,10 @@ private fun createActionListPresenter(
     room: MatrixRoom = FakeMatrixRoom(),
 ): ActionListPresenter {
     val preferencesStore = InMemoryAppPreferencesStore(isDeveloperModeEnabled = isDeveloperModeEnabled)
-    val featureFlagsService = FakeFeatureFlagService(
-        initialState = mapOf(
-            FeatureFlags.PinnedEvents.key to isPinFeatureEnabled,
-        )
-    )
-    return ActionListPresenter(
+    return DefaultActionListPresenter(
+        postProcessor = TimelineItemActionPostProcessor.Default,
         appPreferencesStore = preferencesStore,
-        featureFlagsService = featureFlagsService,
+        isPinnedMessagesFeatureEnabled = { isPinFeatureEnabled },
         room = room
     )
 }

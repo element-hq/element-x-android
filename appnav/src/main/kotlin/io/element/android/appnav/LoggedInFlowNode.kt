@@ -85,6 +85,7 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.util.Optional
+import java.util.UUID
 
 @ContributesNode(SessionScope::class)
 class LoggedInFlowNode @AssistedInject constructor(
@@ -203,7 +204,8 @@ class LoggedInFlowNode @AssistedInject constructor(
             val serverNames: List<String> = emptyList(),
             val trigger: JoinedRoom.Trigger? = null,
             val roomDescription: RoomDescription? = null,
-            val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages()
+            val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages(),
+            val targetId: UUID = UUID.randomUUID(),
         ) : NavTarget
 
         @Parcelize
@@ -294,21 +296,24 @@ class LoggedInFlowNode @AssistedInject constructor(
                         coroutineScope.launch { attachRoom(roomId.toRoomIdOrAlias()) }
                     }
 
-                    override fun onPermalinkClick(data: PermalinkData) {
+                    override fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean) {
                         when (data) {
                             is PermalinkData.UserLink -> {
                                 // Should not happen (handled by MessagesNode)
                                 Timber.e("User link clicked: ${data.userId}.")
                             }
                             is PermalinkData.RoomLink -> {
-                                backstack.push(
-                                    NavTarget.Room(
-                                        roomIdOrAlias = data.roomIdOrAlias,
-                                        serverNames = data.viaParameters,
-                                        trigger = JoinedRoom.Trigger.Timeline,
-                                        initialElement = RoomNavigationTarget.Messages(data.eventId),
-                                    )
+                                val target = NavTarget.Room(
+                                    roomIdOrAlias = data.roomIdOrAlias,
+                                    serverNames = data.viaParameters,
+                                    trigger = JoinedRoom.Trigger.Timeline,
+                                    initialElement = RoomNavigationTarget.Messages(data.eventId),
                                 )
+                                if (pushToBackstack) {
+                                    backstack.push(target)
+                                } else {
+                                    backstack.replace(target)
+                                }
                             }
                             is PermalinkData.FallbackLink,
                             is PermalinkData.RoomEmailInviteLink -> {

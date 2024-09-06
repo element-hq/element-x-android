@@ -36,14 +36,14 @@ import kotlinx.coroutines.launch
 
 class ForwardMessagesPresenter @AssistedInject constructor(
     @Assisted eventId: String,
+    @Assisted private val timelineProvider: TimelineProvider,
     private val appCoroutineScope: CoroutineScope,
-    private val timelineProvider: TimelineProvider,
 ) : Presenter<ForwardMessagesState> {
     private val eventId: EventId = EventId(eventId)
 
     @AssistedFactory
     interface Factory {
-        fun create(eventId: String): ForwardMessagesPresenter
+        fun create(eventId: String, timelineProvider: TimelineProvider): ForwardMessagesPresenter
     }
 
     private val forwardingActionState: MutableState<AsyncAction<List<RoomId>>> = mutableStateOf(AsyncAction.Uninitialized)

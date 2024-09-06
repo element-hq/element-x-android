@@ -19,10 +19,8 @@ package io.element.android.features.poll.api.pollcontent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
@@ -36,12 +34,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollAnswer
@@ -117,7 +113,7 @@ fun PollContentView(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        PollTitle(title = question, isPollEnded = isPollEnded)
+        PollTitleView(title = question, isPollEnded = isPollEnded)
 
         PollAnswers(answerItems = answerItems, onSelectAnswer = ::onSelectAnswer)
 
@@ -136,34 +132,6 @@ fun PollContentView(
                 modifier = Modifier.fillMaxWidth(),
             )
         }
-    }
-}
-
-@Composable
-private fun PollTitle(
-    title: String,
-    isPollEnded: Boolean,
-) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        if (isPollEnded) {
-            Icon(
-                imageVector = CompoundIcons.PollsEnd(),
-                contentDescription = stringResource(id = CommonStrings.a11y_poll_end),
-                modifier = Modifier.size(22.dp)
-            )
-        } else {
-            Icon(
-                imageVector = CompoundIcons.Polls(),
-                contentDescription = stringResource(id = CommonStrings.a11y_poll),
-                modifier = Modifier.size(22.dp)
-            )
-        }
-        Text(
-            text = title,
-            style = ElementTheme.typography.fontBodyLgMedium
-        )
     }
 }
 
