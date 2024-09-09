@@ -94,6 +94,7 @@ import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
 import org.matrix.rustcomponents.sdk.SendQueueRoomErrorListener
+import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
@@ -529,6 +530,14 @@ class RustMatrixClient(
             }
         })
     }.buffer(Channel.UNLIMITED)
+
+    override suspend fun isNativeSlidingSyncSupported(): Boolean {
+        return client.availableSlidingSyncVersions().contains(SlidingSyncVersion.Native)
+    }
+
+    override fun isUsingNativeSlidingSync(): Boolean {
+        return client.session().slidingSyncVersion == SlidingSyncVersion.Native
+    }
 
     internal fun setDelegate(delegate: RustClientSessionDelegate) {
         client.setDelegate(delegate)

@@ -13,7 +13,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 sealed interface RoomListEvents {
     data class UpdateVisibleRange(val range: IntRange) : RoomListEvents
     data object DismissRequestVerificationPrompt : RoomListEvents
-    data object DismissRecoveryKeyPrompt : RoomListEvents
+    data object DismissBanner : RoomListEvents
     data object ToggleSearchResults : RoomListEvents
     data class AcceptInvite(val roomListRoomSummary: RoomListRoomSummary) : RoomListEvents
     data class DeclineInvite(val roomListRoomSummary: RoomListRoomSummary) : RoomListEvents

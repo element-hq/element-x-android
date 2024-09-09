@@ -49,6 +49,7 @@ dependencies {
     implementation(projects.libraries.push.api)
     implementation(projects.features.invite.api)
     implementation(projects.features.networkmonitor.api)
+    implementation(projects.features.logout.api)
     implementation(projects.features.leaveroom.api)
     implementation(projects.services.analytics.api)
     implementation(libs.androidx.datastore.preferences)
@@ -75,6 +76,7 @@ dependencies {
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.services.toolbox.test)
     testImplementation(projects.features.networkmonitor.test)
+    testImplementation(projects.features.logout.test)
     testImplementation(projects.tests.testutils)
     testImplementation(projects.features.leaveroom.test)
 }

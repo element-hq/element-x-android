@@ -56,6 +56,7 @@ dependencies {
     implementation(projects.features.roomlist.impl)
     implementation(projects.features.leaveroom.impl)
     implementation(projects.features.login.impl)
+    implementation(projects.features.logout.impl)
     implementation(projects.features.networkmonitor.impl)
     implementation(projects.services.toolbox.impl)
     implementation(projects.libraries.featureflag.impl)
