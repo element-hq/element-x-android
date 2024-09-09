@@ -97,7 +97,7 @@ class RustSessionVerificationService(
                 updateVerificationStatus()
             }
         }
-        .launchIn(sessionCoroutineScope)
+            .launchIn(sessionCoroutineScope)
     }
 
     override suspend fun requestVerification() = tryOrFail {
@@ -105,7 +105,11 @@ class RustSessionVerificationService(
         verificationController.requestVerification()
     }
 
-    override suspend fun cancelVerification() = tryOrFail { verificationController.cancelVerification() }
+    override suspend fun cancelVerification() = tryOrFail {
+        verificationController.cancelVerification()
+        // We need to manually set the state to canceled, as the Rust SDK doesn't always call `didCancel` when it should
+        didCancel()
+    }
 
     override suspend fun approveVerification() = tryOrFail { verificationController.approveVerification() }
 
