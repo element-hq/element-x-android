@@ -16,8 +16,6 @@ sealed interface VirtualTimelineItem {
 
     data object ReadMarker : VirtualTimelineItem
 
-    data object EncryptedHistoryBanner : VirtualTimelineItem
-
     data object RoomBeginning : VirtualTimelineItem
 
     data object LastForwardIndicator : VirtualTimelineItem

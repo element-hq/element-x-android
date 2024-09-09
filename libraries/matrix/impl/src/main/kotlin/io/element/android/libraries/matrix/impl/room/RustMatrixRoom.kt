@@ -89,7 +89,6 @@ import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 @OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixRoom(
     override val sessionId: SessionId,
-    private val isKeyBackupEnabled: Boolean,
     private val roomListItem: RoomListItem,
     private val innerRoom: InnerRoom,
     innerTimeline: InnerTimeline,
@@ -652,16 +651,14 @@ class RustMatrixRoom(
     ): Timeline {
         val timelineCoroutineScope = roomCoroutineScope.childScope(coroutineDispatchers.main, "TimelineScope-$roomId-$timeline")
         return RustTimeline(
-            isKeyBackupEnabled = isKeyBackupEnabled,
             mode = mode,
             matrixRoom = this,
+            inner = timeline,
             systemClock = systemClock,
             coroutineScope = timelineCoroutineScope,
             dispatcher = roomDispatcher,
-            lastLoginTimestamp = sessionData.loginTimestamp,
-            onNewSyncedEvent = onNewSyncedEvent,
             roomContentForwarder = roomContentForwarder,
-            inner = timeline,
+            onNewSyncedEvent = onNewSyncedEvent,
         )
     }
 }
