@@ -182,7 +182,6 @@ class RoomListPresenter @Inject constructor(
             derivedStateOf {
                 when {
                     currentSecurityBannerDismissed -> SecurityBannerState.None
-                    needsSlidingSyncMigration -> SecurityBannerState.NeedsNativeSlidingSyncMigration
                     syncState == SyncState.Running -> {
                         when (recoveryState) {
                             RecoveryState.UNKNOWN,
@@ -192,6 +191,7 @@ class RoomListPresenter @Inject constructor(
                             RecoveryState.ENABLED -> SecurityBannerState.None
                         }
                     }
+                    needsSlidingSyncMigration -> SecurityBannerState.NeedsNativeSlidingSyncMigration
                     else -> SecurityBannerState.None
                 }
             }
