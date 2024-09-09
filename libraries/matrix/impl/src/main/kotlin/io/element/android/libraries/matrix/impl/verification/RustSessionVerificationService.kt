@@ -26,6 +26,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.Encryption
@@ -95,18 +97,19 @@ class RustSessionVerificationService(
                 updateVerificationStatus()
             }
         }
-        .launchIn(sessionCoroutineScope)
+            .launchIn(sessionCoroutineScope)
     }
 
     override suspend fun requestVerification() = tryOrFail {
-        if (!this::verificationController.isInitialized) {
-            verificationController = client.getSessionVerificationController()
-            verificationController.setDelegate(this)
-        }
+        initVerificationControllerIfNeeded()
         verificationController.requestVerification()
     }
 
-    override suspend fun cancelVerification() = tryOrFail { verificationController.cancelVerification() }
+    override suspend fun cancelVerification() = tryOrFail {
+        verificationController.cancelVerification()
+        // We need to manually set the state to canceled, as the Rust SDK doesn't always call `didCancel` when it should
+        didCancel()
+    }
 
     override suspend fun approveVerification() = tryOrFail { verificationController.approveVerification() }
 
@@ -193,6 +196,16 @@ class RustSessionVerificationService(
         }
     }
 
+    private var initControllerMutex = Mutex()
+
+    private suspend fun initVerificationControllerIfNeeded() = initControllerMutex.withLock {
+        if (!this::verificationController.isInitialized) {
+            tryOrFail {
+                verificationController = client.getSessionVerificationController()
+                verificationController.setDelegate(this)
+            }
+        }
+    }
     private suspend fun updateVerificationStatus() {
         if (verificationFlowState.value == VerificationFlowState.Finished) {
             // Calling `encryptionService.verificationState()` performs a network call and it will deadlock if there is no network
@@ -212,10 +225,7 @@ class RustSessionVerificationService(
             // Otherwise, just check the current verification status from the session verification controller instead
             Timber.d("Updating verification status: flow is pending or was finished some time ago")
             runCatching {
-                if (!this@RustSessionVerificationService::verificationController.isInitialized) {
-                    verificationController = client.getSessionVerificationController()
-                    verificationController.setDelegate(this@RustSessionVerificationService)
-                }
+                initVerificationControllerIfNeeded()
                 _sessionVerifiedStatus.value = if (verificationController.isVerified()) {
                     SessionVerifiedStatus.Verified
                 } else {

@@ -70,8 +70,17 @@ fun VerifySelfSessionView(
     onSuccessLogout: (String?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    fun resetFlow() {
-        state.eventSink(VerifySelfSessionViewEvents.Reset)
+    fun cancelOrResetFlow() {
+        when (state.verificationFlowStep) {
+            is FlowStep.Canceled -> state.eventSink(VerifySelfSessionViewEvents.Reset)
+            is FlowStep.AwaitingOtherDeviceResponse, FlowStep.Ready -> state.eventSink(VerifySelfSessionViewEvents.Cancel)
+            is FlowStep.Verifying -> {
+                if (!state.verificationFlowStep.state.isLoading()) {
+                    state.eventSink(VerifySelfSessionViewEvents.DeclineVerification)
+                }
+            }
+            else -> Unit
+        }
     }
 
     val latestOnFinish by rememberUpdatedState(newValue = onFinish)
@@ -81,16 +90,7 @@ fun VerifySelfSessionView(
         }
     }
     BackHandler {
-        when (state.verificationFlowStep) {
-            is FlowStep.Canceled -> resetFlow()
-            is FlowStep.AwaitingOtherDeviceResponse, FlowStep.Ready -> state.eventSink(VerifySelfSessionViewEvents.Cancel)
-            is FlowStep.Verifying -> {
-                if (!state.verificationFlowStep.state.isLoading()) {
-                    state.eventSink(VerifySelfSessionViewEvents.DeclineVerification)
-                }
-            }
-            else -> Unit
-        }
+        cancelOrResetFlow()
     }
     val verificationFlowStep = state.verificationFlowStep
 
@@ -133,9 +133,9 @@ fun VerifySelfSessionView(
             footer = {
                 BottomMenu(
                     screenState = state,
-                    goBack = ::resetFlow,
+                    onCancelClick = ::cancelOrResetFlow,
                     onEnterRecoveryKey = onEnterRecoveryKey,
-                    onFinish = onFinish,
+                    onContinueClick = onFinish,
                     onResetKey = onResetKey,
                 )
             }
@@ -268,8 +268,8 @@ private fun BottomMenu(
     screenState: VerifySelfSessionState,
     onEnterRecoveryKey: () -> Unit,
     onResetKey: () -> Unit,
-    goBack: () -> Unit,
-    onFinish: () -> Unit,
+    onCancelClick: () -> Unit,
+    onContinueClick: () -> Unit,
 ) {
     val verificationViewState = screenState.verificationFlowStep
     val eventSink = screenState.eventSink
@@ -316,7 +316,7 @@ private fun BottomMenu(
                 TextButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(CommonStrings.action_cancel),
-                    onClick = goBack,
+                    onClick = onCancelClick,
                 )
             }
         }
@@ -330,7 +330,7 @@ private fun BottomMenu(
                 TextButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(CommonStrings.action_cancel),
-                    onClick = goBack,
+                    onClick = onCancelClick,
                 )
             }
         }
@@ -375,7 +375,7 @@ private fun BottomMenu(
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(CommonStrings.action_continue),
-                    onClick = onFinish,
+                    onClick = onContinueClick,
                 )
                 // Placeholder so the 1st button keeps its vertical position
                 Spacer(modifier = Modifier.height(48.dp))
