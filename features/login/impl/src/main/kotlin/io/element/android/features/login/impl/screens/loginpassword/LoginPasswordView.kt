@@ -44,7 +44,6 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
-import io.element.android.features.login.impl.error.isWaitListError
 import io.element.android.features.login.impl.error.loginError
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
@@ -72,7 +71,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun LoginPasswordView(
     state: LoginPasswordState,
     onBackClick: () -> Unit,
-    onWaitListError: (LoginFormState) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val isLoading by remember(state.loginAction) {
@@ -149,16 +147,9 @@ fun LoginPasswordView(
             }
 
             if (state.loginAction is AsyncData.Failure) {
-                when {
-                    state.loginAction.error.isWaitListError() -> {
-                        onWaitListError(state.formState)
-                    }
-                    else -> {
-                        LoginErrorDialog(error = state.loginAction.error, onDismiss = {
-                            state.eventSink(LoginPasswordEvents.ClearError)
-                        })
-                    }
-                }
+                LoginErrorDialog(error = state.loginAction.error, onDismiss = {
+                    state.eventSink(LoginPasswordEvents.ClearError)
+                })
             }
         }
     }
@@ -302,6 +293,5 @@ internal fun LoginPasswordViewPreview(@PreviewParameter(LoginPasswordStateProvid
     LoginPasswordView(
         state = state,
         onBackClick = {},
-        onWaitListError = {},
     )
 }

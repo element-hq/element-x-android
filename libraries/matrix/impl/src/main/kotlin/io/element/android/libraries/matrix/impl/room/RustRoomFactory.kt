@@ -46,7 +46,6 @@ class RustRoomFactory(
     private val roomListService: RoomListService,
     private val innerRoomListService: InnerRoomListService,
     private val roomSyncSubscriber: RoomSyncSubscriber,
-    private val isKeyBackupEnabled: suspend () -> Boolean,
     private val getSessionData: suspend () -> SessionData,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -109,7 +108,6 @@ class RustRoomFactory(
             val liveTimeline = roomReferences.fullRoom.timeline()
             RustMatrixRoom(
                 sessionId = sessionId,
-                isKeyBackupEnabled = isKeyBackupEnabled(),
                 roomListItem = roomReferences.roomListItem,
                 innerRoom = roomReferences.fullRoom,
                 innerTimeline = liveTimeline,

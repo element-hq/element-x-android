@@ -15,7 +15,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MembershipCha
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
-import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
@@ -68,16 +67,6 @@ class RoomBeginningPostProcessorTest {
         assertThat(processedItems).isEqualTo(
             listOf(processor.createRoomBeginningItem()) + timelineItems
         )
-    }
-
-    @Test
-    fun `processor will not add beginning of room item if it's not a DM and EncryptedHistoryBanner item is found`() {
-        val timelineItems = listOf(
-            MatrixTimelineItem.Virtual(UniqueId("EncryptedHistoryBanner"), VirtualTimelineItem.EncryptedHistoryBanner),
-        )
-        val processor = RoomBeginningPostProcessor(Timeline.Mode.LIVE)
-        val processedItems = processor.process(timelineItems, isDm = false, hasMoreToLoadBackwards = false)
-        assertThat(processedItems).isEqualTo(timelineItems)
     }
 
     @Test

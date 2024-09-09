@@ -39,6 +39,7 @@ fun DialogLikeBannerMolecule(
     onSubmitClick: () -> Unit,
     onDismissClick: (() -> Unit)?,
     modifier: Modifier = Modifier,
+    actionText: String = stringResource(CommonStrings.action_continue),
 ) {
     Box(modifier = modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
         Surface(
@@ -74,7 +75,7 @@ fun DialogLikeBannerMolecule(
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(
-                    text = stringResource(CommonStrings.action_continue),
+                    text = actionText,
                     size = ButtonSize.Medium,
                     modifier = Modifier.fillMaxWidth(),
                     onClick = onSubmitClick,

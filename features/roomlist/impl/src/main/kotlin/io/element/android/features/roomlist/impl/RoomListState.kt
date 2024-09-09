@@ -10,6 +10,7 @@ package io.element.android.features.roomlist.impl
 import androidx.compose.runtime.Immutable
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.leaveroom.api.LeaveRoomState
+import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
@@ -31,6 +32,7 @@ data class RoomListState(
     val searchState: RoomListSearchState,
     val contentState: RoomListContentState,
     val acceptDeclineInviteState: AcceptDeclineInviteState,
+    val directLogoutState: DirectLogoutState,
     val eventSink: (RoomListEvents) -> Unit,
 ) {
     val displayFilters = contentState is RoomListContentState.Rooms
@@ -59,6 +61,7 @@ enum class SecurityBannerState {
     None,
     SetUpRecovery,
     RecoveryKeyConfirmation,
+    NeedsNativeSlidingSyncMigration,
 }
 
 @Immutable

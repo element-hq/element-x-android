@@ -12,6 +12,8 @@ import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.aLeaveRoomState
+import io.element.android.features.logout.api.direct.DirectLogoutState
+import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.features.roomlist.impl.filters.RoomListFiltersState
 import io.element.android.features.roomlist.impl.filters.aRoomListFiltersState
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
@@ -57,6 +59,7 @@ internal fun aRoomListState(
     filtersState: RoomListFiltersState = aRoomListFiltersState(),
     contentState: RoomListContentState = aRoomsContentState(),
     acceptDeclineInviteState: AcceptDeclineInviteState = anAcceptDeclineInviteState(),
+    directLogoutState: DirectLogoutState = aDirectLogoutState(),
     eventSink: (RoomListEvents) -> Unit = {}
 ) = RoomListState(
     matrixUser = matrixUser,
@@ -69,6 +72,7 @@ internal fun aRoomListState(
     searchState = searchState,
     contentState = contentState,
     acceptDeclineInviteState = acceptDeclineInviteState,
+    directLogoutState = directLogoutState,
     eventSink = eventSink,
 )
 

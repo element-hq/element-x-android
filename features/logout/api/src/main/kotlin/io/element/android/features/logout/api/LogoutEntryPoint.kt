@@ -16,6 +16,7 @@ interface LogoutEntryPoint : FeatureEntryPoint {
     fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
 
     interface NodeBuilder {
+        fun onSuccessfulLogoutPendingAction(action: () -> Unit): NodeBuilder
         fun callback(callback: Callback): NodeBuilder
         fun build(): Node
     }

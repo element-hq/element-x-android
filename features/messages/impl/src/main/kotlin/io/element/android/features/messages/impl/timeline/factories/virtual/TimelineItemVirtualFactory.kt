@@ -8,7 +8,6 @@
 package io.element.android.features.messages.impl.timeline.factories.virtual
 
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemEncryptedHistoryBannerVirtualModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLastForwardIndicatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingIndicatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
@@ -34,7 +33,6 @@ class TimelineItemVirtualFactory @Inject constructor(
         return when (val inner = virtual) {
             is VirtualTimelineItem.DayDivider -> daySeparatorFactory.create(inner)
             is VirtualTimelineItem.ReadMarker -> TimelineItemReadMarkerModel
-            is VirtualTimelineItem.EncryptedHistoryBanner -> TimelineItemEncryptedHistoryBannerVirtualModel
             is VirtualTimelineItem.RoomBeginning -> TimelineItemRoomBeginningModel
             is VirtualTimelineItem.LoadingIndicator -> TimelineItemLoadingIndicatorModel(
                 direction = inner.direction,

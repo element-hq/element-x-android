@@ -16,14 +16,12 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
-import io.element.android.features.messages.impl.timeline.components.virtual.TimelineEncryptedHistoryBannerView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemDaySeparatorView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemReadMarkerView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemRoomBeginningView
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineLoadingMoreIndicator
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModel
-import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemEncryptedHistoryBannerVirtualModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLastForwardIndicatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingIndicatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
@@ -40,7 +38,6 @@ fun TimelineItemVirtualRow(
         when (virtual.model) {
             is TimelineItemDaySeparatorModel -> TimelineItemDaySeparatorView(virtual.model)
             TimelineItemReadMarkerModel -> TimelineItemReadMarkerView()
-            is TimelineItemEncryptedHistoryBannerVirtualModel -> TimelineEncryptedHistoryBannerView()
             TimelineItemRoomBeginningModel -> TimelineItemRoomBeginningView(roomName = timelineRoomInfo.name)
             is TimelineItemLoadingIndicatorModel -> {
                 TimelineLoadingMoreIndicator(virtual.model.direction)
