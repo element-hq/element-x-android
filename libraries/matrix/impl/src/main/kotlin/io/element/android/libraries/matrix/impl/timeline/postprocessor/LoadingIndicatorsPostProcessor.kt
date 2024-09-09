@@ -19,11 +19,10 @@ class LoadingIndicatorsPostProcessor(private val systemClock: SystemClock) {
         hasMoreToLoadBackward: Boolean,
         hasMoreToLoadForward: Boolean,
     ): List<MatrixTimelineItem> {
-        val shouldAddBackwardLoadingIndicator = hasMoreToLoadBackward && !items.hasEncryptionHistoryBanner()
         val shouldAddForwardLoadingIndicator = hasMoreToLoadForward && items.isNotEmpty()
         val currentTimestamp = systemClock.epochMillis()
         return buildList {
-            if (shouldAddBackwardLoadingIndicator) {
+            if (hasMoreToLoadBackward) {
                 val backwardLoadingIndicator = MatrixTimelineItem.Virtual(
                     uniqueId = UniqueId("BackwardLoadingIndicator"),
                     virtual = VirtualTimelineItem.LoadingIndicator(

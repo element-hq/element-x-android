@@ -87,7 +87,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
-import org.matrix.rustcomponents.sdk.BackupState
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientException
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
@@ -179,7 +178,6 @@ class RustMatrixClient(
         systemClock = clock,
         roomContentForwarder = RoomContentForwarder(innerRoomListService),
         roomSyncSubscriber = roomSyncSubscriber,
-        isKeyBackupEnabled = { client.encryption().use { it.backupState() == BackupState.ENABLED } },
         getSessionData = { sessionStore.getSession(sessionId.value)!! },
     )
 

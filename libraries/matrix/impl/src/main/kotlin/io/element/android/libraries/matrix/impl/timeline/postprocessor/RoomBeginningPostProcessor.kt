@@ -36,7 +36,6 @@ class RoomBeginningPostProcessor(private val mode: Timeline.Mode) {
     }
 
     private fun processForRoom(items: List<MatrixTimelineItem>): List<MatrixTimelineItem> {
-        if (items.hasEncryptionHistoryBanner()) return items
         val roomBeginningItem = createRoomBeginningItem()
         return listOf(roomBeginningItem) + items
     }
