@@ -27,6 +27,15 @@ class DefaultLogoutEntryPoint @Inject constructor() : LogoutEntryPoint {
                 return this
             }
 
+            override fun onSuccessfulLogoutPendingAction(action: () -> Unit): LogoutEntryPoint.NodeBuilder {
+                plugins += object : LogoutNode.SuccessfulLogoutPendingAction, Plugin {
+                    override fun onSuccessfulLogoutPendingAction() {
+                        action()
+                    }
+                }
+                return this
+            }
+
             override fun build(): Node {
                 return parentNode.createNode<LogoutNode>(buildContext, plugins)
             }

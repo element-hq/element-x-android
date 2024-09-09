@@ -77,6 +77,8 @@ class FakeMatrixClient(
     private val clearCacheLambda: () -> Unit = { lambdaError() },
     private val userIdServerNameLambda: () -> String = { lambdaError() },
     private val getUrlLambda: (String) -> Result<String> = { lambdaError() },
+    var isNativeSlidingSyncSupportedLambda: suspend () -> Boolean = { true },
+    var isUsingNativeSlidingSyncLambda: () -> Boolean = { true },
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -315,5 +317,13 @@ class FakeMatrixClient(
 
     override suspend fun getUrl(url: String): Result<String> {
         return getUrlLambda(url)
+    }
+
+    override suspend fun isNativeSlidingSyncSupported(): Boolean {
+        return isNativeSlidingSyncSupportedLambda()
+    }
+
+    override fun isUsingNativeSlidingSync(): Boolean {
+        return isUsingNativeSlidingSyncLambda()
     }
 }

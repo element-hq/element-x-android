@@ -40,6 +40,7 @@ import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
+import io.element.android.features.logout.api.LogoutEntryPoint
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.PreferencesEntryPoint
@@ -65,6 +66,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.sync.SyncState
+import io.element.android.libraries.preferences.api.store.EnableNativeSlidingSyncUseCase
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
@@ -96,6 +98,8 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val shareEntryPoint: ShareEntryPoint,
     private val matrixClient: MatrixClient,
     private val sendingQueue: SendQueues,
+    private val logoutEntryPoint: LogoutEntryPoint,
+    private val enableNativeSlidingSyncUseCase: EnableNativeSlidingSyncUseCase,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
@@ -225,6 +229,9 @@ class LoggedInFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class IncomingShare(val intent: Intent) : NavTarget
+
+        @Parcelize
+        data object LogoutForNativeSlidingSyncMigrationNeeded : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -270,6 +277,10 @@ class LoggedInFlowNode @AssistedInject constructor(
 
                     override fun onRoomDirectorySearchClick() {
                         backstack.push(NavTarget.RoomDirectorySearch)
+                    }
+
+                    override fun onLogoutForNativeSlidingSyncMigrationNeeded() {
+                        backstack.push(NavTarget.LogoutForNativeSlidingSyncMigrationNeeded)
                     }
                 }
                 roomListEntryPoint
@@ -405,6 +416,20 @@ class LoggedInFlowNode @AssistedInject constructor(
                         }
                     })
                     .params(ShareEntryPoint.Params(intent = navTarget.intent))
+                    .build()
+            }
+            is NavTarget.LogoutForNativeSlidingSyncMigrationNeeded -> {
+                val callback = object : LogoutEntryPoint.Callback {
+                    override fun onChangeRecoveryKeyClick() {
+                        backstack.push(NavTarget.SecureBackup())
+                    }
+                }
+
+                logoutEntryPoint.nodeBuilder(this, buildContext)
+                    .onSuccessfulLogoutPendingAction {
+                        enableNativeSlidingSyncUseCase()
+                    }
+                    .callback(callback)
                     .build()
             }
         }

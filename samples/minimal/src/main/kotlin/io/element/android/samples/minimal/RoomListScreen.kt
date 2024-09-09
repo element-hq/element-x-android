@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import io.element.android.features.invite.impl.response.AcceptDeclineInvitePresenter
 import io.element.android.features.invite.impl.response.AcceptDeclineInviteView
 import io.element.android.features.leaveroom.impl.DefaultLeaveRoomPresenter
+import io.element.android.features.logout.impl.direct.DefaultDirectLogoutPresenter
 import io.element.android.features.networkmonitor.impl.DefaultNetworkMonitor
 import io.element.android.features.roomlist.impl.RoomListPresenter
 import io.element.android.features.roomlist.impl.RoomListView
@@ -144,6 +145,7 @@ class RoomListScreen(
             }
         },
         notificationCleaner = FakeNotificationCleaner(),
+        logoutPresenter = DefaultDirectLogoutPresenter(matrixClient, encryptionService),
     )
 
     @Composable
@@ -172,7 +174,8 @@ class RoomListScreen(
             modifier = modifier,
             acceptDeclineInviteView = {
                 AcceptDeclineInviteView(state = state.acceptDeclineInviteState, onAcceptInvite = {}, onDeclineInvite = {})
-            }
+            },
+            onMigrateToNativeSlidingSyncClick = {},
         )
 
         DisposableEffect(Unit) {

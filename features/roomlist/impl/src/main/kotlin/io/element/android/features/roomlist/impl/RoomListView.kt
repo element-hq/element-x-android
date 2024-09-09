@@ -50,6 +50,7 @@ fun RoomListView(
     onRoomSettingsClick: (roomId: RoomId) -> Unit,
     onMenuActionClick: (RoomListMenuAction) -> Unit,
     onRoomDirectorySearchClick: () -> Unit,
+    onMigrateToNativeSlidingSyncClick: () -> Unit,
     modifier: Modifier = Modifier,
     acceptDeclineInviteView: @Composable () -> Unit,
 ) {
@@ -76,6 +77,7 @@ fun RoomListView(
                 onOpenSettings = onSettingsClick,
                 onCreateRoomClick = onCreateRoomClick,
                 onMenuActionClick = onMenuActionClick,
+                onMigrateToNativeSlidingSyncClick = onMigrateToNativeSlidingSyncClick,
                 modifier = Modifier.padding(top = topPadding),
             )
             // This overlaid view will only be visible when state.displaySearchResults is true
@@ -105,6 +107,7 @@ private fun RoomListScaffold(
     onOpenSettings: () -> Unit,
     onCreateRoomClick: () -> Unit,
     onMenuActionClick: (RoomListMenuAction) -> Unit,
+    onMigrateToNativeSlidingSyncClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun onRoomClick(room: RoomListRoomSummary) {
@@ -140,6 +143,7 @@ private fun RoomListScaffold(
                 onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
                 onRoomClick = ::onRoomClick,
                 onCreateRoomClick = onCreateRoomClick,
+                onMigrateToNativeSlidingSyncClick = onMigrateToNativeSlidingSyncClick,
                 modifier = Modifier
                     .padding(padding)
                     .consumeWindowInsets(padding)
@@ -180,5 +184,6 @@ internal fun RoomListViewPreview(@PreviewParameter(RoomListStateProvider::class)
         onMenuActionClick = {},
         onRoomDirectorySearchClick = {},
         acceptDeclineInviteView = {},
+        onMigrateToNativeSlidingSyncClick = {},
     )
 }
