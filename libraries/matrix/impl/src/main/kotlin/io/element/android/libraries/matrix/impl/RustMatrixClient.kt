@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
+import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -245,18 +246,20 @@ class RustMatrixClient(
     }
 
     /**
-     * Wait for the room to be available in the room list.
+     * Wait for the room to be available in the room list, with a membership for the current user of [CurrentUserMembership.JOINED].
      * @param roomIdOrAlias the room id or alias to wait for
      * @param timeout the timeout to wait for the room to be available
      * @throws TimeoutCancellationException if the room is not available after the timeout
      */
-    private suspend fun awaitRoom(roomIdOrAlias: RoomIdOrAlias, timeout: Duration): RoomSummary {
+    private suspend fun awaitJoinedRoom(roomIdOrAlias: RoomIdOrAlias, timeout: Duration): RoomSummary {
         val predicate: (List<RoomSummary>) -> Boolean = when (roomIdOrAlias) {
             is RoomIdOrAlias.Alias -> { roomSummaries: List<RoomSummary> ->
-                roomSummaries.flatMap { it.aliases }.contains(roomIdOrAlias.roomAlias)
+                val found = roomSummaries.find { it.aliases.contains(roomIdOrAlias.roomAlias) }
+                found != null && found.currentUserMembership == CurrentUserMembership.JOINED
             }
             is RoomIdOrAlias.Id -> { roomSummaries: List<RoomSummary> ->
-                roomSummaries.map { it.roomId }.contains(roomIdOrAlias.roomId)
+                val found = roomSummaries.find { it.roomId == roomIdOrAlias.roomId }
+                found != null && found.currentUserMembership == CurrentUserMembership.JOINED
             }
         }
         return withTimeout(timeout) {
@@ -306,7 +309,7 @@ class RustMatrixClient(
             val roomId = RoomId(client.createRoom(rustParams))
             // Wait to receive the room back from the sync but do not returns failure if it fails.
             try {
-                awaitRoom(roomId.toRoomIdOrAlias(), 30.seconds)
+                awaitJoinedRoom(roomId.toRoomIdOrAlias(), 30.seconds)
             } catch (e: Exception) {
                 Timber.e(e, "Timeout waiting for the room to be available in the room list")
             }
@@ -361,7 +364,7 @@ class RustMatrixClient(
         runCatching {
             client.joinRoomById(roomId.value).destroy()
             try {
-                awaitRoom(roomId.toRoomIdOrAlias(), 10.seconds)
+                awaitJoinedRoom(roomId.toRoomIdOrAlias(), 10.seconds)
             } catch (e: Exception) {
                 Timber.e(e, "Timeout waiting for the room to be available in the room list")
                 null
@@ -376,7 +379,7 @@ class RustMatrixClient(
                 serverNames = serverNames,
             ).destroy()
             try {
-                awaitRoom(roomIdOrAlias, 10.seconds)
+                awaitJoinedRoom(roomIdOrAlias, 10.seconds)
             } catch (e: Exception) {
                 Timber.e(e, "Timeout waiting for the room to be available in the room list")
                 null
@@ -503,7 +506,7 @@ class RustMatrixClient(
             var room = getRoom(roomId)
             if (room == null) {
                 emit(Optional.empty())
-                awaitRoom(roomId.toRoomIdOrAlias(), INFINITE)
+                awaitJoinedRoom(roomId.toRoomIdOrAlias(), INFINITE)
                 room = getRoom(roomId)
             }
             room?.use {
