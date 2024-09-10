@@ -15,7 +15,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
@@ -60,6 +59,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
     private val timelineProvider: PinnedEventsTimelineProvider,
     private val snackbarDispatcher: SnackbarDispatcher,
     actionListPresenterFactory: ActionListPresenter.Factory,
+    private val appCoroutineScope: CoroutineScope,
 ) : Presenter<PinnedMessagesListState> {
     @AssistedFactory
     interface Factory {
@@ -100,10 +100,9 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
             }
         )
 
-        val coroutineScope = rememberCoroutineScope()
         fun handleEvents(event: PinnedMessagesListEvents) {
             when (event) {
-                is PinnedMessagesListEvents.HandleAction -> coroutineScope.handleTimelineAction(event.action, event.event)
+                is PinnedMessagesListEvents.HandleAction -> appCoroutineScope.handleTimelineAction(event.action, event.event)
             }
         }
 

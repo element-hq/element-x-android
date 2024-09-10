@@ -33,6 +33,12 @@ class LogoutNode @AssistedInject constructor(
         plugins<LogoutEntryPoint.Callback>().forEach { it.onChangeRecoveryKeyClick() }
     }
 
+    interface SuccessfulLogoutPendingAction : Plugin {
+        fun onSuccessfulLogoutPendingAction()
+    }
+
+    private val customOnSuccessfulLogoutPendingAction = plugins<SuccessfulLogoutPendingAction>().firstOrNull()
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -41,7 +47,10 @@ class LogoutNode @AssistedInject constructor(
         LogoutView(
             state = state,
             onChangeRecoveryKeyClick = ::onChangeRecoveryKeyClick,
-            onSuccessLogout = { onSuccessLogout(activity, isDark, it) },
+            onSuccessLogout = {
+                customOnSuccessfulLogoutPendingAction?.onSuccessfulLogoutPendingAction()
+                onSuccessLogout(activity, isDark, it)
+            },
             onBackClick = ::navigateUp,
             modifier = modifier,
         )

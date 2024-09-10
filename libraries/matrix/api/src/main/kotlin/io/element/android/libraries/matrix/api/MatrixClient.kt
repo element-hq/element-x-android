@@ -126,4 +126,10 @@ interface MatrixClient : Closeable {
      */
     suspend fun getUrl(url: String): Result<String>
     suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomPreview>
+
+    /** Returns `true` if the home server supports native sliding sync. */
+    suspend fun isNativeSlidingSyncSupported(): Boolean
+
+    /** Returns `true` if the current session is using native sliding sync. */
+    fun isUsingNativeSlidingSync(): Boolean
 }
