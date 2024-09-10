@@ -35,11 +35,14 @@ import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class PinnedMessagesListPresenterTest {
     @Test
     fun `present - initial state feature disabled`() = runTest {
@@ -155,6 +158,7 @@ class PinnedMessagesListPresenterTest {
             val filledState = awaitItem() as PinnedMessagesListState.Filled
             val eventItem = filledState.timelineItems.first() as TimelineItem.Event
             filledState.eventSink(PinnedMessagesListEvents.HandleAction(TimelineItemAction.Redact, eventItem))
+            advanceUntilIdle()
             cancelAndIgnoreRemainingEvents()
             assert(redactEventLambda)
                 .isCalledOnce()
@@ -184,9 +188,11 @@ class PinnedMessagesListPresenterTest {
 
             pinnedEventsTimeline.unpinEventLambda = successUnpinEventLambda
             filledState.eventSink(PinnedMessagesListEvents.HandleAction(TimelineItemAction.Unpin, eventItem))
+            advanceUntilIdle()
 
             pinnedEventsTimeline.unpinEventLambda = failureUnpinEventLambda
             filledState.eventSink(PinnedMessagesListEvents.HandleAction(TimelineItemAction.Unpin, eventItem))
+            advanceUntilIdle()
 
             cancelAndIgnoreRemainingEvents()
 
@@ -221,6 +227,7 @@ class PinnedMessagesListPresenterTest {
             val filledState = awaitItem() as PinnedMessagesListState.Filled
             val eventItem = filledState.timelineItems.first() as TimelineItem.Event
             filledState.eventSink(PinnedMessagesListEvents.HandleAction(TimelineItemAction.ViewInTimeline, eventItem))
+            advanceUntilIdle()
             cancelAndIgnoreRemainingEvents()
             assert(onViewInTimelineClickLambda)
                 .isCalledOnce()
@@ -249,6 +256,7 @@ class PinnedMessagesListPresenterTest {
             val filledState = awaitItem() as PinnedMessagesListState.Filled
             val eventItem = filledState.timelineItems.first() as TimelineItem.Event
             filledState.eventSink(PinnedMessagesListEvents.HandleAction(TimelineItemAction.ViewSource, eventItem))
+            advanceUntilIdle()
             cancelAndIgnoreRemainingEvents()
             assert(onShowEventDebugInfoClickLambda)
                 .isCalledOnce()
@@ -277,6 +285,7 @@ class PinnedMessagesListPresenterTest {
             val filledState = awaitItem() as PinnedMessagesListState.Filled
             val eventItem = filledState.timelineItems.first() as TimelineItem.Event
             filledState.eventSink(PinnedMessagesListEvents.HandleAction(TimelineItemAction.Forward, eventItem))
+            advanceUntilIdle()
             cancelAndIgnoreRemainingEvents()
             assert(onForwardEventClickLambda)
                 .isCalledOnce()
@@ -322,6 +331,7 @@ class PinnedMessagesListPresenterTest {
             timelineProvider = timelineProvider,
             snackbarDispatcher = SnackbarDispatcher(),
             actionListPresenterFactory = FakeActionListPresenter.Factory,
+            appCoroutineScope = this,
         )
     }
 }
