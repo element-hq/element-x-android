@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2024 New Vector Ltd
+ * Copyright 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.impl.timeline.postprocessor
@@ -19,11 +10,11 @@ package io.element.android.libraries.matrix.impl.timeline.postprocessor
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
-import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
@@ -37,7 +28,7 @@ class RoomBeginningPostProcessorTest {
             MatrixTimelineItem.Event(UniqueId("m.room.create"), anEventTimelineItem(sender = A_USER_ID, content = StateContent("", OtherState.RoomCreate))),
             MatrixTimelineItem.Event(UniqueId("m.room.member"), anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, null, MembershipChange.JOINED))),
         )
-        val processor = RoomBeginningPostProcessor()
+        val processor = RoomBeginningPostProcessor(Timeline.Mode.LIVE)
         val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = false)
         assertThat(processedItems).isEmpty()
     }
@@ -60,7 +51,7 @@ class RoomBeginningPostProcessorTest {
             ),
             MatrixTimelineItem.Event(UniqueId("m.room.message"), anEventTimelineItem(content = aMessageContent("hi"))),
         )
-        val processor = RoomBeginningPostProcessor()
+        val processor = RoomBeginningPostProcessor(Timeline.Mode.LIVE)
         val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = false)
         assertThat(processedItems).isEqualTo(expected)
     }
@@ -71,21 +62,11 @@ class RoomBeginningPostProcessorTest {
             MatrixTimelineItem.Event(UniqueId("m.room.create"), anEventTimelineItem(sender = A_USER_ID, content = StateContent("", OtherState.RoomCreate))),
             MatrixTimelineItem.Event(UniqueId("m.room.member"), anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, null, MembershipChange.JOINED))),
         )
-        val processor = RoomBeginningPostProcessor()
+        val processor = RoomBeginningPostProcessor(Timeline.Mode.LIVE)
         val processedItems = processor.process(timelineItems, isDm = false, hasMoreToLoadBackwards = false)
         assertThat(processedItems).isEqualTo(
             listOf(processor.createRoomBeginningItem()) + timelineItems
         )
-    }
-
-    @Test
-    fun `processor will not add beginning of room item if it's not a DM and EncryptedHistoryBanner item is found`() {
-        val timelineItems = listOf(
-            MatrixTimelineItem.Virtual(UniqueId("EncryptedHistoryBanner"), VirtualTimelineItem.EncryptedHistoryBanner),
-        )
-        val processor = RoomBeginningPostProcessor()
-        val processedItems = processor.process(timelineItems, isDm = false, hasMoreToLoadBackwards = false)
-        assertThat(processedItems).isEqualTo(timelineItems)
     }
 
     @Test
@@ -94,7 +75,7 @@ class RoomBeginningPostProcessorTest {
             MatrixTimelineItem.Event(UniqueId("m.room.create"), anEventTimelineItem(sender = A_USER_ID, content = StateContent("", OtherState.RoomCreate))),
             MatrixTimelineItem.Event(UniqueId("m.room.member"), anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, null, MembershipChange.JOINED))),
         )
-        val processor = RoomBeginningPostProcessor()
+        val processor = RoomBeginningPostProcessor(Timeline.Mode.LIVE)
         val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = true)
         assertThat(processedItems).isEqualTo(timelineItems)
     }
@@ -104,7 +85,7 @@ class RoomBeginningPostProcessorTest {
         val timelineItems = listOf(
             MatrixTimelineItem.Event(UniqueId("m.room.member"), anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, null, MembershipChange.JOINED))),
         )
-        val processor = RoomBeginningPostProcessor()
+        val processor = RoomBeginningPostProcessor(Timeline.Mode.LIVE)
         val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = true)
         assertThat(processedItems).isEqualTo(timelineItems)
     }
@@ -118,7 +99,7 @@ class RoomBeginningPostProcessorTest {
                 anEventTimelineItem(content = RoomMembershipContent(A_USER_ID_2, null, MembershipChange.JOINED))
             ),
         )
-        val processor = RoomBeginningPostProcessor()
+        val processor = RoomBeginningPostProcessor(Timeline.Mode.LIVE)
         val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = true)
         assertThat(processedItems).isEqualTo(timelineItems)
     }

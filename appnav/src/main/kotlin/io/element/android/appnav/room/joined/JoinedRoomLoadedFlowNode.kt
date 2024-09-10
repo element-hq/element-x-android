@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2024 New Vector Ltd
+ * Copyright 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.appnav.room.joined
@@ -77,7 +68,7 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
 ), DaggerComponentOwner {
     interface Callback : Plugin {
         fun onOpenRoom(roomId: RoomId)
-        fun onPermalinkClick(data: PermalinkData)
+        fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean)
         fun onForwardedToSingleRoom(roomId: RoomId)
         fun onOpenGlobalNotificationSettings()
     }
@@ -128,6 +119,14 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
             override fun onOpenRoom(roomId: RoomId) {
                 callbacks.forEach { it.onOpenRoom(roomId) }
             }
+
+            override fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean) {
+                callbacks.forEach { it.onPermalinkClick(data, pushToBackstack) }
+            }
+
+            override fun onForwardedToSingleRoom(roomId: RoomId) {
+                callbacks.forEach { it.onForwardedToSingleRoom(roomId) }
+            }
         }
         return roomDetailsEntryPoint.nodeBuilder(this, buildContext)
             .params(RoomDetailsEntryPoint.Params(initialTarget))
@@ -138,27 +137,7 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             is NavTarget.Messages -> {
-                val callback = object : MessagesEntryPoint.Callback {
-                    override fun onRoomDetailsClick() {
-                        backstack.push(NavTarget.RoomDetails)
-                    }
-
-                    override fun onUserDataClick(userId: UserId) {
-                        backstack.push(NavTarget.RoomMemberDetails(userId))
-                    }
-
-                    override fun onPermalinkClick(data: PermalinkData) {
-                        callbacks.forEach { it.onPermalinkClick(data) }
-                    }
-
-                    override fun onForwardedToSingleRoom(roomId: RoomId) {
-                        callbacks.forEach { it.onForwardedToSingleRoom(roomId) }
-                    }
-                }
-                messagesEntryPoint.nodeBuilder(this, buildContext)
-                    .params(MessagesEntryPoint.Params(navTarget.focusedEventId))
-                    .callback(callback)
-                    .build()
+                createMessagesNode(buildContext, navTarget)
             }
             NavTarget.RoomDetails -> {
                 createRoomDetailsNode(buildContext, RoomDetailsEntryPoint.InitialTarget.RoomDetails)
@@ -170,6 +149,36 @@ class JoinedRoomLoadedFlowNode @AssistedInject constructor(
                 createRoomDetailsNode(buildContext, RoomDetailsEntryPoint.InitialTarget.RoomNotificationSettings)
             }
         }
+    }
+
+    private fun createMessagesNode(
+        buildContext: BuildContext,
+        navTarget: NavTarget.Messages,
+    ): Node {
+        val callback = object : MessagesEntryPoint.Callback {
+            override fun onRoomDetailsClick() {
+                backstack.push(NavTarget.RoomDetails)
+            }
+
+            override fun onUserDataClick(userId: UserId) {
+                backstack.push(NavTarget.RoomMemberDetails(userId))
+            }
+
+            override fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean) {
+                callbacks.forEach { it.onPermalinkClick(data, pushToBackstack) }
+            }
+
+            override fun onForwardedToSingleRoom(roomId: RoomId) {
+                callbacks.forEach { it.onForwardedToSingleRoom(roomId) }
+            }
+        }
+        val params = MessagesEntryPoint.Params(
+            MessagesEntryPoint.InitialTarget.Messages(navTarget.focusedEventId)
+        )
+        return messagesEntryPoint.nodeBuilder(this, buildContext)
+            .params(params)
+            .callback(callback)
+            .build()
     }
 
     sealed interface NavTarget : Parcelable {

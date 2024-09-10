@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.roomlist.impl
@@ -30,11 +21,14 @@ import dagger.assisted.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.invite.api.response.AcceptDeclineInviteView
+import io.element.android.features.logout.api.direct.DirectLogoutEvents
+import io.element.android.features.logout.api.direct.DirectLogoutView
 import io.element.android.features.roomlist.api.RoomListEntryPoint
 import io.element.android.features.roomlist.impl.components.RoomListMenuAction
 import io.element.android.libraries.deeplink.usecase.InviteFriendsUseCase
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.preferences.api.store.EnableNativeSlidingSyncUseCase
 import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesNode(SessionScope::class)
@@ -45,6 +39,8 @@ class RoomListNode @AssistedInject constructor(
     private val inviteFriendsUseCase: InviteFriendsUseCase,
     private val analyticsService: AnalyticsService,
     private val acceptDeclineInviteView: AcceptDeclineInviteView,
+    private val directLogoutView: DirectLogoutView,
+    private val enableNativeSlidingSyncUseCase: EnableNativeSlidingSyncUseCase,
 ) : Node(buildContext, plugins = plugins) {
     init {
         lifecycle.subscribe(
@@ -97,6 +93,7 @@ class RoomListNode @AssistedInject constructor(
     override fun View(modifier: Modifier) {
         val state = presenter.present()
         val activity = LocalContext.current as Activity
+
         RoomListView(
             state = state,
             onRoomClick = this::onRoomClick,
@@ -107,6 +104,13 @@ class RoomListNode @AssistedInject constructor(
             onRoomSettingsClick = this::onRoomSettingsClick,
             onMenuActionClick = { onMenuActionClick(activity, it) },
             onRoomDirectorySearchClick = this::onRoomDirectorySearchClick,
+            onMigrateToNativeSlidingSyncClick = {
+                if (state.directLogoutState.canDoDirectSignOut) {
+                    state.directLogoutState.eventSink(DirectLogoutEvents.Logout(ignoreSdkError = false))
+                } else {
+                    plugins<RoomListEntryPoint.Callback>().forEach { it.onLogoutForNativeSlidingSyncMigrationNeeded() }
+                }
+            },
             modifier = modifier,
         ) {
             acceptDeclineInviteView.Render(
@@ -115,6 +119,10 @@ class RoomListNode @AssistedInject constructor(
                 onDeclineInvite = { },
                 modifier = Modifier
             )
+        }
+
+        directLogoutView.Render(state.directLogoutState) {
+            enableNativeSlidingSyncUseCase()
         }
     }
 }

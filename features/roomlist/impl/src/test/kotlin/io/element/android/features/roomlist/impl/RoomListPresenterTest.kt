@@ -1,21 +1,13 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.roomlist.impl
 
+import androidx.compose.runtime.Composable
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
@@ -27,6 +19,8 @@ import io.element.android.features.invite.api.response.anAcceptDeclineInviteStat
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.leaveroom.fake.FakeLeaveRoomPresenter
+import io.element.android.features.logout.api.direct.DirectLogoutPresenter
+import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
@@ -249,7 +243,7 @@ class RoomListPresenterTest {
             sessionVerificationService = FakeSessionVerificationService().apply {
                 givenNeedsSessionVerification(false)
             },
-            syncService = FakeSyncService(MutableStateFlow(SyncState.Running))
+            syncService = FakeSyncService(MutableStateFlow(SyncState.Running)),
         )
         val scope = CoroutineScope(context = coroutineContext + SupervisorJob())
         val presenter = createRoomListPresenter(
@@ -277,7 +271,7 @@ class RoomListPresenterTest {
             assertThat(awaitItem().contentAsRooms().securityBannerState).isEqualTo(SecurityBannerState.None)
             encryptionService.emitRecoveryState(RecoveryState.DISABLED)
             assertThat(awaitItem().contentAsRooms().securityBannerState).isEqualTo(SecurityBannerState.SetUpRecovery)
-            nextState.eventSink(RoomListEvents.DismissRecoveryKeyPrompt)
+            nextState.eventSink(RoomListEvents.DismissBanner)
             val finalState = awaitItem()
             assertThat(finalState.contentAsRooms().securityBannerState).isEqualTo(SecurityBannerState.None)
             scope.cancel()
@@ -653,6 +647,10 @@ class RoomListPresenterTest {
         searchPresenter: Presenter<RoomListSearchState> = Presenter { aRoomListSearchState() },
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() },
         notificationCleaner: NotificationCleaner = FakeNotificationCleaner(),
+        logoutPresenter: DirectLogoutPresenter = object : DirectLogoutPresenter {
+            @Composable
+            override fun present() = aDirectLogoutState()
+        },
     ) = RoomListPresenter(
         client = client,
         networkMonitor = networkMonitor,
@@ -680,5 +678,6 @@ class RoomListPresenterTest {
         acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
         fullScreenIntentPermissionsPresenter = FakeFullScreenIntentPermissionsPresenter(),
         notificationCleaner = notificationCleaner,
+        logoutPresenter = logoutPresenter,
     )
 }

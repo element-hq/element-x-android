@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2024 New Vector Ltd
+ * Copyright 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.impl.timeline
@@ -49,7 +40,6 @@ import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTim
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.LastForwardIndicatorsPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.LoadingIndicatorsPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.RoomBeginningPostProcessor
-import io.element.android.libraries.matrix.impl.timeline.postprocessor.TimelineEncryptedHistoryPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.reply.InReplyToMapper
 import io.element.android.libraries.matrix.impl.util.MessageEventContent
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -79,20 +69,17 @@ import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk_ui.LiveBackPaginationStatus
 import java.io.File
-import java.util.Date
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
 private const val PAGINATION_SIZE = 50
 
 class RustTimeline(
     private val inner: InnerTimeline,
-    private val isLive: Boolean,
+    mode: Timeline.Mode,
     systemClock: SystemClock,
-    isKeyBackupEnabled: Boolean,
     private val matrixRoom: MatrixRoom,
     private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
-    lastLoginTimestamp: Date?,
     private val roomContentForwarder: RoomContentForwarder,
     onNewSyncedEvent: () -> Unit,
 ) : Timeline {
@@ -116,12 +103,6 @@ class RustTimeline(
         timelineItems = _timelineItems,
         timelineItemFactory = timelineItemMapper,
     )
-    private val encryptedHistoryPostProcessor = TimelineEncryptedHistoryPostProcessor(
-        lastLoginTimestamp = lastLoginTimestamp,
-        isRoomEncrypted = matrixRoom.isEncrypted,
-        isKeyBackupEnabled = isKeyBackupEnabled,
-        dispatcher = dispatcher,
-    )
     private val timelineItemsSubscriber = TimelineItemsSubscriber(
         timeline = inner,
         timelineCoroutineScope = coroutineScope,
@@ -132,21 +113,21 @@ class RustTimeline(
         onNewSyncedEvent = onNewSyncedEvent,
     )
 
-    private val roomBeginningPostProcessor = RoomBeginningPostProcessor()
+    private val roomBeginningPostProcessor = RoomBeginningPostProcessor(mode)
     private val loadingIndicatorsPostProcessor = LoadingIndicatorsPostProcessor(systemClock)
-    private val lastForwardIndicatorsPostProcessor = LastForwardIndicatorsPostProcessor(isLive)
+    private val lastForwardIndicatorsPostProcessor = LastForwardIndicatorsPostProcessor(mode)
 
     private val backPaginationStatus = MutableStateFlow(
-        Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = true)
+        Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode != Timeline.Mode.PINNED_EVENTS)
     )
 
     private val forwardPaginationStatus = MutableStateFlow(
-        Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = !isLive)
+        Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode == Timeline.Mode.FOCUSED_ON_EVENT)
     )
 
     init {
         coroutineScope.fetchMembers()
-        if (isLive) {
+        if (mode == Timeline.Mode.LIVE) {
             // When timeline is live, we need to listen to the back pagination status as
             // sdk can automatically paginate backwards.
             coroutineScope.registerBackPaginationStatusListener()
@@ -228,7 +209,6 @@ class RustTimeline(
     ) { timelineItems, hasMoreToLoadBackward, hasMoreToLoadForward, isInit ->
         withContext(dispatcher) {
             timelineItems
-                .process { items -> encryptedHistoryPostProcessor.process(items) }
                 .process { items ->
                     roomBeginningPostProcessor.process(
                         items = items,

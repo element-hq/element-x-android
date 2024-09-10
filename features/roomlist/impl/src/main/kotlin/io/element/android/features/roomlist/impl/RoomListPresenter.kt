@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.roomlist.impl
@@ -38,6 +29,7 @@ import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.InviteData
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
+import io.element.android.features.logout.api.direct.DirectLogoutPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
@@ -97,6 +89,7 @@ class RoomListPresenter @Inject constructor(
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
     private val fullScreenIntentPermissionsPresenter: FullScreenIntentPermissionsPresenter,
     private val notificationCleaner: NotificationCleaner,
+    private val logoutPresenter: DirectLogoutPresenter,
 ) : Presenter<RoomListState> {
     private val encryptionService: EncryptionService = client.encryptionService()
     private val syncService: SyncService = client.syncService()
@@ -124,13 +117,15 @@ class RoomListPresenter @Inject constructor(
 
         val contextMenu = remember { mutableStateOf<RoomListState.ContextMenu>(RoomListState.ContextMenu.Hidden) }
 
+        val directLogoutState = logoutPresenter.present()
+
         fun handleEvents(event: RoomListEvents) {
             when (event) {
                 is RoomListEvents.UpdateVisibleRange -> coroutineScope.launch {
                     updateVisibleRange(event.range)
                 }
                 RoomListEvents.DismissRequestVerificationPrompt -> securityBannerDismissed = true
-                RoomListEvents.DismissRecoveryKeyPrompt -> securityBannerDismissed = true
+                RoomListEvents.DismissBanner -> securityBannerDismissed = true
                 RoomListEvents.ToggleSearchResults -> searchState.eventSink(RoomListSearchEvents.ToggleSearchVisibility)
                 is RoomListEvents.ShowContextMenu -> {
                     coroutineScope.showContextMenu(event, contextMenu)
@@ -170,6 +165,7 @@ class RoomListPresenter @Inject constructor(
             searchState = searchState,
             contentState = contentState,
             acceptDeclineInviteState = acceptDeclineInviteState,
+            directLogoutState = directLogoutState,
             eventSink = ::handleEvents,
         )
     }
@@ -177,6 +173,7 @@ class RoomListPresenter @Inject constructor(
     @Composable
     private fun securityBannerState(
         securityBannerDismissed: Boolean,
+        needsSlidingSyncMigration: Boolean,
     ): State<SecurityBannerState> {
         val currentSecurityBannerDismissed by rememberUpdatedState(securityBannerDismissed)
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
@@ -194,6 +191,7 @@ class RoomListPresenter @Inject constructor(
                             RecoveryState.ENABLED -> SecurityBannerState.None
                         }
                     }
+                    needsSlidingSyncMigration -> SecurityBannerState.NeedsNativeSlidingSyncMigration
                     else -> SecurityBannerState.None
                 }
             }
@@ -218,11 +216,14 @@ class RoomListPresenter @Inject constructor(
                 loadingState == RoomList.LoadingState.NotLoaded || roomSummaries is AsyncData.Loading
             }
         }
+        val needsSlidingSyncMigration by produceState(false) {
+            value = client.isNativeSlidingSyncSupported() && !client.isUsingNativeSlidingSync()
+        }
         return when {
             showEmpty -> RoomListContentState.Empty
             showSkeleton -> RoomListContentState.Skeleton(count = 16)
             else -> {
-                val securityBannerState by securityBannerState(securityBannerDismissed)
+                val securityBannerState by securityBannerState(securityBannerDismissed, needsSlidingSyncMigration)
                 RoomListContentState.Rooms(
                     securityBannerState = securityBannerState,
                     fullScreenIntentPermissionsState = fullScreenIntentPermissionsPresenter.present(),

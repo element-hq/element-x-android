@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.roomdetails.impl
@@ -29,6 +20,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
+import io.element.android.features.messages.api.pinned.IsPinnedMessagesFeatureEnabled
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.bool.orFalse
@@ -67,6 +59,7 @@ class RoomDetailsPresenter @Inject constructor(
     private val leaveRoomPresenter: LeaveRoomPresenter,
     private val dispatchers: CoroutineDispatchers,
     private val analyticsService: AnalyticsService,
+    private val isPinnedMessagesFeatureEnabled: IsPinnedMessagesFeatureEnabled,
 ) : Presenter<RoomDetailsState> {
     @Composable
     override fun present(): RoomDetailsState {
@@ -82,6 +75,9 @@ class RoomDetailsPresenter @Inject constructor(
         val roomTopic by remember { derivedStateOf { roomInfo?.topic ?: room.topic } }
         val isFavorite by remember { derivedStateOf { roomInfo?.isFavorite.orFalse() } }
         val isPublic by remember { derivedStateOf { roomInfo?.isPublic.orFalse() } }
+
+        val canShowPinnedMessages = isPinnedMessagesFeatureEnabled()
+        val pinnedMessagesCount by remember { derivedStateOf { roomInfo?.pinnedEventIds?.size } }
 
         LaunchedEffect(Unit) {
             canShowNotificationSettings.value = featureFlagService.isFeatureEnabled(FeatureFlags.NotificationSettings)
@@ -156,6 +152,8 @@ class RoomDetailsPresenter @Inject constructor(
             displayRolesAndPermissionsSettings = !room.isDm && isUserAdmin,
             isPublic = isPublic,
             heroes = roomInfo?.heroes.orEmpty().toPersistentList(),
+            canShowPinnedMessages = canShowPinnedMessages,
+            pinnedMessagesCount = pinnedMessagesCount,
             eventSink = ::handleEvents,
         )
     }
