@@ -7,6 +7,9 @@
 
 package io.element.android.features.messages.impl.timeline.factories
 
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import io.element.android.features.messages.impl.timeline.TimelineItemIndexer
 import io.element.android.features.messages.impl.timeline.diff.TimelineItemsCacheInvalidator
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemEventFactory
@@ -26,15 +29,21 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class TimelineItemsFactory @Inject constructor(
+class TimelineItemsFactory @AssistedInject constructor(
+    @Assisted config: TimelineItemsFactoryConfig,
+    eventItemFactoryCreator: TimelineItemEventFactory.Creator,
     private val dispatchers: CoroutineDispatchers,
-    private val eventItemFactory: TimelineItemEventFactory,
     private val virtualItemFactory: TimelineItemVirtualFactory,
     private val timelineItemGrouper: TimelineItemGrouper,
     private val timelineItemIndexer: TimelineItemIndexer,
 ) {
+    @AssistedFactory
+    interface Creator {
+        fun create(config: TimelineItemsFactoryConfig): TimelineItemsFactory
+    }
+
+    private val eventItemFactory = eventItemFactoryCreator.create(config)
     private val _timelineItems = MutableSharedFlow<ImmutableList<TimelineItem>>(replay = 1)
     private val lock = Mutex()
     private val diffCache = MutableListDiffCache<TimelineItem>()
