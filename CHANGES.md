@@ -1,3 +1,35 @@
+Changes in Element X v0.5.3 (2024-09-10)
+========================================
+
+### ✨ Features
+* Add banner for optional migration to simplified sliding sync by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3429
+
+### 🙌 Improvements
+* Timeline : remove the encrypted history banner by @ganfra in https://github.com/element-hq/element-x-android/pull/3410
+
+### 🐛 Bugfixes
+* Fix new logins with Simplified SS using the proxy by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3417
+* Ensure Call is not hang up when user is asked to grant system permissions by @bmarty in https://github.com/element-hq/element-x-android/pull/3419
+* Wait for a room with joined state in `/sync` after creating it by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3421
+* [Bugfix] : fix self verification flow by @ganfra in https://github.com/element-hq/element-x-android/pull/3426
+
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/3425
+
+### 🚧 In development 🚧
+* [Feature] Pinned messages list by @ganfra in https://github.com/element-hq/element-x-android/pull/3392
+* Pinned messages banner : adjust indicator to match design. by @ganfra in https://github.com/element-hq/element-x-android/pull/3415
+
+### Dependency upgrades
+* Update plugin dependencycheck to v10.0.4 by @renovate in https://github.com/element-hq/element-x-android/pull/3372
+* Update plugin detekt to v1.23.7 by @renovate in https://github.com/element-hq/element-x-android/pull/3424
+
+### Others
+* Delete old log files by @bmarty in https://github.com/element-hq/element-x-android/pull/3413
+* Recovery key formatting and wording iteration by @bmarty in https://github.com/element-hq/element-x-android/pull/3409
+* Change license to AGPL by @bmarty in https://github.com/element-hq/element-x-android/pull/3422
+* Remove Wait list screen by @bmarty in https://github.com/element-hq/element-x-android/pull/3428
+
 Changes in Element X v0.5.2 (2024-09-05)
 =========================================
 
