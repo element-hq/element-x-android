@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.impl.verification
@@ -35,6 +26,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.Encryption
@@ -104,18 +97,19 @@ class RustSessionVerificationService(
                 updateVerificationStatus()
             }
         }
-        .launchIn(sessionCoroutineScope)
+            .launchIn(sessionCoroutineScope)
     }
 
     override suspend fun requestVerification() = tryOrFail {
-        if (!this::verificationController.isInitialized) {
-            verificationController = client.getSessionVerificationController()
-            verificationController.setDelegate(this)
-        }
+        initVerificationControllerIfNeeded()
         verificationController.requestVerification()
     }
 
-    override suspend fun cancelVerification() = tryOrFail { verificationController.cancelVerification() }
+    override suspend fun cancelVerification() = tryOrFail {
+        verificationController.cancelVerification()
+        // We need to manually set the state to canceled, as the Rust SDK doesn't always call `didCancel` when it should
+        didCancel()
+    }
 
     override suspend fun approveVerification() = tryOrFail { verificationController.approveVerification() }
 
@@ -202,6 +196,16 @@ class RustSessionVerificationService(
         }
     }
 
+    private var initControllerMutex = Mutex()
+
+    private suspend fun initVerificationControllerIfNeeded() = initControllerMutex.withLock {
+        if (!this::verificationController.isInitialized) {
+            tryOrFail {
+                verificationController = client.getSessionVerificationController()
+                verificationController.setDelegate(this)
+            }
+        }
+    }
     private suspend fun updateVerificationStatus() {
         if (verificationFlowState.value == VerificationFlowState.Finished) {
             // Calling `encryptionService.verificationState()` performs a network call and it will deadlock if there is no network
@@ -221,10 +225,7 @@ class RustSessionVerificationService(
             // Otherwise, just check the current verification status from the session verification controller instead
             Timber.d("Updating verification status: flow is pending or was finished some time ago")
             runCatching {
-                if (!this@RustSessionVerificationService::verificationController.isInitialized) {
-                    verificationController = client.getSessionVerificationController()
-                    verificationController.setDelegate(this@RustSessionVerificationService)
-                }
+                initVerificationControllerIfNeeded()
                 _sessionVerifiedStatus.value = if (verificationController.isVerified()) {
                     SessionVerifiedStatus.Verified
                 } else {

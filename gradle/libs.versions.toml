@@ -192,7 +192,7 @@ matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.23.1"
 
 # Emojibase
 matrix_emojibase_bindings = "io.element.android:emojibase-bindings:1.1.3"
-sigpwned_emoji4j = "com.sigpwned:emoji4j-core:15.1.0"
+sigpwned_emoji4j = "com.sigpwned:emoji4j-core:15.1.2"
 
 # Di
 inject = "javax.inject:javax.inject:1"
@@ -223,10 +223,10 @@ kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
-detekt = "io.gitlab.arturbosch.detekt:1.23.6"
+detekt = "io.gitlab.arturbosch.detekt:1.23.7"
 ktlint = "org.jlleitschuh.gradle.ktlint:12.1.1"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
-dependencycheck = "org.owasp.dependencycheck:10.0.3"
+dependencycheck = "org.owasp.dependencycheck:10.0.4"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
 paparazzi = "app.cash.paparazzi:1.3.4"
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }

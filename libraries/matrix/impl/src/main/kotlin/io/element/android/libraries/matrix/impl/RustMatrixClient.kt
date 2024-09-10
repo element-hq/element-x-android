@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.impl
@@ -36,6 +27,7 @@ import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
+import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -95,13 +87,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
-import org.matrix.rustcomponents.sdk.BackupState
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientException
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
 import org.matrix.rustcomponents.sdk.SendQueueRoomErrorListener
+import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
@@ -187,7 +179,6 @@ class RustMatrixClient(
         systemClock = clock,
         roomContentForwarder = RoomContentForwarder(innerRoomListService),
         roomSyncSubscriber = roomSyncSubscriber,
-        isKeyBackupEnabled = { client.encryption().use { it.backupState() == BackupState.ENABLED } },
         getSessionData = { sessionStore.getSession(sessionId.value)!! },
     )
 
@@ -254,18 +245,20 @@ class RustMatrixClient(
     }
 
     /**
-     * Wait for the room to be available in the room list.
+     * Wait for the room to be available in the room list, with a membership for the current user of [CurrentUserMembership.JOINED].
      * @param roomIdOrAlias the room id or alias to wait for
      * @param timeout the timeout to wait for the room to be available
      * @throws TimeoutCancellationException if the room is not available after the timeout
      */
-    private suspend fun awaitRoom(roomIdOrAlias: RoomIdOrAlias, timeout: Duration): RoomSummary {
+    private suspend fun awaitJoinedRoom(roomIdOrAlias: RoomIdOrAlias, timeout: Duration): RoomSummary {
         val predicate: (List<RoomSummary>) -> Boolean = when (roomIdOrAlias) {
             is RoomIdOrAlias.Alias -> { roomSummaries: List<RoomSummary> ->
-                roomSummaries.flatMap { it.aliases }.contains(roomIdOrAlias.roomAlias)
+                val found = roomSummaries.find { it.aliases.contains(roomIdOrAlias.roomAlias) }
+                found != null && found.currentUserMembership == CurrentUserMembership.JOINED
             }
             is RoomIdOrAlias.Id -> { roomSummaries: List<RoomSummary> ->
-                roomSummaries.map { it.roomId }.contains(roomIdOrAlias.roomId)
+                val found = roomSummaries.find { it.roomId == roomIdOrAlias.roomId }
+                found != null && found.currentUserMembership == CurrentUserMembership.JOINED
             }
         }
         return withTimeout(timeout) {
@@ -315,7 +308,7 @@ class RustMatrixClient(
             val roomId = RoomId(client.createRoom(rustParams))
             // Wait to receive the room back from the sync but do not returns failure if it fails.
             try {
-                awaitRoom(roomId.toRoomIdOrAlias(), 30.seconds)
+                awaitJoinedRoom(roomId.toRoomIdOrAlias(), 30.seconds)
             } catch (e: Exception) {
                 Timber.e(e, "Timeout waiting for the room to be available in the room list")
             }
@@ -370,7 +363,7 @@ class RustMatrixClient(
         runCatching {
             client.joinRoomById(roomId.value).destroy()
             try {
-                awaitRoom(roomId.toRoomIdOrAlias(), 10.seconds)
+                awaitJoinedRoom(roomId.toRoomIdOrAlias(), 10.seconds)
             } catch (e: Exception) {
                 Timber.e(e, "Timeout waiting for the room to be available in the room list")
                 null
@@ -385,7 +378,7 @@ class RustMatrixClient(
                 serverNames = serverNames,
             ).destroy()
             try {
-                awaitRoom(roomIdOrAlias, 10.seconds)
+                awaitJoinedRoom(roomIdOrAlias, 10.seconds)
             } catch (e: Exception) {
                 Timber.e(e, "Timeout waiting for the room to be available in the room list")
                 null
@@ -512,7 +505,7 @@ class RustMatrixClient(
             var room = getRoom(roomId)
             if (room == null) {
                 emit(Optional.empty())
-                awaitRoom(roomId.toRoomIdOrAlias(), INFINITE)
+                awaitJoinedRoom(roomId.toRoomIdOrAlias(), INFINITE)
                 room = getRoom(roomId)
             }
             room?.use {
@@ -535,6 +528,14 @@ class RustMatrixClient(
             }
         })
     }.buffer(Channel.UNLIMITED)
+
+    override suspend fun isNativeSlidingSyncSupported(): Boolean {
+        return client.availableSlidingSyncVersions().contains(SlidingSyncVersion.Native)
+    }
+
+    override fun isUsingNativeSlidingSync(): Boolean {
+        return client.session().slidingSyncVersion == SlidingSyncVersion.Native
+    }
 
     internal fun setDelegate(delegate: RustClientSessionDelegate) {
         client.setDelegate(delegate)

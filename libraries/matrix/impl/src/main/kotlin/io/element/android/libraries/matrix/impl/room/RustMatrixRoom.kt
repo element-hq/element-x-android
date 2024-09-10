@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.impl.room
@@ -98,7 +89,6 @@ import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 @OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixRoom(
     override val sessionId: SessionId,
-    private val isKeyBackupEnabled: Boolean,
     private val roomListItem: RoomListItem,
     private val innerRoom: InnerRoom,
     innerTimeline: InnerTimeline,
@@ -154,7 +144,7 @@ class RustMatrixRoom(
     private val _roomNotificationSettingsStateFlow = MutableStateFlow<MatrixRoomNotificationSettingsState>(MatrixRoomNotificationSettingsState.Unknown)
     override val roomNotificationSettingsStateFlow: StateFlow<MatrixRoomNotificationSettingsState> = _roomNotificationSettingsStateFlow
 
-    override val liveTimeline = createTimeline(innerTimeline, isLive = true) {
+    override val liveTimeline = createTimeline(innerTimeline, mode = Timeline.Mode.LIVE) {
         _syncUpdateFlow.value = systemClock.epochMillis()
     }
 
@@ -182,7 +172,7 @@ class RustMatrixRoom(
                 numContextEvents = 50u,
                 internalIdPrefix = "focus_$eventId",
             ).let { inner ->
-                createTimeline(inner, isLive = false)
+                createTimeline(inner, mode = Timeline.Mode.FOCUSED_ON_EVENT)
             }
         }.mapFailure {
             it.toFocusEventException()
@@ -199,7 +189,7 @@ class RustMatrixRoom(
                 internalIdPrefix = "pinned_events",
                 maxEventsToLoad = 100u,
             ).let { inner ->
-                createTimeline(inner, isLive = false)
+                createTimeline(inner, mode = Timeline.Mode.PINNED_EVENTS)
             }
         }.onFailure {
             if (it is CancellationException) {
@@ -656,21 +646,19 @@ class RustMatrixRoom(
 
     private fun createTimeline(
         timeline: InnerTimeline,
-        isLive: Boolean,
+        mode: Timeline.Mode,
         onNewSyncedEvent: () -> Unit = {},
     ): Timeline {
         val timelineCoroutineScope = roomCoroutineScope.childScope(coroutineDispatchers.main, "TimelineScope-$roomId-$timeline")
         return RustTimeline(
-            isKeyBackupEnabled = isKeyBackupEnabled,
-            isLive = isLive,
+            mode = mode,
             matrixRoom = this,
+            inner = timeline,
             systemClock = systemClock,
             coroutineScope = timelineCoroutineScope,
             dispatcher = roomDispatcher,
-            lastLoginTimestamp = sessionData.loginTimestamp,
-            onNewSyncedEvent = onNewSyncedEvent,
             roomContentForwarder = roomContentForwarder,
-            inner = timeline,
+            onNewSyncedEvent = onNewSyncedEvent,
         )
     }
 }
