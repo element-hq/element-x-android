@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.roomdetails.impl
@@ -27,6 +18,7 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -66,6 +58,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -103,6 +96,7 @@ fun RoomDetailsView(
     openPollHistory: () -> Unit,
     openAdminSettings: () -> Unit,
     onJoinCallClick: () -> Unit,
+    onPinnedMessagesClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -182,6 +176,13 @@ fun RoomDetailsView(
                         state.eventSink(RoomDetailsEvent.SetFavorite(it))
                     }
                 )
+
+                if (state.canShowPinnedMessages) {
+                    PinnedMessagesItem(
+                        pinnedMessagesCount = state.pinnedMessagesCount,
+                        onPinnedMessagesClick = onPinnedMessagesClick
+                    )
+                }
 
                 if (state.displayRolesAndPermissionsSettings) {
                     ListItem(
@@ -504,6 +505,26 @@ private fun MembersItem(
 }
 
 @Composable
+private fun PinnedMessagesItem(
+    pinnedMessagesCount: Int?,
+    onPinnedMessagesClick: () -> Unit,
+) {
+    ListItem(
+        headlineContent = { Text(stringResource(CommonStrings.screen_room_details_pinned_events_row_title)) },
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Pin())),
+        trailingContent =
+        if (pinnedMessagesCount == null) {
+            ListItemContent.Custom {
+                CircularProgressIndicator(strokeWidth = 2.dp, modifier = Modifier.size(24.dp))
+            }
+        } else {
+            ListItemContent.Text(pinnedMessagesCount.toString())
+        },
+        onClick = onPinnedMessagesClick,
+    )
+}
+
+@Composable
 private fun PollsSection(
     openPollHistory: () -> Unit,
 ) {
@@ -573,5 +594,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
         openPollHistory = {},
         openAdminSettings = {},
         onJoinCallClick = {},
+        onPinnedMessagesClick = {},
     )
 }

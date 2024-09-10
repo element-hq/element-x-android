@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright 2022-2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl
@@ -22,8 +13,8 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.ActionListState
+import io.element.android.features.messages.impl.actionlist.FakeActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.draft.FakeComposerDraftService
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
@@ -100,7 +91,6 @@ import io.element.android.libraries.mediaviewer.test.FakeLocalMediaFactory
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
-import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
@@ -996,7 +986,6 @@ class MessagesPresenterTest {
     ): MessagesPresenter {
         val mediaSender = MediaSender(FakeMediaPreProcessor(), matrixRoom)
         val permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter)
-        val appPreferencesStore = InMemoryAppPreferencesStore()
         val sessionPreferencesStore = InMemorySessionPreferencesStore()
         val mentionSpanProvider = MentionSpanProvider(FakePermalinkParser())
         val messageComposerPresenter = MessageComposerPresenter(
@@ -1053,11 +1042,6 @@ class MessagesPresenterTest {
             }
         }
         val featureFlagService = FakeFeatureFlagService()
-        val actionListPresenter = ActionListPresenter(
-            appPreferencesStore = appPreferencesStore,
-            featureFlagsService = featureFlagService,
-            room = matrixRoom,
-        )
         val typingNotificationPresenter = TypingNotificationPresenter(
             room = matrixRoom,
             sessionPreferencesStore = sessionPreferencesStore,
@@ -1073,7 +1057,7 @@ class MessagesPresenterTest {
             voiceMessageComposerPresenter = voiceMessageComposerPresenter,
             timelinePresenterFactory = timelinePresenterFactory,
             typingNotificationPresenter = typingNotificationPresenter,
-            actionListPresenter = actionListPresenter,
+            actionListPresenterFactory = FakeActionListPresenter.Factory,
             customReactionPresenter = customReactionPresenter,
             reactionSummaryPresenter = reactionSummaryPresenter,
             readReceiptBottomSheetPresenter = readReceiptBottomSheetPresenter,
