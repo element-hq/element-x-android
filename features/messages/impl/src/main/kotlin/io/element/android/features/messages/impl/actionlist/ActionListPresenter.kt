@@ -190,9 +190,9 @@ private fun List<TimelineItemAction>.postFilter(content: TimelineItemEventConten
         when (content) {
             is TimelineItemCallNotifyContent,
             is TimelineItemLegacyCallInviteContent,
-            is TimelineItemStateContent,
+            is TimelineItemStateContent -> action == TimelineItemAction.ViewSource
             is TimelineItemRedactedContent -> {
-                action == TimelineItemAction.ViewSource
+                action == TimelineItemAction.ViewSource || action == TimelineItemAction.Unpin
             }
             else -> true
         }
