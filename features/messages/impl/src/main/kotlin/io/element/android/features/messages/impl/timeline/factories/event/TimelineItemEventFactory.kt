@@ -7,6 +7,10 @@
 
 package io.element.android.features.messages.impl.timeline.factories.event
 
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.groups.canBeDisplayedInBubbleBlock
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
 import io.element.android.features.messages.impl.timeline.model.AggregatedReactionSender
@@ -26,17 +30,23 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.matrix.ui.messages.reply.map
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import java.text.DateFormat
 import java.util.Date
-import javax.inject.Inject
 
-class TimelineItemEventFactory @Inject constructor(
+class TimelineItemEventFactory @AssistedInject constructor(
+    @Assisted private val config: TimelineItemsFactoryConfig,
     private val contentFactory: TimelineItemContentFactory,
     private val matrixClient: MatrixClient,
     private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
     private val permalinkParser: PermalinkParser,
 ) {
+    @AssistedFactory
+    interface Creator {
+        fun create(config: TimelineItemsFactoryConfig): TimelineItemEventFactory
+    }
+
     suspend fun create(
         currentTimelineItem: MatrixTimelineItem.Event,
         index: Int,
@@ -92,8 +102,11 @@ class TimelineItemEventFactory @Inject constructor(
     }
 
     private fun MatrixTimelineItem.Event.computeReactionsState(): TimelineItemReactions {
+        if (!config.computeReactions) {
+            return TimelineItemReactions(reactions = persistentListOf())
+        }
         val timeFormatter = DateFormat.getTimeInstance(DateFormat.SHORT)
-        var aggregatedReactions = event.reactions.map { reaction ->
+        var aggregatedReactions = this.event.reactions.map { reaction ->
             // Sort reactions within an aggregation by timestamp descending.
             // This puts the most recent at the top, useful in cases like the
             // reaction summary view or getting the most recent reaction.
@@ -129,6 +142,9 @@ class TimelineItemEventFactory @Inject constructor(
     private fun MatrixTimelineItem.Event.computeReadReceiptState(
         roomMembers: List<RoomMember>,
     ): TimelineItemReadReceipts {
+        if (!config.computeReadReceipts) {
+            return TimelineItemReadReceipts(receipts = persistentListOf())
+        }
         return TimelineItemReadReceipts(
             receipts = event.receipts
                 .map { receipt ->

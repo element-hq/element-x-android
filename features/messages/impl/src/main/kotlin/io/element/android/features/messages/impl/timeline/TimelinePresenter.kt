@@ -22,6 +22,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
+import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
@@ -54,7 +55,7 @@ import kotlinx.coroutines.withContext
 const val FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS = 200L
 
 class TimelinePresenter @AssistedInject constructor(
-    private val timelineItemsFactory: TimelineItemsFactory,
+    timelineItemsFactoryCreator: TimelineItemsFactory.Creator,
     private val timelineItemIndexer: TimelineItemIndexer,
     private val room: MatrixRoom,
     private val dispatchers: CoroutineDispatchers,
@@ -70,6 +71,13 @@ class TimelinePresenter @AssistedInject constructor(
     interface Factory {
         fun create(navigator: MessagesNavigator): TimelinePresenter
     }
+
+    private val timelineItemsFactory: TimelineItemsFactory = timelineItemsFactoryCreator.create(
+        config = TimelineItemsFactoryConfig(
+            computeReadReceipts = true,
+            computeReactions = true,
+        )
+    )
 
     @Composable
     override fun present(): TimelineState {
