@@ -264,6 +264,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.startup)
     implementation(libs.androidx.preference)
+    implementation(libs.androidx.car) // Worth a try...
     implementation(libs.coil)
 
     implementation(platform(libs.network.okhttp.bom))
