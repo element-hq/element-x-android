@@ -457,8 +457,7 @@ class RustTimeline(
                     item = it,
                 )
             }
-            Unit
-        }
+        }.map { }
     }
 
     override suspend fun sendPollResponse(
