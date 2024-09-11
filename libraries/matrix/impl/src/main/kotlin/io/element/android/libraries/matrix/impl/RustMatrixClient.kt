@@ -173,13 +173,13 @@ class RustMatrixClient(
         roomListService = roomListService,
         innerRoomListService = innerRoomListService,
         sessionId = sessionId,
+        deviceId = deviceId,
         notificationSettingsService = notificationSettingsService,
         sessionCoroutineScope = sessionCoroutineScope,
         dispatchers = dispatchers,
         systemClock = clock,
         roomContentForwarder = RoomContentForwarder(innerRoomListService),
         roomSyncSubscriber = roomSyncSubscriber,
-        getSessionData = { sessionStore.getSession(sessionId.value)!! },
     )
 
     override val mediaLoader: MatrixMediaLoader = RustMediaLoader(

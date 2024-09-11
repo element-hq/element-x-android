@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.impl.room
 import androidx.collection.lruCache
 import io.element.android.appconfig.TimelineConfig
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
@@ -18,7 +19,6 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.awaitLoaded
 import io.element.android.libraries.matrix.impl.roomlist.fullRoomWithTimeline
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
-import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -38,6 +38,7 @@ private const val CACHE_SIZE = 16
 
 class RustRoomFactory(
     private val sessionId: SessionId,
+    private val deviceId: DeviceId,
     private val notificationSettingsService: NotificationSettingsService,
     private val sessionCoroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
@@ -46,7 +47,6 @@ class RustRoomFactory(
     private val roomListService: RoomListService,
     private val innerRoomListService: InnerRoomListService,
     private val roomSyncSubscriber: RoomSyncSubscriber,
-    private val getSessionData: suspend () -> SessionData,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     private val dispatcher = dispatchers.io.limitedParallelism(1)
@@ -108,6 +108,7 @@ class RustRoomFactory(
             val liveTimeline = roomReferences.fullRoom.timeline()
             RustMatrixRoom(
                 sessionId = sessionId,
+                deviceId = deviceId,
                 roomListItem = roomReferences.roomListItem,
                 innerRoom = roomReferences.fullRoom,
                 innerTimeline = liveTimeline,
@@ -116,7 +117,6 @@ class RustRoomFactory(
                 coroutineDispatchers = dispatchers,
                 systemClock = systemClock,
                 roomContentForwarder = roomContentForwarder,
-                sessionData = getSessionData(),
                 roomSyncSubscriber = roomSyncSubscriber,
                 matrixRoomInfoMapper = matrixRoomInfoMapper,
             )
