@@ -212,7 +212,7 @@ class RustTimeline(
     ) { timelineItems, hasMoreToLoadBackward, hasMoreToLoadForward, roomCreator, isInit ->
         withContext(dispatcher) {
             timelineItems
-                .process { items ->
+                .let { items ->
                     roomBeginningPostProcessor.process(
                         items = items,
                         isDm = matrixRoom.isDm,
@@ -220,12 +220,20 @@ class RustTimeline(
                         hasMoreToLoadBackwards = hasMoreToLoadBackward,
                     )
                 }
-                .process(predicate = isInit) { items ->
-                    loadingIndicatorsPostProcessor.process(items, hasMoreToLoadBackward, hasMoreToLoadForward)
+                .let { items ->
+                    loadingIndicatorsPostProcessor.process(
+                        items = items,
+                        isInit = isInit,
+                        hasMoreToLoadBackward = hasMoreToLoadBackward,
+                        hasMoreToLoadForward = hasMoreToLoadForward
+                    )
                 }
                 // Keep lastForwardIndicatorsPostProcessor last
-                .process(predicate = isInit) { items ->
-                    lastForwardIndicatorsPostProcessor.process(items)
+                .let { items ->
+                    lastForwardIndicatorsPostProcessor.process(
+                        items = items,
+                        isInit = isInit,
+                    )
                 }
         }
     }.onStart {
@@ -542,16 +550,5 @@ class RustTimeline(
         return runCatching {
             inner.fetchDetailsForEvent(eventId.value)
         }
-    }
-}
-
-private suspend fun List<MatrixTimelineItem>.process(
-    predicate: Boolean = true,
-    processor: suspend (List<MatrixTimelineItem>) -> List<MatrixTimelineItem>
-): List<MatrixTimelineItem> {
-    return if (predicate) {
-        processor(this)
-    } else {
-        this
     }
 }
