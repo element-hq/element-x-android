@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.impl.roomlist
 import com.google.common.truth.Truth.assertThat
 import com.sun.jna.Pointer
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
@@ -215,6 +216,7 @@ private fun aRustRoomInfo(
     numUnreadNotifications: ULong = 0uL,
     numUnreadMentions: ULong = 0uL,
     pinnedEventIds: List<String> = listOf(),
+    roomCreator: UserId? = null,
 ) = RoomInfo(
     id = id,
     displayName = displayName,
@@ -245,6 +247,7 @@ private fun aRustRoomInfo(
     numUnreadNotifications = numUnreadNotifications,
     numUnreadMentions = numUnreadMentions,
     pinnedEventIds = pinnedEventIds,
+    creator = roomCreator?.value,
 )
 
 class FakeRoomListItem(

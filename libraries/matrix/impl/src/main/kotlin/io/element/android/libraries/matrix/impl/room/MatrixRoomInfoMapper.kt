@@ -28,6 +28,7 @@ class MatrixRoomInfoMapper {
     fun map(rustRoomInfo: RustRoomInfo): MatrixRoomInfo = rustRoomInfo.let {
         return MatrixRoomInfo(
             id = RoomId(it.id),
+            creator = it.creator?.let(::UserId),
             name = it.displayName,
             rawName = it.rawName,
             topic = it.topic,

@@ -207,15 +207,17 @@ class RustTimeline(
         _timelineItems,
         backPaginationStatus.map { it.hasMoreToLoad }.distinctUntilChanged(),
         forwardPaginationStatus.map { it.hasMoreToLoad }.distinctUntilChanged(),
+        matrixRoom.roomInfoFlow.map { it.creator },
         isInit,
-    ) { timelineItems, hasMoreToLoadBackward, hasMoreToLoadForward, isInit ->
+    ) { timelineItems, hasMoreToLoadBackward, hasMoreToLoadForward, roomCreator, isInit ->
         withContext(dispatcher) {
             timelineItems
                 .process { items ->
                     roomBeginningPostProcessor.process(
                         items = items,
                         isDm = matrixRoom.isDm,
-                        hasMoreToLoadBackwards = hasMoreToLoadBackward
+                        roomCreator = roomCreator,
+                        hasMoreToLoadBackwards = hasMoreToLoadBackward,
                     )
                 }
                 .process(predicate = isInit) { items ->
