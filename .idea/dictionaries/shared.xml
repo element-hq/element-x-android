@@ -1,6 +1,7 @@
 <component name="ProjectDictionaryState">
     <dictionary name="shared">
         <words>
+            <w>agpl</w>
             <w>backstack</w>
             <w>blurhash</w>
             <w>fdroid</w>
@@ -17,6 +18,7 @@
             <w>securebackup</w>
             <w>showkase</w>
             <w>snackbar</w>
+            <w>spdx</w>
             <w>swipeable</w>
             <w>textfields</w>
             <w>tombstoned</w>

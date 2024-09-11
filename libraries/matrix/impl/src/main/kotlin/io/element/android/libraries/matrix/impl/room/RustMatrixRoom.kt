@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.impl.room
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.core.extensions.mapFailure
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -52,7 +53,6 @@ import io.element.android.libraries.matrix.impl.util.MessageEventContent
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
 import io.element.android.libraries.matrix.impl.widget.generateWidgetWebViewUrl
-import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -89,6 +89,7 @@ import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 @OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixRoom(
     override val sessionId: SessionId,
+    private val deviceId: DeviceId,
     private val roomListItem: RoomListItem,
     private val innerRoom: InnerRoom,
     innerTimeline: InnerTimeline,
@@ -97,7 +98,6 @@ class RustMatrixRoom(
     private val coroutineDispatchers: CoroutineDispatchers,
     private val systemClock: SystemClock,
     private val roomContentForwarder: RoomContentForwarder,
-    private val sessionData: SessionData,
     private val roomSyncSubscriber: RoomSyncSubscriber,
     private val matrixRoomInfoMapper: MatrixRoomInfoMapper,
 ) : MatrixRoom {
@@ -124,7 +124,7 @@ class RustMatrixRoom(
             override fun call(typingUserIds: List<String>) {
                 channel.trySend(
                     typingUserIds
-                        .filter { it != sessionData.userId }
+                        .filter { it != sessionId.value }
                         .map(::UserId)
                 )
             }
@@ -606,7 +606,7 @@ class RustMatrixRoom(
             room = innerRoom,
             widgetCapabilitiesProvider = object : WidgetCapabilitiesProvider {
                 override fun acquireCapabilities(capabilities: WidgetCapabilities): WidgetCapabilities {
-                    return getElementCallRequiredPermissions(sessionId.value, sessionData.deviceId)
+                    return getElementCallRequiredPermissions(sessionId.value, deviceId.value)
                 }
             },
         )
