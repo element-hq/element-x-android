@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.api
 
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -41,7 +42,7 @@ import java.util.Optional
 
 interface MatrixClient : Closeable {
     val sessionId: SessionId
-    val deviceId: String
+    val deviceId: DeviceId
     val userProfile: StateFlow<MatrixUser>
     val roomListService: RoomListService
     val mediaLoader: MatrixMediaLoader

@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.test
 
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -58,7 +59,7 @@ import java.util.Optional
 
 class FakeMatrixClient(
     override val sessionId: SessionId = A_SESSION_ID,
-    override val deviceId: String = "A_DEVICE_ID",
+    override val deviceId: DeviceId = A_DEVICE_ID,
     override val sessionCoroutineScope: CoroutineScope = TestScope(),
     private val userDisplayName: String? = A_USER_NAME,
     private val userAvatarUrl: String? = AN_AVATAR_URL,

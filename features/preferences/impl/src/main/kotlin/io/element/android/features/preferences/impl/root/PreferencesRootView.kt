@@ -36,6 +36,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserProvider
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -229,7 +230,7 @@ private fun ColumnScope.GeneralSection(
 @Composable
 private fun ColumnScope.Footer(
     version: String,
-    deviceId: String?,
+    deviceId: DeviceId?,
     onClick: (() -> Unit)?,
 ) {
     val text = remember(version, deviceId) {
