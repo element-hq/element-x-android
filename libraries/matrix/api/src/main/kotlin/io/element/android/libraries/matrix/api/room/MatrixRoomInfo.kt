@@ -42,7 +42,7 @@ data class MatrixRoomInfo(
     val notificationCount: Long,
     val userDefinedNotificationMode: RoomNotificationMode?,
     val hasRoomCall: Boolean,
-    val activeRoomCallParticipants: ImmutableList<String>,
+    val activeRoomCallParticipants: ImmutableList<UserId>,
     val heroes: ImmutableList<MatrixUser>,
     val pinnedEventIds: ImmutableList<EventId>,
     val creator: UserId?,

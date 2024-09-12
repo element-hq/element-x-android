@@ -531,7 +531,7 @@ fun aRoomInfo(
     userDefinedNotificationMode: RoomNotificationMode? = null,
     hasRoomCall: Boolean = false,
     userPowerLevels: ImmutableMap<UserId, Long> = persistentMapOf(),
-    activeRoomCallParticipants: List<String> = emptyList(),
+    activeRoomCallParticipants: List<UserId> = emptyList(),
     heroes: List<MatrixUser> = emptyList(),
     pinnedEventIds: List<EventId> = emptyList(),
     roomCreator: UserId? = null,

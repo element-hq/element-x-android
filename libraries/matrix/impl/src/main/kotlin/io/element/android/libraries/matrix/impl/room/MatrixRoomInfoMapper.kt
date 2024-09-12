@@ -50,7 +50,7 @@ class MatrixRoomInfoMapper {
             notificationCount = it.notificationCount.toLong(),
             userDefinedNotificationMode = it.cachedUserDefinedNotificationMode?.map(),
             hasRoomCall = it.hasRoomCall,
-            activeRoomCallParticipants = it.activeRoomCallParticipants.toImmutableList(),
+            activeRoomCallParticipants = it.activeRoomCallParticipants.map(::UserId).toImmutableList(),
             heroes = it.elementHeroes().toImmutableList(),
             pinnedEventIds = it.pinnedEventIds.map(::EventId).toImmutableList(),
         )
