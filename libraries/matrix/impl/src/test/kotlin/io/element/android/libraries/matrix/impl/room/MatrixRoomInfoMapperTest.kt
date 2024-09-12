@@ -67,6 +67,7 @@ class MatrixRoomInfoMapperTest {
                     numUnreadNotifications = 13uL,
                     numUnreadMentions = 14uL,
                     pinnedEventIds = listOf(AN_EVENT_ID.value),
+                    roomCreator = A_USER_ID.value,
                 )
             )
         ).isEqualTo(
@@ -102,6 +103,7 @@ class MatrixRoomInfoMapperTest {
                     )
                 ).toImmutableList(),
                 pinnedEventIds = listOf(AN_EVENT_ID).toPersistentList(),
+                creator = A_USER_ID,
             )
         )
     }
@@ -140,6 +142,7 @@ class MatrixRoomInfoMapperTest {
                     numUnreadNotifications = 13uL,
                     numUnreadMentions = 14uL,
                     pinnedEventIds = emptyList(),
+                    roomCreator = null,
                 )
             )
         ).isEqualTo(
@@ -169,6 +172,7 @@ class MatrixRoomInfoMapperTest {
                 activeRoomCallParticipants = emptyList<UserId>().toImmutableList(),
                 heroes = emptyList<MatrixUser>().toImmutableList(),
                 pinnedEventIds = emptyList<EventId>().toPersistentList(),
+                creator = null,
             )
         )
     }
