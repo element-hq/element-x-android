@@ -188,6 +188,7 @@ class RustMatrixRoom(
             innerRoom.pinnedEventsTimeline(
                 internalIdPrefix = "pinned_events",
                 maxEventsToLoad = 100u,
+                maxConcurrentRequests = 10u,
             ).let { inner ->
                 createTimeline(inner, mode = Timeline.Mode.PINNED_EVENTS)
             }
