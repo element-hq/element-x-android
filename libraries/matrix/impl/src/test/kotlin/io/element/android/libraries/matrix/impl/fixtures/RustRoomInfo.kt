@@ -18,8 +18,8 @@ import org.matrix.rustcomponents.sdk.RoomNotificationMode
 
 fun aRustRoomInfo(
     id: String = A_ROOM_ID.value,
-    displayName: String = A_ROOM_NAME,
-    rawName: String = A_ROOM_NAME,
+    displayName: String? = A_ROOM_NAME,
+    rawName: String? = A_ROOM_NAME,
     topic: String? = null,
     avatarUrl: String? = null,
     isDirect: Boolean = false,

@@ -65,7 +65,7 @@ class RoomInfoExtTest {
     }
 }
 
-private fun aRoomHero(
+internal fun aRoomHero(
     userId: UserId = A_USER_ID,
 ): RoomHero {
     return RoomHero(
