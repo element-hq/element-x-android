@@ -181,6 +181,7 @@ private fun PinnedMessagesListLoaded(
         onSelectAction = ::onActionSelected,
         onCustomReactionClick = {},
         onEmojiReactionClick = { _, _ -> },
+        onVerifiedUserSendFailureClick = {}
     )
     LazyColumn(
         modifier = modifier.fillMaxSize(),

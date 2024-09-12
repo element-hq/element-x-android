@@ -36,6 +36,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -115,16 +116,44 @@ class DefaultActionListPresenter @AssistedInject constructor(
             isEventPinned = pinnedEventIds.contains(timelineItem.eventId),
         )
 
-        val displayEmojiReactions = usersEventPermissions.canSendReaction &&
-            timelineItem.content.canReact()
-        if (actions.isNotEmpty() || displayEmojiReactions) {
+        val verifiedUserSendFailure = buildVerifiedUserSendFailure(timelineItem)
+        val displayEmojiReactions = usersEventPermissions.canSendReaction && timelineItem.content.canReact()
+
+        if (actions.isNotEmpty() || displayEmojiReactions || verifiedUserSendFailure != ActionListState.VerifiedUserSendFailure.None) {
             target.value = ActionListState.Target.Success(
                 event = timelineItem,
                 displayEmojiReactions = displayEmojiReactions,
+                verifiedUserSendFailure = verifiedUserSendFailure,
                 actions = actions.toImmutableList()
             )
         } else {
             target.value = ActionListState.Target.None
+        }
+    }
+
+    private suspend fun buildVerifiedUserSendFailure(
+        timelineItem: TimelineItem.Event,
+    ): ActionListState.VerifiedUserSendFailure {
+        return when (val sendState = timelineItem.localSendState) {
+            is LocalEventSendState.Failed.VerifiedUserHasUnsignedDevice -> {
+                val userId = sendState.devices.keys.firstOrNull()
+                if (userId == null) {
+                    ActionListState.VerifiedUserSendFailure.None
+                } else {
+                    val displayName = room.userDisplayName(userId).getOrNull() ?: userId.value
+                    ActionListState.VerifiedUserSendFailure.UnsignedDevice(displayName)
+                }
+            }
+            is LocalEventSendState.Failed.VerifiedUserChangedIdentity -> {
+                val userId = sendState.users.firstOrNull()
+                if (userId == null) {
+                    ActionListState.VerifiedUserSendFailure.None
+                } else {
+                    val displayName = room.userDisplayName(userId).getOrNull() ?: userId.value
+                    ActionListState.VerifiedUserSendFailure.ChangedIdentity(displayName)
+                }
+            }
+            else -> ActionListState.VerifiedUserSendFailure.None
         }
     }
 

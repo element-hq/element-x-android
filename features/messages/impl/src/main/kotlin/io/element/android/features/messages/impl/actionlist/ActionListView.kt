@@ -27,6 +27,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -90,6 +91,7 @@ fun ActionListView(
     onSelectAction: (action: TimelineItemAction, TimelineItem.Event) -> Unit,
     onEmojiReactionClick: (String, TimelineItem.Event) -> Unit,
     onCustomReactionClick: (TimelineItem.Event) -> Unit,
+    onVerifiedUserSendFailureClick: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -126,6 +128,14 @@ fun ActionListView(
         state.eventSink(ActionListEvents.Clear)
     }
 
+    fun onVerifiedUserSendFailureClick() {
+        if (targetItem == null) return
+        sheetState.hide(coroutineScope) {
+            state.eventSink(ActionListEvents.Clear)
+            onVerifiedUserSendFailureClick(targetItem)
+        }
+    }
+
     if (targetItem != null) {
         ModalBottomSheet(
             sheetState = sheetState,
@@ -137,6 +147,7 @@ fun ActionListView(
                 onActionClick = ::onItemActionClick,
                 onEmojiReactionClick = ::onEmojiReactionClick,
                 onCustomReactionClick = ::onCustomReactionClick,
+                onVerifiedUserSendFailureClick = ::onVerifiedUserSendFailureClick,
                 modifier = Modifier
                     .navigationBarsPadding()
                     .imePadding()
@@ -151,6 +162,7 @@ private fun SheetContent(
     onActionClick: (TimelineItemAction) -> Unit,
     onEmojiReactionClick: (String) -> Unit,
     onCustomReactionClick: () -> Unit,
+    onVerifiedUserSendFailureClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when (val target = state.target) {
@@ -181,6 +193,16 @@ private fun SheetContent(
                         } else {
                             Spacer(modifier = Modifier.height(14.dp))
                         }
+                        HorizontalDivider()
+                    }
+                }
+                if (target.verifiedUserSendFailure != ActionListState.VerifiedUserSendFailure.None) {
+                    item {
+                        VerifiedUserSendFailureView(
+                            sendFailure = target.verifiedUserSendFailure,
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = onVerifiedUserSendFailureClick
+                        )
                         HorizontalDivider()
                     }
                 }
@@ -339,6 +361,33 @@ private fun EmojiReactionsRow(
 }
 
 @Composable
+private fun VerifiedUserSendFailureView(
+    sendFailure: ActionListState.VerifiedUserSendFailure,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    ListItem(
+        modifier = modifier
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Error())),
+        trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChevronRight())),
+        headlineContent = {
+            Text(
+                text = sendFailure.formatted(),
+                style = ElementTheme.typography.fontBodySmMedium,
+            )
+        },
+        colors = ListItemDefaults.colors(
+            containerColor = Color.Transparent,
+            leadingIconColor = ElementTheme.colors.iconCriticalPrimary,
+            trailingIconColor = ElementTheme.colors.iconPrimary,
+            headlineColor = ElementTheme.colors.textCriticalPrimary,
+        ),
+    )
+}
+
+@Composable
 private fun EmojiButton(
     emoji: String,
     isHighlighted: Boolean,
@@ -387,5 +436,6 @@ internal fun SheetContentPreview(
         onActionClick = {},
         onEmojiReactionClick = {},
         onCustomReactionClick = {},
+        onVerifiedUserSendFailureClick = {},
     )
 }
