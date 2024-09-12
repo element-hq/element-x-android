@@ -1,24 +1,15 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl.timeline.factories
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import io.element.android.features.messages.impl.timeline.TimelineItemIndexer
 import io.element.android.features.messages.impl.timeline.diff.TimelineItemsCacheInvalidator
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemEventFactory
@@ -31,22 +22,29 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class TimelineItemsFactory @Inject constructor(
+class TimelineItemsFactory @AssistedInject constructor(
+    @Assisted config: TimelineItemsFactoryConfig,
+    eventItemFactoryCreator: TimelineItemEventFactory.Creator,
     private val dispatchers: CoroutineDispatchers,
-    private val eventItemFactory: TimelineItemEventFactory,
     private val virtualItemFactory: TimelineItemVirtualFactory,
     private val timelineItemGrouper: TimelineItemGrouper,
     private val timelineItemIndexer: TimelineItemIndexer,
 ) {
-    private val timelineItems = MutableStateFlow(persistentListOf<TimelineItem>())
+    @AssistedFactory
+    interface Creator {
+        fun create(config: TimelineItemsFactoryConfig): TimelineItemsFactory
+    }
+
+    private val eventItemFactory = eventItemFactoryCreator.create(config)
+    private val _timelineItems = MutableSharedFlow<ImmutableList<TimelineItem>>(replay = 1)
     private val lock = Mutex()
     private val diffCache = MutableListDiffCache<TimelineItem>()
     private val diffCacheUpdater = DiffCacheUpdater<MatrixTimelineItem, TimelineItem>(
@@ -61,10 +59,7 @@ class TimelineItemsFactory @Inject constructor(
         }
     }
 
-    @Composable
-    fun collectItemsAsState(): State<ImmutableList<TimelineItem>> {
-        return timelineItems.collectAsState()
-    }
+    val timelineItems: Flow<ImmutableList<TimelineItem>> = _timelineItems.distinctUntilChanged()
 
     suspend fun replaceWith(
         timelineItems: List<MatrixTimelineItem>,
@@ -102,7 +97,7 @@ class TimelineItemsFactory @Inject constructor(
         }
         val result = timelineItemGrouper.group(newTimelineItemStates).toPersistentList()
         timelineItemIndexer.process(result)
-        this.timelineItems.emit(result)
+        this._timelineItems.emit(result)
     }
 
     private suspend fun buildAndCacheItem(

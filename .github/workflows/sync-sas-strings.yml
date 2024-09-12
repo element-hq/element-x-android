@@ -23,7 +23,7 @@ jobs:
       - name: Run SAS String script
         run: ./tools/sas/import_sas_strings.py
       - name: Create Pull Request for SAS Strings
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
           commit-message: Sync SAS Strings
           title: Sync SAS Strings

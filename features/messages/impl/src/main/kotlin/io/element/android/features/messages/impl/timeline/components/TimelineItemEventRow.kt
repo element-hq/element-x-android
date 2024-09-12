@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl.timeline.components
@@ -129,7 +120,16 @@ fun TimelineItemEventRow(
     onReadReceiptClick: (event: TimelineItem.Event) -> Unit,
     onSwipeToReply: () -> Unit,
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit = { contentModifier, onContentLayoutChange ->
+        TimelineItemEventContentView(
+            content = event.content,
+            onLinkClick = onLinkClick,
+            eventSink = eventSink,
+            modifier = contentModifier,
+            onContentLayoutChange = onContentLayoutChange
+        )
+    },
 ) {
     val coroutineScope = rememberCoroutineScope()
     val interactionSource = remember { MutableInteractionSource() }
@@ -188,8 +188,7 @@ fun TimelineItemEventRow(
                         onReactionClick = { emoji -> onReactionClick(emoji, event) },
                         onReactionLongClick = { emoji -> onReactionLongClick(emoji, event) },
                         onMoreReactionsClick = { onMoreReactionsClick(event) },
-                        onLinkClick = onLinkClick,
-                        eventSink = eventSink,
+                        eventContentView = eventContentView,
                     )
                 }
             }
@@ -207,8 +206,7 @@ fun TimelineItemEventRow(
                 onReactionClick = { emoji -> onReactionClick(emoji, event) },
                 onReactionLongClick = { emoji -> onReactionLongClick(emoji, event) },
                 onMoreReactionsClick = { onMoreReactionsClick(event) },
-                onLinkClick = onLinkClick,
-                eventSink = eventSink,
+                eventContentView = eventContentView,
             )
         }
         // Read receipts / Send state
@@ -263,9 +261,8 @@ private fun TimelineItemEventRowContent(
     onReactionClick: (emoji: String) -> Unit,
     onReactionLongClick: (emoji: String) -> Unit,
     onMoreReactionsClick: (event: TimelineItem.Event) -> Unit,
-    onLinkClick: (String) -> Unit,
-    eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier,
+    eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit,
 ) {
     fun ConstrainScope.linkStartOrEnd(event: TimelineItem.Event) = if (event.isMine) {
         end.linkTo(parent.end)
@@ -328,8 +325,7 @@ private fun TimelineItemEventRowContent(
                 onShieldClick = onShieldClick,
                 onMessageLongClick = onLongClick,
                 inReplyToClick = inReplyToClick,
-                onLinkClick = onLinkClick,
-                eventSink = eventSink,
+                eventContentView = eventContentView,
             )
         }
 
@@ -389,12 +385,11 @@ private fun MessageEventBubbleContent(
     onShieldClick: (MessageShield) -> Unit,
     onMessageLongClick: () -> Unit,
     inReplyToClick: () -> Unit,
-    onLinkClick: (String) -> Unit,
-    eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     @SuppressLint("ModifierParameter")
     // need to rename this modifier to prevent linter false positives
     @Suppress("ModifierNaming")
     bubbleModifier: Modifier = Modifier,
+    eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit,
 ) {
     // Long clicks are not not automatically propagated from a `clickable`
     // to its `combinedClickable` parent so we do it manually
@@ -521,15 +516,10 @@ private fun MessageEventBubbleContent(
                 onShieldClick = onShieldClick,
                 canShrinkContent = canShrinkContent,
                 modifier = timestampLayoutModifier,
-            ) { onContentLayoutChange ->
-                TimelineItemEventContentView(
-                    content = event.content,
-                    onLinkClick = onLinkClick,
-                    eventSink = eventSink,
-                    onContentLayoutChange = onContentLayoutChange,
-                    modifier = contentModifier
-                )
-            }
+                content = { onContentLayoutChange ->
+                    eventContentView(contentModifier, onContentLayoutChange)
+                }
+            )
         }
 
         val inReplyTo = @Composable { inReplyTo: InReplyToDetails ->

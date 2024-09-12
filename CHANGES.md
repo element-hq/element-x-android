@@ -1,3 +1,81 @@
+Changes in Element X v0.5.3 (2024-09-10)
+========================================
+
+### ✨ Features
+* Add banner for optional migration to simplified sliding sync by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3429
+
+### 🙌 Improvements
+* Timeline : remove the encrypted history banner by @ganfra in https://github.com/element-hq/element-x-android/pull/3410
+
+### 🐛 Bugfixes
+* Fix new logins with Simplified SS using the proxy by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3417
+* Ensure Call is not hang up when user is asked to grant system permissions by @bmarty in https://github.com/element-hq/element-x-android/pull/3419
+* Wait for a room with joined state in `/sync` after creating it by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3421
+* [Bugfix] : fix self verification flow by @ganfra in https://github.com/element-hq/element-x-android/pull/3426
+
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/3425
+
+### 🚧 In development 🚧
+* [Feature] Pinned messages list by @ganfra in https://github.com/element-hq/element-x-android/pull/3392
+* Pinned messages banner : adjust indicator to match design. by @ganfra in https://github.com/element-hq/element-x-android/pull/3415
+
+### Dependency upgrades
+* Update plugin dependencycheck to v10.0.4 by @renovate in https://github.com/element-hq/element-x-android/pull/3372
+* Update plugin detekt to v1.23.7 by @renovate in https://github.com/element-hq/element-x-android/pull/3424
+
+### Others
+* Delete old log files by @bmarty in https://github.com/element-hq/element-x-android/pull/3413
+* Recovery key formatting and wording iteration by @bmarty in https://github.com/element-hq/element-x-android/pull/3409
+* Change license to AGPL by @bmarty in https://github.com/element-hq/element-x-android/pull/3422
+* Remove Wait list screen by @bmarty in https://github.com/element-hq/element-x-android/pull/3428
+
+Changes in Element X v0.5.2 (2024-09-05)
+=========================================
+
+### 🙌 Improvements
+* [Identity reset] Remove instruction to reset identity on another client. by @bmarty in https://github.com/element-hq/element-x-android/pull/3355
+* Redact message on displayed notification by @bmarty in https://github.com/element-hq/element-x-android/pull/3320
+* Add a way to sign out when the user is asked to verify the session. by @bmarty in https://github.com/element-hq/element-x-android/pull/3359
+* Add banner entry point to set up recovery by @bmarty in https://github.com/element-hq/element-x-android/pull/3360
+* Replace OSS licenses plugin with Licensee and some manually done UI. by @bmarty in https://github.com/element-hq/element-x-android/pull/3381
+
+### 🐛 Bugfixes
+* Small fixes around logging out. by @bmarty in https://github.com/element-hq/element-x-android/pull/3356
+* Ensure starting PinUnlockActivity does not crash the application. by @bmarty in https://github.com/element-hq/element-x-android/pull/3369
+* Use the right colors for `@room` mention pills by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3376
+* Fix avatar sometimes not loading by @bmarty in https://github.com/element-hq/element-x-android/pull/3366
+* Make pinned events required state in SlidingSync by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3385
+* Make sure to save the tokens the Client might return when its session is restored by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3378
+* Fix Element Call closing automatically on API 34 by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3402
+
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/3373
+
+### 🧱 Build
+* Try adding a memory limit for the kotlin compiler by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3377
+
+### Dependency upgrades
+* Update dependency com.google.testparameterinjector:test-parameter-injector to v1.17 by @renovate in https://github.com/element-hq/element-x-android/pull/3357
+* Update dependencyAnalysis to v2.0.1 by @renovate in https://github.com/element-hq/element-x-android/pull/3362
+* Update android.gradle.plugin to v8.6.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3363
+* Update dependency io.nlopez.compose.rules:detekt to v0.4.11 by @renovate in https://github.com/element-hq/element-x-android/pull/3364
+* Update dependency com.posthog:posthog-android to v3.6.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3358
+* Update mobile-dev-inc/action-maestro-cloud action to v1.9.1 by @renovate in https://github.com/element-hq/element-x-android/pull/3367
+* Update dependency com.posthog:posthog-android to v3.6.1 by @renovate in https://github.com/element-hq/element-x-android/pull/3368
+* Update dependency org.matrix.rustcomponents:sdk-android to v0.2.41 by @renovate in https://github.com/element-hq/element-x-android/pull/3384
+* Rust sdk : update to 0.2.42 by @ganfra in https://github.com/element-hq/element-x-android/pull/3393
+* Update dependency com.android.tools:desugar_jdk_libs to v2.1.2 by @renovate in https://github.com/element-hq/element-x-android/pull/3350
+* Update dependency com.sigpwned:emoji4j-core to v15.1.2 by @renovate in https://github.com/element-hq/element-x-android/pull/3396
+
+### Others
+* Release : use a different concurrency group for enterprise build by @ganfra in https://github.com/element-hq/element-x-android/pull/3351
+* Provide distinct cache directory to the Rust SDK. by @bmarty in https://github.com/element-hq/element-x-android/pull/3370
+* Remove the migration screen by @bmarty in https://github.com/element-hq/element-x-android/pull/3389
+* Unified push endpoint: do not fallback to default endpoint in case of failure and add troubleshoot test. by @bmarty in https://github.com/element-hq/element-x-android/pull/3388
+* Skip device verification screen when creating a new account using OIDC by @bmarty in https://github.com/element-hq/element-x-android/pull/3395
+* Big emoji-only messages by @frebib in https://github.com/element-hq/element-x-android/pull/3295
+
 Changes in Element X v0.5.1 (2024-08-28)
 =========================================
 
