@@ -86,7 +86,7 @@ class RustTimeline(
     onNewSyncedEvent: () -> Unit,
 ) : Timeline {
     private val initLatch = CompletableDeferred<Unit>()
-    private val isInit = MutableStateFlow(false)
+    private val isTimelineInitialized = MutableStateFlow(false)
 
     private val _timelineItems: MutableStateFlow<List<MatrixTimelineItem>> =
         MutableStateFlow(emptyList())
@@ -110,7 +110,7 @@ class RustTimeline(
         timelineCoroutineScope = coroutineScope,
         timelineDiffProcessor = timelineDiffProcessor,
         initLatch = initLatch,
-        isInit = isInit,
+        isTimelineInitialized = isTimelineInitialized,
         dispatcher = dispatcher,
         onNewSyncedEvent = onNewSyncedEvent,
     )
@@ -189,7 +189,7 @@ class RustTimeline(
     }
 
     private fun canPaginate(direction: Timeline.PaginationDirection): Boolean {
-        if (!isInit.value) return false
+        if (!isTimelineInitialized.value) return false
         return when (direction) {
             Timeline.PaginationDirection.BACKWARDS -> backPaginationStatus.value.canPaginate
             Timeline.PaginationDirection.FORWARDS -> forwardPaginationStatus.value.canPaginate
@@ -208,8 +208,12 @@ class RustTimeline(
         backPaginationStatus.map { it.hasMoreToLoad }.distinctUntilChanged(),
         forwardPaginationStatus.map { it.hasMoreToLoad }.distinctUntilChanged(),
         matrixRoom.roomInfoFlow.map { it.creator },
-        isInit,
-    ) { timelineItems, hasMoreToLoadBackward, hasMoreToLoadForward, roomCreator, isInit ->
+        isTimelineInitialized,
+    ) { timelineItems,
+        hasMoreToLoadBackward,
+        hasMoreToLoadForward,
+        roomCreator,
+        isTimelineInitialized ->
         withContext(dispatcher) {
             timelineItems
                 .let { items ->
@@ -223,7 +227,7 @@ class RustTimeline(
                 .let { items ->
                     loadingIndicatorsPostProcessor.process(
                         items = items,
-                        isInit = isInit,
+                        isTimelineInitialized = isTimelineInitialized,
                         hasMoreToLoadBackward = hasMoreToLoadBackward,
                         hasMoreToLoadForward = hasMoreToLoadForward
                     )
@@ -232,7 +236,7 @@ class RustTimeline(
                 .let { items ->
                     lastForwardIndicatorsPostProcessor.process(
                         items = items,
-                        isInit = isInit,
+                        isTimelineInitialized = isTimelineInitialized,
                     )
                 }
         }

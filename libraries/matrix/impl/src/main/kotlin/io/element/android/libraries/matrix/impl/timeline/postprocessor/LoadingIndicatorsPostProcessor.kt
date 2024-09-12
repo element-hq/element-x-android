@@ -16,11 +16,11 @@ import io.element.android.services.toolbox.api.systemclock.SystemClock
 class LoadingIndicatorsPostProcessor(private val systemClock: SystemClock) {
     fun process(
         items: List<MatrixTimelineItem>,
-        isInit: Boolean,
+        isTimelineInitialized: Boolean,
         hasMoreToLoadBackward: Boolean,
         hasMoreToLoadForward: Boolean,
     ): List<MatrixTimelineItem> {
-        if (!isInit) return items
+        if (!isTimelineInitialized) return items
         val shouldAddForwardLoadingIndicator = hasMoreToLoadForward && items.isNotEmpty()
         val currentTimestamp = systemClock.epochMillis()
         return buildList {
