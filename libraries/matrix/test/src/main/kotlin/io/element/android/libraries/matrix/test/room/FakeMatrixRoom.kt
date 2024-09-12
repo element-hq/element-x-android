@@ -520,7 +520,7 @@ fun aRoomInfo(
     isTombstoned: Boolean = false,
     isFavorite: Boolean = false,
     canonicalAlias: RoomAlias? = null,
-    alternativeAliases: List<String> = emptyList(),
+    alternativeAliases: List<RoomAlias> = emptyList(),
     currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,
     inviter: RoomMember? = null,
     activeMembersCount: Long = 1,

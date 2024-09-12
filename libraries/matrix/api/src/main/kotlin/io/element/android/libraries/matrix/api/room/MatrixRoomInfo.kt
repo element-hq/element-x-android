@@ -31,7 +31,7 @@ data class MatrixRoomInfo(
     val isTombstoned: Boolean,
     val isFavorite: Boolean,
     val canonicalAlias: RoomAlias?,
-    val alternativeAliases: ImmutableList<String>,
+    val alternativeAliases: ImmutableList<RoomAlias>,
     val currentUserMembership: CurrentUserMembership,
     val inviter: RoomMember?,
     val activeMembersCount: Long,

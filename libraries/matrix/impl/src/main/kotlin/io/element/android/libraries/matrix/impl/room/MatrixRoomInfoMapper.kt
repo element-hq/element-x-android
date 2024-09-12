@@ -39,7 +39,7 @@ class MatrixRoomInfoMapper {
             isTombstoned = it.isTombstoned,
             isFavorite = it.isFavourite,
             canonicalAlias = it.canonicalAlias?.let(::RoomAlias),
-            alternativeAliases = it.alternativeAliases.toImmutableList(),
+            alternativeAliases = it.alternativeAliases.map(::RoomAlias).toImmutableList(),
             currentUserMembership = it.membership.map(),
             inviter = it.inviter?.let(RoomMemberMapper::map),
             activeMembersCount = it.activeMembersCount.toLong(),
