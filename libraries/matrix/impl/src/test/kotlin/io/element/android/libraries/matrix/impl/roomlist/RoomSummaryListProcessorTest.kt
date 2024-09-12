@@ -150,7 +150,7 @@ class RoomSummaryListProcessorTest {
     }
 
     @Test
-    fun `Rest removes all entries and add the provided ones`() = runTest {
+    fun `Reset removes all entries and add the provided ones`() = runTest {
         summaries.value = listOf(aRoomSummaryFilled(roomId = A_ROOM_ID), aRoomSummaryFilled(A_ROOM_ID_2))
         val processor = createProcessor()
         val index = 0
