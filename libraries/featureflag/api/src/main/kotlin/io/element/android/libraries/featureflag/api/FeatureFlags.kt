@@ -13,8 +13,6 @@ import io.element.android.libraries.core.meta.BuildType
 
 /**
  * To enable or disable a FeatureFlags, change the `defaultValue` value.
- * Warning: to enable a flag for the release app, you MUST update the file
- * [io.element.android.libraries.featureflag.impl.StaticFeatureFlagProvider]
  */
 enum class FeatureFlags(
     override val key: String,
@@ -123,6 +121,15 @@ enum class FeatureFlags(
         title = "Sync on push",
         description = "Subscribe to room sync when a push is received",
         defaultValue = { true },
+        isFinished = false,
+    ),
+    InvisibleCrypto(
+        key = "feature.invisibleCrypto",
+        title = "Invisible Crypto",
+        description = "This setting controls how end-to-end encryption (E2E) keys are shared." +
+            " Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners." +
+            " You'll have to stop and re-open the app manually for that setting to take effect.",
+        defaultValue = { false },
         isFinished = false,
     ),
 }
