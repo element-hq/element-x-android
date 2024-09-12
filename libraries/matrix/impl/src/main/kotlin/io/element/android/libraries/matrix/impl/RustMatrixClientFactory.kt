@@ -60,6 +60,9 @@ class RustMatrixClientFactory @Inject constructor(
             .homeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
             .setSessionDelegate(sessionDelegate)
+            .roomKeyRecipientStrategy(
+                strategy = CollectStrategy.DeviceBasedStrategy(false, true)
+            )
             .use { it.build() }
 
         client.restoreSession(sessionData.toSession())
