@@ -44,5 +44,6 @@ data class MatrixRoomInfo(
     val hasRoomCall: Boolean,
     val activeRoomCallParticipants: ImmutableList<String>,
     val heroes: ImmutableList<MatrixUser>,
-    val pinnedEventIds: ImmutableList<EventId>
+    val pinnedEventIds: ImmutableList<EventId>,
+    val creator: UserId?,
 )
