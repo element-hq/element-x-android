@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.api.room
 
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -349,5 +350,9 @@ interface MatrixRoom : Closeable {
      */
     suspend fun clearComposerDraft(): Result<Unit>
 
+    suspend fun ignoreDeviceTrustAndResend(devices: Map<UserId, List<DeviceId>>, transactionId: TransactionId): Result<Unit>
+    suspend fun withdrawVerificationAndResend(userIds: List<UserId>, transactionId: TransactionId): Result<Unit>
+
     override fun close() = destroy()
+
 }
