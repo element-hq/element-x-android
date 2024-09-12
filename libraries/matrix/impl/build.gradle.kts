@@ -48,6 +48,7 @@ dependencies {
     testImplementation(libs.test.robolectric)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.services.analytics.test)
+    testImplementation(projects.services.toolbox.test)
     testImplementation(projects.tests.testutils)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.test.turbine)
