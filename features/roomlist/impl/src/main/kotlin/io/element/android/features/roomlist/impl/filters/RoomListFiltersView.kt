@@ -116,7 +116,7 @@ fun RoomListFiltersView(
                 val zIndex = (if (previousFilters.value.contains(filterWithSelection.filter)) state.filterSelectionStates.size else 0) - i.toFloat()
                 RoomListFilterView(
                     modifier = Modifier
-                        .animateItemPlacement()
+                        .animateItem()
                         .zIndex(zIndex),
                     roomListFilter = filterWithSelection.filter,
                     selected = filterWithSelection.isSelected,
