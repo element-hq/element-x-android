@@ -70,7 +70,7 @@ fun CustomBottomSheetScaffold(
     sheetPeekHeight: Dp = BottomSheetDefaults.SheetPeekHeight,
     sheetMaxWidth: Dp = BottomSheetDefaults.SheetMaxWidth,
     sheetShape: Shape = BottomSheetDefaults.ExpandedShape,
-    sheetContainerColor: Color = BottomSheetDefaults.ContainerColor,
+    sheetContainerColor: Color = Color.White,
     sheetContentColor: Color = contentColorFor(sheetContainerColor),
     sheetTonalElevation: Dp = BottomSheetDefaults.Elevation,
     sheetShadowElevation: Dp = BottomSheetDefaults.Elevation,

@@ -9,6 +9,7 @@ package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.theme.components.bottomsheet.BottomSheetScaffoldState
 import io.element.android.libraries.designsystem.theme.components.bottomsheet.CustomBottomSheetScaffold
 import io.element.android.libraries.designsystem.theme.components.bottomsheet.rememberBottomSheetScaffoldState
@@ -32,7 +34,7 @@ fun BottomSheetScaffold(
     scaffoldState: BottomSheetScaffoldState = rememberBottomSheetScaffoldState(),
     sheetPeekHeight: Dp = BottomSheetDefaults.SheetPeekHeight,
     sheetShape: Shape = BottomSheetDefaults.ExpandedShape,
-    sheetContainerColor: Color = BottomSheetDefaults.ContainerColor,
+    sheetContainerColor: Color = MaterialTheme.colorScheme.surface,
     sheetContentColor: Color = contentColorFor(sheetContainerColor),
     sheetTonalElevation: Dp = BottomSheetDefaults.Elevation,
     sheetShadowElevation: Dp = BottomSheetDefaults.Elevation,
