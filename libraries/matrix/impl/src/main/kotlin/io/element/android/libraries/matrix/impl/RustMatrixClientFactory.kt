@@ -10,6 +10,8 @@ package io.element.android.libraries.matrix.impl
 import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.CacheDirectory
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.impl.analytics.UtdTracker
 import io.element.android.libraries.matrix.impl.certificates.UserCertificatesProvider
 import io.element.android.libraries.matrix.impl.paths.SessionPaths
@@ -30,6 +32,7 @@ import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 import org.matrix.rustcomponents.sdk.SlidingSyncVersionBuilder
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
+import uniffi.matrix_sdk_crypto.CollectStrategy
 import java.io.File
 import javax.inject.Inject
 
@@ -45,6 +48,7 @@ class RustMatrixClientFactory @Inject constructor(
     private val clock: SystemClock,
     private val utdTracker: UtdTracker,
     private val appPreferencesStore: AppPreferencesStore,
+    private val featureFlagService: FeatureFlagService,
 ) {
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
         val sessionDelegate = RustClientSessionDelegate(sessionStore, appCoroutineScope, coroutineDispatchers)
@@ -104,6 +108,13 @@ class RustMatrixClientFactory @Inject constructor(
             .addRootCertificates(userCertificatesProvider.provides())
             .autoEnableBackups(true)
             .autoEnableCrossSigning(true)
+            .roomKeyRecipientStrategy(
+                strategy = if (featureFlagService.isFeatureEnabled(FeatureFlags.InvisibleCrypto)) {
+                    CollectStrategy.IdentityBasedStrategy
+                } else {
+                    CollectStrategy.DeviceBasedStrategy(onlyAllowTrustedDevices = false, errorOnVerifiedUserProblem = false)
+                }
+            )
             .run {
                 // Apply sliding sync version settings
                 when (slidingSync) {

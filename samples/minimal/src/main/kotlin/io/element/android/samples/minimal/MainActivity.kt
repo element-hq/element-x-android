@@ -56,6 +56,7 @@ class MainActivity : ComponentActivity() {
                 clock = DefaultSystemClock(),
                 utdTracker = UtdTracker(NoopAnalyticsService()),
                 appPreferencesStore = InMemoryAppPreferencesStore(),
+                featureFlagService = AlwaysEnabledFeatureFlagService(),
             ),
             passphraseGenerator = NullPassphraseGenerator(),
             oidcConfigurationProvider = OidcConfigurationProvider(baseDirectory),

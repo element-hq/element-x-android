@@ -123,4 +123,13 @@ enum class FeatureFlags(
         defaultValue = { true },
         isFinished = false,
     ),
+    InvisibleCrypto(
+        key = "feature.invisibleCrypto",
+        title = "Invisible Crypto",
+        description = "This setting controls how end-to-end encryption (E2E) keys are shared." +
+            " Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners." +
+            " You'll have to stop and re-open the app manually for that setting to take effect.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
 }
