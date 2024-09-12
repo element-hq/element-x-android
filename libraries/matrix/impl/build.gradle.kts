@@ -47,6 +47,8 @@ dependencies {
     testImplementation(libs.test.truth)
     testImplementation(libs.test.robolectric)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.sessionStorage.implMemory)
+    testImplementation(projects.libraries.sessionStorage.test)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.services.toolbox.test)
     testImplementation(projects.tests.testutils)
