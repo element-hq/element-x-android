@@ -15,7 +15,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
@@ -27,6 +26,7 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.pinned.PinnedEventsTimelineProvider
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
+import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -55,16 +55,23 @@ import kotlin.time.Duration.Companion.milliseconds
 class PinnedMessagesListPresenter @AssistedInject constructor(
     @Assisted private val navigator: PinnedMessagesListNavigator,
     private val room: MatrixRoom,
-    private val timelineItemsFactory: TimelineItemsFactory,
+    timelineItemsFactoryCreator: TimelineItemsFactory.Creator,
     private val timelineProvider: PinnedEventsTimelineProvider,
     private val snackbarDispatcher: SnackbarDispatcher,
     actionListPresenterFactory: ActionListPresenter.Factory,
+    private val appCoroutineScope: CoroutineScope,
 ) : Presenter<PinnedMessagesListState> {
     @AssistedFactory
     interface Factory {
         fun create(navigator: PinnedMessagesListNavigator): PinnedMessagesListPresenter
     }
 
+    private val timelineItemsFactory: TimelineItemsFactory = timelineItemsFactoryCreator.create(
+        config = TimelineItemsFactoryConfig(
+            computeReadReceipts = false,
+            computeReactions = false,
+        )
+    )
     private val actionListPresenter = actionListPresenterFactory.create(PinnedMessagesListTimelineActionPostProcessor())
 
     @Composable
@@ -93,10 +100,9 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
             }
         )
 
-        val coroutineScope = rememberCoroutineScope()
         fun handleEvents(event: PinnedMessagesListEvents) {
             when (event) {
-                is PinnedMessagesListEvents.HandleAction -> coroutineScope.handleTimelineAction(event.action, event.event)
+                is PinnedMessagesListEvents.HandleAction -> appCoroutineScope.handleTimelineAction(event.action, event.event)
             }
         }
 

@@ -18,7 +18,7 @@ import io.element.android.features.messages.impl.actionlist.FakeActionListPresen
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.draft.FakeComposerDraftService
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
-import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactory
+import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactoryCreator
 import io.element.android.features.messages.impl.messagecomposer.DefaultMessageComposerContext
 import io.element.android.features.messages.impl.messagecomposer.FakeRoomAliasSuggestionsDataSource
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
@@ -1024,7 +1024,7 @@ class MessagesPresenterTest {
             permissionsPresenterFactory,
         )
         val timelinePresenter = TimelinePresenter(
-            timelineItemsFactory = aTimelineItemsFactory(),
+            timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(),
             room = matrixRoom,
             dispatchers = coroutineDispatchers,
             appScope = this,

@@ -12,6 +12,7 @@ import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -120,7 +121,7 @@ class RustMatrixClient(
     sessionDelegate: RustClientSessionDelegate,
 ) : MatrixClient {
     override val sessionId: UserId = UserId(client.userId())
-    override val deviceId: String = client.deviceId()
+    override val deviceId: DeviceId = DeviceId(client.deviceId())
     override val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-$sessionId")
 
     private val innerRoomListService = syncService.roomListService()
@@ -173,13 +174,13 @@ class RustMatrixClient(
         roomListService = roomListService,
         innerRoomListService = innerRoomListService,
         sessionId = sessionId,
+        deviceId = deviceId,
         notificationSettingsService = notificationSettingsService,
         sessionCoroutineScope = sessionCoroutineScope,
         dispatchers = dispatchers,
         systemClock = clock,
         roomContentForwarder = RoomContentForwarder(innerRoomListService),
         roomSyncSubscriber = roomSyncSubscriber,
-        getSessionData = { sessionStore.getSession(sessionId.value)!! },
     )
 
     override val mediaLoader: MatrixMediaLoader = RustMediaLoader(

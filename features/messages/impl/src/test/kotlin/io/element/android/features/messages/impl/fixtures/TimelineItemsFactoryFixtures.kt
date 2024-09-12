@@ -9,6 +9,7 @@ package io.element.android.features.messages.impl.fixtures
 
 import io.element.android.features.messages.impl.timeline.TimelineItemIndexer
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
+import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFailedToParseMessageFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFailedToParseStateFactory
@@ -39,40 +40,56 @@ import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractorW
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 
+internal fun TestScope.aTimelineItemsFactoryCreator(
+    timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
+): TimelineItemsFactory.Creator {
+    return object : TimelineItemsFactory.Creator {
+        override fun create(config: TimelineItemsFactoryConfig): TimelineItemsFactory {
+            return aTimelineItemsFactory(config, timelineItemIndexer)
+        }
+    }
+}
+
 internal fun TestScope.aTimelineItemsFactory(
-    timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer()
+    config: TimelineItemsFactoryConfig,
+    timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
 ): TimelineItemsFactory {
     val timelineEventFormatter = aTimelineEventFormatter()
     val matrixClient = FakeMatrixClient()
     return TimelineItemsFactory(
         dispatchers = testCoroutineDispatchers(),
-        eventItemFactory = TimelineItemEventFactory(
-            contentFactory = TimelineItemContentFactory(
-                messageFactory = TimelineItemContentMessageFactory(
-                    fileSizeFormatter = FakeFileSizeFormatter(),
-                    fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
-                    featureFlagService = FakeFeatureFlagService(),
-                    htmlConverterProvider = FakeHtmlConverterProvider(),
+        eventItemFactoryCreator = object : TimelineItemEventFactory.Creator {
+            override fun create(config: TimelineItemsFactoryConfig): TimelineItemEventFactory {
+                return TimelineItemEventFactory(
+                    contentFactory = TimelineItemContentFactory(
+                        messageFactory = TimelineItemContentMessageFactory(
+                            fileSizeFormatter = FakeFileSizeFormatter(),
+                            fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
+                            featureFlagService = FakeFeatureFlagService(),
+                            htmlConverterProvider = FakeHtmlConverterProvider(),
+                            permalinkParser = FakePermalinkParser(),
+                            textPillificationHelper = FakeTextPillificationHelper(),
+                        ),
+                        redactedMessageFactory = TimelineItemContentRedactedFactory(),
+                        stickerFactory = TimelineItemContentStickerFactory(
+                            fileSizeFormatter = FakeFileSizeFormatter(),
+                            fileExtensionExtractor = FileExtensionExtractorWithoutValidation()
+                        ),
+                        pollFactory = TimelineItemContentPollFactory(FakeFeatureFlagService(), FakePollContentStateFactory()),
+                        utdFactory = TimelineItemContentUTDFactory(),
+                        roomMembershipFactory = TimelineItemContentRoomMembershipFactory(timelineEventFormatter),
+                        profileChangeFactory = TimelineItemContentProfileChangeFactory(timelineEventFormatter),
+                        stateFactory = TimelineItemContentStateFactory(timelineEventFormatter),
+                        failedToParseMessageFactory = TimelineItemContentFailedToParseMessageFactory(),
+                        failedToParseStateFactory = TimelineItemContentFailedToParseStateFactory(),
+                    ),
+                    matrixClient = matrixClient,
+                    lastMessageTimestampFormatter = FakeLastMessageTimestampFormatter(),
                     permalinkParser = FakePermalinkParser(),
-                    textPillificationHelper = FakeTextPillificationHelper(),
-                ),
-                redactedMessageFactory = TimelineItemContentRedactedFactory(),
-                stickerFactory = TimelineItemContentStickerFactory(
-                    fileSizeFormatter = FakeFileSizeFormatter(),
-                    fileExtensionExtractor = FileExtensionExtractorWithoutValidation()
-                ),
-                pollFactory = TimelineItemContentPollFactory(FakeFeatureFlagService(), FakePollContentStateFactory()),
-                utdFactory = TimelineItemContentUTDFactory(),
-                roomMembershipFactory = TimelineItemContentRoomMembershipFactory(timelineEventFormatter),
-                profileChangeFactory = TimelineItemContentProfileChangeFactory(timelineEventFormatter),
-                stateFactory = TimelineItemContentStateFactory(timelineEventFormatter),
-                failedToParseMessageFactory = TimelineItemContentFailedToParseMessageFactory(),
-                failedToParseStateFactory = TimelineItemContentFailedToParseStateFactory(),
-            ),
-            matrixClient = matrixClient,
-            lastMessageTimestampFormatter = FakeLastMessageTimestampFormatter(),
-            permalinkParser = FakePermalinkParser(),
-        ),
+                    config = config
+                )
+            }
+        },
         virtualItemFactory = TimelineItemVirtualFactory(
             daySeparatorFactory = TimelineItemDaySeparatorFactory(
                 FakeDaySeparatorFormatter()
@@ -80,6 +97,7 @@ internal fun TestScope.aTimelineItemsFactory(
         ),
         timelineItemGrouper = TimelineItemGrouper(),
         timelineItemIndexer = timelineItemIndexer,
+        config = config
     )
 }
 

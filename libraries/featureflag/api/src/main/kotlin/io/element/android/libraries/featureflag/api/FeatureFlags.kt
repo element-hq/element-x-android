@@ -115,7 +115,7 @@ enum class FeatureFlags(
         key = "feature.pinnedEvents",
         title = "Pinned Events",
         description = "Allow user to pin events in a room",
-        defaultValue = { false },
+        defaultValue = { true },
         isFinished = false,
     ),
     SyncOnPush(

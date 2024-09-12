@@ -9,6 +9,7 @@ package io.element.android.features.preferences.impl.root
 
 import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -18,7 +19,7 @@ fun aPreferencesRootState(
 ) = PreferencesRootState(
     myUser = myUser,
     version = "Version 1.1 (1)",
-    deviceId = "ILAKNDNASDLK",
+    deviceId = DeviceId("ILAKNDNASDLK"),
     showSecureBackup = true,
     showSecureBackupBadge = true,
     accountManagementUrl = "aUrl",
