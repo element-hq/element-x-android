@@ -61,9 +61,11 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.EditedContent
 import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.FormattedBody
 import org.matrix.rustcomponents.sdk.MessageFormat
+import org.matrix.rustcomponents.sdk.PollData
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
@@ -274,8 +276,15 @@ class RustTimeline(
         withContext(dispatcher) {
             runCatching<Unit> {
                 getEventTimelineItem(originalEventId, transactionId).use { item ->
+                    val editedContent = EditedContent.RoomMessage(
+                        content = MessageEventContent.from(
+                            body = body,
+                            htmlBody = htmlBody,
+                            intentionalMentions = intentionalMentions
+                        ),
+                    )
                     inner.edit(
-                        newContent = MessageEventContent.from(body, htmlBody, intentionalMentions),
+                        newContent = editedContent,
                         item = item,
                     )
                 }
@@ -434,16 +443,21 @@ class RustTimeline(
                 inner.getEventTimelineItemByEventId(
                     eventId = pollStartId.value
                 )
-            pollStartEvent.use {
-                inner.editPoll(
+            val editedContent = EditedContent.PollStart(
+                pollData = PollData(
                     question = question,
                     answers = answers,
                     maxSelections = maxSelections.toUByte(),
                     pollKind = pollKind.toInner(),
-                    editItem = pollStartEvent,
+                ),
+            )
+            pollStartEvent.use {
+                inner.edit(
+                    newContent = editedContent,
+                    item = it,
                 )
             }
-        }
+        }.map { }
     }
 
     override suspend fun sendPollResponse(
