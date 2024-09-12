@@ -8,36 +8,11 @@
 package io.element.android.libraries.matrix.impl.timeline.postprocessor
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.api.core.UniqueId
-import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
-import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
-import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
-import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.test.A_USER_ID
-import io.element.android.libraries.matrix.test.A_USER_ID_2
-import io.element.android.libraries.matrix.test.timeline.aMessageContent
-import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import org.junit.Test
 
 class RoomBeginningPostProcessorTest {
-    private val roomCreateEvent = MatrixTimelineItem.Event(
-        uniqueId = UniqueId("m.room.create"),
-        event = anEventTimelineItem(sender = A_USER_ID, content = StateContent("", OtherState.RoomCreate))
-    )
-    private val roomCreatorJoinEvent = MatrixTimelineItem.Event(
-        uniqueId = UniqueId("m.room.member"),
-        event = anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, null, MembershipChange.JOINED))
-    )
-    private val otherMemberJoinEvent = MatrixTimelineItem.Event(
-        uniqueId = UniqueId("m.room.member_other"),
-        event = anEventTimelineItem(content = RoomMembershipContent(A_USER_ID_2, null, MembershipChange.JOINED))
-    )
-    private val messageEvent = MatrixTimelineItem.Event(
-        uniqueId = UniqueId("m.room.message"),
-        event = anEventTimelineItem(content = aMessageContent("hi"))
-    )
 
     @Test
     fun `processor returns empty list when empty list is provided`() {
