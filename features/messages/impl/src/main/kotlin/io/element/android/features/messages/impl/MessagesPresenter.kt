@@ -30,7 +30,6 @@ import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
-import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
@@ -96,7 +95,6 @@ class MessagesPresenter @AssistedInject constructor(
     private val reactionSummaryPresenter: ReactionSummaryPresenter,
     private val readReceiptBottomSheetPresenter: ReadReceiptBottomSheetPresenter,
     private val pinnedMessagesBannerPresenter: Presenter<PinnedMessagesBannerState>,
-    private val resolveVerifiedUserSendFailurePresenter: Presenter<ResolveVerifiedUserSendFailureState>,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val dispatchers: CoroutineDispatchers,
@@ -130,7 +128,6 @@ class MessagesPresenter @AssistedInject constructor(
         val reactionSummaryState = reactionSummaryPresenter.present()
         val readReceiptBottomSheetState = readReceiptBottomSheetPresenter.present()
         val pinnedMessagesBannerState = pinnedMessagesBannerPresenter.present()
-        val resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailurePresenter.present()
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
 
@@ -230,7 +227,6 @@ class MessagesPresenter @AssistedInject constructor(
             appName = buildMeta.applicationName,
             callState = callState,
             pinnedMessagesBannerState = pinnedMessagesBannerState,
-            resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
             eventSink = { handleEvents(it) }
         )
     }

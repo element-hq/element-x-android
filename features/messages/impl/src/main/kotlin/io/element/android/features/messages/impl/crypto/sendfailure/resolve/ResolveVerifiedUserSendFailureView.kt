@@ -43,7 +43,7 @@ fun ResolveVerifiedUserSendFailureView(
     state: ResolveVerifiedUserSendFailureState,
     modifier: Modifier = Modifier,
 ) {
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showSheet by remember { mutableStateOf(false) }
 
     fun dismiss() {

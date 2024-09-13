@@ -8,6 +8,7 @@
 package io.element.android.features.messages.impl.timeline
 
 import androidx.compose.runtime.Immutable
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureState
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.matrix.api.core.EventId
@@ -25,6 +26,7 @@ data class TimelineState(
     val focusRequestState: FocusRequestState,
     // If not null, info will be rendered in a dialog
     val messageShield: MessageShield?,
+    val resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState,
     val eventSink: (TimelineEvents) -> Unit,
 ) {
     val hasAnyEvent = timelineItems.any { it is TimelineItem.Event }
