@@ -7,7 +7,6 @@
 
 package io.element.android.libraries.matrix.impl
 
-import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -19,12 +18,10 @@ import io.element.android.libraries.matrix.impl.paths.getSessionPaths
 import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
 import io.element.android.libraries.matrix.impl.util.anonymizedTokens
 import io.element.android.libraries.network.useragent.UserAgentProvider
-import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.Session
@@ -47,7 +44,6 @@ class RustMatrixClientFactory @Inject constructor(
     private val proxyProvider: ProxyProvider,
     private val clock: SystemClock,
     private val utdTracker: UtdTracker,
-    private val appPreferencesStore: AppPreferencesStore,
     private val featureFlagService: FeatureFlagService,
 ) {
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
@@ -55,7 +51,7 @@ class RustMatrixClientFactory @Inject constructor(
         val client = getBaseClientBuilder(
             sessionPaths = sessionData.getSessionPaths(),
             passphrase = sessionData.passphrase,
-            restore = true,
+            slidingSyncType = ClientBuilderSlidingSync.Restored,
         )
             .homeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
@@ -88,16 +84,8 @@ class RustMatrixClientFactory @Inject constructor(
     internal suspend fun getBaseClientBuilder(
         sessionPaths: SessionPaths,
         passphrase: String?,
-        restore: Boolean,
+        slidingSyncType: ClientBuilderSlidingSync,
     ): ClientBuilder {
-        val slidingSync = when {
-            // Always check restore first, since otherwise other values could accidentally override the already persisted config
-            restore -> ClientBuilderSlidingSync.Restored
-            AuthenticationConfig.SLIDING_SYNC_PROXY_URL != null -> ClientBuilderSlidingSync.CustomProxy(AuthenticationConfig.SLIDING_SYNC_PROXY_URL!!)
-            appPreferencesStore.isSimplifiedSlidingSyncEnabledFlow().first() -> ClientBuilderSlidingSync.Simplified
-            else -> ClientBuilderSlidingSync.Discovered
-        }
-
         return ClientBuilder()
             .sessionPaths(
                 dataPath = sessionPaths.fileDirectory.absolutePath,
@@ -117,9 +105,9 @@ class RustMatrixClientFactory @Inject constructor(
             )
             .run {
                 // Apply sliding sync version settings
-                when (slidingSync) {
+                when (slidingSyncType) {
                     ClientBuilderSlidingSync.Restored -> this
-                    is ClientBuilderSlidingSync.CustomProxy -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.Proxy(slidingSync.url))
+                    is ClientBuilderSlidingSync.CustomProxy -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.Proxy(slidingSyncType.url))
                     ClientBuilderSlidingSync.Discovered -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.DiscoverProxy)
                     ClientBuilderSlidingSync.Simplified -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.DiscoverNative)
                     ClientBuilderSlidingSync.ForcedSimplified -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.Native)
