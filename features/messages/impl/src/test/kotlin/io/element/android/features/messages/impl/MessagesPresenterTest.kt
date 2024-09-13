@@ -1036,6 +1036,7 @@ class MessagesPresenterTest {
             sessionPreferencesStore = sessionPreferencesStore,
             timelineItemIndexer = TimelineItemIndexer(),
             timelineController = TimelineController(matrixRoom),
+            resolveVerifiedUserSendFailurePresenter = { aResolveVerifiedUserSendFailureState() },
         )
         val timelinePresenterFactory = object : TimelinePresenter.Factory {
             override fun create(navigator: MessagesNavigator): TimelinePresenter {
@@ -1063,7 +1064,6 @@ class MessagesPresenterTest {
             reactionSummaryPresenter = reactionSummaryPresenter,
             readReceiptBottomSheetPresenter = readReceiptBottomSheetPresenter,
             pinnedMessagesBannerPresenter = { aLoadedPinnedMessagesBannerState() },
-            resolveVerifiedUserSendFailurePresenter = { aResolveVerifiedUserSendFailureState() },
             networkMonitor = FakeNetworkMonitor(),
             snackbarDispatcher = SnackbarDispatcher(),
             navigator = navigator,

@@ -35,9 +35,7 @@ import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure
-import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureEvents
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.aChangedIdentitySendFailure
-import io.element.android.features.messages.impl.crypto.sendfailure.resolve.aResolveVerifiedUserSendFailureState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerItem
 import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMessagesBannerState
@@ -424,7 +422,7 @@ class MessagesViewTest {
 
     @Test
     fun `clicking on verified user send failure from action list emits the expected Event`() {
-        val eventsRecorder = EventsRecorder<ResolveVerifiedUserSendFailureEvents>()
+        val eventsRecorder = EventsRecorder<TimelineEvents>()
         val state = aMessagesState()
         val timelineItem = state.timelineState.timelineItems.first() as TimelineItem.Event
         val stateWithActionListState = state.copy(
@@ -436,9 +434,7 @@ class MessagesViewTest {
                     actions = persistentListOf(),
                 ),
             ),
-            resolveVerifiedUserSendFailureState = aResolveVerifiedUserSendFailureState(
-                eventSink = eventsRecorder
-            ),
+            timelineState = aTimelineState(eventSink = eventsRecorder)
         )
         rule.setMessagesView(
             state = stateWithActionListState,
@@ -447,7 +443,7 @@ class MessagesViewTest {
         rule.onNodeWithText(verifiedUserSendFailure).performClick()
         // Give time for the close animation to complete
         rule.mainClock.advanceTimeBy(milliseconds = 1_000)
-        eventsRecorder.assertSingle(ResolveVerifiedUserSendFailureEvents.ComputeForMessage(timelineItem))
+        eventsRecorder.assertSingle(TimelineEvents.ComputeVerifiedUserSendFailure(timelineItem))
     }
 
     @Test
