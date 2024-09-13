@@ -9,6 +9,7 @@ package io.element.android.features.messages.impl
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.actionlist.ActionListState
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.timeline.TimelineState
@@ -47,6 +48,7 @@ data class MessagesState(
     val callState: RoomCallState,
     val appName: String,
     val pinnedMessagesBannerState: PinnedMessagesBannerState,
+    val resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState,
     val eventSink: (MessagesEvents) -> Unit
 )
 

@@ -10,6 +10,8 @@ package io.element.android.features.messages.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.anActionListState
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureState
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.aResolveVerifiedUserSendFailureState
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
@@ -113,6 +115,7 @@ fun aMessagesState(
     enableVoiceMessages: Boolean = true,
     callState: RoomCallState = RoomCallState.ENABLED,
     pinnedMessagesBannerState: PinnedMessagesBannerState = aLoadedPinnedMessagesBannerState(),
+    resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState = aResolveVerifiedUserSendFailureState(),
     eventSink: (MessagesEvents) -> Unit = {},
 ) = MessagesState(
     roomId = RoomId("!id:domain"),
@@ -137,6 +140,7 @@ fun aMessagesState(
     callState = callState,
     appName = "Element",
     pinnedMessagesBannerState = pinnedMessagesBannerState,
+    resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
     eventSink = eventSink,
 )
 

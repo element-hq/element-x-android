@@ -47,6 +47,10 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure
+import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure.ChangedIdentity
+import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure.None
+import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure.UnsignedDevice
 import io.element.android.features.messages.impl.timeline.components.MessageShieldView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
@@ -196,7 +200,7 @@ private fun SheetContent(
                         HorizontalDivider()
                     }
                 }
-                if (target.verifiedUserSendFailure != ActionListState.VerifiedUserSendFailure.None) {
+                if (target.verifiedUserSendFailure != None) {
                     item {
                         VerifiedUserSendFailureView(
                             sendFailure = target.verifiedUserSendFailure,
@@ -362,10 +366,19 @@ private fun EmojiReactionsRow(
 
 @Composable
 private fun VerifiedUserSendFailureView(
-    sendFailure: ActionListState.VerifiedUserSendFailure,
+    sendFailure: VerifiedUserSendFailure,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    @Composable
+    fun VerifiedUserSendFailure.headline(): String {
+        return when (this) {
+            is None -> ""
+            is UnsignedDevice -> stringResource(CommonStrings.screen_timeline_item_menu_send_failure_unsigned_device, userDisplayName)
+            is ChangedIdentity -> stringResource(CommonStrings.screen_timeline_item_menu_send_failure_changed_identity, userDisplayName)
+        }
+    }
+
     ListItem(
         modifier = modifier
             .clickable(onClick = onClick)
@@ -374,7 +387,7 @@ private fun VerifiedUserSendFailureView(
         trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChevronRight())),
         headlineContent = {
             Text(
-                text = sendFailure.formatted(),
+                text = sendFailure.headline(),
                 style = ElementTheme.typography.fontBodySmMedium,
             )
         },

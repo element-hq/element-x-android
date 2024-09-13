@@ -57,6 +57,8 @@ import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureEvents
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureView
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsBottomSheet
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
@@ -242,8 +244,12 @@ fun MessagesView(
         },
         onEmojiReactionClick = ::onEmojiReactionClick,
         onVerifiedUserSendFailureClick = { event ->
+            state.resolveVerifiedUserSendFailureState.eventSink(ResolveVerifiedUserSendFailureEvents.ComputeForMessage(event))
+        },
+    )
 
-        }
+    ResolveVerifiedUserSendFailureView(
+        state = state.resolveVerifiedUserSendFailureState,
     )
 
     CustomReactionBottomSheet(

@@ -9,6 +9,8 @@ package io.element.android.features.messages.impl.actionlist
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.anUnsignedDeviceSendFailure
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemAudioContent
@@ -18,8 +20,6 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
-import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -37,7 +37,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                             reactionsState = reactionsState
                         ),
                         displayEmojiReactions = true,
-                        verifiedUserSendFailure = ActionListState.VerifiedUserSendFailure.None,
+                        verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(),
                     )
                 ),
@@ -50,7 +50,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                             reactionsState = reactionsState,
                         ),
                         displayEmojiReactions = true,
-                        verifiedUserSendFailure = ActionListState.VerifiedUserSendFailure.None,
+                        verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(),
                     )
                 ),
@@ -60,7 +60,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                             reactionsState = reactionsState
                         ),
                         displayEmojiReactions = true,
-                        verifiedUserSendFailure = ActionListState.VerifiedUserSendFailure.None,
+                        verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(),
                     )
                 ),
@@ -70,7 +70,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                             reactionsState = reactionsState
                         ),
                         displayEmojiReactions = true,
-                        verifiedUserSendFailure = ActionListState.VerifiedUserSendFailure.None,
+                        verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(),
                     )
                 ),
@@ -80,7 +80,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                             reactionsState = reactionsState
                         ),
                         displayEmojiReactions = true,
-                        verifiedUserSendFailure = ActionListState.VerifiedUserSendFailure.None,
+                        verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(),
                     )
                 ),
@@ -90,7 +90,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                             reactionsState = reactionsState
                         ),
                         displayEmojiReactions = true,
-                        verifiedUserSendFailure = ActionListState.VerifiedUserSendFailure.None,
+                        verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(),
                     )
                 ),
@@ -100,7 +100,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                             reactionsState = reactionsState
                         ),
                         displayEmojiReactions = true,
-                        verifiedUserSendFailure = ActionListState.VerifiedUserSendFailure.None,
+                        verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(),
                     )
                 ),
@@ -110,7 +110,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                             reactionsState = reactionsState
                         ),
                         displayEmojiReactions = false,
-                        verifiedUserSendFailure = ActionListState.VerifiedUserSendFailure.None,
+                        verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(),
                     ),
                 ),
@@ -120,7 +120,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                             reactionsState = reactionsState
                         ),
                         displayEmojiReactions = false,
-                        verifiedUserSendFailure = ActionListState.VerifiedUserSendFailure.None,
+                        verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemPollActionList(),
                     ),
                 ),
@@ -131,7 +131,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                             messageShield = MessageShield.UnknownDevice(isCritical = true)
                         ),
                         displayEmojiReactions = true,
-                        verifiedUserSendFailure = ActionListState.VerifiedUserSendFailure.None,
+                        verifiedUserSendFailure = VerifiedUserSendFailure.None,
                         actions = aTimelineItemActionList(),
                     )
                 ),
@@ -139,7 +139,7 @@ open class ActionListStateProvider : PreviewParameterProvider<ActionListState> {
                     target = ActionListState.Target.Success(
                         event = aTimelineItemEvent(),
                         displayEmojiReactions = true,
-                        verifiedUserSendFailure = ActionListState.VerifiedUserSendFailure.UnsignedDevice(displayName = "Alice"),
+                        verifiedUserSendFailure = anUnsignedDeviceSendFailure(),
                         actions = aTimelineItemActionList(),
                     )
                 ),

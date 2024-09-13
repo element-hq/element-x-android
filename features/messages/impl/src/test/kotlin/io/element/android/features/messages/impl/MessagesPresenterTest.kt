@@ -16,6 +16,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.FakeActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.aResolveVerifiedUserSendFailureState
 import io.element.android.features.messages.impl.draft.FakeComposerDraftService
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactoryCreator
@@ -1062,6 +1063,7 @@ class MessagesPresenterTest {
             reactionSummaryPresenter = reactionSummaryPresenter,
             readReceiptBottomSheetPresenter = readReceiptBottomSheetPresenter,
             pinnedMessagesBannerPresenter = { aLoadedPinnedMessagesBannerState() },
+            resolveVerifiedUserSendFailurePresenter = { aResolveVerifiedUserSendFailureState() },
             networkMonitor = FakeNetworkMonitor(),
             snackbarDispatcher = SnackbarDispatcher(),
             navigator = navigator,

@@ -354,5 +354,4 @@ interface MatrixRoom : Closeable {
     suspend fun withdrawVerificationAndResend(userIds: List<UserId>, transactionId: TransactionId): Result<Unit>
 
     override fun close() = destroy()
-
 }

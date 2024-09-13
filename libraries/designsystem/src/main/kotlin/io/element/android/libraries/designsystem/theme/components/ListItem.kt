@@ -80,11 +80,11 @@ fun ListItem(
 /**
  * A List Item component to be used in lists and menus with simple layouts, matching the Material 3 guidelines.
  * @param headlineContent The main content of the list item, usually a text.
+ * @param colors The colors to use for the list item. You can use [ListItemDefaults.colors] to create this.
  * @param modifier The modifier to be applied to the list item.
  * @param supportingContent The content to be displayed below the headline content.
  * @param leadingContent The content to be displayed before the headline content.
  * @param trailingContent The content to be displayed after the headline content.
- * @param colors The colors to use for the list item.
  * @param enabled Whether the list item is enabled. When disabled, will change the color of the headline content and the leading content to use disabled tokens.
  * @param onClick The callback to be called when the list item is clicked.
  */
@@ -412,8 +412,8 @@ private object PreviewItems {
     ) {
         ElementThemedPreview {
             ListItem(
-                headlineContent = PreviewItems.headline(),
-                supportingContent = PreviewItems.text(),
+                headlineContent = headline(),
+                supportingContent = text(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
                 style = style,
@@ -431,8 +431,8 @@ private object PreviewItems {
     ) {
         ElementThemedPreview {
             ListItem(
-                headlineContent = PreviewItems.headline(),
-                supportingContent = PreviewItems.textSingleLine(),
+                headlineContent = headline(),
+                supportingContent = textSingleLine(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
                 style = style,
@@ -451,7 +451,7 @@ private object PreviewItems {
     ) {
         ElementThemedPreview {
             ListItem(
-                headlineContent = PreviewItems.headline(),
+                headlineContent = headline(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
                 enabled = enabled,

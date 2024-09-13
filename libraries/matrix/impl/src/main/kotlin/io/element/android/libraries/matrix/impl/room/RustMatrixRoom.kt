@@ -647,10 +647,9 @@ class RustMatrixRoom(
 
     override suspend fun ignoreDeviceTrustAndResend(devices: Map<UserId, List<DeviceId>>, transactionId: TransactionId) = runCatching {
         innerRoom.ignoreDeviceTrustAndResend(
-            devices = devices
-                .entries.associate { entry ->
-                    entry.key.value to entry.value.map { it.value }
-                },
+            devices = devices.entries.associate { entry ->
+                entry.key.value to entry.value.map { it.value }
+            },
             transactionId = transactionId.value
         )
     }
