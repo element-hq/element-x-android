@@ -36,7 +36,7 @@ fun ChangeServerView(
                     ErrorDialog(
                         modifier = modifier,
                         content = error.message(),
-                        onDismiss = {
+                        onSubmit = {
                             eventSink.invoke(ChangeServerEvents.ClearError)
                         }
                     )

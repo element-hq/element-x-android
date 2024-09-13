@@ -105,7 +105,7 @@ private fun LeaveRoomErrorDialog(
         is LeaveRoomState.Error.Hidden -> {}
         is LeaveRoomState.Error.Shown -> ErrorDialog(
             content = stringResource(CommonStrings.error_unknown),
-            onDismiss = { state.eventSink(LeaveRoomEvent.HideError) }
+            onSubmit = { state.eventSink(LeaveRoomEvent.HideError) }
         )
     }
 }
