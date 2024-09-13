@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.timeline.item.event
 
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -87,7 +88,9 @@ fun RustEventSendState?.map(): LocalEventSendState? {
         }
         is RustEventSendState.VerifiedUserHasUnsignedDevice -> {
             LocalEventSendState.Failed.VerifiedUserHasUnsignedDevice(
-                devices = devices.mapKeys { UserId(it.key) }
+                devices = devices.entries.associate { entry ->
+                    UserId(entry.key) to entry.value.map { DeviceId(it) }
+                }
             )
         }
         EventSendState.CrossSigningNotSetup -> LocalEventSendState.Failed.CrossSigningNotSetup
