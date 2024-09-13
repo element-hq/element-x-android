@@ -33,7 +33,6 @@
   <string name="screen_recovery_key_confirm_error_content">"Προσπάθησε ξανά για να επιβεβαιώσεις την πρόσβαση στο αντίγραφο ασφαλείας της συνομιλίας σου."</string>
   <string name="screen_recovery_key_confirm_error_title">"Λανθασμένο κλειδί ανάκτησης"</string>
   <string name="screen_recovery_key_confirm_key_description">"Εάν έχεις ένα κλειδί ασφαλείας ή μια φράση ασφαλείας, θα λειτουργήσει επίσης."</string>
-  <string name="screen_recovery_key_confirm_key_label">"Κλειδί ανάκτησης ή κωδικός πρόσβασης"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Εισαγωγή…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Έχασες το κλειδί ανάκτησης;"</string>
   <string name="screen_recovery_key_confirm_success">"Επιβεβαιώθηκε το κλειδί ανάκτησης"</string>

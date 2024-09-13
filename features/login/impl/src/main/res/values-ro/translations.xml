@@ -78,10 +78,4 @@
   <string name="screen_server_confirmation_message_register">"Aici vor trăi conversațiile dvs. - la fel cum ați folosi un furnizor de e-mail pentru a vă păstra e-mailurile."</string>
   <string name="screen_server_confirmation_title_login">"Sunteți pe cale să vă conectați la %1$s"</string>
   <string name="screen_server_confirmation_title_register">"Sunteți pe cale să creați un cont pe %1$s"</string>
-  <string name="screen_waitlist_message">"Există o cerere mare pentru %1$s pentru %2$s în acest moment. Reveniți la aplicație în câteva zile și încercați din nou.
-
-Vă mulțumim pentru răbdare!"</string>
-  <string name="screen_waitlist_message_success">"Bun venit la%1$s!"</string>
-  <string name="screen_waitlist_title">"Sunteți pe lista de așteptare"</string>
-  <string name="screen_waitlist_title_success">"Sunteți conectat!"</string>
 </resources>

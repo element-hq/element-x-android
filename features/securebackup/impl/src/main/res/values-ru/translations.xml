@@ -60,10 +60,6 @@
     <b>"ключ восстановления"</b>
   </string>
   <string name="screen_recovery_key_confirm_key_description">"Если у вас есть пароль для восстановления или секретный пароль/ключ, это тоже сработает."</string>
-  <string name="screen_recovery_key_confirm_key_label">
-    <b>"Ключ восстановления"</b>
-    " или пароль"
-  </string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Вход…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Потеряли ключ восстановления?"</string>
   <string name="screen_recovery_key_confirm_success">

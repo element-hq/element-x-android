@@ -38,7 +38,6 @@
   <string name="screen_recovery_key_confirm_error_content">"Spróbuj ponownie, aby potwierdzić dostęp do backupu czatu."</string>
   <string name="screen_recovery_key_confirm_error_title">"Nieprawidłowy klucz przywracania"</string>
   <string name="screen_recovery_key_confirm_key_description">"To też zadziała, jeśli posiadasz klucz lub frazę bezpieczeństwa."</string>
-  <string name="screen_recovery_key_confirm_key_label">"Klucz przywracania lub hasło"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Wprowadź…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Zgubiłeś swój kod przywracania?"</string>
   <string name="screen_recovery_key_confirm_success">"Potwierdzono klucz przywracania"</string>

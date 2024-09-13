@@ -29,5 +29,4 @@
   <string name="screen_server_confirmation_message_register">"您的所有對話將保存於此，就如同您的電子郵件供應商會保存您的電子郵件一樣。"</string>
   <string name="screen_server_confirmation_title_login">"您即將登入 %1$s"</string>
   <string name="screen_server_confirmation_title_register">"您即將在 %1$s 建立帳號"</string>
-  <string name="screen_waitlist_message_success">"歡迎使用 %1$s！"</string>
 </resources>
