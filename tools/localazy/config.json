@@ -1,6 +1,13 @@
 {
   "modules" : [
     {
+      "name" : ":appnav",
+      "includeRegex" : [
+        "banner\\.migrate_to_native_sliding_sync\\.force_logout.title",
+        "banner\\.migrate_to_native_sliding_sync\\.action"
+      ]
+    },
+    {
       "name" : ":features:rageshake:impl",
       "includeRegex" : [
         "screen_bug_report_.*"

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"Log Out &amp; Upgrade"</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app."</string>
+</resources>
