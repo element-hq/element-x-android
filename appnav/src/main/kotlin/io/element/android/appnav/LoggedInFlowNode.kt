@@ -13,7 +13,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -54,6 +57,9 @@ import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.waitForNavTargetAttached
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SessionScope
@@ -123,6 +129,8 @@ class LoggedInFlowNode @AssistedInject constructor(
         matrixClient.roomMembershipObserver(),
     )
 
+    private var forceNativeSlidingSyncMigration: Boolean by mutableStateOf(false)
+
     override fun onBuilt() {
         super.onBuilt()
         lifecycle.subscribe(
@@ -141,6 +149,14 @@ class LoggedInFlowNode @AssistedInject constructor(
                         }
                     }
                     .launchIn(lifecycleScope)
+            },
+            onResume = {
+                coroutineScope.launch {
+                    // Force the user to log out if they were using the proxy sliding sync and it's no longer available, but native sliding sync is.
+                    forceNativeSlidingSyncMigration = !matrixClient.isUsingNativeSlidingSync() &&
+                        matrixClient.isNativeSlidingSyncSupported() &&
+                        !matrixClient.isSlidingSyncProxySupported()
+                }
             },
             onStop = {
                 coroutineScope.launch {
@@ -490,6 +506,18 @@ class LoggedInFlowNode @AssistedInject constructor(
             if (ftueState is FtueState.Complete) {
                 PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
             }
+
+            // Set the force migration dialog here so it's always displayed over every screen
+            if (forceNativeSlidingSyncMigration) {
+                ForceNativeSlidingSyncMigrationDialog(onSubmit = {
+                    // Enable native sliding sync if it wasn't already the case
+                    enableNativeSlidingSyncUseCase()
+                    // Then force the logout
+                    coroutineScope.launch {
+                        matrixClient.logout(userInitiated = true, ignoreSdkError = true)
+                    }
+                })
+            }
         }
     }
 
@@ -498,4 +526,25 @@ class LoggedInFlowNode @AssistedInject constructor(
         @Assisted buildContext: BuildContext,
         @Assisted plugins: List<Plugin>,
     ) : Node(buildContext, plugins = plugins)
+}
+
+@Composable
+private fun ForceNativeSlidingSyncMigrationDialog(
+    onSubmit: () -> Unit,
+) {
+    ErrorDialog(
+        title = null,
+        content = stringResource(R.string.banner_migrate_to_native_sliding_sync_force_logout_title),
+        submitText = stringResource(R.string.banner_migrate_to_native_sliding_sync_action),
+        onSubmit = onSubmit,
+        canDismiss = false,
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun ForceNativeSlidingSyncMigrationDialogPreview() {
+    ElementPreview {
+        ForceNativeSlidingSyncMigrationDialog {}
+    }
 }
