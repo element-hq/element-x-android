@@ -60,9 +60,6 @@ class RustMatrixClientFactory @Inject constructor(
             .homeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
             .setSessionDelegate(sessionDelegate)
-            .roomKeyRecipientStrategy(
-                strategy = CollectStrategy.DeviceBasedStrategy(false, true)
-            )
             .use { it.build() }
 
         client.restoreSession(sessionData.toSession())
@@ -115,7 +112,7 @@ class RustMatrixClientFactory @Inject constructor(
                 strategy = if (featureFlagService.isFeatureEnabled(FeatureFlags.InvisibleCrypto)) {
                     CollectStrategy.IdentityBasedStrategy
                 } else {
-                    CollectStrategy.DeviceBasedStrategy(onlyAllowTrustedDevices = false, errorOnVerifiedUserProblem = false)
+                    CollectStrategy.DeviceBasedStrategy(onlyAllowTrustedDevices = false, errorOnVerifiedUserProblem = true)
                 }
             )
             .run {
