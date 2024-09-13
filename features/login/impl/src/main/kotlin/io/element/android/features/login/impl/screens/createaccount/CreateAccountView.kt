@@ -9,6 +9,7 @@ package io.element.android.features.login.impl.screens.createaccount
 
 import android.annotation.SuppressLint
 import android.view.ViewGroup
+import android.webkit.JsResult
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import androidx.compose.animation.AnimatedVisibility
@@ -41,12 +42,14 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.progressIndicatorTrackColor
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateAccountView(
     state: CreateAccountState,
     onBackClick: () -> Unit,
+    onOpenExternalUrl: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -76,9 +79,14 @@ fun CreateAccountView(
                     .fillMaxSize(),
                 state = state,
                 onWebViewCreate = { webView ->
-                    WebViewMessageInterceptor(webView, state.isDebugBuild) {
-                        state.eventSink(CreateAccountEvents.OnMessageReceived(it))
-                    }
+                    WebViewMessageInterceptor(
+                        webView,
+                        state.isDebugBuild,
+                        onOpenExternalUrl = onOpenExternalUrl,
+                        onMessage = {
+                            state.eventSink(CreateAccountEvents.OnMessageReceived(it))
+                        },
+                    )
                 }
             )
             AnimatedVisibility(
@@ -153,6 +161,12 @@ private fun WebView.setup(state: CreateAccountState) {
             super.onProgressChanged(view, newProgress)
             state.eventSink(CreateAccountEvents.SetPageProgress(newProgress))
         }
+
+        override fun onJsBeforeUnload(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
+            Timber.w("onJsBeforeUnload, cancelling the dialog, we will open external links in a Custom Chrome Tab")
+            result?.confirm()
+            return true
+        }
     }
 }
 
@@ -162,5 +176,6 @@ internal fun CreateAccountViewPreview(@PreviewParameter(CreateAccountStateProvid
     CreateAccountView(
         state = state,
         onBackClick = {},
+        onOpenExternalUrl = {},
     )
 }

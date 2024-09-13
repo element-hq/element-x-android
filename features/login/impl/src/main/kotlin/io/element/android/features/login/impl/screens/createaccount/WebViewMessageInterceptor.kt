@@ -9,6 +9,7 @@ package io.element.android.features.login.impl.screens.createaccount
 
 import android.graphics.Bitmap
 import android.webkit.JavascriptInterface
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.webkit.WebViewCompat
@@ -17,6 +18,7 @@ import androidx.webkit.WebViewFeature
 class WebViewMessageInterceptor(
     webView: WebView,
     private val debugLog: Boolean,
+    private val onOpenExternalUrl: (String) -> Unit,
     private val onMessage: (String) -> Unit,
 ) {
     companion object {
@@ -49,6 +51,13 @@ class WebViewMessageInterceptor(
                     """.trimIndent(),
                     null
                 )
+            }
+
+            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                request ?: return super.shouldOverrideUrlLoading(view, request)
+                // Load the URL in a Chrome Custom Tab, and return true to cancel the load
+                onOpenExternalUrl(request.url.toString())
+                return true
             }
         }
 

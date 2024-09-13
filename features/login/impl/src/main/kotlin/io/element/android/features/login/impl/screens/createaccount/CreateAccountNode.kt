@@ -7,14 +7,18 @@
 
 package io.element.android.features.login.impl.screens.createaccount
 
+import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.AppScope
@@ -31,13 +35,22 @@ class CreateAccountNode @AssistedInject constructor(
 
     private val presenter = presenterFactory.create(inputs<Inputs>().url)
 
+    private fun onOpenExternalUrl(activity: Activity, darkTheme: Boolean, url: String) {
+        activity.openUrlInChromeCustomTab(null, darkTheme, url)
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
+        val activity = LocalContext.current as Activity
+        val isDark = ElementTheme.isLightTheme.not()
         val state = presenter.present()
         CreateAccountView(
             state = state,
             modifier = modifier,
             onBackClick = ::navigateUp,
+            onOpenExternalUrl = {
+                onOpenExternalUrl(activity, isDark, it)
+            },
         )
     }
 }
