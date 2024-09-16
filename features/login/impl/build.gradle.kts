@@ -44,6 +44,7 @@ dependencies {
     implementation(projects.libraries.oidc.api)
     implementation(libs.androidx.browser)
     implementation(platform(libs.network.retrofit.bom))
+    implementation(libs.androidx.webkit)
     implementation(libs.network.retrofit)
     implementation(libs.serialization.json)
     api(projects.features.login.api)

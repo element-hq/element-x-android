@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.matrix.api.auth.external.ExternalSession
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -157,6 +158,23 @@ class RustMatrixAuthenticationService @Inject constructor(
                 SessionId(sessionData.userId)
             }.mapFailure { failure ->
                 failure.mapAuthenticationException()
+            }
+        }
+
+    override suspend fun importCreatedSession(externalSession: ExternalSession): Result<SessionId> =
+        withContext(coroutineDispatchers.io) {
+            runCatching {
+                currentClient ?: error("You need to call `setHomeserver()` first")
+                val currentSessionPaths = sessionPaths ?: error("You need to call `setHomeserver()` first")
+                val sessionData = externalSession.toSessionData(
+                    isTokenValid = true,
+                    loginType = LoginType.PASSWORD,
+                    passphrase = pendingPassphrase,
+                    sessionPaths = currentSessionPaths,
+                )
+                clear()
+                sessionStore.storeData(sessionData)
+                SessionId(sessionData.userId)
             }
         }
 
