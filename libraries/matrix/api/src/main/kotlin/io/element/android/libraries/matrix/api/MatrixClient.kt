@@ -131,6 +131,9 @@ interface MatrixClient : Closeable {
     /** Returns `true` if the home server supports native sliding sync. */
     suspend fun isNativeSlidingSyncSupported(): Boolean
 
-    /** Returns `true` if the current session is using native sliding sync. */
+    /** Returns `true` if the home server supports sliding sync using a proxy. */
+    suspend fun isSlidingSyncProxySupported(): Boolean
+
+    /** Returns `true` if the current session is using native sliding sync, `false` if it's using a proxy. */
     fun isUsingNativeSlidingSync(): Boolean
 }

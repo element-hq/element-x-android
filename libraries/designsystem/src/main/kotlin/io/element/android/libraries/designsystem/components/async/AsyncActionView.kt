@@ -48,7 +48,7 @@ fun <T> AsyncActionView(
                 ErrorDialog(
                     title = errorTitle(async.error),
                     content = errorMessage(async.error),
-                    onDismiss = onErrorDismiss
+                    onSubmit = onErrorDismiss
                 )
             } else {
                 RetryDialog(

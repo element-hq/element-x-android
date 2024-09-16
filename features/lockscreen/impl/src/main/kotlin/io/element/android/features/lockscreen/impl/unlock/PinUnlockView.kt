@@ -104,7 +104,7 @@ fun PinUnlockView(
         if (state.showBiometricUnlockError) {
             ErrorDialog(
                 content = state.biometricUnlockErrorMessage ?: "",
-                onDismiss = { state.eventSink(PinUnlockEvents.ClearBiometricError) }
+                onSubmit = { state.eventSink(PinUnlockEvents.ClearBiometricError) }
             )
         }
     }
@@ -206,7 +206,7 @@ private fun SignOutPrompt(
         ErrorDialog(
             title = stringResource(id = R.string.screen_app_lock_signout_alert_title),
             content = stringResource(id = R.string.screen_app_lock_signout_alert_message),
-            onDismiss = onSignOut,
+            onSubmit = onSignOut,
         )
     }
 }

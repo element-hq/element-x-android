@@ -534,6 +534,10 @@ class RustMatrixClient(
         return client.availableSlidingSyncVersions().contains(SlidingSyncVersion.Native)
     }
 
+    override suspend fun isSlidingSyncProxySupported(): Boolean {
+        return client.availableSlidingSyncVersions().any { it is SlidingSyncVersion.Proxy }
+    }
+
     override fun isUsingNativeSlidingSync(): Boolean {
         return client.session().slidingSyncVersion == SlidingSyncVersion.Native
     }
