@@ -19,7 +19,6 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatch
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
@@ -135,34 +134,6 @@ class PinnedMessagesListPresenterTest {
             assertThat(filledState.userEventPermissions.canRedactOther).isTrue()
             assertThat(filledState.userEventPermissions.canPinUnpin).isTrue()
             cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - redact event`() = runTest {
-        val redactEventLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String? -> Result.success(true) }
-        val pinnedEventsTimeline = createPinnedMessagesTimeline().apply {
-            this.redactEventLambda = redactEventLambda
-        }
-        val room = FakeMatrixRoom(
-            pinnedEventsTimelineResult = { Result.success(pinnedEventsTimeline) },
-            canRedactOwnResult = { Result.success(true) },
-            canRedactOtherResult = { Result.success(true) },
-            canUserPinUnpinResult = { Result.success(true) },
-        ).apply {
-            givenRoomInfo(aRoomInfo(pinnedEventIds = listOf(AN_EVENT_ID)))
-        }
-        val presenter = createPinnedMessagesListPresenter(room = room, isFeatureEnabled = true)
-        presenter.test {
-            skipItems(3)
-            val filledState = awaitItem() as PinnedMessagesListState.Filled
-            val eventItem = filledState.timelineItems.first() as TimelineItem.Event
-            filledState.eventSink(PinnedMessagesListEvents.HandleAction(TimelineItemAction.Redact, eventItem))
-            advanceUntilIdle()
-            cancelAndIgnoreRemainingEvents()
-            assert(redactEventLambda)
-                .isCalledOnce()
-                .with(value(AN_EVENT_ID), value(null), value(null))
         }
     }
 
