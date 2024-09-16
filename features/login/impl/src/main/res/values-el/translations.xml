@@ -21,6 +21,7 @@
   <string name="screen_change_server_form_notice">"Μπορείτε να συνδεθείς μόνο σε υπάρχοντα διακομιστή που υποστηρίζει Sliding sync. Ο διαχειριστής του οικιακού διακομιστή σου θα πρέπει να το ρυθμίσει. %1$s"</string>
   <string name="screen_change_server_subtitle">"Ποια είναι η διεύθυνση του διακομιστή σου;"</string>
   <string name="screen_change_server_title">"Επέλεξε το διακομιστή σου"</string>
+  <string name="screen_create_account_title">"Δημιουργία λογαριασμού"</string>
   <string name="screen_login_error_deactivated_account">"Αυτός ο λογαριασμός έχει απενεργοποιηθεί."</string>
   <string name="screen_login_error_invalid_credentials">"Λανθασμένο όνομα χρήστη ή κωδικός πρόσβασης"</string>
   <string name="screen_login_error_invalid_user_id">"Αυτό δεν είναι έγκυρο αναγνωριστικό χρήστη. Αναμενόμενη μορφή: \'@χρήστης:homeserver.org\'"</string>

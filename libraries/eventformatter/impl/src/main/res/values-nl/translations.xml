@@ -3,12 +3,16 @@
   <string name="state_event_avatar_changed_too">"(afbeelding is ook gewijzigd)"</string>
   <string name="state_event_avatar_url_changed">"%1$s wijzigde van afbeelding"</string>
   <string name="state_event_avatar_url_changed_by_you">"Je hebt je afbeelding gewijzigd"</string>
+  <string name="state_event_demoted_to_member">"%1$s werd gedegradeerd tot lid"</string>
+  <string name="state_event_demoted_to_moderator">"%1$s werd gedegradeerd tot moderator"</string>
   <string name="state_event_display_name_changed_from">"%1$s heeft de weergavenaam aangepast van %2$s naar %3$s"</string>
   <string name="state_event_display_name_changed_from_by_you">"Je hebt je weergavenaam aangepast van %1$s naar %2$s"</string>
   <string name="state_event_display_name_removed">"%1$s heeft de weergavenaam verwijderd (dit was %2$s)"</string>
   <string name="state_event_display_name_removed_by_you">"Je hebt je weergavenaam verwijderd (dit was %1$s)"</string>
   <string name="state_event_display_name_set">"%1$s heeft de weergavenaam %2$s aangenomen"</string>
   <string name="state_event_display_name_set_by_you">"Je hebt de weergavenaam %1$s aangenomen"</string>
+  <string name="state_event_promoted_to_administrator">"%1$s werd bevorderd tot beheerder"</string>
+  <string name="state_event_promoted_to_moderator">"%1$s werd bevorderd tot moderator"</string>
   <string name="state_event_room_avatar_changed">"%1$s heeft de kamerafbeelding gewijzigd"</string>
   <string name="state_event_room_avatar_changed_by_you">"Je hebt de kamerafbeelding gewijzigd"</string>
   <string name="state_event_room_avatar_removed">"%1$s heeft de kamerafbeelding verwijderd"</string>

@@ -38,6 +38,7 @@
   <string name="action_back">"Назад"</string>
   <string name="action_call">"Позвонить"</string>
   <string name="action_cancel">"Отмена"</string>
+  <string name="action_cancel_for_now">"Отмените сейчас"</string>
   <string name="action_choose_photo">"Выбрать фото"</string>
   <string name="action_clear">"Очистить"</string>
   <string name="action_close">"Закрыть"</string>
@@ -256,6 +257,7 @@
   <string name="dialog_title_warning">"Предупреждение"</string>
   <string name="dialog_unsaved_changes_description_android">"Изменения не сохранены. Вы действительно хотите вернуться?"</string>
   <string name="dialog_unsaved_changes_title">"Сохранить изменения?"</string>
+  <string name="error_account_creation_not_possible">"Ваш homeserver необходимо обновить, чтобы он поддерживал Matrix Authentication Service и создание учетной записи."</string>
   <string name="error_failed_creating_the_permalink">"Не удалось создать постоянную ссылку"</string>
   <string name="error_failed_loading_map">"Не удалось загрузить карту %1$s. Пожалуйста, повторите попытку позже."</string>
   <string name="error_failed_loading_messages">"Не удалось загрузить сообщения"</string>
@@ -290,6 +292,12 @@
   <string name="screen_pinned_timeline_screen_title_empty">"Закрепленные сообщения"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Вы собираетесь перейти в свою учетную запись %1$s, чтобы сбросить идентификацию. После этого вы вернетесь в приложение."</string>
   <string name="screen_reset_identity_confirmation_title">"Не можете подтвердить? Перейдите в свою учетную запись, чтобы сбросить свою идентификацию."</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Отозвать верификацию и отправить"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Вы можете отозвать свою верификацию и отправить это сообщение в любом случае или вы можете отменить ее сейчас и повторить попытку позже после повторной верификации %1$s."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Ваше сообщение не было отправлено, потому что изменилась подтвержденная личность %1$s"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Отправь сообщение в любом случае"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s использует одно или несколько непроверенных устройств. Вы все равно можете отправить сообщение или отменить его пока и повторить попытку позже %2$s, проверив все устройства пользователя."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Ваше сообщение не было отправлено, потому что %1$s не проверил одно или несколько устройств"</string>
   <string name="screen_room_details_pinned_events_row_title">"Закрепленные сообщения"</string>
   <string name="screen_room_error_failed_processing_media">"Не удалось обработать медиафайл для загрузки, попробуйте еще раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не удалось получить данные о пользователе"</string>
@@ -311,6 +319,8 @@
   <string name="screen_share_open_google_maps">"Открыть в Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Открыть в OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Поделиться этим местоположением"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Сообщение не отправлено, потому что верифицированная личность %1$s изменилась."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Сообщение не отправлено, потому что %1$s не проверил одно или несколько устройств."</string>
   <string name="screen_view_location_title">"Местоположение"</string>
   <string name="settings_version_number">"Версия: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"ru"</string>

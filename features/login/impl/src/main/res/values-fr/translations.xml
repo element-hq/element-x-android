@@ -21,6 +21,7 @@
   <string name="screen_change_server_form_notice">"Vous ne pouvez vous connecter qu’à un serveur existant qui prend en charge le sliding sync. L’administrateur de votre serveur d’accueil devra le configurer. %1$s"</string>
   <string name="screen_change_server_subtitle">"Quelle est l’adresse de votre serveur ?"</string>
   <string name="screen_change_server_title">"Choisissez votre serveur"</string>
+  <string name="screen_create_account_title">"Créer un compte"</string>
   <string name="screen_login_error_deactivated_account">"Ce compte a été désactivé."</string>
   <string name="screen_login_error_invalid_credentials">"Nom d’utilisateur et/ou mot de passe incorrects"</string>
   <string name="screen_login_error_invalid_user_id">"Il ne s’agit pas d’un identifiant utilisateur valide. Format attendu : « @user:homeserver.org »"</string>
