@@ -12,4 +12,7 @@ import retrofit2.http.GET
 internal interface WellknownAPI {
     @GET(".well-known/matrix/client")
     suspend fun getWellKnown(): WellKnown
+
+    @GET(".well-known/element/element.json")
+    suspend fun getElementWellKnown(): ElementWellKnown
 }
