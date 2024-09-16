@@ -43,6 +43,7 @@ class ConfirmAccountProviderNode @AssistedInject constructor(
     interface Callback : Plugin {
         fun onLoginPasswordNeeded()
         fun onOidcDetails(oidcDetails: OidcDetails)
+        fun onCreateAccountContinue(url: String)
         fun onChangeAccountProvider()
     }
 
@@ -52,6 +53,10 @@ class ConfirmAccountProviderNode @AssistedInject constructor(
 
     private fun onLoginPasswordNeeded() {
         plugins<Callback>().forEach { it.onLoginPasswordNeeded() }
+    }
+
+    private fun onCreateAccountContinue(url: String) {
+        plugins<Callback>().forEach { it.onCreateAccountContinue(url) }
     }
 
     private fun onChangeAccountProvider() {
@@ -67,6 +72,7 @@ class ConfirmAccountProviderNode @AssistedInject constructor(
             modifier = modifier,
             onOidcDetails = ::onOidcDetails,
             onNeedLoginPassword = ::onLoginPasswordNeeded,
+            onCreateAccountContinue = ::onCreateAccountContinue,
             onChange = ::onChangeAccountProvider,
             onLearnMoreClick = { openLearnMorePage(context) },
         )

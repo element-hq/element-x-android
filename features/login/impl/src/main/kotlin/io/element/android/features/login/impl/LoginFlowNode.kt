@@ -30,6 +30,7 @@ import io.element.android.features.login.impl.accountprovider.AccountProviderDat
 import io.element.android.features.login.impl.qrcode.QrCodeLoginFlowNode
 import io.element.android.features.login.impl.screens.changeaccountprovider.ChangeAccountProviderNode
 import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderNode
+import io.element.android.features.login.impl.screens.createaccount.CreateAccountNode
 import io.element.android.features.login.impl.screens.loginpassword.LoginPasswordNode
 import io.element.android.features.login.impl.screens.searchaccountprovider.SearchAccountProviderNode
 import io.element.android.libraries.architecture.BackstackView
@@ -110,6 +111,9 @@ class LoginFlowNode @AssistedInject constructor(
         data object LoginPassword : NavTarget
 
         @Parcelize
+        data class CreateAccount(val url: String) : NavTarget
+
+        @Parcelize
         data class OidcView(val oidcDetails: OidcDetails) : NavTarget
     }
 
@@ -138,6 +142,10 @@ class LoginFlowNode @AssistedInject constructor(
                             // Fallback to WebView mode
                             backstack.push(NavTarget.OidcView(oidcDetails))
                         }
+                    }
+
+                    override fun onCreateAccountContinue(url: String) {
+                        backstack.push(NavTarget.CreateAccount(url))
                     }
 
                     override fun onLoginPasswordNeeded() {
@@ -179,6 +187,12 @@ class LoginFlowNode @AssistedInject constructor(
             }
             is NavTarget.OidcView -> {
                 oidcEntryPoint.createFallbackWebViewNode(this, buildContext, navTarget.oidcDetails.url)
+            }
+            is NavTarget.CreateAccount -> {
+                val inputs = CreateAccountNode.Inputs(
+                    url = navTarget.url,
+                )
+                createNode<CreateAccountNode>(buildContext, listOf(inputs))
             }
         }
     }

@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.dialogs.SlidingSyncNotSupportedDialog
 import io.element.android.features.login.impl.error.ChangeServerError
+import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
@@ -42,6 +43,7 @@ fun ConfirmAccountProviderView(
     onOidcDetails: (OidcDetails) -> Unit,
     onNeedLoginPassword: () -> Unit,
     onLearnMoreClick: () -> Unit,
+    onCreateAccountContinue: (url: String) -> Unit,
     onChange: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -109,12 +111,23 @@ fun ConfirmAccountProviderView(
                         )
                     }
                     is ChangeServerError.SlidingSyncAlert -> {
-                        SlidingSyncNotSupportedDialog(onLearnMoreClick = {
-                            onLearnMoreClick()
-                            eventSink(ConfirmAccountProviderEvents.ClearError)
-                        }, onDismiss = {
-                            eventSink(ConfirmAccountProviderEvents.ClearError)
-                        })
+                        SlidingSyncNotSupportedDialog(
+                            onLearnMoreClick = {
+                                onLearnMoreClick()
+                                eventSink(ConfirmAccountProviderEvents.ClearError)
+                            },
+                            onDismiss = {
+                                eventSink(ConfirmAccountProviderEvents.ClearError)
+                            }
+                        )
+                    }
+                    is AccountCreationNotSupported -> {
+                        ErrorDialog(
+                            content = stringResource(CommonStrings.error_account_creation_not_possible),
+                            onSubmit = {
+                                eventSink.invoke(ConfirmAccountProviderEvents.ClearError)
+                            }
+                        )
                     }
                 }
             }
@@ -123,6 +136,7 @@ fun ConfirmAccountProviderView(
                 when (val loginFlowState = state.loginFlow.data) {
                     is LoginFlow.OidcFlow -> onOidcDetails(loginFlowState.oidcDetails)
                     LoginFlow.PasswordLogin -> onNeedLoginPassword()
+                    is LoginFlow.AccountCreationFlow -> onCreateAccountContinue(loginFlowState.url)
                 }
             }
             AsyncData.Uninitialized -> Unit
@@ -139,6 +153,7 @@ internal fun ConfirmAccountProviderViewPreview(
         state = state,
         onOidcDetails = {},
         onNeedLoginPassword = {},
+        onCreateAccountContinue = {},
         onLearnMoreClick = {},
         onChange = {},
     )

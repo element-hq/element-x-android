@@ -24,4 +24,5 @@ data class ConfirmAccountProviderState(
 sealed interface LoginFlow {
     data object PasswordLogin : LoginFlow
     data class OidcFlow(val oidcDetails: OidcDetails) : LoginFlow
+    data class AccountCreationFlow(val url: String) : LoginFlow
 }
