@@ -28,8 +28,8 @@ Wähle etwas Einprägsames. Bei falscher Eingabe wirst du aus der App ausgeloggt
     <item quantity="other">"Du hast %1$d Versuche zum Entsperren"</item>
   </plurals>
   <plurals name="screen_app_lock_subtitle_wrong_pin">
-    <item quantity="one">"Falsche PIN. Du hast %1$d weitere Chance"</item>
-    <item quantity="other">"Falsche PIN. Du hast %1$d weitere Chancen"</item>
+    <item quantity="one">"Falsche PIN. Du hast %1$d weiteren Versuch"</item>
+    <item quantity="other">"Falsche PIN. Du hast %1$d weitere Versuche"</item>
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"Biometrie verwenden"</string>
   <string name="screen_app_lock_use_pin_android">"PIN verwenden"</string>

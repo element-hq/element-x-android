@@ -36,6 +36,7 @@
   <string name="action_back">"Zurück"</string>
   <string name="action_call">"Anruf"</string>
   <string name="action_cancel">"Abbrechen"</string>
+  <string name="action_cancel_for_now">"Jetzt abbrechen"</string>
   <string name="action_choose_photo">"Foto auswählen"</string>
   <string name="action_clear">"Löschen"</string>
   <string name="action_close">"Schließen"</string>
@@ -80,6 +81,7 @@
   <string name="action_ok">"Ok"</string>
   <string name="action_open_settings">"Einstellungen öffnen"</string>
   <string name="action_open_with">"Öffnen mit"</string>
+  <string name="action_pin">"Fixieren"</string>
   <string name="action_quick_reply">"Schnelle Antwort"</string>
   <string name="action_quote">"Zitat"</string>
   <string name="action_react">"Reagieren"</string>
@@ -109,7 +111,8 @@
   <string name="action_take_photo">"Foto aufnehmen"</string>
   <string name="action_tap_for_options">"Für Optionen tippen"</string>
   <string name="action_try_again">"Erneut versuchen"</string>
-  <string name="action_unpin">"Entpinnen"</string>
+  <string name="action_unpin">"Lösen"</string>
+  <string name="action_view_in_timeline">"Im Chatverlauf anzeigen"</string>
   <string name="action_view_source">"Quellcode anzeigen"</string>
   <string name="action_yes">"Ja"</string>
   <string name="common_about">"Über"</string>
@@ -175,6 +178,7 @@ Grund: %1$s."</string>
   <string name="common_people">"Personen"</string>
   <string name="common_permalink">"Permalink"</string>
   <string name="common_permission">"Erlaubnis"</string>
+  <string name="common_pinned">"Fixiert"</string>
   <string name="common_please_wait">"Bitte warten …"</string>
   <string name="common_poll_end_confirmation">"Bist du sicher, dass du diese Umfrage beenden möchtest?"</string>
   <string name="common_poll_summary">"Umfrage: %1$s"</string>
@@ -258,6 +262,7 @@ Grund: %1$s."</string>
   <string name="error_some_messages_have_not_been_sent">"Einige Nachrichten wurden nicht gesendet"</string>
   <string name="error_unknown">"Entschuldigung, es ist ein Fehler aufgetreten"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Die Authentizität dieser verschlüsselten Nachricht kann auf diesem Gerät nicht garantiert werden."</string>
+  <string name="event_shield_reason_sent_in_clear">"Unverschlüsselt."</string>
   <string name="event_shield_reason_unknown_device">"Verschlüsselt von einem unbekannten oder gelöschten Gerät."</string>
   <string name="event_shield_reason_unsigned_device">"Verschlüsselt durch ein Gerät, das nicht von seinem Besitzer verifiziert wurde."</string>
   <string name="event_shield_reason_unverified_identity">"Verschlüsselt durch einen nicht verifizierten Benutzer."</string>
@@ -268,6 +273,15 @@ Grund: %1$s."</string>
   <string name="screen_media_picker_error_failed_selection">"Medienauswahl fehlgeschlagen, bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Das Hochladen der Medien ist fehlgeschlagen. Bitte versuche es erneut."</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Drücke auf eine Nachricht und wähle “%1$s”, um sie hier einzufügen."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Fixiere wichtige Nachrichten, so dass sie leicht gefunden werden können"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d fixierte Nachricht"</item>
+    <item quantity="other">"%1$d fixierte Nachrichten"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Fixierte Nachrichten"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Nachricht trotzdem senden"</string>
+  <string name="screen_room_details_pinned_events_row_title">"Fixierte Nachrichten"</string>
   <string name="screen_room_error_failed_processing_media">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Benutzerdetails konnten nicht abgerufen werden"</string>
   <string name="screen_room_member_details_block_alert_action">"Blockieren"</string>
@@ -279,6 +293,7 @@ Grund: %1$s."</string>
   <string name="screen_room_member_details_unblock_user">"Blockierung aufheben"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s von %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Angepinnte Nachrichten"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Nachricht wird geladen…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Alle anzeigen"</string>
   <string name="screen_room_title">"Chat"</string>
   <string name="screen_share_location_title">"Standort teilen"</string>

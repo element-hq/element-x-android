@@ -3,4 +3,5 @@
   <string name="screen_analytics_settings_help_us_improve">"Deel anonieme gebruiksgegevens om ons te helpen problemen te identificeren."</string>
   <string name="screen_analytics_settings_read_terms">"Je kunt al onze voorwaarden %1$s lezen."</string>
   <string name="screen_analytics_settings_read_terms_content_link">"hier"</string>
+  <string name="screen_analytics_settings_share_data">"Gebruiksgegevens delen"</string>
 </resources>

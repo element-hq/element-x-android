@@ -21,6 +21,7 @@
   <string name="screen_change_server_form_notice">"Du kannst nur eine Verbindung zu einem vorhandenen Server herstellen, der Sliding Sync unterstützt. Dein Homeserver-Administrator muss das konfigurieren. %1$s"</string>
   <string name="screen_change_server_subtitle">"Wie lautet die Adresse deines Servers?"</string>
   <string name="screen_change_server_title">"Wähle deinen Server aus"</string>
+  <string name="screen_create_account_title">"Konto erstellen"</string>
   <string name="screen_login_error_deactivated_account">"Dieses Konto wurde deaktiviert."</string>
   <string name="screen_login_error_invalid_credentials">"Falscher Benutzername und/oder Passwort"</string>
   <string name="screen_login_error_invalid_user_id">"Dies ist keine gültige Benutzerkennung. Erwartetes Format: \'@user:homeserver.org\'"</string>

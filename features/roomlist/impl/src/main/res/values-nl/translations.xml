@@ -14,13 +14,25 @@
   <string name="screen_roomlist_empty_message">"Ga aan de slag door iemand een bericht te sturen."</string>
   <string name="screen_roomlist_empty_title">"Nog geen chats."</string>
   <string name="screen_roomlist_filter_favourites">"Favorieten"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"Je kunt een chat toevoegen aan je favorieten in de chatinstellingen.
+Voor nu kun je filters deselecteren om je andere chats te zien"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"Je hebt nog geen favoriete chats"</string>
+  <string name="screen_roomlist_filter_invites">"Uitnodigingen"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"Je hebt geen openstaande uitnodigingen."</string>
   <string name="screen_roomlist_filter_low_priority">"Lage prioriteit"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Je kunt filters deselecteren om je andere chats te zien"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"Je hebt geen chats voor deze selectie"</string>
   <string name="screen_roomlist_filter_people">"Personen"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"Je hebt nog geen directe chats"</string>
   <string name="screen_roomlist_filter_rooms">"Kamers"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"Je zit nog niet in een kamer"</string>
   <string name="screen_roomlist_filter_unreads">"Ongelezen"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"Gefeliciteerd!
+Je hebt geen ongelezen berichten!"</string>
   <string name="screen_roomlist_main_space_title">"Chats"</string>
   <string name="screen_roomlist_mark_as_read">"Markeren als gelezen"</string>
   <string name="screen_roomlist_mark_as_unread">"Markeren als ongelezen"</string>
+  <string name="screen_roomlist_room_directory_button_title">"Blader door alle kamers"</string>
   <string name="session_verification_banner_message">"Het lijkt erop dat je een nieuw apparaat gebruikt. Verifieer met een ander apparaat om toegang te krijgen tot je versleutelde berichten."</string>
   <string name="session_verification_banner_title">"Verifieer dat jij het bent"</string>
 </resources>

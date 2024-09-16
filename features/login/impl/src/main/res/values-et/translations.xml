@@ -21,6 +21,7 @@
   <string name="screen_change_server_form_notice">"Sa saad luua ühendust vaid olemasoleva serveriga, mis toetab Sliding sync režiimi. Sinu koduserveri haldur peaks selle seadistama. %1$s"</string>
   <string name="screen_change_server_subtitle">"Mis on sinu koduserveri aadress?"</string>
   <string name="screen_change_server_title">"Vali oma server"</string>
+  <string name="screen_create_account_title">"Loo kasutajakonto"</string>
   <string name="screen_login_error_deactivated_account">"Konto on kasutusest eemaldatud."</string>
   <string name="screen_login_error_invalid_credentials">"Vigane kasutajanimi ja/või salasõna"</string>
   <string name="screen_login_error_invalid_user_id">"See ei ole korrektne kasutajanimi. Õige vorming on: „@kasutaja:koduserver.ee“"</string>
