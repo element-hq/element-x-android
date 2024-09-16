@@ -9,11 +9,13 @@ package io.element.android.features.login.impl.web
 
 import android.net.Uri
 import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.login.impl.resolver.network.WellknownAPI
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.network.RetrofitFactory
 import java.net.HttpURLConnection
+import timber.log.Timber
 import javax.inject.Inject
 
 interface WebClientUrlForAuthenticationRetriever {
@@ -25,6 +27,10 @@ class DefaultWebClientUrlForAuthenticationRetriever @Inject constructor(
     private val retrofitFactory: RetrofitFactory,
 ) : WebClientUrlForAuthenticationRetriever {
     override suspend fun retrieve(homeServerUrl: String): String {
+        if (homeServerUrl != AuthenticationConfig.MATRIX_ORG_URL) {
+            Timber.w("Temporary account creation flow is only supported on matrix.org")
+            throw AccountCreationNotSupported()
+        }
         val wellknownApi = retrofitFactory.create(homeServerUrl)
             .create(WellknownAPI::class.java)
         val result = try {
