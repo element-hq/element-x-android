@@ -38,7 +38,6 @@
   <string name="screen_recovery_key_confirm_error_content">"Por favor, tenta novamente para confirmar o acesso à tua cópia de segurança das conversas."</string>
   <string name="screen_recovery_key_confirm_error_title">"Chave de recuperação incorreta"</string>
   <string name="screen_recovery_key_confirm_key_description">"Também funciona se tiveres uma chave ou frase de segurança."</string>
-  <string name="screen_recovery_key_confirm_key_label">"Chave ou código de recuperação"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Inserir…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Perdeste a tua chave?"</string>
   <string name="screen_recovery_key_confirm_success">"Chave de recuperação confirmada"</string>

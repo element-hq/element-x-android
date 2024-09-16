@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"Logi välja ja uuenda"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Sinu koduserver toetab uut ja kiiremat protokolli. Uuendamiseks logi korraks rakendusest välja ja siis tagasi. Mingil hetkel tulevikus vana protokoll eemaldatakse kasutusest ja tehes uuenduse nüüd väldid hilisemat sundkorras uuendust."</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Sinu koduserver enam ei toeta vana protokolli. Jätkamaks rakenduse kasutamist palun logi välja ning seejärel tagasi."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Saadaval on uuendus"</string>
   <string name="banner_set_up_recovery_content">"Loo uus taastevõti, mida saad kasutada oma krüptitud sõnumite ajaloo taastamisel olukorras, kus kaotad ligipääsu oma seadmetele."</string>
   <string name="banner_set_up_recovery_title">"Seadista taastamine"</string>
   <string name="confirm_recovery_key_banner_message">"Sinu vestluste varukoopia pole hetkel sünkroonis. Säilitamaks ligipääsu vestluse varukoopiale palun sisesta oma taastevõti."</string>
