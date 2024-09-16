@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.notificationsettings.Notification
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
+import io.element.android.libraries.matrix.api.room.InvitedRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -243,6 +244,10 @@ class RustMatrixClient(
 
     override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
         return roomFactory.create(roomId)
+    }
+
+    override suspend fun getInvitedRoom(roomId: RoomId): InvitedRoom? {
+        return roomFactory.createInvitedRoom(roomId)
     }
 
     /**
