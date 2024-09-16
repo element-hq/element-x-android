@@ -13,6 +13,12 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import timber.log.Timber
 
+/**
+ * This class is responsible for resolving and resending a failed message sent to a verified user.
+ * It also allow to resend the message without resolving the failure, for example if the user has in the meantime verified their device again.
+ * It's using the [VerifiedUserSendFailureIterator] to iterate over the different failures (ie. the different users concerned by the failure).
+ * This way, the user can resolve and resend the message for each user concerned, one by one.
+ */
 class VerifiedUserSendFailureResolver(
     private val room: MatrixRoom,
     private val transactionId: TransactionId,

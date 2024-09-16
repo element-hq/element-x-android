@@ -350,7 +350,23 @@ interface MatrixRoom : Closeable {
      */
     suspend fun clearComposerDraft(): Result<Unit>
 
+    /**
+     * Ignore the local trust for the given devices and resend messages that failed to send because said devices are unverified.
+     *
+     * @param devices The map of users identifiers to device identifiers received in the error
+     * @param transactionId The send queue transaction identifier of the local echo the send error applies to.
+     *
+     */
     suspend fun ignoreDeviceTrustAndResend(devices: Map<UserId, List<DeviceId>>, transactionId: TransactionId): Result<Unit>
+
+    /**
+     * Remove verification requirements for the given users and
+     * resend messages that failed to send because their identities were no longer verified.
+     *
+     * @param userIds The list of users identifiers received in the error.
+     * @param transactionId The send queue transaction identifier of the local echo the send error applies to.
+     *
+     */
     suspend fun withdrawVerificationAndResend(userIds: List<UserId>, transactionId: TransactionId): Result<Unit>
 
     override fun close() = destroy()

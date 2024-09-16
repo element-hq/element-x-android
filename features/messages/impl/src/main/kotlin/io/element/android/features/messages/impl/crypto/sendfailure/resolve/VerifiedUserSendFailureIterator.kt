@@ -8,6 +8,7 @@
 package io.element.android.features.messages.impl.crypto.sendfailure.resolve
 
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
+import timber.log.Timber
 
 /**
  * Iterator for [LocalEventSendState.Failed.VerifiedUser]
@@ -30,6 +31,12 @@ class UnsignedDeviceSendFailureIterator(
 ) : VerifiedUserSendFailureIterator {
     private val iterator = failure.devices.iterator()
 
+    init {
+        if (!hasNext()) {
+            Timber.w("Got $failure without any devices, shouldn't happen.")
+        }
+    }
+
     override fun hasNext(): Boolean {
         return iterator.hasNext()
     }
@@ -46,6 +53,12 @@ class ChangedIdentitySendFailureIterator(
     failure: LocalEventSendState.Failed.VerifiedUserChangedIdentity
 ) : VerifiedUserSendFailureIterator {
     private val iterator = failure.users.iterator()
+
+    init {
+        if (!hasNext()) {
+            Timber.w("Got $failure without any users, shouldn't happen.")
+        }
+    }
 
     override fun hasNext(): Boolean {
         return iterator.hasNext()

@@ -118,7 +118,7 @@ private fun VerifiedUserSendFailure.title(): String {
             id = CommonStrings.screen_resolve_send_failure_changed_identity_title,
             userDisplayName
         )
-        VerifiedUserSendFailure.None -> ""
+        VerifiedUserSendFailure.None -> error("This method should never be called for this state")
     }
 }
 
@@ -134,7 +134,7 @@ private fun VerifiedUserSendFailure.subtitle(): String {
             id = CommonStrings.screen_resolve_send_failure_changed_identity_subtitle,
             userDisplayName
         )
-        VerifiedUserSendFailure.None -> ""
+        VerifiedUserSendFailure.None -> error("This method should never be called for this state")
     }
 }
 
@@ -143,7 +143,7 @@ private fun VerifiedUserSendFailure.resolveAction(): String {
     return when (this) {
         is VerifiedUserSendFailure.UnsignedDevice -> stringResource(id = CommonStrings.screen_resolve_send_failure_unsigned_device_primary_button_title)
         is VerifiedUserSendFailure.ChangedIdentity -> stringResource(id = CommonStrings.screen_resolve_send_failure_changed_identity_primary_button_title)
-        VerifiedUserSendFailure.None -> ""
+        VerifiedUserSendFailure.None -> error("This method should never be called for this state")
     }
 }
 
