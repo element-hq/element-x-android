@@ -34,9 +34,6 @@ class WebViewMessageInterceptor(
                 super.onPageStarted(view, url, favicon)
 
                 // We inject this JS code when the page starts loading to attach a message listener to the window.
-                // This listener will receive both messages:
-                // - EC widget API -> Element X (message.data.api == "fromWidget")
-                // - Element X -> EC widget API (message.data.api == "toWidget"), we should ignore these
                 view?.evaluateJavascript(
                     """
                         window.addEventListener(
