@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
+import io.element.android.libraries.matrix.api.room.InvitedRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -99,6 +100,7 @@ class FakeMatrixClient(
     private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var findDmResult: RoomId? = A_ROOM_ID
     private val getRoomResults = mutableMapOf<RoomId, MatrixRoom>()
+    val getInvitedRoomResults = mutableMapOf<RoomId, InvitedRoom>()
     private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()
     private val getProfileResults = mutableMapOf<UserId, Result<MatrixUser>>()
     private var uploadMediaResult: Result<String> = Result.success(AN_AVATAR_URL)
@@ -123,6 +125,10 @@ class FakeMatrixClient(
 
     override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
         return getRoomResults[roomId]
+    }
+
+    override suspend fun getInvitedRoom(roomId: RoomId): InvitedRoom? {
+        return getInvitedRoomResults[roomId]
     }
 
     override suspend fun findDM(userId: UserId): RoomId? {

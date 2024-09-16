@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
+import io.element.android.libraries.matrix.api.room.InvitedRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.awaitLoaded
@@ -27,6 +28,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.FilterTimelineEventType
+import org.matrix.rustcomponents.sdk.Membership
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListException
 import org.matrix.rustcomponents.sdk.RoomListItem
@@ -121,6 +123,33 @@ class RustRoomFactory(
                 matrixRoomInfoMapper = matrixRoomInfoMapper,
             )
         }
+    }
+
+    suspend fun createInvitedRoom(roomId: RoomId): InvitedRoom? = withContext(dispatcher) {
+        if (isDestroyed) {
+            Timber.d("Room factory is destroyed, returning null for $roomId")
+            return@withContext null
+        }
+        val roomListItem = innerRoomListService.roomOrNull(roomId.value)
+        if (roomListItem == null) {
+            Timber.d("Room not found for $roomId")
+            return@withContext null
+        }
+        if (roomListItem.membership() != Membership.INVITED) {
+            Timber.d("Room $roomId is not in invited state")
+            return@withContext null
+        }
+        val invitedRoom = try {
+            roomListItem.invitedRoom()
+        } catch (e: RoomListException) {
+            Timber.e(e, "Failed to get invited room for $roomId")
+            return@withContext null
+        }
+
+        RustInvitedRoom(
+            sessionId = sessionId,
+            invitedRoom = invitedRoom,
+        )
     }
 
     private suspend fun getRoomReferences(roomId: RoomId): RustRoomReferences? {
