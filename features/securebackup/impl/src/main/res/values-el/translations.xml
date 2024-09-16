@@ -16,6 +16,12 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Ακολούθησε τις οδηγίες για να δημιουργήσεις ένα νέο κλειδί ανάκτησης"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Αποθήκευσε το νέο κλειδί ανάκτησης σε έναν διαχειριστή κωδικών πρόσβασης ή σε κρυπτογραφημένη σημείωση"</string>
   <string name="screen_create_new_recovery_key_title">"Επανάφερε την κρυπτογράφηση για το λογαριασμό σου χρησιμοποιώντας άλλη συσκευή"</string>
+  <string name="screen_encryption_reset_action_continue_reset">"Συνέχιση επαναφοράς"</string>
+  <string name="screen_encryption_reset_bullet_1">"Τα στοιχεία του λογαριασμού σου, οι επαφές, οι προτιμήσεις και η λίστα συνομιλιών θα διατηρηθούν"</string>
+  <string name="screen_encryption_reset_bullet_2">"Θα χάσεις το υπάρχον ιστορικό μηνυμάτων σου"</string>
+  <string name="screen_encryption_reset_bullet_3">"Θα χρειαστεί να επαληθεύσεις ξανά όλες τις υπάρχουσες συσκευές και επαφές σου"</string>
+  <string name="screen_encryption_reset_footer">"Επανάφερε την ταυτότητά σου μόνο εάν δεν έχεις πρόσβαση σε άλλη συνδεδεμένη συσκευή και έχεις χάσει το κλειδί ανάκτησης."</string>
+  <string name="screen_encryption_reset_title">"Δεν μπορείς να επιβεβαιώσεις; Θα χρειαστεί να επαναφέρεις την ταυτότητά σου."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Απενεργοποίηση"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Θα χάσεις τα κρυπτογραφημένα μηνύματά σου εάν αποσυνδεθείς από όλες τις συσκευές."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Σίγουρα θες να απενεργοποιήσεις τα αντίγραφα ασφαλείας;"</string>
@@ -50,4 +56,11 @@
   <string name="screen_recovery_key_setup_generate_key_description">"Βεβαιώσου ότι μπορείς να αποθηκεύσεις το κλειδί ανάκτησης κάπου ασφαλές"</string>
   <string name="screen_recovery_key_setup_success">"Επιτυχής ρύθμιση ανάκτησης"</string>
   <string name="screen_recovery_key_setup_title">"Ρύθμιση ανάκτησης"</string>
+  <string name="screen_reset_encryption_confirmation_alert_action">"Ναι, επαναφορά τώρα"</string>
+  <string name="screen_reset_encryption_confirmation_alert_subtitle">"Η διαδικασία είναι μη αναστρέψιμη."</string>
+  <string name="screen_reset_encryption_confirmation_alert_title">"Σίγουρα θες να επαναφέρεις την ταυτότητά σου;"</string>
+  <string name="screen_reset_encryption_password_error">"Συνέβη ένα άγνωστο σφάλμα. Έλεγξε ότι ο κωδικός πρόσβασης του λογαριασμού σου είναι σωστός και δοκίμασε ξανά."</string>
+  <string name="screen_reset_encryption_password_placeholder">"Εισαγωγή…"</string>
+  <string name="screen_reset_encryption_password_subtitle">"Επιβεβαίωσε ότι θες να επαναφέρεις την ταυτότητά σου."</string>
+  <string name="screen_reset_encryption_password_title">"Εισήγαγε τον κωδικό πρόσβασης του λογαριασμού σου για να συνεχίσεις"</string>
 </resources>

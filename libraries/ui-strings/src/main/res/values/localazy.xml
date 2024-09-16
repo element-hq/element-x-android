@@ -251,6 +251,7 @@ Reason: %1$s."</string>
   <string name="dialog_title_warning">"Warning"</string>
   <string name="dialog_unsaved_changes_description_android">"Your changes have not been saved. Are you sure you want to go back?"</string>
   <string name="dialog_unsaved_changes_title">"Save changes?"</string>
+  <string name="error_account_creation_not_possible">"Your homeserver needs to be upgraded to support Matrix Authentication Server and account creation."</string>
   <string name="error_failed_creating_the_permalink">"Failed creating the permalink"</string>
   <string name="error_failed_loading_map">"%1$s could not load the map. Please try again later."</string>
   <string name="error_failed_loading_messages">"Failed loading messages"</string>
@@ -272,6 +273,7 @@ Reason: %1$s."</string>
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
+  <string name="screen_create_account_title">"Create account"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Failed uploading media, please try again."</string>
