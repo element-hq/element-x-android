@@ -14,8 +14,8 @@ import io.element.android.features.login.impl.resolver.network.WellknownAPI
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.network.RetrofitFactory
-import java.net.HttpURLConnection
 import timber.log.Timber
+import java.net.HttpURLConnection
 import javax.inject.Inject
 
 interface WebClientUrlForAuthenticationRetriever {
@@ -35,10 +35,9 @@ class DefaultWebClientUrlForAuthenticationRetriever @Inject constructor(
             .create(WellknownAPI::class.java)
         val result = try {
             wellknownApi.getElementWellKnown()
-        } catch (e: Exception) {
+        } catch (e: retrofit2.HttpException) {
             throw when {
-                e is retrofit2.HttpException &&
-                    e.code() == HttpURLConnection.HTTP_NOT_FOUND -> AccountCreationNotSupported()
+                e.code() == HttpURLConnection.HTTP_NOT_FOUND -> AccountCreationNotSupported()
                 else -> e
             }
         }

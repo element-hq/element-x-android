@@ -118,7 +118,8 @@ fun ConfirmAccountProviderView(
                             },
                             onDismiss = {
                                 eventSink(ConfirmAccountProviderEvents.ClearError)
-                            })
+                            }
+                        )
                     }
                     is AccountCreationNotSupported -> {
                         ErrorDialog(
