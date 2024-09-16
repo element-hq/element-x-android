@@ -16,15 +16,18 @@ open class LoggedInStateProvider : PreviewParameterProvider<LoggedInState> {
             aLoggedInState(),
             aLoggedInState(showSyncSpinner = true),
             aLoggedInState(pusherRegistrationState = AsyncData.Failure(PusherRegistrationFailure.NoDistributorsAvailable())),
+            aLoggedInState(forceNativeSlidingSyncMigration = true),
         )
 }
 
 fun aLoggedInState(
     showSyncSpinner: Boolean = false,
     pusherRegistrationState: AsyncData<Unit> = AsyncData.Uninitialized,
+    forceNativeSlidingSyncMigration: Boolean = false,
 ) = LoggedInState(
     showSyncSpinner = showSyncSpinner,
     pusherRegistrationState = pusherRegistrationState,
     ignoreRegistrationError = false,
+    forceNativeSlidingSyncMigration = forceNativeSlidingSyncMigration,
     eventSink = {},
 )
