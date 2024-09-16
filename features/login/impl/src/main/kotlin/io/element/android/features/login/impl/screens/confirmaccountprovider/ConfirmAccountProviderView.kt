@@ -111,17 +111,19 @@ fun ConfirmAccountProviderView(
                         )
                     }
                     is ChangeServerError.SlidingSyncAlert -> {
-                        SlidingSyncNotSupportedDialog(onLearnMoreClick = {
-                            onLearnMoreClick()
-                            eventSink(ConfirmAccountProviderEvents.ClearError)
-                        }, onDismiss = {
-                            eventSink(ConfirmAccountProviderEvents.ClearError)
-                        })
+                        SlidingSyncNotSupportedDialog(
+                            onLearnMoreClick = {
+                                onLearnMoreClick()
+                                eventSink(ConfirmAccountProviderEvents.ClearError)
+                            },
+                            onDismiss = {
+                                eventSink(ConfirmAccountProviderEvents.ClearError)
+                            })
                     }
                     is AccountCreationNotSupported -> {
                         ErrorDialog(
                             content = stringResource(CommonStrings.error_account_creation_not_possible),
-                            onDismiss = {
+                            onSubmit = {
                                 eventSink.invoke(ConfirmAccountProviderEvents.ClearError)
                             }
                         )
