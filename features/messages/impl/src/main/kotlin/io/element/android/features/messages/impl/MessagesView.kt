@@ -241,6 +241,9 @@ fun MessagesView(
             state.customReactionState.eventSink(CustomReactionEvents.ShowCustomReactionSheet(event))
         },
         onEmojiReactionClick = ::onEmojiReactionClick,
+        onVerifiedUserSendFailureClick = { event ->
+            state.timelineState.eventSink(TimelineEvents.ComputeVerifiedUserSendFailure(event))
+        },
     )
 
     CustomReactionBottomSheet(

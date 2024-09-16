@@ -65,7 +65,41 @@ fun ListItem(
         disabledLeadingIconColor = ListItemDefaultColors.iconDisabled,
         disabledTrailingIconColor = ListItemDefaultColors.iconDisabled,
     )
+    ListItem(
+        headlineContent = headlineContent,
+        modifier = modifier,
+        supportingContent = supportingContent,
+        leadingContent = leadingContent,
+        trailingContent = trailingContent,
+        colors = colors,
+        enabled = enabled,
+        onClick = onClick,
+    )
+}
 
+/**
+ * A List Item component to be used in lists and menus with simple layouts, matching the Material 3 guidelines.
+ * @param headlineContent The main content of the list item, usually a text.
+ * @param colors The colors to use for the list item. You can use [ListItemDefaults.colors] to create this.
+ * @param modifier The modifier to be applied to the list item.
+ * @param supportingContent The content to be displayed below the headline content.
+ * @param leadingContent The content to be displayed before the headline content.
+ * @param trailingContent The content to be displayed after the headline content.
+ * @param enabled Whether the list item is enabled. When disabled, will change the color of the headline content and the leading content to use disabled tokens.
+ * @param onClick The callback to be called when the list item is clicked.
+ */
+@Suppress("LongParameterList")
+@Composable
+fun ListItem(
+    headlineContent: @Composable () -> Unit,
+    colors: ListItemColors,
+    modifier: Modifier = Modifier,
+    supportingContent: @Composable (() -> Unit)? = null,
+    leadingContent: ListItemContent? = null,
+    trailingContent: ListItemContent? = null,
+    enabled: Boolean = true,
+    onClick: (() -> Unit)? = null,
+) {
     // We cannot just pass the disabled colors, they must be set manually: https://issuetracker.google.com/issues/280480132
     val headlineColor = if (enabled) colors.headlineColor else colors.disabledHeadlineColor
     val leadingContentColor = if (enabled) colors.leadingIconColor else colors.disabledLeadingIconColor
@@ -378,8 +412,8 @@ private object PreviewItems {
     ) {
         ElementThemedPreview {
             ListItem(
-                headlineContent = PreviewItems.headline(),
-                supportingContent = PreviewItems.text(),
+                headlineContent = headline(),
+                supportingContent = text(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
                 style = style,
@@ -397,8 +431,8 @@ private object PreviewItems {
     ) {
         ElementThemedPreview {
             ListItem(
-                headlineContent = PreviewItems.headline(),
-                supportingContent = PreviewItems.textSingleLine(),
+                headlineContent = headline(),
+                supportingContent = textSingleLine(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
                 style = style,
@@ -417,7 +451,7 @@ private object PreviewItems {
     ) {
         ElementThemedPreview {
             ListItem(
-                headlineContent = PreviewItems.headline(),
+                headlineContent = headline(),
                 leadingContent = leadingContent,
                 trailingContent = trailingContent,
                 enabled = enabled,

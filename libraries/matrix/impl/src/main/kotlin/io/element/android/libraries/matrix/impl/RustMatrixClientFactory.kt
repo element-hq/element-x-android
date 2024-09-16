@@ -100,7 +100,7 @@ class RustMatrixClientFactory @Inject constructor(
                 strategy = if (featureFlagService.isFeatureEnabled(FeatureFlags.InvisibleCrypto)) {
                     CollectStrategy.IdentityBasedStrategy
                 } else {
-                    CollectStrategy.DeviceBasedStrategy(onlyAllowTrustedDevices = false, errorOnVerifiedUserProblem = false)
+                    CollectStrategy.DeviceBasedStrategy(onlyAllowTrustedDevices = false, errorOnVerifiedUserProblem = true)
                 }
             )
             .run {
