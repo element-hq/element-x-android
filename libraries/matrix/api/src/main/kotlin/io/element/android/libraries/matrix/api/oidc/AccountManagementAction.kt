@@ -7,9 +7,11 @@
 
 package io.element.android.libraries.matrix.api.oidc
 
+import io.element.android.libraries.matrix.api.core.DeviceId
+
 sealed interface AccountManagementAction {
     data object Profile : AccountManagementAction
     data object SessionsList : AccountManagementAction
-    data class SessionView(val deviceId: String) : AccountManagementAction
-    data class SessionEnd(val deviceId: String) : AccountManagementAction
+    data class SessionView(val deviceId: DeviceId) : AccountManagementAction
+    data class SessionEnd(val deviceId: DeviceId) : AccountManagementAction
 }

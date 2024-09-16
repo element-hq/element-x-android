@@ -108,7 +108,7 @@ private fun PinnedMessagesListContent(
                 ErrorDialog(
                     title = stringResource(id = CommonStrings.error_unknown),
                     content = stringResource(id = CommonStrings.error_failed_loading_messages),
-                    onDismiss = onErrorDismiss
+                    onSubmit = onErrorDismiss
                 )
             }
             PinnedMessagesListState.Empty -> PinnedMessagesListEmpty()

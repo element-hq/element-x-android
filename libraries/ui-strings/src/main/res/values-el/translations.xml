@@ -36,6 +36,7 @@
   <string name="action_back">"Πίσω"</string>
   <string name="action_call">"Κάλεσε"</string>
   <string name="action_cancel">"Άκυρο"</string>
+  <string name="action_cancel_for_now">"Ακύρωση προς το παρόν"</string>
   <string name="action_choose_photo">"Επιλογή φωτογραφίας"</string>
   <string name="action_clear">"Εκκαθάριση"</string>
   <string name="action_close">"Κλείσιμο"</string>
@@ -91,6 +92,7 @@
   <string name="action_report_bug">"Αναφορά σφάλματος"</string>
   <string name="action_report_content">"Αναφορά περιεχομένου"</string>
   <string name="action_reset">"Επαναφορά"</string>
+  <string name="action_reset_identity">"Επαναφορά ταυτότητας"</string>
   <string name="action_retry">"Επανάληψη"</string>
   <string name="action_retry_decryption">"Επανάληψη αποκρυπτογράφησης"</string>
   <string name="action_save">"Αποθήκευση"</string>
@@ -111,6 +113,7 @@
   <string name="action_tap_for_options">"Πάτα για επιλογές"</string>
   <string name="action_try_again">"Προσπάθησε ξανά"</string>
   <string name="action_unpin">"Ξεκαρφίτσωμα"</string>
+  <string name="action_view_in_timeline">"Προβολή στο χρονοδιάγραμμα"</string>
   <string name="action_view_source">"Προβολή πηγής"</string>
   <string name="action_yes">"Ναι"</string>
   <string name="common_about">"Σχετικά"</string>
@@ -176,6 +179,7 @@
   <string name="common_people">"Άτομα"</string>
   <string name="common_permalink">"Μόνιμος σύνδεσμος"</string>
   <string name="common_permission">"Αδεια"</string>
+  <string name="common_pinned">"Καρφιτσωμένο"</string>
   <string name="common_please_wait">"Παρακαλώ περίμενε…"</string>
   <string name="common_poll_end_confirmation">"Θες σίγουρα να τερματίσεις αυτή τη δημοσκόπηση;"</string>
   <string name="common_poll_summary">"Δημοσκόπηση: %1$s"</string>
@@ -247,6 +251,7 @@
   <string name="dialog_title_warning">"Προειδοποίηση"</string>
   <string name="dialog_unsaved_changes_description_android">"Οι αλλαγές σου δεν έχουν αποθηκευτεί. Σίγουρα θες να πας πίσω;"</string>
   <string name="dialog_unsaved_changes_title">"Αποθήκευση αλλαγών;"</string>
+  <string name="error_account_creation_not_possible">"Ο οικιακός διακομιστής σου πρέπει να αναβαθμιστεί για να υποστηρίζει το Matrix Authentication Server και τη δημιουργία λογαριασμού."</string>
   <string name="error_failed_creating_the_permalink">"Αποτυχία δημιουργίας του μόνιμου συνδέσμου"</string>
   <string name="error_failed_loading_map">"%1$s δεν ήταν δυνατή η φόρτωση του χάρτη. Παρακαλώ δοκίμασε ξανά αργότερα."</string>
   <string name="error_failed_loading_messages">"Αποτυχία φόρτωσης μηνυμάτων"</string>
@@ -259,6 +264,8 @@
   <string name="error_some_messages_have_not_been_sent">"Ορισμένα μηνύματα δεν έχουν σταλεί"</string>
   <string name="error_unknown">"Λυπούμαστε, παρουσιάστηκε σφάλμα"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Η αυθεντικότητα αυτού του κρυπτογραφημένου μηνύματος δεν είναι εγγυημένη σε αυτήν τη συσκευή."</string>
+  <string name="event_shield_reason_previously_verified">"Κρυπτογραφημένο από έναν προηγουμένως επαληθευμένο χρήστη."</string>
+  <string name="event_shield_reason_sent_in_clear">"Μη κρυπτογραφημένο."</string>
   <string name="event_shield_reason_unknown_device">"Κρυπτογραφημένο από άγνωστη ή διαγεγραμμένη συσκευή."</string>
   <string name="event_shield_reason_unsigned_device">"Κρυπτογραφημένο από μια συσκευή που δεν έχει επαληθευτεί από τον ιδιοκτήτη της."</string>
   <string name="event_shield_reason_unverified_identity">"Κρυπτογραφημένο από μη επαληθευμένο χρήστη."</string>
@@ -266,9 +273,26 @@
   <string name="invite_friends_text">"Γεια, μίλα μου στην εφαρμογή %1$s :%2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Κούνησε δυνατά τη συσκευή σου για να αναφέρεις κάποιο σφάλμα"</string>
+  <string name="screen_create_account_title">"Δημιουργία λογαριασμού"</string>
   <string name="screen_media_picker_error_failed_selection">"Αποτυχία επιλογής πολυμέσου, δοκίμασε ξανά."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Αποτυχία μεταφόρτωσης μέσου, δοκίμασε ξανά."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Αποτυχία μεταφόρτωσης πολυμέσων, δοκίμασε ξανά."</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Πάτα σε ένα μήνυμα και επέλεξε «%1$s» για να συμπεριληφθεί εδώ."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Καρφίτσωσε σημαντικά μηνύματα, ώστε να μπορούν να εντοπιστούν εύκολα"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d Καρφιτσωμένο μήνυμα"</item>
+    <item quantity="other">"%1$d Καρφιτσωμένα μηνύματα"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Καρφιτσωμένα μηνύματα"</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"Πρόκειται να μεταβείς στον λογαριασμό σου %1$s για να επαναφέρεις την ταυτότητά σου. Στη συνέχεια, θα επιστρέψεις στην εφαρμογή."</string>
+  <string name="screen_reset_identity_confirmation_title">"Δεν μπορείς να επιβεβαιώσεις; Πήγαινε στον λογαριασμό σου για να επαναφέρεις την ταυτότητά σου."</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Ανάκληση επαλήθευσης και αποστολή"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Μπορείτε να ανακαλέσεις την επαλήθευσή σου και να στείλεις αυτό το μήνυμα όπως και να \'χει ή μπορείς να το ακυρώσεις προς το παρόν και να προσπαθήσεις ξανά αργότερα μετά την επαλήθευση του χρήστη %1$s."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Το μήνυμά σου δεν στάλθηκε επειδή η επαληθευμένη ταυτότητα του χρήστη %1$s έχει αλλάξει"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Αποστολή μηνύματος ούτως ή άλλως"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"Ο χρήστης %1$s χρησιμοποιεί τουλάχιστον μία μη επαληθευμένη συσκευή. Μπορείς να στείλεις το μήνυμα όπως και να \'χει ή μπορείς να το ακυρώσεις προς το παρόν και να δοκιμάσεις ξανά αργότερα αφού ο χρήστης %2$s επαληθεύσει όλες τις συσκευές του."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Το μήνυμά σου δεν στάλθηκε επειδή ο χρήστης %1$s δεν έχει επαληθεύσει τουλάχιστον μία συσκευή"</string>
+  <string name="screen_room_details_pinned_events_row_title">"Καρφιτσωμένα μηνύματα"</string>
   <string name="screen_room_error_failed_processing_media">"Αποτυχία μεταφόρτωσης μέσου, δοκίμασε ξανά."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Δεν ήταν δυνατή η ανάκτηση στοιχείων χρήστη"</string>
   <string name="screen_room_member_details_block_alert_action">"Αποκλεισμός"</string>
@@ -280,6 +304,7 @@
   <string name="screen_room_member_details_unblock_user">"Κατάργηση αποκλεισμού χρήστη"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s από %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Καρφιτσωμένα μηνύματα"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Φόρτωση μηνύματος…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Προβολή Όλων"</string>
   <string name="screen_room_title">"Συνομιλία"</string>
   <string name="screen_share_location_title">"Κοινή χρήση τοποθεσίας"</string>
@@ -288,6 +313,8 @@
   <string name="screen_share_open_google_maps">"Άνοιγμα στο Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Άνοιγμα στο OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Κοινή χρήση αυτής της τοποθεσίας"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Το μήνυμα δεν στάλθηκε επειδή η επαληθευμένη ταυτότητα του χρήστη %1$s έχει αλλάξει."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Το μήνυμα δεν στάλθηκε επειδή ο χρήστης %1$s δεν έχει επαληθεύσει τουλάχιστον μία συσκευή."</string>
   <string name="screen_view_location_title">"Τοποθεσία"</string>
   <string name="settings_version_number">"Έκδοση: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"el"</string>

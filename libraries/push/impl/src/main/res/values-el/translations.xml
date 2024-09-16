@@ -34,6 +34,7 @@
   <string name="notification_room_action_quick_reply">"Γρήγορη απάντηση"</string>
   <string name="notification_room_invite_body">"Σέ προσκάλεσε να συμμετάσχεις στο δωμάτιο"</string>
   <string name="notification_sender_me">"Εγώ"</string>
+  <string name="notification_sender_mention_reply">"Ο χρήστης %1$s αναφέρθηκε ή απάντησε"</string>
   <string name="notification_test_push_notification_content">"Βλέπεις την ειδοποίηση! Κάνε μου κλικ!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>

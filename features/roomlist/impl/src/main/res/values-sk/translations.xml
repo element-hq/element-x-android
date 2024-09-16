@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"Odhlásiť sa a aktualizovať"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Váš server teraz podporuje nový, rýchlejší protokol. Odhláste sa a prihláste sa znova, aby ste mohli aktualizovať. Ak to urobíte teraz, pomôže vám vyhnúť sa nútenému odhláseniu, keď sa starý protokol neskôr odstráni."</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Váš domovský server už nepodporuje starý protokol. Ak chcete pokračovať v používaní aplikácie, odhláste sa a znova sa prihláste."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Aktualizácia je k dispozícii"</string>
   <string name="banner_set_up_recovery_content">"Vytvorte nový kľúč na obnovenie, ktorý môžete použiť na obnovenie vašej histórie šifrovaných správ v prípade straty prístupu k vašim zariadeniam."</string>
   <string name="banner_set_up_recovery_title">"Nastaviť obnovenie"</string>
   <string name="confirm_recovery_key_banner_message">"Vaša záloha konverzácie nie je momentálne synchronizovaná. Na zachovanie prístupu k zálohe konverzácie musíte potvrdiť svoj kľúč na obnovu."</string>

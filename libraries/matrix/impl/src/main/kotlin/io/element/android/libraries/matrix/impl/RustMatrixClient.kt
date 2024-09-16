@@ -12,6 +12,7 @@ import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -28,6 +29,7 @@ import io.element.android.libraries.matrix.api.notificationsettings.Notification
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
+import io.element.android.libraries.matrix.api.room.InvitedRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -120,7 +122,7 @@ class RustMatrixClient(
     sessionDelegate: RustClientSessionDelegate,
 ) : MatrixClient {
     override val sessionId: UserId = UserId(client.userId())
-    override val deviceId: String = client.deviceId()
+    override val deviceId: DeviceId = DeviceId(client.deviceId())
     override val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-$sessionId")
 
     private val innerRoomListService = syncService.roomListService()
@@ -173,13 +175,13 @@ class RustMatrixClient(
         roomListService = roomListService,
         innerRoomListService = innerRoomListService,
         sessionId = sessionId,
+        deviceId = deviceId,
         notificationSettingsService = notificationSettingsService,
         sessionCoroutineScope = sessionCoroutineScope,
         dispatchers = dispatchers,
         systemClock = clock,
         roomContentForwarder = RoomContentForwarder(innerRoomListService),
         roomSyncSubscriber = roomSyncSubscriber,
-        getSessionData = { sessionStore.getSession(sessionId.value)!! },
     )
 
     override val mediaLoader: MatrixMediaLoader = RustMediaLoader(
@@ -242,6 +244,10 @@ class RustMatrixClient(
 
     override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
         return roomFactory.create(roomId)
+    }
+
+    override suspend fun getInvitedRoom(roomId: RoomId): InvitedRoom? {
+        return roomFactory.createInvitedRoom(roomId)
     }
 
     /**
@@ -531,6 +537,10 @@ class RustMatrixClient(
 
     override suspend fun isNativeSlidingSyncSupported(): Boolean {
         return client.availableSlidingSyncVersions().contains(SlidingSyncVersion.Native)
+    }
+
+    override suspend fun isSlidingSyncProxySupported(): Boolean {
+        return client.availableSlidingSyncVersions().any { it is SlidingSyncVersion.Proxy }
     }
 
     override fun isUsingNativeSlidingSync(): Boolean {

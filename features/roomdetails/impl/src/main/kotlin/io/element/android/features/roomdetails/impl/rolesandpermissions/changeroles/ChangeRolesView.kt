@@ -210,7 +210,7 @@ fun ChangeRolesView(
             is AsyncAction.Failure -> {
                 ErrorDialog(
                     content = stringResource(CommonStrings.error_unknown),
-                    onDismiss = { state.eventSink(ChangeRolesEvent.ClearError) }
+                    onSubmit = { state.eventSink(ChangeRolesEvent.ClearError) }
                 )
             }
             is AsyncAction.Success -> {

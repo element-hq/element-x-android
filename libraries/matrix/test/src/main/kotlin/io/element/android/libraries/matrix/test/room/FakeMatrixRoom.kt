@@ -523,6 +523,7 @@ fun aRoomInfo(
     activeRoomCallParticipants: List<String> = emptyList(),
     heroes: List<MatrixUser> = emptyList(),
     pinnedEventIds: List<EventId> = emptyList(),
+    roomCreator: UserId? = null,
 ) = MatrixRoomInfo(
     id = id,
     name = name,
@@ -549,6 +550,7 @@ fun aRoomInfo(
     activeRoomCallParticipants = activeRoomCallParticipants.toImmutableList(),
     heroes = heroes.toImmutableList(),
     pinnedEventIds = pinnedEventIds.toImmutableList(),
+    creator = roomCreator,
 )
 
 fun defaultRoomPowerLevels() = MatrixRoomPowerLevels(

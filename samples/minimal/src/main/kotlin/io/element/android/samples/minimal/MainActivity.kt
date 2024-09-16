@@ -55,10 +55,11 @@ class MainActivity : ComponentActivity() {
                 proxyProvider = proxyProvider,
                 clock = DefaultSystemClock(),
                 utdTracker = UtdTracker(NoopAnalyticsService()),
-                appPreferencesStore = InMemoryAppPreferencesStore(),
+                featureFlagService = AlwaysEnabledFeatureFlagService(),
             ),
             passphraseGenerator = NullPassphraseGenerator(),
             oidcConfigurationProvider = OidcConfigurationProvider(baseDirectory),
+            appPreferencesStore = InMemoryAppPreferencesStore(),
         )
     }
 

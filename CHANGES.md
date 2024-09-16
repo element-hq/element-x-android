@@ -1,3 +1,22 @@
+Changes in Element X v0.6.0 (2024-09-12)
+========================================
+
+### 🙌 Improvements
+* Enables pinned messages feature by default. by @ganfra in https://github.com/element-hq/element-x-android/pull/3439
+* Pinned messages list : hide reactions by @ganfra in https://github.com/element-hq/element-x-android/pull/3430
+
+### 🐛 Bugfixes
+* Feature/fga/pinned messages fix timeline provider by @ganfra in https://github.com/element-hq/element-x-android/pull/3432
+
+### Dependency upgrades
+* Update activity to v1.9.2 by @renovate in https://github.com/element-hq/element-x-android/pull/3397
+* Update peter-evans/create-pull-request action to v7 by @renovate in https://github.com/element-hq/element-x-android/pull/3383
+* Rust sdk upgrade to 0.2.43 by @bmarty in https://github.com/element-hq/element-x-android/pull/3446
+
+### Others
+* DeviceId and cleanup. by @bmarty in https://github.com/element-hq/element-x-android/pull/3442
+* Update application store assets by @bmarty in https://github.com/element-hq/element-x-android/pull/3441
+
 Changes in Element X v0.5.3 (2024-09-10)
 ========================================
 

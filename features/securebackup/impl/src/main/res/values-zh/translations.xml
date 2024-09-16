@@ -38,7 +38,6 @@
   <string name="screen_recovery_key_confirm_error_content">"请重试以访问您的聊天备份。"</string>
   <string name="screen_recovery_key_confirm_error_title">"恢复密钥不正确"</string>
   <string name="screen_recovery_key_confirm_key_description">"如果您有安全密钥或安全短语，也可以用。"</string>
-  <string name="screen_recovery_key_confirm_key_label">"恢复密钥或密码"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"输入……"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"丢失了恢复密钥？"</string>
   <string name="screen_recovery_key_confirm_success">"恢复密钥已确认"</string>
