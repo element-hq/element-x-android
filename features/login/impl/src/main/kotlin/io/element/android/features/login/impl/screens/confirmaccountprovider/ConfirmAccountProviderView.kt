@@ -103,7 +103,7 @@ fun ConfirmAccountProviderView(
                     is ChangeServerError.Error -> {
                         ErrorDialog(
                             content = error.message(),
-                            onDismiss = {
+                            onSubmit = {
                                 eventSink.invoke(ConfirmAccountProviderEvents.ClearError)
                             }
                         )

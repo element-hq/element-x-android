@@ -116,7 +116,7 @@ private fun SetupPinContent(
         ErrorDialog(
             title = state.setupPinFailure.title(),
             content = state.setupPinFailure.content(),
-            onDismiss = {
+            onSubmit = {
                 state.eventSink(SetupPinEvents.ClearFailure)
             }
         )

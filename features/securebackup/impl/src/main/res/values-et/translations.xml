@@ -39,7 +39,6 @@
   <string name="screen_recovery_key_confirm_error_content">"Kinnitamaks ligipääsu sinu vestluse varukoopiale, palun proovi uuesti"</string>
   <string name="screen_recovery_key_confirm_error_title">"Vigane taastevõti"</string>
   <string name="screen_recovery_key_confirm_key_description">"Kui sul on turvavõti või turvafraas, siis need toimivad ka."</string>
-  <string name="screen_recovery_key_confirm_key_label">"Taastevõti või turvafraas"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Sisesta…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Kas sa oled taastevõtme kaotanud?"</string>
   <string name="screen_recovery_key_confirm_success">"Taastevõti on kinnitatud"</string>

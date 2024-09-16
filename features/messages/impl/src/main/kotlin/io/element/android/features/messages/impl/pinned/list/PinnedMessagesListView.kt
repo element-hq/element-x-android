@@ -108,7 +108,7 @@ private fun PinnedMessagesListContent(
                 ErrorDialog(
                     title = stringResource(id = CommonStrings.error_unknown),
                     content = stringResource(id = CommonStrings.error_failed_loading_messages),
-                    onDismiss = onErrorDismiss
+                    onSubmit = onErrorDismiss
                 )
             }
             PinnedMessagesListState.Empty -> PinnedMessagesListEmpty()
@@ -181,6 +181,7 @@ private fun PinnedMessagesListLoaded(
         onSelectAction = ::onActionSelected,
         onCustomReactionClick = {},
         onEmojiReactionClick = { _, _ -> },
+        onVerifiedUserSendFailureClick = {}
     )
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -199,19 +200,18 @@ private fun PinnedMessagesListLoaded(
                 renderReadReceipts = false,
                 isLastOutgoingMessage = false,
                 focusedEventId = null,
-                onClick = onEventClick,
-                onLongClick = ::onMessageLongClick,
                 onUserDataClick = onUserDataClick,
                 onLinkClick = onLinkClick,
+                onClick = onEventClick,
+                onLongClick = ::onMessageLongClick,
                 inReplyToClick = {},
                 onReactionClick = { _, _ -> },
                 onReactionLongClick = { _, _ -> },
                 onMoreReactionsClick = {},
                 onReadReceiptClick = {},
-                eventSink = {},
                 onSwipeToReply = {},
                 onJoinCallClick = {},
-                onShieldClick = {},
+                eventSink = {},
                 eventContentView = { event, contentModifier, onContentLayoutChange ->
                     TimelineItemEventContentViewWrapper(
                         event = event,

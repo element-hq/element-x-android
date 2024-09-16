@@ -19,7 +19,7 @@ internal fun VoiceMessageSendingFailedDialog(
     ErrorDialog(
         title = stringResource(CommonStrings.common_error),
         content = stringResource(CommonStrings.error_failed_uploading_voice_message),
-        onDismiss = onDismiss,
+        onSubmit = onDismiss,
         submitText = stringResource(CommonStrings.action_ok),
     )
 }

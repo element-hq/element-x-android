@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.isEdited
 import io.element.android.libraries.core.bool.orFalse
@@ -31,14 +32,13 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
-import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.isCritical
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun TimelineEventTimestampView(
     event: TimelineItem.Event,
-    onShieldClick: (MessageShield) -> Unit,
+    eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val formattedTime = event.sentTime
@@ -48,8 +48,8 @@ fun TimelineEventTimestampView(
     val tint = if (hasError || hasEncryptionCritical) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary
     Row(
         modifier = Modifier
-            .padding(PaddingValues(start = TimelineEventTimestampViewDefaults.spacing))
-            .then(modifier),
+                .padding(PaddingValues(start = TimelineEventTimestampViewDefaults.spacing))
+                .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (isMessageEdited) {
@@ -66,12 +66,17 @@ fun TimelineEventTimestampView(
             color = tint,
         )
         if (hasError) {
+            val isVerifiedUserSendFailure = event.localSendState is LocalEventSendState.Failed.VerifiedUser
             Spacer(modifier = Modifier.width(2.dp))
             Icon(
                 imageVector = CompoundIcons.Error(),
                 contentDescription = stringResource(id = CommonStrings.common_sending_failed),
                 tint = tint,
-                modifier = Modifier.size(15.dp, 18.dp),
+                modifier = Modifier
+                        .size(15.dp, 18.dp)
+                        .clickable(isVerifiedUserSendFailure) {
+                            eventSink(TimelineEvents.ComputeVerifiedUserSendFailure(event))
+                        },
             )
         }
         event.messageShield?.let { shield ->
@@ -80,8 +85,10 @@ fun TimelineEventTimestampView(
                 imageVector = shield.toIcon(),
                 contentDescription = shield.toText(),
                 modifier = Modifier
-                    .size(15.dp)
-                    .clickable { onShieldClick(shield) },
+                        .size(15.dp)
+                        .clickable {
+                            eventSink(TimelineEvents.ShowShieldDialog(shield))
+                        },
                 tint = shield.toIconColor(),
             )
             Spacer(modifier = Modifier.width(4.dp))
@@ -94,7 +101,7 @@ fun TimelineEventTimestampView(
 internal fun TimelineEventTimestampViewPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) = ElementPreview {
     TimelineEventTimestampView(
         event = event,
-        onShieldClick = {},
+        eventSink = {},
     )
 }
 

@@ -459,8 +459,8 @@ class RustMatrixRoom(
         return liveTimeline.forwardEvent(eventId, roomIds)
     }
 
-    override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> {
-        return Result.failure(UnsupportedOperationException("Not supported"))
+    override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> = runCatching {
+        innerRoom.tryResend(transactionId.value)
     }
 
     override suspend fun cancelSend(transactionId: TransactionId): Result<Boolean> {
@@ -643,6 +643,22 @@ class RustMatrixRoom(
     override suspend fun clearComposerDraft(): Result<Unit> = runCatching {
         Timber.d("clearComposerDraft for $roomId")
         innerRoom.clearComposerDraft()
+    }
+
+    override suspend fun ignoreDeviceTrustAndResend(devices: Map<UserId, List<DeviceId>>, transactionId: TransactionId) = runCatching {
+        innerRoom.ignoreDeviceTrustAndResend(
+            devices = devices.entries.associate { entry ->
+                entry.key.value to entry.value.map { it.value }
+            },
+            transactionId = transactionId.value
+        )
+    }
+
+    override suspend fun withdrawVerificationAndResend(userIds: List<UserId>, transactionId: TransactionId) = runCatching {
+        innerRoom.withdrawVerificationAndResend(
+            userIds = userIds.map { it.value },
+            transactionId = transactionId.value
+        )
     }
 
     private fun createTimeline(

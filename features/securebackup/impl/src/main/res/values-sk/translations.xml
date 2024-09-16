@@ -39,7 +39,6 @@
   <string name="screen_recovery_key_confirm_error_content">"Skúste prosím znova potvrdiť prístup k vašej zálohe konverzácie."</string>
   <string name="screen_recovery_key_confirm_error_title">"Nesprávny kľúč na obnovenie"</string>
   <string name="screen_recovery_key_confirm_key_description">"Ak máte bezpečnostný kľúč alebo bezpečnostnú frázu, bude to fungovať tiež."</string>
-  <string name="screen_recovery_key_confirm_key_label">"Kľúč na obnovenie alebo prístupový kód"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Zadať…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Stratili ste kľúč na obnovenie?"</string>
   <string name="screen_recovery_key_confirm_success">"Kľúč na obnovu potvrdený"</string>

@@ -21,6 +21,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.messages.impl.MessagesNavigator
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureEvents
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureState
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.model.NewEventState
@@ -66,6 +68,7 @@ class TimelinePresenter @AssistedInject constructor(
     private val endPollAction: EndPollAction,
     private val sessionPreferencesStore: SessionPreferencesStore,
     private val timelineController: TimelineController,
+    private val resolveVerifiedUserSendFailurePresenter: Presenter<ResolveVerifiedUserSendFailureState>,
 ) : Presenter<TimelineState> {
     @AssistedFactory
     interface Factory {
@@ -101,6 +104,7 @@ class TimelinePresenter @AssistedInject constructor(
         val newEventState = remember { mutableStateOf(NewEventState.None) }
         val messageShield: MutableState<MessageShield?> = remember { mutableStateOf(null) }
 
+        val resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailurePresenter.present()
         val isSendPublicReadReceiptsEnabled by sessionPreferencesStore.isSendPublicReadReceiptsEnabled().collectAsState(initial = true)
         val renderReadReceipts by sessionPreferencesStore.isRenderReadReceiptsEnabled().collectAsState(initial = true)
         val isLive by timelineController.isLive().collectAsState(initial = true)
@@ -156,6 +160,9 @@ class TimelinePresenter @AssistedInject constructor(
                 }
                 TimelineEvents.HideShieldDialog -> messageShield.value = null
                 is TimelineEvents.ShowShieldDialog -> messageShield.value = event.messageShield
+                is TimelineEvents.ComputeVerifiedUserSendFailure -> {
+                    resolveVerifiedUserSendFailureState.eventSink(ResolveVerifiedUserSendFailureEvents.ComputeForMessage(event.event))
+                }
             }
         }
 
@@ -232,6 +239,7 @@ class TimelinePresenter @AssistedInject constructor(
             isLive = isLive,
             focusRequestState = focusRequestState.value,
             messageShield = messageShield.value,
+            resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
             eventSink = { handleEvents(it) }
         )
     }

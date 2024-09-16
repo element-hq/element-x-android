@@ -38,7 +38,6 @@
   <string name="screen_recovery_key_confirm_error_content">"Паўтарыце спробу, каб пацвердзіць доступ да рэзервовай копіі чата."</string>
   <string name="screen_recovery_key_confirm_error_title">"Няправільны ключ аднаўлення"</string>
   <string name="screen_recovery_key_confirm_key_description">"Калі ў вас ёсць ключ аднаўлення або парольная фраза, гэта таксама будзе працаваць."</string>
-  <string name="screen_recovery_key_confirm_key_label">"Ключ аднаўлення або код доступу"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Увесці…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Страцілі ключ аднаўлення?"</string>
   <string name="screen_recovery_key_confirm_success">"Ключ аднаўлення пацверджаны"</string>

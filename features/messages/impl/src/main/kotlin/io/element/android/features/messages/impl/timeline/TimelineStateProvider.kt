@@ -7,6 +7,8 @@
 
 package io.element.android.features.messages.impl.timeline
 
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureState
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.aResolveVerifiedUserSendFailureState
 import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
@@ -44,6 +46,7 @@ fun aTimelineState(
     focusedEventIndex: Int = -1,
     isLive: Boolean = true,
     messageShield: MessageShield? = null,
+    resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState = aResolveVerifiedUserSendFailureState(),
     eventSink: (TimelineEvents) -> Unit = {},
 ): TimelineState {
     val focusedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().getOrNull(focusedEventIndex)?.eventId
@@ -60,6 +63,7 @@ fun aTimelineState(
         isLive = isLive,
         focusRequestState = focusRequestState,
         messageShield = messageShield,
+        resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
         eventSink = eventSink,
     )
 }

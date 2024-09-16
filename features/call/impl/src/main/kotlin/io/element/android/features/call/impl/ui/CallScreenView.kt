@@ -111,7 +111,7 @@ internal fun CallScreenView(
             is AsyncData.Failure ->
                 ErrorDialog(
                     content = state.urlState.error.message.orEmpty(),
-                    onDismiss = { state.eventSink(CallScreenEvents.Hangup) },
+                    onSubmit = { state.eventSink(CallScreenEvents.Hangup) },
                 )
             is AsyncData.Success -> Unit
         }

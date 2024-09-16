@@ -124,7 +124,7 @@ fun RolesAndPermissionsView(
         is AsyncAction.Failure -> {
             ErrorDialog(
                 content = stringResource(CommonStrings.error_unknown),
-                onDismiss = { state.eventSink(RolesAndPermissionsEvents.CancelPendingAction) }
+                onSubmit = { state.eventSink(RolesAndPermissionsEvents.CancelPendingAction) }
             )
         }
         else -> Unit

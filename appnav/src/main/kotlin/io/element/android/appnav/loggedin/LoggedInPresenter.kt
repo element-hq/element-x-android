@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import im.vector.app.features.analytics.plan.CryptoSessionStateChange
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.features.networkmonitor.api.NetworkMonitor
@@ -29,6 +30,7 @@ import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
+import io.element.android.libraries.preferences.api.store.EnableNativeSlidingSyncUseCase
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.pushproviders.api.RegistrationFailure
 import io.element.android.services.analytics.api.AnalyticsService
@@ -48,6 +50,7 @@ class LoggedInPresenter @Inject constructor(
     private val sessionVerificationService: SessionVerificationService,
     private val analyticsService: AnalyticsService,
     private val encryptionService: EncryptionService,
+    private val enableNativeSlidingSyncUseCase: EnableNativeSlidingSyncUseCase,
 ) : Presenter<LoggedInState> {
     @Composable
     override fun present(): LoggedInState {
@@ -78,6 +81,7 @@ class LoggedInPresenter @Inject constructor(
                 networkStatus == NetworkStatus.Online && syncIndicator == RoomListService.SyncIndicator.Show
             }
         }
+        var forceNativeSlidingSyncMigration by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
             combine(
                 sessionVerificationService.sessionVerifiedStatus,
@@ -97,6 +101,18 @@ class LoggedInPresenter @Inject constructor(
                         }
                     }
                 }
+                LoggedInEvents.CheckSlidingSyncProxyAvailability -> coroutineScope.launch {
+                    // Force the user to log out if they were using the proxy sliding sync and it's no longer available, but native sliding sync is.
+                    forceNativeSlidingSyncMigration = !matrixClient.isUsingNativeSlidingSync() &&
+                        matrixClient.isNativeSlidingSyncSupported() &&
+                        !matrixClient.isSlidingSyncProxySupported()
+                }
+                LoggedInEvents.LogoutAndMigrateToNativeSlidingSync -> coroutineScope.launch {
+                    // Enable native sliding sync if it wasn't already the case
+                    enableNativeSlidingSyncUseCase()
+                    // Then force the logout
+                    matrixClient.logout(userInitiated = true, ignoreSdkError = true)
+                }
             }
         }
 
@@ -104,6 +120,7 @@ class LoggedInPresenter @Inject constructor(
             showSyncSpinner = showSyncSpinner,
             pusherRegistrationState = pusherRegistrationState.value,
             ignoreRegistrationError = ignoreRegistrationError,
+            forceNativeSlidingSyncMigration = forceNativeSlidingSyncMigration,
             eventSink = ::handleEvent
         )
     }

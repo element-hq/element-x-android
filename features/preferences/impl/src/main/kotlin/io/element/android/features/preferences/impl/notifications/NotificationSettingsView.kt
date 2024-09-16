@@ -259,7 +259,7 @@ private fun InvalidNotificationSettingsView(
         ErrorDialog(
             title = stringResource(id = CommonStrings.dialog_title_error),
             content = stringResource(id = R.string.screen_notification_settings_failed_fixing_configuration),
-            onDismiss = onDismissError
+            onSubmit = onDismissError
         )
     }
 }

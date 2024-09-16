@@ -51,10 +51,6 @@ Das bedeutet:"</string>
   <string name="screen_recovery_key_confirm_error_content">"Bitte versuche es noch einmal, um den Zugriff auf dein Chat-Backup zu bestätigen."</string>
   <string name="screen_recovery_key_confirm_error_title">"Falscher Wiederherstellungsschlüssel"</string>
   <string name="screen_recovery_key_confirm_key_description">"Dies funktioniert auch mit einem Sicherheitsschlüssel oder Sicherheitsphrase."</string>
-  <string name="screen_recovery_key_confirm_key_label">
-    <b>"Wiederherstellungsschlüssel"</b>
-    " oder Passcode"
-  </string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Eingeben…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Hast du deinen Wiederherstellungschlüssel vergessen?"</string>
   <string name="screen_recovery_key_confirm_success">"Wiederherstellungsschlüssel bestätigt"</string>
