@@ -24,6 +24,7 @@ import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.ClientBuilder
+import org.matrix.rustcomponents.sdk.ClientBuilderInterface
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 import org.matrix.rustcomponents.sdk.SlidingSyncVersionBuilder
@@ -85,7 +86,7 @@ class RustMatrixClientFactory @Inject constructor(
         sessionPaths: SessionPaths,
         passphrase: String?,
         slidingSyncType: ClientBuilderSlidingSync,
-    ): ClientBuilder {
+    ): ClientBuilderInterface {
         return ClientBuilder()
             .sessionPaths(
                 dataPath = sessionPaths.fileDirectory.absolutePath,

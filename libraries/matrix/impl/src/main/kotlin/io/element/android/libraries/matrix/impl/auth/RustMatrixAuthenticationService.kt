@@ -41,7 +41,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.ClientBuilder
+import org.matrix.rustcomponents.sdk.ClientBuilderInterface
 import org.matrix.rustcomponents.sdk.ClientInterface
 import org.matrix.rustcomponents.sdk.Disposable
 import org.matrix.rustcomponents.sdk.HumanQrLoginException
@@ -280,7 +280,7 @@ class RustMatrixAuthenticationService @Inject constructor(
 
     private suspend fun makeClient(
         sessionPaths: SessionPaths,
-        config: suspend ClientBuilder.() -> ClientBuilder,
+        config: suspend ClientBuilderInterface.() -> ClientBuilderInterface,
     ): ClientInterface {
         val slidingSyncType = getSlidingSyncType()
         if (slidingSyncType is ClientBuilderSlidingSync.Simplified) {
@@ -292,7 +292,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                         passphrase = pendingPassphrase,
                         slidingSyncType = slidingSyncType,
                     )
-                    .run { config() }
+                    .config()
                     .build()
             } catch (e: HumanQrLoginException.SlidingSyncNotAvailable) {
                 Timber.e(e, "Failed to create client with simplified sliding sync, trying with Proxy now")
@@ -305,7 +305,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                 passphrase = pendingPassphrase,
                 slidingSyncType = getSlidingSyncProxy(),
             )
-            .run { config() }
+            .config()
             .build()
     }
 
