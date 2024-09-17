@@ -32,9 +32,9 @@ import org.matrix.rustcomponents.sdk.Membership
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListException
 import org.matrix.rustcomponents.sdk.RoomListItem
+import org.matrix.rustcomponents.sdk.RoomListServiceInterface
 import org.matrix.rustcomponents.sdk.TimelineEventTypeFilter
 import timber.log.Timber
-import org.matrix.rustcomponents.sdk.RoomListService as InnerRoomListService
 
 private const val CACHE_SIZE = 16
 
@@ -47,7 +47,7 @@ class RustRoomFactory(
     private val systemClock: SystemClock,
     private val roomContentForwarder: RoomContentForwarder,
     private val roomListService: RoomListService,
-    private val innerRoomListService: InnerRoomListService,
+    private val innerRoomListService: RoomListServiceInterface,
     private val roomSyncSubscriber: RoomSyncSubscriber,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)

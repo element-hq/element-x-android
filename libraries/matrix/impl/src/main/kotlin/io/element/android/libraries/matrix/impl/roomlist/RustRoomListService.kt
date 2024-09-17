@@ -22,15 +22,15 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import org.matrix.rustcomponents.sdk.RoomListServiceInterface
 import org.matrix.rustcomponents.sdk.RoomListServiceState
 import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicator
 import timber.log.Timber
-import org.matrix.rustcomponents.sdk.RoomListService as InnerRustRoomListService
 
 private const val DEFAULT_PAGE_SIZE = 20
 
 internal class RustRoomListService(
-    private val innerRoomListService: InnerRustRoomListService,
+    private val innerRoomListService: RoomListServiceInterface,
     private val sessionCoroutineScope: CoroutineScope,
     private val sessionDispatcher: CoroutineDispatcher,
     private val roomListFactory: RoomListFactory,

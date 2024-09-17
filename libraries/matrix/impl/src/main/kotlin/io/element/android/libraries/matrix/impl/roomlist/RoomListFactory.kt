@@ -23,13 +23,13 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind
 import org.matrix.rustcomponents.sdk.RoomListLoadingState
-import org.matrix.rustcomponents.sdk.RoomListService
+import org.matrix.rustcomponents.sdk.RoomListServiceInterface
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 import org.matrix.rustcomponents.sdk.RoomList as InnerRoomList
 
 internal class RoomListFactory(
-    private val innerRoomListService: RoomListService,
+    private val innerRoomListService: RoomListServiceInterface,
     private val sessionCoroutineScope: CoroutineScope,
     private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
 ) {

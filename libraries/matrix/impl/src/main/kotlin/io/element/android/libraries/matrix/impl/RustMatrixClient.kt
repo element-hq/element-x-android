@@ -98,8 +98,10 @@ import org.matrix.rustcomponents.sdk.Disposable
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
+import org.matrix.rustcomponents.sdk.RoomListServiceInterface
 import org.matrix.rustcomponents.sdk.SendQueueRoomErrorListener
 import org.matrix.rustcomponents.sdk.SlidingSyncVersion
+import org.matrix.rustcomponents.sdk.SyncServiceInterface
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
@@ -116,7 +118,7 @@ import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 @OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixClient(
     private val client: ClientInterface,
-    private val syncService: ClientSyncService,
+    private val syncService: SyncServiceInterface,
     private val sessionStore: SessionStore,
     private val appCoroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
@@ -129,7 +131,7 @@ class RustMatrixClient(
     override val deviceId: DeviceId = DeviceId(client.deviceId())
     override val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-$sessionId")
 
-    private val innerRoomListService = syncService.roomListService()
+    private val innerRoomListService: RoomListServiceInterface = syncService.roomListService()
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
 
     private val rustSyncService = RustSyncService(syncService, sessionCoroutineScope)
@@ -137,7 +139,9 @@ class RustMatrixClient(
         client = client,
         dispatchers = dispatchers,
     )
-    private val notificationProcessSetup = NotificationProcessSetup.SingleProcess(syncService)
+
+    // Note: need to force casting to ClientSyncService for now
+    private val notificationProcessSetup = NotificationProcessSetup.SingleProcess((syncService as ClientSyncService))
     private val notificationClient = runBlocking { client.notificationClient(notificationProcessSetup) }
     private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
     private val notificationSettingsService = RustNotificationSettingsService(client, dispatchers)
@@ -455,8 +459,8 @@ class RustMatrixClient(
         clientDelegateTaskHandle?.cancelAndDestroy()
         notificationSettingsService.destroy()
         verificationService.destroy()
-        syncService.destroy()
-        innerRoomListService.destroy()
+        Disposable.destroy(syncService)
+        Disposable.destroy(innerRoomListService)
         notificationClient.destroy()
         notificationProcessSetup.destroy()
         encryptionService.destroy()

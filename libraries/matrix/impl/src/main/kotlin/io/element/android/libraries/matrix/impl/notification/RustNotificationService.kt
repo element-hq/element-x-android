@@ -15,12 +15,12 @@ import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.NotificationClient
+import org.matrix.rustcomponents.sdk.NotificationClientInterface
 import org.matrix.rustcomponents.sdk.use
 
 class RustNotificationService(
     sessionId: SessionId,
-    private val notificationClient: NotificationClient,
+    private val notificationClient: NotificationClientInterface,
     private val dispatchers: CoroutineDispatchers,
     clock: SystemClock,
 ) : NotificationService {

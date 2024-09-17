@@ -16,16 +16,16 @@ import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.timeline.runWithTimelineListenerRegistered
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withTimeout
-import org.matrix.rustcomponents.sdk.RoomListService
+import org.matrix.rustcomponents.sdk.RoomListServiceInterface
 import org.matrix.rustcomponents.sdk.Timeline
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Helper to forward event contents from a room to a set of other rooms.
- * @param roomListService the [RoomListService] to fetch room instances to forward the event to
+ * @param roomListService the [RoomListServiceInterface] to fetch room instances to forward the event to
  */
 class RoomContentForwarder(
-    private val roomListService: RoomListService,
+    private val roomListService: RoomListServiceInterface,
 ) {
     /**
      * Forwards the event with the given [eventId] from the [fromTimeline] to the given [toRoomIds].
