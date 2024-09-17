@@ -511,7 +511,9 @@ class RustMatrixClient(
 
     override suspend fun deactivateAccount(password: String, eraseData: Boolean): Result<Unit> = withContext(sessionDispatcher) {
         Timber.w("Deactivating account")
-        syncService.stop()
+        // Remove current delegate so we don't receive an auth error
+        clientDelegateTaskHandle?.cancelAndDestroy()
+        clientDelegateTaskHandle = null
         runCatching {
             // First call without AuthData, should fail
             val firstAttempt = runCatching {
@@ -523,15 +525,22 @@ class RustMatrixClient(
             if (firstAttempt.isFailure) {
                 Timber.w(firstAttempt.exceptionOrNull(), "Expected failure, try again")
                 // This is expected, try again with the password
-                client.deactivateAccount(
-                    authData = AuthData.Password(
-                        passwordDetails = AuthDataPasswordDetails(
-                            identifier = sessionId.value,
-                            password = password,
+                runCatching {
+                    client.deactivateAccount(
+                        authData = AuthData.Password(
+                            passwordDetails = AuthDataPasswordDetails(
+                                identifier = sessionId.value,
+                                password = password,
+                            ),
                         ),
-                    ),
-                    eraseData = eraseData,
-                )
+                        eraseData = eraseData,
+                    )
+                }.onFailure {
+                    Timber.e(it, "Failed to deactivate account")
+                    // If the deactivation failed we need to restore the delegate
+                    clientDelegateTaskHandle = client.setDelegate(sessionDelegate)
+                    throw it
+                }
             }
             close()
             deleteSessionDirectory(deleteCryptoDb = true)
