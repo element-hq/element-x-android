@@ -272,6 +272,8 @@ class RustMatrixClient(
                 .filter(predicate)
                 .first()
                 .first()
+                // Ensure that the room is ready
+                .also { client.awaitRoomRemoteEcho(it.roomId.value) }
         }
     }
 
