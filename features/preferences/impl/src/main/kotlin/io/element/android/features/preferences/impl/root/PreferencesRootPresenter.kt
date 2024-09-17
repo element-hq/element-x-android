@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import io.element.android.features.logout.api.direct.DirectLogoutPresenter
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
 import io.element.android.libraries.architecture.Presenter
@@ -75,6 +76,12 @@ class PreferencesRootPresenter @Inject constructor(
         val devicesManagementUrl: MutableState<String?> = remember {
             mutableStateOf(null)
         }
+        var canDeactivateAccount by remember {
+            mutableStateOf(false)
+        }
+        LaunchedEffect(Unit) {
+            canDeactivateAccount = matrixClient.canDeactivateAccount()
+        }
 
         val showBlockedUsersItem by produceState(initialValue = false) {
             matrixClient.ignoredUsersFlow
@@ -108,6 +115,7 @@ class PreferencesRootPresenter @Inject constructor(
             devicesManagementUrl = devicesManagementUrl.value,
             showAnalyticsSettings = hasAnalyticsProviders,
             showDeveloperSettings = showDeveloperSettings,
+            canDeactivateAccount = canDeactivateAccount,
             showNotificationSettings = showNotificationSettings.value,
             showLockScreenSettings = showLockScreenSettings.value,
             showBlockedUsersItem = showBlockedUsersItem,

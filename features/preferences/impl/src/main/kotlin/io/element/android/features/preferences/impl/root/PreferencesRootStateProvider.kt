@@ -29,6 +29,7 @@ fun aPreferencesRootState(
     showNotificationSettings = true,
     showLockScreenSettings = true,
     showBlockedUsersItem = true,
+    canDeactivateAccount = true,
     snackbarMessage = SnackbarMessage(CommonStrings.common_verification_complete),
     directLogoutState = aDirectLogoutState(),
     eventSink = eventSink,
