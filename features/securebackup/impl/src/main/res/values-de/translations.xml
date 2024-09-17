@@ -33,10 +33,9 @@
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Ausschalten"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Du verlierst deine verschlüsselten Nachrichten, wenn du auf allen Geräten abgemeldet bist."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Bist du sicher, dass du das Backup deaktivieren willst?"</string>
-  <string name="screen_key_backup_disable_description">"Wenn du das Backup deaktivierst, wird dein aktuelles Backup des Verschlüsselungsschlüssels entfernt und andere Sicherheitsfunktionen werden deaktiviert. 
-Das bedeutet:"</string>
-  <string name="screen_key_backup_disable_description_point_1">"Keine Historie für verschlüsselte Nachrichten auf neuen Geräten ."</string>
-  <string name="screen_key_backup_disable_description_point_2">"Zugriff auf deine verschlüsselten Nachrichten verlieren, wenn du dich überall von %1$s abmeldest"</string>
+  <string name="screen_key_backup_disable_description">"Wenn du das Backup deaktivierst, wird dein aktuelles Schlüssel Backup für die Verschlüsselung entfernt und andere Sicherheitsfunktionen werden deaktiviert. Das bedeutet:"</string>
+  <string name="screen_key_backup_disable_description_point_1">"Keinen Nachrichtenverlauf für verschlüsselte Nachrichten auf neuen Geräten ."</string>
+  <string name="screen_key_backup_disable_description_point_2">"Verlust des Zugriffs auf Deine verschlüsselten Nachrichten, wenn Du Dich überall von %1$s abmeldest"</string>
   <string name="screen_key_backup_disable_title">"Bist du sicher, dass du das Backup deaktivieren willst?"</string>
   <string name="screen_recovery_key_change_description">"Hier kannst Du einen neuen Wiederherstellungsschlüssel erstellen. Nachdem Du einen neuen Wiederherstellungsschlüssel erstellt hast, funktioniert dein alter Schlüssel nicht mehr."</string>
   <string name="screen_recovery_key_change_generate_key">"Wiederherstellungsschlüssel erstellen"</string>
