@@ -27,11 +27,12 @@ import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.Disposable
 import org.matrix.rustcomponents.sdk.FilterTimelineEventType
 import org.matrix.rustcomponents.sdk.Membership
-import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.RoomInterface
 import org.matrix.rustcomponents.sdk.RoomListException
-import org.matrix.rustcomponents.sdk.RoomListItem
+import org.matrix.rustcomponents.sdk.RoomListItemInterface
 import org.matrix.rustcomponents.sdk.RoomListServiceInterface
 import org.matrix.rustcomponents.sdk.TimelineEventTypeFilter
 import timber.log.Timber
@@ -56,16 +57,18 @@ class RustRoomFactory(
     private var isDestroyed: Boolean = false
 
     private data class RustRoomReferences(
-        val roomListItem: RoomListItem,
-        val fullRoom: Room,
+        val roomListItem: RoomListItemInterface,
+        val fullRoom: RoomInterface,
     )
 
     private val cache = lruCache<RoomId, RustRoomReferences>(
         maxSize = CACHE_SIZE,
         onEntryRemoved = { evicted, roomId, oldRoom, _ ->
             Timber.d("On room removed from cache: $roomId, evicted: $evicted")
-            oldRoom.roomListItem.close()
-            oldRoom.fullRoom.close()
+            Disposable.destroy(
+                oldRoom.roomListItem,
+                oldRoom.fullRoom,
+            )
         }
     )
 

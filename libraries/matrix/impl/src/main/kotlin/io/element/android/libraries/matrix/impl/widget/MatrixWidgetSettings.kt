@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.impl.widget
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import org.matrix.rustcomponents.sdk.ClientProperties
 import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.RoomInterface
 import org.matrix.rustcomponents.sdk.WidgetSettings
 import org.matrix.rustcomponents.sdk.generateWebviewUrl
 
@@ -26,13 +27,13 @@ fun MatrixWidgetSettings.Companion.fromRustWidgetSettings(widgetSettings: Widget
 )
 
 suspend fun MatrixWidgetSettings.generateWidgetWebViewUrl(
-    room: Room,
+    room: RoomInterface,
     clientId: String,
     languageTag: String? = null,
     theme: String? = null
 ) = generateWebviewUrl(
     widgetSettings = this.toRustWidgetSettings(),
-    room = room,
+    room = room as Room,
     props = ClientProperties(
         clientId = clientId,
         languageTag = languageTag,

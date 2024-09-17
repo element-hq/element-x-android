@@ -61,22 +61,23 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.Disposable
 import org.matrix.rustcomponents.sdk.EditedContent
 import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.FormattedBody
 import org.matrix.rustcomponents.sdk.MessageFormat
 import org.matrix.rustcomponents.sdk.PollData
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
+import org.matrix.rustcomponents.sdk.TimelineInterface
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk_ui.LiveBackPaginationStatus
 import java.io.File
-import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
 private const val PAGINATION_SIZE = 50
 
 class RustTimeline(
-    private val inner: InnerTimeline,
+    private val inner: TimelineInterface,
     mode: Timeline.Mode,
     systemClock: SystemClock,
     private val matrixRoom: MatrixRoom,
@@ -248,7 +249,7 @@ class RustTimeline(
 
     override fun close() {
         coroutineScope.cancel()
-        inner.close()
+        Disposable.destroy(inner)
     }
 
     private fun CoroutineScope.fetchMembers() = launch(dispatcher) {

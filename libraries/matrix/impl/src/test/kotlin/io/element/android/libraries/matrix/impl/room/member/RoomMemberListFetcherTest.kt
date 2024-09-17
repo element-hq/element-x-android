@@ -15,7 +15,7 @@ import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher.Source.CACHE
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher.Source.CACHE_AND_SERVER
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher.Source.SERVER
-import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.impl.sdk.FakeRoomInterface
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID_3
@@ -25,7 +25,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.MembershipState
 import org.matrix.rustcomponents.sdk.NoPointer
-import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomMembersIterator
 import uniffi.matrix_sdk.RoomMemberRole
@@ -33,7 +32,7 @@ import uniffi.matrix_sdk.RoomMemberRole
 class RoomMemberListFetcherTest {
     @Test
     fun `fetchRoomMembers with CACHE source - emits cached members, if any`() = runTest {
-        val room = FakeRustRoom(getMembersNoSync = {
+        val room = FakeRoomInterface(getMembersNoSync = {
             FakeRoomMembersIterator(
                 listOf(
                     fakeRustRoomMember(A_USER_ID),
@@ -64,7 +63,7 @@ class RoomMemberListFetcherTest {
 
     @Test
     fun `fetchRoomMembers with CACHE source - emits empty list, if no members exist`() = runTest {
-        val room = FakeRustRoom(getMembersNoSync = {
+        val room = FakeRoomInterface(getMembersNoSync = {
             FakeRoomMembersIterator(emptyList())
         })
 
@@ -79,7 +78,7 @@ class RoomMemberListFetcherTest {
 
     @Test
     fun `fetchRoomMembers with CACHE source - emits Error on error found`() = runTest {
-        val room = FakeRustRoom(getMembersNoSync = {
+        val room = FakeRoomInterface(getMembersNoSync = {
             error("Some unexpected issue")
         })
 
@@ -94,7 +93,7 @@ class RoomMemberListFetcherTest {
 
     @Test
     fun `fetchRoomMembers with CACHE source - emits all items at once`() = runTest {
-        val room = FakeRustRoom(getMembersNoSync = {
+        val room = FakeRoomInterface(getMembersNoSync = {
             FakeRoomMembersIterator(
                 listOf(
                     fakeRustRoomMember(A_USER_ID),
@@ -121,7 +120,7 @@ class RoomMemberListFetcherTest {
 
     @Test
     fun `fetchRoomMembers with SERVER source - emits only new members, if any`() = runTest {
-        val room = FakeRustRoom(getMembers = {
+        val room = FakeRoomInterface(getMembers = {
             FakeRoomMembersIterator(
                 listOf(
                     fakeRustRoomMember(A_USER_ID),
@@ -147,7 +146,7 @@ class RoomMemberListFetcherTest {
 
     @Test
     fun `fetchRoomMembers with SERVER source - on error it emits an Error item`() = runTest {
-        val room = FakeRustRoom(getMembers = { error("An unexpected error") })
+        val room = FakeRoomInterface(getMembers = { error("An unexpected error") })
 
         val fetcher = RoomMemberListFetcher(room, Dispatchers.Default)
         fetcher.membersFlow.test {
@@ -161,7 +160,7 @@ class RoomMemberListFetcherTest {
 
     @Test
     fun `fetchRoomMembers with CACHE_AND_SERVER source - returns cached items first, then new ones`() = runTest {
-        val room = FakeRustRoom(
+        val room = FakeRoomInterface(
             getMembersNoSync = {
                 FakeRoomMembersIterator(listOf(fakeRustRoomMember(A_USER_ID_4)))
             },
@@ -201,32 +200,6 @@ class RoomMemberListFetcherTest {
             assertThat(room.membersNoSyncCallCount).isEqualTo(1)
             assertThat(room.membersCallCount).isEqualTo(1)
         }
-    }
-}
-
-class FakeRustRoom(
-    private val getMembers: () -> RoomMembersIterator = { FakeRoomMembersIterator() },
-    private val getMembersNoSync: () -> RoomMembersIterator = { FakeRoomMembersIterator() },
-) : Room(NoPointer) {
-    var membersCallCount = 0
-    var membersNoSyncCallCount = 0
-
-    override fun id(): String {
-        return A_ROOM_ID.value
-    }
-
-    override suspend fun members(): RoomMembersIterator {
-        membersCallCount++
-        return getMembers()
-    }
-
-    override suspend fun membersNoSync(): RoomMembersIterator {
-        membersNoSyncCallCount++
-        return getMembersNoSync()
-    }
-
-    override fun close() {
-        // No-op
     }
 }
 

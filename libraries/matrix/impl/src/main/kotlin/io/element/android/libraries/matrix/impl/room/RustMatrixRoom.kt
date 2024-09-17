@@ -70,9 +70,9 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomInfoListener
-import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.TypingNotificationsListener
 import org.matrix.rustcomponents.sdk.UserPowerLevelUpdate
 import org.matrix.rustcomponents.sdk.WidgetCapabilities
@@ -83,16 +83,17 @@ import timber.log.Timber
 import uniffi.matrix_sdk.RoomPowerLevelChanges
 import java.io.File
 import kotlin.coroutines.cancellation.CancellationException
-import org.matrix.rustcomponents.sdk.Room as InnerRoom
-import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
+import org.matrix.rustcomponents.sdk.RoomInterface
+import org.matrix.rustcomponents.sdk.RoomListItemInterface
+import org.matrix.rustcomponents.sdk.TimelineInterface
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixRoom(
     override val sessionId: SessionId,
     private val deviceId: DeviceId,
-    private val roomListItem: RoomListItem,
-    private val innerRoom: InnerRoom,
-    innerTimeline: InnerTimeline,
+    private val roomListItem: RoomListItemInterface,
+    private val innerRoom: RoomInterface,
+    innerTimeline: TimelineInterface,
     private val notificationSettingsService: NotificationSettingsService,
     sessionCoroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
@@ -604,7 +605,7 @@ class RustMatrixRoom(
     override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver> = runCatching {
         RustWidgetDriver(
             widgetSettings = widgetSettings,
-            room = innerRoom,
+            room = innerRoom as Room,
             widgetCapabilitiesProvider = object : WidgetCapabilitiesProvider {
                 override fun acquireCapabilities(capabilities: WidgetCapabilities): WidgetCapabilities {
                     return getElementCallRequiredPermissions(sessionId.value, deviceId.value)
@@ -662,7 +663,7 @@ class RustMatrixRoom(
     }
 
     private fun createTimeline(
-        timeline: InnerTimeline,
+        timeline: TimelineInterface,
         mode: Timeline.Mode,
         onNewSyncedEvent: () -> Unit = {},
     ): Timeline {

@@ -19,9 +19,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import org.matrix.rustcomponents.sdk.Timeline
 import org.matrix.rustcomponents.sdk.TimelineChange
 import org.matrix.rustcomponents.sdk.TimelineDiff
+import org.matrix.rustcomponents.sdk.TimelineInterface
 import org.matrix.rustcomponents.sdk.TimelineItem
 import uniffi.matrix_sdk_ui.EventItemOrigin
 
@@ -35,7 +35,7 @@ private const val INITIAL_MAX_SIZE = 50
 internal class TimelineItemsSubscriber(
     timelineCoroutineScope: CoroutineScope,
     dispatcher: CoroutineDispatcher,
-    private val timeline: Timeline,
+    private val timeline: TimelineInterface,
     private val timelineDiffProcessor: MatrixTimelineDiffProcessor,
     private val initLatch: CompletableDeferred<Unit>,
     private val isTimelineInitialized: MutableStateFlow<Boolean>,

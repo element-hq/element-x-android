@@ -10,11 +10,12 @@ package io.element.android.libraries.matrix.impl.room
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.room.InvitedRoom
-import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.Disposable
+import org.matrix.rustcomponents.sdk.RoomInterface
 
 class RustInvitedRoom(
     override val sessionId: SessionId,
-    private val invitedRoom: Room,
+    private val invitedRoom: RoomInterface,
 ) : InvitedRoom {
     override val roomId = RoomId(invitedRoom.id())
 
@@ -23,6 +24,6 @@ class RustInvitedRoom(
     }
 
     override fun close() {
-        invitedRoom.destroy()
+        Disposable.destroy(invitedRoom)
     }
 }

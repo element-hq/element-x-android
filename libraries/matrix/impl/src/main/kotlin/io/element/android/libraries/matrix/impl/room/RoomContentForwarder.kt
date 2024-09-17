@@ -16,8 +16,9 @@ import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.timeline.runWithTimelineListenerRegistered
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withTimeout
+import org.matrix.rustcomponents.sdk.Disposable
 import org.matrix.rustcomponents.sdk.RoomListServiceInterface
-import org.matrix.rustcomponents.sdk.Timeline
+import org.matrix.rustcomponents.sdk.TimelineInterface
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
@@ -35,7 +36,7 @@ class RoomContentForwarder(
      * @param timeoutMs the maximum time in milliseconds to wait for the event to be sent to a room
      */
     suspend fun forward(
-        fromTimeline: Timeline,
+        fromTimeline: TimelineInterface,
         eventId: EventId,
         toRoomIds: List<RoomId>,
         timeoutMs: Long = 5000L
@@ -53,20 +54,22 @@ class RoomContentForwarder(
         }
         val failedForwardingTo = mutableSetOf<RoomId>()
         targetRooms.parallelMap { room ->
-            room.use { targetRoom ->
+            try {
                 runCatching {
                     // Sending a message requires a registered timeline listener
-                    targetRoom.timeline().runWithTimelineListenerRegistered {
+                    room.timeline().runWithTimelineListenerRegistered {
                         withTimeout(timeoutMs.milliseconds) {
-                            targetRoom.timeline().send(content)
+                            room.timeline().send(content)
                         }
                     }
+                }.onFailure {
+                    failedForwardingTo.add(RoomId(room.id()))
+                    if (it is CancellationException) {
+                        throw it
+                    }
                 }
-            }.onFailure {
-                failedForwardingTo.add(RoomId(room.id()))
-                if (it is CancellationException) {
-                    throw it
-                }
+            } finally {
+                Disposable.destroy(room)
             }
         }
 

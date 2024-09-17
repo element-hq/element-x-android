@@ -7,12 +7,12 @@
 
 package io.element.android.libraries.matrix.impl.roomlist
 
-import org.matrix.rustcomponents.sdk.Room
+import org.matrix.rustcomponents.sdk.RoomInterface
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.TimelineEventTypeFilter
 
 /** Returns a `Room` with an initialized timeline using the given [filter]. */
-suspend fun RoomListItem.fullRoomWithTimeline(filter: TimelineEventTypeFilter? = null): Room {
+suspend fun RoomListItem.fullRoomWithTimeline(filter: TimelineEventTypeFilter? = null): RoomInterface {
     if (!isTimelineInitialized()) {
         initTimeline(filter, "live")
     }
