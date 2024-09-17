@@ -38,6 +38,7 @@ fun InfoListOrganism(
     iconTint: Color = LocalContentColor.current,
     iconSize: Dp = 20.dp,
     textStyle: TextStyle = LocalTextStyle.current,
+    textColor: Color = ElementTheme.colors.textPrimary,
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(4.dp),
 ) {
     Column(
@@ -56,7 +57,7 @@ fun InfoListOrganism(
                     Text(
                         text = item.message,
                         style = textStyle,
-                        color = ElementTheme.colors.textPrimary,
+                        color = textColor,
                     )
                 },
                 icon = {
