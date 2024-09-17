@@ -119,7 +119,7 @@ class RustMatrixClient(
     private val baseDirectory: File,
     baseCacheDirectory: File,
     private val clock: SystemClock,
-    sessionDelegate: RustClientSessionDelegate,
+    private val sessionDelegate: RustClientSessionDelegate,
 ) : MatrixClient {
     override val sessionId: UserId = UserId(client.userId())
     override val deviceId: DeviceId = DeviceId(client.deviceId())
@@ -192,7 +192,7 @@ class RustMatrixClient(
 
     private val roomMembershipObserver = RoomMembershipObserver()
 
-    private val clientDelegateTaskHandle: TaskHandle? = client.setDelegate(sessionDelegate)
+    private var clientDelegateTaskHandle: TaskHandle? = client.setDelegate(sessionDelegate)
 
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(
         MatrixUser(
@@ -446,12 +446,12 @@ class RustMatrixClient(
     override fun close() {
         appCoroutineScope.launch {
             roomFactory.destroy()
+            rustSyncService.destroy()
         }
         sessionCoroutineScope.cancel()
         clientDelegateTaskHandle?.cancelAndDestroy()
         notificationSettingsService.destroy()
         verificationService.destroy()
-        syncService.destroy()
         innerRoomListService.destroy()
         notificationClient.destroy()
         notificationProcessSetup.destroy()
@@ -470,7 +470,9 @@ class RustMatrixClient(
 
     override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean): String? {
         var result: String? = null
-        syncService.stop()
+        // Remove current delegate so we don't receive an auth error
+        clientDelegateTaskHandle?.cancelAndDestroy()
+        clientDelegateTaskHandle = null
         withContext(sessionDispatcher) {
             if (userInitiated) {
                 try {
@@ -479,12 +481,15 @@ class RustMatrixClient(
                     if (ignoreSdkError) {
                         Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
                     } else {
+                        // If the logout failed we need to restore the delegate
+                        clientDelegateTaskHandle = client.setDelegate(sessionDelegate)
                         Timber.e(failure, "Fail to call logout on HS.")
                         throw failure
                     }
                 }
             }
             close()
+
             deleteSessionDirectory(deleteCryptoDb = true)
             if (userInitiated) {
                 sessionStore.removeSession(sessionId.value)
@@ -547,10 +552,6 @@ class RustMatrixClient(
 
     override fun isUsingNativeSlidingSync(): Boolean {
         return client.session().slidingSyncVersion == SlidingSyncVersion.Native
-    }
-
-    internal fun setDelegate(delegate: RustClientSessionDelegate) {
-        client.setDelegate(delegate)
     }
 
     private suspend fun File.getCacheSize(
