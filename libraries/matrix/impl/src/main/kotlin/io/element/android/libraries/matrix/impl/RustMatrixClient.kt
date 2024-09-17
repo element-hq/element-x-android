@@ -311,14 +311,16 @@ class RustMatrixClient(
                 avatar = createRoomParams.avatar,
                 powerLevelContentOverride = defaultRoomCreationPowerLevels,
             )
-            val roomId = RoomId(client.createRoom(rustParams))
+            val roomId = client.createRoom(rustParams)
             // Wait to receive the room back from the sync but do not returns failure if it fails.
             try {
-                awaitJoinedRoom(roomId.toRoomIdOrAlias(), 30.seconds)
+                withTimeout(30.seconds) {
+                    client.awaitRoomRemoteEcho(roomId)
+                }
             } catch (e: Exception) {
                 Timber.e(e, "Timeout waiting for the room to be available in the room list")
             }
-            roomId
+            RoomId(roomId)
         }
     }
 
