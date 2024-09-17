@@ -4,6 +4,7 @@
   <string name="screen_identity_confirmation_subtitle">"Verifiziere dieses Gerät, um sicheres Messaging einzurichten."</string>
   <string name="screen_identity_confirmation_title">"Bestätige, dass du es bist"</string>
   <string name="screen_identity_confirmation_use_another_device">"Ein anderes Gerät verwenden"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Wiederherstellungsschlüssel verwenden"</string>
   <string name="screen_identity_confirmed_subtitle">"Du kannst nun verschlüsselte Nachrichten lesen oder versenden."</string>
   <string name="screen_identity_confirmed_title">"Gerät verifiziert"</string>
   <string name="screen_identity_use_another_device">"Ein anderes Gerät verwenden"</string>

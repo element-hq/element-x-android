@@ -250,6 +250,7 @@ Grund: %1$s."</string>
   <string name="dialog_title_warning">"Warnung"</string>
   <string name="dialog_unsaved_changes_description_android">"Deine Änderungen wurden nicht gespeichert. Bist du sicher, dass du zurückgehen willst?"</string>
   <string name="dialog_unsaved_changes_title">"Änderungen speichern?"</string>
+  <string name="error_account_creation_not_possible">"Dein Homeserver muss aktualisiert werden, um den Matrix Authentication Services und die Erstellung von Konten zu unterstützen."</string>
   <string name="error_failed_creating_the_permalink">"Fehler beim Erstellen des Permalinks"</string>
   <string name="error_failed_loading_map">"%1$s konnte die Karte nicht laden. Bitte versuche es später erneut."</string>
   <string name="error_failed_loading_messages">"Fehler beim Laden der Nachrichten"</string>
@@ -262,6 +263,7 @@ Grund: %1$s."</string>
   <string name="error_some_messages_have_not_been_sent">"Einige Nachrichten wurden nicht gesendet"</string>
   <string name="error_unknown">"Entschuldigung, es ist ein Fehler aufgetreten"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Die Authentizität dieser verschlüsselten Nachricht kann auf diesem Gerät nicht garantiert werden."</string>
+  <string name="event_shield_reason_previously_verified">"Verschlüsselt von einem zuvor verifizierten Nutzer."</string>
   <string name="event_shield_reason_sent_in_clear">"Unverschlüsselt."</string>
   <string name="event_shield_reason_unknown_device">"Verschlüsselt von einem unbekannten oder gelöschten Gerät."</string>
   <string name="event_shield_reason_unsigned_device">"Verschlüsselt durch ein Gerät, das nicht von seinem Besitzer verifiziert wurde."</string>
@@ -280,7 +282,14 @@ Grund: %1$s."</string>
     <item quantity="other">"%1$d fixierte Nachrichten"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Fixierte Nachrichten"</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"Du wirst jetzt zu deinem %1$s Konto geleitet, um deine Identität zurückzusetzen. Danach wirst du zur App zurückgebracht."</string>
+  <string name="screen_reset_identity_confirmation_title">"Kannst du das nicht bestätigen? Gehe zu deinem Konto, um deine Identität zurückzusetzen."</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Verifizierung zurückziehen und senden"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Du kannst deine Verifizierung zurückziehen und diese Nachricht trotzdem senden, oder du kannst sie vorerst abbrechen und es später noch einmal versuchen, nachdem du %1$s erneut verifiziert hast."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Deine Nachricht wurde nicht gesendet, da sich die verifizierte Identität von %1$s geändert hat"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Nachricht trotzdem senden"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s verwendet wenigstens ein nicht verifiziertes Gerät. Du kannst die Nachricht trotzdem verschicken, oder vorerst abbrechen und später erneut versuchen, nachdem %2$s alle Geräte verifiziert hat."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Deine Nachricht wurde nicht gesendet, weil %1$s nicht alle Geräte verifiziert hat"</string>
   <string name="screen_room_details_pinned_events_row_title">"Fixierte Nachrichten"</string>
   <string name="screen_room_error_failed_processing_media">"Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Benutzerdetails konnten nicht abgerufen werden"</string>
@@ -302,6 +311,8 @@ Grund: %1$s."</string>
   <string name="screen_share_open_google_maps">"In Google Maps öffnen"</string>
   <string name="screen_share_open_osm_maps">"In OpenStreetMap öffnen"</string>
   <string name="screen_share_this_location_action">"Diesen Standort teilen"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Nachricht nicht gesendet, weil sich die verifizierte Identität von %1$s geändert hat."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Nachricht wurde nicht gesendet, weil %1$s nicht alle Geräte verifiziert hat"</string>
   <string name="screen_view_location_title">"Standort"</string>
   <string name="settings_version_number">"Version: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>

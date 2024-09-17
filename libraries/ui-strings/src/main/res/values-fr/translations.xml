@@ -289,7 +289,7 @@ Raison: %1$s."</string>
   <string name="screen_resolve_send_failure_changed_identity_title">"Votre message n’a pas été envoyé car l’identité vérifiée de %1$s a changé"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Envoyer le message quand même"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s utilise un ou plusieurs appareils non vérifiés. Vous pouvez quand même envoyer le message, ou vous pouvez annuler pour l’instant et réessayer plus tard après que %2$s vérifie tous ses appareils."</string>
-  <string name="screen_resolve_send_failure_unsigned_device_title">"Votre message n’a pas été envoyé car %1$s a un ou plusieurs appareils non vérifiés"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Votre message n’a pas été envoyé car %1$s n’a pas vérifié tous ses appareils"</string>
   <string name="screen_room_details_pinned_events_row_title">"Messages épinglés"</string>
   <string name="screen_room_error_failed_processing_media">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Impossible de récupérer les détails de l’utilisateur"</string>
@@ -312,7 +312,7 @@ Raison: %1$s."</string>
   <string name="screen_share_open_osm_maps">"Ouvrir dans OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Partager cette position"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Le message n’a pas été envoyé car l’identité vérifiée de %1$s a changé."</string>
-  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Le message n’a pas été envoyé car %1$s n’a pas vérifié un ou plusieurs appareils."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Le message n’a pas été envoyé car %1$s n’a pas vérifié tous ses appareils."</string>
   <string name="screen_view_location_title">"Position"</string>
   <string name="settings_version_number">"Version : %1$s ( %2$s )"</string>
   <string name="test_language_identifier">"fr"</string>
