@@ -184,7 +184,6 @@ private fun Content(
                             tint = ElementTheme.colors.iconCriticalPrimary,
                         )
                     },
-                    iconVector = CompoundIcons.Close(),
                 ),
                 InfoListItem(
                     message = stringResource(R.string.screen_deactivate_account_list_item_2),
