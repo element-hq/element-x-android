@@ -92,8 +92,9 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.AuthData
 import org.matrix.rustcomponents.sdk.AuthDataPasswordDetails
-import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientException
+import org.matrix.rustcomponents.sdk.ClientInterface
+import org.matrix.rustcomponents.sdk.Disposable
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.PowerLevels
@@ -114,7 +115,7 @@ import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixClient(
-    private val client: Client,
+    private val client: ClientInterface,
     private val syncService: ClientSyncService,
     private val sessionStore: SessionStore,
     private val appCoroutineScope: CoroutineScope,
@@ -459,7 +460,7 @@ class RustMatrixClient(
         notificationClient.destroy()
         notificationProcessSetup.destroy()
         encryptionService.destroy()
-        client.destroy()
+        Disposable.destroy(client)
     }
 
     override suspend fun getCacheSize(): Long {

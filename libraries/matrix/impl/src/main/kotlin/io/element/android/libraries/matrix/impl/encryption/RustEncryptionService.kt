@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.BackupSteadyStateListener
-import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.ClientInterface
 import org.matrix.rustcomponents.sdk.EnableRecoveryProgressListener
 import org.matrix.rustcomponents.sdk.Encryption
 import org.matrix.rustcomponents.sdk.BackupUploadState as RustBackupUploadState
@@ -42,7 +42,7 @@ import org.matrix.rustcomponents.sdk.EnableRecoveryProgress as RustEnableRecover
 import org.matrix.rustcomponents.sdk.SteadyStateException as RustSteadyStateException
 
 internal class RustEncryptionService(
-    client: Client,
+    client: ClientInterface,
     syncService: RustSyncService,
     sessionCoroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,

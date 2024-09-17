@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeout
-import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.ClientInterface
 import org.matrix.rustcomponents.sdk.Encryption
 import org.matrix.rustcomponents.sdk.RecoveryState
 import org.matrix.rustcomponents.sdk.RecoveryStateListener
@@ -43,7 +43,7 @@ import kotlin.time.Duration.Companion.seconds
 import org.matrix.rustcomponents.sdk.SessionVerificationData as RustSessionVerificationData
 
 class RustSessionVerificationService(
-    private val client: Client,
+    private val client: ClientInterface,
     isSyncServiceReady: Flow<Boolean>,
     private val sessionCoroutineScope: CoroutineScope,
 ) : SessionVerificationService, SessionVerificationControllerDelegate {
@@ -206,6 +206,7 @@ class RustSessionVerificationService(
             }
         }
     }
+
     private suspend fun updateVerificationStatus() {
         if (verificationFlowState.value == VerificationFlowState.Finished) {
             // Calling `encryptionService.verificationState()` performs a network call and it will deadlock if there is no network

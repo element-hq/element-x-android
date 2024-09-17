@@ -14,14 +14,14 @@ import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
 import io.element.android.libraries.matrix.api.pusher.UnsetHttpPusherData
 import io.element.android.libraries.matrix.impl.exception.mapClientException
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.ClientInterface
 import org.matrix.rustcomponents.sdk.HttpPusherData
 import org.matrix.rustcomponents.sdk.PushFormat
 import org.matrix.rustcomponents.sdk.PusherIdentifiers
 import org.matrix.rustcomponents.sdk.PusherKind
 
 class RustPushersService(
-    private val client: Client,
+    private val client: ClientInterface,
     private val dispatchers: CoroutineDispatchers
 ) : PushersService {
     override suspend fun setHttpPusher(setHttpPusherData: SetHttpPusherData): Result<Unit> {

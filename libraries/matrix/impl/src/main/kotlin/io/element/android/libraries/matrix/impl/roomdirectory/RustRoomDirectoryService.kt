@@ -11,10 +11,10 @@ import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryList
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.ClientInterface
 
 class RustRoomDirectoryService(
-    private val client: Client,
+    private val client: ClientInterface,
     private val sessionDispatcher: CoroutineDispatcher,
 ) : RoomDirectoryService {
     override fun createRoomDirectoryList(scope: CoroutineScope): RoomDirectoryList {

@@ -41,15 +41,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
+import org.matrix.rustcomponents.sdk.ClientInterface
+import org.matrix.rustcomponents.sdk.Disposable
 import org.matrix.rustcomponents.sdk.HumanQrLoginException
 import org.matrix.rustcomponents.sdk.OidcConfiguration
 import org.matrix.rustcomponents.sdk.QrCodeData
 import org.matrix.rustcomponents.sdk.QrCodeDecodeException
 import org.matrix.rustcomponents.sdk.QrLoginProgress
 import org.matrix.rustcomponents.sdk.QrLoginProgressListener
-import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk.OidcAuthorizationData
 import javax.inject.Inject
@@ -72,7 +72,7 @@ class RustMatrixAuthenticationService @Inject constructor(
     // Need to keep a copy of the current session path to eventually delete it.
     // Ideally it would be possible to get the sessionPath from the Client to avoid doing this.
     private var sessionPaths: SessionPaths? = null
-    private var currentClient: Client? = null
+    private var currentClient: ClientInterface? = null
     private var currentHomeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
 
     private fun rotateSessionPath(): SessionPaths {
@@ -251,18 +251,19 @@ class RustMatrixAuthenticationService @Inject constructor(
                     oidcConfiguration = oidcConfiguration,
                     progressListener = progressListener,
                 )
-
-                client.use { rustClient ->
-                    val sessionData = rustClient.session()
+                val sessionData = try {
+                    client.session()
                         .toSessionData(
                             isTokenValid = true,
                             loginType = LoginType.QR,
                             passphrase = pendingPassphrase,
                             sessionPaths = emptySessionPaths,
                         )
-                    sessionStore.storeData(sessionData)
-                    SessionId(sessionData.userId)
+                } finally {
+                    Disposable.destroy(client)
                 }
+                sessionStore.storeData(sessionData)
+                SessionId(sessionData.userId)
             }.mapFailure {
                 when (it) {
                     is QrCodeDecodeException -> QrErrorMapper.map(it)
@@ -280,19 +281,19 @@ class RustMatrixAuthenticationService @Inject constructor(
     private suspend fun makeClient(
         sessionPaths: SessionPaths,
         config: suspend ClientBuilder.() -> ClientBuilder,
-    ): Client {
+    ): ClientInterface {
         val slidingSyncType = getSlidingSyncType()
         if (slidingSyncType is ClientBuilderSlidingSync.Simplified) {
             Timber.d("Creating client with simplified sliding sync")
             try {
-               return rustMatrixClientFactory
-                   .getBaseClientBuilder(
-                       sessionPaths = sessionPaths,
-                       passphrase = pendingPassphrase,
-                       slidingSyncType = slidingSyncType,
-                   )
-                   .run { config() }
-                   .build()
+                return rustMatrixClientFactory
+                    .getBaseClientBuilder(
+                        sessionPaths = sessionPaths,
+                        passphrase = pendingPassphrase,
+                        slidingSyncType = slidingSyncType,
+                    )
+                    .run { config() }
+                    .build()
             } catch (e: HumanQrLoginException.SlidingSyncNotAvailable) {
                 Timber.e(e, "Failed to create client with simplified sliding sync, trying with Proxy now")
             }
@@ -314,7 +315,7 @@ class RustMatrixAuthenticationService @Inject constructor(
         qrCodeData: QrCodeData,
         oidcConfiguration: OidcConfiguration,
         progressListener: QrLoginProgressListener,
-    ): Client {
+    ): ClientInterface {
         val slidingSyncType = getSlidingSyncType()
         if (slidingSyncType is ClientBuilderSlidingSync.Simplified) {
             Timber.d("Creating client for QR Code login with simplified sliding sync")
@@ -353,7 +354,7 @@ class RustMatrixAuthenticationService @Inject constructor(
     }
 
     private fun clear() {
-        currentClient?.close()
+        Disposable.destroy(currentClient)
         currentClient = null
     }
 }
