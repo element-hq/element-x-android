@@ -54,6 +54,7 @@ import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.components.list.SwitchListItem
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithStyledPart
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -168,14 +169,26 @@ private fun Content(
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Text(
-            text = stringResource(R.string.screen_deactivate_account_description),
+            text = buildAnnotatedStringWithStyledPart(
+                R.string.screen_deactivate_account_description,
+                R.string.screen_deactivate_account_description_bold_part,
+                color = ElementTheme.colors.textSecondary,
+                bold = true,
+                underline = false,
+            ),
             style = ElementTheme.typography.fontBodyMdRegular,
             color = ElementTheme.colors.textSecondary,
         )
         InfoListOrganism(
             items = persistentListOf(
                 InfoListItem(
-                    message = stringResource(R.string.screen_deactivate_account_list_item_1),
+                    message = buildAnnotatedStringWithStyledPart(
+                        R.string.screen_deactivate_account_list_item_1,
+                        R.string.screen_deactivate_account_list_item_1_bold_part,
+                        color = ElementTheme.colors.textSecondary,
+                        bold = true,
+                        underline = false,
+                    ),
                     iconComposable = {
                         Icon(
                             modifier = Modifier.size(20.dp),
