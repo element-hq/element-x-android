@@ -21,6 +21,7 @@
   <string name="screen_change_server_form_notice">"Csak olyan meglévő kiszolgálóhoz csatlakozhat, amely támogatja a Sliding sync protokollt. Ezt a Matrix-kiszolgáló adminisztrátorának kell beállítania. %1$s"</string>
   <string name="screen_change_server_subtitle">"Mi a kiszolgálója címe?"</string>
   <string name="screen_change_server_title">"Válassza ki a kiszolgálóját"</string>
+  <string name="screen_create_account_title">"Fiók létrehozása"</string>
   <string name="screen_login_error_deactivated_account">"Ez a fiók deaktiválva lett."</string>
   <string name="screen_login_error_invalid_credentials">"Helytelen felhasználónév vagy jelszó"</string>
   <string name="screen_login_error_invalid_user_id">"Ez nem érvényes felhasználóazonosító. A várt formátum: „@user:homeserver.org”"</string>
