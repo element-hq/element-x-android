@@ -283,7 +283,7 @@ private fun LoginErrorDialog(error: Throwable, onDismiss: () -> Unit) {
     ErrorDialog(
         title = stringResource(id = CommonStrings.dialog_title_error),
         content = stringResource(loginError(error)),
-        onDismiss = onDismiss
+        onSubmit = onDismiss
     )
 }
 

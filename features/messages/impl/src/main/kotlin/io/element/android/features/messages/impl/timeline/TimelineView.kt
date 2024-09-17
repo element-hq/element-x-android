@@ -48,6 +48,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureView
 import io.element.android.features.messages.impl.timeline.components.TimelineItemRow
 import io.element.android.features.messages.impl.timeline.components.toText
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
@@ -127,8 +128,8 @@ fun TimelineView(
         Box(modifier) {
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .nestedScroll(nestedScrollConnection),
+                        .fillMaxSize()
+                        .nestedScroll(nestedScrollConnection),
                 state = lazyListState,
                 reverseLayout = useReverseLayout,
                 contentPadding = PaddingValues(vertical = 8.dp),
@@ -150,19 +151,18 @@ fun TimelineView(
                         isLastOutgoingMessage = (timelineItem as? TimelineItem.Event)?.isMine == true &&
                             state.timelineItems.first().identifier() == timelineItem.identifier(),
                         focusedEventId = state.focusedEventId,
-                        onClick = onMessageClick,
-                        onLongClick = onMessageLongClick,
-                        onShieldClick = ::onShieldClick,
                         onUserDataClick = onUserDataClick,
                         onLinkClick = onLinkClick,
+                        onClick = onMessageClick,
+                        onLongClick = onMessageLongClick,
                         inReplyToClick = ::inReplyToClick,
                         onReactionClick = onReactionClick,
                         onReactionLongClick = onReactionLongClick,
                         onMoreReactionsClick = onMoreReactionsClick,
                         onReadReceiptClick = onReadReceiptClick,
-                        eventSink = state.eventSink,
                         onSwipeToReply = onSwipeToReply,
                         onJoinCallClick = onJoinCallClick,
+                        eventSink = state.eventSink,
                     )
                 }
             }
@@ -185,6 +185,8 @@ fun TimelineView(
             )
         }
     }
+
+    ResolveVerifiedUserSendFailureView(state = state.resolveVerifiedUserSendFailureState)
 
     MessageShieldDialog(state)
 }
@@ -267,8 +269,8 @@ private fun BoxScope.TimelineScrollHelper(
         // Use inverse of canAutoScroll otherwise we might briefly see the before the scroll animation is triggered
         isVisible = !canAutoScroll || forceJumpToBottomVisibility || !isLive,
         modifier = Modifier
-            .align(Alignment.BottomEnd)
-            .padding(end = 24.dp, bottom = 12.dp),
+                .align(Alignment.BottomEnd)
+                .padding(end = 24.dp, bottom = 12.dp),
         onClick = { jumpToBottom() },
     )
 }
@@ -295,8 +297,8 @@ private fun JumpToBottomButton(
         ) {
             Icon(
                 modifier = Modifier
-                    .size(24.dp)
-                    .rotate(90f),
+                        .size(24.dp)
+                        .rotate(90f),
                 imageVector = CompoundIcons.ArrowRight(),
                 contentDescription = stringResource(id = CommonStrings.a11y_jump_to_bottom)
             )

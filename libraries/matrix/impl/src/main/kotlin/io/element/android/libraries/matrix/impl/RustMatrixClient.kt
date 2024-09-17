@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.notificationsettings.Notification
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
+import io.element.android.libraries.matrix.api.room.InvitedRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -245,6 +246,10 @@ class RustMatrixClient(
         return roomFactory.create(roomId)
     }
 
+    override suspend fun getInvitedRoom(roomId: RoomId): InvitedRoom? {
+        return roomFactory.createInvitedRoom(roomId)
+    }
+
     /**
      * Wait for the room to be available in the room list, with a membership for the current user of [CurrentUserMembership.JOINED].
      * @param roomIdOrAlias the room id or alias to wait for
@@ -267,6 +272,8 @@ class RustMatrixClient(
                 .filter(predicate)
                 .first()
                 .first()
+                // Ensure that the room is ready
+                .also { client.awaitRoomRemoteEcho(it.roomId.value) }
         }
     }
 
@@ -532,6 +539,10 @@ class RustMatrixClient(
 
     override suspend fun isNativeSlidingSyncSupported(): Boolean {
         return client.availableSlidingSyncVersions().contains(SlidingSyncVersion.Native)
+    }
+
+    override suspend fun isSlidingSyncProxySupported(): Boolean {
+        return client.availableSlidingSyncVersions().any { it is SlidingSyncVersion.Proxy }
     }
 
     override fun isUsingNativeSlidingSync(): Boolean {

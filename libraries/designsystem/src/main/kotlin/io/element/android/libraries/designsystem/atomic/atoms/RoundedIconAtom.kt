@@ -37,6 +37,7 @@ import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
  * @param resourceId the resource id of the icon to display, exclusive with [imageVector]
  * @param imageVector the image vector of the icon to display, exclusive with [resourceId]
  * @param tint the tint to apply to the icon
+ * @param backgroundTint the tint to apply to the icon background
  */
 @Composable
 fun RoundedIconAtom(
@@ -44,13 +45,14 @@ fun RoundedIconAtom(
     size: RoundedIconAtomSize = RoundedIconAtomSize.Large,
     resourceId: Int? = null,
     imageVector: ImageVector? = null,
-    tint: Color = MaterialTheme.colorScheme.secondary
+    tint: Color = MaterialTheme.colorScheme.secondary,
+    backgroundTint: Color = ElementTheme.colors.temporaryColorBgSpecial,
 ) {
     Box(
         modifier = modifier
             .size(size.toContainerSize())
             .background(
-                color = ElementTheme.colors.temporaryColorBgSpecial,
+                color = backgroundTint,
                 shape = RoundedCornerShape(size.toCornerSize())
             )
     ) {

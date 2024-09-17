@@ -86,7 +86,7 @@ class RustTimeline(
     onNewSyncedEvent: () -> Unit,
 ) : Timeline {
     private val initLatch = CompletableDeferred<Unit>()
-    private val isInit = MutableStateFlow(false)
+    private val isTimelineInitialized = MutableStateFlow(false)
 
     private val _timelineItems: MutableStateFlow<List<MatrixTimelineItem>> =
         MutableStateFlow(emptyList())
@@ -110,7 +110,7 @@ class RustTimeline(
         timelineCoroutineScope = coroutineScope,
         timelineDiffProcessor = timelineDiffProcessor,
         initLatch = initLatch,
-        isInit = isInit,
+        isTimelineInitialized = isTimelineInitialized,
         dispatcher = dispatcher,
         onNewSyncedEvent = onNewSyncedEvent,
     )
@@ -189,7 +189,7 @@ class RustTimeline(
     }
 
     private fun canPaginate(direction: Timeline.PaginationDirection): Boolean {
-        if (!isInit.value) return false
+        if (!isTimelineInitialized.value) return false
         return when (direction) {
             Timeline.PaginationDirection.BACKWARDS -> backPaginationStatus.value.canPaginate
             Timeline.PaginationDirection.FORWARDS -> forwardPaginationStatus.value.canPaginate
@@ -207,23 +207,37 @@ class RustTimeline(
         _timelineItems,
         backPaginationStatus.map { it.hasMoreToLoad }.distinctUntilChanged(),
         forwardPaginationStatus.map { it.hasMoreToLoad }.distinctUntilChanged(),
-        isInit,
-    ) { timelineItems, hasMoreToLoadBackward, hasMoreToLoadForward, isInit ->
+        matrixRoom.roomInfoFlow.map { it.creator },
+        isTimelineInitialized,
+    ) { timelineItems,
+        hasMoreToLoadBackward,
+        hasMoreToLoadForward,
+        roomCreator,
+        isTimelineInitialized ->
         withContext(dispatcher) {
             timelineItems
-                .process { items ->
+                .let { items ->
                     roomBeginningPostProcessor.process(
                         items = items,
                         isDm = matrixRoom.isDm,
-                        hasMoreToLoadBackwards = hasMoreToLoadBackward
+                        roomCreator = roomCreator,
+                        hasMoreToLoadBackwards = hasMoreToLoadBackward,
                     )
                 }
-                .process(predicate = isInit) { items ->
-                    loadingIndicatorsPostProcessor.process(items, hasMoreToLoadBackward, hasMoreToLoadForward)
+                .let { items ->
+                    loadingIndicatorsPostProcessor.process(
+                        items = items,
+                        isTimelineInitialized = isTimelineInitialized,
+                        hasMoreToLoadBackward = hasMoreToLoadBackward,
+                        hasMoreToLoadForward = hasMoreToLoadForward
+                    )
                 }
                 // Keep lastForwardIndicatorsPostProcessor last
-                .process(predicate = isInit) { items ->
-                    lastForwardIndicatorsPostProcessor.process(items)
+                .let { items ->
+                    lastForwardIndicatorsPostProcessor.process(
+                        items = items,
+                        isTimelineInitialized = isTimelineInitialized,
+                    )
                 }
         }
     }.onStart {
@@ -540,16 +554,5 @@ class RustTimeline(
         return runCatching {
             inner.fetchDetailsForEvent(eventId.value)
         }
-    }
-}
-
-private suspend fun List<MatrixTimelineItem>.process(
-    predicate: Boolean = true,
-    processor: suspend (List<MatrixTimelineItem>) -> List<MatrixTimelineItem>
-): List<MatrixTimelineItem> {
-    return if (predicate) {
-        processor(this)
-    } else {
-        this
     }
 }

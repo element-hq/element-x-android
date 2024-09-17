@@ -36,7 +36,7 @@ private fun AppErrorViewContent(
     ErrorDialog(
         title = title,
         content = body,
-        onDismiss = onDismiss,
+        onSubmit = onDismiss,
     )
 }
 

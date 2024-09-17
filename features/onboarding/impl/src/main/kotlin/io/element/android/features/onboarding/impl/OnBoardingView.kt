@@ -39,8 +39,8 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.IconSource
-import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -171,10 +171,9 @@ private fun OnBoardingButtons(
                 .testTag(TestTags.onBoardingSignIn)
         )
         if (state.canCreateAccount) {
-            OutlinedButton(
+            TextButton(
                 text = stringResource(id = R.string.screen_onboarding_sign_up),
                 onClick = onCreateAccount,
-                enabled = true,
                 modifier = Modifier
                     .fillMaxWidth()
             )

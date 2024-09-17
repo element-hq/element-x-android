@@ -26,6 +26,7 @@
     " в менеджере паролей или зашифрованной заметке"
   </string>
   <string name="screen_create_new_recovery_key_title">"Сбросьте шифрование вашей учетной записи с помощью другого устройства."</string>
+  <string name="screen_encryption_reset_action_continue_reset">"Продолжить сброс"</string>
   <string name="screen_encryption_reset_bullet_1">"Данные вашей учетной записи, контакты, настройки и список чатов будут сохранены"</string>
   <string name="screen_encryption_reset_bullet_2">"Вы потеряете существующую историю сообщений"</string>
   <string name="screen_encryption_reset_bullet_3">"Вам нужно будет заново подтвердить все существующие устройства и контакты."</string>
@@ -60,10 +61,6 @@
     <b>"ключ восстановления"</b>
   </string>
   <string name="screen_recovery_key_confirm_key_description">"Если у вас есть пароль для восстановления или секретный пароль/ключ, это тоже сработает."</string>
-  <string name="screen_recovery_key_confirm_key_label">
-    <b>"Ключ восстановления"</b>
-    " или пароль"
-  </string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Вход…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Потеряли ключ восстановления?"</string>
   <string name="screen_recovery_key_confirm_success">

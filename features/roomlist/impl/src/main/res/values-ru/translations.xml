@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"Выйти и обновить"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Теперь ваш сервер поддерживает новый, более быстрый протокол. Выйдите из системы и снова войдите в систему для обновления прямо сейчас. Сделав это сейчас, вы сможете избежать принудительного выхода из системы при последующем удалении старого протокола."</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Ваш homeserver больше не поддерживает старый протокол. Пожалуйста, выйдите из системы и войдите снова, чтобы продолжить использование приложения."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Доступно обновление"</string>
+  <string name="banner_set_up_recovery_content">"Создайте новый ключ восстановления, который можно использовать для восстановления зашифрованной истории сообщений в случае потери доступа к своим устройствам."</string>
+  <string name="banner_set_up_recovery_title">"Настроить восстановление"</string>
   <string name="confirm_recovery_key_banner_message">"В настоящее время резервная копия вашего чата не синхронизирована. Требуется подтвердить вашим ключом восстановления, чтобы сохранить доступ к резервной копии чата."</string>
   <string name="confirm_recovery_key_banner_title">
     "Введите "

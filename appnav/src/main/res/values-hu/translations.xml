@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"Kijelentkezés és frissítés"</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"A Matrix-kiszolgáló már nem támogatja a régi protokollt. Az alkalmazás további használatához jelentkezzen ki és be."</string>
+</resources>

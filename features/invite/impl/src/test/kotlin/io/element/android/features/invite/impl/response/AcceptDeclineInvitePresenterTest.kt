@@ -21,7 +21,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeInvitedRoom
 import io.element.android.libraries.matrix.test.room.join.FakeJoinRoom
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.test.notifications.FakeNotificationCleaner
@@ -83,12 +83,7 @@ class AcceptDeclineInvitePresenterTest {
             Result.failure<Unit>(RuntimeException("Failed to leave room"))
         }
         val client = FakeMatrixClient().apply {
-            givenGetRoomResult(
-                roomId = A_ROOM_ID,
-                result = FakeMatrixRoom(
-                    leaveRoomLambda = declineInviteFailure
-                )
-            )
+            getInvitedRoomResults[A_ROOM_ID] = FakeInvitedRoom(declineInviteResult = declineInviteFailure)
         }
         val presenter = createAcceptDeclineInvitePresenter(client = client)
         presenter.test {
@@ -133,12 +128,7 @@ class AcceptDeclineInvitePresenterTest {
             Result.success(Unit)
         }
         val client = FakeMatrixClient().apply {
-            givenGetRoomResult(
-                roomId = A_ROOM_ID,
-                result = FakeMatrixRoom(
-                    leaveRoomLambda = declineInviteSuccess
-                )
-            )
+            getInvitedRoomResults[A_ROOM_ID] = FakeInvitedRoom(declineInviteResult = declineInviteSuccess)
         }
         val presenter = createAcceptDeclineInvitePresenter(
             client = client,

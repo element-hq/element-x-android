@@ -13,7 +13,10 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
 import io.element.android.features.login.impl.util.defaultAccountProvider
+import io.element.android.features.login.impl.web.FakeWebClientUrlForAuthenticationRetriever
+import io.element.android.features.login.impl.web.WebClientUrlForAuthenticationRetriever
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.test.A_HOMESERVER
@@ -255,17 +258,109 @@ class ConfirmAccountProviderPresenterTest {
         }
     }
 
+    @Test
+    fun `present - confirm account creation without oidc and without url generates an error`() = runTest {
+        val authenticationService = FakeMatrixAuthenticationService()
+        authenticationService.givenHomeserver(A_HOMESERVER)
+        val presenter = createConfirmAccountProviderPresenter(
+            params = ConfirmAccountProviderPresenter.Params(isAccountCreation = true),
+            matrixAuthenticationService = authenticationService,
+            webClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever {
+                throw AccountCreationNotSupported()
+            },
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(ConfirmAccountProviderEvents.Continue)
+            skipItems(1) // Loading
+            // Check an error was returned
+            val submittedState = awaitItem()
+            assertThat(submittedState.loginFlow.errorOrNull()).isInstanceOf(AccountCreationNotSupported::class.java)
+            // Assert the error is then cleared
+            submittedState.eventSink(ConfirmAccountProviderEvents.ClearError)
+            val clearedState = awaitItem()
+            assertThat(clearedState.loginFlow).isEqualTo(AsyncData.Uninitialized)
+        }
+    }
+
+    @Test
+    fun `present - confirm account creation with oidc is successful`() = runTest {
+        val authenticationService = FakeMatrixAuthenticationService()
+        authenticationService.givenHomeserver(A_HOMESERVER_OIDC)
+        val presenter = createConfirmAccountProviderPresenter(
+            params = ConfirmAccountProviderPresenter.Params(isAccountCreation = true),
+            matrixAuthenticationService = authenticationService,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(ConfirmAccountProviderEvents.Continue)
+            skipItems(1) // Loading
+            val submittedState = awaitItem()
+            assertThat(submittedState.loginFlow).isInstanceOf(AsyncData.Success::class.java)
+            assertThat(submittedState.loginFlow.dataOrNull()).isInstanceOf(LoginFlow.OidcFlow::class.java)
+        }
+    }
+
+    @Test
+    fun `present - confirm account creation with oidc and url continues with oidc`() = runTest {
+        val aUrl = "aUrl"
+        val authenticationService = FakeMatrixAuthenticationService()
+        authenticationService.givenHomeserver(A_HOMESERVER_OIDC)
+        val presenter = createConfirmAccountProviderPresenter(
+            params = ConfirmAccountProviderPresenter.Params(isAccountCreation = true),
+            matrixAuthenticationService = authenticationService,
+            webClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever { aUrl },
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(ConfirmAccountProviderEvents.Continue)
+            skipItems(1) // Loading
+            val submittedState = awaitItem()
+            assertThat(submittedState.loginFlow).isInstanceOf(AsyncData.Success::class.java)
+            assertThat(submittedState.loginFlow.dataOrNull()).isInstanceOf(LoginFlow.OidcFlow::class.java)
+        }
+    }
+
+    @Test
+    fun `present - confirm account creation without oidc and with url continuing with url`() = runTest {
+        val aUrl = "aUrl"
+        val authenticationService = FakeMatrixAuthenticationService()
+        authenticationService.givenHomeserver(A_HOMESERVER)
+        val presenter = createConfirmAccountProviderPresenter(
+            params = ConfirmAccountProviderPresenter.Params(isAccountCreation = true),
+            matrixAuthenticationService = authenticationService,
+            webClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever { aUrl },
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(ConfirmAccountProviderEvents.Continue)
+            skipItems(1) // Loading
+            val submittedState = awaitItem()
+            assertThat(submittedState.loginFlow.dataOrNull()).isEqualTo(LoginFlow.AccountCreationFlow(aUrl))
+        }
+    }
+
     private fun createConfirmAccountProviderPresenter(
         params: ConfirmAccountProviderPresenter.Params = ConfirmAccountProviderPresenter.Params(isAccountCreation = false),
         accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(),
         matrixAuthenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
         defaultOidcActionFlow: DefaultOidcActionFlow = DefaultOidcActionFlow(),
         defaultLoginUserStory: DefaultLoginUserStory = DefaultLoginUserStory(),
+        webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever(),
     ) = ConfirmAccountProviderPresenter(
         params = params,
         accountProviderDataSource = accountProviderDataSource,
         authenticationService = matrixAuthenticationService,
         oidcActionFlow = defaultOidcActionFlow,
         defaultLoginUserStory = defaultLoginUserStory,
+        webClientUrlForAuthenticationRetriever = webClientUrlForAuthenticationRetriever
     )
 }

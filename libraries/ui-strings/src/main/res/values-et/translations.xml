@@ -36,6 +36,7 @@
   <string name="action_back">"Tagasi"</string>
   <string name="action_call">"Helista kasutajale"</string>
   <string name="action_cancel">"Loobu"</string>
+  <string name="action_cancel_for_now">"Hetkel jäta tegemata"</string>
   <string name="action_choose_photo">"Vali foto"</string>
   <string name="action_clear">"Selge"</string>
   <string name="action_close">"Sulge"</string>
@@ -250,6 +251,7 @@ Põhjus: %1$s."</string>
   <string name="dialog_title_warning">"Hoiatus"</string>
   <string name="dialog_unsaved_changes_description_android">"Sinu tehtud muudatused pole veel salvestatud. Kas sa oled kindel, et soovid minna tagasi?"</string>
   <string name="dialog_unsaved_changes_title">"Kas salvestame muudatused?"</string>
+  <string name="error_account_creation_not_possible">"Selleks et koos kasutajakonto loomisega toimiks Matrix Authentication Service\'i tugi, vajab sinu koduserver uuendamist."</string>
   <string name="error_failed_creating_the_permalink">"Püsilingi loomine ei õnnestumud"</string>
   <string name="error_failed_loading_map">"%1$s kaardi laadimine ei õnnestunud. Palun proovi hiljem uuesti."</string>
   <string name="error_failed_loading_messages">"Sõnumite laadimine ei õnnestunud"</string>
@@ -283,6 +285,12 @@ Põhjus: %1$s."</string>
   <string name="screen_pinned_timeline_screen_title_empty">"Esiletõstetud sõnumid"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Oma võrguidentiteedi lähtestamiseks suuname sind %1$s kasutajakonto halduse lehele. Hiljem suunatakse sind tagasi sama rakenduse juurde."</string>
   <string name="screen_reset_identity_confirmation_title">"Sa ei saa seda kinnitada? Ava oma kasutajakonto haldus ja lähtesta oma võrguidentiteet."</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Unusta verifitseerimine ja saada ikkagi"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Sa võid jätta verifitseerimisvea tähelepanuta ja sõnumi ikkagi saata või katkestad saatmise ja peale kasutaja %1$s verifitseerimist proovid seda uuesti."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Sinu sõnum on saatmata, kuna kasutaja %1$s verifitseeritud identiteet on muutunud."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Saada sõnum ikkagi"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s kasutab ühte või enamat verifitseerimata seadet. Sa võid sõnumi ikkagi saata või katkestad selle ning ootad kuni %2$s on kõik oma seadmed verifitseerinud ning proovid seejärel uuesti."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Sinu sõnum on saatmata, kuna %1$s pole verifitseerinud ühte või enamat oma seadet"</string>
   <string name="screen_room_details_pinned_events_row_title">"Esiletõstetud sõnumid"</string>
   <string name="screen_room_error_failed_processing_media">"Meediafaili töötlemine enne üleslaadimist ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kasutaja andmete laadimine ei õnnestunud"</string>
@@ -304,6 +312,8 @@ Põhjus: %1$s."</string>
   <string name="screen_share_open_google_maps">"Ava Google Mapsis"</string>
   <string name="screen_share_open_osm_maps">"Ava OpenStreetMapis"</string>
   <string name="screen_share_this_location_action">"Jaga seda asukohta"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Sõnum on saatmata, kuna kasutaja %1$s verifitseeritud identiteet on muutunud."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Sõnum on saatmata, kuna %1$s pole verifitseerinud ühte või enamat oma seadet."</string>
   <string name="screen_view_location_title">"Asukoht"</string>
   <string name="settings_version_number">"Versioon: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"et"</string>

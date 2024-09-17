@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="banner_migrate_to_native_sliding_sync_action">"Log Out &amp; Upgrade"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later."</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app."</string>
   <string name="banner_migrate_to_native_sliding_sync_title">"Upgrade available"</string>
   <string name="banner_set_up_recovery_content">"Generate a new recovery key that can be used to restore your encrypted message history in case you lose access to your devices."</string>
   <string name="banner_set_up_recovery_title">"Set up recovery"</string>
