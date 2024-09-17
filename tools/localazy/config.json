@@ -28,6 +28,12 @@
       ]
     },
     {
+      "name" : ":features:deactivation:impl",
+      "includeRegex" : [
+        "screen_deactivate_account_.*"
+      ]
+    },
+    {
       "name" : ":features:roomaliasresolver:impl",
       "includeRegex" : [
         "screen_room_alias_resolver_.*"

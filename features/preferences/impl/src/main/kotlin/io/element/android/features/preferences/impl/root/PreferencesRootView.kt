@@ -57,6 +57,7 @@ fun PreferencesRootView(
     onOpenUserProfile: (MatrixUser) -> Unit,
     onOpenBlockedUsers: () -> Unit,
     onSignOutClick: () -> Unit,
+    onDeactivateClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -99,6 +100,7 @@ fun PreferencesRootView(
             onOpenAdvancedSettings = onOpenAdvancedSettings,
             onOpenDeveloperSettings = onOpenDeveloperSettings,
             onSignOutClick = onSignOutClick,
+            onDeactivateClick = onDeactivateClick,
         )
 
         Footer(
@@ -193,6 +195,7 @@ private fun ColumnScope.GeneralSection(
     onOpenAdvancedSettings: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
     onSignOutClick: () -> Unit,
+    onDeactivateClick: () -> Unit,
 ) {
     ListItem(
         headlineContent = { Text(stringResource(id = CommonStrings.common_about)) },
@@ -225,6 +228,14 @@ private fun ColumnScope.GeneralSection(
         style = ListItemStyle.Destructive,
         onClick = onSignOutClick,
     )
+    if (state.canDeactivateAccount) {
+        ListItem(
+            headlineContent = { Text(stringResource(id = CommonStrings.action_deactivate_account)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Warning())),
+            style = ListItemStyle.Destructive,
+            onClick = onDeactivateClick,
+        )
+    }
 }
 
 @Composable
@@ -292,5 +303,6 @@ private fun ContentToPreview(matrixUser: MatrixUser) {
         onOpenUserProfile = {},
         onOpenBlockedUsers = {},
         onSignOutClick = {},
+        onDeactivateClick = {},
     )
 }
