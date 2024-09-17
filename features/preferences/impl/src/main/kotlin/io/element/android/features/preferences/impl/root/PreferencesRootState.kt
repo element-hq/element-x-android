@@ -22,6 +22,7 @@ data class PreferencesRootState(
     val devicesManagementUrl: String?,
     val showAnalyticsSettings: Boolean,
     val showDeveloperSettings: Boolean,
+    val canDeactivateAccount: Boolean,
     val showLockScreenSettings: Boolean,
     val showNotificationSettings: Boolean,
     val showBlockedUsersItem: Boolean,

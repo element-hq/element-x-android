@@ -138,4 +138,7 @@ interface MatrixClient : Closeable {
 
     /** Returns `true` if the current session is using native sliding sync, `false` if it's using a proxy. */
     fun isUsingNativeSlidingSync(): Boolean
+
+    fun canDeactivateAccount(): Boolean
+    suspend fun deactivateAccount(password: String, eraseData: Boolean): Result<Unit>
 }

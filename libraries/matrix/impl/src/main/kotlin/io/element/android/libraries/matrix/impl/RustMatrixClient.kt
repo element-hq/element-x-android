@@ -9,6 +9,7 @@ package io.element.android.libraries.matrix.impl
 
 import io.element.android.libraries.androidutils.file.getSizeOfFiles
 import io.element.android.libraries.androidutils.file.safeDelete
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -89,6 +90,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import org.matrix.rustcomponents.sdk.AuthData
+import org.matrix.rustcomponents.sdk.AuthDataPasswordDetails
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientException
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
@@ -496,6 +499,46 @@ class RustMatrixClient(
             }
         }
         return result
+    }
+
+    override fun canDeactivateAccount(): Boolean {
+        return runCatching {
+            client.canDeactivateAccount()
+        }
+            .getOrNull()
+            .orFalse()
+    }
+
+    override suspend fun deactivateAccount(password: String, eraseData: Boolean): Result<Unit> = withContext(sessionDispatcher) {
+        Timber.w("Deactivating account")
+        syncService.stop()
+        runCatching {
+            // First call without AuthData, should fail
+            val firstAttempt = runCatching {
+                client.deactivateAccount(
+                    authData = null,
+                    eraseData = eraseData,
+                )
+            }
+            if (firstAttempt.isFailure) {
+                Timber.w(firstAttempt.exceptionOrNull(), "Expected failure, try again")
+                // This is expected, try again with the password
+                client.deactivateAccount(
+                    authData = AuthData.Password(
+                        passwordDetails = AuthDataPasswordDetails(
+                            identifier = sessionId.value,
+                            password = password,
+                        ),
+                    ),
+                    eraseData = eraseData,
+                )
+            }
+            close()
+            deleteSessionDirectory(deleteCryptoDb = true)
+            sessionStore.removeSession(sessionId.value)
+        }.onFailure {
+            Timber.e(it, "Failed to deactivate account")
+        }
     }
 
     override suspend fun getAccountManagementUrl(action: AccountManagementAction?): Result<String?> = withContext(sessionDispatcher) {
