@@ -251,7 +251,7 @@ Põhjus: %1$s."</string>
   <string name="dialog_title_warning">"Hoiatus"</string>
   <string name="dialog_unsaved_changes_description_android">"Sinu tehtud muudatused pole veel salvestatud. Kas sa oled kindel, et soovid minna tagasi?"</string>
   <string name="dialog_unsaved_changes_title">"Kas salvestame muudatused?"</string>
-  <string name="error_account_creation_not_possible">"Selleks et koos kasutajakonto loomisega toimiks Matrix Authentication Serveri tugi, vajab sinu koduserver uuendamist."</string>
+  <string name="error_account_creation_not_possible">"Selleks et koos kasutajakonto loomisega toimiks Matrix Authentication Service\'i tugi, vajab sinu koduserver uuendamist."</string>
   <string name="error_failed_creating_the_permalink">"Püsilingi loomine ei õnnestumud"</string>
   <string name="error_failed_loading_map">"%1$s kaardi laadimine ei õnnestunud. Palun proovi hiljem uuesti."</string>
   <string name="error_failed_loading_messages">"Sõnumite laadimine ei õnnestunud"</string>

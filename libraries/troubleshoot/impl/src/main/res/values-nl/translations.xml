@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_screen_action">"Tests uitvoeren"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"Tests opnieuw uitvoeren"</string>
+  <string name="troubleshoot_notifications_screen_failure">"Sommige tests zijn mislukt. Controleer de details."</string>
+  <string name="troubleshoot_notifications_screen_notice">"Voer de tests uit om problemen in je configuratie op te sporen waardoor meldingen mogelijk niet naar verwachting werken."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"Probeer het op te lossen"</string>
+  <string name="troubleshoot_notifications_screen_success">"Alle tests zijn geslaagd."</string>
+  <string name="troubleshoot_notifications_screen_title">"Problemen met meldingen oplossen"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"Sommige tests vereisen je aandacht. Controleer de details."</string>
+</resources>

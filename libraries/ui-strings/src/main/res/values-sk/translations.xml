@@ -255,6 +255,7 @@ Dôvod: %1$s."</string>
   <string name="dialog_title_warning">"Upozornenie"</string>
   <string name="dialog_unsaved_changes_description_android">"Vaše zmeny neboli uložené. Naozaj sa chcete vrátiť?"</string>
   <string name="dialog_unsaved_changes_title">"Uložiť zmeny?"</string>
+  <string name="error_account_creation_not_possible">"Váš domovský server musí byť aktualizovaný tak, aby podporoval Matrix Authentication Server a vytvorenie účtu."</string>
   <string name="error_failed_creating_the_permalink">"Nepodarilo sa vytvoriť trvalý odkaz"</string>
   <string name="error_failed_loading_map">"%1$s nedokázal načítať mapu. Skúste to prosím neskôr."</string>
   <string name="error_failed_loading_messages">"Načítanie správ zlyhalo"</string>
