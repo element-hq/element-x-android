@@ -79,6 +79,8 @@ class FakeMatrixClient(
     private val clearCacheLambda: () -> Unit = { lambdaError() },
     private val userIdServerNameLambda: () -> String = { lambdaError() },
     private val getUrlLambda: (String) -> Result<String> = { lambdaError() },
+    private val canDeactivateAccountResult: () -> Boolean = { lambdaError() },
+    private val deactivateAccountResult: (String, Boolean) -> Result<Unit> = { _, _ -> lambdaError() },
     var isNativeSlidingSyncSupportedLambda: suspend () -> Boolean = { true },
     var isSlidingSyncProxySupportedLambda: suspend () -> Boolean = { true },
     var isUsingNativeSlidingSyncLambda: () -> Boolean = { true },
@@ -173,6 +175,12 @@ class FakeMatrixClient(
 
     override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean): String? = simulateLongTask {
         return logoutLambda(ignoreSdkError, userInitiated)
+    }
+
+    override fun canDeactivateAccount() = canDeactivateAccountResult()
+
+    override suspend fun deactivateAccount(password: String, eraseData: Boolean): Result<Unit> = simulateLongTask {
+        deactivateAccountResult(password, eraseData)
     }
 
     override fun close() = Unit

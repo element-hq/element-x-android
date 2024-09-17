@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -38,6 +39,7 @@ fun InfoListOrganism(
     iconTint: Color = LocalContentColor.current,
     iconSize: Dp = 20.dp,
     textStyle: TextStyle = LocalTextStyle.current,
+    textColor: Color = ElementTheme.colors.textPrimary,
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(4.dp),
 ) {
     Column(
@@ -53,11 +55,19 @@ fun InfoListOrganism(
             }
             InfoListItemMolecule(
                 message = {
-                    Text(
-                        text = item.message,
-                        style = textStyle,
-                        color = ElementTheme.colors.textPrimary,
-                    )
+                    if (item.message is AnnotatedString) {
+                        Text(
+                            text = item.message,
+                            style = textStyle,
+                            color = textColor,
+                        )
+                    } else {
+                        Text(
+                            text = item.message.toString(),
+                            style = textStyle,
+                            color = textColor,
+                        )
+                    }
                 },
                 icon = {
                     if (item.iconId != null) {
@@ -86,7 +96,7 @@ fun InfoListOrganism(
 }
 
 data class InfoListItem(
-    val message: String,
+    val message: CharSequence,
     @DrawableRes val iconId: Int? = null,
     val iconVector: ImageVector? = null,
     val iconComposable: @Composable () -> Unit = {},
