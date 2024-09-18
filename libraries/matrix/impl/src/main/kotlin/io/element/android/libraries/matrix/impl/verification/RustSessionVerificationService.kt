@@ -206,6 +206,7 @@ class RustSessionVerificationService(
             }
         }
     }
+
     private suspend fun updateVerificationStatus() {
         if (verificationFlowState.value == VerificationFlowState.Finished) {
             // Calling `encryptionService.verificationState()` performs a network call and it will deadlock if there is no network
