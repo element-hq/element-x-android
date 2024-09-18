@@ -43,14 +43,12 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import kotlin.time.Duration.Companion.milliseconds
 
 class PinnedMessagesListPresenter @AssistedInject constructor(
     @Assisted private val navigator: PinnedMessagesListNavigator,
@@ -174,7 +172,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
                 is AsyncData.Failure -> flowOf(AsyncData.Failure(asyncTimeline.error))
                 is AsyncData.Loading -> flowOf(AsyncData.Loading())
                 is AsyncData.Success -> {
-                    val timelineItemsFlow = asyncTimeline.data.timelineItems.debounce(300.milliseconds)
+                    val timelineItemsFlow = asyncTimeline.data.timelineItems
                     combine(timelineItemsFlow, room.membersStateFlow) { items, membersState ->
                         timelineItemsFactory.replaceWith(
                             timelineItems = items,
