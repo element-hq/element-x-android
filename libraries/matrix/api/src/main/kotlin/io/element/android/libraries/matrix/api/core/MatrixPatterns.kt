@@ -149,7 +149,12 @@ object MatrixPatterns {
                         add(MatrixPatternResult(MatrixPatternType.USER_ID, permalink.userId.toString(), match.range.first, match.range.last + 1))
                     }
                     is PermalinkData.RoomLink -> {
-                        add(MatrixPatternResult(MatrixPatternType.ROOM_ALIAS, permalink.roomIdOrAlias.identifier, match.range.first, match.range.last + 1))
+                        when (permalink.roomIdOrAlias) {
+                            is RoomIdOrAlias.Alias -> MatrixPatternType.ROOM_ALIAS
+                            is RoomIdOrAlias.Id -> if (permalink.eventId == null) MatrixPatternType.ROOM_ID else null
+                        }?.let { type ->
+                            add(MatrixPatternResult(type, permalink.roomIdOrAlias.identifier, match.range.first, match.range.last + 1))
+                        }
                     }
                     else -> Unit
                 }
