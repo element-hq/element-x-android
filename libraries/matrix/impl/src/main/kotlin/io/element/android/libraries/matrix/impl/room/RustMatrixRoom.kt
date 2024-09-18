@@ -73,6 +73,9 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomInfoListener
+import org.matrix.rustcomponents.sdk.RoomInterface
+import org.matrix.rustcomponents.sdk.RoomListItemInterface
+import org.matrix.rustcomponents.sdk.TimelineInterface
 import org.matrix.rustcomponents.sdk.TypingNotificationsListener
 import org.matrix.rustcomponents.sdk.UserPowerLevelUpdate
 import org.matrix.rustcomponents.sdk.WidgetCapabilities
@@ -83,9 +86,6 @@ import timber.log.Timber
 import uniffi.matrix_sdk.RoomPowerLevelChanges
 import java.io.File
 import kotlin.coroutines.cancellation.CancellationException
-import org.matrix.rustcomponents.sdk.RoomInterface
-import org.matrix.rustcomponents.sdk.RoomListItemInterface
-import org.matrix.rustcomponents.sdk.TimelineInterface
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixRoom(
