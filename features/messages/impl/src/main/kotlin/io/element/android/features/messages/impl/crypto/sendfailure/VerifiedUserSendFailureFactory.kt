@@ -23,8 +23,12 @@ class VerifiedUserSendFailureFactory @Inject constructor(
                 if (userId == null) {
                     VerifiedUserSendFailure.None
                 } else {
-                    val displayName = room.userDisplayName(userId).getOrNull() ?: userId.value
-                    VerifiedUserSendFailure.UnsignedDevice(displayName)
+                    if (userId == room.sessionId) {
+                        VerifiedUserSendFailure.UnsignedDevice.FromYou
+                    } else {
+                        val displayName = room.userDisplayName(userId).getOrNull() ?: userId.value
+                        VerifiedUserSendFailure.UnsignedDevice.FromOther(displayName)
+                    }
                 }
             }
             is LocalEventSendState.Failed.VerifiedUserChangedIdentity -> {

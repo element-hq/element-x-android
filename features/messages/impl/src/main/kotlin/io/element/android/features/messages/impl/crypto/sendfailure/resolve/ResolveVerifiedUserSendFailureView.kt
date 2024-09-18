@@ -113,7 +113,11 @@ fun ResolveVerifiedUserSendFailureView(
 @Composable
 private fun VerifiedUserSendFailure.title(): String {
     return when (this) {
-        is VerifiedUserSendFailure.UnsignedDevice -> stringResource(id = CommonStrings.screen_resolve_send_failure_unsigned_device_title, userDisplayName)
+        is VerifiedUserSendFailure.UnsignedDevice.FromOther -> stringResource(
+            id = CommonStrings.screen_resolve_send_failure_unsigned_device_title,
+            userDisplayName
+        )
+        VerifiedUserSendFailure.UnsignedDevice.FromYou -> stringResource(id = CommonStrings.screen_resolve_send_failure_you_unsigned_device_title)
         is VerifiedUserSendFailure.ChangedIdentity -> stringResource(
             id = CommonStrings.screen_resolve_send_failure_changed_identity_title,
             userDisplayName
@@ -125,11 +129,12 @@ private fun VerifiedUserSendFailure.title(): String {
 @Composable
 private fun VerifiedUserSendFailure.subtitle(): String {
     return when (this) {
-        is VerifiedUserSendFailure.UnsignedDevice -> stringResource(
+        is VerifiedUserSendFailure.UnsignedDevice.FromOther -> stringResource(
             id = CommonStrings.screen_resolve_send_failure_unsigned_device_subtitle,
             userDisplayName,
             userDisplayName,
         )
+        VerifiedUserSendFailure.UnsignedDevice.FromYou -> stringResource(id = CommonStrings.screen_resolve_send_failure_you_unsigned_device_subtitle)
         is VerifiedUserSendFailure.ChangedIdentity -> stringResource(
             id = CommonStrings.screen_resolve_send_failure_changed_identity_subtitle,
             userDisplayName
