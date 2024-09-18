@@ -13,7 +13,6 @@ import org.matrix.rustcomponents.sdk.NoPointer
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomListItem
 
-// Note: should implement RoomListItemInterface instead, but this is not possible yet.
 class FakeRoomListItem(
     private val roomId: RoomId,
     private val roomInfo: RoomInfo = aRustRoomInfo(id = roomId.value),

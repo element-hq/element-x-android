@@ -11,8 +11,6 @@ import org.matrix.rustcomponents.sdk.NoPointer
 import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomMembersIterator
 
-// Note: need to extend RoomMembersIterator until RoomInterface.members() and
-// RoomInterface.membersNoSync() returns RoomMembersIteratorInterface
 class FakeRoomMembersIterator(
     private var members: List<RoomMember>? = null
 ) : RoomMembersIterator(NoPointer) {
