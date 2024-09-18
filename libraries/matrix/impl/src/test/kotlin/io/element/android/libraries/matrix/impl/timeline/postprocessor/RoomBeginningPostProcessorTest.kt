@@ -13,7 +13,6 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import org.junit.Test
 
 class RoomBeginningPostProcessorTest {
-
     @Test
     fun `processor returns empty list when empty list is provided`() {
         val processor = RoomBeginningPostProcessor(Timeline.Mode.LIVE)

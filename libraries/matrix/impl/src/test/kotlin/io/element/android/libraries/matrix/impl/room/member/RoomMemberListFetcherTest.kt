@@ -11,9 +11,9 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.roomMembers
-import io.element.android.libraries.matrix.impl.fixtures.FakeRustRoom
-import io.element.android.libraries.matrix.impl.fixtures.FakeRustRoomMembersIterator
-import io.element.android.libraries.matrix.impl.fixtures.aRustRoomMember
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoom
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoomMembersIterator
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomMember
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher.Source.CACHE
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher.Source.CACHE_AND_SERVER
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher.Source.SERVER

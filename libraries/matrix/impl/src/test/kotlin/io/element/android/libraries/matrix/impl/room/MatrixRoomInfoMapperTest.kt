@@ -15,8 +15,9 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.matrix.impl.room.member.aRustRoomMember
-import io.element.android.libraries.matrix.impl.roomlist.aRustRoomInfo
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomHero
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomInfo
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomMember
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
@@ -52,7 +53,7 @@ class MatrixRoomInfoMapperTest {
                     alternativeAliases = listOf(A_ROOM_ALIAS.value),
                     membership = Membership.JOINED,
                     inviter = aRustRoomMember(A_USER_ID),
-                    heroes = listOf(aRoomHero()),
+                    heroes = listOf(aRustRoomHero()),
                     activeMembersCount = 2uL,
                     invitedMembersCount = 3uL,
                     joinedMembersCount = 4uL,
@@ -67,7 +68,7 @@ class MatrixRoomInfoMapperTest {
                     numUnreadNotifications = 13uL,
                     numUnreadMentions = 14uL,
                     pinnedEventIds = listOf(AN_EVENT_ID.value),
-                    roomCreator = A_USER_ID.value,
+                    roomCreator = A_USER_ID,
                 )
             )
         ).isEqualTo(
@@ -127,7 +128,7 @@ class MatrixRoomInfoMapperTest {
                     alternativeAliases = emptyList(),
                     membership = Membership.INVITED,
                     inviter = null,
-                    heroes = listOf(aRoomHero()),
+                    heroes = listOf(aRustRoomHero()),
                     activeMembersCount = 2uL,
                     invitedMembersCount = 3uL,
                     joinedMembersCount = 4uL,

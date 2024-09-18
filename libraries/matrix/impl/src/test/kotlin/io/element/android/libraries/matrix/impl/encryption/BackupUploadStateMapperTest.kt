@@ -15,19 +15,21 @@ import org.matrix.rustcomponents.sdk.BackupUploadState as RustBackupUploadState
 class BackupUploadStateMapperTest {
     @Test
     fun `Ensure that mapping is correct`() {
-        assertThat(BackupUploadStateMapper().map(RustBackupUploadState.Waiting))
+        val sut = BackupUploadStateMapper()
+        assertThat(sut.map(RustBackupUploadState.Waiting))
             .isEqualTo(BackupUploadState.Waiting)
-        assertThat(BackupUploadStateMapper().map(RustBackupUploadState.Error))
+        assertThat(sut.map(RustBackupUploadState.Error))
             .isEqualTo(BackupUploadState.Error)
-        assertThat(BackupUploadStateMapper().map(RustBackupUploadState.Done))
+        assertThat(sut.map(RustBackupUploadState.Done))
             .isEqualTo(BackupUploadState.Done)
-        assertThat(BackupUploadStateMapper().map(RustBackupUploadState.Uploading(1.toUInt(), 2.toUInt())))
+        assertThat(sut.map(RustBackupUploadState.Uploading(1.toUInt(), 2.toUInt())))
             .isEqualTo(BackupUploadState.Uploading(1, 2))
     }
 
     @Test
     fun `Ensure that full uploading is mapper to Done`() {
-        assertThat(BackupUploadStateMapper().map(RustBackupUploadState.Uploading(2.toUInt(), 2.toUInt())))
+        val sut = BackupUploadStateMapper()
+        assertThat(sut.map(RustBackupUploadState.Uploading(2.toUInt(), 2.toUInt())))
             .isEqualTo(BackupUploadState.Done)
     }
 }

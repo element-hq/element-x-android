@@ -15,12 +15,13 @@ import org.matrix.rustcomponents.sdk.BackupState as RustBackupState
 class BackupStateMapperTest {
     @Test
     fun `Ensure that mapping is correct`() {
-        assertThat(BackupStateMapper().map(RustBackupState.UNKNOWN)).isEqualTo(BackupState.UNKNOWN)
-        assertThat(BackupStateMapper().map(RustBackupState.CREATING)).isEqualTo(BackupState.CREATING)
-        assertThat(BackupStateMapper().map(RustBackupState.ENABLING)).isEqualTo(BackupState.ENABLING)
-        assertThat(BackupStateMapper().map(RustBackupState.RESUMING)).isEqualTo(BackupState.RESUMING)
-        assertThat(BackupStateMapper().map(RustBackupState.ENABLED)).isEqualTo(BackupState.ENABLED)
-        assertThat(BackupStateMapper().map(RustBackupState.DOWNLOADING)).isEqualTo(BackupState.DOWNLOADING)
-        assertThat(BackupStateMapper().map(RustBackupState.DISABLING)).isEqualTo(BackupState.DISABLING)
+        val sut = BackupStateMapper()
+        assertThat(sut.map(RustBackupState.UNKNOWN)).isEqualTo(BackupState.UNKNOWN)
+        assertThat(sut.map(RustBackupState.CREATING)).isEqualTo(BackupState.CREATING)
+        assertThat(sut.map(RustBackupState.ENABLING)).isEqualTo(BackupState.ENABLING)
+        assertThat(sut.map(RustBackupState.RESUMING)).isEqualTo(BackupState.RESUMING)
+        assertThat(sut.map(RustBackupState.ENABLED)).isEqualTo(BackupState.ENABLED)
+        assertThat(sut.map(RustBackupState.DOWNLOADING)).isEqualTo(BackupState.DOWNLOADING)
+        assertThat(sut.map(RustBackupState.DISABLING)).isEqualTo(BackupState.DISABLING)
     }
 }

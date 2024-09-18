@@ -25,5 +25,3 @@ class QrLoginProgressExtensionsKtTest {
             .isEqualTo(QrCodeLoginStep.Finished)
     }
 }
-
-

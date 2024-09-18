@@ -15,17 +15,18 @@ import org.matrix.rustcomponents.sdk.EnableRecoveryProgress as RustEnableRecover
 class EnableRecoveryProgressMapperTest {
     @Test
     fun `Ensure that mapping is correct`() {
-        assertThat(EnableRecoveryProgressMapper().map(RustEnableRecoveryProgress.CreatingRecoveryKey))
+        val sut = EnableRecoveryProgressMapper()
+        assertThat(sut.map(RustEnableRecoveryProgress.CreatingRecoveryKey))
             .isEqualTo(EnableRecoveryProgress.CreatingRecoveryKey)
-        assertThat(EnableRecoveryProgressMapper().map(RustEnableRecoveryProgress.CreatingBackup))
+        assertThat(sut.map(RustEnableRecoveryProgress.CreatingBackup))
             .isEqualTo(EnableRecoveryProgress.CreatingBackup)
-        assertThat(EnableRecoveryProgressMapper().map(RustEnableRecoveryProgress.Starting))
+        assertThat(sut.map(RustEnableRecoveryProgress.Starting))
             .isEqualTo(EnableRecoveryProgress.Starting)
-        assertThat(EnableRecoveryProgressMapper().map(RustEnableRecoveryProgress.BackingUp(1.toUInt(), 2.toUInt())))
+        assertThat(sut.map(RustEnableRecoveryProgress.BackingUp(1.toUInt(), 2.toUInt())))
             .isEqualTo(EnableRecoveryProgress.BackingUp(1, 2))
-        assertThat(EnableRecoveryProgressMapper().map(RustEnableRecoveryProgress.RoomKeyUploadError))
+        assertThat(sut.map(RustEnableRecoveryProgress.RoomKeyUploadError))
             .isEqualTo(EnableRecoveryProgress.RoomKeyUploadError)
-        assertThat(EnableRecoveryProgressMapper().map(RustEnableRecoveryProgress.Done("recoveryKey")))
+        assertThat(sut.map(RustEnableRecoveryProgress.Done("recoveryKey")))
             .isEqualTo(EnableRecoveryProgress.Done("recoveryKey"))
     }
 }

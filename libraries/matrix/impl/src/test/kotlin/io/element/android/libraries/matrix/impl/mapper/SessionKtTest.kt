@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.impl.mapper
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustSession
 import io.element.android.libraries.matrix.impl.paths.SessionPaths
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
@@ -16,7 +17,6 @@ import io.element.android.libraries.matrix.test.A_SECRET
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.sessionstorage.api.LoginType
 import org.junit.Test
-import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 import java.io.File
 
@@ -81,18 +81,4 @@ class SessionKtTest {
         )
         assertThat(result.slidingSyncProxy).isEqualTo("proxyUrl")
     }
-}
-
-internal fun aRustSession(
-    proxy: SlidingSyncVersion = SlidingSyncVersion.None
-): Session {
-    return Session(
-        accessToken = "accessToken",
-        refreshToken = "refreshToken",
-        userId = A_USER_ID.value,
-        deviceId = A_DEVICE_ID.value,
-        homeserverUrl = A_HOMESERVER_URL,
-        oidcData = null,
-        slidingSyncVersion = proxy,
-    )
 }

@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.matrix.rustcomponents.sdk.TimelineChange
-import org.matrix.rustcomponents.sdk.TimelineDiffInterface
+import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineItem
 import timber.log.Timber
 
@@ -36,7 +36,7 @@ internal class MatrixTimelineDiffProcessor(
         }
     }
 
-    suspend fun postDiffs(diffs: List<TimelineDiffInterface>) {
+    suspend fun postDiffs(diffs: List<TimelineDiff>) {
         updateTimelineItems {
             Timber.v("Update timeline items from postDiffs (with ${diffs.size} items) on ${Thread.currentThread()}")
             diffs.forEach { diff ->
@@ -52,7 +52,7 @@ internal class MatrixTimelineDiffProcessor(
             timelineItems.value = mutableTimelineItems
         }
 
-    private fun MutableList<MatrixTimelineItem>.applyDiff(diff: TimelineDiffInterface) {
+    private fun MutableList<MatrixTimelineItem>.applyDiff(diff: TimelineDiff) {
         when (diff.change()) {
             TimelineChange.APPEND -> {
                 val items = diff.append()?.map { it.asMatrixTimelineItem() } ?: return

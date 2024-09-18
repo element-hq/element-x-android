@@ -10,10 +10,10 @@ package io.element.android.libraries.matrix.impl.room
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.matrix.impl.fixtures.aRustRoomInfo
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomHero
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomInfo
 import io.element.android.libraries.matrix.test.A_USER_ID
 import org.junit.Test
-import org.matrix.rustcomponents.sdk.RoomHero
 
 class RoomInfoExtTest {
     @Test
@@ -21,7 +21,7 @@ class RoomInfoExtTest {
         val result = aRustRoomInfo(
             isDirect = true,
             activeMembersCount = 2uL,
-            heroes = listOf(aRoomHero())
+            heroes = listOf(aRustRoomHero())
         ).elementHeroes()
         assertThat(result).isEqualTo(
             listOf(
@@ -39,7 +39,7 @@ class RoomInfoExtTest {
         val result = aRustRoomInfo(
             isDirect = true,
             activeMembersCount = 2uL,
-            heroes = listOf(aRoomHero(), aRoomHero())
+            heroes = listOf(aRustRoomHero(), aRustRoomHero())
         ).elementHeroes()
         assertThat(result).isEmpty()
     }
@@ -49,7 +49,7 @@ class RoomInfoExtTest {
         val result = aRustRoomInfo(
             isDirect = false,
             activeMembersCount = 2uL,
-            heroes = listOf(aRoomHero())
+            heroes = listOf(aRustRoomHero())
         ).elementHeroes()
         assertThat(result).isEmpty()
     }
@@ -59,18 +59,9 @@ class RoomInfoExtTest {
         val result = aRustRoomInfo(
             isDirect = true,
             activeMembersCount = 3uL,
-            heroes = listOf(aRoomHero())
+            heroes = listOf(aRustRoomHero())
         ).elementHeroes()
         assertThat(result).isEmpty()
     }
 }
 
-internal fun aRoomHero(
-    userId: UserId = A_USER_ID,
-): RoomHero {
-    return RoomHero(
-        userId = userId.value,
-        displayName = "displayName",
-        avatarUrl = "avatarUrl",
-    )
-}

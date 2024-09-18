@@ -10,10 +10,10 @@ package io.element.android.libraries.matrix.impl.room.preview
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomPreview
 import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import org.junit.Test
-import org.matrix.rustcomponents.sdk.RoomPreview as RustRoomPreview
 
 class RoomPreviewMapperTest {
     @Test
@@ -70,27 +70,4 @@ class RoomPreviewMapperTest {
             )
         )
     }
-}
-
-internal fun aRustRoomPreview(
-    canonicalAlias: String? = A_ROOM_ALIAS.value,
-    isJoined: Boolean = true,
-    isInvited: Boolean = true,
-    isPublic: Boolean = true,
-    canKnock: Boolean = true,
-): RustRoomPreview {
-    return RustRoomPreview(
-        roomId = A_ROOM_ID.value,
-        canonicalAlias = canonicalAlias,
-        name = "name",
-        topic = "topic",
-        avatarUrl = "avatarUrl",
-        numJoinedMembers = 1u,
-        roomType = null,
-        isHistoryWorldReadable = true,
-        isJoined = isJoined,
-        isInvited = isInvited,
-        isPublic = isPublic,
-        canKnock = canKnock,
-    )
 }

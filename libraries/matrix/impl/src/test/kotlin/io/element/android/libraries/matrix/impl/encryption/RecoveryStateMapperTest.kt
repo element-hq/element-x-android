@@ -15,9 +15,10 @@ import org.matrix.rustcomponents.sdk.RecoveryState as RustRecoveryState
 class RecoveryStateMapperTest {
     @Test
     fun `Ensure that mapping is correct`() {
-        assertThat(RecoveryStateMapper().map(RustRecoveryState.UNKNOWN)).isEqualTo(RecoveryState.UNKNOWN)
-        assertThat(RecoveryStateMapper().map(RustRecoveryState.ENABLED)).isEqualTo(RecoveryState.ENABLED)
-        assertThat(RecoveryStateMapper().map(RustRecoveryState.DISABLED)).isEqualTo(RecoveryState.DISABLED)
-        assertThat(RecoveryStateMapper().map(RustRecoveryState.INCOMPLETE)).isEqualTo(RecoveryState.INCOMPLETE)
+        val sut = RecoveryStateMapper()
+        assertThat(sut.map(RustRecoveryState.UNKNOWN)).isEqualTo(RecoveryState.UNKNOWN)
+        assertThat(sut.map(RustRecoveryState.ENABLED)).isEqualTo(RecoveryState.ENABLED)
+        assertThat(sut.map(RustRecoveryState.DISABLED)).isEqualTo(RecoveryState.DISABLED)
+        assertThat(sut.map(RustRecoveryState.INCOMPLETE)).isEqualTo(RecoveryState.INCOMPLETE)
     }
 }

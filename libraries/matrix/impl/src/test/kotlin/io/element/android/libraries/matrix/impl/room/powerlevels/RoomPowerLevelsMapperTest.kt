@@ -9,15 +9,15 @@ package io.element.android.libraries.matrix.impl.room.powerlevels
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomPowerLevels
 import org.junit.Test
-import org.matrix.rustcomponents.sdk.RoomPowerLevels as RustRoomPowerLevels
 
 class RoomPowerLevelsMapperTest {
     @Test
     fun `test that mapping of RoomPowerLevels is correct`() {
         assertThat(
             RoomPowerLevelsMapper.map(
-                RustRoomPowerLevels(
+                aRustRoomPowerLevels(
                     ban = 1,
                     invite = 2,
                     kick = 3,

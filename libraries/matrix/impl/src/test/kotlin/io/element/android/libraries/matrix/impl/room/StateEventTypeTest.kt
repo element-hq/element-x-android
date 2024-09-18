@@ -8,9 +8,8 @@
 package io.element.android.libraries.matrix.impl.room
 
 import com.google.common.truth.Truth.assertThat
-import org.junit.Test
-
 import io.element.android.libraries.matrix.api.room.StateEventType
+import org.junit.Test
 import org.matrix.rustcomponents.sdk.StateEventType as RustStateEventType
 
 class StateEventTypeTest {

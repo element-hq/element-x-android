@@ -9,14 +9,14 @@ package io.element.android.libraries.matrix.impl.usersearch
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustUserProfile
 import io.element.android.libraries.matrix.test.A_USER_ID
 import org.junit.Test
-import org.matrix.rustcomponents.sdk.UserProfile
 
 class UserProfileMapperTest {
     @Test
     fun map() {
-        assertThat(UserProfileMapper.map(UserProfile(A_USER_ID.value, "displayName", "avatarUrl")))
+        assertThat(UserProfileMapper.map(aRustUserProfile(A_USER_ID.value, "displayName", "avatarUrl")))
             .isEqualTo(MatrixUser(A_USER_ID, "displayName", "avatarUrl"))
     }
 }

@@ -10,7 +10,7 @@ package io.element.android.libraries.matrix.impl.roomlist
 import com.google.common.truth.Truth.assertThat
 import com.sun.jna.Pointer
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import io.element.android.libraries.matrix.impl.fixtures.FakeRustRoomListItem
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoomListItem
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_ID_3

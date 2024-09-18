@@ -12,7 +12,6 @@ import io.element.android.libraries.matrix.api.poll.PollKind
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.PollKind as RustPollKind
 
-
 class PollKindKtTest {
     @Test
     fun `map should return Disclosed when RustPollKind is Disclosed`() {
