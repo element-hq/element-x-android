@@ -113,28 +113,33 @@ fun ResolveVerifiedUserSendFailureView(
 @Composable
 private fun VerifiedUserSendFailure.title(): String {
     return when (this) {
-        is VerifiedUserSendFailure.UnsignedDevice -> stringResource(id = CommonStrings.screen_resolve_send_failure_unsigned_device_title, userDisplayName)
+        is VerifiedUserSendFailure.UnsignedDevice.FromOther -> stringResource(
+            id = CommonStrings.screen_resolve_send_failure_unsigned_device_title,
+            userDisplayName
+        )
+        VerifiedUserSendFailure.UnsignedDevice.FromYou -> stringResource(id = CommonStrings.screen_resolve_send_failure_you_unsigned_device_title)
         is VerifiedUserSendFailure.ChangedIdentity -> stringResource(
             id = CommonStrings.screen_resolve_send_failure_changed_identity_title,
             userDisplayName
         )
-        VerifiedUserSendFailure.None -> error("This method should never be called for this state")
+        VerifiedUserSendFailure.None -> ""
     }
 }
 
 @Composable
 private fun VerifiedUserSendFailure.subtitle(): String {
     return when (this) {
-        is VerifiedUserSendFailure.UnsignedDevice -> stringResource(
+        is VerifiedUserSendFailure.UnsignedDevice.FromOther -> stringResource(
             id = CommonStrings.screen_resolve_send_failure_unsigned_device_subtitle,
             userDisplayName,
             userDisplayName,
         )
+        VerifiedUserSendFailure.UnsignedDevice.FromYou -> stringResource(id = CommonStrings.screen_resolve_send_failure_you_unsigned_device_subtitle)
         is VerifiedUserSendFailure.ChangedIdentity -> stringResource(
             id = CommonStrings.screen_resolve_send_failure_changed_identity_subtitle,
             userDisplayName
         )
-        VerifiedUserSendFailure.None -> error("This method should never be called for this state")
+        VerifiedUserSendFailure.None -> ""
     }
 }
 
@@ -143,7 +148,7 @@ private fun VerifiedUserSendFailure.resolveAction(): String {
     return when (this) {
         is VerifiedUserSendFailure.UnsignedDevice -> stringResource(id = CommonStrings.screen_resolve_send_failure_unsigned_device_primary_button_title)
         is VerifiedUserSendFailure.ChangedIdentity -> stringResource(id = CommonStrings.screen_resolve_send_failure_changed_identity_primary_button_title)
-        VerifiedUserSendFailure.None -> error("This method should never be called for this state")
+        VerifiedUserSendFailure.None -> ""
     }
 }
 

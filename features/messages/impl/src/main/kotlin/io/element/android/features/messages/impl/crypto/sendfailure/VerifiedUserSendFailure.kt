@@ -13,9 +13,10 @@ import androidx.compose.runtime.Immutable
 sealed interface VerifiedUserSendFailure {
     data object None : VerifiedUserSendFailure
 
-    data class UnsignedDevice(
-        val userDisplayName: String,
-    ) : VerifiedUserSendFailure
+    sealed interface UnsignedDevice : VerifiedUserSendFailure {
+        data object FromYou : UnsignedDevice
+        data class FromOther(val userDisplayName: String) : UnsignedDevice
+    }
 
     data class ChangedIdentity(
         val userDisplayName: String,

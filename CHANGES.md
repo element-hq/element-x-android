@@ -1,3 +1,9 @@
+Changes in Element X v0.6.2 (2024-09-17)
+========================================
+
+### ✨ Features
+* Account deactivation. by @bmarty in https://github.com/element-hq/element-x-android/pull/3479
+
 Changes in Element X v0.6.1 (2024-09-17)
 ========================================
 
