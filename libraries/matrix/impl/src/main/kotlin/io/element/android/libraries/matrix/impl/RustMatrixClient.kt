@@ -141,7 +141,7 @@ class RustMatrixClient(
     )
 
     // Note: need to force casting to ClientSyncService for now
-    private val notificationProcessSetup = NotificationProcessSetup.SingleProcess((syncService as ClientSyncService))
+    private val notificationProcessSetup = NotificationProcessSetup.SingleProcess(syncService as ClientSyncService)
     private val notificationClient = runBlocking { client.notificationClient(notificationProcessSetup) }
     private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
     private val notificationSettingsService = RustNotificationSettingsService(client, dispatchers)
