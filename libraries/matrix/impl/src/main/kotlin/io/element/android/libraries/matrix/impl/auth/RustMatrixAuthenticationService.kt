@@ -42,6 +42,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.ClientBuildException
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.HumanQrLoginException
 import org.matrix.rustcomponents.sdk.OidcConfiguration
@@ -292,7 +293,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                     )
                     .config()
                     .build()
-            } catch (e: HumanQrLoginException.SlidingSyncNotAvailable) {
+            } catch (e: ClientBuildException.SlidingSyncVersion) {
                 Timber.e(e, "Failed to create client with simplified sliding sync, trying with Proxy now")
             }
         }
