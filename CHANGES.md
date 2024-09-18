@@ -1,3 +1,54 @@
+Changes in Element X v0.6.2 (2024-09-17)
+========================================
+
+### ✨ Features
+* Account deactivation. by @bmarty in https://github.com/element-hq/element-x-android/pull/3479
+
+Changes in Element X v0.6.1 (2024-09-17)
+========================================
+
+### ✨ Features
+* Add forced logout flow when the proxy is no longer available by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3458
+* Temporary account creation using Element Web. by @bmarty in https://github.com/element-hq/element-x-android/pull/3467
+
+### 🙌 Improvements
+* Feature/valere/invisible crypto feature flag by @BillCarsonFr in https://github.com/element-hq/element-x-android/pull/3451
+* Require acknowledgement to send to a verified user if their identity changed or if a device is unverified. by @ganfra in https://github.com/element-hq/element-x-android/pull/3461
+* Update pinned message actions by @ganfra in https://github.com/element-hq/element-x-android/pull/3438
+
+### 🐛 Bugfixes
+* Fix events blinking at the beginning of DM by @bmarty in https://github.com/element-hq/element-x-android/pull/3449
+* Fix not being able to decline an invite from the room list by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3466
+
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/3464
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/3469
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/3476
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/3477
+
+### Others
+* Upgrade Rust sdk to 0.2.45 by @bmarty in https://github.com/element-hq/element-x-android/pull/3472
+* SDK 0.2.46 by @bmarty in https://github.com/element-hq/element-x-android/pull/3475
+
+Changes in Element X v0.6.0 (2024-09-12)
+========================================
+
+### 🙌 Improvements
+* Enables pinned messages feature by default. by @ganfra in https://github.com/element-hq/element-x-android/pull/3439
+* Pinned messages list : hide reactions by @ganfra in https://github.com/element-hq/element-x-android/pull/3430
+
+### 🐛 Bugfixes
+* Feature/fga/pinned messages fix timeline provider by @ganfra in https://github.com/element-hq/element-x-android/pull/3432
+
+### Dependency upgrades
+* Update activity to v1.9.2 by @renovate in https://github.com/element-hq/element-x-android/pull/3397
+* Update peter-evans/create-pull-request action to v7 by @renovate in https://github.com/element-hq/element-x-android/pull/3383
+* Rust sdk upgrade to 0.2.43 by @bmarty in https://github.com/element-hq/element-x-android/pull/3446
+
+### Others
+* DeviceId and cleanup. by @bmarty in https://github.com/element-hq/element-x-android/pull/3442
+* Update application store assets by @bmarty in https://github.com/element-hq/element-x-android/pull/3441
+
 Changes in Element X v0.5.3 (2024-09-10)
 ========================================
 

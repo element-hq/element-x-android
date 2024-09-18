@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_join_action">"Toetreden tot de kamer"</string>
+  <string name="screen_join_room_knock_action">"Klop om deel te nemen"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s ondersteunt nog geen spaces. Je kunt spaces benaderen via de webbrowser."</string>
+  <string name="screen_join_room_space_not_supported_title">"Spaces worden nog niet ondersteund"</string>
+  <string name="screen_join_room_subtitle_knock">"Klik op de knop hieronder en een kamerbeheerder wordt op de hoogte gebracht. Na goedkeuring kun je deelnemen aan het gesprek."</string>
+  <string name="screen_join_room_subtitle_no_preview">"Je moet lid zijn van deze kamer om de berichtgeschiedenis te bekijken."</string>
+  <string name="screen_join_room_title_knock">"Wil je tot deze kamer toetreden?"</string>
+  <string name="screen_join_room_title_no_preview">"Voorbeeld is niet beschikbaar"</string>
+</resources>

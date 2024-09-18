@@ -119,7 +119,6 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
         targetEvent: TimelineItem.Event,
     ) = launch {
         when (action) {
-            TimelineItemAction.Redact -> handleActionRedact(targetEvent)
             TimelineItemAction.ViewSource -> {
                 navigator.onShowEventDebugInfoClick(targetEvent.eventId, targetEvent.debugInfo)
             }
@@ -146,13 +145,6 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
                     Timber.e(it, "Failed to unpin event ${targetEvent.eventId}")
                     snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_error))
                 }
-        }
-    }
-
-    private suspend fun handleActionRedact(event: TimelineItem.Event) {
-        timelineProvider.invokeOnTimeline {
-            redactEvent(eventId = event.eventId, transactionId = event.transactionId, reason = null)
-                .onFailure { Timber.e(it) }
         }
     }
 

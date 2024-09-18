@@ -38,7 +38,7 @@ internal class TimelineItemsSubscriber(
     private val timeline: Timeline,
     private val timelineDiffProcessor: MatrixTimelineDiffProcessor,
     private val initLatch: CompletableDeferred<Unit>,
-    private val isInit: MutableStateFlow<Boolean>,
+    private val isTimelineInitialized: MutableStateFlow<Boolean>,
     private val onNewSyncedEvent: () -> Unit,
 ) {
     private var subscriptionCount = 0
@@ -85,13 +85,13 @@ internal class TimelineItemsSubscriber(
             ensureActive()
             timelineDiffProcessor.postItems(it)
         }
-        isInit.value = true
+        isTimelineInitialized.value = true
         initLatch.complete(Unit)
     }
 
     private suspend fun postDiffs(diffs: List<TimelineDiff>) {
         val diffsToProcess = diffs.toMutableList()
-        if (!isInit.value) {
+        if (!isTimelineInitialized.value) {
             val resetDiff = diffsToProcess.firstOrNull { it.change() == TimelineChange.RESET }
             if (resetDiff != null) {
                 // Keep using the postItems logic so we can post the timelineItems asap.

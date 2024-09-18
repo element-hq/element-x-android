@@ -21,6 +21,8 @@ import dagger.assisted.AssistedInject
 import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.error.ChangeServerError
+import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
+import io.element.android.features.login.impl.web.WebClientUrlForAuthenticationRetriever
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -36,6 +38,7 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
     private val authenticationService: MatrixAuthenticationService,
     private val oidcActionFlow: OidcActionFlow,
     private val defaultLoginUserStory: DefaultLoginUserStory,
+    private val webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever,
 ) : Presenter<ConfirmAccountProviderState> {
     data class Params(
         val isAccountCreation: Boolean,
@@ -90,13 +93,24 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
                 if (matrixHomeServerDetails.supportsOidcLogin) {
                     // Retrieve the details right now
                     LoginFlow.OidcFlow(authenticationService.getOidcUrl().getOrThrow())
+                } else if (params.isAccountCreation) {
+                    val url = webClientUrlForAuthenticationRetriever.retrieve(homeserverUrl)
+                    LoginFlow.AccountCreationFlow(url)
                 } else if (matrixHomeServerDetails.supportsPasswordLogin) {
                     LoginFlow.PasswordLogin
                 } else {
                     error("Unsupported login flow")
                 }
             }.getOrThrow()
-        }.runCatchingUpdatingState(loginFlowAction, errorTransform = ChangeServerError::from)
+        }.runCatchingUpdatingState(
+            state = loginFlowAction,
+            errorTransform = {
+                when (it) {
+                    is AccountCreationNotSupported -> it
+                    else -> ChangeServerError.from(it)
+                }
+            }
+        )
     }
 
     private suspend fun onOidcAction(

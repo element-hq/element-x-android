@@ -36,7 +36,7 @@ fun FocusRequestStateView(
             }
             ErrorDialog(
                 content = errorMessage,
-                onDismiss = onClearFocusRequestState,
+                onSubmit = onClearFocusRequestState,
                 modifier = modifier,
             )
         }

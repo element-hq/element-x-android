@@ -13,5 +13,6 @@ data class LoggedInState(
     val showSyncSpinner: Boolean,
     val pusherRegistrationState: AsyncData<Unit>,
     val ignoreRegistrationError: Boolean,
+    val forceNativeSlidingSyncMigration: Boolean,
     val eventSink: (LoggedInEvents) -> Unit,
 )

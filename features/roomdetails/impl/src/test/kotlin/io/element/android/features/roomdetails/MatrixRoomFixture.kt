@@ -31,7 +31,7 @@ fun aMatrixRoom(
     emitRoomInfo: Boolean = false,
     canInviteResult: (UserId) -> Result<Boolean> = { lambdaError() },
     canSendStateResult: (UserId, StateEventType) -> Result<Boolean> = { _, _ -> lambdaError() },
-    userDisplayNameResult: () -> Result<String?> = { lambdaError() },
+    userDisplayNameResult: (UserId) -> Result<String?> = { lambdaError() },
     userAvatarUrlResult: () -> Result<String?> = { lambdaError() },
     setNameResult: (String) -> Result<Unit> = { lambdaError() },
     setTopicResult: (String) -> Result<Unit> = { lambdaError() },

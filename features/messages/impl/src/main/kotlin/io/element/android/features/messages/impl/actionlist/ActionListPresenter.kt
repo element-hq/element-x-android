@@ -22,6 +22,8 @@ import io.element.android.features.messages.api.pinned.IsPinnedMessagesFeatureEn
 import io.element.android.features.messages.impl.UserEventPermissions
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
+import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure
+import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailureFactory
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
@@ -56,6 +58,7 @@ class DefaultActionListPresenter @AssistedInject constructor(
     private val appPreferencesStore: AppPreferencesStore,
     private val isPinnedMessagesFeatureEnabled: IsPinnedMessagesFeatureEnabled,
     private val room: MatrixRoom,
+    private val userSendFailureFactory: VerifiedUserSendFailureFactory,
 ) : ActionListPresenter {
     @AssistedFactory
     @ContributesBinding(RoomScope::class)
@@ -115,12 +118,14 @@ class DefaultActionListPresenter @AssistedInject constructor(
             isEventPinned = pinnedEventIds.contains(timelineItem.eventId),
         )
 
-        val displayEmojiReactions = usersEventPermissions.canSendReaction &&
-            timelineItem.content.canReact()
-        if (actions.isNotEmpty() || displayEmojiReactions) {
+        val verifiedUserSendFailure = userSendFailureFactory.create(timelineItem.localSendState)
+        val displayEmojiReactions = usersEventPermissions.canSendReaction && timelineItem.content.canReact()
+
+        if (actions.isNotEmpty() || displayEmojiReactions || verifiedUserSendFailure != VerifiedUserSendFailure.None) {
             target.value = ActionListState.Target.Success(
                 event = timelineItem,
                 displayEmojiReactions = displayEmojiReactions,
+                verifiedUserSendFailure = verifiedUserSendFailure,
                 actions = actions.toImmutableList()
             )
         } else {
@@ -190,9 +195,9 @@ private fun List<TimelineItemAction>.postFilter(content: TimelineItemEventConten
         when (content) {
             is TimelineItemCallNotifyContent,
             is TimelineItemLegacyCallInviteContent,
-            is TimelineItemStateContent,
+            is TimelineItemStateContent -> action == TimelineItemAction.ViewSource
             is TimelineItemRedactedContent -> {
-                action == TimelineItemAction.ViewSource
+                action == TimelineItemAction.ViewSource || action == TimelineItemAction.Unpin
             }
             else -> true
         }

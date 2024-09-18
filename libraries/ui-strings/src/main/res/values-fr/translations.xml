@@ -36,6 +36,7 @@
   <string name="action_back">"Retour"</string>
   <string name="action_call">"Appel"</string>
   <string name="action_cancel">"Annuler"</string>
+  <string name="action_cancel_for_now">"Annuler pour l’instant"</string>
   <string name="action_choose_photo">"Choisir une photo"</string>
   <string name="action_clear">"Effacer"</string>
   <string name="action_close">"Fermer"</string>
@@ -249,6 +250,7 @@ Raison: %1$s."</string>
   <string name="dialog_title_warning">"Attention"</string>
   <string name="dialog_unsaved_changes_description_android">"Vos modifications n’ont pas été enregistrées. Êtes-vous certain de vouloir quitter?"</string>
   <string name="dialog_unsaved_changes_title">"Enregistrer les changements?"</string>
+  <string name="error_account_creation_not_possible">"Votre serveur d’accueil doit être mis à jour pour prendre en charge le protocole MAS (Matrix Authentication Service) et la création de compte."</string>
   <string name="error_failed_creating_the_permalink">"Échec de la création du permalien"</string>
   <string name="error_failed_loading_map">"%1$s n’a pas pu charger la carte. Veuillez réessayer ultérieurement."</string>
   <string name="error_failed_loading_messages">"Échec du chargement des messages"</string>
@@ -280,6 +282,14 @@ Raison: %1$s."</string>
     <item quantity="other">"%1$d messages épinglés"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Messages épinglés"</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"Vous êtes sur le point d’accéder à votre compte %1$s pour réinitialiser votre identité. Vous serez ensuite redirigé vers l’application."</string>
+  <string name="screen_reset_identity_confirmation_title">"Vous ne pouvez pas confirmer ? Accédez à votre compte pour réinitialiser votre identité."</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Révoquer la verification et envoyer"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Vous pouvez révoquer la verification et envoyer ce message, ou vous pouvez annuler pour l’instant et réessayer plus tard après avoir vérifié à nouveau %1$s."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Votre message n’a pas été envoyé car l’identité vérifiée de %1$s a changé"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Envoyer le message quand même"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s utilise un ou plusieurs appareils non vérifiés. Vous pouvez quand même envoyer le message, ou vous pouvez annuler pour l’instant et réessayer plus tard après que %2$s vérifie tous ses appareils."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Votre message n’a pas été envoyé car %1$s n’a pas vérifié tous ses appareils"</string>
   <string name="screen_room_details_pinned_events_row_title">"Messages épinglés"</string>
   <string name="screen_room_error_failed_processing_media">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Impossible de récupérer les détails de l’utilisateur"</string>
@@ -301,6 +311,8 @@ Raison: %1$s."</string>
   <string name="screen_share_open_google_maps">"Ouvrir dans Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Ouvrir dans OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Partager cette position"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Le message n’a pas été envoyé car l’identité vérifiée de %1$s a changé."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Le message n’a pas été envoyé car %1$s n’a pas vérifié tous ses appareils."</string>
   <string name="screen_view_location_title">"Position"</string>
   <string name="settings_version_number">"Version : %1$s ( %2$s )"</string>
   <string name="test_language_identifier">"fr"</string>

@@ -38,7 +38,6 @@
   <string name="screen_recovery_key_confirm_error_content">"Будь ласка, спробуйте ще раз, щоб підтвердити доступ до резервної копії чату."</string>
   <string name="screen_recovery_key_confirm_error_title">"Неправильний ключ відновлення"</string>
   <string name="screen_recovery_key_confirm_key_description">"Якщо у вас є ключ безпеки або фраза безпеки, це теж спрацює."</string>
-  <string name="screen_recovery_key_confirm_key_label">"Ключ відновлення або код допуску"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Ввести…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Загубили ключ відновлення?"</string>
   <string name="screen_recovery_key_confirm_success">"Ключ відновлення підтверджено"</string>

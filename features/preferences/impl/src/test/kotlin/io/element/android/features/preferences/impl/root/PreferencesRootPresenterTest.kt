@@ -10,6 +10,7 @@ package io.element.android.features.preferences.impl.root
 import androidx.compose.runtime.Composable
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
+import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.logout.api.direct.DirectLogoutPresenter
@@ -45,7 +46,7 @@ class PreferencesRootPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val matrixClient = FakeMatrixClient()
+        val matrixClient = FakeMatrixClient(canDeactivateAccountResult = { true })
         val presenter = createPresenter(matrixClient = matrixClient)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -76,8 +77,24 @@ class PreferencesRootPresenterTest {
             assertThat(loadedState.showDeveloperSettings).isTrue()
             assertThat(loadedState.showLockScreenSettings).isTrue()
             assertThat(loadedState.showNotificationSettings).isTrue()
+            assertThat(loadedState.canDeactivateAccount).isTrue()
             assertThat(loadedState.directLogoutState).isEqualTo(aDirectLogoutState)
             assertThat(loadedState.snackbarMessage).isNull()
+        }
+    }
+
+    @Test
+    fun `present - can deactivate account is false if the Matrix client say so`() = runTest {
+        val presenter = createPresenter(
+            matrixClient = FakeMatrixClient(
+                canDeactivateAccountResult = { false }
+            )
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val loadedState = awaitFirstItem()
+            assertThat(loadedState.canDeactivateAccount).isFalse()
         }
     }
 
@@ -89,8 +106,7 @@ class PreferencesRootPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val loadedState = awaitItem()
+            val loadedState = awaitFirstItem()
             assertThat(loadedState.showDeveloperSettings).isFalse()
         }
     }
@@ -103,20 +119,22 @@ class PreferencesRootPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val loadedState = awaitItem()
-
+            val loadedState = awaitFirstItem()
             repeat(times = ShowDeveloperSettingsProvider.DEVELOPER_SETTINGS_COUNTER) {
                 assertThat(loadedState.showDeveloperSettings).isFalse()
                 loadedState.eventSink(PreferencesRootEvents.OnVersionInfoClick)
             }
-
             assertThat(awaitItem().showDeveloperSettings).isTrue()
         }
     }
 
+    private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
+        skipItems(1)
+        return awaitItem()
+    }
+
     private fun createPresenter(
-        matrixClient: FakeMatrixClient = FakeMatrixClient(),
+        matrixClient: FakeMatrixClient = FakeMatrixClient(canDeactivateAccountResult = { true }),
         sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
         showDeveloperSettingsProvider: ShowDeveloperSettingsProvider = ShowDeveloperSettingsProvider(aBuildMeta(BuildType.DEBUG)),
     ) = PreferencesRootPresenter(

@@ -9,6 +9,7 @@ package io.element.android.libraries.matrix.impl
 
 import io.element.android.libraries.androidutils.file.getSizeOfFiles
 import io.element.android.libraries.androidutils.file.safeDelete
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -29,6 +30,7 @@ import io.element.android.libraries.matrix.api.notificationsettings.Notification
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
+import io.element.android.libraries.matrix.api.room.InvitedRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -88,6 +90,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import org.matrix.rustcomponents.sdk.AuthData
+import org.matrix.rustcomponents.sdk.AuthDataPasswordDetails
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientException
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
@@ -245,6 +249,10 @@ class RustMatrixClient(
         return roomFactory.create(roomId)
     }
 
+    override suspend fun getInvitedRoom(roomId: RoomId): InvitedRoom? {
+        return roomFactory.createInvitedRoom(roomId)
+    }
+
     /**
      * Wait for the room to be available in the room list, with a membership for the current user of [CurrentUserMembership.JOINED].
      * @param roomIdOrAlias the room id or alias to wait for
@@ -267,6 +275,8 @@ class RustMatrixClient(
                 .filter(predicate)
                 .first()
                 .first()
+                // Ensure that the room is ready
+                .also { client.awaitRoomRemoteEcho(it.roomId.value) }
         }
     }
 
@@ -486,6 +496,46 @@ class RustMatrixClient(
         return result
     }
 
+    override fun canDeactivateAccount(): Boolean {
+        return runCatching {
+            client.canDeactivateAccount()
+        }
+            .getOrNull()
+            .orFalse()
+    }
+
+    override suspend fun deactivateAccount(password: String, eraseData: Boolean): Result<Unit> = withContext(sessionDispatcher) {
+        Timber.w("Deactivating account")
+        syncService.stop()
+        runCatching {
+            // First call without AuthData, should fail
+            val firstAttempt = runCatching {
+                client.deactivateAccount(
+                    authData = null,
+                    eraseData = eraseData,
+                )
+            }
+            if (firstAttempt.isFailure) {
+                Timber.w(firstAttempt.exceptionOrNull(), "Expected failure, try again")
+                // This is expected, try again with the password
+                client.deactivateAccount(
+                    authData = AuthData.Password(
+                        passwordDetails = AuthDataPasswordDetails(
+                            identifier = sessionId.value,
+                            password = password,
+                        ),
+                    ),
+                    eraseData = eraseData,
+                )
+            }
+            close()
+            deleteSessionDirectory(deleteCryptoDb = true)
+            sessionStore.removeSession(sessionId.value)
+        }.onFailure {
+            Timber.e(it, "Failed to deactivate account")
+        }
+    }
+
     override suspend fun getAccountManagementUrl(action: AccountManagementAction?): Result<String?> = withContext(sessionDispatcher) {
         val rustAction = action?.toRustAction()
         runCatching {
@@ -532,6 +582,10 @@ class RustMatrixClient(
 
     override suspend fun isNativeSlidingSyncSupported(): Boolean {
         return client.availableSlidingSyncVersions().contains(SlidingSyncVersion.Native)
+    }
+
+    override suspend fun isSlidingSyncProxySupported(): Boolean {
+        return client.availableSlidingSyncVersions().any { it is SlidingSyncVersion.Proxy }
     }
 
     override fun isUsingNativeSlidingSync(): Boolean {

@@ -22,85 +22,174 @@ import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import org.junit.Test
 
 class RoomBeginningPostProcessorTest {
+    private val roomCreateEvent = MatrixTimelineItem.Event(
+        uniqueId = UniqueId("m.room.create"),
+        event = anEventTimelineItem(sender = A_USER_ID, content = StateContent("", OtherState.RoomCreate))
+    )
+    private val roomCreatorJoinEvent = MatrixTimelineItem.Event(
+        uniqueId = UniqueId("m.room.member"),
+        event = anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, null, MembershipChange.JOINED))
+    )
+    private val otherMemberJoinEvent = MatrixTimelineItem.Event(
+        uniqueId = UniqueId("m.room.member_other"),
+        event = anEventTimelineItem(content = RoomMembershipContent(A_USER_ID_2, null, MembershipChange.JOINED))
+    )
+    private val messageEvent = MatrixTimelineItem.Event(
+        uniqueId = UniqueId("m.room.message"),
+        event = anEventTimelineItem(content = aMessageContent("hi"))
+    )
+
+    @Test
+    fun `processor returns empty list when empty list is provided`() {
+        val processor = RoomBeginningPostProcessor(Timeline.Mode.LIVE)
+        val processedItems = processor.process(
+            items = emptyList(),
+            isDm = true,
+            roomCreator = A_USER_ID,
+            hasMoreToLoadBackwards = false,
+        )
+        assertThat(processedItems).isEmpty()
+    }
+
+    @Test
+    fun `processor returns the provided list when it only contains a message`() {
+        val processor = RoomBeginningPostProcessor(Timeline.Mode.LIVE)
+        val processedItems = processor.process(
+            items = listOf(messageEvent),
+            isDm = true,
+            roomCreator = A_USER_ID,
+            hasMoreToLoadBackwards = false,
+        )
+        assertThat(processedItems).isEqualTo(listOf(messageEvent))
+    }
+
+    @Test
+    fun `processor returns the provided list when it only contains a message and the roomCreator is not provided`() {
+        val processor = RoomBeginningPostProcessor(Timeline.Mode.LIVE)
+        val processedItems = processor.process(
+            items = listOf(messageEvent),
+            isDm = true,
+            roomCreator = null,
+            hasMoreToLoadBackwards = false,
+        )
+        assertThat(processedItems).isEqualTo(listOf(messageEvent))
+    }
+
     @Test
     fun `processor removes room creation event and self-join event from DM timeline`() {
         val timelineItems = listOf(
-            MatrixTimelineItem.Event(UniqueId("m.room.create"), anEventTimelineItem(sender = A_USER_ID, content = StateContent("", OtherState.RoomCreate))),
-            MatrixTimelineItem.Event(UniqueId("m.room.member"), anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, null, MembershipChange.JOINED))),
+            roomCreateEvent,
+            roomCreatorJoinEvent,
         )
         val processor = RoomBeginningPostProcessor(Timeline.Mode.LIVE)
-        val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = false)
+        val processedItems = processor.process(
+            items = timelineItems,
+            isDm = true,
+            roomCreator = A_USER_ID,
+            hasMoreToLoadBackwards = false,
+        )
         assertThat(processedItems).isEmpty()
+    }
+
+    @Test
+    fun `processor does not remove anything with PINNED_EVENTS mode`() {
+        val timelineItems = listOf(
+            roomCreateEvent,
+            roomCreatorJoinEvent,
+        )
+        val processor = RoomBeginningPostProcessor(Timeline.Mode.PINNED_EVENTS)
+        val processedItems = processor.process(
+            items = timelineItems,
+            isDm = true,
+            roomCreator = A_USER_ID,
+            hasMoreToLoadBackwards = false,
+        )
+        assertThat(processedItems).isEqualTo(timelineItems)
     }
 
     @Test
     fun `processor removes room creation event and self-join event from DM timeline even if they're not the first items`() {
         val timelineItems = listOf(
-            MatrixTimelineItem.Event(
-                UniqueId("m.room.member_other"),
-                anEventTimelineItem(content = RoomMembershipContent(A_USER_ID_2, null, MembershipChange.JOINED))
-            ),
-            MatrixTimelineItem.Event(UniqueId("m.room.create"), anEventTimelineItem(sender = A_USER_ID, content = StateContent("", OtherState.RoomCreate))),
-            MatrixTimelineItem.Event(UniqueId("m.room.message"), anEventTimelineItem(content = aMessageContent("hi"))),
-            MatrixTimelineItem.Event(UniqueId("m.room.member"), anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, null, MembershipChange.JOINED))),
+            otherMemberJoinEvent,
+            roomCreateEvent,
+            messageEvent,
+            roomCreatorJoinEvent,
         )
         val expected = listOf(
-            MatrixTimelineItem.Event(
-                UniqueId("m.room.member_other"),
-                anEventTimelineItem(content = RoomMembershipContent(A_USER_ID_2, null, MembershipChange.JOINED))
-            ),
-            MatrixTimelineItem.Event(UniqueId("m.room.message"), anEventTimelineItem(content = aMessageContent("hi"))),
+            otherMemberJoinEvent,
+            messageEvent,
         )
         val processor = RoomBeginningPostProcessor(Timeline.Mode.LIVE)
-        val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = false)
+        val processedItems = processor.process(timelineItems, isDm = true, roomCreator = A_USER_ID, hasMoreToLoadBackwards = false)
         assertThat(processedItems).isEqualTo(expected)
     }
 
     @Test
     fun `processor will add beginning of room item if it's not a DM`() {
         val timelineItems = listOf(
-            MatrixTimelineItem.Event(UniqueId("m.room.create"), anEventTimelineItem(sender = A_USER_ID, content = StateContent("", OtherState.RoomCreate))),
-            MatrixTimelineItem.Event(UniqueId("m.room.member"), anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, null, MembershipChange.JOINED))),
+            roomCreateEvent,
+            roomCreatorJoinEvent,
         )
         val processor = RoomBeginningPostProcessor(Timeline.Mode.LIVE)
-        val processedItems = processor.process(timelineItems, isDm = false, hasMoreToLoadBackwards = false)
+        val processedItems = processor.process(timelineItems, isDm = false, roomCreator = A_USER_ID, hasMoreToLoadBackwards = false)
         assertThat(processedItems).isEqualTo(
             listOf(processor.createRoomBeginningItem()) + timelineItems
         )
     }
 
     @Test
-    fun `processor won't remove items if it's not at the start of the timeline`() {
+    fun `processor will not add beginning of room item if it's not a DM but the room has more to load`() {
         val timelineItems = listOf(
-            MatrixTimelineItem.Event(UniqueId("m.room.create"), anEventTimelineItem(sender = A_USER_ID, content = StateContent("", OtherState.RoomCreate))),
-            MatrixTimelineItem.Event(UniqueId("m.room.member"), anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, null, MembershipChange.JOINED))),
+            roomCreateEvent,
+            roomCreatorJoinEvent,
         )
         val processor = RoomBeginningPostProcessor(Timeline.Mode.LIVE)
-        val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = true)
+        val processedItems = processor.process(timelineItems, isDm = false, roomCreator = A_USER_ID, hasMoreToLoadBackwards = true)
         assertThat(processedItems).isEqualTo(timelineItems)
     }
 
     @Test
-    fun `processor won't remove the first member join event if it can't find the room creation event`() {
+    fun `processor will add beginning of room item if it's not a DM, when the parameter roomCreator is null`() {
         val timelineItems = listOf(
-            MatrixTimelineItem.Event(UniqueId("m.room.member"), anEventTimelineItem(content = RoomMembershipContent(A_USER_ID, null, MembershipChange.JOINED))),
+            roomCreateEvent,
+            roomCreatorJoinEvent,
         )
         val processor = RoomBeginningPostProcessor(Timeline.Mode.LIVE)
-        val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = true)
-        assertThat(processedItems).isEqualTo(timelineItems)
+        val processedItems = processor.process(timelineItems, isDm = false, roomCreator = null, hasMoreToLoadBackwards = false)
+        assertThat(processedItems).isEqualTo(
+            listOf(processor.createRoomBeginningItem()) + timelineItems
+        )
+    }
+
+    @Test
+    fun `processor removes items event it's not at the start of the timeline`() {
+        val timelineItems = listOf(
+            roomCreateEvent,
+            roomCreatorJoinEvent,
+        )
+        val processor = RoomBeginningPostProcessor(Timeline.Mode.LIVE)
+        val processedItems = processor.process(timelineItems, isDm = true, roomCreator = A_USER_ID, hasMoreToLoadBackwards = true)
+        assertThat(processedItems).isEmpty()
+    }
+
+    @Test
+    fun `processor removes the first member join event if it matches the roomCreator parameter`() {
+        val timelineItems = listOf(
+            roomCreatorJoinEvent,
+        )
+        val processor = RoomBeginningPostProcessor(Timeline.Mode.LIVE)
+        val processedItems = processor.process(timelineItems, isDm = true, roomCreator = A_USER_ID, hasMoreToLoadBackwards = true)
+        assertThat(processedItems).isEmpty()
     }
 
     @Test
     fun `processor won't remove the first member join event if it's not from the room creator`() {
         val timelineItems = listOf(
-            MatrixTimelineItem.Event(UniqueId("m.room.create"), anEventTimelineItem(sender = A_USER_ID, content = StateContent("", OtherState.RoomCreate))),
-            MatrixTimelineItem.Event(
-                UniqueId("m.room.member"),
-                anEventTimelineItem(content = RoomMembershipContent(A_USER_ID_2, null, MembershipChange.JOINED))
-            ),
+            roomCreateEvent,
+            otherMemberJoinEvent,
         )
         val processor = RoomBeginningPostProcessor(Timeline.Mode.LIVE)
-        val processedItems = processor.process(timelineItems, isDm = true, hasMoreToLoadBackwards = true)
-        assertThat(processedItems).isEqualTo(timelineItems)
+        val processedItems = processor.process(timelineItems, isDm = true, roomCreator = A_USER_ID, hasMoreToLoadBackwards = true)
+        assertThat(processedItems).isEqualTo(listOf(otherMemberJoinEvent))
     }
 }

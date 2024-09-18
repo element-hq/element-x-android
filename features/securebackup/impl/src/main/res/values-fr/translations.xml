@@ -16,6 +16,7 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Suivez les instructions pour créer une nouvelle clé de récupération"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Enregistrez votre nouvelle clé dans un gestionnaire de mots de passe ou dans une note chiffrée"</string>
   <string name="screen_create_new_recovery_key_title">"Réinitialisez le chiffrement de votre compte en utilisant un autre appareil"</string>
+  <string name="screen_encryption_reset_action_continue_reset">"Continuer la réinitialisation"</string>
   <string name="screen_encryption_reset_bullet_1">"Les détails de votre compte, vos contacts, vos préférences et votre liste de discussions seront conservés"</string>
   <string name="screen_encryption_reset_bullet_2">"Vous perdrez l’historique de vos messages"</string>
   <string name="screen_encryption_reset_bullet_3">"Vous devrez vérifier à nouveau tous vos appareils et tous vos contacts"</string>
@@ -37,7 +38,6 @@
   <string name="screen_recovery_key_confirm_error_content">"Veuillez réessayer afin de pouvoir accéder à vos anciens messages."</string>
   <string name="screen_recovery_key_confirm_error_title">"Clé de récupération incorrecte"</string>
   <string name="screen_recovery_key_confirm_key_description">"Si vous avez une clé de sécurité ou une phrase de sécurité, cela fonctionnera également."</string>
-  <string name="screen_recovery_key_confirm_key_label">"Clé de récupération"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Saisissez la clé ici…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Clé de récupération perdue?"</string>
   <string name="screen_recovery_key_confirm_success">"Clé de récupération confirmée"</string>

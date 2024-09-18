@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.api.timeline.item.event
 
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 
@@ -18,21 +19,24 @@ sealed interface LocalEventSendState {
         data class Unknown(val error: String) : Failed
         data object CrossSigningNotSetup : Failed
         data object SendingFromUnverifiedDevice : Failed
+
+        sealed interface VerifiedUser : Failed
         data class VerifiedUserHasUnsignedDevice(
             /**
              * The unsigned devices belonging to verified users. A map from user ID
              * to a list of device IDs.
              */
-            val devices: Map<UserId, List<String>>
-        ) : Failed
+            val devices: Map<UserId, List<DeviceId>>
+        ) : VerifiedUser
 
         data class VerifiedUserChangedIdentity(
             /**
              * The users that were previously verified but are no longer.
              */
             val users: List<UserId>
-        ) : Failed
+        ) : VerifiedUser
     }
+
     data class Sent(
         val eventId: EventId
     ) : LocalEventSendState
