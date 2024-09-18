@@ -50,10 +50,6 @@ class RoomMemberListFetcherTest {
             val cachedItemsState = awaitItem()
             assertThat(cachedItemsState).isInstanceOf(MatrixRoomMembersState.Ready::class.java)
             assertThat((cachedItemsState as? MatrixRoomMembersState.Ready)?.roomMembers).hasSize(3)
-
-            // Assert only the 'no sync' method was called, so no new member sync happened
-            assertThat(room.membersNoSyncCallCount).isEqualTo(1)
-            assertThat(room.membersCallCount).isEqualTo(0)
         }
     }
 
@@ -133,10 +129,6 @@ class RoomMemberListFetcherTest {
             assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Unknown::class.java)
             assertThat(awaitItem()).isInstanceOf(MatrixRoomMembersState.Pending::class.java)
             assertThat((awaitItem() as? MatrixRoomMembersState.Ready)?.roomMembers?.size).isEqualTo(3)
-
-            // Assert only the 'sync' method was called, so a new member sync happened
-            assertThat(room.membersNoSyncCallCount).isEqualTo(0)
-            assertThat(room.membersCallCount).isEqualTo(1)
         }
     }
 
@@ -191,10 +183,6 @@ class RoomMemberListFetcherTest {
                 assertThat(ready).isInstanceOf(MatrixRoomMembersState.Ready::class.java)
                 assertThat(ready.roomMembers()).hasSize(3)
             }
-
-            // Assert both member methods were called, so both the cache was hit and a new member sync happened
-            assertThat(room.membersNoSyncCallCount).isEqualTo(1)
-            assertThat(room.membersCallCount).isEqualTo(1)
         }
     }
 }

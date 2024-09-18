@@ -7,29 +7,27 @@
 
 package io.element.android.libraries.matrix.impl.fixtures
 
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.tests.testutils.lambda.lambdaError
 import org.matrix.rustcomponents.sdk.NoPointer
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomMembersIterator
 
 class FakeRustRoom(
-    private val getMembers: () -> RoomMembersIterator = { FakeRustRoomMembersIterator() },
-    private val getMembersNoSync: () -> RoomMembersIterator = { FakeRustRoomMembersIterator() },
+    private val roomId: RoomId = A_ROOM_ID,
+    private val getMembers: () -> RoomMembersIterator = { lambdaError() },
+    private val getMembersNoSync: () -> RoomMembersIterator = { lambdaError() },
 ) : Room(NoPointer) {
-    var membersCallCount = 0
-    var membersNoSyncCallCount = 0
-
     override fun id(): String {
-        return A_ROOM_ID.value
+        return roomId.value
     }
 
     override suspend fun members(): RoomMembersIterator {
-        membersCallCount++
         return getMembers()
     }
 
     override suspend fun membersNoSync(): RoomMembersIterator {
-        membersNoSyncCallCount++
         return getMembersNoSync()
     }
 
