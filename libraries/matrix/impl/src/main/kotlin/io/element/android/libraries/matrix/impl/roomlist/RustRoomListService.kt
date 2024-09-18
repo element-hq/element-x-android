@@ -53,11 +53,7 @@ internal class RustRoomListService(
     }
 
     override suspend fun subscribeToVisibleRooms(roomIds: List<RoomId>) {
-        val toSubscribe = roomIds.filterNot { roomSyncSubscriber.isSubscribedTo(it) }
-        if (toSubscribe.isNotEmpty()) {
-            Timber.d("Subscribe to ${toSubscribe.size} rooms: $toSubscribe")
-            roomSyncSubscriber.batchSubscribe(toSubscribe)
-        }
+        roomSyncSubscriber.batchSubscribe(roomIds)
     }
 
     override val allRooms: DynamicRoomList = roomListFactory.createRoomList(
