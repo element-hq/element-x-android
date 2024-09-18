@@ -7,7 +7,6 @@
 
 package io.element.android.libraries.matrix.impl.sdk
 
-import io.element.android.libraries.matrix.impl.room.member.FakeRoomMembersIterator
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import org.matrix.rustcomponents.sdk.ComposerDraft
 import org.matrix.rustcomponents.sdk.ImageInfo

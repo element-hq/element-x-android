@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetche
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher.Source.CACHE_AND_SERVER
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher.Source.SERVER
 import io.element.android.libraries.matrix.impl.sdk.FakeRoomInterface
+import io.element.android.libraries.matrix.impl.sdk.FakeRoomMembersIterator
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID_3
@@ -24,9 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.MembershipState
-import org.matrix.rustcomponents.sdk.NoPointer
 import org.matrix.rustcomponents.sdk.RoomMember
-import org.matrix.rustcomponents.sdk.RoomMembersIterator
 import uniffi.matrix_sdk.RoomMemberRole
 
 class RoomMemberListFetcherTest {
@@ -199,25 +198,6 @@ class RoomMemberListFetcherTest {
             // Assert both member methods were called, so both the cache was hit and a new member sync happened
             assertThat(room.membersNoSyncCallCount).isEqualTo(1)
             assertThat(room.membersCallCount).isEqualTo(1)
-        }
-    }
-}
-
-class FakeRoomMembersIterator(
-    private var members: List<RoomMember>? = null
-) : RoomMembersIterator(NoPointer) {
-    override fun len(): UInt {
-        return members?.size?.toUInt() ?: 0u
-    }
-
-    override fun nextChunk(chunkSize: UInt): List<RoomMember>? {
-        if (members?.isEmpty() == true) {
-            return null
-        }
-        return members?.let {
-            val result = it.take(chunkSize.toInt())
-            members = it.subList(result.size, it.size)
-            result
         }
     }
 }
