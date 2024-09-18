@@ -13,7 +13,7 @@ import org.matrix.rustcomponents.sdk.NoPointer
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomListItem
 
-class FakeRoomListItem(
+class FakeRustRoomListItem(
     private val roomId: RoomId,
     private val roomInfo: RoomInfo = aRustRoomInfo(id = roomId.value),
     private val latestEvent: EventTimelineItem? = null,

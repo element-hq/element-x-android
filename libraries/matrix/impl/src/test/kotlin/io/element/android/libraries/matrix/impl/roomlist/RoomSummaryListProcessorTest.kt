@@ -10,7 +10,7 @@ package io.element.android.libraries.matrix.impl.roomlist
 import com.google.common.truth.Truth.assertThat
 import com.sun.jna.Pointer
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import io.element.android.libraries.matrix.impl.sdk.FakeRoomListItem
+import io.element.android.libraries.matrix.impl.sdk.FakeRustRoomListItem
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.room.aRoomSummary
@@ -39,7 +39,7 @@ class RoomSummaryListProcessorTest {
         summaries.value = listOf(aRoomSummary())
         val processor = createProcessor()
 
-        val newEntry = FakeRoomListItem(A_ROOM_ID_2)
+        val newEntry = FakeRustRoomListItem(A_ROOM_ID_2)
         processor.postUpdate(listOf(RoomListEntriesUpdate.Append(listOf(newEntry, newEntry, newEntry))))
 
         assertThat(summaries.value.count()).isEqualTo(4)
@@ -50,7 +50,7 @@ class RoomSummaryListProcessorTest {
     fun `PushBack adds a new entry at the end of the list`() = runTest {
         summaries.value = listOf(aRoomSummaryFilled())
         val processor = createProcessor()
-        processor.postUpdate(listOf(RoomListEntriesUpdate.PushBack(FakeRoomListItem(A_ROOM_ID_2))))
+        processor.postUpdate(listOf(RoomListEntriesUpdate.PushBack(FakeRustRoomListItem(A_ROOM_ID_2))))
 
         assertThat(summaries.value.count()).isEqualTo(2)
         assertThat(summaries.value.last().roomId).isEqualTo(A_ROOM_ID_2)
@@ -60,7 +60,7 @@ class RoomSummaryListProcessorTest {
     fun `PushFront inserts a new entry at the start of the list`() = runTest {
         summaries.value = listOf(aRoomSummaryFilled())
         val processor = createProcessor()
-        processor.postUpdate(listOf(RoomListEntriesUpdate.PushFront(FakeRoomListItem(A_ROOM_ID_2))))
+        processor.postUpdate(listOf(RoomListEntriesUpdate.PushFront(FakeRustRoomListItem(A_ROOM_ID_2))))
 
         assertThat(summaries.value.count()).isEqualTo(2)
         assertThat(summaries.value.first().roomId).isEqualTo(A_ROOM_ID_2)
@@ -72,7 +72,7 @@ class RoomSummaryListProcessorTest {
         val processor = createProcessor()
         val index = 0
 
-        processor.postUpdate(listOf(RoomListEntriesUpdate.Set(index.toUInt(), FakeRoomListItem(A_ROOM_ID_2))))
+        processor.postUpdate(listOf(RoomListEntriesUpdate.Set(index.toUInt(), FakeRustRoomListItem(A_ROOM_ID_2))))
 
         assertThat(summaries.value.count()).isEqualTo(1)
         assertThat(summaries.value[index].roomId).isEqualTo(A_ROOM_ID_2)
@@ -84,7 +84,7 @@ class RoomSummaryListProcessorTest {
         val processor = createProcessor()
         val index = 0
 
-        processor.postUpdate(listOf(RoomListEntriesUpdate.Insert(index.toUInt(), FakeRoomListItem(A_ROOM_ID_2))))
+        processor.postUpdate(listOf(RoomListEntriesUpdate.Insert(index.toUInt(), FakeRustRoomListItem(A_ROOM_ID_2))))
 
         assertThat(summaries.value.count()).isEqualTo(2)
         assertThat(summaries.value[index].roomId).isEqualTo(A_ROOM_ID_2)

@@ -11,9 +11,9 @@ import org.matrix.rustcomponents.sdk.NoPointer
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomMembersIterator
 
-class FakeRoom(
-    private val getMembers: () -> RoomMembersIterator = { FakeRoomMembersIterator() },
-    private val getMembersNoSync: () -> RoomMembersIterator = { FakeRoomMembersIterator() },
+class FakeRustRoom(
+    private val getMembers: () -> RoomMembersIterator = { FakeRustRoomMembersIterator() },
+    private val getMembersNoSync: () -> RoomMembersIterator = { FakeRustRoomMembersIterator() },
 ) : Room(NoPointer) {
     var membersCallCount = 0
     var membersNoSyncCallCount = 0

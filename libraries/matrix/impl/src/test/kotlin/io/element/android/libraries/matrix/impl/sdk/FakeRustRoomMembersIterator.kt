@@ -11,7 +11,7 @@ import org.matrix.rustcomponents.sdk.NoPointer
 import org.matrix.rustcomponents.sdk.RoomMember
 import org.matrix.rustcomponents.sdk.RoomMembersIterator
 
-class FakeRoomMembersIterator(
+class FakeRustRoomMembersIterator(
     private var members: List<RoomMember>? = null
 ) : RoomMembersIterator(NoPointer) {
     override fun len(): UInt {
