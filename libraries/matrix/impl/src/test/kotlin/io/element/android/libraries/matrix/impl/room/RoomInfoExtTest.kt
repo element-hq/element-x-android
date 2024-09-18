@@ -64,4 +64,3 @@ class RoomInfoExtTest {
         assertThat(result).isEmpty()
     }
 }
-

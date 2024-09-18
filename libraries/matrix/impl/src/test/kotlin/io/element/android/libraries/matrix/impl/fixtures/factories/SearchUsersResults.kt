@@ -17,4 +17,3 @@ internal fun aRustSearchUsersResults(
     results = results,
     limited = limited,
 )
-
