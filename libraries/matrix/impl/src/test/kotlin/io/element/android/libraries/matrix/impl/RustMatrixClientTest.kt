@@ -13,6 +13,7 @@ import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustSyncServi
 import io.element.android.libraries.matrix.impl.room.FakeTimelineEventTypeFilterFactory
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -30,21 +31,20 @@ class RustMatrixClientTest {
         }
     }
 
-    private fun TestScope.createRustMatrixClient(): RustMatrixClient {
-        val sessionStore = InMemorySessionStore()
-        return RustMatrixClient(
-            client = FakeRustClient(),
-            baseDirectory = File(""),
-            sessionStore = InMemorySessionStore(),
-            appCoroutineScope = this,
-            sessionDelegate = aRustClientSessionDelegate(
-                sessionStore = sessionStore,
-            ),
-            syncService = FakeRustSyncService(),
-            dispatchers = testCoroutineDispatchers(),
-            baseCacheDirectory = File(""),
-            clock = FakeSystemClock(),
-            timelineEventTypeFilterFactory = FakeTimelineEventTypeFilterFactory(),
-        )
-    }
+    private fun TestScope.createRustMatrixClient(
+        sessionStore: SessionStore = InMemorySessionStore(),
+    ) = RustMatrixClient(
+        client = FakeRustClient(),
+        baseDirectory = File(""),
+        sessionStore = sessionStore,
+        appCoroutineScope = this,
+        sessionDelegate = aRustClientSessionDelegate(
+            sessionStore = sessionStore,
+        ),
+        syncService = FakeRustSyncService(),
+        dispatchers = testCoroutineDispatchers(),
+        baseCacheDirectory = File(""),
+        clock = FakeSystemClock(),
+        timelineEventTypeFilterFactory = FakeTimelineEventTypeFilterFactory(),
+    )
 }
