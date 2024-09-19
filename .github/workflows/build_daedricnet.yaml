@@ -46,7 +46,7 @@ jobs:
             app/build/outputs/apk/gplay/nightly/app-gplay-arm64-v8a-nightly.apk
 
       - name: Send to Matrix
-        uses: daedric7/Matrix-Send-File@v0.2-beta3
+        uses: daedric7/Matrix-Send-File@v0.2-beta5
         with:
           room_id: ${{ secrets.MATRIX_ROOM_ID }}
           access_token: ${{ secrets.MATRIX_ACCESS_TOKEN }}
