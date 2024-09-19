@@ -15,7 +15,6 @@ import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicatorListener
 import org.matrix.rustcomponents.sdk.TaskHandle
 
 class FakeRustRoomListService : RoomListService(NoPointer) {
-
     override suspend fun allRooms(): RoomList {
         return FakeRustRoomList()
     }

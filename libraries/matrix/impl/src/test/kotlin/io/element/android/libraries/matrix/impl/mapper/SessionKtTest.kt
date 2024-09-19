@@ -125,8 +125,7 @@ private fun anExternalSession(
     refreshToken: String? = null,
     homeserverUrl: String = A_HOMESERVER_URL,
     slidingSyncProxy: String? = null,
-
-    ) = ExternalSession(
+) = ExternalSession(
     userId = userId,
     deviceId = deviceId,
     accessToken = accessToken,

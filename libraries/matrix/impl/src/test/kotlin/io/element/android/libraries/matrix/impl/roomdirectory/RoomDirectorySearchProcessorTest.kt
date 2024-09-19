@@ -69,7 +69,6 @@ class RoomDirectorySearchProcessorTest {
                 )
             )
             assertThat(awaitItem()).isEqualTo(listOf(room1, room2, room3))
-
         }
     }
 }

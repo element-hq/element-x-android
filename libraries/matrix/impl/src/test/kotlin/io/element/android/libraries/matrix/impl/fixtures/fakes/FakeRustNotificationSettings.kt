@@ -28,4 +28,3 @@ class FakeRustNotificationSettings(
         isOneToOne: Boolean,
     ): RoomNotificationSettings = roomNotificationSettings
 }
-
