@@ -116,14 +116,14 @@ import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 @OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixClient(
     private val client: Client,
-    private val syncService: ClientSyncService,
+    private val baseDirectory: File,
     private val sessionStore: SessionStore,
     private val appCoroutineScope: CoroutineScope,
-    private val dispatchers: CoroutineDispatchers,
-    private val baseDirectory: File,
-    baseCacheDirectory: File,
-    private val clock: SystemClock,
     private val sessionDelegate: RustClientSessionDelegate,
+    syncService: ClientSyncService,
+    dispatchers: CoroutineDispatchers,
+    baseCacheDirectory: File,
+    clock: SystemClock,
     timelineEventTypeFilterFactory: TimelineEventTypeFilterFactory,
 ) : MatrixClient {
     override val sessionId: UserId = UserId(client.userId())

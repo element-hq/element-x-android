@@ -26,18 +26,18 @@ class RustMatrixClientTest {
         val sessionStore = InMemorySessionStore()
         val sut = RustMatrixClient(
             client = FakeRustClient(),
-            syncService = FakeRustSyncService(),
+            baseDirectory = File(""),
             sessionStore = InMemorySessionStore(),
             appCoroutineScope = this,
-            dispatchers = testCoroutineDispatchers(),
-            baseDirectory = File(""),
-            baseCacheDirectory = File(""),
-            clock = FakeSystemClock(),
             sessionDelegate = RustClientSessionDelegate(
                 sessionStore = sessionStore,
                 appCoroutineScope = this,
                 coroutineDispatchers = testCoroutineDispatchers(),
             ),
+            syncService = FakeRustSyncService(),
+            dispatchers = testCoroutineDispatchers(),
+            baseCacheDirectory = File(""),
+            clock = FakeSystemClock(),
             timelineEventTypeFilterFactory = FakeTimelineEventTypeFilterFactory(),
         )
         assertThat(sut.sessionId).isEqualTo(A_USER_ID)
