@@ -65,6 +65,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.theme.components.autofill
 import io.element.android.libraries.designsystem.theme.components.onTabOrEnterKeyFocusNext
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.persistentListOf
 
@@ -277,6 +279,7 @@ private fun Content(
                     .padding(top = 8.dp)
                     .fillMaxWidth()
                     .onTabOrEnterKeyFocusNext(focusManager)
+                    .testTag(TestTags.loginPassword)
                     .autofill(
                         autofillTypes = listOf(AutofillType.Password),
                         onFill = {

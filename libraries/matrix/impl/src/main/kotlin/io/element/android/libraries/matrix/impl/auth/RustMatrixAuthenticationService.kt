@@ -42,6 +42,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.ClientBuildException
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.HumanQrLoginException
 import org.matrix.rustcomponents.sdk.OidcConfiguration
@@ -251,18 +252,17 @@ class RustMatrixAuthenticationService @Inject constructor(
                     oidcConfiguration = oidcConfiguration,
                     progressListener = progressListener,
                 )
-
-                client.use { rustClient ->
-                    val sessionData = rustClient.session()
+                val sessionData = client.use { rustClient ->
+                    rustClient.session()
                         .toSessionData(
                             isTokenValid = true,
                             loginType = LoginType.QR,
                             passphrase = pendingPassphrase,
                             sessionPaths = emptySessionPaths,
                         )
-                    sessionStore.storeData(sessionData)
-                    SessionId(sessionData.userId)
                 }
+                sessionStore.storeData(sessionData)
+                SessionId(sessionData.userId)
             }.mapFailure {
                 when (it) {
                     is QrCodeDecodeException -> QrErrorMapper.map(it)
@@ -285,15 +285,15 @@ class RustMatrixAuthenticationService @Inject constructor(
         if (slidingSyncType is ClientBuilderSlidingSync.Simplified) {
             Timber.d("Creating client with simplified sliding sync")
             try {
-               return rustMatrixClientFactory
-                   .getBaseClientBuilder(
-                       sessionPaths = sessionPaths,
-                       passphrase = pendingPassphrase,
-                       slidingSyncType = slidingSyncType,
-                   )
-                   .run { config() }
-                   .build()
-            } catch (e: HumanQrLoginException.SlidingSyncNotAvailable) {
+                return rustMatrixClientFactory
+                    .getBaseClientBuilder(
+                        sessionPaths = sessionPaths,
+                        passphrase = pendingPassphrase,
+                        slidingSyncType = slidingSyncType,
+                    )
+                    .config()
+                    .build()
+            } catch (e: ClientBuildException.SlidingSyncVersion) {
                 Timber.e(e, "Failed to create client with simplified sliding sync, trying with Proxy now")
             }
         }
@@ -304,7 +304,7 @@ class RustMatrixAuthenticationService @Inject constructor(
                 passphrase = pendingPassphrase,
                 slidingSyncType = getSlidingSyncProxy(),
             )
-            .run { config() }
+            .config()
             .build()
     }
 

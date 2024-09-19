@@ -39,7 +39,7 @@ class MatrixRoomInfoMapper {
             isTombstoned = it.isTombstoned,
             isFavorite = it.isFavourite,
             canonicalAlias = it.canonicalAlias?.let(::RoomAlias),
-            alternativeAliases = it.alternativeAliases.toImmutableList(),
+            alternativeAliases = it.alternativeAliases.map(::RoomAlias).toImmutableList(),
             currentUserMembership = it.membership.map(),
             inviter = it.inviter?.let(RoomMemberMapper::map),
             activeMembersCount = it.activeMembersCount.toLong(),
@@ -50,7 +50,7 @@ class MatrixRoomInfoMapper {
             notificationCount = it.notificationCount.toLong(),
             userDefinedNotificationMode = it.cachedUserDefinedNotificationMode?.map(),
             hasRoomCall = it.hasRoomCall,
-            activeRoomCallParticipants = it.activeRoomCallParticipants.toImmutableList(),
+            activeRoomCallParticipants = it.activeRoomCallParticipants.map(::UserId).toImmutableList(),
             heroes = it.elementHeroes().toImmutableList(),
             pinnedEventIds = it.pinnedEventIds.map(::EventId).toImmutableList(),
         )

@@ -1,0 +1,2 @@
+Element X is the new generation of Element for professional and personal use on mobile. It’s the fastest Matrix client with a seamless & intuitive user interface.
+Full changelog: https://github.com/element-hq/element-x-android/releases

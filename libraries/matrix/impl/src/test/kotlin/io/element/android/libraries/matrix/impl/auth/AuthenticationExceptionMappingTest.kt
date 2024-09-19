@@ -36,11 +36,22 @@ class AuthenticationExceptionMappingTest {
         assertThat(ClientBuildException.InvalidServerName("Invalid server name").mapAuthenticationException())
             .isException<AuthenticationException.InvalidServerName>("Invalid server name")
 
-        assertThat(ClientBuildException.Sdk("SDK issue").mapAuthenticationException())
-            .isException<AuthenticationException.Generic>("SDK issue")
-
         assertThat(ClientBuildException.SlidingSyncVersion("Sliding sync not available").mapAuthenticationException())
             .isException<AuthenticationException.SlidingSyncVersion>("Sliding sync not available")
+    }
+
+    @Test
+    fun `mapping other exceptions map to the Generic Kotlin`() {
+        assertThat(ClientBuildException.Sdk("SDK issue").mapAuthenticationException())
+            .isException<AuthenticationException.Generic>("SDK issue")
+        assertThat(ClientBuildException.ServerUnreachable("Server unreachable").mapAuthenticationException())
+            .isException<AuthenticationException.Generic>("Server unreachable")
+        assertThat(ClientBuildException.SlidingSync("Sliding Sync").mapAuthenticationException())
+            .isException<AuthenticationException.Generic>("Sliding Sync")
+        assertThat(ClientBuildException.WellKnownDeserializationException("WellKnown Deserialization").mapAuthenticationException())
+            .isException<AuthenticationException.Generic>("WellKnown Deserialization")
+        assertThat(ClientBuildException.WellKnownLookupFailed("WellKnown Lookup Failed").mapAuthenticationException())
+            .isException<AuthenticationException.Generic>("WellKnown Lookup Failed")
     }
 
     private inline fun <reified T> ThrowableSubject.isException(message: String) {
