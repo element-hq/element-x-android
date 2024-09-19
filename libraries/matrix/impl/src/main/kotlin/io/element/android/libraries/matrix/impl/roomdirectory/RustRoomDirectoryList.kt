@@ -28,7 +28,7 @@ class RustRoomDirectoryList(
 ) : RoomDirectoryList {
     private val hasMoreToLoad = MutableStateFlow(true)
     private val items = MutableSharedFlow<List<RoomDescription>>(replay = 1)
-    private val processor = RoomDirectorySearchProcessor(items, coroutineContext, RoomDescriptionMapper())
+    private val processor = RoomDirectorySearchProcessor(items, coroutineContext)
 
     init {
         launchIn(coroutineScope)

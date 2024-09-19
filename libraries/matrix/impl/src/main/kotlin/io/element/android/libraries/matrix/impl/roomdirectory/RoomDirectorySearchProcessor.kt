@@ -19,8 +19,8 @@ import kotlin.coroutines.CoroutineContext
 class RoomDirectorySearchProcessor(
     private val roomDescriptions: MutableSharedFlow<List<RoomDescription>>,
     private val coroutineContext: CoroutineContext,
-    private val roomDescriptionMapper: RoomDescriptionMapper,
 ) {
+    private val roomDescriptionMapper: RoomDescriptionMapper = RoomDescriptionMapper()
     private val mutex = Mutex()
 
     suspend fun postUpdates(updates: List<RoomDirectorySearchEntryUpdate>) {
