@@ -37,10 +37,8 @@ class RustMatrixClientTest {
             baseDirectory = File(""),
             sessionStore = InMemorySessionStore(),
             appCoroutineScope = this,
-            sessionDelegate = RustClientSessionDelegate(
+            sessionDelegate = aRustClientSessionDelegate(
                 sessionStore = sessionStore,
-                appCoroutineScope = this,
-                coroutineDispatchers = testCoroutineDispatchers(),
             ),
             syncService = FakeRustSyncService(),
             dispatchers = testCoroutineDispatchers(),
