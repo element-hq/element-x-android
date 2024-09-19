@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import java.io.File
@@ -23,8 +24,15 @@ import java.io.File
 class RustMatrixClientTest {
     @Test
     fun `ensure that sessionId and deviceId can be retrieved from the client`() = runTest {
+        createRustMatrixClient().use { sut ->
+            assertThat(sut.sessionId).isEqualTo(A_USER_ID)
+            assertThat(sut.deviceId).isEqualTo(A_DEVICE_ID)
+        }
+    }
+
+    private fun TestScope.createRustMatrixClient(): RustMatrixClient {
         val sessionStore = InMemorySessionStore()
-        val sut = RustMatrixClient(
+        return RustMatrixClient(
             client = FakeRustClient(),
             baseDirectory = File(""),
             sessionStore = InMemorySessionStore(),
@@ -40,8 +48,5 @@ class RustMatrixClientTest {
             clock = FakeSystemClock(),
             timelineEventTypeFilterFactory = FakeTimelineEventTypeFilterFactory(),
         )
-        assertThat(sut.sessionId).isEqualTo(A_USER_ID)
-        assertThat(sut.deviceId).isEqualTo(A_DEVICE_ID)
-        sut.close()
     }
 }
