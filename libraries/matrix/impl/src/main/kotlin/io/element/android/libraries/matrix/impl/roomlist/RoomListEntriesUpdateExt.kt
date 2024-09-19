@@ -7,8 +7,11 @@
 
 package io.element.android.libraries.matrix.impl.roomlist
 
+import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
 
+@Suppress("unused")
+@ExcludeFromCoverage
 internal fun RoomListEntriesUpdate.describe(): String {
     return when (this) {
         is RoomListEntriesUpdate.Set -> {

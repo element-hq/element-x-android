@@ -51,9 +51,9 @@ class DefaultFirebaseNewTokenHandlerTest {
         val pusherSubscriber = FakePusherSubscriber(registerPusherResult = registerPusherResult)
         val firebaseNewTokenHandler = createDefaultFirebaseNewTokenHandler(
             sessionStore = InMemoryMultiSessionsStore().apply {
-                storeData(aSessionData(A_USER_ID))
-                storeData(aSessionData(A_USER_ID_2))
-                storeData(aSessionData(A_USER_ID_3))
+                storeData(aSessionData(A_USER_ID.value))
+                storeData(aSessionData(A_USER_ID_2.value))
+                storeData(aSessionData(A_USER_ID_3.value))
             },
             matrixClientProvider = FakeMatrixClientProvider { sessionId ->
                 when (sessionId) {
@@ -90,7 +90,7 @@ class DefaultFirebaseNewTokenHandlerTest {
         val pusherSubscriber = FakePusherSubscriber(registerPusherResult = registerPusherResult)
         val firebaseNewTokenHandler = createDefaultFirebaseNewTokenHandler(
             sessionStore = InMemoryMultiSessionsStore().apply {
-                storeData(aSessionData(A_USER_ID))
+                storeData(aSessionData(A_USER_ID.value))
             },
             matrixClientProvider = FakeMatrixClientProvider {
                 Result.failure(IllegalStateException())
@@ -114,7 +114,7 @@ class DefaultFirebaseNewTokenHandlerTest {
         val pusherSubscriber = FakePusherSubscriber(registerPusherResult = registerPusherResult)
         val firebaseNewTokenHandler = createDefaultFirebaseNewTokenHandler(
             sessionStore = InMemoryMultiSessionsStore().apply {
-                storeData(aSessionData(A_USER_ID))
+                storeData(aSessionData(A_USER_ID.value))
             },
             matrixClientProvider = FakeMatrixClientProvider {
                 Result.success(aMatrixClient1)

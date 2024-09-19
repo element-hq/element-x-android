@@ -55,6 +55,7 @@ dependencies {
     testImplementation(libs.test.mockk)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.sessionStorage.implMemory)
+    testImplementation(projects.libraries.sessionStorage.test)
     testImplementation(projects.features.rageshake.test)
     testImplementation(projects.tests.testutils)
     testImplementation(projects.services.toolbox.test)

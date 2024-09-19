@@ -5,7 +5,7 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-package io.element.android.libraries.matrix.impl.fixtures
+package io.element.android.libraries.matrix.impl.fixtures.fakes
 
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.test.A_ROOM_ID
