@@ -82,6 +82,8 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
                 userHasPermissionToSendMessage = false,
                 userHasPermissionToSendReaction = false,
                 isCallOngoing = false,
+                // don't compute this value or the pin icon will be shown
+                pinnedEventIds = emptyList()
             )
         }
 
