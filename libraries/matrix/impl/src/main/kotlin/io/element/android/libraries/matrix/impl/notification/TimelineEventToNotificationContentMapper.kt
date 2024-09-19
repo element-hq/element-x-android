@@ -19,9 +19,8 @@ import org.matrix.rustcomponents.sdk.StateEventContent
 import org.matrix.rustcomponents.sdk.TimelineEvent
 import org.matrix.rustcomponents.sdk.TimelineEventType
 import org.matrix.rustcomponents.sdk.use
-import javax.inject.Inject
 
-class TimelineEventToNotificationContentMapper @Inject constructor() {
+class TimelineEventToNotificationContentMapper {
     fun map(timelineEvent: TimelineEvent): NotificationContent {
         return timelineEvent.use {
             timelineEvent.eventType().use { eventType ->
