@@ -45,15 +45,6 @@ jobs:
           path: |
             app/build/outputs/apk/gplay/nightly/app-gplay-arm64-v8a-nightly.apk
 
-      - name: Deploy Nightly
-        uses: WebFreak001/deploy-nightly@v3.1.0
-        with:
-          upload_url: https://uploads.github.com/repos/daedric7/element-x-daedricnet/releases/164077249/assets{?name,label} # find out this value by opening https://api.github.com/repos/<owner>/<repo>/releases in your browser and copy the full "upload_url" value including the {?name,label} part
-          release_id: 164077249 # same as above (id can just be taken out the upload_url, it's used to find old releases)
-          asset_path: app/build/outputs/apk/gplay/nightly/app-gplay-arm64-v8a-nightly.apk # path to archive to upload
-          asset_name: daedricnet-element-x-$$.apk # name to upload the release as, use $$ to insert date (YYYYMMDD) and 6 letter commit hash
-          asset_content_type: application/vnd.android.package-archive # required by GitHub API
-          max_releases: 5 # optional, if there are more releases than this matching the asset_name, the oldest ones are going to be deleted
       - name: send message
         uses: s3krit/matrix-message-action@v0.0.3
         with:
@@ -67,4 +58,15 @@ jobs:
           room_id: ${{ secrets.MATRIX_ROOM_ID }}
           access_token: ${{ secrets.MATRIX_ACCESS_TOKEN }}
           server: "https://aguiarvieira.pt"
-          file: app/build/outputs/apk/gplay/nightly/app-gplay-arm64-v8a-nightly.apk
+          file: app/build/outputs/apk/gplay/nightly/app-gplay-arm64-v8a-nightly.apk            
+
+      - name: Deploy Nightly
+        uses: WebFreak001/deploy-nightly@v3.1.0
+        with:
+          upload_url: https://uploads.github.com/repos/daedric7/element-x-daedricnet/releases/164077249/assets{?name,label} # find out this value by opening https://api.github.com/repos/<owner>/<repo>/releases in your browser and copy the full "upload_url" value including the {?name,label} part
+          release_id: 164077249 # same as above (id can just be taken out the upload_url, it's used to find old releases)
+          asset_path: app/build/outputs/apk/gplay/nightly/app-gplay-arm64-v8a-nightly.apk # path to archive to upload
+          asset_name: daedricnet-element-x-$$.apk # name to upload the release as, use $$ to insert date (YYYYMMDD) and 6 letter commit hash
+          asset_content_type: application/vnd.android.package-archive # required by GitHub API
+          max_releases: 5 # optional, if there are more releases than this matching the asset_name, the oldest ones are going to be deleted
+
