@@ -10,13 +10,14 @@ package io.element.android.libraries.matrix.impl
 import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import org.matrix.rustcomponents.sdk.ClientBuilder
+import javax.inject.Inject
 
 interface ClientBuilderProvider {
     fun provide(): ClientBuilder
 }
 
 @ContributesBinding(AppScope::class)
-class RustClientBuilderProvider : ClientBuilderProvider {
+class RustClientBuilderProvider @Inject constructor() : ClientBuilderProvider {
     override fun provide(): ClientBuilder {
         return ClientBuilder()
     }
