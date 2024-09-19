@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 
 const val A_USER_NAME = "alice"
 const val A_PASSWORD = "password"
+const val A_PASSPHRASE = "passphrase"
 const val A_SECRET = "secret"
 
 val A_USER_ID = UserId("@alice:server.org")

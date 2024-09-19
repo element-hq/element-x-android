@@ -47,6 +47,7 @@ class RustMatrixClientFactory @Inject constructor(
     private val utdTracker: UtdTracker,
     private val featureFlagService: FeatureFlagService,
     private val timelineEventTypeFilterFactory: TimelineEventTypeFilterFactory,
+    private val clientBuilderProvider: ClientBuilderProvider,
 ) {
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
         val sessionDelegate = RustClientSessionDelegate(sessionStore, appCoroutineScope, coroutineDispatchers)
@@ -89,7 +90,7 @@ class RustMatrixClientFactory @Inject constructor(
         passphrase: String?,
         slidingSyncType: ClientBuilderSlidingSync,
     ): ClientBuilder {
-        return ClientBuilder()
+        return clientBuilderProvider.provide()
             .sessionPaths(
                 dataPath = sessionPaths.fileDirectory.absolutePath,
                 cachePath = sessionPaths.cacheDirectory.absolutePath,

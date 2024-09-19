@@ -18,6 +18,7 @@ import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.NotificationSettings
 import org.matrix.rustcomponents.sdk.Session
+import org.matrix.rustcomponents.sdk.SyncServiceBuilder
 import org.matrix.rustcomponents.sdk.TaskHandle
 
 class FakeRustClient(
@@ -36,4 +37,6 @@ class FakeRustClient(
     override fun session(): Session = session
     override fun setDelegate(delegate: ClientDelegate?): TaskHandle = FakeRustTaskHandle()
     override fun cachedAvatarUrl(): String? = null
+    override suspend fun restoreSession(session: Session) = Unit
+    override fun syncService(): SyncServiceBuilder = FakeRustSyncServiceBuilder()
 }
