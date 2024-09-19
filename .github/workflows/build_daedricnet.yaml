@@ -62,7 +62,7 @@ jobs:
           message: "Build complete"
           server: "aguiarvieira.pt"
       - name: send message
-        uses: daedric7/Matrix-Send-File@v0.1-beta2
+        uses: daedric7/Matrix-Send-File@v0.1-beta3
         with:
           room_id: ${{ secrets.MATRIX_ROOM_ID }}
           access_token: ${{ secrets.MATRIX_ACCESS_TOKEN }}
