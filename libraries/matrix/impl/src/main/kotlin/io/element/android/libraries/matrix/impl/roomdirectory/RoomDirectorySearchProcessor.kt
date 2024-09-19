@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.impl.roomdirectory
 
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDescription
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -17,9 +18,11 @@ import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
 
 class RoomDirectorySearchProcessor(
-    private val roomDescriptions: MutableSharedFlow<List<RoomDescription>>,
     private val coroutineContext: CoroutineContext,
 ) {
+    private val roomDescriptions: MutableSharedFlow<List<RoomDescription>> = MutableSharedFlow(replay = 1)
+    val roomDescriptionsFlow: Flow<List<RoomDescription>> = roomDescriptions
+
     private val roomDescriptionMapper: RoomDescriptionMapper = RoomDescriptionMapper()
     private val mutex = Mutex()
 
