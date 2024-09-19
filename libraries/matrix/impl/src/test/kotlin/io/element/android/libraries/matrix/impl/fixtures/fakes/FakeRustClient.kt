@@ -17,6 +17,8 @@ import org.matrix.rustcomponents.sdk.NoPointer
 import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.NotificationSettings
+import org.matrix.rustcomponents.sdk.PusherIdentifiers
+import org.matrix.rustcomponents.sdk.PusherKind
 import org.matrix.rustcomponents.sdk.RoomDirectorySearch
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.SyncServiceBuilder
@@ -41,4 +43,14 @@ class FakeRustClient(
     override suspend fun restoreSession(session: Session) = Unit
     override fun syncService(): SyncServiceBuilder = FakeRustSyncServiceBuilder()
     override fun roomDirectorySearch(): RoomDirectorySearch = FakeRoomDirectorySearch()
+    override suspend fun setPusher(
+        identifiers: PusherIdentifiers,
+        kind: PusherKind,
+        appDisplayName: String,
+        deviceDisplayName: String,
+        profileTag: String?,
+        lang: String,
+    ) = Unit
+
+    override suspend fun deletePusher(identifiers: PusherIdentifiers) = Unit
 }
