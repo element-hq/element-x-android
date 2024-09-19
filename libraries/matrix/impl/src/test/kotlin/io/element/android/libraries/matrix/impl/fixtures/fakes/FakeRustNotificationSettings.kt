@@ -7,14 +7,25 @@
 
 package io.element.android.libraries.matrix.impl.fixtures.fakes
 
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomNotificationSettings
 import org.matrix.rustcomponents.sdk.NoPointer
 import org.matrix.rustcomponents.sdk.NotificationSettings
 import org.matrix.rustcomponents.sdk.NotificationSettingsDelegate
+import org.matrix.rustcomponents.sdk.RoomNotificationSettings
 
-class FakeRustNotificationSettings : NotificationSettings(NoPointer) {
+class FakeRustNotificationSettings(
+    private val roomNotificationSettings: RoomNotificationSettings = aRustRoomNotificationSettings(),
+) : NotificationSettings(NoPointer) {
     private var delegate: NotificationSettingsDelegate? = null
 
     override fun setDelegate(delegate: NotificationSettingsDelegate?) {
         this.delegate = delegate
     }
+
+    override suspend fun getRoomNotificationSettings(
+        roomId: String,
+        isEncrypted: Boolean,
+        isOneToOne: Boolean,
+    ): RoomNotificationSettings = roomNotificationSettings
 }
+
