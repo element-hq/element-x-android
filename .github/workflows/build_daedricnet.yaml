@@ -57,8 +57,9 @@ jobs:
           access_token: ${{ secrets.MATRIX_ACCESS_TOKEN }}
           message: "Build complete ${{ env.date }}"
           server: "aguiarvieira.pt"
+          
       - name: Send to Matrix
-        uses: daedric7/Matrix-Send-File@v0.1-beta7
+        uses: daedric7/Matrix-Send-File@v0.2-beta1
         with:
           room_id: ${{ secrets.MATRIX_ROOM_ID }}
           access_token: ${{ secrets.MATRIX_ACCESS_TOKEN }}
