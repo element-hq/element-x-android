@@ -66,7 +66,7 @@ else
 fi
 
 if [[ -z ${INPUT_AUTHOR_EMAIL} ]]; then
-  git config user.email "benoitm+elementbot@element.io"
+  git config user.email "android@element.io"
 else
   git config --local user.name "${INPUT_AUTHOR_EMAIL}"
 fi
