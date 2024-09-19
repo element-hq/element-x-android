@@ -44,13 +44,15 @@ jobs:
           name: elementx-app-gplay-bundle-unsigned
           path: |
             app/build/outputs/apk/gplay/nightly/app-gplay-arm64-v8a-nightly.apk
+      - name: Set current date as env variable
+        run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
 
       - name: send message
         uses: s3krit/matrix-message-action@v0.0.3
         with:
           room_id: ${{ secrets.MATRIX_ROOM_ID }}
           access_token: ${{ secrets.MATRIX_ACCESS_TOKEN }}
-          message: "Build complete"
+          message: "Build complete $NOW"
           server: "aguiarvieira.pt"
       - name: Send to Matrix
         uses: daedric7/Matrix-Send-File@v0.1-beta7
