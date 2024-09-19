@@ -5,7 +5,7 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-package io.element.android.libraries.matrix.impl.fixtures
+package io.element.android.libraries.matrix.impl.fixtures.factories
 
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -18,8 +18,8 @@ import org.matrix.rustcomponents.sdk.RoomNotificationMode
 
 fun aRustRoomInfo(
     id: String = A_ROOM_ID.value,
-    displayName: String = A_ROOM_NAME,
-    rawName: String = A_ROOM_NAME,
+    displayName: String? = A_ROOM_NAME,
+    rawName: String? = A_ROOM_NAME,
     topic: String? = null,
     avatarUrl: String? = null,
     isDirect: Boolean = false,

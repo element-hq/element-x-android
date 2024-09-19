@@ -10,9 +10,10 @@ package io.element.android.libraries.matrix.impl.roomlist
 import com.google.common.truth.Truth.assertThat
 import com.sun.jna.Pointer
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import io.element.android.libraries.matrix.impl.fixtures.FakeRustRoomListItem
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoomListItem
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
+import io.element.android.libraries.matrix.test.A_ROOM_ID_3
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -146,6 +147,18 @@ class RoomSummaryListProcessorTest {
 
         assertThat(summaries.value.count()).isEqualTo(1)
         assertThat(summaries.value[index].roomId).isEqualTo(A_ROOM_ID)
+    }
+
+    @Test
+    fun `Reset removes all entries and add the provided ones`() = runTest {
+        summaries.value = listOf(aRoomSummaryFilled(roomId = A_ROOM_ID), aRoomSummaryFilled(A_ROOM_ID_2))
+        val processor = createProcessor()
+        val index = 0
+
+        processor.postUpdate(listOf(RoomListEntriesUpdate.Reset(listOf(FakeRustRoomListItem(A_ROOM_ID_3)))))
+
+        assertThat(summaries.value.count()).isEqualTo(1)
+        assertThat(summaries.value[index].roomId).isEqualTo(A_ROOM_ID_3)
     }
 
     private fun TestScope.createProcessor() = RoomSummaryListProcessor(

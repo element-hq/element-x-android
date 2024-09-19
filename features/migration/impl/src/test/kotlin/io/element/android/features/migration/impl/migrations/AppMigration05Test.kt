@@ -21,7 +21,7 @@ class AppMigration05Test {
         val sessionStore = InMemorySessionStore().apply {
             updateData(
                 aSessionData(
-                    sessionId = A_SESSION_ID,
+                    sessionId = A_SESSION_ID.value,
                     sessionPath = "",
                 )
             )
@@ -37,7 +37,7 @@ class AppMigration05Test {
         val sessionStore = InMemorySessionStore().apply {
             updateData(
                 aSessionData(
-                    sessionId = A_SESSION_ID,
+                    sessionId = A_SESSION_ID.value,
                     sessionPath = "/a/path/existing",
                 )
             )

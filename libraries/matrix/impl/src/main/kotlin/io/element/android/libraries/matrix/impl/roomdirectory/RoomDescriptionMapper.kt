@@ -21,13 +21,17 @@ class RoomDescriptionMapper {
             topic = roomDescription.topic,
             avatarUrl = roomDescription.avatarUrl,
             alias = roomDescription.alias?.let(::RoomAlias),
-            joinRule = when (roomDescription.joinRule) {
-                PublicRoomJoinRule.PUBLIC -> RoomDescription.JoinRule.PUBLIC
-                PublicRoomJoinRule.KNOCK -> RoomDescription.JoinRule.KNOCK
-                null -> RoomDescription.JoinRule.UNKNOWN
-            },
+            joinRule = roomDescription.joinRule.map(),
             isWorldReadable = roomDescription.isWorldReadable,
             numberOfMembers = roomDescription.joinedMembers.toLong(),
         )
+    }
+}
+
+internal fun PublicRoomJoinRule?.map(): RoomDescription.JoinRule {
+    return when (this) {
+        PublicRoomJoinRule.PUBLIC -> RoomDescription.JoinRule.PUBLIC
+        PublicRoomJoinRule.KNOCK -> RoomDescription.JoinRule.KNOCK
+        null -> RoomDescription.JoinRule.UNKNOWN
     }
 }
