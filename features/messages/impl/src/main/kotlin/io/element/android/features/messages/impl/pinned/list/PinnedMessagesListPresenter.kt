@@ -26,6 +26,7 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.pinned.PinnedEventsTimelineProvider
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
+import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -42,19 +43,17 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import kotlin.time.Duration.Companion.milliseconds
 
 class PinnedMessagesListPresenter @AssistedInject constructor(
     @Assisted private val navigator: PinnedMessagesListNavigator,
     private val room: MatrixRoom,
-    private val timelineItemsFactory: TimelineItemsFactory,
+    timelineItemsFactoryCreator: TimelineItemsFactory.Creator,
     private val timelineProvider: PinnedEventsTimelineProvider,
     private val snackbarDispatcher: SnackbarDispatcher,
     actionListPresenterFactory: ActionListPresenter.Factory,
@@ -65,6 +64,12 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
         fun create(navigator: PinnedMessagesListNavigator): PinnedMessagesListPresenter
     }
 
+    private val timelineItemsFactory: TimelineItemsFactory = timelineItemsFactoryCreator.create(
+        config = TimelineItemsFactoryConfig(
+            computeReadReceipts = false,
+            computeReactions = false,
+        )
+    )
     private val actionListPresenter = actionListPresenterFactory.create(PinnedMessagesListTimelineActionPostProcessor())
 
     @Composable
@@ -112,7 +117,6 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
         targetEvent: TimelineItem.Event,
     ) = launch {
         when (action) {
-            TimelineItemAction.Redact -> handleActionRedact(targetEvent)
             TimelineItemAction.ViewSource -> {
                 navigator.onShowEventDebugInfoClick(targetEvent.eventId, targetEvent.debugInfo)
             }
@@ -142,13 +146,6 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
         }
     }
 
-    private suspend fun handleActionRedact(event: TimelineItem.Event) {
-        timelineProvider.invokeOnTimeline {
-            redactEvent(eventId = event.eventId, transactionId = event.transactionId, reason = null)
-                .onFailure { Timber.e(it) }
-        }
-    }
-
     @Composable
     private fun userEventPermissions(updateKey: Long): State<UserEventPermissions> {
         return produceState(UserEventPermissions.DEFAULT, key1 = updateKey) {
@@ -175,7 +172,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
                 is AsyncData.Failure -> flowOf(AsyncData.Failure(asyncTimeline.error))
                 is AsyncData.Loading -> flowOf(AsyncData.Loading())
                 is AsyncData.Success -> {
-                    val timelineItemsFlow = asyncTimeline.data.timelineItems.debounce(300.milliseconds)
+                    val timelineItemsFlow = asyncTimeline.data.timelineItems
                     combine(timelineItemsFlow, room.membersStateFlow) { items, membersState ->
                         timelineItemsFactory.replaceWith(
                             timelineItems = items,

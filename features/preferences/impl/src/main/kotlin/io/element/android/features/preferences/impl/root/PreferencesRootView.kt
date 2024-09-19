@@ -36,6 +36,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserProvider
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -56,6 +57,7 @@ fun PreferencesRootView(
     onOpenUserProfile: (MatrixUser) -> Unit,
     onOpenBlockedUsers: () -> Unit,
     onSignOutClick: () -> Unit,
+    onDeactivateClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -98,6 +100,7 @@ fun PreferencesRootView(
             onOpenAdvancedSettings = onOpenAdvancedSettings,
             onOpenDeveloperSettings = onOpenDeveloperSettings,
             onSignOutClick = onSignOutClick,
+            onDeactivateClick = onDeactivateClick,
         )
 
         Footer(
@@ -192,6 +195,7 @@ private fun ColumnScope.GeneralSection(
     onOpenAdvancedSettings: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
     onSignOutClick: () -> Unit,
+    onDeactivateClick: () -> Unit,
 ) {
     ListItem(
         headlineContent = { Text(stringResource(id = CommonStrings.common_about)) },
@@ -224,12 +228,20 @@ private fun ColumnScope.GeneralSection(
         style = ListItemStyle.Destructive,
         onClick = onSignOutClick,
     )
+    if (state.canDeactivateAccount) {
+        ListItem(
+            headlineContent = { Text(stringResource(id = CommonStrings.action_deactivate_account)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Warning())),
+            style = ListItemStyle.Destructive,
+            onClick = onDeactivateClick,
+        )
+    }
 }
 
 @Composable
 private fun ColumnScope.Footer(
     version: String,
-    deviceId: String?,
+    deviceId: DeviceId?,
     onClick: (() -> Unit)?,
 ) {
     val text = remember(version, deviceId) {
@@ -291,5 +303,6 @@ private fun ContentToPreview(matrixUser: MatrixUser) {
         onOpenUserProfile = {},
         onOpenBlockedUsers = {},
         onSignOutClick = {},
+        onDeactivateClick = {},
     )
 }

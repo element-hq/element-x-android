@@ -13,8 +13,8 @@ import org.matrix.rustcomponents.sdk.AccountManagementAction as RustAccountManag
 fun AccountManagementAction.toRustAction(): RustAccountManagementAction {
     return when (this) {
         AccountManagementAction.Profile -> RustAccountManagementAction.Profile
-        is AccountManagementAction.SessionEnd -> RustAccountManagementAction.SessionEnd(deviceId)
-        is AccountManagementAction.SessionView -> RustAccountManagementAction.SessionView(deviceId)
+        is AccountManagementAction.SessionEnd -> RustAccountManagementAction.SessionEnd(deviceId.value)
+        is AccountManagementAction.SessionView -> RustAccountManagementAction.SessionView(deviceId.value)
         AccountManagementAction.SessionsList -> RustAccountManagementAction.SessionsList
     }
 }

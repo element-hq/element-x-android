@@ -8,7 +8,6 @@
 package io.element.android.features.signedout.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionData
 
@@ -20,18 +19,18 @@ open class SignedOutStateProvider : PreviewParameterProvider<SignedOutState> {
         )
 }
 
-fun aSignedOutState() = SignedOutState(
+private fun aSignedOutState() = SignedOutState(
     appName = "AppName",
     signedOutSession = aSessionData(),
     eventSink = {},
 )
 
-fun aSessionData(
-    sessionId: SessionId = SessionId("@alice:server.org"),
+private fun aSessionData(
+    sessionId: String = "@alice:server.org",
     isTokenValid: Boolean = false,
 ): SessionData {
     return SessionData(
-        userId = sessionId.value,
+        userId = sessionId,
         deviceId = "aDeviceId",
         accessToken = "anAccessToken",
         refreshToken = "aRefreshToken",

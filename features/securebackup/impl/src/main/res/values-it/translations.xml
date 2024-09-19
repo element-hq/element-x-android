@@ -38,7 +38,6 @@
   <string name="screen_recovery_key_confirm_error_content">"Riprova per confermare l\'accesso al backup della chat."</string>
   <string name="screen_recovery_key_confirm_error_title">"Chiave di recupero errata"</string>
   <string name="screen_recovery_key_confirm_key_description">"Se hai una chiave di sicurezza o una password, andrà bene anche questo."</string>
-  <string name="screen_recovery_key_confirm_key_label">"Chiave di recupero o codice di accesso"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Inserisci…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Hai perso la chiave di recupero?"</string>
   <string name="screen_recovery_key_confirm_success">"Chiave di recupero confermata"</string>

@@ -100,7 +100,8 @@ internal class MatrixTimelineDiffProcessor(
                 clear()
             }
             TimelineChange.TRUNCATE -> {
-                // Not supported
+                val index = diff.truncate() ?: return
+                subList(index.toInt(), size).clear()
             }
         }
     }

@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.test.room
 
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -79,7 +80,7 @@ class FakeMatrixRoom(
     private var roomPermalinkResult: () -> Result<String> = { lambdaError() },
     private var eventPermalinkResult: (EventId) -> Result<String> = { lambdaError() },
     private val sendCallNotificationIfNeededResult: () -> Result<Unit> = { lambdaError() },
-    private val userDisplayNameResult: () -> Result<String?> = { lambdaError() },
+    private val userDisplayNameResult: (UserId) -> Result<String?> = { lambdaError() },
     private val userAvatarUrlResult: () -> Result<String?> = { lambdaError() },
     private val userRoleResult: () -> Result<RoomMember.Role> = { lambdaError() },
     private val getUpdatedMemberResult: (UserId) -> Result<RoomMember> = { lambdaError() },
@@ -134,7 +135,9 @@ class FakeMatrixRoom(
     private val loadComposerDraftLambda: () -> Result<ComposerDraft?> = { Result.success<ComposerDraft?>(null) },
     private val clearComposerDraftLambda: () -> Result<Unit> = { Result.success(Unit) },
     private val subscribeToSyncLambda: () -> Unit = { lambdaError() },
-) : MatrixRoom {
+    private val ignoreDeviceTrustAndResendResult: (Map<UserId, List<DeviceId>>, TransactionId) -> Result<Unit> = { _, _ -> lambdaError() },
+    private val withdrawVerificationAndResendResult: (List<UserId>, TransactionId) -> Result<Unit> = { _, _ -> lambdaError() },
+    ) : MatrixRoom {
     private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
     override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
 
@@ -199,7 +202,7 @@ class FakeMatrixRoom(
     override fun destroy() = Unit
 
     override suspend fun userDisplayName(userId: UserId): Result<String?> = simulateLongTask {
-        userDisplayNameResult()
+        userDisplayNameResult(userId)
     }
 
     override suspend fun userAvatarUrl(userId: UserId): Result<String?> = simulateLongTask {
@@ -226,7 +229,7 @@ class FakeMatrixRoom(
         return toggleReactionResult(emoji, uniqueId)
     }
 
-    override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> {
+    override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> = simulateLongTask {
         return retrySendMessageResult(transactionId)
     }
 
@@ -492,6 +495,14 @@ class FakeMatrixRoom(
         return getWidgetDriverResult(widgetSettings)
     }
 
+    override suspend fun ignoreDeviceTrustAndResend(devices: Map<UserId, List<DeviceId>>, transactionId: TransactionId): Result<Unit> = simulateLongTask {
+        return ignoreDeviceTrustAndResendResult(devices, transactionId)
+    }
+
+    override suspend fun withdrawVerificationAndResend(userIds: List<UserId>, transactionId: TransactionId): Result<Unit> = simulateLongTask {
+        return withdrawVerificationAndResendResult(userIds, transactionId)
+    }
+
     fun givenRoomMembersState(state: MatrixRoomMembersState) {
         membersStateFlow.value = state
     }
@@ -509,7 +520,7 @@ fun aRoomInfo(
     isTombstoned: Boolean = false,
     isFavorite: Boolean = false,
     canonicalAlias: RoomAlias? = null,
-    alternativeAliases: List<String> = emptyList(),
+    alternativeAliases: List<RoomAlias> = emptyList(),
     currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,
     inviter: RoomMember? = null,
     activeMembersCount: Long = 1,
@@ -520,9 +531,10 @@ fun aRoomInfo(
     userDefinedNotificationMode: RoomNotificationMode? = null,
     hasRoomCall: Boolean = false,
     userPowerLevels: ImmutableMap<UserId, Long> = persistentMapOf(),
-    activeRoomCallParticipants: List<String> = emptyList(),
+    activeRoomCallParticipants: List<UserId> = emptyList(),
     heroes: List<MatrixUser> = emptyList(),
     pinnedEventIds: List<EventId> = emptyList(),
+    roomCreator: UserId? = null,
 ) = MatrixRoomInfo(
     id = id,
     name = name,
@@ -549,6 +561,7 @@ fun aRoomInfo(
     activeRoomCallParticipants = activeRoomCallParticipants.toImmutableList(),
     heroes = heroes.toImmutableList(),
     pinnedEventIds = pinnedEventIds.toImmutableList(),
+    creator = roomCreator,
 )
 
 fun defaultRoomPowerLevels() = MatrixRoomPowerLevels(

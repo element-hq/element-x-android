@@ -33,7 +33,6 @@
   <string name="screen_recovery_key_confirm_error_content">"Vă rugăm să încercați din nou să confirmați accesul la backup."</string>
   <string name="screen_recovery_key_confirm_error_title">"Cheie de recuperare incorectă"</string>
   <string name="screen_recovery_key_confirm_key_description">"Dacă aveți o cheie de securitate sau o frază de securitate, aceasta va funcționa și ea."</string>
-  <string name="screen_recovery_key_confirm_key_label">"Cheie de recuperare sau cod de acces"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Introduceți…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Ați pierdut cheia de recuperare?"</string>
   <string name="screen_recovery_key_confirm_success">"Cheia de recuperare confirmată"</string>

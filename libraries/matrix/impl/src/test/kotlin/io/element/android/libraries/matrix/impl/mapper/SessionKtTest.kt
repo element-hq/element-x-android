@@ -1,0 +1,84 @@
+/*
+ * Copyright 2024 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
+ */
+
+package io.element.android.libraries.matrix.impl.mapper
+
+import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustSession
+import io.element.android.libraries.matrix.impl.paths.SessionPaths
+import io.element.android.libraries.matrix.test.A_DEVICE_ID
+import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
+import io.element.android.libraries.matrix.test.A_HOMESERVER_URL_2
+import io.element.android.libraries.matrix.test.A_SECRET
+import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.sessionstorage.api.LoginType
+import org.junit.Test
+import org.matrix.rustcomponents.sdk.SlidingSyncVersion
+import java.io.File
+
+class SessionKtTest {
+    @Test
+    fun `toSessionData compute the expected result`() {
+        val result = aRustSession().toSessionData(
+            isTokenValid = true,
+            loginType = LoginType.PASSWORD,
+            passphrase = A_SECRET,
+            sessionPaths = SessionPaths(File("/a/file"), File("/a/cache")),
+        )
+        assertThat(result.userId).isEqualTo(A_USER_ID.value)
+        assertThat(result.deviceId).isEqualTo(A_DEVICE_ID.value)
+        assertThat(result.accessToken).isEqualTo("accessToken")
+        assertThat(result.refreshToken).isEqualTo("refreshToken")
+        assertThat(result.homeserverUrl).isEqualTo(A_HOMESERVER_URL)
+        assertThat(result.isTokenValid).isTrue()
+        assertThat(result.oidcData).isNull()
+        assertThat(result.slidingSyncProxy).isNull()
+        assertThat(result.loginType).isEqualTo(LoginType.PASSWORD)
+        assertThat(result.loginTimestamp).isNotNull()
+        assertThat(result.passphrase).isEqualTo(A_SECRET)
+        assertThat(result.sessionPath).isEqualTo("/a/file")
+        assertThat(result.cachePath).isEqualTo("/a/cache")
+    }
+
+    @Test
+    fun `toSessionData can change the validity of the token`() {
+        val result = aRustSession().toSessionData(
+            isTokenValid = false,
+            loginType = LoginType.PASSWORD,
+            passphrase = A_SECRET,
+            sessionPaths = SessionPaths(File("/a/file"), File("/a/cache")),
+            homeserverUrl = null,
+        )
+        assertThat(result.isTokenValid).isFalse()
+    }
+
+    @Test
+    fun `toSessionData can override the value of the homeserver url`() {
+        val result = aRustSession().toSessionData(
+            isTokenValid = true,
+            loginType = LoginType.PASSWORD,
+            passphrase = A_SECRET,
+            sessionPaths = SessionPaths(File("/a/file"), File("/a/cache")),
+            homeserverUrl = A_HOMESERVER_URL_2,
+        )
+        assertThat(result.homeserverUrl).isEqualTo(A_HOMESERVER_URL_2)
+    }
+
+    @Test
+    fun `toSessionData copy the sliding sync url if present`() {
+        val result = aRustSession(
+            proxy = SlidingSyncVersion.Proxy("proxyUrl")
+        ).toSessionData(
+            isTokenValid = true,
+            loginType = LoginType.PASSWORD,
+            passphrase = A_SECRET,
+            sessionPaths = SessionPaths(File("/a/file"), File("/a/cache")),
+            homeserverUrl = A_HOMESERVER_URL_2,
+        )
+        assertThat(result.slidingSyncProxy).isEqualTo("proxyUrl")
+    }
+}

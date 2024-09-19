@@ -9,9 +9,11 @@ package io.element.android.libraries.matrix.impl
 
 import io.element.android.libraries.androidutils.file.getSizeOfFiles
 import io.element.android.libraries.androidutils.file.safeDelete
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -28,6 +30,7 @@ import io.element.android.libraries.matrix.api.notificationsettings.Notification
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
+import io.element.android.libraries.matrix.api.room.InvitedRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -87,6 +90,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import org.matrix.rustcomponents.sdk.AuthData
+import org.matrix.rustcomponents.sdk.AuthDataPasswordDetails
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientException
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
@@ -117,10 +122,10 @@ class RustMatrixClient(
     private val baseDirectory: File,
     baseCacheDirectory: File,
     private val clock: SystemClock,
-    sessionDelegate: RustClientSessionDelegate,
+    private val sessionDelegate: RustClientSessionDelegate,
 ) : MatrixClient {
     override val sessionId: UserId = UserId(client.userId())
-    override val deviceId: String = client.deviceId()
+    override val deviceId: DeviceId = DeviceId(client.deviceId())
     override val sessionCoroutineScope = appCoroutineScope.childScope(dispatchers.main, "Session-$sessionId")
 
     private val innerRoomListService = syncService.roomListService()
@@ -173,13 +178,13 @@ class RustMatrixClient(
         roomListService = roomListService,
         innerRoomListService = innerRoomListService,
         sessionId = sessionId,
+        deviceId = deviceId,
         notificationSettingsService = notificationSettingsService,
         sessionCoroutineScope = sessionCoroutineScope,
         dispatchers = dispatchers,
         systemClock = clock,
         roomContentForwarder = RoomContentForwarder(innerRoomListService),
         roomSyncSubscriber = roomSyncSubscriber,
-        getSessionData = { sessionStore.getSession(sessionId.value)!! },
     )
 
     override val mediaLoader: MatrixMediaLoader = RustMediaLoader(
@@ -190,7 +195,7 @@ class RustMatrixClient(
 
     private val roomMembershipObserver = RoomMembershipObserver()
 
-    private val clientDelegateTaskHandle: TaskHandle? = client.setDelegate(sessionDelegate)
+    private var clientDelegateTaskHandle: TaskHandle? = client.setDelegate(sessionDelegate)
 
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(
         MatrixUser(
@@ -244,6 +249,10 @@ class RustMatrixClient(
         return roomFactory.create(roomId)
     }
 
+    override suspend fun getInvitedRoom(roomId: RoomId): InvitedRoom? {
+        return roomFactory.createInvitedRoom(roomId)
+    }
+
     /**
      * Wait for the room to be available in the room list, with a membership for the current user of [CurrentUserMembership.JOINED].
      * @param roomIdOrAlias the room id or alias to wait for
@@ -266,6 +275,8 @@ class RustMatrixClient(
                 .filter(predicate)
                 .first()
                 .first()
+                // Ensure that the room is ready
+                .also { client.awaitRoomRemoteEcho(it.roomId.value) }
         }
     }
 
@@ -438,12 +449,12 @@ class RustMatrixClient(
     override fun close() {
         appCoroutineScope.launch {
             roomFactory.destroy()
+            rustSyncService.destroy()
         }
         sessionCoroutineScope.cancel()
         clientDelegateTaskHandle?.cancelAndDestroy()
         notificationSettingsService.destroy()
         verificationService.destroy()
-        syncService.destroy()
         innerRoomListService.destroy()
         notificationClient.destroy()
         notificationProcessSetup.destroy()
@@ -462,7 +473,9 @@ class RustMatrixClient(
 
     override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean): String? {
         var result: String? = null
-        syncService.stop()
+        // Remove current delegate so we don't receive an auth error
+        clientDelegateTaskHandle?.cancelAndDestroy()
+        clientDelegateTaskHandle = null
         withContext(sessionDispatcher) {
             if (userInitiated) {
                 try {
@@ -471,18 +484,70 @@ class RustMatrixClient(
                     if (ignoreSdkError) {
                         Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
                     } else {
+                        // If the logout failed we need to restore the delegate
+                        clientDelegateTaskHandle = client.setDelegate(sessionDelegate)
                         Timber.e(failure, "Fail to call logout on HS.")
                         throw failure
                     }
                 }
             }
             close()
+
             deleteSessionDirectory(deleteCryptoDb = true)
             if (userInitiated) {
                 sessionStore.removeSession(sessionId.value)
             }
         }
         return result
+    }
+
+    override fun canDeactivateAccount(): Boolean {
+        return runCatching {
+            client.canDeactivateAccount()
+        }
+            .getOrNull()
+            .orFalse()
+    }
+
+    override suspend fun deactivateAccount(password: String, eraseData: Boolean): Result<Unit> = withContext(sessionDispatcher) {
+        Timber.w("Deactivating account")
+        // Remove current delegate so we don't receive an auth error
+        clientDelegateTaskHandle?.cancelAndDestroy()
+        clientDelegateTaskHandle = null
+        runCatching {
+            // First call without AuthData, should fail
+            val firstAttempt = runCatching {
+                client.deactivateAccount(
+                    authData = null,
+                    eraseData = eraseData,
+                )
+            }
+            if (firstAttempt.isFailure) {
+                Timber.w(firstAttempt.exceptionOrNull(), "Expected failure, try again")
+                // This is expected, try again with the password
+                runCatching {
+                    client.deactivateAccount(
+                        authData = AuthData.Password(
+                            passwordDetails = AuthDataPasswordDetails(
+                                identifier = sessionId.value,
+                                password = password,
+                            ),
+                        ),
+                        eraseData = eraseData,
+                    )
+                }.onFailure {
+                    Timber.e(it, "Failed to deactivate account")
+                    // If the deactivation failed we need to restore the delegate
+                    clientDelegateTaskHandle = client.setDelegate(sessionDelegate)
+                    throw it
+                }
+            }
+            close()
+            deleteSessionDirectory(deleteCryptoDb = true)
+            sessionStore.removeSession(sessionId.value)
+        }.onFailure {
+            Timber.e(it, "Failed to deactivate account")
+        }
     }
 
     override suspend fun getAccountManagementUrl(action: AccountManagementAction?): Result<String?> = withContext(sessionDispatcher) {
@@ -533,12 +598,12 @@ class RustMatrixClient(
         return client.availableSlidingSyncVersions().contains(SlidingSyncVersion.Native)
     }
 
-    override fun isUsingNativeSlidingSync(): Boolean {
-        return client.session().slidingSyncVersion == SlidingSyncVersion.Native
+    override suspend fun isSlidingSyncProxySupported(): Boolean {
+        return client.availableSlidingSyncVersions().any { it is SlidingSyncVersion.Proxy }
     }
 
-    internal fun setDelegate(delegate: RustClientSessionDelegate) {
-        client.setDelegate(delegate)
+    override fun isUsingNativeSlidingSync(): Boolean {
+        return client.session().slidingSyncVersion == SlidingSyncVersion.Native
     }
 
     private suspend fun File.getCacheSize(

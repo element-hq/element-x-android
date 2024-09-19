@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.test
 
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -21,6 +22,7 @@ import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
+import io.element.android.libraries.matrix.api.room.InvitedRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -58,7 +60,7 @@ import java.util.Optional
 
 class FakeMatrixClient(
     override val sessionId: SessionId = A_SESSION_ID,
-    override val deviceId: String = "A_DEVICE_ID",
+    override val deviceId: DeviceId = A_DEVICE_ID,
     override val sessionCoroutineScope: CoroutineScope = TestScope(),
     private val userDisplayName: String? = A_USER_NAME,
     private val userAvatarUrl: String? = AN_AVATAR_URL,
@@ -77,7 +79,10 @@ class FakeMatrixClient(
     private val clearCacheLambda: () -> Unit = { lambdaError() },
     private val userIdServerNameLambda: () -> String = { lambdaError() },
     private val getUrlLambda: (String) -> Result<String> = { lambdaError() },
+    private val canDeactivateAccountResult: () -> Boolean = { lambdaError() },
+    private val deactivateAccountResult: (String, Boolean) -> Result<Unit> = { _, _ -> lambdaError() },
     var isNativeSlidingSyncSupportedLambda: suspend () -> Boolean = { true },
+    var isSlidingSyncProxySupportedLambda: suspend () -> Boolean = { true },
     var isUsingNativeSlidingSyncLambda: () -> Boolean = { true },
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
@@ -97,6 +102,7 @@ class FakeMatrixClient(
     private var createDmResult: Result<RoomId> = Result.success(A_ROOM_ID)
     private var findDmResult: RoomId? = A_ROOM_ID
     private val getRoomResults = mutableMapOf<RoomId, MatrixRoom>()
+    val getInvitedRoomResults = mutableMapOf<RoomId, InvitedRoom>()
     private val searchUserResults = mutableMapOf<String, Result<MatrixSearchUserResults>>()
     private val getProfileResults = mutableMapOf<UserId, Result<MatrixUser>>()
     private var uploadMediaResult: Result<String> = Result.success(AN_AVATAR_URL)
@@ -121,6 +127,10 @@ class FakeMatrixClient(
 
     override suspend fun getRoom(roomId: RoomId): MatrixRoom? {
         return getRoomResults[roomId]
+    }
+
+    override suspend fun getInvitedRoom(roomId: RoomId): InvitedRoom? {
+        return getInvitedRoomResults[roomId]
     }
 
     override suspend fun findDM(userId: UserId): RoomId? {
@@ -165,6 +175,12 @@ class FakeMatrixClient(
 
     override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean): String? = simulateLongTask {
         return logoutLambda(ignoreSdkError, userInitiated)
+    }
+
+    override fun canDeactivateAccount() = canDeactivateAccountResult()
+
+    override suspend fun deactivateAccount(password: String, eraseData: Boolean): Result<Unit> = simulateLongTask {
+        deactivateAccountResult(password, eraseData)
     }
 
     override fun close() = Unit
@@ -321,6 +337,10 @@ class FakeMatrixClient(
 
     override suspend fun isNativeSlidingSyncSupported(): Boolean {
         return isNativeSlidingSyncSupportedLambda()
+    }
+
+    override suspend fun isSlidingSyncProxySupported(): Boolean {
+        return isSlidingSyncProxySupportedLambda()
     }
 
     override fun isUsingNativeSlidingSync(): Boolean {

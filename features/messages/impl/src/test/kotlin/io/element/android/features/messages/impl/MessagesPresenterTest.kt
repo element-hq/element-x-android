@@ -16,9 +16,10 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.FakeActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.aResolveVerifiedUserSendFailureState
 import io.element.android.features.messages.impl.draft.FakeComposerDraftService
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
-import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactory
+import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactoryCreator
 import io.element.android.features.messages.impl.messagecomposer.DefaultMessageComposerContext
 import io.element.android.features.messages.impl.messagecomposer.FakeRoomAliasSuggestionsDataSource
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
@@ -1024,7 +1025,7 @@ class MessagesPresenterTest {
             permissionsPresenterFactory,
         )
         val timelinePresenter = TimelinePresenter(
-            timelineItemsFactory = aTimelineItemsFactory(),
+            timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(),
             room = matrixRoom,
             dispatchers = coroutineDispatchers,
             appScope = this,
@@ -1035,6 +1036,7 @@ class MessagesPresenterTest {
             sessionPreferencesStore = sessionPreferencesStore,
             timelineItemIndexer = TimelineItemIndexer(),
             timelineController = TimelineController(matrixRoom),
+            resolveVerifiedUserSendFailurePresenter = { aResolveVerifiedUserSendFailureState() },
         )
         val timelinePresenterFactory = object : TimelinePresenter.Factory {
             override fun create(navigator: MessagesNavigator): TimelinePresenter {

@@ -14,13 +14,17 @@ import org.matrix.rustcomponents.sdk.RecoveryException as RustRecoveryException
 
 fun Throwable.mapRecoveryException(): RecoveryException {
     return when (this) {
-        is RustRecoveryException.SecretStorage -> RecoveryException.SecretStorage(
-            message = errorMessage
-        )
-        is RustRecoveryException.BackupExistsOnServer -> RecoveryException.BackupExistsOnServer
-        is RustRecoveryException.Client -> RecoveryException.Client(
-            source.mapClientException()
-        )
+        is RustRecoveryException -> {
+            when (this) {
+                is RustRecoveryException.SecretStorage -> RecoveryException.SecretStorage(
+                    message = errorMessage
+                )
+                is RustRecoveryException.BackupExistsOnServer -> RecoveryException.BackupExistsOnServer
+                is RustRecoveryException.Client -> RecoveryException.Client(
+                    source.mapClientException()
+                )
+            }
+        }
         else -> RecoveryException.Client(
             ClientException.Other("Unknown error")
         )

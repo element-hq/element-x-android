@@ -34,10 +34,4 @@
   <string name="screen_server_confirmation_message_register">"აქ იქნება თქვენი საუბრები - ისევე, როგორც თქვენ ელ. ფოსტაში ინახება თქვენი ელ.წერილები."</string>
   <string name="screen_server_confirmation_title_login">"თქვენ აპირებთ შესვლას %1$s-ში"</string>
   <string name="screen_server_confirmation_title_register">"თქვენ აპირებთ ანგარიშის შექმნას %1$s-ში"</string>
-  <string name="screen_waitlist_message">"ახლა დიდი მოთხოვნაა %1$s-ზე %2$s-ში. დაბრუნდით რამდენიმე დღეში და სცადეთ ერთხელაც.
-
-მადლობა მოთმენისათვის!"</string>
-  <string name="screen_waitlist_message_success">"კეთილი იყოს თქვენი მობრძანება %1$s-ში!"</string>
-  <string name="screen_waitlist_title">"თითქმის მზადაა."</string>
-  <string name="screen_waitlist_title_success">"თქვენ შეხვედით."</string>
 </resources>

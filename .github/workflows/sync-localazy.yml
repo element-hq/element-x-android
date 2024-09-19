@@ -36,7 +36,7 @@ jobs:
           ./tools/localazy/importSupportedLocalesFromLocalazy.py
           ./tools/test/generateAllScreenshots.py
       - name: Create Pull Request for Strings
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
           commit-message: Sync Strings from Localazy

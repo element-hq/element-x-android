@@ -13,10 +13,10 @@ import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.FakeMessagesNavigator
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.aResolveVerifiedUserSendFailureState
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
-import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactory
+import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactoryCreator
 import io.element.android.features.messages.impl.timeline.components.aCriticalShield
-import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.voicemessages.timeline.FakeRedactedVoiceMessageManager
@@ -662,7 +662,6 @@ import kotlin.time.Duration.Companion.seconds
             liveTimeline = timeline,
             canUserSendMessageResult = { _, _ -> Result.success(true) }
         ),
-        timelineItemsFactory: TimelineItemsFactory = aTimelineItemsFactory(),
         redactedVoiceMessageManager: RedactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
         messagesNavigator: FakeMessagesNavigator = FakeMessagesNavigator(),
         endPollAction: EndPollAction = FakeEndPollAction(),
@@ -671,7 +670,7 @@ import kotlin.time.Duration.Companion.seconds
         timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
     ): TimelinePresenter {
         return TimelinePresenter(
-            timelineItemsFactory = timelineItemsFactory,
+            timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(),
             room = room,
             dispatchers = testCoroutineDispatchers(),
             appScope = this,
@@ -682,6 +681,7 @@ import kotlin.time.Duration.Companion.seconds
             sessionPreferencesStore = sessionPreferencesStore,
             timelineItemIndexer = timelineItemIndexer,
             timelineController = TimelineController(room),
+            resolveVerifiedUserSendFailurePresenter = { aResolveVerifiedUserSendFailureState() },
         )
     }
 }

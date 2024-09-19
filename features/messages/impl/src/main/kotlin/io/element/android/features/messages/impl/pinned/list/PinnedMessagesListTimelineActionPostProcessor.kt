@@ -17,7 +17,6 @@ class PinnedMessagesListTimelineActionPostProcessor : TimelineItemActionPostProc
             actions.firstOrNull { it is TimelineItemAction.Unpin }?.let(::add)
             actions.firstOrNull { it is TimelineItemAction.Forward }?.let(::add)
             actions.firstOrNull { it is TimelineItemAction.ViewSource }?.let(::add)
-            actions.firstOrNull { it is TimelineItemAction.Redact }?.let(::add)
         }
     }
 }

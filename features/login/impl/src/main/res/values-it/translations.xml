@@ -78,10 +78,4 @@ Prova ad accedere manualmente o scansiona il codice QR con un altro dispositivo.
   <string name="screen_server_confirmation_message_register">"Qui è dove vivranno le tue conversazioni — proprio come useresti un fornitore di posta elettronica per conservare le tue email."</string>
   <string name="screen_server_confirmation_title_login">"Stai per accedere a %1$s"</string>
   <string name="screen_server_confirmation_title_register">"Stai per creare un account su %1$s"</string>
-  <string name="screen_waitlist_message">"Al momento c\'è una grande richiesta per %1$s su %2$s. Torna a visitare l\'app tra qualche giorno e riprova.
-
-Grazie per la pazienza!"</string>
-  <string name="screen_waitlist_message_success">"Benvenuti in %1$s!"</string>
-  <string name="screen_waitlist_title">"Ci sei quasi."</string>
-  <string name="screen_waitlist_title_success">"Sei dentro."</string>
 </resources>

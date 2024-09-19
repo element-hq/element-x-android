@@ -91,8 +91,9 @@ class DefaultElementCallBaseUrlProviderTest {
     private fun createElementWellKnown(widgetUrl: String): ElementWellKnown {
         return ElementWellKnown(
             call = ElementCallWellKnown(
-                widgetUrl = widgetUrl
-            )
+                widgetUrl = widgetUrl,
+            ),
+            registrationHelperUrl = null,
         )
     }
 }

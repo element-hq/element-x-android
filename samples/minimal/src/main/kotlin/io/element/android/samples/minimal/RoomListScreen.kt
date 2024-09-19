@@ -25,8 +25,6 @@ import io.element.android.features.roomlist.impl.filters.selection.DefaultFilter
 import io.element.android.features.roomlist.impl.search.RoomListSearchDataSource
 import io.element.android.features.roomlist.impl.search.RoomListSearchPresenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.dateformatter.impl.DateFormatters
 import io.element.android.libraries.dateformatter.impl.DefaultLastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.impl.LocalDateTimeProvider
@@ -35,8 +33,6 @@ import io.element.android.libraries.eventformatter.impl.DefaultRoomLastMessageFo
 import io.element.android.libraries.eventformatter.impl.ProfileChangeContentFormatter
 import io.element.android.libraries.eventformatter.impl.RoomMembershipContentFormatter
 import io.element.android.libraries.eventformatter.impl.StateContentFormatter
-import io.element.android.libraries.featureflag.impl.DefaultFeatureFlagService
-import io.element.android.libraries.featureflag.impl.PreferencesFeatureFlagProvider
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsPresenter
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.indicator.impl.DefaultIndicatorService
@@ -70,13 +66,7 @@ class RoomListScreen(
     private val sessionVerificationService = matrixClient.sessionVerificationService()
     private val encryptionService = matrixClient.encryptionService()
     private val stringProvider = AndroidStringProvider(context.resources)
-    private val buildMeta = getBuildMeta(context)
-    private val featureFlagService = DefaultFeatureFlagService(
-        providers = setOf(
-            PreferencesFeatureFlagProvider(context = context, buildMeta = buildMeta)
-        ),
-        buildMeta = buildMeta,
-    )
+    private val featureFlagService = AlwaysEnabledFeatureFlagService()
     private val roomListRoomSummaryFactory = RoomListRoomSummaryFactory(
         lastMessageTimestampFormatter = DefaultLastMessageTimestampFormatter(
             localDateTimeProvider = dateTimeProvider,
@@ -190,26 +180,5 @@ class RoomListScreen(
                 }
             }
         }
-    }
-
-    private fun getBuildMeta(context: Context): BuildMeta {
-        val buildType = BuildType.valueOf(BuildConfig.BUILD_TYPE.uppercase())
-        val name = context.getString(R.string.app_name)
-        return BuildMeta(
-            isDebuggable = BuildConfig.DEBUG,
-            buildType = buildType,
-            applicationName = name,
-            productionApplicationName = name,
-            desktopApplicationName = name,
-            applicationId = BuildConfig.APPLICATION_ID,
-            lowPrivacyLoggingEnabled = false,
-            versionName = BuildConfig.VERSION_NAME,
-            versionCode = BuildConfig.VERSION_CODE.toLong(),
-            gitRevision = "",
-            gitBranchName = "",
-            flavorDescription = "",
-            flavorShortDescription = "",
-            isEnterpriseBuild = false,
-        )
     }
 }

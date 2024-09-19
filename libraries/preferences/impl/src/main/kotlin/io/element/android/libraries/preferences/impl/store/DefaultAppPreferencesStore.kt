@@ -87,7 +87,7 @@ class DefaultAppPreferencesStore @Inject constructor(
 
     override fun isSimplifiedSlidingSyncEnabledFlow(): Flow<Boolean> {
         return store.data.map { prefs ->
-            prefs[simplifiedSlidingSyncKey] ?: false
+            prefs[simplifiedSlidingSyncKey] ?: true
         }
     }
 

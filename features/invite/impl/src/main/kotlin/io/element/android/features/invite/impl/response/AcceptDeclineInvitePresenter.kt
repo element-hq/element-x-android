@@ -112,8 +112,8 @@ class AcceptDeclineInvitePresenter @Inject constructor(
 
     private fun CoroutineScope.declineInvite(roomId: RoomId, declinedAction: MutableState<AsyncAction<RoomId>>) = launch {
         suspend {
-            client.getRoom(roomId)?.use {
-                it.leave().getOrThrow()
+            client.getInvitedRoom(roomId)?.use {
+                it.declineInvite().getOrThrow()
                 notificationCleaner.clearMembershipNotificationForRoom(client.sessionId, roomId)
             }
             roomId

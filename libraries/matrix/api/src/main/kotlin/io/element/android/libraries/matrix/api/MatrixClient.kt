@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.api
 
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -20,6 +21,7 @@ import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
+import io.element.android.libraries.matrix.api.room.InvitedRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -41,13 +43,14 @@ import java.util.Optional
 
 interface MatrixClient : Closeable {
     val sessionId: SessionId
-    val deviceId: String
+    val deviceId: DeviceId
     val userProfile: StateFlow<MatrixUser>
     val roomListService: RoomListService
     val mediaLoader: MatrixMediaLoader
     val sessionCoroutineScope: CoroutineScope
     val ignoredUsersFlow: StateFlow<ImmutableList<UserId>>
     suspend fun getRoom(roomId: RoomId): MatrixRoom?
+    suspend fun getInvitedRoom(roomId: RoomId): InvitedRoom?
     suspend fun findDM(userId: UserId): RoomId?
     suspend fun ignoreUser(userId: UserId): Result<Unit>
     suspend fun unignoreUser(userId: UserId): Result<Unit>
@@ -130,6 +133,12 @@ interface MatrixClient : Closeable {
     /** Returns `true` if the home server supports native sliding sync. */
     suspend fun isNativeSlidingSyncSupported(): Boolean
 
-    /** Returns `true` if the current session is using native sliding sync. */
+    /** Returns `true` if the home server supports sliding sync using a proxy. */
+    suspend fun isSlidingSyncProxySupported(): Boolean
+
+    /** Returns `true` if the current session is using native sliding sync, `false` if it's using a proxy. */
     fun isUsingNativeSlidingSync(): Boolean
+
+    fun canDeactivateAccount(): Boolean
+    suspend fun deactivateAccount(password: String, eraseData: Boolean): Result<Unit>
 }

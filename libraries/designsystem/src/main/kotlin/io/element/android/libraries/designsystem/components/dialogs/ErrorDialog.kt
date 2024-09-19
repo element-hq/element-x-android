@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.window.DialogProperties
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
@@ -25,17 +26,23 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun ErrorDialog(
     content: String,
-    onDismiss: () -> Unit,
+    onSubmit: () -> Unit,
     modifier: Modifier = Modifier,
-    title: String = ErrorDialogDefaults.title,
+    title: String? = ErrorDialogDefaults.title,
     submitText: String = ErrorDialogDefaults.submitText,
+    onDismiss: () -> Unit = onSubmit,
+    canDismiss: Boolean = true,
 ) {
-    BasicAlertDialog(modifier = modifier, onDismissRequest = onDismiss) {
+    BasicAlertDialog(
+        modifier = modifier,
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(dismissOnClickOutside = canDismiss, dismissOnBackPress = canDismiss)
+    ) {
         ErrorDialogContent(
             title = title,
             content = content,
             submitText = submitText,
-            onSubmitClick = onDismiss,
+            onSubmitClick = onSubmit,
         )
     }
 }
@@ -44,7 +51,7 @@ fun ErrorDialog(
 private fun ErrorDialogContent(
     content: String,
     onSubmitClick: () -> Unit,
-    title: String = ErrorDialogDefaults.title,
+    title: String? = ErrorDialogDefaults.title,
     submitText: String = ErrorDialogDefaults.submitText,
 ) {
     SimpleAlertDialogContent(
@@ -78,6 +85,6 @@ internal fun ErrorDialogContentPreview() {
 internal fun ErrorDialogPreview() = ElementPreview {
     ErrorDialog(
         content = "Content",
-        onDismiss = {},
+        onSubmit = {},
     )
 }

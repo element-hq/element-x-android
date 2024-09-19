@@ -39,7 +39,6 @@
   <string name="screen_recovery_key_confirm_error_content">"Zkuste prosím znovu potvrdit přístup k záloze chatu."</string>
   <string name="screen_recovery_key_confirm_error_title">"Nesprávný klíč pro obnovení"</string>
   <string name="screen_recovery_key_confirm_key_description">"Pokud máte bezpečnostní klíč nebo bezpečnostní frázi, bude to fungovat také."</string>
-  <string name="screen_recovery_key_confirm_key_label">"Klíč pro obnovení nebo přístupový kód"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Zadejte…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Ztratili jste klíč pro obnovení?"</string>
   <string name="screen_recovery_key_confirm_success">"Klíč pro obnovení potvrzen"</string>

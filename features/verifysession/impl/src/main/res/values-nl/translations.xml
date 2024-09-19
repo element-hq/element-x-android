@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Maak een nieuwe herstelsleutel"</string>
+  <string name="screen_identity_confirmation_subtitle">"Verifieer dit apparaat om beveiligde berichten in te stellen."</string>
+  <string name="screen_identity_confirmation_title">"Bevestig dat jij het bent"</string>
+  <string name="screen_identity_confirmed_subtitle">"Nu kun je veilig berichten lezen of verzenden, en iedereen met wie je chat kan dit apparaat ook vertrouwen."</string>
+  <string name="screen_identity_confirmed_title">"Apparaat geverifieerd"</string>
+  <string name="screen_identity_waiting_on_other_device">"Wachten op ander apparaat…"</string>
   <string name="screen_session_verification_cancelled_subtitle">"Er lijkt iets niet goed te gaan. Of er is een time-out opgetreden of het verzoek is geweigerd."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Bevestig dat de emoji\'s hieronder overeenkomen met de emoji\'s in je andere sessie."</string>
   <string name="screen_session_verification_compare_emojis_title">"Vergelijk emoji\'s"</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"Bevestig dat de onderstaande cijfers overeenkomen met de cijfers die worden weergegeven in je andere sessie."</string>
   <string name="screen_session_verification_compare_numbers_title">"Vergelijk getallen"</string>
   <string name="screen_session_verification_complete_subtitle">"Je nieuwe sessie is nu geverifieerd. Het heeft toegang tot je versleutelde berichten en andere gebruikers zullen het als vertrouwd beschouwen."</string>
-  <string name="screen_session_verification_enter_recovery_key">"Voer recovery key in"</string>
+  <string name="screen_session_verification_enter_recovery_key">"Voer herstelsleutel in"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Bewijs dat jij het bent om toegang te krijgen tot je versleutelde berichtgeschiedenis."</string>
   <string name="screen_session_verification_open_existing_session_title">"Open een bestaande sessie"</string>
   <string name="screen_session_verification_positive_button_canceled">"Verificatie opnieuw proberen"</string>

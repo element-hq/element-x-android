@@ -27,6 +27,7 @@ import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
 
 /**
  * IconTitleSubtitleMolecule is a molecule which displays an icon, a title and a subtitle.
@@ -37,6 +38,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
  * @param iconResourceId the resource id of the icon to display, exclusive with [iconImageVector]
  * @param iconImageVector the image vector of the icon to display, exclusive with [iconResourceId]
  * @param iconTint the tint to apply to the icon
+ * @param iconBackgroundTint the tint to apply to the icon background
  */
 @Composable
 fun IconTitleSubtitleMolecule(
@@ -46,6 +48,7 @@ fun IconTitleSubtitleMolecule(
     iconResourceId: Int? = null,
     iconImageVector: ImageVector? = null,
     iconTint: Color = MaterialTheme.colorScheme.primary,
+    iconBackgroundTint: Color = ElementTheme.colors.temporaryColorBgSpecial,
 ) {
     Column(modifier) {
         RoundedIconAtom(
@@ -55,6 +58,7 @@ fun IconTitleSubtitleMolecule(
             resourceId = iconResourceId,
             imageVector = iconImageVector,
             tint = iconTint,
+            backgroundTint = iconBackgroundTint,
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
