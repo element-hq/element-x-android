@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
+import io.element.android.libraries.matrix.impl.RustClientBuilderProvider
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
 import io.element.android.libraries.matrix.impl.analytics.UtdTracker
 import io.element.android.libraries.matrix.impl.auth.OidcConfigurationProvider
@@ -57,7 +58,8 @@ class MainActivity : ComponentActivity() {
                 clock = DefaultSystemClock(),
                 utdTracker = UtdTracker(NoopAnalyticsService()),
                 featureFlagService = AlwaysEnabledFeatureFlagService(),
-                timelineEventTypeFilterFactory = RustTimelineEventTypeFilterFactory()
+                timelineEventTypeFilterFactory = RustTimelineEventTypeFilterFactory(),
+                clientBuilderProvider = RustClientBuilderProvider(),
             ),
             passphraseGenerator = NullPassphraseGenerator(),
             oidcConfigurationProvider = OidcConfigurationProvider(baseDirectory),
