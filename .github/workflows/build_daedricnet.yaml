@@ -66,5 +66,5 @@ jobs:
         with:
           room_id: ${{ secrets.MATRIX_ROOM_ID }}
           access_token: ${{ secrets.MATRIX_ACCESS_TOKEN }}
-          server: "aguiarvieira.pt"
+          server: "https://aguiarvieira.pt"
           file: app/build/outputs/apk/gplay/nightly/app-gplay-arm64-v8a-nightly.apk
