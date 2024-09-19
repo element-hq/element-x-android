@@ -61,7 +61,7 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -73,6 +73,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 private const val EXTENDED_RANGE_SIZE = 40
+private const val SUBSCRIBE_TO_VISIBLE_ROOMS_DEBOUNCE_IN_MILLIS = 300L
 
 class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
@@ -301,7 +302,10 @@ class RoomListPresenter @Inject constructor(
     private var currentUpdateVisibleRangeJob: Job? = null
     private fun CoroutineScope.updateVisibleRange(range: IntRange) {
         currentUpdateVisibleRangeJob?.cancel()
-        currentUpdateVisibleRangeJob = launch(SupervisorJob()) {
+        currentUpdateVisibleRangeJob = launch {
+            // Debounce the subscription to avoid subscribing to too many rooms
+            delay(SUBSCRIBE_TO_VISIBLE_ROOMS_DEBOUNCE_IN_MILLIS)
+
             if (range.isEmpty()) return@launch
             val currentRoomList = roomListDataSource.allRooms.first()
             // Use extended range to 'prefetch' the next rooms info

@@ -85,13 +85,16 @@ import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import kotlin.time.Duration.Companion.seconds
 
 class RoomListPresenterTest {
     @get:Rule
@@ -599,6 +602,38 @@ class RoomListPresenterTest {
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - UpdateVisibleRange will cancel the previous subscription if called too soon`() = runTest {
+        val subscribeToVisibleRoomsLambda = lambdaRecorder { _: List<RoomId> -> }
+        val roomListService = FakeRoomListService(subscribeToVisibleRoomsLambda = subscribeToVisibleRoomsLambda)
+        val scope = CoroutineScope(coroutineContext + SupervisorJob())
+        val matrixClient = FakeMatrixClient(
+            roomListService = roomListService,
+        )
+        val roomSummary = aRoomSummary(
+            currentUserMembership = CurrentUserMembership.INVITED
+        )
+        roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
+        roomListService.postAllRooms(listOf(roomSummary))
+        val presenter = createRoomListPresenter(
+            coroutineScope = scope,
+            client = matrixClient,
+        )
+        presenter.test {
+            val state = consumeItemsUntilPredicate {
+                it.contentState is RoomListContentState.Rooms
+            }.last()
+
+            state.eventSink(RoomListEvents.UpdateVisibleRange(IntRange(0, 10)))
+            // If called again, it will cancel the current one, which should not result in a test failure
+            state.eventSink(RoomListEvents.UpdateVisibleRange(IntRange(0, 11)))
+            advanceTimeBy(1.seconds)
+            subscribeToVisibleRoomsLambda.assertions().isCalledOnce()
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - UpdateVisibleRange subscribes to rooms in visible range`() = runTest {
         val subscribeToVisibleRoomsLambda = lambdaRecorder { _: List<RoomId> -> }
@@ -622,10 +657,12 @@ class RoomListPresenterTest {
             }.last()
 
             state.eventSink(RoomListEvents.UpdateVisibleRange(IntRange(0, 10)))
+            advanceTimeBy(1.seconds)
             subscribeToVisibleRoomsLambda.assertions().isCalledOnce()
 
-            // If called again, it will cancel the current one, which should not result in a test failure
+            // If called again, it will subscribe to the next items
             state.eventSink(RoomListEvents.UpdateVisibleRange(IntRange(0, 11)))
+            advanceTimeBy(1.seconds)
             subscribeToVisibleRoomsLambda.assertions().isCalledExactly(2)
         }
     }
