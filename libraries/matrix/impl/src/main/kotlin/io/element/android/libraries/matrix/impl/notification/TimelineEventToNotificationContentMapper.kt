@@ -51,7 +51,10 @@ private fun StateEventContent.toContent(): NotificationContent.StateEvent {
         StateEventContent.RoomHistoryVisibility -> NotificationContent.StateEvent.RoomHistoryVisibility
         StateEventContent.RoomJoinRules -> NotificationContent.StateEvent.RoomJoinRules
         is StateEventContent.RoomMemberContent -> {
-            NotificationContent.StateEvent.RoomMemberContent(userId, RoomMemberMapper.mapMembership(membershipState))
+            NotificationContent.StateEvent.RoomMemberContent(
+                userId = UserId(userId),
+                membershipState = RoomMemberMapper.mapMembership(membershipState),
+            )
         }
         StateEventContent.RoomName -> NotificationContent.StateEvent.RoomName
         StateEventContent.RoomPinnedEvents -> NotificationContent.StateEvent.RoomPinnedEvents

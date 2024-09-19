@@ -140,7 +140,7 @@ class RustMatrixClient(
     )
     private val notificationProcessSetup = NotificationProcessSetup.SingleProcess(syncService)
     private val notificationClient = runBlocking { client.notificationClient(notificationProcessSetup) }
-    private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
+    private val notificationService = RustNotificationService(notificationClient, dispatchers, clock)
     private val notificationSettingsService = RustNotificationSettingsService(client, dispatchers)
         .apply { start() }
     private val encryptionService = RustEncryptionService(

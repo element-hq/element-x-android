@@ -370,7 +370,7 @@ class DefaultNotifiableEventResolverTest {
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.StateEvent.RoomMemberContent(
-                        userId = A_USER_ID_2.value,
+                        sender = A_USER_ID_2,
                         membershipState = RoomMembershipState.INVITE
                     ),
                     isDirect = false,
@@ -405,7 +405,7 @@ class DefaultNotifiableEventResolverTest {
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.StateEvent.RoomMemberContent(
-                        userId = A_USER_ID_2.value,
+                        sender = A_USER_ID_2,
                         membershipState = RoomMembershipState.INVITE
                     ),
                     isDirect = true,
@@ -440,7 +440,7 @@ class DefaultNotifiableEventResolverTest {
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.StateEvent.RoomMemberContent(
-                        userId = A_USER_ID_2.value,
+                        sender = A_USER_ID_2,
                         membershipState = RoomMembershipState.JOIN
                     )
                 )
