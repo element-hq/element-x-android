@@ -8,9 +8,9 @@
 package io.element.android.libraries.matrix.impl.roomlist
 
 import com.google.common.truth.Truth.assertThat
-import com.sun.jna.Pointer
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoomListItem
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoomListService
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_ID_3
@@ -21,17 +21,8 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.matrix.rustcomponents.sdk.RoomList
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
-import org.matrix.rustcomponents.sdk.RoomListItem
-import org.matrix.rustcomponents.sdk.RoomListServiceInterface
-import org.matrix.rustcomponents.sdk.RoomListServiceStateListener
-import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicatorListener
-import org.matrix.rustcomponents.sdk.RoomSubscription
-import org.matrix.rustcomponents.sdk.TaskHandle
 
-// NOTE: this class is using a fake implementation of a Rust SDK interface which returns actual Rust objects with pointers.
-// Since we don't access the data in those objects, this is fine for our tests, but that's as far as we can test this class.
 class RoomSummaryListProcessorTest {
     private val summaries = MutableStateFlow<List<RoomSummary>>(emptyList())
 
@@ -163,29 +154,8 @@ class RoomSummaryListProcessorTest {
 
     private fun TestScope.createProcessor() = RoomSummaryListProcessor(
         summaries,
-        fakeRoomListService,
+        FakeRustRoomListService(),
         coroutineContext = StandardTestDispatcher(testScheduler),
         roomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
     )
-
-    // Fake room list service that returns Rust objects with null pointers. Luckily for us, they don't crash for our test cases
-    private val fakeRoomListService = object : RoomListServiceInterface {
-        override suspend fun allRooms(): RoomList {
-            return RoomList(Pointer.NULL)
-        }
-
-        override fun room(roomId: String): RoomListItem {
-            return RoomListItem(Pointer.NULL)
-        }
-
-        override fun state(listener: RoomListServiceStateListener): TaskHandle {
-            return TaskHandle(Pointer.NULL)
-        }
-
-        override fun syncIndicator(delayBeforeShowingInMs: UInt, delayBeforeHidingInMs: UInt, listener: RoomListServiceSyncIndicatorListener): TaskHandle {
-            return TaskHandle(Pointer.NULL)
-        }
-
-        override fun subscribeToRooms(roomIds: List<String>, settings: RoomSubscription?) = Unit
-    }
 }
