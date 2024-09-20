@@ -370,8 +370,24 @@ class DefaultNotifiableEventResolverTest {
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.StateEvent.RoomMemberContent(
-                        userId = A_USER_ID_2.value,
+                        userId = A_USER_ID_2,
                         membershipState = RoomMembershipState.INVITE
+                    ),
+                    isDirect = false,
+                )
+            )
+        )
+        val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
+        assertThat(result).isNull()
+    }
+
+    @Test
+    fun `resolve invite room`() = runTest {
+        val sut = createDefaultNotifiableEventResolver(
+            notificationResult = Result.success(
+                createNotificationData(
+                    content = NotificationContent.Invite(
+                        senderId = A_USER_ID_2,
                     ),
                     isDirect = false,
                 )
@@ -400,13 +416,12 @@ class DefaultNotifiableEventResolverTest {
     }
 
     @Test
-    fun `resolve RoomMemberContent invite direct`() = runTest {
+    fun `resolve invite invite direct`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
-                    content = NotificationContent.StateEvent.RoomMemberContent(
-                        userId = A_USER_ID_2.value,
-                        membershipState = RoomMembershipState.INVITE
+                    content = NotificationContent.Invite(
+                        senderId = A_USER_ID_2,
                     ),
                     isDirect = true,
                 )
@@ -440,7 +455,7 @@ class DefaultNotifiableEventResolverTest {
             notificationResult = Result.success(
                 createNotificationData(
                     content = NotificationContent.StateEvent.RoomMemberContent(
-                        userId = A_USER_ID_2.value,
+                        userId = A_USER_ID_2,
                         membershipState = RoomMembershipState.JOIN
                     )
                 )

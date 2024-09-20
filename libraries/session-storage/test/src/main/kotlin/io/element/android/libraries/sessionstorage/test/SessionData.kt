@@ -16,12 +16,14 @@ fun aSessionData(
     isTokenValid: Boolean = false,
     sessionPath: String = "/a/path/to/a/session",
     cachePath: String = "/a/path/to/a/cache",
-): SessionData {
+    accessToken: String = "anAccessToken",
+    refreshToken: String? = "aRefreshToken",
+    ): SessionData {
     return SessionData(
         userId = sessionId,
         deviceId = deviceId,
-        accessToken = "anAccessToken",
-        refreshToken = "aRefreshToken",
+        accessToken = accessToken,
+        refreshToken = refreshToken,
         homeserverUrl = "aHomeserverUrl",
         oidcData = null,
         slidingSyncProxy = null,

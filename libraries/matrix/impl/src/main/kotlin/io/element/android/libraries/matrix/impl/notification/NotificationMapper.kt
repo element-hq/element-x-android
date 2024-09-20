@@ -10,10 +10,9 @@ package io.element.android.libraries.matrix.impl.notification
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
-import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import org.matrix.rustcomponents.sdk.NotificationEvent
@@ -21,10 +20,9 @@ import org.matrix.rustcomponents.sdk.NotificationItem
 import org.matrix.rustcomponents.sdk.use
 
 class NotificationMapper(
-    sessionId: SessionId,
     private val clock: SystemClock,
 ) {
-    private val notificationContentMapper = NotificationContentMapper(sessionId)
+    private val notificationContentMapper = NotificationContentMapper()
 
     fun map(
         eventId: EventId,
@@ -56,15 +54,14 @@ class NotificationMapper(
     }
 }
 
-class NotificationContentMapper(private val sessionId: SessionId) {
+class NotificationContentMapper {
     private val timelineEventToNotificationContentMapper = TimelineEventToNotificationContentMapper()
 
     fun map(notificationEvent: NotificationEvent): NotificationContent =
         when (notificationEvent) {
             is NotificationEvent.Timeline -> timelineEventToNotificationContentMapper.map(notificationEvent.event)
-            is NotificationEvent.Invite -> NotificationContent.StateEvent.RoomMemberContent(
-                userId = sessionId.value,
-                membershipState = RoomMembershipState.INVITE,
+            is NotificationEvent.Invite -> NotificationContent.Invite(
+                senderId = UserId(notificationEvent.sender),
             )
         }
 }

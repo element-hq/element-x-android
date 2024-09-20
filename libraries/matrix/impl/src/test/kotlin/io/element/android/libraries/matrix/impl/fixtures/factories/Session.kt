@@ -14,11 +14,13 @@ import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 
 internal fun aRustSession(
-    proxy: SlidingSyncVersion = SlidingSyncVersion.None
+    proxy: SlidingSyncVersion = SlidingSyncVersion.None,
+    accessToken: String = "accessToken",
+    refreshToken: String = "refreshToken",
 ): Session {
     return Session(
-        accessToken = "accessToken",
-        refreshToken = "refreshToken",
+        accessToken = accessToken,
+        refreshToken = refreshToken,
         userId = A_USER_ID.value,
         deviceId = A_DEVICE_ID.value,
         homeserverUrl = A_HOMESERVER_URL,

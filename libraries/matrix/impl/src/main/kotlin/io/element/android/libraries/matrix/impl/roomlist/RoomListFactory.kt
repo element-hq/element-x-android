@@ -25,21 +25,21 @@ import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind
 import org.matrix.rustcomponents.sdk.RoomListLoadingState
 import org.matrix.rustcomponents.sdk.RoomListService
 import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
 import org.matrix.rustcomponents.sdk.RoomList as InnerRoomList
 
 internal class RoomListFactory(
     private val innerRoomListService: RoomListService,
     private val sessionCoroutineScope: CoroutineScope,
-    private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
 ) {
+    private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory()
+
     /**
      * Creates a room list that can be used to load more rooms and filter them dynamically.
      */
     fun createRoomList(
         pageSize: Int,
+        coroutineContext: CoroutineContext,
         coroutineScope: CoroutineScope = sessionCoroutineScope,
-        coroutineContext: CoroutineContext = EmptyCoroutineContext,
         initialFilter: RoomListFilter = RoomListFilter.all(),
         innerProvider: suspend () -> InnerRoomList
     ): DynamicRoomList {

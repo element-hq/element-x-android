@@ -10,7 +10,6 @@ package io.element.android.libraries.matrix.impl.notification
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.notification.NotificationService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -19,15 +18,13 @@ import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.use
 
 class RustNotificationService(
-    sessionId: SessionId,
     private val notificationClient: NotificationClient,
     private val dispatchers: CoroutineDispatchers,
     clock: SystemClock,
 ) : NotificationService {
-    private val notificationMapper: NotificationMapper = NotificationMapper(sessionId, clock)
+    private val notificationMapper: NotificationMapper = NotificationMapper(clock)
 
     override suspend fun getNotification(
-        userId: SessionId,
         roomId: RoomId,
         eventId: EventId,
     ): Result<NotificationData?> = withContext(dispatchers.io) {
