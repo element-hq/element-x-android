@@ -85,25 +85,30 @@ internal fun CallScreenView(
         BackHandler {
             handleBack()
         }
-        CallWebView(
-            modifier = Modifier
+        if (state.urlState !is AsyncData.Failure || state.canRenderWebViewInCaseOfError) {
+            CallWebView(
+                modifier = Modifier
                     .padding(padding)
                     .consumeWindowInsets(padding)
                     .fillMaxSize(),
-            url = state.urlState,
-            userAgent = state.userAgent,
-            onPermissionsRequest = { request ->
-                val androidPermissions = mapWebkitPermissions(request.resources)
-                val callback: RequestPermissionCallback = { request.grant(it) }
-                requestPermissions(androidPermissions.toTypedArray(), callback)
-            },
-            onWebViewCreate = { webView ->
-                val interceptor = WebViewWidgetMessageInterceptor(webView)
-                state.eventSink(CallScreenEvents.SetupMessageChannels(interceptor))
-                val pipController = WebViewPipController(webView)
-                pipState.eventSink(PictureInPictureEvents.SetPipController(pipController))
-            }
-        )
+                url = state.urlState,
+                userAgent = state.userAgent,
+                onPermissionsRequest = { request ->
+                    val androidPermissions = mapWebkitPermissions(request.resources)
+                    val callback: RequestPermissionCallback = { request.grant(it) }
+                    requestPermissions(androidPermissions.toTypedArray(), callback)
+                },
+                onWebViewCreate = { webView ->
+                    val interceptor = WebViewWidgetMessageInterceptor(
+                        webView = webView,
+                        onError = { state.eventSink(CallScreenEvents.OnWebViewError(it)) },
+                    )
+                    state.eventSink(CallScreenEvents.SetupMessageChannels(interceptor))
+                    val pipController = WebViewPipController(webView)
+                    pipState.eventSink(PictureInPictureEvents.SetPipController(pipController))
+                }
+            )
+        }
         when (state.urlState) {
             AsyncData.Uninitialized,
             is AsyncData.Loading ->

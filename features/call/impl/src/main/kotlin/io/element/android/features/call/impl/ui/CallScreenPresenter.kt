@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -38,6 +39,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.ScreenTracker
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
@@ -78,8 +80,10 @@ class CallScreenPresenter @AssistedInject constructor(
         val callWidgetDriver = remember { mutableStateOf<MatrixWidgetDriver?>(null) }
         val messageInterceptor = remember { mutableStateOf<WidgetMessageInterceptor?>(null) }
         var isJoinedCall by rememberSaveable { mutableStateOf(false) }
+        var canRenderWebViewInCaseOfError by rememberSaveable { mutableStateOf(false) }
         val languageTag = languageTagProvider.provideLanguageTag()
         val theme = if (ElementTheme.isLightTheme) "light" else "dark"
+        val errorMessage = stringResource(id = CommonStrings.error_unknown)
         DisposableEffect(Unit) {
             coroutineScope.launch {
                 // Sets the call as joined
@@ -125,6 +129,8 @@ class CallScreenPresenter @AssistedInject constructor(
             LaunchedEffect(Unit) {
                 interceptor.interceptedMessages
                     .onEach {
+                        // We are receiving messages from the WebView, consider that the application is loaded
+                        canRenderWebViewInCaseOfError = true
                         // Relay message to Widget Driver
                         callWidgetDriver.value?.send(it)
 
@@ -163,11 +169,25 @@ class CallScreenPresenter @AssistedInject constructor(
                 is CallScreenEvents.SetupMessageChannels -> {
                     messageInterceptor.value = event.widgetMessageInterceptor
                 }
+                is CallScreenEvents.OnWebViewError -> {
+                    if (!canRenderWebViewInCaseOfError) {
+                        urlState.value = AsyncData.Failure(
+                            Exception(
+                                buildString {
+                                    append(errorMessage)
+                                    event.description?.let { append("\n\n").append(it) }
+                                }
+                            )
+                        )
+                    }
+                    // Else ignore the error, give a chance the Element Call to recover by itself.
+                }
             }
         }
 
         return CallScreenState(
             urlState = urlState.value,
+            canRenderWebViewInCaseOfError = canRenderWebViewInCaseOfError,
             userAgent = userAgent,
             isInWidgetMode = isInWidgetMode,
             eventSink = { handleEvents(it) },

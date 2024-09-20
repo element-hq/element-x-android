@@ -21,12 +21,14 @@ open class CallScreenStateProvider : PreviewParameterProvider<CallScreenState> {
 
 internal fun aCallScreenState(
     urlState: AsyncData<String> = AsyncData.Success("https://call.element.io/some-actual-call?with=parameters"),
+    canRenderWebViewInCaseOfError: Boolean = true,
     userAgent: String = "",
     isInWidgetMode: Boolean = false,
     eventSink: (CallScreenEvents) -> Unit = {},
 ): CallScreenState {
     return CallScreenState(
         urlState = urlState,
+        canRenderWebViewInCaseOfError = canRenderWebViewInCaseOfError,
         userAgent = userAgent,
         isInWidgetMode = isInWidgetMode,
         eventSink = eventSink,
