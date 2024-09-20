@@ -378,6 +378,22 @@ class DefaultNotifiableEventResolverTest {
             )
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
+        assertThat(result).isNull()
+    }
+
+    @Test
+    fun `resolve invite room`() = runTest {
+        val sut = createDefaultNotifiableEventResolver(
+            notificationResult = Result.success(
+                createNotificationData(
+                    content = NotificationContent.Invite(
+                        senderId = A_USER_ID_2,
+                    ),
+                    isDirect = false,
+                )
+            )
+        )
+        val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
         val expectedResult = ResolvedPushEvent.Event(
             InviteNotifiableEvent(
                 sessionId = A_SESSION_ID,
@@ -400,13 +416,12 @@ class DefaultNotifiableEventResolverTest {
     }
 
     @Test
-    fun `resolve RoomMemberContent invite direct`() = runTest {
+    fun `resolve invite invite direct`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
-                    content = NotificationContent.StateEvent.RoomMemberContent(
-                        userId = A_USER_ID_2,
-                        membershipState = RoomMembershipState.INVITE
+                    content = NotificationContent.Invite(
+                        senderId = A_USER_ID_2,
                     ),
                     isDirect = true,
                 )
