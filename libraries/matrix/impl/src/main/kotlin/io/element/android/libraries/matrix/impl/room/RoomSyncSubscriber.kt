@@ -15,14 +15,14 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.RequiredState
-import org.matrix.rustcomponents.sdk.RoomListServiceInterface
+import org.matrix.rustcomponents.sdk.RoomListService
 import org.matrix.rustcomponents.sdk.RoomSubscription
 import timber.log.Timber
 
 private const val DEFAULT_TIMELINE_LIMIT = 20u
 
 class RoomSyncSubscriber(
-    private val roomListService: RoomListServiceInterface,
+    private val roomListService: RoomListService,
     private val dispatchers: CoroutineDispatchers,
 ) {
     private val subscribedRoomIds = mutableSetOf<RoomId>()

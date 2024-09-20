@@ -37,7 +37,9 @@ import org.matrix.rustcomponents.sdk.MembershipChange as RustMembershipChange
 import org.matrix.rustcomponents.sdk.OtherState as RustOtherState
 import uniffi.matrix_sdk_crypto.UtdCause as RustUtdCause
 
-class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMapper = EventMessageMapper()) {
+class TimelineEventContentMapper(
+    private val eventMessageMapper: EventMessageMapper = EventMessageMapper(),
+) {
     fun map(content: TimelineItemContent): EventContent {
         return content.use {
             content.kind().use { kind ->

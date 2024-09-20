@@ -7,12 +7,10 @@
 
 package io.element.android.libraries.matrix.impl.roomdirectory
 
-import io.element.android.libraries.matrix.api.roomdirectory.RoomDescription
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
@@ -27,8 +25,7 @@ class RustRoomDirectoryList(
     private val coroutineContext: CoroutineContext,
 ) : RoomDirectoryList {
     private val hasMoreToLoad = MutableStateFlow(true)
-    private val items = MutableSharedFlow<List<RoomDescription>>(replay = 1)
-    private val processor = RoomDirectorySearchProcessor(items, coroutineContext, RoomDescriptionMapper())
+    private val processor = RoomDirectorySearchProcessor(coroutineContext)
 
     init {
         launchIn(coroutineScope)
@@ -77,7 +74,7 @@ class RustRoomDirectoryList(
     }
 
     override val state: Flow<RoomDirectoryList.State> =
-        combine(hasMoreToLoad, items) { hasMoreToLoad, items ->
+        combine(hasMoreToLoad, processor.roomDescriptionsFlow) { hasMoreToLoad, items ->
             RoomDirectoryList.State(
                 hasMoreToLoad = hasMoreToLoad,
                 items = items

@@ -19,9 +19,8 @@ import org.matrix.rustcomponents.sdk.StateEventContent
 import org.matrix.rustcomponents.sdk.TimelineEvent
 import org.matrix.rustcomponents.sdk.TimelineEventType
 import org.matrix.rustcomponents.sdk.use
-import javax.inject.Inject
 
-class TimelineEventToNotificationContentMapper @Inject constructor() {
+class TimelineEventToNotificationContentMapper {
     fun map(timelineEvent: TimelineEvent): NotificationContent {
         return timelineEvent.use {
             timelineEvent.eventType().use { eventType ->
@@ -52,7 +51,10 @@ private fun StateEventContent.toContent(): NotificationContent.StateEvent {
         StateEventContent.RoomHistoryVisibility -> NotificationContent.StateEvent.RoomHistoryVisibility
         StateEventContent.RoomJoinRules -> NotificationContent.StateEvent.RoomJoinRules
         is StateEventContent.RoomMemberContent -> {
-            NotificationContent.StateEvent.RoomMemberContent(userId, RoomMemberMapper.mapMembership(membershipState))
+            NotificationContent.StateEvent.RoomMemberContent(
+                userId = UserId(userId),
+                membershipState = RoomMemberMapper.mapMembership(membershipState),
+            )
         }
         StateEventContent.RoomName -> NotificationContent.StateEvent.RoomName
         StateEventContent.RoomPinnedEvents -> NotificationContent.StateEvent.RoomPinnedEvents

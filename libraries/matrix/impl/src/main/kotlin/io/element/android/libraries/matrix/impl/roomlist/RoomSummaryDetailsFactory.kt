@@ -19,7 +19,9 @@ import io.element.android.libraries.matrix.impl.room.message.RoomMessageFactory
 import org.matrix.rustcomponents.sdk.RoomListItem
 import org.matrix.rustcomponents.sdk.use
 
-class RoomSummaryDetailsFactory(private val roomMessageFactory: RoomMessageFactory = RoomMessageFactory()) {
+class RoomSummaryDetailsFactory(
+    private val roomMessageFactory: RoomMessageFactory = RoomMessageFactory(),
+) {
     suspend fun create(roomListItem: RoomListItem): RoomSummary {
         val roomInfo = roomListItem.roomInfo()
         val latestRoomMessage = roomListItem.latestEvent().use { event ->
