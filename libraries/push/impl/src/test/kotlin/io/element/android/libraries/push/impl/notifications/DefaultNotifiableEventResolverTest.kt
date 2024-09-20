@@ -404,7 +404,7 @@ class DefaultNotifiableEventResolverTest {
                 roomName = null,
                 noisy = false,
                 title = null,
-                description = "Invited you to join the room",
+                description = "Bob invited you to join the room",
                 type = null,
                 timestamp = A_TIMESTAMP,
                 soundName = null,
@@ -416,7 +416,7 @@ class DefaultNotifiableEventResolverTest {
     }
 
     @Test
-    fun `resolve invite invite direct`() = runTest {
+    fun `resolve invite direct`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
                 createNotificationData(
@@ -438,7 +438,77 @@ class DefaultNotifiableEventResolverTest {
                 roomName = null,
                 noisy = false,
                 title = null,
-                description = "Invited you to chat",
+                description = "Bob invited you to chat",
+                type = null,
+                timestamp = A_TIMESTAMP,
+                soundName = null,
+                isRedacted = false,
+                isUpdated = false,
+            )
+        )
+        assertThat(result).isEqualTo(expectedResult)
+    }
+
+    @Test
+    fun `resolve invite direct, no display name`() = runTest {
+        val sut = createDefaultNotifiableEventResolver(
+            notificationResult = Result.success(
+                createNotificationData(
+                    content = NotificationContent.Invite(
+                        senderId = A_USER_ID_2,
+                    ),
+                    isDirect = true,
+                    senderDisplayName = null,
+                )
+            )
+        )
+        val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
+        val expectedResult = ResolvedPushEvent.Event(
+            InviteNotifiableEvent(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+                eventId = AN_EVENT_ID,
+                editedEventId = null,
+                canBeReplaced = true,
+                roomName = null,
+                noisy = false,
+                title = null,
+                description = "@bob:server.org invited you to chat",
+                type = null,
+                timestamp = A_TIMESTAMP,
+                soundName = null,
+                isRedacted = false,
+                isUpdated = false,
+            )
+        )
+        assertThat(result).isEqualTo(expectedResult)
+    }
+
+    @Test
+    fun `resolve invite direct, ambiguous display name`() = runTest {
+        val sut = createDefaultNotifiableEventResolver(
+            notificationResult = Result.success(
+                createNotificationData(
+                    content = NotificationContent.Invite(
+                        senderId = A_USER_ID_2,
+                    ),
+                    isDirect = false,
+                    senderIsNameAmbiguous = true,
+                )
+            )
+        )
+        val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
+        val expectedResult = ResolvedPushEvent.Event(
+            InviteNotifiableEvent(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+                eventId = AN_EVENT_ID,
+                editedEventId = null,
+                canBeReplaced = true,
+                roomName = null,
+                noisy = false,
+                title = null,
+                description = "Bob (@bob:server.org) invited you to join the room",
                 type = null,
                 timestamp = A_TIMESTAMP,
                 soundName = null,
@@ -755,13 +825,15 @@ class DefaultNotifiableEventResolverTest {
         isDirect: Boolean = false,
         hasMention: Boolean = false,
         timestamp: Long = A_TIMESTAMP,
+        senderDisplayName: String? = "Bob",
+        senderIsNameAmbiguous: Boolean = false,
     ): NotificationData {
         return NotificationData(
             eventId = AN_EVENT_ID,
             roomId = A_ROOM_ID,
             senderAvatarUrl = null,
-            senderDisplayName = "Bob",
-            senderIsNameAmbiguous = false,
+            senderDisplayName = senderDisplayName,
+            senderIsNameAmbiguous = senderIsNameAmbiguous,
             roomAvatarUrl = null,
             roomDisplayName = null,
             isDirect = isDirect,
