@@ -34,7 +34,7 @@
   <string name="action_accept">"Nõustu"</string>
   <string name="action_add_to_timeline">"Lisa ajajoonele"</string>
   <string name="action_back">"Tagasi"</string>
-  <string name="action_call">"Helista kasutajale"</string>
+  <string name="action_call">"Helista"</string>
   <string name="action_cancel">"Loobu"</string>
   <string name="action_cancel_for_now">"Hetkel jäta tegemata"</string>
   <string name="action_choose_photo">"Vali foto"</string>
@@ -42,12 +42,14 @@
   <string name="action_close">"Sulge"</string>
   <string name="action_complete_verification">"Tee verifitseerimine lõpuni"</string>
   <string name="action_confirm">"Kinnita"</string>
+  <string name="action_confirm_password">"Korda salasõna"</string>
   <string name="action_continue">"Jätka"</string>
   <string name="action_copy">"Kopeeri"</string>
   <string name="action_copy_link">"Kopeeri link"</string>
   <string name="action_copy_link_to_message">"Kopeeri sõnumi link"</string>
   <string name="action_create">"Loo"</string>
   <string name="action_create_a_room">"Loo jututuba"</string>
+  <string name="action_deactivate_account">"Eemalda konto kasutusest"</string>
   <string name="action_decline">"Keeldu"</string>
   <string name="action_delete_poll">"Kustuta küsitlus"</string>
   <string name="action_disable">"Lülita välja"</string>
@@ -74,7 +76,7 @@
   <string name="action_load_more">"Näita veel"</string>
   <string name="action_manage_account">"Halda kasutajakontot"</string>
   <string name="action_manage_devices">"Halda seadmeid"</string>
-  <string name="action_message">"Saada sõnum kasutajale"</string>
+  <string name="action_message">"Saada sõnum"</string>
   <string name="action_next">"Edasi"</string>
   <string name="action_no">"Ei"</string>
   <string name="action_not_now">"Mitte praegu"</string>
@@ -92,7 +94,7 @@
   <string name="action_report_bug">"Teata veast"</string>
   <string name="action_report_content">"Teata sisust haldurile"</string>
   <string name="action_reset">"Lähtesta"</string>
-  <string name="action_reset_identity">"Lähtesta on identiteet"</string>
+  <string name="action_reset_identity">"Lähtesta oma identiteet"</string>
   <string name="action_retry">"Proovi uuesti"</string>
   <string name="action_retry_decryption">"Proovi dekrüptimist uuesti"</string>
   <string name="action_save">"Salvesta"</string>
@@ -169,7 +171,7 @@ Põhjus: %1$s."</string>
   <string name="common_message_layout">"Sõnumi paigutus"</string>
   <string name="common_message_removed">"Sõnum on eemaldatud"</string>
   <string name="common_modern">"Kaasaegne"</string>
-  <string name="common_mute">"Summutamine"</string>
+  <string name="common_mute">"Summutatud"</string>
   <string name="common_no_results">"Otsingul pole tulemusi"</string>
   <string name="common_no_room_name">"Jututoal puudub nimi"</string>
   <string name="common_offline">"Võrgust väljas"</string>
@@ -208,7 +210,7 @@ Põhjus: %1$s."</string>
   <string name="common_search_for_someone">"Otsi kedagi"</string>
   <string name="common_search_results">"Otsingutulemused"</string>
   <string name="common_security">"Turvalisus"</string>
-  <string name="common_seen_by">"Seda nägi"</string>
+  <string name="common_seen_by">"Seda nägi(d)"</string>
   <string name="common_send_to">"Saada kasutajale"</string>
   <string name="common_sending">"Saadame…"</string>
   <string name="common_sending_failed">"Saatmine ei õnnestunud"</string>
@@ -290,7 +292,9 @@ Põhjus: %1$s."</string>
   <string name="screen_resolve_send_failure_changed_identity_title">"Sinu sõnum on saatmata, kuna kasutaja %1$s verifitseeritud identiteet on muutunud."</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Saada sõnum ikkagi"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s kasutab ühte või enamat verifitseerimata seadet. Sa võid sõnumi ikkagi saata või katkestad selle ning ootad kuni %2$s on kõik oma seadmed verifitseerinud ning proovid seejärel uuesti."</string>
-  <string name="screen_resolve_send_failure_unsigned_device_title">"Sinu sõnum on saatmata, kuna %1$s pole verifitseerinud ühte või enamat oma seadet"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Sinu sõnum on saatmata, kuna %1$s pole verifitseerinud kõiki oma seadmeid"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Üks või enam sinu seadet on verifitseerimata. Sa võid sõnumi ikkagi ära saata või katkestad saatmise ning proovid uuesti, kui oled kõik oma seadmed verifitseerinud."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"Kuna sul on üks või enam verifitseerimata seadet, siis sinu sõnum jäi saatmata"</string>
   <string name="screen_room_details_pinned_events_row_title">"Esiletõstetud sõnumid"</string>
   <string name="screen_room_error_failed_processing_media">"Meediafaili töötlemine enne üleslaadimist ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kasutaja andmete laadimine ei õnnestunud"</string>
@@ -313,7 +317,8 @@ Põhjus: %1$s."</string>
   <string name="screen_share_open_osm_maps">"Ava OpenStreetMapis"</string>
   <string name="screen_share_this_location_action">"Jaga seda asukohta"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Sõnum on saatmata, kuna kasutaja %1$s verifitseeritud identiteet on muutunud."</string>
-  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Sõnum on saatmata, kuna %1$s pole verifitseerinud ühte või enamat oma seadet."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Sõnum on saatmata, kuna %1$s pole verifitseerinud kõiki oma seadmeid."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Kuna sa pole üks või enamgi oma seadet verifitseerinud, siis sinu sõnum on saatmata."</string>
   <string name="screen_view_location_title">"Asukoht"</string>
   <string name="settings_version_number">"Versioon: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"et"</string>

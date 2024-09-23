@@ -24,7 +24,6 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
@@ -106,7 +105,7 @@ class PinnedMessagesBannerPresenter @Inject constructor(
         }
     }
 
-    @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Composable
     private fun PinnedMessagesBannerItemsEffect(
         onItemsChange: (AsyncData<ImmutableList<PinnedMessagesBannerItem>>) -> Unit,

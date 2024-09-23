@@ -49,10 +49,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -88,8 +90,8 @@ class RustTimeline(
     private val initLatch = CompletableDeferred<Unit>()
     private val isTimelineInitialized = MutableStateFlow(false)
 
-    private val _timelineItems: MutableStateFlow<List<MatrixTimelineItem>> =
-        MutableStateFlow(emptyList())
+    private val _timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> =
+        MutableSharedFlow(replay = 1, extraBufferCapacity = Int.MAX_VALUE)
 
     private val timelineEventContentMapper = TimelineEventContentMapper()
     private val inReplyToMapper = InReplyToMapper(timelineEventContentMapper)
@@ -522,7 +524,7 @@ class RustTimeline(
     }
 
     override suspend fun loadReplyDetails(eventId: EventId): InReplyTo = withContext(dispatcher) {
-        val timelineItem = _timelineItems.value.firstOrNull { timelineItem ->
+        val timelineItem = _timelineItems.first().firstOrNull { timelineItem ->
             timelineItem is MatrixTimelineItem.Event && timelineItem.eventId == eventId
         } as? MatrixTimelineItem.Event
 
