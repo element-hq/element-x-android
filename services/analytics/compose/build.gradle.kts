@@ -10,7 +10,6 @@ plugins {
 
 android {
     namespace = "io.element.android.services.analytics.compose"
-
 }
 dependencies {
     api(projects.services.analytics.api)
