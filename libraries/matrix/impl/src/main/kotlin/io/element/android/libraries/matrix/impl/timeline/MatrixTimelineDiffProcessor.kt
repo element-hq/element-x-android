@@ -11,7 +11,8 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.matrix.rustcomponents.sdk.TimelineChange
@@ -20,7 +21,7 @@ import org.matrix.rustcomponents.sdk.TimelineItem
 import timber.log.Timber
 
 internal class MatrixTimelineDiffProcessor(
-    private val timelineItems: MutableStateFlow<List<MatrixTimelineItem>>,
+    private val timelineItems: MutableSharedFlow<List<MatrixTimelineItem>>,
     private val timelineItemFactory: MatrixTimelineItemMapper,
 ) {
     private val mutex = Mutex()
@@ -47,9 +48,13 @@ internal class MatrixTimelineDiffProcessor(
 
     private suspend fun updateTimelineItems(block: MutableList<MatrixTimelineItem>.() -> Unit) =
         mutex.withLock {
-            val mutableTimelineItems = timelineItems.value.toMutableList()
+            val mutableTimelineItems = if (timelineItems.replayCache.isNotEmpty()) {
+                timelineItems.first().toMutableList()
+            } else {
+                mutableListOf()
+            }
             block(mutableTimelineItems)
-            timelineItems.value = mutableTimelineItems
+            timelineItems.tryEmit(mutableTimelineItems)
         }
 
     private fun MutableList<MatrixTimelineItem>.applyDiff(diff: TimelineDiff) {

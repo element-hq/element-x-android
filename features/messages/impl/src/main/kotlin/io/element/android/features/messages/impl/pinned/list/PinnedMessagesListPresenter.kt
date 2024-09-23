@@ -41,7 +41,6 @@ import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
@@ -161,7 +160,6 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
         }
     }
 
-    @OptIn(FlowPreview::class)
     @Composable
     private fun PinnedMessagesListEffect(onItemsChange: (AsyncData<ImmutableList<TimelineItem>>) -> Unit) {
         val updatedOnItemsChange by rememberUpdatedState(onItemsChange)
