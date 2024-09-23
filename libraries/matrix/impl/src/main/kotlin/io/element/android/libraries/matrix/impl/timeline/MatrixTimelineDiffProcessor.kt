@@ -12,7 +12,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.matrix.rustcomponents.sdk.TimelineChange
