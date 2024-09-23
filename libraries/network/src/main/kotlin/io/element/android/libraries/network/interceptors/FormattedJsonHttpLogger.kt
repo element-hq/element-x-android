@@ -34,6 +34,11 @@ internal class FormattedJsonHttpLogger(
         // It can be only the case if we log the bodies of Http requests.
         if (level != HttpLoggingInterceptor.Level.BODY) return
 
+        if (message.length > 100_000) {
+            Timber.d("Content is too long (${message.length} chars) to be formatted as JSON")
+            return
+        }
+
         if (message.startsWith("{")) {
             // JSON Detected
             try {
