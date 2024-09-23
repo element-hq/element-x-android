@@ -34,7 +34,7 @@ import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
 import io.element.android.libraries.designsystem.utils.snackbar.LocalSnackbarDispatcher
-import io.element.android.x.di.AppBindings
+import io.element.android.x.di.XAppBindings
 import io.element.android.x.intent.SafeUriHandler
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -43,7 +43,7 @@ private val loggerTag = LoggerTag("MainActivity")
 
 class MainActivity : NodeActivity() {
     private lateinit var mainNode: MainNode
-    private lateinit var appBindings: AppBindings
+    private lateinit var appBindings: XAppBindings
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.tag(loggerTag.value).w("onCreate, with savedInstanceState: ${savedInstanceState != null}")
@@ -58,7 +58,7 @@ class MainActivity : NodeActivity() {
     }
 
     @Composable
-    private fun MainContent(appBindings: AppBindings) {
+    private fun MainContent(appBindings: XAppBindings) {
         val migrationState = appBindings.migrationEntryPoint().present()
         ElementThemeApp(appBindings.preferencesStore()) {
             CompositionLocalProvider(

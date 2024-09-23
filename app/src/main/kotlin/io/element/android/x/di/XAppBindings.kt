@@ -17,8 +17,9 @@ import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.tracing.TracingService
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 
+// Note: AppBindings has been renamed to XAppBindings to attempt to fix reproducible build issue.
 @ContributesTo(AppScope::class)
-interface AppBindings {
+interface XAppBindings {
     fun snackbarDispatcher(): SnackbarDispatcher
 
     fun tracingService(): TracingService

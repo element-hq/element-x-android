@@ -20,12 +20,12 @@ import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
 import io.element.android.libraries.matrix.api.tracing.TracingFilterConfigurations
 import io.element.android.libraries.matrix.api.tracing.WriteToFilesConfiguration
 import io.element.android.x.BuildConfig
-import io.element.android.x.di.AppBindings
+import io.element.android.x.di.XAppBindings
 import timber.log.Timber
 
 class TracingInitializer : Initializer<Unit> {
     override fun create(context: Context) {
-        val appBindings = context.bindings<AppBindings>()
+        val appBindings = context.bindings<XAppBindings>()
         val tracingService = appBindings.tracingService()
         val bugReporter = appBindings.bugReporter()
         Timber.plant(tracingService.createTimberTree())
