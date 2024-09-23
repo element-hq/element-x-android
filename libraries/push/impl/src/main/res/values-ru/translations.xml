@@ -26,6 +26,7 @@
     <item quantity="many">"%d приглашений"</item>
   </plurals>
   <string name="notification_invite_body">"Пригласил вас в чат"</string>
+  <string name="notification_invite_body_with_sender">"%1$s пригласил вас в чат"</string>
   <string name="notification_mentioned_you_body">"Упомянул вас: %1$s"</string>
   <string name="notification_new_messages">"Новые сообщения"</string>
   <plurals name="notification_new_messages_for_room">
@@ -37,6 +38,7 @@
   <string name="notification_room_action_mark_as_read">"Пометить как прочитанное"</string>
   <string name="notification_room_action_quick_reply">"Быстрый ответ"</string>
   <string name="notification_room_invite_body">"Пригласил вас в комнату"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s пригласил вас присоединиться к комнате"</string>
   <string name="notification_sender_me">"Я"</string>
   <string name="notification_sender_mention_reply">"%1$s упомянул или ответил"</string>
   <string name="notification_test_push_notification_content">"Вы просматриваете уведомление! Нажмите на меня!"</string>
