@@ -44,12 +44,15 @@
   <string name="action_close">"Zavřít"</string>
   <string name="action_complete_verification">"Dokončit ověření"</string>
   <string name="action_confirm">"Potvrdit"</string>
+  <string name="action_confirm_password">"Potvrdit heslo"</string>
   <string name="action_continue">"Pokračovat"</string>
   <string name="action_copy">"Kopírovat"</string>
   <string name="action_copy_link">"Kopírovat odkaz"</string>
   <string name="action_copy_link_to_message">"Kopírovat odkaz na zprávu"</string>
   <string name="action_create">"Vytvořit"</string>
   <string name="action_create_a_room">"Vytvořit místnost"</string>
+  <string name="action_deactivate">"Deaktivovat"</string>
+  <string name="action_deactivate_account">"Deaktivovat účet"</string>
   <string name="action_decline">"Odmítnout"</string>
   <string name="action_delete_poll">"Odstranit hlasování"</string>
   <string name="action_disable">"Zakázat"</string>
@@ -255,6 +258,7 @@ Důvod: %1$s."</string>
   <string name="dialog_title_warning">"Upozornění"</string>
   <string name="dialog_unsaved_changes_description_android">"Vaše změny nebyly uloženy. Opravdu se chcete vrátit?"</string>
   <string name="dialog_unsaved_changes_title">"Uložit změny?"</string>
+  <string name="error_account_creation_not_possible">"Váš domovský server je třeba upgradovat, aby podporoval službu Matrix Authentication Service a vytváření účtu."</string>
   <string name="error_failed_creating_the_permalink">"Vytvoření trvalého odkazu se nezdařilo"</string>
   <string name="error_failed_loading_map">"%1$s nemohl načíst mapu. Zkuste to prosím později."</string>
   <string name="error_failed_loading_messages">"Načítání zpráv se nezdařilo"</string>
@@ -294,7 +298,9 @@ Důvod: %1$s."</string>
   <string name="screen_resolve_send_failure_changed_identity_title">"Vaše zpráva nebyla odeslána, protože ověřená identita uživatele %1$s se změnila"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Přesto odeslat zprávu"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s používá jedno nebo více neověřených zařízení. Zprávu můžete přesto odeslat, nebo můžete prozatím zrušit a zkusit to znovu později poté, co %2$s ověří všechna svá zařízení."</string>
-  <string name="screen_resolve_send_failure_unsigned_device_title">"Vaše zpráva nebyla odeslána, protože%1$s neověřil jedno nebo více zařízení"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Vaše zpráva nebyla odeslána, protože%1$s neověřil(a) všechna zařízení"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Jedno nebo více vašich zařízení není ověřeno. Zprávu můžete přesto odeslat, nebo ji můžete prozatím zrušit a zkusit to znovu později, až ověříte všechna svá zařízení."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"Vaše zpráva nebyla odeslána, protože jste neověřili jedno nebo více zařízení"</string>
   <string name="screen_room_details_pinned_events_row_title">"Připnuté zprávy"</string>
   <string name="screen_room_error_failed_processing_media">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepodařilo se načíst údaje o uživateli"</string>
@@ -317,7 +323,8 @@ Důvod: %1$s."</string>
   <string name="screen_share_open_osm_maps">"Otevřít v OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Sdílet tuto polohu"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Zpráva nebyla odeslána, protože ověřená identita uživatele %1$s se změnila."</string>
-  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Zpráva nebyla odeslána, protože%1$s neověřil jedno nebo více zařízení."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Zpráva nebyla odeslána, protože%1$s neověřil(a) všechna zařízení."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Zpráva nebyla odeslána, protože jste neověřili jedno nebo více zařízení."</string>
   <string name="screen_view_location_title">"Poloha"</string>
   <string name="settings_version_number">"Verze: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"en"</string>

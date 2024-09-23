@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Подтвердите, что вы хотите деактивировать свою учетную запись. Это действие не может быть отменено."</string>
+  <string name="screen_deactivate_account_delete_all_messages">"Удалить все мои сообщения"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"Предупреждение: будущие пользователи могут увидеть незавершенные разговоры."</string>
+  <string name="screen_deactivate_account_description">"Деактивация вашей учетной записи %1$s означает следующее:"</string>
+  <string name="screen_deactivate_account_description_bold_part">"необратимый"</string>
+  <string name="screen_deactivate_account_list_item_1">"%1$s вашей учетной записи (вы не можете войти в систему снова, и ваш ID не может быть использован повторно)."</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"Отключить навсегда"</string>
+  <string name="screen_deactivate_account_list_item_2">"Удалите вас из всех чатов."</string>
+  <string name="screen_deactivate_account_list_item_3">"Удалите данные своей учетной записи с нашего сервера идентификации."</string>
+  <string name="screen_deactivate_account_list_item_4">"Ваши сообщения по-прежнему будут видны зарегистрированным пользователям, но не будут доступны новым или незарегистрированным пользователям, если вы решите удалить их."</string>
+  <string name="screen_deactivate_account_title">"Отключить учётную запись"</string>
+</resources>

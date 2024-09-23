@@ -23,6 +23,7 @@
     <item quantity="other">"%d invitations"</item>
   </plurals>
   <string name="notification_invite_body">"Invited you to chat"</string>
+  <string name="notification_invite_body_with_sender">"%1$s invited you to chat"</string>
   <string name="notification_mentioned_you_body">"Mentioned you: %1$s"</string>
   <string name="notification_new_messages">"New Messages"</string>
   <plurals name="notification_new_messages_for_room">
@@ -33,6 +34,7 @@
   <string name="notification_room_action_mark_as_read">"Mark as read"</string>
   <string name="notification_room_action_quick_reply">"Quick reply"</string>
   <string name="notification_room_invite_body">"Invited you to join the room"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s invited you to join the room"</string>
   <string name="notification_sender_me">"Me"</string>
   <string name="notification_sender_mention_reply">"%1$s mentioned or replied"</string>
   <string name="notification_test_push_notification_content">"You are viewing the notification! Click me!"</string>
