@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Palun kinnita uuesti, et soovid eemaldada oma konto kasutusest"</string>
+  <string name="screen_deactivate_account_delete_all_messages">"Kustuta kõik minu sõnumid"</string>
+  <string name="screen_deactivate_account_title">"Eemalda konto kasutusest"</string>
+</resources>

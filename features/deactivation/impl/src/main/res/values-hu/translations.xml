@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Erősítse meg, hogy deaktiválja a fiókját. Ez a művelet nem vonható vissza."</string>
+  <string name="screen_deactivate_account_delete_all_messages">"Összes saját üzenet törlése"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"Figyelmeztetés: A jövőbeli felhasználók hiányos beszélgetéseket láthatnak."</string>
+  <string name="screen_deactivate_account_description">"A fiók deaktiválása %1$s, a következőket okozza:"</string>
+  <string name="screen_deactivate_account_description_bold_part">"visszafordíthatatlan"</string>
+  <string name="screen_deactivate_account_list_item_1">"%1$s a fiókját (nem fog tudni újra bejelentkezni, és az azonosítója nem használható újra)."</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"Véglegesen letiltja"</string>
+  <string name="screen_deactivate_account_list_item_2">"Eltávolításra kerül az összes csevegőszobából."</string>
+  <string name="screen_deactivate_account_list_item_3">"Törlésre kerülnek a fiókadatai a személyazonosító kiszolgálónkról."</string>
+  <string name="screen_deactivate_account_list_item_4">"Üzenetei továbbra is láthatóak maradnak a regisztrált felhasználók számára, de nem lesznek elérhetőek az új vagy nem regisztrált felhasználók számára, ha úgy dönt, hogy törli őket."</string>
+  <string name="screen_deactivate_account_title">"Fiók deaktiválása"</string>
+</resources>

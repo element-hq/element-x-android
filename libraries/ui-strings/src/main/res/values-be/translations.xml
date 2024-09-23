@@ -38,6 +38,7 @@
   <string name="action_back">"Назад"</string>
   <string name="action_call">"Званок"</string>
   <string name="action_cancel">"Скасаваць"</string>
+  <string name="action_cancel_for_now">"Адмяніць пакуль"</string>
   <string name="action_choose_photo">"Выбраць фота"</string>
   <string name="action_clear">"Ачысціць"</string>
   <string name="action_close">"Закрыць"</string>
@@ -285,6 +286,7 @@
     <item quantity="many">"%1$d Замацаваных паведамленняў"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Замацаваныя паведамленні"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Усё роўна адправіць паведамленне"</string>
   <string name="screen_room_details_pinned_events_row_title">"Замацаваныя паведамленні"</string>
   <string name="screen_room_error_failed_processing_media">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не ўдалося атрымаць інфармацыю пра карыстальніка"</string>

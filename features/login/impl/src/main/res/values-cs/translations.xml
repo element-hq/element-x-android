@@ -21,6 +21,7 @@
   <string name="screen_change_server_form_notice">"Můžete se připojit pouze k serveru, který podporuje klouzavou synchronizaci. Správce vašeho domovského serveru jej bude muset nakonfigurovat. %1$s"</string>
   <string name="screen_change_server_subtitle">"Jaká je adresa vašeho serveru?"</string>
   <string name="screen_change_server_title">"Vyberte váš server"</string>
+  <string name="screen_create_account_title">"Vytvořit účet"</string>
   <string name="screen_login_error_deactivated_account">"Tento účet byl deaktivován."</string>
   <string name="screen_login_error_invalid_credentials">"Nesprávné uživatelské jméno nebo heslo"</string>
   <string name="screen_login_error_invalid_user_id">"Toto není platný identifikátor uživatele. Očekávaný formát: \'@user:homeserver.org\'"</string>
