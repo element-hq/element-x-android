@@ -33,7 +33,10 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.StateEventType
+import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.A_ROOM_NAME
+import io.element.android.libraries.matrix.test.A_ROOM_TOPIC
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -129,7 +132,12 @@ class RoomDetailsPresenterTest {
 
     @Test
     fun `present - initial state is updated with roomInfo if it exists`() = runTest {
-        val roomInfo = aRoomInfo(name = "A room name", topic = "A topic", avatarUrl = "https://matrix.org/avatar.jpg", pinnedEventIds = listOf(AN_EVENT_ID))
+        val roomInfo = aRoomInfo(
+            name = A_ROOM_NAME,
+            topic = A_ROOM_TOPIC,
+            avatarUrl = AN_AVATAR_URL,
+            pinnedEventIds = listOf(AN_EVENT_ID),
+        )
         val room = aMatrixRoom(
             canInviteResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },

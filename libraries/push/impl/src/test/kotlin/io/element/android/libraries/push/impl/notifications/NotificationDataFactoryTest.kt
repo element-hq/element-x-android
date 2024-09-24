@@ -100,7 +100,7 @@ class NotificationDataFactoryTest {
                 null,
             ),
             roomId = A_ROOM_ID,
-            summaryLine = "room-name: sender-name message-body",
+            summaryLine = "A room name: Bob Hello world!",
             messageCount = events.size,
             latestTimestamp = events.maxOf { it.timestamp },
             shouldBing = events.any { it.noisy }
@@ -152,7 +152,7 @@ class NotificationDataFactoryTest {
                 null,
             ),
             roomId = A_ROOM_ID,
-            summaryLine = "room-name: sender-name message-body",
+            summaryLine = "A room name: Bob Hello world!",
             messageCount = withRedactedRemoved.size,
             latestTimestamp = withRedactedRemoved.maxOf { it.timestamp },
             shouldBing = withRedactedRemoved.any { it.noisy }

@@ -39,6 +39,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -51,6 +52,8 @@ import io.element.android.libraries.designsystem.theme.pinnedMessageBannerIndica
 import io.element.android.libraries.designsystem.utils.annotatedTextWithBold
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.services.analytics.compose.LocalAnalyticsService
+import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 
 @Composable
 fun PinnedMessagesBannerView(
@@ -79,6 +82,7 @@ private fun PinnedMessagesBannerRow(
     onViewAllClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val analyticsService = LocalAnalyticsService.current
     val borderColor = ElementTheme.colors.pinnedMessageBannerBorder
     Row(
         modifier = modifier
@@ -88,6 +92,7 @@ private fun PinnedMessagesBannerRow(
             .heightIn(min = 64.dp)
             .clickable {
                 if (state is PinnedMessagesBannerState.Loaded) {
+                    analyticsService.captureInteraction(Interaction.Name.PinnedMessageBannerClick)
                     onClick(state.currentPinnedMessage.eventId)
                     state.eventSink(PinnedMessagesBannerEvents.MoveToNextPinned)
                 }
@@ -112,7 +117,13 @@ private fun PinnedMessagesBannerRow(
             message = state.formattedMessage(),
             modifier = Modifier.weight(1f)
         )
-        ViewAllButton(state, onViewAllClick)
+        ViewAllButton(
+            state = state,
+            onViewAllClick = {
+                onViewAllClick()
+                analyticsService.captureInteraction(Interaction.Name.PinnedMessageBannerViewAllButton)
+            },
+        )
     }
 }
 

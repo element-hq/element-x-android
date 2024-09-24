@@ -37,6 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.leaveroom.api.LeaveRoomView
@@ -80,6 +81,8 @@ import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.services.analytics.compose.LocalAnalyticsService
+import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
@@ -111,9 +114,9 @@ fun RoomDetailsView(
     ) { padding ->
         Column(
             modifier = Modifier
-                .padding(padding)
-                .verticalScroll(rememberScrollState())
-                .consumeWindowInsets(padding)
+                    .padding(padding)
+                    .verticalScroll(rememberScrollState())
+                    .consumeWindowInsets(padding)
         ) {
             LeaveRoomView(state = state.leaveRoomState)
 
@@ -270,8 +273,8 @@ private fun MainActionsSection(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
         val roomNotificationSettings = state.roomNotificationSettings
@@ -330,8 +333,8 @@ private fun RoomHeaderSection(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         CompositeAvatar(
@@ -340,8 +343,8 @@ private fun RoomHeaderSection(
                 user.getAvatarData(size = AvatarSize.RoomHeader)
             }.toPersistentList(),
             modifier = Modifier
-                .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
-                .testTag(TestTags.roomDetailAvatar)
+                    .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
+                    .testTag(TestTags.roomDetailAvatar)
         )
         TitleAndSubtitle(title = roomName, subtitle = roomAlias?.value)
     }
@@ -357,8 +360,8 @@ private fun DmHeaderSection(
 ) {
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         DmAvatars(
@@ -509,6 +512,7 @@ private fun PinnedMessagesItem(
     pinnedMessagesCount: Int?,
     onPinnedMessagesClick: () -> Unit,
 ) {
+    val analyticsService = LocalAnalyticsService.current
     ListItem(
         headlineContent = { Text(stringResource(CommonStrings.screen_room_details_pinned_events_row_title)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Pin())),
@@ -520,7 +524,10 @@ private fun PinnedMessagesItem(
         } else {
             ListItemContent.Text(pinnedMessagesCount.toString())
         },
-        onClick = onPinnedMessagesClick,
+        onClick = {
+            analyticsService.captureInteraction(Interaction.Name.PinnedMessageRoomInfoButton)
+            onPinnedMessagesClick()
+        }
     )
 }
 

@@ -11,10 +11,18 @@ import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_ROOM_NAME
+import io.element.android.libraries.matrix.test.A_TIMESTAMP
+import io.element.android.libraries.matrix.test.A_USER_NAME_2
 
 fun aNotificationData(
-    senderDisplayName: String?,
-    senderIsNameAmbiguous: Boolean,
+    content: NotificationContent = NotificationContent.MessageLike.RoomEncrypted,
+    isDirect: Boolean = false,
+    hasMention: Boolean = false,
+    timestamp: Long = A_TIMESTAMP,
+    senderDisplayName: String? = A_USER_NAME_2,
+    senderIsNameAmbiguous: Boolean = false,
+    roomDisplayName: String? = A_ROOM_NAME
 ): NotificationData {
     return NotificationData(
         eventId = AN_EVENT_ID,
@@ -23,13 +31,13 @@ fun aNotificationData(
         senderDisplayName = senderDisplayName,
         senderIsNameAmbiguous = senderIsNameAmbiguous,
         roomAvatarUrl = null,
-        roomDisplayName = null,
-        isDirect = false,
+        roomDisplayName = roomDisplayName,
+        isDirect = isDirect,
         isDm = false,
         isEncrypted = false,
         isNoisy = false,
-        timestamp = 0L,
-        content = NotificationContent.MessageLike.RoomEncrypted,
-        hasMention = false,
+        timestamp = timestamp,
+        content = content,
+        hasMention = hasMention,
     )
 }

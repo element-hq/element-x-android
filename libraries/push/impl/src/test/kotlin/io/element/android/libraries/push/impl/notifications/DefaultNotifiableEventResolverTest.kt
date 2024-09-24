@@ -9,7 +9,6 @@ package io.element.android.libraries.push.impl.notifications
 
 import android.content.Context
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.notification.CallNotifyType
 import io.element.android.libraries.matrix.api.notification.NotificationContent
@@ -33,13 +32,18 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_REDACTION_REASON
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_TIMESTAMP
 import io.element.android.libraries.matrix.test.A_USER_ID_2
+import io.element.android.libraries.matrix.test.A_USER_NAME_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.notification.FakeNotificationService
+import io.element.android.libraries.matrix.test.notification.aNotificationData
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationMediaRepo
+import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
@@ -88,17 +92,17 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve event message text`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
                         messageType = TextMessageType(body = "Hello world", formatted = null)
-                    )
+                    ),
                 )
             )
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
         val expectedResult = ResolvedPushEvent.Event(
-            createNotifiableMessageEvent(body = "Hello world")
+            aNotifiableMessageEvent(body = "Hello world")
         )
         assertThat(result).isEqualTo(expectedResult)
     }
@@ -108,7 +112,7 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve event message with mention`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
                         messageType = TextMessageType(body = "Hello world", formatted = null)
@@ -119,7 +123,7 @@ class DefaultNotifiableEventResolverTest {
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
         val expectedResult = ResolvedPushEvent.Event(
-            createNotifiableMessageEvent(body = "Hello world", hasMentionOrReply = true)
+            aNotifiableMessageEvent(body = "Hello world", hasMentionOrReply = true)
         )
         assertThat(result).isEqualTo(expectedResult)
     }
@@ -128,7 +132,7 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve HTML formatted event message text takes plain text version`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
                         messageType = TextMessageType(
@@ -138,13 +142,13 @@ class DefaultNotifiableEventResolverTest {
                                 format = MessageFormat.HTML,
                             )
                         )
-                    )
+                    ),
                 )
             )
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
         val expectedResult = ResolvedPushEvent.Event(
-            createNotifiableMessageEvent(body = "Hello world")
+            aNotifiableMessageEvent(body = "Hello world")
         )
         assertThat(result).isEqualTo(expectedResult)
     }
@@ -153,7 +157,7 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve incorrectly formatted event message text uses fallback`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
                         messageType = TextMessageType(
@@ -163,13 +167,13 @@ class DefaultNotifiableEventResolverTest {
                                 format = MessageFormat.UNKNOWN,
                             )
                         )
-                    )
+                    ),
                 )
             )
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
         val expectedResult = ResolvedPushEvent.Event(
-            createNotifiableMessageEvent(body = "Hello world")
+            aNotifiableMessageEvent(body = "Hello world")
         )
         assertThat(result).isEqualTo(expectedResult)
     }
@@ -178,17 +182,17 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve event message audio`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
                         messageType = AudioMessageType(body = "Audio", MediaSource("url"), null)
-                    )
+                    ),
                 )
             )
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
         val expectedResult = ResolvedPushEvent.Event(
-            createNotifiableMessageEvent(body = "Audio")
+            aNotifiableMessageEvent(body = "Audio")
         )
         assertThat(result).isEqualTo(expectedResult)
     }
@@ -197,17 +201,17 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve event message video`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
                         messageType = VideoMessageType(body = "Video", null, null, MediaSource("url"), null)
-                    )
+                    ),
                 )
             )
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
         val expectedResult = ResolvedPushEvent.Event(
-            createNotifiableMessageEvent(body = "Video")
+            aNotifiableMessageEvent(body = "Video")
         )
         assertThat(result).isEqualTo(expectedResult)
     }
@@ -216,17 +220,17 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve event message voice`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
                         messageType = VoiceMessageType(body = "Voice", MediaSource("url"), null, null)
-                    )
+                    ),
                 )
             )
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
         val expectedResult = ResolvedPushEvent.Event(
-            createNotifiableMessageEvent(body = "Voice message")
+            aNotifiableMessageEvent(body = "Voice message")
         )
         assertThat(result).isEqualTo(expectedResult)
     }
@@ -235,17 +239,17 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve event message image`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
                         messageType = ImageMessageType("Image", null, null, MediaSource("url"), null),
-                    )
+                    ),
                 )
             )
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
         val expectedResult = ResolvedPushEvent.Event(
-            createNotifiableMessageEvent(body = "Image")
+            aNotifiableMessageEvent(body = "Image")
         )
         assertThat(result).isEqualTo(expectedResult)
     }
@@ -254,17 +258,17 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve event message sticker`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
                         messageType = StickerMessageType("Sticker", MediaSource("url"), null),
-                    )
+                    ),
                 )
             )
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
         val expectedResult = ResolvedPushEvent.Event(
-            createNotifiableMessageEvent(body = "Sticker")
+            aNotifiableMessageEvent(body = "Sticker")
         )
         assertThat(result).isEqualTo(expectedResult)
     }
@@ -273,17 +277,17 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve event message file`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
                         messageType = FileMessageType("File", MediaSource("url"), null),
-                    )
+                    ),
                 )
             )
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
         val expectedResult = ResolvedPushEvent.Event(
-            createNotifiableMessageEvent(body = "File")
+            aNotifiableMessageEvent(body = "File")
         )
         assertThat(result).isEqualTo(expectedResult)
     }
@@ -292,17 +296,17 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve event message location`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
                         messageType = LocationMessageType("Location", "geo:1,2", null),
-                    )
+                    ),
                 )
             )
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
         val expectedResult = ResolvedPushEvent.Event(
-            createNotifiableMessageEvent(body = "Location")
+            aNotifiableMessageEvent(body = "Location")
         )
         assertThat(result).isEqualTo(expectedResult)
     }
@@ -311,17 +315,17 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve event message notice`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
                         messageType = NoticeMessageType("Notice", null),
-                    )
+                    ),
                 )
             )
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
         val expectedResult = ResolvedPushEvent.Event(
-            createNotifiableMessageEvent(body = "Notice")
+            aNotifiableMessageEvent(body = "Notice")
         )
         assertThat(result).isEqualTo(expectedResult)
     }
@@ -330,17 +334,17 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve event message emote`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.MessageLike.RoomMessage(
                         senderId = A_USER_ID_2,
                         messageType = EmoteMessageType("is happy", null),
-                    )
+                    ),
                 )
             )
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
         val expectedResult = ResolvedPushEvent.Event(
-            createNotifiableMessageEvent(body = "* Bob is happy")
+            aNotifiableMessageEvent(body = "* Bob is happy")
         )
         assertThat(result).isEqualTo(expectedResult)
     }
@@ -349,17 +353,17 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve poll`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.MessageLike.Poll(
                         senderId = A_USER_ID_2,
                         question = "A question"
-                    )
+                    ),
                 )
             )
         )
         val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
         val expectedResult = ResolvedPushEvent.Event(
-            createNotifiableMessageEvent(body = "Poll: A question")
+            aNotifiableMessageEvent(body = "Poll: A question")
         )
         assertThat(result).isEqualTo(expectedResult)
     }
@@ -368,7 +372,7 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve RoomMemberContent invite room`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.StateEvent.RoomMemberContent(
                         userId = A_USER_ID_2,
                         membershipState = RoomMembershipState.INVITE
@@ -385,7 +389,7 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve invite room`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.Invite(
                         senderId = A_USER_ID_2,
                     ),
@@ -401,10 +405,10 @@ class DefaultNotifiableEventResolverTest {
                 eventId = AN_EVENT_ID,
                 editedEventId = null,
                 canBeReplaced = true,
-                roomName = null,
+                roomName = A_ROOM_NAME,
                 noisy = false,
                 title = null,
-                description = "Invited you to join the room",
+                description = "Bob invited you to join the room",
                 type = null,
                 timestamp = A_TIMESTAMP,
                 soundName = null,
@@ -416,10 +420,10 @@ class DefaultNotifiableEventResolverTest {
     }
 
     @Test
-    fun `resolve invite invite direct`() = runTest {
+    fun `resolve invite direct`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.Invite(
                         senderId = A_USER_ID_2,
                     ),
@@ -435,10 +439,80 @@ class DefaultNotifiableEventResolverTest {
                 eventId = AN_EVENT_ID,
                 editedEventId = null,
                 canBeReplaced = true,
-                roomName = null,
+                roomName = A_ROOM_NAME,
                 noisy = false,
                 title = null,
-                description = "Invited you to chat",
+                description = "Bob invited you to chat",
+                type = null,
+                timestamp = A_TIMESTAMP,
+                soundName = null,
+                isRedacted = false,
+                isUpdated = false,
+            )
+        )
+        assertThat(result).isEqualTo(expectedResult)
+    }
+
+    @Test
+    fun `resolve invite direct, no display name`() = runTest {
+        val sut = createDefaultNotifiableEventResolver(
+            notificationResult = Result.success(
+                aNotificationData(
+                    content = NotificationContent.Invite(
+                        senderId = A_USER_ID_2,
+                    ),
+                    isDirect = true,
+                    senderDisplayName = null,
+                )
+            )
+        )
+        val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
+        val expectedResult = ResolvedPushEvent.Event(
+            InviteNotifiableEvent(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+                eventId = AN_EVENT_ID,
+                editedEventId = null,
+                canBeReplaced = true,
+                roomName = A_ROOM_NAME,
+                noisy = false,
+                title = null,
+                description = "@bob:server.org invited you to chat",
+                type = null,
+                timestamp = A_TIMESTAMP,
+                soundName = null,
+                isRedacted = false,
+                isUpdated = false,
+            )
+        )
+        assertThat(result).isEqualTo(expectedResult)
+    }
+
+    @Test
+    fun `resolve invite direct, ambiguous display name`() = runTest {
+        val sut = createDefaultNotifiableEventResolver(
+            notificationResult = Result.success(
+                aNotificationData(
+                    content = NotificationContent.Invite(
+                        senderId = A_USER_ID_2,
+                    ),
+                    isDirect = false,
+                    senderIsNameAmbiguous = true,
+                )
+            )
+        )
+        val result = sut.resolveEvent(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID)
+        val expectedResult = ResolvedPushEvent.Event(
+            InviteNotifiableEvent(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+                eventId = AN_EVENT_ID,
+                editedEventId = null,
+                canBeReplaced = true,
+                roomName = A_ROOM_NAME,
+                noisy = false,
+                title = null,
+                description = "Bob (@bob:server.org) invited you to join the room",
                 type = null,
                 timestamp = A_TIMESTAMP,
                 soundName = null,
@@ -453,7 +527,7 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve RoomMemberContent other`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.StateEvent.RoomMemberContent(
                         userId = A_USER_ID_2,
                         membershipState = RoomMembershipState.JOIN
@@ -469,7 +543,7 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve RoomEncrypted`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.MessageLike.RoomEncrypted
                 )
             )
@@ -495,8 +569,8 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve CallInvite`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
-                    content = NotificationContent.MessageLike.CallInvite(A_USER_ID_2)
+                aNotificationData(
+                    content = NotificationContent.MessageLike.CallInvite(A_USER_ID_2),
                 )
             )
         )
@@ -511,11 +585,11 @@ class DefaultNotifiableEventResolverTest {
                 senderId = A_USER_ID_2,
                 noisy = false,
                 timestamp = A_TIMESTAMP,
-                senderDisambiguatedDisplayName = "Bob",
+                senderDisambiguatedDisplayName = A_USER_NAME_2,
                 body = "Call in progress (unsupported)",
                 imageUriString = null,
                 threadId = null,
-                roomName = null,
+                roomName = A_ROOM_NAME,
                 roomAvatarPath = null,
                 senderAvatarPath = null,
                 soundName = null,
@@ -533,7 +607,7 @@ class DefaultNotifiableEventResolverTest {
         val timestamp = DefaultSystemClock().epochMillis()
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.MessageLike.CallNotify(
                         A_USER_ID_2,
                         CallNotifyType.RING
@@ -548,14 +622,14 @@ class DefaultNotifiableEventResolverTest {
                 roomId = A_ROOM_ID,
                 eventId = AN_EVENT_ID,
                 senderId = A_USER_ID_2,
-                roomName = null,
+                roomName = A_ROOM_NAME,
                 editedEventId = null,
                 description = "Incoming call",
                 timestamp = timestamp,
                 canBeReplaced = true,
                 isRedacted = false,
                 isUpdated = false,
-                senderDisambiguatedDisplayName = "Bob",
+                senderDisambiguatedDisplayName = A_USER_NAME_2,
                 senderAvatarUrl = null,
                 callNotifyType = CallNotifyType.RING,
             )
@@ -568,7 +642,7 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve CallNotify - ring but timed out displays the same as notify`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.MessageLike.CallNotify(
                         A_USER_ID_2,
                         CallNotifyType.RING
@@ -584,12 +658,12 @@ class DefaultNotifiableEventResolverTest {
                 editedEventId = null,
                 noisy = true,
                 timestamp = 0L,
-                senderDisambiguatedDisplayName = "Bob",
-                senderId = UserId("@bob:server.org"),
+                senderDisambiguatedDisplayName = A_USER_NAME_2,
+                senderId = A_USER_ID_2,
                 body = "☎\uFE0F Incoming call",
                 roomId = A_ROOM_ID,
                 threadId = null,
-                roomName = null,
+                roomName = A_ROOM_NAME,
                 canBeReplaced = false,
                 isRedacted = false,
                 imageUriString = null,
@@ -604,11 +678,11 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve CallNotify - notify`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.MessageLike.CallNotify(
                         A_USER_ID_2,
                         CallNotifyType.NOTIFY
-                    )
+                    ),
                 )
             )
         )
@@ -619,12 +693,12 @@ class DefaultNotifiableEventResolverTest {
                 editedEventId = null,
                 noisy = true,
                 timestamp = A_TIMESTAMP,
-                senderDisambiguatedDisplayName = "Bob",
-                senderId = UserId("@bob:server.org"),
+                senderDisambiguatedDisplayName = A_USER_NAME_2,
+                senderId = A_USER_ID_2,
                 body = "☎\uFE0F Incoming call",
                 roomId = A_ROOM_ID,
                 threadId = null,
-                roomName = null,
+                roomName = A_ROOM_NAME,
                 canBeReplaced = false,
                 isRedacted = false,
                 imageUriString = null,
@@ -639,7 +713,7 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve RoomRedaction`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.MessageLike.RoomRedaction(
                         AN_EVENT_ID_2,
                         A_REDACTION_REASON,
@@ -661,7 +735,7 @@ class DefaultNotifiableEventResolverTest {
     fun `resolve RoomRedaction with null redactedEventId should return null`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = NotificationContent.MessageLike.RoomRedaction(
                         null,
                         A_REDACTION_REASON,
@@ -712,7 +786,7 @@ class DefaultNotifiableEventResolverTest {
     private fun testNull(content: NotificationContent) = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
-                createNotificationData(
+                aNotificationData(
                     content = content
                 )
             )
@@ -749,59 +823,4 @@ class DefaultNotifiableEventResolverTest {
             ),
         )
     }
-
-    private fun createNotificationData(
-        content: NotificationContent,
-        isDirect: Boolean = false,
-        hasMention: Boolean = false,
-        timestamp: Long = A_TIMESTAMP,
-    ): NotificationData {
-        return NotificationData(
-            eventId = AN_EVENT_ID,
-            roomId = A_ROOM_ID,
-            senderAvatarUrl = null,
-            senderDisplayName = "Bob",
-            senderIsNameAmbiguous = false,
-            roomAvatarUrl = null,
-            roomDisplayName = null,
-            isDirect = isDirect,
-            isEncrypted = false,
-            isNoisy = false,
-            timestamp = timestamp,
-            content = content,
-            hasMention = hasMention,
-            isDm = false,
-        )
-    }
-
-    private fun createNotifiableMessageEvent(
-        body: String,
-        hasMentionOrReply: Boolean = false,
-    ): NotifiableMessageEvent {
-        return NotifiableMessageEvent(
-            sessionId = A_SESSION_ID,
-            roomId = A_ROOM_ID,
-            eventId = AN_EVENT_ID,
-            editedEventId = null,
-            canBeReplaced = false,
-            senderId = A_USER_ID_2,
-            noisy = false,
-            timestamp = A_TIMESTAMP,
-            senderDisambiguatedDisplayName = "Bob",
-            body = body,
-            imageUriString = null,
-            threadId = null,
-            roomName = null,
-            roomAvatarPath = null,
-            senderAvatarPath = null,
-            soundName = null,
-            outGoingMessage = false,
-            outGoingMessageFailed = false,
-            isRedacted = false,
-            isUpdated = false,
-            hasMentionOrReply = hasMentionOrReply,
-        )
-    }
 }
-
-private const val A_TIMESTAMP = 567L

@@ -112,6 +112,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
                 )
             }
             is NotificationContent.Invite -> {
+                val senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId)
                 InviteNotifiableEvent(
                     sessionId = userId,
                     roomId = roomId,
@@ -124,8 +125,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     soundName = null,
                     isRedacted = false,
                     isUpdated = false,
-                    // TODO We could use the senderId here
-                    description = descriptionFromRoomMembershipInvite(isDirect),
+                    description = descriptionFromRoomMembershipInvite(senderDisambiguatedDisplayName, isDirect),
                     // TODO check if type is needed anymore
                     type = null,
                     // TODO check if title is needed anymore
@@ -278,12 +278,13 @@ class DefaultNotifiableEventResolver @Inject constructor(
     }
 
     private fun descriptionFromRoomMembershipInvite(
+        senderDisambiguatedDisplayName: String,
         isDirectRoom: Boolean
     ): String {
         return if (isDirectRoom) {
-            stringProvider.getString(R.string.notification_invite_body)
+            stringProvider.getString(R.string.notification_invite_body_with_sender, senderDisambiguatedDisplayName)
         } else {
-            stringProvider.getString(R.string.notification_room_invite_body)
+            stringProvider.getString(R.string.notification_room_invite_body_with_sender, senderDisambiguatedDisplayName)
         }
     }
 
