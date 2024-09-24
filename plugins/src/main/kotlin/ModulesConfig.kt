@@ -6,10 +6,16 @@
  */
 
 import config.AnalyticsConfig
+import config.PushProvidersConfig
 
 object ModulesConfig {
+    val pushProvidersConfig = PushProvidersConfig(
+        includeFirebase = true,
+        includeUnifiedPush = true,
+    )
+
     val analyticsConfig: AnalyticsConfig = AnalyticsConfig.Enabled(
         withPosthog = true,
-        withSentry = true
+        withSentry = true,
     )
 }
