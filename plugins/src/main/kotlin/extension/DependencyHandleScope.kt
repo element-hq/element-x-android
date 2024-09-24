@@ -7,14 +7,14 @@
 
 package extension
 
+import config.AnalyticsConfig
+import ModulesConfig
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Action
 import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.logging.Logger
-import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.closureOf
-import org.gradle.kotlin.dsl.exclude
 import org.gradle.kotlin.dsl.project
 import java.io.File
 
@@ -24,7 +24,7 @@ private fun DependencyHandlerScope.implementation(dependency: Any) = dependencie
 private fun DependencyHandlerScope.implementation(
     dependency: Any,
     config: Action<ExternalModuleDependency>
-) = dependencies.add("implementation",  dependency, closureOf<ExternalModuleDependency> { config.execute(this) })
+) = dependencies.add("implementation", dependency, closureOf<ExternalModuleDependency> { config.execute(this) })
 
 private fun DependencyHandlerScope.androidTestImplementation(dependency: Any) = dependencies.add("androidTestImplementation", dependency)
 
@@ -111,13 +111,21 @@ fun DependencyHandlerScope.allLibrariesImpl() {
 }
 
 fun DependencyHandlerScope.allServicesImpl() {
-    // For analytics configuration, either use noop, or use the impl, with at least one analyticsproviders implementation
-    // implementation(project(":services:analytics:noop"))
-    implementation(project(":services:analytics:impl"))
     implementation(project(":services:analytics:compose"))
-    implementation(project(":services:analyticsproviders:posthog"))
-    implementation(project(":services:analyticsproviders:sentry"))
-
+    when (ModulesConfig.analyticsConfig) {
+        AnalyticsConfig.Disabled -> {
+            implementation(project(":services:analytics:noop"))
+        }
+        is AnalyticsConfig.Enabled -> {
+            implementation(project(":services:analytics:impl"))
+            if (ModulesConfig.analyticsConfig.withPosthog) {
+                implementation(project(":services:analyticsproviders:posthog"))
+            }
+            if (ModulesConfig.analyticsConfig.withSentry) {
+                implementation(project(":services:analyticsproviders:sentry"))
+            }
+        }
+    }
     implementation(project(":services:apperror:impl"))
     implementation(project(":services:appnavstate:impl"))
     implementation(project(":services:toolbox:impl"))
