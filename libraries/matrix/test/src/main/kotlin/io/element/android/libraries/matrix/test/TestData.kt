@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 
 const val A_USER_NAME = "alice"
+const val A_USER_NAME_2 = "Bob"
 const val A_PASSWORD = "password"
 const val A_PASSPHRASE = "passphrase"
 const val A_SECRET = "secret"
@@ -55,6 +56,7 @@ val A_UNIQUE_ID = UniqueId("aUniqueId")
 val A_UNIQUE_ID_2 = UniqueId("aUniqueId2")
 
 const val A_ROOM_NAME = "A room name"
+const val A_ROOM_TOPIC = "A room topic"
 const val A_ROOM_RAW_NAME = "A room raw name"
 const val A_MESSAGE = "Hello world!"
 const val A_REPLY = "OK, I'll be there!"
@@ -80,3 +82,5 @@ val AN_EXCEPTION = Exception(A_FAILURE_REASON)
 const val A_RECOVERY_KEY = "1234 5678"
 
 val A_SERVER_LIST = listOf("server1", "server2")
+
+const val A_TIMESTAMP = 567L

@@ -16,9 +16,13 @@ import io.element.android.libraries.matrix.api.notification.CallNotifyType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_TIMESTAMP
 import io.element.android.libraries.matrix.test.A_USER_ID_2
+import io.element.android.libraries.matrix.test.A_USER_NAME_2
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
@@ -56,7 +60,7 @@ fun anInviteNotifiableEvent(
     sessionId = sessionId,
     eventId = eventId,
     roomId = roomId,
-    roomName = "a room name",
+    roomName = A_ROOM_NAME,
     editedEventId = null,
     noisy = false,
     title = "title",
@@ -69,28 +73,40 @@ fun anInviteNotifiableEvent(
 )
 
 fun aNotifiableMessageEvent(
+    body: String = A_MESSAGE,
     sessionId: SessionId = A_SESSION_ID,
     roomId: RoomId = A_ROOM_ID,
     eventId: EventId = AN_EVENT_ID,
     threadId: ThreadId? = null,
     isRedacted: Boolean = false,
-    timestamp: Long = 0,
+    hasMentionOrReply: Boolean = false,
+    timestamp: Long = A_TIMESTAMP,
     type: String = EventType.MESSAGE,
+    senderId: UserId = A_USER_ID_2,
+    senderDisambiguatedDisplayName: String = A_USER_NAME_2,
+    roomName: String? = A_ROOM_NAME,
 ) = NotifiableMessageEvent(
     sessionId = sessionId,
     eventId = eventId,
     editedEventId = null,
     noisy = false,
     timestamp = timestamp,
-    senderDisambiguatedDisplayName = "sender-name",
-    senderId = UserId("@sending-id:domain.com"),
-    body = "message-body",
+    senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
+    senderId = senderId,
+    body = body,
     roomId = roomId,
     threadId = threadId,
-    roomName = "room-name",
+    roomName = roomName,
     canBeReplaced = false,
     isRedacted = isRedacted,
     imageUriString = null,
+    roomAvatarPath = null,
+    senderAvatarPath = null,
+    soundName = null,
+    outGoingMessage = false,
+    outGoingMessageFailed = false,
+    isUpdated = false,
+    hasMentionOrReply = hasMentionOrReply,
     type = type,
 )
 
@@ -108,7 +124,7 @@ fun aNotifiableCallEvent(
     sessionId = sessionId,
     eventId = eventId,
     roomId = roomId,
-    roomName = "a room name",
+    roomName = A_ROOM_NAME,
     editedEventId = null,
     description = "description",
     timestamp = timestamp,
