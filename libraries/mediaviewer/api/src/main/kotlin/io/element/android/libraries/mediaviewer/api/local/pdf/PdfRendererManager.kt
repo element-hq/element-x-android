@@ -35,19 +35,21 @@ class PdfRendererManager(
         coroutineScope.launch {
             mutex.withLock {
                 withContext(Dispatchers.IO) {
-                    runCatching {
+                    pdfRenderer = runCatching {
                         PdfRenderer(parcelFileDescriptor)
                     }.fold(
                         onSuccess = { pdfRenderer ->
-                            this@PdfRendererManager.pdfRenderer = pdfRenderer
-                            // Preload just 3 pages so we can render faster
-                            val firstPages = pdfRenderer.loadPages(from = 0, to = 3)
-                            mutablePdfPages.value = AsyncData.Success(firstPages.toImmutableList())
-                            val nextPages = pdfRenderer.loadPages(from = 3, to = pdfRenderer.pageCount)
-                            mutablePdfPages.value = AsyncData.Success((firstPages + nextPages).toImmutableList())
+                            pdfRenderer.apply {
+                                // Preload just 3 pages so we can render faster
+                                val firstPages = loadPages(from = 0, to = 3)
+                                mutablePdfPages.value = AsyncData.Success(firstPages.toImmutableList())
+                                val nextPages = loadPages(from = 3, to = pageCount)
+                                mutablePdfPages.value = AsyncData.Success((firstPages + nextPages).toImmutableList())
+                            }
                         },
                         onFailure = {
                             mutablePdfPages.value = AsyncData.Failure(it)
+                            null
                         }
                     )
                 }
