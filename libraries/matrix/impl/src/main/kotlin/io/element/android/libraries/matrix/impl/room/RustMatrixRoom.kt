@@ -116,10 +116,8 @@ class RustMatrixRoom(
     }
 
     override val roomTypingMembersFlow: Flow<List<UserId>> = mxCallbackFlow {
-        launch {
-            val initial = emptyList<UserId>()
-            channel.trySend(initial)
-        }
+        val initial = emptyList<UserId>()
+        channel.trySend(initial)
         innerRoom.subscribeToTypingNotifications(object : TypingNotificationsListener {
             override fun call(typingUserIds: List<String>) {
                 channel.trySend(
