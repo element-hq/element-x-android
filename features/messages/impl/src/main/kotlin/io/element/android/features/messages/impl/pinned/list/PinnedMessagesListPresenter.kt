@@ -20,6 +20,8 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.Interaction
+import im.vector.app.features.analytics.plan.PinUnpinAction
 import io.element.android.features.messages.impl.UserEventPermissions
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -39,6 +41,8 @@ import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.combine
@@ -57,6 +61,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
     private val snackbarDispatcher: SnackbarDispatcher,
     actionListPresenterFactory: ActionListPresenter.Factory,
     private val appCoroutineScope: CoroutineScope,
+    private val analyticsService: AnalyticsService,
 ) : Presenter<PinnedMessagesListState> {
     @AssistedFactory
     interface Factory {
@@ -129,6 +134,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
             TimelineItemAction.Unpin -> handleUnpinAction(targetEvent)
             TimelineItemAction.ViewInTimeline -> {
                 targetEvent.eventId?.let { eventId ->
+                    analyticsService.captureInteraction(Interaction.Name.PinnedMessageListViewTimeline)
                     navigator.onViewInTimelineClick(eventId)
                 }
             }
@@ -138,6 +144,12 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
 
     private suspend fun handleUnpinAction(targetEvent: TimelineItem.Event) {
         if (targetEvent.eventId == null) return
+        analyticsService.capture(
+            PinUnpinAction(
+                from = PinUnpinAction.From.MessagePinningList,
+                kind = PinUnpinAction.Kind.Unpin,
+            )
+        )
         timelineProvider.invokeOnTimeline {
             unpinEvent(targetEvent.eventId)
                 .onFailure {

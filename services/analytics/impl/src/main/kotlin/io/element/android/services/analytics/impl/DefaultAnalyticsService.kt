@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 @SingleIn(AppScope::class)
-@ContributesBinding(AppScope::class, boundType = AnalyticsService::class)
+@ContributesBinding(AppScope::class, boundType = AnalyticsService::class, priority = ContributesBinding.Priority.HIGHEST)
 class DefaultAnalyticsService @Inject constructor(
     private val analyticsProviders: Set<@JvmSuppressWildcards AnalyticsProvider>,
     private val analyticsStore: AnalyticsStore,
