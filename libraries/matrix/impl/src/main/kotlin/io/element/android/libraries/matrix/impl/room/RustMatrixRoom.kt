@@ -68,7 +68,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomInfoListener
@@ -104,14 +103,12 @@ class RustMatrixRoom(
     override val roomId = RoomId(innerRoom.id())
 
     override val roomInfoFlow: Flow<MatrixRoomInfo> = mxCallbackFlow {
-        launch {
-            runCatching { innerRoom.roomInfo() }
-                .getOrNull()
-                ?.let(matrixRoomInfoMapper::map)
-                ?.let { initial ->
-                    channel.trySend(initial)
-                }
-        }
+        runCatching { innerRoom.roomInfo() }
+            .getOrNull()
+            ?.let(matrixRoomInfoMapper::map)
+            ?.let { initial ->
+                channel.trySend(initial)
+            }
         innerRoom.subscribeToRoomInfoUpdates(object : RoomInfoListener {
             override fun call(roomInfo: RoomInfo) {
                 channel.trySend(matrixRoomInfoMapper.map(roomInfo))
