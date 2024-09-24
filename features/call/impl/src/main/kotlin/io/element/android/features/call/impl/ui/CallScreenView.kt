@@ -85,7 +85,15 @@ internal fun CallScreenView(
         BackHandler {
             handleBack()
         }
-        if (state.urlState !is AsyncData.Failure || state.canRenderWebViewInCaseOfError) {
+        if (state.webViewError != null) {
+            ErrorDialog(
+                content = buildString {
+                    append(stringResource(CommonStrings.error_unknown))
+                    state.webViewError.takeIf { it.isNotEmpty() }?.let { append("\n\n").append(it) }
+                },
+                onSubmit = { state.eventSink(CallScreenEvents.Hangup) },
+            )
+        } else {
             CallWebView(
                 modifier = Modifier
                     .padding(padding)
@@ -108,17 +116,17 @@ internal fun CallScreenView(
                     pipState.eventSink(PictureInPictureEvents.SetPipController(pipController))
                 }
             )
-        }
-        when (state.urlState) {
-            AsyncData.Uninitialized,
-            is AsyncData.Loading ->
-                ProgressDialog(text = stringResource(id = CommonStrings.common_please_wait))
-            is AsyncData.Failure ->
-                ErrorDialog(
-                    content = state.urlState.error.message.orEmpty(),
-                    onSubmit = { state.eventSink(CallScreenEvents.Hangup) },
-                )
-            is AsyncData.Success -> Unit
+            when (state.urlState) {
+                AsyncData.Uninitialized,
+                is AsyncData.Loading ->
+                    ProgressDialog(text = stringResource(id = CommonStrings.common_please_wait))
+                is AsyncData.Failure ->
+                    ErrorDialog(
+                        content = state.urlState.error.message.orEmpty(),
+                        onSubmit = { state.eventSink(CallScreenEvents.Hangup) },
+                    )
+                is AsyncData.Success -> Unit
+            }
         }
     }
 }
