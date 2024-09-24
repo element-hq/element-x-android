@@ -93,7 +93,7 @@ private fun PdfPagesView(
 }
 
 @Composable
-fun PdfPagesErrorView(
+private fun PdfPagesErrorView(
     error: Throwable,
     modifier: Modifier = Modifier,
 ) {
