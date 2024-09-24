@@ -105,8 +105,12 @@ class RustMatrixRoom(
 
     override val roomInfoFlow: Flow<MatrixRoomInfo> = mxCallbackFlow {
         launch {
-            val initial = innerRoom.roomInfo().let(matrixRoomInfoMapper::map)
-            channel.trySend(initial)
+            runCatching { innerRoom.roomInfo() }
+                .getOrNull()
+                ?.let(matrixRoomInfoMapper::map)
+                ?.let { initial ->
+                    channel.trySend(initial)
+                }
         }
         innerRoom.subscribeToRoomInfoUpdates(object : RoomInfoListener {
             override fun call(roomInfo: RoomInfo) {
@@ -623,9 +627,13 @@ class RustMatrixRoom(
         innerRoom.sendCallNotificationIfNeeded()
     }
 
-    override suspend fun setSendQueueEnabled(enabled: Boolean) = withContext(roomDispatcher) {
-        Timber.d("setSendQueuesEnabled: $enabled")
-        innerRoom.enableSendQueue(enabled)
+    override suspend fun setSendQueueEnabled(enabled: Boolean) {
+        withContext(roomDispatcher) {
+            Timber.d("setSendQueuesEnabled: $enabled")
+            runCatching {
+                innerRoom.enableSendQueue(enabled)
+            }
+        }
     }
 
     override suspend fun saveComposerDraft(composerDraft: ComposerDraft): Result<Unit> = runCatching {
