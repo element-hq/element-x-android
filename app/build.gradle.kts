@@ -253,7 +253,7 @@ dependencies {
     if (ModulesConfig.pushProvidersConfig.includeFirebase) {
         "gplayImplementation"(projects.libraries.pushproviders.firebase)
     }
-    if (ModulesConfig.pushProvidersConfig.includeFirebase) {
+    if (ModulesConfig.pushProvidersConfig.includeUnifiedPush) {
         implementation(projects.libraries.pushproviders.unifiedpush)
     }
 
