@@ -8,6 +8,7 @@
 package io.element.android.features.messages.impl.pinned.list
 
 import com.google.common.truth.Truth.assertThat
+import im.vector.app.features.analytics.plan.PinUnpinAction
 import io.element.android.features.messages.impl.actionlist.FakeActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactoryCreator
@@ -30,6 +31,8 @@ import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -142,7 +145,7 @@ class PinnedMessagesListPresenterTest {
         val successUnpinEventLambda = lambdaRecorder { _: EventId? -> Result.success(true) }
         val failureUnpinEventLambda = lambdaRecorder { _: EventId? -> Result.failure<Boolean>(A_THROWABLE) }
         val pinnedEventsTimeline = createPinnedMessagesTimeline()
-
+        val analyticsService = FakeAnalyticsService()
         val room = FakeMatrixRoom(
             pinnedEventsTimelineResult = { Result.success(pinnedEventsTimeline) },
             canRedactOwnResult = { Result.success(true) },
@@ -151,7 +154,7 @@ class PinnedMessagesListPresenterTest {
         ).apply {
             givenRoomInfo(aRoomInfo(pinnedEventIds = listOf(AN_EVENT_ID)))
         }
-        val presenter = createPinnedMessagesListPresenter(room = room, isFeatureEnabled = true)
+        val presenter = createPinnedMessagesListPresenter(room = room, isFeatureEnabled = true, analyticsService = analyticsService)
         presenter.test {
             skipItems(3)
             val filledState = awaitItem() as PinnedMessagesListState.Filled
@@ -174,6 +177,11 @@ class PinnedMessagesListPresenterTest {
             assert(failureUnpinEventLambda)
                 .isCalledOnce()
                 .with(value(AN_EVENT_ID))
+
+            assertThat(analyticsService.capturedEvents).containsExactly(
+                PinUnpinAction(kind = PinUnpinAction.Kind.Unpin, from = PinUnpinAction.From.MessagePinningList),
+                PinUnpinAction(kind = PinUnpinAction.Kind.Unpin, from = PinUnpinAction.From.MessagePinningList)
+            )
         }
     }
 
@@ -286,6 +294,7 @@ class PinnedMessagesListPresenterTest {
         room: MatrixRoom = FakeMatrixRoom(),
         networkMonitor: NetworkMonitor = FakeNetworkMonitor(),
         isFeatureEnabled: Boolean = true,
+        analyticsService: AnalyticsService = FakeAnalyticsService(),
     ): PinnedMessagesListPresenter {
         val timelineProvider = PinnedEventsTimelineProvider(
             room = room,
@@ -302,6 +311,7 @@ class PinnedMessagesListPresenterTest {
             timelineProvider = timelineProvider,
             snackbarDispatcher = SnackbarDispatcher(),
             actionListPresenterFactory = FakeActionListPresenter.Factory,
+            analyticsService = analyticsService,
             appCoroutineScope = this,
         )
     }

@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.impl.certificates.UserCertificatesPro
 import io.element.android.libraries.matrix.impl.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.paths.getSessionPaths
 import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
+import io.element.android.libraries.matrix.impl.room.TimelineEventTypeFilterFactory
 import io.element.android.libraries.matrix.impl.util.anonymizedTokens
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionData
@@ -45,6 +46,8 @@ class RustMatrixClientFactory @Inject constructor(
     private val clock: SystemClock,
     private val utdTracker: UtdTracker,
     private val featureFlagService: FeatureFlagService,
+    private val timelineEventTypeFilterFactory: TimelineEventTypeFilterFactory,
+    private val clientBuilderProvider: ClientBuilderProvider,
 ) {
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
         val sessionDelegate = RustClientSessionDelegate(sessionStore, appCoroutineScope, coroutineDispatchers)
@@ -68,14 +71,15 @@ class RustMatrixClientFactory @Inject constructor(
 
         RustMatrixClient(
             client = client,
-            syncService = syncService,
+            baseDirectory = baseDirectory,
             sessionStore = sessionStore,
             appCoroutineScope = appCoroutineScope,
+            sessionDelegate = sessionDelegate,
+            syncService = syncService,
             dispatchers = coroutineDispatchers,
-            baseDirectory = baseDirectory,
             baseCacheDirectory = cacheDirectory,
             clock = clock,
-            sessionDelegate = sessionDelegate,
+            timelineEventTypeFilterFactory = timelineEventTypeFilterFactory,
         ).also {
             Timber.tag(it.toString()).d("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
         }
@@ -86,7 +90,7 @@ class RustMatrixClientFactory @Inject constructor(
         passphrase: String?,
         slidingSyncType: ClientBuilderSlidingSync,
     ): ClientBuilder {
-        return ClientBuilder()
+        return clientBuilderProvider.provide()
             .sessionPaths(
                 dataPath = sessionPaths.fileDirectory.absolutePath,
                 cachePath = sessionPaths.cacheDirectory.absolutePath,

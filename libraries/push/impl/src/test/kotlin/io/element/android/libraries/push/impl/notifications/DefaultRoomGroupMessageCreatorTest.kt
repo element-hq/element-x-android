@@ -13,6 +13,7 @@ import androidx.core.app.NotificationCompat
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_TIMESTAMP
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.push.impl.notifications.factories.createNotificationCreator
@@ -27,7 +28,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
-private const val A_TIMESTAMP = 6480L
 private const val A_ROOM_AVATAR = "mxc://roomAvatar"
 private const val A_USER_AVATAR_1 = "mxc://userAvatar1"
 private const val A_USER_AVATAR_2 = "mxc://userAvatar2"

@@ -12,6 +12,6 @@
   <string name="screen_bug_report_include_logs">"Luba logide saatmine"</string>
   <string name="screen_bug_report_include_screenshot">"Saada ekraanitõmmis"</string>
   <string name="screen_bug_report_logs_description">"Tõhusama veaotsingu nimel lisame sinu veateatele logid. Kui sa seda ei soovi, siis lülita antud valik välja."</string>
-  <string name="screen_bug_report_rash_logs_alert_title">"%1$s jooksis kokku viimatu kui seda kasutasid. Kas tahaksid selle kohta meile aruande saata?"</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s jooksis kokku viimati, kui seda kasutasid. Kas tahaksid selle kohta meile veateate saata?"</string>
   <string name="screen_bug_report_view_logs">"Vaata logisid"</string>
 </resources>

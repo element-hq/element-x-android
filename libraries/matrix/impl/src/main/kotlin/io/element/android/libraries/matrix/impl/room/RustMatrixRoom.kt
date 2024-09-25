@@ -68,7 +68,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomInfoListener
@@ -104,10 +103,12 @@ class RustMatrixRoom(
     override val roomId = RoomId(innerRoom.id())
 
     override val roomInfoFlow: Flow<MatrixRoomInfo> = mxCallbackFlow {
-        launch {
-            val initial = innerRoom.roomInfo().let(matrixRoomInfoMapper::map)
-            channel.trySend(initial)
-        }
+        runCatching { innerRoom.roomInfo() }
+            .getOrNull()
+            ?.let(matrixRoomInfoMapper::map)
+            ?.let { initial ->
+                channel.trySend(initial)
+            }
         innerRoom.subscribeToRoomInfoUpdates(object : RoomInfoListener {
             override fun call(roomInfo: RoomInfo) {
                 channel.trySend(matrixRoomInfoMapper.map(roomInfo))
@@ -116,10 +117,8 @@ class RustMatrixRoom(
     }
 
     override val roomTypingMembersFlow: Flow<List<UserId>> = mxCallbackFlow {
-        launch {
-            val initial = emptyList<UserId>()
-            channel.trySend(initial)
-        }
+        val initial = emptyList<UserId>()
+        channel.trySend(initial)
         innerRoom.subscribeToTypingNotifications(object : TypingNotificationsListener {
             override fun call(typingUserIds: List<String>) {
                 channel.trySend(
@@ -625,9 +624,13 @@ class RustMatrixRoom(
         innerRoom.sendCallNotificationIfNeeded()
     }
 
-    override suspend fun setSendQueueEnabled(enabled: Boolean) = withContext(roomDispatcher) {
-        Timber.d("setSendQueuesEnabled: $enabled")
-        innerRoom.enableSendQueue(enabled)
+    override suspend fun setSendQueueEnabled(enabled: Boolean) {
+        withContext(roomDispatcher) {
+            Timber.d("setSendQueuesEnabled: $enabled")
+            runCatching {
+                innerRoom.enableSendQueue(enabled)
+            }
+        }
     }
 
     override suspend fun saveComposerDraft(composerDraft: ComposerDraft): Result<Unit> = runCatching {

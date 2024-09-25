@@ -24,7 +24,6 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
-import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
@@ -76,7 +75,6 @@ class DefaultNotifiableEventResolver @Inject constructor(
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return null
         val notificationService = client.notificationService()
         val notificationData = notificationService.getNotification(
-            userId = sessionId,
             roomId = roomId,
             eventId = eventId,
         ).onFailure {
@@ -113,30 +111,26 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     hasMentionOrReply = hasMention,
                 )
             }
-            is NotificationContent.StateEvent.RoomMemberContent -> {
-                if (content.membershipState == RoomMembershipState.INVITE) {
-                    InviteNotifiableEvent(
-                        sessionId = userId,
-                        roomId = roomId,
-                        eventId = eventId,
-                        editedEventId = null,
-                        canBeReplaced = true,
-                        roomName = roomDisplayName,
-                        noisy = isNoisy,
-                        timestamp = this.timestamp,
-                        soundName = null,
-                        isRedacted = false,
-                        isUpdated = false,
-                        description = descriptionFromRoomMembershipInvite(isDirect),
-                        // TODO check if type is needed anymore
-                        type = null,
-                        // TODO check if title is needed anymore
-                        title = null,
-                    )
-                } else {
-                    Timber.tag(loggerTag.value).d("Ignoring notification state event for membership ${content.membershipState}")
-                    null
-                }
+            is NotificationContent.Invite -> {
+                val senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId)
+                InviteNotifiableEvent(
+                    sessionId = userId,
+                    roomId = roomId,
+                    eventId = eventId,
+                    editedEventId = null,
+                    canBeReplaced = true,
+                    roomName = roomDisplayName,
+                    noisy = isNoisy,
+                    timestamp = this.timestamp,
+                    soundName = null,
+                    isRedacted = false,
+                    isUpdated = false,
+                    description = descriptionFromRoomMembershipInvite(senderDisambiguatedDisplayName, isDirect),
+                    // TODO check if type is needed anymore
+                    type = null,
+                    // TODO check if title is needed anymore
+                    title = null,
+                )
             }
             NotificationContent.MessageLike.CallAnswer,
             NotificationContent.MessageLike.CallCandidates,
@@ -203,6 +197,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
             NotificationContent.MessageLike.Sticker -> null.also {
                 Timber.tag(loggerTag.value).d("Ignoring notification for sticker")
             }
+            is NotificationContent.StateEvent.RoomMemberContent,
             NotificationContent.StateEvent.PolicyRuleRoom,
             NotificationContent.StateEvent.PolicyRuleServer,
             NotificationContent.StateEvent.PolicyRuleUser,
@@ -283,12 +278,13 @@ class DefaultNotifiableEventResolver @Inject constructor(
     }
 
     private fun descriptionFromRoomMembershipInvite(
+        senderDisambiguatedDisplayName: String,
         isDirectRoom: Boolean
     ): String {
         return if (isDirectRoom) {
-            stringProvider.getString(R.string.notification_invite_body)
+            stringProvider.getString(R.string.notification_invite_body_with_sender, senderDisambiguatedDisplayName)
         } else {
-            stringProvider.getString(R.string.notification_room_invite_body)
+            stringProvider.getString(R.string.notification_room_invite_body_with_sender, senderDisambiguatedDisplayName)
         }
     }
 

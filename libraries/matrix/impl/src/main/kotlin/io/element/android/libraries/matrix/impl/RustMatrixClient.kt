@@ -54,6 +54,7 @@ import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustRoomFactory
+import io.element.android.libraries.matrix.impl.room.TimelineEventTypeFilterFactory
 import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewMapper
 import io.element.android.libraries.matrix.impl.roomdirectory.RustRoomDirectoryService
 import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
@@ -115,14 +116,15 @@ import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 @OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixClient(
     private val client: Client,
-    private val syncService: ClientSyncService,
+    private val baseDirectory: File,
     private val sessionStore: SessionStore,
     private val appCoroutineScope: CoroutineScope,
-    private val dispatchers: CoroutineDispatchers,
-    private val baseDirectory: File,
-    baseCacheDirectory: File,
-    private val clock: SystemClock,
     private val sessionDelegate: RustClientSessionDelegate,
+    syncService: ClientSyncService,
+    dispatchers: CoroutineDispatchers,
+    baseCacheDirectory: File,
+    clock: SystemClock,
+    timelineEventTypeFilterFactory: TimelineEventTypeFilterFactory,
 ) : MatrixClient {
     override val sessionId: UserId = UserId(client.userId())
     override val deviceId: DeviceId = DeviceId(client.deviceId())
@@ -138,7 +140,7 @@ class RustMatrixClient(
     )
     private val notificationProcessSetup = NotificationProcessSetup.SingleProcess(syncService)
     private val notificationClient = runBlocking { client.notificationClient(notificationProcessSetup) }
-    private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
+    private val notificationService = RustNotificationService(notificationClient, dispatchers, clock)
     private val notificationSettingsService = RustNotificationSettingsService(client, dispatchers)
         .apply { start() }
     private val encryptionService = RustEncryptionService(
@@ -185,6 +187,7 @@ class RustMatrixClient(
         systemClock = clock,
         roomContentForwarder = RoomContentForwarder(innerRoomListService),
         roomSyncSubscriber = roomSyncSubscriber,
+        timelineEventTypeFilterFactory = timelineEventTypeFilterFactory,
     )
 
     override val mediaLoader: MatrixMediaLoader = RustMediaLoader(

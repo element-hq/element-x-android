@@ -39,6 +39,7 @@ import io.element.android.features.roomlist.impl.search.RoomListSearchEvents
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -218,7 +219,10 @@ class RoomListPresenter @Inject constructor(
             }
         }
         val needsSlidingSyncMigration by produceState(false) {
-            value = client.isNativeSlidingSyncSupported() && !client.isUsingNativeSlidingSync()
+            value = runCatching {
+                // Note: this can fail when the session is destroyed from another client.
+                client.isNativeSlidingSyncSupported() && !client.isUsingNativeSlidingSync()
+            }.getOrNull().orFalse()
         }
         return when {
             showEmpty -> RoomListContentState.Empty

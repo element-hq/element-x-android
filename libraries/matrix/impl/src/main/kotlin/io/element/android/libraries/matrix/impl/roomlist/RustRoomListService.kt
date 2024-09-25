@@ -31,10 +31,10 @@ private const val DEFAULT_PAGE_SIZE = 20
 
 internal class RustRoomListService(
     private val innerRoomListService: InnerRustRoomListService,
-    private val sessionCoroutineScope: CoroutineScope,
     private val sessionDispatcher: CoroutineDispatcher,
     private val roomListFactory: RoomListFactory,
     private val roomSyncSubscriber: RoomSyncSubscriber,
+    sessionCoroutineScope: CoroutineScope,
 ) : RoomListService {
     override fun createRoomList(
         pageSize: Int,

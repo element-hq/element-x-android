@@ -21,7 +21,7 @@ open class ConfigureTracingStateProvider : PreviewParameterProvider<ConfigureTra
 
 fun aConfigureTracingState() = ConfigureTracingState(
     targetsToLogLevel = persistentMapOf(
-        Target.COMMON to LogLevel.INFO,
+        Target.ELEMENT to LogLevel.INFO,
         Target.MATRIX_SDK_FFI to LogLevel.WARN,
         Target.MATRIX_SDK_BASE_SLIDING_SYNC to LogLevel.ERROR,
     ),

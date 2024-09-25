@@ -97,9 +97,7 @@ internal fun RoomListServiceInterface.stateFlow(): Flow<RoomListServiceState> =
                 trySendBlocking(state)
             }
         }
-        tryOrNull {
-            state(listener)
-        }
+        state(listener)
     }.buffer(Channel.UNLIMITED)
 
 internal fun RoomListServiceInterface.syncIndicator(): Flow<RoomListServiceSyncIndicator> =
@@ -109,13 +107,11 @@ internal fun RoomListServiceInterface.syncIndicator(): Flow<RoomListServiceSyncI
                 trySendBlocking(syncIndicator)
             }
         }
-        tryOrNull {
-            syncIndicator(
-                SYNC_INDICATOR_DELAY_BEFORE_SHOWING,
-                SYNC_INDICATOR_DELAY_BEFORE_HIDING,
-                listener,
-            )
-        }
+        syncIndicator(
+            SYNC_INDICATOR_DELAY_BEFORE_SHOWING,
+            SYNC_INDICATOR_DELAY_BEFORE_HIDING,
+            listener,
+        )
     }.buffer(Channel.UNLIMITED)
 
 internal fun RoomListServiceInterface.roomOrNull(roomId: String): RoomListItem? {
