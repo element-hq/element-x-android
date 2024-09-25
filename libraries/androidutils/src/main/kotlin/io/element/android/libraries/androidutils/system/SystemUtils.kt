@@ -71,7 +71,10 @@ fun Context.copyToClipboard(
  * Shows notification settings for the current app.
  * In android O will directly opens the notification settings, in lower version it will show the App settings
  */
-fun Context.startNotificationSettingsIntent(activityResultLauncher: ActivityResultLauncher<Intent>? = null) {
+fun Context.startNotificationSettingsIntent(
+    activityResultLauncher: ActivityResultLauncher<Intent>? = null,
+    noActivityFoundMessage: String = getString(R.string.error_no_compatible_app_found),
+) {
     val intent = Intent()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
@@ -85,10 +88,14 @@ fun Context.startNotificationSettingsIntent(activityResultLauncher: ActivityResu
         intent.data = Uri.fromParts("package", packageName, null)
     }
 
-    if (activityResultLauncher != null) {
-        activityResultLauncher.launch(intent)
-    } else {
-        startActivity(intent)
+    try {
+        if (activityResultLauncher != null) {
+            activityResultLauncher.launch(intent)
+        } else {
+            startActivity(intent)
+        }
+    } catch (activityNotFoundException: ActivityNotFoundException) {
+        toast(noActivityFoundMessage)
     }
 }
 

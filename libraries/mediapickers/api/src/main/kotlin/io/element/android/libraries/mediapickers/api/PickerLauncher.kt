@@ -7,7 +7,9 @@
 
 package io.element.android.libraries.mediapickers.api
 
+import android.content.ActivityNotFoundException
 import androidx.activity.compose.ManagedActivityResultLauncher
+import timber.log.Timber
 
 /**
  * Wrapper around [ManagedActivityResultLauncher] to be used with media/file pickers.
@@ -25,11 +27,19 @@ class ComposePickerLauncher<Input, Output>(
     private val defaultRequest: Input,
 ) : PickerLauncher<Input, Output> {
     override fun launch() {
-        managedLauncher.launch(defaultRequest)
+        try {
+            managedLauncher.launch(defaultRequest)
+        } catch (activityNotFoundException: ActivityNotFoundException) {
+            Timber.w(activityNotFoundException, "No activity found")
+        }
     }
 
     override fun launch(customInput: Input) {
-        managedLauncher.launch(customInput)
+        try {
+            managedLauncher.launch(customInput)
+        } catch (activityNotFoundException: ActivityNotFoundException) {
+            Timber.w(activityNotFoundException, "No activity found")
+        }
     }
 }
 
