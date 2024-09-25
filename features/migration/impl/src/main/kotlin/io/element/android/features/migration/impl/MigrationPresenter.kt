@@ -45,7 +45,6 @@ class MigrationPresenter @Inject constructor(
         LaunchedEffect(migrationStoreVersion) {
             val migrationValue = migrationStoreVersion ?: return@LaunchedEffect
             if (migrationValue == -1) {
-                // Fresh install, no migration needed
                 Timber.d("Fresh install, or previous installed application did not have the migration mechanism.")
             }
             if (migrationValue == lastMigration) {
