@@ -101,7 +101,7 @@ class RustMatrixClientFactory @Inject constructor(
             .autoEnableBackups(true)
             .autoEnableCrossSigning(true)
             .roomKeyRecipientStrategy(
-                strategy = if (featureFlagService.isFeatureEnabled(FeatureFlags.InvisibleCrypto)) {
+                strategy = if (featureFlagService.isFeatureEnabled(FeatureFlags.OnlySignedDeviceIsolationMode)) {
                     CollectStrategy.IdentityBasedStrategy
                 } else {
                     CollectStrategy.DeviceBasedStrategy(onlyAllowTrustedDevices = false, errorOnVerifiedUserProblem = true)
