@@ -7,21 +7,23 @@
 
 package io.element.android.libraries.sessionstorage.test
 
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionData
 
 fun aSessionData(
-    sessionId: SessionId = SessionId("@alice:server.org"),
+    sessionId: String = "@alice:server.org",
+    deviceId: String = "aDeviceId",
     isTokenValid: Boolean = false,
     sessionPath: String = "/a/path/to/a/session",
     cachePath: String = "/a/path/to/a/cache",
-): SessionData {
+    accessToken: String = "anAccessToken",
+    refreshToken: String? = "aRefreshToken",
+    ): SessionData {
     return SessionData(
-        userId = sessionId.value,
-        deviceId = "aDeviceId",
-        accessToken = "anAccessToken",
-        refreshToken = "aRefreshToken",
+        userId = sessionId,
+        deviceId = deviceId,
+        accessToken = accessToken,
+        refreshToken = refreshToken,
         homeserverUrl = "aHomeserverUrl",
         oidcData = null,
         slidingSyncProxy = null,

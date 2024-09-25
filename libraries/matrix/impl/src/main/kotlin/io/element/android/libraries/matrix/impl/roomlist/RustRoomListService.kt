@@ -31,10 +31,10 @@ private const val DEFAULT_PAGE_SIZE = 20
 
 internal class RustRoomListService(
     private val innerRoomListService: InnerRustRoomListService,
-    private val sessionCoroutineScope: CoroutineScope,
     private val sessionDispatcher: CoroutineDispatcher,
     private val roomListFactory: RoomListFactory,
     private val roomSyncSubscriber: RoomSyncSubscriber,
+    sessionCoroutineScope: CoroutineScope,
 ) : RoomListService {
     override fun createRoomList(
         pageSize: Int,
@@ -53,11 +53,7 @@ internal class RustRoomListService(
     }
 
     override suspend fun subscribeToVisibleRooms(roomIds: List<RoomId>) {
-        val toSubscribe = roomIds.filterNot { roomSyncSubscriber.isSubscribedTo(it) }
-        if (toSubscribe.isNotEmpty()) {
-            Timber.d("Subscribe to ${toSubscribe.size} rooms: $toSubscribe")
-            roomSyncSubscriber.batchSubscribe(toSubscribe)
-        }
+        roomSyncSubscriber.batchSubscribe(roomIds)
     }
 
     override val allRooms: DynamicRoomList = roomListFactory.createRoomList(

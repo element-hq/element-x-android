@@ -39,6 +39,7 @@ import io.element.android.features.roomlist.impl.search.RoomListSearchEvents
 import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -61,7 +62,7 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -73,6 +74,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 private const val EXTENDED_RANGE_SIZE = 40
+private const val SUBSCRIBE_TO_VISIBLE_ROOMS_DEBOUNCE_IN_MILLIS = 300L
 
 class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
@@ -217,7 +219,10 @@ class RoomListPresenter @Inject constructor(
             }
         }
         val needsSlidingSyncMigration by produceState(false) {
-            value = client.isNativeSlidingSyncSupported() && !client.isUsingNativeSlidingSync()
+            value = runCatching {
+                // Note: this can fail when the session is destroyed from another client.
+                client.isNativeSlidingSyncSupported() && !client.isUsingNativeSlidingSync()
+            }.getOrNull().orFalse()
         }
         return when {
             showEmpty -> RoomListContentState.Empty
@@ -301,7 +306,10 @@ class RoomListPresenter @Inject constructor(
     private var currentUpdateVisibleRangeJob: Job? = null
     private fun CoroutineScope.updateVisibleRange(range: IntRange) {
         currentUpdateVisibleRangeJob?.cancel()
-        currentUpdateVisibleRangeJob = launch(SupervisorJob()) {
+        currentUpdateVisibleRangeJob = launch {
+            // Debounce the subscription to avoid subscribing to too many rooms
+            delay(SUBSCRIBE_TO_VISIBLE_ROOMS_DEBOUNCE_IN_MILLIS)
+
             if (range.isEmpty()) return@launch
             val currentRoomList = roomListDataSource.allRooms.first()
             // Use extended range to 'prefetch' the next rooms info

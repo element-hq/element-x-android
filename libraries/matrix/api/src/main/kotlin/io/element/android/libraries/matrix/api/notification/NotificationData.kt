@@ -94,7 +94,7 @@ sealed interface NotificationContent {
         data object RoomHistoryVisibility : StateEvent
         data object RoomJoinRules : StateEvent
         data class RoomMemberContent(
-            val userId: String,
+            val userId: UserId,
             val membershipState: RoomMembershipState
         ) : StateEvent
 
@@ -108,6 +108,10 @@ sealed interface NotificationContent {
         data object SpaceChild : StateEvent
         data object SpaceParent : StateEvent
     }
+
+    data class Invite(
+        val senderId: UserId,
+    ) : NotificationContent
 }
 
 enum class CallNotifyType {

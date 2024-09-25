@@ -24,15 +24,12 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.milliseconds
 
 class PinnedMessagesBannerPresenter @Inject constructor(
     private val room: MatrixRoom,
@@ -108,7 +105,7 @@ class PinnedMessagesBannerPresenter @Inject constructor(
         }
     }
 
-    @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Composable
     private fun PinnedMessagesBannerItemsEffect(
         onItemsChange: (AsyncData<ImmutableList<PinnedMessagesBannerItem>>) -> Unit,
@@ -123,7 +120,6 @@ class PinnedMessagesBannerPresenter @Inject constructor(
                         is AsyncData.Loading -> flowOf(AsyncData.Loading())
                         is AsyncData.Success -> {
                             asyncTimeline.data.timelineItems
-                                .debounce(300.milliseconds)
                                 .map { timelineItems ->
                                     val pinnedItems = timelineItems.mapNotNull { timelineItem ->
                                         itemFactory.create(timelineItem)

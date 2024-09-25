@@ -10,9 +10,10 @@ package io.element.android.libraries.matrix.impl.analytics
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 
-private fun Long?.toAnalyticsRoomSize(): JoinedRoom.RoomSize {
+private fun Long.toAnalyticsRoomSize(): JoinedRoom.RoomSize {
     return when (this) {
-        null,
+        0L,
+        1L -> JoinedRoom.RoomSize.One
         2L -> JoinedRoom.RoomSize.Two
         in 3..10 -> JoinedRoom.RoomSize.ThreeToTen
         in 11..100 -> JoinedRoom.RoomSize.ElevenToOneHundred

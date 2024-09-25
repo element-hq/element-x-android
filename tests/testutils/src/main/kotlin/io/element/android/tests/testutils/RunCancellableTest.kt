@@ -10,6 +10,7 @@ package io.element.android.tests.testutils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 
 /**
@@ -18,5 +19,14 @@ import kotlinx.coroutines.test.runTest
 fun runCancellableScopeTest(block: suspend (CoroutineScope) -> Unit) = runTest {
     val scope = CoroutineScope(coroutineContext + SupervisorJob())
     block(scope)
+    scope.cancel()
+}
+
+/**
+ * Run a test with a [CoroutineScope] that will be cancelled automatically and avoiding failing the test.
+ */
+fun runCancellableScopeTestWithTestScope(block: suspend (testScope: TestScope, cancellableScope: CoroutineScope) -> Unit) = runTest {
+    val scope = CoroutineScope(coroutineContext + SupervisorJob())
+    block(this, scope)
     scope.cancel()
 }

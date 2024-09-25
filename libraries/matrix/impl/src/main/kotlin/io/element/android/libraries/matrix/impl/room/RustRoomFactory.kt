@@ -27,12 +27,10 @@ import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import org.matrix.rustcomponents.sdk.FilterTimelineEventType
 import org.matrix.rustcomponents.sdk.Membership
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomListException
 import org.matrix.rustcomponents.sdk.RoomListItem
-import org.matrix.rustcomponents.sdk.TimelineEventTypeFilter
 import timber.log.Timber
 import org.matrix.rustcomponents.sdk.RoomListService as InnerRoomListService
 
@@ -49,6 +47,7 @@ class RustRoomFactory(
     private val roomListService: RoomListService,
     private val innerRoomListService: InnerRoomListService,
     private val roomSyncSubscriber: RoomSyncSubscriber,
+    private val timelineEventTypeFilterFactory: TimelineEventTypeFilterFactory,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     private val dispatcher = dispatchers.io.limitedParallelism(1)
@@ -74,11 +73,7 @@ class RustRoomFactory(
     private val eventFilters = TimelineConfig.excludedEvents
         .takeIf { it.isNotEmpty() }
         ?.let { listStateEventType ->
-            TimelineEventTypeFilter.exclude(
-                listStateEventType.map { stateEventType ->
-                    FilterTimelineEventType.State(stateEventType.map())
-                }
-            )
+            timelineEventTypeFilterFactory.create(listStateEventType)
         }
 
     suspend fun destroy() {

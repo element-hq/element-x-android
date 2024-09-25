@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -81,6 +82,7 @@ class TimelinePresenter @AssistedInject constructor(
             computeReactions = true,
         )
     )
+    private var timelineItems by mutableStateOf<ImmutableList<TimelineItem>>(persistentListOf())
 
     @Composable
     override fun present(): TimelineState {
@@ -89,9 +91,12 @@ class TimelinePresenter @AssistedInject constructor(
             mutableStateOf(FocusRequestState.None)
         }
 
+        LaunchedEffect(Unit) {
+            timelineItemsFactory.timelineItems.collect { timelineItems = it }
+        }
+
         val lastReadReceiptId = rememberSaveable { mutableStateOf<EventId?>(null) }
 
-        val timelineItems by timelineItemsFactory.timelineItems.collectAsState(initial = persistentListOf())
         val roomInfo by room.roomInfoFlow.collectAsState(initial = null)
 
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
@@ -228,6 +233,7 @@ class TimelinePresenter @AssistedInject constructor(
                     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
                     userHasPermissionToSendReaction = userHasPermissionToSendReaction,
                     isCallOngoing = roomInfo?.hasRoomCall.orFalse(),
+                    pinnedEventIds = roomInfo?.pinnedEventIds.orEmpty(),
                 )
             }
         }

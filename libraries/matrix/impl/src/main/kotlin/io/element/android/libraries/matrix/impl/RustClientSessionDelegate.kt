@@ -50,7 +50,6 @@ class RustClientSessionDelegate(
      */
     fun bindClient(client: RustMatrixClient) {
         this.client = client
-        client.setDelegate(this)
     }
 
     override fun saveSessionInKeychain(session: Session) {

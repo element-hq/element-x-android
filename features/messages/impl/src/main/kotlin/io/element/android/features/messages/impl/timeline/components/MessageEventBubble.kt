@@ -11,8 +11,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
@@ -40,6 +39,7 @@ import io.element.android.libraries.core.extensions.to01
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -49,11 +49,11 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 
 private val BUBBLE_RADIUS = 12.dp
-internal val BUBBLE_INCOMING_OFFSET = 16.dp
 private val avatarRadius = AvatarSize.TimelineSender.dp / 2
 
-// Design says: The maximum width of a bubble is still 3/4 of the screen width. But try with 85% now.
-private const val BUBBLE_WIDTH_RATIO = 0.85f
+// Design says: The maximum width of a bubble is still 3/4 of the screen width. But try with 78% now.
+private const val BUBBLE_WIDTH_RATIO = 0.78f
+private val MIN_BUBBLE_WIDTH = 80.dp
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -93,14 +93,6 @@ fun MessageEventBubble(
         }
     }
 
-    fun Modifier.offsetForItem(): Modifier {
-        return when {
-            state.isMine -> this
-            state.timelineRoomInfo.isDm -> this
-            else -> offset(x = BUBBLE_INCOMING_OFFSET)
-        }
-    }
-
     // Ignore state.isHighlighted for now, we need a design decision on it.
     val backgroundBubbleColor = when {
         state.isMine -> ElementTheme.colors.messageFromMeBackground
@@ -109,11 +101,8 @@ fun MessageEventBubble(
     val bubbleShape = bubbleShape()
     val radiusPx = (avatarRadius + SENDER_AVATAR_BORDER_WIDTH).toPx()
     val yOffsetPx = -(NEGATIVE_MARGIN_FOR_BUBBLE + avatarRadius).toPx()
-    Box(
+    BoxWithConstraints(
         modifier = modifier
-            .fillMaxWidth(BUBBLE_WIDTH_RATIO)
-            .padding(start = avatarRadius, end = 16.dp)
-            .offsetForItem()
             .graphicsLayer {
                 compositingStrategy = CompositingStrategy.Offscreen
             }
@@ -138,7 +127,10 @@ fun MessageEventBubble(
         Surface(
             modifier = Modifier
                 .testTag(TestTags.messageBubble)
-                .widthIn(min = 80.dp)
+                .widthIn(
+                    min = MIN_BUBBLE_WIDTH,
+                    max = (constraints.maxWidth * BUBBLE_WIDTH_RATIO).toInt().toDp()
+                )
                 .clip(bubbleShape)
                 .combinedClickable(
                     onClick = onClick,

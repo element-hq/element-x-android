@@ -374,7 +374,8 @@ private fun VerifiedUserSendFailureView(
     fun VerifiedUserSendFailure.headline(): String {
         return when (this) {
             is None -> ""
-            is UnsignedDevice -> stringResource(CommonStrings.screen_timeline_item_menu_send_failure_unsigned_device, userDisplayName)
+            is UnsignedDevice.FromOther -> stringResource(CommonStrings.screen_timeline_item_menu_send_failure_unsigned_device, userDisplayName)
+            is UnsignedDevice.FromYou -> stringResource(CommonStrings.screen_timeline_item_menu_send_failure_you_unsigned_device)
             is ChangedIdentity -> stringResource(CommonStrings.screen_timeline_item_menu_send_failure_changed_identity, userDisplayName)
         }
     }

@@ -19,8 +19,8 @@ import org.matrix.rustcomponents.sdk.TimelineItem
 class MatrixTimelineItemMapper(
     private val fetchDetailsForEvent: suspend (EventId) -> Result<Unit>,
     private val coroutineScope: CoroutineScope,
-    private val virtualTimelineItemMapper: VirtualTimelineItemMapper = VirtualTimelineItemMapper(),
-    private val eventTimelineItemMapper: EventTimelineItemMapper = EventTimelineItemMapper(),
+    private val virtualTimelineItemMapper: VirtualTimelineItemMapper,
+    private val eventTimelineItemMapper: EventTimelineItemMapper,
 ) {
     fun map(timelineItem: TimelineItem): MatrixTimelineItem = timelineItem.use {
         val uniqueId = UniqueId(timelineItem.uniqueId())

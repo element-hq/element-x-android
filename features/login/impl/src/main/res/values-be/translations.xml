@@ -21,6 +21,7 @@
   <string name="screen_change_server_form_notice">"Вы можаце падключыцца толькі да існуючага сервера, які падтрымлівае sliding sync. Адміністратару хатняга сервера запатрабуецца наладзіць яго. %1$s"</string>
   <string name="screen_change_server_subtitle">"Які адрас вашага сервера?"</string>
   <string name="screen_change_server_title">"Выберыце свой сервер"</string>
+  <string name="screen_create_account_title">"Стварыць уліковы запіс"</string>
   <string name="screen_login_error_deactivated_account">"Гэты ўліковы запіс быў дэактываваны."</string>
   <string name="screen_login_error_invalid_credentials">"Няправільнае імя карыстальніка і/або пароль"</string>
   <string name="screen_login_error_invalid_user_id">"Гэта несапраўдны ідэнтыфікатар карыстальніка. Чаканы фармат: ‘@user:homeserver.org’"</string>

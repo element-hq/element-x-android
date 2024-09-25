@@ -17,9 +17,8 @@ import io.element.android.libraries.matrix.test.FakeSdkMetadata
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.network.useragent.DefaultUserAgentProvider
-import io.element.android.libraries.sessionstorage.api.LoginType
-import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.impl.memory.InMemorySessionStore
+import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -94,7 +93,7 @@ class DefaultBugReporterTest {
         server.start()
 
         val mockSessionStore = InMemorySessionStore().apply {
-            storeData(mockSessionData("@foo:eample.com", "ABCDEFGH"))
+            storeData(aSessionData(sessionId = "@foo:example.com", deviceId = "ABCDEFGH"))
         }
 
         val buildMeta = aBuildMeta()
@@ -143,7 +142,7 @@ class DefaultBugReporterTest {
         assertThat(foundValues["can_contact"]).isEqualTo("true")
         assertThat(foundValues["device_id"]).isEqualTo("ABCDEFGH")
         assertThat(foundValues["sdk_sha"]).isEqualTo("123456789")
-        assertThat(foundValues["user_id"]).isEqualTo("@foo:eample.com")
+        assertThat(foundValues["user_id"]).isEqualTo("@foo:example.com")
         assertThat(foundValues["text"]).isEqualTo("a bug occurred")
         assertThat(foundValues["device_keys"]).isEqualTo("curve25519:CURVECURVECURVE, ed25519:EDKEYEDKEYEDKY")
 
@@ -163,7 +162,7 @@ class DefaultBugReporterTest {
         server.start()
 
         val mockSessionStore = InMemorySessionStore().apply {
-            storeData(mockSessionData("@foo:eample.com", "ABCDEFGH"))
+            storeData(aSessionData("@foo:example.com", "ABCDEFGH"))
         }
 
         val buildMeta = aBuildMeta()
@@ -267,21 +266,6 @@ class DefaultBugReporterTest {
         return foundValues
     }
 
-    private fun mockSessionData(userId: String, deviceId: String) = SessionData(
-        userId = userId,
-        deviceId = deviceId,
-        homeserverUrl = "example.com",
-        accessToken = "AA",
-        isTokenValid = true,
-        loginType = LoginType.DIRECT,
-        loginTimestamp = null,
-        oidcData = null,
-        refreshToken = null,
-        slidingSyncProxy = null,
-        passphrase = null,
-        sessionPath = "session",
-        cachePath = "cache",
-    )
     @Test
     fun `test sendBugReport error`() = runTest {
         val server = MockWebServer()

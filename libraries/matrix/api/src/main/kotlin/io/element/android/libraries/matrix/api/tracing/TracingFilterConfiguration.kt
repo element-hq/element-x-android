@@ -46,7 +46,7 @@ data class TracingFilterConfiguration(
 }
 
 enum class Target(open val filter: String) {
-    COMMON(""),
+    // COMMON(""),
     ELEMENT("elementx"),
     HYPER("hyper"),
     MATRIX_SDK_FFI("matrix_sdk_ffi"),

@@ -54,6 +54,7 @@ import io.element.android.libraries.matrix.impl.pushers.RustPushersService
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
 import io.element.android.libraries.matrix.impl.room.RustRoomFactory
+import io.element.android.libraries.matrix.impl.room.TimelineEventTypeFilterFactory
 import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewMapper
 import io.element.android.libraries.matrix.impl.roomdirectory.RustRoomDirectoryService
 import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
@@ -115,14 +116,15 @@ import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 @OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixClient(
     private val client: Client,
-    private val syncService: ClientSyncService,
+    private val baseDirectory: File,
     private val sessionStore: SessionStore,
     private val appCoroutineScope: CoroutineScope,
-    private val dispatchers: CoroutineDispatchers,
-    private val baseDirectory: File,
+    private val sessionDelegate: RustClientSessionDelegate,
+    syncService: ClientSyncService,
+    dispatchers: CoroutineDispatchers,
     baseCacheDirectory: File,
-    private val clock: SystemClock,
-    sessionDelegate: RustClientSessionDelegate,
+    clock: SystemClock,
+    timelineEventTypeFilterFactory: TimelineEventTypeFilterFactory,
 ) : MatrixClient {
     override val sessionId: UserId = UserId(client.userId())
     override val deviceId: DeviceId = DeviceId(client.deviceId())
@@ -138,7 +140,7 @@ class RustMatrixClient(
     )
     private val notificationProcessSetup = NotificationProcessSetup.SingleProcess(syncService)
     private val notificationClient = runBlocking { client.notificationClient(notificationProcessSetup) }
-    private val notificationService = RustNotificationService(sessionId, notificationClient, dispatchers, clock)
+    private val notificationService = RustNotificationService(notificationClient, dispatchers, clock)
     private val notificationSettingsService = RustNotificationSettingsService(client, dispatchers)
         .apply { start() }
     private val encryptionService = RustEncryptionService(
@@ -185,6 +187,7 @@ class RustMatrixClient(
         systemClock = clock,
         roomContentForwarder = RoomContentForwarder(innerRoomListService),
         roomSyncSubscriber = roomSyncSubscriber,
+        timelineEventTypeFilterFactory = timelineEventTypeFilterFactory,
     )
 
     override val mediaLoader: MatrixMediaLoader = RustMediaLoader(
@@ -195,7 +198,7 @@ class RustMatrixClient(
 
     private val roomMembershipObserver = RoomMembershipObserver()
 
-    private val clientDelegateTaskHandle: TaskHandle? = client.setDelegate(sessionDelegate)
+    private var clientDelegateTaskHandle: TaskHandle? = client.setDelegate(sessionDelegate)
 
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(
         MatrixUser(
@@ -449,12 +452,12 @@ class RustMatrixClient(
     override fun close() {
         appCoroutineScope.launch {
             roomFactory.destroy()
+            rustSyncService.destroy()
         }
         sessionCoroutineScope.cancel()
         clientDelegateTaskHandle?.cancelAndDestroy()
         notificationSettingsService.destroy()
         verificationService.destroy()
-        syncService.destroy()
         innerRoomListService.destroy()
         notificationClient.destroy()
         notificationProcessSetup.destroy()
@@ -473,7 +476,9 @@ class RustMatrixClient(
 
     override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean): String? {
         var result: String? = null
-        syncService.stop()
+        // Remove current delegate so we don't receive an auth error
+        clientDelegateTaskHandle?.cancelAndDestroy()
+        clientDelegateTaskHandle = null
         withContext(sessionDispatcher) {
             if (userInitiated) {
                 try {
@@ -482,12 +487,15 @@ class RustMatrixClient(
                     if (ignoreSdkError) {
                         Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
                     } else {
+                        // If the logout failed we need to restore the delegate
+                        clientDelegateTaskHandle = client.setDelegate(sessionDelegate)
                         Timber.e(failure, "Fail to call logout on HS.")
                         throw failure
                     }
                 }
             }
             close()
+
             deleteSessionDirectory(deleteCryptoDb = true)
             if (userInitiated) {
                 sessionStore.removeSession(sessionId.value)
@@ -506,7 +514,9 @@ class RustMatrixClient(
 
     override suspend fun deactivateAccount(password: String, eraseData: Boolean): Result<Unit> = withContext(sessionDispatcher) {
         Timber.w("Deactivating account")
-        syncService.stop()
+        // Remove current delegate so we don't receive an auth error
+        clientDelegateTaskHandle?.cancelAndDestroy()
+        clientDelegateTaskHandle = null
         runCatching {
             // First call without AuthData, should fail
             val firstAttempt = runCatching {
@@ -518,15 +528,22 @@ class RustMatrixClient(
             if (firstAttempt.isFailure) {
                 Timber.w(firstAttempt.exceptionOrNull(), "Expected failure, try again")
                 // This is expected, try again with the password
-                client.deactivateAccount(
-                    authData = AuthData.Password(
-                        passwordDetails = AuthDataPasswordDetails(
-                            identifier = sessionId.value,
-                            password = password,
+                runCatching {
+                    client.deactivateAccount(
+                        authData = AuthData.Password(
+                            passwordDetails = AuthDataPasswordDetails(
+                                identifier = sessionId.value,
+                                password = password,
+                            ),
                         ),
-                    ),
-                    eraseData = eraseData,
-                )
+                        eraseData = eraseData,
+                    )
+                }.onFailure {
+                    Timber.e(it, "Failed to deactivate account")
+                    // If the deactivation failed we need to restore the delegate
+                    clientDelegateTaskHandle = client.setDelegate(sessionDelegate)
+                    throw it
+                }
             }
             close()
             deleteSessionDirectory(deleteCryptoDb = true)
@@ -590,10 +607,6 @@ class RustMatrixClient(
 
     override fun isUsingNativeSlidingSync(): Boolean {
         return client.session().slidingSyncVersion == SlidingSyncVersion.Native
-    }
-
-    internal fun setDelegate(delegate: RustClientSessionDelegate) {
-        client.setDelegate(delegate)
     }
 
     private suspend fun File.getCacheSize(

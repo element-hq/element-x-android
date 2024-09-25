@@ -12,7 +12,11 @@ import org.matrix.rustcomponents.sdk.ClientException as RustClientException
 
 fun Throwable.mapClientException(): ClientException {
     return when (this) {
-        is RustClientException.Generic -> ClientException.Generic(msg)
+        is RustClientException -> {
+            when (this) {
+                is RustClientException.Generic -> ClientException.Generic(msg)
+            }
+        }
         else -> ClientException.Other(message ?: "Unknown error")
     }
 }

@@ -36,7 +36,7 @@ fun aResolveVerifiedUserSendFailureState(
     eventSink = eventSink
 )
 
-fun anUnsignedDeviceSendFailure(userDisplayName: String = "Alice") = VerifiedUserSendFailure.UnsignedDevice(
+fun anUnsignedDeviceSendFailure(userDisplayName: String = "Alice") = VerifiedUserSendFailure.UnsignedDevice.FromOther(
     userDisplayName = userDisplayName,
 )
 

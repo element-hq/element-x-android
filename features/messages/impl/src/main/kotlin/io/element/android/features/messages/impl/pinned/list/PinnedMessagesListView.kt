@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
@@ -44,6 +45,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.services.analytics.compose.LocalAnalyticsService
+import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 
 @Composable
 fun PinnedMessagesListView(
@@ -57,7 +60,14 @@ fun PinnedMessagesListView(
     Scaffold(
         modifier = modifier,
         topBar = {
-            PinnedMessagesListTopBar(state, onBackClick)
+            val analyticsService = LocalAnalyticsService.current
+            PinnedMessagesListTopBar(
+                state = state,
+                onBackClick = {
+                    analyticsService.captureInteraction(Interaction.Name.PinnedMessageBannerCloseListButton)
+                    onBackClick()
+                }
+            )
         },
         content = { padding ->
             PinnedMessagesListContent(
@@ -67,8 +77,8 @@ fun PinnedMessagesListView(
                 onLinkClick = onLinkClick,
                 onErrorDismiss = onBackClick,
                 modifier = Modifier
-                    .padding(padding)
-                    .consumeWindowInsets(padding),
+                        .padding(padding)
+                        .consumeWindowInsets(padding),
             )
         }
     )

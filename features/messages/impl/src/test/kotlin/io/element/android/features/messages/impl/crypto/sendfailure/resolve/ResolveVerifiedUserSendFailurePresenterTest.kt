@@ -94,7 +94,7 @@ class ResolveVerifiedUserSendFailurePresenterTest {
             initialState.eventSink(ResolveVerifiedUserSendFailureEvents.ComputeForMessage(failedMessage))
             skipItems(1)
             awaitItem().also { state ->
-                assertThat(state.verifiedUserSendFailure).isEqualTo(VerifiedUserSendFailure.UnsignedDevice(A_USER_ID.value))
+                assertThat(state.verifiedUserSendFailure).isEqualTo(VerifiedUserSendFailure.UnsignedDevice.FromYou)
                 state.eventSink(ResolveVerifiedUserSendFailureEvents.Dismiss)
             }
             skipItems(1)
@@ -124,7 +124,7 @@ class ResolveVerifiedUserSendFailurePresenterTest {
 
             skipItems(1)
             awaitItem().also { state ->
-                assertThat(state.verifiedUserSendFailure).isEqualTo(VerifiedUserSendFailure.UnsignedDevice(A_USER_ID.value))
+                assertThat(state.verifiedUserSendFailure).isEqualTo(VerifiedUserSendFailure.UnsignedDevice.FromYou)
                 state.eventSink(ResolveVerifiedUserSendFailureEvents.Retry)
             }
             awaitItem().also { state ->
@@ -158,7 +158,7 @@ class ResolveVerifiedUserSendFailurePresenterTest {
 
             skipItems(1)
             awaitItem().also { state ->
-                assertThat(state.verifiedUserSendFailure).isEqualTo(VerifiedUserSendFailure.UnsignedDevice(A_USER_ID.value))
+                assertThat(state.verifiedUserSendFailure).isEqualTo(VerifiedUserSendFailure.UnsignedDevice.FromYou)
                 state.eventSink(ResolveVerifiedUserSendFailureEvents.ResolveAndResend)
             }
             awaitItem().also { state ->
@@ -167,7 +167,7 @@ class ResolveVerifiedUserSendFailurePresenterTest {
             // This should move to the next user
             skipItems(2)
             awaitItem().also { state ->
-                assertThat(state.verifiedUserSendFailure).isEqualTo(VerifiedUserSendFailure.UnsignedDevice(A_USER_ID_2.value))
+                assertThat(state.verifiedUserSendFailure).isEqualTo(VerifiedUserSendFailure.UnsignedDevice.FromOther(A_USER_ID_2.value))
                 assertThat(state.resolveAction).isEqualTo(AsyncAction.Success(Unit))
                 state.eventSink(ResolveVerifiedUserSendFailureEvents.ResolveAndResend)
             }
@@ -199,14 +199,14 @@ class ResolveVerifiedUserSendFailurePresenterTest {
 
             skipItems(1)
             awaitItem().also { state ->
-                assertThat(state.verifiedUserSendFailure).isEqualTo(VerifiedUserSendFailure.UnsignedDevice(A_USER_ID.value))
+                assertThat(state.verifiedUserSendFailure).isEqualTo(VerifiedUserSendFailure.UnsignedDevice.FromYou)
                 state.eventSink(ResolveVerifiedUserSendFailureEvents.ResolveAndResend)
             }
             awaitItem().also { state ->
                 assertThat(state.resolveAction).isEqualTo(AsyncAction.Loading)
             }
             awaitItem().also { state ->
-                assertThat(state.verifiedUserSendFailure).isEqualTo(VerifiedUserSendFailure.UnsignedDevice(A_USER_ID.value))
+                assertThat(state.verifiedUserSendFailure).isEqualTo(VerifiedUserSendFailure.UnsignedDevice.FromYou)
                 assertThat(state.resolveAction).isInstanceOf(AsyncAction.Failure::class.java)
             }
             ensureAllEventsConsumed()

@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.PinUnpinAction
 import io.element.android.appconfig.MessageComposerConfig
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
@@ -77,6 +78,7 @@ import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.room.canCall
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -104,6 +106,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val buildMeta: BuildMeta,
     private val timelineController: TimelineController,
     private val permalinkParser: PermalinkParser,
+    private val analyticsService: AnalyticsService,
 ) : Presenter<MessagesState> {
     private val timelinePresenter = timelinePresenterFactory.create(navigator = navigator)
     private val actionListPresenter = actionListPresenterFactory.create(TimelineItemActionPostProcessor.Default)
@@ -285,6 +288,12 @@ class MessagesPresenter @AssistedInject constructor(
 
     private suspend fun handlePinAction(targetEvent: TimelineItem.Event) {
         if (targetEvent.eventId == null) return
+        analyticsService.capture(
+            PinUnpinAction(
+                from = PinUnpinAction.From.Timeline,
+                kind = PinUnpinAction.Kind.Pin,
+            )
+        )
         timelineController.invokeOnCurrentTimeline {
             pinEvent(targetEvent.eventId)
                 .onFailure {
@@ -296,6 +305,12 @@ class MessagesPresenter @AssistedInject constructor(
 
     private suspend fun handleUnpinAction(targetEvent: TimelineItem.Event) {
         if (targetEvent.eventId == null) return
+        analyticsService.capture(
+            PinUnpinAction(
+                from = PinUnpinAction.From.Timeline,
+                kind = PinUnpinAction.Kind.Unpin,
+            )
+        )
         timelineController.invokeOnCurrentTimeline {
             unpinEvent(targetEvent.eventId)
                 .onFailure {

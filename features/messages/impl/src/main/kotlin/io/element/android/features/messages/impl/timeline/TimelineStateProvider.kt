@@ -240,10 +240,12 @@ internal fun aTimelineRoomInfo(
     name: String = "Room name",
     isDm: Boolean = false,
     userHasPermissionToSendMessage: Boolean = true,
+    pinnedEventIds: List<EventId> = emptyList(),
 ) = TimelineRoomInfo(
     isDm = isDm,
     name = name,
     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
     userHasPermissionToSendReaction = true,
     isCallOngoing = false,
+    pinnedEventIds = pinnedEventIds,
 )

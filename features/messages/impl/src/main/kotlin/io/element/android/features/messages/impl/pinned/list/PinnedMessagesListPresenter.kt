@@ -20,6 +20,8 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.Interaction
+import im.vector.app.features.analytics.plan.PinUnpinAction
 import io.element.android.features.messages.impl.UserEventPermissions
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -39,18 +41,17 @@ import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import kotlin.time.Duration.Companion.milliseconds
 
 class PinnedMessagesListPresenter @AssistedInject constructor(
     @Assisted private val navigator: PinnedMessagesListNavigator,
@@ -60,6 +61,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
     private val snackbarDispatcher: SnackbarDispatcher,
     actionListPresenterFactory: ActionListPresenter.Factory,
     private val appCoroutineScope: CoroutineScope,
+    private val analyticsService: AnalyticsService,
 ) : Presenter<PinnedMessagesListState> {
     @AssistedFactory
     interface Factory {
@@ -84,6 +86,8 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
                 userHasPermissionToSendMessage = false,
                 userHasPermissionToSendReaction = false,
                 isCallOngoing = false,
+                // don't compute this value or the pin icon will be shown
+                pinnedEventIds = emptyList()
             )
         }
 
@@ -130,6 +134,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
             TimelineItemAction.Unpin -> handleUnpinAction(targetEvent)
             TimelineItemAction.ViewInTimeline -> {
                 targetEvent.eventId?.let { eventId ->
+                    analyticsService.captureInteraction(Interaction.Name.PinnedMessageListViewTimeline)
                     navigator.onViewInTimelineClick(eventId)
                 }
             }
@@ -139,6 +144,12 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
 
     private suspend fun handleUnpinAction(targetEvent: TimelineItem.Event) {
         if (targetEvent.eventId == null) return
+        analyticsService.capture(
+            PinUnpinAction(
+                from = PinUnpinAction.From.MessagePinningList,
+                kind = PinUnpinAction.Kind.Unpin,
+            )
+        )
         timelineProvider.invokeOnTimeline {
             unpinEvent(targetEvent.eventId)
                 .onFailure {
@@ -161,7 +172,6 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
         }
     }
 
-    @OptIn(FlowPreview::class)
     @Composable
     private fun PinnedMessagesListEffect(onItemsChange: (AsyncData<ImmutableList<TimelineItem>>) -> Unit) {
         val updatedOnItemsChange by rememberUpdatedState(onItemsChange)
@@ -174,7 +184,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
                 is AsyncData.Failure -> flowOf(AsyncData.Failure(asyncTimeline.error))
                 is AsyncData.Loading -> flowOf(AsyncData.Loading())
                 is AsyncData.Success -> {
-                    val timelineItemsFlow = asyncTimeline.data.timelineItems.debounce(300.milliseconds)
+                    val timelineItemsFlow = asyncTimeline.data.timelineItems
                     combine(timelineItemsFlow, room.membersStateFlow) { items, membersState ->
                         timelineItemsFactory.replaceWith(
                             timelineItems = items,

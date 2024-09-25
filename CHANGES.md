@@ -1,5 +1,21 @@
-Changes in Element X v0.6.2 (2024-09-17)
+Changes in Element X v0.6.3 (2024-09-19)
 ========================================
+
+## What's Changed
+### 🙌 Improvements
+* Iterate send failure verification by @ganfra in https://github.com/element-hq/element-x-android/pull/3485
+### 🐛 Bugfixes
+* Make sure the logout action doesn't cause a crash by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3480
+* Distinguish between roomId and roomAlias. by @bmarty in https://github.com/element-hq/element-x-android/pull/3486
+* Fix sliding sync proxy login not working after native SS failure by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3489
+### Dependency upgrades
+* SDK 0.2.47 by @ganfra in https://github.com/element-hq/element-x-android/pull/3490
+### Others
+* Add tests on AccountDeactivationView by @bmarty in https://github.com/element-hq/element-x-android/pull/3481
+* Cleanup and fixtures for SDK classes. by @bmarty in https://github.com/element-hq/element-x-android/pull/3488
+* Timeline related improvements by @ganfra in https://github.com/element-hq/element-x-android/pull/3487
+* Room list : debounce subscribe to visible rooms. by @ganfra in https://github.com/element-hq/element-x-android/pull/3491
+* Improve code coverage metrics by @bmarty in https://github.com/element-hq/element-x-android/pull/3450
 
 ### ✨ Features
 * Account deactivation. by @bmarty in https://github.com/element-hq/element-x-android/pull/3479

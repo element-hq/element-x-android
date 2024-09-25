@@ -11,8 +11,10 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.StateEventType
+import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
+import io.element.android.libraries.matrix.test.A_ROOM_TOPIC
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
@@ -22,8 +24,8 @@ fun aMatrixRoom(
     roomId: RoomId = A_ROOM_ID,
     displayName: String = A_ROOM_NAME,
     rawName: String? = displayName,
-    topic: String? = "A topic",
-    avatarUrl: String? = "https://matrix.org/avatar.jpg",
+    topic: String? = A_ROOM_TOPIC,
+    avatarUrl: String? = AN_AVATAR_URL,
     isEncrypted: Boolean = true,
     isPublic: Boolean = true,
     isDirect: Boolean = false,

@@ -42,8 +42,8 @@
     <item quantity="other">"%1$d jututoa muudatust"</item>
   </plurals>
   <plurals name="screen_room_typing_many_members">
-    <item quantity="one">"%1$s, %2$s ja veel %3$d huviline"</item>
-    <item quantity="other">"%1$s, %2$s ja veel %3$d huvilist"</item>
+    <item quantity="one">"%1$s, %2$s ja veel %3$d osaleja"</item>
+    <item quantity="other">"%1$s, %2$s ja veel %3$d osalejat"</item>
   </plurals>
   <plurals name="screen_room_typing_notification">
     <item quantity="one">"%1$s kirjutab"</item>
