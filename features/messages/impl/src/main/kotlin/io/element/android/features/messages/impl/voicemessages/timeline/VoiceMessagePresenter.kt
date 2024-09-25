@@ -27,6 +27,7 @@ import io.element.android.features.messages.impl.voicemessages.VoiceMessageExcep
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
+import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.ui.utils.time.formatShort
 import io.element.android.services.analytics.api.AnalyticsService
@@ -126,8 +127,8 @@ class VoiceMessagePresenter @AssistedInject constructor(
                                     it
                                 },
                             ) {
-                                player.prepare().apply {
-                                    player.play()
+                                player.prepare().flatMap {
+                                    runCatching { player.play() }
                                 }
                             }
                         }
