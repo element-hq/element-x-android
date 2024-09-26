@@ -25,11 +25,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -356,7 +356,7 @@ private fun EmojiReactionsRow(
                     .clickable(
                         enabled = true,
                         onClick = onCustomReactionClick,
-                        indication = rememberRipple(bounded = false, radius = emojiRippleRadius),
+                        indication = ripple(bounded = false, radius = emojiRippleRadius),
                         interactionSource = remember { MutableInteractionSource() }
                     )
             )
@@ -433,7 +433,7 @@ private fun EmojiButton(
                 .clickable(
                     enabled = true,
                     onClick = { onClick(emoji) },
-                    indication = rememberRipple(bounded = false, radius = emojiRippleRadius),
+                    indication = ripple(bounded = false, radius = emojiRippleRadius),
                     interactionSource = remember { MutableInteractionSource() }
                 )
         )

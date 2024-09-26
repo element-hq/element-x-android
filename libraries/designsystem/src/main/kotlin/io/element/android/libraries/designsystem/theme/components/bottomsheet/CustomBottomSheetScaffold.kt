@@ -70,7 +70,7 @@ fun CustomBottomSheetScaffold(
     sheetPeekHeight: Dp = BottomSheetDefaults.SheetPeekHeight,
     sheetMaxWidth: Dp = BottomSheetDefaults.SheetMaxWidth,
     sheetShape: Shape = BottomSheetDefaults.ExpandedShape,
-    sheetContainerColor: Color = BottomSheetDefaults.ContainerColor,
+    sheetContainerColor: Color = Color.White,
     sheetContentColor: Color = contentColorFor(sheetContainerColor),
     sheetTonalElevation: Dp = BottomSheetDefaults.Elevation,
     sheetShadowElevation: Dp = BottomSheetDefaults.Elevation,
@@ -367,6 +367,12 @@ private class MapDraggableAnchors<T>(private val anchors: Map<T, Float>) : Dragg
         return anchors == other.anchors
     }
 
+    override fun forEach(block: (anchor: T, position: Float) -> Unit) {
+        for (anchor in anchors) {
+            block(anchor.key, anchor.value)
+        }
+    }
+
     override fun hashCode() = 31 * anchors.hashCode()
 
     override fun toString() = "MapDraggableAnchors($anchors)"
@@ -381,7 +387,7 @@ internal fun ConsumeSwipeWithinBottomSheetBoundsNestedScrollConnection(
 ): NestedScrollConnection = object : NestedScrollConnection {
     override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
         val delta = available.toFloat()
-        return if (delta < 0 && source == NestedScrollSource.Drag) {
+        return if (delta < 0 && source == NestedScrollSource.UserInput) {
             sheetState.anchoredDraggableState.dispatchRawDelta(delta).toOffset()
         } else {
             Offset.Zero
@@ -393,7 +399,7 @@ internal fun ConsumeSwipeWithinBottomSheetBoundsNestedScrollConnection(
         available: Offset,
         source: NestedScrollSource
     ): Offset {
-        return if (source == NestedScrollSource.Drag) {
+        return if (source == NestedScrollSource.UserInput) {
             sheetState.anchoredDraggableState.dispatchRawDelta(available.toFloat()).toOffset()
         } else {
             Offset.Zero

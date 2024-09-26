@@ -7,8 +7,8 @@
 
 package io.element.android.libraries.designsystem.components.tooltip
 
-import androidx.compose.material3.CaretScope
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TooltipScope
 import androidx.compose.material3.TooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,7 +19,7 @@ import androidx.compose.material3.TooltipBox as M3TooltipBox
 @Composable
 fun TooltipBox(
     positionProvider: PopupPositionProvider,
-    tooltip: @Composable CaretScope.() -> Unit,
+    tooltip: @Composable TooltipScope.() -> Unit,
     state: TooltipState,
     modifier: Modifier = Modifier,
     focusable: Boolean = true,
