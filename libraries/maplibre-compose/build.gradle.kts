@@ -22,6 +22,4 @@ dependencies {
     api(libs.maplibre)
     api(libs.maplibre.ktx)
     api(libs.maplibre.annotation)
-    // needed for libs.maplibre.annotation waiting for a new release with the fix
-    implementation(libs.mapbox.android.gestures)
 }
