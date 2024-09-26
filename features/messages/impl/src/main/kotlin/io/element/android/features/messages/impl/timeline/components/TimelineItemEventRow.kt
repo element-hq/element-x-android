@@ -394,7 +394,7 @@ private fun MessageSenderInformation(
     senderAvatar: AvatarData,
     modifier: Modifier = Modifier
 ) {
-    val avatarColors = AvatarColorsProvider.provide(senderAvatar.id, ElementTheme.isLightTheme)
+    val avatarColors = AvatarColorsProvider.provide(senderAvatar.id)
     Row(modifier = modifier) {
         Avatar(senderAvatar)
         Spacer(modifier = Modifier.width(4.dp))
