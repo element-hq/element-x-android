@@ -33,9 +33,10 @@ import io.element.android.features.roomdetails.impl.notificationsettings.RoomNot
 import io.element.android.features.roomdetails.impl.rolesandpermissions.RolesAndPermissionsFlowNode
 import io.element.android.features.userprofile.shared.UserProfileNodeHelper
 import io.element.android.features.userprofile.shared.avatar.AvatarPreviewNode
-import io.element.android.libraries.architecture.BackstackView
+import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.architecture.overlay.operation.show
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -125,7 +126,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                     }
 
                     override fun openAvatarPreview(name: String, url: String) {
-                        backstack.push(NavTarget.AvatarPreview(name, url))
+                        overlay.show(NavTarget.AvatarPreview(name, url))
                     }
 
                     override fun openPollHistory() {
@@ -186,7 +187,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
             is NavTarget.RoomMemberDetails -> {
                 val callback = object : UserProfileNodeHelper.Callback {
                     override fun openAvatarPreview(username: String, avatarUrl: String) {
-                        backstack.push(NavTarget.AvatarPreview(username, avatarUrl))
+                        overlay.show(NavTarget.AvatarPreview(username, avatarUrl))
                     }
 
                     override fun onStartDM(roomId: RoomId) {
@@ -252,6 +253,6 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        BackstackView()
+        BackstackWithOverlayBox(modifier)
     }
 }
