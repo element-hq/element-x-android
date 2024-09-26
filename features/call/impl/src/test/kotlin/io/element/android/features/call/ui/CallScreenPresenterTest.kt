@@ -71,6 +71,7 @@ class CallScreenPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.urlState).isEqualTo(AsyncData.Success("https://call.element.io"))
+            assertThat(initialState.webViewError).isNull()
             assertThat(initialState.isInWidgetMode).isFalse()
             analyticsLambda.assertions().isNeverCalled()
             joinedCallLambda.assertions().isCalledOnce()
@@ -268,6 +269,48 @@ class CallScreenPresenterTest {
         job.cancelAndJoin()
 
         assert(stopSyncLambda).isCalledOnce()
+    }
+
+    @Test
+    fun `present - error from WebView are updating the state`() = runTest {
+        val presenter = createCallScreenPresenter(
+            callType = CallType.ExternalUrl("https://call.element.io"),
+            activeCallManager = FakeActiveCallManager(),
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            // Wait until the URL is loaded
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink(CallScreenEvents.OnWebViewError("A Webview error"))
+            val finalState = awaitItem()
+            assertThat(finalState.webViewError).isEqualTo("A Webview error")
+        }
+    }
+
+    @Test
+    fun `present - error from WebView are ignored if Element Call is loaded`() = runTest {
+        val presenter = createCallScreenPresenter(
+            callType = CallType.ExternalUrl("https://call.element.io"),
+            activeCallManager = FakeActiveCallManager(),
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            // Wait until the URL is loaded
+            skipItems(1)
+            val initialState = awaitItem()
+
+            val messageInterceptor = FakeWidgetMessageInterceptor()
+            initialState.eventSink(CallScreenEvents.SetupMessageChannels(messageInterceptor))
+            // Emit a message
+            messageInterceptor.givenInterceptedMessage("A message")
+            // WebView emits an error, but it will be ignored
+            initialState.eventSink(CallScreenEvents.OnWebViewError("A Webview error"))
+            val finalState = awaitItem()
+            assertThat(finalState.webViewError).isNull()
+        }
     }
 
     private fun TestScope.createCallScreenPresenter(

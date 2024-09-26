@@ -67,7 +67,7 @@ kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 gms_google_services = "com.google.gms:google-services:4.4.2"
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:33.2.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:33.3.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 
@@ -152,7 +152,7 @@ coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil_compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 coil_gif = { module = "io.coil-kt:coil-gif", version.ref = "coil" }
 coil_test = { module = "io.coil-kt:coil-test", version.ref = "coil" }
-compound = { module = "io.element.android:compound-android", version = "0.0.7" }
+compound = { module = "io.element.android:compound-android", version = "0.1.0" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization_json" }
 kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7"
