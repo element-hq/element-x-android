@@ -64,11 +64,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
             is MessageContent -> content.process(senderDisambiguatedDisplayName, isDmRoom)
             RedactedContent -> {
                 val message = sp.getString(CommonStrings.common_message_removed)
-                if (!isDmRoom) {
-                    message.prefixWith(senderDisambiguatedDisplayName)
-                } else {
-                    message
-                }
+                message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom)
             }
             is StickerContent -> {
                 val message = sp.getString(CommonStrings.common_sticker) + " (" + content.body + ")"
@@ -76,11 +72,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
             }
             is UnableToDecryptContent -> {
                 val message = sp.getString(CommonStrings.common_waiting_for_decryption_key)
-                if (!isDmRoom) {
-                    message.prefixWith(senderDisambiguatedDisplayName)
-                } else {
-                    message
-                }
+                message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom)
             }
             is RoomMembershipContent -> {
                 roomMembershipContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing)
