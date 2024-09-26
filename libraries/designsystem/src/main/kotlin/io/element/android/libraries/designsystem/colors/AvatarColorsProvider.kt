@@ -12,7 +12,6 @@ import io.element.android.compound.theme.AvatarColors
 import io.element.android.compound.theme.avatarColors
 
 object AvatarColorsProvider {
-
     @Composable
     fun provide(id: String): AvatarColors {
         return avatarColors().let { colors ->
@@ -21,7 +20,6 @@ object AvatarColorsProvider {
     }
 }
 
-@Composable
 internal fun String.toHash(maxSize: Int): Int {
     return toList().sumOf { it.code } % maxSize
 }
