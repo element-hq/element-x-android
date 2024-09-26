@@ -8,16 +8,23 @@
 package io.element.android.features.call.impl.utils
 
 import android.graphics.Bitmap
+import android.net.http.SslError
 import android.webkit.JavascriptInterface
+import android.webkit.SslErrorHandler
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.webkit.WebViewCompat
 import androidx.webkit.WebViewFeature
 import io.element.android.features.call.impl.BuildConfig
 import kotlinx.coroutines.flow.MutableSharedFlow
+import timber.log.Timber
 
 class WebViewWidgetMessageInterceptor(
     private val webView: WebView,
+    private val onError: (String?) -> Unit,
 ) : WidgetMessageInterceptor {
     companion object {
         // We call both the WebMessageListener and the JavascriptInterface objects in JS with this
@@ -45,15 +52,34 @@ class WebViewWidgetMessageInterceptor(
                             if (message.data.response && message.data.api == "toWidget"
                                 || !message.data.response && message.data.api == "fromWidget") {
                                 let json = JSON.stringify(event.data) 
-                                ${"console.log('message sent: ' + json);".takeIf { BuildConfig.DEBUG } }
+                                ${"console.log('message sent: ' + json);".takeIf { BuildConfig.DEBUG }}
                                 $LISTENER_NAME.postMessage(json);
                             } else {
-                                ${"console.log('message received (ignored): ' + JSON.stringify(event.data));".takeIf { BuildConfig.DEBUG } }
+                                ${"console.log('message received (ignored): ' + JSON.stringify(event.data));".takeIf { BuildConfig.DEBUG }}
                             }
                         });
                     """.trimIndent(),
                     null
                 )
+            }
+
+            override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+                // No network for instance, transmit the error
+                Timber.e("onReceivedError error: ${error?.errorCode} ${error?.description}")
+                onError(error?.description?.toString())
+                super.onReceivedError(view, request, error)
+            }
+
+            override fun onReceivedHttpError(view: WebView?, request: WebResourceRequest?, errorResponse: WebResourceResponse?) {
+                Timber.e("onReceivedHttpError error: ${errorResponse?.statusCode} ${errorResponse?.reasonPhrase}")
+                onError(errorResponse?.statusCode.toString())
+                super.onReceivedHttpError(view, request, errorResponse)
+            }
+
+            override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
+                Timber.e("onReceivedSslError error: ${error?.primaryError}")
+                onError(error?.primaryError?.toString())
+                super.onReceivedSslError(view, handler, error)
             }
         }
 
