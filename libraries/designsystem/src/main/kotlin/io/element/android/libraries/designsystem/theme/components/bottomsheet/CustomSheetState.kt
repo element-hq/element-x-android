@@ -7,7 +7,9 @@
 
 package io.element.android.libraries.designsystem.theme.components.bottomsheet
 
+import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.core.SpringSpec
+import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.animateTo
 import androidx.compose.foundation.gestures.snapTo
@@ -201,14 +203,12 @@ constructor(
      * gesture interaction or another programmatic interaction like a [animateTo] or [snapTo] call.
      *
      * @param targetValue The target value of the animation
-     * @param velocity The velocity of the animation
      */
     @OptIn(ExperimentalFoundationApi::class)
     internal suspend fun animateTo(
         targetValue: SheetValue,
-        velocity: Float = anchoredDraggableState.lastVelocity
     ) {
-        anchoredDraggableState.animateTo(targetValue, velocity)
+        anchoredDraggableState.animateTo(targetValue)
     }
 
     /**
@@ -235,7 +235,8 @@ constructor(
     @OptIn(ExperimentalFoundationApi::class)
     internal var anchoredDraggableState = androidx.compose.foundation.gestures.AnchoredDraggableState(
         initialValue = initialValue,
-        animationSpec = AnchoredDraggableDefaults.AnimationSpec,
+        snapAnimationSpec = AnchoredDraggableDefaults.SnapAnimationSpec,
+        decayAnimationSpec = AnchoredDraggableDefaults.DecayAnimationSpec,
         confirmValueChange = confirmValueChange,
         positionalThreshold = { with(requireDensity()) { 56.dp.toPx() } },
         velocityThreshold = { with(requireDensity()) { 125.dp.toPx() } }
@@ -298,5 +299,10 @@ internal object AnchoredDraggableDefaults {
     @get:ExperimentalMaterial3Api
     @Suppress("OPT_IN_MARKER_ON_WRONG_TARGET")
     @ExperimentalMaterial3Api
-    val AnimationSpec = SpringSpec<Float>()
+    val SnapAnimationSpec = SpringSpec<Float>()
+
+    @get:ExperimentalMaterial3Api
+    @Suppress("OPT_IN_MARKER_ON_WRONG_TARGET")
+    @ExperimentalMaterial3Api
+    val DecayAnimationSpec = exponentialDecay<Float>()
 }

@@ -250,10 +250,12 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     anvil(projects.anvilcodegen)
 
-    // Comment to not include firebase in the project
-    "gplayImplementation"(projects.libraries.pushproviders.firebase)
-    // Comment to not include unified push in the project
-    implementation(projects.libraries.pushproviders.unifiedpush)
+    if (ModulesConfig.pushProvidersConfig.includeFirebase) {
+        "gplayImplementation"(projects.libraries.pushproviders.firebase)
+    }
+    if (ModulesConfig.pushProvidersConfig.includeUnifiedPush) {
+        implementation(projects.libraries.pushproviders.unifiedpush)
+    }
 
     implementation(libs.appyx.core)
     implementation(libs.androidx.splash)

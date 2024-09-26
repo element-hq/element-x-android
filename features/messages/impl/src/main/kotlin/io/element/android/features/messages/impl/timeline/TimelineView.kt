@@ -128,8 +128,8 @@ fun TimelineView(
         Box(modifier) {
             LazyColumn(
                 modifier = Modifier
-                        .fillMaxSize()
-                        .nestedScroll(nestedScrollConnection),
+                    .fillMaxSize()
+                    .nestedScroll(nestedScrollConnection),
                 state = lazyListState,
                 reverseLayout = useReverseLayout,
                 contentPadding = PaddingValues(vertical = 8.dp),
@@ -145,6 +145,7 @@ fun TimelineView(
                     key = { timelineItem -> timelineItem.identifier() },
                 ) { timelineItem ->
                     TimelineItemRow(
+                        modifier = Modifier.animateItem(),
                         timelineItem = timelineItem,
                         timelineRoomInfo = state.timelineRoomInfo,
                         renderReadReceipts = state.renderReadReceipts,
@@ -269,8 +270,8 @@ private fun BoxScope.TimelineScrollHelper(
         // Use inverse of canAutoScroll otherwise we might briefly see the before the scroll animation is triggered
         isVisible = !canAutoScroll || forceJumpToBottomVisibility || !isLive,
         modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = 24.dp, bottom = 12.dp),
+            .align(Alignment.BottomEnd)
+            .padding(end = 24.dp, bottom = 12.dp),
         onClick = { jumpToBottom() },
     )
 }
@@ -297,8 +298,8 @@ private fun JumpToBottomButton(
         ) {
             Icon(
                 modifier = Modifier
-                        .size(24.dp)
-                        .rotate(90f),
+                    .size(24.dp)
+                    .rotate(90f),
                 imageVector = CompoundIcons.ArrowRight(),
                 contentDescription = stringResource(id = CommonStrings.a11y_jump_to_bottom)
             )
@@ -312,12 +313,18 @@ internal fun TimelineViewPreview(
     @PreviewParameter(TimelineItemEventContentProvider::class) content: TimelineItemEventContent
 ) = ElementPreview {
     val timelineItems = aTimelineItemList(content)
+    val timelineEvents = timelineItems.filterIsInstance<TimelineItem.Event>()
+    val lastEventIdFromMe = timelineEvents.firstOrNull { it.isMine }?.eventId
+    val lastEventIdFromOther = timelineEvents.firstOrNull { !it.isMine }?.eventId
     CompositionLocalProvider(
         LocalTimelineItemPresenterFactories provides aFakeTimelineItemPresenterFactories(),
     ) {
         TimelineView(
             state = aTimelineState(
                 timelineItems = timelineItems,
+                timelineRoomInfo = aTimelineRoomInfo(
+                    pinnedEventIds = listOfNotNull(lastEventIdFromMe, lastEventIdFromOther)
+                ),
                 focusedEventIndex = 0,
             ),
             typingNotificationState = aTypingNotificationState(),

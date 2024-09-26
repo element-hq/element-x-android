@@ -26,7 +26,6 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -81,7 +80,6 @@ class MediaViewerViewTest {
         eventsRecorder.assertSingle(expectedEvent)
     }
 
-    @Ignore("This test is not passing yet, maybe due to interaction with ZoomableAsyncImage?")
     @Test
     fun `clicking on image hides the overlay`() {
         val eventsRecorder = EventsRecorder<MediaViewerEvents>(expectEvents = false)
@@ -96,16 +94,17 @@ class MediaViewerViewTest {
         )
         // Ensure that the action are visible
         val contentDescription = rule.activity.getString(CommonStrings.action_open_with)
-        rule.onNodeWithContentDescription(contentDescription).assertHasClickAction()
+        rule.onNodeWithContentDescription(contentDescription)
+            .assertExists()
+            .assertHasClickAction()
         val imageContentDescription = rule.activity.getString(CommonStrings.common_image)
         rule.onNodeWithContentDescription(imageContentDescription).performClick()
-        // assertHasNoClickAction does not work as expected (?)
-        // rule.onNodeWithContentDescription(contentDescription).assertHasNoClickAction()
-        rule.onNodeWithContentDescription(contentDescription).performClick()
-        // No emitted event
+        // Give time for the animation (? since even by removing AnimatedVisibility it still fails)
+        rule.mainClock.advanceTimeBy(1_000)
+        rule.onNodeWithContentDescription(contentDescription)
+            .assertDoesNotExist()
     }
 
-    @Ignore("This test is not passing yet, maybe due to interaction with ZoomableAsyncImage?")
     @Test
     fun `clicking swipe on the image invokes the expected callback`() {
         val eventsRecorder = EventsRecorder<MediaViewerEvents>(expectEvents = false)
@@ -121,7 +120,7 @@ class MediaViewerViewTest {
                 onBackClick = callback,
             )
             val imageContentDescription = rule.activity.getString(CommonStrings.common_image)
-            rule.onNodeWithContentDescription(imageContentDescription).performTouchInput { swipeDown() }
+            rule.onNodeWithContentDescription(imageContentDescription).performTouchInput { swipeDown(startY = centerY) }
             rule.mainClock.advanceTimeBy(1_000)
         }
     }

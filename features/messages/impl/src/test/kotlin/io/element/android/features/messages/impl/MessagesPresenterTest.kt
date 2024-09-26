@@ -13,6 +13,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import im.vector.app.features.analytics.plan.PinUnpinAction
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.FakeActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -896,6 +897,7 @@ class MessagesPresenterTest {
     fun `present - handle action pin`() = runTest {
         val successPinEventLambda = lambdaRecorder { _: EventId -> Result.success(true) }
         val failurePinEventLambda = lambdaRecorder { _: EventId -> Result.failure<Boolean>(A_THROWABLE) }
+        val analyticsService = FakeAnalyticsService()
         val timeline = FakeTimeline()
         val room = FakeMatrixRoom(
             liveTimeline = timeline,
@@ -906,7 +908,7 @@ class MessagesPresenterTest {
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
         )
-        val presenter = createMessagesPresenter(matrixRoom = room)
+        val presenter = createMessagesPresenter(matrixRoom = room, analyticsService = analyticsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -923,6 +925,10 @@ class MessagesPresenterTest {
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Pin, messageEvent))
             assert(failurePinEventLambda).isCalledOnce().with(value(messageEvent.eventId))
             assertThat(awaitItem().snackbarMessage).isNotNull()
+            assertThat(analyticsService.capturedEvents).containsExactly(
+                PinUnpinAction(kind = PinUnpinAction.Kind.Pin, from = PinUnpinAction.From.Timeline),
+                PinUnpinAction(kind = PinUnpinAction.Kind.Pin, from = PinUnpinAction.From.Timeline)
+            )
         }
     }
 
@@ -931,6 +937,7 @@ class MessagesPresenterTest {
         val successUnpinEventLambda = lambdaRecorder { _: EventId -> Result.success(true) }
         val failureUnpinEventLambda = lambdaRecorder { _: EventId -> Result.failure<Boolean>(A_THROWABLE) }
         val timeline = FakeTimeline()
+        val analyticsService = FakeAnalyticsService()
         val room = FakeMatrixRoom(
             liveTimeline = timeline,
             canUserSendMessageResult = { _, _ -> Result.success(true) },
@@ -940,7 +947,7 @@ class MessagesPresenterTest {
             typingNoticeResult = { Result.success(Unit) },
             canUserPinUnpinResult = { Result.success(true) },
         )
-        val presenter = createMessagesPresenter(matrixRoom = room)
+        val presenter = createMessagesPresenter(matrixRoom = room, analyticsService = analyticsService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -957,6 +964,10 @@ class MessagesPresenterTest {
             initialState.eventSink.invoke(MessagesEvents.HandleAction(TimelineItemAction.Unpin, messageEvent))
             assert(failureUnpinEventLambda).isCalledOnce().with(value(messageEvent.eventId))
             assertThat(awaitItem().snackbarMessage).isNotNull()
+            assertThat(analyticsService.capturedEvents).containsExactly(
+                PinUnpinAction(kind = PinUnpinAction.Kind.Unpin, from = PinUnpinAction.From.Timeline),
+                PinUnpinAction(kind = PinUnpinAction.Kind.Unpin, from = PinUnpinAction.From.Timeline)
+            )
         }
     }
 
@@ -1074,6 +1085,7 @@ class MessagesPresenterTest {
             htmlConverterProvider = FakeHtmlConverterProvider(),
             timelineController = TimelineController(matrixRoom),
             permalinkParser = permalinkParser,
+            analyticsService = analyticsService,
         )
     }
 }

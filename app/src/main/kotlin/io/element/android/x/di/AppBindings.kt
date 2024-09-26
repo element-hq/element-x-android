@@ -16,6 +16,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatch
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.matrix.api.tracing.TracingService
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesTo(AppScope::class)
 interface AppBindings {
@@ -32,4 +33,6 @@ interface AppBindings {
     fun migrationEntryPoint(): MigrationEntryPoint
 
     fun lockScreenEntryPoint(): LockScreenEntryPoint
+
+    fun analyticsService(): AnalyticsService
 }

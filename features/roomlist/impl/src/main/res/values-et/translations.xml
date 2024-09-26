@@ -9,7 +9,7 @@
   <string name="confirm_recovery_key_banner_message">"Sinu vestluste varukoopia pole hetkel sünkroonis. Säilitamaks ligipääsu vestluse varukoopiale palun sisesta oma taastevõti."</string>
   <string name="confirm_recovery_key_banner_title">"Sisesta oma taastevõti"</string>
   <string name="full_screen_intent_banner_message">"Selleks, et sul ainsamgi tähtis kõne ei jääks märkamata, siis palun muuda oma nutiseadme seadistusi nii, et lukustusvaates oleksid täisekraani mõõtu teavitused."</string>
-  <string name="full_screen_intent_banner_title">"Täiusta oma telefonikõnede kogemust"</string>
+  <string name="full_screen_intent_banner_title">"Sinu tõhusad telefonikõned"</string>
   <string name="screen_invites_decline_chat_message">"Kas sa oled kindel, et soovid keelduda liitumiskutsest: %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Lükka kutse tagasi"</string>
   <string name="screen_invites_decline_direct_chat_message">"Kas sa oled kindel, et soovid keelduda privaatsest vestlusest kasutajaga %1$s?"</string>

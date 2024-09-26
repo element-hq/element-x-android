@@ -227,6 +227,7 @@ Compose:
       - LocalTimelineItemPresenterFactories
       - LocalRoomMemberProfilesCache
       - LocalMentionSpanTheme
+      - LocalAnalyticsService
   CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:

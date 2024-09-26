@@ -19,6 +19,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import io.element.android.libraries.architecture.AsyncData
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import me.saket.telephoto.zoomable.ZoomableState
 import me.saket.telephoto.zoomable.rememberZoomableState
@@ -35,10 +37,10 @@ class PdfViewerState(
     private var pdfRendererManager by mutableStateOf<PdfRendererManager?>(null)
 
     @Composable
-    fun getPages(): List<PdfPage> {
+    fun getPages(): AsyncData<ImmutableList<PdfPage>> {
         return pdfRendererManager?.run {
             pdfPages.collectAsState().value
-        } ?: emptyList()
+        } ?: AsyncData.Uninitialized
     }
 
     fun openForWidth(maxWidth: Int) {

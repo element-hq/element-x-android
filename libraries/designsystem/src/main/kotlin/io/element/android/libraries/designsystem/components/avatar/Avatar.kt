@@ -115,7 +115,7 @@ private fun InitialsAvatar(
     forcedAvatarSize: Dp?,
     modifier: Modifier = Modifier,
 ) {
-    val avatarColors = AvatarColorsProvider.provide(avatarData.id, ElementTheme.isLightTheme)
+    val avatarColors = AvatarColorsProvider.provide(avatarData.id)
     Box(
         modifier.background(color = avatarColors.background)
     ) {

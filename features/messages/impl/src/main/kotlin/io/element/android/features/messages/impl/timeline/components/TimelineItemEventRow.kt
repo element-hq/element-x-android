@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -99,6 +100,8 @@ val NEGATIVE_MARGIN_FOR_BUBBLE = (-8).dp
 
 // Width of the transparent border around the sender avatar
 val SENDER_AVATAR_BORDER_WIDTH = 3.dp
+
+private val BUBBLE_INCOMING_OFFSET = 16.dp
 
 @Composable
 fun TimelineItemEventRow(
@@ -277,6 +280,7 @@ private fun TimelineItemEventRowContent(
             sender,
             message,
             reactions,
+            pinIcon,
         ) = createRefs()
 
         // Sender
@@ -311,7 +315,12 @@ private fun TimelineItemEventRowContent(
             modifier = Modifier
                 .constrainAs(message) {
                     top.linkTo(sender.bottom, margin = NEGATIVE_MARGIN_FOR_BUBBLE)
-                    this.linkStartOrEnd(event)
+                    if (event.isMine) {
+                        end.linkTo(parent.end, margin = 16.dp)
+                    } else {
+                        val startMargin = if (timelineRoomInfo.isDm) 16.dp else 16.dp + BUBBLE_INCOMING_OFFSET
+                        start.linkTo(parent.start, margin = startMargin)
+                    }
                 },
             state = bubbleState,
             interactionSource = interactionSource,
@@ -324,6 +333,27 @@ private fun TimelineItemEventRowContent(
                 inReplyToClick = inReplyToClick,
                 eventSink = eventSink,
                 eventContentView = eventContentView,
+            )
+        }
+
+        // Pin icon
+        val isEventPinned = timelineRoomInfo.pinnedEventIds.contains(event.eventId)
+        if (isEventPinned) {
+            Icon(
+                imageVector = CompoundIcons.PinSolid(),
+                contentDescription = stringResource(CommonStrings.common_pinned),
+                tint = ElementTheme.colors.iconTertiary,
+                modifier = Modifier
+                    .padding(1.dp)
+                    .size(16.dp)
+                    .constrainAs(pinIcon) {
+                        top.linkTo(message.top)
+                        if (event.isMine) {
+                            end.linkTo(message.start, margin = 8.dp)
+                        } else {
+                            start.linkTo(message.end, margin = 8.dp)
+                        }
+                    }
             )
         }
 
@@ -364,7 +394,7 @@ private fun MessageSenderInformation(
     senderAvatar: AvatarData,
     modifier: Modifier = Modifier
 ) {
-    val avatarColors = AvatarColorsProvider.provide(senderAvatar.id, ElementTheme.isLightTheme)
+    val avatarColors = AvatarColorsProvider.provide(senderAvatar.id)
     Row(modifier = modifier) {
         Avatar(senderAvatar)
         Spacer(modifier = Modifier.width(4.dp))

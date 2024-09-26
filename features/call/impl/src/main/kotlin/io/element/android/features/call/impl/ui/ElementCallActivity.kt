@@ -281,7 +281,11 @@ class ElementCallActivity :
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun enterPipMode(): Boolean {
-        return enterPictureInPictureMode(getPictureInPictureParams())
+        return if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+            enterPictureInPictureMode(getPictureInPictureParams())
+        } else {
+            false
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
