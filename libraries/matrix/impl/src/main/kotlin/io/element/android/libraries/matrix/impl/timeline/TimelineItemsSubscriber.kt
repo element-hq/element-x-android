@@ -80,10 +80,15 @@ internal class TimelineItemsSubscriber(
     }
 
     private suspend fun postItems(items: List<TimelineItem>) = coroutineScope {
-        // Split the initial items in multiple list as there is no pagination in the cached data, so we can post timelineItems asap.
-        items.chunked(INITIAL_MAX_SIZE).reversed().forEach {
-            ensureActive()
-            timelineDiffProcessor.postItems(it)
+        if (items.isEmpty()) {
+            // Makes sure to post empty list if there is no item, so you can handle empty state.
+            timelineDiffProcessor.postItems(emptyList())
+        } else {
+            // Split the initial items in multiple list as there is no pagination in the cached data, so we can post timelineItems asap.
+            items.chunked(INITIAL_MAX_SIZE).reversed().forEach {
+                ensureActive()
+                timelineDiffProcessor.postItems(it)
+            }
         }
         isTimelineInitialized.value = true
         initLatch.complete(Unit)

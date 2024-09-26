@@ -12,10 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.input.pointer.pointerInput
 
-fun Modifier.clearFocusOnTap(focusManager: FocusManager): Modifier = then(
-    pointerInput(Unit) {
-        detectTapGestures(onTap = {
-            focusManager.clearFocus()
-        })
-    }
-)
+fun Modifier.clearFocusOnTap(focusManager: FocusManager): Modifier = pointerInput(Unit) {
+    detectTapGestures(onTap = {
+        focusManager.clearFocus()
+    })
+}
