@@ -98,7 +98,7 @@ androidx_activity_activity = { module = "androidx.activity:activity", version.re
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx_startup = "androidx.startup:startup-runtime:1.2.0"
 androidx_preference = "androidx.preference:preference:1.2.1"
-androidx_webkit = "androidx.webkit:webkit:1.11.0"
+androidx_webkit = "androidx.webkit:webkit:1.12.0"
 
 androidx_compose_bom = { module = "androidx.compose:compose-bom", version.ref = "compose_bom" }
 androidx_compose_material3 = { module = "androidx.compose.material3:material3" }
@@ -176,16 +176,15 @@ vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.2"
-maplibre = "org.maplibre.gl:android-sdk:11.4.0"
+maplibre = "org.maplibre.gl:android-sdk:11.5.0"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:3.0.1"
-maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.0"
-mapbox_android_gestures = "com.mapbox.mapboxsdk:mapbox-android-gestures:0.7.0"
+maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.1"
 opusencoder = "io.element.android:opusencoder:1.1.0"
 kotlinpoet = "com.squareup:kotlinpoet:1.18.1"
 zxing_cpp = "io.github.zxing-cpp:android:2.2.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.7.3"
+posthog = "com.posthog:posthog-android:3.7.5"
 sentry = "io.sentry:sentry-android:7.14.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.25.0"

@@ -248,6 +248,7 @@ Reason: %1$s."</string>
   <string name="common_voice_message">"Voice message"</string>
   <string name="common_waiting">"Waiting…"</string>
   <string name="common_waiting_for_decryption_key">"Waiting for this message"</string>
+  <string name="common_you">"You"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
   <string name="dialog_title_error">"Error"</string>
   <string name="dialog_title_success">"Success"</string>
