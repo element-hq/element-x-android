@@ -8,18 +8,18 @@
 package io.element.android.libraries.matrix.impl.roomdirectory
 
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustClient
-import io.element.android.tests.testutils.runCancellableScopeTestWithTestScope
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class RustRoomDirectoryServiceTest {
     @Test
-    fun test() = runCancellableScopeTestWithTestScope { testScope, cancellableScope ->
+    fun test() = runTest {
         val client = FakeRustClient()
         val sut = RustRoomDirectoryService(
             client = client,
-            sessionDispatcher = StandardTestDispatcher(testScope.testScheduler),
+            sessionDispatcher = StandardTestDispatcher(testScheduler),
         )
-        sut.createRoomDirectoryList(cancellableScope)
+        sut.createRoomDirectoryList(backgroundScope)
     }
 }

@@ -13,12 +13,12 @@ import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryList
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomDescription
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRoomDirectorySearch
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
-import io.element.android.tests.testutils.runCancellableScopeTestWithTestScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.RoomDirectorySearch
 import org.matrix.rustcomponents.sdk.RoomDirectorySearchEntryUpdate
@@ -26,15 +26,15 @@ import org.matrix.rustcomponents.sdk.RoomDirectorySearchEntryUpdate
 @OptIn(ExperimentalCoroutinesApi::class)
 class RustRoomDirectoryListTest {
     @Test
-    fun `check that the state emits the expected values`() = runCancellableScopeTestWithTestScope { testScope, cancellableScope ->
+    fun `check that the state emits the expected values`() = runTest {
         val fakeRoomDirectorySearch = FakeRoomDirectorySearch()
         val mapper = RoomDescriptionMapper()
-        val sut = testScope.createRustRoomDirectoryList(
+        val sut = createRustRoomDirectoryList(
             roomDirectorySearch = fakeRoomDirectorySearch,
-            scope = cancellableScope,
+            scope = backgroundScope,
         )
         // Let the mxCallback be ready
-        testScope.runCurrent()
+        runCurrent()
         sut.state.test {
             sut.filter("", 20)
             fakeRoomDirectorySearch.emitResult(
