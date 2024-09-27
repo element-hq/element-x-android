@@ -11,6 +11,7 @@ import io.element.android.libraries.architecture.AsyncData
 
 data class CallScreenState(
     val urlState: AsyncData<String>,
+    val webViewError: String?,
     val userAgent: String,
     val isInWidgetMode: Boolean,
     val eventSink: (CallScreenEvents) -> Unit,

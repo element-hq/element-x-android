@@ -40,6 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.mimetype.MimeTypes
@@ -66,9 +67,6 @@ import me.saket.telephoto.flick.FlickToDismiss
 import me.saket.telephoto.flick.FlickToDismissState
 import me.saket.telephoto.flick.rememberFlickToDismissState
 import me.saket.telephoto.zoomable.ZoomSpec
-import me.saket.telephoto.zoomable.ZoomableState
-import me.saket.telephoto.zoomable.coil.ZoomableAsyncImage
-import me.saket.telephoto.zoomable.rememberZoomableImageState
 import me.saket.telephoto.zoomable.rememberZoomableState
 import kotlin.time.Duration
 
@@ -181,7 +179,6 @@ private fun MediaViewerPage(
                     mediaInfo = state.mediaInfo,
                     thumbnailSource = state.thumbnailSource,
                     isVisible = showThumbnail,
-                    zoomableState = zoomableState
                 )
                 if (showError) {
                     ErrorView(
@@ -316,24 +313,18 @@ private fun ThumbnailView(
     thumbnailSource: MediaSource?,
     isVisible: Boolean,
     mediaInfo: MediaInfo,
-    zoomableState: ZoomableState,
     modifier: Modifier = Modifier,
 ) {
-    AnimatedVisibility(
-        visible = isVisible,
-        enter = fadeIn(),
-        exit = fadeOut()
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
-        Box(
-            modifier = modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
+        if (isVisible) {
             val mediaRequestData = MediaRequestData(
                 source = thumbnailSource,
                 kind = MediaRequestData.Kind.File(mediaInfo.name, mediaInfo.mimeType)
             )
-            ZoomableAsyncImage(
-                state = rememberZoomableImageState(zoomableState),
+            AsyncImage(
                 modifier = Modifier.fillMaxSize(),
                 model = mediaRequestData,
                 contentScale = ContentScale.Fit,

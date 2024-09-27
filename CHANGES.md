@@ -1,3 +1,39 @@
+Changes in Element X v0.6.4 (2024-09-25)
+========================================
+
+### 🙌 Improvements
+* Pinned messages : add pin icon in timeline for pinned events. by @ganfra in https://github.com/element-hq/element-x-android/pull/3500
+* Include inviter in the notification for invitation by @bmarty in https://github.com/element-hq/element-x-android/pull/3503
+
+### 🐛 Bugfixes
+* Fix crash when session is deleted on another client by @bmarty in https://github.com/element-hq/element-x-android/pull/3515
+* Fix pinned events banner reappearing when loading by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3519
+* Fix various crashes by @bmarty in https://github.com/element-hq/element-x-android/pull/3533
+* Perform the migration, even if the current version is not known. by @bmarty in https://github.com/element-hq/element-x-android/pull/3535
+* timeline : makes sure to emit empty list if initial reset has no item. by @ganfra in https://github.com/element-hq/element-x-android/pull/3538
+
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/3513
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/3517
+
+### Dependency upgrades
+* Update dependency io.nlopez.compose.rules:detekt to v0.4.12 by @renovate in https://github.com/element-hq/element-x-android/pull/3436
+* Update dependency com.posthog:posthog-android to v3.7.3 by @renovate in https://github.com/element-hq/element-x-android/pull/3443
+* Update dependency com.otaliastudios:transcoder to v0.11.1 by @renovate in https://github.com/element-hq/element-x-android/pull/3440
+* Update dependency org.maplibre.gl:android-sdk to v11.4.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3408
+* Update dependencyAnalysis to v2.0.2 by @renovate in https://github.com/element-hq/element-x-android/pull/3508
+* Update dependency org.maplibre.gl:android-sdk-ktx-v7 to v3.0.1 by @renovate in https://github.com/element-hq/element-x-android/pull/3507
+* Update dependencyAnalysis to v2.1.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3526
+* Update dependency net.java.dev.jna:jna to v5.15.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3525
+* Update dependency androidx.startup:startup-runtime to v1.2.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3516
+* dependencies : update rust sdk to 0.2.48 by @ganfra in https://github.com/element-hq/element-x-android/pull/3532
+
+### Others
+* Change ElementBot mail to android@element.io by @bmarty in https://github.com/element-hq/element-x-android/pull/3497
+* Test RustMatrixClient and other classes in the matrix module by @bmarty in https://github.com/element-hq/element-x-android/pull/3501
+* Pinned messages analytics by @ganfra in https://github.com/element-hq/element-x-android/pull/3523
+* Remove ability to configure default log level by @bmarty in https://github.com/element-hq/element-x-android/pull/3531
+
 Changes in Element X v0.6.3 (2024-09-19)
 ========================================
 

@@ -5,13 +5,10 @@
  * Please see LICENSE in the repository root for full details.
  */
 
-@file:OptIn(ExperimentalAnimationApi::class)
-
 package io.element.android.features.messages.impl.timeline
 
 import android.view.accessibility.AccessibilityManager
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn

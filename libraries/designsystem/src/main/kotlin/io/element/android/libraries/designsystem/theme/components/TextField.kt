@@ -36,6 +36,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -64,7 +65,12 @@ fun TextField(
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = TextFieldDefaults.shape,
-    colors: TextFieldColors = TextFieldDefaults.colors()
+    colors: TextFieldColors = TextFieldDefaults.colors(
+        unfocusedContainerColor = ElementTheme.colors.bgSubtleSecondary,
+        focusedContainerColor = ElementTheme.colors.bgSubtleSecondary,
+        disabledContainerColor = ElementTheme.colors.bgSubtleSecondary,
+        errorContainerColor = ElementTheme.colors.bgSubtleSecondary,
+    )
 ) {
     androidx.compose.material3.TextField(
         value = value,

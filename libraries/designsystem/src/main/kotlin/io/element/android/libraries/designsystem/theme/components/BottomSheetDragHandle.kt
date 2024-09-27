@@ -45,8 +45,8 @@ fun BottomSheetDragHandle(
                 .fillMaxWidth()
                 .requiredHeight(72.dp)
                 .offset(y = 18.dp)
-                .clip(MaterialTheme.shapes.extraLarge)
-                .background(MaterialTheme.colorScheme.background)
+                .clip(MaterialTheme.shapes.large)
+                .background(MaterialTheme.colorScheme.surface)
                 .border(0.5.dp, ElementTheme.colors.borderDisabled, MaterialTheme.shapes.extraLarge)
         )
 

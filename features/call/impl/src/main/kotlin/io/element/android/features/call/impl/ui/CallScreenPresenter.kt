@@ -78,6 +78,8 @@ class CallScreenPresenter @AssistedInject constructor(
         val callWidgetDriver = remember { mutableStateOf<MatrixWidgetDriver?>(null) }
         val messageInterceptor = remember { mutableStateOf<WidgetMessageInterceptor?>(null) }
         var isJoinedCall by rememberSaveable { mutableStateOf(false) }
+        var ignoreWebViewError by rememberSaveable { mutableStateOf(false) }
+        var webViewError by remember { mutableStateOf<String?>(null) }
         val languageTag = languageTagProvider.provideLanguageTag()
         val theme = if (ElementTheme.isLightTheme) "light" else "dark"
         DisposableEffect(Unit) {
@@ -125,6 +127,8 @@ class CallScreenPresenter @AssistedInject constructor(
             LaunchedEffect(Unit) {
                 interceptor.interceptedMessages
                     .onEach {
+                        // We are receiving messages from the WebView, consider that the application is loaded
+                        ignoreWebViewError = true
                         // Relay message to Widget Driver
                         callWidgetDriver.value?.send(it)
 
@@ -163,11 +167,18 @@ class CallScreenPresenter @AssistedInject constructor(
                 is CallScreenEvents.SetupMessageChannels -> {
                     messageInterceptor.value = event.widgetMessageInterceptor
                 }
+                is CallScreenEvents.OnWebViewError -> {
+                    if (!ignoreWebViewError) {
+                        webViewError = event.description.orEmpty()
+                    }
+                    // Else ignore the error, give a chance the Element Call to recover by itself.
+                }
             }
         }
 
         return CallScreenState(
             urlState = urlState.value,
+            webViewError = webViewError,
             userAgent = userAgent,
             isInWidgetMode = isInWidgetMode,
             eventSink = { handleEvents(it) },

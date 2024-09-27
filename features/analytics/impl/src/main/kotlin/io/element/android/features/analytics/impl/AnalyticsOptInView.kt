@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,6 +35,7 @@ import io.element.android.libraries.designsystem.atomic.organisms.InfoListOrgani
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.background.OnboardingBackground
 import io.element.android.libraries.designsystem.components.BigIcon
+import io.element.android.libraries.designsystem.components.ClickableLinkText
 import io.element.android.libraries.designsystem.components.PageTitle
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -104,14 +104,9 @@ private fun AnalyticsOptInHeader(
             bold = true,
             tagAndLink = LINK_TAG to AnalyticsConfig.POLICY_LINK,
         )
-        ClickableText(
-            text = text,
-            onClick = {
-                text
-                    .getStringAnnotations(LINK_TAG, it, it)
-                    .firstOrNull()
-                    ?.let { _ -> onClickTerms() }
-            },
+        ClickableLinkText(
+            annotatedString = text,
+            onClick = { onClickTerms() },
             modifier = Modifier
                 .padding(8.dp),
             style = ElementTheme.typography.fontBodyMdRegular
