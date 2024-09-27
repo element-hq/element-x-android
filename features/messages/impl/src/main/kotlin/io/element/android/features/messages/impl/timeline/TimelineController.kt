@@ -57,6 +57,10 @@ class TimelineController @Inject constructor(
         return detachedTimeline.map { !it.isPresent }
     }
 
+    fun currentPaginationStatus(direction: Timeline.PaginationDirection): Timeline.PaginationStatus {
+        return currentTimelineFlow.value.paginationStatus(direction).value
+    }
+
     suspend fun invokeOnCurrentTimeline(block: suspend (Timeline.() -> Any)) {
         currentTimelineFlow.value.run {
             block(this)
@@ -107,11 +111,6 @@ class TimelineController @Inject constructor(
 
     suspend fun paginate(direction: Timeline.PaginationDirection): Result<Boolean> {
         return currentTimelineFlow.value.paginate(direction)
-            .onSuccess { hasReachedEnd ->
-                if (direction == Timeline.PaginationDirection.FORWARDS && hasReachedEnd) {
-                    focusOnLive()
-                }
-            }
     }
 
     private val currentTimelineFlow = combine(liveTimeline, detachedTimeline) { live, detached ->

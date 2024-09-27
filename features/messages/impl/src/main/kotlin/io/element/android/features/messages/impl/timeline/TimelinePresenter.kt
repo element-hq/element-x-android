@@ -41,6 +41,7 @@ import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
@@ -135,6 +136,12 @@ class TimelinePresenter @AssistedInject constructor(
                         )
                     } else {
                         newEventState.value = NewEventState.None
+                        if (event.firstIndex == 0) {
+                            val forwardPaginationStatus = timelineController.currentPaginationStatus(Timeline.PaginationDirection.FORWARDS)
+                            if (!forwardPaginationStatus.hasMoreToLoad) {
+                                timelineController.focusOnLive()
+                            }
+                        }
                     }
                 }
                 is TimelineEvents.SelectPollAnswer -> appScope.launch {
