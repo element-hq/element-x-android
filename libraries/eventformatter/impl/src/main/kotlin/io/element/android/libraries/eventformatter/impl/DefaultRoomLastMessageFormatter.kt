@@ -61,25 +61,18 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
         val isOutgoing = event.isOwn
         val senderDisambiguatedDisplayName = event.senderProfile.getDisambiguatedDisplayName(event.sender)
         return when (val content = event.content) {
-            is MessageContent -> processMessageContents(content, senderDisambiguatedDisplayName, isDmRoom)
+            is MessageContent -> content.process(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             RedactedContent -> {
                 val message = sp.getString(CommonStrings.common_message_removed)
-                if (!isDmRoom) {
-                    message.prefixWith(senderDisambiguatedDisplayName)
-                } else {
-                    message
-                }
+                message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is StickerContent -> {
-                prefixIfNeeded(sp.getString(CommonStrings.common_sticker) + " (" + content.body + ")", senderDisambiguatedDisplayName, isDmRoom)
+                val message = sp.getString(CommonStrings.common_sticker) + " (" + content.body + ")"
+                message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is UnableToDecryptContent -> {
                 val message = sp.getString(CommonStrings.common_waiting_for_decryption_key)
-                if (!isDmRoom) {
-                    message.prefixWith(senderDisambiguatedDisplayName)
-                } else {
-                    message
-                }
+                message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is RoomMembershipContent -> {
                 roomMembershipContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing)
@@ -92,22 +85,23 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
             }
             is PollContent -> {
                 val message = sp.getString(CommonStrings.common_poll_summary, content.question)
-                prefixIfNeeded(message, senderDisambiguatedDisplayName, isDmRoom)
+                message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is FailedToParseMessageLikeContent, is FailedToParseStateContent, is UnknownContent -> {
-                prefixIfNeeded(sp.getString(CommonStrings.common_unsupported_event), senderDisambiguatedDisplayName, isDmRoom)
+                val message = sp.getString(CommonStrings.common_unsupported_event)
+                message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is LegacyCallInviteContent -> sp.getString(CommonStrings.common_call_invite)
             is CallNotifyContent -> sp.getString(CommonStrings.common_call_started)
         }?.take(MAX_SAFE_LENGTH)
     }
 
-    private fun processMessageContents(
-        messageContent: MessageContent,
+    private fun MessageContent.process(
         senderDisambiguatedDisplayName: String,
         isDmRoom: Boolean,
+        isOutgoing: Boolean
     ): CharSequence {
-        val internalMessage = when (val messageType: MessageType = messageContent.type) {
+        val message = when (val messageType: MessageType = type) {
             // Doesn't need a prefix
             is EmoteMessageType -> {
                 return "* $senderDisambiguatedDisplayName ${messageType.body}"
@@ -143,16 +137,22 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 messageType.body
             }
         }
-        return prefixIfNeeded(internalMessage, senderDisambiguatedDisplayName, isDmRoom)
+        return message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
     }
 
-    private fun prefixIfNeeded(
-        message: String,
+    private fun String.prefixIfNeeded(
         senderDisambiguatedDisplayName: String,
         isDmRoom: Boolean,
+        isOutgoing: Boolean,
     ): CharSequence = if (isDmRoom) {
-        message
+        this
     } else {
-        message.prefixWith(senderDisambiguatedDisplayName)
+        prefixWith(
+            if (isOutgoing) {
+                sp.getString(CommonStrings.common_you)
+            } else {
+                senderDisambiguatedDisplayName
+            }
+        )
     }
 }
