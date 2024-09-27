@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTim
 import io.element.android.libraries.matrix.test.A_UNIQUE_ID
 import io.element.android.libraries.matrix.test.A_UNIQUE_ID_2
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -155,7 +156,7 @@ class MatrixTimelineDiffProcessorTest {
 }
 
 internal fun TestScope.createMatrixTimelineDiffProcessor(
-    timelineItems: MutableStateFlow<List<MatrixTimelineItem>>,
+    timelineItems: MutableSharedFlow<List<MatrixTimelineItem>>,
 ): MatrixTimelineDiffProcessor {
     val timelineEventContentMapper = TimelineEventContentMapper()
     val timelineItemMapper = MatrixTimelineItemMapper(
