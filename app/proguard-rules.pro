@@ -13,6 +13,8 @@
 # TagSoup, coming from the RTE library
 -keep class org.ccil.cowan.tagsoup.** { *; }
 
+-dontwarn javax.**
+
 # kotlinx.serialization
 
 # Kotlin serialization looks up the generated serializer classes through a function on companion
