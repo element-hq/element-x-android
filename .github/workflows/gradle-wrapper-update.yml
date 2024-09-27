@@ -19,7 +19,7 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
       - name: Update Gradle Wrapper
-        uses: gradle-update/update-gradle-wrapper-action@v1
+        uses: gradle-update/update-gradle-wrapper-action@v2
         with:
           repo-token: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
           target-branch: develop
