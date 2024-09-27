@@ -1,3 +1,5 @@
+import extension.setupAnvil
+
 /*
  * Copyright 2022-2024 New Vector Ltd.
  *
@@ -7,7 +9,6 @@
 
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.anvil)
 }
 
 android {
@@ -19,9 +20,7 @@ android {
     }
 }
 
-anvil {
-    generateDaggerFactories.set(true)
-}
+setupAnvil()
 
 dependencies {
     api(projects.features.location.api)
@@ -39,8 +38,6 @@ dependencies {
     implementation(libs.accompanist.permission)
     implementation(projects.libraries.uiStrings)
     implementation(libs.dagger)
-    implementation(projects.anvilannotations)
-    anvil(projects.anvilcodegen)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
