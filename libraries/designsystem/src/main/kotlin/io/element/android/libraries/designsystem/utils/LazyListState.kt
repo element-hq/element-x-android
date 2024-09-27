@@ -7,6 +7,8 @@
 
 package io.element.android.libraries.designsystem.utils
 
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -34,4 +36,34 @@ fun LazyListState.isScrollingUp(): Boolean {
             }
         }
     }.value
+}
+
+suspend fun LazyListState.animateScrollToItemCenter(index: Int) {
+    fun LazyListLayoutInfo.containerSize(): Int {
+        return if (orientation == Orientation.Vertical) {
+            viewportSize.height
+        } else {
+            viewportSize.width
+        } - beforeContentPadding - afterContentPadding
+    }
+
+    fun LazyListLayoutInfo.resolveItemOffsetToCenter(index: Int): Int? {
+        val itemInfo = visibleItemsInfo.firstOrNull { it.index == index } ?: return null
+        return -(containerSize() - itemInfo.size) / 2
+    }
+
+    // await for the first layout.
+    scroll { }
+    layoutInfo.resolveItemOffsetToCenter(index)?.let {
+        // Item is already visible, just scroll to center.
+        animateScrollToItem(index, it)
+        return
+    }
+    // Item is not visible, jump to to it centered.
+    val offset = -layoutInfo.containerSize() / 2
+    scrollToItem(index, offset)
+    // and then adjust according to the actual item size.
+    layoutInfo.resolveItemOffsetToCenter(index)?.let {
+        animateScrollToItem(index, it)
+    }
 }
