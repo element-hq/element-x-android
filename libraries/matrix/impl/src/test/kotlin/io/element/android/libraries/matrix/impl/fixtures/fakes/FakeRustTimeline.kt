@@ -13,8 +13,7 @@ import org.matrix.rustcomponents.sdk.Timeline
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineListener
 
-class FakeRustTimeline(
-) : Timeline(NoPointer) {
+class FakeRustTimeline : Timeline(NoPointer) {
     private var listener: TimelineListener? = null
     override suspend fun addListener(listener: TimelineListener): TaskHandle {
         this.listener = listener

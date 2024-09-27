@@ -33,89 +33,97 @@ import uniffi.matrix_sdk_ui.EventItemOrigin
 @OptIn(ExperimentalCoroutinesApi::class)
 class TimelineItemsSubscriberTest {
     @Test
-    fun `when timeline emits an empty list of items, the flow must emits an empty list`() = runCancellableScopeTestWithTestScope { testScope, cancellableScope ->
-        val timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> =
-            MutableSharedFlow(replay = 1, extraBufferCapacity = Int.MAX_VALUE)
-        val timeline = FakeRustTimeline()
-        val timelineItemsSubscriber = testScope.createTimelineItemsSubscriber(
-            coroutineScope = cancellableScope,
-            timeline = timeline,
-            timelineItems = timelineItems,
-        )
-        timelineItems.test {
-            timelineItemsSubscriber.subscribeIfNeeded()
-            // Wait for the listener to be set.
-            testScope.runCurrent()
-            timeline.emitDiff(listOf(FakeRustTimelineDiff(item = null, change = TimelineChange.RESET)))
-            val final = awaitItem()
-            assertThat(final).isEmpty()
-            timelineItemsSubscriber.unsubscribeIfNeeded()
+    fun `when timeline emits an empty list of items, the flow must emits an empty list`() {
+        runCancellableScopeTestWithTestScope { testScope, cancellableScope ->
+            val timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> =
+                MutableSharedFlow(replay = 1, extraBufferCapacity = Int.MAX_VALUE)
+            val timeline = FakeRustTimeline()
+            val timelineItemsSubscriber = testScope.createTimelineItemsSubscriber(
+                coroutineScope = cancellableScope,
+                timeline = timeline,
+                timelineItems = timelineItems,
+            )
+            timelineItems.test {
+                timelineItemsSubscriber.subscribeIfNeeded()
+                // Wait for the listener to be set.
+                testScope.runCurrent()
+                timeline.emitDiff(listOf(FakeRustTimelineDiff(item = null, change = TimelineChange.RESET)))
+                val final = awaitItem()
+                assertThat(final).isEmpty()
+                timelineItemsSubscriber.unsubscribeIfNeeded()
+            }
         }
     }
 
     @Test
-    fun `when timeline emits a non empty list of items, the flow must emits a non empty list`() = runCancellableScopeTestWithTestScope { testScope, cancellableScope ->
-        val timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> =
-            MutableSharedFlow(replay = 1, extraBufferCapacity = Int.MAX_VALUE)
-        val timeline = FakeRustTimeline()
-        val timelineItemsSubscriber = testScope.createTimelineItemsSubscriber(
-            coroutineScope = cancellableScope,
-            timeline = timeline,
-            timelineItems = timelineItems,
-        )
-        timelineItems.test {
-            timelineItemsSubscriber.subscribeIfNeeded()
-            // Wait for the listener to be set.
-            testScope.runCurrent()
-            timeline.emitDiff(listOf(FakeRustTimelineDiff(item = FakeRustTimelineItem(), change = TimelineChange.RESET)))
-            val final = awaitItem()
-            assertThat(final).isNotEmpty()
-            timelineItemsSubscriber.unsubscribeIfNeeded()
+    fun `when timeline emits a non empty list of items, the flow must emits a non empty list`() {
+        runCancellableScopeTestWithTestScope { testScope, cancellableScope ->
+            val timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> =
+                MutableSharedFlow(replay = 1, extraBufferCapacity = Int.MAX_VALUE)
+            val timeline = FakeRustTimeline()
+            val timelineItemsSubscriber = testScope.createTimelineItemsSubscriber(
+                coroutineScope = cancellableScope,
+                timeline = timeline,
+                timelineItems = timelineItems,
+            )
+            timelineItems.test {
+                timelineItemsSubscriber.subscribeIfNeeded()
+                // Wait for the listener to be set.
+                testScope.runCurrent()
+                timeline.emitDiff(listOf(FakeRustTimelineDiff(item = FakeRustTimelineItem(), change = TimelineChange.RESET)))
+                val final = awaitItem()
+                assertThat(final).isNotEmpty()
+                timelineItemsSubscriber.unsubscribeIfNeeded()
+            }
         }
     }
 
     @Test
-    fun `when timeline emits an item with SYNC origin, the callback onNewSyncedEvent is invoked`() = runCancellableScopeTestWithTestScope { testScope, cancellableScope ->
-        val timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> =
-            MutableSharedFlow(replay = 1, extraBufferCapacity = Int.MAX_VALUE)
-        val timeline = FakeRustTimeline()
-        val onNewSyncedEventRecorder = lambdaRecorder<Unit> { }
-        val timelineItemsSubscriber = testScope.createTimelineItemsSubscriber(
-            coroutineScope = cancellableScope,
-            timeline = timeline,
-            timelineItems = timelineItems,
-            onNewSyncedEvent = onNewSyncedEventRecorder,
-        )
-        timelineItems.test {
-            timelineItemsSubscriber.subscribeIfNeeded()
-            // Wait for the listener to be set.
-            testScope.runCurrent()
-            timeline.emitDiff(
-                listOf(
-                    FakeRustTimelineDiff(
-                        item = FakeRustTimelineItem(
-                            asEventResult = FakeRustEventTimelineItem(origin = EventItemOrigin.SYNC)
-                        ),
-                        change = TimelineChange.RESET,
+    fun `when timeline emits an item with SYNC origin, the callback onNewSyncedEvent is invoked`() {
+        runCancellableScopeTestWithTestScope { testScope, cancellableScope ->
+            val timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> =
+                MutableSharedFlow(replay = 1, extraBufferCapacity = Int.MAX_VALUE)
+            val timeline = FakeRustTimeline()
+            val onNewSyncedEventRecorder = lambdaRecorder<Unit> { }
+            val timelineItemsSubscriber = testScope.createTimelineItemsSubscriber(
+                coroutineScope = cancellableScope,
+                timeline = timeline,
+                timelineItems = timelineItems,
+                onNewSyncedEvent = onNewSyncedEventRecorder,
+            )
+            timelineItems.test {
+                timelineItemsSubscriber.subscribeIfNeeded()
+                // Wait for the listener to be set.
+                testScope.runCurrent()
+                timeline.emitDiff(
+                    listOf(
+                        FakeRustTimelineDiff(
+                            item = FakeRustTimelineItem(
+                                asEventResult = FakeRustEventTimelineItem(origin = EventItemOrigin.SYNC)
+                            ),
+                            change = TimelineChange.RESET,
+                        )
                     )
                 )
-            )
-            val final = awaitItem()
-            assertThat(final).isNotEmpty()
-            timelineItemsSubscriber.unsubscribeIfNeeded()
+                val final = awaitItem()
+                assertThat(final).isNotEmpty()
+                timelineItemsSubscriber.unsubscribeIfNeeded()
+            }
+            onNewSyncedEventRecorder.assertions().isCalledOnce()
         }
-        onNewSyncedEventRecorder.assertions().isCalledOnce()
     }
 
     @Test
-    fun `multiple subscriptions does not have side effect`() = runCancellableScopeTestWithTestScope { testScope, cancellableScope ->
-        val timelineItemsSubscriber = testScope.createTimelineItemsSubscriber(
-            coroutineScope = cancellableScope,
-        )
-        timelineItemsSubscriber.subscribeIfNeeded()
-        timelineItemsSubscriber.subscribeIfNeeded()
-        timelineItemsSubscriber.unsubscribeIfNeeded()
-        timelineItemsSubscriber.unsubscribeIfNeeded()
+    fun `multiple subscriptions does not have side effect`() {
+        runCancellableScopeTestWithTestScope { testScope, cancellableScope ->
+            val timelineItemsSubscriber = testScope.createTimelineItemsSubscriber(
+                coroutineScope = cancellableScope,
+            )
+            timelineItemsSubscriber.subscribeIfNeeded()
+            timelineItemsSubscriber.subscribeIfNeeded()
+            timelineItemsSubscriber.unsubscribeIfNeeded()
+            timelineItemsSubscriber.unsubscribeIfNeeded()
+        }
     }
 
     private fun TestScope.createTimelineItemsSubscriber(

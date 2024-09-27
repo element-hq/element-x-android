@@ -32,7 +32,7 @@ class FakeRustEventTimelineItem(
     override fun isLocal(): Boolean = false
     override fun isOwn(): Boolean = false
     override fun isRemote(): Boolean = false
-    override fun localSendState(): EventSendState?  = null
+    override fun localSendState(): EventSendState? = null
     override fun reactions(): List<Reaction> = emptyList()
     override fun readReceipts(): Map<String, Receipt> = emptyMap()
     override fun sender(): String = A_USER_ID.value
