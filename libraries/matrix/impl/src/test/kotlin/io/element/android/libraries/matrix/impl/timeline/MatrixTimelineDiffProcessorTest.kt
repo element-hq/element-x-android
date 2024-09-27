@@ -31,7 +31,7 @@ class MatrixTimelineDiffProcessorTest {
     @Test
     fun `Append adds new entries at the end of the list`() = runTest {
         timelineItems.value = listOf(anEvent)
-        val processor = createProcessor()
+        val processor = createMatrixTimelineDiffProcessor(timelineItems)
         processor.postDiffs(listOf(FakeRustTimelineDiff(change = TimelineChange.APPEND)))
         assertThat(timelineItems.value.count()).isEqualTo(2)
         assertThat(timelineItems.value).containsExactly(
@@ -43,7 +43,7 @@ class MatrixTimelineDiffProcessorTest {
     @Test
     fun `PushBack adds a new entry at the end of the list`() = runTest {
         timelineItems.value = listOf(anEvent)
-        val processor = createProcessor()
+        val processor = createMatrixTimelineDiffProcessor(timelineItems)
         processor.postDiffs(listOf(FakeRustTimelineDiff(change = TimelineChange.PUSH_BACK)))
         assertThat(timelineItems.value.count()).isEqualTo(2)
         assertThat(timelineItems.value).containsExactly(
@@ -55,7 +55,7 @@ class MatrixTimelineDiffProcessorTest {
     @Test
     fun `PushFront inserts a new entry at the start of the list`() = runTest {
         timelineItems.value = listOf(anEvent)
-        val processor = createProcessor()
+        val processor = createMatrixTimelineDiffProcessor(timelineItems)
         processor.postDiffs(listOf(FakeRustTimelineDiff(change = TimelineChange.PUSH_FRONT)))
         assertThat(timelineItems.value.count()).isEqualTo(2)
         assertThat(timelineItems.value).containsExactly(
@@ -67,7 +67,7 @@ class MatrixTimelineDiffProcessorTest {
     @Test
     fun `Set replaces an entry at some index`() = runTest {
         timelineItems.value = listOf(anEvent, anEvent2)
-        val processor = createProcessor()
+        val processor = createMatrixTimelineDiffProcessor(timelineItems)
         processor.postDiffs(listOf(FakeRustTimelineDiff(change = TimelineChange.SET)))
         assertThat(timelineItems.value.count()).isEqualTo(2)
         assertThat(timelineItems.value).containsExactly(
@@ -79,7 +79,7 @@ class MatrixTimelineDiffProcessorTest {
     @Test
     fun `Insert inserts a new entry at the provided index`() = runTest {
         timelineItems.value = listOf(anEvent, anEvent2)
-        val processor = createProcessor()
+        val processor = createMatrixTimelineDiffProcessor(timelineItems)
         processor.postDiffs(listOf(FakeRustTimelineDiff(change = TimelineChange.INSERT)))
         assertThat(timelineItems.value.count()).isEqualTo(3)
         assertThat(timelineItems.value).containsExactly(
@@ -92,7 +92,7 @@ class MatrixTimelineDiffProcessorTest {
     @Test
     fun `Remove removes an entry at some index`() = runTest {
         timelineItems.value = listOf(anEvent, MatrixTimelineItem.Other, anEvent2)
-        val processor = createProcessor()
+        val processor = createMatrixTimelineDiffProcessor(timelineItems)
         processor.postDiffs(listOf(FakeRustTimelineDiff(change = TimelineChange.REMOVE)))
         assertThat(timelineItems.value.count()).isEqualTo(2)
         assertThat(timelineItems.value).containsExactly(
@@ -104,7 +104,7 @@ class MatrixTimelineDiffProcessorTest {
     @Test
     fun `PopBack removes an entry at the end of the list`() = runTest {
         timelineItems.value = listOf(anEvent, anEvent2)
-        val processor = createProcessor()
+        val processor = createMatrixTimelineDiffProcessor(timelineItems)
         processor.postDiffs(listOf(FakeRustTimelineDiff(change = TimelineChange.POP_BACK)))
         assertThat(timelineItems.value.count()).isEqualTo(1)
         assertThat(timelineItems.value).containsExactly(
@@ -115,7 +115,7 @@ class MatrixTimelineDiffProcessorTest {
     @Test
     fun `PopFront removes an entry at the start of the list`() = runTest {
         timelineItems.value = listOf(anEvent, anEvent2)
-        val processor = createProcessor()
+        val processor = createMatrixTimelineDiffProcessor(timelineItems)
         processor.postDiffs(listOf(FakeRustTimelineDiff(change = TimelineChange.POP_FRONT)))
         assertThat(timelineItems.value.count()).isEqualTo(1)
         assertThat(timelineItems.value).containsExactly(
@@ -126,7 +126,7 @@ class MatrixTimelineDiffProcessorTest {
     @Test
     fun `Clear removes all the entries`() = runTest {
         timelineItems.value = listOf(anEvent, anEvent2)
-        val processor = createProcessor()
+        val processor = createMatrixTimelineDiffProcessor(timelineItems)
         processor.postDiffs(listOf(FakeRustTimelineDiff(change = TimelineChange.CLEAR)))
         assertThat(timelineItems.value).isEmpty()
     }
@@ -134,7 +134,7 @@ class MatrixTimelineDiffProcessorTest {
     @Test
     fun `Truncate removes all entries after the provided length`() = runTest {
         timelineItems.value = listOf(anEvent, MatrixTimelineItem.Other, anEvent2)
-        val processor = createProcessor()
+        val processor = createMatrixTimelineDiffProcessor(timelineItems)
         processor.postDiffs(listOf(FakeRustTimelineDiff(change = TimelineChange.TRUNCATE)))
         assertThat(timelineItems.value.count()).isEqualTo(1)
         assertThat(timelineItems.value).containsExactly(
@@ -145,27 +145,29 @@ class MatrixTimelineDiffProcessorTest {
     @Test
     fun `Reset removes all entries and add the provided ones`() = runTest {
         timelineItems.value = listOf(anEvent, MatrixTimelineItem.Other, anEvent2)
-        val processor = createProcessor()
+        val processor = createMatrixTimelineDiffProcessor(timelineItems)
         processor.postDiffs(listOf(FakeRustTimelineDiff(change = TimelineChange.RESET)))
         assertThat(timelineItems.value.count()).isEqualTo(1)
         assertThat(timelineItems.value).containsExactly(
             MatrixTimelineItem.Other,
         )
     }
+}
 
-    private fun TestScope.createProcessor(): MatrixTimelineDiffProcessor {
-        val timelineEventContentMapper = TimelineEventContentMapper()
-        val timelineItemMapper = MatrixTimelineItemMapper(
-            fetchDetailsForEvent = { _ -> Result.success(Unit) },
-            coroutineScope = this,
-            virtualTimelineItemMapper = VirtualTimelineItemMapper(),
-            eventTimelineItemMapper = EventTimelineItemMapper(
-                contentMapper = timelineEventContentMapper
-            )
+internal fun TestScope.createMatrixTimelineDiffProcessor(
+    timelineItems: MutableStateFlow<List<MatrixTimelineItem>>,
+): MatrixTimelineDiffProcessor {
+    val timelineEventContentMapper = TimelineEventContentMapper()
+    val timelineItemMapper = MatrixTimelineItemMapper(
+        fetchDetailsForEvent = { _ -> Result.success(Unit) },
+        coroutineScope = this,
+        virtualTimelineItemMapper = VirtualTimelineItemMapper(),
+        eventTimelineItemMapper = EventTimelineItemMapper(
+            contentMapper = timelineEventContentMapper
         )
-        return MatrixTimelineDiffProcessor(
-            timelineItems,
-            timelineItemFactory = timelineItemMapper,
-        )
-    }
+    )
+    return MatrixTimelineDiffProcessor(
+        timelineItems = timelineItems,
+        timelineItemFactory = timelineItemMapper,
+    )
 }
