@@ -503,7 +503,7 @@ import kotlin.time.Duration.Companion.seconds
                 assertThat(state.timelineItems).isNotEmpty()
             }
             initialState.eventSink.invoke(TimelineEvents.JumpToLive)
-            skipItems(1)
+            skipItems(2)
             awaitItem().also { state ->
                 // Event stays focused
                 assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
@@ -670,7 +670,7 @@ import kotlin.time.Duration.Companion.seconds
         timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
     ): TimelinePresenter {
         return TimelinePresenter(
-            timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(),
+            timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(timelineItemIndexer),
             room = room,
             dispatchers = testCoroutineDispatchers(),
             appScope = this,
