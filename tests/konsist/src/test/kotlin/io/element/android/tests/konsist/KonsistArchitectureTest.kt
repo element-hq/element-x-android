@@ -82,7 +82,15 @@ class KonsistArchitectureTest {
                     return@all if (type.startsWith("@") || type.startsWith("(") || type.startsWith("suspend")) {
                         true
                     } else {
-                        val fullyQualifiedName = param.type.declaration.packagee?.fullyQualifiedName + "." + type
+                        var typePackage = param.type.declaration.packagee?.name
+                        if (typePackage == type) {
+                            // Workaround, now that packagee.fullyQualifiedName is not available anymore
+                            // It seems that when the type in in the same package as the function,
+                            // the package is equal to the type (which is wrong).
+                            // So in this case, use the package of the function
+                            typePackage = it.packagee?.name
+                        }
+                        val fullyQualifiedName = "$typePackage.$type"
                         fullyQualifiedName !in forbiddenInterfacesForComposableParameter
                     }
                 }
