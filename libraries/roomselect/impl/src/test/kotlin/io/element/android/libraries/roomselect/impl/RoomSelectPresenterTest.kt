@@ -68,7 +68,19 @@ class RoomSelectPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(awaitItem().resultState as? SearchBarResultState.Results).isEqualTo(SearchBarResultState.Results(listOf(aRoomSummary())))
+            val expectedRoomSummary = aRoomSummary()
+            // Do not compare the lambda as there will be different. So copy the lambda from expectedRoomSummary to result
+            val result = (awaitItem().resultState as SearchBarResultState.Results).results.map { roomSummary ->
+                roomSummary.copy(
+                    lastMessage = roomSummary.lastMessage!!.copy(
+                        event = roomSummary.lastMessage!!.event.copy(
+                            debugInfoProvider = expectedRoomSummary.lastMessage!!.event.debugInfoProvider,
+                            messageShieldProvider = expectedRoomSummary.lastMessage!!.event.messageShieldProvider,
+                        )
+                    ),
+                )
+            }
+            assertThat(result).isEqualTo(listOf(expectedRoomSummary))
             initialState.eventSink(RoomSelectEvents.ToggleSearchActive)
             skipItems(1)
             initialState.eventSink(RoomSelectEvents.UpdateQuery("string not contained"))
