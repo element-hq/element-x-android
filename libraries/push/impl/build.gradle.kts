@@ -1,3 +1,5 @@
+import extension.setupAnvil
+
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
@@ -6,7 +8,6 @@
  */
 plugins {
     id("io.element.android-library")
-    alias(libs.plugins.anvil)
     alias(libs.plugins.kotlin.serialization)
 }
 
@@ -20,9 +21,7 @@ android {
     }
 }
 
-anvil {
-    generateDaggerFactories.set(true)
-}
+setupAnvil()
 
 dependencies {
     implementation(libs.dagger)

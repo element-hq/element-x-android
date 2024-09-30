@@ -12,6 +12,7 @@ import ModulesConfig
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Action
 import org.gradle.api.artifacts.ExternalModuleDependency
+import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.logging.Logger
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.closureOf
@@ -19,6 +20,7 @@ import org.gradle.kotlin.dsl.project
 import java.io.File
 
 private fun DependencyHandlerScope.implementation(dependency: Any) = dependencies.add("implementation", dependency)
+internal fun DependencyHandler.implementation(dependency: Any) = add("implementation", dependency)
 
 // Implementation + config block
 private fun DependencyHandlerScope.implementation(

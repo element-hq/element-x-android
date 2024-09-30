@@ -7,9 +7,10 @@
 
 @file:Suppress("UnstableApiUsage")
 
+import extension.setupAnvil
+
 plugins {
     id("io.element.android-library")
-    alias(libs.plugins.anvil)
 }
 
 android {
@@ -55,9 +56,7 @@ android {
     }
 }
 
-anvil {
-    generateDaggerFactories.set(true)
-}
+setupAnvil()
 
 dependencies {
     implementation(libs.dagger)

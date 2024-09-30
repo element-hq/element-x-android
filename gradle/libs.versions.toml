@@ -63,6 +63,7 @@ kover = "0.8.3"
 android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "android_gradle_plugin" }
 # https://developer.android.com/studio/write/java8-support#library-desugaring-versions
 android_desugar = "com.android.tools:desugar_jdk_libs:2.1.2"
+anvil_gradle_plugin = { module = "com.squareup.anvil:gradle-plugin", version.ref = "anvil" }
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 gms_google_services = "com.google.gms:google-services:4.4.2"
