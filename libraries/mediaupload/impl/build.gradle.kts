@@ -14,13 +14,11 @@ plugins {
 android {
     namespace = "io.element.android.libraries.mediaupload.impl"
 
-
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
         }
     }
-
 }
 
 setupAnvil()
