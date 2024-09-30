@@ -23,7 +23,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.timeline.reply.InReplyToMapper
-import org.matrix.rustcomponents.sdk.Message
+import org.matrix.rustcomponents.sdk.MessageContent as Message
 import org.matrix.rustcomponents.sdk.MessageType
 import org.matrix.rustcomponents.sdk.use
 import org.matrix.rustcomponents.sdk.FormattedBody as RustFormattedBody
@@ -34,13 +34,13 @@ class EventMessageMapper {
     private val inReplyToMapper by lazy { InReplyToMapper(TimelineEventContentMapper()) }
 
     fun map(message: Message): MessageContent = message.use {
-        val type = it.msgtype().use(this::mapMessageType)
-        val inReplyToEvent: InReplyTo? = it.inReplyTo()?.use(inReplyToMapper::map)
+        val type = it.msgType.use(this::mapMessageType)
+        val inReplyToEvent: InReplyTo? = it.inReplyTo?.use(inReplyToMapper::map)
         MessageContent(
-            body = it.body(),
+            body = it.body,
             inReplyTo = inReplyToEvent,
-            isEdited = it.isEdited(),
-            isThreaded = it.isThreaded(),
+            isEdited = it.isEdited,
+            isThreaded = it.threadRoot != null,
             type = type
         )
     }

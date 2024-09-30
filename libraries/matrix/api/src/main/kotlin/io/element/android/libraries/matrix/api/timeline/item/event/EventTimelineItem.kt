@@ -28,9 +28,9 @@ data class EventTimelineItem(
     val senderProfile: ProfileTimelineDetails,
     val timestamp: Long,
     val content: EventContent,
-    val debugInfo: TimelineItemDebugInfo,
+    val debugInfoProvider: EventDebugInfoProvider,
     val origin: TimelineItemEventOrigin?,
-    val messageShield: MessageShield?,
+    val messageShieldProvider: EventShieldsProvider,
 ) {
     fun inReplyTo(): InReplyTo? {
         return (content as? MessageContent)?.inReplyTo
@@ -44,4 +44,12 @@ data class EventTimelineItem(
         val details = inReplyTo()
         return details is InReplyTo.NotLoaded
     }
+}
+
+interface EventDebugInfoProvider {
+    fun get(): TimelineItemDebugInfo
+}
+
+interface EventShieldsProvider {
+    fun getShield(strict: Boolean = false): MessageShield?
 }
