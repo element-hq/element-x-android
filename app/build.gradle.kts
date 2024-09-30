@@ -11,6 +11,7 @@ import com.android.build.api.variant.FilterConfiguration.FilterType.ABI
 import com.android.build.gradle.internal.tasks.factory.dependsOn
 import com.android.build.gradle.tasks.GenerateBuildConfig
 import extension.AssetCopyTask
+import extension.ComponentMergingStrategy
 import extension.GitBranchNameValueSource
 import extension.GitRevisionValueSource
 import extension.allEnterpriseImpl
@@ -235,22 +236,24 @@ knit {
 setupAnvil(
     generateDaggerCode = true,
     generateDaggerFactoriesUsingAnvil = false,
+    componentMergingStrategy = ComponentMergingStrategy.KSP,
 )
 
 dependencies {
     allLibrariesImpl()
     allServicesImpl()
     if (isEnterpriseBuild) {
-        allEnterpriseImpl(rootDir, logger)
+        allEnterpriseImpl(project)
         implementation(projects.appicon.enterprise)
     } else {
         implementation(projects.appicon.element)
     }
-    allFeaturesImpl(rootDir, logger)
+    allFeaturesImpl(project)
     implementation(projects.features.migration.api)
     implementation(projects.appnav)
     implementation(projects.appconfig)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.services.analytics.compose)
 
     if (ModulesConfig.pushProvidersConfig.includeFirebase) {
         "gplayImplementation"(projects.libraries.pushproviders.firebase)
@@ -275,6 +278,8 @@ dependencies {
     implementation(libs.serialization.json)
 
     implementation(libs.matrix.emojibase.bindings)
+    // Needed for UtdTracker
+    implementation(libs.matrix.sdk)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.test.robolectric)

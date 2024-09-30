@@ -17,7 +17,7 @@ import io.element.android.libraries.architecture.AssistedNodeFactory
 import io.element.android.libraries.architecture.createNode
 
 internal class FakeQrCodeLoginComponent(private val qrCodeLoginManager: QrCodeLoginManager) :
-    QrCodeLoginComponent {
+    MergedQrCodeLoginComponent {
     // Ignore this error, it does override a method once code generation is done
     override fun qrCodeLoginManager(): QrCodeLoginManager = qrCodeLoginManager
 

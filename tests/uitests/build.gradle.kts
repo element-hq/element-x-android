@@ -52,7 +52,7 @@ dependencies {
     implementation(projects.appnav)
     allLibrariesImpl()
     allServicesImpl()
-    allFeaturesImpl(rootDir, logger)
+    allFeaturesImpl(project)
     implementation(projects.appicon.element)
     implementation(projects.appicon.enterprise)
 

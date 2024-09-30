@@ -20,7 +20,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 @SingleIn(SessionScope::class)
 @MergeSubcomponent(SessionScope::class)
 interface SessionComponent : NodeFactoriesBindings {
-    @Subcomponent.Builder
+    @MergeSubcomponent.Builder
     interface Builder {
         @BindsInstance
         fun client(matrixClient: MatrixClient): Builder

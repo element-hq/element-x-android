@@ -17,7 +17,7 @@ import io.element.android.libraries.di.SingleIn
 @SingleIn(QrCodeLoginScope::class)
 @MergeSubcomponent(QrCodeLoginScope::class)
 interface QrCodeLoginComponent : NodeFactoriesBindings {
-    @Subcomponent.Builder
+    @MergeSubcomponent.Builder
     interface Builder {
         fun build(): QrCodeLoginComponent
     }

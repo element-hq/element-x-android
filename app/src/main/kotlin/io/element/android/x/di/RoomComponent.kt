@@ -20,7 +20,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoom
 @SingleIn(RoomScope::class)
 @MergeSubcomponent(RoomScope::class)
 interface RoomComponent : NodeFactoriesBindings {
-    @Subcomponent.Builder
+    @MergeSubcomponent.Builder
     interface Builder {
         @BindsInstance
         fun room(room: MatrixRoom): Builder
