@@ -46,10 +46,10 @@ data class EventTimelineItem(
     }
 }
 
-interface EventDebugInfoProvider {
+fun interface EventDebugInfoProvider {
     fun get(): TimelineItemDebugInfo
 }
 
-interface EventShieldsProvider {
-    fun getShield(strict: Boolean = false): MessageShield?
+fun interface EventShieldsProvider {
+    fun getShield(strict: Boolean): MessageShield?
 }

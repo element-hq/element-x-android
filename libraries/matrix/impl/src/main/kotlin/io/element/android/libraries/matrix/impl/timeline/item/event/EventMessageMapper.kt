@@ -23,10 +23,10 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.timeline.reply.InReplyToMapper
-import org.matrix.rustcomponents.sdk.MessageContent as Message
 import org.matrix.rustcomponents.sdk.MessageType
 import org.matrix.rustcomponents.sdk.use
 import org.matrix.rustcomponents.sdk.FormattedBody as RustFormattedBody
+import org.matrix.rustcomponents.sdk.MessageContent as Message
 import org.matrix.rustcomponents.sdk.MessageFormat as RustMessageFormat
 import org.matrix.rustcomponents.sdk.MessageType as RustMessageType
 

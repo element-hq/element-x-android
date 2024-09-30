@@ -350,6 +350,7 @@ class RustTimeline(
     }
 
     @Throws
+    @Suppress("UnusedPrivateMember")
     private suspend fun getEventTimelineItem(eventId: EventId?, transactionId: TransactionId?): EventTimelineItem {
         return try {
             when {
