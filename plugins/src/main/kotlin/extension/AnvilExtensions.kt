@@ -7,10 +7,12 @@
 
 package extension
 
-import org.gradle.api.Project
 import com.squareup.anvil.plugin.AnvilExtension
 import org.gradle.accessors.dm.LibrariesForLibs
+import org.gradle.api.Project
+import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.the
+import org.gradle.plugin.use.PluginDependency
 
 /**
  * Setup Anvil plugin with the given configuration.
@@ -23,12 +25,12 @@ fun Project.setupAnvil(
 ) {
     val libs = the<LibrariesForLibs>()
     // Apply plugins and dependencies
-    applyPluginIfNeeded("com.squareup.anvil")
+    applyPluginIfNeeded(libs.plugins.anvil)
 
     if (generateDaggerCode) {
-        applyPluginIfNeeded("org.jetbrains.kotlin.kapt")
+        applyPluginIfNeeded(libs.plugins.kapt)
         // Needed at the top level since dagger code should be generated at a single point for performance
-        dependencies.add("implementation", libs.dagger)
+        dependencies.implementation(libs.dagger)
         dependencies.add("kapt", libs.dagger.compiler)
     }
 
@@ -36,12 +38,12 @@ fun Project.setupAnvil(
     if (project.pluginManager.hasPlugin("io.element.android-compose-library")
         || project.pluginManager.hasPlugin("io.element.android-compose-application")) {
         // Annotations to generate DI code for Appyx nodes
-        dependencies.add("implementation", project.project(":anvilannotations"))
+        dependencies.implementation(project.project(":anvilannotations"))
         // Code generator for the annotations above
         dependencies.add("anvil", project.project(":anvilcodegen"))
     }
 
-    project.pluginManager.withPlugin("com.squareup.anvil") {
+    project.pluginManager.withPlugin(libs.plugins.anvil.get().pluginId) {
         // Setup extension
         extensions.configure(AnvilExtension::class.java) {
             this.generateDaggerFactories.set(generateDaggerFactoriesUsingAnvil)
@@ -49,7 +51,8 @@ fun Project.setupAnvil(
     }
 }
 
-private fun Project.applyPluginIfNeeded(pluginId: String) {
+private fun Project.applyPluginIfNeeded(plugin: Provider<PluginDependency>) {
+    val pluginId = plugin.get().pluginId
     if (!pluginManager.hasPlugin(pluginId)) {
         pluginManager.apply(pluginId)
     }
