@@ -23,6 +23,7 @@
     <item quantity="other">"%d kutset"</item>
   </plurals>
   <string name="notification_invite_body">"Kutse osalema vestluses"</string>
+  <string name="notification_invite_body_with_sender">"%1$s saatus sulle vestluskutse"</string>
   <string name="notification_mentioned_you_body">"Mainis sind: %1$s"</string>
   <string name="notification_new_messages">"Uued sõnumid"</string>
   <plurals name="notification_new_messages_for_room">
@@ -33,6 +34,7 @@
   <string name="notification_room_action_mark_as_read">"Märgi loetuks"</string>
   <string name="notification_room_action_quick_reply">"Kiirvastus"</string>
   <string name="notification_room_invite_body">"Saatis sulle kutse jututuppa"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s saatis sulle kutse jututoaga liitumiseks"</string>
   <string name="notification_sender_me">"Mina"</string>
   <string name="notification_sender_mention_reply">"%1$s mainis või vastas"</string>
   <string name="notification_test_push_notification_content">"See ongi teavitus! Klõpsi mind!"</string>

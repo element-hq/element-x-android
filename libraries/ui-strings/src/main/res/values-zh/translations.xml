@@ -34,6 +34,7 @@
   <string name="action_back">"返回"</string>
   <string name="action_call">"呼叫"</string>
   <string name="action_cancel">"取消"</string>
+  <string name="action_cancel_for_now">"暂时取消"</string>
   <string name="action_choose_photo">"选择照片"</string>
   <string name="action_clear">"清除"</string>
   <string name="action_close">"关闭"</string>
@@ -110,6 +111,7 @@
   <string name="action_tap_for_options">"点按查看选项"</string>
   <string name="action_try_again">"再试一次"</string>
   <string name="action_unpin">"取消置顶"</string>
+  <string name="action_view_in_timeline">"在时间轴中查看"</string>
   <string name="action_view_source">"查看源码"</string>
   <string name="action_yes">"是"</string>
   <string name="common_about">"关于"</string>
@@ -273,6 +275,9 @@
     <item quantity="other">"%1$d 置顶消息"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"置顶消息"</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"您将要转到您的%1$s帐户来重置您的身份信息。之后，您将被带回该应用。"</string>
+  <string name="screen_reset_identity_confirmation_title">"无法确认？请前往您的帐户重置您的身份。"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"您的消息未发送，因为%1$s尚未验证所有设备"</string>
   <string name="screen_room_details_pinned_events_row_title">"置顶消息"</string>
   <string name="screen_room_error_failed_processing_media">"处理要上传的媒体失败，请重试。"</string>
   <string name="screen_room_error_failed_retrieving_user_details">"无法获取用户信息"</string>
@@ -294,6 +299,7 @@
   <string name="screen_share_open_google_maps">"在 Google Maps 中打开"</string>
   <string name="screen_share_open_osm_maps">"在 OpenStreetMap 中打开"</string>
   <string name="screen_share_this_location_action">"分享这个位置"</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"消息未发送，因为%1$s尚未验证所有设备。"</string>
   <string name="screen_view_location_title">"位置"</string>
   <string name="settings_version_number">"版本：%1$s (%2$s)"</string>
   <string name="test_language_identifier">"zh-Hans"</string>

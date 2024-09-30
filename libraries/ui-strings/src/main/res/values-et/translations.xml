@@ -42,13 +42,14 @@
   <string name="action_close">"Sulge"</string>
   <string name="action_complete_verification">"Tee verifitseerimine lõpuni"</string>
   <string name="action_confirm">"Kinnita"</string>
-  <string name="action_confirm_password">"Korda salasõna"</string>
+  <string name="action_confirm_password">"Kinnita otsust oma salasõnaga"</string>
   <string name="action_continue">"Jätka"</string>
   <string name="action_copy">"Kopeeri"</string>
   <string name="action_copy_link">"Kopeeri link"</string>
   <string name="action_copy_link_to_message">"Kopeeri sõnumi link"</string>
   <string name="action_create">"Loo"</string>
   <string name="action_create_a_room">"Loo jututuba"</string>
+  <string name="action_deactivate">"Eemalda konto"</string>
   <string name="action_deactivate_account">"Eemalda konto kasutusest"</string>
   <string name="action_decline">"Keeldu"</string>
   <string name="action_delete_poll">"Kustuta küsitlus"</string>
@@ -247,6 +248,7 @@ Põhjus: %1$s."</string>
   <string name="common_voice_message">"Häälsõnum"</string>
   <string name="common_waiting">"Ootame…"</string>
   <string name="common_waiting_for_decryption_key">"Ootame selle sõnumi dekrüptimisvõtit"</string>
+  <string name="common_you">"Sina"</string>
   <string name="dialog_title_confirmation">"Kinnitus"</string>
   <string name="dialog_title_error">"Viga"</string>
   <string name="dialog_title_success">"Õnnestus"</string>
