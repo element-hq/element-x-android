@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 
 const val MIN_HEIGHT_IN_DP = 100
 const val MAX_HEIGHT_IN_DP = 360
-private const val DEFAULT_ASPECT_RATIO = 1.33f
+const val DEFAULT_ASPECT_RATIO = 1.33f
 
 @Composable
 fun TimelineItemAspectRatioBox(

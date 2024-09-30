@@ -23,18 +23,17 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 
 private const val STICKER_SIZE_IN_DP = 128
-private const val DEFAULT_ASPECT_RATIO = 1.33f
 
 @Composable
 fun TimelineItemStickerView(
     content: TimelineItemStickerContent,
     modifier: Modifier = Modifier,
 ) {
-    val safeAspectRatio = content.aspectRatio ?: DEFAULT_ASPECT_RATIO
+    val aspectRatio = content.aspectRatio ?: DEFAULT_ASPECT_RATIO
     Box(
         modifier = modifier
             .heightIn(min = STICKER_SIZE_IN_DP.dp, max = STICKER_SIZE_IN_DP.dp)
-            .aspectRatio(safeAspectRatio, false),
+            .aspectRatio(aspectRatio, false),
         contentAlignment = Alignment.TopStart,
     ) {
         BlurHashAsyncImage(
