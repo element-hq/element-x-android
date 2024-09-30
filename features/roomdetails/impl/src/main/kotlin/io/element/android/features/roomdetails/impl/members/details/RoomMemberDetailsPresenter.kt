@@ -23,16 +23,22 @@ import io.element.android.features.userprofile.shared.UserProfileEvents
 import io.element.android.features.userprofile.shared.UserProfilePresenterHelper
 import io.element.android.features.userprofile.shared.UserProfileState
 import io.element.android.features.userprofile.shared.UserProfileState.ConfirmationDialog
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.room.getRoomMemberAsState
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -44,6 +50,9 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
     private val client: MatrixClient,
     private val room: MatrixRoom,
     private val startDMAction: StartDMAction,
+    private val dispatchers: CoroutineDispatchers,
+    private val clipboardHelper: ClipboardHelper,
+    private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<UserProfileState> {
     interface Factory {
         fun create(roomMemberId: UserId): RoomMemberDetailsPresenter
@@ -65,6 +74,7 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
         val isCurrentUser = remember { client.isMe(roomMemberId) }
         val dmRoomId by userProfilePresenterHelper.getDmRoomId()
         val canCall by userProfilePresenterHelper.getCanCall(dmRoomId)
+        val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         LaunchedEffect(Unit) {
             client.ignoredUsersFlow
                 .map { ignoredUsers -> roomMemberId in ignoredUsers }
@@ -112,6 +122,12 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
                 UserProfileEvents.ClearStartDMState -> {
                     startDmActionState.value = AsyncAction.Uninitialized
                 }
+                is UserProfileEvents.CopyID -> {
+                    coroutineScope.launch(dispatchers.io) {
+                        clipboardHelper.copyPlainText(event.text)
+                        snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
+                    }
+                }
             }
         }
 
@@ -155,7 +171,8 @@ class RoomMemberDetailsPresenter @AssistedInject constructor(
             isCurrentUser = isCurrentUser,
             dmRoomId = dmRoomId,
             canCall = canCall,
-            eventSink = ::handleEvents
+            snackbarMessage = snackbarMessage,
+            eventSink = ::handleEvents,
         )
     }
 }

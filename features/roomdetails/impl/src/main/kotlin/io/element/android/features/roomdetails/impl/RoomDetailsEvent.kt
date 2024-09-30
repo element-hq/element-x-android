@@ -11,5 +11,6 @@ sealed interface RoomDetailsEvent {
     data object LeaveRoom : RoomDetailsEvent
     data object MuteNotification : RoomDetailsEvent
     data object UnmuteNotification : RoomDetailsEvent
+    data class CopyID(val text: String) : RoomDetailsEvent
     data class SetFavorite(val isFavorite: Boolean) : RoomDetailsEvent
 }

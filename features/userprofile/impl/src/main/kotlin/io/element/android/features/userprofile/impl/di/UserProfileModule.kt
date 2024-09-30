@@ -12,6 +12,9 @@ import dagger.Module
 import dagger.Provides
 import io.element.android.features.createroom.api.StartDMAction
 import io.element.android.features.userprofile.impl.root.UserProfilePresenter
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
@@ -23,10 +26,13 @@ object UserProfileModule {
     fun provideUserProfilePresenterFactory(
         matrixClient: MatrixClient,
         startDMAction: StartDMAction,
+        dispatchers: CoroutineDispatchers,
+        clipboardHelper: ClipboardHelper,
+        snackbarDispatcher: SnackbarDispatcher,
     ): UserProfilePresenter.Factory {
         return object : UserProfilePresenter.Factory {
             override fun create(userId: UserId): UserProfilePresenter {
-                return UserProfilePresenter(userId, matrixClient, startDMAction)
+                return UserProfilePresenter(userId, matrixClient, startDMAction, dispatchers, clipboardHelper, snackbarDispatcher)
             }
         }
     }

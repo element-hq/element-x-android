@@ -13,10 +13,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -37,6 +39,7 @@ fun UserProfileHeaderSection(
     userId: UserId,
     userName: String?,
     openAvatarPreview: (url: String) -> Unit,
+    onUserIdClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -66,8 +69,9 @@ fun UserProfileHeaderSection(
             style = ElementTheme.typography.fontBodyLgRegular,
             color = MaterialTheme.colorScheme.secondary,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .clip(RoundedCornerShape(4.dp))
+                .clickable { onUserIdClick(userId.value) }
+                .padding(horizontal = 4.dp),
             textAlign = TextAlign.Center,
         )
         Spacer(Modifier.height(40.dp))
@@ -82,5 +86,6 @@ internal fun UserProfileHeaderSectionPreview() = ElementPreview {
         userId = UserId("@alice:example.com"),
         userName = "Alice",
         openAvatarPreview = {},
+        onUserIdClick = {},
     )
 }

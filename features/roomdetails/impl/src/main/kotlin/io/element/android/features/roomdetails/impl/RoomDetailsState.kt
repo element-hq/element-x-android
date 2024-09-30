@@ -10,6 +10,7 @@ package io.element.android.features.roomdetails.impl
 import androidx.compose.runtime.Immutable
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.userprofile.shared.UserProfileState
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -39,6 +40,7 @@ data class RoomDetailsState(
     val heroes: ImmutableList<MatrixUser>,
     val canShowPinnedMessages: Boolean,
     val pinnedMessagesCount: Int?,
+    val snackbarMessage: SnackbarMessage?,
     val eventSink: (RoomDetailsEvent) -> Unit
 )
 

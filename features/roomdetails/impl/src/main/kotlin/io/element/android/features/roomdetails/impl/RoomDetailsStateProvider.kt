@@ -13,6 +13,7 @@ import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.userprofile.shared.UserProfileState
 import io.element.android.features.userprofile.shared.aUserProfileState
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -99,6 +100,7 @@ fun aRoomDetailsState(
     heroes: List<MatrixUser> = emptyList(),
     canShowPinnedMessages: Boolean = true,
     pinnedMessagesCount: Int? = null,
+    snackbarMessage: SnackbarMessage? = null,
     eventSink: (RoomDetailsEvent) -> Unit = {},
 ) = RoomDetailsState(
     roomId = roomId,
@@ -122,7 +124,8 @@ fun aRoomDetailsState(
     heroes = heroes.toPersistentList(),
     canShowPinnedMessages = canShowPinnedMessages,
     pinnedMessagesCount = pinnedMessagesCount,
-    eventSink = eventSink
+    snackbarMessage = snackbarMessage,
+    eventSink = eventSink,
 )
 
 fun aRoomNotificationSettings(

@@ -130,6 +130,7 @@
   <string name="common_call_invite">"Call in progress (unsupported)"</string>
   <string name="common_call_started">"Call started"</string>
   <string name="common_chat_backup">"Chat backup"</string>
+  <string name="common_copied_to_clipboard">"Copied to clipboard"</string>
   <string name="common_copyright">"Copyright"</string>
   <string name="common_creating_room">"Creating room…"</string>
   <string name="common_current_user_left_room">"Left room"</string>

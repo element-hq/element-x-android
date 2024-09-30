@@ -12,6 +12,9 @@ import dagger.Module
 import dagger.Provides
 import io.element.android.features.createroom.api.StartDMAction
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
@@ -25,10 +28,13 @@ object RoomMemberModule {
         matrixClient: MatrixClient,
         room: MatrixRoom,
         startDMAction: StartDMAction,
+        dispatchers: CoroutineDispatchers,
+        clipboardHelper: ClipboardHelper,
+        snackbarDispatcher: SnackbarDispatcher,
     ): RoomMemberDetailsPresenter.Factory {
         return object : RoomMemberDetailsPresenter.Factory {
             override fun create(roomMemberId: UserId): RoomMemberDetailsPresenter {
-                return RoomMemberDetailsPresenter(roomMemberId, matrixClient, room, startDMAction)
+                return RoomMemberDetailsPresenter(roomMemberId, matrixClient, room, startDMAction, dispatchers, clipboardHelper, snackbarDispatcher)
             }
         }
     }
