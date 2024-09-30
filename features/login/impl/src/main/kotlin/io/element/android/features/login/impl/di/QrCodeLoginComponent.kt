@@ -9,7 +9,6 @@ package io.element.android.features.login.impl.di
 
 import com.squareup.anvil.annotations.ContributesTo
 import com.squareup.anvil.annotations.MergeSubcomponent
-import dagger.Subcomponent
 import io.element.android.libraries.architecture.NodeFactoriesBindings
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn

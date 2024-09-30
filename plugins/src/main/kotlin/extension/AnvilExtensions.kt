@@ -8,7 +8,6 @@
 package extension
 
 import com.squareup.anvil.plugin.AnvilExtension
-import gradle.kotlin.dsl.accessors._719af408c2a6c8acb7cff251b94eadcc.implementation
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Project
 import org.gradle.api.provider.Provider
@@ -32,25 +31,6 @@ fun Project.setupAnvil(
     // Add dagger dependency, needed for generated code
     dependencies.implementation(libs.dagger)
 
-    if (generateDaggerCode) {
-        // Apply KSP plugin if it wasn't applied before
-        applyPluginIfNeeded(libs.plugins.ksp)
-        // Needed at the top level since dagger code should be generated at a single point for performance reasons
-        dependencies.add("ksp", libs.dagger.compiler)
-    }
-
-    // These dependencies are only needed for compose library or application modules
-    if (project.pluginManager.hasPlugin("io.element.android-compose-library")
-        || project.pluginManager.hasPlugin("io.element.android-compose-application")) {
-
-        // Apply KSP plugin if it wasn't applied before
-        applyPluginIfNeeded(libs.plugins.ksp)
-        // Annotations to generate DI code for Appyx nodes
-        dependencies.implementation(project.project(":anvilannotations"))
-        // Code generator for the annotations above
-        dependencies.add("ksp", project.project(":anvilcodegen"))
-    }
-
     // Apply Anvil plugin and configure it
     applyPluginIfNeeded(libs.plugins.anvil)
 
@@ -65,6 +45,20 @@ fun Project.setupAnvil(
                 componentMerging = componentMergingStrategy == ComponentMergingStrategy.KSP,
             )
         }
+    }
+
+    if (generateDaggerCode) {
+        // Needed at the top level since dagger code should be generated at a single point for performance reasons
+        dependencies.add("ksp", libs.dagger.compiler)
+    }
+
+    // These dependencies are only needed for compose library or application modules
+    if (project.pluginManager.hasPlugin("io.element.android-compose-library")
+        || project.pluginManager.hasPlugin("io.element.android-compose-application")) {
+        // Annotations to generate DI code for Appyx nodes
+        dependencies.implementation(project.project(":anvilannotations"))
+        // Code generator for the annotations above
+        dependencies.add("ksp", project.project(":anvilcodegen"))
     }
 }
 
