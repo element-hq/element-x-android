@@ -88,7 +88,13 @@ fun TimelineItemVideoView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .then(if (isLoaded) Modifier.background(Color.White) else Modifier),
-                model = MediaRequestData(content.thumbnailSource, MediaRequestData.Kind.File(content.body, content.mimeType)),
+                model = MediaRequestData(
+                    source = content.thumbnailSource,
+                    kind = MediaRequestData.Kind.File(
+                        body = content.filename ?: content.body,
+                        mimeType = content.mimeType
+                    )
+                ),
                 contentScale = ContentScale.Fit,
                 alignment = Alignment.Center,
                 contentDescription = description,
