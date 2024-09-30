@@ -252,6 +252,7 @@ Dôvod: %1$s."</string>
   <string name="common_voice_message">"Hlasová správa"</string>
   <string name="common_waiting">"Čaká sa…"</string>
   <string name="common_waiting_for_decryption_key">"Čaká sa na dešifrovací kľúč"</string>
+  <string name="common_you">"Vy"</string>
   <string name="dialog_title_confirmation">"Potvrdenie"</string>
   <string name="dialog_title_error">"Chyba"</string>
   <string name="dialog_title_success">"Úspech"</string>
