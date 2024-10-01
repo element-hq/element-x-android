@@ -55,9 +55,6 @@ import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
-import io.element.android.features.messages.impl.typing.TypingNotificationState
-import io.element.android.features.messages.impl.typing.TypingNotificationView
-import io.element.android.features.messages.impl.typing.aTypingNotificationState
 import io.element.android.libraries.designsystem.components.dialogs.AlertDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -73,7 +70,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun TimelineView(
     state: TimelineState,
-    typingNotificationState: TypingNotificationState,
     onUserDataClick: (UserId) -> Unit,
     onLinkClick: (String) -> Unit,
     onMessageClick: (TimelineItem.Event) -> Unit,
@@ -131,11 +127,6 @@ fun TimelineView(
                 reverseLayout = useReverseLayout,
                 contentPadding = PaddingValues(vertical = 8.dp),
             ) {
-                if (state.isLive) {
-                    item {
-                        TypingNotificationView(state = typingNotificationState)
-                    }
-                }
                 items(
                     items = state.timelineItems,
                     contentType = { timelineItem -> timelineItem.contentType() },
@@ -319,7 +310,6 @@ internal fun TimelineViewPreview(
                 ),
                 focusedEventIndex = 0,
             ),
-            typingNotificationState = aTypingNotificationState(),
             onUserDataClick = {},
             onLinkClick = {},
             onMessageClick = {},

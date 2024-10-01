@@ -28,6 +28,7 @@ import io.element.android.features.messages.impl.timeline.factories.TimelineItem
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
 import io.element.android.features.poll.api.actions.EndPollAction
 import io.element.android.features.poll.api.actions.SendPollResponseAction
@@ -71,6 +72,7 @@ class TimelinePresenter @AssistedInject constructor(
     private val sessionPreferencesStore: SessionPreferencesStore,
     private val timelineController: TimelineController,
     private val resolveVerifiedUserSendFailurePresenter: Presenter<ResolveVerifiedUserSendFailureState>,
+    private val typingNotificationPresenter: Presenter<TypingNotificationState>,
 ) : Presenter<TimelineState> {
     @AssistedFactory
     interface Factory {
@@ -232,7 +234,8 @@ class TimelinePresenter @AssistedInject constructor(
                 .launchIn(this)
         }
 
-        val timelineRoomInfo by remember {
+        val typingNotificationState = typingNotificationPresenter.present()
+        val timelineRoomInfo by remember(typingNotificationState) {
             derivedStateOf {
                 TimelineRoomInfo(
                     name = room.displayName,
@@ -241,6 +244,7 @@ class TimelinePresenter @AssistedInject constructor(
                     userHasPermissionToSendReaction = userHasPermissionToSendReaction,
                     isCallOngoing = roomInfo?.hasRoomCall.orFalse(),
                     pinnedEventIds = roomInfo?.pinnedEventIds.orEmpty(),
+                    typingNotificationState = typingNotificationState,
                 )
             }
         }

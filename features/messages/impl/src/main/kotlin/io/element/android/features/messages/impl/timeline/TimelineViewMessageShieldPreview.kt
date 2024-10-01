@@ -36,7 +36,6 @@ internal fun TimelineViewMessageShieldPreview() = ElementPreview {
                 timelineItems = items.toImmutableList(),
                 messageShield = messageShield,
             ),
-            typingNotificationState = aTypingNotificationState(),
             onUserDataClick = {},
             onLinkClick = {},
             onMessageClick = {},

@@ -46,7 +46,6 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
-import io.element.android.features.messages.impl.typing.TypingNotificationPresenter
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
@@ -91,7 +90,6 @@ class MessagesPresenter @AssistedInject constructor(
     private val composerPresenter: MessageComposerPresenter,
     private val voiceMessageComposerPresenter: VoiceMessageComposerPresenter,
     timelinePresenterFactory: TimelinePresenter.Factory,
-    private val typingNotificationPresenter: TypingNotificationPresenter,
     private val actionListPresenterFactory: ActionListPresenter.Factory,
     private val customReactionPresenter: CustomReactionPresenter,
     private val reactionSummaryPresenter: ReactionSummaryPresenter,
@@ -125,7 +123,6 @@ class MessagesPresenter @AssistedInject constructor(
         val composerState = composerPresenter.present()
         val voiceMessageComposerState = voiceMessageComposerPresenter.present()
         val timelineState = timelinePresenter.present()
-        val typingNotificationState = typingNotificationPresenter.present()
         val actionListState = actionListPresenter.present()
         val customReactionState = customReactionPresenter.present()
         val reactionSummaryState = reactionSummaryPresenter.present()
@@ -216,7 +213,6 @@ class MessagesPresenter @AssistedInject constructor(
             userEventPermissions = userEventPermissions,
             voiceMessageComposerState = voiceMessageComposerState,
             timelineState = timelineState,
-            typingNotificationState = typingNotificationState,
             actionListState = actionListState,
             customReactionState = customReactionState,
             reactionSummaryState = reactionSummaryState,

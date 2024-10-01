@@ -40,6 +40,7 @@ import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTim
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.LastForwardIndicatorsPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.LoadingIndicatorsPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.RoomBeginningPostProcessor
+import io.element.android.libraries.matrix.impl.timeline.postprocessor.TypingNotificationPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.reply.InReplyToMapper
 import io.element.android.libraries.matrix.impl.util.MessageEventContent
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -120,6 +121,7 @@ class RustTimeline(
     private val roomBeginningPostProcessor = RoomBeginningPostProcessor(mode)
     private val loadingIndicatorsPostProcessor = LoadingIndicatorsPostProcessor(systemClock)
     private val lastForwardIndicatorsPostProcessor = LastForwardIndicatorsPostProcessor(mode)
+    private val typingNotificationPostProcessor = TypingNotificationPostProcessor(mode)
 
     private val backPaginationStatus = MutableStateFlow(
         Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode != Timeline.Mode.PINNED_EVENTS)
@@ -233,6 +235,9 @@ class RustTimeline(
                         hasMoreToLoadBackward = hasMoreToLoadBackward,
                         hasMoreToLoadForward = hasMoreToLoadForward
                     )
+                }
+                .let { items ->
+                    typingNotificationPostProcessor.process(items = items)
                 }
                 // Keep lastForwardIndicatorsPostProcessor last
                 .let { items ->

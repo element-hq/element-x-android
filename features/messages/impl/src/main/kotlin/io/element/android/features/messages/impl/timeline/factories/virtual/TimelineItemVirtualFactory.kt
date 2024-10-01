@@ -12,6 +12,7 @@ import io.element.android.features.messages.impl.timeline.model.virtual.Timeline
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingIndicatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemRoomBeginningModel
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemTypingNotificationModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemVirtualModel
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
@@ -39,6 +40,7 @@ class TimelineItemVirtualFactory @Inject constructor(
                 timestamp = inner.timestamp
             )
             is VirtualTimelineItem.LastForwardIndicator -> TimelineItemLastForwardIndicatorModel
+            VirtualTimelineItem.TypingNotification -> TimelineItemTypingNotificationModel
         }
     }
 }

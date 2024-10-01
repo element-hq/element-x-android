@@ -19,6 +19,7 @@ import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactoryC
 import io.element.android.features.messages.impl.timeline.components.aCriticalShield
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.typing.aTypingNotificationState
 import io.element.android.features.messages.impl.voicemessages.timeline.FakeRedactedVoiceMessageManager
 import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
 import io.element.android.features.messages.impl.voicemessages.timeline.aRedactedMatrixTimeline
@@ -682,6 +683,7 @@ import kotlin.time.Duration.Companion.seconds
             timelineItemIndexer = timelineItemIndexer,
             timelineController = TimelineController(room),
             resolveVerifiedUserSendFailurePresenter = { aResolveVerifiedUserSendFailureState() },
+            typingNotificationPresenter = { aTypingNotificationState() },
         )
     }
 }
