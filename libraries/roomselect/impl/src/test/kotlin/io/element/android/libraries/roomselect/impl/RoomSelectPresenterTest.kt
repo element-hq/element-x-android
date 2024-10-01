@@ -69,7 +69,7 @@ class RoomSelectPresenterTest {
         }.test {
             val initialState = awaitItem()
             val expectedRoomSummary = aRoomSummary()
-            // Do not compare the lambda as there will be different. So copy the lambda from expectedRoomSummary to result
+            // Do not compare the lambda because they will be different. So copy the lambda from expectedRoomSummary to result
             val result = (awaitItem().resultState as SearchBarResultState.Results).results.map { roomSummary ->
                 roomSummary.copy(
                     lastMessage = roomSummary.lastMessage!!.copy(
