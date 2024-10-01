@@ -1,3 +1,5 @@
+import extension.setupAnvil
+
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
@@ -7,16 +9,13 @@
 
 plugins {
     id("io.element.android-library")
-    alias(libs.plugins.anvil)
 }
 
 android {
     namespace = "io.element.android.libraries.usersearch.impl"
 }
 
-anvil {
-    generateDaggerFactories.set(true)
-}
+setupAnvil()
 
 dependencies {
     implementation(projects.libraries.core)

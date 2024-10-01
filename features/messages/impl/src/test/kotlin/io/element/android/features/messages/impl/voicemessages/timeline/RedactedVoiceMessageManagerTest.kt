@@ -88,13 +88,15 @@ fun aRedactedMatrixTimeline(eventId: EventId) = listOf<MatrixTimelineItem>(
             senderProfile = ProfileTimelineDetails.Unavailable,
             timestamp = 9442,
             content = RedactedContent,
-            debugInfo = TimelineItemDebugInfo(
-                model = "enim",
-                originalJson = null,
-                latestEditedJson = null
-            ),
+            debugInfoProvider = {
+                TimelineItemDebugInfo(
+                    model = "enim",
+                    originalJson = null,
+                    latestEditedJson = null
+                )
+            },
             origin = null,
-            messageShield = null,
+            messageShieldProvider = { null },
         ),
     )
 )

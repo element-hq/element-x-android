@@ -1,3 +1,5 @@
+import extension.setupAnvil
+
 /*
  * Copyright 2022-2024 New Vector Ltd.
  *
@@ -7,12 +9,9 @@
 
 plugins {
     id("io.element.android-library")
-    alias(libs.plugins.anvil)
 }
 
-anvil {
-    generateDaggerFactories.set(true)
-}
+setupAnvil()
 
 android {
     namespace = "io.element.android.features.networkmonitor.impl"

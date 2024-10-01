@@ -19,14 +19,13 @@ import extension.allLibrariesImpl
 import extension.allServicesImpl
 import extension.koverDependencies
 import extension.locales
+import extension.setupAnvil
 import extension.setupKover
 import java.util.Locale
 
 plugins {
     id("io.element.android-compose-application")
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.anvil)
-    alias(libs.plugins.kapt)
     // When using precompiled plugins, we need to apply the firebase plugin like this
     id(libs.plugins.firebaseAppDistribution.get().pluginId)
     alias(libs.plugins.knit)
@@ -233,6 +232,11 @@ knit {
     }
 }
 
+setupAnvil(
+    generateDaggerCode = true,
+    generateDaggerFactoriesUsingAnvil = false,
+)
+
 dependencies {
     allLibrariesImpl()
     allServicesImpl()
@@ -244,11 +248,9 @@ dependencies {
     }
     allFeaturesImpl(rootDir, logger)
     implementation(projects.features.migration.api)
-    implementation(projects.anvilannotations)
     implementation(projects.appnav)
     implementation(projects.appconfig)
     implementation(projects.libraries.uiStrings)
-    anvil(projects.anvilcodegen)
 
     if (ModulesConfig.pushProvidersConfig.includeFirebase) {
         "gplayImplementation"(projects.libraries.pushproviders.firebase)
@@ -273,9 +275,6 @@ dependencies {
     implementation(libs.serialization.json)
 
     implementation(libs.matrix.emojibase.bindings)
-
-    implementation(libs.dagger)
-    kapt(libs.dagger.compiler)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.test.robolectric)

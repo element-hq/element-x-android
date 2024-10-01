@@ -462,7 +462,7 @@ class RustMatrixRoom(
         innerRoom.tryResend(transactionId.value)
     }
 
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Boolean> {
+    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> {
         return liveTimeline.cancelSend(transactionId)
     }
 

@@ -1,6 +1,7 @@
+import extensions.setupAnvil
+
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.anvil)
     id("kotlin-parcelize")
 }
 
@@ -8,13 +9,9 @@ android {
     namespace = "io.element.android.features.${MODULE_NAME}.impl"
 }
 
-anvil {
-    generateDaggerFactories.set(true)
-}
+setupAnvil()
 
 dependencies {
-    implementation(projects.anvilannotations)
-    anvil(projects.anvilcodegen)
     api(projects.features.${ MODULE_NAME }.api)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
