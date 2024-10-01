@@ -228,7 +228,7 @@ private fun BoxScope.TimelineScrollHelper(
 
     val latestOnFocusEventRender by rememberUpdatedState(onFocusEventRender)
     LaunchedEffect(focusRequestState) {
-        if (focusRequestState is FocusRequestState.Success && focusRequestState.isIndexed) {
+        if (focusRequestState is FocusRequestState.Success && !focusRequestState.rendered && focusRequestState.isIndexed) {
             lazyListState.animateScrollToItemCenter(focusRequestState.index)
             latestOnFocusEventRender()
         }
