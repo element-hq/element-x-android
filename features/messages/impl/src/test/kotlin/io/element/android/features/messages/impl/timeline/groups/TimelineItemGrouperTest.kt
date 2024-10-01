@@ -41,7 +41,7 @@ class TimelineItemGrouperTest {
         canBeRepliedTo = false,
         inReplyTo = null,
         isThreaded = false,
-        debugInfo = aTimelineItemDebugInfo(),
+        debugInfoProvider = { aTimelineItemDebugInfo() },
         origin = null,
         messageShield = null,
     )

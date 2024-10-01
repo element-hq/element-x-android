@@ -114,7 +114,8 @@ internal class RustEncryptionService(
                     override fun onUpdate(status: RustEnableRecoveryProgress) {
                         enableRecoveryProgressStateFlow.value = enableRecoveryProgressMapper.map(status)
                     }
-                }
+                },
+                passphrase = null,
             )
                 // enableRecovery returns the encryption key, but we read it from the state flow
                 .let { }
