@@ -1,3 +1,5 @@
+import extension.setupAnvil
+
 /*
  * Copyright 2024 New Vector Ltd.
  *
@@ -7,7 +9,6 @@
 
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.anvil)
     id("kotlin-parcelize")
 }
 
@@ -15,13 +16,9 @@ android {
     namespace = "io.element.android.features.viewfolder.impl"
 }
 
-anvil {
-    generateDaggerFactories.set(true)
-}
+setupAnvil()
 
 dependencies {
-    implementation(projects.anvilannotations)
-    anvil(projects.anvilcodegen)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)

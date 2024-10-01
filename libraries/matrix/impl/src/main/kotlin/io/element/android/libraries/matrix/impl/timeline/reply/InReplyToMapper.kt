@@ -19,8 +19,8 @@ class InReplyToMapper(
     private val timelineEventContentMapper: TimelineEventContentMapper,
 ) {
     fun map(inReplyToDetails: InReplyToDetails): InReplyTo {
-        val inReplyToId = EventId(inReplyToDetails.eventId)
-        return when (val event = inReplyToDetails.event) {
+        val inReplyToId = EventId(inReplyToDetails.eventId())
+        return when (val event = inReplyToDetails.event()) {
             is RepliedToEventDetails.Ready -> {
                 InReplyTo.Ready(
                     eventId = inReplyToId,

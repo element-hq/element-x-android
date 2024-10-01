@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"登出并升级"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"您的服务器现在支持更快的新协议。现在登出并重新登录以进行升级。现在这样做可以帮助您避免在以后删除旧协议时被强制登出。"</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"您的服务器不再支持旧协议。请登出并重新登录以继续使用此应用。"</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"有可用升级"</string>
+  <string name="banner_set_up_recovery_content">"生成新的恢复密钥，该密钥可用于在您无法访问设备时恢复加密的消息历史记录。"</string>
+  <string name="banner_set_up_recovery_title">"设置恢复"</string>
   <string name="confirm_recovery_key_banner_message">"聊天备份目前不同步，需要输入恢复密钥才能访问聊天备份。"</string>
   <string name="confirm_recovery_key_banner_title">"输入恢复密钥"</string>
   <string name="full_screen_intent_banner_message">"为确保您不会错过重要来电，请更改设置以允许锁屏时的全屏通知。"</string>

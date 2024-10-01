@@ -72,7 +72,9 @@ fun TimelineItemVideoView(
         modifier = modifier.semantics { contentDescription = description }
     ) {
         val containerModifier = if (content.showCaption) {
-            Modifier.padding(top = 6.dp).clip(RoundedCornerShape(6.dp))
+            Modifier
+                .padding(top = 6.dp)
+                .clip(RoundedCornerShape(6.dp))
         } else {
             Modifier
         }
@@ -86,7 +88,13 @@ fun TimelineItemVideoView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .then(if (isLoaded) Modifier.background(Color.White) else Modifier),
-                model = MediaRequestData(content.thumbnailSource, MediaRequestData.Kind.File(content.body, content.mimeType)),
+                model = MediaRequestData(
+                    source = content.thumbnailSource,
+                    kind = MediaRequestData.Kind.File(
+                        body = content.filename ?: content.body,
+                        mimeType = content.mimeType
+                    )
+                ),
                 contentScale = ContentScale.Fit,
                 alignment = Alignment.Center,
                 contentDescription = description,
@@ -116,9 +124,10 @@ fun TimelineItemVideoView(
                 LocalContentColor provides ElementTheme.colors.textPrimary,
                 LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular,
             ) {
+                val aspectRatio = content.aspectRatio ?: DEFAULT_ASPECT_RATIO
                 EditorStyledText(
                     modifier = Modifier
-                        .widthIn(min = MIN_HEIGHT_IN_DP.dp * content.aspectRatio!!, max = MAX_HEIGHT_IN_DP.dp * content.aspectRatio),
+                        .widthIn(min = MIN_HEIGHT_IN_DP.dp * aspectRatio, max = MAX_HEIGHT_IN_DP.dp * aspectRatio),
                     text = caption,
                     style = ElementRichTextEditorStyle.textStyle(),
                     releaseOnDetach = false,
@@ -152,5 +161,16 @@ internal fun TimelineVideoWithCaptionRowPreview() = ElementPreview {
                 ),
             )
         }
+        ATimelineItemEventRow(
+            event = aTimelineItemEvent(
+                isMine = false,
+                content = aTimelineItemVideoContent().copy(
+                    filename = "video.mp4",
+                    body = "Video with null aspect ratio",
+                    aspectRatio = null,
+                ),
+                groupPosition = TimelineItemGroupPosition.Last,
+            ),
+        )
     }
 }

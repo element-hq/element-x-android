@@ -103,7 +103,7 @@ class FakeMatrixRoom(
     private val updateUserRoleResult: () -> Result<Unit> = { lambdaError() },
     private val toggleReactionResult: (String, UniqueId) -> Result<Unit> = { _, _ -> lambdaError() },
     private val retrySendMessageResult: (TransactionId) -> Result<Unit> = { lambdaError() },
-    private val cancelSendResult: (TransactionId) -> Result<Boolean> = { lambdaError() },
+    private val cancelSendResult: (TransactionId) -> Result<Unit> = { lambdaError() },
     private val forwardEventResult: (EventId, List<RoomId>) -> Result<Unit> = { _, _ -> lambdaError() },
     private val reportContentResult: (EventId, String, UserId?) -> Result<Unit> = { _, _, _ -> lambdaError() },
     private val kickUserResult: (UserId, String?) -> Result<Unit> = { _, _ -> lambdaError() },
@@ -233,7 +233,7 @@ class FakeMatrixRoom(
         return retrySendMessageResult(transactionId)
     }
 
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Boolean> {
+    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> {
         return cancelSendResult(transactionId)
     }
 

@@ -466,7 +466,7 @@ class CreatePollPresenterTest {
     @Test
     fun `delete confirms`() = runTest {
         val presenter = createCreatePollPresenter(mode = CreatePollMode.EditPoll(pollEventId))
-        val redactEventLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String? -> Result.success(true) }
+        val redactEventLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String? -> Result.success(Unit) }
         timeline.redactEventLambda = redactEventLambda
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -481,7 +481,7 @@ class CreatePollPresenterTest {
     @Test
     fun `delete can be cancelled`() = runTest {
         val presenter = createCreatePollPresenter(mode = CreatePollMode.EditPoll(pollEventId))
-        val redactEventLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String? -> Result.success(true) }
+        val redactEventLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String? -> Result.success(Unit) }
         timeline.redactEventLambda = redactEventLambda
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -499,7 +499,7 @@ class CreatePollPresenterTest {
     @Test
     fun `delete can be confirmed`() = runTest {
         val presenter = createCreatePollPresenter(mode = CreatePollMode.EditPoll(pollEventId))
-        val redactEventLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String? -> Result.success(true) }
+        val redactEventLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String? -> Result.success(Unit) }
         timeline.redactEventLambda = redactEventLambda
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()

@@ -162,7 +162,7 @@ internal fun aTimelineItemEvent(
         groupPosition = groupPosition,
         localSendState = sendState,
         inReplyTo = inReplyTo,
-        debugInfo = debugInfo,
+        debugInfoProvider = { debugInfo },
         isThreaded = isThreaded,
         origin = null,
         messageShield = messageShield,

@@ -26,6 +26,7 @@
     <item quantity="other">"%d pozvánek"</item>
   </plurals>
   <string name="notification_invite_body">"Vás pozval(a) do chatu"</string>
+  <string name="notification_invite_body_with_sender">"%1$s vás pozval(a) do chatu"</string>
   <string name="notification_mentioned_you_body">"Zmínili vás: %1$s"</string>
   <string name="notification_new_messages">"Nové zprávy"</string>
   <plurals name="notification_new_messages_for_room">
@@ -37,6 +38,7 @@
   <string name="notification_room_action_mark_as_read">"Označit jako přečtené"</string>
   <string name="notification_room_action_quick_reply">"Rychlá odpověď"</string>
   <string name="notification_room_invite_body">"Vás pozval(a) do místnosti"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s vás pozval(a) do místnosti"</string>
   <string name="notification_sender_me">"Já"</string>
   <string name="notification_sender_mention_reply">"%1$s zmínil(a) nebo odpověděl(a)"</string>
   <string name="notification_test_push_notification_content">"Prohlížíte si oznámení! Klikněte na mě!"</string>

@@ -66,9 +66,9 @@ fun anEventTimelineItem(
     senderProfile = senderProfile,
     timestamp = timestamp,
     content = content,
-    debugInfo = debugInfo,
+    debugInfoProvider = { debugInfo },
     origin = null,
-    messageShield = messageShield,
+    messageShieldProvider = { messageShield },
 )
 
 fun aProfileTimelineDetails(

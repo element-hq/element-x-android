@@ -81,7 +81,13 @@ fun TimelineItemImageView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .then(if (isLoaded) Modifier.background(Color.White) else Modifier),
-                model = MediaRequestData(content.preferredMediaSource, MediaRequestData.Kind.File(content.body, content.mimeType)),
+                model = MediaRequestData(
+                    source = content.preferredMediaSource,
+                    kind = MediaRequestData.Kind.File(
+                        body = content.filename ?: content.body,
+                        mimeType = content.mimeType,
+                    ),
+                ),
                 contentScale = ContentScale.Fit,
                 alignment = Alignment.Center,
                 contentDescription = description,
@@ -100,9 +106,10 @@ fun TimelineItemImageView(
                 LocalContentColor provides ElementTheme.colors.textPrimary,
                 LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular
             ) {
+                val aspectRatio = content.aspectRatio ?: DEFAULT_ASPECT_RATIO
                 EditorStyledText(
                     modifier = Modifier
-                        .widthIn(min = MIN_HEIGHT_IN_DP.dp * content.aspectRatio!!, max = MAX_HEIGHT_IN_DP.dp * content.aspectRatio),
+                        .widthIn(min = MIN_HEIGHT_IN_DP.dp * aspectRatio, max = MAX_HEIGHT_IN_DP.dp * aspectRatio),
                     text = caption,
                     style = ElementRichTextEditorStyle.textStyle(),
                     releaseOnDetach = false,
@@ -136,5 +143,16 @@ internal fun TimelineImageWithCaptionRowPreview() = ElementPreview {
                 ),
             )
         }
+        ATimelineItemEventRow(
+            event = aTimelineItemEvent(
+                isMine = false,
+                content = aTimelineItemImageContent().copy(
+                    filename = "image.jpg",
+                    body = "Image with null aspectRatio",
+                    aspectRatio = null,
+                ),
+                groupPosition = TimelineItemGroupPosition.Last,
+            ),
+        )
     }
 }

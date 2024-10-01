@@ -493,7 +493,7 @@ class MessagesPresenterTest {
             canUserPinUnpinResult = { Result.success(true) },
         )
 
-        val redactEventLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String? -> Result.success(true) }
+        val redactEventLambda = lambdaRecorder { _: EventId?, _: TransactionId?, _: String? -> Result.success(Unit) }
         liveTimeline.redactEventLambda = redactEventLambda
 
         val presenter = createMessagesPresenter(matrixRoom = matrixRoom, coroutineDispatchers = coroutineDispatchers)

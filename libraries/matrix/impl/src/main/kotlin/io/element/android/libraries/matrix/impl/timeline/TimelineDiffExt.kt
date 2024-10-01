@@ -41,5 +41,5 @@ internal fun TimelineDiff.eventOrigin(): EventItemOrigin? {
 }
 
 private fun TimelineItem.eventOrigin(): EventItemOrigin? {
-    return asEvent()?.origin()
+    return asEvent()?.origin
 }

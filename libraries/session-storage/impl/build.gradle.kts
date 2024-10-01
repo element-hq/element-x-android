@@ -1,3 +1,5 @@
+import extension.setupAnvil
+
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
@@ -6,7 +8,6 @@
  */
 plugins {
     id("io.element.android-library")
-    alias(libs.plugins.anvil)
     alias(libs.plugins.sqldelight)
 }
 
@@ -14,9 +15,7 @@ android {
     namespace = "io.element.android.libraries.sessionstorage.impl"
 }
 
-anvil {
-    generateDaggerFactories.set(true)
-}
+setupAnvil()
 
 dependencies {
     implementation(libs.dagger)

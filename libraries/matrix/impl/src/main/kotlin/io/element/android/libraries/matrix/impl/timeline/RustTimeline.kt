@@ -64,6 +64,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.EditedContent
+import org.matrix.rustcomponents.sdk.EventOrTransactionId
 import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.FormattedBody
 import org.matrix.rustcomponents.sdk.MessageFormat
@@ -274,11 +275,14 @@ class RustTimeline(
         }
     }
 
-    override suspend fun redactEvent(eventId: EventId?, transactionId: TransactionId?, reason: String?): Result<Boolean> = withContext(dispatcher) {
+    override suspend fun redactEvent(eventId: EventId?, transactionId: TransactionId?, reason: String?): Result<Unit> = withContext(dispatcher) {
         runCatching {
-            getEventTimelineItem(eventId, transactionId).use { item ->
-                inner.redactEvent(item = item, reason = reason)
+            val eventOrTransactionId = if (eventId != null) {
+                EventOrTransactionId.EventId(eventId.value)
+            } else {
+                EventOrTransactionId.TransactionId(transactionId!!.value)
             }
+            inner.redactEvent(eventOrTransactionId = eventOrTransactionId, reason = reason)
         }
     }
 
@@ -291,19 +295,22 @@ class RustTimeline(
     ): Result<Unit> =
         withContext(dispatcher) {
             runCatching<Unit> {
-                getEventTimelineItem(originalEventId, transactionId).use { item ->
-                    val editedContent = EditedContent.RoomMessage(
-                        content = MessageEventContent.from(
-                            body = body,
-                            htmlBody = htmlBody,
-                            intentionalMentions = intentionalMentions
-                        ),
-                    )
-                    inner.edit(
-                        newContent = editedContent,
-                        item = item,
-                    )
+                val eventOrTransactionId = if (originalEventId != null) {
+                    EventOrTransactionId.EventId(originalEventId.value)
+                } else {
+                    EventOrTransactionId.TransactionId(transactionId!!.value)
                 }
+                val editedContent = EditedContent.RoomMessage(
+                    content = MessageEventContent.from(
+                        body = body,
+                        htmlBody = htmlBody,
+                        intentionalMentions = intentionalMentions
+                    ),
+                )
+                inner.edit(
+                    newContent = editedContent,
+                    eventOrTransactionId = eventOrTransactionId,
+                )
             }
         }
 
@@ -343,6 +350,7 @@ class RustTimeline(
     }
 
     @Throws
+    @Suppress("UnusedPrivateMember")
     private suspend fun getEventTimelineItem(eventId: EventId?, transactionId: TransactionId?): EventTimelineItem {
         return try {
             when {
@@ -411,7 +419,8 @@ class RustTimeline(
         }
     }
 
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Boolean> = redactEvent(eventId = null, transactionId = transactionId, reason = null)
+    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> =
+        redactEvent(eventId = null, transactionId = transactionId, reason = null)
 
     override suspend fun sendLocation(
         body: String,
@@ -455,10 +464,6 @@ class RustTimeline(
         pollKind: PollKind,
     ): Result<Unit> = withContext(dispatcher) {
         runCatching {
-            val pollStartEvent =
-                inner.getEventTimelineItemByEventId(
-                    eventId = pollStartId.value
-                )
             val editedContent = EditedContent.PollStart(
                 pollData = PollData(
                     question = question,
@@ -467,12 +472,10 @@ class RustTimeline(
                     pollKind = pollKind.toInner(),
                 ),
             )
-            pollStartEvent.use {
-                inner.edit(
-                    newContent = editedContent,
-                    item = it,
-                )
-            }
+            inner.edit(
+                newContent = editedContent,
+                eventOrTransactionId = EventOrTransactionId.EventId(pollStartId.value),
+            )
         }.map { }
     }
 
@@ -482,7 +485,7 @@ class RustTimeline(
     ): Result<Unit> = withContext(dispatcher) {
         runCatching {
             inner.sendPollResponse(
-                pollStartId = pollStartId.value,
+                pollStartEventId = pollStartId.value,
                 answers = answers,
             )
         }
@@ -494,7 +497,7 @@ class RustTimeline(
     ): Result<Unit> = withContext(dispatcher) {
         runCatching {
             inner.endPoll(
-                pollStartId = pollStartId.value,
+                pollStartEventId = pollStartId.value,
                 text = text,
             )
         }
