@@ -49,21 +49,26 @@ suspend fun LazyListState.animateScrollToItemCenter(index: Int) {
 
     fun LazyListLayoutInfo.resolveItemOffsetToCenter(index: Int): Int? {
         val itemInfo = visibleItemsInfo.firstOrNull { it.index == index } ?: return null
-        return -(containerSize() - itemInfo.size) / 2
+        val containerSize = containerSize()
+        val itemSize = itemInfo.size
+        return if (itemSize > containerSize) {
+            itemSize - containerSize / 2
+        } else {
+            -(containerSize() - itemInfo.size) / 2
+        }
     }
 
     // await for the first layout.
     scroll { }
-    layoutInfo.resolveItemOffsetToCenter(index)?.let {
+    layoutInfo.resolveItemOffsetToCenter(index)?.let { offset ->
         // Item is already visible, just scroll to center.
-        animateScrollToItem(index, it)
+        animateScrollToItem(index, offset)
         return
     }
-    // Item is not visible, jump to to it centered.
-    val offset = -layoutInfo.containerSize() / 2
-    scrollToItem(index, offset)
+    // Item is not visible, jump to it...
+    scrollToItem(index)
     // and then adjust according to the actual item size.
-    layoutInfo.resolveItemOffsetToCenter(index)?.let {
-        animateScrollToItem(index, it)
+    layoutInfo.resolveItemOffsetToCenter(index)?.let { offset ->
+        animateScrollToItem(index, offset)
     }
 }
