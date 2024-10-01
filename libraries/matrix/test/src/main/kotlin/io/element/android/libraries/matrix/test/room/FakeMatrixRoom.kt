@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.encryption.identity.IdentityStateChange
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -137,7 +138,7 @@ class FakeMatrixRoom(
     private val subscribeToSyncLambda: () -> Unit = { lambdaError() },
     private val ignoreDeviceTrustAndResendResult: (Map<UserId, List<DeviceId>>, TransactionId) -> Result<Unit> = { _, _ -> lambdaError() },
     private val withdrawVerificationAndResendResult: (List<UserId>, TransactionId) -> Result<Unit> = { _, _ -> lambdaError() },
-    ) : MatrixRoom {
+) : MatrixRoom {
     private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
     override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
 
@@ -150,6 +151,13 @@ class FakeMatrixRoom(
 
     fun givenRoomTypingMembers(typingMembers: List<UserId>) {
         _roomTypingMembersFlow.tryEmit(typingMembers)
+    }
+
+    private val _identityStateChangesFlow: MutableSharedFlow<List<IdentityStateChange>> = MutableSharedFlow(replay = 1)
+    override val identityStateChangesFlow: Flow<List<IdentityStateChange>> = _identityStateChangesFlow
+
+    fun emitIdentityStateChanges(identityStateChanges: List<IdentityStateChange>) {
+        _identityStateChangesFlow.tryEmit(identityStateChanges)
     }
 
     override val membersStateFlow: MutableStateFlow<MatrixRoomMembersState> = MutableStateFlow(MatrixRoomMembersState.Unknown)

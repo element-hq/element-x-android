@@ -16,6 +16,7 @@ import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.FakeActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.crypto.identity.IdentityChangeStatePresenter
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
@@ -1016,6 +1017,9 @@ class MessagesPresenterTest {
             }
         }
         val featureFlagService = FakeFeatureFlagService()
+        val identityChangeStatePresenter = IdentityChangeStatePresenter(
+            room = matrixRoom,
+        )
         return MessagesPresenter(
             room = matrixRoom,
             composerPresenter = messageComposerPresenter,
@@ -1026,6 +1030,7 @@ class MessagesPresenterTest {
             customReactionPresenter = { aCustomReactionState() },
             reactionSummaryPresenter = { aReactionSummaryState() },
             readReceiptBottomSheetPresenter = { aReadReceiptBottomSheetState() },
+            identityChangeStatePresenter = identityChangeStatePresenter,
             pinnedMessagesBannerPresenter = { aLoadedPinnedMessagesBannerState() },
             networkMonitor = FakeNetworkMonitor(),
             snackbarDispatcher = SnackbarDispatcher(),
