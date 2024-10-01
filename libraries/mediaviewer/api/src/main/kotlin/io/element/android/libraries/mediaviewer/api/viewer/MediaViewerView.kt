@@ -322,7 +322,7 @@ private fun ThumbnailView(
         if (isVisible) {
             val mediaRequestData = MediaRequestData(
                 source = thumbnailSource,
-                kind = MediaRequestData.Kind.File(mediaInfo.name, mediaInfo.mimeType)
+                kind = MediaRequestData.Kind.File(mediaInfo.filename, mediaInfo.mimeType)
             )
             AsyncImage(
                 modifier = Modifier.fillMaxSize(),

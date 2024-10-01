@@ -32,7 +32,8 @@ class FakeLocalMediaFactory(
     override fun createFromUri(uri: Uri, mimeType: String?, name: String?, formattedFileSize: String?): LocalMedia {
         val safeName = name ?: fallbackName
         val mediaInfo = MediaInfo(
-            name = safeName,
+            filename = safeName,
+            caption = null,
             mimeType = mimeType ?: fallbackMimeType,
             formattedFileSize = formattedFileSize ?: fallbackFileSize,
             fileExtension = fileExtensionExtractor.extractFromName(safeName)

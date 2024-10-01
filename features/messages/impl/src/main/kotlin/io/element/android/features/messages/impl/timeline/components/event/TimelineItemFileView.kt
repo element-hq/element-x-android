@@ -64,7 +64,7 @@ fun TimelineItemFileView(
         Spacer(Modifier.width(spacing))
         Column {
             Text(
-                text = content.body,
+                text = content.bestDescription,
                 color = ElementTheme.materialColors.primary,
                 maxLines = 2,
                 style = ElementTheme.typography.fontBodyLgRegular,

@@ -27,9 +27,9 @@ fun aTimelineItemVideoContent(
     aspectRatio: Float = 0.5f,
     blurhash: String? = A_BLUR_HASH,
 ) = TimelineItemVideoContent(
-    body = "Video.mp4",
-    formatted = null,
-    filename = null,
+    filename = "Video.mp4",
+    caption = null,
+    formattedCaption = null,
     thumbnailSource = null,
     blurHash = blurhash,
     aspectRatio = aspectRatio,

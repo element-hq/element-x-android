@@ -29,7 +29,8 @@ class AndroidLocalMediaFactoryTest {
         assertThat(result.uri.toString()).endsWith("aPath")
         assertThat(result.info).isEqualTo(
             MediaInfo(
-                name = "an image file.jpg",
+                filename = "an image file.jpg",
+                caption = null,
                 mimeType = MimeTypes.Jpeg,
                 formattedFileSize = "4MB",
                 fileExtension = "jpg",

@@ -303,7 +303,7 @@ private fun MediaFileView(
             if (info != null) {
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
-                    text = info.name,
+                    text = info.filename,
                     maxLines = 2,
                     style = ElementTheme.typography.fontBodyLgRegular,
                     overflow = TextOverflow.Ellipsis,

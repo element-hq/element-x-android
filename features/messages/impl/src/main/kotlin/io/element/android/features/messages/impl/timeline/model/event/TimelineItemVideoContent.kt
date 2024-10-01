@@ -12,9 +12,9 @@ import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import kotlin.time.Duration
 
 data class TimelineItemVideoContent(
-    val body: String,
-    val formatted: FormattedBody?,
-    val filename: String?,
+    override val filename: String,
+    override val caption: String?,
+    override val formattedCaption: FormattedBody?,
     val duration: Duration,
     val videoSource: MediaSource,
     val thumbnailSource: MediaSource?,
@@ -25,9 +25,8 @@ data class TimelineItemVideoContent(
     val mimeType: String,
     val formattedFileSize: String,
     val fileExtension: String,
-) : TimelineItemEventContent {
+) : TimelineItemEventContentWithAttachment {
     override val type: String = "TimelineItemImageContent"
 
-    val showCaption = filename != null && filename != body
-    val caption = if (showCaption) body else ""
+    val showCaption = caption != null
 }

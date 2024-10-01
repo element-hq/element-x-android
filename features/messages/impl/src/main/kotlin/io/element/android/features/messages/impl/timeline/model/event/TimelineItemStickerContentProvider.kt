@@ -26,7 +26,9 @@ fun aTimelineItemStickerContent(
     aspectRatio: Float = 0.5f,
     blurhash: String? = A_BLUR_HASH,
 ) = TimelineItemStickerContent(
-    body = "a body",
+    filename = "a sticker.gif",
+    caption = "a body",
+    formattedCaption = null,
     mediaSource = MediaSource(""),
     thumbnailSource = null,
     mimeType = MimeTypes.IMAGE_JPEG,

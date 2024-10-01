@@ -47,7 +47,7 @@ interface NotificationMediaRepo {
      *
      * @param mediaSource the media source of the media.
      * @param mimeType the mime type of the media.
-     * @param body the body of the message.
+     * @param body optional body which will be used to name the file.
      * @return A [Result] holding either the media [File] from the cache directory or an [Exception].
      */
     suspend fun getMediaFile(

@@ -30,10 +30,14 @@ data class MessageContent(
 data object RedactedContent : EventContent
 
 data class StickerContent(
-    val body: String,
+    val filename: String,
+    val body: String?,
     val info: ImageInfo,
     val source: MediaSource,
-) : EventContent
+) : EventContent {
+    val bestDescription: String
+        get() = body ?: filename
+}
 
 data class PollContent(
     val question: String,

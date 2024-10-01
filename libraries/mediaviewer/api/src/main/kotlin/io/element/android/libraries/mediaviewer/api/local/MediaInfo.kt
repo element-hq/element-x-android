@@ -13,43 +13,49 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class MediaInfo(
-    val name: String,
+    val filename: String,
+    val caption: String?,
     val mimeType: String,
     val formattedFileSize: String,
     val fileExtension: String,
 ) : Parcelable
 
 fun anImageMediaInfo(): MediaInfo = MediaInfo(
-    "an image file.jpg",
-    MimeTypes.Jpeg,
-    "4MB",
-    "jpg"
+    filename = "an image file.jpg",
+    caption = null,
+    mimeType = MimeTypes.Jpeg,
+    formattedFileSize = "4MB",
+    fileExtension = "jpg",
 )
 
 fun aVideoMediaInfo(): MediaInfo = MediaInfo(
-    "a video file.mp4",
-    MimeTypes.Mp4,
-    "14MB",
-    "mp4"
+    filename = "a video file.mp4",
+    caption = null,
+    mimeType = MimeTypes.Mp4,
+    formattedFileSize = "14MB",
+    fileExtension = "mp4",
 )
 
 fun aPdfMediaInfo(): MediaInfo = MediaInfo(
-    "a pdf file.pdf",
-    MimeTypes.Pdf,
-    "23MB",
-    "pdf"
+    filename = "a pdf file.pdf",
+    caption = null,
+    mimeType = MimeTypes.Pdf,
+    formattedFileSize = "23MB",
+    fileExtension = "pdf",
 )
 
 fun anApkMediaInfo(): MediaInfo = MediaInfo(
-    "an apk file.apk",
-    MimeTypes.Apk,
-    "50MB",
-    "apk"
+    filename = "an apk file.apk",
+    caption = null,
+    mimeType = MimeTypes.Apk,
+    formattedFileSize = "50MB",
+    fileExtension = "apk",
 )
 
 fun anAudioMediaInfo(): MediaInfo = MediaInfo(
-    "an audio file.mp3",
-    MimeTypes.Mp3,
-    "7MB",
-    "mp3"
+    filename = "an audio file.mp3",
+    caption = null,
+    mimeType = MimeTypes.Mp3,
+    formattedFileSize = "7MB",
+    fileExtension = "mp3",
 )

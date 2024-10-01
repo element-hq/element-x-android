@@ -45,7 +45,7 @@ internal fun TimelineItemEventRowShieldPreview() = ElementPreview {
         ATimelineItemEventRow(
             event = aTimelineItemEvent(
                 isMine = true,
-                content = aTimelineItemImageContent().copy(
+                content = aTimelineItemImageContent(
                     aspectRatio = 2.5f
                 ),
                 groupPosition = TimelineItemGroupPosition.Last,
@@ -54,7 +54,7 @@ internal fun TimelineItemEventRowShieldPreview() = ElementPreview {
         )
         ATimelineItemEventRow(
             event = aTimelineItemEvent(
-                content = aTimelineItemImageContent().copy(
+                content = aTimelineItemImageContent(
                     aspectRatio = 2.5f
                 ),
                 groupPosition = TimelineItemGroupPosition.Last,

@@ -33,7 +33,9 @@ class TimelineItemContentStickerFactory @Inject constructor(
         val aspectRatio = aspectRatioOf(content.info.width, content.info.height)
 
         return TimelineItemStickerContent(
-            body = content.body,
+            filename = content.filename,
+            caption = content.body,
+            formattedCaption = null,
             mediaSource = content.source,
             thumbnailSource = content.info.thumbnailSource,
             mimeType = content.info.mimetype ?: MimeTypes.OctetStream,
@@ -42,7 +44,7 @@ class TimelineItemContentStickerFactory @Inject constructor(
             height = content.info.height?.toInt(),
             aspectRatio = aspectRatio,
             formattedFileSize = fileSizeFormatter.format(content.info.size ?: 0),
-            fileExtension = fileExtensionExtractor.extractFromName(content.body)
+            fileExtension = fileExtensionExtractor.extractFromName(content.filename)
         )
     }
 }

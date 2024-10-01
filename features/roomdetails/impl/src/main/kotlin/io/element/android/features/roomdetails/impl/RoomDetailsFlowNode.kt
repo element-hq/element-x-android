@@ -206,7 +206,8 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                 val mimeType = MimeTypes.Images
                 val input = MediaViewerNode.Inputs(
                     mediaInfo = MediaInfo(
-                        name = navTarget.name,
+                        filename = navTarget.name,
+                        caption = null,
                         mimeType = mimeType,
                         formattedFileSize = "",
                         fileExtension = ""
