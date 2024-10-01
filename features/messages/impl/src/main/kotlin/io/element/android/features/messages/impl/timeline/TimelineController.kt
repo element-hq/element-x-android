@@ -57,8 +57,9 @@ class TimelineController @Inject constructor(
         return detachedTimeline.map { !it.isPresent }
     }
 
-    fun currentPaginationStatus(direction: Timeline.PaginationDirection): Timeline.PaginationStatus {
-        return currentTimelineFlow.value.paginationStatus(direction).value
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun paginationStatus(direction: Timeline.PaginationDirection): Flow<Timeline.PaginationStatus> {
+        return currentTimelineFlow.flatMapLatest { timeline -> timeline.paginationStatus(direction)}
     }
 
     suspend fun invokeOnCurrentTimeline(block: suspend (Timeline.() -> Any)) {

@@ -53,6 +53,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -130,6 +131,8 @@ class TimelinePresenter @AssistedInject constructor(
         val renderReadReceipts by sessionPreferencesStore.isRenderReadReceiptsEnabled().collectAsState(initial = true)
         val isLive by timelineController.isLive().collectAsState(initial = true)
 
+        var shouldFocusOnLive by rememberSaveable { mutableStateOf(false) }
+
         fun handleEvents(event: TimelineEvents) {
             when (event) {
                 is TimelineEvents.LoadMore -> {
@@ -142,7 +145,7 @@ class TimelinePresenter @AssistedInject constructor(
                         if (event.firstIndex == 0) {
                             newEventState.value = NewEventState.None
                         }
-                        println("## sendReadReceiptIfNeeded firstVisibleIndex: ${event.firstIndex}")
+                        shouldFocusOnLive = false
                         appScope.sendReadReceiptIfNeeded(
                             firstVisibleIndex = event.firstIndex,
                             timelineItems = timelineItems,
@@ -151,12 +154,7 @@ class TimelinePresenter @AssistedInject constructor(
                         )
                     } else {
                         newEventState.value = NewEventState.None
-                        if (event.firstIndex == 0) {
-                            val forwardPaginationStatus = timelineController.currentPaginationStatus(Timeline.PaginationDirection.FORWARDS)
-                            if (!forwardPaginationStatus.hasMoreToLoad) {
-                                timelineController.focusOnLive()
-                            }
-                        }
+                        shouldFocusOnLive = event.firstIndex == 0
                     }
                 }
                 is TimelineEvents.SelectPollAnswer -> appScope.launch {
@@ -190,6 +188,18 @@ class TimelinePresenter @AssistedInject constructor(
                 is TimelineEvents.ComputeVerifiedUserSendFailure -> {
                     resolveVerifiedUserSendFailureState.eventSink(ResolveVerifiedUserSendFailureEvents.ComputeForMessage(event.event))
                 }
+            }
+        }
+
+        val hasMoreToLoadForward by remember {
+            timelineController
+                .paginationStatus(Timeline.PaginationDirection.FORWARDS)
+                .map { it.hasMoreToLoad }
+        }.collectAsState(false)
+
+        LaunchedEffect(shouldFocusOnLive, hasMoreToLoadForward) {
+            if (shouldFocusOnLive && !hasMoreToLoadForward) {
+                timelineController.focusOnLive()
             }
         }
 
