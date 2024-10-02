@@ -22,7 +22,7 @@ android {
 setupAnvil()
 
 dependencies {
-    allFeaturesApi(rootDir, logger)
+    allFeaturesApi(project)
 
     implementation(projects.libraries.core)
     implementation(projects.libraries.androidutils)

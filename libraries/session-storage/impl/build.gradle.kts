@@ -1,4 +1,6 @@
 import extension.setupAnvil
+import org.gradle.internal.extensions.stdlib.capitalized
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 /*
  * Copyright 2023, 2024 New Vector Ltd.
@@ -48,6 +50,18 @@ sqldelight {
             // ./gradlew verifySqlDelightMigration
             schemaOutputDirectory = File("src/main/sqldelight/databases")
             verifyMigrations = true
+        }
+    }
+}
+
+// Workaround for KSP not picking up the generated files from SqlDelight
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        afterEvaluate {
+            val variantName = variant.name.capitalized()
+            tasks.getByName<KotlinCompile>("ksp${variantName}Kotlin") {
+                setSource(tasks.getByName("generate${variantName}SessionDatabaseInterface").outputs)
+            }
         }
     }
 }

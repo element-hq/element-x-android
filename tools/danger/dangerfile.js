@@ -122,7 +122,7 @@ const previewAnnotations = [
 
 const filesWithPreviews = editedFiles.filter(file => file.endsWith(".kt")).filter(file => {
     const content = fs.readFileSync(file);
-    return previewAnnotations.some((ann) => content.includes(ann));
+    return previewAnnotations.some((ann) => content.includes("import " + ann));
 })
 
 const composablePreviewProviderContents = fs.readFileSync('tests/uitests/src/test/kotlin/base/ComposablePreviewProvider.kt');
