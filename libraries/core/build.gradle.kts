@@ -15,6 +15,10 @@ java {
     targetCompatibility = Versions.javaCompileVersion
 }
 
+kotlin {
+    jvmToolchain(Versions.javaLanguageVersion.asInt())
+}
+
 dependencies {
     implementation(libs.coroutines.core)
     testImplementation(libs.test.junit)
