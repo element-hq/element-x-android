@@ -17,18 +17,22 @@ open class TimelineItemVideoContentProvider : PreviewParameterProvider<TimelineI
     override val values: Sequence<TimelineItemVideoContent>
         get() = sequenceOf(
             aTimelineItemVideoContent(),
-            aTimelineItemVideoContent().copy(aspectRatio = 1.0f),
-            aTimelineItemVideoContent().copy(aspectRatio = 1.5f),
+            aTimelineItemVideoContent(aspectRatio = 1.0f),
+            aTimelineItemVideoContent(aspectRatio = 1.5f),
+            aTimelineItemVideoContent(blurhash = null),
         )
 }
 
-fun aTimelineItemVideoContent() = TimelineItemVideoContent(
+fun aTimelineItemVideoContent(
+    aspectRatio: Float = 0.5f,
+    blurhash: String? = A_BLUR_HASH,
+) = TimelineItemVideoContent(
     body = "Video.mp4",
     formatted = null,
     filename = null,
     thumbnailSource = null,
-    blurHash = A_BLUR_HASH,
-    aspectRatio = 0.5f,
+    blurHash = blurhash,
+    aspectRatio = aspectRatio,
     duration = 100.milliseconds,
     videoSource = MediaSource(""),
     height = 300,

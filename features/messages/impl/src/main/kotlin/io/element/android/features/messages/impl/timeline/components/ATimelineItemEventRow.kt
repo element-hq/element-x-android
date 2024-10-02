@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
+import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 
 // For previews
 @Composable
@@ -20,10 +22,12 @@ internal fun ATimelineItemEventRow(
     renderReadReceipts: Boolean = false,
     isLastOutgoingMessage: Boolean = false,
     isHighlighted: Boolean = false,
+    timelineProtectionState: TimelineProtectionState = aTimelineProtectionState(),
 ) = TimelineItemEventRow(
     event = event,
     timelineRoomInfo = timelineRoomInfo,
     renderReadReceipts = renderReadReceipts,
+    timelineProtectionState = timelineProtectionState,
     isLastOutgoingMessage = isLastOutgoingMessage,
     isHighlighted = isHighlighted,
     onClick = {},

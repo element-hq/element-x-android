@@ -57,6 +57,8 @@ import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
+import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.libraries.designsystem.components.dialogs.AlertDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -72,6 +74,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun TimelineView(
     state: TimelineState,
+    timelineProtectionState: TimelineProtectionState,
     onUserDataClick: (UserId) -> Unit,
     onLinkClick: (String) -> Unit,
     onMessageClick: (TimelineItem.Event) -> Unit,
@@ -137,6 +140,7 @@ fun TimelineView(
                     TimelineItemRow(
                         timelineItem = timelineItem,
                         timelineRoomInfo = state.timelineRoomInfo,
+                        timelineProtectionState = timelineProtectionState,
                         renderReadReceipts = state.renderReadReceipts,
                         isLastOutgoingMessage = state.isLastOutgoingMessage(timelineItem.identifier()),
                         focusedEventId = state.focusedEventId,
@@ -320,6 +324,7 @@ internal fun TimelineViewPreview(
                 ),
                 focusedEventIndex = 0,
             ),
+            timelineProtectionState = aTimelineProtectionState(),
             onUserDataClick = {},
             onLinkClick = {},
             onMessageClick = {},

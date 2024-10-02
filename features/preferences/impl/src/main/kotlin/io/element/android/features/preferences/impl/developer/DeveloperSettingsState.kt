@@ -19,6 +19,7 @@ data class DeveloperSettingsState(
     val clearCacheAction: AsyncData<Unit>,
     val customElementCallBaseUrlState: CustomElementCallBaseUrlState,
     val isSimpleSlidingSyncEnabled: Boolean,
+    val hideImagesAndVideos: Boolean,
     val eventSink: (DeveloperSettingsEvents) -> Unit
 )
 

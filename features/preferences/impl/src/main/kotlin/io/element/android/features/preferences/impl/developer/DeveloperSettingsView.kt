@@ -40,9 +40,10 @@ fun DeveloperSettingsView(
         title = stringResource(id = CommonStrings.common_developer_options)
     ) {
         // Note: this is OK to hardcode strings in this debug screen.
+        SettingsCategory(state)
         PreferenceCategory(
             title = "Feature flags",
-            showTopDivider = false,
+            showTopDivider = true,
         ) {
             FeatureListContent(state)
         }
@@ -89,6 +90,22 @@ fun DeveloperSettingsView(
                 }
             )
         }
+    }
+}
+
+@Composable
+private fun SettingsCategory(
+    state: DeveloperSettingsState,
+) {
+    PreferenceCategory(title = "Preferences", showTopDivider = false) {
+        PreferenceSwitch(
+            title = "Hide image & video previews",
+            subtitle = "When toggled image & video will not render in the timeline by default.",
+            isChecked = state.hideImagesAndVideos,
+            onCheckedChange = {
+                state.eventSink(DeveloperSettingsEvents.SetHideImagesAndVideos(it))
+            }
+        )
     }
 }
 

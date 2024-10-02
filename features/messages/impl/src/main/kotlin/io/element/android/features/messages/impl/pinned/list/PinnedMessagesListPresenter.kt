@@ -30,6 +30,8 @@ import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionPresenter
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -60,6 +62,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
     private val room: MatrixRoom,
     timelineItemsFactoryCreator: TimelineItemsFactory.Creator,
     private val timelineProvider: PinnedEventsTimelineProvider,
+    private val timelineProtectionPresenter: TimelineProtectionPresenter,
     private val snackbarDispatcher: SnackbarDispatcher,
     actionListPresenterFactory: ActionListPresenter.Factory,
     private val appCoroutineScope: CoroutineScope,
@@ -97,14 +100,13 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
                 )
             )
         }
-
+        val timelineProtectionState = timelineProtectionPresenter.present()
         val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
         val userEventPermissions by userEventPermissions(syncUpdateFlow.value)
 
         var pinnedMessageItems by remember {
             mutableStateOf<AsyncData<ImmutableList<TimelineItem>>>(AsyncData.Uninitialized)
         }
-
         PinnedMessagesListEffect(
             onItemsChange = { newItems ->
                 pinnedMessageItems = newItems
@@ -119,6 +121,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
 
         return pinnedMessagesListState(
             timelineRoomInfo = timelineRoomInfo,
+            timelineProtectionState = timelineProtectionState,
             userEventPermissions = userEventPermissions,
             timelineItems = pinnedMessageItems,
             eventSink = ::handleEvents
@@ -214,6 +217,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
     @Composable
     private fun pinnedMessagesListState(
         timelineRoomInfo: TimelineRoomInfo,
+        timelineProtectionState: TimelineProtectionState,
         userEventPermissions: UserEventPermissions,
         timelineItems: AsyncData<ImmutableList<TimelineItem>>,
         eventSink: (PinnedMessagesListEvents) -> Unit
@@ -228,6 +232,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
                     val actionListState = actionListPresenter.present()
                     PinnedMessagesListState.Filled(
                         timelineRoomInfo = timelineRoomInfo,
+                        timelineProtectionState = timelineProtectionState,
                         userEventPermissions = userEventPermissions,
                         timelineItems = timelineItems.data,
                         actionListState = actionListState,
