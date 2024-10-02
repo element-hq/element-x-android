@@ -26,7 +26,6 @@ import io.element.android.features.messages.impl.timeline.components.receipt.bot
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
-import io.element.android.features.messages.impl.typing.aTypingNotificationState
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessageComposerState
 import io.element.android.features.messages.impl.voicemessages.composer.aVoiceMessagePreviewState
@@ -122,7 +121,6 @@ fun aMessagesState(
     userEventPermissions = userEventPermissions,
     composerState = composerState,
     voiceMessageComposerState = voiceMessageComposerState,
-    typingNotificationState = aTypingNotificationState(),
     timelineState = timelineState,
     readReceiptBottomSheetState = readReceiptBottomSheetState,
     actionListState = actionListState,

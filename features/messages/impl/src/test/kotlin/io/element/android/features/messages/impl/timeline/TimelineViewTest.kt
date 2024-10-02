@@ -155,7 +155,6 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setTimel
     setSafeContent {
         TimelineView(
             state = state,
-            typingNotificationState = typingNotificationState,
             onUserDataClick = onUserDataClick,
             onLinkClick = onLinkClick,
             onMessageClick = onMessageClick,

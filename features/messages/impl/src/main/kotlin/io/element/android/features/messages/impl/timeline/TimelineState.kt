@@ -11,6 +11,7 @@ import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureState
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import kotlinx.collections.immutable.ImmutableList
@@ -67,5 +68,6 @@ data class TimelineRoomInfo(
     val userHasPermissionToSendMessage: Boolean,
     val userHasPermissionToSendReaction: Boolean,
     val isCallOngoing: Boolean,
-    val pinnedEventIds: List<EventId>
+    val pinnedEventIds: List<EventId>,
+    val typingNotificationState: TypingNotificationState,
 )
