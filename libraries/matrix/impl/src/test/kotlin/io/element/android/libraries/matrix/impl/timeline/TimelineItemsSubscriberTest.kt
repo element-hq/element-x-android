@@ -10,10 +10,13 @@ package io.element.android.libraries.matrix.impl.timeline
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustEventTimelineItem
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustEventTimelineItem
+import io.element.android.libraries.matrix.impl.fixtures.factories.anEventTimelineItemDebugInfo
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustTimeline
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustTimelineDiff
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustTimelineItem
+import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.CompletableDeferred
@@ -26,9 +29,22 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import org.matrix.rustcomponents.sdk.EventOrTransactionId
+import org.matrix.rustcomponents.sdk.EventSendState
+import org.matrix.rustcomponents.sdk.EventShieldsProvider
+import org.matrix.rustcomponents.sdk.EventTimelineItem
+import org.matrix.rustcomponents.sdk.EventTimelineItemDebugInfo
+import org.matrix.rustcomponents.sdk.EventTimelineItemDebugInfoProvider
+import org.matrix.rustcomponents.sdk.ProfileDetails
+import org.matrix.rustcomponents.sdk.Reaction
+import org.matrix.rustcomponents.sdk.Receipt
+import org.matrix.rustcomponents.sdk.ShieldState
+import org.matrix.rustcomponents.sdk.EventTimelineItem as RustEventTimelineItem
 import org.matrix.rustcomponents.sdk.Timeline
 import org.matrix.rustcomponents.sdk.TimelineChange
+import org.matrix.rustcomponents.sdk.TimelineItemContent
 import uniffi.matrix_sdk_ui.EventItemOrigin
+import uniffi.matrix_sdk_ui.NoPointer
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TimelineItemsSubscriberTest {
@@ -94,7 +110,7 @@ class TimelineItemsSubscriberTest {
                 listOf(
                     FakeRustTimelineDiff(
                         item = FakeRustTimelineItem(
-                            asEventResult = FakeRustEventTimelineItem(origin = EventItemOrigin.SYNC)
+                            asEventResult = aRustEventTimelineItem(origin = EventItemOrigin.SYNC),
                         ),
                         change = TimelineChange.RESET,
                     )
