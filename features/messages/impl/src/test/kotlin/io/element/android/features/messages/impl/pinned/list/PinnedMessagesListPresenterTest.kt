@@ -14,6 +14,7 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactoryCreator
 import io.element.android.features.messages.impl.pinned.PinnedEventsTimelineProvider
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -31,6 +32,7 @@ import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.lambda.assert
@@ -303,12 +305,14 @@ class PinnedMessagesListPresenterTest {
                 initialState = mapOf(FeatureFlags.PinnedEvents.key to isFeatureEnabled)
             )
         )
+        val timelineProtectionPresenter = TimelineProtectionPresenter(InMemoryAppPreferencesStore())
         timelineProvider.launchIn(backgroundScope)
         return PinnedMessagesListPresenter(
             navigator = navigator,
             room = room,
             timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(),
             timelineProvider = timelineProvider,
+            timelineProtectionPresenter = timelineProtectionPresenter,
             snackbarDispatcher = SnackbarDispatcher(),
             actionListPresenterFactory = FakeActionListPresenter.Factory,
             analyticsService = analyticsService,
