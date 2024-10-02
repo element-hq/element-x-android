@@ -186,9 +186,9 @@ class RoomListPresenter @Inject constructor(
                     currentSecurityBannerDismissed -> SecurityBannerState.None
                     syncState == SyncState.Running -> {
                         when (recoveryState) {
-                            RecoveryState.UNKNOWN,
                             RecoveryState.DISABLED -> SecurityBannerState.SetUpRecovery
                             RecoveryState.INCOMPLETE -> SecurityBannerState.RecoveryKeyConfirmation
+                            RecoveryState.UNKNOWN,
                             RecoveryState.WAITING_FOR_SYNC,
                             RecoveryState.ENABLED -> SecurityBannerState.None
                         }
