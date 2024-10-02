@@ -236,7 +236,9 @@ class RoomListPresenterTest {
 
     @Test
     fun `present - handle DismissRecoveryKeyPrompt`() = runTest {
-        val encryptionService = FakeEncryptionService()
+        val encryptionService = FakeEncryptionService().apply {
+            recoveryStateStateFlow.emit(RecoveryState.DISABLED)
+        }
         val roomListService = FakeRoomListService().apply {
             postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
         }
