@@ -136,8 +136,7 @@ fun TimelineView(
                         timelineItem = timelineItem,
                         timelineRoomInfo = state.timelineRoomInfo,
                         renderReadReceipts = state.renderReadReceipts,
-                        isLastOutgoingMessage = (timelineItem as? TimelineItem.Event)?.isMine == true &&
-                            state.timelineItems.first().identifier() == timelineItem.identifier(),
+                        isLastOutgoingMessage = state.isLastOutgoingMessage(timelineItem.identifier()),
                         focusedEventId = state.focusedEventId,
                         onUserDataClick = onUserDataClick,
                         onLinkClick = onLinkClick,
