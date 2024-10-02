@@ -55,10 +55,6 @@ fun CommonExtension<*, *, *, *, *, *>.composeConfig(libs: LibrariesForLibs) {
         compose = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composecompiler.get()
-    }
-
     packaging {
         resources.excludes.apply {
             add("META-INF/AL2.0")
