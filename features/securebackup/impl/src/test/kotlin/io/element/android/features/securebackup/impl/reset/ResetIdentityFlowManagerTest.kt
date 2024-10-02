@@ -47,6 +47,7 @@ class ResetIdentityFlowManagerTest {
         var result: AsyncData.Success<IdentityResetHandle>? = null
         flowManager.getResetHandle().test {
             assertThat(awaitItem().isLoading()).isTrue()
+            @Suppress("UNCHECKED_CAST")
             result = awaitItem() as? AsyncData.Success<IdentityResetHandle>
             assertThat(result).isNotNull()
         }

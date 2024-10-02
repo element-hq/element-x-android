@@ -3,8 +3,9 @@
 
 [versions]
 # Project
-android_gradle_plugin = "8.6.1"
+android_gradle_plugin = "8.7.0"
 kotlin = "1.9.25"
+kotlinpoetKsp = "1.17.0"
 ksp = "1.9.25-1.0.20"
 firebaseAppDistribution = "5.0.0"
 
@@ -49,7 +50,7 @@ telephoto = "0.13.0"
 
 # DI
 dagger = "2.52"
-anvil = "2.4.9"
+anvil = "0.3.1"
 
 # Auto service
 autoservice = "1.1.1"
@@ -63,14 +64,17 @@ kover = "0.8.3"
 android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "android_gradle_plugin" }
 # https://developer.android.com/studio/write/java8-support#library-desugaring-versions
 android_desugar = "com.android.tools:desugar_jdk_libs:2.1.2"
-anvil_gradle_plugin = { module = "com.squareup.anvil:gradle-plugin", version.ref = "anvil" }
+anvil_gradle_plugin = { module = "dev.zacsweers.anvil:gradle-plugin", version.ref = "anvil" }
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinpoetKsp" }
 kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
+ksp_gradle_plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 gms_google_services = "com.google.gms:google-services:4.4.2"
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:33.3.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:33.4.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
+ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 
 # AndroidX
 androidx_core = { module = "androidx.core:core", version.ref = "core" }
@@ -198,8 +202,8 @@ sigpwned_emoji4j = "com.sigpwned:emoji4j-core:15.1.2"
 inject = "javax.inject:javax.inject:1"
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger_compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
-anvil_compiler_api = { module = "com.squareup.anvil:compiler-api", version.ref = "anvil" }
-anvil_compiler_utils = { module = "com.squareup.anvil:compiler-utils", version.ref = "anvil" }
+anvil_compiler_api = { module = "dev.zacsweers.anvil:compiler-api", version.ref = "anvil" }
+anvil_compiler_utils = { module = "dev.zacsweers.anvil:compiler-utils", version.ref = "anvil" }
 
 # Auto services
 google_autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }
@@ -222,7 +226,7 @@ kotlin_jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
+anvil = { id = "dev.zacsweers.anvil", version.ref = "anvil" }
 detekt = "io.gitlab.arturbosch.detekt:1.23.7"
 ktlint = "org.jlleitschuh.gradle.ktlint:12.1.1"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"

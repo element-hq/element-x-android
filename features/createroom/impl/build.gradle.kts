@@ -1,3 +1,4 @@
+import extension.ComponentMergingStrategy
 import extension.setupAnvil
 
 /*
@@ -22,7 +23,7 @@ android {
     }
 }
 
-setupAnvil()
+setupAnvil(componentMergingStrategy = ComponentMergingStrategy.KSP)
 
 dependencies {
     implementation(projects.libraries.core)
