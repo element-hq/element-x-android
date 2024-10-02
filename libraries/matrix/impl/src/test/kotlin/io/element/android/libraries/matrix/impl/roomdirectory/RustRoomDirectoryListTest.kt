@@ -11,7 +11,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryList
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomDescription
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRoomDirectorySearch
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoomDirectorySearch
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -27,17 +27,17 @@ import org.matrix.rustcomponents.sdk.RoomDirectorySearchEntryUpdate
 class RustRoomDirectoryListTest {
     @Test
     fun `check that the state emits the expected values`() = runTest {
-        val fakeRoomDirectorySearch = FakeRoomDirectorySearch()
+        val roomDirectorySearch = FakeRustRoomDirectorySearch()
         val mapper = RoomDescriptionMapper()
         val sut = createRustRoomDirectoryList(
-            roomDirectorySearch = fakeRoomDirectorySearch,
+            roomDirectorySearch = roomDirectorySearch,
             scope = backgroundScope,
         )
         // Let the mxCallback be ready
         runCurrent()
         sut.state.test {
             sut.filter("", 20)
-            fakeRoomDirectorySearch.emitResult(
+            roomDirectorySearch.emitResult(
                 listOf(
                     RoomDirectorySearchEntryUpdate.Append(listOf(aRustRoomDescription()))
                 )
@@ -50,9 +50,9 @@ class RustRoomDirectoryListTest {
                 )
             )
             assertThat(initialItem.hasMoreToLoad).isTrue()
-            fakeRoomDirectorySearch.isAtLastPage = true
+            roomDirectorySearch.isAtLastPage = true
             sut.loadMore()
-            fakeRoomDirectorySearch.emitResult(
+            roomDirectorySearch.emitResult(
                 listOf(
                     RoomDirectorySearchEntryUpdate.Append(listOf(aRustRoomDescription(A_ROOM_ID_2.value)))
                 )
@@ -80,7 +80,7 @@ class RustRoomDirectoryListTest {
     }
 
     private fun TestScope.createRustRoomDirectoryList(
-        roomDirectorySearch: RoomDirectorySearch = FakeRoomDirectorySearch(),
+        roomDirectorySearch: RoomDirectorySearch = FakeRustRoomDirectorySearch(),
         scope: CoroutineScope,
     ) = RustRoomDirectoryList(
         inner = roomDirectorySearch,
