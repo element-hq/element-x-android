@@ -103,7 +103,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     timestamp = this.timestamp,
                     senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
                     body = messageBody,
-                    imageUriString = fetchImageIfPresent(client)?.toString(),
+                    imageUriString = content.fetchImageIfPresent(client)?.toString(),
                     roomName = roomDisplayName,
                     roomIsDm = isDm,
                     roomAvatarPath = roomAvatarUrl,
@@ -148,7 +148,6 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     timestamp = this.timestamp,
                     senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
                     body = stringProvider.getString(CommonStrings.common_call_invite),
-                    imageUriString = fetchImageIfPresent(client)?.toString(),
                     roomName = roomDisplayName,
                     roomIsDm = isDm,
                     roomAvatarPath = roomAvatarUrl,
@@ -288,22 +287,18 @@ class DefaultNotifiableEventResolver @Inject constructor(
         }
     }
 
-    private suspend fun NotificationData.fetchImageIfPresent(client: MatrixClient): Uri? {
-        val fileResult = when (val content = this.content) {
-            is NotificationContent.MessageLike.RoomMessage -> {
-                when (val messageType = content.messageType) {
-                    is ImageMessageType -> notificationMediaRepoFactory.create(client)
-                        .getMediaFile(
-                            mediaSource = messageType.source,
-                            mimeType = messageType.info?.mimetype,
-                            body = messageType.body,
-                        )
-                    is VideoMessageType -> null // Use the thumbnail here?
-                    else -> null
-                }
-            }
+    private suspend fun NotificationContent.MessageLike.RoomMessage.fetchImageIfPresent(client: MatrixClient): Uri? {
+        val fileResult = when (val messageType = messageType) {
+            is ImageMessageType -> notificationMediaRepoFactory.create(client)
+                .getMediaFile(
+                    mediaSource = messageType.source,
+                    mimeType = messageType.info?.mimetype,
+                    body = messageType.body,
+                )
+            is VideoMessageType -> null // Use the thumbnail here?
             else -> null
-        } ?: return null
+        }
+            ?: return null
 
         return fileResult
             .onFailure {
