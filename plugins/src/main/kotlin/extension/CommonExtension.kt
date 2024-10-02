@@ -10,7 +10,6 @@ package extension
 import Versions
 import com.android.build.api.dsl.CommonExtension
 import isEnterpriseBuild
-import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Project
 import java.io.File
 
@@ -44,12 +43,13 @@ fun CommonExtension<*, *, *, *, *, *>.androidConfig(project: Project) {
         }
         checkDependencies = false
         abortOnError = true
+        ignoreTestSources = true
         ignoreTestFixturesSources = true
         checkGeneratedSources = false
     }
 }
 
-fun CommonExtension<*, *, *, *, *, *>.composeConfig(libs: LibrariesForLibs) {
+fun CommonExtension<*, *, *, *, *, *>.composeConfig() {
 
     buildFeatures {
         compose = true

@@ -24,7 +24,7 @@ plugins {
 
 android {
     androidConfig(project)
-    composeConfig(libs)
+    composeConfig()
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
     }

@@ -43,6 +43,7 @@ import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.lambdaSuspendRecorder
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -145,7 +146,7 @@ class LoggedInPresenterTest {
 
     @Test
     fun `present - ensure default pusher is registered with default provider`() = runTest {
-        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
+        val lambda = lambdaSuspendRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
             Result.success(Unit)
         }
         val sessionVerificationService = FakeSessionVerificationService(
@@ -178,7 +179,7 @@ class LoggedInPresenterTest {
 
     @Test
     fun `present - ensure default pusher is registered with default provider - fail to register`() = runTest {
-        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
+        val lambda = lambdaSuspendRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
             Result.failure(AN_EXCEPTION)
         }
         val sessionVerificationService = FakeSessionVerificationService(
@@ -211,7 +212,7 @@ class LoggedInPresenterTest {
 
     @Test
     fun `present - ensure current provider is registered with current distributor`() = runTest {
-        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
+        val lambda = lambdaSuspendRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
             Result.success(Unit)
         }
         val sessionVerificationService = FakeSessionVerificationService(
@@ -256,7 +257,7 @@ class LoggedInPresenterTest {
 
     @Test
     fun `present - if current push provider does not have current distributor, the first one is used`() = runTest {
-        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
+        val lambda = lambdaSuspendRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
             Result.success(Unit)
         }
         val sessionVerificationService = FakeSessionVerificationService(
@@ -422,7 +423,7 @@ class LoggedInPresenterTest {
 
     @Test
     fun `present - case two push providers but first one does not have distributor - second one will be used`() = runTest {
-        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
+        val lambda = lambdaSuspendRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
             Result.success(Unit)
         }
         val sessionVerificationService = FakeSessionVerificationService(
