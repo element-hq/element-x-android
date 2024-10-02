@@ -10,7 +10,7 @@ package io.element.android.libraries.matrix.impl.timeline
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
-import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustEventTimelineItem
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustEventTimelineItem
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustTimeline
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustTimelineDiff
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustTimelineItem
@@ -94,7 +94,7 @@ class TimelineItemsSubscriberTest {
                 listOf(
                     FakeRustTimelineDiff(
                         item = FakeRustTimelineItem(
-                            asEventResult = FakeRustEventTimelineItem(origin = EventItemOrigin.SYNC)
+                            asEventResult = aRustEventTimelineItem(origin = EventItemOrigin.SYNC),
                         ),
                         change = TimelineChange.RESET,
                     )
