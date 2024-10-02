@@ -56,6 +56,6 @@ object Versions {
     const val targetSdk = 34
     // When updating the `minSdk`, make sure to update the value of `minSdkVersion` in the file `tools/release/release.sh`
     val minSdk = if (isEnterpriseBuild) 26 else 24
-    val javaCompileVersion = JavaVersion.VERSION_17
-    val javaLanguageVersion: JavaLanguageVersion = JavaLanguageVersion.of(11)
+    val javaCompileVersion = JavaVersion.VERSION_21
+    val javaLanguageVersion: JavaLanguageVersion = JavaLanguageVersion.of(21)
 }
