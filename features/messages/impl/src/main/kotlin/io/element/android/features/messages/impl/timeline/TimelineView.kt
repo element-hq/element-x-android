@@ -30,9 +30,11 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -206,6 +208,7 @@ private fun BoxScope.TimelineScrollHelper(
             lazyListState.firstVisibleItemIndex < 3 && isLive
         }
     }
+    var jumpToLiveHandled by remember { mutableStateOf(true) }
 
     fun scrollToBottom() {
         coroutineScope.launch {
@@ -221,7 +224,15 @@ private fun BoxScope.TimelineScrollHelper(
         if (isLive) {
             scrollToBottom()
         } else {
+            jumpToLiveHandled = false
             onJumpToLive()
+        }
+    }
+
+    LaunchedEffect(jumpToLiveHandled, isLive) {
+        if (!jumpToLiveHandled && isLive) {
+            lazyListState.scrollToItem(0)
+            jumpToLiveHandled = true
         }
     }
 
