@@ -143,8 +143,8 @@ fun SecureBackupRootView(
 
         // Setup recovery
         when (state.recoveryState) {
-            RecoveryState.WAITING_FOR_SYNC -> Unit
             RecoveryState.UNKNOWN,
+            RecoveryState.WAITING_FOR_SYNC -> Unit
             RecoveryState.DISABLED -> {
                 PreferenceText(
                     title = stringResource(id = R.string.screen_chat_backup_recovery_action_setup),
