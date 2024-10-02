@@ -26,6 +26,10 @@ android {
     }
 }
 
+kotlin {
+    jvmToolchain(21)
+}
+
 dependencies {
     commonDependencies(libs)
     coreLibraryDesugaring(libs.android.desugar)

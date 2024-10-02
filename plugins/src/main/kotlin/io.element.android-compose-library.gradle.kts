@@ -29,6 +29,10 @@ android {
     }
 }
 
+kotlin {
+    jvmToolchain(21)
+}
+
 dependencies {
     commonDependencies(libs)
     composeDependencies(libs)
