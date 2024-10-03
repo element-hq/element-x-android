@@ -13,11 +13,11 @@ jobs:
     steps:
       - name: ⏬ Checkout with LFS
         uses: nschloe/action-cached-lfs-checkout@v1.2.2
-      - name: Use JDK 17
+      - name: Use JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '17'
+          java-version: '21'
       - name: Configure gradle
         uses: gradle/actions/setup-gradle@v4
         with:

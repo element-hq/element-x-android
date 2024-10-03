@@ -11,8 +11,14 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = Versions.javaVersion
+    targetCompatibility = Versions.javaVersion
+}
+
+kotlin {
+    jvmToolchain {
+        languageVersion = Versions.javaLanguageVersion
+    }
 }
 
 dependencies {
