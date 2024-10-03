@@ -67,7 +67,6 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.utils.animateScrollToItemCenter
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 
@@ -115,10 +114,6 @@ fun TimelineView(
 
     fun inReplyToClick(eventId: EventId) {
         state.eventSink(TimelineEvents.FocusOnEvent(eventId))
-    }
-
-    fun onShieldClick(shield: MessageShield) {
-        state.eventSink(TimelineEvents.ShowShieldDialog(shield))
     }
 
     // Animate alpha when timeline is first displayed, to avoid flashes or glitching when viewing rooms
