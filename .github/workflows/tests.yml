@@ -65,7 +65,7 @@ jobs:
         with:
           name: kover-error-report
           path: |
-            app/build/reports/kover/verifyGplayDebug.err
+            app/build/reports/kover
 
       - name: ✅ Upload kover report (disabled)
         if: always()
