@@ -379,7 +379,6 @@ private fun MessagesViewContent(
                     val scrollBehavior = PinnedMessagesBannerViewDefaults.rememberExitOnScrollBehavior()
                     TimelineView(
                         state = state.timelineState,
-                        typingNotificationState = state.typingNotificationState,
                         onUserDataClick = onUserDataClick,
                         onLinkClick = onLinkClick,
                         onMessageClick = onMessageClick,

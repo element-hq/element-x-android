@@ -15,7 +15,6 @@ import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
-import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -33,7 +32,6 @@ data class MessagesState(
     val composerState: MessageComposerState,
     val voiceMessageComposerState: VoiceMessageComposerState,
     val timelineState: TimelineState,
-    val typingNotificationState: TypingNotificationState,
     val actionListState: ActionListState,
     val customReactionState: CustomReactionState,
     val reactionSummaryState: ReactionSummaryState,

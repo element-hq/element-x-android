@@ -30,9 +30,11 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -55,25 +57,21 @@ import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
-import io.element.android.features.messages.impl.typing.TypingNotificationState
-import io.element.android.features.messages.impl.typing.TypingNotificationView
-import io.element.android.features.messages.impl.typing.aTypingNotificationState
 import io.element.android.libraries.designsystem.components.dialogs.AlertDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.utils.animateScrollToItemCenter
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
-import kotlin.math.abs
 
 @Composable
 fun TimelineView(
     state: TimelineState,
-    typingNotificationState: TypingNotificationState,
     onUserDataClick: (UserId) -> Unit,
     onLinkClick: (String) -> Unit,
     onMessageClick: (TimelineItem.Event) -> Unit,
@@ -131,11 +129,6 @@ fun TimelineView(
                 reverseLayout = useReverseLayout,
                 contentPadding = PaddingValues(vertical = 8.dp),
             ) {
-                if (state.isLive) {
-                    item {
-                        TypingNotificationView(state = typingNotificationState)
-                    }
-                }
                 items(
                     items = state.timelineItems,
                     contentType = { timelineItem -> timelineItem.contentType() },
@@ -145,8 +138,7 @@ fun TimelineView(
                         timelineItem = timelineItem,
                         timelineRoomInfo = state.timelineRoomInfo,
                         renderReadReceipts = state.renderReadReceipts,
-                        isLastOutgoingMessage = (timelineItem as? TimelineItem.Event)?.isMine == true &&
-                            state.timelineItems.first().identifier() == timelineItem.identifier(),
+                        isLastOutgoingMessage = state.isLastOutgoingMessage(timelineItem.identifier()),
                         focusedEventId = state.focusedEventId,
                         onUserDataClick = onUserDataClick,
                         onLinkClick = onLinkClick,
@@ -216,6 +208,7 @@ private fun BoxScope.TimelineScrollHelper(
             lazyListState.firstVisibleItemIndex < 3 && isLive
         }
     }
+    var jumpToLiveHandled by remember { mutableStateOf(true) }
 
     fun scrollToBottom() {
         coroutineScope.launch {
@@ -231,18 +224,22 @@ private fun BoxScope.TimelineScrollHelper(
         if (isLive) {
             scrollToBottom()
         } else {
+            jumpToLiveHandled = false
             onJumpToLive()
+        }
+    }
+
+    LaunchedEffect(jumpToLiveHandled, isLive) {
+        if (!jumpToLiveHandled && isLive) {
+            lazyListState.scrollToItem(0)
+            jumpToLiveHandled = true
         }
     }
 
     val latestOnFocusEventRender by rememberUpdatedState(onFocusEventRender)
     LaunchedEffect(focusRequestState) {
-        if (focusRequestState is FocusRequestState.Success && focusRequestState.isIndexed) {
-            if (abs(lazyListState.firstVisibleItemIndex - focusRequestState.index) < 10) {
-                lazyListState.animateScrollToItem(focusRequestState.index)
-            } else {
-                lazyListState.scrollToItem(focusRequestState.index)
-            }
+        if (focusRequestState is FocusRequestState.Success && focusRequestState.isIndexed && !focusRequestState.rendered) {
+            lazyListState.animateScrollToItemCenter(focusRequestState.index)
             latestOnFocusEventRender()
         }
     }
@@ -323,7 +320,6 @@ internal fun TimelineViewPreview(
                 ),
                 focusedEventIndex = 0,
             ),
-            typingNotificationState = aTypingNotificationState(),
             onUserDataClick = {},
             onLinkClick = {},
             onMessageClick = {},

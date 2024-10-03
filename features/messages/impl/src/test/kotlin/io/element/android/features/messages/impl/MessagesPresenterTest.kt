@@ -40,7 +40,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
-import io.element.android.features.messages.impl.typing.TypingNotificationPresenter
+import io.element.android.features.messages.impl.typing.aTypingNotificationState
 import io.element.android.features.messages.impl.utils.FakeTextPillificationHelper
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPlayer
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
@@ -1048,6 +1048,7 @@ class MessagesPresenterTest {
             timelineItemIndexer = TimelineItemIndexer(),
             timelineController = TimelineController(matrixRoom),
             resolveVerifiedUserSendFailurePresenter = { aResolveVerifiedUserSendFailureState() },
+            typingNotificationPresenter = { aTypingNotificationState() },
         )
         val timelinePresenterFactory = object : TimelinePresenter.Factory {
             override fun create(navigator: MessagesNavigator): TimelinePresenter {
@@ -1055,11 +1056,6 @@ class MessagesPresenterTest {
             }
         }
         val featureFlagService = FakeFeatureFlagService()
-        val typingNotificationPresenter = TypingNotificationPresenter(
-            room = matrixRoom,
-            sessionPreferencesStore = sessionPreferencesStore,
-        )
-
         val readReceiptBottomSheetPresenter = ReadReceiptBottomSheetPresenter()
         val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
         val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)
@@ -1069,7 +1065,6 @@ class MessagesPresenterTest {
             composerPresenter = messageComposerPresenter,
             voiceMessageComposerPresenter = voiceMessageComposerPresenter,
             timelinePresenterFactory = timelinePresenterFactory,
-            typingNotificationPresenter = typingNotificationPresenter,
             actionListPresenterFactory = FakeActionListPresenter.Factory,
             customReactionPresenter = customReactionPresenter,
             reactionSummaryPresenter = reactionSummaryPresenter,

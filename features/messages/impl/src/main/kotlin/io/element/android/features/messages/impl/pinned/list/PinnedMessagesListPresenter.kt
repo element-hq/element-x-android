@@ -30,6 +30,7 @@ import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -44,6 +45,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
@@ -87,7 +89,12 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
                 userHasPermissionToSendReaction = false,
                 isCallOngoing = false,
                 // don't compute this value or the pin icon will be shown
-                pinnedEventIds = emptyList()
+                pinnedEventIds = emptyList(),
+                typingNotificationState = TypingNotificationState(
+                    renderTypingNotifications = false,
+                    typingMembers = persistentListOf(),
+                    reserveSpace = false,
+                )
             )
         }
 

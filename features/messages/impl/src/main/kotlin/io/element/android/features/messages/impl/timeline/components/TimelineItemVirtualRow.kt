@@ -26,6 +26,8 @@ import io.element.android.features.messages.impl.timeline.model.virtual.Timeline
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingIndicatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemRoomBeginningModel
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemTypingNotificationModel
+import io.element.android.features.messages.impl.typing.TypingNotificationView
 
 @Composable
 fun TimelineItemVirtualRow(
@@ -46,8 +48,14 @@ fun TimelineItemVirtualRow(
                     latestEventSink(TimelineEvents.LoadMore(virtual.model.direction))
                 }
             }
+            // Empty model trick to avoid timeline jumping during forward pagination.
             is TimelineItemLastForwardIndicatorModel -> {
                 Spacer(modifier = Modifier)
+            }
+            is TimelineItemTypingNotificationModel -> {
+                TypingNotificationView(
+                    state = timelineRoomInfo.typingNotificationState,
+                )
             }
         }
     }

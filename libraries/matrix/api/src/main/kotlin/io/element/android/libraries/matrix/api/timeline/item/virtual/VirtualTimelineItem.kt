@@ -24,4 +24,6 @@ sealed interface VirtualTimelineItem {
         val direction: Timeline.PaginationDirection,
         val timestamp: Long,
     ) : VirtualTimelineItem
+
+    data object TypingNotification : VirtualTimelineItem
 }
