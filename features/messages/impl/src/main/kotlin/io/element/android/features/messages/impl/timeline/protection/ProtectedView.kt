@@ -31,6 +31,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 import io.element.android.libraries.ui.strings.CommonStrings
 
+@SuppressWarnings("ModifierClickableOrder")
 @Composable
 fun ProtectedView(
     hideContent: Boolean,
