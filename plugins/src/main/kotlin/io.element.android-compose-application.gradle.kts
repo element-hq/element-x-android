@@ -12,7 +12,6 @@ import extension.androidConfig
 import extension.commonDependencies
 import extension.composeConfig
 import extension.composeDependencies
-import gradle.kotlin.dsl.accessors._719af408c2a6c8acb7cff251b94eadcc.kotlin
 import org.gradle.accessors.dm.LibrariesForLibs
 
 val libs = the<LibrariesForLibs>()
