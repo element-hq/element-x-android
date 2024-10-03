@@ -11,7 +11,6 @@ import Versions
 import com.android.build.api.dsl.CommonExtension
 import isEnterpriseBuild
 import org.gradle.accessors.dm.LibrariesForLibs
-import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import java.io.File
 
@@ -28,8 +27,8 @@ fun CommonExtension<*, *, *, *, *, *>.androidConfig(project: Project) {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = Versions.javaVersion
+        targetCompatibility = Versions.javaVersion
     }
 
     testOptions {

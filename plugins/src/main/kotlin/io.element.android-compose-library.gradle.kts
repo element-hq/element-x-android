@@ -30,7 +30,9 @@ android {
 }
 
 kotlin {
-    jvmToolchain(Versions.javaLanguageVersion.asInt())
+    jvmToolchain {
+        languageVersion = Versions.javaLanguageVersion
+    }
 }
 
 dependencies {

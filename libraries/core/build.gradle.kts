@@ -11,12 +11,14 @@ plugins {
 }
 
 java {
-    sourceCompatibility = Versions.javaCompileVersion
-    targetCompatibility = Versions.javaCompileVersion
+    sourceCompatibility = Versions.javaVersion
+    targetCompatibility = Versions.javaVersion
 }
 
 kotlin {
-    jvmToolchain(Versions.javaLanguageVersion.asInt())
+    jvmToolchain {
+        languageVersion = Versions.javaLanguageVersion
+    }
 }
 
 dependencies {
