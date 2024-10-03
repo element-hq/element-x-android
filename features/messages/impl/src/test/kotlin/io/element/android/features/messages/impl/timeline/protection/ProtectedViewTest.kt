@@ -8,14 +8,14 @@
 package io.element.android.features.messages.impl.timeline.protection
 
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.lambda.lambdaError
 import org.junit.Rule
@@ -49,7 +49,7 @@ class ProtectedViewTest {
                 }
             )
             rule.onNodeWithText("Hello").assertDoesNotExist()
-            rule.onNodeWithText("Show").performClick()
+            rule.clickOn(CommonStrings.action_show)
         }
     }
 }
@@ -60,12 +60,10 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setProte
     content: @Composable () -> Unit = {},
 ) {
     setContent {
-        Box {
-            ProtectedView(
-                hideContent = hideContent,
-                onShowClick = onShowClick,
-                content = content
-            )
-        }
+        ProtectedView(
+            hideContent = hideContent,
+            onShowClick = onShowClick,
+            content = content
+        )
     }
 }
