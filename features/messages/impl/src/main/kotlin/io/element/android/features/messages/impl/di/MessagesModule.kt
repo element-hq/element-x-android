@@ -30,5 +30,4 @@ interface MessagesModule {
 
     @Binds
     fun bindTypingNotificationPresenter(presenter: TypingNotificationPresenter): Presenter<TypingNotificationState>
-
 }

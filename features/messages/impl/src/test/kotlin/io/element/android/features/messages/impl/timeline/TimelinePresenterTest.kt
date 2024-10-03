@@ -671,7 +671,7 @@ import kotlin.time.Duration.Companion.seconds
         timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
     ): TimelinePresenter {
         return TimelinePresenter(
-            timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(timelineItemIndexer),
+            timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(),
             room = room,
             dispatchers = testCoroutineDispatchers(),
             appScope = this,

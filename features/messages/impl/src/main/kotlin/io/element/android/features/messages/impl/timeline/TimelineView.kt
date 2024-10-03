@@ -62,12 +62,12 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.utils.animateScrollToItemCenter
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
-import kotlin.math.abs
 
 @Composable
 fun TimelineView(
@@ -238,12 +238,8 @@ private fun BoxScope.TimelineScrollHelper(
 
     val latestOnFocusEventRender by rememberUpdatedState(onFocusEventRender)
     LaunchedEffect(focusRequestState) {
-        if (focusRequestState is FocusRequestState.Success && focusRequestState.isIndexed) {
-            if (abs(lazyListState.firstVisibleItemIndex - focusRequestState.index) < 10) {
-                lazyListState.animateScrollToItem(focusRequestState.index)
-            } else {
-                lazyListState.scrollToItem(focusRequestState.index)
-            }
+        if (focusRequestState is FocusRequestState.Success && focusRequestState.isIndexed && !focusRequestState.rendered) {
+            lazyListState.animateScrollToItemCenter(focusRequestState.index)
             latestOnFocusEventRender()
         }
     }

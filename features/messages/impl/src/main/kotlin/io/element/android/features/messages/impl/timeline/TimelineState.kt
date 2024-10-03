@@ -31,15 +31,13 @@ data class TimelineState(
     val resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState,
     val eventSink: (TimelineEvents) -> Unit,
 ) {
-    val lastTimelineEvent = timelineItems.firstOrNull { it is TimelineItem.Event} as? TimelineItem.Event
+    private val lastTimelineEvent = timelineItems.firstOrNull { it is TimelineItem.Event } as? TimelineItem.Event
     val hasAnyEvent = lastTimelineEvent != null
     val focusedEventId = focusRequestState.eventId()
 
-
     fun isLastOutgoingMessage(uniqueId: UniqueId): Boolean {
-        return lastTimelineEvent != null && lastTimelineEvent.isMine && lastTimelineEvent.id == uniqueId
+        return isLive && lastTimelineEvent != null && lastTimelineEvent.isMine && lastTimelineEvent.id == uniqueId
     }
-
 }
 
 @Immutable

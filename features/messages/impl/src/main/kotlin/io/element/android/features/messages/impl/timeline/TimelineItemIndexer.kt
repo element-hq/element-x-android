@@ -8,8 +8,6 @@
 package io.element.android.features.messages.impl.timeline
 
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.EventId
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.sync.Mutex
@@ -17,7 +15,6 @@ import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 import javax.inject.Inject
 
-@SingleIn(RoomScope::class)
 class TimelineItemIndexer @Inject constructor() {
     // This is a latch to wait for the first process call
     private val firstProcessLatch = CompletableDeferred<Unit>()

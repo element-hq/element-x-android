@@ -16,7 +16,6 @@ import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTime
  * This post processor is responsible for adding a typing notification item to the timeline items when the timeline is in live mode.
  */
 class TypingNotificationPostProcessor(private val mode: Timeline.Mode) {
-
     fun process(items: List<MatrixTimelineItem>): List<MatrixTimelineItem> {
         return if (mode == Timeline.Mode.LIVE) {
             buildList {

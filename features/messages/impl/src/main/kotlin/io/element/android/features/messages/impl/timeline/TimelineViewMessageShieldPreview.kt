@@ -14,7 +14,6 @@ import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPr
 import io.element.android.features.messages.impl.timeline.di.aFakeTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
-import io.element.android.features.messages.impl.typing.aTypingNotificationState
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import kotlinx.collections.immutable.toImmutableList
