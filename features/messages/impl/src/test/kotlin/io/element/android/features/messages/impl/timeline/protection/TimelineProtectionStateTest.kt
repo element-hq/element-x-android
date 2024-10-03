@@ -33,7 +33,7 @@ class TimelineProtectionStateTest {
     }
 
     @Test
-    fun `when protectionState is RenderOnly with an Event, hideContent always return true`() {
+    fun `when protectionState is RenderOnly with an Event, hideContent can return true or false`() {
         val sut = aTimelineProtectionState(
             protectionState = ProtectionState.RenderOnly(persistentSetOf(AN_EVENT_ID))
         )
