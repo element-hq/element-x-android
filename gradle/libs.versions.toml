@@ -147,7 +147,7 @@ test_mockk = "io.mockk:mockk:1.13.12"
 test_konsist = "com.lemonappdev:konsist:0.16.1"
 test_turbine = "app.cash.turbine:turbine:1.1.0"
 test_truth = "com.google.truth:truth:1.4.4"
-test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.17"
+test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.18"
 test_robolectric = "org.robolectric:robolectric:4.13"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
 test_composable_preview_scanner = "com.github.sergio-sastre.ComposablePreviewScanner:android:0.1.2"
