@@ -28,6 +28,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
  * closed, [onErrorDismiss] will be invoked. If [onRetry] is not null, a retry button will be displayed.
  * - When loading, display a loading dialog using [progressDialog]. Pass empty lambda to disable.
  */
+@Suppress("ContentSlotReused") // False positive, the lambdas don't add composable views
 @Composable
 fun <T> AsyncActionView(
     async: AsyncAction<T>,
