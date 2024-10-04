@@ -298,14 +298,13 @@ tasks.withType<GenerateBuildConfig>().configureEach {
 licensee {
     allow("Apache-2.0")
     allow("MIT")
-    allow("GPL-2.0-with-classpath-exception")
     allow("BSD-2-Clause")
     allowUrl("https://opensource.org/licenses/MIT")
     allowUrl("https://developer.android.com/studio/terms.html")
-    allowUrl("http://openjdk.java.net/legal/gplv2+ce.html")
     allowUrl("https://www.zetetic.net/sqlcipher/license/")
     allowUrl("https://jsoup.org/license")
     allowUrl("https://asm.ow2.io/license.html")
+    allowUrl("https://www.gnu.org/licenses/agpl-3.0.txt")
     ignoreDependencies("com.github.matrix-org", "matrix-analytics-events")
 }
 
