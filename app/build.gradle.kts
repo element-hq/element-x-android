@@ -275,8 +275,6 @@ dependencies {
     implementation(libs.serialization.json)
 
     implementation(libs.matrix.emojibase.bindings)
-    // Needed for UtdTracker
-    implementation(libs.matrix.sdk)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.test.robolectric)

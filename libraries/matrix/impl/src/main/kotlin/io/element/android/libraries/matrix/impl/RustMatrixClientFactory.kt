@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.impl.util.anonymizedTokens
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
@@ -44,7 +45,7 @@ class RustMatrixClientFactory @Inject constructor(
     private val userCertificatesProvider: UserCertificatesProvider,
     private val proxyProvider: ProxyProvider,
     private val clock: SystemClock,
-    private val utdTracker: UtdTracker,
+    private val analyticsService: AnalyticsService,
     private val featureFlagService: FeatureFlagService,
     private val timelineEventTypeFilterFactory: TimelineEventTypeFilterFactory,
     private val clientBuilderProvider: ClientBuilderProvider,
@@ -64,7 +65,7 @@ class RustMatrixClientFactory @Inject constructor(
         client.restoreSession(sessionData.toSession())
 
         val syncService = client.syncService()
-            .withUtdHook(utdTracker)
+            .withUtdHook(UtdTracker(analyticsService))
             .finish()
 
         val (anonymizedAccessToken, anonymizedRefreshToken) = sessionData.anonymizedTokens()
