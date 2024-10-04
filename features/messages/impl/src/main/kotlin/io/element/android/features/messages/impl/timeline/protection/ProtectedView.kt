@@ -78,7 +78,7 @@ fun ProtectedView(
 
 @PreviewsDayNight
 @Composable
-internal fun PreviewProtectedView() = ElementPreview {
+internal fun ProtectedViewPreview() = ElementPreview {
     Box(
         modifier = Modifier
             .size(160.dp)
