@@ -26,8 +26,8 @@ sealed interface MessageShield {
     /** An unencrypted event in an encrypted room. */
     data class SentInClear(val isCritical: Boolean) : MessageShield
 
-    /** The sender was previously verified but changed their identity. */
-    data class PreviouslyVerified(val isCritical: Boolean) : MessageShield
+    /** The sender was previously verified but is not anymore. */
+    data class VerificationViolation(val isCritical: Boolean) : MessageShield
 }
 
 val MessageShield.isCritical: Boolean
@@ -37,5 +37,5 @@ val MessageShield.isCritical: Boolean
         is MessageShield.UnsignedDevice -> isCritical
         is MessageShield.UnverifiedIdentity -> isCritical
         is MessageShield.SentInClear -> isCritical
-        is MessageShield.PreviouslyVerified -> isCritical
+        is MessageShield.VerificationViolation -> isCritical
     }
