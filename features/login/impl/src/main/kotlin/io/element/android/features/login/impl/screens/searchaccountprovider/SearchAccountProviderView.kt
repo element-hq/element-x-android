@@ -196,7 +196,6 @@ private fun HomeserverData.toAccountProvider(): AccountProvider {
         isPublic = isMatrixOrg,
         isMatrixOrg = isMatrixOrg,
         isValid = isWellknownValid,
-        supportSlidingSync = supportSlidingSync,
     )
 }
 

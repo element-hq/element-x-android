@@ -14,5 +14,4 @@ data class AccountProvider(
     val isPublic: Boolean = false,
     val isMatrixOrg: Boolean = false,
     val isValid: Boolean = false,
-    val supportSlidingSync: Boolean = false,
 )
