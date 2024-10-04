@@ -46,6 +46,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
@@ -90,6 +91,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val composerPresenter: MessageComposerPresenter,
     private val voiceMessageComposerPresenter: VoiceMessageComposerPresenter,
     timelinePresenterFactory: TimelinePresenter.Factory,
+    private val timelineProtectionPresenter: Presenter<TimelineProtectionState>,
     private val actionListPresenterFactory: ActionListPresenter.Factory,
     private val customReactionPresenter: CustomReactionPresenter,
     private val reactionSummaryPresenter: ReactionSummaryPresenter,
@@ -123,6 +125,7 @@ class MessagesPresenter @AssistedInject constructor(
         val composerState = composerPresenter.present()
         val voiceMessageComposerState = voiceMessageComposerPresenter.present()
         val timelineState = timelinePresenter.present()
+        val timelineProtectionState = timelineProtectionPresenter.present()
         val actionListState = actionListPresenter.present()
         val customReactionState = customReactionPresenter.present()
         val reactionSummaryState = reactionSummaryPresenter.present()
@@ -182,6 +185,7 @@ class MessagesPresenter @AssistedInject constructor(
                         composerState = composerState,
                         enableTextFormatting = composerState.showTextFormatting,
                         timelineState = timelineState,
+                        timelineProtectionState = timelineProtectionState,
                     )
                 }
                 is MessagesEvents.ToggleReaction -> {
@@ -213,6 +217,7 @@ class MessagesPresenter @AssistedInject constructor(
             userEventPermissions = userEventPermissions,
             voiceMessageComposerState = voiceMessageComposerState,
             timelineState = timelineState,
+            timelineProtectionState = timelineProtectionState,
             actionListState = actionListState,
             customReactionState = customReactionState,
             reactionSummaryState = reactionSummaryState,
@@ -262,6 +267,7 @@ class MessagesPresenter @AssistedInject constructor(
         action: TimelineItemAction,
         targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
+        timelineProtectionState: TimelineProtectionState,
         enableTextFormatting: Boolean,
         timelineState: TimelineState,
     ) = launch {
@@ -271,7 +277,7 @@ class MessagesPresenter @AssistedInject constructor(
             TimelineItemAction.Redact -> handleActionRedact(targetEvent)
             TimelineItemAction.Edit -> handleActionEdit(targetEvent, composerState, enableTextFormatting)
             TimelineItemAction.Reply,
-            TimelineItemAction.ReplyInThread -> handleActionReply(targetEvent, composerState)
+            TimelineItemAction.ReplyInThread -> handleActionReply(targetEvent, composerState, timelineProtectionState)
             TimelineItemAction.ViewSource -> handleShowDebugInfoAction(targetEvent)
             TimelineItemAction.Forward -> handleForwardAction(targetEvent)
             TimelineItemAction.ReportContent -> handleReportAction(targetEvent)
@@ -385,11 +391,18 @@ class MessagesPresenter @AssistedInject constructor(
         }
     }
 
-    private suspend fun handleActionReply(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {
+    private suspend fun handleActionReply(
+        targetEvent: TimelineItem.Event,
+        composerState: MessageComposerState,
+        timelineProtectionState: TimelineProtectionState,
+    ) {
         if (targetEvent.eventId == null) return
         timelineController.invokeOnCurrentTimeline {
             val replyToDetails = loadReplyDetails(targetEvent.eventId).map(permalinkParser)
-            val composerMode = MessageComposerMode.Reply(replyToDetails = replyToDetails)
+            val composerMode = MessageComposerMode.Reply(
+                replyToDetails = replyToDetails,
+                hideImage = timelineProtectionState.hideMediaContent(targetEvent.eventId),
+            )
             composerState.eventSink(
                 MessageComposerEvents.SetMode(composerMode)
             )

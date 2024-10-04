@@ -15,6 +15,7 @@ import io.element.android.features.messages.impl.UserEventPermissions
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
@@ -26,6 +27,7 @@ sealed interface PinnedMessagesListState {
     data object Empty : PinnedMessagesListState
     data class Filled(
         val timelineRoomInfo: TimelineRoomInfo,
+        val timelineProtectionState: TimelineProtectionState,
         val userEventPermissions: UserEventPermissions,
         val timelineItems: ImmutableList<TimelineItem>,
         val actionListState: ActionListState,

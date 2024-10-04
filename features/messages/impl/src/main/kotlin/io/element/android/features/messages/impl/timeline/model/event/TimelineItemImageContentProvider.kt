@@ -16,22 +16,26 @@ open class TimelineItemImageContentProvider : PreviewParameterProvider<TimelineI
     override val values: Sequence<TimelineItemImageContent>
         get() = sequenceOf(
             aTimelineItemImageContent(),
-            aTimelineItemImageContent().copy(aspectRatio = 1.0f),
-            aTimelineItemImageContent().copy(aspectRatio = 1.5f),
+            aTimelineItemImageContent(aspectRatio = 1.0f),
+            aTimelineItemImageContent(aspectRatio = 1.5f),
+            aTimelineItemImageContent(blurhash = null),
         )
 }
 
-fun aTimelineItemImageContent() = TimelineItemImageContent(
+fun aTimelineItemImageContent(
+    aspectRatio: Float = 0.5f,
+    blurhash: String? = A_BLUR_HASH,
+) = TimelineItemImageContent(
     body = "a body",
     formatted = null,
     filename = null,
     mediaSource = MediaSource(""),
     thumbnailSource = null,
     mimeType = MimeTypes.IMAGE_JPEG,
-    blurhash = A_BLUR_HASH,
+    blurhash = blurhash,
     width = null,
     height = 300,
-    aspectRatio = 0.5f,
+    aspectRatio = aspectRatio,
     formattedFileSize = "4MB",
     fileExtension = "jpg"
 )

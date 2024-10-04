@@ -22,5 +22,8 @@ interface AppPreferencesStore {
     suspend fun setSimplifiedSlidingSyncEnabled(enabled: Boolean)
     fun isSimplifiedSlidingSyncEnabledFlow(): Flow<Boolean>
 
+    suspend fun setHideImagesAndVideos(value: Boolean)
+    fun doesHideImagesAndVideosFlow(): Flow<Boolean>
+
     suspend fun reset()
 }

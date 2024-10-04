@@ -17,13 +17,12 @@ import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Composer
+import io.element.android.features.messages.impl.messagecomposer.aReplyMode
 import io.element.android.features.messages.impl.voicemessages.VoiceMessageException
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.matrix.api.core.ProgressCallback
-import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
-import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
@@ -707,8 +706,6 @@ class VoiceMessageComposerPresenterTest {
             time = RECORDING_DURATION,
         )
 }
-
-private fun aReplyMode() = MessageComposerMode.Reply(replyToDetails = InReplyToDetails.Loading(AN_EVENT_ID))
 
 private fun aVoiceMessageComposerEvent(
     isReply: Boolean = false

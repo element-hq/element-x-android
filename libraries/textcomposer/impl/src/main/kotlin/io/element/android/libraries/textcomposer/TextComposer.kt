@@ -118,8 +118,8 @@ fun TextComposer(
     }
 
     val layoutModifier = modifier
-            .fillMaxSize()
-            .height(IntrinsicSize.Min)
+        .fillMaxSize()
+        .height(IntrinsicSize.Min)
 
     val composerOptionsButton: @Composable () -> Unit = remember {
         @Composable {
@@ -316,8 +316,8 @@ private fun StandardLayout(
             if (voiceMessageState is VoiceMessageState.Preview || voiceMessageState is VoiceMessageState.Recording) {
                 Box(
                     modifier = Modifier
-                            .padding(bottom = 5.dp, top = 5.dp, end = 3.dp, start = 3.dp)
-                            .size(48.dp),
+                        .padding(bottom = 5.dp, top = 5.dp, end = 3.dp, start = 3.dp)
+                        .size(48.dp),
                     contentAlignment = Alignment.Center,
                 ) {
                     voiceDeleteButton()
@@ -327,8 +327,8 @@ private fun StandardLayout(
             }
             Box(
                 modifier = Modifier
-                        .padding(bottom = 8.dp, top = 8.dp)
-                        .weight(1f)
+                    .padding(bottom = 8.dp, top = 8.dp)
+                    .weight(1f)
             ) {
                 voiceRecording()
             }
@@ -341,16 +341,16 @@ private fun StandardLayout(
             }
             Box(
                 modifier = Modifier
-                        .padding(bottom = 8.dp, top = 8.dp)
-                        .weight(1f)
+                    .padding(bottom = 8.dp, top = 8.dp)
+                    .weight(1f)
             ) {
                 textInput()
             }
         }
         Box(
-                Modifier
-                        .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
-                        .size(48.dp),
+            Modifier
+                .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
+                .size(48.dp),
             contentAlignment = Alignment.Center,
         ) {
             endButton()
@@ -372,8 +372,8 @@ private fun TextFormattingLayout(
     ) {
         Box(
             modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 12.dp)
+                .weight(1f)
+                .padding(horizontal = 12.dp)
         ) {
             textInput()
         }
@@ -417,21 +417,24 @@ private fun TextInputBox(
 
     Column(
         modifier = Modifier
-                .clip(roundedCorners)
-                .border(0.5.dp, borderColor, roundedCorners)
-                .background(color = bgColor)
-                .requiredHeightIn(min = 42.dp)
-                .fillMaxSize(),
+            .clip(roundedCorners)
+            .border(0.5.dp, borderColor, roundedCorners)
+            .background(color = bgColor)
+            .requiredHeightIn(min = 42.dp)
+            .fillMaxSize(),
     ) {
         if (composerMode is MessageComposerMode.Special) {
-            ComposerModeView(composerMode = composerMode, onResetComposerMode = onResetComposerMode)
+            ComposerModeView(
+                composerMode = composerMode,
+                onResetComposerMode = onResetComposerMode,
+            )
         }
         val defaultTypography = ElementTheme.typography.fontBodyLgRegular
         Box(
             modifier = Modifier
-                    .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 42.dp)
-                    // Apply test tag only once, otherwise 2 nodes will have it (both the normal and subcomposing one) and tests will fail
-                    .then(if (!subcomposing) Modifier.testTag(TestTags.textEditor) else Modifier),
+                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 42.dp)
+                // Apply test tag only once, otherwise 2 nodes will have it (both the normal and subcomposing one) and tests will fail
+                .then(if (!subcomposing) Modifier.testTag(TestTags.textEditor) else Modifier),
             contentAlignment = Alignment.CenterStart,
         ) {
             // Placeholder
@@ -477,8 +480,8 @@ private fun TextInput(
             // This prevents it gaining focus and mutating the state.
             registerStateUpdates = !subcomposing,
             modifier = Modifier
-                    .padding(top = 6.dp, bottom = 6.dp)
-                    .fillMaxWidth(),
+                .padding(top = 6.dp, bottom = 6.dp)
+                .fillMaxWidth(),
             style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.hasFocus),
             resolveMentionDisplay = resolveMentionDisplay,
             resolveRoomMentionDisplay = resolveRoomMentionDisplay,
@@ -603,6 +606,7 @@ internal fun TextComposerReplyPreview(@PreviewParameter(InReplyToDetailsProvider
         voiceMessageState = VoiceMessageState.Idle,
         composerMode = MessageComposerMode.Reply(
             replyToDetails = inReplyToDetails,
+            hideImage = false,
         ),
         enableVoiceMessages = true,
     )

@@ -46,6 +46,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemGrou
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContentProvider
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.protection.ProtectedView
 import io.element.android.libraries.designsystem.components.blurhash.blurHashBackground
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -58,6 +59,8 @@ import io.element.android.wysiwyg.compose.EditorStyledText
 @Composable
 fun TimelineItemImageView(
     content: TimelineItemImageContent,
+    hideMediaContent: Boolean,
+    onShowClick: () -> Unit,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -76,23 +79,28 @@ fun TimelineItemImageView(
             modifier = containerModifier.blurHashBackground(content.blurhash, alpha = 0.9f),
             aspectRatio = content.aspectRatio,
         ) {
-            var isLoaded by remember { mutableStateOf(false) }
-            AsyncImage(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .then(if (isLoaded) Modifier.background(Color.White) else Modifier),
-                model = MediaRequestData(
-                    source = content.preferredMediaSource,
-                    kind = MediaRequestData.Kind.File(
-                        body = content.filename ?: content.body,
-                        mimeType = content.mimeType,
+            ProtectedView(
+                hideContent = hideMediaContent,
+                onShowClick = onShowClick,
+            ) {
+                var isLoaded by remember { mutableStateOf(false) }
+                AsyncImage(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .then(if (isLoaded) Modifier.background(Color.White) else Modifier),
+                    model = MediaRequestData(
+                        source = content.preferredMediaSource,
+                        kind = MediaRequestData.Kind.File(
+                            body = content.filename ?: content.body,
+                            mimeType = content.mimeType,
+                        ),
                     ),
-                ),
-                contentScale = ContentScale.Fit,
-                alignment = Alignment.Center,
-                contentDescription = description,
-                onState = { isLoaded = it is AsyncImagePainter.State.Success },
-            )
+                    contentScale = ContentScale.Fit,
+                    alignment = Alignment.Center,
+                    contentDescription = description,
+                    onState = { isLoaded = it is AsyncImagePainter.State.Success },
+                )
+            }
         }
 
         if (content.showCaption) {
@@ -123,7 +131,23 @@ fun TimelineItemImageView(
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemImageViewPreview(@PreviewParameter(TimelineItemImageContentProvider::class) content: TimelineItemImageContent) = ElementPreview {
-    TimelineItemImageView(content, {})
+    TimelineItemImageView(
+        content = content,
+        hideMediaContent = false,
+        onShowClick = {},
+        onContentLayoutChange = {},
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemImageViewHideMediaContentPreview() = ElementPreview {
+    TimelineItemImageView(
+        content = aTimelineItemImageContent(),
+        hideMediaContent = true,
+        onShowClick = {},
+        onContentLayoutChange = {},
+    )
 }
 
 @PreviewsDayNight

@@ -16,20 +16,24 @@ open class TimelineItemStickerContentProvider : PreviewParameterProvider<Timelin
     override val values: Sequence<TimelineItemStickerContent>
         get() = sequenceOf(
             aTimelineItemStickerContent(),
-            aTimelineItemStickerContent().copy(aspectRatio = 1.0f),
-            aTimelineItemStickerContent().copy(aspectRatio = 1.5f),
+            aTimelineItemStickerContent(aspectRatio = 1.0f),
+            aTimelineItemStickerContent(aspectRatio = 1.5f),
+            aTimelineItemStickerContent(blurhash = null),
         )
 }
 
-fun aTimelineItemStickerContent() = TimelineItemStickerContent(
+fun aTimelineItemStickerContent(
+    aspectRatio: Float = 0.5f,
+    blurhash: String? = A_BLUR_HASH,
+) = TimelineItemStickerContent(
     body = "a body",
     mediaSource = MediaSource(""),
     thumbnailSource = null,
     mimeType = MimeTypes.IMAGE_JPEG,
-    blurhash = A_BLUR_HASH,
+    blurhash = blurhash,
     width = null,
     height = 128,
-    aspectRatio = 0.5f,
+    aspectRatio = aspectRatio,
     formattedFileSize = "4MB",
     fileExtension = "jpg"
 )

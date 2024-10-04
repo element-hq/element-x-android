@@ -17,6 +17,8 @@ import io.element.android.features.messages.impl.timeline.components.aCriticalSh
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingIndicatorModel
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
+import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -137,6 +139,7 @@ class TimelineViewTest {
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setTimelineView(
     state: TimelineState,
+    timelineProtectionState: TimelineProtectionState = aTimelineProtectionState(),
     onUserDataClick: (UserId) -> Unit = EnsureNeverCalledWithParam(),
     onLinkClick: (String) -> Unit = EnsureNeverCalledWithParam(),
     onMessageClick: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
@@ -152,6 +155,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setTimel
     setSafeContent {
         TimelineView(
             state = state,
+            timelineProtectionState = timelineProtectionState,
             onUserDataClick = onUserDataClick,
             onLinkClick = onLinkClick,
             onMessageClick = onMessageClick,

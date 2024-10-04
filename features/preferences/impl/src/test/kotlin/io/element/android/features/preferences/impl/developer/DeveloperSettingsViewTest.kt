@@ -45,6 +45,7 @@ class DeveloperSettingsViewTest {
         }
     }
 
+    @Config(qualifiers = "h1500dp")
     @Test
     fun `clicking on element call url open the dialogs and submit emits the expected event`() {
         val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>()
@@ -112,6 +113,18 @@ class DeveloperSettingsViewTest {
         )
         rule.onNodeWithText("Enable Simplified Sliding Sync").performClick()
         eventsRecorder.assertSingle(DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled(true))
+    }
+
+    @Test
+    fun `clicking on the hide images and videos switch emits the expected event`() {
+        val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>()
+        rule.setDeveloperSettingsView(
+            state = aDeveloperSettingsState(
+                eventSink = eventsRecorder
+            ),
+        )
+        rule.onNodeWithText("Hide image & video previews").performClick()
+        eventsRecorder.assertSingle(DeveloperSettingsEvents.SetHideImagesAndVideos(true))
     }
 }
 

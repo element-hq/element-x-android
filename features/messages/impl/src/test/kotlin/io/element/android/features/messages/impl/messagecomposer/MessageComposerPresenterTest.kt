@@ -1521,4 +1521,7 @@ fun anEditMode(
     transactionId: TransactionId? = null,
 ) = MessageComposerMode.Edit(eventId, transactionId, message)
 
-fun aReplyMode() = MessageComposerMode.Reply(replyToDetails = InReplyToDetails.Loading(AN_EVENT_ID))
+fun aReplyMode() = MessageComposerMode.Reply(
+    replyToDetails = InReplyToDetails.Loading(AN_EVENT_ID),
+    hideImage = false,
+)

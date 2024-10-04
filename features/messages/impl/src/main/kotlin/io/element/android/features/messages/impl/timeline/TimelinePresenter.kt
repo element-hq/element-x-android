@@ -243,8 +243,8 @@ class TimelinePresenter @AssistedInject constructor(
             }
         }
         return TimelineState(
-            timelineRoomInfo = timelineRoomInfo,
             timelineItems = timelineItems,
+            timelineRoomInfo = timelineRoomInfo,
             renderReadReceipts = renderReadReceipts,
             newEventState = newEventState.value,
             isLive = isLive,

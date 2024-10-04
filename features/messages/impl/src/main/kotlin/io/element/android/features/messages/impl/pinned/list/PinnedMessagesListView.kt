@@ -32,6 +32,8 @@ import io.element.android.features.messages.impl.timeline.components.event.Timel
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.poll.api.pollcontent.PollTitleView
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -77,8 +79,8 @@ fun PinnedMessagesListView(
                 onLinkClick = onLinkClick,
                 onErrorDismiss = onBackClick,
                 modifier = Modifier
-                        .padding(padding)
-                        .consumeWindowInsets(padding),
+                    .padding(padding)
+                    .consumeWindowInsets(padding),
             )
         }
     )
@@ -208,6 +210,7 @@ private fun PinnedMessagesListLoaded(
                 timelineItem = timelineItem,
                 timelineRoomInfo = state.timelineRoomInfo,
                 renderReadReceipts = false,
+                timelineProtectionState = state.timelineProtectionState,
                 isLastOutgoingMessage = false,
                 focusedEventId = null,
                 onUserDataClick = onUserDataClick,
@@ -225,6 +228,7 @@ private fun PinnedMessagesListLoaded(
                 eventContentView = { event, contentModifier, onContentLayoutChange ->
                     TimelineItemEventContentViewWrapper(
                         event = event,
+                        timelineProtectionState = state.timelineProtectionState,
                         onLinkClick = onLinkClick,
                         modifier = contentModifier,
                         onContentLayoutChange = onContentLayoutChange
@@ -238,6 +242,7 @@ private fun PinnedMessagesListLoaded(
 @Composable
 private fun TimelineItemEventContentViewWrapper(
     event: TimelineItem.Event,
+    timelineProtectionState: TimelineProtectionState,
     onLinkClick: (String) -> Unit,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
@@ -251,6 +256,8 @@ private fun TimelineItemEventContentViewWrapper(
     } else {
         TimelineItemEventContentView(
             content = event.content,
+            hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
+            onShowClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
             onLinkClick = onLinkClick,
             eventSink = { },
             modifier = modifier,

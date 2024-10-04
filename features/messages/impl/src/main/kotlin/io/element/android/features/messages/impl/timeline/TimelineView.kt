@@ -57,6 +57,8 @@ import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
+import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.libraries.designsystem.components.dialogs.AlertDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -65,13 +67,13 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.utils.animateScrollToItemCenter
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 
 @Composable
 fun TimelineView(
     state: TimelineState,
+    timelineProtectionState: TimelineProtectionState,
     onUserDataClick: (UserId) -> Unit,
     onLinkClick: (String) -> Unit,
     onMessageClick: (TimelineItem.Event) -> Unit,
@@ -114,10 +116,6 @@ fun TimelineView(
         state.eventSink(TimelineEvents.FocusOnEvent(eventId))
     }
 
-    fun onShieldClick(shield: MessageShield) {
-        state.eventSink(TimelineEvents.ShowShieldDialog(shield))
-    }
-
     // Animate alpha when timeline is first displayed, to avoid flashes or glitching when viewing rooms
     AnimatedVisibility(visible = true, enter = fadeIn()) {
         Box(modifier) {
@@ -137,6 +135,7 @@ fun TimelineView(
                     TimelineItemRow(
                         timelineItem = timelineItem,
                         timelineRoomInfo = state.timelineRoomInfo,
+                        timelineProtectionState = timelineProtectionState,
                         renderReadReceipts = state.renderReadReceipts,
                         isLastOutgoingMessage = state.isLastOutgoingMessage(timelineItem.identifier()),
                         focusedEventId = state.focusedEventId,
@@ -320,6 +319,7 @@ internal fun TimelineViewPreview(
                 ),
                 focusedEventIndex = 0,
             ),
+            timelineProtectionState = aTimelineProtectionState(),
             onUserDataClick = {},
             onLinkClick = {},
             onMessageClick = {},

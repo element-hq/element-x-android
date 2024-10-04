@@ -31,6 +31,7 @@ fun aDeveloperSettingsState(
     clearCacheAction: AsyncData<Unit> = AsyncData.Uninitialized,
     customElementCallBaseUrlState: CustomElementCallBaseUrlState = aCustomElementCallBaseUrlState(),
     isSimplifiedSlidingSyncEnabled: Boolean = false,
+    hideImagesAndVideos: Boolean = false,
     eventSink: (DeveloperSettingsEvents) -> Unit = {},
 ) = DeveloperSettingsState(
     features = aFeatureUiModelList(),
@@ -39,6 +40,7 @@ fun aDeveloperSettingsState(
     clearCacheAction = clearCacheAction,
     customElementCallBaseUrlState = customElementCallBaseUrlState,
     isSimpleSlidingSyncEnabled = isSimplifiedSlidingSyncEnabled,
+    hideImagesAndVideos = hideImagesAndVideos,
     eventSink = eventSink,
 )
 

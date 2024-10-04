@@ -70,6 +70,8 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -108,6 +110,7 @@ private val BUBBLE_INCOMING_OFFSET = 16.dp
 fun TimelineItemEventRow(
     event: TimelineItem.Event,
     timelineRoomInfo: TimelineRoomInfo,
+    timelineProtectionState: TimelineProtectionState,
     renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
     isHighlighted: Boolean,
@@ -126,6 +129,8 @@ fun TimelineItemEventRow(
     eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit = { contentModifier, onContentLayoutChange ->
         TimelineItemEventContentView(
             content = event.content,
+            hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
+            onShowClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
             onLinkClick = onLinkClick,
             eventSink = eventSink,
             modifier = contentModifier,
@@ -164,6 +169,7 @@ fun TimelineItemEventRow(
                     }
                     TimelineItemEventRowContent(
                         event = event,
+                        timelineProtectionState = timelineProtectionState,
                         isHighlighted = isHighlighted,
                         timelineRoomInfo = timelineRoomInfo,
                         interactionSource = interactionSource,
@@ -197,6 +203,7 @@ fun TimelineItemEventRow(
         } else {
             TimelineItemEventRowContent(
                 event = event,
+                timelineProtectionState = timelineProtectionState,
                 isHighlighted = isHighlighted,
                 timelineRoomInfo = timelineRoomInfo,
                 interactionSource = interactionSource,
@@ -252,6 +259,7 @@ private fun SwipeSensitivity(
 @Composable
 private fun TimelineItemEventRowContent(
     event: TimelineItem.Event,
+    timelineProtectionState: TimelineProtectionState,
     isHighlighted: Boolean,
     timelineRoomInfo: TimelineRoomInfo,
     interactionSource: MutableInteractionSource,
@@ -330,6 +338,7 @@ private fun TimelineItemEventRowContent(
         ) {
             MessageEventBubbleContent(
                 event = event,
+                timelineProtectionState = timelineProtectionState,
                 onMessageLongClick = onLongClick,
                 inReplyToClick = inReplyToClick,
                 eventSink = eventSink,
@@ -411,6 +420,7 @@ private fun MessageSenderInformation(
 @Composable
 private fun MessageEventBubbleContent(
     event: TimelineItem.Event,
+    timelineProtectionState: TimelineProtectionState,
     onMessageLongClick: () -> Unit,
     inReplyToClick: () -> Unit,
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
@@ -560,7 +570,11 @@ private fun MessageEventBubbleContent(
                 .clip(RoundedCornerShape(6.dp))
                 // FIXME when a node is clickable, its contents won't be added to the semantics tree of its parent
                 .clickable(onClick = inReplyToClick)
-            InReplyToView(inReplyTo, modifier = inReplyToModifier)
+            InReplyToView(
+                inReplyTo = inReplyTo,
+                hideImage = timelineProtectionState.hideMediaContent(inReplyTo.eventId()),
+                modifier = inReplyToModifier,
+            )
         }
         if (inReplyToDetails != null) {
             // Use SubComposeLayout only if necessary as it can have consequences on the performance.

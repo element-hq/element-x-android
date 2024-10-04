@@ -30,6 +30,7 @@ private val developerModeKey = booleanPreferencesKey("developerMode")
 private val customElementCallBaseUrlKey = stringPreferencesKey("elementCallBaseUrl")
 private val themeKey = stringPreferencesKey("theme")
 private val simplifiedSlidingSyncKey = booleanPreferencesKey("useSimplifiedSlidingSync")
+private val hideImagesAndVideosKey = booleanPreferencesKey("hideImagesAndVideos")
 
 @ContributesBinding(AppScope::class)
 class DefaultAppPreferencesStore @Inject constructor(
@@ -88,6 +89,18 @@ class DefaultAppPreferencesStore @Inject constructor(
     override fun isSimplifiedSlidingSyncEnabledFlow(): Flow<Boolean> {
         return store.data.map { prefs ->
             prefs[simplifiedSlidingSyncKey] ?: true
+        }
+    }
+
+    override suspend fun setHideImagesAndVideos(value: Boolean) {
+        store.edit { prefs ->
+            prefs[hideImagesAndVideosKey] = value
+        }
+    }
+
+    override fun doesHideImagesAndVideosFlow(): Flow<Boolean> {
+        return store.data.map { prefs ->
+            prefs[hideImagesAndVideosKey] ?: false
         }
     }
 

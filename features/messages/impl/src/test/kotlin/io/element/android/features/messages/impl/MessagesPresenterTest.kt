@@ -40,6 +40,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.features.messages.impl.typing.aTypingNotificationState
 import io.element.android.features.messages.impl.utils.FakeTextPillificationHelper
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPlayer
@@ -1059,12 +1060,12 @@ class MessagesPresenterTest {
         val readReceiptBottomSheetPresenter = ReadReceiptBottomSheetPresenter()
         val customReactionPresenter = CustomReactionPresenter(emojibaseProvider = FakeEmojibaseProvider())
         val reactionSummaryPresenter = ReactionSummaryPresenter(room = matrixRoom)
-
         return MessagesPresenter(
             room = matrixRoom,
             composerPresenter = messageComposerPresenter,
             voiceMessageComposerPresenter = voiceMessageComposerPresenter,
             timelinePresenterFactory = timelinePresenterFactory,
+            timelineProtectionPresenter = { aTimelineProtectionState() },
             actionListPresenterFactory = FakeActionListPresenter.Factory,
             customReactionPresenter = customReactionPresenter,
             reactionSummaryPresenter = reactionSummaryPresenter,

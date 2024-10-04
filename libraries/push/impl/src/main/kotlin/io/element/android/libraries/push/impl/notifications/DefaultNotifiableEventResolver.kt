@@ -37,6 +37,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.ui.messages.toPlainText
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
@@ -45,6 +46,7 @@ import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEv
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlinx.coroutines.flow.first
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -69,6 +71,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
     @ApplicationContext private val context: Context,
     private val permalinkParser: PermalinkParser,
     private val callNotificationEventResolver: CallNotificationEventResolver,
+    private val appPreferencesStore: AppPreferencesStore,
 ) : NotifiableEventResolver {
     override suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): ResolvedPushEvent? {
         // Restore session
@@ -103,7 +106,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     timestamp = this.timestamp,
                     senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
                     body = messageBody,
-                    imageUriString = fetchImageIfPresent(client)?.toString(),
+                    imageUriString = content.fetchImageIfPresent(client)?.toString(),
                     roomName = roomDisplayName,
                     roomIsDm = isDm,
                     roomAvatarPath = roomAvatarUrl,
@@ -148,7 +151,6 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     timestamp = this.timestamp,
                     senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
                     body = stringProvider.getString(CommonStrings.common_call_invite),
-                    imageUriString = fetchImageIfPresent(client)?.toString(),
                     roomName = roomDisplayName,
                     roomIsDm = isDm,
                     roomAvatarPath = roomAvatarUrl,
@@ -288,22 +290,21 @@ class DefaultNotifiableEventResolver @Inject constructor(
         }
     }
 
-    private suspend fun NotificationData.fetchImageIfPresent(client: MatrixClient): Uri? {
-        val fileResult = when (val content = this.content) {
-            is NotificationContent.MessageLike.RoomMessage -> {
-                when (val messageType = content.messageType) {
-                    is ImageMessageType -> notificationMediaRepoFactory.create(client)
-                        .getMediaFile(
-                            mediaSource = messageType.source,
-                            mimeType = messageType.info?.mimetype,
-                            body = messageType.body,
-                        )
-                    is VideoMessageType -> null // Use the thumbnail here?
-                    else -> null
-                }
-            }
+    private suspend fun NotificationContent.MessageLike.RoomMessage.fetchImageIfPresent(client: MatrixClient): Uri? {
+        if (appPreferencesStore.doesHideImagesAndVideosFlow().first()) {
+            return null
+        }
+        val fileResult = when (val messageType = messageType) {
+            is ImageMessageType -> notificationMediaRepoFactory.create(client)
+                .getMediaFile(
+                    mediaSource = messageType.source,
+                    mimeType = messageType.info?.mimetype,
+                    body = messageType.body,
+                )
+            is VideoMessageType -> null // Use the thumbnail here?
             else -> null
-        } ?: return null
+        }
+            ?: return null
 
         return fileResult
             .onFailure {

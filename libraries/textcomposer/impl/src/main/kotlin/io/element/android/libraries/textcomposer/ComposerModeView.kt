@@ -48,6 +48,7 @@ internal fun ComposerModeView(
             ReplyToModeView(
                 modifier = Modifier.padding(8.dp),
                 replyToDetails = composerMode.replyToDetails,
+                hideImage = composerMode.hideImage,
                 onResetComposerMode = onResetComposerMode,
             )
         }
@@ -103,6 +104,7 @@ private fun EditingModeView(
 @Composable
 private fun ReplyToModeView(
     replyToDetails: InReplyToDetails,
+    hideImage: Boolean,
     onResetComposerMode: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -112,7 +114,11 @@ private fun ReplyToModeView(
             .background(MaterialTheme.colorScheme.surface)
             .padding(4.dp)
     ) {
-        InReplyToView(inReplyTo = replyToDetails, modifier = Modifier.weight(1f))
+        InReplyToView(
+            inReplyTo = replyToDetails,
+            hideImage = hideImage,
+            modifier = Modifier.weight(1f),
+        )
         Icon(
             imageVector = CompoundIcons.Close(),
             contentDescription = stringResource(CommonStrings.action_close),
