@@ -13,9 +13,8 @@ import org.matrix.rustcomponents.sdk.UnableToDecryptDelegate
 import org.matrix.rustcomponents.sdk.UnableToDecryptInfo
 import timber.log.Timber
 import uniffi.matrix_sdk_crypto.UtdCause
-import javax.inject.Inject
 
-class UtdTracker @Inject constructor(
+class UtdTracker(
     private val analyticsService: AnalyticsService,
 ) : UnableToDecryptDelegate {
     override fun onUtd(info: UnableToDecryptInfo) {

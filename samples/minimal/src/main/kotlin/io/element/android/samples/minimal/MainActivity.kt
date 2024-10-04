@@ -21,7 +21,6 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.impl.RustClientBuilderProvider
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
-import io.element.android.libraries.matrix.impl.analytics.UtdTracker
 import io.element.android.libraries.matrix.impl.auth.OidcConfigurationProvider
 import io.element.android.libraries.matrix.impl.auth.RustMatrixAuthenticationService
 import io.element.android.libraries.matrix.impl.paths.SessionPathsFactory
@@ -56,7 +55,7 @@ class MainActivity : ComponentActivity() {
                 userCertificatesProvider = userCertificatesProvider,
                 proxyProvider = proxyProvider,
                 clock = DefaultSystemClock(),
-                utdTracker = UtdTracker(NoopAnalyticsService()),
+                analyticsService = NoopAnalyticsService(),
                 featureFlagService = AlwaysEnabledFeatureFlagService(),
                 timelineEventTypeFilterFactory = RustTimelineEventTypeFilterFactory(),
                 clientBuilderProvider = RustClientBuilderProvider(),
