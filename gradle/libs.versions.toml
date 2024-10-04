@@ -181,7 +181,7 @@ vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.2"
-maplibre = "org.maplibre.gl:android-sdk:11.5.0"
+maplibre = "org.maplibre.gl:android-sdk:11.5.1"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:3.0.1"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.1"
 opusencoder = "io.element.android:opusencoder:1.1.0"
