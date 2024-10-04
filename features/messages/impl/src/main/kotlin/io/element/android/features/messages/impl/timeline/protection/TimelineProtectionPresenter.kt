@@ -25,11 +25,11 @@ class TimelineProtectionPresenter @Inject constructor(
 ) : Presenter<TimelineProtectionState> {
     @Composable
     override fun present(): TimelineProtectionState {
-        val hideContent by appPreferencesStore.doesHideImagesAndVideosFlow().collectAsState(initial = false)
+        val hideMediaContent by appPreferencesStore.doesHideImagesAndVideosFlow().collectAsState(initial = false)
         var allowedEvents by remember { mutableStateOf<Set<EventId>>(setOf()) }
-        val protectionState by remember(hideContent) {
+        val protectionState by remember(hideMediaContent) {
             derivedStateOf {
-                if (hideContent) {
+                if (hideMediaContent) {
                     ProtectionState.RenderOnly(eventIds = allowedEvents.toImmutableSet())
                 } else {
                     ProtectionState.RenderAll

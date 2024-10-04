@@ -256,7 +256,7 @@ private fun TimelineItemEventContentViewWrapper(
     } else {
         TimelineItemEventContentView(
             content = event.content,
-            hideContent = timelineProtectionState.hideContent(event.eventId),
+            hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
             onShowClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
             onLinkClick = onLinkClick,
             eventSink = { },

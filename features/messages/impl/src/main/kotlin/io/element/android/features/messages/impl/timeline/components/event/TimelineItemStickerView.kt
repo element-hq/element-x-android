@@ -39,7 +39,7 @@ private const val STICKER_SIZE_IN_DP = 128
 @Composable
 fun TimelineItemStickerView(
     content: TimelineItemStickerContent,
-    hideContent: Boolean,
+    hideMediaContent: Boolean,
     onShowClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -54,7 +54,7 @@ fun TimelineItemStickerView(
             maxHeight = STICKER_SIZE_IN_DP,
         ) {
             ProtectedView(
-                hideContent = hideContent,
+                hideContent = hideMediaContent,
                 onShowClick = onShowClick,
             ) {
                 var isLoaded by remember { mutableStateOf(false) }
@@ -84,7 +84,7 @@ fun TimelineItemStickerView(
 internal fun TimelineItemStickerViewPreview(@PreviewParameter(TimelineItemStickerContentProvider::class) content: TimelineItemStickerContent) = ElementPreview {
     TimelineItemStickerView(
         content = content,
-        hideContent = false,
+        hideMediaContent = false,
         onShowClick = {},
     )
 }

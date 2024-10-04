@@ -129,7 +129,7 @@ fun TimelineItemEventRow(
     eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit = { contentModifier, onContentLayoutChange ->
         TimelineItemEventContentView(
             content = event.content,
-            hideContent = timelineProtectionState.hideContent(event.eventId),
+            hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
             onShowClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
             onLinkClick = onLinkClick,
             eventSink = eventSink,
@@ -572,7 +572,7 @@ private fun MessageEventBubbleContent(
                 .clickable(onClick = inReplyToClick)
             InReplyToView(
                 inReplyTo = inReplyTo,
-                hideImage = timelineProtectionState.hideContent(inReplyTo.eventId()),
+                hideImage = timelineProtectionState.hideMediaContent(inReplyTo.eventId()),
                 modifier = inReplyToModifier,
             )
         }

@@ -59,7 +59,7 @@ import io.element.android.wysiwyg.compose.EditorStyledText
 @Composable
 fun TimelineItemImageView(
     content: TimelineItemImageContent,
-    hideContent: Boolean,
+    hideMediaContent: Boolean,
     onShowClick: () -> Unit,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
@@ -80,7 +80,7 @@ fun TimelineItemImageView(
             aspectRatio = content.aspectRatio,
         ) {
             ProtectedView(
-                hideContent = hideContent,
+                hideContent = hideMediaContent,
                 onShowClick = onShowClick,
             ) {
                 var isLoaded by remember { mutableStateOf(false) }
@@ -133,7 +133,7 @@ fun TimelineItemImageView(
 internal fun TimelineItemImageViewPreview(@PreviewParameter(TimelineItemImageContentProvider::class) content: TimelineItemImageContent) = ElementPreview {
     TimelineItemImageView(
         content = content,
-        hideContent = false,
+        hideMediaContent = false,
         onShowClick = {},
         onContentLayoutChange = {},
     )
@@ -141,10 +141,10 @@ internal fun TimelineItemImageViewPreview(@PreviewParameter(TimelineItemImageCon
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineItemImageViewHideContentPreview() = ElementPreview {
+internal fun TimelineItemImageViewHideMediaContentPreview() = ElementPreview {
     TimelineItemImageView(
         content = aTimelineItemImageContent(),
-        hideContent = true,
+        hideMediaContent = true,
         onShowClick = {},
         onContentLayoutChange = {},
     )

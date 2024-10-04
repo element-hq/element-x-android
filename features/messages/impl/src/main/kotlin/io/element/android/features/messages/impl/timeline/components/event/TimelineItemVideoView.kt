@@ -65,7 +65,7 @@ import io.element.android.wysiwyg.compose.EditorStyledText
 @Composable
 fun TimelineItemVideoView(
     content: TimelineItemVideoContent,
-    hideContent: Boolean,
+    hideMediaContent: Boolean,
     onShowClick: () -> Unit,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
@@ -87,7 +87,7 @@ fun TimelineItemVideoView(
             contentAlignment = Alignment.Center,
         ) {
             ProtectedView(
-                hideContent = hideContent,
+                hideContent = hideMediaContent,
                 onShowClick = onShowClick,
             ) {
                 var isLoaded by remember { mutableStateOf(false) }
@@ -151,7 +151,7 @@ fun TimelineItemVideoView(
 internal fun TimelineItemVideoViewPreview(@PreviewParameter(TimelineItemVideoContentProvider::class) content: TimelineItemVideoContent) = ElementPreview {
     TimelineItemVideoView(
         content = content,
-        hideContent = false,
+        hideMediaContent = false,
         onShowClick = {},
         onContentLayoutChange = {},
     )
@@ -159,10 +159,10 @@ internal fun TimelineItemVideoViewPreview(@PreviewParameter(TimelineItemVideoCon
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineItemVideoViewHideContentPreview() = ElementPreview {
+internal fun TimelineItemVideoViewHideMediaContentPreview() = ElementPreview {
     TimelineItemVideoView(
         content = aTimelineItemVideoContent(),
-        hideContent = true,
+        hideMediaContent = true,
         onShowClick = {},
         onContentLayoutChange = {},
     )

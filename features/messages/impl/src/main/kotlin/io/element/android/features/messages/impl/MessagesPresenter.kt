@@ -402,7 +402,7 @@ class MessagesPresenter @AssistedInject constructor(
             val replyToDetails = loadReplyDetails(targetEvent.eventId).map(permalinkParser)
             val composerMode = MessageComposerMode.Reply(
                 replyToDetails = replyToDetails,
-                hideImage = timelineProtectionState.hideContent(targetEvent.eventId),
+                hideImage = timelineProtectionState.hideMediaContent(targetEvent.eventId),
             )
             composerState.eventSink(
                 MessageComposerEvents.SetMode(composerMode)

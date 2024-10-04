@@ -15,30 +15,30 @@ import org.junit.Test
 
 class TimelineProtectionStateTest {
     @Test
-    fun `when protectionState is RenderAll, hideContent always return null`() {
+    fun `when protectionState is RenderAll, hideMediaContent always return null`() {
         val sut = aTimelineProtectionState(
             protectionState = ProtectionState.RenderAll
         )
-        assertThat(sut.hideContent(null)).isFalse()
-        assertThat(sut.hideContent(AN_EVENT_ID)).isFalse()
+        assertThat(sut.hideMediaContent(null)).isFalse()
+        assertThat(sut.hideMediaContent(AN_EVENT_ID)).isFalse()
     }
 
     @Test
-    fun `when protectionState is RenderOnly with empty set, hideContent always return true`() {
+    fun `when protectionState is RenderOnly with empty set, hideMediaContent always return true`() {
         val sut = aTimelineProtectionState(
             protectionState = ProtectionState.RenderOnly(persistentSetOf())
         )
-        assertThat(sut.hideContent(null)).isTrue()
-        assertThat(sut.hideContent(AN_EVENT_ID)).isTrue()
+        assertThat(sut.hideMediaContent(null)).isTrue()
+        assertThat(sut.hideMediaContent(AN_EVENT_ID)).isTrue()
     }
 
     @Test
-    fun `when protectionState is RenderOnly with an Event, hideContent can return true or false`() {
+    fun `when protectionState is RenderOnly with an Event, hideMediaContent can return true or false`() {
         val sut = aTimelineProtectionState(
             protectionState = ProtectionState.RenderOnly(persistentSetOf(AN_EVENT_ID))
         )
-        assertThat(sut.hideContent(null)).isTrue()
-        assertThat(sut.hideContent(AN_EVENT_ID)).isFalse()
-        assertThat(sut.hideContent(AN_EVENT_ID_2)).isTrue()
+        assertThat(sut.hideMediaContent(null)).isTrue()
+        assertThat(sut.hideMediaContent(AN_EVENT_ID)).isFalse()
+        assertThat(sut.hideMediaContent(AN_EVENT_ID_2)).isTrue()
     }
 }

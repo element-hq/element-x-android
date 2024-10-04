@@ -59,7 +59,7 @@ internal fun TimelineItemRow(
         { event, contentModifier, onContentLayoutChange ->
             TimelineItemEventContentView(
                 content = event.content,
-                hideContent = timelineProtectionState.hideContent(event.eventId),
+                hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
                 onShowClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
                 onLinkClick = onLinkClick,
                 eventSink = eventSink,
@@ -118,7 +118,7 @@ internal fun TimelineItemRow(
                             timelineProtectionState = timelineProtectionState,
                             isLastOutgoingMessage = isLastOutgoingMessage,
                             isHighlighted = timelineItem.isEvent(focusedEventId),
-                            onClick = if (timelineProtectionState.hideContent(timelineItem.eventId) && timelineItem.mustBeProtected()) {
+                            onClick = if (timelineProtectionState.hideMediaContent(timelineItem.eventId) && timelineItem.mustBeProtected()) {
                                 {}
                             } else {
                                 { onClick(timelineItem) }
