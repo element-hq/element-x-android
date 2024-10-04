@@ -30,7 +30,6 @@ import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionPresenter
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.libraries.architecture.AsyncData
@@ -62,7 +61,7 @@ class PinnedMessagesListPresenter @AssistedInject constructor(
     private val room: MatrixRoom,
     timelineItemsFactoryCreator: TimelineItemsFactory.Creator,
     private val timelineProvider: PinnedEventsTimelineProvider,
-    private val timelineProtectionPresenter: TimelineProtectionPresenter,
+    private val timelineProtectionPresenter: Presenter<TimelineProtectionState>,
     private val snackbarDispatcher: SnackbarDispatcher,
     actionListPresenterFactory: ActionListPresenter.Factory,
     private val appCoroutineScope: CoroutineScope,

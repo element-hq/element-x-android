@@ -46,7 +46,6 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
-import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionPresenter
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.networkmonitor.api.NetworkMonitor
@@ -92,7 +91,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val composerPresenter: MessageComposerPresenter,
     private val voiceMessageComposerPresenter: VoiceMessageComposerPresenter,
     timelinePresenterFactory: TimelinePresenter.Factory,
-    private val timelineProtectionPresenter: TimelineProtectionPresenter,
+    private val timelineProtectionPresenter: Presenter<TimelineProtectionState>,
     private val actionListPresenterFactory: ActionListPresenter.Factory,
     private val customReactionPresenter: CustomReactionPresenter,
     private val reactionSummaryPresenter: ReactionSummaryPresenter,
