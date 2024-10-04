@@ -164,7 +164,7 @@ private fun ShieldState?.map(): MessageShield? {
         ShieldStateCode.UNSIGNED_DEVICE -> MessageShield.UnsignedDevice(isCritical)
         ShieldStateCode.UNVERIFIED_IDENTITY -> MessageShield.UnverifiedIdentity(isCritical)
         ShieldStateCode.SENT_IN_CLEAR -> MessageShield.SentInClear(isCritical)
-        ShieldStateCode.PREVIOUSLY_VERIFIED -> MessageShield.PreviouslyVerified(isCritical)
+        ShieldStateCode.VERIFICATION_VIOLATION -> MessageShield.VerificationViolation(isCritical)
     }
 }
 
