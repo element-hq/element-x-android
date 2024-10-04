@@ -1,0 +1,63 @@
+{
+  "action": {
+    "close": "Kapat",
+    "go": "Git",
+    "no": "Hayır",
+    "register": "Kaydol",
+    "remove": "Çıkar",
+    "sign_in": "Gir",
+    "sign_out": "Çık"
+  },
+  "call_ended_view": {
+    "create_account_button": "Hesap aç",
+    "create_account_prompt": "<0>Hesabınızı tutmak için niye bir parola açmıyorsunuz?</0><1>Böylece ileriki aramalarda adınızı ve avatarınızı kullanabileceksiniz</1>",
+    "not_now_button": "Şimdi değil, ev ekranına dön"
+  },
+  "common": {
+    "audio": "Ses",
+    "camera": "Kamera",
+    "copied": "Kopyalandı",
+    "display_name": "Ekran adı",
+    "home": "Ev",
+    "loading": "Yükleniyor…",
+    "microphone": "Mikrofon",
+    "password": "Parola",
+    "settings": "Ayarlar"
+  },
+  "join_existing_call_modal": {
+    "text": "Bu arama zaten var, katılmak ister misiniz?",
+    "title": "Mevcut aramaya katıl?"
+  },
+  "lobby": {
+    "join_button": "Aramaya katıl"
+  },
+  "logging_in": "Giriliyor…",
+  "login_auth_links": "<0>Hesap oluştur</0> yahut <2>Konuk olarak gir</2>",
+  "login_title": "Gir",
+  "rageshake_request_modal": {
+    "body": "Bu aramadaki başka bir kullanıcı sorun yaşıyor. Sorunu daha iyi çözebilmemiz için hata ayıklama kütüğünü almak isteriz.",
+    "title": "Hata ayıklama kütük istemi"
+  },
+  "rageshake_send_logs": "Hata ayıklama kütüğünü gönder",
+  "rageshake_sending": "Gönderiliyor…",
+  "recaptcha_dismissed": "reCAPTCHA atlandı",
+  "recaptcha_not_loaded": "reCAPTCHA yüklenmedi",
+  "register": {
+    "passwords_must_match": "Parolalar aynı olmalı",
+    "registering": "Kaydediyor…"
+  },
+  "register_auth_links": "<0>Mevcut hesabınız mı var?</0><1><0>Gir</0> yahut <2>Konuk girişi</2></1>",
+  "register_confirm_password_label": "Parolayı tekrar edin",
+  "return_home_button": "Ev ekranına geri dön",
+  "room_auth_view_join_button": "Aramaya katıl",
+  "screenshare_button_label": "Ekran paylaş",
+  "select_input_unset_button": "Bir seçenek seç",
+  "settings": {
+    "developer_tab_title": "Geliştirici",
+    "feedback_tab_h4": "Geri bildirim ver",
+    "feedback_tab_send_logs_label": "Hata ayıklama kütüğünü dahil et",
+    "more_tab_title": "Daha"
+  },
+  "unauthenticated_view_body": "Kaydolmadınız mı? <2>Hesap açın</2>",
+  "unauthenticated_view_login_button": "Hesabınıza girin"
+}

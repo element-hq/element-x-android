@@ -1,0 +1,22 @@
+{
+  "default_server_config": {
+    "m.homeserver": {
+      "base_url": "https://appassets.androidplatform.net",
+      "server_name": "appassets.androidplatform.net"
+    }
+  },
+  "eula": "https://static.element.io/legal/online-EULA.pdf",
+  "features": {
+    "feature_use_device_session_member_events": true
+  },
+  "livekit": {
+    "livekit_service_url": "https://livekit-jwt.call.element.io"
+  },
+  "posthog": {
+    "api_host": "https://posthog-element-call.element.io",
+    "api_key": "phc_rXGHx9vDmyEvyRxPziYtdVIv0ahEv8A9uLWFcCi1WcU"
+  },
+  "rageshake": {
+    "submit_url": "https://element.io/bugreports/submit"
+  }
+}
