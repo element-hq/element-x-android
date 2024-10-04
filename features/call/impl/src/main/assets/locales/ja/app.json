@@ -1,0 +1,73 @@
+{
+  "a11y": {
+    "user_menu": "ユーザーメニュー"
+  },
+  "action": {
+    "close": "閉じる",
+    "copy": "コピー",
+    "go": "続行",
+    "no": "いいえ",
+    "register": "登録",
+    "remove": "削除",
+    "sign_in": "サインイン",
+    "sign_out": "サインアウト"
+  },
+  "call_ended_view": {
+    "create_account_button": "アカウントを作成"
+  },
+  "common": {
+    "audio": "音声",
+    "avatar": "アバター",
+    "camera": "カメラ",
+    "copied": "コピーしました！",
+    "display_name": "表示名",
+    "home": "ホーム",
+    "loading": "読み込んでいます…",
+    "microphone": "マイク",
+    "password": "パスワード",
+    "profile": "プロフィール",
+    "settings": "設定",
+    "username": "ユーザー名",
+    "video": "ビデオ"
+  },
+  "full_screen_view_h1": "<0>何かがうまく行きませんでした。</0>",
+  "header_label": "Element Call ホーム",
+  "join_existing_call_modal": {
+    "join_button": "はい、通話に参加",
+    "text": "この通話は既に存在します。参加しますか？",
+    "title": "既存の通話に参加しますか？"
+  },
+  "layout_spotlight_label": "スポットライト",
+  "lobby": {
+    "join_button": "通話に参加"
+  },
+  "logging_in": "ログインしています…",
+  "login_auth_links": "<0>アカウントを作成</0>または<2>ゲストとしてアクセス</2>",
+  "login_title": "ログイン",
+  "rageshake_request_modal": {
+    "title": "デバッグログを要求"
+  },
+  "rageshake_send_logs": "デバッグログを送信",
+  "rageshake_sending": "送信しています…",
+  "rageshake_sending_logs": "デバッグログを送信しています…",
+  "register": {
+    "passwords_must_match": "パスワードが一致する必要があります",
+    "registering": "登録しています…"
+  },
+  "register_auth_links": "<0>既にアカウントをお持ちですか？</0><1><0>ログイン</0>または<2>ゲストとしてアクセス</2></1>",
+  "register_confirm_password_label": "パスワードを確認",
+  "return_home_button": "ホーム画面に戻る",
+  "room_auth_view_join_button": "今すぐ通話に参加",
+  "screenshare_button_label": "画面共有",
+  "select_input_unset_button": "オプションを選択",
+  "settings": {
+    "developer_tab_title": "開発者",
+    "feedback_tab_h4": "フィードバックを送信",
+    "feedback_tab_send_logs_label": "デバッグログを含める",
+    "speaker_device_selection_label": "スピーカー"
+  },
+  "unauthenticated_view_body": "アカウントがありませんか？ <2>アカウントを作成</2>",
+  "unauthenticated_view_login_button": "アカウントにログイン",
+  "version": "バージョン：{{version}}",
+  "waiting_for_participants": "他の参加者を待機しています…"
+}

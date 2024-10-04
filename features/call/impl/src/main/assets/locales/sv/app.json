@@ -1,0 +1,7 @@
+{
+  "call_ended_view": {
+    "headline": "{{displayName}}, ditt samtal har avslutats."
+  },
+  "star_rating_input_label_one": "{{count}} stjärna",
+  "star_rating_input_label_other": "{{count}} stjärnor"
+}

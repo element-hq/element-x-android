@@ -8,6 +8,7 @@
 package io.element.android.features.call.impl.utils
 
 import android.graphics.Bitmap
+import android.net.Uri
 import android.net.http.SslError
 import android.webkit.JavascriptInterface
 import android.webkit.SslErrorHandler
@@ -16,6 +17,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.webkit.WebViewAssetLoader
 import androidx.webkit.WebViewCompat
 import androidx.webkit.WebViewFeature
 import io.element.android.features.call.impl.BuildConfig
@@ -37,6 +39,10 @@ class WebViewWidgetMessageInterceptor(
     override val interceptedMessages = MutableSharedFlow<String>(extraBufferCapacity = 10)
 
     init {
+        val assetLoader = WebViewAssetLoader.Builder()
+            .addPathHandler("/", WebViewAssetLoader.AssetsPathHandler(webView.context))
+            .build()
+
         webView.webViewClient = object : WebViewClient() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
@@ -116,6 +122,15 @@ class WebViewWidgetMessageInterceptor(
                 }
 
                 super.onReceivedSslError(view, handler, error)
+            }
+
+            override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest): WebResourceResponse? {
+                println("Intercepting: ${request.url}")
+                return assetLoader.shouldInterceptRequest(request.url)
+            }
+
+            override fun shouldInterceptRequest(view: WebView?, url: String): WebResourceResponse? {
+                return assetLoader.shouldInterceptRequest(Uri.parse(url))
             }
         }
 

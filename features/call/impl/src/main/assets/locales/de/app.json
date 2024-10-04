@@ -1,0 +1,142 @@
+{
+  "a11y": {
+    "user_menu": "Benutzermenü"
+  },
+  "action": {
+    "close": "Schließen",
+    "copy": "Kopieren",
+    "copy_link": "Link kopieren",
+    "go": "Los geht’s",
+    "invite": "Einladen",
+    "no": "Nein",
+    "register": "Registrieren",
+    "remove": "Entfernen",
+    "sign_in": "Anmelden",
+    "sign_out": "Abmelden",
+    "submit": "Absenden"
+  },
+  "analytics_notice": "Mit der Teilnahme an der Beta akzeptierst du die Sammlung von anonymen Daten, die wir zur Verbesserung des Produkts verwenden. Weitere Informationen zu den von uns erhobenen Daten findest du in unserer <2>Datenschutzerklärung</2> und unseren <6>Cookie-Richtlinien</6>.",
+  "app_selection_modal": {
+    "continue_in_browser": "Weiter im Browser",
+    "open_in_app": "In der App öffnen",
+    "text": "Bereit, beizutreten?",
+    "title": "App auswählen"
+  },
+  "application_opened_another_tab": "Diese Anwendung wurde in einem anderen Tab geöffnet.",
+  "browser_media_e2ee_unsupported": "Dein Webbrowser unterstützt keine Medien-Ende-zu-Ende-Verschlüsselung. Unterstützte Browser sind Chrome, Safari, Firefox >=117",
+  "browser_media_e2ee_unsupported_heading": "Inkompatibler Browser",
+  "call_ended_view": {
+    "body": "Deine Verbindung wurde getrennt",
+    "create_account_button": "Konto erstellen",
+    "create_account_prompt": "<0>Warum vergibst du nicht abschließend ein Passwort, um dein Konto zu erhalten?</0><1>Du kannst deinen Namen behalten und ein Profilbild für zukünftige Anrufe festlegen.</1>",
+    "feedback_done": "<0>Danke für deine Rückmeldung!</0>",
+    "feedback_prompt": "<0>Wir würden uns freuen, deine Rückmeldung zu hören, um deine Erfahrung verbessern zu können.</0>",
+    "headline": "{{displayName}}, dein Anruf wurde beendet.",
+    "not_now_button": "Nicht jetzt, zurück zur Startseite",
+    "reconnect_button": "Erneut verbinden",
+    "survey_prompt": "Wie ist es gelaufen?"
+  },
+  "call_name": "Name des Anrufs",
+  "common": {
+    "audio": "Audio",
+    "avatar": "Profilbild",
+    "camera": "Kamera",
+    "copied": "Kopiert!",
+    "display_name": "Anzeigename",
+    "encrypted": "Verschlüsselt",
+    "error": "Fehler",
+    "home": "Startseite",
+    "loading": "Lade …",
+    "microphone": "Mikrofon",
+    "password": "Passwort",
+    "profile": "Profil",
+    "settings": "Einstellungen",
+    "unencrypted": "Nicht verschlüsselt",
+    "username": "Benutzername",
+    "video": "Video"
+  },
+  "disconnected_banner": "Die Verbindung zum Server wurde getrennt.",
+  "full_screen_view_description": "<0>Übermittelte Problemberichte helfen uns, Fehler zu beheben.</0>",
+  "full_screen_view_h1": "<0>Hoppla, etwas ist schiefgelaufen.</0>",
+  "hangup_button_label": "Anruf beenden",
+  "header_label": "Element Call-Startseite",
+  "header_participants_label": "Teilnehmende",
+  "invite_modal": {
+    "link_copied_toast": "Link in Zwischenablage kopiert",
+    "title": "Zu diesem Anruf einladen"
+  },
+  "join_existing_call_modal": {
+    "join_button": "Ja, Anruf beitreten",
+    "text": "Dieser Aufruf existiert bereits, möchtest Du teilnehmen?",
+    "title": "An bestehendem Anruf teilnehmen?"
+  },
+  "layout_grid_label": "Raster",
+  "layout_spotlight_label": "Rampenlicht",
+  "lobby": {
+    "join_button": "Anruf beitreten",
+    "leave_button": "Zurück zu kürzlichen Anrufen"
+  },
+  "log_in": "Anmelden",
+  "logging_in": "Anmelden …",
+  "login_auth_links": "<0>Konto erstellen</0> Oder <2>Als Gast betreten</2>",
+  "login_auth_links_prompt": "Noch nicht registriert?",
+  "login_subheading": "Weiter zu Element",
+  "login_title": "Anmelden",
+  "microphone_off": "Mikrofon aus",
+  "microphone_on": "Mikrofon an",
+  "mute_microphone_button_label": "Mikrofon deaktivieren",
+  "rageshake_button_error_caption": "Protokolle erneut senden",
+  "rageshake_request_modal": {
+    "body": "Ein anderer Benutzer dieses Anrufs hat ein Problem. Um es besser diagnostizieren zu können, würden wir gerne ein Debug-Protokoll erstellen.",
+    "title": "Debug-Log Anfrage"
+  },
+  "rageshake_send_logs": "Debug-Logs senden",
+  "rageshake_sending": "Senden …",
+  "rageshake_sending_logs": "Sende Debug-Protokolle …",
+  "rageshake_sent": "Danke!",
+  "recaptcha_caption": "Diese Seite wird durch reCAPTCHA geschützt und es gelten Googles <2>Datenschutzerklärung</2> und <6>Nutzungsbedingungen</6>. <9></9>Mit einem Klick auf „Registrieren“ akzeptierst du unseren <2>Endbenutzer-Lizenzvertrag (EULA)</2>",
+  "recaptcha_dismissed": "Recaptcha abgelehnt",
+  "recaptcha_not_loaded": "Recaptcha nicht geladen",
+  "register": {
+    "passwords_must_match": "Passwörter müssen übereinstimmen",
+    "registering": "Registrierung …"
+  },
+  "register_auth_links": "<0>Du hast bereits ein Konto?</0><1><0>Anmelden</0> Oder <2>Als Gast betreten</2></1>",
+  "register_confirm_password_label": "Passwort bestätigen",
+  "return_home_button": "Zurück zur Startseite",
+  "room_auth_view_eula_caption": "Mit einem Klick auf „Anruf beitreten“ akzeptierst du unseren <2>Endbenutzer-Lizenzvertrag (EULA)</2>",
+  "room_auth_view_join_button": "Anruf beitreten",
+  "screenshare_button_label": "Bildschirm teilen",
+  "select_input_unset_button": "Wähle eine Option",
+  "settings": {
+    "developer_settings_label": "Entwicklereinstellungen",
+    "developer_settings_label_description": "Zeige die Entwicklereinstellungen im Einstellungsfenster.",
+    "developer_tab_title": "Entwickler",
+    "feedback_tab_body": "Falls du auf Probleme stößt oder einfach nur eine Rückmeldung geben möchtest, sende uns bitte eine kurze Beschreibung.",
+    "feedback_tab_description_label": "Deine Rückmeldung",
+    "feedback_tab_h4": "Rückmeldung geben",
+    "feedback_tab_send_logs_label": "Debug-Protokolle einschließen",
+    "feedback_tab_thank_you": "Danke, wir haben deine Rückmeldung erhalten!",
+    "feedback_tab_title": "Rückmeldung",
+    "more_tab_title": "Mehr",
+    "opt_in_description": "<0></0><1></1>Du kannst deine Zustimmung durch Abwählen dieses Kästchens zurückziehen. Falls du dich aktuell in einem Anruf befindest, wird diese Einstellung nach dem Ende des Anrufs wirksam.",
+    "show_connection_stats_label": "Verbindungsstatistiken zeigen",
+    "speaker_device_selection_label": "Wiedergabegerät"
+  },
+  "star_rating_input_label_one": "{{count}} Stern",
+  "star_rating_input_label_other": "{{count}} Sterne",
+  "start_new_call": "Neuen Anruf beginnen",
+  "start_video_button_label": "Video aktivieren",
+  "stop_screenshare_button_label": "Bildschirm wird geteilt",
+  "stop_video_button_label": "Video deaktivieren",
+  "submitting": "Sende …",
+  "unauthenticated_view_body": "Noch nicht registriert? <2>Konto erstellen</2>",
+  "unauthenticated_view_eula_caption": "Mit einem Klick auf „Los geht’s“ akzeptierst du unseren <2>Endbenutzer-Lizenzvertrag (EULA)</2>",
+  "unauthenticated_view_login_button": "Melde dich mit deinem Konto an",
+  "unmute_microphone_button_label": "Mikrofon aktivieren",
+  "version": "Version: {{version}}",
+  "video_tile": {
+    "sfu_participant_local": "Du"
+  },
+  "waiting_for_participants": "Warte auf weitere Teilnehmer …"
+}

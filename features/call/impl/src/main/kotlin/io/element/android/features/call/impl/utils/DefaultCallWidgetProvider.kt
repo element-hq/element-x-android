@@ -35,9 +35,7 @@ class DefaultCallWidgetProvider @Inject constructor(
     ): Result<CallWidgetProvider.GetWidgetResult> = runCatching {
         val matrixClient = matrixClientsProvider.getOrRestore(sessionId).getOrThrow()
         val room = matrixClient.getRoom(roomId) ?: error("Room not found")
-        val baseUrl = appPreferencesStore.getCustomElementCallBaseUrlFlow().firstOrNull()
-            ?: elementCallBaseUrlProvider.provides(matrixClient)
-            ?: ElementCallConfig.DEFAULT_BASE_URL
+        val baseUrl = "https://appassets.androidplatform.net/index.html"
         val widgetSettings = callWidgetSettingsProvider.provide(baseUrl, encrypted = room.isEncrypted)
         val callUrl = room.generateWidgetWebViewUrl(
             widgetSettings = widgetSettings,
