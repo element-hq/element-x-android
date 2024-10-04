@@ -51,10 +51,10 @@ if [[ -z ${REPO} ]]; then
 fi
 
 echo "Deleting previous screenshots"
-./gradlew removeOldSnapshots --stacktrace --warn
+./gradlew removeOldSnapshots --stacktrace --warn $GRADLE_ARGS
 
 echo "Record screenshots"
-./gradlew recordPaparazziDebug --stacktrace
+./gradlew recordPaparazziDebug --stacktrace $GRADLE_ARGS
 
 echo "Committing changes"
 git config http.sslVerify false
