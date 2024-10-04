@@ -64,6 +64,7 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.A_UNIQUE_ID
 import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
@@ -1019,6 +1020,7 @@ class MessagesPresenterTest {
         val featureFlagService = FakeFeatureFlagService()
         val identityChangeStatePresenter = IdentityChangeStatePresenter(
             room = matrixRoom,
+            encryptionService = FakeEncryptionService(),
         )
         return MessagesPresenter(
             room = matrixRoom,

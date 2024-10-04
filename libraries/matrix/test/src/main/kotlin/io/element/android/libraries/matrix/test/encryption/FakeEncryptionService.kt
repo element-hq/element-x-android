@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.test.encryption
 
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.EnableRecoveryProgress
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.flowOf
 
 class FakeEncryptionService(
     var startIdentityResetLambda: () -> Result<IdentityResetHandle?> = { lambdaError() },
+    private val pinUserIdentityResult: (UserId) -> Result<Unit> = { lambdaError() },
 ) : EncryptionService {
     private var disableRecoveryFailure: Exception? = null
     override val backupStateStateFlow: MutableStateFlow<BackupState> = MutableStateFlow(BackupState.UNKNOWN)
@@ -115,6 +117,10 @@ class FakeEncryptionService(
 
     override suspend fun startIdentityReset(): Result<IdentityResetHandle?> {
         return startIdentityResetLambda()
+    }
+
+    override suspend fun pinUserIdentity(userId: UserId): Result<Unit> {
+        return pinUserIdentityResult(userId)
     }
 
     companion object {

@@ -12,33 +12,35 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.roomMembers
-import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class IdentityChangeStatePresenter @Inject constructor(
     private val room: MatrixRoom,
+    private val encryptionService: EncryptionService,
 ) : Presenter<IdentityChangeState> {
     @Composable
     override fun present(): IdentityChangeState {
+        val coroutineScope = rememberCoroutineScope()
         val roomMemberIdentityStateChange = remember {
-            mutableStateOf(emptyList<RoomMemberIdentityStateChange>())
-        }
-
-        // Keep the ignored alert locally for now
-        val ignoredUserIdChange = rememberSaveable {
-            mutableStateOf(emptyList<UserId>())
+            mutableStateOf(persistentListOf<RoomMemberIdentityStateChange>())
         }
 
         LaunchedEffect(Unit) {
@@ -47,38 +49,40 @@ class IdentityChangeStatePresenter @Inject constructor(
 
         fun handleEvent(event: IdentityChangeEvent) {
             when (event) {
-                is IdentityChangeEvent.Submit -> {
-                    ignoredUserIdChange.value += event.userId
-                    // TODO notify the SDK
-                }
+                is IdentityChangeEvent.Submit -> coroutineScope.pinUserIdentity(event.userId)
             }
         }
 
         return IdentityChangeState(
-            roomMemberIdentityStateChanges = roomMemberIdentityStateChange.value
-                .filter { it.roomMember.userId !in ignoredUserIdChange.value }
-                .toImmutableList(),
+            roomMemberIdentityStateChanges = roomMemberIdentityStateChange.value,
             eventSink = ::handleEvent,
         )
     }
 
-    private fun CoroutineScope.observeRoomMemberIdentityStateChange(roomMemberIdentityStateChange: MutableState<List<RoomMemberIdentityStateChange>>) {
+    private fun CoroutineScope.observeRoomMemberIdentityStateChange(roomMemberIdentityStateChange: MutableState<PersistentList<RoomMemberIdentityStateChange>>) {
         combine(room.identityStateChangesFlow, room.membersStateFlow) { IdentityStateChanges, membersState ->
-            IdentityStateChanges.map { IdentityStateChange ->
+            IdentityStateChanges.map { identityStateChange ->
                 val member = membersState.roomMembers()
-                    ?.firstOrNull { roomMember -> roomMember.userId == IdentityStateChange.userId }
-                    ?: createDefaultRoomMemberForIdentityChange(IdentityStateChange.userId)
+                    ?.firstOrNull { roomMember -> roomMember.userId == identityStateChange.userId }
+                    ?: createDefaultRoomMemberForIdentityChange(identityStateChange.userId)
                 RoomMemberIdentityStateChange(
                     roomMember = member,
-                    identityState = IdentityStateChange.identityState,
+                    identityState = identityStateChange.identityState,
                 )
             }
         }
             .distinctUntilChanged()
             .onEach { roomMemberIdentityStateChanges ->
-                roomMemberIdentityStateChange.value = roomMemberIdentityStateChanges
+                roomMemberIdentityStateChange.value = roomMemberIdentityStateChanges.toPersistentList()
             }
             .launchIn(this)
+    }
+
+    private fun CoroutineScope.pinUserIdentity(userId: UserId) = launch {
+        encryptionService.pinUserIdentity(userId)
+            .onFailure {
+                Timber.e(it, "Failed to pin identity for user $userId")
+            }
     }
 }
 

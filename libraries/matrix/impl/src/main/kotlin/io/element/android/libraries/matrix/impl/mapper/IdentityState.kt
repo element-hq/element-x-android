@@ -8,7 +8,7 @@
 package io.element.android.libraries.matrix.impl.mapper
 
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
-import org.matrix.rustcomponents.sdk.IdentityState as RustIdentityState
+import uniffi.matrix_sdk_crypto.IdentityState as RustIdentityState
 
 fun RustIdentityState.map(): IdentityState = when (this) {
     RustIdentityState.VERIFIED -> IdentityState.Verified
