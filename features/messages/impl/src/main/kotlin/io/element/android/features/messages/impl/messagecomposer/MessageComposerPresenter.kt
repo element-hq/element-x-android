@@ -592,13 +592,11 @@ class MessageComposerPresenter @Inject constructor(
                 )
                 timelineController.invokeOnCurrentTimeline {
                     val replyToDetails = loadReplyDetails(draftType.eventId).map(permalinkParser)
-                    run {
-                        messageComposerContext.composerMode = MessageComposerMode.Reply(
-                            replyToDetails = replyToDetails,
-                            // I guess it's fine to always render the image when restoring a draft
-                            hideImage = false
-                        )
-                    }
+                    messageComposerContext.composerMode = MessageComposerMode.Reply(
+                        replyToDetails = replyToDetails,
+                        // I guess it's fine to always render the image when restoring a draft
+                        hideImage = false
+                    )
                 }
             }
         }
