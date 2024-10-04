@@ -319,8 +319,8 @@ private fun MessagesViewContent(
     onJoinCallClick: () -> Unit,
     onViewAllPinnedMessagesClick: () -> Unit,
     forceJumpToBottomVisibility: Boolean,
-    modifier: Modifier = Modifier,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier

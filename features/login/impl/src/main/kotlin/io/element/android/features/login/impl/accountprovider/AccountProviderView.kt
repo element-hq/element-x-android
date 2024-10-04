@@ -38,8 +38,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 @Composable
 fun AccountProviderView(
     item: AccountProvider,
-    modifier: Modifier = Modifier,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier

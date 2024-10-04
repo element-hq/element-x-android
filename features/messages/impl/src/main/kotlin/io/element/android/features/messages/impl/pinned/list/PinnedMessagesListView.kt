@@ -239,8 +239,8 @@ private fun PinnedMessagesListLoaded(
 private fun TimelineItemEventContentViewWrapper(
     event: TimelineItem.Event,
     onLinkClick: (String) -> Unit,
-    modifier: Modifier = Modifier,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     if (event.content is TimelineItemPollContent) {
         PollTitleView(

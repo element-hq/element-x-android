@@ -42,8 +42,8 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun WelcomeView(
     applicationName: String,
-    modifier: Modifier = Modifier,
     onContinueClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     BackHandler(onBack = onContinueClick)
     OnBoardingPage(
