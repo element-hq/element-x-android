@@ -46,7 +46,7 @@ fun ProtectedView(
                 .background(Color(0x99000000)),
             contentAlignment = Alignment.Center,
         ) {
-            ElementTheme(darkTheme = false) {
+            ElementTheme(darkTheme = false, applySystemBarsUpdate = false) {
                 // Not using a button to be able to have correct size
                 Text(
                     modifier = Modifier
