@@ -10,23 +10,20 @@ package io.element.android.features.analytics.impl.preferences
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
-import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.appconfig.AnalyticsConfig
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
-import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesPresenter
 import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesState
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.di.AppScope
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@ContributesBinding(AppScope::class)
-class DefaultAnalyticsPreferencesPresenter @Inject constructor(
+class AnalyticsPreferencesPresenter @Inject constructor(
     private val analyticsService: AnalyticsService,
     private val buildMeta: BuildMeta,
-) : AnalyticsPreferencesPresenter {
+) : Presenter<AnalyticsPreferencesState> {
     @Composable
     override fun present(): AnalyticsPreferencesState {
         val localCoroutineScope = rememberCoroutineScope()

@@ -8,19 +8,19 @@
 package io.element.android.features.preferences.impl.analytics
 
 import androidx.compose.runtime.Composable
-import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesPresenter
+import io.element.android.features.analytics.api.preferences.AnalyticsPreferencesState
 import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
 
 class AnalyticsSettingsPresenter @Inject constructor(
-    private val analyticsPresenter: AnalyticsPreferencesPresenter,
+    private val analyticsPreferencesPresenter: Presenter<AnalyticsPreferencesState>,
 ) : Presenter<AnalyticsSettingsState> {
     @Composable
     override fun present(): AnalyticsSettingsState {
-        val analyticsState = analyticsPresenter.present()
+        val analyticsPreferencesState = analyticsPreferencesPresenter.present()
 
         return AnalyticsSettingsState(
-            analyticsState = analyticsState,
+            analyticsPreferencesState = analyticsPreferencesState,
         )
     }
 }

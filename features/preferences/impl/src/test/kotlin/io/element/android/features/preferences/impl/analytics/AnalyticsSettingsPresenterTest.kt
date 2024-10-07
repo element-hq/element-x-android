@@ -11,9 +11,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.analytics.impl.preferences.DefaultAnalyticsPreferencesPresenter
-import io.element.android.libraries.matrix.test.core.aBuildMeta
-import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.features.analytics.api.preferences.aAnalyticsPreferencesState
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -25,15 +23,14 @@ class AnalyticsSettingsPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val analyticsPresenter = DefaultAnalyticsPreferencesPresenter(FakeAnalyticsService(), aBuildMeta())
         val presenter = AnalyticsSettingsPresenter(
-            analyticsPresenter,
+            analyticsPreferencesPresenter = { aAnalyticsPreferencesState() },
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.analyticsState.isEnabled).isFalse()
+            assertThat(initialState.analyticsPreferencesState.isEnabled).isFalse()
         }
     }
 }
