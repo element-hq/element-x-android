@@ -25,7 +25,6 @@ import io.element.android.services.appnavstate.test.FakeAppNavigationStateServic
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
