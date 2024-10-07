@@ -29,7 +29,7 @@ import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.InviteData
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
-import io.element.android.features.logout.api.direct.DirectLogoutPresenter
+import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
@@ -91,7 +91,7 @@ class RoomListPresenter @Inject constructor(
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
     private val fullScreenIntentPermissionsPresenter: FullScreenIntentPermissionsPresenter,
     private val notificationCleaner: NotificationCleaner,
-    private val logoutPresenter: DirectLogoutPresenter,
+    private val logoutPresenter: Presenter<DirectLogoutState>,
 ) : Presenter<RoomListState> {
     private val encryptionService: EncryptionService = client.encryptionService()
     private val syncService: SyncService = client.syncService()

@@ -16,7 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import io.element.android.features.logout.api.direct.DirectLogoutPresenter
+import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -42,7 +42,7 @@ class PreferencesRootPresenter @Inject constructor(
     private val snackbarDispatcher: SnackbarDispatcher,
     private val featureFlagService: FeatureFlagService,
     private val indicatorService: IndicatorService,
-    private val directLogoutPresenter: DirectLogoutPresenter,
+    private val directLogoutPresenter: Presenter<DirectLogoutState>,
     private val showDeveloperSettingsProvider: ShowDeveloperSettingsProvider,
 ) : Presenter<PreferencesRootState> {
     @Composable

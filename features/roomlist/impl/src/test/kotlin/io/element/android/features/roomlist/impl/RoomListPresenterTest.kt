@@ -7,7 +7,6 @@
 
 package io.element.android.features.roomlist.impl
 
-import androidx.compose.runtime.Composable
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
@@ -19,7 +18,6 @@ import io.element.android.features.invite.api.response.anAcceptDeclineInviteStat
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.leaveroom.fake.FakeLeaveRoomPresenter
-import io.element.android.features.logout.api.direct.DirectLogoutPresenter
 import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
@@ -686,10 +684,6 @@ class RoomListPresenterTest {
         searchPresenter: Presenter<RoomListSearchState> = Presenter { aRoomListSearchState() },
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() },
         notificationCleaner: NotificationCleaner = FakeNotificationCleaner(),
-        logoutPresenter: DirectLogoutPresenter = object : DirectLogoutPresenter {
-            @Composable
-            override fun present() = aDirectLogoutState()
-        },
     ) = RoomListPresenter(
         client = client,
         networkMonitor = networkMonitor,
@@ -717,6 +711,6 @@ class RoomListPresenterTest {
         acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
         fullScreenIntentPermissionsPresenter = FakeFullScreenIntentPermissionsPresenter(),
         notificationCleaner = notificationCleaner,
-        logoutPresenter = logoutPresenter,
+        logoutPresenter = { aDirectLogoutState() },
     )
 }

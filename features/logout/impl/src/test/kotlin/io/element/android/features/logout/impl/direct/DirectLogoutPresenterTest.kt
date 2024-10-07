@@ -26,13 +26,13 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
-class DefaultDirectLogoutPresenterTest {
+class DirectLogoutPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = createDefaultDirectLogoutPresenter()
+        val presenter = createDirectLogoutPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -44,7 +44,7 @@ class DefaultDirectLogoutPresenterTest {
 
     @Test
     fun `present - initial state - last session`() = runTest {
-        val presenter = createDefaultDirectLogoutPresenter(
+        val presenter = createDirectLogoutPresenter(
             encryptionService = FakeEncryptionService().apply {
                 emitIsLastDevice(true)
             }
@@ -66,7 +66,7 @@ class DefaultDirectLogoutPresenterTest {
                 emit(BackupUploadState.Waiting)
             }
         )
-        val presenter = createDefaultDirectLogoutPresenter(
+        val presenter = createDirectLogoutPresenter(
             encryptionService = encryptionService
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -81,7 +81,7 @@ class DefaultDirectLogoutPresenterTest {
 
     @Test
     fun `present - logout then cancel`() = runTest {
-        val presenter = createDefaultDirectLogoutPresenter()
+        val presenter = createDirectLogoutPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -97,7 +97,7 @@ class DefaultDirectLogoutPresenterTest {
 
     @Test
     fun `present - logout then confirm`() = runTest {
-        val presenter = createDefaultDirectLogoutPresenter()
+        val presenter = createDirectLogoutPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -120,7 +120,7 @@ class DefaultDirectLogoutPresenterTest {
                 throw A_THROWABLE
             }
         }
-        val presenter = createDefaultDirectLogoutPresenter(
+        val presenter = createDirectLogoutPresenter(
             matrixClient,
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -152,7 +152,7 @@ class DefaultDirectLogoutPresenterTest {
                 }
             }
         }
-        val presenter = createDefaultDirectLogoutPresenter(
+        val presenter = createDirectLogoutPresenter(
             matrixClient,
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -179,10 +179,10 @@ class DefaultDirectLogoutPresenterTest {
         return awaitItem()
     }
 
-    private fun createDefaultDirectLogoutPresenter(
+    private fun createDirectLogoutPresenter(
         matrixClient: MatrixClient = FakeMatrixClient(),
         encryptionService: EncryptionService = FakeEncryptionService(),
-    ): DefaultDirectLogoutPresenter = DefaultDirectLogoutPresenter(
+    ): DirectLogoutPresenter = DirectLogoutPresenter(
         matrixClient = matrixClient,
         encryptionService = encryptionService,
     )

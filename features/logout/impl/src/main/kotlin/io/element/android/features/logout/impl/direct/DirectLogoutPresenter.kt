@@ -14,14 +14,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.logout.api.direct.DirectLogoutEvents
-import io.element.android.features.logout.api.direct.DirectLogoutPresenter
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.logout.impl.tools.isBackingUp
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
-import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -29,11 +27,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@ContributesBinding(SessionScope::class)
-class DefaultDirectLogoutPresenter @Inject constructor(
+class DirectLogoutPresenter @Inject constructor(
     private val matrixClient: MatrixClient,
     private val encryptionService: EncryptionService,
-) : DirectLogoutPresenter {
+) : Presenter<DirectLogoutState> {
     @Composable
     override fun present(): DirectLogoutState {
         val localCoroutineScope = rememberCoroutineScope()
