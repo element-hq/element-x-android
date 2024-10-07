@@ -11,6 +11,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -172,27 +173,51 @@ class RoomListPresenter @Inject constructor(
     }
 
     @Composable
-    private fun securityBannerState(
+    private fun rememberSecurityBannerState(
         securityBannerDismissed: Boolean,
         needsSlidingSyncMigration: Boolean,
-    ): SecurityBannerState {
+    ): State<SecurityBannerState> {
         val currentSecurityBannerDismissed by rememberUpdatedState(securityBannerDismissed)
+        val currentNeedsSlidingSyncMigration by rememberUpdatedState(needsSlidingSyncMigration)
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
         val syncState by syncService.syncState.collectAsState()
-        return when {
-            currentSecurityBannerDismissed -> SecurityBannerState.None
-            syncState == SyncState.Running -> {
-                when (recoveryState) {
-                    RecoveryState.DISABLED -> SecurityBannerState.SetUpRecovery
-                    RecoveryState.INCOMPLETE -> SecurityBannerState.RecoveryKeyConfirmation
-                    RecoveryState.UNKNOWN,
-                    RecoveryState.WAITING_FOR_SYNC,
-                    RecoveryState.ENABLED -> SecurityBannerState.None
-                }
+        return remember {
+            derivedStateOf {
+                calculateBannerState(
+                    securityBannerDismissed = currentSecurityBannerDismissed,
+                    needsSlidingSyncMigration = currentNeedsSlidingSyncMigration,
+                    recoveryState = recoveryState,
+                    syncState = syncState,
+                )
             }
-            needsSlidingSyncMigration -> SecurityBannerState.NeedsNativeSlidingSyncMigration
-            else -> SecurityBannerState.None
         }
+    }
+
+    private fun calculateBannerState(
+        securityBannerDismissed: Boolean,
+        needsSlidingSyncMigration: Boolean,
+        syncState: SyncState,
+        recoveryState: RecoveryState,
+    ): SecurityBannerState {
+        if (securityBannerDismissed) {
+            return SecurityBannerState.None
+        }
+
+        if (syncState == SyncState.Running) {
+            when (recoveryState) {
+                RecoveryState.DISABLED -> return SecurityBannerState.SetUpRecovery
+                RecoveryState.INCOMPLETE -> return SecurityBannerState.RecoveryKeyConfirmation
+                RecoveryState.UNKNOWN,
+                RecoveryState.WAITING_FOR_SYNC,
+                RecoveryState.ENABLED -> Unit
+            }
+        }
+
+        if (needsSlidingSyncMigration) {
+            return SecurityBannerState.NeedsNativeSlidingSyncMigration
+        }
+
+        return SecurityBannerState.None
     }
 
     @Composable
@@ -223,7 +248,7 @@ class RoomListPresenter @Inject constructor(
             showEmpty -> RoomListContentState.Empty
             showSkeleton -> RoomListContentState.Skeleton(count = 16)
             else -> {
-                val securityBannerState = securityBannerState(securityBannerDismissed, needsSlidingSyncMigration)
+                val securityBannerState by rememberSecurityBannerState(securityBannerDismissed, needsSlidingSyncMigration)
                 RoomListContentState.Rooms(
                     securityBannerState = securityBannerState,
                     fullScreenIntentPermissionsState = fullScreenIntentPermissionsPresenter.present(),
