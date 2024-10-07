@@ -230,6 +230,8 @@ class RoomListPresenterTest {
             assertThat(eventWithContentAsRooms.contentAsRooms().securityBannerState).isEqualTo(SecurityBannerState.RecoveryKeyConfirmation)
             eventSink(RoomListEvents.DismissRequestVerificationPrompt)
             assertThat(awaitItem().contentAsRooms().securityBannerState).isEqualTo(SecurityBannerState.None)
+
+            cancelAndIgnoreRemainingEvents()
             scope.cancel()
         }
     }
@@ -279,6 +281,8 @@ class RoomListPresenterTest {
             nextState.eventSink(RoomListEvents.DismissBanner)
             val finalState = awaitItem()
             assertThat(finalState.contentAsRooms().securityBannerState).isEqualTo(SecurityBannerState.None)
+
+            cancelAndIgnoreRemainingEvents()
             scope.cancel()
         }
     }
