@@ -5,7 +5,7 @@
 # Project
 android_gradle_plugin = "8.7.0"
 kotlin = "1.9.25"
-kotlinpoetKsp = "1.17.0"
+kotlinpoetKsp = "1.18.1"
 ksp = "1.9.25-1.0.20"
 firebaseAppDistribution = "5.0.0"
 
