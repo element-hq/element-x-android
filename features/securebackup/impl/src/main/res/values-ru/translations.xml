@@ -9,7 +9,7 @@
     <b>"ключ восстановления"</b>
   </string>
   <string name="screen_chat_backup_recovery_action_confirm">
-    "Ввести "
+    "Введите "
     <b>"ключ восстановления"</b>
   </string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Резервная копия чата в настоящее время не синхронизирована."</string>
@@ -68,7 +68,7 @@
     " подтвержден"
   </string>
   <string name="screen_recovery_key_confirm_title">
-    "Подтвердите "
+    "Введите "
     <b>"ключ восстановления"</b>
   </string>
   <string name="screen_recovery_key_copied_to_clipboard">
@@ -100,7 +100,7 @@
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Этот процесс необратим."</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"Вы действительно хотите сбросить шифрование?"</string>
   <string name="screen_reset_encryption_password_error">"Произошла неизвестная ошибка. Проверьте правильность пароля учетной записи и повторите попытку."</string>
-  <string name="screen_reset_encryption_password_placeholder">"Ввод…"</string>
+  <string name="screen_reset_encryption_password_placeholder">"Вход…"</string>
   <string name="screen_reset_encryption_password_subtitle">"Подтвердите, что вы хотите сбросить шифрование."</string>
   <string name="screen_reset_encryption_password_title">"Введите пароль своей учетной записи, чтобы продолжить"</string>
 </resources>

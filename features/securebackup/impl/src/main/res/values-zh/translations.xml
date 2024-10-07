@@ -42,7 +42,7 @@
   <string name="screen_recovery_key_confirm_key_placeholder">"输入……"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"丢失了恢复密钥？"</string>
   <string name="screen_recovery_key_confirm_success">"恢复密钥已确认"</string>
-  <string name="screen_recovery_key_confirm_title">"输入您的恢复密钥"</string>
+  <string name="screen_recovery_key_confirm_title">"输入恢复密钥"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"恢复密钥已复制"</string>
   <string name="screen_recovery_key_generating_key">"正在生成……"</string>
   <string name="screen_recovery_key_save_action">"保存恢复密钥"</string>
@@ -60,7 +60,7 @@
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"此过程不可逆。"</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"您确定要重置加密吗？"</string>
   <string name="screen_reset_encryption_password_error">"发生未知错误。请检查您的帐户密码是否正确，然后重试。"</string>
-  <string name="screen_reset_encryption_password_placeholder">"输入…"</string>
+  <string name="screen_reset_encryption_password_placeholder">"输入……"</string>
   <string name="screen_reset_encryption_password_subtitle">"确认您要重置加密。"</string>
   <string name="screen_reset_encryption_password_title">"输入您的账户密码以继续"</string>
 </resources>

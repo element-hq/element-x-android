@@ -16,6 +16,7 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Postępuj zgodnie z instrukcjami, aby utworzyć nowy klucz przywracania"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Zapisz nowy klucz przywracania w menedżerze haseł lub notatce szyfrowanej"</string>
   <string name="screen_create_new_recovery_key_title">"Resetuj szyfrowanie swojego konta za pomocą drugiego urządzenia"</string>
+  <string name="screen_encryption_reset_action_continue_reset">"Kontynuuj resetowanie"</string>
   <string name="screen_encryption_reset_bullet_1">"Szczegóły konta, kontakty, preferencje i lista czatów zostaną zachowane"</string>
   <string name="screen_encryption_reset_bullet_2">"Utracisz istniejącą historię wiadomości"</string>
   <string name="screen_encryption_reset_bullet_3">"Wymagana będzie ponowna weryfikacja istniejących urządzeń i kontaktów"</string>
@@ -41,7 +42,7 @@
   <string name="screen_recovery_key_confirm_key_placeholder">"Wprowadź…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Zgubiłeś swój kod przywracania?"</string>
   <string name="screen_recovery_key_confirm_success">"Potwierdzono klucz przywracania"</string>
-  <string name="screen_recovery_key_confirm_title">"Wprowadź klucz przywracania"</string>
+  <string name="screen_recovery_key_confirm_title">"Wprowadź swój klucz przywracania"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Skopiowano klucz przywracania"</string>
   <string name="screen_recovery_key_generating_key">"Generuję…"</string>
   <string name="screen_recovery_key_save_action">"Zapisz klucz przywracania"</string>
@@ -58,6 +59,7 @@
   <string name="screen_reset_encryption_confirmation_alert_action">"Tak, zresetuj teraz"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Tego procesu nie można odwrócić."</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"Czy na pewno chcesz zresetować szyfrowanie?"</string>
+  <string name="screen_reset_encryption_password_error">"Wystąpił nieznany błąd. Sprawdź, czy hasło jest poprawne i spróbuj ponownie."</string>
   <string name="screen_reset_encryption_password_placeholder">"Wprowadź…"</string>
   <string name="screen_reset_encryption_password_subtitle">"Potwierdź, że chcesz zresetować szyfrowanie."</string>
   <string name="screen_reset_encryption_password_title">"Wprowadź hasło, aby kontynuować"</string>

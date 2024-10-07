@@ -5,7 +5,7 @@
   <string name="screen_chat_backup_key_backup_description">"Varundamine tagab, et sinu sõnumite ajalugu on alati loetav. %1$s."</string>
   <string name="screen_chat_backup_key_backup_title">"Varundus"</string>
   <string name="screen_chat_backup_recovery_action_change">"Muuda taastevõtit"</string>
-  <string name="screen_chat_backup_recovery_action_confirm">"Sisesta oma taastevõti"</string>
+  <string name="screen_chat_backup_recovery_action_confirm">"Sisesta taastevõti"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Sinu vestluste krüptograafia varukoopia pole hetkel enam sünkroonis."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Seadista krüptovõtmete varundus"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Säilita ligipääs oma krüptitud sõnumitele ka siis, kui sa kaotad kõik oma seadmed ja/või logid kõikjal välja rakendusest %1$s."</string>

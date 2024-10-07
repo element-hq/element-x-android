@@ -5,7 +5,7 @@
   <string name="screen_chat_backup_key_backup_description">"La sauvegarde assure que vous ne perdiez pas l’historique des discussions. %1$s."</string>
   <string name="screen_chat_backup_key_backup_title">"Sauvegarde"</string>
   <string name="screen_chat_backup_recovery_action_change">"Changer la clé de récupération"</string>
-  <string name="screen_chat_backup_recovery_action_confirm">"Confirmer la clé de récupération"</string>
+  <string name="screen_chat_backup_recovery_action_confirm">"Utiliser la clé de récupération"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"La sauvegarde des discussions est désynchronisée."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Configurer la récupération"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Accédez à vos messages chiffrés si vous perdez tous vos appareils ou que vous êtes déconnectés de %1$s partout."</string>
@@ -21,6 +21,7 @@
   <string name="screen_encryption_reset_bullet_2">"Vous perdrez l’historique de vos messages"</string>
   <string name="screen_encryption_reset_bullet_3">"Vous devrez vérifier à nouveau tous vos appareils et tous vos contacts"</string>
   <string name="screen_encryption_reset_footer">"Ne réinitialisez votre identité que si vous n’avez plus accès à aucune autre session et que vous avez perdu votre clé de récupération."</string>
+  <string name="screen_encryption_reset_title">"Vous ne pouvez pas confirmer ? Vous devez réinitialiser votre identité."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Désactiver"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Vous perdrez vos messages chiffrés si vous vous déconnectez de toutes vos sessions."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Êtes-vous certain de vouloir désactiver la sauvegarde?"</string>
@@ -41,7 +42,7 @@
   <string name="screen_recovery_key_confirm_key_placeholder">"Saisissez la clé ici…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Clé de récupération perdue?"</string>
   <string name="screen_recovery_key_confirm_success">"Clé de récupération confirmée"</string>
-  <string name="screen_recovery_key_confirm_title">"Saisissez votre clé de récupération"</string>
+  <string name="screen_recovery_key_confirm_title">"Confirmer votre clé de récupération"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Clé de récupération copiée"</string>
   <string name="screen_recovery_key_generating_key">"Génération…"</string>
   <string name="screen_recovery_key_save_action">"Enregistrer la clé"</string>
@@ -57,8 +58,9 @@
   <string name="screen_recovery_key_setup_title">"Configurer la sauvegarde"</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"Oui, réinitialisez maintenant"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Cette opération ne peut pas être annulée."</string>
+  <string name="screen_reset_encryption_confirmation_alert_title">"Êtes-vous sûr de vouloir réinitialiser votre identité ?"</string>
   <string name="screen_reset_encryption_password_error">"Une erreur s’est produite. Vérifiez que le mot de passe de votre compte est correct et réessayez."</string>
-  <string name="screen_reset_encryption_password_placeholder">"Saisissez…"</string>
+  <string name="screen_reset_encryption_password_placeholder">"Saisissez la clé ici…"</string>
   <string name="screen_reset_encryption_password_subtitle">"Veuillez confirmer que vous souhaitez réinitialiser votre identité."</string>
   <string name="screen_reset_encryption_password_title">"Saisissez le mot de passe de votre compte pour continuer"</string>
 </resources>

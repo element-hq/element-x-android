@@ -5,6 +5,7 @@
   <string name="screen_signout_confirmation_dialog_title">"Sair"</string>
   <string name="screen_signout_in_progress_dialog_content">"Saindo…"</string>
   <string name="screen_signout_key_backup_disabled_title">"Você desativou o backup"</string>
+  <string name="screen_signout_key_backup_offline_title">"O backup das suas chaves ainda está em andamento"</string>
   <string name="screen_signout_key_backup_ongoing_title">"O backup das suas chaves ainda está em andamento"</string>
   <string name="screen_signout_preference_item">"Sair"</string>
   <string name="screen_signout_recovery_disabled_title">"A recuperação não está configurada"</string>

@@ -5,7 +5,7 @@
   <string name="screen_chat_backup_key_backup_description">"Backup vă asigură că nu pierdeți istoricul mesajelor. %1$s."</string>
   <string name="screen_chat_backup_key_backup_title">"Backup"</string>
   <string name="screen_chat_backup_recovery_action_change">"Schimbați cheia de recuperare"</string>
-  <string name="screen_chat_backup_recovery_action_confirm">"Confirmați cheia de recuperare"</string>
+  <string name="screen_chat_backup_recovery_action_confirm">"Introduceți cheia de recuperare"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Backup-ul pentru chat nu este sincronizat în prezent."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Configurați recuperarea"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Obțineți acces la mesajele dumneavoastră criptate dacă vă pierdeți toate dispozitivele sau sunteți deconectat de la %1$s peste tot."</string>
@@ -50,4 +50,5 @@
   <string name="screen_recovery_key_setup_generate_key_description">"Asigurați-vă că puteți stoca cheia de recuperare undeva în siguranță"</string>
   <string name="screen_recovery_key_setup_success">"Configurarea recuperării a reușit"</string>
   <string name="screen_recovery_key_setup_title">"Configurați recuperarea"</string>
+  <string name="screen_reset_encryption_password_placeholder">"Introduceți…"</string>
 </resources>

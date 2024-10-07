@@ -4,7 +4,7 @@
   <string name="screen_create_poll_anonymous_desc">"Näita tulemusi alles pärast küsitluse lõppu"</string>
   <string name="screen_create_poll_anonymous_headline">"Peida hääled"</string>
   <string name="screen_create_poll_answer_hint">"Valik %1$d"</string>
-  <string name="screen_create_poll_cancel_confirmation_content_android">"Sinu muudatused jäävad salvestamata. Kas oled kindel, et soovid tagasi minna?"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Sinu tehtud muudatused pole veel salvestatud. Kas sa oled kindel, et soovid minna tagasi?"</string>
   <string name="screen_create_poll_question_desc">"Küsimus või teema"</string>
   <string name="screen_create_poll_question_hint">"Mis on küsitluse teema?"</string>
   <string name="screen_create_poll_title">"Loo küsitlus"</string>

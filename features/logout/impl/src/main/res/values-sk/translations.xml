@@ -14,5 +14,5 @@
   <string name="screen_signout_recovery_disabled_subtitle">"Chystáte sa odhlásiť z vašej poslednej relácie. Ak sa teraz odhlásite, stratíte prístup k svojim šifrovaným správam."</string>
   <string name="screen_signout_recovery_disabled_title">"Obnovenie nie je nastavené"</string>
   <string name="screen_signout_save_recovery_key_subtitle">"Chystáte sa odhlásiť z vašej poslednej relácie. Ak sa teraz odhlásite, môžete stratiť prístup k svojim šifrovaným správam."</string>
-  <string name="screen_signout_save_recovery_key_title">"Uložili ste si kľúč na obnovenie?"</string>
+  <string name="screen_signout_save_recovery_key_title">"Uložili ste kľúč na obnovenie?"</string>
 </resources>

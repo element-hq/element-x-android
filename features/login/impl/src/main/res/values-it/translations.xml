@@ -21,6 +21,7 @@
   <string name="screen_change_server_form_notice">"Puoi connetterti solo a un server esistente che supporta la sliding sync. L\'amministratore del tuo homeserver dovrà configurarla. %1$s"</string>
   <string name="screen_change_server_subtitle">"Qual è l\'indirizzo del tuo server?"</string>
   <string name="screen_change_server_title">"Seleziona il tuo server"</string>
+  <string name="screen_create_account_title">"Crea account"</string>
   <string name="screen_login_error_deactivated_account">"Questo account è stato disattivato."</string>
   <string name="screen_login_error_invalid_credentials">"Nome utente e/o password errati"</string>
   <string name="screen_login_error_invalid_user_id">"Questo non è un identità utente valida. il formato atteso é: \'@user:homeserver.org\'"</string>

@@ -17,7 +17,7 @@
   <string name="notification_incoming_call">"Sissetulev kõne"</string>
   <string name="notification_inline_reply_failed">"** Saatmine ei õnnestunud - palun ava jututoa täisvaade"</string>
   <string name="notification_invitation_action_join">"Liitu"</string>
-  <string name="notification_invitation_action_reject">"Lükka tagasi"</string>
+  <string name="notification_invitation_action_reject">"Keeldu"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d kutse"</item>
     <item quantity="other">"%d kutset"</item>

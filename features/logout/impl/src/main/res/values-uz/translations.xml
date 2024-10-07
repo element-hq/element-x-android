@@ -5,4 +5,5 @@
   <string name="screen_signout_confirmation_dialog_title">"Tizimdan chiqish"</string>
   <string name="screen_signout_in_progress_dialog_content">"Chiqish…"</string>
   <string name="screen_signout_preference_item">"Tizimdan chiqish"</string>
+  <string name="screen_signout_save_recovery_key_title">"Zaxira kalitingizni saqladingizmi?"</string>
 </resources>

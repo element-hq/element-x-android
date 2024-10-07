@@ -4,6 +4,7 @@
   <string name="banner_migrate_to_native_sliding_sync_description">"Dein Server unterstützt jetzt ein neues, schnelleres Protokoll. Melde dich ab und melde dich wieder an, um zu aktualisieren. Wenn du das jetzt tust, vermeidest du eine erzwungene Abmeldung, wenn das alte Protokoll später entfernt wird."</string>
   <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Dein Homeserver unterstützt das alte Protokoll nicht mehr. Bitte logge dich aus und melde dich wieder an, um die App weiter zu nutzen."</string>
   <string name="banner_migrate_to_native_sliding_sync_title">"Aktualisierung verfügbar"</string>
+  <string name="banner_set_up_recovery_content">"Erstelle einen neuen Wiederherstellungsschlüssel, mit dem du deinen verschlüsselten Nachrichtenverlauf wiederherstellen kannst, wenn du dich an einem neuen Gerät anmeldest."</string>
   <string name="banner_set_up_recovery_title">"Wiederherstellung einrichten"</string>
   <string name="confirm_recovery_key_banner_message">"Dein Chat-Backup ist derzeit nicht synchronisiert. Du musst deinen Wiederherstellungsschlüssel bestätigen, um Zugriff auf dein Chat-Backup zu erhalten."</string>
   <string name="confirm_recovery_key_banner_title">"Wiederherstellungsschlüssel bestätigen."</string>

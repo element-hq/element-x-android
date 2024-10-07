@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"ანგარიშის მიმწოდებლის შეცვლა"</string>
+  <string name="screen_account_provider_change">"შეცვალეთ ანგარიშის მომწოდებელი"</string>
   <string name="screen_account_provider_form_hint">"სახლის სერვერის მისამართი"</string>
   <string name="screen_account_provider_form_notice">"შეიყვანეთ საძიებო სიტყვა ან დომენის მისამართი."</string>
   <string name="screen_account_provider_form_subtitle">"მოძებნეთ კომპანია, საზოგადოება ან კერძო სერვერი."</string>

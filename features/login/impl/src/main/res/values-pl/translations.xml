@@ -21,6 +21,7 @@
   <string name="screen_change_server_form_notice">"Możesz połączyć się tylko z serwerem, który obsługuje technologię Sliding Sync. Administrator serwera domowego będzie musiał ją skonfigurować. %1$s"</string>
   <string name="screen_change_server_subtitle">"Jaki jest adres Twojego serwera?"</string>
   <string name="screen_change_server_title">"Wybierz swój serwer"</string>
+  <string name="screen_create_account_title">"Utwórz konto"</string>
   <string name="screen_login_error_deactivated_account">"To konto zostało dezaktywowane."</string>
   <string name="screen_login_error_invalid_credentials">"Nieprawidłowa nazwa użytkownika i/lub hasło"</string>
   <string name="screen_login_error_invalid_user_id">"To nie jest prawidłowy identyfikator użytkownika. Oczekiwany format: \'@user:homeserver.org\'"</string>

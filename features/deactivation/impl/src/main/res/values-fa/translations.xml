@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_delete_all_messages">"حذف همهٔ پیام‌هایم"</string>
+  <string name="screen_deactivate_account_description_bold_part">"بازگشت‌ناپذیر"</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"از کار انداختن دایمی"</string>
+  <string name="screen_deactivate_account_list_item_2">"برداشتنتان از همهٔ اتاق‌های گپ."</string>
+  <string name="screen_deactivate_account_list_item_3">"حذف اطّلاعات حسابتان از کارساز هویت."</string>
+  <string name="screen_deactivate_account_title">"غیرفعّال‌سازی حساب"</string>
+</resources>

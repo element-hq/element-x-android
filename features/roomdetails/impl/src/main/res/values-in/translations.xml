@@ -51,7 +51,7 @@
   <string name="screen_room_details_leave_room_title">"Tinggalkan ruangan"</string>
   <string name="screen_room_details_notification_mode_custom">"Khusus"</string>
   <string name="screen_room_details_notification_mode_default">"Bawaan"</string>
-  <string name="screen_room_details_notification_title">"Pemberitahuan"</string>
+  <string name="screen_room_details_notification_title">"Notifikasi"</string>
   <string name="screen_room_details_roles_and_permissions">"Peran dan perizinan"</string>
   <string name="screen_room_details_room_name_label">"Nama ruangan"</string>
   <string name="screen_room_details_security_title">"Keamanan"</string>

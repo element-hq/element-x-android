@@ -21,6 +21,7 @@
   <string name="screen_change_server_form_notice">"Só te podes ligar a um servidor existente que suporte a sincronização deslizante (sliding sync). O administrador do teu servidor terá de a configurar. %1$s"</string>
   <string name="screen_change_server_subtitle">"Qual é o endereço do teu servidor?"</string>
   <string name="screen_change_server_title">"Seleciona o teu servidor"</string>
+  <string name="screen_create_account_title">"Criar conta"</string>
   <string name="screen_login_error_deactivated_account">"Esta conta foi desativada."</string>
   <string name="screen_login_error_invalid_credentials">"Nome de utilizador ou senha incorretos"</string>
   <string name="screen_login_error_invalid_user_id">"Identificador de utilizador inválido. Formato esperado: ‘@utilizador:servidor.org’"</string>
