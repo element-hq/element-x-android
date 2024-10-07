@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.samples.minimal
@@ -22,7 +13,8 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import io.element.android.features.invite.impl.response.AcceptDeclineInvitePresenter
 import io.element.android.features.invite.impl.response.AcceptDeclineInviteView
-import io.element.android.features.leaveroom.impl.DefaultLeaveRoomPresenter
+import io.element.android.features.leaveroom.impl.LeaveRoomPresenter
+import io.element.android.features.logout.impl.direct.DirectLogoutPresenter
 import io.element.android.features.networkmonitor.impl.DefaultNetworkMonitor
 import io.element.android.features.roomlist.impl.RoomListPresenter
 import io.element.android.features.roomlist.impl.RoomListView
@@ -34,7 +26,6 @@ import io.element.android.features.roomlist.impl.search.RoomListSearchDataSource
 import io.element.android.features.roomlist.impl.search.RoomListSearchPresenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.dateformatter.impl.DateFormatters
 import io.element.android.libraries.dateformatter.impl.DefaultLastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.impl.LocalDateTimeProvider
@@ -43,10 +34,7 @@ import io.element.android.libraries.eventformatter.impl.DefaultRoomLastMessageFo
 import io.element.android.libraries.eventformatter.impl.ProfileChangeContentFormatter
 import io.element.android.libraries.eventformatter.impl.RoomMembershipContentFormatter
 import io.element.android.libraries.eventformatter.impl.StateContentFormatter
-import io.element.android.libraries.featureflag.impl.DefaultFeatureFlagService
-import io.element.android.libraries.featureflag.impl.PreferencesFeatureFlagProvider
-import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsPresenter
-import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
+import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 import io.element.android.libraries.indicator.impl.DefaultIndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -64,12 +52,14 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import timber.log.Timber
 import java.util.Locale
+import javax.inject.Inject
 
 class RoomListScreen(
     context: Context,
     private val matrixClient: MatrixClient,
     private val coroutineDispatchers: CoroutineDispatchers = Singleton.coroutineDispatchers,
 ) {
+    @Inject lateinit var buildMeta: BuildMeta
     private val clock = Clock.System
     private val locale = Locale.getDefault()
     private val timeZone = TimeZone.currentSystemDefault()
@@ -78,13 +68,7 @@ class RoomListScreen(
     private val sessionVerificationService = matrixClient.sessionVerificationService()
     private val encryptionService = matrixClient.encryptionService()
     private val stringProvider = AndroidStringProvider(context.resources)
-    private val buildMeta = getBuildMeta(context)
-    private val featureFlagService = DefaultFeatureFlagService(
-        providers = setOf(
-            PreferencesFeatureFlagProvider(context = context, buildMeta = buildMeta)
-        ),
-        buildMeta = buildMeta,
-    )
+    private val featureFlagService = AlwaysEnabledFeatureFlagService()
     private val roomListRoomSummaryFactory = RoomListRoomSummaryFactory(
         lastMessageTimestampFormatter = DefaultLastMessageTimestampFormatter(
             localDateTimeProvider = dateTimeProvider,
@@ -106,7 +90,7 @@ class RoomListScreen(
         client = matrixClient,
         networkMonitor = DefaultNetworkMonitor(context, Singleton.appScope),
         snackbarDispatcher = SnackbarDispatcher(),
-        leaveRoomPresenter = DefaultLeaveRoomPresenter(matrixClient, RoomMembershipObserver(), coroutineDispatchers),
+        leaveRoomPresenter = LeaveRoomPresenter(matrixClient, RoomMembershipObserver(), coroutineDispatchers),
         roomListDataSource = RoomListDataSource(
             roomListService = matrixClient.roomListService,
             roomListRoomSummaryFactory = roomListRoomSummaryFactory,
@@ -143,18 +127,9 @@ class RoomListScreen(
             notificationCleaner = FakeNotificationCleaner(),
         ),
         analyticsService = NoopAnalyticsService(),
-        fullScreenIntentPermissionsPresenter = object : FullScreenIntentPermissionsPresenter {
-            @Composable
-            override fun present(): FullScreenIntentPermissionsState {
-                return FullScreenIntentPermissionsState(
-                    permissionGranted = true,
-                    shouldDisplayBanner = false,
-                    dismissFullScreenIntentBanner = {},
-                    openFullScreenIntentSettings = {}
-                )
-            }
-        },
+        fullScreenIntentPermissionsPresenter = { aFullScreenIntentPermissionsState() },
         notificationCleaner = FakeNotificationCleaner(),
+        logoutPresenter = DirectLogoutPresenter(matrixClient, encryptionService),
     )
 
     @Composable
@@ -183,7 +158,8 @@ class RoomListScreen(
             modifier = modifier,
             acceptDeclineInviteView = {
                 AcceptDeclineInviteView(state = state.acceptDeclineInviteState, onAcceptInvite = {}, onDeclineInvite = {})
-            }
+            },
+            onMigrateToNativeSlidingSyncClick = {},
         )
 
         DisposableEffect(Unit) {
@@ -198,26 +174,5 @@ class RoomListScreen(
                 }
             }
         }
-    }
-
-    private fun getBuildMeta(context: Context): BuildMeta {
-        val buildType = BuildType.valueOf(BuildConfig.BUILD_TYPE.uppercase())
-        val name = context.getString(R.string.app_name)
-        return BuildMeta(
-            isDebuggable = BuildConfig.DEBUG,
-            buildType = buildType,
-            applicationName = name,
-            productionApplicationName = name,
-            desktopApplicationName = name,
-            applicationId = BuildConfig.APPLICATION_ID,
-            lowPrivacyLoggingEnabled = false,
-            versionName = BuildConfig.VERSION_NAME,
-            versionCode = BuildConfig.VERSION_CODE.toLong(),
-            gitRevision = "",
-            gitBranchName = "",
-            flavorDescription = "",
-            flavorShortDescription = "",
-            isEnterpriseBuild = false,
-        )
     }
 }

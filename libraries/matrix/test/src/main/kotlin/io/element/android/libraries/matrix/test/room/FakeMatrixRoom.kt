@@ -1,21 +1,13 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.test.room
 
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -88,7 +80,7 @@ class FakeMatrixRoom(
     private var roomPermalinkResult: () -> Result<String> = { lambdaError() },
     private var eventPermalinkResult: (EventId) -> Result<String> = { lambdaError() },
     private val sendCallNotificationIfNeededResult: () -> Result<Unit> = { lambdaError() },
-    private val userDisplayNameResult: () -> Result<String?> = { lambdaError() },
+    private val userDisplayNameResult: (UserId) -> Result<String?> = { lambdaError() },
     private val userAvatarUrlResult: () -> Result<String?> = { lambdaError() },
     private val userRoleResult: () -> Result<RoomMember.Role> = { lambdaError() },
     private val getUpdatedMemberResult: (UserId) -> Result<RoomMember> = { lambdaError() },
@@ -111,7 +103,7 @@ class FakeMatrixRoom(
     private val updateUserRoleResult: () -> Result<Unit> = { lambdaError() },
     private val toggleReactionResult: (String, UniqueId) -> Result<Unit> = { _, _ -> lambdaError() },
     private val retrySendMessageResult: (TransactionId) -> Result<Unit> = { lambdaError() },
-    private val cancelSendResult: (TransactionId) -> Result<Boolean> = { lambdaError() },
+    private val cancelSendResult: (TransactionId) -> Result<Unit> = { lambdaError() },
     private val forwardEventResult: (EventId, List<RoomId>) -> Result<Unit> = { _, _ -> lambdaError() },
     private val reportContentResult: (EventId, String, UserId?) -> Result<Unit> = { _, _, _ -> lambdaError() },
     private val kickUserResult: (UserId, String?) -> Result<Unit> = { _, _ -> lambdaError() },
@@ -143,7 +135,9 @@ class FakeMatrixRoom(
     private val loadComposerDraftLambda: () -> Result<ComposerDraft?> = { Result.success<ComposerDraft?>(null) },
     private val clearComposerDraftLambda: () -> Result<Unit> = { Result.success(Unit) },
     private val subscribeToSyncLambda: () -> Unit = { lambdaError() },
-) : MatrixRoom {
+    private val ignoreDeviceTrustAndResendResult: (Map<UserId, List<DeviceId>>, TransactionId) -> Result<Unit> = { _, _ -> lambdaError() },
+    private val withdrawVerificationAndResendResult: (List<UserId>, TransactionId) -> Result<Unit> = { _, _ -> lambdaError() },
+    ) : MatrixRoom {
     private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
     override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
 
@@ -208,7 +202,7 @@ class FakeMatrixRoom(
     override fun destroy() = Unit
 
     override suspend fun userDisplayName(userId: UserId): Result<String?> = simulateLongTask {
-        userDisplayNameResult()
+        userDisplayNameResult(userId)
     }
 
     override suspend fun userAvatarUrl(userId: UserId): Result<String?> = simulateLongTask {
@@ -235,11 +229,11 @@ class FakeMatrixRoom(
         return toggleReactionResult(emoji, uniqueId)
     }
 
-    override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> {
+    override suspend fun retrySendMessage(transactionId: TransactionId): Result<Unit> = simulateLongTask {
         return retrySendMessageResult(transactionId)
     }
 
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Boolean> {
+    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> {
         return cancelSendResult(transactionId)
     }
 
@@ -501,6 +495,14 @@ class FakeMatrixRoom(
         return getWidgetDriverResult(widgetSettings)
     }
 
+    override suspend fun ignoreDeviceTrustAndResend(devices: Map<UserId, List<DeviceId>>, transactionId: TransactionId): Result<Unit> = simulateLongTask {
+        return ignoreDeviceTrustAndResendResult(devices, transactionId)
+    }
+
+    override suspend fun withdrawVerificationAndResend(userIds: List<UserId>, transactionId: TransactionId): Result<Unit> = simulateLongTask {
+        return withdrawVerificationAndResendResult(userIds, transactionId)
+    }
+
     fun givenRoomMembersState(state: MatrixRoomMembersState) {
         membersStateFlow.value = state
     }
@@ -518,7 +520,7 @@ fun aRoomInfo(
     isTombstoned: Boolean = false,
     isFavorite: Boolean = false,
     canonicalAlias: RoomAlias? = null,
-    alternativeAliases: List<String> = emptyList(),
+    alternativeAliases: List<RoomAlias> = emptyList(),
     currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,
     inviter: RoomMember? = null,
     activeMembersCount: Long = 1,
@@ -529,9 +531,10 @@ fun aRoomInfo(
     userDefinedNotificationMode: RoomNotificationMode? = null,
     hasRoomCall: Boolean = false,
     userPowerLevels: ImmutableMap<UserId, Long> = persistentMapOf(),
-    activeRoomCallParticipants: List<String> = emptyList(),
+    activeRoomCallParticipants: List<UserId> = emptyList(),
     heroes: List<MatrixUser> = emptyList(),
     pinnedEventIds: List<EventId> = emptyList(),
+    roomCreator: UserId? = null,
 ) = MatrixRoomInfo(
     id = id,
     name = name,
@@ -558,6 +561,7 @@ fun aRoomInfo(
     activeRoomCallParticipants = activeRoomCallParticipants.toImmutableList(),
     heroes = heroes.toImmutableList(),
     pinnedEventIds = pinnedEventIds.toImmutableList(),
+    creator = roomCreator,
 )
 
 fun defaultRoomPowerLevels() = MatrixRoomPowerLevels(

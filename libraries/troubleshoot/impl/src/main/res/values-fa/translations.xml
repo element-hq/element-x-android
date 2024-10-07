@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_screen_action">"اجرای آزمون‌ها"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"اجرای دوبارهٔ آزمون‌ها"</string>
+  <string name="troubleshoot_notifications_screen_failure">"برخی آزمون‌ها شکست خوردند. بررسی جزییات."</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"تلاش برای تعمیر"</string>
+  <string name="troubleshoot_notifications_screen_success">"همهٔ آزمون‌ها با موفّقیت گذرانده شدند."</string>
+  <string name="troubleshoot_notifications_screen_title">"رفع‌اشکال آگاهی‌ها"</string>
+</resources>

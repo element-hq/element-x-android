@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.impl.timeline.item.event
@@ -38,7 +29,6 @@ import io.element.android.libraries.matrix.impl.poll.map
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 import org.matrix.rustcomponents.sdk.TimelineItemContent
-import org.matrix.rustcomponents.sdk.TimelineItemContentKind
 import org.matrix.rustcomponents.sdk.use
 import uniffi.matrix_sdk_ui.RoomPinnedEventsChange
 import org.matrix.rustcomponents.sdk.EncryptedMessage as RustEncryptedMessage
@@ -46,89 +36,82 @@ import org.matrix.rustcomponents.sdk.MembershipChange as RustMembershipChange
 import org.matrix.rustcomponents.sdk.OtherState as RustOtherState
 import uniffi.matrix_sdk_crypto.UtdCause as RustUtdCause
 
-class TimelineEventContentMapper(private val eventMessageMapper: EventMessageMapper = EventMessageMapper()) {
+class TimelineEventContentMapper(
+    private val eventMessageMapper: EventMessageMapper = EventMessageMapper(),
+) {
     fun map(content: TimelineItemContent): EventContent {
         return content.use {
-            content.kind().use { kind ->
-                map(content, kind)
+            when (it) {
+                is TimelineItemContent.FailedToParseMessageLike -> {
+                    FailedToParseMessageLikeContent(
+                        eventType = it.eventType,
+                        error = it.error
+                    )
+                }
+                is TimelineItemContent.FailedToParseState -> {
+                    FailedToParseStateContent(
+                        eventType = it.eventType,
+                        stateKey = it.stateKey,
+                        error = it.error
+                    )
+                }
+                is TimelineItemContent.Message -> {
+                    eventMessageMapper.map(it.content)
+                }
+                is TimelineItemContent.ProfileChange -> {
+                    ProfileChangeContent(
+                        displayName = it.displayName,
+                        prevDisplayName = it.prevDisplayName,
+                        avatarUrl = it.avatarUrl,
+                        prevAvatarUrl = it.prevAvatarUrl
+                    )
+                }
+                TimelineItemContent.RedactedMessage -> {
+                    RedactedContent
+                }
+                is TimelineItemContent.RoomMembership -> {
+                    RoomMembershipContent(
+                        userId = UserId(it.userId),
+                        userDisplayName = it.userDisplayName,
+                        change = it.change?.map()
+                    )
+                }
+                is TimelineItemContent.State -> {
+                    StateContent(
+                        stateKey = it.stateKey,
+                        content = it.content.map()
+                    )
+                }
+                is TimelineItemContent.Sticker -> {
+                    StickerContent(
+                        body = it.body,
+                        info = it.info.map(),
+                        source = it.source.map(),
+                    )
+                }
+                is TimelineItemContent.Poll -> {
+                    PollContent(
+                        question = it.question,
+                        kind = it.kind.map(),
+                        maxSelections = it.maxSelections,
+                        answers = it.answers.map { answer -> answer.map() }.toImmutableList(),
+                        votes = it.votes.mapValues { vote ->
+                            vote.value.map { userId -> UserId(userId) }.toImmutableList()
+                        }.toImmutableMap(),
+                        endTime = it.endTime,
+                        isEdited = it.hasBeenEdited,
+                    )
+                }
+                is TimelineItemContent.UnableToDecrypt -> {
+                    UnableToDecryptContent(
+                        data = it.msg.map()
+                    )
+                }
+                is TimelineItemContent.CallInvite -> LegacyCallInviteContent
+                is TimelineItemContent.CallNotify -> CallNotifyContent
+                else -> UnknownContent
             }
         }
-    }
-
-    private fun map(content: TimelineItemContent, kind: TimelineItemContentKind) = when (kind) {
-        is TimelineItemContentKind.FailedToParseMessageLike -> {
-            FailedToParseMessageLikeContent(
-                eventType = kind.eventType,
-                error = kind.error
-            )
-        }
-        is TimelineItemContentKind.FailedToParseState -> {
-            FailedToParseStateContent(
-                eventType = kind.eventType,
-                stateKey = kind.stateKey,
-                error = kind.error
-            )
-        }
-        TimelineItemContentKind.Message -> {
-            val message = content.asMessage()
-            if (message == null) {
-                UnknownContent
-            } else {
-                eventMessageMapper.map(message)
-            }
-        }
-        is TimelineItemContentKind.ProfileChange -> {
-            ProfileChangeContent(
-                displayName = kind.displayName,
-                prevDisplayName = kind.prevDisplayName,
-                avatarUrl = kind.avatarUrl,
-                prevAvatarUrl = kind.prevAvatarUrl
-            )
-        }
-        TimelineItemContentKind.RedactedMessage -> {
-            RedactedContent
-        }
-        is TimelineItemContentKind.RoomMembership -> {
-            RoomMembershipContent(
-                userId = UserId(kind.userId),
-                userDisplayName = kind.userDisplayName,
-                change = kind.change?.map()
-            )
-        }
-        is TimelineItemContentKind.State -> {
-            StateContent(
-                stateKey = kind.stateKey,
-                content = kind.content.map()
-            )
-        }
-        is TimelineItemContentKind.Sticker -> {
-            StickerContent(
-                body = kind.body,
-                info = kind.info.map(),
-                source = kind.source.map(),
-            )
-        }
-        is TimelineItemContentKind.Poll -> {
-            PollContent(
-                question = kind.question,
-                kind = kind.kind.map(),
-                maxSelections = kind.maxSelections,
-                answers = kind.answers.map { answer -> answer.map() }.toImmutableList(),
-                votes = kind.votes.mapValues { vote ->
-                    vote.value.map { userId -> UserId(userId) }.toImmutableList()
-                }.toImmutableMap(),
-                endTime = kind.endTime,
-                isEdited = kind.hasBeenEdited,
-            )
-        }
-        is TimelineItemContentKind.UnableToDecrypt -> {
-            UnableToDecryptContent(
-                data = kind.msg.map()
-            )
-        }
-        is TimelineItemContentKind.CallInvite -> LegacyCallInviteContent
-        is TimelineItemContentKind.CallNotify -> CallNotifyContent
-        else -> UnknownContent
     }
 }
 

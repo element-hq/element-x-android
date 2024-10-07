@@ -1,25 +1,19 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright 2022-2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl.timeline
 
 import androidx.compose.runtime.Immutable
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureState
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import kotlinx.collections.immutable.ImmutableList
 import kotlin.time.Duration
@@ -34,10 +28,16 @@ data class TimelineState(
     val focusRequestState: FocusRequestState,
     // If not null, info will be rendered in a dialog
     val messageShield: MessageShield?,
+    val resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState,
     val eventSink: (TimelineEvents) -> Unit,
 ) {
-    val hasAnyEvent = timelineItems.any { it is TimelineItem.Event }
+    private val lastTimelineEvent = timelineItems.firstOrNull { it is TimelineItem.Event } as? TimelineItem.Event
+    val hasAnyEvent = lastTimelineEvent != null
     val focusedEventId = focusRequestState.eventId()
+
+    fun isLastOutgoingMessage(uniqueId: UniqueId): Boolean {
+        return isLive && lastTimelineEvent != null && lastTimelineEvent.isMine && lastTimelineEvent.id == uniqueId
+    }
 }
 
 @Immutable
@@ -74,4 +74,6 @@ data class TimelineRoomInfo(
     val userHasPermissionToSendMessage: Boolean,
     val userHasPermissionToSendReaction: Boolean,
     val isCallOngoing: Boolean,
+    val pinnedEventIds: List<EventId>,
+    val typingNotificationState: TypingNotificationState,
 )

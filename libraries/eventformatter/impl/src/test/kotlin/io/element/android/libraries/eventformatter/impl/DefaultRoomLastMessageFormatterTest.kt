@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.libraries.eventformatter.impl
@@ -157,7 +148,29 @@ class DefaultRoomLastMessageFormatterTest {
 
     @Test
     @Config(qualifiers = "en")
-    fun `Message contents`() {
+    fun `Message contents sent by other user`() {
+        testMessageContents(
+            sentByYou = false,
+            senderName = "Alice",
+            expectedPrefix = "Alice",
+        )
+    }
+
+    @Test
+    @Config(qualifiers = "en")
+    fun `Message contents sent by current user`() {
+        testMessageContents(
+            sentByYou = true,
+            senderName = "Bob",
+            expectedPrefix = "You",
+        )
+    }
+
+    private fun testMessageContents(
+        sentByYou: Boolean,
+        senderName: String,
+        expectedPrefix: String,
+    ) {
         val body = "Shared body"
         fun createMessageContent(type: MessageType): MessageContent {
             return MessageContent(body, null, false, false, type)
@@ -176,7 +189,6 @@ class DefaultRoomLastMessageFormatterTest {
             EmoteMessageType(body, null),
             OtherMessageType(msgType = "a_type", body = body),
         )
-        val senderName = "Someone"
         val resultsInRoom = mutableListOf<Pair<MessageType, CharSequence?>>()
         val resultsInDm = mutableListOf<Pair<MessageType, CharSequence?>>()
 
@@ -184,7 +196,7 @@ class DefaultRoomLastMessageFormatterTest {
         sequenceOf(false, true).forEach { isDm ->
             sharedContentMessagesTypes.forEach { type ->
                 val content = createMessageContent(type)
-                val message = createRoomEvent(sentByYou = false, senderDisplayName = "Someone", content = content)
+                val message = createRoomEvent(sentByYou = sentByYou, senderDisplayName = senderName, content = content)
                 val result = formatter.format(message, isDmRoom = isDm)
                 if (isDm) {
                     resultsInDm.add(type to result)
@@ -216,16 +228,16 @@ class DefaultRoomLastMessageFormatterTest {
         for ((type, result) in resultsInRoom) {
             val string = result.toString()
             val expectedResult = when (type) {
-                is VideoMessageType -> "$senderName: Video"
-                is AudioMessageType -> "$senderName: Audio"
-                is VoiceMessageType -> "$senderName: Voice message"
-                is ImageMessageType -> "$senderName: Image"
-                is StickerMessageType -> "$senderName: Sticker"
-                is FileMessageType -> "$senderName: File"
-                is LocationMessageType -> "$senderName: Shared location"
+                is VideoMessageType -> "$expectedPrefix: Video"
+                is AudioMessageType -> "$expectedPrefix: Audio"
+                is VoiceMessageType -> "$expectedPrefix: Voice message"
+                is ImageMessageType -> "$expectedPrefix: Image"
+                is StickerMessageType -> "$expectedPrefix: Sticker"
+                is FileMessageType -> "$expectedPrefix: File"
+                is LocationMessageType -> "$expectedPrefix: Shared location"
                 is TextMessageType,
                 is NoticeMessageType,
-                is OtherMessageType -> "$senderName: $body"
+                is OtherMessageType -> "$expectedPrefix: $body"
                 is EmoteMessageType -> "* $senderName ${type.body}"
             }
             val shouldCreateAnnotatedString = when (type) {
@@ -830,7 +842,7 @@ class DefaultRoomLastMessageFormatterTest {
         val pollContent = aPollContent()
 
         val mineContentEvent = createRoomEvent(sentByYou = true, senderDisplayName = "Alice", content = pollContent)
-        assertThat(formatter.format(mineContentEvent, false).toString()).isEqualTo("Alice: Poll: Do you like polls?")
+        assertThat(formatter.format(mineContentEvent, false).toString()).isEqualTo("You: Poll: Do you like polls?")
 
         val contentEvent = createRoomEvent(sentByYou = false, senderDisplayName = "Bob", content = pollContent)
         assertThat(formatter.format(contentEvent, false).toString()).isEqualTo("Bob: Poll: Do you like polls?")

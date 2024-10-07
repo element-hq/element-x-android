@@ -45,6 +45,12 @@
   <string name="state_event_room_name_removed_by_you">"Αφαίρεσες το όνομα του δωματίου"</string>
   <string name="state_event_room_none">"Ο χρήστης %1$s δεν έκανε καμία αλλαγή"</string>
   <string name="state_event_room_none_by_you">"Δεν έκανες καμία αλλαγή"</string>
+  <string name="state_event_room_pinned_events_changed">"Ο χρήστης %1$s άλλαξε τα καρφιτσωμένα μηνύματα"</string>
+  <string name="state_event_room_pinned_events_changed_by_you">"Άλλαξες τα καρφιτσωμένα μηνύματα"</string>
+  <string name="state_event_room_pinned_events_pinned">"Ο χρήστης %1$s καρφίτσωσε ένα μήνυμα"</string>
+  <string name="state_event_room_pinned_events_pinned_by_you">"Καρφίτσωσες ένα μήνυμα"</string>
+  <string name="state_event_room_pinned_events_unpinned">"Ο χρήστης %1$s ξεκαρφίτσωσε ένα μήνυμα"</string>
+  <string name="state_event_room_pinned_events_unpinned_by_you">"Ξεκαρφίτσωσες ένα μήνυμα"</string>
   <string name="state_event_room_reject">"Ο χρήστης %1$s απέρριψε την πρόσκληση"</string>
   <string name="state_event_room_reject_by_you">"Απέρριψες την πρόσκληση"</string>
   <string name="state_event_room_remove">"Ο χρήστης %1$s αφαίρεσε τον χρήστη %2$s"</string>

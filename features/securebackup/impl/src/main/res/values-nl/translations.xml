@@ -9,6 +9,13 @@
   <string name="screen_chat_backup_recovery_action_confirm_description">"Je chatback-up is momenteel niet gesynchroniseerd."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Herstelmogelijkheid instellen"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Krijg toegang tot je versleutelde berichten als je al je apparaten kwijtraakt of overal uit %1$s bent uitgelogd."</string>
+  <string name="screen_create_new_recovery_key_list_item_1">"Open %1$s op een desktopapparaat"</string>
+  <string name="screen_create_new_recovery_key_list_item_2">"Log opnieuw in op je account"</string>
+  <string name="screen_create_new_recovery_key_list_item_3">"Wanneer je wordt gevraagd om je apparaat te verifiëren, selecteer %1$s"</string>
+  <string name="screen_create_new_recovery_key_list_item_3_reset_all">"“Alles opnieuw instellen”"</string>
+  <string name="screen_create_new_recovery_key_list_item_4">"Volg de instructies om een nieuwe herstelsleutel te maken"</string>
+  <string name="screen_create_new_recovery_key_list_item_5">"Sla je nieuwe herstelsleutel op in een wachtwoordmanager of versleutelde notitie"</string>
+  <string name="screen_create_new_recovery_key_title">"Stel de versleuteling voor je account opnieuw in met een ander apparaat"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Uitschakelen"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Je verliest je versleutelde berichten als je bent uitgelogd op alle apparaten."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Weet je zeker dat je de back-up wilt uitschakelen?"</string>
@@ -21,11 +28,13 @@
   <string name="screen_recovery_key_change_generate_key_description">"Zorg ervoor dat je je herstelsleutel op een veilige plek kunt bewaren"</string>
   <string name="screen_recovery_key_change_success">"Herstelsleutel gewijzigd"</string>
   <string name="screen_recovery_key_change_title">"Herstelsleutel wijzigen?"</string>
+  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Maak een nieuwe herstelsleutel"</string>
   <string name="screen_recovery_key_confirm_description">"Zorg ervoor dat niemand dit scherm kan zien!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Probeer het opnieuw om toegang tot je chatback-up te bevestigen."</string>
   <string name="screen_recovery_key_confirm_error_title">"Onjuiste herstelsleutel"</string>
   <string name="screen_recovery_key_confirm_key_description">"Als je een beveiligingssleutel of beveiligingszin hebt, werkt dit ook."</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Voer in…"</string>
+  <string name="screen_recovery_key_confirm_lost_recovery_key">"Herstelsleutel kwijt?"</string>
   <string name="screen_recovery_key_confirm_success">"Herstelsleutel bevestigd"</string>
   <string name="screen_recovery_key_confirm_title">"Voer je herstelsleutel in"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Herstelsleutel gekopieerd"</string>
@@ -41,4 +50,5 @@
   <string name="screen_recovery_key_setup_generate_key_description">"Zorg ervoor dat je je herstelsleutel op een veilige plek kunt bewaren"</string>
   <string name="screen_recovery_key_setup_success">"Herstelmogelijkheid succesvol ingesteld"</string>
   <string name="screen_recovery_key_setup_title">"Herstelmogelijkheid instellen"</string>
+  <string name="screen_reset_encryption_password_placeholder">"Voer in…"</string>
 </resources>

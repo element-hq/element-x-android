@@ -9,8 +9,8 @@ on:
 
 # Enrich gradle.properties for CI/CD
 env:
-  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx6g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.incremental=false -XX:+UseG1GC
-  CI_GRADLE_ARG_PROPERTIES: --stacktrace --warn -Dsonar.gradle.skipCompile=true
+  GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx9g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC -Dkotlin.daemon.jvm.options=-Xmx4g
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace --warn -Dsonar.gradle.skipCompile=true --no-configuration-cache
   GROUP: ${{ format('sonar-{0}', github.ref) }}
 
 jobs:
@@ -27,25 +27,17 @@ jobs:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
-      - name: Use JDK 17
+      - name: Use JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '17'
+          java-version: '21'
       - name: Configure gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
-      - name: Build Gplay Debug
-        run: ./gradlew :app:assembleGplayDebug $CI_GRADLE_ARG_PROPERTIES
-      - name: Build Fdroid Debug
-        run: ./gradlew :app:assembleFdroidDebug $CI_GRADLE_ARG_PROPERTIES
-      - name: Build Sample
-        run: ./gradlew :samples:minimal:assembleDebug $CI_GRADLE_ARG_PROPERTIES
-      - name: Build library fixtures
-        run: ./gradlew assembleDebug createFullJarDebugTestFixtures $CI_GRADLE_ARG_PROPERTIES
-      - name: Build app fixtures
-        run: ./gradlew :app:createFullJarGplayDebugTestFixtures $CI_GRADLE_ARG_PROPERTIES
+      - name: Build debug code and test fixtures
+        run: ./gradlew assembleDebug createFullJarDebugTestFixtures :app:createFullJarGplayDebugTestFixtures $CI_GRADLE_ARG_PROPERTIES
       - name: 🔊 Publish results to Sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

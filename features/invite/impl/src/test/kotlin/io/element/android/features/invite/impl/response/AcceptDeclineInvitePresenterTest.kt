@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2024 New Vector Ltd
+ * Copyright 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.invite.impl.response
@@ -30,7 +21,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.FakeInvitedRoom
 import io.element.android.libraries.matrix.test.room.join.FakeJoinRoom
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.test.notifications.FakeNotificationCleaner
@@ -92,12 +83,7 @@ class AcceptDeclineInvitePresenterTest {
             Result.failure<Unit>(RuntimeException("Failed to leave room"))
         }
         val client = FakeMatrixClient().apply {
-            givenGetRoomResult(
-                roomId = A_ROOM_ID,
-                result = FakeMatrixRoom(
-                    leaveRoomLambda = declineInviteFailure
-                )
-            )
+            getInvitedRoomResults[A_ROOM_ID] = FakeInvitedRoom(declineInviteResult = declineInviteFailure)
         }
         val presenter = createAcceptDeclineInvitePresenter(client = client)
         presenter.test {
@@ -142,12 +128,7 @@ class AcceptDeclineInvitePresenterTest {
             Result.success(Unit)
         }
         val client = FakeMatrixClient().apply {
-            givenGetRoomResult(
-                roomId = A_ROOM_ID,
-                result = FakeMatrixRoom(
-                    leaveRoomLambda = declineInviteSuccess
-                )
-            )
+            getInvitedRoomResults[A_ROOM_ID] = FakeInvitedRoom(declineInviteResult = declineInviteSuccess)
         }
         val presenter = createAcceptDeclineInvitePresenter(
             client = client,

@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.roomdetails.impl
@@ -31,6 +22,7 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.anvilannotations.ContributesNode
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
+import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.poll.api.history.PollHistoryEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.features.roomdetails.impl.edit.RoomDetailsEditNode
@@ -41,14 +33,16 @@ import io.element.android.features.roomdetails.impl.notificationsettings.RoomNot
 import io.element.android.features.roomdetails.impl.rolesandpermissions.RolesAndPermissionsFlowNode
 import io.element.android.features.userprofile.shared.UserProfileNodeHelper
 import io.element.android.features.userprofile.shared.avatar.AvatarPreviewNode
-import io.element.android.libraries.architecture.BackstackView
+import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.architecture.overlay.operation.show
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.mediaviewer.api.local.MediaInfo
 import io.element.android.libraries.mediaviewer.api.viewer.MediaViewerNode
@@ -64,6 +58,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
     private val elementCallEntryPoint: ElementCallEntryPoint,
     private val room: MatrixRoom,
     private val analyticsService: AnalyticsService,
+    private val messagesEntryPoint: MessagesEntryPoint,
 ) : BaseFlowNode<RoomDetailsFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = plugins.filterIsInstance<RoomDetailsEntryPoint.Params>().first().initialElement.toNavTarget(),
@@ -105,6 +100,9 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
         @Parcelize
         data object AdminSettings : NavTarget
+
+        @Parcelize
+        data object PinnedMessagesList : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -128,7 +126,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
                     }
 
                     override fun openAvatarPreview(name: String, url: String) {
-                        backstack.push(NavTarget.AvatarPreview(name, url))
+                        overlay.show(NavTarget.AvatarPreview(name, url))
                     }
 
                     override fun openPollHistory() {
@@ -137,6 +135,10 @@ class RoomDetailsFlowNode @AssistedInject constructor(
 
                     override fun openAdminSettings() {
                         backstack.push(NavTarget.AdminSettings)
+                    }
+
+                    override fun openPinnedMessagesList() {
+                        backstack.push(NavTarget.PinnedMessagesList)
                     }
 
                     override fun onJoinCall() {
@@ -185,7 +187,7 @@ class RoomDetailsFlowNode @AssistedInject constructor(
             is NavTarget.RoomMemberDetails -> {
                 val callback = object : UserProfileNodeHelper.Callback {
                     override fun openAvatarPreview(username: String, avatarUrl: String) {
-                        backstack.push(NavTarget.AvatarPreview(username, avatarUrl))
+                        overlay.show(NavTarget.AvatarPreview(username, avatarUrl))
                     }
 
                     override fun onStartDM(roomId: RoomId) {
@@ -224,11 +226,33 @@ class RoomDetailsFlowNode @AssistedInject constructor(
             is NavTarget.AdminSettings -> {
                 createNode<RolesAndPermissionsFlowNode>(buildContext)
             }
+            NavTarget.PinnedMessagesList -> {
+                val params = MessagesEntryPoint.Params(
+                    MessagesEntryPoint.InitialTarget.PinnedMessages
+                )
+                val callback = object : MessagesEntryPoint.Callback {
+                    override fun onRoomDetailsClick() = Unit
+
+                    override fun onUserDataClick(userId: UserId) = Unit
+
+                    override fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean) {
+                        plugins<RoomDetailsEntryPoint.Callback>().forEach { it.onPermalinkClick(data, pushToBackstack) }
+                    }
+
+                    override fun onForwardedToSingleRoom(roomId: RoomId) {
+                        plugins<RoomDetailsEntryPoint.Callback>().forEach { it.onForwardedToSingleRoom(roomId) }
+                    }
+                }
+                return messagesEntryPoint.nodeBuilder(this, buildContext)
+                    .params(params)
+                    .callback(callback)
+                    .build()
+            }
         }
     }
 
     @Composable
     override fun View(modifier: Modifier) {
-        BackstackView()
+        BackstackWithOverlayBox(modifier)
     }
 }

@@ -14,6 +14,8 @@
   <string name="screen_change_account_provider_subtitle">"Gebruik een andere accountprovider, zoals je eigen privéserver of een zakelijke account."</string>
   <string name="screen_change_account_provider_title">"Wijzig accountprovider"</string>
   <string name="screen_change_server_error_invalid_homeserver">"We konden deze homeserver niet bereiken. Controleer of je de homeserver-URL juist hebt ingevoerd. Als de URL juist is, neem dan contact op met de beheerder van je homeserver voor verdere hulp."</string>
+  <string name="screen_change_server_error_invalid_well_known">"Sliding sync is niet beschikbaar vanwege een probleem in het well-known bestand:
+%1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Deze server ondersteunt op dit moment geen sliding sync."</string>
   <string name="screen_change_server_form_header">"Homeserver-URL"</string>
   <string name="screen_change_server_form_notice">"Je kunt alleen verbinding maken met een bestaande server die sliding sync ondersteunt. De beheerder van de homeserver moet dit configureren. %1$s"</string>
@@ -28,17 +30,45 @@
   <string name="screen_login_subtitle">"Matrix is een open netwerk voor veilige, gedecentraliseerde communicatie."</string>
   <string name="screen_login_title">"Welkom terug!"</string>
   <string name="screen_login_title_with_homeserver">"Inloggen bij %1$s"</string>
+  <string name="screen_qr_code_login_connecting_subtitle">"Een beveiligde verbinding tot stand brengen"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_description">"Er kon geen beveiligde verbinding worden gemaakt met het nieuwe apparaat. Je bestaande apparaten zijn nog steeds veilig en je hoeft je daarover geen zorgen te maken."</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Wat nu?"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_1">"Probeer opnieuw in te loggen met een QR-code voor het geval dit een netwerkprobleem was"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Als je hetzelfde probleem ondervindt, probeer dan een ander wifi-netwerk of gebruik je mobiele data in plaats van wifi."</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Als dat niet werkt, log dan handmatig in"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_title">"Verbinding niet veilig"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Daar word je gevraagd om de twee cijfers in te voeren die op dit apparaat worden weergegeven."</string>
+  <string name="screen_qr_code_login_device_code_title">"Voer het onderstaande nummer in op je andere apparaat"</string>
+  <string name="screen_qr_code_login_error_cancelled_subtitle">"De aanmelding is geannuleerd op het andere apparaat."</string>
+  <string name="screen_qr_code_login_error_cancelled_title">"Login verzoek geannuleerd"</string>
+  <string name="screen_qr_code_login_error_declined_subtitle">"De aanmelding is geweigerd op het andere apparaat."</string>
+  <string name="screen_qr_code_login_error_declined_title">"Aanmelden geweigerd"</string>
+  <string name="screen_qr_code_login_error_expired_subtitle">"Aanmelden is verlopen. Probeer het opnieuw."</string>
+  <string name="screen_qr_code_login_error_expired_title">"De aanmelding was niet op tijd voltooid"</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_title">"QR-code wordt niet ondersteund"</string>
+  <string name="screen_qr_code_login_initial_state_button_title">"Klaar om te scannen"</string>
+  <string name="screen_qr_code_login_initial_state_item_1">"Open %1$s op een desktopapparaat"</string>
+  <string name="screen_qr_code_login_initial_state_item_2">"Klik op je afbeelding"</string>
+  <string name="screen_qr_code_login_initial_state_item_3">"Selecteer %1$s"</string>
+  <string name="screen_qr_code_login_initial_state_item_3_action">"“Nieuw apparaat koppelen”"</string>
+  <string name="screen_qr_code_login_initial_state_item_4">"Scan de QR-code met dit apparaat"</string>
+  <string name="screen_qr_code_login_initial_state_title">"Open %1$s op een ander apparaat om de QR-code te krijgen"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_description">"Gebruik de QR-code die op het andere apparaat wordt weergegeven."</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Probeer het opnieuw"</string>
-  <string name="screen_server_confirmation_change_server">"Accountprovider wijzigen"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_subtitle">"Verkeerde QR-code"</string>
+  <string name="screen_qr_code_login_no_camera_permission_button">"Ga naar camera-instellingen"</string>
+  <string name="screen_qr_code_login_no_camera_permission_state_description">"Je moet %1$s toestemming geven om de camera van je apparaat te gebruiken om verder te gaan."</string>
+  <string name="screen_qr_code_login_no_camera_permission_state_title">"Cameratoegang toestaan om de QR-code te scannen"</string>
+  <string name="screen_qr_code_login_scanning_state_title">"Scan de QR-code"</string>
+  <string name="screen_qr_code_login_start_over_button">"Opnieuw beginnen"</string>
+  <string name="screen_qr_code_login_unknown_error_description">"Er is een onverwachte fout opgetreden. Probeer het opnieuw."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Aan het wachten op je andere apparaat"</string>
+  <string name="screen_qr_code_login_verify_code_subtitle">"Je accountprovider kan om de volgende code vragen om de aanmelding te verifiëren."</string>
+  <string name="screen_qr_code_login_verify_code_title">"Je verificatiecode"</string>
+  <string name="screen_server_confirmation_change_server">"Wijzig accountprovider"</string>
   <string name="screen_server_confirmation_message_login_element_dot_io">"Een privéserver voor medewerkers van Element."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix is een open netwerk voor veilige, gedecentraliseerde communicatie."</string>
   <string name="screen_server_confirmation_message_register">"Dit is waar je gesprekken zullen worden bewaard — net zoals je een e-mailprovider zou gebruiken om je e-mails te bewaren."</string>
   <string name="screen_server_confirmation_title_login">"Je staat op het punt je aan te melden bij %1$s"</string>
   <string name="screen_server_confirmation_title_register">"Je staat op het punt een account aan te maken op %1$s"</string>
-  <string name="screen_waitlist_message">"Er is momenteel veel vraag naar %1$s op %2$s. Kom over een paar dagen terug naar de app en probeer het opnieuw.
-
-Bedankt voor je geduld!"</string>
-  <string name="screen_waitlist_message_success">"Welkom bij %1$s!"</string>
-  <string name="screen_waitlist_title">"Je bent er bijna."</string>
-  <string name="screen_waitlist_title_success">"Je bent binnen."</string>
 </resources>

@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.login.impl.screens.confirmaccountprovider
@@ -30,6 +21,8 @@ import dagger.assisted.AssistedInject
 import io.element.android.features.login.impl.DefaultLoginUserStory
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.error.ChangeServerError
+import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
+import io.element.android.features.login.impl.web.WebClientUrlForAuthenticationRetriever
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -45,6 +38,7 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
     private val authenticationService: MatrixAuthenticationService,
     private val oidcActionFlow: OidcActionFlow,
     private val defaultLoginUserStory: DefaultLoginUserStory,
+    private val webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever,
 ) : Presenter<ConfirmAccountProviderState> {
     data class Params(
         val isAccountCreation: Boolean,
@@ -99,13 +93,24 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
                 if (matrixHomeServerDetails.supportsOidcLogin) {
                     // Retrieve the details right now
                     LoginFlow.OidcFlow(authenticationService.getOidcUrl().getOrThrow())
+                } else if (params.isAccountCreation) {
+                    val url = webClientUrlForAuthenticationRetriever.retrieve(homeserverUrl)
+                    LoginFlow.AccountCreationFlow(url)
                 } else if (matrixHomeServerDetails.supportsPasswordLogin) {
                     LoginFlow.PasswordLogin
                 } else {
                     error("Unsupported login flow")
                 }
             }.getOrThrow()
-        }.runCatchingUpdatingState(loginFlowAction, errorTransform = ChangeServerError::from)
+        }.runCatchingUpdatingState(
+            state = loginFlowAction,
+            errorTransform = {
+                when (it) {
+                    is AccountCreationNotSupported -> it
+                    else -> ChangeServerError.from(it)
+                }
+            }
+        )
     }
 
     private suspend fun onOidcAction(

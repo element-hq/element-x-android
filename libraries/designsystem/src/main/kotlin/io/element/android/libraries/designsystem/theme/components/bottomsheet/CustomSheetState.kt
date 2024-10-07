@@ -1,22 +1,15 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.libraries.designsystem.theme.components.bottomsheet
 
+import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.core.SpringSpec
+import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.animateTo
 import androidx.compose.foundation.gestures.snapTo
@@ -210,14 +203,12 @@ constructor(
      * gesture interaction or another programmatic interaction like a [animateTo] or [snapTo] call.
      *
      * @param targetValue The target value of the animation
-     * @param velocity The velocity of the animation
      */
     @OptIn(ExperimentalFoundationApi::class)
     internal suspend fun animateTo(
         targetValue: SheetValue,
-        velocity: Float = anchoredDraggableState.lastVelocity
     ) {
-        anchoredDraggableState.animateTo(targetValue, velocity)
+        anchoredDraggableState.animateTo(targetValue)
     }
 
     /**
@@ -244,7 +235,8 @@ constructor(
     @OptIn(ExperimentalFoundationApi::class)
     internal var anchoredDraggableState = androidx.compose.foundation.gestures.AnchoredDraggableState(
         initialValue = initialValue,
-        animationSpec = AnchoredDraggableDefaults.AnimationSpec,
+        snapAnimationSpec = AnchoredDraggableDefaults.SnapAnimationSpec,
+        decayAnimationSpec = AnchoredDraggableDefaults.DecayAnimationSpec,
         confirmValueChange = confirmValueChange,
         positionalThreshold = { with(requireDensity()) { 56.dp.toPx() } },
         velocityThreshold = { with(requireDensity()) { 125.dp.toPx() } }
@@ -307,5 +299,10 @@ internal object AnchoredDraggableDefaults {
     @get:ExperimentalMaterial3Api
     @Suppress("OPT_IN_MARKER_ON_WRONG_TARGET")
     @ExperimentalMaterial3Api
-    val AnimationSpec = SpringSpec<Float>()
+    val SnapAnimationSpec = SpringSpec<Float>()
+
+    @get:ExperimentalMaterial3Api
+    @Suppress("OPT_IN_MARKER_ON_WRONG_TARGET")
+    @ExperimentalMaterial3Api
+    val DecayAnimationSpec = exponentialDecay<Float>()
 }

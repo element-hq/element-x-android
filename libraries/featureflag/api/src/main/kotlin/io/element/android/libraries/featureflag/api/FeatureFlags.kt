@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.libraries.featureflag.api
@@ -22,8 +13,6 @@ import io.element.android.libraries.core.meta.BuildType
 
 /**
  * To enable or disable a FeatureFlags, change the `defaultValue` value.
- * Warning: to enable a flag for the release app, you MUST update the file
- * [io.element.android.libraries.featureflag.impl.StaticFeatureFlagProvider]
  */
 enum class FeatureFlags(
     override val key: String,
@@ -124,7 +113,7 @@ enum class FeatureFlags(
         key = "feature.pinnedEvents",
         title = "Pinned Events",
         description = "Allow user to pin events in a room",
-        defaultValue = { false },
+        defaultValue = { true },
         isFinished = false,
     ),
     SyncOnPush(
@@ -132,6 +121,15 @@ enum class FeatureFlags(
         title = "Sync on push",
         description = "Subscribe to room sync when a push is received",
         defaultValue = { true },
+        isFinished = false,
+    ),
+    OnlySignedDeviceIsolationMode(
+        key = "feature.onlySignedDeviceIsolationMode",
+        title = "Exclude insecure devices when sending/receiving messages",
+        description = "This setting controls how end-to-end encryption (E2E) keys are shared." +
+            " Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners." +
+            " You'll have to stop and re-open the app manually for that setting to take effect.",
+        defaultValue = { false },
         isFinished = false,
     ),
 }

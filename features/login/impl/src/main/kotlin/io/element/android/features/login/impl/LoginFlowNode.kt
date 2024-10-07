@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.login.impl
@@ -28,7 +19,6 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
-import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dagger.assisted.Assisted
@@ -40,10 +30,9 @@ import io.element.android.features.login.impl.accountprovider.AccountProviderDat
 import io.element.android.features.login.impl.qrcode.QrCodeLoginFlowNode
 import io.element.android.features.login.impl.screens.changeaccountprovider.ChangeAccountProviderNode
 import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderNode
-import io.element.android.features.login.impl.screens.loginpassword.LoginFormState
+import io.element.android.features.login.impl.screens.createaccount.CreateAccountNode
 import io.element.android.features.login.impl.screens.loginpassword.LoginPasswordNode
 import io.element.android.features.login.impl.screens.searchaccountprovider.SearchAccountProviderNode
-import io.element.android.features.login.impl.screens.waitlistscreen.WaitListNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
@@ -122,7 +111,7 @@ class LoginFlowNode @AssistedInject constructor(
         data object LoginPassword : NavTarget
 
         @Parcelize
-        data class WaitList(val loginFormState: LoginFormState) : NavTarget
+        data class CreateAccount(val url: String) : NavTarget
 
         @Parcelize
         data class OidcView(val oidcDetails: OidcDetails) : NavTarget
@@ -153,6 +142,10 @@ class LoginFlowNode @AssistedInject constructor(
                             // Fallback to WebView mode
                             backstack.push(NavTarget.OidcView(oidcDetails))
                         }
+                    }
+
+                    override fun onCreateAccountContinue(url: String) {
+                        backstack.push(NavTarget.CreateAccount(url))
                     }
 
                     override fun onLoginPasswordNeeded() {
@@ -190,26 +183,16 @@ class LoginFlowNode @AssistedInject constructor(
                 createNode<SearchAccountProviderNode>(buildContext, plugins = listOf(callback))
             }
             NavTarget.LoginPassword -> {
-                val callback = object : LoginPasswordNode.Callback {
-                    override fun onWaitListError(loginFormState: LoginFormState) {
-                        backstack.newRoot(NavTarget.WaitList(loginFormState))
-                    }
-                }
-                createNode<LoginPasswordNode>(buildContext, plugins = listOf(callback))
+                createNode<LoginPasswordNode>(buildContext)
             }
             is NavTarget.OidcView -> {
                 oidcEntryPoint.createFallbackWebViewNode(this, buildContext, navTarget.oidcDetails.url)
             }
-            is NavTarget.WaitList -> {
-                val inputs = WaitListNode.Inputs(
-                    loginFormState = navTarget.loginFormState,
+            is NavTarget.CreateAccount -> {
+                val inputs = CreateAccountNode.Inputs(
+                    url = navTarget.url,
                 )
-                val callback = object : WaitListNode.Callback {
-                    override fun onCancelClick() {
-                        navigateUp()
-                    }
-                }
-                createNode<WaitListNode>(buildContext, plugins = listOf(callback, inputs))
+                createNode<CreateAccountNode>(buildContext, listOf(inputs))
             }
         }
     }

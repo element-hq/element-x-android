@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.login.impl.screens.searchaccountprovider
@@ -20,16 +11,13 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
-import io.element.android.features.login.impl.changeserver.ChangeServerPresenter
+import io.element.android.features.login.impl.changeserver.aChangeServerState
 import io.element.android.features.login.impl.resolver.HomeserverResolver
 import io.element.android.features.login.impl.resolver.network.FakeWellknownRequest
 import io.element.android.features.login.impl.resolver.network.WellKnown
 import io.element.android.features.login.impl.resolver.network.WellKnownBaseConfig
-import io.element.android.features.login.impl.resolver.network.WellKnownSlidingSyncConfig
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
-import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.runTest
@@ -43,13 +31,9 @@ class SearchAccountProviderPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val fakeWellknownRequest = FakeWellknownRequest()
-        val changeServerPresenter = ChangeServerPresenter(
-            FakeMatrixAuthenticationService(),
-            AccountProviderDataSource()
-        )
         val presenter = SearchAccountProviderPresenter(
-            HomeserverResolver(testCoroutineDispatchers(), fakeWellknownRequest),
-            changeServerPresenter
+            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeWellknownRequest),
+            changeServerPresenter = { aChangeServerState() }
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -63,13 +47,9 @@ class SearchAccountProviderPresenterTest {
     @Test
     fun `present - enter text no result`() = runTest {
         val fakeWellknownRequest = FakeWellknownRequest()
-        val changeServerPresenter = ChangeServerPresenter(
-            FakeMatrixAuthenticationService(),
-            AccountProviderDataSource()
-        )
         val presenter = SearchAccountProviderPresenter(
-            HomeserverResolver(testCoroutineDispatchers(), fakeWellknownRequest),
-            changeServerPresenter
+            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeWellknownRequest),
+            changeServerPresenter = { aChangeServerState() }
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -87,13 +67,9 @@ class SearchAccountProviderPresenterTest {
     @Test
     fun `present - enter valid url no wellknown`() = runTest {
         val fakeWellknownRequest = FakeWellknownRequest()
-        val changeServerPresenter = ChangeServerPresenter(
-            FakeMatrixAuthenticationService(),
-            AccountProviderDataSource()
-        )
         val presenter = SearchAccountProviderPresenter(
-            HomeserverResolver(testCoroutineDispatchers(), fakeWellknownRequest),
-            changeServerPresenter
+            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeWellknownRequest),
+            changeServerPresenter = { aChangeServerState() }
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -107,7 +83,7 @@ class SearchAccountProviderPresenterTest {
             assertThat(awaitItem().userInputResult).isEqualTo(
                 AsyncData.Success(
                     listOf(
-                        aHomeserverData(homeserverUrl = "https://test.org", isWellknownValid = false, supportSlidingSync = false)
+                        aHomeserverData(homeserverUrl = "https://test.org", isWellknownValid = false)
                     )
                 )
             )
@@ -115,55 +91,16 @@ class SearchAccountProviderPresenterTest {
     }
 
     @Test
-    fun `present - enter text one result no sliding sync`() = runTest {
-        val fakeWellknownRequest = FakeWellknownRequest()
-        fakeWellknownRequest.givenResultMap(
-            mapOf(
-                "https://test.org" to aWellKnown().copy(slidingSyncProxy = null),
-            )
-        )
-        val changeServerPresenter = ChangeServerPresenter(
-            FakeMatrixAuthenticationService(),
-            AccountProviderDataSource()
-        )
-        val presenter = SearchAccountProviderPresenter(
-            HomeserverResolver(testCoroutineDispatchers(), fakeWellknownRequest),
-            changeServerPresenter
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitItem()
-            initialState.eventSink.invoke(SearchAccountProviderEvents.UserInput("test"))
-            val withInputState = awaitItem()
-            assertThat(withInputState.userInput).isEqualTo("test")
-            assertThat(initialState.userInputResult).isEqualTo(AsyncData.Uninitialized)
-            assertThat(awaitItem().userInputResult).isInstanceOf(AsyncData.Loading::class.java)
-            assertThat(awaitItem().userInputResult).isEqualTo(
-                AsyncData.Success(
-                    listOf(
-                        aHomeserverData(homeserverUrl = "https://test.org", isWellknownValid = true, supportSlidingSync = false)
-                    )
-                )
-            )
-        }
-    }
-
-    @Test
-    fun `present - enter text one result with sliding sync`() = runTest {
+    fun `present - enter text one result with wellknown`() = runTest {
         val fakeWellknownRequest = FakeWellknownRequest()
         fakeWellknownRequest.givenResultMap(
             mapOf(
                 "https://test.io" to aWellKnown(),
             )
         )
-        val changeServerPresenter = ChangeServerPresenter(
-            FakeMatrixAuthenticationService(),
-            AccountProviderDataSource()
-        )
         val presenter = SearchAccountProviderPresenter(
-            HomeserverResolver(testCoroutineDispatchers(), fakeWellknownRequest),
-            changeServerPresenter
+            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeWellknownRequest),
+            changeServerPresenter = { aChangeServerState() }
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -192,9 +129,6 @@ class SearchAccountProviderPresenterTest {
             identityServer = WellKnownBaseConfig(
                 baseURL = A_HOMESERVER_URL
             ),
-            slidingSyncProxy = WellKnownSlidingSyncConfig(
-                url = A_HOMESERVER_URL
-            )
         )
     }
 }

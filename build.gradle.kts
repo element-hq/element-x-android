@@ -1,25 +1,16 @@
+/*
+ * Copyright 2022-2024 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
+ */
+
 buildscript {
     dependencies {
         classpath(libs.kotlin.gradle.plugin)
         classpath(libs.gms.google.services)
     }
 }
-
-/*
- * Copyright (c) 2022 New Vector Ltd
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
@@ -57,7 +48,7 @@ allprojects {
         config.from(files("$rootDir/tools/detekt/detekt.yml"))
     }
     dependencies {
-        detektPlugins("io.nlopez.compose.rules:detekt:0.4.11")
+        detektPlugins("io.nlopez.compose.rules:detekt:0.4.15")
     }
 
     // KtLint
@@ -80,8 +71,9 @@ allprojects {
             // To have XML report for Danger
             reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
         }
+        val generatedPath = "${layout.buildDirectory.asFile.get()}/generated/"
         filter {
-            exclude { element -> element.file.path.contains("${layout.buildDirectory.asFile.get()}/generated/") }
+            exclude { element -> element.file.path.contains(generatedPath) }
         }
     }
     // Dependency check

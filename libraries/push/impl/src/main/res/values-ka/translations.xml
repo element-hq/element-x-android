@@ -15,7 +15,6 @@
   <string name="notification_fallback_content">"შეტყობინება"</string>
   <string name="notification_inline_reply_failed">"** გაგზავნა ვერ მოხერხდა - გთხოვთ, გახსნათ ოთახი"</string>
   <string name="notification_invitation_action_join">"გაწევრიანება"</string>
-  <string name="notification_invitation_action_reject">"უარყოფა"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d მოწვევა"</item>
     <item quantity="other">"%d მოწვევები"</item>

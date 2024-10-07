@@ -7,7 +7,7 @@
   <string name="screen_signout_key_backup_disabled_subtitle">"Вы збіраецеся выйсці з апошняга сеанса. Калі вы выйдзеце з сістэмы зараз, вы страціце доступ да зашыфраваных паведамленняў."</string>
   <string name="screen_signout_key_backup_disabled_title">"Вы адключылі рэзервовае капіраванне"</string>
   <string name="screen_signout_key_backup_offline_subtitle">"Вашы ключы ўсё яшчэ захоўваліся, калі вы выйшлі з сеткі. Паўторна падключыцеся, каб можна было стварыць рэзервовую копію вашых ключоў перад выхадам."</string>
-  <string name="screen_signout_key_backup_offline_title">"Рэзервовае капіраванне ключоў усё яшчэ працягваецца"</string>
+  <string name="screen_signout_key_backup_offline_title">"Вашы ключы ўсё яшчэ ствараюцца"</string>
   <string name="screen_signout_key_backup_ongoing_subtitle">"Калі ласка, дачакайцеся завяршэння працэсу, перш чым выходзіць з сістэмы."</string>
   <string name="screen_signout_key_backup_ongoing_title">"Вашы ключы ўсё яшчэ ствараюцца"</string>
   <string name="screen_signout_preference_item">"Выйсці"</string>

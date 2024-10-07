@@ -63,7 +63,7 @@
   </plurals>
   <string name="screen_room_member_list_manage_member_ban">"Eliminar y prohibir a un miembro"</string>
   <string name="screen_room_member_list_manage_member_remove">"Remover de la sala"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Eliminar y prohibir miembro"</string>
+  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Eliminar y prohibir a un miembro"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Solo eliminar miembro"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_title">"¿Eliminar al miembro y prohibirle unirse en el futuro?"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Anular la prohibición"</string>

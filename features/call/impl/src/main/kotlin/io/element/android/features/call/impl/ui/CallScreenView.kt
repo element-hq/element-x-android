@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.call.impl.ui
@@ -94,35 +85,48 @@ internal fun CallScreenView(
         BackHandler {
             handleBack()
         }
-        CallWebView(
-            modifier = Modifier
+        if (state.webViewError != null) {
+            ErrorDialog(
+                content = buildString {
+                    append(stringResource(CommonStrings.error_unknown))
+                    state.webViewError.takeIf { it.isNotEmpty() }?.let { append("\n\n").append(it) }
+                },
+                onSubmit = { state.eventSink(CallScreenEvents.Hangup) },
+            )
+        } else {
+            CallWebView(
+                modifier = Modifier
                     .padding(padding)
                     .consumeWindowInsets(padding)
                     .fillMaxSize(),
-            url = state.urlState,
-            userAgent = state.userAgent,
-            onPermissionsRequest = { request ->
-                val androidPermissions = mapWebkitPermissions(request.resources)
-                val callback: RequestPermissionCallback = { request.grant(it) }
-                requestPermissions(androidPermissions.toTypedArray(), callback)
-            },
-            onWebViewCreate = { webView ->
-                val interceptor = WebViewWidgetMessageInterceptor(webView)
-                state.eventSink(CallScreenEvents.SetupMessageChannels(interceptor))
-                val pipController = WebViewPipController(webView)
-                pipState.eventSink(PictureInPictureEvents.SetPipController(pipController))
+                url = state.urlState,
+                userAgent = state.userAgent,
+                onPermissionsRequest = { request ->
+                    val androidPermissions = mapWebkitPermissions(request.resources)
+                    val callback: RequestPermissionCallback = { request.grant(it) }
+                    requestPermissions(androidPermissions.toTypedArray(), callback)
+                },
+                onWebViewCreate = { webView ->
+                    val interceptor = WebViewWidgetMessageInterceptor(
+                        webView = webView,
+                        onError = { state.eventSink(CallScreenEvents.OnWebViewError(it)) },
+                    )
+                    state.eventSink(CallScreenEvents.SetupMessageChannels(interceptor))
+                    val pipController = WebViewPipController(webView)
+                    pipState.eventSink(PictureInPictureEvents.SetPipController(pipController))
+                }
+            )
+            when (state.urlState) {
+                AsyncData.Uninitialized,
+                is AsyncData.Loading ->
+                    ProgressDialog(text = stringResource(id = CommonStrings.common_please_wait))
+                is AsyncData.Failure ->
+                    ErrorDialog(
+                        content = state.urlState.error.message.orEmpty(),
+                        onSubmit = { state.eventSink(CallScreenEvents.Hangup) },
+                    )
+                is AsyncData.Success -> Unit
             }
-        )
-        when (state.urlState) {
-            AsyncData.Uninitialized,
-            is AsyncData.Loading ->
-                ProgressDialog(text = stringResource(id = CommonStrings.common_please_wait))
-            is AsyncData.Failure ->
-                ErrorDialog(
-                    content = state.urlState.error.message.orEmpty(),
-                    onDismiss = { state.eventSink(CallScreenEvents.Hangup) },
-                )
-            is AsyncData.Success -> Unit
         }
     }
 }

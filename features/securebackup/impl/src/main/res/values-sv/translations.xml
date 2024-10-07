@@ -39,7 +39,6 @@
   <string name="screen_recovery_key_confirm_error_content">"Vänligen pröva igen för att bekräfta åtkomsten till din chattsäkerhetskopia."</string>
   <string name="screen_recovery_key_confirm_error_title">"Felaktig återställningsnyckel"</string>
   <string name="screen_recovery_key_confirm_key_description">"Om du har en säkerhetsnyckel eller säkerhetsfras så funkar den också."</string>
-  <string name="screen_recovery_key_confirm_key_label">"Återställningsnyckel eller lösenkod"</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Ange …"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Blivit av med din återställningsnyckel?"</string>
   <string name="screen_recovery_key_confirm_success">"Återställningsnyckel bekräftad"</string>

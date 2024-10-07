@@ -1,32 +1,30 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.call.impl.utils
 
 import android.graphics.Bitmap
+import android.net.http.SslError
 import android.webkit.JavascriptInterface
+import android.webkit.SslErrorHandler
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.webkit.WebViewCompat
 import androidx.webkit.WebViewFeature
 import io.element.android.features.call.impl.BuildConfig
 import kotlinx.coroutines.flow.MutableSharedFlow
+import timber.log.Timber
 
 class WebViewWidgetMessageInterceptor(
     private val webView: WebView,
+    private val onError: (String?) -> Unit,
 ) : WidgetMessageInterceptor {
     companion object {
         // We call both the WebMessageListener and the JavascriptInterface objects in JS with this
@@ -54,15 +52,34 @@ class WebViewWidgetMessageInterceptor(
                             if (message.data.response && message.data.api == "toWidget"
                                 || !message.data.response && message.data.api == "fromWidget") {
                                 let json = JSON.stringify(event.data) 
-                                ${"console.log('message sent: ' + json);".takeIf { BuildConfig.DEBUG } }
+                                ${"console.log('message sent: ' + json);".takeIf { BuildConfig.DEBUG }}
                                 $LISTENER_NAME.postMessage(json);
                             } else {
-                                ${"console.log('message received (ignored): ' + JSON.stringify(event.data));".takeIf { BuildConfig.DEBUG } }
+                                ${"console.log('message received (ignored): ' + JSON.stringify(event.data));".takeIf { BuildConfig.DEBUG }}
                             }
                         });
                     """.trimIndent(),
                     null
                 )
+            }
+
+            override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+                // No network for instance, transmit the error
+                Timber.e("onReceivedError error: ${error?.errorCode} ${error?.description}")
+                onError(error?.description?.toString())
+                super.onReceivedError(view, request, error)
+            }
+
+            override fun onReceivedHttpError(view: WebView?, request: WebResourceRequest?, errorResponse: WebResourceResponse?) {
+                Timber.e("onReceivedHttpError error: ${errorResponse?.statusCode} ${errorResponse?.reasonPhrase}")
+                onError(errorResponse?.statusCode.toString())
+                super.onReceivedHttpError(view, request, errorResponse)
+            }
+
+            override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
+                Timber.e("onReceivedSslError error: ${error?.primaryError}")
+                onError(error?.primaryError?.toString())
+                super.onReceivedSslError(view, handler, error)
             }
         }
 

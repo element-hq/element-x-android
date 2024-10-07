@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"پیوست نماگرفت"</string>
+  <string name="screen_bug_report_contact_me">"اگر پرسش دیگری دارید، می‌توانید با من در تماس باشید."</string>
+  <string name="screen_bug_report_contact_me_title">"تماس با من"</string>
+  <string name="screen_bug_report_edit_screenshot">"ویرایش نماگرفت"</string>
+  <string name="screen_bug_report_editor_placeholder">"شرح مشکل…"</string>
+  <string name="screen_bug_report_editor_supporting">"ترجیحاً توضیحات را به زبان انگلیسی بنویسید."</string>
+  <string name="screen_bug_report_include_crash_logs">"ارسال رخدادنگارهای خطا"</string>
+  <string name="screen_bug_report_include_logs">"اجازه به گزارش‌ها"</string>
+  <string name="screen_bug_report_include_screenshot">"ارسال تصویر صفحه"</string>
+  <string name="screen_bug_report_view_logs">"دیدن گزارش‌ها"</string>
+</resources>

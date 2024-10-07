@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"خروج و ارتقا"</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"ارتقا موجود است"</string>
+  <string name="banner_set_up_recovery_title">"برپایی بازیابی"</string>
+  <string name="confirm_recovery_key_banner_title">"ورود کلید بازیابیتان"</string>
+  <string name="full_screen_intent_banner_title">"بهبود تجریهٔ تماستان"</string>
+  <string name="screen_invites_decline_chat_message">"مطمئنید که می‌خواهید دعوت پیوستن به %1$s را رد کنید؟"</string>
+  <string name="screen_invites_decline_chat_title">"رد دعوت"</string>
+  <string name="screen_invites_decline_direct_chat_message">"مطمئنید که می‌خواهید این گپ خصوصی با %1$s را رد کنید؟"</string>
+  <string name="screen_invites_decline_direct_chat_title">"رد گپ"</string>
+  <string name="screen_invites_empty_list">"بدون دعوت"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) دعوتتان کرد"</string>
+  <string name="screen_migration_message">"فرایندی یک باره است. ممنون از شکیباییتان."</string>
+  <string name="screen_migration_title">"برپایی حسابتان."</string>
+  <string name="screen_roomlist_a11y_create_message">"ایجاد اتاق یا گفت‌وگویی جدید"</string>
+  <string name="screen_roomlist_empty_message">"آغاز با پیام دادن به کسی."</string>
+  <string name="screen_roomlist_empty_title">"هنوز گپی وجود ندارد."</string>
+  <string name="screen_roomlist_filter_favourites">"علاقه‌مندی‌ها"</string>
+  <string name="screen_roomlist_filter_favourites_empty_state_title">"هنوز هیچ گپ مورد علاقه‌ای ندارید"</string>
+  <string name="screen_roomlist_filter_invites">"دعوت‌ها"</string>
+  <string name="screen_roomlist_filter_invites_empty_state_title">"هیچ دعوت منتظری ندارید."</string>
+  <string name="screen_roomlist_filter_low_priority">"اولویت کم"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"می توانید پالایه‌ها را برای دیدن دیگر گپ‌هایتان بردارید"</string>
+  <string name="screen_roomlist_filter_mixed_empty_state_title">"هیچ گپی برای این گزینش ندارید"</string>
+  <string name="screen_roomlist_filter_people">"افراد"</string>
+  <string name="screen_roomlist_filter_people_empty_state_title">"هنوز هیچ پیام مستقیمی ندارید"</string>
+  <string name="screen_roomlist_filter_rooms">"اتاق‌ها"</string>
+  <string name="screen_roomlist_filter_rooms_empty_state_title">"هنوز در هیچ اتاقی نیستید"</string>
+  <string name="screen_roomlist_filter_unreads">"نخوانده‌ها"</string>
+  <string name="screen_roomlist_filter_unreads_empty_state_title">"تبریک!
+هیچ پیام نخوانده‌ای ندارید!"</string>
+  <string name="screen_roomlist_main_space_title">"گپ‌ها"</string>
+  <string name="screen_roomlist_mark_as_read">"علامت‌گذاری به عنوان خوانده شده"</string>
+  <string name="screen_roomlist_mark_as_unread">"نشان به ناخوانده"</string>
+  <string name="screen_roomlist_room_directory_button_title">"مرور همهٔ اتاق‌ها"</string>
+  <string name="session_verification_banner_title">"تأیید کنید که خودتانید"</string>
+</resources>

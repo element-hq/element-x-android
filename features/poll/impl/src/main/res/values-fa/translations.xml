@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"افزودن گزینه"</string>
+  <string name="screen_create_poll_anonymous_desc">"نمایش نتیجه‌ها تنها پس از پایان نظرسنجی"</string>
+  <string name="screen_create_poll_anonymous_headline">"نهفتن رأی‌ها"</string>
+  <string name="screen_create_poll_answer_hint">"گزینهٔ %1$d"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"تغییراتتان ذخیره نشده‌اند. مطمئنید که می‌خواهید برگردید؟"</string>
+  <string name="screen_create_poll_question_desc">"پرسش یا موضوع"</string>
+  <string name="screen_create_poll_question_hint">"این نظرسنجی دربارهٔ چیست؟"</string>
+  <string name="screen_create_poll_title">"ایجاد نظرسنجی"</string>
+  <string name="screen_edit_poll_delete_confirmation">"مطمئنید که می‌خواهید این نظرسنجی را حذف کنید؟"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"حذف نظرسنجی"</string>
+  <string name="screen_edit_poll_title">"ویرایش نظرسنجی"</string>
+  <string name="screen_polls_history_empty_ongoing">"نتوانست هیچ نظرسنجی در جریانی بیابد."</string>
+  <string name="screen_polls_history_empty_past">"نتوانست هیچ نظرسنجی گذشته‌ای بیابد."</string>
+  <string name="screen_polls_history_filter_ongoing">"در جریان"</string>
+  <string name="screen_polls_history_filter_past">"گذشته"</string>
+  <string name="screen_polls_history_title">"نظرسنجی‌ها"</string>
+</resources>

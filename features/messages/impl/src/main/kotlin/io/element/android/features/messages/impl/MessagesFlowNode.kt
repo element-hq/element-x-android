@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl
@@ -21,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
+import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.node
@@ -41,7 +33,10 @@ import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewNode
 import io.element.android.features.messages.impl.forward.ForwardMessagesNode
+import io.element.android.features.messages.impl.pinned.PinnedEventsTimelineProvider
+import io.element.android.features.messages.impl.pinned.list.PinnedMessagesListNode
 import io.element.android.features.messages.impl.report.ReportMessageNode
+import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.debug.EventDebugInfoNode
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
@@ -54,7 +49,6 @@ import io.element.android.features.poll.api.create.CreatePollEntryPoint
 import io.element.android.features.poll.api.create.CreatePollMode
 import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode
-import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.architecture.overlay.Overlay
@@ -64,9 +58,11 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.room.joinedRoomMembers
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
@@ -81,7 +77,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
-import timber.log.Timber
 
 @ContributesNode(RoomScope::class)
 class MessagesFlowNode @AssistedInject constructor(
@@ -96,9 +91,11 @@ class MessagesFlowNode @AssistedInject constructor(
     private val room: MatrixRoom,
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
     private val mentionSpanTheme: MentionSpanTheme,
+    private val pinnedEventsTimelineProvider: PinnedEventsTimelineProvider,
+    private val timelineController: TimelineController,
 ) : BaseFlowNode<MessagesFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.Messages,
+        initialElement = plugins.filterIsInstance<MessagesEntryPoint.Params>().first().initialTarget.toNavTarget(),
         savedStateMap = buildContext.savedStateMap,
     ),
     overlay = Overlay(
@@ -107,16 +104,12 @@ class MessagesFlowNode @AssistedInject constructor(
     buildContext = buildContext,
     plugins = plugins
 ) {
-    data class Inputs(val focusedEventId: EventId?) : NodeInputs
-
-    private val inputs = inputs<Inputs>()
-
     sealed interface NavTarget : Parcelable {
         @Parcelize
         data object Empty : NavTarget
 
         @Parcelize
-        data object Messages : NavTarget
+        data class Messages(val focusedEventId: EventId?) : NavTarget
 
         @Parcelize
         data class MediaViewer(
@@ -135,7 +128,7 @@ class MessagesFlowNode @AssistedInject constructor(
         data class EventDebugInfo(val eventId: EventId?, val debugInfo: TimelineItemDebugInfo) : NavTarget
 
         @Parcelize
-        data class ForwardEvent(val eventId: EventId) : NavTarget
+        data class ForwardEvent(val eventId: EventId, val fromPinnedEvents: Boolean) : NavTarget
 
         @Parcelize
         data class ReportMessage(val eventId: EventId, val senderId: UserId) : NavTarget
@@ -148,18 +141,27 @@ class MessagesFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class EditPoll(val eventId: EventId) : NavTarget
+
+        @Parcelize
+        data object PinnedMessagesList : NavTarget
     }
 
     private val callbacks = plugins<MessagesEntryPoint.Callback>()
 
     override fun onBuilt() {
         super.onBuilt()
-
+        lifecycle.subscribe(
+            onDestroy = {
+                timelineController.close()
+            }
+        )
         room.membersStateFlow
             .onEach { membersState ->
                 roomMemberProfilesCache.replace(membersState.joinedRoomMembers())
             }
             .launchIn(lifecycleScope)
+
+        pinnedEventsTimelineProvider.launchIn(lifecycleScope)
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -183,7 +185,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     }
 
                     override fun onPermalinkClick(data: PermalinkData) {
-                        callbacks.forEach { it.onPermalinkClick(data) }
+                        callbacks.forEach { it.onPermalinkClick(data, pushToBackstack = true) }
                     }
 
                     override fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
@@ -191,7 +193,7 @@ class MessagesFlowNode @AssistedInject constructor(
                     }
 
                     override fun onForwardEventClick(eventId: EventId) {
-                        backstack.push(NavTarget.ForwardEvent(eventId))
+                        backstack.push(NavTarget.ForwardEvent(eventId, fromPinnedEvents = false))
                     }
 
                     override fun onReportMessage(eventId: EventId, senderId: UserId) {
@@ -220,12 +222,10 @@ class MessagesFlowNode @AssistedInject constructor(
                     }
 
                     override fun onViewAllPinnedEvents() {
-                        Timber.d("On View All Pinned Events not implemented yet.")
+                        backstack.push(NavTarget.PinnedMessagesList)
                     }
                 }
-                val inputs = MessagesNode.Inputs(
-                    focusedEventId = inputs.focusedEventId,
-                )
+                val inputs = MessagesNode.Inputs(focusedEventId = navTarget.focusedEventId)
                 createNode<MessagesNode>(buildContext, listOf(callback, inputs))
             }
             is NavTarget.MediaViewer -> {
@@ -251,7 +251,12 @@ class MessagesFlowNode @AssistedInject constructor(
                 createNode<EventDebugInfoNode>(buildContext, listOf(inputs))
             }
             is NavTarget.ForwardEvent -> {
-                val inputs = ForwardMessagesNode.Inputs(navTarget.eventId)
+                val timelineProvider = if (navTarget.fromPinnedEvents) {
+                    pinnedEventsTimelineProvider
+                } else {
+                    timelineController
+                }
+                val inputs = ForwardMessagesNode.Inputs(navTarget.eventId, timelineProvider)
                 val callback = object : ForwardMessagesNode.Callback {
                     override fun onForwardedToSingleRoom(roomId: RoomId) {
                         callbacks.forEach { it.onForwardedToSingleRoom(roomId) }
@@ -276,6 +281,38 @@ class MessagesFlowNode @AssistedInject constructor(
                     .params(CreatePollEntryPoint.Params(mode = CreatePollMode.EditPoll(eventId = navTarget.eventId)))
                     .build()
             }
+            NavTarget.PinnedMessagesList -> {
+                val callback = object : PinnedMessagesListNode.Callback {
+                    override fun onEventClick(event: TimelineItem.Event) {
+                        processEventClick(event)
+                    }
+
+                    override fun onUserDataClick(userId: UserId) {
+                        callbacks.forEach { it.onUserDataClick(userId) }
+                    }
+
+                    override fun onViewInTimelineClick(eventId: EventId) {
+                        val permalinkData = PermalinkData.RoomLink(
+                            roomIdOrAlias = room.roomId.toRoomIdOrAlias(),
+                            eventId = eventId,
+                        )
+                        callbacks.forEach { it.onPermalinkClick(permalinkData, pushToBackstack = false) }
+                    }
+
+                    override fun onRoomPermalinkClick(data: PermalinkData.RoomLink) {
+                        callbacks.forEach { it.onPermalinkClick(data, pushToBackstack = !room.matches(data.roomIdOrAlias)) }
+                    }
+
+                    override fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
+                        backstack.push(NavTarget.EventDebugInfo(eventId, debugInfo))
+                    }
+
+                    override fun onForwardEventClick(eventId: EventId) {
+                        backstack.push(NavTarget.ForwardEvent(eventId = eventId, fromPinnedEvents = true))
+                    }
+                }
+                createNode<PinnedMessagesListNode>(buildContext, plugins = listOf(callback))
+            }
             NavTarget.Empty -> {
                 node(buildContext) {}
             }
@@ -287,7 +324,7 @@ class MessagesFlowNode @AssistedInject constructor(
             is TimelineItemImageContent -> {
                 val navTarget = NavTarget.MediaViewer(
                     mediaInfo = MediaInfo(
-                        name = event.content.body,
+                        name = event.content.filename ?: event.content.body,
                         mimeType = event.content.mimeType,
                         formattedFileSize = event.content.formattedFileSize,
                         fileExtension = event.content.fileExtension
@@ -321,7 +358,7 @@ class MessagesFlowNode @AssistedInject constructor(
             is TimelineItemVideoContent -> {
                 val navTarget = NavTarget.MediaViewer(
                     mediaInfo = MediaInfo(
-                        name = event.content.body,
+                        name = event.content.filename ?: event.content.body,
                         mimeType = event.content.mimeType,
                         formattedFileSize = event.content.formattedFileSize,
                         fileExtension = event.content.fileExtension

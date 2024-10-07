@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"افزودن پیوست"</string>
+  <string name="rich_text_editor_bullet_list">"تغییر وضعیت سیاههٔ گلوله‌ای"</string>
+  <string name="rich_text_editor_close_formatting_options">"بستن گزینه‌های قالب‌بندی"</string>
+  <string name="rich_text_editor_code_block">"تغییر حالت بلوک کد"</string>
+  <string name="rich_text_editor_composer_placeholder">"پیام…"</string>
+  <string name="rich_text_editor_create_link">"ایجاد پیوند"</string>
+  <string name="rich_text_editor_edit_link">"ویرایش پیوند"</string>
+  <string name="rich_text_editor_format_bold">"اعمال قالب توپر"</string>
+  <string name="rich_text_editor_format_italic">"اعمال قالب کج"</string>
+  <string name="rich_text_editor_format_strikethrough">"اعمال قالب خط‌خورده"</string>
+  <string name="rich_text_editor_format_underline">"اعمال قالب زیرخط‌دار"</string>
+  <string name="rich_text_editor_full_screen_toggle">"تغییر حالت تمام‌صفحه"</string>
+  <string name="rich_text_editor_indent">"تورفتگی"</string>
+  <string name="rich_text_editor_inline_code">"اعمال قالب کد درون‌خط"</string>
+  <string name="rich_text_editor_link">"تنظیم پیوند"</string>
+  <string name="rich_text_editor_numbered_list">"تغییر وضعیت سیاههٔ شماره‌دار"</string>
+  <string name="rich_text_editor_open_compose_options">"گشودن گزینه‌های نوشتن"</string>
+  <string name="rich_text_editor_quote">"تغییر حالت نقل قول"</string>
+  <string name="rich_text_editor_remove_link">"برداشتن پیوند"</string>
+  <string name="rich_text_editor_unindent">"تونرفتگی"</string>
+  <string name="rich_text_editor_url_placeholder">"پیوند"</string>
+  <string name="screen_room_voice_message_tooltip">"نگه داشتن برای ضبط"</string>
+</resources>

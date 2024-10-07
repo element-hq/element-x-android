@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2024 New Vector Ltd
+ * Copyright 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.ui.messages.reply
@@ -66,11 +57,11 @@ internal sealed interface InReplyToMetadata {
  * Metadata can be either a thumbnail with a text OR just a text.
  */
 @Composable
-internal fun InReplyToDetails.Ready.metadata(): InReplyToMetadata? = when (eventContent) {
+internal fun InReplyToDetails.Ready.metadata(hideImage: Boolean): InReplyToMetadata? = when (eventContent) {
     is MessageContent -> when (val type = eventContent.type) {
         is ImageMessageType -> InReplyToMetadata.Thumbnail(
             AttachmentThumbnailInfo(
-                thumbnailSource = type.info?.thumbnailSource ?: type.source,
+                thumbnailSource = (type.info?.thumbnailSource ?: type.source).takeUnless { hideImage },
                 textContent = eventContent.body,
                 type = AttachmentThumbnailType.Image,
                 blurHash = type.info?.blurhash,
@@ -78,7 +69,7 @@ internal fun InReplyToDetails.Ready.metadata(): InReplyToMetadata? = when (event
         )
         is VideoMessageType -> InReplyToMetadata.Thumbnail(
             AttachmentThumbnailInfo(
-                thumbnailSource = type.info?.thumbnailSource,
+                thumbnailSource = type.info?.thumbnailSource?.takeUnless { hideImage },
                 textContent = eventContent.body,
                 type = AttachmentThumbnailType.Video,
                 blurHash = type.info?.blurhash,
@@ -86,7 +77,7 @@ internal fun InReplyToDetails.Ready.metadata(): InReplyToMetadata? = when (event
         )
         is FileMessageType -> InReplyToMetadata.Thumbnail(
             AttachmentThumbnailInfo(
-                thumbnailSource = type.info?.thumbnailSource,
+                thumbnailSource = type.info?.thumbnailSource?.takeUnless { hideImage },
                 textContent = eventContent.body,
                 type = AttachmentThumbnailType.File,
             )
@@ -113,7 +104,7 @@ internal fun InReplyToDetails.Ready.metadata(): InReplyToMetadata? = when (event
     }
     is StickerContent -> InReplyToMetadata.Thumbnail(
         AttachmentThumbnailInfo(
-            thumbnailSource = eventContent.source,
+            thumbnailSource = eventContent.source.takeUnless { hideImage },
             textContent = eventContent.body,
             type = AttachmentThumbnailType.Image,
             blurHash = eventContent.info.blurhash,

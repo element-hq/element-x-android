@@ -1,6 +1,13 @@
 {
   "modules" : [
     {
+      "name" : ":appnav",
+      "includeRegex" : [
+        "banner\\.migrate_to_native_sliding_sync\\.force_logout.title",
+        "banner\\.migrate_to_native_sliding_sync\\.action"
+      ]
+    },
+    {
       "name" : ":features:rageshake:impl",
       "includeRegex" : [
         "screen_bug_report_.*"
@@ -18,6 +25,12 @@
       "name" : ":features:logout:impl",
       "includeRegex" : [
         "screen_signout_.*"
+      ]
+    },
+    {
+      "name" : ":features:deactivation:impl",
+      "includeRegex" : [
+        "screen_deactivate_account_.*"
       ]
     },
     {
@@ -120,6 +133,7 @@
         "screen_server_confirmation_.*",
         "screen_change_server_.*",
         "screen_change_account_provider_.*",
+        "screen_create_account_.*",
         "screen_account_provider_.*",
         "screen_waitlist_.*",
         "screen_qr_code_login_.*"
@@ -139,6 +153,7 @@
         "session_verification_banner_.*",
         "confirm_recovery_key_banner_.*",
         "banner\\.set_up_recovery\\..*",
+        "banner\\.migrate_to_native_sliding_sync\\..*",
         "full_screen_intent_banner_.*",
         "screen_migration_.*",
         "screen_invites_.*"

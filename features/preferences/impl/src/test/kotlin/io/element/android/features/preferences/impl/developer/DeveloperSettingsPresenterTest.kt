@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.preferences.impl.developer
@@ -24,9 +15,7 @@ import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.logout.test.FakeLogoutUseCase
 import io.element.android.features.preferences.impl.tasks.FakeClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.FakeComputeCacheSizeUseCase
-import io.element.android.features.rageshake.impl.preferences.DefaultRageshakePreferencesPresenter
-import io.element.android.features.rageshake.test.rageshake.FakeRageShake
-import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataStore
+import io.element.android.features.rageshake.api.preferences.aRageshakePreferencesState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
@@ -59,10 +48,11 @@ class DeveloperSettingsPresenterTest {
             assertThat(initialState.customElementCallBaseUrlState).isNotNull()
             assertThat(initialState.customElementCallBaseUrlState.baseUrl).isNull()
             assertThat(initialState.isSimpleSlidingSyncEnabled).isFalse()
+            assertThat(initialState.hideImagesAndVideos).isFalse()
             val loadedState = awaitItem()
             assertThat(loadedState.rageshakeState.isEnabled).isFalse()
             assertThat(loadedState.rageshakeState.isSupported).isTrue()
-            assertThat(loadedState.rageshakeState.sensitivity).isEqualTo(1.0f)
+            assertThat(loadedState.rageshakeState.sensitivity).isEqualTo(0.3f)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -113,9 +103,8 @@ class DeveloperSettingsPresenterTest {
 
     @Test
     fun `present - clear cache`() = runTest {
-        val rageshakePresenter = DefaultRageshakePreferencesPresenter(FakeRageShake(), FakeRageshakeDataStore())
         val clearCacheUseCase = FakeClearCacheUseCase()
-        val presenter = createDeveloperSettingsPresenter(clearCacheUseCase = clearCacheUseCase, rageshakePresenter = rageshakePresenter)
+        val presenter = createDeveloperSettingsPresenter(clearCacheUseCase = clearCacheUseCase)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -188,11 +177,28 @@ class DeveloperSettingsPresenterTest {
         }
     }
 
+    @Test
+    fun `present - toggling hide image and video`() = runTest {
+        val preferences = InMemoryAppPreferencesStore()
+        val presenter = createDeveloperSettingsPresenter(preferencesStore = preferences)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitLastSequentialItem()
+            assertThat(initialState.hideImagesAndVideos).isFalse()
+            initialState.eventSink(DeveloperSettingsEvents.SetHideImagesAndVideos(true))
+            assertThat(awaitItem().hideImagesAndVideos).isTrue()
+            assertThat(preferences.doesHideImagesAndVideosFlow().first()).isTrue()
+            initialState.eventSink(DeveloperSettingsEvents.SetHideImagesAndVideos(false))
+            assertThat(awaitItem().hideImagesAndVideos).isFalse()
+            assertThat(preferences.doesHideImagesAndVideosFlow().first()).isFalse()
+        }
+    }
+
     private fun createDeveloperSettingsPresenter(
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
         cacheSizeUseCase: FakeComputeCacheSizeUseCase = FakeComputeCacheSizeUseCase(),
         clearCacheUseCase: FakeClearCacheUseCase = FakeClearCacheUseCase(),
-        rageshakePresenter: DefaultRageshakePreferencesPresenter = DefaultRageshakePreferencesPresenter(FakeRageShake(), FakeRageshakeDataStore()),
         preferencesStore: InMemoryAppPreferencesStore = InMemoryAppPreferencesStore(),
         buildMeta: BuildMeta = aBuildMeta(),
         logoutUseCase: FakeLogoutUseCase = FakeLogoutUseCase(logoutLambda = { "" })
@@ -201,7 +207,7 @@ class DeveloperSettingsPresenterTest {
             featureFlagService = featureFlagService,
             computeCacheSizeUseCase = cacheSizeUseCase,
             clearCacheUseCase = clearCacheUseCase,
-            rageshakePresenter = rageshakePresenter,
+            rageshakePresenter = { aRageshakePreferencesState() },
             appPreferencesStore = preferencesStore,
             buildMeta = buildMeta,
             logoutUseCase = logoutUseCase,

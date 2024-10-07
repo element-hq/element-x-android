@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.appnav
@@ -49,6 +40,7 @@ import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
+import io.element.android.features.logout.api.LogoutEntryPoint
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.preferences.api.PreferencesEntryPoint
@@ -74,6 +66,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.sync.SyncState
+import io.element.android.libraries.preferences.api.store.EnableNativeSlidingSyncUseCase
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
@@ -85,6 +78,7 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.util.Optional
+import java.util.UUID
 
 @ContributesNode(SessionScope::class)
 class LoggedInFlowNode @AssistedInject constructor(
@@ -104,6 +98,8 @@ class LoggedInFlowNode @AssistedInject constructor(
     private val shareEntryPoint: ShareEntryPoint,
     private val matrixClient: MatrixClient,
     private val sendingQueue: SendQueues,
+    private val logoutEntryPoint: LogoutEntryPoint,
+    private val enableNativeSlidingSyncUseCase: EnableNativeSlidingSyncUseCase,
     snackbarDispatcher: SnackbarDispatcher,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
@@ -203,7 +199,8 @@ class LoggedInFlowNode @AssistedInject constructor(
             val serverNames: List<String> = emptyList(),
             val trigger: JoinedRoom.Trigger? = null,
             val roomDescription: RoomDescription? = null,
-            val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages()
+            val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages(),
+            val targetId: UUID = UUID.randomUUID(),
         ) : NavTarget
 
         @Parcelize
@@ -232,6 +229,9 @@ class LoggedInFlowNode @AssistedInject constructor(
 
         @Parcelize
         data class IncomingShare(val intent: Intent) : NavTarget
+
+        @Parcelize
+        data object LogoutForNativeSlidingSyncMigrationNeeded : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -278,6 +278,10 @@ class LoggedInFlowNode @AssistedInject constructor(
                     override fun onRoomDirectorySearchClick() {
                         backstack.push(NavTarget.RoomDirectorySearch)
                     }
+
+                    override fun onLogoutForNativeSlidingSyncMigrationNeeded() {
+                        backstack.push(NavTarget.LogoutForNativeSlidingSyncMigrationNeeded)
+                    }
                 }
                 roomListEntryPoint
                     .nodeBuilder(this, buildContext)
@@ -294,21 +298,24 @@ class LoggedInFlowNode @AssistedInject constructor(
                         coroutineScope.launch { attachRoom(roomId.toRoomIdOrAlias()) }
                     }
 
-                    override fun onPermalinkClick(data: PermalinkData) {
+                    override fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean) {
                         when (data) {
                             is PermalinkData.UserLink -> {
                                 // Should not happen (handled by MessagesNode)
                                 Timber.e("User link clicked: ${data.userId}.")
                             }
                             is PermalinkData.RoomLink -> {
-                                backstack.push(
-                                    NavTarget.Room(
-                                        roomIdOrAlias = data.roomIdOrAlias,
-                                        serverNames = data.viaParameters,
-                                        trigger = JoinedRoom.Trigger.Timeline,
-                                        initialElement = RoomNavigationTarget.Messages(data.eventId),
-                                    )
+                                val target = NavTarget.Room(
+                                    roomIdOrAlias = data.roomIdOrAlias,
+                                    serverNames = data.viaParameters,
+                                    trigger = JoinedRoom.Trigger.Timeline,
+                                    initialElement = RoomNavigationTarget.Messages(data.eventId),
                                 )
+                                if (pushToBackstack) {
+                                    backstack.push(target)
+                                } else {
+                                    backstack.replace(target)
+                                }
                             }
                             is PermalinkData.FallbackLink,
                             is PermalinkData.RoomEmailInviteLink -> {
@@ -409,6 +416,20 @@ class LoggedInFlowNode @AssistedInject constructor(
                         }
                     })
                     .params(ShareEntryPoint.Params(intent = navTarget.intent))
+                    .build()
+            }
+            is NavTarget.LogoutForNativeSlidingSyncMigrationNeeded -> {
+                val callback = object : LogoutEntryPoint.Callback {
+                    override fun onChangeRecoveryKeyClick() {
+                        backstack.push(NavTarget.SecureBackup())
+                    }
+                }
+
+                logoutEntryPoint.nodeBuilder(this, buildContext)
+                    .onSuccessfulLogoutPendingAction {
+                        enableNativeSlidingSyncUseCase()
+                    }
+                    .callback(callback)
                     .build()
             }
         }

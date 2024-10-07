@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.roomdetails.members
@@ -28,8 +19,8 @@ import io.element.android.features.roomdetails.impl.members.aRoomMemberList
 import io.element.android.features.roomdetails.impl.members.aVictor
 import io.element.android.features.roomdetails.impl.members.aWalter
 import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationEvents
+import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationState
 import io.element.android.features.roomdetails.impl.members.moderation.aRoomMembersModerationState
-import io.element.android.features.roomdetails.members.moderation.FakeRoomMembersModerationPresenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -39,6 +30,7 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
+import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -205,9 +197,9 @@ class RoomMemberListPresenterTest {
     @Test
     fun `present - RoomMemberSelected by default opens the room member details through the navigator`() = runTest {
         val navigator = FakeRoomMemberListNavigator()
-        val moderationPresenter = FakeRoomMembersModerationPresenter(canDisplayModerationActions = false)
+        val roomMembersModerationStateLambda = { aRoomMembersModerationState(canDisplayModerationActions = false) }
         val presenter = createPresenter(
-            moderationPresenter = moderationPresenter,
+            roomMembersModerationStateLambda = roomMembersModerationStateLambda,
             navigator = navigator,
             matrixRoom = FakeMatrixRoom(
                 updateMembersResult = { Result.success(Unit) },
@@ -226,17 +218,15 @@ class RoomMemberListPresenterTest {
     @Test
     fun `present - RoomMemberSelected will open the moderation options if the current user can use them`() = runTest {
         val navigator = FakeRoomMemberListNavigator()
-        var selectRoomMemberCallCounts = 0
-        val capturingState = aRoomMembersModerationState(eventSink = { event ->
-            if (event is RoomMembersModerationEvents.SelectRoomMember) {
-                selectRoomMemberCallCounts++
-            }
-        })
-        val moderationPresenter = FakeRoomMembersModerationPresenter(canDisplayModerationActions = true).apply {
-            givenState(capturingState)
+        val eventsRecorder = EventsRecorder<RoomMembersModerationEvents>()
+        val roomMembersModerationStateLambda = {
+            aRoomMembersModerationState(
+                canDisplayModerationActions = true,
+                eventSink = eventsRecorder,
+            )
         }
         val presenter = createPresenter(
-            moderationPresenter = moderationPresenter,
+            roomMembersModerationStateLambda = roomMembersModerationStateLambda,
             navigator = navigator,
             matrixRoom = FakeMatrixRoom(
                 updateMembersResult = { Result.success(Unit) },
@@ -248,7 +238,7 @@ class RoomMemberListPresenterTest {
         }.test {
             skipItems(1)
             awaitItem().eventSink(RoomMemberListEvents.RoomMemberSelected(aVictor()))
-            assertThat(selectRoomMemberCallCounts).isEqualTo(1)
+            eventsRecorder.assertSingle(RoomMembersModerationEvents.SelectRoomMember(aVictor()))
         }
     }
 }
@@ -278,13 +268,13 @@ private fun TestScope.createPresenter(
         updateMembersResult = { Result.success(Unit) }
     ),
     roomMemberListDataSource: RoomMemberListDataSource = createDataSource(coroutineDispatchers = coroutineDispatchers),
-    moderationPresenter: FakeRoomMembersModerationPresenter = FakeRoomMembersModerationPresenter(),
+    roomMembersModerationStateLambda: () -> RoomMembersModerationState = { aRoomMembersModerationState() },
     navigator: RoomMemberListNavigator = object : RoomMemberListNavigator {}
 ) = RoomMemberListPresenter(
     buildMeta = buildMeta,
     room = matrixRoom,
     roomMemberListDataSource = roomMemberListDataSource,
     coroutineDispatchers = coroutineDispatchers,
-    roomMembersModerationPresenter = moderationPresenter,
+    roomMembersModerationPresenter = { roomMembersModerationStateLambda() },
     navigator = navigator
 )

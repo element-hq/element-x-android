@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2024 New Vector Ltd
+ * Copyright 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl
@@ -43,6 +34,8 @@ import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.aChangedIdentitySendFailure
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerItem
 import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMessagesBannerState
@@ -338,6 +331,7 @@ class MessagesViewTest {
                     event = timelineItem,
                     displayEmojiReactions = true,
                     actions = persistentListOf(TimelineItemAction.Edit),
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
                 )
             ),
         )
@@ -408,6 +402,7 @@ class MessagesViewTest {
                 target = ActionListState.Target.Success(
                     event = timelineItem,
                     displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(TimelineItemAction.Edit),
                 ),
             ),
@@ -423,6 +418,32 @@ class MessagesViewTest {
         // Give time for the close animation to complete
         rule.mainClock.advanceTimeBy(milliseconds = 1_000)
         eventsRecorder.assertSingle(CustomReactionEvents.ShowCustomReactionSheet(timelineItem))
+    }
+
+    @Test
+    fun `clicking on verified user send failure from action list emits the expected Event`() {
+        val eventsRecorder = EventsRecorder<TimelineEvents>()
+        val state = aMessagesState()
+        val timelineItem = state.timelineState.timelineItems.first() as TimelineItem.Event
+        val stateWithActionListState = state.copy(
+            actionListState = anActionListState(
+                target = ActionListState.Target.Success(
+                    event = timelineItem,
+                    displayEmojiReactions = true,
+                    verifiedUserSendFailure = aChangedIdentitySendFailure(),
+                    actions = persistentListOf(),
+                ),
+            ),
+            timelineState = aTimelineState(eventSink = eventsRecorder)
+        )
+        rule.setMessagesView(
+            state = stateWithActionListState,
+        )
+        val verifiedUserSendFailure = rule.activity.getString(CommonStrings.screen_timeline_item_menu_send_failure_changed_identity, "Alice")
+        rule.onNodeWithText(verifiedUserSendFailure).performClick()
+        // Give time for the close animation to complete
+        rule.mainClock.advanceTimeBy(milliseconds = 1_000)
+        eventsRecorder.assertSingle(TimelineEvents.ComputeVerifiedUserSendFailure(timelineItem))
     }
 
     @Test

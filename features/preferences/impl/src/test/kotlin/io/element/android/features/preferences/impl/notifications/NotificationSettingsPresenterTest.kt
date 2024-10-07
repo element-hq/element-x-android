@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.preferences.impl.notifications
@@ -21,7 +12,8 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.fullscreenintent.test.FakeFullScreenIntentPermissionsPresenter
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
+import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.test.A_THROWABLE
@@ -272,12 +264,11 @@ class NotificationSettingsPresenterTest {
 
     @Test
     fun `present - RefreshSystemNotificationsEnabled also refreshes fullScreenIntentState`() = runTest {
-        val fullScreenIntentPermissionsPresenter = FakeFullScreenIntentPermissionsPresenter().apply {
-            state = state.copy(permissionGranted = false)
-        }
+        var lambdaResult = aFullScreenIntentPermissionsState(permissionGranted = false)
+        val fullScreenIntentPermissionsStateLambda = { lambdaResult }
         val presenter = createNotificationSettingsPresenter(
             pushService = createFakePushService(),
-            fullScreenIntentPermissionsPresenter = fullScreenIntentPermissionsPresenter,
+            fullScreenIntentPermissionsStateLambda = fullScreenIntentPermissionsStateLambda,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -286,7 +277,7 @@ class NotificationSettingsPresenterTest {
             assertThat(initialState.fullScreenIntentPermissionsState.permissionGranted).isFalse()
 
             // Change the notification settings
-            fullScreenIntentPermissionsPresenter.state = fullScreenIntentPermissionsPresenter.state.copy(permissionGranted = true)
+            lambdaResult = lambdaResult.copy(permissionGranted = true)
             // Check it's not changed unless we refresh
             expectNoEvents()
 
@@ -345,7 +336,7 @@ class NotificationSettingsPresenterTest {
     private fun createNotificationSettingsPresenter(
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
         pushService: PushService = FakePushService(),
-        fullScreenIntentPermissionsPresenter: FakeFullScreenIntentPermissionsPresenter = FakeFullScreenIntentPermissionsPresenter()
+        fullScreenIntentPermissionsStateLambda: () -> FullScreenIntentPermissionsState = { aFullScreenIntentPermissionsState() },
     ): NotificationSettingsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
         return NotificationSettingsPresenter(
@@ -354,7 +345,7 @@ class NotificationSettingsPresenterTest {
             matrixClient = matrixClient,
             pushService = pushService,
             systemNotificationsEnabledProvider = FakeSystemNotificationsEnabledProvider(),
-            fullScreenIntentPermissionsPresenter = fullScreenIntentPermissionsPresenter,
+            fullScreenIntentPermissionsPresenter = { fullScreenIntentPermissionsStateLambda() },
         )
     }
 }

@@ -1,23 +1,14 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl.fixtures
 
-import io.element.android.features.messages.impl.timeline.TimelineItemIndexer
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
+import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFailedToParseMessageFactory
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFailedToParseStateFactory
@@ -48,47 +39,60 @@ import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractorW
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 
+internal fun TestScope.aTimelineItemsFactoryCreator(): TimelineItemsFactory.Creator {
+    return object : TimelineItemsFactory.Creator {
+        override fun create(config: TimelineItemsFactoryConfig): TimelineItemsFactory {
+            return aTimelineItemsFactory(config)
+        }
+    }
+}
+
 internal fun TestScope.aTimelineItemsFactory(
-    timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer()
+    config: TimelineItemsFactoryConfig,
 ): TimelineItemsFactory {
     val timelineEventFormatter = aTimelineEventFormatter()
     val matrixClient = FakeMatrixClient()
     return TimelineItemsFactory(
         dispatchers = testCoroutineDispatchers(),
-        eventItemFactory = TimelineItemEventFactory(
-            contentFactory = TimelineItemContentFactory(
-                messageFactory = TimelineItemContentMessageFactory(
-                    fileSizeFormatter = FakeFileSizeFormatter(),
-                    fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
-                    featureFlagService = FakeFeatureFlagService(),
-                    htmlConverterProvider = FakeHtmlConverterProvider(),
+        eventItemFactoryCreator = object : TimelineItemEventFactory.Creator {
+            override fun create(config: TimelineItemsFactoryConfig): TimelineItemEventFactory {
+                return TimelineItemEventFactory(
+                    contentFactory = TimelineItemContentFactory(
+                        messageFactory = TimelineItemContentMessageFactory(
+                            fileSizeFormatter = FakeFileSizeFormatter(),
+                            fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
+                            featureFlagService = FakeFeatureFlagService(),
+                            htmlConverterProvider = FakeHtmlConverterProvider(),
+                            permalinkParser = FakePermalinkParser(),
+                            textPillificationHelper = FakeTextPillificationHelper(),
+                        ),
+                        redactedMessageFactory = TimelineItemContentRedactedFactory(),
+                        stickerFactory = TimelineItemContentStickerFactory(
+                            fileSizeFormatter = FakeFileSizeFormatter(),
+                            fileExtensionExtractor = FileExtensionExtractorWithoutValidation()
+                        ),
+                        pollFactory = TimelineItemContentPollFactory(FakeFeatureFlagService(), FakePollContentStateFactory()),
+                        utdFactory = TimelineItemContentUTDFactory(),
+                        roomMembershipFactory = TimelineItemContentRoomMembershipFactory(timelineEventFormatter),
+                        profileChangeFactory = TimelineItemContentProfileChangeFactory(timelineEventFormatter),
+                        stateFactory = TimelineItemContentStateFactory(timelineEventFormatter),
+                        failedToParseMessageFactory = TimelineItemContentFailedToParseMessageFactory(),
+                        failedToParseStateFactory = TimelineItemContentFailedToParseStateFactory(),
+                    ),
+                    matrixClient = matrixClient,
+                    lastMessageTimestampFormatter = FakeLastMessageTimestampFormatter(),
                     permalinkParser = FakePermalinkParser(),
-                    textPillificationHelper = FakeTextPillificationHelper(),
-                ),
-                redactedMessageFactory = TimelineItemContentRedactedFactory(),
-                stickerFactory = TimelineItemContentStickerFactory(
-                    fileSizeFormatter = FakeFileSizeFormatter(),
-                    fileExtensionExtractor = FileExtensionExtractorWithoutValidation()
-                ),
-                pollFactory = TimelineItemContentPollFactory(FakeFeatureFlagService(), FakePollContentStateFactory()),
-                utdFactory = TimelineItemContentUTDFactory(),
-                roomMembershipFactory = TimelineItemContentRoomMembershipFactory(timelineEventFormatter),
-                profileChangeFactory = TimelineItemContentProfileChangeFactory(timelineEventFormatter),
-                stateFactory = TimelineItemContentStateFactory(timelineEventFormatter),
-                failedToParseMessageFactory = TimelineItemContentFailedToParseMessageFactory(),
-                failedToParseStateFactory = TimelineItemContentFailedToParseStateFactory(),
-            ),
-            matrixClient = matrixClient,
-            lastMessageTimestampFormatter = FakeLastMessageTimestampFormatter(),
-            permalinkParser = FakePermalinkParser(),
-        ),
+                    config = config
+                )
+            }
+        },
         virtualItemFactory = TimelineItemVirtualFactory(
             daySeparatorFactory = TimelineItemDaySeparatorFactory(
                 FakeDaySeparatorFormatter()
             ),
         ),
         timelineItemGrouper = TimelineItemGrouper(),
-        timelineItemIndexer = timelineItemIndexer,
+        config = config
     )
 }
 

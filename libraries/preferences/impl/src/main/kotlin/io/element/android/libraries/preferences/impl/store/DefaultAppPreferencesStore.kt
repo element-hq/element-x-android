@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.libraries.preferences.impl.store
@@ -39,6 +30,7 @@ private val developerModeKey = booleanPreferencesKey("developerMode")
 private val customElementCallBaseUrlKey = stringPreferencesKey("elementCallBaseUrl")
 private val themeKey = stringPreferencesKey("theme")
 private val simplifiedSlidingSyncKey = booleanPreferencesKey("useSimplifiedSlidingSync")
+private val hideImagesAndVideosKey = booleanPreferencesKey("hideImagesAndVideos")
 
 @ContributesBinding(AppScope::class)
 class DefaultAppPreferencesStore @Inject constructor(
@@ -96,7 +88,19 @@ class DefaultAppPreferencesStore @Inject constructor(
 
     override fun isSimplifiedSlidingSyncEnabledFlow(): Flow<Boolean> {
         return store.data.map { prefs ->
-            prefs[simplifiedSlidingSyncKey] ?: false
+            prefs[simplifiedSlidingSyncKey] ?: true
+        }
+    }
+
+    override suspend fun setHideImagesAndVideos(value: Boolean) {
+        store.edit { prefs ->
+            prefs[hideImagesAndVideosKey] = value
+        }
+    }
+
+    override fun doesHideImagesAndVideosFlow(): Flow<Boolean> {
+        return store.data.map { prefs ->
+            prefs[hideImagesAndVideosKey] ?: false
         }
     }
 

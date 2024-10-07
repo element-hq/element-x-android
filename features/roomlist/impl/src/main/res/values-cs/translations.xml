@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"Odhlásit se a upgradovat"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Váš server nyní podporuje nový, rychlejší protokol. Chcete-li upgradovat, odhlaste se a znovu se přihlaste. Pokud to uděláte nyní, pomůže vám vyhnout se nucenému odhlášení, když bude starý protokol později odstraněn."</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Váš domovský server již nepodporuje starý protokol. Chcete-li pokračovat v používání aplikace, odhlaste se a znovu se přihlaste."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Upgrade k dispozici"</string>
   <string name="banner_set_up_recovery_content">"Vygenerujte nový klíč pro obnovení, který lze použít k obnovení historie šifrovaných zpráv v případě, že ztratíte přístup ke svým zařízením."</string>
   <string name="banner_set_up_recovery_title">"Nastavení obnovy"</string>
   <string name="confirm_recovery_key_banner_message">"Vaše záloha chatu není aktuálně synchronizována. Abyste si zachovali přístup k záloze chatu, musíte potvrdit klíč pro obnovení."</string>

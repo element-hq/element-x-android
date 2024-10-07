@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2024 New Vector Ltd
+ * Copyright 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl.timeline.components
@@ -88,7 +79,7 @@ internal fun MessageShield.toText(): String {
             is MessageShield.UnsignedDevice -> CommonStrings.event_shield_reason_unsigned_device
             is MessageShield.UnverifiedIdentity -> CommonStrings.event_shield_reason_unverified_identity
             is MessageShield.SentInClear -> CommonStrings.event_shield_reason_sent_in_clear
-            is MessageShield.PreviouslyVerified -> CommonStrings.event_shield_reason_previously_verified
+            is MessageShield.VerificationViolation -> CommonStrings.event_shield_reason_previously_verified
         }
     )
 }
@@ -100,7 +91,7 @@ internal fun MessageShield.toIcon(): ImageVector {
         is MessageShield.UnknownDevice,
         is MessageShield.UnsignedDevice,
         is MessageShield.UnverifiedIdentity,
-        is MessageShield.PreviouslyVerified -> CompoundIcons.HelpSolid()
+        is MessageShield.VerificationViolation -> CompoundIcons.HelpSolid()
         is MessageShield.SentInClear -> CompoundIcons.LockOff()
     }
 }
@@ -129,7 +120,7 @@ internal fun MessageShieldViewPreview() {
                 shield = MessageShield.SentInClear(false)
             )
             MessageShieldView(
-                shield = MessageShield.PreviouslyVerified(false)
+                shield = MessageShield.VerificationViolation(false)
             )
         }
     }

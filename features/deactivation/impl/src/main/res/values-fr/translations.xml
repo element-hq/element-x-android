@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Veuillez confirmer que vous souhaitez désactiver votre compte. Cette action ne peut pas être annulée."</string>
+  <string name="screen_deactivate_account_delete_all_messages">"Supprimer tous mes messages"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"Attention : les futurs utilisateurs pourraient voir des conversations incomplètes."</string>
+  <string name="screen_deactivate_account_description">"La désactivation de votre compte est %1$s, cela va:"</string>
+  <string name="screen_deactivate_account_description_bold_part">"irréversible"</string>
+  <string name="screen_deactivate_account_list_item_1">"%1$s votre compte (vous ne pourrez plus vous reconnecter et votre identifiant ne pourra pas être réutilisé)."</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"Désactiver définitivement"</string>
+  <string name="screen_deactivate_account_list_item_2">"Vous retirer de tous les salons et toutes les discussions."</string>
+  <string name="screen_deactivate_account_list_item_3">"Supprimer les informations de votre compte du serveur d’identité."</string>
+  <string name="screen_deactivate_account_list_item_4">"Rendre vos messages invisibles aux futurs membres des salons si vous choisissez de les supprimer. Vos messages seront toujours visibles pour les utilisateurs qui les ont déjà récupérés."</string>
+  <string name="screen_deactivate_account_title">"Désactiver votre compte"</string>
+</resources>

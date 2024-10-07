@@ -36,17 +36,21 @@
   <string name="action_back">"Indietro"</string>
   <string name="action_call">"Chiama"</string>
   <string name="action_cancel">"Annulla"</string>
+  <string name="action_cancel_for_now">"Annulla per ora"</string>
   <string name="action_choose_photo">"Scegli foto"</string>
   <string name="action_clear">"Cancella"</string>
   <string name="action_close">"Chiudi"</string>
   <string name="action_complete_verification">"Completa verifica"</string>
   <string name="action_confirm">"Conferma"</string>
+  <string name="action_confirm_password">"Conferma password"</string>
   <string name="action_continue">"Continua"</string>
   <string name="action_copy">"Copia"</string>
   <string name="action_copy_link">"Copia collegamento"</string>
   <string name="action_copy_link_to_message">"Copia collegamento al messaggio"</string>
   <string name="action_create">"Crea"</string>
   <string name="action_create_a_room">"Crea una stanza"</string>
+  <string name="action_deactivate">"Disattiva"</string>
+  <string name="action_deactivate_account">"Disattiva account"</string>
   <string name="action_decline">"Rifiuta"</string>
   <string name="action_delete_poll">"Elimina sondaggio"</string>
   <string name="action_disable">"Disabilita"</string>
@@ -112,6 +116,7 @@
   <string name="action_tap_for_options">"Tocca per le opzioni"</string>
   <string name="action_try_again">"Riprova"</string>
   <string name="action_unpin">"Rimuovi dai fissati"</string>
+  <string name="action_view_in_timeline">"Visualizza nella conversazione"</string>
   <string name="action_view_source">"Vedi codice sorgente"</string>
   <string name="action_yes">"Sì"</string>
   <string name="common_about">"Informazioni"</string>
@@ -125,6 +130,7 @@
   <string name="common_call_invite">"Chiamata in corso (non supportata)"</string>
   <string name="common_call_started">"Chiamata avviata"</string>
   <string name="common_chat_backup">"Backup della chat"</string>
+  <string name="common_copied_to_clipboard">"Copiato negli appunti"</string>
   <string name="common_copyright">"Copyright"</string>
   <string name="common_creating_room">"Creazione stanza…"</string>
   <string name="common_current_user_left_room">"Hai lasciato la stanza"</string>
@@ -177,6 +183,7 @@ Motivo:. %1$s"</string>
   <string name="common_people">"Persone"</string>
   <string name="common_permalink">"Collegamento permanente"</string>
   <string name="common_permission">"Autorizzazione"</string>
+  <string name="common_pinned">"Fissato"</string>
   <string name="common_please_wait">"Attendere prego…"</string>
   <string name="common_poll_end_confirmation">"Vuoi davvero terminare questo sondaggio?"</string>
   <string name="common_poll_summary">"Sondaggio: %1$s"</string>
@@ -242,12 +249,15 @@ Motivo:. %1$s"</string>
   <string name="common_voice_message">"Messaggio vocale"</string>
   <string name="common_waiting">"In attesa…"</string>
   <string name="common_waiting_for_decryption_key">"In attesa del messaggio"</string>
+  <string name="common_you">"Tu"</string>
+  <string name="crypto_identity_change_pin_violation">"L\'identità di %1$s sembra essere cambiata. %2$s"</string>
   <string name="dialog_title_confirmation">"Conferma"</string>
   <string name="dialog_title_error">"Errore"</string>
   <string name="dialog_title_success">"Operazione riuscita"</string>
   <string name="dialog_title_warning">"Attenzione"</string>
   <string name="dialog_unsaved_changes_description_android">"Le modifiche non sono state salvate. Vuoi davvero tornare indietro?"</string>
   <string name="dialog_unsaved_changes_title">"Salvare le modifiche?"</string>
+  <string name="error_account_creation_not_possible">"Il tuo homeserver deve essere aggiornato per supportare il Matrix Authentication Service e la creazione di account."</string>
   <string name="error_failed_creating_the_permalink">"Impossibile creare il collegamento permanente"</string>
   <string name="error_failed_loading_map">"%1$s non è riuscito a caricare la mappa. Riprova più tardi."</string>
   <string name="error_failed_loading_messages">"Caricamento dei messaggi non riuscito"</string>
@@ -260,6 +270,7 @@ Motivo:. %1$s"</string>
   <string name="error_some_messages_have_not_been_sent">"Alcuni messaggi non sono stati inviati"</string>
   <string name="error_unknown">"Siamo spiacenti, si è verificato un errore"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"L\'autenticità di questo messaggio cifrato non può essere garantita su questo dispositivo."</string>
+  <string name="event_shield_reason_previously_verified">"Cifrato da un utente precedentemente verificato."</string>
   <string name="event_shield_reason_sent_in_clear">"Non cifrato."</string>
   <string name="event_shield_reason_unknown_device">"Cifrato da un dispositivo sconosciuto o eliminato."</string>
   <string name="event_shield_reason_unsigned_device">"Cifrato da un dispositivo non verificato dal proprietario."</string>
@@ -278,6 +289,16 @@ Motivo:. %1$s"</string>
     <item quantity="other">"%1$d Messaggi fissati"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Messaggi fissati"</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"Stai per accedere al tuo account di %1$s per ripristinare la tua identità. Dopodiché verrai riportato all\'app."</string>
+  <string name="screen_reset_identity_confirmation_title">"Non riesci a confermare? Vai al tuo account per ripristinare la tua identità."</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Ritira la verifica e invia"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Puoi ritirare la tua verifica e inviare comunque questo messaggio, oppure annullarlo per ora e riprovare più tardi dopo aver riverificato %1$s."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Il tuo messaggio non è stato inviato perché l\'identità verificata di %1$s è cambiata."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Invia comunque il messaggio"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s sta usando uno o più dispositivi non verificati. Puoi inviare il messaggio in ogni caso, oppure annullarlo e riprovare più tardi quando %2$s avrà verificato tutti i suoi dispositivi."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Il tuo messaggio non è stato inviato perché %1$s non ha verificato tutti i dispositivi."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Uno o più dispositivi non sono verificati. Puoi inviare il messaggio comunque, oppure annullarlo e riprovare più tardi dopo aver verificato tutti i tuoi dispositivi."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"Il tuo messaggio non è stato inviato perché non hai verificato uno o più dispositivi."</string>
   <string name="screen_room_details_pinned_events_row_title">"Messaggi fissati"</string>
   <string name="screen_room_error_failed_processing_media">"Elaborazione del file multimediale da caricare fallita, riprova."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Impossibile recuperare i dettagli dell\'utente"</string>
@@ -299,6 +320,9 @@ Motivo:. %1$s"</string>
   <string name="screen_share_open_google_maps">"Apri in Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Apri in OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Condividi questa posizione"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Messaggio non inviato perché l\'identità verificata di %1$s è cambiata."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Messaggio non inviato perché %1$s non ha verificato tutti i dispositivi."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Messaggio non inviato perché non hai verificato uno o più dispositivi."</string>
   <string name="screen_view_location_title">"Posizione"</string>
   <string name="settings_version_number">"Versione: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"it"</string>

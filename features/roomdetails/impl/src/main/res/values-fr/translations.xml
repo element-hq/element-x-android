@@ -31,7 +31,7 @@
   <string name="screen_room_change_role_section_moderators">"Modérateurs"</string>
   <string name="screen_room_change_role_section_users">"Membres"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"Vous avez des modifications non-enregistrées."</string>
-  <string name="screen_room_change_role_unsaved_changes_title">"Enregistrer les modifications?"</string>
+  <string name="screen_room_change_role_unsaved_changes_title">"Enregistrer les changements?"</string>
   <string name="screen_room_details_add_topic_title">"Ajouter un sujet"</string>
   <string name="screen_room_details_already_a_member">"Déjà membre"</string>
   <string name="screen_room_details_already_invited">"Déjà invité(e)"</string>
@@ -70,7 +70,7 @@
   </plurals>
   <string name="screen_room_member_list_manage_member_ban">"Retirer et bannir ce membre"</string>
   <string name="screen_room_member_list_manage_member_remove">"Retirer le membre du salon"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Retirer et bannir le membre"</string>
+  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Retirer et bannir ce membre"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Retirer le membre uniquement"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_title">"Retirer le membre et interdire l’adhésion à l’avenir ?"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Débannir"</string>

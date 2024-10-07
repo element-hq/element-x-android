@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2024 New Vector Ltd
+ * Copyright 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl.pinned.banner
@@ -29,10 +20,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,6 +39,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -63,6 +52,8 @@ import io.element.android.libraries.designsystem.theme.pinnedMessageBannerIndica
 import io.element.android.libraries.designsystem.utils.annotatedTextWithBold
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.services.analytics.compose.LocalAnalyticsService
+import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 
 @Composable
 fun PinnedMessagesBannerView(
@@ -91,6 +82,7 @@ private fun PinnedMessagesBannerRow(
     onViewAllClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val analyticsService = LocalAnalyticsService.current
     val borderColor = ElementTheme.colors.pinnedMessageBannerBorder
     Row(
         modifier = modifier
@@ -100,6 +92,7 @@ private fun PinnedMessagesBannerRow(
             .heightIn(min = 64.dp)
             .clickable {
                 if (state is PinnedMessagesBannerState.Loaded) {
+                    analyticsService.captureInteraction(Interaction.Name.PinnedMessageBannerClick)
                     onClick(state.currentPinnedMessage.eventId)
                     state.eventSink(PinnedMessagesBannerEvents.MoveToNextPinned)
                 }
@@ -111,7 +104,6 @@ private fun PinnedMessagesBannerRow(
         PinIndicators(
             pinIndex = state.currentPinnedMessageIndex(),
             pinsCount = state.pinnedMessagesCount(),
-            modifier = Modifier.heightIn(max = 40.dp)
         )
         Icon(
             imageVector = CompoundIcons.PinSolid(),
@@ -125,7 +117,13 @@ private fun PinnedMessagesBannerRow(
             message = state.formattedMessage(),
             modifier = Modifier.weight(1f)
         )
-        ViewAllButton(state, onViewAllClick)
+        ViewAllButton(
+            state = state,
+            onViewAllClick = {
+                onViewAllClick()
+                analyticsService.captureInteraction(Interaction.Name.PinnedMessageBannerViewAllButton)
+            },
+        )
     }
 }
 
@@ -183,32 +181,41 @@ private fun PinIndicators(
             else -> 11
         }
     }
-    val lazyListState = rememberLazyListState()
-    LaunchedEffect(pinIndex) {
-        val viewportSize = lazyListState.layoutInfo.viewportSize
-        lazyListState.animateScrollToItem(
-            pinIndex,
-            indicatorHeight / 2 - viewportSize.height / 2
-        )
+    val activeIndex = remember(pinIndex) {
+        pinIndex % 3
     }
-    LazyColumn(
+    val shownIndicators = remember(pinsCount, pinIndex) {
+        if (pinsCount <= 3) {
+            pinsCount
+        } else {
+            val isLastPage = pinIndex >= pinsCount - pinsCount % 3
+            if (isLastPage) {
+                pinsCount % 3
+            } else {
+                3
+            }
+        }
+    }
+    val indicatorsCount = pinsCount.coerceAtMost(3)
+
+    Column(
         modifier = modifier,
-        state = lazyListState,
-        verticalArrangement = spacedBy(2.dp),
-        userScrollEnabled = false,
+        verticalArrangement = spacedBy(2.dp)
     ) {
-        items(pinsCount) { index ->
+        for (index in 0 until indicatorsCount) {
             Box(
                 modifier = Modifier
                     .width(2.dp)
                     .height(indicatorHeight.dp)
                     .background(
-                        color = if (index == pinIndex) {
+                        color = if (index == activeIndex) {
                             ElementTheme.colors.iconAccentPrimary
-                        } else {
+                        } else if (index < shownIndicators) {
                             ElementTheme.colors.pinnedMessageBannerIndicator
+                        } else {
+                            Color.Transparent
                         }
-                    )
+                    ),
             )
         }
     }

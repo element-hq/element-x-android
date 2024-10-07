@@ -34,6 +34,7 @@
   <string name="action_accept">"Accepteren"</string>
   <string name="action_add_to_timeline">"Toevoegen aan tijdlijn"</string>
   <string name="action_back">"Terug"</string>
+  <string name="action_call">"Bellen"</string>
   <string name="action_cancel">"Annuleren"</string>
   <string name="action_choose_photo">"Kies foto"</string>
   <string name="action_clear">"Wissen"</string>
@@ -49,6 +50,7 @@
   <string name="action_decline">"Weigeren"</string>
   <string name="action_delete_poll">"Peiling verwijderen"</string>
   <string name="action_disable">"Uitschakelen"</string>
+  <string name="action_discard">"Verwerpen"</string>
   <string name="action_done">"Gereed"</string>
   <string name="action_edit">"Bewerken"</string>
   <string name="action_edit_poll">"Peiling wijzigen"</string>
@@ -57,6 +59,7 @@
   <string name="action_enter_pin">"Voer pincode in"</string>
   <string name="action_forgot_password">"Wachtwoord vergeten?"</string>
   <string name="action_forward">"Doorsturen"</string>
+  <string name="action_go_back">"Terug"</string>
   <string name="action_invite">"Uitnodigen"</string>
   <string name="action_invite_friends">"Mensen uitnodigen"</string>
   <string name="action_invite_friends_to_app">"Nodig mensen uit voor %1$s"</string>
@@ -70,6 +73,7 @@
   <string name="action_load_more">"Meer laden"</string>
   <string name="action_manage_account">"Account beheren"</string>
   <string name="action_manage_devices">"Apparaten beheren"</string>
+  <string name="action_message">"Bericht"</string>
   <string name="action_next">"Volgende"</string>
   <string name="action_no">"Nee"</string>
   <string name="action_not_now">"Niet nu"</string>
@@ -84,6 +88,7 @@
   <string name="action_reply_in_thread">"Antwoord in subchat"</string>
   <string name="action_report_bug">"Probleem melden"</string>
   <string name="action_report_content">"Inhoud melden"</string>
+  <string name="action_reset">"Opnieuw instellen"</string>
   <string name="action_retry">"Opnieuw proberen"</string>
   <string name="action_retry_decryption">"Decryptie opnieuw proberen"</string>
   <string name="action_save">"Opslaan"</string>
@@ -108,10 +113,13 @@
   <string name="common_about">"Over"</string>
   <string name="common_acceptable_use_policy">"Beleid inzake redelijk gebruik"</string>
   <string name="common_advanced_settings">"Geavanceerde instellingen"</string>
+  <string name="common_analytics">"Gebruiksgegevens"</string>
   <string name="common_appearance">"Weergave"</string>
   <string name="common_audio">"Geluid"</string>
   <string name="common_blocked_users">"Geblokkeerde gebruikers"</string>
   <string name="common_bubbles">"Bubbels"</string>
+  <string name="common_call_invite">"Gesprek bezig (niet ondersteund)"</string>
+  <string name="common_call_started">"Oproep gestart"</string>
   <string name="common_chat_backup">"Chat back-up"</string>
   <string name="common_copyright">"Copyright"</string>
   <string name="common_creating_room">"Kamer maken…"</string>
@@ -153,12 +161,14 @@
   <string name="common_modern">"Modern"</string>
   <string name="common_mute">"Dempen"</string>
   <string name="common_no_results">"Geen resultaten"</string>
+  <string name="common_no_room_name">"Geen kamernaam"</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_or">"of"</string>
   <string name="common_password">"Wachtwoord"</string>
   <string name="common_people">"Personen"</string>
   <string name="common_permalink">"Permalink"</string>
   <string name="common_permission">"Toestemming"</string>
+  <string name="common_please_wait">"Even geduld…"</string>
   <string name="common_poll_end_confirmation">"Weet je zeker dat je deze peiling wilt beëindigen?"</string>
   <string name="common_poll_summary">"Peiling: %1$s"</string>
   <string name="common_poll_total_votes">"Totaal aantal stemmen: %1$s"</string>
@@ -180,6 +190,8 @@
   <string name="common_room">"Kamer"</string>
   <string name="common_room_name">"Naam van de kamer"</string>
   <string name="common_room_name_placeholder">"bijv. de naam van je project"</string>
+  <string name="common_saved_changes">"Wijzigingen opgeslagen"</string>
+  <string name="common_saving">"Opslaan"</string>
   <string name="common_screen_lock">"Schermvergrendeling"</string>
   <string name="common_search_for_someone">"Iemand zoeken"</string>
   <string name="common_search_results">"Zoekresultaten"</string>
@@ -193,6 +205,7 @@
   <string name="common_settings">"Instellingen"</string>
   <string name="common_shared_location">"Gedeelde locatie"</string>
   <string name="common_signing_out">"Uitloggen"</string>
+  <string name="common_something_went_wrong">"Er is iets misgegaan"</string>
   <string name="common_starting_chat">"Chat starten…"</string>
   <string name="common_sticker">"Sticker"</string>
   <string name="common_success">"Geslaagd"</string>
@@ -205,6 +218,7 @@
   <string name="common_topic">"Onderwerp"</string>
   <string name="common_topic_placeholder">"Waar gaat deze kamer over?"</string>
   <string name="common_unable_to_decrypt">"Kan niet ontsleutelen"</string>
+  <string name="common_unable_to_decrypt_no_access">"Je hebt geen toegang tot dit bericht"</string>
   <string name="common_unable_to_invite_message">"Uitnodigingen konden niet naar een of meerdere gebruikers worden verzonden."</string>
   <string name="common_unable_to_invite_title">"Kan uitnodiging(en) niet verzenden"</string>
   <string name="common_unlock">"Ontgrendelen"</string>
@@ -222,11 +236,14 @@
   <string name="dialog_title_error">"Fout"</string>
   <string name="dialog_title_success">"Geslaagd"</string>
   <string name="dialog_title_warning">"Waarschuwing"</string>
+  <string name="dialog_unsaved_changes_description_android">"Je wijzigingen zijn niet opgeslagen. Weet je zeker dat je terug wilt gaan?"</string>
+  <string name="dialog_unsaved_changes_title">"Wijzigingen opslaan?"</string>
   <string name="error_failed_creating_the_permalink">"Het aanmaken van de permanente link is mislukt"</string>
   <string name="error_failed_loading_map">"%1$s kon de kaart niet laden. Probeer het later opnieuw."</string>
   <string name="error_failed_loading_messages">"Het laden van berichten is mislukt"</string>
   <string name="error_failed_locating_user">"%1$s had geen toegang tot je locatie. Probeer het later opnieuw."</string>
   <string name="error_failed_uploading_voice_message">"Het uploaden van je spraakbericht is mislukt."</string>
+  <string name="error_message_not_found">"Bericht niet gevonden"</string>
   <string name="error_missing_location_auth_android">"%1$s heeft geen toegang tot je locatie. Je kunt dit inschakelen bij Instellingen."</string>
   <string name="error_missing_location_rationale_android">"%1$s heeft geen toegang tot je locatie. Schakel toegang hieronder in."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s heeft geen toegang tot je microfoon. Schakel toegang in om een spraakbericht op te nemen."</string>
@@ -244,9 +261,11 @@
   <string name="screen_room_member_details_block_alert_action">"Blokkeren"</string>
   <string name="screen_room_member_details_block_alert_description">"Geblokkeerde gebruikers kunnen je geen berichten sturen en al hun berichten worden verborgen. Je kunt ze op elk moment deblokkeren."</string>
   <string name="screen_room_member_details_block_user">"Gebruiker blokkeren"</string>
+  <string name="screen_room_member_details_title">"Profiel"</string>
   <string name="screen_room_member_details_unblock_alert_action">"Deblokkeren"</string>
   <string name="screen_room_member_details_unblock_alert_description">"Je zult alle berichten van hen weer kunnen zien."</string>
   <string name="screen_room_member_details_unblock_user">"Gebruiker deblokkeren"</string>
+  <string name="screen_room_title">"Chat"</string>
   <string name="screen_share_location_title">"Locatie delen"</string>
   <string name="screen_share_my_location_action">"Deel mijn locatie"</string>
   <string name="screen_share_open_apple_maps">"Openen in Apple Maps"</string>

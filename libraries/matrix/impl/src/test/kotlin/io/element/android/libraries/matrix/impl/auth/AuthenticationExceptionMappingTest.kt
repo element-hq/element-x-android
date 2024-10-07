@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.impl.auth
@@ -45,11 +36,22 @@ class AuthenticationExceptionMappingTest {
         assertThat(ClientBuildException.InvalidServerName("Invalid server name").mapAuthenticationException())
             .isException<AuthenticationException.InvalidServerName>("Invalid server name")
 
-        assertThat(ClientBuildException.Sdk("SDK issue").mapAuthenticationException())
-            .isException<AuthenticationException.Generic>("SDK issue")
-
         assertThat(ClientBuildException.SlidingSyncVersion("Sliding sync not available").mapAuthenticationException())
             .isException<AuthenticationException.SlidingSyncVersion>("Sliding sync not available")
+    }
+
+    @Test
+    fun `mapping other exceptions map to the Generic Kotlin`() {
+        assertThat(ClientBuildException.Sdk("SDK issue").mapAuthenticationException())
+            .isException<AuthenticationException.Generic>("SDK issue")
+        assertThat(ClientBuildException.ServerUnreachable("Server unreachable").mapAuthenticationException())
+            .isException<AuthenticationException.Generic>("Server unreachable")
+        assertThat(ClientBuildException.SlidingSync("Sliding Sync").mapAuthenticationException())
+            .isException<AuthenticationException.Generic>("Sliding Sync")
+        assertThat(ClientBuildException.WellKnownDeserializationException("WellKnown Deserialization").mapAuthenticationException())
+            .isException<AuthenticationException.Generic>("WellKnown Deserialization")
+        assertThat(ClientBuildException.WellKnownLookupFailed("WellKnown Lookup Failed").mapAuthenticationException())
+            .isException<AuthenticationException.Generic>("WellKnown Lookup Failed")
     }
 
     private inline fun <reified T> ThrowableSubject.isException(message: String) {

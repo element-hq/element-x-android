@@ -70,7 +70,7 @@
   </plurals>
   <string name="screen_room_member_list_manage_member_ban">"Remover e banir participante"</string>
   <string name="screen_room_member_list_manage_member_remove">"Remover da sala"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Remover e banir"</string>
+  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Remover e banir participante"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Remover apenas"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_title">"Remover participante e proibir de se juntar no futuro?"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Anular banimento"</string>

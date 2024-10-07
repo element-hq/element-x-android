@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.services.appnavstate.impl
@@ -32,9 +23,9 @@ import io.element.android.services.appnavstate.test.A_SESSION_OWNER
 import io.element.android.services.appnavstate.test.A_SPACE_OWNER
 import io.element.android.services.appnavstate.test.A_THREAD_OWNER
 import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
-import io.element.android.tests.testutils.runCancellableScopeTest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class DefaultNavigationStateServiceTest {
@@ -60,8 +51,8 @@ class DefaultNavigationStateServiceTest {
     )
 
     @Test
-    fun testNavigation() = runCancellableScopeTest { scope ->
-        val service = createStateService(scope)
+    fun testNavigation() = runTest {
+        val service = createStateService(backgroundScope)
         assertThat(service.appNavigationState.first().navigationState).isEqualTo(navigationStateRoot)
         service.onNavigateToSession(A_SESSION_OWNER, A_SESSION_ID)
         assertThat(service.appNavigationState.first().navigationState).isEqualTo(navigationStateSession)
@@ -83,15 +74,15 @@ class DefaultNavigationStateServiceTest {
     }
 
     @Test
-    fun testFailure() = runCancellableScopeTest { scope ->
-        val service = createStateService(scope)
+    fun testFailure() = runTest {
+        val service = createStateService(backgroundScope)
         service.onNavigateToSpace(A_SPACE_OWNER, A_SPACE_ID)
         assertThat(service.appNavigationState.value.navigationState).isEqualTo(NavigationState.Root)
     }
 
     @Test
-    fun testOnNavigateToThread() = runCancellableScopeTest { scope ->
-        val service = createStateService(scope)
+    fun testOnNavigateToThread() = runTest {
+        val service = createStateService(backgroundScope)
         // From root (no effect)
         service.onNavigateToThread(A_THREAD_OWNER, A_THREAD_ID)
         assertThat(service.appNavigationState.first().navigationState).isEqualTo(navigationStateRoot)
@@ -119,8 +110,8 @@ class DefaultNavigationStateServiceTest {
     }
 
     @Test
-    fun testOnNavigateToRoom() = runCancellableScopeTest { scope ->
-        val service = createStateService(scope)
+    fun testOnNavigateToRoom() = runTest {
+        val service = createStateService(backgroundScope)
         // From root (no effect)
         service.onNavigateToRoom(A_ROOM_OWNER, A_ROOM_ID)
         assertThat(service.appNavigationState.first().navigationState).isEqualTo(navigationStateRoot)
@@ -148,8 +139,8 @@ class DefaultNavigationStateServiceTest {
     }
 
     @Test
-    fun testOnNavigateToSpace() = runCancellableScopeTest { scope ->
-        val service = createStateService(scope)
+    fun testOnNavigateToSpace() = runTest {
+        val service = createStateService(backgroundScope)
         // From root (no effect)
         service.onNavigateToSpace(A_SPACE_OWNER, A_SPACE_ID)
         assertThat(service.appNavigationState.first().navigationState).isEqualTo(navigationStateRoot)
@@ -177,8 +168,8 @@ class DefaultNavigationStateServiceTest {
     }
 
     @Test
-    fun testOnNavigateToSession() = runCancellableScopeTest { scope ->
-        val service = createStateService(scope)
+    fun testOnNavigateToSession() = runTest {
+        val service = createStateService(backgroundScope)
         // From root
         service.onNavigateToSession(A_SESSION_OWNER, A_SESSION_ID)
         assertThat(service.appNavigationState.first().navigationState).isEqualTo(navigationStateSession)
@@ -206,8 +197,8 @@ class DefaultNavigationStateServiceTest {
     }
 
     @Test
-    fun testOnLeavingThread() = runCancellableScopeTest { scope ->
-        val service = createStateService(scope)
+    fun testOnLeavingThread() = runTest {
+        val service = createStateService(backgroundScope)
         // From root (no effect)
         service.onLeavingThread(A_THREAD_OWNER)
         assertThat(service.appNavigationState.first().navigationState).isEqualTo(navigationStateRoot)
@@ -234,8 +225,8 @@ class DefaultNavigationStateServiceTest {
     }
 
     @Test
-    fun testOnLeavingRoom() = runCancellableScopeTest { scope ->
-        val service = createStateService(scope)
+    fun testOnLeavingRoom() = runTest {
+        val service = createStateService(backgroundScope)
         // From root (no effect)
         service.onLeavingRoom(A_ROOM_OWNER)
         assertThat(service.appNavigationState.first().navigationState).isEqualTo(navigationStateRoot)
@@ -262,8 +253,8 @@ class DefaultNavigationStateServiceTest {
     }
 
     @Test
-    fun testOnLeavingSpace() = runCancellableScopeTest { scope ->
-        val service = createStateService(scope)
+    fun testOnLeavingSpace() = runTest {
+        val service = createStateService(backgroundScope)
         // From root (no effect)
         service.onLeavingSpace(A_SPACE_OWNER)
         assertThat(service.appNavigationState.first().navigationState).isEqualTo(navigationStateRoot)
@@ -290,8 +281,8 @@ class DefaultNavigationStateServiceTest {
     }
 
     @Test
-    fun testOnLeavingSession() = runCancellableScopeTest { scope ->
-        val service = createStateService(scope)
+    fun testOnLeavingSession() = runTest {
+        val service = createStateService(backgroundScope)
         // From root
         service.onLeavingSession(A_SESSION_OWNER)
         assertThat(service.appNavigationState.first().navigationState).isEqualTo(navigationStateRoot)

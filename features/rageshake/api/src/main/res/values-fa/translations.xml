@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rageshake_detection_dialog_content">"به نظر می‌رسد دارید گوشی خود را به دلیل کار نکردن تکان می‌دهید! آیا می‌خواهید یک اشکال در برنامه گزارش نمایید؟"</string>
+  <string name="settings_rageshake">"تکان دادن"</string>
+  <string name="settings_rageshake_detection_threshold">"آستانهٔ تشخیص"</string>
+</resources>
