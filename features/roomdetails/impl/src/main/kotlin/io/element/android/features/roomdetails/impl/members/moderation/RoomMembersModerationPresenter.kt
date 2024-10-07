@@ -21,6 +21,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -38,6 +39,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RoomMembersModerationPresenter @Inject constructor(
+    private val buildMeta: BuildMeta,
     private val room: MatrixRoom,
     private val dispatchers: CoroutineDispatchers,
     private val analyticsService: AnalyticsService,
@@ -125,7 +127,7 @@ class RoomMembersModerationPresenter @Inject constructor(
         }
 
         return RoomMembersModerationState(
-            isDebugBuild = false,
+            isDebugBuild = buildMeta.isDebuggable,
             canDisplayModerationActions = canDisplayModerationActions,
             selectedRoomMember = selectedMember,
             actions = moderationActions,
