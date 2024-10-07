@@ -4,9 +4,9 @@
 [versions]
 # Project
 android_gradle_plugin = "8.7.0"
-kotlin = "1.9.25"
+kotlin = "2.0.20"
 kotlinpoetKsp = "1.18.1"
-ksp = "1.9.25-1.0.20"
+ksp = "2.0.20-1.0.25"
 firebaseAppDistribution = "5.0.0"
 
 # AndroidX
