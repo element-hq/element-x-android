@@ -19,11 +19,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.core.app.NotificationManagerCompat
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.SingleIn
-import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsPresenter
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import io.element.android.services.toolbox.api.intent.ExternalIntentLauncher
@@ -33,14 +32,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @SingleIn(AppScope::class)
-@ContributesBinding(AppScope::class)
-class DefaultFullScreenIntentPermissionsPresenter @Inject constructor(
+class FullScreenIntentPermissionsPresenter @Inject constructor(
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
     private val externalIntentLauncher: ExternalIntentLauncher,
     private val buildMeta: BuildMeta,
     private val notificationManagerCompat: NotificationManagerCompat,
     preferencesDataStoreFactory: PreferenceDataStoreFactory,
-) : FullScreenIntentPermissionsPresenter {
+) : Presenter<FullScreenIntentPermissionsState> {
     companion object {
         private const val PREF_KEY_FULL_SCREEN_INTENT_BANNER_DISMISSED = "PREF_KEY_FULL_SCREEN_INTENT_BANNER_DISMISSED"
     }

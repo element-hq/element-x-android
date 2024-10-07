@@ -15,9 +15,7 @@ import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.logout.test.FakeLogoutUseCase
 import io.element.android.features.preferences.impl.tasks.FakeClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.FakeComputeCacheSizeUseCase
-import io.element.android.features.rageshake.impl.preferences.DefaultRageshakePreferencesPresenter
-import io.element.android.features.rageshake.test.rageshake.FakeRageShake
-import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataStore
+import io.element.android.features.rageshake.api.preferences.aRageshakePreferencesState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
@@ -54,7 +52,7 @@ class DeveloperSettingsPresenterTest {
             val loadedState = awaitItem()
             assertThat(loadedState.rageshakeState.isEnabled).isFalse()
             assertThat(loadedState.rageshakeState.isSupported).isTrue()
-            assertThat(loadedState.rageshakeState.sensitivity).isEqualTo(1.0f)
+            assertThat(loadedState.rageshakeState.sensitivity).isEqualTo(0.3f)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -105,9 +103,8 @@ class DeveloperSettingsPresenterTest {
 
     @Test
     fun `present - clear cache`() = runTest {
-        val rageshakePresenter = DefaultRageshakePreferencesPresenter(FakeRageShake(), FakeRageshakeDataStore())
         val clearCacheUseCase = FakeClearCacheUseCase()
-        val presenter = createDeveloperSettingsPresenter(clearCacheUseCase = clearCacheUseCase, rageshakePresenter = rageshakePresenter)
+        val presenter = createDeveloperSettingsPresenter(clearCacheUseCase = clearCacheUseCase)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -202,7 +199,6 @@ class DeveloperSettingsPresenterTest {
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
         cacheSizeUseCase: FakeComputeCacheSizeUseCase = FakeComputeCacheSizeUseCase(),
         clearCacheUseCase: FakeClearCacheUseCase = FakeClearCacheUseCase(),
-        rageshakePresenter: DefaultRageshakePreferencesPresenter = DefaultRageshakePreferencesPresenter(FakeRageShake(), FakeRageshakeDataStore()),
         preferencesStore: InMemoryAppPreferencesStore = InMemoryAppPreferencesStore(),
         buildMeta: BuildMeta = aBuildMeta(),
         logoutUseCase: FakeLogoutUseCase = FakeLogoutUseCase(logoutLambda = { "" })
@@ -211,7 +207,7 @@ class DeveloperSettingsPresenterTest {
             featureFlagService = featureFlagService,
             computeCacheSizeUseCase = cacheSizeUseCase,
             clearCacheUseCase = clearCacheUseCase,
-            rageshakePresenter = rageshakePresenter,
+            rageshakePresenter = { aRageshakePreferencesState() },
             appPreferencesStore = preferencesStore,
             buildMeta = buildMeta,
             logoutUseCase = logoutUseCase,

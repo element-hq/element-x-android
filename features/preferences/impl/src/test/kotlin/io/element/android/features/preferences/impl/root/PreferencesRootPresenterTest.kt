@@ -7,16 +7,13 @@
 
 package io.element.android.features.preferences.impl.root
 
-import androidx.compose.runtime.Composable
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.logout.api.direct.DirectLogoutPresenter
-import io.element.android.features.logout.api.direct.DirectLogoutState
+import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
-import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
@@ -37,12 +34,6 @@ import org.junit.Test
 class PreferencesRootPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
-
-    private val aDirectLogoutState = DirectLogoutState(
-        canDoDirectSignOut = true,
-        logoutAction = AsyncAction.Uninitialized,
-        eventSink = {},
-    )
 
     @Test
     fun `present - initial state`() = runTest {
@@ -78,7 +69,7 @@ class PreferencesRootPresenterTest {
             assertThat(loadedState.showLockScreenSettings).isTrue()
             assertThat(loadedState.showNotificationSettings).isTrue()
             assertThat(loadedState.canDeactivateAccount).isTrue()
-            assertThat(loadedState.directLogoutState).isEqualTo(aDirectLogoutState)
+            assertThat(loadedState.directLogoutState).isEqualTo(aDirectLogoutState())
             assertThat(loadedState.snackbarMessage).isNull()
         }
     }
@@ -148,10 +139,7 @@ class PreferencesRootPresenterTest {
             sessionVerificationService = sessionVerificationService,
             encryptionService = FakeEncryptionService(),
         ),
-        directLogoutPresenter = object : DirectLogoutPresenter {
-            @Composable
-            override fun present() = aDirectLogoutState
-        },
+        directLogoutPresenter = { aDirectLogoutState() },
         showDeveloperSettingsProvider = showDeveloperSettingsProvider,
     )
 }
