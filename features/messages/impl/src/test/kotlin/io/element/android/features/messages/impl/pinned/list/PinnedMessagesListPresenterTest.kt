@@ -312,7 +312,7 @@ class PinnedMessagesListPresenterTest {
             timelineProvider = timelineProvider,
             timelineProtectionPresenter = { aTimelineProtectionState() },
             snackbarDispatcher = SnackbarDispatcher(),
-            actionListPresenterFactory = FakeActionListPresenter.Factory,
+            actionListPresenterFactory = FakeActionListPresenter.Factory(),
             analyticsService = analyticsService,
             appCoroutineScope = this,
         )
