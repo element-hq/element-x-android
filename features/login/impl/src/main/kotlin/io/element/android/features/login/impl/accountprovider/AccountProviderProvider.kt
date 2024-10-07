@@ -15,8 +15,7 @@ open class AccountProviderProvider : PreviewParameterProvider<AccountProvider> {
         get() = sequenceOf(
             anAccountProvider(),
             anAccountProvider().copy(subtitle = null),
-            anAccountProvider().copy(subtitle = null, title = "no.sliding.sync", supportSlidingSync = false),
-            anAccountProvider().copy(subtitle = null, title = "invalid", isValid = false, supportSlidingSync = false),
+            anAccountProvider().copy(subtitle = null, title = "invalid", isValid = false),
             anAccountProvider().copy(subtitle = null, title = "Other", isPublic = false, isMatrixOrg = false),
             // Add other state here
         )
@@ -28,5 +27,4 @@ fun anAccountProvider() = AccountProvider(
     isPublic = true,
     isMatrixOrg = true,
     isValid = true,
-    supportSlidingSync = true,
 )

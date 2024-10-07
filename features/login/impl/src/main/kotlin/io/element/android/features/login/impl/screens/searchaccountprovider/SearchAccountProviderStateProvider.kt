@@ -34,20 +34,18 @@ fun aSearchAccountProviderState(
 
 fun aHomeserverDataList(): List<HomeserverData> {
     return listOf(
-        aHomeserverData(isWellknownValid = true, supportSlidingSync = true),
-        aHomeserverData(homeserverUrl = "https://no.sliding.sync", isWellknownValid = true, supportSlidingSync = false),
-        aHomeserverData(homeserverUrl = "https://invalid", isWellknownValid = false, supportSlidingSync = false),
+        aHomeserverData(isWellknownValid = true),
+        aHomeserverData(homeserverUrl = "https://no.sliding.sync", isWellknownValid = true),
+        aHomeserverData(homeserverUrl = "https://invalid", isWellknownValid = false),
     )
 }
 
 fun aHomeserverData(
     homeserverUrl: String = AuthenticationConfig.MATRIX_ORG_URL,
     isWellknownValid: Boolean = true,
-    supportSlidingSync: Boolean = true,
 ): HomeserverData {
     return HomeserverData(
         homeserverUrl = homeserverUrl,
         isWellknownValid = isWellknownValid,
-        supportSlidingSync = supportSlidingSync,
     )
 }

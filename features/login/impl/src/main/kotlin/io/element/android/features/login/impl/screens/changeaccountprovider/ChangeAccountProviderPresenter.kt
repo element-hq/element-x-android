@@ -29,7 +29,6 @@ class ChangeAccountProviderPresenter @Inject constructor(
                     isPublic = true,
                     isMatrixOrg = true,
                     isValid = true,
-                    supportSlidingSync = true,
                 )
             ),
             changeServerState = changeServerState,
