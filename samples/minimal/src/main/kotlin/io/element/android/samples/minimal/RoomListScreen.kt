@@ -25,6 +25,7 @@ import io.element.android.features.roomlist.impl.filters.selection.DefaultFilter
 import io.element.android.features.roomlist.impl.search.RoomListSearchDataSource
 import io.element.android.features.roomlist.impl.search.RoomListSearchPresenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.dateformatter.impl.DateFormatters
 import io.element.android.libraries.dateformatter.impl.DefaultLastMessageTimestampFormatter
 import io.element.android.libraries.dateformatter.impl.LocalDateTimeProvider
@@ -51,12 +52,14 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import timber.log.Timber
 import java.util.Locale
+import javax.inject.Inject
 
 class RoomListScreen(
     context: Context,
     private val matrixClient: MatrixClient,
     private val coroutineDispatchers: CoroutineDispatchers = Singleton.coroutineDispatchers,
 ) {
+    @Inject lateinit var buildMeta: BuildMeta
     private val clock = Clock.System
     private val locale = Locale.getDefault()
     private val timeZone = TimeZone.currentSystemDefault()

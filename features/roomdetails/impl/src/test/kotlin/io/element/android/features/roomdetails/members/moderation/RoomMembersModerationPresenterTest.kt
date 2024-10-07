@@ -319,6 +319,7 @@ class RoomMembersModerationPresenterTest {
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
     ): RoomMembersModerationPresenter {
         return RoomMembersModerationPresenter(
+            buildMeta = buildMeta,
             room = matrixRoom,
             dispatchers = dispatchers,
             analyticsService = analyticsService,
