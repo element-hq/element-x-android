@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="full_screen_intent_banner_title">"بهبود تجریهٔ تماستان"</string>
+  <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"گزینش چگونگی دریافت آگاهی"</string>
+  <string name="screen_advanced_settings_developer_mode">"حالت توسعه‌دهنده"</string>
+  <string name="screen_advanced_settings_element_call_base_url">"نشانی پایهٔ تماس المنتی سفارشی"</string>
+  <string name="screen_advanced_settings_element_call_base_url_description">"تنظمی نشانی پایه‌‌ای سفارشی برای تماس المنتی."</string>
+  <string name="screen_advanced_settings_push_provider_android">"فراهم کنندهٔ آگاهی‌های ارسالی"</string>
+  <string name="screen_advanced_settings_rich_text_editor_description">"از کار انداختن ویرایشگر متن غنی یا نوشتن دستی مارک‌دون."</string>
+  <string name="screen_advanced_settings_send_read_receipts">"رسید‌های خواندن"</string>
+  <string name="screen_advanced_settings_share_presence">"هم‌رسانی حضور"</string>
+  <string name="screen_blocked_users_empty">"هیچ کاربر مسدودی ندارید"</string>
+  <string name="screen_blocked_users_unblock_alert_action">"رفع انسداد"</string>
+  <string name="screen_blocked_users_unblock_alert_description">"قادر خواهید بود دوباره همهٔ پیام‌هایش را ببینید."</string>
+  <string name="screen_blocked_users_unblock_alert_title">"رفع انسداد کاربر"</string>
+  <string name="screen_blocked_users_unblocking">"رفع کردن انسداد…"</string>
+  <string name="screen_edit_profile_display_name">"نام نمایشی"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"نام نمایشیتان"</string>
+  <string name="screen_edit_profile_error">"خطایی ناشناخته رخ داد و اطّلاعات نتوانستند تغییر کنند."</string>
+  <string name="screen_edit_profile_error_title">"ناتوان در به‌روز کردن نمایه"</string>
+  <string name="screen_edit_profile_title">"ویرایش نمایه"</string>
+  <string name="screen_edit_profile_updating_details">"به‌روز کردن نمایه…"</string>
+  <string name="screen_notification_settings_additional_settings_section_title">"تنظیمات اضافی"</string>
+  <string name="screen_notification_settings_calls_label">"تماس‌های صوتی و تصویری"</string>
+  <string name="screen_notification_settings_configuration_mismatch">"نامتطابقت در پیکربندی"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"تنظمیات آگاهی را ساده کرده‌ایم تا یافتن انتخاب‌ها را ساده‌تر کنیم. برهی تنظمیات سفارسی که در گذشته گزیده‌اید این‌جا نشان داده نمی‌شوند؛ ولی همچنن فعّالند.
+
+با ادامه داد ممکن است برخی تنظیماتتان تغییر کنند."</string>
+  <string name="screen_notification_settings_direct_chats">"گپ‌های مستقیم"</string>
+  <string name="screen_notification_settings_edit_custom_settings_section_title">"تنظیمات سفارشی برای هر گپ"</string>
+  <string name="screen_notification_settings_edit_failed_updating_default_mode">"هنگام به‌روز کردن تنظیمات آگاهی خطایی رخ داد."</string>
+  <string name="screen_notification_settings_edit_mode_all_messages">"همهٔ پیام‌ها"</string>
+  <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"فقط اشاره‌ها و کلیدواژگان"</string>
+  <string name="screen_notification_settings_edit_screen_direct_section_header">"آگاهی در گپ‌های مستقیم برای"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"آگاهی در گپ‌های گروهی برای"</string>
+  <string name="screen_notification_settings_enable_notifications">"به کار انداختن آگاهی‌ها روی این افزاره"</string>
+  <string name="screen_notification_settings_failed_fixing_configuration">"پیکربندی درست نشد. لطفاً دوباره تلاش کنید."</string>
+  <string name="screen_notification_settings_group_chats">"گپ‌های گروهی"</string>
+  <string name="screen_notification_settings_invite_for_me_label">"دعوت‌ها"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"کارساز خانگیتان از این گزینه در اتاق‌های رمز شده پشتیبانی نمی‌کند. ممکن است در برخی اتاق‌ها آگاه نشوید."</string>
+  <string name="screen_notification_settings_mentions_section_title">"اشاره‌ها"</string>
+  <string name="screen_notification_settings_mode_all">"همه"</string>
+  <string name="screen_notification_settings_mode_mentions">"اشاره‌ها"</string>
+  <string name="screen_notification_settings_notification_section_title">"آگاه کردنم برای"</string>
+  <string name="screen_notification_settings_room_mention_label">"آگاه کردنم برای ‪@room"</string>
+  <string name="screen_notification_settings_system_notifications_action_required">"برای گرفتن آگاهی‌ها لطفاً%1$sتان را تغییر دهید."</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"تنظیمات سامانه"</string>
+  <string name="screen_notification_settings_system_notifications_turned_off">"آگاهی‌های سامانه‌ای خاموش شدند"</string>
+  <string name="screen_notification_settings_title">"آگاهی‌ها"</string>
+  <string name="troubleshoot_notifications_entry_point_section">"رفع‌اشکال"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"رفع‌اشکال آگاهی‌ها"</string>
+</resources>

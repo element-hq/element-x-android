@@ -71,6 +71,9 @@ class DeveloperSettingsPresenter @Inject constructor(
         val isSimplifiedSlidingSyncEnabled by appPreferencesStore
             .isSimplifiedSlidingSyncEnabledFlow()
             .collectAsState(initial = false)
+        val hideImagesAndVideos by appPreferencesStore
+            .doesHideImagesAndVideosFlow()
+            .collectAsState(initial = false)
 
         LaunchedEffect(Unit) {
             FeatureFlags.entries
@@ -114,6 +117,9 @@ class DeveloperSettingsPresenter @Inject constructor(
                     appPreferencesStore.setSimplifiedSlidingSyncEnabled(event.isEnabled)
                     logoutUseCase.logout(ignoreSdkError = true)
                 }
+                is DeveloperSettingsEvents.SetHideImagesAndVideos -> coroutineScope.launch {
+                    appPreferencesStore.setHideImagesAndVideos(event.value)
+                }
             }
         }
 
@@ -128,6 +134,7 @@ class DeveloperSettingsPresenter @Inject constructor(
                 validator = ::customElementCallUrlValidator,
             ),
             isSimpleSlidingSyncEnabled = isSimplifiedSlidingSyncEnabled,
+            hideImagesAndVideos = hideImagesAndVideos,
             eventSink = ::handleEvents
         )
     }

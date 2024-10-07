@@ -5,7 +5,7 @@
   <string name="screen_chat_backup_key_backup_description">"備份可確保您不會遺失歷史訊息。%1$s。"</string>
   <string name="screen_chat_backup_key_backup_title">"備份"</string>
   <string name="screen_chat_backup_recovery_action_change">"變更復原金鑰"</string>
-  <string name="screen_chat_backup_recovery_action_confirm">"輸入復原金鑰"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"關閉"</string>
+  <string name="screen_recovery_key_confirm_title">"輸入您的復原金鑰"</string>
   <string name="screen_recovery_key_save_key_description">"點擊以複製復原金鑰"</string>
 </resources>

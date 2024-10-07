@@ -44,7 +44,7 @@ Kui sa jätkad muutmist, siis võivad muutuda ka need peidetud eelistused."</str
   <string name="screen_notification_settings_group_chats">"Rühmavestlused"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Kutsed"</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Sinu koduserver ei toeta seda funktsionaalsust krüptitud jututubades ja seega ei pruugi kõik teavitused sinuni jõuda."</string>
-  <string name="screen_notification_settings_mentions_section_title">"Mainimised"</string>
+  <string name="screen_notification_settings_mentions_section_title">"Mainimiste alusel"</string>
   <string name="screen_notification_settings_mode_all">"Kõik"</string>
   <string name="screen_notification_settings_mode_mentions">"Mainimiste alusel"</string>
   <string name="screen_notification_settings_notification_section_title">"Teavita mind"</string>

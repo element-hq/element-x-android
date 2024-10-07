@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_onboarding_sign_in_manually">"ورود دستی"</string>
+  <string name="screen_onboarding_sign_in_with_qr_code">"ورود با کد QR"</string>
+  <string name="screen_onboarding_sign_up">"ایجاد حساب"</string>
+  <string name="screen_onboarding_welcome_message">"به سریع‌ترین %1$s خوش آمدید. بازطرّاحی شده برای سرعت و سادگی."</string>
+  <string name="screen_onboarding_welcome_subtitle">"به %1$s خوش آمدید. بازطرّاحی شده برای سرعت و سادگی."</string>
+  <string name="screen_onboarding_welcome_title">"در المنتتان باشید"</string>
+</resources>

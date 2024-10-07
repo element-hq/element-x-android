@@ -35,6 +35,8 @@ import io.element.android.libraries.architecture.Presenter
 @Composable
 fun TimelineItemEventContentView(
     content: TimelineItemEventContent,
+    hideMediaContent: Boolean,
+    onShowClick: () -> Unit,
     onLinkClick: (url: String) -> Unit,
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
     modifier: Modifier = Modifier,
@@ -69,15 +71,21 @@ fun TimelineItemEventContentView(
         )
         is TimelineItemImageContent -> TimelineItemImageView(
             content = content,
+            hideMediaContent = hideMediaContent,
+            onShowClick = onShowClick,
             onContentLayoutChange = onContentLayoutChange,
             modifier = modifier,
         )
         is TimelineItemStickerContent -> TimelineItemStickerView(
             content = content,
+            hideMediaContent = hideMediaContent,
+            onShowClick = onShowClick,
             modifier = modifier,
         )
         is TimelineItemVideoContent -> TimelineItemVideoView(
             content = content,
+            hideMediaContent = hideMediaContent,
+            onShowClick = onShowClick,
             onContentLayoutChange = onContentLayoutChange,
             modifier = modifier
         )

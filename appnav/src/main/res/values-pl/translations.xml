@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"Wyloguj się i zaktualizuj"</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Twój serwer domowy już nie wspiera starego protokołu. Zaloguj się ponownie, aby kontynuować korzystanie z aplikacji."</string>
+</resources>

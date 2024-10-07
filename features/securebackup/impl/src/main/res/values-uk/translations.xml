@@ -5,7 +5,7 @@
   <string name="screen_chat_backup_key_backup_description">"Резервне копіювання гарантує, що ви не втратите історію повідомлень. %1$s."</string>
   <string name="screen_chat_backup_key_backup_title">"Резервне копіювання"</string>
   <string name="screen_chat_backup_recovery_action_change">"Змінити ключ відновлення"</string>
-  <string name="screen_chat_backup_recovery_action_confirm">"Підтвердити ключ відновлення"</string>
+  <string name="screen_chat_backup_recovery_action_confirm">"Введіть ключ відновлення"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Ваша резервна копія чату наразі не синхронізована."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Налаштувати відновлення"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Отримайте доступ до своїх зашифрованих повідомлень, якщо ви втратите всі свої пристрої або вийшли з %1$s системи."</string>

@@ -319,8 +319,8 @@ private fun MessagesViewContent(
     onJoinCallClick: () -> Unit,
     onViewAllPinnedMessagesClick: () -> Unit,
     forceJumpToBottomVisibility: Boolean,
-    modifier: Modifier = Modifier,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
@@ -379,7 +379,7 @@ private fun MessagesViewContent(
                     val scrollBehavior = PinnedMessagesBannerViewDefaults.rememberExitOnScrollBehavior()
                     TimelineView(
                         state = state.timelineState,
-                        typingNotificationState = state.typingNotificationState,
+                        timelineProtectionState = state.timelineProtectionState,
                         onUserDataClick = onUserDataClick,
                         onLinkClick = onLinkClick,
                         onMessageClick = onMessageClick,

@@ -4,7 +4,7 @@
   <string name="screen_create_poll_anonymous_desc">"Mostrar los resultados solo después de que finalice la encuesta"</string>
   <string name="screen_create_poll_anonymous_headline">"Ocultar votos"</string>
   <string name="screen_create_poll_answer_hint">"Opción %1$d"</string>
-  <string name="screen_create_poll_cancel_confirmation_content_android">"Los cambios no se han guardado. ¿Estás seguro de que quieres volver?"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Tus cambios no se han guardado. ¿Estás seguro de que quieres volver atrás?"</string>
   <string name="screen_create_poll_question_desc">"Pregunta o tema"</string>
   <string name="screen_create_poll_question_hint">"¿De qué trata la encuesta?"</string>
   <string name="screen_create_poll_title">"Crear una Encuesta"</string>

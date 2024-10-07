@@ -92,6 +92,7 @@
   <string name="action_report_bug">"Fehler melden"</string>
   <string name="action_report_content">"Inhalt melden"</string>
   <string name="action_reset">"Zurücksetzen"</string>
+  <string name="action_reset_identity">"Identität zurücksetzen"</string>
   <string name="action_retry">"Erneut versuchen"</string>
   <string name="action_retry_decryption">"Entschlüsselung wiederholen"</string>
   <string name="action_save">"Speichern"</string>

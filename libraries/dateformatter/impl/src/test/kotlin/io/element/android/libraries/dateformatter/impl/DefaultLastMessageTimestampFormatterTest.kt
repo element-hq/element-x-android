@@ -36,7 +36,7 @@ class DefaultLastMessageTimestampFormatterTest {
         val now = "1980-04-06T18:35:24.00Z"
         val dat = "1980-04-06T18:35:24.00Z"
         val formatter = createFormatter(now)
-        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("6:35 PM")
+        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("6:35 PM")
     }
 
     @Test
@@ -44,7 +44,7 @@ class DefaultLastMessageTimestampFormatterTest {
         val now = "1980-04-06T18:35:24.00Z"
         val dat = "1980-04-06T18:35:23.00Z"
         val formatter = createFormatter(now)
-        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("6:35 PM")
+        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("6:35 PM")
     }
 
     @Test
@@ -52,7 +52,7 @@ class DefaultLastMessageTimestampFormatterTest {
         val now = "1980-04-06T18:35:24.00Z"
         val dat = "1980-04-06T18:34:24.00Z"
         val formatter = createFormatter(now)
-        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("6:34 PM")
+        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("6:34 PM")
     }
 
     @Test
@@ -60,7 +60,7 @@ class DefaultLastMessageTimestampFormatterTest {
         val now = "1980-04-06T18:35:24.00Z"
         val dat = "1980-04-06T17:35:24.00Z"
         val formatter = createFormatter(now)
-        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("5:35 PM")
+        assertThat(formatter.format(Instant.parse(dat).toEpochMilliseconds())).isEqualTo("5:35 PM")
     }
 
     @Test

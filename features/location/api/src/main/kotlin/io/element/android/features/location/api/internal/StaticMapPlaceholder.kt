@@ -38,8 +38,8 @@ internal fun StaticMapPlaceholder(
     contentDescription: String?,
     width: Dp,
     height: Dp,
-    modifier: Modifier = Modifier,
     onLoadMapClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Box(
         contentAlignment = Alignment.Center,

@@ -14,6 +14,10 @@ import io.element.android.features.messages.impl.crypto.sendfailure.resolve.Reso
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerPresenter
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionPresenter
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
+import io.element.android.features.messages.impl.typing.TypingNotificationPresenter
+import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
 
@@ -25,4 +29,10 @@ interface MessagesModule {
 
     @Binds
     fun bindResolveVerifiedUserSendFailurePresenter(presenter: ResolveVerifiedUserSendFailurePresenter): Presenter<ResolveVerifiedUserSendFailureState>
+
+    @Binds
+    fun bindTypingNotificationPresenter(presenter: TypingNotificationPresenter): Presenter<TypingNotificationState>
+
+    @Binds
+    fun bindTimelineProtectionPresenter(presenter: TimelineProtectionPresenter): Presenter<TimelineProtectionState>
 }

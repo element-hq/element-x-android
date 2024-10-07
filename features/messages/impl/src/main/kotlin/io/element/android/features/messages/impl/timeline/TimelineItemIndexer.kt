@@ -8,29 +8,39 @@
 package io.element.android.features.messages.impl.timeline
 
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.EventId
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 import javax.inject.Inject
 
-@SingleIn(RoomScope::class)
 class TimelineItemIndexer @Inject constructor() {
+    // This is a latch to wait for the first process call
+    private val firstProcessLatch = CompletableDeferred<Unit>()
     private val timelineEventsIndexes = mutableMapOf<EventId, Int>()
 
-    fun isKnown(eventId: EventId): Boolean {
-        return timelineEventsIndexes.containsKey(eventId).also {
-            Timber.d("$eventId isKnown = $it")
+    private val mutex = Mutex()
+
+    suspend fun isKnown(eventId: EventId): Boolean {
+        firstProcessLatch.await()
+        return mutex.withLock {
+            timelineEventsIndexes.containsKey(eventId).also {
+                Timber.d("$eventId isKnown = $it")
+            }
         }
     }
 
-    fun indexOf(eventId: EventId): Int {
-        return (timelineEventsIndexes[eventId] ?: -1).also {
-            Timber.d("indexOf $eventId= $it")
+    suspend fun indexOf(eventId: EventId): Int {
+        firstProcessLatch.await()
+        return mutex.withLock {
+            (timelineEventsIndexes[eventId] ?: -1).also {
+                Timber.d("indexOf $eventId= $it")
+            }
         }
     }
 
-    fun process(timelineItems: List<TimelineItem>) {
+    suspend fun process(timelineItems: List<TimelineItem>) = mutex.withLock {
         Timber.d("process ${timelineItems.size} items")
         timelineEventsIndexes.clear()
         timelineItems.forEachIndexed { index, timelineItem ->
@@ -46,6 +56,7 @@ class TimelineItemIndexer @Inject constructor() {
                 else -> Unit
             }
         }
+        firstProcessLatch.complete(Unit)
     }
 
     private fun processEvent(event: TimelineItem.Event, index: Int) {

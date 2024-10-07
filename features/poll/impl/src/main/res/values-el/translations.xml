@@ -4,7 +4,7 @@
   <string name="screen_create_poll_anonymous_desc">"Εμφάνιση αποτελεσμάτων μόνο μετά τη λήξη της ψηφοφορίας"</string>
   <string name="screen_create_poll_anonymous_headline">"Απόκρυψη ψήφων"</string>
   <string name="screen_create_poll_answer_hint">"Επιλογή %1$d"</string>
-  <string name="screen_create_poll_cancel_confirmation_content_android">"Οι αλλαγές σου δεν έχουν αποθηκευτεί. Σίγουρα θέλεις να πας πίσω;"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Οι αλλαγές σου δεν έχουν αποθηκευτεί. Σίγουρα θες να πας πίσω;"</string>
   <string name="screen_create_poll_question_desc">"Ερώτηση ή θέμα"</string>
   <string name="screen_create_poll_question_hint">"Τί αφορά η δημοσκόπηση;"</string>
   <string name="screen_create_poll_title">"Δημιουργία Δημοσκόπησης"</string>

@@ -14,5 +14,5 @@
   <string name="screen_signout_recovery_disabled_subtitle">"Sa oled logimas välja oma viimasest sessioonist. Kui teed seda nüüd, siis kaotad ligipääsu oma krüptitud sõnumitele."</string>
   <string name="screen_signout_recovery_disabled_title">"Andmete taastamine on seadistamata"</string>
   <string name="screen_signout_save_recovery_key_subtitle">"Sa oled logimas välja oma viimasest sessioonist. Kui teed seda nüüd, siis ilmselt kaotad ligipääsu oma krüptitud sõnumitele."</string>
-  <string name="screen_signout_save_recovery_key_title">"Kas sa oled oma taastevõtme salvestanud?"</string>
+  <string name="screen_signout_save_recovery_key_title">"Kas sa oled oma taastevõtme talletanud?"</string>
 </resources>

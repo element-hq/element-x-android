@@ -5,7 +5,7 @@
   <string name="screen_chat_backup_key_backup_description">"A cópia de segurança garante que não perdes o teu histórico de mensagens. %1$s."</string>
   <string name="screen_chat_backup_key_backup_title">"Cópia de segurança"</string>
   <string name="screen_chat_backup_recovery_action_change">"Alterar chave de recuperação"</string>
-  <string name="screen_chat_backup_recovery_action_confirm">"Inserir chave de recuperação"</string>
+  <string name="screen_chat_backup_recovery_action_confirm">"Insere a chave de recuperação"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"A tua cópia de segurança das conversas está atualmente dessincronizada."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Configurar recuperação"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Obtém acesso às tuas mensagens cifradas mesmo se perderes todos os teus dispositivos ou se terminares todas as tuas sessões %1$s."</string>
@@ -16,6 +16,7 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Segue as instruções para criar uma nova chave de recuperação"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Guarda a tua nova chave de recuperação num gestor de senhas ou numa nota cifrada"</string>
   <string name="screen_create_new_recovery_key_title">"Repor a cifragem da tua conta utilizando outro dispositivo"</string>
+  <string name="screen_encryption_reset_action_continue_reset">"Continuar a reposição"</string>
   <string name="screen_encryption_reset_bullet_1">"Os detalhes da tua conta, contactos, preferências e lista de conversas serão mantidos."</string>
   <string name="screen_encryption_reset_bullet_2">"Perderás o acesso ao teu histórico de mensagens existente"</string>
   <string name="screen_encryption_reset_bullet_3">"Necessitarás de verificar todos os teus dispositivos e contactos novamente."</string>
@@ -58,6 +59,7 @@
   <string name="screen_reset_encryption_confirmation_alert_action">"Sim, repor agora"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Este processo é irreversível."</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"Tens a certeza que pretendes repor a tua cifra?"</string>
+  <string name="screen_reset_encryption_password_error">"Um erro desconhecido aconteceu. Verifique se a senha da sua conta está correta e tente novamente."</string>
   <string name="screen_reset_encryption_password_placeholder">"Inserir…"</string>
   <string name="screen_reset_encryption_password_subtitle">"Confirma que pretendes realmente repor a tua cifra."</string>
   <string name="screen_reset_encryption_password_title">"Insere a tua palavra-passe para continuares"</string>

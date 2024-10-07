@@ -4,7 +4,7 @@
   <string name="screen_create_poll_anonymous_desc">"Zobraziť výsledky až po skončení ankety"</string>
   <string name="screen_create_poll_anonymous_headline">"Anonymná anketa"</string>
   <string name="screen_create_poll_answer_hint">"Možnosť %1$d"</string>
-  <string name="screen_create_poll_cancel_confirmation_content_android">"Vaše zmeny neboli uložené. Určite sa chcete vrátiť späť?"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Vaše zmeny neboli uložené. Naozaj sa chcete vrátiť?"</string>
   <string name="screen_create_poll_question_desc">"Otázka alebo téma"</string>
   <string name="screen_create_poll_question_hint">"O čom je anketa?"</string>
   <string name="screen_create_poll_title">"Vytvoriť anketu"</string>

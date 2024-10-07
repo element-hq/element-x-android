@@ -50,6 +50,7 @@ class DeveloperSettingsPresenterTest {
             assertThat(initialState.customElementCallBaseUrlState).isNotNull()
             assertThat(initialState.customElementCallBaseUrlState.baseUrl).isNull()
             assertThat(initialState.isSimpleSlidingSyncEnabled).isFalse()
+            assertThat(initialState.hideImagesAndVideos).isFalse()
             val loadedState = awaitItem()
             assertThat(loadedState.rageshakeState.isEnabled).isFalse()
             assertThat(loadedState.rageshakeState.isSupported).isTrue()
@@ -176,6 +177,24 @@ class DeveloperSettingsPresenterTest {
             assertThat(awaitItem().isSimpleSlidingSyncEnabled).isFalse()
             assertThat(preferences.isSimplifiedSlidingSyncEnabledFlow().first()).isFalse()
             logoutCallRecorder.assertions().isCalledExactly(times = 2)
+        }
+    }
+
+    @Test
+    fun `present - toggling hide image and video`() = runTest {
+        val preferences = InMemoryAppPreferencesStore()
+        val presenter = createDeveloperSettingsPresenter(preferencesStore = preferences)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitLastSequentialItem()
+            assertThat(initialState.hideImagesAndVideos).isFalse()
+            initialState.eventSink(DeveloperSettingsEvents.SetHideImagesAndVideos(true))
+            assertThat(awaitItem().hideImagesAndVideos).isTrue()
+            assertThat(preferences.doesHideImagesAndVideosFlow().first()).isTrue()
+            initialState.eventSink(DeveloperSettingsEvents.SetHideImagesAndVideos(false))
+            assertThat(awaitItem().hideImagesAndVideos).isFalse()
+            assertThat(preferences.doesHideImagesAndVideosFlow().first()).isFalse()
         }
     }
 

@@ -12,8 +12,10 @@ import org.matrix.rustcomponents.sdk.NoPointer
 import org.matrix.rustcomponents.sdk.TimelineItem
 import org.matrix.rustcomponents.sdk.VirtualTimelineItem
 
-class FakeRustTimelineItem : TimelineItem(NoPointer) {
-    override fun asEvent(): EventTimelineItem? = null
+class FakeRustTimelineItem(
+    private val asEventResult: EventTimelineItem? = null,
+) : TimelineItem(NoPointer) {
+    override fun asEvent(): EventTimelineItem? = asEventResult
     override fun asVirtual(): VirtualTimelineItem? = null
     override fun fmtDebug(): String = "fmtDebug"
     override fun uniqueId(): String = "uniqueId"

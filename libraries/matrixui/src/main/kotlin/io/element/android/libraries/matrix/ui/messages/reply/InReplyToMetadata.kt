@@ -57,11 +57,11 @@ internal sealed interface InReplyToMetadata {
  * Metadata can be either a thumbnail with a text OR just a text.
  */
 @Composable
-internal fun InReplyToDetails.Ready.metadata(): InReplyToMetadata? = when (eventContent) {
+internal fun InReplyToDetails.Ready.metadata(hideImage: Boolean): InReplyToMetadata? = when (eventContent) {
     is MessageContent -> when (val type = eventContent.type) {
         is ImageMessageType -> InReplyToMetadata.Thumbnail(
             AttachmentThumbnailInfo(
-                thumbnailSource = type.info?.thumbnailSource ?: type.source,
+                thumbnailSource = (type.info?.thumbnailSource ?: type.source).takeUnless { hideImage },
                 textContent = eventContent.body,
                 type = AttachmentThumbnailType.Image,
                 blurHash = type.info?.blurhash,
@@ -69,7 +69,7 @@ internal fun InReplyToDetails.Ready.metadata(): InReplyToMetadata? = when (event
         )
         is VideoMessageType -> InReplyToMetadata.Thumbnail(
             AttachmentThumbnailInfo(
-                thumbnailSource = type.info?.thumbnailSource,
+                thumbnailSource = type.info?.thumbnailSource?.takeUnless { hideImage },
                 textContent = eventContent.body,
                 type = AttachmentThumbnailType.Video,
                 blurHash = type.info?.blurhash,
@@ -77,7 +77,7 @@ internal fun InReplyToDetails.Ready.metadata(): InReplyToMetadata? = when (event
         )
         is FileMessageType -> InReplyToMetadata.Thumbnail(
             AttachmentThumbnailInfo(
-                thumbnailSource = type.info?.thumbnailSource,
+                thumbnailSource = type.info?.thumbnailSource?.takeUnless { hideImage },
                 textContent = eventContent.body,
                 type = AttachmentThumbnailType.File,
             )
@@ -104,7 +104,7 @@ internal fun InReplyToDetails.Ready.metadata(): InReplyToMetadata? = when (event
     }
     is StickerContent -> InReplyToMetadata.Thumbnail(
         AttachmentThumbnailInfo(
-            thumbnailSource = eventContent.source,
+            thumbnailSource = eventContent.source.takeUnless { hideImage },
             textContent = eventContent.body,
             type = AttachmentThumbnailType.Image,
             blurHash = eventContent.info.blurhash,

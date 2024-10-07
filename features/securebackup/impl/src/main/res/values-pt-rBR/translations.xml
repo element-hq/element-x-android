@@ -40,4 +40,5 @@
   <string name="screen_recovery_key_setup_generate_key_description">"Certifique-se de que você pode armazenar sua chave de recuperação em algum lugar seguro"</string>
   <string name="screen_recovery_key_setup_success">"Configuração de recuperação bem-sucedida"</string>
   <string name="screen_recovery_key_setup_title">"Configurar a recuperação"</string>
+  <string name="screen_reset_encryption_password_placeholder">"Inserir…"</string>
 </resources>

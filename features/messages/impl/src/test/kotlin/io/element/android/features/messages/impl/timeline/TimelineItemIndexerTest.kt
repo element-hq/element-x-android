@@ -13,11 +13,12 @@ import io.element.android.features.messages.impl.timeline.model.virtual.Timeline
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class TimelineItemIndexerTest {
     @Test
-    fun `test TimelineItemIndexer`() {
+    fun `test TimelineItemIndexer`() = runTest {
         val eventIds = mutableListOf<EventId>()
         val data = listOf(
             aTimelineItemEvent().also { eventIds.add(it.eventId!!) },

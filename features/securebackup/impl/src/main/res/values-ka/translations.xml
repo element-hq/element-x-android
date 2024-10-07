@@ -5,7 +5,6 @@
   <string name="screen_chat_backup_key_backup_description">"სარეზერვო ასლი უზრუნველყოფს იმას, რომ თქვენ შეტყობინებების ისტორიას არ დაკარგავთ. %1$s"</string>
   <string name="screen_chat_backup_key_backup_title">"სარეზერვო ასლი"</string>
   <string name="screen_chat_backup_recovery_action_change">"აღდგენის გასაღების შეცვლა"</string>
-  <string name="screen_chat_backup_recovery_action_confirm">"შეიყვანეთ აღდგენის გასაღები"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"თქვენი ჩატის სარეზერვო ასლი ამჟამად არ არის სინქრონიზებული."</string>
   <string name="screen_chat_backup_recovery_action_setup">"აღდგენის დაყენება"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"მიიღეთ წვდომა თქვენს დაშიფრულ შეტყობინებებზე, თუ დაკარგავთ თქვენს ყველა მოწყობილობას ან გამოხვალთ სისტემიდან %1$s-დან ყველგან."</string>
@@ -27,7 +26,7 @@
   <string name="screen_recovery_key_confirm_key_description">"თუ თქვენ გაქვთ უსაფრთხოების გასაღები ან უსაფრთხოების ფრაზა, ეს ასევე იმუშავებს."</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"შეყვანა"</string>
   <string name="screen_recovery_key_confirm_success">"აღდგენის გასაღები დადასტურებულია"</string>
-  <string name="screen_recovery_key_confirm_title">"შეიყვანეთ თქვენი აღდგენის გასაღები"</string>
+  <string name="screen_recovery_key_confirm_title">"შეიყვანეთ აღდგენის გასაღები"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"დაკოპირებულია აღდგენის გასაღები"</string>
   <string name="screen_recovery_key_generating_key">"გენერირება…"</string>
   <string name="screen_recovery_key_save_action">"აღდგენის გასაღების შენახვა"</string>
@@ -41,4 +40,5 @@
   <string name="screen_recovery_key_setup_generate_key_description">"დარწმუნდით, რომ შეგიძლიათ შეინახოთ თქვენი აღდგენის გასაღები სადმე უსაფრთხო ადგილას"</string>
   <string name="screen_recovery_key_setup_success">"აღდგენის დაყენება წარმატებით დასრულდა"</string>
   <string name="screen_recovery_key_setup_title">"აღდგენის დაყენება"</string>
+  <string name="screen_reset_encryption_password_placeholder">"შეყვანა"</string>
 </resources>

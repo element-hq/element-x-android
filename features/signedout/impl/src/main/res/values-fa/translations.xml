@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signed_out_reason_1">"گذرواژه‌تان را در نشستی دیگر تغییر داده‌اید"</string>
+  <string name="screen_signed_out_reason_2">"این نشست را از نشستی دیگر حذف کرده‌اید"</string>
+  <string name="screen_signed_out_title">"خارج شده‌اید"</string>
+</resources>

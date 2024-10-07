@@ -5,7 +5,7 @@
   <string name="screen_chat_backup_key_backup_description">"Zálohovanie zaisťuje, že nestratíte históriu správ. %1$s."</string>
   <string name="screen_chat_backup_key_backup_title">"Zálohovanie"</string>
   <string name="screen_chat_backup_recovery_action_change">"Zmeniť kľúč na obnovenie"</string>
-  <string name="screen_chat_backup_recovery_action_confirm">"Potvrdiť kľúč na obnovenie"</string>
+  <string name="screen_chat_backup_recovery_action_confirm">"Zadajte kľúč na obnovenie"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Vaša záloha konverzácie nie je momentálne synchronizovaná."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Nastaviť obnovovanie"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Získajte prístup k vašim šifrovaným správam aj keď stratíte všetky svoje zariadenia alebo sa odhlásite zo všetkých %1$s zariadení."</string>
@@ -42,7 +42,7 @@
   <string name="screen_recovery_key_confirm_key_placeholder">"Zadať…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Stratili ste kľúč na obnovenie?"</string>
   <string name="screen_recovery_key_confirm_success">"Kľúč na obnovu potvrdený"</string>
-  <string name="screen_recovery_key_confirm_title">"Zadajte kľúč na obnovenie"</string>
+  <string name="screen_recovery_key_confirm_title">"Potvrďte svoj kľúč na obnovenie"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Skopírovaný kľúč na obnovenie"</string>
   <string name="screen_recovery_key_generating_key">"Generovanie…"</string>
   <string name="screen_recovery_key_save_action">"Uložiť kľúč na obnovenie"</string>
@@ -60,7 +60,7 @@
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Tento proces je nezvratný."</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"Naozaj chcete obnoviť svoje šifrovanie?"</string>
   <string name="screen_reset_encryption_password_error">"Nastala neznáma chyba. Skontrolujte, či je heslo vášho účtu správne a skúste to znova."</string>
-  <string name="screen_reset_encryption_password_placeholder">"Zadajte…"</string>
+  <string name="screen_reset_encryption_password_placeholder">"Zadať…"</string>
   <string name="screen_reset_encryption_password_subtitle">"Potvrďte, že chcete obnoviť svoje šifrovanie."</string>
   <string name="screen_reset_encryption_password_title">"Ak chcete pokračovať, zadajte heslo účtu"</string>
 </resources>

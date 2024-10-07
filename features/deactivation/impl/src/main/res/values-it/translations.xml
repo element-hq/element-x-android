@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Conferma di voler disattivare il tuo account. Questa azione è irreversibile."</string>
+  <string name="screen_deactivate_account_delete_all_messages">"Elimina tutti i miei messaggi"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"Attenzione: gli utenti futuri potrebbero vedere conversazioni incomplete."</string>
+  <string name="screen_deactivate_account_description">"La disattivazione del tuo account è %1$s , quindi:"</string>
+  <string name="screen_deactivate_account_description_bold_part">"irreversibile"</string>
+  <string name="screen_deactivate_account_list_item_1">"%1$s il tuo account (non puoi riaccedere e il tuo ID non può essere riutilizzato)."</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"Disattiva permanentemente"</string>
+  <string name="screen_deactivate_account_list_item_2">"Ti rimuove da tutte le stanze di chat."</string>
+  <string name="screen_deactivate_account_list_item_3">"Elimina le informazioni del tuo account dal nostro server di identità."</string>
+  <string name="screen_deactivate_account_list_item_4">"I tuoi messaggi saranno ancora visibili agli utenti registrati, ma non saranno disponibili per gli utenti nuovi o non registrati se decidi di eliminarli."</string>
+  <string name="screen_deactivate_account_title">"Disattivazione dell\'account"</string>
+</resources>

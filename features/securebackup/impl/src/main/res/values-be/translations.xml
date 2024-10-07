@@ -60,7 +60,7 @@
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Гэты працэс незваротны."</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"Вы ўпэўнены, што хочаце скінуць шыфраванне?"</string>
   <string name="screen_reset_encryption_password_error">"Адбылася невядомая памылка. Калі ласка, праверце правільнасць пароля вашага ўліковага запісу і паўтарыце спробу."</string>
-  <string name="screen_reset_encryption_password_placeholder">"Увод…"</string>
+  <string name="screen_reset_encryption_password_placeholder">"Увесці…"</string>
   <string name="screen_reset_encryption_password_subtitle">"Пацвердзіце, што вы хочаце скінуць шыфраванне"</string>
   <string name="screen_reset_encryption_password_title">"Каб працягнуць, увядзіце пароль уліковага запісу"</string>
 </resources>

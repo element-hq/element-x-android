@@ -29,6 +29,12 @@ android {
     }
 }
 
+kotlin {
+    jvmToolchain {
+        languageVersion = Versions.javaLanguageVersion
+    }
+}
+
 dependencies {
     commonDependencies(libs)
     composeDependencies(libs)

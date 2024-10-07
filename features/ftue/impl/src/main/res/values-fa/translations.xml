@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_notification_optin_subtitle">"می‌توانید بعداً تنظیماتتان را تغییر دهید."</string>
+  <string name="screen_notification_optin_title">"اجازه به آگاهی‌ها و از دست ندادن پیام‌ها"</string>
+  <string name="screen_welcome_button">"بزن بریم!"</string>
+  <string name="screen_welcome_subtitle">"چیزهایی که باید بدانید:"</string>
+  <string name="screen_welcome_title">"به %1$s خوش آمدید!"</string>
+</resources>
