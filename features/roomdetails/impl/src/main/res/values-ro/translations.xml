@@ -70,7 +70,7 @@
   </plurals>
   <string name="screen_room_member_list_manage_member_ban">"Eliminați și interziceți membrul"</string>
   <string name="screen_room_member_list_manage_member_remove">"Înlăturați membrul"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Înlăturați și interziceți membrul"</string>
+  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Eliminați și interziceți membrul"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Doar înlăturare"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_title">"Înlăturați membrul și interziceți-i să se alăture în viitor?"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Anulare excludere"</string>

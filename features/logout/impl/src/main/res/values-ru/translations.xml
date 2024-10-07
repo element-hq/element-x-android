@@ -14,5 +14,5 @@
   <string name="screen_signout_recovery_disabled_subtitle">"Вы собираетесь выйти из последнего сеанса. Если вы выйдете из системы сейчас, вы потеряете доступ к зашифрованным сообщениям."</string>
   <string name="screen_signout_recovery_disabled_title">"Восстановление не настроено"</string>
   <string name="screen_signout_save_recovery_key_subtitle">"Вы собираетесь выйти из последнего сеанса. Если вы выйдете из системы сейчас, вы можете потерять доступ к зашифрованным сообщениям."</string>
-  <string name="screen_signout_save_recovery_key_title">"Вы сохранили свой ключ восстановления?"</string>
+  <string name="screen_signout_save_recovery_key_title">"Вы сохранили ключ восстановления?"</string>
 </resources>

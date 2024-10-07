@@ -23,6 +23,7 @@
     <item quantity="other">"%d προσκλήσεις"</item>
   </plurals>
   <string name="notification_invite_body">"Σε προσκάλεσε να συνομιλήσετε"</string>
+  <string name="notification_invite_body_with_sender">"Ο χρήστης %1$s σε προσκάλεσε σε συνομιλία"</string>
   <string name="notification_mentioned_you_body">"Σέ ανέφερε: %1$s"</string>
   <string name="notification_new_messages">"Νέα Μηνύματα"</string>
   <plurals name="notification_new_messages_for_room">
@@ -33,6 +34,7 @@
   <string name="notification_room_action_mark_as_read">"Επισήμανση ως αναγνωσμένου"</string>
   <string name="notification_room_action_quick_reply">"Γρήγορη απάντηση"</string>
   <string name="notification_room_invite_body">"Σέ προσκάλεσε να συμμετάσχεις στο δωμάτιο"</string>
+  <string name="notification_room_invite_body_with_sender">"Ο χρήστης %1$s σε προσκάλεσε να συμμετάσχεις στο δωμάτιο"</string>
   <string name="notification_sender_me">"Εγώ"</string>
   <string name="notification_sender_mention_reply">"Ο χρήστης %1$s αναφέρθηκε ή απάντησε"</string>
   <string name="notification_test_push_notification_content">"Βλέπεις την ειδοποίηση! Κάνε μου κλικ!"</string>

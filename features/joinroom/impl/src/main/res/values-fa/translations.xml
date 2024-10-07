@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_join_action">"پیوستن به اتاق"</string>
+  <string name="screen_join_room_knock_action">"در زدن برای پیوستن"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s هنوز از فضاها پشتیبانی نمی‌کند. می‌توانید روی وب به فضاها دسترسی داشته باشید."</string>
+  <string name="screen_join_room_space_not_supported_title">"فضاها هنوز پشتیبانی نمی‌شوند"</string>
+  <string name="screen_join_room_subtitle_knock">"زدن روی این دکمه برای آگاه شدن مدیر اتاق. پس از تأیید می‌توانید به گفت‌وگو بپیوندید."</string>
+  <string name="screen_join_room_subtitle_no_preview">"برای دیدن تاریخچهٔ پیام باید عضو این اتاق باشید."</string>
+  <string name="screen_join_room_title_knock">"می‌خواهید به اتاق بپیوندید؟"</string>
+  <string name="screen_join_room_title_no_preview">"پیش‌نمایش موجود نیست"</string>
+</resources>

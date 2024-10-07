@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"فعّالیت‌ها"</string>
+  <string name="emoji_picker_category_flags">"پرچم‌ها"</string>
+  <string name="emoji_picker_category_foods">"غذا و نوشیدنی"</string>
+  <string name="emoji_picker_category_nature">"حیوانات و طبعیت"</string>
+  <string name="emoji_picker_category_objects">"اشیا"</string>
+  <string name="emoji_picker_category_people">"شکلک‌ها و افراد"</string>
+  <string name="emoji_picker_category_places">"سفر و مکان‌ها"</string>
+  <string name="emoji_picker_category_symbols">"نمادها"</string>
+  <string name="screen_report_content_block_user">"انسداد کاربر"</string>
+  <string name="screen_report_content_hint">"دلیل گزارش این محتوا"</string>
+  <string name="screen_room_attachment_source_camera">"دوربین"</string>
+  <string name="screen_room_attachment_source_camera_photo">"عکس گرفتن"</string>
+  <string name="screen_room_attachment_source_camera_video">"ضبط ویدیو"</string>
+  <string name="screen_room_attachment_source_files">"پیوست"</string>
+  <string name="screen_room_attachment_source_gallery">"کتابخانهٔ عکس و ویدیو"</string>
+  <string name="screen_room_attachment_source_location">"مکان"</string>
+  <string name="screen_room_attachment_source_poll">"نظرسنجی"</string>
+  <string name="screen_room_attachment_text_formatting">"قالب‌بندی متن"</string>
+  <string name="screen_room_invite_again_alert_message">"می‌خواهید دوباره دعوتش کنید؟"</string>
+  <string name="screen_room_invite_again_alert_title">"در این گپ تنهایید"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"آگاهی به تمام اتاق"</string>
+  <string name="screen_room_mentions_at_room_title">"هرکسی"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"فرستادن دوباره"</string>
+  <string name="screen_room_retry_send_menu_title">"فرستادن پیامتان شکست خورد"</string>
+  <string name="screen_room_timeline_add_reaction">"افزودن شکلک"</string>
+  <string name="screen_room_timeline_beginning_of_room">"آغاز %1$s است."</string>
+  <string name="screen_room_timeline_beginning_of_room_no_name">"این، آغاز گفت‌وگوست."</string>
+  <string name="screen_room_timeline_less_reactions">"نمایش کم‌تر"</string>
+  <string name="screen_room_timeline_message_copied">"پیام رونوشت شد"</string>
+  <string name="screen_room_timeline_no_permission_to_post">"اجازهٔ فرستادن به این اتاق را ندارید"</string>
+  <string name="screen_room_timeline_reactions_show_less">"نمایش کم‌تر"</string>
+  <string name="screen_room_timeline_reactions_show_more">"نمایش بیش‌تر"</string>
+  <string name="screen_room_timeline_read_marker_title">"جدید"</string>
+  <string name="screen_room_typing_two_members">"%1$s و %2$s"</string>
+</resources>

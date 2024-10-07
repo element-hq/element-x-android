@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"Kontoanbieter ändern"</string>
+  <string name="screen_account_provider_change">"Kontoanbieter wechseln"</string>
   <string name="screen_account_provider_form_hint">"Homeserver-Adresse"</string>
   <string name="screen_account_provider_form_notice">"Gib einen Suchbegriff oder eine Domainadresse ein."</string>
   <string name="screen_account_provider_form_subtitle">"Suche nach einem Unternehmen, einer Community oder einem privaten Server."</string>

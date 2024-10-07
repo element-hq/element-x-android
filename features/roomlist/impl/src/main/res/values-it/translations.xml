@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"Esci e aggiorna"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Il tuo server ora supporta un nuovo protocollo più veloce. Esci e rientra per effettuare l\'aggiornamento. Se lo fai ora, eviterai una disconnessione forzata quando il vecchio protocollo verrà rimosso in seguito."</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Il tuo homeserver non supporta più il vecchio protocollo. Esci e rientra per continuare a usare l\'app."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Aggiornamento disponibile"</string>
+  <string name="banner_set_up_recovery_content">"Genera una nuova chiave di recupero che può essere usata per ripristinare la cronologia dei messaggi crittografati nel caso in cui tu perda l\'accesso ai tuoi dispositivi."</string>
+  <string name="banner_set_up_recovery_title">"Configura il ripristino"</string>
   <string name="confirm_recovery_key_banner_message">"Il backup della chat non è attualmente sincronizzato. Devi confermare la chiave di recupero per mantenere l\'accesso al backup della chat."</string>
   <string name="confirm_recovery_key_banner_title">"Inserisci la chiave di recupero"</string>
   <string name="full_screen_intent_banner_message">"Per non perdere mai una chiamata importante, modifica le impostazioni per consentire le notifiche a schermo intero quando il telefono è bloccato."</string>

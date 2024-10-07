@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"Wyloguj się i zaktualizuj"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Twój serwer obsługuje teraz nowy, szybszy protokół. Wyloguj się i zaloguj ponownie, aby uaktualnić teraz. Zrobienie tego teraz pomoże uniknąć wymuszonego wylogowania, gdy stary protokół zostanie później usunięty."</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Twój serwer domowy już nie wspiera starego protokołu. Zaloguj się ponownie, aby kontynuować korzystanie z aplikacji."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Dostępna aktualizacja"</string>
+  <string name="banner_set_up_recovery_content">"Wygeneruj nowy klucz przywracania, którego można użyć do przywrócenia historii wiadomości szyfrowanych w przypadku utraty dostępu do swoich urządzeń."</string>
+  <string name="banner_set_up_recovery_title">"Skonfiguruj przywracanie"</string>
   <string name="confirm_recovery_key_banner_message">"Twoja kopia zapasowa czatu jest obecnie niezsynchronizowana. Aby zachować dostęp do kopii zapasowej czatu, musisz potwierdzić klucz odzyskiwania."</string>
   <string name="confirm_recovery_key_banner_title">"Wprowadź swój klucz przywracania"</string>
   <string name="full_screen_intent_banner_message">"Upewnij się, że nie pominiesz żadnego połączenia. Zmień swoje ustawienia i zezwól na powiadomienia na blokadzie ekranu."</string>

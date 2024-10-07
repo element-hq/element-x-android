@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_app_lock_biometric_authentication">"هویت‌سنجی زیستی"</string>
+  <string name="screen_app_lock_biometric_unlock">"قفل‌گشایی زیست‌سنجی"</string>
+  <string name="screen_app_lock_biometric_unlock_title_android">"قفل‌گشایی با زیست‌سنجی"</string>
+  <string name="screen_app_lock_forgot_pin">"فراموشی پین؟"</string>
+  <string name="screen_app_lock_settings_change_pin">"تغییر کد پین"</string>
+  <string name="screen_app_lock_settings_enable_biometric_unlock">"احازه به قفل گشایی زیست‌سنجی"</string>
+  <string name="screen_app_lock_settings_remove_pin">"برداشتن پین"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_message">"مطمئنید که می‌خواهید پین را بردارید؟"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_title">"برداشتن پین؟"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_allow_title">"اجازه به %1$s"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_skip">"ترجیح می‌دهم از پین استفاده کنم"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"زمیانتان را ذخیره کرده و از %1$s برای قفل‌گشایی هربارهٔ کاره استفاده کنید"</string>
+  <string name="screen_app_lock_setup_choose_pin">"گزینش پین"</string>
+  <string name="screen_app_lock_setup_confirm_pin">"تأیید پین"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"به دلیل امنیتی نمی‌توانید این پین را برگزینید"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"گزینشی پینی متفاوت"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"لطفاً یک پین را دو بار وارد کنید"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"پین‌ها مطابق نیستند"</string>
+  <string name="screen_app_lock_signout_alert_message">"برای ادامه باید دوباره وارد شده و پینی جدید ایجاد کنید"</string>
+  <string name="screen_app_lock_signout_alert_title">"دارید خارج می‌شوید"</string>
+  <string name="screen_app_lock_use_biometric_android">"استفاده از زیست‌سنجی"</string>
+  <string name="screen_app_lock_use_pin_android">"استفاده از پین"</string>
+  <string name="screen_signout_in_progress_dialog_content">"خارج شدن…"</string>
+</resources>

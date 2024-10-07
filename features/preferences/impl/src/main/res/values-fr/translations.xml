@@ -54,5 +54,5 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_system_notifications_turned_off">"Les notifications du système sont désactivées"</string>
   <string name="screen_notification_settings_title">"Notifications"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Dépannage"</string>
-  <string name="troubleshoot_notifications_entry_point_title">"Résoudre les problèmes liés aux notifications"</string>
+  <string name="troubleshoot_notifications_entry_point_title">"Dépanner les notifications"</string>
 </resources>

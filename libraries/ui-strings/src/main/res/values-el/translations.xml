@@ -104,6 +104,7 @@
   <string name="action_send_message">"Αποστολή μηνύματος"</string>
   <string name="action_share">"Κοινή χρήση"</string>
   <string name="action_share_link">"Κοινή χρήση συνδέσμου"</string>
+  <string name="action_show">"Εμφάνιση"</string>
   <string name="action_sign_in_again">"Συνδέσου ξανά"</string>
   <string name="action_signout">"Αποσύνδεση"</string>
   <string name="action_signout_anyway">"Αποσύνδεση ούτως ή άλλως"</string>
@@ -130,6 +131,7 @@
   <string name="common_call_invite">"Κλήση σε εξέλιξη (δεν υποστηρίζεται)"</string>
   <string name="common_call_started">"Η κλήση ξεκίνησε"</string>
   <string name="common_chat_backup">"Αντίγραφο ασφαλείας συνομιλίας"</string>
+  <string name="common_copied_to_clipboard">"Αντιγράφηκε στο πρόχειρο"</string>
   <string name="common_copyright">"Πνευματικά δικαιώματα"</string>
   <string name="common_creating_room">"Δημιουργία δωματίου…"</string>
   <string name="common_current_user_left_room">"Αποχώρησε από το δωμάτιο"</string>
@@ -248,6 +250,8 @@
   <string name="common_voice_message">"Φωνητικό μήνυμα"</string>
   <string name="common_waiting">"Αναμονή…"</string>
   <string name="common_waiting_for_decryption_key">"Αναμονή για αυτό το μήνυμα"</string>
+  <string name="common_you">"Εσύ"</string>
+  <string name="crypto_identity_change_pin_violation">"Η ταυτότητα του χρήστη %1$s φαίνεται να έχει αλλάξει. %2$s"</string>
   <string name="dialog_title_confirmation">"Επιβεβαίωση"</string>
   <string name="dialog_title_error">"Σφάλμα"</string>
   <string name="dialog_title_success">"Επιτυχία"</string>

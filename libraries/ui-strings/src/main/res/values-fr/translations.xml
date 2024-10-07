@@ -95,6 +95,7 @@
   <string name="action_report_bug">"Signaler un problème"</string>
   <string name="action_report_content">"Signaler le contenu"</string>
   <string name="action_reset">"Réinitialiser"</string>
+  <string name="action_reset_identity">"Réinitialiser l’identité"</string>
   <string name="action_retry">"Réessayer"</string>
   <string name="action_retry_decryption">"Réessayer le déchiffrement"</string>
   <string name="action_save">"Enregistrer"</string>

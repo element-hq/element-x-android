@@ -4,7 +4,6 @@
   <string name="screen_create_poll_anonymous_desc">"შედეგების ჩვენება მხოლოდ გამოკითხვის დასრულების შემდეგ"</string>
   <string name="screen_create_poll_anonymous_headline">"ხმების დამალვა"</string>
   <string name="screen_create_poll_answer_hint">"ვარიანტი %1$d"</string>
-  <string name="screen_create_poll_cancel_confirmation_content_android">"თქვენი ცვლილებები არ არის შენახული. დარწმუნებული ხართ, რომ გსურთ დაბრუნება?"</string>
   <string name="screen_create_poll_question_desc">"კითხვა ან თემა"</string>
   <string name="screen_create_poll_question_hint">"რას ეხება გამოკითხვა?"</string>
   <string name="screen_create_poll_title">"გამოკითხვის შექმნა"</string>
