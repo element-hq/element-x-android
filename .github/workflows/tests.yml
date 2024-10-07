@@ -85,6 +85,8 @@ jobs:
       # https://github.com/codecov/codecov-action
       - name: ☂️ Upload coverage reports to codecov
         uses: codecov/codecov-action@v4
+        # Skip in forks
+        if: ${{ github.repository == 'element-hq/element-x-android' && ('pull_request' != github.event_name || github.event.pull_request.head.repo.full_name == github.repository) }}
         with:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
