@@ -43,7 +43,7 @@ jobs:
     name: Create App Bundle Enterprise
     runs-on: ubuntu-latest
     # Skip in forks
-    if: ${{ github.repository == 'element-hq/element-x-android' }}
+    if: ${{ github.repository == 'element-hq/element-x-android' && ('pull_request' != github.event_name || github.event.pull_request.head.repo.full_name == github.repository) }}
     concurrency:
       group: ${{ format('build-release-main-enterprise-{0}', github.sha) }}
       cancel-in-progress: true
@@ -52,7 +52,7 @@ jobs:
       - name: Add SSH private keys for submodule repositories
         uses: webfactory/ssh-agent@v0.9.0
         # Skip in forks
-        if: ${{ github.repository == 'element-hq/element-x-android' }}
+        if: ${{ github.repository == 'element-hq/element-x-android' && ('pull_request' != github.event_name || github.event.pull_request.head.repo.full_name == github.repository) }}
         with:
           ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Clone submodules
