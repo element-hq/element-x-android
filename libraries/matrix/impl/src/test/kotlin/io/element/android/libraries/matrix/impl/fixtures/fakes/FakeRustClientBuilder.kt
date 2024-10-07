@@ -18,6 +18,7 @@ import org.matrix.rustcomponents.sdk.RequestConfig
 import org.matrix.rustcomponents.sdk.SlidingSyncVersionBuilder
 import uniffi.matrix_sdk.BackupDownloadStrategy
 import uniffi.matrix_sdk_crypto.CollectStrategy
+import uniffi.matrix_sdk_crypto.TrustRequirement
 
 class FakeRustClientBuilder : ClientBuilder(NoPointer) {
     override fun addRootCertificates(certificates: List<ByteArray>) = this
@@ -26,6 +27,7 @@ class FakeRustClientBuilder : ClientBuilder(NoPointer) {
     override fun backupDownloadStrategy(backupDownloadStrategy: BackupDownloadStrategy) = this
     override fun disableAutomaticTokenRefresh() = this
     override fun disableBuiltInRootCertificates() = this
+    override fun roomDecryptionTrustRequirement(trustRequirement: TrustRequirement) = this
     override fun disableSslVerification() = this
     override fun enableCrossProcessRefreshLock(processId: String, sessionDelegate: ClientSessionDelegate) = this
     override fun homeserverUrl(url: String) = this
