@@ -34,6 +34,7 @@ import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -97,51 +98,54 @@ private fun AttachmentSourcePickerMenu(
             .navigationBarsPadding()
             .imePadding()
     ) {
-        ListItem(
-            modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.PhotoFromCamera) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.TakePhoto())),
-            headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_camera_photo)) },
-            style = ListItemStyle.Primary,
-        )
-        ListItem(
-            modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.VideoFromCamera) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VideoCall())),
-            headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_camera_video)) },
-            style = ListItemStyle.Primary,
-        )
-        ListItem(
-            modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Image())),
-            headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_gallery)) },
-            style = ListItemStyle.Primary,
-        )
-        ListItem(
-            modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Attachment())),
-            headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_files)) },
-            style = ListItemStyle.Primary,
-        )
-        if (state.canShareLocation) {
+        if (state.attachmentsState == AttachmentsState.None &&
+            state.mode == MessageComposerMode.Normal) {
             ListItem(
-                modifier = Modifier.clickable {
-                    state.eventSink(MessageComposerEvents.PickAttachmentSource.Location)
-                    onSendLocationClick()
-                },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.LocationPin())),
-                headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_location)) },
+                modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.PhotoFromCamera) },
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.TakePhoto())),
+                headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_camera_photo)) },
                 style = ListItemStyle.Primary,
             )
-        }
-        if (state.canCreatePoll) {
             ListItem(
-                modifier = Modifier.clickable {
-                    state.eventSink(MessageComposerEvents.PickAttachmentSource.Poll)
-                    onCreatePollClick()
-                },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Polls())),
-                headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_poll)) },
+                modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.VideoFromCamera) },
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VideoCall())),
+                headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_camera_video)) },
                 style = ListItemStyle.Primary,
             )
+            ListItem(
+                modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.FromGallery) },
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Image())),
+                headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_gallery)) },
+                style = ListItemStyle.Primary,
+            )
+            ListItem(
+                modifier = Modifier.clickable { state.eventSink(MessageComposerEvents.PickAttachmentSource.FromFiles) },
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Attachment())),
+                headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_files)) },
+                style = ListItemStyle.Primary,
+            )
+            if (state.canShareLocation) {
+                ListItem(
+                    modifier = Modifier.clickable {
+                        state.eventSink(MessageComposerEvents.PickAttachmentSource.Location)
+                        onSendLocationClick()
+                    },
+                    leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.LocationPin())),
+                    headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_location)) },
+                    style = ListItemStyle.Primary,
+                )
+            }
+            if (state.canCreatePoll) {
+                ListItem(
+                    modifier = Modifier.clickable {
+                        state.eventSink(MessageComposerEvents.PickAttachmentSource.Poll)
+                        onCreatePollClick()
+                    },
+                    leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Polls())),
+                    headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_poll)) },
+                    style = ListItemStyle.Primary,
+                )
+            }
         }
         if (enableTextFormatting) {
             ListItem(

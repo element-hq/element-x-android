@@ -26,7 +26,6 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
-import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
@@ -51,7 +50,6 @@ import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.services.analytics.api.AnalyticsService
-import kotlinx.collections.immutable.ImmutableList
 
 @ContributesNode(RoomScope::class)
 class MessagesNode @AssistedInject constructor(
@@ -76,7 +74,6 @@ class MessagesNode @AssistedInject constructor(
     interface Callback : Plugin {
         fun onRoomDetailsClick()
         fun onEventClick(event: TimelineItem.Event): Boolean
-        fun onPreviewAttachments(attachments: ImmutableList<Attachment>)
         fun onUserDataClick(userId: UserId)
         fun onPermalinkClick(data: PermalinkData)
         fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
@@ -113,10 +110,6 @@ class MessagesNode @AssistedInject constructor(
             ?.map { it.onEventClick(event) }
             ?.all { it }
             .orFalse()
-    }
-
-    private fun onPreviewAttachments(attachments: ImmutableList<Attachment>) {
-        callbacks.forEach { it.onPreviewAttachments(attachments) }
     }
 
     private fun onUserDataClick(userId: UserId) {
@@ -208,7 +201,6 @@ class MessagesNode @AssistedInject constructor(
                 onBackClick = this::navigateUp,
                 onRoomDetailsClick = this::onRoomDetailsClick,
                 onEventClick = this::onEventClick,
-                onPreviewAttachments = this::onPreviewAttachments,
                 onUserDataClick = this::onUserDataClick,
                 onLinkClick = { onLinkClick(context, it, state.timelineState.eventSink) },
                 onSendLocationClick = this::onSendLocationClick,
