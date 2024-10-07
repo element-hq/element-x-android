@@ -71,6 +71,7 @@ class RoomMembersModerationStatePreviewProvider : PreviewParameterProvider<RoomM
 }
 
 fun aRoomMembersModerationState(
+    canDisplayModerationActions: Boolean = false,
     selectedRoomMember: RoomMember? = null,
     actions: List<ModerationAction> = emptyList(),
     kickUserAsyncAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
@@ -79,6 +80,7 @@ fun aRoomMembersModerationState(
     canDisplayBannedUsers: Boolean = false,
     eventSink: (RoomMembersModerationEvents) -> Unit = {},
 ) = RoomMembersModerationState(
+    canDisplayModerationActions = canDisplayModerationActions,
     selectedRoomMember = selectedRoomMember,
     actions = actions.toPersistentList(),
     kickUserAsyncAction = kickUserAsyncAction,

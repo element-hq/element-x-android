@@ -21,7 +21,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationEvents
-import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationPresenter
+import io.element.android.features.roomdetails.impl.members.moderation.RoomMembersModerationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -40,7 +40,7 @@ class RoomMemberListPresenter @AssistedInject constructor(
     private val room: MatrixRoom,
     private val roomMemberListDataSource: RoomMemberListDataSource,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val roomMembersModerationPresenter: RoomMembersModerationPresenter,
+    private val roomMembersModerationPresenter: Presenter<RoomMembersModerationState>,
     @Assisted private val navigator: RoomMemberListNavigator,
 ) : Presenter<RoomMemberListState> {
     @AssistedFactory
@@ -136,7 +136,7 @@ class RoomMemberListPresenter @AssistedInject constructor(
                 is RoomMemberListEvents.OnSearchActiveChanged -> isSearchActive = event.active
                 is RoomMemberListEvents.UpdateSearchQuery -> searchQuery = event.query
                 is RoomMemberListEvents.RoomMemberSelected -> coroutineScope.launch {
-                    if (roomMembersModerationPresenter.canDisplayModerationActions()) {
+                    if (roomModerationState.canDisplayModerationActions) {
                         roomModerationState.eventSink(RoomMembersModerationEvents.SelectRoomMember(event.roomMember))
                     } else {
                         navigator.openRoomMemberDetails(event.roomMember.userId)
