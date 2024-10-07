@@ -14,12 +14,17 @@ import io.element.android.features.rageshake.api.crash.CrashDetectionPresenter
 import io.element.android.features.rageshake.api.crash.CrashDetectionState
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionPresenter
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionState
+import io.element.android.features.rageshake.api.preferences.RageshakePreferencesPresenter
+import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.AppScope
 
 @ContributesTo(AppScope::class)
 @Module
 interface RageshakeModule {
+    @Binds
+    fun bindRageshakePreferencesPresenter(presenter: RageshakePreferencesPresenter): Presenter<RageshakePreferencesState>
+
     @Binds
     fun bindRageshakeDetectionPresenter(presenter: RageshakeDetectionPresenter): Presenter<RageshakeDetectionState>
 
