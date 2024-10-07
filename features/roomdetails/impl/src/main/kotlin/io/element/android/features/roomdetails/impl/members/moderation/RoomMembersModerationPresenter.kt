@@ -16,14 +16,12 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import com.squareup.anvil.annotations.ContributesBinding
 import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.finally
-import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -84,7 +82,8 @@ class RoomMembersModerationPresenter @Inject constructor(
                             moderationActions = buildList {
                                 add(ModerationAction.DisplayProfile(event.roomMember.userId))
                                 val currentUserMemberPowerLevel = room.userRole(room.sessionId)
-                                    .getOrDefault(RoomMember.Role.USER).powerLevel
+                                    .getOrDefault(RoomMember.Role.USER)
+                                    .powerLevel
                                 if (currentUserMemberPowerLevel > event.roomMember.powerLevel) {
                                     if (canKick()) {
                                         add(ModerationAction.KickUser(event.roomMember.userId))

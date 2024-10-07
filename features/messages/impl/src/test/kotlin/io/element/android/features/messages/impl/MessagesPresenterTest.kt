@@ -891,7 +891,7 @@ class MessagesPresenterTest {
                 content = aTimelineItemPollContent()
             )
             initialState.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, poll))
-            val finalState = awaitItem()
+            skipItems(1)
             composerRecorder.assertSingle(
                 MessageComposerEvents.SetMode(
                     composerMode = MessageComposerMode.Reply(
