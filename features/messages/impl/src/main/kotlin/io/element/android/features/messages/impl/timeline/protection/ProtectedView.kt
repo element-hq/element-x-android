@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -46,7 +47,7 @@ fun ProtectedView(
                 .background(Color(0x99000000)),
             contentAlignment = Alignment.Center,
         ) {
-            ElementTheme(darkTheme = false) {
+            ElementTheme(darkTheme = false, applySystemBarsUpdate = false) {
                 // Not using a button to be able to have correct size
                 Text(
                     modifier = Modifier
@@ -59,7 +60,7 @@ fun ProtectedView(
                         .border(
                             width = 1.dp,
                             color = ElementTheme.colors.borderInteractiveSecondary,
-                            shape = RoundedCornerShape(percent = 50),
+                            shape = CircleShape,
                         )
                         .padding(
                             horizontal = 16.dp,
