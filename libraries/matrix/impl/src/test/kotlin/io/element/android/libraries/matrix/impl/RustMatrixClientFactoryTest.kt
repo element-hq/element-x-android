@@ -10,7 +10,6 @@ package io.element.android.libraries.matrix.impl
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.impl.analytics.UtdTracker
 import io.element.android.libraries.matrix.impl.auth.FakeProxyProvider
 import io.element.android.libraries.matrix.impl.auth.FakeUserCertificatesProvider
 import io.element.android.libraries.matrix.impl.room.FakeTimelineEventTypeFilterFactory
@@ -50,7 +49,7 @@ fun TestScope.createRustMatrixClientFactory(
     userCertificatesProvider = FakeUserCertificatesProvider(),
     proxyProvider = FakeProxyProvider(),
     clock = FakeSystemClock(),
-    utdTracker = UtdTracker(FakeAnalyticsService()),
+    analyticsService = FakeAnalyticsService(),
     featureFlagService = FakeFeatureFlagService(),
     timelineEventTypeFilterFactory = FakeTimelineEventTypeFilterFactory(),
     clientBuilderProvider = FakeClientBuilderProvider(),

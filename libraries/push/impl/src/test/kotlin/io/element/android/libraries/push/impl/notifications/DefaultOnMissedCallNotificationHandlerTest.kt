@@ -24,10 +24,7 @@ import io.element.android.libraries.push.test.notifications.FakeImageLoaderHolde
 import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.mockk.mockk
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -39,7 +36,6 @@ class DefaultOnMissedCallNotificationHandlerTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `addMissedCallNotification - should add missed call notification`() = runTest {
-        val childScope = CoroutineScope(coroutineContext + SupervisorJob())
         val dataFactory = FakeNotificationDataFactory(
             messageEventToNotificationsResult = lambdaRecorder { _, _, _ -> emptyList() }
         )
@@ -59,7 +55,7 @@ class DefaultOnMissedCallNotificationHandlerTest {
                     notificationDataFactory = dataFactory,
                 ),
                 appNavigationStateService = FakeAppNavigationStateService(),
-                coroutineScope = childScope,
+                coroutineScope = backgroundScope,
                 matrixClientProvider = FakeMatrixClientProvider(),
                 imageLoaderHolder = FakeImageLoaderHolder(),
                 activeNotificationsProvider = FakeActiveNotificationsProvider(),
@@ -76,8 +72,5 @@ class DefaultOnMissedCallNotificationHandlerTest {
         runCurrent()
 
         dataFactory.messageEventToNotificationsResult.assertions().isCalledOnce()
-
-        // Cancel the coroutine scope so the test can finish
-        childScope.cancel()
     }
 }

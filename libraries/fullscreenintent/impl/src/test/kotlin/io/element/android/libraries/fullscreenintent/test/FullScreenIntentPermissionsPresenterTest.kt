@@ -15,7 +15,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.fullscreenintent.impl.DefaultFullScreenIntentPermissionsPresenter
+import io.element.android.libraries.fullscreenintent.impl.FullScreenIntentPermissionsPresenter
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.preferences.test.FakePreferenceDataStoreFactory
 import io.element.android.services.toolbox.api.intent.ExternalIntentLauncher
@@ -32,7 +32,7 @@ import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class DefaultFullScreenIntentPermissionsPresenterTest {
+class FullScreenIntentPermissionsPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -129,7 +129,7 @@ class DefaultFullScreenIntentPermissionsPresenterTest {
         externalIntentLauncher: ExternalIntentLauncher = FakeExternalIntentLauncher(),
         buildMeta: BuildMeta = aBuildMeta(),
         notificationManagerCompat: NotificationManagerCompat = mockk(relaxed = true)
-    ) = DefaultFullScreenIntentPermissionsPresenter(
+    ) = FullScreenIntentPermissionsPresenter(
         buildVersionSdkIntProvider = buildVersionSdkIntProvider,
         externalIntentLauncher = externalIntentLauncher,
         buildMeta = buildMeta,

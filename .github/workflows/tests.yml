@@ -57,7 +57,7 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
 
       - name: ⚙️ Check coverage for debug variant (includes unit & screenshot tests)
-        run: ./gradlew :tests:uitests:verifyPaparazziDebug :app:koverXmlReportGplayDebug :app:koverHtmlReportGplayDebug :app:koverVerifyAll $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew testDebugUnitTest :tests:uitests:verifyPaparazziDebug :app:koverXmlReportGplayDebug :app:koverHtmlReportGplayDebug :app:koverVerifyAll $CI_GRADLE_ARG_PROPERTIES
 
       - name: 🚫 Upload kover failed coverage reports
         if: failure()

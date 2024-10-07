@@ -32,22 +32,21 @@ import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
-import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.TimelineState
-import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
-import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryPresenter
-import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetPresenter
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
+import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
-import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
@@ -88,14 +87,14 @@ import timber.log.Timber
 class MessagesPresenter @AssistedInject constructor(
     @Assisted private val navigator: MessagesNavigator,
     private val room: MatrixRoom,
-    private val composerPresenter: MessageComposerPresenter,
-    private val voiceMessageComposerPresenter: VoiceMessageComposerPresenter,
+    private val composerPresenter: Presenter<MessageComposerState>,
+    private val voiceMessageComposerPresenter: Presenter<VoiceMessageComposerState>,
     timelinePresenterFactory: TimelinePresenter.Factory,
     private val timelineProtectionPresenter: Presenter<TimelineProtectionState>,
     private val actionListPresenterFactory: ActionListPresenter.Factory,
-    private val customReactionPresenter: CustomReactionPresenter,
-    private val reactionSummaryPresenter: ReactionSummaryPresenter,
-    private val readReceiptBottomSheetPresenter: ReadReceiptBottomSheetPresenter,
+    private val customReactionPresenter: Presenter<CustomReactionState>,
+    private val reactionSummaryPresenter: Presenter<ReactionSummaryState>,
+    private val readReceiptBottomSheetPresenter: Presenter<ReadReceiptBottomSheetState>,
     private val pinnedMessagesBannerPresenter: Presenter<PinnedMessagesBannerState>,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,

@@ -16,8 +16,8 @@ import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.createroom.test.FakeStartDMAction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
-import io.element.android.features.leaveroom.api.LeaveRoomPresenter
-import io.element.android.features.leaveroom.fake.FakeLeaveRoomPresenter
+import io.element.android.features.leaveroom.api.LeaveRoomState
+import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.roomdetails.impl.RoomDetailsEvent
 import io.element.android.features.roomdetails.impl.RoomDetailsPresenter
 import io.element.android.features.roomdetails.impl.RoomDetailsState
@@ -45,6 +45,7 @@ import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.FakeLifecycleOwner
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
@@ -72,7 +73,7 @@ class RoomDetailsPresenterTest {
 
     private fun TestScope.createRoomDetailsPresenter(
         room: MatrixRoom = aMatrixRoom(),
-        leaveRoomPresenter: LeaveRoomPresenter = FakeLeaveRoomPresenter(),
+        leaveRoomState: LeaveRoomState = aLeaveRoomState(),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
         analyticsService: AnalyticsService = FakeAnalyticsService(),
@@ -93,7 +94,7 @@ class RoomDetailsPresenterTest {
             featureFlagService = featureFlagService,
             notificationSettingsService = matrixClient.notificationSettingsService(),
             roomMembersDetailsPresenterFactory = roomMemberDetailsPresenterFactory,
-            leaveRoomPresenter = leaveRoomPresenter,
+            leaveRoomPresenter = { leaveRoomState },
             dispatchers = dispatchers,
             isPinnedMessagesFeatureEnabled = { isPinnedMessagesFeatureEnabled },
             analyticsService = analyticsService,
@@ -475,7 +476,7 @@ class RoomDetailsPresenterTest {
 
     @Test
     fun `present - leave room event is passed on to leave room presenter`() = runTest {
-        val leaveRoomPresenter = FakeLeaveRoomPresenter()
+        val leaveRoomEventRecorder = EventsRecorder<LeaveRoomEvent>()
         val room = aMatrixRoom(
             canInviteResult = { Result.success(true) },
             canUserJoinCallResult = { Result.success(true) },
@@ -483,25 +484,18 @@ class RoomDetailsPresenterTest {
         )
         val presenter = createRoomDetailsPresenter(
             room = room,
-            leaveRoomPresenter = leaveRoomPresenter,
+            leaveRoomState = aLeaveRoomState(eventSink = leaveRoomEventRecorder),
             dispatchers = testCoroutineDispatchers()
         )
         presenter.test {
             awaitItem().eventSink(RoomDetailsEvent.LeaveRoom)
-
-            assertThat(leaveRoomPresenter.events).contains(
-                LeaveRoomEvent.ShowConfirmation(
-                    room.roomId
-                )
-            )
-
+            leaveRoomEventRecorder.assertSingle(LeaveRoomEvent.ShowConfirmation(room.roomId))
             cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
     fun `present - notification mode changes`() = runTest {
-        val leaveRoomPresenter = FakeLeaveRoomPresenter()
         val notificationSettingsService = FakeNotificationSettingsService()
         val room = aMatrixRoom(
             notificationSettingsService = notificationSettingsService,
@@ -511,7 +505,6 @@ class RoomDetailsPresenterTest {
         )
         val presenter = createRoomDetailsPresenter(
             room = room,
-            leaveRoomPresenter = leaveRoomPresenter,
             notificationSettingsService = notificationSettingsService,
         )
         presenter.test {

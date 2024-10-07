@@ -27,7 +27,6 @@ dependencies {
     implementation(projects.services.toolbox.api)
     implementation(libs.androidx.datastore.preferences)
 
-    testImplementation(projects.libraries.fullscreenintent.test)
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)

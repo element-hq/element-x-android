@@ -57,9 +57,10 @@ fun aLeaveRoomState(
     confirmation: LeaveRoomState.Confirmation = LeaveRoomState.Confirmation.Hidden,
     progress: LeaveRoomState.Progress = LeaveRoomState.Progress.Hidden,
     error: LeaveRoomState.Error = LeaveRoomState.Error.Hidden,
+    eventSink: (LeaveRoomEvent) -> Unit = {},
 ) = LeaveRoomState(
     confirmation = confirmation,
     progress = progress,
     error = error,
-    eventSink = {},
+    eventSink = eventSink,
 )

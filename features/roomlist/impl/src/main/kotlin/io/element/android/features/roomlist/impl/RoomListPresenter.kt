@@ -27,8 +27,8 @@ import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.InviteData
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
-import io.element.android.features.leaveroom.api.LeaveRoomPresenter
-import io.element.android.features.logout.api.direct.DirectLogoutPresenter
+import io.element.android.features.leaveroom.api.LeaveRoomState
+import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
@@ -43,7 +43,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatch
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsPresenter
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -79,7 +79,7 @@ class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
-    private val leaveRoomPresenter: LeaveRoomPresenter,
+    private val leaveRoomPresenter: Presenter<LeaveRoomState>,
     private val roomListDataSource: RoomListDataSource,
     private val featureFlagService: FeatureFlagService,
     private val indicatorService: IndicatorService,
@@ -88,9 +88,9 @@ class RoomListPresenter @Inject constructor(
     private val sessionPreferencesStore: SessionPreferencesStore,
     private val analyticsService: AnalyticsService,
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
-    private val fullScreenIntentPermissionsPresenter: FullScreenIntentPermissionsPresenter,
+    private val fullScreenIntentPermissionsPresenter: Presenter<FullScreenIntentPermissionsState>,
     private val notificationCleaner: NotificationCleaner,
-    private val logoutPresenter: DirectLogoutPresenter,
+    private val logoutPresenter: Presenter<DirectLogoutState>,
 ) : Presenter<RoomListState> {
     private val encryptionService: EncryptionService = client.encryptionService()
     private val syncService: SyncService = client.syncService()

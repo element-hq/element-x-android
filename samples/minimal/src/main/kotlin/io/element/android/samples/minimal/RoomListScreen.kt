@@ -13,8 +13,8 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import io.element.android.features.invite.impl.response.AcceptDeclineInvitePresenter
 import io.element.android.features.invite.impl.response.AcceptDeclineInviteView
-import io.element.android.features.leaveroom.impl.DefaultLeaveRoomPresenter
-import io.element.android.features.logout.impl.direct.DefaultDirectLogoutPresenter
+import io.element.android.features.leaveroom.impl.LeaveRoomPresenter
+import io.element.android.features.logout.impl.direct.DirectLogoutPresenter
 import io.element.android.features.networkmonitor.impl.DefaultNetworkMonitor
 import io.element.android.features.roomlist.impl.RoomListPresenter
 import io.element.android.features.roomlist.impl.RoomListView
@@ -33,8 +33,7 @@ import io.element.android.libraries.eventformatter.impl.DefaultRoomLastMessageFo
 import io.element.android.libraries.eventformatter.impl.ProfileChangeContentFormatter
 import io.element.android.libraries.eventformatter.impl.RoomMembershipContentFormatter
 import io.element.android.libraries.eventformatter.impl.StateContentFormatter
-import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsPresenter
-import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
+import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 import io.element.android.libraries.indicator.impl.DefaultIndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -87,7 +86,7 @@ class RoomListScreen(
         client = matrixClient,
         networkMonitor = DefaultNetworkMonitor(context, Singleton.appScope),
         snackbarDispatcher = SnackbarDispatcher(),
-        leaveRoomPresenter = DefaultLeaveRoomPresenter(matrixClient, RoomMembershipObserver(), coroutineDispatchers),
+        leaveRoomPresenter = LeaveRoomPresenter(matrixClient, RoomMembershipObserver(), coroutineDispatchers),
         roomListDataSource = RoomListDataSource(
             roomListService = matrixClient.roomListService,
             roomListRoomSummaryFactory = roomListRoomSummaryFactory,
@@ -123,19 +122,9 @@ class RoomListScreen(
             notificationCleaner = FakeNotificationCleaner(),
         ),
         analyticsService = NoopAnalyticsService(),
-        fullScreenIntentPermissionsPresenter = object : FullScreenIntentPermissionsPresenter {
-            @Composable
-            override fun present(): FullScreenIntentPermissionsState {
-                return FullScreenIntentPermissionsState(
-                    permissionGranted = true,
-                    shouldDisplayBanner = false,
-                    dismissFullScreenIntentBanner = {},
-                    openFullScreenIntentSettings = {}
-                )
-            }
-        },
+        fullScreenIntentPermissionsPresenter = { aFullScreenIntentPermissionsState() },
         notificationCleaner = FakeNotificationCleaner(),
-        logoutPresenter = DefaultDirectLogoutPresenter(matrixClient, encryptionService),
+        logoutPresenter = DirectLogoutPresenter(matrixClient, encryptionService),
     )
 
     @Composable
