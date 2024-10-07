@@ -44,7 +44,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatch
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsPresenter
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -89,7 +89,7 @@ class RoomListPresenter @Inject constructor(
     private val sessionPreferencesStore: SessionPreferencesStore,
     private val analyticsService: AnalyticsService,
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
-    private val fullScreenIntentPermissionsPresenter: FullScreenIntentPermissionsPresenter,
+    private val fullScreenIntentPermissionsPresenter: Presenter<FullScreenIntentPermissionsState>,
     private val notificationCleaner: NotificationCleaner,
     private val logoutPresenter: Presenter<DirectLogoutState>,
 ) : Presenter<RoomListState> {

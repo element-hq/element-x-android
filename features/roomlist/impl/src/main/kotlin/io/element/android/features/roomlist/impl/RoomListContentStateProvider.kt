@@ -10,6 +10,7 @@ package io.element.android.features.roomlist.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
+import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -37,15 +38,3 @@ internal fun aRoomsContentState(
 internal fun aSkeletonContentState() = RoomListContentState.Skeleton(16)
 
 internal fun anEmptyContentState() = RoomListContentState.Empty
-
-internal fun aFullScreenIntentPermissionsState(
-    permissionGranted: Boolean = true,
-    shouldDisplay: Boolean = false,
-    openFullScreenIntentSettings: () -> Unit = {},
-    dismissFullScreenIntentBanner: () -> Unit = {},
-) = FullScreenIntentPermissionsState(
-    permissionGranted = permissionGranted,
-    shouldDisplayBanner = shouldDisplay,
-    openFullScreenIntentSettings = openFullScreenIntentSettings,
-    dismissFullScreenIntentBanner = dismissFullScreenIntentBanner,
-)

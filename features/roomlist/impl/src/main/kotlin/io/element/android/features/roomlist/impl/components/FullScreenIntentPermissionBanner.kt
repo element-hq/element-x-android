@@ -10,11 +10,11 @@ package io.element.android.features.roomlist.impl.components
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.roomlist.impl.R
-import io.element.android.features.roomlist.impl.aFullScreenIntentPermissionsState
 import io.element.android.libraries.designsystem.atomic.molecules.DialogLikeBannerMolecule
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
+import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 
 @Composable
 fun FullScreenIntentPermissionBanner(state: FullScreenIntentPermissionsState) {

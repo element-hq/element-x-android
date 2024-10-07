@@ -38,7 +38,7 @@ import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
-import io.element.android.libraries.fullscreenintent.test.FakeFullScreenIntentPermissionsPresenter
+import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 import io.element.android.libraries.indicator.impl.DefaultIndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -709,7 +709,7 @@ class RoomListPresenterTest {
         filtersPresenter = filtersPresenter,
         analyticsService = analyticsService,
         acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
-        fullScreenIntentPermissionsPresenter = FakeFullScreenIntentPermissionsPresenter(),
+        fullScreenIntentPermissionsPresenter = { aFullScreenIntentPermissionsState() },
         notificationCleaner = notificationCleaner,
         logoutPresenter = { aDirectLogoutState() },
     )

@@ -65,7 +65,6 @@ dependencies {
     testImplementation(projects.libraries.dateformatter.test)
     testImplementation(projects.libraries.eventformatter.test)
     testImplementation(projects.libraries.indicator.impl)
-    testImplementation(projects.libraries.fullscreenintent.test)
     testImplementation(projects.libraries.permissions.noop)
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.libraries.preferences.test)

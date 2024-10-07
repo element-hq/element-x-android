@@ -11,6 +11,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
+import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -86,16 +87,4 @@ fun aInvalidNotificationSettingsState(
     showChangePushProviderDialog = false,
     fullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(),
     eventSink = eventSink,
-)
-
-internal fun aFullScreenIntentPermissionsState(
-    permissionGranted: Boolean = true,
-    shouldDisplay: Boolean = false,
-    openFullScreenIntentSettings: () -> Unit = {},
-    dismissFullScreenIntentBanner: () -> Unit = {},
-) = FullScreenIntentPermissionsState(
-    permissionGranted = permissionGranted,
-    shouldDisplayBanner = shouldDisplay,
-    openFullScreenIntentSettings = openFullScreenIntentSettings,
-    dismissFullScreenIntentBanner = dismissFullScreenIntentBanner,
 )
