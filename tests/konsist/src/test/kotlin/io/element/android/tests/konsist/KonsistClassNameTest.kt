@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.tests.konsist
@@ -77,12 +68,20 @@ class KonsistClassNameTest {
             .withoutName(
                 "FakeFileSystem",
                 "FakeImageLoader",
-                "FakeRustRoom",
             )
             .assertTrue {
-                val interfaceName = it.name.replace("Fake", "")
-                it.name.startsWith("Fake") &&
-                    it.parents().any { parent -> parent.name.replace(".", "") == interfaceName }
+                val interfaceName = it.name
+                    .replace("FakeRust", "")
+                    .replace("Fake", "")
+                (it.name.startsWith("Fake") || it.name.startsWith("FakeRust")) &&
+                    it.parents().any { parent ->
+                        // Workaround to get the parent name. For instance:
+                        // parent.name used to return `UserListPresenter.Factory` but is now returning `Factory`.
+                        // So we need to retrieve the name of the parent class differently.
+                        val packageName = parent.packagee!!.name
+                        val parentName = parent.fullyQualifiedName!!.substringAfter("$packageName.").replace(".", "")
+                        parentName == interfaceName
+                    }
             }
     }
 

@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2024 New Vector Ltd
+ * Copyright 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.migration.impl
@@ -34,6 +25,32 @@ import org.junit.Test
 class MigrationPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
+
+    @Test
+    fun `present - run all migrations on fresh installation, and last version should be stored`() = runTest {
+        val migrations = (1..10).map { order ->
+            FakeAppMigration(order = order)
+        }
+        val store = InMemoryMigrationStore(initialApplicationMigrationVersion = -1)
+        val presenter = createPresenter(
+            migrationStore = store,
+            migrations = migrations.toSet(),
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.migrationAction).isEqualTo(AsyncData.Uninitialized)
+            skipItems(migrations.size)
+            awaitItem().also { state ->
+                assertThat(state.migrationAction).isEqualTo(AsyncData.Success(Unit))
+            }
+            assertThat(store.applicationMigrationVersion().first()).isEqualTo(migrations.maxOf { it.order })
+        }
+        for (migration in migrations) {
+            migration.migrateLambda.assertions().isCalledOnce()
+        }
+    }
 
     @Test
     fun `present - no migration should occurs if ApplicationMigrationVersion is the last one`() = runTest {
@@ -89,7 +106,7 @@ private fun createPresenter(
 
 private class FakeAppMigration(
     override val order: Int,
-    var migrateLambda: LambdaNoParamRecorder<Unit> = lambdaRecorder { -> },
+    val migrateLambda: LambdaNoParamRecorder<Unit> = lambdaRecorder { -> },
 ) : AppMigration {
     override suspend fun migrate() {
         migrateLambda()

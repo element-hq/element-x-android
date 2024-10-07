@@ -24,5 +24,4 @@
   <string name="screen_server_confirmation_message_register">"Това е мястото, където ще живеят вашите разговори — точно както бихте използвали имейл доставчик, за да съхранявате вашите имейли."</string>
   <string name="screen_server_confirmation_title_login">"На път сте да влезете в %1$s"</string>
   <string name="screen_server_confirmation_title_register">"На път сте да създадете акаунт в %1$s"</string>
-  <string name="screen_waitlist_message_success">"Добре дошли в %1$s!"</string>
 </resources>

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"Выйсці і абнавіць"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Ваш сервер зараз падтрымлівае новы, хутчэйшы пратакол. Выйдзіце з сістэмы і зноў увайдзіце, каб абнавіць яе. Гэта дапаможа вам пазбегнуць прымусовага выхаду з сістэмы, калі стары пратакол будзе пазней выдалены."</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Ваш хатні сервер больш не падтрымлівае стары пратакол. Калі ласка, выйдзіце і ўвайдзіце зноў, каб працягнуць выкарыстанне праграмы."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Даступна абнаўленне"</string>
+  <string name="banner_set_up_recovery_content">"Стварыце новы ключ аднаўлення, які можна выкарыстоўваць для аднаўлення зашыфраванай гісторыі паведамленняў у выпадку страты доступу да вашых прылад."</string>
+  <string name="banner_set_up_recovery_title">"Наладзіць аднаўленне"</string>
   <string name="confirm_recovery_key_banner_message">"Ваша рэзервовая копія чата зараз не сінхранізавана. Вам трэба пацвердзіць ключ аднаўлення, каб захаваць доступ да рэзервовай копіі чата."</string>
   <string name="confirm_recovery_key_banner_title">"Увядзіце ключ аднаўлення"</string>
   <string name="full_screen_intent_banner_message">"Каб не прапусціць важны званок, зменіце налады, каб дазволіць поўнаэкранныя апавяшчэнні, калі тэлефон заблакіраваны."</string>

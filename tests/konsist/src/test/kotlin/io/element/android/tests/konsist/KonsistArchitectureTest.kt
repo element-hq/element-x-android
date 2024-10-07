@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.tests.konsist
@@ -91,7 +82,15 @@ class KonsistArchitectureTest {
                     return@all if (type.startsWith("@") || type.startsWith("(") || type.startsWith("suspend")) {
                         true
                     } else {
-                        val fullyQualifiedName = param.type.declaration.packagee?.fullyQualifiedName + "." + type
+                        var typePackage = param.type.declaration.packagee?.name
+                        if (typePackage == type) {
+                            // Workaround, now that packagee.fullyQualifiedName is not available anymore
+                            // It seems that when the type in in the same package as the function,
+                            // the package is equal to the type (which is wrong).
+                            // So in this case, use the package of the function
+                            typePackage = it.packagee?.name
+                        }
+                        val fullyQualifiedName = "$typePackage.$type"
                         fullyQualifiedName !in forbiddenInterfacesForComposableParameter
                     }
                 }

@@ -26,6 +26,7 @@
     <item quantity="many">"%d запрашэнняў"</item>
   </plurals>
   <string name="notification_invite_body">"Запрасіў(-ла) вас у чат"</string>
+  <string name="notification_invite_body_with_sender">"%1$s запрасіў(-ла) вас у чат"</string>
   <string name="notification_mentioned_you_body">"Згадаў(-ла) вас: %1$s"</string>
   <string name="notification_new_messages">"Новыя паведамленні"</string>
   <plurals name="notification_new_messages_for_room">
@@ -37,6 +38,7 @@
   <string name="notification_room_action_mark_as_read">"Пазначыць як прачытанае"</string>
   <string name="notification_room_action_quick_reply">"Хуткі адказ"</string>
   <string name="notification_room_invite_body">"Запрасіў(-ла) вас далучыцца да пакоя"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s запрасіў(-ла) вас далучыцца да пакоя"</string>
   <string name="notification_sender_me">"Я"</string>
   <string name="notification_test_push_notification_content">"Вы праглядаеце апавяшчэнне! Націсніце мяне!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"Kijelentkezés és frissítés"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"A kiszolgálója mostantól egy új, gyorsabb protokollt támogat. A frissítéshez jelentkezzen ki, majd jelentkezzen be újra. Ha ezt most megteszi, elkerülheti a kényszerített kijelentkeztetést a régi protokollt eltávolításakor."</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"A Matrix-kiszolgáló már nem támogatja a régi protokollt. Az alkalmazás további használatához jelentkezzen ki és be."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Frissítés érhető el"</string>
   <string name="banner_set_up_recovery_content">"Hozzon létre egy új helyreállítási kulcsot, amellyel visszaállíthatja a titkosított üzenetek előzményeit, ha elveszíti az eszközökhöz való hozzáférést."</string>
   <string name="banner_set_up_recovery_title">"Helyreállítás beállítása"</string>
   <string name="confirm_recovery_key_banner_message">"A csevegés biztonsági mentése nincs szinkronban. Meg kell erősítenie a helyreállítási kulcsát, hogy továbbra is hozzáférjen a csevegés biztonsági mentéséhez."</string>

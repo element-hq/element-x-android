@@ -34,10 +34,4 @@
   <string name="screen_server_confirmation_message_register">"Aqui é onde suas conversas vão ficar — assim como você usa um provedor de e-mails para manter seus e-mails."</string>
   <string name="screen_server_confirmation_title_login">"Você está prestes a fazer login em %1$s"</string>
   <string name="screen_server_confirmation_title_register">"Você está prestes a criar uma conta em %1$s"</string>
-  <string name="screen_waitlist_message">"Há uma grande demanda por %1$s sobre %2$s no momento. Volte ao aplicativo em alguns dias e tente novamente. 
-
-Obrigado pela sua paciência!"</string>
-  <string name="screen_waitlist_message_success">"Bem-vindo ao %1$s!"</string>
-  <string name="screen_waitlist_title">"Você está quase lá."</string>
-  <string name="screen_waitlist_title_success">"Você está dentro."</string>
 </resources>

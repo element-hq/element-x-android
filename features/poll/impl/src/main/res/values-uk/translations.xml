@@ -4,7 +4,7 @@
   <string name="screen_create_poll_anonymous_desc">"Показувати результати тільки після закінчення опитування"</string>
   <string name="screen_create_poll_anonymous_headline">"Приховати голоси"</string>
   <string name="screen_create_poll_answer_hint">"Варіант %1$d"</string>
-  <string name="screen_create_poll_cancel_confirmation_content_android">"Ваші зміни не збережені. Ви впевнені, що хочете повернутися?"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Внесені зміни не збережено. Ви впевнені, що хочете повернутися?"</string>
   <string name="screen_create_poll_question_desc">"Питання або тема"</string>
   <string name="screen_create_poll_question_hint">"Про що йдеться в опитуванні?"</string>
   <string name="screen_create_poll_title">"Створити опитування"</string>

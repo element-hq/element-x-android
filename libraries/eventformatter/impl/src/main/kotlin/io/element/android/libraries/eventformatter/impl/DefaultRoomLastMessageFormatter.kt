@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.libraries.eventformatter.impl
@@ -70,25 +61,18 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
         val isOutgoing = event.isOwn
         val senderDisambiguatedDisplayName = event.senderProfile.getDisambiguatedDisplayName(event.sender)
         return when (val content = event.content) {
-            is MessageContent -> processMessageContents(content, senderDisambiguatedDisplayName, isDmRoom)
+            is MessageContent -> content.process(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             RedactedContent -> {
                 val message = sp.getString(CommonStrings.common_message_removed)
-                if (!isDmRoom) {
-                    message.prefixWith(senderDisambiguatedDisplayName)
-                } else {
-                    message
-                }
+                message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is StickerContent -> {
-                prefixIfNeeded(sp.getString(CommonStrings.common_sticker) + " (" + content.body + ")", senderDisambiguatedDisplayName, isDmRoom)
+                val message = sp.getString(CommonStrings.common_sticker) + " (" + content.body + ")"
+                message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is UnableToDecryptContent -> {
                 val message = sp.getString(CommonStrings.common_waiting_for_decryption_key)
-                if (!isDmRoom) {
-                    message.prefixWith(senderDisambiguatedDisplayName)
-                } else {
-                    message
-                }
+                message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is RoomMembershipContent -> {
                 roomMembershipContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing)
@@ -101,22 +85,23 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
             }
             is PollContent -> {
                 val message = sp.getString(CommonStrings.common_poll_summary, content.question)
-                prefixIfNeeded(message, senderDisambiguatedDisplayName, isDmRoom)
+                message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is FailedToParseMessageLikeContent, is FailedToParseStateContent, is UnknownContent -> {
-                prefixIfNeeded(sp.getString(CommonStrings.common_unsupported_event), senderDisambiguatedDisplayName, isDmRoom)
+                val message = sp.getString(CommonStrings.common_unsupported_event)
+                message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is LegacyCallInviteContent -> sp.getString(CommonStrings.common_call_invite)
             is CallNotifyContent -> sp.getString(CommonStrings.common_call_started)
         }?.take(MAX_SAFE_LENGTH)
     }
 
-    private fun processMessageContents(
-        messageContent: MessageContent,
+    private fun MessageContent.process(
         senderDisambiguatedDisplayName: String,
         isDmRoom: Boolean,
+        isOutgoing: Boolean
     ): CharSequence {
-        val internalMessage = when (val messageType: MessageType = messageContent.type) {
+        val message = when (val messageType: MessageType = type) {
             // Doesn't need a prefix
             is EmoteMessageType -> {
                 return "* $senderDisambiguatedDisplayName ${messageType.body}"
@@ -152,16 +137,22 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 messageType.body
             }
         }
-        return prefixIfNeeded(internalMessage, senderDisambiguatedDisplayName, isDmRoom)
+        return message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
     }
 
-    private fun prefixIfNeeded(
-        message: String,
+    private fun String.prefixIfNeeded(
         senderDisambiguatedDisplayName: String,
         isDmRoom: Boolean,
+        isOutgoing: Boolean,
     ): CharSequence = if (isDmRoom) {
-        message
+        this
     } else {
-        message.prefixWith(senderDisambiguatedDisplayName)
+        prefixWith(
+            if (isOutgoing) {
+                sp.getString(CommonStrings.common_you)
+            } else {
+                senderDisambiguatedDisplayName
+            }
+        )
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"ანგარიშის მიმწოდებლის შეცვლა"</string>
+  <string name="screen_account_provider_change">"შეცვალეთ ანგარიშის მომწოდებელი"</string>
   <string name="screen_account_provider_form_hint">"სახლის სერვერის მისამართი"</string>
   <string name="screen_account_provider_form_notice">"შეიყვანეთ საძიებო სიტყვა ან დომენის მისამართი."</string>
   <string name="screen_account_provider_form_subtitle">"მოძებნეთ კომპანია, საზოგადოება ან კერძო სერვერი."</string>
@@ -34,10 +34,4 @@
   <string name="screen_server_confirmation_message_register">"აქ იქნება თქვენი საუბრები - ისევე, როგორც თქვენ ელ. ფოსტაში ინახება თქვენი ელ.წერილები."</string>
   <string name="screen_server_confirmation_title_login">"თქვენ აპირებთ შესვლას %1$s-ში"</string>
   <string name="screen_server_confirmation_title_register">"თქვენ აპირებთ ანგარიშის შექმნას %1$s-ში"</string>
-  <string name="screen_waitlist_message">"ახლა დიდი მოთხოვნაა %1$s-ზე %2$s-ში. დაბრუნდით რამდენიმე დღეში და სცადეთ ერთხელაც.
-
-მადლობა მოთმენისათვის!"</string>
-  <string name="screen_waitlist_message_success">"კეთილი იყოს თქვენი მობრძანება %1$s-ში!"</string>
-  <string name="screen_waitlist_title">"თითქმის მზადაა."</string>
-  <string name="screen_waitlist_title_success">"თქვენ შეხვედით."</string>
 </resources>

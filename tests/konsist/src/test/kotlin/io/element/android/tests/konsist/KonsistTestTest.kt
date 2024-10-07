@@ -1,31 +1,38 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.tests.konsist
 
+import com.google.common.truth.Truth.assertThat
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.ext.list.modifierprovider.withoutOverrideModifier
+import com.lemonappdev.konsist.api.ext.list.withAnnotationOf
 import com.lemonappdev.konsist.api.ext.list.withFunction
 import com.lemonappdev.konsist.api.ext.list.withReturnType
+import com.lemonappdev.konsist.api.ext.list.withoutAnnotationOf
 import com.lemonappdev.konsist.api.ext.list.withoutName
 import com.lemonappdev.konsist.api.verify.assertFalse
 import com.lemonappdev.konsist.api.verify.assertTrue
+import org.junit.Ignore
 import org.junit.Test
 
 class KonsistTestTest {
+    @Test
+    fun `Ensure that unit tests are detected`() {
+        val numberOfTests = Konsist
+            .scopeFromTest()
+            .functions()
+            .withAnnotationOf(Test::class)
+            .withoutAnnotationOf(Ignore::class)
+            .size
+        println("Number of unit tests: $numberOfTests")
+        assertThat(numberOfTests).isGreaterThan(2000)
+    }
+
     @Test
     fun `Classes name containing @Test must end with 'Test'`() {
         Konsist

@@ -7,7 +7,7 @@
   <string name="screen_signout_key_backup_disabled_subtitle">"Estás a punto de cerrar tu última sesión. Si cierras sesión ahora, perderás el acceso a tus mensajes cifrados."</string>
   <string name="screen_signout_key_backup_disabled_title">"Has desactivado la copia de seguridad"</string>
   <string name="screen_signout_key_backup_offline_subtitle">"Se estaba haciendo una copia de seguridad de tus claves cuando te desconectaste. Vuelve a conectarte para que se haga una copia de seguridad de tus claves antes de desconectarte."</string>
-  <string name="screen_signout_key_backup_offline_title">"Se está guardando una copia de seguridad de tus claves"</string>
+  <string name="screen_signout_key_backup_offline_title">"Se sigue guardando una copia de seguridad de tus claves"</string>
   <string name="screen_signout_key_backup_ongoing_subtitle">"Espera a que se complete antes de cerrar sesión."</string>
   <string name="screen_signout_key_backup_ongoing_title">"Se sigue guardando una copia de seguridad de tus claves"</string>
   <string name="screen_signout_preference_item">"Cerrar sesión"</string>

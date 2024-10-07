@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.preferences.impl.root
@@ -45,6 +36,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserProvider
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -65,6 +57,7 @@ fun PreferencesRootView(
     onOpenUserProfile: (MatrixUser) -> Unit,
     onOpenBlockedUsers: () -> Unit,
     onSignOutClick: () -> Unit,
+    onDeactivateClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -108,6 +101,7 @@ fun PreferencesRootView(
             onOpenAdvancedSettings = onOpenAdvancedSettings,
             onOpenDeveloperSettings = onOpenDeveloperSettings,
             onSignOutClick = onSignOutClick,
+            onDeactivateClick = onDeactivateClick,
         )
 
         Footer(
@@ -202,6 +196,7 @@ private fun ColumnScope.GeneralSection(
     onOpenAdvancedSettings: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
     onSignOutClick: () -> Unit,
+    onDeactivateClick: () -> Unit,
 ) {
     ListItem(
         headlineContent = { Text(stringResource(id = CommonStrings.common_about)) },
@@ -234,12 +229,20 @@ private fun ColumnScope.GeneralSection(
         style = ListItemStyle.Destructive,
         onClick = onSignOutClick,
     )
+    if (state.canDeactivateAccount) {
+        ListItem(
+            headlineContent = { Text(stringResource(id = CommonStrings.action_deactivate_account)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Warning())),
+            style = ListItemStyle.Destructive,
+            onClick = onDeactivateClick,
+        )
+    }
 }
 
 @Composable
 private fun ColumnScope.Footer(
     version: String,
-    deviceId: String?,
+    deviceId: DeviceId?,
     onClick: (() -> Unit)?,
 ) {
     val text = remember(version, deviceId) {
@@ -301,5 +304,6 @@ private fun ContentToPreview(matrixUser: MatrixUser) {
         onOpenUserProfile = {},
         onOpenBlockedUsers = {},
         onSignOutClick = {},
+        onDeactivateClick = {},
     )
 }

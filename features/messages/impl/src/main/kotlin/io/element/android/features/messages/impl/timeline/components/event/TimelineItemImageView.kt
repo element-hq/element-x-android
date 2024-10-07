@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl.timeline.components.event
@@ -55,6 +46,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemGrou
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContentProvider
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.protection.ProtectedView
 import io.element.android.libraries.designsystem.components.blurhash.blurHashBackground
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -67,6 +59,8 @@ import io.element.android.wysiwyg.compose.EditorStyledText
 @Composable
 fun TimelineItemImageView(
     content: TimelineItemImageContent,
+    hideMediaContent: Boolean,
+    onShowClick: () -> Unit,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -85,17 +79,28 @@ fun TimelineItemImageView(
             modifier = containerModifier.blurHashBackground(content.blurhash, alpha = 0.9f),
             aspectRatio = content.aspectRatio,
         ) {
-            var isLoaded by remember { mutableStateOf(false) }
-            AsyncImage(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .then(if (isLoaded) Modifier.background(Color.White) else Modifier),
-                model = MediaRequestData(content.preferredMediaSource, MediaRequestData.Kind.File(content.body, content.mimeType)),
-                contentScale = ContentScale.Fit,
-                alignment = Alignment.Center,
-                contentDescription = description,
-                onState = { isLoaded = it is AsyncImagePainter.State.Success },
-            )
+            ProtectedView(
+                hideContent = hideMediaContent,
+                onShowClick = onShowClick,
+            ) {
+                var isLoaded by remember { mutableStateOf(false) }
+                AsyncImage(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .then(if (isLoaded) Modifier.background(Color.White) else Modifier),
+                    model = MediaRequestData(
+                        source = content.preferredMediaSource,
+                        kind = MediaRequestData.Kind.File(
+                            body = content.filename ?: content.body,
+                            mimeType = content.mimeType,
+                        ),
+                    ),
+                    contentScale = ContentScale.Fit,
+                    alignment = Alignment.Center,
+                    contentDescription = description,
+                    onState = { isLoaded = it is AsyncImagePainter.State.Success },
+                )
+            }
         }
 
         if (content.showCaption) {
@@ -109,9 +114,10 @@ fun TimelineItemImageView(
                 LocalContentColor provides ElementTheme.colors.textPrimary,
                 LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular
             ) {
+                val aspectRatio = content.aspectRatio ?: DEFAULT_ASPECT_RATIO
                 EditorStyledText(
                     modifier = Modifier
-                        .widthIn(min = MIN_HEIGHT_IN_DP.dp * content.aspectRatio!!, max = MAX_HEIGHT_IN_DP.dp * content.aspectRatio),
+                        .widthIn(min = MIN_HEIGHT_IN_DP.dp * aspectRatio, max = MAX_HEIGHT_IN_DP.dp * aspectRatio),
                     text = caption,
                     style = ElementRichTextEditorStyle.textStyle(),
                     releaseOnDetach = false,
@@ -125,7 +131,23 @@ fun TimelineItemImageView(
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemImageViewPreview(@PreviewParameter(TimelineItemImageContentProvider::class) content: TimelineItemImageContent) = ElementPreview {
-    TimelineItemImageView(content, {})
+    TimelineItemImageView(
+        content = content,
+        hideMediaContent = false,
+        onShowClick = {},
+        onContentLayoutChange = {},
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemImageViewHideMediaContentPreview() = ElementPreview {
+    TimelineItemImageView(
+        content = aTimelineItemImageContent(),
+        hideMediaContent = true,
+        onShowClick = {},
+        onContentLayoutChange = {},
+    )
 }
 
 @PreviewsDayNight
@@ -145,5 +167,16 @@ internal fun TimelineImageWithCaptionRowPreview() = ElementPreview {
                 ),
             )
         }
+        ATimelineItemEventRow(
+            event = aTimelineItemEvent(
+                isMine = false,
+                content = aTimelineItemImageContent().copy(
+                    filename = "image.jpg",
+                    body = "Image with null aspectRatio",
+                    aspectRatio = null,
+                ),
+                groupPosition = TimelineItemGroupPosition.Last,
+            ),
+        )
     }
 }

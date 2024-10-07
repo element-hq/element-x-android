@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2024 New Vector Ltd
+ * Copyright 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.impl.timeline
@@ -47,7 +38,7 @@ internal class TimelineItemsSubscriber(
     private val timeline: Timeline,
     private val timelineDiffProcessor: MatrixTimelineDiffProcessor,
     private val initLatch: CompletableDeferred<Unit>,
-    private val isInit: MutableStateFlow<Boolean>,
+    private val isTimelineInitialized: MutableStateFlow<Boolean>,
     private val onNewSyncedEvent: () -> Unit,
 ) {
     private var subscriptionCount = 0
@@ -89,18 +80,23 @@ internal class TimelineItemsSubscriber(
     }
 
     private suspend fun postItems(items: List<TimelineItem>) = coroutineScope {
-        // Split the initial items in multiple list as there is no pagination in the cached data, so we can post timelineItems asap.
-        items.chunked(INITIAL_MAX_SIZE).reversed().forEach {
-            ensureActive()
-            timelineDiffProcessor.postItems(it)
+        if (items.isEmpty()) {
+            // Makes sure to post empty list if there is no item, so you can handle empty state.
+            timelineDiffProcessor.postItems(emptyList())
+        } else {
+            // Split the initial items in multiple list as there is no pagination in the cached data, so we can post timelineItems asap.
+            items.chunked(INITIAL_MAX_SIZE).reversed().forEach {
+                ensureActive()
+                timelineDiffProcessor.postItems(it)
+            }
         }
-        isInit.value = true
+        isTimelineInitialized.value = true
         initLatch.complete(Unit)
     }
 
     private suspend fun postDiffs(diffs: List<TimelineDiff>) {
         val diffsToProcess = diffs.toMutableList()
-        if (!isInit.value) {
+        if (!isTimelineInitialized.value) {
             val resetDiff = diffsToProcess.firstOrNull { it.change() == TimelineChange.RESET }
             if (resetDiff != null) {
                 // Keep using the postItems logic so we can post the timelineItems asap.

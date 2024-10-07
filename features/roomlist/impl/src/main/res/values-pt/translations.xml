@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"Sair &amp; Atualizar"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"O teu servidor suporta agora um protocolo novo e mais rápido. Termina a sessão e volta a iniciar sessão para atualizar agora. Se o fizeres agora, evitarás um fim de sessão forçado quando o protocolo antigo for removido mais tarde."</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Seu homeserver não suporta mais o protocolo antigo. Termine sessão e volte a iniciar sessão para continuar a utilizar a aplicação."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Atualização disponível"</string>
+  <string name="banner_set_up_recovery_content">"Gere uma nova chave de recuperação que pode ser usada para restaurar seu histórico de mensagens criptografadas caso você perca o acesso aos seus dispositivos."</string>
+  <string name="banner_set_up_recovery_title">"Configurar a recuperação"</string>
   <string name="confirm_recovery_key_banner_message">"A tua cópia de segurança das conversas está atualmente dessincronizada. Tens de inserir a tua chave de recuperação para manteres o acesso à cópia."</string>
   <string name="confirm_recovery_key_banner_title">"Insere a tua chave de recuperação"</string>
   <string name="full_screen_intent_banner_message">"Para garantir que nunca perdes uma chamada importante, altera as configurações para permitir notificações em ecrã inteiro quando o telemóvel está bloqueado."</string>

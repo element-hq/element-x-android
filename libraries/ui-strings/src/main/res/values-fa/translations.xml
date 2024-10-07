@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_delete">"حذف"</string>
+  <string name="a11y_hide_password">"نهفتن گذرواژه"</string>
+  <string name="a11y_jump_to_bottom">"به پایین بروید"</string>
+  <string name="a11y_notifications_mentions_only">"فقط اشاره‌ها"</string>
+  <string name="a11y_notifications_muted">"خموش"</string>
+  <string name="a11y_page_n">"صفحهٔ %1$d"</string>
+  <string name="a11y_pause">"مکث"</string>
+  <string name="a11y_pin_field">"زمینهٔ پین"</string>
+  <string name="a11y_play">"پخش"</string>
+  <string name="a11y_poll">"نظرسنجی"</string>
+  <string name="a11y_poll_end">"نظرسنجی پایان یافته"</string>
+  <string name="a11y_react_with">"واکنش با %1$s"</string>
+  <string name="a11y_react_with_other_emojis">"واکنش با شکلک‌های دیگر"</string>
+  <string name="a11y_read_receipts_multiple">"خوانده به دست %1$s و %2$s"</string>
+  <string name="a11y_read_receipts_single">"خوانده به دست %1$s"</string>
+  <string name="a11y_read_receipts_tap_to_show_all">"زدن برای نمایش همه"</string>
+  <string name="a11y_remove_reaction_with">"برداشتن واکنش با %1$s"</string>
+  <string name="a11y_send_files">"ارسال پرونده‌ها"</string>
+  <string name="a11y_show_password">"نمایش گذرواژه"</string>
+  <string name="a11y_start_call">"آغاز یک تماس"</string>
+  <string name="a11y_user_menu">"فهرست کاربر"</string>
+  <string name="a11y_voice_message_record">"ضبط پیام صوتی."</string>
+  <string name="a11y_voice_message_stop_recording">"توقّف ضبط"</string>
+  <string name="action_accept">"پذیرش"</string>
+  <string name="action_add_to_timeline">"افزودن به خط زمانی"</string>
+  <string name="action_back">"بازگشت"</string>
+  <string name="action_call">"تماس"</string>
+  <string name="action_cancel">"لغو"</string>
+  <string name="action_cancel_for_now">"لغو برای امنون"</string>
+  <string name="action_choose_photo">"گزینش عکس"</string>
+  <string name="action_clear">"پاک سازی"</string>
+  <string name="action_close">"بستن"</string>
+  <string name="action_complete_verification">"تکمیل تأیید"</string>
+  <string name="action_confirm">"تأیید"</string>
+  <string name="action_confirm_password">"تأیید گذرواژه"</string>
+  <string name="action_continue">"ادامه"</string>
+  <string name="action_copy">"رونوشت"</string>
+  <string name="action_copy_link">"رونوشت از پیوند"</string>
+  <string name="action_copy_link_to_message">"رونوشت از پیوند پیام"</string>
+  <string name="action_create">"ایجاد"</string>
+  <string name="action_create_a_room">"ایجاد اتاق"</string>
+  <string name="action_deactivate">"غیرفعّال"</string>
+  <string name="action_deactivate_account">"غیرفعّال‌سازی حساب"</string>
+  <string name="action_decline">"رد"</string>
+  <string name="action_delete_poll">"حذف نظرسنجی"</string>
+  <string name="action_disable">"از کار انداختن"</string>
+  <string name="action_discard">"دور ریختن"</string>
+  <string name="action_done">"انجام شد"</string>
+  <string name="action_edit">"ویرایش"</string>
+  <string name="action_edit_poll">"ویرایش نظرسنجی"</string>
+  <string name="action_enable">"به کار انداختن"</string>
+  <string name="action_end_poll">"پایان نظرسنجی"</string>
+  <string name="action_enter_pin">"ورود پین"</string>
+  <string name="action_forgot_password">"گذرواژه را فراموش کردید؟"</string>
+  <string name="action_forward">"پیشروی"</string>
+  <string name="action_go_back">"پس‌روی"</string>
+  <string name="action_invite">"دعوت"</string>
+  <string name="action_invite_friends">"دعوت افراد"</string>
+  <string name="action_invite_friends_to_app">"دعوت به %1$s"</string>
+  <string name="action_invite_people_to_app">"دعوت افراد به %1$s"</string>
+  <string name="action_invites_list">"دعوت‌ها"</string>
+  <string name="action_join">"پیوستن"</string>
+  <string name="action_learn_more">"بیش‌تر دانستن"</string>
+  <string name="action_leave">"ترک"</string>
+  <string name="action_leave_conversation">"ترک گفت‌وگو"</string>
+  <string name="action_leave_room">"ترک اتاق"</string>
+  <string name="action_load_more">"بار کردن بیش‌تر"</string>
+  <string name="action_manage_account">"مدیریت حساب"</string>
+  <string name="action_manage_devices">"مدیریت افزاره‌ها"</string>
+  <string name="action_message">"پیام"</string>
+  <string name="action_next">"بعدی"</string>
+  <string name="action_no">"نه"</string>
+  <string name="action_not_now">"الآن نه"</string>
+  <string name="action_ok">"قبول"</string>
+  <string name="action_open_settings">"تنظیمات"</string>
+  <string name="action_open_with">"گشودن با"</string>
+  <string name="action_pin">"سنجاق"</string>
+  <string name="action_quick_reply">"پاسخ سریع"</string>
+  <string name="action_quote">"نقل قول"</string>
+  <string name="action_react">"واکنش"</string>
+  <string name="action_reject">"رد کردن"</string>
+  <string name="action_remove">"برداشتن"</string>
+  <string name="action_reply">"پاسخ"</string>
+  <string name="action_reply_in_thread">"پاسخ در رشته"</string>
+  <string name="action_report_bug">"گزارش اشکال"</string>
+  <string name="action_report_content">"گزارش محتوا"</string>
+  <string name="action_reset">"بازنشانی"</string>
+  <string name="action_reset_identity">"بازنشانی هویت"</string>
+  <string name="action_retry">"تلاش دوباره"</string>
+  <string name="action_retry_decryption">"تلاش دوباره برای رمزگشایی"</string>
+  <string name="action_save">"ذخیره"</string>
+  <string name="action_search">"جست‌وجو"</string>
+  <string name="action_send">"فرستادن"</string>
+  <string name="action_send_message">"فرستادن پیام"</string>
+  <string name="action_share">"هم‌رسانی"</string>
+  <string name="action_share_link">"هم‌رسانی پیوند"</string>
+  <string name="action_show">"نمایش"</string>
+  <string name="action_sign_in_again">"ورود دوباره"</string>
+  <string name="action_signout">"خروج"</string>
+  <string name="action_signout_anyway">"خروج به هر صورت"</string>
+  <string name="action_skip">"پرش"</string>
+  <string name="action_start">"آغاز"</string>
+  <string name="action_start_chat">"آغاز گپ"</string>
+  <string name="action_start_verification">"آغاز تأیید"</string>
+  <string name="action_static_map_load">"زدن برای بار کردن نقشه"</string>
+  <string name="action_take_photo">"عکس گرفتن"</string>
+  <string name="action_tap_for_options">"زدن برای گزینه‌ها"</string>
+  <string name="action_try_again">"تلاش دوباره"</string>
+  <string name="action_unpin">"سنجاق نکردن"</string>
+  <string name="action_view_in_timeline">"دیدن در خط زمانی"</string>
+  <string name="action_view_source">"دیدن منبع"</string>
+  <string name="action_yes">"بله"</string>
+  <string name="common_about">"درباره"</string>
+  <string name="common_acceptable_use_policy">"سیاست استفادهٔ پذیرفتنی"</string>
+  <string name="common_advanced_settings">"تنظیمات پیش‌رفته"</string>
+  <string name="common_analytics">"تجزیه و تحلیل"</string>
+  <string name="common_appearance">"ظاهر"</string>
+  <string name="common_audio">"صدا"</string>
+  <string name="common_blocked_users">"کاربران مسدود"</string>
+  <string name="common_bubbles">"حباب‌ها"</string>
+  <string name="common_call_invite">"تماس در جریان (پشتیبانی نشده)"</string>
+  <string name="common_call_started">"تماس آغاز شد"</string>
+  <string name="common_chat_backup">"پشتیبان گپ"</string>
+  <string name="common_copied_to_clipboard">"در تخته‌گیره رونوشت شد"</string>
+  <string name="common_copyright">"حق رونوشت"</string>
+  <string name="common_creating_room">"ایجاد کردن اتاق…"</string>
+  <string name="common_current_user_left_room">"اتاق را ترک کرد"</string>
+  <string name="common_dark">"تیره"</string>
+  <string name="common_decryption_error">"خطای رمزگشایی"</string>
+  <string name="common_developer_options">"گزینه‌های توسعه دهنده"</string>
+  <string name="common_direct_chat">"گپ مستقیم"</string>
+  <string name="common_do_not_show_this_again">"این مورد را دوباره نشان نده"</string>
+  <string name="common_edited_suffix">"(ویراسته)"</string>
+  <string name="common_editing">"ویرایش"</string>
+  <string name="common_emote">"* %1$s %2$s"</string>
+  <string name="common_encryption_enabled">"رمزنگاری به کار افتاده"</string>
+  <string name="common_enter_your_pin">"پینتان را وارد کنید"</string>
+  <string name="common_error">"خطا"</string>
+  <string name="common_everyone">"هرکسی"</string>
+  <string name="common_failed">"شکست خورد"</string>
+  <string name="common_favourite">"برگزیده"</string>
+  <string name="common_favourited">"برگزیده"</string>
+  <string name="common_file">"پرونده"</string>
+  <string name="common_file_saved_on_disk_android">"پرونده در بارگیری‌ها ذخیره شد"</string>
+  <string name="common_forward_message">"هدایت پیام"</string>
+  <string name="common_gif">"جیف"</string>
+  <string name="common_image">"تصویر"</string>
+  <string name="common_in_reply_to">"در پاسخ به %1$s"</string>
+  <string name="common_install_apk_android">"نصب APK"</string>
+  <string name="common_invite_unknown_profile">"شناسهٔ ماتریکس نتوانست پیدا شود. ممکن است دعوت نرسیده باشد."</string>
+  <string name="common_leaving_room">"ترک کردن اتاق"</string>
+  <string name="common_light">"روشن"</string>
+  <string name="common_link_copied_to_clipboard">"پیوند در تخته‌گیره رونوشت شد"</string>
+  <string name="common_loading">"بار کردن…"</string>
+  <string name="common_message">"پیام"</string>
+  <string name="common_message_actions">"کنش‌های پیام"</string>
+  <string name="common_message_layout">"جینش پیام"</string>
+  <string name="common_message_removed">"پیام برداشته شد"</string>
+  <string name="common_modern">"نوین"</string>
+  <string name="common_mute">"بی‌صدا"</string>
+  <string name="common_no_results">"بدون نتیجه"</string>
+  <string name="common_no_room_name">"بدون نام اتاق"</string>
+  <string name="common_offline">"برون‌خط"</string>
+  <string name="common_open_source_licenses">"پروانه‌های نرم‌افزاری آزاد"</string>
+  <string name="common_or">"یا"</string>
+  <string name="common_password">"گذرواژه"</string>
+  <string name="common_people">"افراد"</string>
+  <string name="common_permalink">"پایاپیوند"</string>
+  <string name="common_permission">"اجازه"</string>
+  <string name="common_pinned">"سنجاق شده"</string>
+  <string name="common_please_wait">"لطفا صبر کنید…"</string>
+  <string name="common_poll_end_confirmation">"مطئنید که می‌خواهید این نظرسنجی را پایان دهید؟"</string>
+  <string name="common_poll_summary">"نظرسنجی: %1$s"</string>
+  <string name="common_poll_total_votes">"مجموع آرا: %1$s"</string>
+  <string name="common_poll_undisclosed_text">"نتیجه‌ها پس از پایان نظرسنجی نشان داده خواهند شد"</string>
+  <string name="common_privacy_policy">"سیاست محرمانگی"</string>
+  <string name="common_reaction">"واکنش"</string>
+  <string name="common_reactions">"واکنش‌ها"</string>
+  <string name="common_recovery_key">"کلید بازیابی"</string>
+  <string name="common_refreshing">"تازه سازی…"</string>
+  <string name="common_replying_to">"پاسخ دادن به %1$s"</string>
+  <string name="common_report_a_bug">"گزارش یک اشکال"</string>
+  <string name="common_report_a_problem">"گزارش مشکل"</string>
+  <string name="common_report_submitted">"گزارش ثبت شد"</string>
+  <string name="common_rich_text_editor">"ویرایشگر متن غنی"</string>
+  <string name="common_room">"اتاق"</string>
+  <string name="common_room_name">"نام اتاق"</string>
+  <string name="common_room_name_placeholder">"برای نمونه نام پروژه‌تان"</string>
+  <string name="common_saved_changes">"تغییرات ذخیره شده"</string>
+  <string name="common_saving">"ذخیره کردن"</string>
+  <string name="common_screen_lock">"قفل صفحه"</string>
+  <string name="common_search_for_someone">"جست‌وجوی افراد"</string>
+  <string name="common_search_results">"نتایج جست‌وجو"</string>
+  <string name="common_security">"امنیت"</string>
+  <string name="common_seen_by">"دیده شده به دست"</string>
+  <string name="common_send_to">"فرستادن به"</string>
+  <string name="common_sending">"فرستادن…"</string>
+  <string name="common_sending_failed">"فرستادن شکست خورد"</string>
+  <string name="common_sent">"فرستاده"</string>
+  <string name="common_server_not_supported">"کارساز پشتیبانی نمی‌شود"</string>
+  <string name="common_server_url">"نشانی کارساز"</string>
+  <string name="common_settings">"تنظیمات"</string>
+  <string name="common_shared_location">"مکان هم‌رسانده"</string>
+  <string name="common_signing_out">"خارج شدن"</string>
+  <string name="common_something_went_wrong">"چیزی اشتباه پیش رفت"</string>
+  <string name="common_starting_chat">"آغازیدن گپ…"</string>
+  <string name="common_sticker">"عکس برگردان"</string>
+  <string name="common_success">"موفّقیت"</string>
+  <string name="common_suggestions">"پیشنهادها"</string>
+  <string name="common_syncing">"هم‌گام ساختن"</string>
+  <string name="common_system">"سامانه"</string>
+  <string name="common_text">"متن"</string>
+  <string name="common_third_party_notices">"تذکّرهای سوم‌شخص"</string>
+  <string name="common_thread">"رشته"</string>
+  <string name="common_topic">"موضوع"</string>
+  <string name="common_topic_placeholder">"این اتاق دربارهٔ چیست؟"</string>
+  <string name="common_unable_to_decrypt">"ناتوان در رمزگشایی"</string>
+  <string name="common_unable_to_decrypt_no_access">"به این پیام دسترسی ندارید"</string>
+  <string name="common_unable_to_invite_message">"دعوت‌ها نتوانستند به کاربرانی برسند."</string>
+  <string name="common_unable_to_invite_title">"ناتوان در فرستادن دعوت(ها)"</string>
+  <string name="common_unlock">"قفل‌گشایی"</string>
+  <string name="common_unmute">"باصدا"</string>
+  <string name="common_unsupported_event">"رویداد پشتیبانی نشده"</string>
+  <string name="common_username">"نام کاربری"</string>
+  <string name="common_verification_cancelled">"تأیید لغو شد"</string>
+  <string name="common_verification_complete">"تأیید کامل شد"</string>
+  <string name="common_verify_device">"تأیید افزاره"</string>
+  <string name="common_video">"ویدیو"</string>
+  <string name="common_voice_message">"پیام صوتی"</string>
+  <string name="common_waiting">"در انتظار…"</string>
+  <string name="common_waiting_for_decryption_key">"در انتظار این پیام"</string>
+  <string name="common_you">"شما"</string>
+  <string name="crypto_identity_change_pin_violation">"به نظر می‌رسد هویت %1$s تغییر کرده. %2$s"</string>
+  <string name="dialog_title_confirmation">"تایید"</string>
+  <string name="dialog_title_error">"خطا"</string>
+  <string name="dialog_title_success">"موفّقیت"</string>
+  <string name="dialog_title_warning">"هشدار"</string>
+  <string name="dialog_unsaved_changes_description_android">"تغییراتتان ذخیره نشده‌اند. مطمئنید که می‌خواهید برگردید؟"</string>
+  <string name="dialog_unsaved_changes_title">"ذخیرهٔ تغییرات؟"</string>
+  <string name="error_failed_creating_the_permalink">"شکست در ایجاد پایاپیوند"</string>
+  <string name="error_failed_loading_messages">"شکست در بار کردن پیام‌ها"</string>
+  <string name="error_failed_uploading_voice_message">"شکست در بارگذاری پیام صوتیتان."</string>
+  <string name="error_message_not_found">"پیام پیدا نشد"</string>
+  <string name="error_some_messages_have_not_been_sent">"برخی پیام‌ها ارسال نشده‌اند"</string>
+  <string name="error_unknown">"متأسفیم ، خطایی رخ داد"</string>
+  <string name="event_shield_reason_authenticity_not_guaranteed">"اعتبار این پیام رمز شده نمی‌تواند روی این افزاره تأیید شود."</string>
+  <string name="event_shield_reason_previously_verified">"رمز شده به دست کاربری از پیش تأیید شده."</string>
+  <string name="event_shield_reason_sent_in_clear">"رمز نشده."</string>
+  <string name="event_shield_reason_unknown_device">"رمز شده به دست افزاره‌ای ناشناخته یا حذف شده."</string>
+  <string name="event_shield_reason_unsigned_device">"رمز شده به دست افزاره‌ای که از سوی مالکش تأیید نشده."</string>
+  <string name="event_shield_reason_unverified_identity">"رمز شده به دست کاربری تأیید نشده."</string>
+  <string name="invite_friends_rich_title">"🔐️ پییوستن به من روی %1$s"</string>
+  <string name="invite_friends_text">"درود. با من روی %1$s صحبت کن: %2$s"</string>
+  <string name="login_initial_device_name_android">"%1$s اندروید"</string>
+  <string name="screen_media_picker_error_failed_selection">"گزینش رسانه شکست خورد. لطفاً دوباره تلاش کنید."</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"پردازش رسانه برای بارگذاری شکست خورد. لطفاً دوباره تلاش کنید."</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"بارگذاری رسانه شکست خورد. لطفاً دوباره تلاش کنید."</string>
+  <string name="screen_pinned_timeline_screen_title_empty">"پیام‌های سنجاق شده"</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"داردید برای بازنشانی هویتتان به حساب %1$s می‌روید. پس از آن به کاره برگردانده خواهید شد."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"فرستادن پیام به هر روی"</string>
+  <string name="screen_room_details_pinned_events_row_title">"پیام‌های سنجاق شده"</string>
+  <string name="screen_room_error_failed_processing_media">"پردازش رسانه برای بارگذاری شکست خورد. لطفاً دوباره تلاش کنید."</string>
+  <string name="screen_room_member_details_block_alert_action">"بلوک"</string>
+  <string name="screen_room_member_details_block_user">"انسداد کاربر"</string>
+  <string name="screen_room_member_details_title">"نمایه"</string>
+  <string name="screen_room_member_details_unblock_alert_action">"رفع انسداد"</string>
+  <string name="screen_room_member_details_unblock_alert_description">"قادر خواهید بود دوباره همهٔ پیام‌هایش را ببینید."</string>
+  <string name="screen_room_member_details_unblock_user">"رفع انسداد کاربر"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s از %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s پیام‌های سنجاق شده"</string>
+  <string name="screen_room_pinned_banner_loading_description">"بار کردن پشام‌ها…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"نمایش همه"</string>
+  <string name="screen_room_title">"گپ"</string>
+  <string name="screen_share_location_title">"هم‌رسانی موقعیت"</string>
+  <string name="screen_share_my_location_action">"هم‌رسانی مکانم"</string>
+  <string name="screen_share_open_apple_maps">"گشودن در نقشه‌های اپل"</string>
+  <string name="screen_share_open_google_maps">"گشودن در نقشه‌های گوگل"</string>
+  <string name="screen_share_open_osm_maps">"گشودن در اوپن‌استریت‌مپ"</string>
+  <string name="screen_share_this_location_action">"هم‌رسانی این مکان"</string>
+  <string name="screen_view_location_title">"مکان"</string>
+  <string name="settings_version_number">"نگارش : %1$s (%2$s)"</string>
+  <string name="test_language_identifier">"fa"</string>
+  <string name="test_untranslated_default_language_identifier">"en"</string>
+</resources>

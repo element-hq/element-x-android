@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.call.ui
@@ -80,6 +71,7 @@ class CallScreenPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.urlState).isEqualTo(AsyncData.Success("https://call.element.io"))
+            assertThat(initialState.webViewError).isNull()
             assertThat(initialState.isInWidgetMode).isFalse()
             analyticsLambda.assertions().isNeverCalled()
             joinedCallLambda.assertions().isCalledOnce()
@@ -277,6 +269,48 @@ class CallScreenPresenterTest {
         job.cancelAndJoin()
 
         assert(stopSyncLambda).isCalledOnce()
+    }
+
+    @Test
+    fun `present - error from WebView are updating the state`() = runTest {
+        val presenter = createCallScreenPresenter(
+            callType = CallType.ExternalUrl("https://call.element.io"),
+            activeCallManager = FakeActiveCallManager(),
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            // Wait until the URL is loaded
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink(CallScreenEvents.OnWebViewError("A Webview error"))
+            val finalState = awaitItem()
+            assertThat(finalState.webViewError).isEqualTo("A Webview error")
+        }
+    }
+
+    @Test
+    fun `present - error from WebView are ignored if Element Call is loaded`() = runTest {
+        val presenter = createCallScreenPresenter(
+            callType = CallType.ExternalUrl("https://call.element.io"),
+            activeCallManager = FakeActiveCallManager(),
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            // Wait until the URL is loaded
+            skipItems(1)
+            val initialState = awaitItem()
+
+            val messageInterceptor = FakeWidgetMessageInterceptor()
+            initialState.eventSink(CallScreenEvents.SetupMessageChannels(messageInterceptor))
+            // Emit a message
+            messageInterceptor.givenInterceptedMessage("A message")
+            // WebView emits an error, but it will be ignored
+            initialState.eventSink(CallScreenEvents.OnWebViewError("A Webview error"))
+            val finalState = awaitItem()
+            assertThat(finalState.webViewError).isNull()
+        }
     }
 
     private fun TestScope.createCallScreenPresenter(

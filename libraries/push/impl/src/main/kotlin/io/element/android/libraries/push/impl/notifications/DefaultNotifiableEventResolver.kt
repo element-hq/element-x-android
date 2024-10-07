@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.libraries.push.impl.notifications
@@ -33,7 +24,6 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
-import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
@@ -47,6 +37,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.ui.messages.toPlainText
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
@@ -55,6 +46,7 @@ import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEv
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlinx.coroutines.flow.first
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -79,13 +71,13 @@ class DefaultNotifiableEventResolver @Inject constructor(
     @ApplicationContext private val context: Context,
     private val permalinkParser: PermalinkParser,
     private val callNotificationEventResolver: CallNotificationEventResolver,
+    private val appPreferencesStore: AppPreferencesStore,
 ) : NotifiableEventResolver {
     override suspend fun resolveEvent(sessionId: SessionId, roomId: RoomId, eventId: EventId): ResolvedPushEvent? {
         // Restore session
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return null
         val notificationService = client.notificationService()
         val notificationData = notificationService.getNotification(
-            userId = sessionId,
             roomId = roomId,
             eventId = eventId,
         ).onFailure {
@@ -114,7 +106,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     timestamp = this.timestamp,
                     senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
                     body = messageBody,
-                    imageUriString = fetchImageIfPresent(client)?.toString(),
+                    imageUriString = content.fetchImageIfPresent(client)?.toString(),
                     roomName = roomDisplayName,
                     roomIsDm = isDm,
                     roomAvatarPath = roomAvatarUrl,
@@ -122,30 +114,26 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     hasMentionOrReply = hasMention,
                 )
             }
-            is NotificationContent.StateEvent.RoomMemberContent -> {
-                if (content.membershipState == RoomMembershipState.INVITE) {
-                    InviteNotifiableEvent(
-                        sessionId = userId,
-                        roomId = roomId,
-                        eventId = eventId,
-                        editedEventId = null,
-                        canBeReplaced = true,
-                        roomName = roomDisplayName,
-                        noisy = isNoisy,
-                        timestamp = this.timestamp,
-                        soundName = null,
-                        isRedacted = false,
-                        isUpdated = false,
-                        description = descriptionFromRoomMembershipInvite(isDirect),
-                        // TODO check if type is needed anymore
-                        type = null,
-                        // TODO check if title is needed anymore
-                        title = null,
-                    )
-                } else {
-                    Timber.tag(loggerTag.value).d("Ignoring notification state event for membership ${content.membershipState}")
-                    null
-                }
+            is NotificationContent.Invite -> {
+                val senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId)
+                InviteNotifiableEvent(
+                    sessionId = userId,
+                    roomId = roomId,
+                    eventId = eventId,
+                    editedEventId = null,
+                    canBeReplaced = true,
+                    roomName = roomDisplayName,
+                    noisy = isNoisy,
+                    timestamp = this.timestamp,
+                    soundName = null,
+                    isRedacted = false,
+                    isUpdated = false,
+                    description = descriptionFromRoomMembershipInvite(senderDisambiguatedDisplayName, isDirect),
+                    // TODO check if type is needed anymore
+                    type = null,
+                    // TODO check if title is needed anymore
+                    title = null,
+                )
             }
             NotificationContent.MessageLike.CallAnswer,
             NotificationContent.MessageLike.CallCandidates,
@@ -163,7 +151,6 @@ class DefaultNotifiableEventResolver @Inject constructor(
                     timestamp = this.timestamp,
                     senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
                     body = stringProvider.getString(CommonStrings.common_call_invite),
-                    imageUriString = fetchImageIfPresent(client)?.toString(),
                     roomName = roomDisplayName,
                     roomIsDm = isDm,
                     roomAvatarPath = roomAvatarUrl,
@@ -212,6 +199,7 @@ class DefaultNotifiableEventResolver @Inject constructor(
             NotificationContent.MessageLike.Sticker -> null.also {
                 Timber.tag(loggerTag.value).d("Ignoring notification for sticker")
             }
+            is NotificationContent.StateEvent.RoomMemberContent,
             NotificationContent.StateEvent.PolicyRuleRoom,
             NotificationContent.StateEvent.PolicyRuleServer,
             NotificationContent.StateEvent.PolicyRuleUser,
@@ -292,31 +280,31 @@ class DefaultNotifiableEventResolver @Inject constructor(
     }
 
     private fun descriptionFromRoomMembershipInvite(
+        senderDisambiguatedDisplayName: String,
         isDirectRoom: Boolean
     ): String {
         return if (isDirectRoom) {
-            stringProvider.getString(R.string.notification_invite_body)
+            stringProvider.getString(R.string.notification_invite_body_with_sender, senderDisambiguatedDisplayName)
         } else {
-            stringProvider.getString(R.string.notification_room_invite_body)
+            stringProvider.getString(R.string.notification_room_invite_body_with_sender, senderDisambiguatedDisplayName)
         }
     }
 
-    private suspend fun NotificationData.fetchImageIfPresent(client: MatrixClient): Uri? {
-        val fileResult = when (val content = this.content) {
-            is NotificationContent.MessageLike.RoomMessage -> {
-                when (val messageType = content.messageType) {
-                    is ImageMessageType -> notificationMediaRepoFactory.create(client)
-                        .getMediaFile(
-                            mediaSource = messageType.source,
-                            mimeType = messageType.info?.mimetype,
-                            body = messageType.body,
-                        )
-                    is VideoMessageType -> null // Use the thumbnail here?
-                    else -> null
-                }
-            }
+    private suspend fun NotificationContent.MessageLike.RoomMessage.fetchImageIfPresent(client: MatrixClient): Uri? {
+        if (appPreferencesStore.doesHideImagesAndVideosFlow().first()) {
+            return null
+        }
+        val fileResult = when (val messageType = messageType) {
+            is ImageMessageType -> notificationMediaRepoFactory.create(client)
+                .getMediaFile(
+                    mediaSource = messageType.source,
+                    mimeType = messageType.info?.mimetype,
+                    body = messageType.body,
+                )
+            is VideoMessageType -> null // Use the thumbnail here?
             else -> null
-        } ?: return null
+        }
+            ?: return null
 
         return fileResult
             .onFailure {

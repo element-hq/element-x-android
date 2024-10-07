@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl.timeline.components
@@ -29,15 +20,19 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
+import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
+import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
+import io.element.android.features.messages.impl.timeline.protection.mustBeProtected
 import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.highlightedMessageBackgroundColor
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 
 @Composable
 internal fun TimelineItemRow(
@@ -45,12 +40,12 @@ internal fun TimelineItemRow(
     timelineRoomInfo: TimelineRoomInfo,
     renderReadReceipts: Boolean,
     isLastOutgoingMessage: Boolean,
+    timelineProtectionState: TimelineProtectionState,
     focusedEventId: EventId?,
     onUserDataClick: (UserId) -> Unit,
     onLinkClick: (String) -> Unit,
     onClick: (TimelineItem.Event) -> Unit,
     onLongClick: (TimelineItem.Event) -> Unit,
-    onShieldClick: (MessageShield) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
     onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
@@ -59,7 +54,19 @@ internal fun TimelineItemRow(
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     onJoinCallClick: () -> Unit,
     eventSink: (TimelineEvents.EventFromTimelineItem) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
+        { event, contentModifier, onContentLayoutChange ->
+            TimelineItemEventContentView(
+                content = event.content,
+                hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
+                onShowClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
+                onLinkClick = onLinkClick,
+                eventSink = eventSink,
+                modifier = contentModifier,
+                onContentLayoutChange = onContentLayoutChange
+            )
+        },
 ) {
     val backgroundModifier = if (timelineItem.isEvent(focusedEventId)) {
         val focusedEventOffset = if ((timelineItem as? TimelineItem.Event)?.showSenderInformation == true) {
@@ -108,13 +115,17 @@ internal fun TimelineItemRow(
                             event = timelineItem,
                             timelineRoomInfo = timelineRoomInfo,
                             renderReadReceipts = renderReadReceipts,
+                            timelineProtectionState = timelineProtectionState,
                             isLastOutgoingMessage = isLastOutgoingMessage,
                             isHighlighted = timelineItem.isEvent(focusedEventId),
-                            onClick = { onClick(timelineItem) },
+                            onClick = if (timelineProtectionState.hideMediaContent(timelineItem.eventId) && timelineItem.mustBeProtected()) {
+                                {}
+                            } else {
+                                { onClick(timelineItem) }
+                            },
                             onLongClick = { onLongClick(timelineItem) },
-                            onShieldClick = onShieldClick,
-                            onUserDataClick = onUserDataClick,
                             onLinkClick = onLinkClick,
+                            onUserDataClick = onUserDataClick,
                             inReplyToClick = inReplyToClick,
                             onReactionClick = onReactionClick,
                             onReactionLongClick = onReactionLongClick,
@@ -122,6 +133,9 @@ internal fun TimelineItemRow(
                             onReadReceiptClick = onReadReceiptClick,
                             onSwipeToReply = { onSwipeToReply(timelineItem) },
                             eventSink = eventSink,
+                            eventContentView = { contentModifier, onContentLayoutChange ->
+                                eventContentView(timelineItem, contentModifier, onContentLayoutChange)
+                            },
                         )
                     }
                 }
@@ -130,12 +144,12 @@ internal fun TimelineItemRow(
                 TimelineItemGroupedEventsRow(
                     timelineItem = timelineItem,
                     timelineRoomInfo = timelineRoomInfo,
+                    timelineProtectionState = timelineProtectionState,
                     renderReadReceipts = renderReadReceipts,
                     isLastOutgoingMessage = isLastOutgoingMessage,
                     focusedEventId = focusedEventId,
                     onClick = onClick,
                     onLongClick = onLongClick,
-                    onShieldClick = onShieldClick,
                     inReplyToClick = inReplyToClick,
                     onUserDataClick = onUserDataClick,
                     onLinkClick = onLinkClick,

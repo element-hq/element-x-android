@@ -1,45 +1,46 @@
 /*
- * Copyright (c) 2024 New Vector Ltd
+ * Copyright 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl.timeline
 
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.SingleIn
 import io.element.android.libraries.matrix.api.core.EventId
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 import javax.inject.Inject
 
-@SingleIn(RoomScope::class)
 class TimelineItemIndexer @Inject constructor() {
+    // This is a latch to wait for the first process call
+    private val firstProcessLatch = CompletableDeferred<Unit>()
     private val timelineEventsIndexes = mutableMapOf<EventId, Int>()
 
-    fun isKnown(eventId: EventId): Boolean {
-        return timelineEventsIndexes.containsKey(eventId).also {
-            Timber.d("$eventId isKnown = $it")
+    private val mutex = Mutex()
+
+    suspend fun isKnown(eventId: EventId): Boolean {
+        firstProcessLatch.await()
+        return mutex.withLock {
+            timelineEventsIndexes.containsKey(eventId).also {
+                Timber.d("$eventId isKnown = $it")
+            }
         }
     }
 
-    fun indexOf(eventId: EventId): Int {
-        return (timelineEventsIndexes[eventId] ?: -1).also {
-            Timber.d("indexOf $eventId= $it")
+    suspend fun indexOf(eventId: EventId): Int {
+        firstProcessLatch.await()
+        return mutex.withLock {
+            (timelineEventsIndexes[eventId] ?: -1).also {
+                Timber.d("indexOf $eventId= $it")
+            }
         }
     }
 
-    fun process(timelineItems: List<TimelineItem>) {
+    suspend fun process(timelineItems: List<TimelineItem>) = mutex.withLock {
         Timber.d("process ${timelineItems.size} items")
         timelineEventsIndexes.clear()
         timelineItems.forEachIndexed { index, timelineItem ->
@@ -55,6 +56,7 @@ class TimelineItemIndexer @Inject constructor() {
                 else -> Unit
             }
         }
+        firstProcessLatch.complete(Unit)
     }
 
     private fun processEvent(event: TimelineItem.Event, index: Int) {

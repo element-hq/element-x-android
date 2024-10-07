@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.libraries.designsystem.atomic.pages
@@ -27,6 +18,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.movableContentOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,6 +41,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
  * @param footer optional footer.
  * @param content main content.
  */
+@Suppress("NAME_SHADOWING")
 @Composable
 fun HeaderFooterPage(
     modifier: Modifier = Modifier,
@@ -60,6 +54,10 @@ fun HeaderFooterPage(
     footer: @Composable () -> Unit = {},
     content: @Composable () -> Unit = {},
 ) {
+    val topBar = remember { movableContentOf(topBar) }
+    val header = remember { movableContentOf(header) }
+    val footer = remember { movableContentOf(footer) }
+    val content = remember { movableContentOf(content) }
     Scaffold(
         modifier = modifier,
         topBar = topBar,

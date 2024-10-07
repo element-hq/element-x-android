@@ -14,7 +14,7 @@
   <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Säästa aega ja kasuta alati %1$s rakenduse lukustuse eemaldamiseks"</string>
   <string name="screen_app_lock_setup_choose_pin">"Vali PIN-kood"</string>
   <string name="screen_app_lock_setup_confirm_pin">"Korda PIN-koodi"</string>
-  <string name="screen_app_lock_setup_pin_context">"Lisamaks oma %1$s vestlustele turvalisust ja privaatsust, lukusta oma nutiseade.
+  <string name="screen_app_lock_setup_pin_context">"Lisamaks oma %1$s rakenduse vestlustele turvalisust ja privaatsust, lukusta oma nutiseade.
 
 Vali midagi, mis hästi meelde jääb. Kui unustad selle PIN-koodi, siis turvakaalutlustel logitakse sind rakendusest välja."</string>
   <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"Turvakaalutlustel sa ei saa sellist PIN-koodi kasutada"</string>
@@ -31,7 +31,7 @@ Vali midagi, mis hästi meelde jääb. Kui unustad selle PIN-koodi, siis turvaka
     <item quantity="one">"Vale PIN-kood. Saad proovida veel %1$d korra"</item>
     <item quantity="other">"Vale PIN-kood. Saad proovida veel %1$d korda"</item>
   </plurals>
-  <string name="screen_app_lock_use_biometric_android">"Kasuta biomeetrilist tuvastust"</string>
+  <string name="screen_app_lock_use_biometric_android">"Kasuta biomeetriat"</string>
   <string name="screen_app_lock_use_pin_android">"Kasuta PIN-koodi"</string>
   <string name="screen_signout_in_progress_dialog_content">"Logime välja…"</string>
 </resources>

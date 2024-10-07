@@ -1,28 +1,18 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.preferences.impl.root
 
-import androidx.compose.runtime.Composable
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
+import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.logout.api.direct.DirectLogoutPresenter
-import io.element.android.features.logout.api.direct.DirectLogoutState
+import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.meta.BuildMeta
@@ -47,15 +37,9 @@ class PreferencesRootPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
-    private val aDirectLogoutState = DirectLogoutState(
-        canDoDirectSignOut = true,
-        logoutAction = AsyncAction.Uninitialized,
-        eventSink = {},
-    )
-
     @Test
     fun `present - initial state`() = runTest {
-        val matrixClient = FakeMatrixClient()
+        val matrixClient = FakeMatrixClient(canDeactivateAccountResult = { true })
         val presenter = createPresenter(matrixClient = matrixClient)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -86,8 +70,24 @@ class PreferencesRootPresenterTest {
             assertThat(loadedState.showDeveloperSettings).isTrue()
             assertThat(loadedState.showLockScreenSettings).isTrue()
             assertThat(loadedState.showNotificationSettings).isTrue()
-            assertThat(loadedState.directLogoutState).isEqualTo(aDirectLogoutState)
+            assertThat(loadedState.canDeactivateAccount).isTrue()
+            assertThat(loadedState.directLogoutState).isEqualTo(aDirectLogoutState())
             assertThat(loadedState.snackbarMessage).isNull()
+        }
+    }
+
+    @Test
+    fun `present - can deactivate account is false if the Matrix client say so`() = runTest {
+        val presenter = createPresenter(
+            matrixClient = FakeMatrixClient(
+                canDeactivateAccountResult = { false }
+            )
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val loadedState = awaitFirstItem()
+            assertThat(loadedState.canDeactivateAccount).isFalse()
         }
     }
 
@@ -99,8 +99,7 @@ class PreferencesRootPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val loadedState = awaitItem()
+            val loadedState = awaitFirstItem()
             assertThat(loadedState.showDeveloperSettings).isFalse()
         }
     }
@@ -113,21 +112,23 @@ class PreferencesRootPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-            val loadedState = awaitItem()
-
+            val loadedState = awaitFirstItem()
             repeat(times = ShowDeveloperSettingsProvider.DEVELOPER_SETTINGS_COUNTER) {
                 assertThat(loadedState.showDeveloperSettings).isFalse()
                 loadedState.eventSink(PreferencesRootEvents.OnVersionInfoClick)
             }
-
             assertThat(awaitItem().showDeveloperSettings).isTrue()
         }
     }
 
+    private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
+        skipItems(1)
+        return awaitItem()
+    }
+
     private fun createPresenter(
         buildMeta: BuildMeta = aBuildMeta(),
-        matrixClient: FakeMatrixClient = FakeMatrixClient(),
+        matrixClient: FakeMatrixClient = FakeMatrixClient(canDeactivateAccountResult = { true }),
         sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
         showDeveloperSettingsProvider: ShowDeveloperSettingsProvider = ShowDeveloperSettingsProvider(aBuildMeta(BuildType.DEBUG)),
     ) = PreferencesRootPresenter(
@@ -142,10 +143,7 @@ class PreferencesRootPresenterTest {
             sessionVerificationService = sessionVerificationService,
             encryptionService = FakeEncryptionService(),
         ),
-        directLogoutPresenter = object : DirectLogoutPresenter {
-            @Composable
-            override fun present() = aDirectLogoutState
-        },
+        directLogoutPresenter = { aDirectLogoutState() },
         showDeveloperSettingsProvider = showDeveloperSettingsProvider,
     )
 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Παρακαλώ επιβεβαίωσε ότι θες να απενεργοποιήσεις τον λογαριασμό σου. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."</string>
+  <string name="screen_deactivate_account_delete_all_messages">"Διαγραφή όλων των μηνυμάτων μου"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"Προειδοποίηση: Οι μελλοντικοί χρήστες ενδέχεται να βλέπουν ελλιπείς συνομιλίες."</string>
+  <string name="screen_deactivate_account_description">"Η απενεργοποίηση του λογαριασμού σας είναι %1$s, θα:"</string>
+  <string name="screen_deactivate_account_description_bold_part">"μη αναστρέψιμο"</string>
+  <string name="screen_deactivate_account_list_item_1">"%1$s τον λογαριασμό σου (δεν μπορείς να συνδεθείς ξανά και το αναγνωριστικό σου δεν μπορεί να επαναχρησιμοποιηθεί)."</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"Μόνιμη απενεργοποίηση"</string>
+  <string name="screen_deactivate_account_list_item_2">"Σε αφαιρέσει από όλα τα δωμάτια συνομιλίας."</string>
+  <string name="screen_deactivate_account_list_item_3">"Διαγράψει τα στοιχεία του λογαριασμού σου από τον διακομιστή ταυτότητάς μας."</string>
+  <string name="screen_deactivate_account_list_item_4">"Τα μηνύματά σου θα εξακολουθούν να είναι ορατά στους εγγεγραμμένους χρήστες, αλλά δεν θα είναι διαθέσιμα σε νέους ή μη εγγεγραμμένους χρήστες εάν επιλέξεις να τα διαγράψεις."</string>
+  <string name="screen_deactivate_account_title">"Απενεργοποίηση λογαριασμού"</string>
+</resources>

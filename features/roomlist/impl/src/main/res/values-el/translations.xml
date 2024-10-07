@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"Αποσύνδεση &amp;amp; Αναβάθμιση"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Ο διακομιστής σου υποστηρίζει τώρα ένα νέο, ταχύτερο πρωτόκολλο. Αποσυνδέσου και συνδέσου ξανά για αναβάθμιση τώρα. Κάνοντας αυτό τώρα θα σε βοηθήσει να αποφύγεις μια αναγκαστική αποσύνδεση όταν το παλιό πρωτόκολλο καταργηθεί αργότερα."</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Ο οικιακός διακομιστής σου δεν υποστηρίζει πλέον το παλιό πρωτόκολλο. Αποσυνδέσου και συνδέσου ξανά για να συνεχίσεις να χρησιμοποιείς την εφαρμογή."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Διαθέσιμη αναβάθμιση"</string>
+  <string name="banner_set_up_recovery_content">"Δημιούργησε ένα νέο κλειδί ανάκτησης που μπορεί να χρησιμοποιηθεί για την επαναφορά του ιστορικού των κρυπτογραφημένων μηνυμάτων σου σε περίπτωση που χάσεις την πρόσβαση στις συσκευές σου."</string>
+  <string name="banner_set_up_recovery_title">"Ρύθμιση ανάκτησης"</string>
   <string name="confirm_recovery_key_banner_message">"Το αντίγραφο ασφαλείας της συνομιλίας σου δεν είναι συγχρονισμένο αυτήν τη στιγμή. Πρέπει να εισαγάγεις το κλειδί ανάκτησης για να διατηρήσεις την πρόσβαση στο αντίγραφο ασφαλείας της συνομιλίας σου."</string>
   <string name="confirm_recovery_key_banner_title">"Εισήγαγε το κλειδί ανάκτησης"</string>
   <string name="full_screen_intent_banner_message">"Για να διασφαλίσεις ότι δεν θα χάσεις ποτέ μια σημαντική κλήση, άλλαξε τις ρυθμίσεις σου για να επιτρέψεις τις ειδοποιήσεις πλήρους οθόνης όταν το τηλέφωνό σου είναι κλειδωμένο."</string>

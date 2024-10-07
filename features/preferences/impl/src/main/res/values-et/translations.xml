@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="full_screen_intent_banner_message">"Selleks, et sul ainsamgi tähtis kõne ei jääks märkamata, siis palun muuda oma nutiseadme seadistusi nii, et lukustusvaates oleksid täisekraani mõõtu teavitused."</string>
-  <string name="full_screen_intent_banner_title">"Täiusta oma telefonikõnede kogemust"</string>
+  <string name="full_screen_intent_banner_title">"Sinu tõhusad telefonikõned"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Vali kuidas sa soovid saada teavitusi"</string>
   <string name="screen_advanced_settings_developer_mode">"Arendaja valikud"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Selle eelistuse sisselülitamisel lisanduvad rakendusse arendaja tööks vajalikud valikud."</string>
@@ -44,7 +44,7 @@ Kui sa jätkad muutmist, siis võivad muutuda ka need peidetud eelistused."</str
   <string name="screen_notification_settings_group_chats">"Rühmavestlused"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Kutsed"</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Sinu koduserver ei toeta seda funktsionaalsust krüptitud jututubades ja seega ei pruugi kõik teavitused sinuni jõuda."</string>
-  <string name="screen_notification_settings_mentions_section_title">"Mainimised"</string>
+  <string name="screen_notification_settings_mentions_section_title">"Mainimiste alusel"</string>
   <string name="screen_notification_settings_mode_all">"Kõik"</string>
   <string name="screen_notification_settings_mode_mentions">"Mainimiste alusel"</string>
   <string name="screen_notification_settings_notification_section_title">"Teavita mind"</string>

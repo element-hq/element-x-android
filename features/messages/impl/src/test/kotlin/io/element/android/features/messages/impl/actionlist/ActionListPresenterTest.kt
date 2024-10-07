@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl.actionlist
@@ -22,6 +13,9 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.aUserEventPermissions
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
+import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure
+import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailureFactory
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCallNotifyContent
@@ -32,11 +26,11 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVoiceContent
 import io.element.android.features.poll.api.pollcontent.aPollAnswerItemList
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
+import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
@@ -89,6 +83,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     event = messageEvent,
                     displayEmojiReactions = false,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.ViewSource,
                     )
@@ -130,6 +125,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     event = messageEvent,
                     displayEmojiReactions = false,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.ViewSource,
                     )
@@ -171,6 +167,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     event = messageEvent,
                     displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
@@ -218,6 +215,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     event = messageEvent,
                     displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Forward,
                         TimelineItemAction.Pin,
@@ -262,6 +260,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     event = messageEvent,
                     displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
@@ -308,6 +307,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     event = messageEvent,
                     displayEmojiReactions = false,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
@@ -355,6 +355,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     event = messageEvent,
                     displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
@@ -402,6 +403,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     event = messageEvent,
                     displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
@@ -449,6 +451,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     event = messageEvent,
                     displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
@@ -494,6 +497,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     event = stateEvent,
                     displayEmojiReactions = false,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.ViewSource,
                     )
@@ -563,6 +567,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     event = messageEvent,
                     displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
@@ -609,6 +614,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     event = messageEvent,
                     displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
@@ -662,6 +668,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     event = messageEvent,
                     displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
@@ -758,6 +765,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     event = messageEvent,
                     displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Edit,
                         TimelineItemAction.Copy,
@@ -797,6 +805,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     event = messageEvent,
                     displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Edit,
@@ -839,6 +848,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     event = messageEvent,
                     displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.EndPoll,
@@ -880,6 +890,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     event = messageEvent,
                     displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Pin,
@@ -920,6 +931,7 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     event = messageEvent,
                     displayEmojiReactions = true,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.Reply,
                         TimelineItemAction.Forward,
@@ -959,11 +971,38 @@ class ActionListPresenterTest {
                 ActionListState.Target.Success(
                     event = messageEvent,
                     displayEmojiReactions = false,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
                         TimelineItemAction.ViewSource
                     )
                 )
             )
+        }
+    }
+
+    @Test
+    fun `present - compute for verified user send failure`() = runTest {
+        val room = FakeMatrixRoom(
+            userDisplayNameResult = { Result.success("Alice") }
+        )
+        val presenter = createActionListPresenter(isDeveloperModeEnabled = false, isPinFeatureEnabled = false, room = room)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent(
+                sendState = LocalEventSendState.Failed.VerifiedUserChangedIdentity(users = listOf(A_USER_ID)),
+            )
+            initialState.eventSink.invoke(
+                ActionListEvents.ComputeForMessage(
+                    event = messageEvent,
+                    userEventPermissions = aUserEventPermissions(),
+                )
+            )
+            skipItems(1)
+            val successState = awaitItem()
+            val target = successState.target as ActionListState.Target.Success
+            assertThat(target.verifiedUserSendFailure).isEqualTo(VerifiedUserSendFailure.ChangedIdentity(userDisplayName = "Alice"))
         }
     }
 }
@@ -974,14 +1013,11 @@ private fun createActionListPresenter(
     room: MatrixRoom = FakeMatrixRoom(),
 ): ActionListPresenter {
     val preferencesStore = InMemoryAppPreferencesStore(isDeveloperModeEnabled = isDeveloperModeEnabled)
-    val featureFlagsService = FakeFeatureFlagService(
-        initialState = mapOf(
-            FeatureFlags.PinnedEvents.key to isPinFeatureEnabled,
-        )
-    )
-    return ActionListPresenter(
+    return DefaultActionListPresenter(
+        postProcessor = TimelineItemActionPostProcessor.Default,
         appPreferencesStore = preferencesStore,
-        featureFlagsService = featureFlagsService,
-        room = room
+        isPinnedMessagesFeatureEnabled = { isPinFeatureEnabled },
+        room = room,
+        userSendFailureFactory = VerifiedUserSendFailureFactory(room)
     )
 }

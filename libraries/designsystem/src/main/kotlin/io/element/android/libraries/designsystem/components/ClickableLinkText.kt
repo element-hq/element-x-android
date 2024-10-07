@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright 2022-2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.libraries.designsystem.components
@@ -32,7 +23,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
@@ -46,6 +37,7 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
+import timber.log.Timber
 
 const val LINK_TAG = "URL"
 
@@ -74,7 +66,6 @@ fun ClickableLinkText(
     )
 }
 
-@OptIn(ExperimentalTextApi::class)
 @Composable
 fun ClickableLinkText(
     annotatedString: AnnotatedString,
@@ -115,14 +106,18 @@ fun ClickableLinkText(
         ) { offset ->
             layoutResult.value?.let { layoutResult ->
                 val position = layoutResult.getOffsetForPosition(offset)
-                val linkUrlAnnotations = annotatedString.getUrlAnnotations(position, position)
-                    .map { AnnotatedString.Range(it.item.url, it.start, it.end, linkAnnotationTag) }
+                val linkUrlAnnotations = annotatedString.getLinkAnnotations(position, position)
+                    .map { AnnotatedString.Range(it.item, it.start, it.end, linkAnnotationTag) }
                 val linkStringAnnotations = linkUrlAnnotations +
                     annotatedString.getStringAnnotations(linkAnnotationTag, position, position)
                 if (linkStringAnnotations.isEmpty()) {
                     onClick()
                 } else {
-                    uriHandler.openUri(linkStringAnnotations.first().item)
+                    when (val annotation = linkStringAnnotations.first().item) {
+                        is LinkAnnotation.Url -> uriHandler.openUri(annotation.url)
+                        is String -> uriHandler.openUri(annotation)
+                        else -> Timber.e("Unknown link annotation: $annotation")
+                    }
                 }
             }
         }
@@ -138,7 +133,6 @@ fun ClickableLinkText(
     )
 }
 
-@OptIn(ExperimentalTextApi::class)
 fun AnnotatedString.linkify(linkStyle: SpanStyle): AnnotatedString {
     val original = this
     val spannable = SpannableString(this.text)
@@ -150,7 +144,7 @@ fun AnnotatedString.linkify(linkStyle: SpanStyle): AnnotatedString {
         for (span in spans) {
             val start = spannable.getSpanStart(span)
             val end = spannable.getSpanEnd(span)
-            if (original.getUrlAnnotations(start, end).isEmpty() && original.getStringAnnotations("URL", start, end).isEmpty()) {
+            if (original.getLinkAnnotations(start, end).isEmpty() && original.getStringAnnotations("URL", start, end).isEmpty()) {
                 // Prevent linkifying domains in user or room handles (@user:domain.com, #room:domain.com)
                 if (start > 0 && !spannable[start - 1].isWhitespace()) continue
                 addStyle(

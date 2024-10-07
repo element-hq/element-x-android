@@ -5,7 +5,6 @@
   <string name="screen_chat_backup_key_backup_description">"Zaxiralash xabarlar tarixini yo\'qotmaslikni ta\'minlaydi.%1$s."</string>
   <string name="screen_chat_backup_key_backup_title">"Zaxira"</string>
   <string name="screen_chat_backup_recovery_action_change">"Qayta tiklash kalitini o\'zgartiring"</string>
-  <string name="screen_chat_backup_recovery_action_confirm">"Qayta tiklash kalitini kiriting"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Sizning chat zaxirangiz hozirda sinxronlashtirilmagan."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Qayta tiklashni sozlang"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Agar barcha qurilmalaringizni yo‘qotib qo‘ysangiz yoki tizimdan chiqqan bo‘lsangiz, shifrlangan xabarlaringizga ruxsat oling%1$s hamma joyda."</string>
@@ -25,7 +24,6 @@
   <string name="screen_recovery_key_confirm_key_description">"Agar sizda xavfsizlik kaliti yoki xavfsizlik iborasi bolsa, bu ham ishlaydi."</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Kirish…"</string>
   <string name="screen_recovery_key_confirm_success">"Qayta tiklash kaliti tasdiqlandi"</string>
-  <string name="screen_recovery_key_confirm_title">"Qayta tiklash kalitingizni kiriting"</string>
   <string name="screen_recovery_key_save_action">"Qayta tiklash kalitini saqlang"</string>
   <string name="screen_recovery_key_save_description">"Qayta tiklash kalitingizni xavfsiz joyga yozing yoki parol menejerida saqlang."</string>
   <string name="screen_recovery_key_save_key_description">"Qayta tiklash kalitidan nusxa olish uchun bosing"</string>
@@ -37,4 +35,5 @@
   <string name="screen_recovery_key_setup_generate_key_description">"Qayta tiklash kalitingizni xavfsiz joyda saqlashingiz mumkinligiga ishonch hosil qiling"</string>
   <string name="screen_recovery_key_setup_success">"Qayta tiklash muvaffaqiyatli sozlandi"</string>
   <string name="screen_recovery_key_setup_title">"Qayta tiklashni sozlang"</string>
+  <string name="screen_reset_encryption_password_placeholder">"Kirish…"</string>
 </resources>

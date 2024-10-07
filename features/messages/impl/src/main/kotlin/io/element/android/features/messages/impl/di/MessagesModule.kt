@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2024 New Vector Ltd
+ * Copyright 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl.di
@@ -19,8 +10,24 @@ package io.element.android.features.messages.impl.di
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Binds
 import dagger.Module
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailurePresenter
+import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureState
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerPresenter
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryPresenter
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
+import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetPresenter
+import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionPresenter
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
+import io.element.android.features.messages.impl.typing.TypingNotificationPresenter
+import io.element.android.features.messages.impl.typing.TypingNotificationState
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
 
@@ -29,4 +36,28 @@ import io.element.android.libraries.di.RoomScope
 interface MessagesModule {
     @Binds
     fun bindPinnedMessagesBannerPresenter(presenter: PinnedMessagesBannerPresenter): Presenter<PinnedMessagesBannerState>
+
+    @Binds
+    fun bindResolveVerifiedUserSendFailurePresenter(presenter: ResolveVerifiedUserSendFailurePresenter): Presenter<ResolveVerifiedUserSendFailureState>
+
+    @Binds
+    fun bindTypingNotificationPresenter(presenter: TypingNotificationPresenter): Presenter<TypingNotificationState>
+
+    @Binds
+    fun bindTimelineProtectionPresenter(presenter: TimelineProtectionPresenter): Presenter<TimelineProtectionState>
+
+    @Binds
+    fun bindMessageComposerPresenter(presenter: MessageComposerPresenter): Presenter<MessageComposerState>
+
+    @Binds
+    fun bindVoiceMessageComposerPresenter(presenter: VoiceMessageComposerPresenter): Presenter<VoiceMessageComposerState>
+
+    @Binds
+    fun bindCustomReactionPresenter(presenter: CustomReactionPresenter): Presenter<CustomReactionState>
+
+    @Binds
+    fun bindReactionSummaryPresenter(presenter: ReactionSummaryPresenter): Presenter<ReactionSummaryState>
+
+    @Binds
+    fun bindReadReceiptBottomSheetPresenter(presenter: ReadReceiptBottomSheetPresenter): Presenter<ReadReceiptBottomSheetState>
 }

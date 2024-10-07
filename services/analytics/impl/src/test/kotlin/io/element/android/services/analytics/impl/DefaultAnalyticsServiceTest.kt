@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2024 New Vector Ltd
+ * Copyright 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 @file:OptIn(ExperimentalCoroutinesApi::class)
@@ -33,7 +24,6 @@ import io.element.android.services.analyticsproviders.api.AnalyticsProvider
 import io.element.android.services.analyticsproviders.test.FakeAnalyticsProvider
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
-import io.element.android.tests.testutils.runCancellableScopeTest
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -46,13 +36,13 @@ import org.junit.Test
 
 class DefaultAnalyticsServiceTest {
     @Test
-    fun `getAvailableAnalyticsProviders return the set of provider`() = runCancellableScopeTest {
+    fun `getAvailableAnalyticsProviders return the set of provider`() = runTest {
         val providers = setOf(
             FakeAnalyticsProvider(name = "provider1", stopLambda = { }),
             FakeAnalyticsProvider(name = "provider2", stopLambda = { }),
         )
         val sut = createDefaultAnalyticsService(
-            coroutineScope = it,
+            coroutineScope = backgroundScope,
             analyticsProviders = providers
         )
         val result = sut.getAvailableAnalyticsProviders()
@@ -60,17 +50,17 @@ class DefaultAnalyticsServiceTest {
     }
 
     @Test
-    fun `when consent is not provided, capture is no op`() = runCancellableScopeTest {
-        val sut = createDefaultAnalyticsService(it)
+    fun `when consent is not provided, capture is no op`() = runTest {
+        val sut = createDefaultAnalyticsService(backgroundScope)
         sut.capture(anEvent)
     }
 
     @Test
-    fun `when consent is provided, capture is sent to the AnalyticsProvider`() = runCancellableScopeTest {
+    fun `when consent is provided, capture is sent to the AnalyticsProvider`() = runTest {
         val initLambda = lambdaRecorder<Unit> { }
         val captureLambda = lambdaRecorder<VectorAnalyticsEvent, Unit> { _ -> }
         val sut = createDefaultAnalyticsService(
-            coroutineScope = it,
+            coroutineScope = backgroundScope,
             analyticsStore = FakeAnalyticsStore(defaultUserConsent = true),
             analyticsProviders = setOf(
                 FakeAnalyticsProvider(
@@ -85,17 +75,17 @@ class DefaultAnalyticsServiceTest {
     }
 
     @Test
-    fun `when consent is not provided, screen is no op`() = runCancellableScopeTest {
-        val sut = createDefaultAnalyticsService(it)
+    fun `when consent is not provided, screen is no op`() = runTest {
+        val sut = createDefaultAnalyticsService(backgroundScope)
         sut.screen(aScreen)
     }
 
     @Test
-    fun `when consent is provided, screen is sent to the AnalyticsProvider`() = runCancellableScopeTest {
+    fun `when consent is provided, screen is sent to the AnalyticsProvider`() = runTest {
         val initLambda = lambdaRecorder<Unit> { }
         val screenLambda = lambdaRecorder<VectorAnalyticsScreen, Unit> { _ -> }
         val sut = createDefaultAnalyticsService(
-            coroutineScope = it,
+            coroutineScope = backgroundScope,
             analyticsStore = FakeAnalyticsStore(defaultUserConsent = true),
             analyticsProviders = setOf(
                 FakeAnalyticsProvider(
@@ -110,17 +100,17 @@ class DefaultAnalyticsServiceTest {
     }
 
     @Test
-    fun `when consent is not provided, trackError is no op`() = runCancellableScopeTest {
-        val sut = createDefaultAnalyticsService(it)
+    fun `when consent is not provided, trackError is no op`() = runTest {
+        val sut = createDefaultAnalyticsService(backgroundScope)
         sut.trackError(anError)
     }
 
     @Test
-    fun `when consent is provided, trackError is sent to the AnalyticsProvider`() = runCancellableScopeTest {
+    fun `when consent is provided, trackError is sent to the AnalyticsProvider`() = runTest {
         val initLambda = lambdaRecorder<Unit> { }
         val trackErrorLambda = lambdaRecorder<Throwable, Unit> { _ -> }
         val sut = createDefaultAnalyticsService(
-            coroutineScope = it,
+            coroutineScope = backgroundScope,
             analyticsStore = FakeAnalyticsStore(defaultUserConsent = true),
             analyticsProviders = setOf(
                 FakeAnalyticsProvider(
@@ -135,10 +125,10 @@ class DefaultAnalyticsServiceTest {
     }
 
     @Test
-    fun `setUserConsent is sent to the store`() = runCancellableScopeTest {
+    fun `setUserConsent is sent to the store`() = runTest {
         val store = FakeAnalyticsStore()
         val sut = createDefaultAnalyticsService(
-            coroutineScope = it,
+            coroutineScope = backgroundScope,
             analyticsStore = store,
         )
         assertThat(store.userConsentFlow.first()).isFalse()
@@ -149,10 +139,10 @@ class DefaultAnalyticsServiceTest {
     }
 
     @Test
-    fun `setAnalyticsId is sent to the store`() = runCancellableScopeTest {
+    fun `setAnalyticsId is sent to the store`() = runTest {
         val store = FakeAnalyticsStore()
         val sut = createDefaultAnalyticsService(
-            coroutineScope = it,
+            coroutineScope = backgroundScope,
             analyticsStore = store,
         )
         assertThat(store.analyticsIdFlow.first()).isEqualTo("")
@@ -163,10 +153,10 @@ class DefaultAnalyticsServiceTest {
     }
 
     @Test
-    fun `setDidAskUserConsent is sent to the store`() = runCancellableScopeTest {
+    fun `setDidAskUserConsent is sent to the store`() = runTest {
         val store = FakeAnalyticsStore()
         val sut = createDefaultAnalyticsService(
-            coroutineScope = it,
+            coroutineScope = backgroundScope,
             analyticsStore = store,
         )
         assertThat(store.didAskUserConsentFlow.first()).isFalse()
@@ -177,13 +167,13 @@ class DefaultAnalyticsServiceTest {
     }
 
     @Test
-    fun `when a session is deleted, the store is reset`() = runCancellableScopeTest {
+    fun `when a session is deleted, the store is reset`() = runTest {
         val resetLambda = lambdaRecorder<Unit> { }
         val store = FakeAnalyticsStore(
             resetLambda = resetLambda,
         )
         val sut = createDefaultAnalyticsService(
-            coroutineScope = it,
+            coroutineScope = backgroundScope,
             analyticsStore = store,
         )
         sut.onSessionDeleted("userId")
@@ -191,12 +181,12 @@ class DefaultAnalyticsServiceTest {
     }
 
     @Test
-    fun `when reset is invoked, the user consent is reset`() = runCancellableScopeTest {
+    fun `when reset is invoked, the user consent is reset`() = runTest {
         val store = FakeAnalyticsStore(
             defaultDidAskUserConsent = true,
         )
         val sut = createDefaultAnalyticsService(
-            coroutineScope = it,
+            coroutineScope = backgroundScope,
             analyticsStore = store,
         )
         assertThat(store.didAskUserConsentFlow.first()).isTrue()
@@ -205,9 +195,9 @@ class DefaultAnalyticsServiceTest {
     }
 
     @Test
-    fun `when a session is added, nothing happen`() = runCancellableScopeTest {
+    fun `when a session is added, nothing happen`() = runTest {
         val sut = createDefaultAnalyticsService(
-            coroutineScope = it,
+            coroutineScope = backgroundScope,
         )
         sut.onSessionCreated("userId")
     }
@@ -240,10 +230,10 @@ class DefaultAnalyticsServiceTest {
     }
 
     @Test
-    fun `when consent is provided, updateUserProperties is sent to the provider`() = runCancellableScopeTest {
+    fun `when consent is provided, updateUserProperties is sent to the provider`() = runTest {
         val updateUserPropertiesLambda = lambdaRecorder<UserProperties, Unit> { _ -> }
         val sut = createDefaultAnalyticsService(
-            coroutineScope = it,
+            coroutineScope = backgroundScope,
             analyticsProviders = setOf(
                 FakeAnalyticsProvider(
                     initLambda = { },
@@ -257,10 +247,10 @@ class DefaultAnalyticsServiceTest {
     }
 
     @Test
-    fun `when super properties are updated, updateSuperProperties is sent to the provider`() = runCancellableScopeTest {
+    fun `when super properties are updated, updateSuperProperties is sent to the provider`() = runTest {
         val updateSuperPropertiesLambda = lambdaRecorder<SuperProperties, Unit> { _ -> }
         val sut = createDefaultAnalyticsService(
-            coroutineScope = it,
+            coroutineScope = backgroundScope,
             analyticsProviders = setOf(
                 FakeAnalyticsProvider(
                     initLambda = { },

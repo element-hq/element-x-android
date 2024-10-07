@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.verifysession.impl
@@ -79,8 +70,17 @@ fun VerifySelfSessionView(
     onSuccessLogout: (String?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    fun resetFlow() {
-        state.eventSink(VerifySelfSessionViewEvents.Reset)
+    fun cancelOrResetFlow() {
+        when (state.verificationFlowStep) {
+            is FlowStep.Canceled -> state.eventSink(VerifySelfSessionViewEvents.Reset)
+            is FlowStep.AwaitingOtherDeviceResponse, FlowStep.Ready -> state.eventSink(VerifySelfSessionViewEvents.Cancel)
+            is FlowStep.Verifying -> {
+                if (!state.verificationFlowStep.state.isLoading()) {
+                    state.eventSink(VerifySelfSessionViewEvents.DeclineVerification)
+                }
+            }
+            else -> Unit
+        }
     }
 
     val latestOnFinish by rememberUpdatedState(newValue = onFinish)
@@ -90,16 +90,7 @@ fun VerifySelfSessionView(
         }
     }
     BackHandler {
-        when (state.verificationFlowStep) {
-            is FlowStep.Canceled -> resetFlow()
-            is FlowStep.AwaitingOtherDeviceResponse, FlowStep.Ready -> state.eventSink(VerifySelfSessionViewEvents.Cancel)
-            is FlowStep.Verifying -> {
-                if (!state.verificationFlowStep.state.isLoading()) {
-                    state.eventSink(VerifySelfSessionViewEvents.DeclineVerification)
-                }
-            }
-            else -> Unit
-        }
+        cancelOrResetFlow()
     }
     val verificationFlowStep = state.verificationFlowStep
 
@@ -142,9 +133,9 @@ fun VerifySelfSessionView(
             footer = {
                 BottomMenu(
                     screenState = state,
-                    goBack = ::resetFlow,
+                    onCancelClick = ::cancelOrResetFlow,
                     onEnterRecoveryKey = onEnterRecoveryKey,
-                    onFinish = onFinish,
+                    onContinueClick = onFinish,
                     onResetKey = onResetKey,
                 )
             }
@@ -277,8 +268,8 @@ private fun BottomMenu(
     screenState: VerifySelfSessionState,
     onEnterRecoveryKey: () -> Unit,
     onResetKey: () -> Unit,
-    goBack: () -> Unit,
-    onFinish: () -> Unit,
+    onCancelClick: () -> Unit,
+    onContinueClick: () -> Unit,
 ) {
     val verificationViewState = screenState.verificationFlowStep
     val eventSink = screenState.eventSink
@@ -325,7 +316,7 @@ private fun BottomMenu(
                 TextButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(CommonStrings.action_cancel),
-                    onClick = goBack,
+                    onClick = onCancelClick,
                 )
             }
         }
@@ -339,7 +330,7 @@ private fun BottomMenu(
                 TextButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(CommonStrings.action_cancel),
-                    onClick = goBack,
+                    onClick = onCancelClick,
                 )
             }
         }
@@ -384,7 +375,7 @@ private fun BottomMenu(
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(CommonStrings.action_continue),
-                    onClick = onFinish,
+                    onClick = onContinueClick,
                 )
                 // Placeholder so the 1st button keeps its vertical position
                 Spacer(modifier = Modifier.height(48.dp))

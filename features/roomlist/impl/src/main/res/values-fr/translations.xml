@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="banner_migrate_to_native_sliding_sync_action">"Déconnecter et mettre à niveau"</string>
+  <string name="banner_migrate_to_native_sliding_sync_description">"Votre serveur prend désormais en charge un nouveau protocole plus rapide. Déconnectez-vous, puis reconnectez-vous pour effectuer la mise à niveau dès maintenant. En le faisant tout de suite, vous éviterez une déconnexion forcée lorsque l’ancien protocole sera supprimé."</string>
+  <string name="banner_migrate_to_native_sliding_sync_force_logout_title">"Votre serveur d’accueil ne prend plus en charge l’ancien protocole. Veuillez vous déconnecter puis vous reconnecter pour continuer à utiliser l’application."</string>
+  <string name="banner_migrate_to_native_sliding_sync_title">"Mise à niveau disponible"</string>
+  <string name="banner_set_up_recovery_content">"Générez une nouvelle clé de récupération qui peut être utilisée pour restaurer l’historique de vos messages chiffrés au cas où vous perdriez l’accès à vos appareils."</string>
+  <string name="banner_set_up_recovery_title">"Configurer la récupération"</string>
   <string name="confirm_recovery_key_banner_message">"La sauvegarde des conversations est désynchronisée. Vous devez confirmer la clé de récupération pour accéder à votre historique."</string>
   <string name="confirm_recovery_key_banner_title">"Confirmer votre clé de récupération"</string>
   <string name="full_screen_intent_banner_message">"Afin de ne jamais manquer un appel important, veuillez modifier vos paramètres pour autoriser les notifications en plein écran lorsque votre appareil est verrouillé."</string>

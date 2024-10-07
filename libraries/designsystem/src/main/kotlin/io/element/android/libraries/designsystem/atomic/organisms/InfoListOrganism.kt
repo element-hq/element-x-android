@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.libraries.designsystem.atomic.organisms
@@ -26,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -47,6 +39,7 @@ fun InfoListOrganism(
     iconTint: Color = LocalContentColor.current,
     iconSize: Dp = 20.dp,
     textStyle: TextStyle = LocalTextStyle.current,
+    textColor: Color = ElementTheme.colors.textPrimary,
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(4.dp),
 ) {
     Column(
@@ -62,11 +55,19 @@ fun InfoListOrganism(
             }
             InfoListItemMolecule(
                 message = {
-                    Text(
-                        text = item.message,
-                        style = textStyle,
-                        color = ElementTheme.colors.textPrimary,
-                    )
+                    if (item.message is AnnotatedString) {
+                        Text(
+                            text = item.message,
+                            style = textStyle,
+                            color = textColor,
+                        )
+                    } else {
+                        Text(
+                            text = item.message.toString(),
+                            style = textStyle,
+                            color = textColor,
+                        )
+                    }
                 },
                 icon = {
                     if (item.iconId != null) {
@@ -95,7 +96,7 @@ fun InfoListOrganism(
 }
 
 data class InfoListItem(
-    val message: String,
+    val message: CharSequence,
     @DrawableRes val iconId: Int? = null,
     val iconVector: ImageVector? = null,
     val iconComposable: @Composable () -> Unit = {},

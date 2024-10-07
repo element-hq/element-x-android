@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.appnav.loggedin
@@ -38,6 +29,8 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import io.element.android.libraries.preferences.api.store.EnableNativeSlidingSyncUseCase
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.push.test.FakePushService
 import io.element.android.libraries.pushproviders.api.Distributor
@@ -51,6 +44,10 @@ import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -100,7 +97,8 @@ class LoggedInPresenterTest {
             pushService = FakePushService(),
             sessionVerificationService = verificationService,
             analyticsService = analyticsService,
-            encryptionService = encryptionService
+            encryptionService = encryptionService,
+            enableNativeSlidingSyncUseCase = EnableNativeSlidingSyncUseCase(InMemoryAppPreferencesStore(), this),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -496,26 +494,103 @@ class LoggedInPresenterTest {
         )
     }
 
+    @Test
+    fun `present - CheckSlidingSyncProxyAvailability forces the sliding sync migration under the right circumstances`() = runTest {
+        // The migration will be forced if:
+        // - The user is not using the native sliding sync
+        // - The sliding sync proxy is no longer supported
+        // - The native sliding sync is supported
+        val matrixClient = FakeMatrixClient(
+            isUsingNativeSlidingSyncLambda = { false },
+            isSlidingSyncProxySupportedLambda = { false },
+            isNativeSlidingSyncSupportedLambda = { true },
+        )
+        val presenter = createLoggedInPresenter(matrixClient = matrixClient)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.forceNativeSlidingSyncMigration).isFalse()
+
+            initialState.eventSink(LoggedInEvents.CheckSlidingSyncProxyAvailability)
+
+            assertThat(awaitItem().forceNativeSlidingSyncMigration).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - CheckSlidingSyncProxyAvailability will not force the migration if native sliding sync is not supported too`() = runTest {
+        val matrixClient = FakeMatrixClient(
+            isUsingNativeSlidingSyncLambda = { false },
+            isSlidingSyncProxySupportedLambda = { false },
+            isNativeSlidingSyncSupportedLambda = { false },
+        )
+        val presenter = createLoggedInPresenter(matrixClient = matrixClient)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.forceNativeSlidingSyncMigration).isFalse()
+
+            initialState.eventSink(LoggedInEvents.CheckSlidingSyncProxyAvailability)
+
+            expectNoEvents()
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - LogoutAndMigrateToNativeSlidingSync enables native sliding sync and logs out the user`() = runTest {
+        val logoutLambda = lambdaRecorder<Boolean, Boolean, String?> { userInitiated, ignoreSdkError ->
+            assertThat(userInitiated).isTrue()
+            assertThat(ignoreSdkError).isTrue()
+            null
+        }
+        val matrixClient = FakeMatrixClient().apply {
+            this.logoutLambda = logoutLambda
+        }
+        val appPreferencesStore = InMemoryAppPreferencesStore()
+        val enableNativeSlidingSyncUseCase = EnableNativeSlidingSyncUseCase(appPreferencesStore, this)
+        val presenter = createLoggedInPresenter(matrixClient = matrixClient, enableNativeSlidingSyncUseCase = enableNativeSlidingSyncUseCase)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+
+            assertThat(appPreferencesStore.isSimplifiedSlidingSyncEnabledFlow().first()).isFalse()
+
+            initialState.eventSink(LoggedInEvents.LogoutAndMigrateToNativeSlidingSync)
+
+            advanceUntilIdle()
+
+            assertThat(appPreferencesStore.isSimplifiedSlidingSyncEnabledFlow().first()).isTrue()
+            assertThat(logoutLambda.assertions().isCalledOnce())
+        }
+    }
+
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
         skipItems(1)
         return awaitItem()
     }
 
-    private fun createLoggedInPresenter(
+    private fun TestScope.createLoggedInPresenter(
         roomListService: RoomListService = FakeRoomListService(),
         networkStatus: NetworkStatus = NetworkStatus.Offline,
         analyticsService: AnalyticsService = FakeAnalyticsService(),
         sessionVerificationService: SessionVerificationService = FakeSessionVerificationService(),
         encryptionService: EncryptionService = FakeEncryptionService(),
         pushService: PushService = FakePushService(),
+        enableNativeSlidingSyncUseCase: EnableNativeSlidingSyncUseCase = EnableNativeSlidingSyncUseCase(InMemoryAppPreferencesStore(), this),
+        matrixClient: MatrixClient = FakeMatrixClient(roomListService = roomListService),
     ): LoggedInPresenter {
         return LoggedInPresenter(
-            matrixClient = FakeMatrixClient(roomListService = roomListService),
+            matrixClient = matrixClient,
             networkMonitor = FakeNetworkMonitor(networkStatus),
             pushService = pushService,
             sessionVerificationService = sessionVerificationService,
             analyticsService = analyticsService,
-            encryptionService = encryptionService
+            encryptionService = encryptionService,
+            enableNativeSlidingSyncUseCase = enableNativeSlidingSyncUseCase,
         )
     }
 }

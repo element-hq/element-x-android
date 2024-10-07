@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl.actionlist
@@ -34,10 +25,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -55,6 +47,10 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure
+import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure.ChangedIdentity
+import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure.None
+import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure.UnsignedDevice
 import io.element.android.features.messages.impl.timeline.components.MessageShieldView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
@@ -99,6 +95,7 @@ fun ActionListView(
     onSelectAction: (action: TimelineItemAction, TimelineItem.Event) -> Unit,
     onEmojiReactionClick: (String, TimelineItem.Event) -> Unit,
     onCustomReactionClick: (TimelineItem.Event) -> Unit,
+    onVerifiedUserSendFailureClick: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -135,6 +132,14 @@ fun ActionListView(
         state.eventSink(ActionListEvents.Clear)
     }
 
+    fun onVerifiedUserSendFailureClick() {
+        if (targetItem == null) return
+        sheetState.hide(coroutineScope) {
+            state.eventSink(ActionListEvents.Clear)
+            onVerifiedUserSendFailureClick(targetItem)
+        }
+    }
+
     if (targetItem != null) {
         ModalBottomSheet(
             sheetState = sheetState,
@@ -146,6 +151,7 @@ fun ActionListView(
                 onActionClick = ::onItemActionClick,
                 onEmojiReactionClick = ::onEmojiReactionClick,
                 onCustomReactionClick = ::onCustomReactionClick,
+                onVerifiedUserSendFailureClick = ::onVerifiedUserSendFailureClick,
                 modifier = Modifier
                     .navigationBarsPadding()
                     .imePadding()
@@ -160,6 +166,7 @@ private fun SheetContent(
     onActionClick: (TimelineItemAction) -> Unit,
     onEmojiReactionClick: (String) -> Unit,
     onCustomReactionClick: () -> Unit,
+    onVerifiedUserSendFailureClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when (val target = state.target) {
@@ -190,6 +197,16 @@ private fun SheetContent(
                         } else {
                             Spacer(modifier = Modifier.height(14.dp))
                         }
+                        HorizontalDivider()
+                    }
+                }
+                if (target.verifiedUserSendFailure != None) {
+                    item {
+                        VerifiedUserSendFailureView(
+                            sendFailure = target.verifiedUserSendFailure,
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = onVerifiedUserSendFailureClick
+                        )
                         HorizontalDivider()
                     }
                 }
@@ -339,12 +356,49 @@ private fun EmojiReactionsRow(
                     .clickable(
                         enabled = true,
                         onClick = onCustomReactionClick,
-                        indication = rememberRipple(bounded = false, radius = emojiRippleRadius),
+                        indication = ripple(bounded = false, radius = emojiRippleRadius),
                         interactionSource = remember { MutableInteractionSource() }
                     )
             )
         }
     }
+}
+
+@Composable
+private fun VerifiedUserSendFailureView(
+    sendFailure: VerifiedUserSendFailure,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    @Composable
+    fun VerifiedUserSendFailure.headline(): String {
+        return when (this) {
+            is None -> ""
+            is UnsignedDevice.FromOther -> stringResource(CommonStrings.screen_timeline_item_menu_send_failure_unsigned_device, userDisplayName)
+            is UnsignedDevice.FromYou -> stringResource(CommonStrings.screen_timeline_item_menu_send_failure_you_unsigned_device)
+            is ChangedIdentity -> stringResource(CommonStrings.screen_timeline_item_menu_send_failure_changed_identity, userDisplayName)
+        }
+    }
+
+    ListItem(
+        modifier = modifier
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Error())),
+        trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChevronRight())),
+        headlineContent = {
+            Text(
+                text = sendFailure.headline(),
+                style = ElementTheme.typography.fontBodySmMedium,
+            )
+        },
+        colors = ListItemDefaults.colors(
+            containerColor = Color.Transparent,
+            leadingIconColor = ElementTheme.colors.iconCriticalPrimary,
+            trailingIconColor = ElementTheme.colors.iconPrimary,
+            headlineColor = ElementTheme.colors.textCriticalPrimary,
+        ),
+    )
 }
 
 @Composable
@@ -379,7 +433,7 @@ private fun EmojiButton(
                 .clickable(
                     enabled = true,
                     onClick = { onClick(emoji) },
-                    indication = rememberRipple(bounded = false, radius = emojiRippleRadius),
+                    indication = ripple(bounded = false, radius = emojiRippleRadius),
                     interactionSource = remember { MutableInteractionSource() }
                 )
         )
@@ -396,5 +450,6 @@ internal fun SheetContentPreview(
         onActionClick = {},
         onEmojiReactionClick = {},
         onCustomReactionClick = {},
+        onVerifiedUserSendFailureClick = {},
     )
 }

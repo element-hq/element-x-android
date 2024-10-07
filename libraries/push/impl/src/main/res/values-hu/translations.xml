@@ -23,6 +23,7 @@
     <item quantity="other">"%d meghívó"</item>
   </plurals>
   <string name="notification_invite_body">"Meghívta, hogy csevegjen"</string>
+  <string name="notification_invite_body_with_sender">"%1$s meghívta egy csevegésre"</string>
   <string name="notification_mentioned_you_body">"Megemlítette Önt: %1$s"</string>
   <string name="notification_new_messages">"Új üzenetek"</string>
   <plurals name="notification_new_messages_for_room">
@@ -33,6 +34,7 @@
   <string name="notification_room_action_mark_as_read">"Megjelölés olvasottként"</string>
   <string name="notification_room_action_quick_reply">"Gyors válasz"</string>
   <string name="notification_room_invite_body">"Meghívta, hogy csatlakozzon a szobához"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s meghívta, hogy csatlakozzon a szobához"</string>
   <string name="notification_sender_me">"Én"</string>
   <string name="notification_sender_mention_reply">"%1$s megemlítette vagy válaszolt"</string>
   <string name="notification_test_push_notification_content">"Az értesítést nézi! Kattintson ide!"</string>

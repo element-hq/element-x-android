@@ -1,33 +1,25 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright 2022-2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package extension
 
+import ModulesConfig
+import config.AnalyticsConfig
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Action
+import org.gradle.api.Project
 import org.gradle.api.artifacts.ExternalModuleDependency
-import org.gradle.api.logging.Logger
-import org.gradle.api.provider.Provider
+import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.closureOf
-import org.gradle.kotlin.dsl.exclude
 import org.gradle.kotlin.dsl.project
-import java.io.File
 
 private fun DependencyHandlerScope.implementation(dependency: Any) = dependencies.add("implementation", dependency)
+internal fun DependencyHandler.implementation(dependency: Any) = add("implementation", dependency)
 
 // Implementation + config block
 private fun DependencyHandlerScope.implementation(
@@ -65,26 +57,6 @@ fun DependencyHandlerScope.composeDependencies(libs: LibrariesForLibs) {
     implementation(libs.kotlinx.collections.immutable)
 }
 
-private fun DependencyHandlerScope.addImplementationProjects(
-    directory: File,
-    path: String,
-    nameFilter: String,
-    logger: Logger,
-) {
-    directory.listFiles().orEmpty().also { it.sort() }.forEach { file ->
-        if (file.isDirectory) {
-            val newPath = "$path:${file.name}"
-            val buildFile = File(file, "build.gradle.kts")
-            if (buildFile.exists() && file.name == nameFilter) {
-                implementation(project(newPath))
-                logger.lifecycle("Added implementation(project($newPath))")
-            } else {
-                addImplementationProjects(file, newPath, nameFilter, logger)
-            }
-        }
-    }
-}
-
 fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:androidutils"))
     implementation(project(":libraries:deeplink"))
@@ -120,28 +92,36 @@ fun DependencyHandlerScope.allLibrariesImpl() {
 }
 
 fun DependencyHandlerScope.allServicesImpl() {
-    // For analytics configuration, either use noop, or use the impl, with at least one analyticsproviders implementation
-    // implementation(project(":services:analytics:noop"))
-    implementation(project(":services:analytics:impl"))
-    implementation(project(":services:analyticsproviders:posthog"))
-    implementation(project(":services:analyticsproviders:sentry"))
+    implementation(project(":services:analytics:compose"))
+    when (ModulesConfig.analyticsConfig) {
+        AnalyticsConfig.Disabled -> {
+            implementation(project(":services:analytics:noop"))
+        }
+        is AnalyticsConfig.Enabled -> {
+            implementation(project(":services:analytics:impl"))
+            if (ModulesConfig.analyticsConfig.withPosthog) {
+                implementation(project(":services:analyticsproviders:posthog"))
+            }
+            if (ModulesConfig.analyticsConfig.withSentry) {
+                implementation(project(":services:analyticsproviders:sentry"))
+            }
+        }
+    }
 
     implementation(project(":services:apperror:impl"))
     implementation(project(":services:appnavstate:impl"))
     implementation(project(":services:toolbox:impl"))
 }
 
-fun DependencyHandlerScope.allEnterpriseImpl(rootDir: File, logger: Logger) {
-    val enterpriseDir = File(rootDir, "enterprise")
-    addImplementationProjects(enterpriseDir, ":enterprise", "impl", logger)
-}
+fun DependencyHandlerScope.allEnterpriseImpl(project: Project) = addAll(project, "enterprise", "impl")
 
-fun DependencyHandlerScope.allFeaturesApi(rootDir: File, logger: Logger) {
-    val featuresDir = File(rootDir, "features")
-    addImplementationProjects(featuresDir, ":features", "api", logger)
-}
+fun DependencyHandlerScope.allFeaturesImpl(project: Project) = addAll(project, "features", "impl")
 
-fun DependencyHandlerScope.allFeaturesImpl(rootDir: File, logger: Logger) {
-    val featuresDir = File(rootDir, "features")
-    addImplementationProjects(featuresDir, ":features", "impl", logger)
+fun DependencyHandlerScope.allFeaturesApi(project: Project) = addAll(project, "features", "api")
+
+private fun DependencyHandlerScope.addAll(project: Project, prefix: String, suffix: String) {
+    val subProjects = project.rootProject.subprojects.filter { it.path.startsWith(":$prefix") && it.path.endsWith(":$suffix") }
+    for (p in subProjects) {
+        add("implementation", p)
+    }
 }

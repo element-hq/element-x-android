@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.appnav.loggedin
@@ -25,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import im.vector.app.features.analytics.plan.CryptoSessionStateChange
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.features.networkmonitor.api.NetworkMonitor
@@ -38,6 +30,7 @@ import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
+import io.element.android.libraries.preferences.api.store.EnableNativeSlidingSyncUseCase
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.pushproviders.api.RegistrationFailure
 import io.element.android.services.analytics.api.AnalyticsService
@@ -57,6 +50,7 @@ class LoggedInPresenter @Inject constructor(
     private val sessionVerificationService: SessionVerificationService,
     private val analyticsService: AnalyticsService,
     private val encryptionService: EncryptionService,
+    private val enableNativeSlidingSyncUseCase: EnableNativeSlidingSyncUseCase,
 ) : Presenter<LoggedInState> {
     @Composable
     override fun present(): LoggedInState {
@@ -87,6 +81,7 @@ class LoggedInPresenter @Inject constructor(
                 networkStatus == NetworkStatus.Online && syncIndicator == RoomListService.SyncIndicator.Show
             }
         }
+        var forceNativeSlidingSyncMigration by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
             combine(
                 sessionVerificationService.sessionVerifiedStatus,
@@ -106,6 +101,18 @@ class LoggedInPresenter @Inject constructor(
                         }
                     }
                 }
+                LoggedInEvents.CheckSlidingSyncProxyAvailability -> coroutineScope.launch {
+                    // Force the user to log out if they were using the proxy sliding sync and it's no longer available, but native sliding sync is.
+                    forceNativeSlidingSyncMigration = !matrixClient.isUsingNativeSlidingSync() &&
+                        matrixClient.isNativeSlidingSyncSupported() &&
+                        !matrixClient.isSlidingSyncProxySupported()
+                }
+                LoggedInEvents.LogoutAndMigrateToNativeSlidingSync -> coroutineScope.launch {
+                    // Enable native sliding sync if it wasn't already the case
+                    enableNativeSlidingSyncUseCase()
+                    // Then force the logout
+                    matrixClient.logout(userInitiated = true, ignoreSdkError = true)
+                }
             }
         }
 
@@ -113,6 +120,7 @@ class LoggedInPresenter @Inject constructor(
             showSyncSpinner = showSyncSpinner,
             pusherRegistrationState = pusherRegistrationState.value,
             ignoreRegistrationError = ignoreRegistrationError,
+            forceNativeSlidingSyncMigration = forceNativeSlidingSyncMigration,
             eventSink = ::handleEvent
         )
     }

@@ -1,25 +1,19 @@
 /*
- * Copyright (c) 2024 New Vector Ltd
+ * Copyright 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl.pinned.banner
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.messages.impl.pinned.PinnedEventsTimelineProvider
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.eventformatter.test.FakePinnedMessagesBannerFormatter
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -67,7 +61,7 @@ class PinnedMessagesBannerPresenterTest {
         }
         val presenter = createPinnedMessagesBannerPresenter(room = room)
         presenter.test {
-            skipItems(1)
+            skipItems(2)
             val loadingState = awaitItem()
             assertThat(loadingState).isEqualTo(PinnedMessagesBannerState.Loading(1))
             assertThat(loadingState.pinnedMessagesCount()).isEqualTo(1)
@@ -98,7 +92,7 @@ class PinnedMessagesBannerPresenterTest {
         }
         val presenter = createPinnedMessagesBannerPresenter(room = room)
         presenter.test {
-            skipItems(2)
+            skipItems(3)
             val loadedState = awaitItem() as PinnedMessagesBannerState.Loaded
             assertThat(loadedState.currentPinnedMessageIndex).isEqualTo(0)
             assertThat(loadedState.loadedPinnedMessagesCount).isEqualTo(1)
@@ -137,7 +131,7 @@ class PinnedMessagesBannerPresenterTest {
         }
         val presenter = createPinnedMessagesBannerPresenter(room = room)
         presenter.test {
-            skipItems(2)
+            skipItems(3)
             awaitItem().also { loadedState ->
                 loadedState as PinnedMessagesBannerState.Loaded
                 assertThat(loadedState.currentPinnedMessageIndex).isEqualTo(1)
@@ -172,7 +166,7 @@ class PinnedMessagesBannerPresenterTest {
         }
         val presenter = createPinnedMessagesBannerPresenter(room = room)
         presenter.test {
-            skipItems(1)
+            skipItems(2)
             awaitItem().also { loadingState ->
                 assertThat(loadingState).isEqualTo(PinnedMessagesBannerState.Loading(1))
                 assertThat(loadingState.pinnedMessagesCount()).isEqualTo(1)
@@ -195,11 +189,19 @@ class PinnedMessagesBannerPresenterTest {
         networkMonitor: NetworkMonitor = FakeNetworkMonitor(),
         isFeatureEnabled: Boolean = true,
     ): PinnedMessagesBannerPresenter {
+        val timelineProvider = PinnedEventsTimelineProvider(
+            room = room,
+            networkMonitor = networkMonitor,
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.PinnedEvents.key to isFeatureEnabled)
+            )
+        )
+        timelineProvider.launchIn(backgroundScope)
+
         return PinnedMessagesBannerPresenter(
             room = room,
             itemFactory = itemFactory,
-            isFeatureEnabled = { isFeatureEnabled },
-            networkMonitor = networkMonitor,
+            pinnedEventsTimelineProvider = timelineProvider,
         )
     }
 }

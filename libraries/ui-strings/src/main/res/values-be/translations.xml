@@ -38,17 +38,21 @@
   <string name="action_back">"Назад"</string>
   <string name="action_call">"Званок"</string>
   <string name="action_cancel">"Скасаваць"</string>
+  <string name="action_cancel_for_now">"Адмяніць пакуль"</string>
   <string name="action_choose_photo">"Выбраць фота"</string>
   <string name="action_clear">"Ачысціць"</string>
   <string name="action_close">"Закрыць"</string>
   <string name="action_complete_verification">"Праверка завершана"</string>
   <string name="action_confirm">"Пацвердзіць"</string>
+  <string name="action_confirm_password">"Пацвердзіць пароль"</string>
   <string name="action_continue">"Працягнуць"</string>
   <string name="action_copy">"Капіраваць"</string>
   <string name="action_copy_link">"Скапіраваць спасылку"</string>
   <string name="action_copy_link_to_message">"Скапіраваць спасылку на паведамленне"</string>
   <string name="action_create">"Стварыць"</string>
   <string name="action_create_a_room">"Стварыце пакой"</string>
+  <string name="action_deactivate">"Дэактываваць"</string>
+  <string name="action_deactivate_account">"Дэактываваць уліковы запіс"</string>
   <string name="action_decline">"Адхіліць"</string>
   <string name="action_delete_poll">"Выдаліць апытанне"</string>
   <string name="action_disable">"Адключыць"</string>
@@ -248,12 +252,14 @@
   <string name="common_voice_message">"Галасавое паведамленне"</string>
   <string name="common_waiting">"Чакаем…"</string>
   <string name="common_waiting_for_decryption_key">"Чакаю гэта паведамленне"</string>
+  <string name="common_you">"Вы"</string>
   <string name="dialog_title_confirmation">"Пацвярджэнне"</string>
   <string name="dialog_title_error">"Памылка"</string>
   <string name="dialog_title_success">"Поспех"</string>
   <string name="dialog_title_warning">"Папярэджанне"</string>
   <string name="dialog_unsaved_changes_description_android">"Вашы змены не былі захаваны. Вы ўпэўнены, што хочаце вярнуцца?"</string>
   <string name="dialog_unsaved_changes_title">"Захаваць змены?"</string>
+  <string name="error_account_creation_not_possible">"Ваш хатні сервер неабходна абнавіць для падтрымкі Matrix Authentication Service і стварэння ўліковага запісу."</string>
   <string name="error_failed_creating_the_permalink">"Не атрымалася стварыць пастаянную спасылку"</string>
   <string name="error_failed_loading_map">"%1$s не атрымалася загрузіць карту. Калі ласка паспрабуйце зноў пазней."</string>
   <string name="error_failed_loading_messages">"Не ўдалося загрузіць паведамленні"</string>
@@ -266,6 +272,7 @@
   <string name="error_some_messages_have_not_been_sent">"Некаторыя паведамленні не былі адпраўлены"</string>
   <string name="error_unknown">"Выбачце, адбылася памылка"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"Сапраўднасць гэтага зашыфраванага паведамлення не можа быць гарантаваная на гэтай прыладзе."</string>
+  <string name="event_shield_reason_previously_verified">"Зашыфравана раней правераным карыстальнікам."</string>
   <string name="event_shield_reason_sent_in_clear">"Не зашыфраваны."</string>
   <string name="event_shield_reason_unknown_device">"Зашыфравана невядомай ці выдаленай прыладай."</string>
   <string name="event_shield_reason_unsigned_device">"Зашыфравана прыладай, не пацверджанай яе ўладальнікам."</string>
@@ -285,6 +292,8 @@
     <item quantity="many">"%1$d Замацаваных паведамленняў"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Замацаваныя паведамленні"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Адклікаць праверку і адправіць"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Усё роўна адправіць паведамленне"</string>
   <string name="screen_room_details_pinned_events_row_title">"Замацаваныя паведамленні"</string>
   <string name="screen_room_error_failed_processing_media">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не ўдалося атрымаць інфармацыю пра карыстальніка"</string>

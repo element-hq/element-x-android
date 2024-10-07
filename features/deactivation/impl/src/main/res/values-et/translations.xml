@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Palun kinnita uuesti, et soovid eemaldada oma konto kasutusest"</string>
+  <string name="screen_deactivate_account_delete_all_messages">"Kustuta kõik minu sõnumid"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"Hoiatus: tulevased kasutajad võivad näha poolikuid vestlusi."</string>
+  <string name="screen_deactivate_account_description">"Sinu konto kasutusest eemaldamine on %1$s ja sellega:"</string>
+  <string name="screen_deactivate_account_description_bold_part">"pöördumatu"</string>
+  <string name="screen_deactivate_account_list_item_1">"Sinu kasutajakonto %1$s (sa ei saa enam sellega võrku logida ning kasutajatunnust ei saa enam pruukida)."</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"jäädavalt eemaldatakse kasutusest"</string>
+  <string name="screen_deactivate_account_list_item_2">"Sind logitakse välja kõikidest jututubadest."</string>
+  <string name="screen_deactivate_account_list_item_3">"Kustutatakse sinu andmed meie isikutuvastusserverist."</string>
+  <string name="screen_deactivate_account_list_item_4">"Sinu sõnumid on jätkuvalt nähtavad registreeritud kasutajatele, kuid kui otsustad sõnumid kustutada, siis nad nad pole nähtavad uutele ja registreerimata kasutajatele."</string>
+  <string name="screen_deactivate_account_title">"Eemalda konto kasutusest"</string>
+</resources>

@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl
@@ -33,28 +24,29 @@ import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.features.analytics.plan.PinUnpinAction
 import io.element.android.appconfig.MessageComposerConfig
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
-import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.TimelineState
-import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionPresenter
-import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryPresenter
-import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetPresenter
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
+import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
-import io.element.android.features.messages.impl.typing.TypingNotificationPresenter
-import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPresenter
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
+import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
@@ -85,6 +77,7 @@ import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.room.canCall
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -94,14 +87,14 @@ import timber.log.Timber
 class MessagesPresenter @AssistedInject constructor(
     @Assisted private val navigator: MessagesNavigator,
     private val room: MatrixRoom,
-    private val composerPresenter: MessageComposerPresenter,
-    private val voiceMessageComposerPresenter: VoiceMessageComposerPresenter,
+    private val composerPresenter: Presenter<MessageComposerState>,
+    private val voiceMessageComposerPresenter: Presenter<VoiceMessageComposerState>,
     timelinePresenterFactory: TimelinePresenter.Factory,
-    private val typingNotificationPresenter: TypingNotificationPresenter,
-    private val actionListPresenter: ActionListPresenter,
-    private val customReactionPresenter: CustomReactionPresenter,
-    private val reactionSummaryPresenter: ReactionSummaryPresenter,
-    private val readReceiptBottomSheetPresenter: ReadReceiptBottomSheetPresenter,
+    private val timelineProtectionPresenter: Presenter<TimelineProtectionState>,
+    private val actionListPresenterFactory: ActionListPresenter.Factory,
+    private val customReactionPresenter: Presenter<CustomReactionState>,
+    private val reactionSummaryPresenter: Presenter<ReactionSummaryState>,
+    private val readReceiptBottomSheetPresenter: Presenter<ReadReceiptBottomSheetState>,
     private val pinnedMessagesBannerPresenter: Presenter<PinnedMessagesBannerState>,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
@@ -112,8 +105,10 @@ class MessagesPresenter @AssistedInject constructor(
     private val buildMeta: BuildMeta,
     private val timelineController: TimelineController,
     private val permalinkParser: PermalinkParser,
+    private val analyticsService: AnalyticsService,
 ) : Presenter<MessagesState> {
     private val timelinePresenter = timelinePresenterFactory.create(navigator = navigator)
+    private val actionListPresenter = actionListPresenterFactory.create(TimelineItemActionPostProcessor.Default)
 
     @AssistedFactory
     interface Factory {
@@ -129,7 +124,7 @@ class MessagesPresenter @AssistedInject constructor(
         val composerState = composerPresenter.present()
         val voiceMessageComposerState = voiceMessageComposerPresenter.present()
         val timelineState = timelinePresenter.present()
-        val typingNotificationState = typingNotificationPresenter.present()
+        val timelineProtectionState = timelineProtectionPresenter.present()
         val actionListState = actionListPresenter.present()
         val customReactionState = customReactionPresenter.present()
         val reactionSummaryState = reactionSummaryPresenter.present()
@@ -189,6 +184,7 @@ class MessagesPresenter @AssistedInject constructor(
                         composerState = composerState,
                         enableTextFormatting = composerState.showTextFormatting,
                         timelineState = timelineState,
+                        timelineProtectionState = timelineProtectionState,
                     )
                 }
                 is MessagesEvents.ToggleReaction -> {
@@ -221,7 +217,7 @@ class MessagesPresenter @AssistedInject constructor(
             userEventPermissions = userEventPermissions,
             voiceMessageComposerState = voiceMessageComposerState,
             timelineState = timelineState,
-            typingNotificationState = typingNotificationState,
+            timelineProtectionState = timelineProtectionState,
             actionListState = actionListState,
             customReactionState = customReactionState,
             reactionSummaryState = reactionSummaryState,
@@ -271,6 +267,7 @@ class MessagesPresenter @AssistedInject constructor(
         action: TimelineItemAction,
         targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
+        timelineProtectionState: TimelineProtectionState,
         enableTextFormatting: Boolean,
         timelineState: TimelineState,
     ) = launch {
@@ -280,18 +277,25 @@ class MessagesPresenter @AssistedInject constructor(
             TimelineItemAction.Redact -> handleActionRedact(targetEvent)
             TimelineItemAction.Edit -> handleActionEdit(targetEvent, composerState, enableTextFormatting)
             TimelineItemAction.Reply,
-            TimelineItemAction.ReplyInThread -> handleActionReply(targetEvent, composerState)
+            TimelineItemAction.ReplyInThread -> handleActionReply(targetEvent, composerState, timelineProtectionState)
             TimelineItemAction.ViewSource -> handleShowDebugInfoAction(targetEvent)
             TimelineItemAction.Forward -> handleForwardAction(targetEvent)
             TimelineItemAction.ReportContent -> handleReportAction(targetEvent)
             TimelineItemAction.EndPoll -> handleEndPollAction(targetEvent, timelineState)
             TimelineItemAction.Pin -> handlePinAction(targetEvent)
             TimelineItemAction.Unpin -> handleUnpinAction(targetEvent)
+            TimelineItemAction.ViewInTimeline -> Unit
         }
     }
 
     private suspend fun handlePinAction(targetEvent: TimelineItem.Event) {
         if (targetEvent.eventId == null) return
+        analyticsService.capture(
+            PinUnpinAction(
+                from = PinUnpinAction.From.Timeline,
+                kind = PinUnpinAction.Kind.Pin,
+            )
+        )
         timelineController.invokeOnCurrentTimeline {
             pinEvent(targetEvent.eventId)
                 .onFailure {
@@ -303,6 +307,12 @@ class MessagesPresenter @AssistedInject constructor(
 
     private suspend fun handleUnpinAction(targetEvent: TimelineItem.Event) {
         if (targetEvent.eventId == null) return
+        analyticsService.capture(
+            PinUnpinAction(
+                from = PinUnpinAction.From.Timeline,
+                kind = PinUnpinAction.Kind.Unpin,
+            )
+        )
         timelineController.invokeOnCurrentTimeline {
             unpinEvent(targetEvent.eventId)
                 .onFailure {
@@ -381,11 +391,18 @@ class MessagesPresenter @AssistedInject constructor(
         }
     }
 
-    private suspend fun handleActionReply(targetEvent: TimelineItem.Event, composerState: MessageComposerState) {
+    private suspend fun handleActionReply(
+        targetEvent: TimelineItem.Event,
+        composerState: MessageComposerState,
+        timelineProtectionState: TimelineProtectionState,
+    ) {
         if (targetEvent.eventId == null) return
         timelineController.invokeOnCurrentTimeline {
             val replyToDetails = loadReplyDetails(targetEvent.eventId).map(permalinkParser)
-            val composerMode = MessageComposerMode.Reply(replyToDetails = replyToDetails)
+            val composerMode = MessageComposerMode.Reply(
+                replyToDetails = replyToDetails,
+                hideImage = timelineProtectionState.hideMediaContent(targetEvent.eventId),
+            )
             composerState.eventSink(
                 MessageComposerEvents.SetMode(composerMode)
             )

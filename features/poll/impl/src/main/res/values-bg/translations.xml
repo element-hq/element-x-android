@@ -4,7 +4,6 @@
   <string name="screen_create_poll_anonymous_desc">"Показване на резултатите само след приключване на анкетата"</string>
   <string name="screen_create_poll_anonymous_headline">"Скриване на гласовете"</string>
   <string name="screen_create_poll_answer_hint">"Опция %1$d"</string>
-  <string name="screen_create_poll_cancel_confirmation_content_android">"Промените ви не са запазени. Сигурни ли сте, че искате да се върнете назад?"</string>
   <string name="screen_create_poll_question_desc">"Въпрос или тема"</string>
   <string name="screen_create_poll_question_hint">"За какво се отнася анкетата?"</string>
   <string name="screen_create_poll_title">"Създаване на анкета"</string>

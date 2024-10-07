@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2024 New Vector Ltd
+ * Copyright 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.impl.timeline
@@ -49,7 +40,7 @@ import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTim
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.LastForwardIndicatorsPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.LoadingIndicatorsPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.RoomBeginningPostProcessor
-import io.element.android.libraries.matrix.impl.timeline.postprocessor.TimelineEncryptedHistoryPostProcessor
+import io.element.android.libraries.matrix.impl.timeline.postprocessor.TypingNotificationPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.reply.InReplyToMapper
 import io.element.android.libraries.matrix.impl.util.MessageEventContent
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -59,10 +50,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -71,36 +64,36 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.EditedContent
+import org.matrix.rustcomponents.sdk.EventOrTransactionId
 import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.FormattedBody
 import org.matrix.rustcomponents.sdk.MessageFormat
+import org.matrix.rustcomponents.sdk.PollData
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk_ui.LiveBackPaginationStatus
 import java.io.File
-import java.util.Date
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
 private const val PAGINATION_SIZE = 50
 
 class RustTimeline(
     private val inner: InnerTimeline,
-    private val isLive: Boolean,
+    mode: Timeline.Mode,
     systemClock: SystemClock,
-    isKeyBackupEnabled: Boolean,
     private val matrixRoom: MatrixRoom,
     private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
-    lastLoginTimestamp: Date?,
     private val roomContentForwarder: RoomContentForwarder,
     onNewSyncedEvent: () -> Unit,
 ) : Timeline {
     private val initLatch = CompletableDeferred<Unit>()
-    private val isInit = MutableStateFlow(false)
+    private val isTimelineInitialized = MutableStateFlow(false)
 
-    private val _timelineItems: MutableStateFlow<List<MatrixTimelineItem>> =
-        MutableStateFlow(emptyList())
+    private val _timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> =
+        MutableSharedFlow(replay = 1, extraBufferCapacity = Int.MAX_VALUE)
 
     private val timelineEventContentMapper = TimelineEventContentMapper()
     private val inReplyToMapper = InReplyToMapper(timelineEventContentMapper)
@@ -116,37 +109,32 @@ class RustTimeline(
         timelineItems = _timelineItems,
         timelineItemFactory = timelineItemMapper,
     )
-    private val encryptedHistoryPostProcessor = TimelineEncryptedHistoryPostProcessor(
-        lastLoginTimestamp = lastLoginTimestamp,
-        isRoomEncrypted = matrixRoom.isEncrypted,
-        isKeyBackupEnabled = isKeyBackupEnabled,
-        dispatcher = dispatcher,
-    )
     private val timelineItemsSubscriber = TimelineItemsSubscriber(
         timeline = inner,
         timelineCoroutineScope = coroutineScope,
         timelineDiffProcessor = timelineDiffProcessor,
         initLatch = initLatch,
-        isInit = isInit,
+        isTimelineInitialized = isTimelineInitialized,
         dispatcher = dispatcher,
         onNewSyncedEvent = onNewSyncedEvent,
     )
 
-    private val roomBeginningPostProcessor = RoomBeginningPostProcessor()
+    private val roomBeginningPostProcessor = RoomBeginningPostProcessor(mode)
     private val loadingIndicatorsPostProcessor = LoadingIndicatorsPostProcessor(systemClock)
-    private val lastForwardIndicatorsPostProcessor = LastForwardIndicatorsPostProcessor(isLive)
+    private val lastForwardIndicatorsPostProcessor = LastForwardIndicatorsPostProcessor(mode)
+    private val typingNotificationPostProcessor = TypingNotificationPostProcessor(mode)
 
     private val backPaginationStatus = MutableStateFlow(
-        Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = true)
+        Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode != Timeline.Mode.PINNED_EVENTS)
     )
 
     private val forwardPaginationStatus = MutableStateFlow(
-        Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = !isLive)
+        Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode == Timeline.Mode.FOCUSED_ON_EVENT)
     )
 
     init {
         coroutineScope.fetchMembers()
-        if (isLive) {
+        if (mode == Timeline.Mode.LIVE) {
             // When timeline is live, we need to listen to the back pagination status as
             // sdk can automatically paginate backwards.
             coroutineScope.registerBackPaginationStatusListener()
@@ -206,7 +194,7 @@ class RustTimeline(
     }
 
     private fun canPaginate(direction: Timeline.PaginationDirection): Boolean {
-        if (!isInit.value) return false
+        if (!isTimelineInitialized.value) return false
         return when (direction) {
             Timeline.PaginationDirection.BACKWARDS -> backPaginationStatus.value.canPaginate
             Timeline.PaginationDirection.FORWARDS -> forwardPaginationStatus.value.canPaginate
@@ -224,24 +212,40 @@ class RustTimeline(
         _timelineItems,
         backPaginationStatus.map { it.hasMoreToLoad }.distinctUntilChanged(),
         forwardPaginationStatus.map { it.hasMoreToLoad }.distinctUntilChanged(),
-        isInit,
-    ) { timelineItems, hasMoreToLoadBackward, hasMoreToLoadForward, isInit ->
+        matrixRoom.roomInfoFlow.map { it.creator },
+        isTimelineInitialized,
+    ) { timelineItems,
+        hasMoreToLoadBackward,
+        hasMoreToLoadForward,
+        roomCreator,
+        isTimelineInitialized ->
         withContext(dispatcher) {
             timelineItems
-                .process { items -> encryptedHistoryPostProcessor.process(items) }
-                .process { items ->
+                .let { items ->
                     roomBeginningPostProcessor.process(
                         items = items,
                         isDm = matrixRoom.isDm,
-                        hasMoreToLoadBackwards = hasMoreToLoadBackward
+                        roomCreator = roomCreator,
+                        hasMoreToLoadBackwards = hasMoreToLoadBackward,
                     )
                 }
-                .process(predicate = isInit) { items ->
-                    loadingIndicatorsPostProcessor.process(items, hasMoreToLoadBackward, hasMoreToLoadForward)
+                .let { items ->
+                    loadingIndicatorsPostProcessor.process(
+                        items = items,
+                        isTimelineInitialized = isTimelineInitialized,
+                        hasMoreToLoadBackward = hasMoreToLoadBackward,
+                        hasMoreToLoadForward = hasMoreToLoadForward
+                    )
+                }
+                .let { items ->
+                    typingNotificationPostProcessor.process(items = items)
                 }
                 // Keep lastForwardIndicatorsPostProcessor last
-                .process(predicate = isInit) { items ->
-                    lastForwardIndicatorsPostProcessor.process(items)
+                .let { items ->
+                    lastForwardIndicatorsPostProcessor.process(
+                        items = items,
+                        isTimelineInitialized = isTimelineInitialized,
+                    )
                 }
         }
     }.onStart {
@@ -276,11 +280,14 @@ class RustTimeline(
         }
     }
 
-    override suspend fun redactEvent(eventId: EventId?, transactionId: TransactionId?, reason: String?): Result<Boolean> = withContext(dispatcher) {
+    override suspend fun redactEvent(eventId: EventId?, transactionId: TransactionId?, reason: String?): Result<Unit> = withContext(dispatcher) {
         runCatching {
-            getEventTimelineItem(eventId, transactionId).use { item ->
-                inner.redactEvent(item = item, reason = reason)
+            val eventOrTransactionId = if (eventId != null) {
+                EventOrTransactionId.EventId(eventId.value)
+            } else {
+                EventOrTransactionId.TransactionId(transactionId!!.value)
             }
+            inner.redactEvent(eventOrTransactionId = eventOrTransactionId, reason = reason)
         }
     }
 
@@ -293,12 +300,22 @@ class RustTimeline(
     ): Result<Unit> =
         withContext(dispatcher) {
             runCatching<Unit> {
-                getEventTimelineItem(originalEventId, transactionId).use { item ->
-                    inner.edit(
-                        newContent = MessageEventContent.from(body, htmlBody, intentionalMentions),
-                        item = item,
-                    )
+                val eventOrTransactionId = if (originalEventId != null) {
+                    EventOrTransactionId.EventId(originalEventId.value)
+                } else {
+                    EventOrTransactionId.TransactionId(transactionId!!.value)
                 }
+                val editedContent = EditedContent.RoomMessage(
+                    content = MessageEventContent.from(
+                        body = body,
+                        htmlBody = htmlBody,
+                        intentionalMentions = intentionalMentions
+                    ),
+                )
+                inner.edit(
+                    newContent = editedContent,
+                    eventOrTransactionId = eventOrTransactionId,
+                )
             }
         }
 
@@ -338,6 +355,7 @@ class RustTimeline(
     }
 
     @Throws
+    @Suppress("UnusedPrivateMember")
     private suspend fun getEventTimelineItem(eventId: EventId?, transactionId: TransactionId?): EventTimelineItem {
         return try {
             when {
@@ -406,7 +424,8 @@ class RustTimeline(
         }
     }
 
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Boolean> = redactEvent(eventId = null, transactionId = transactionId, reason = null)
+    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> =
+        redactEvent(eventId = null, transactionId = transactionId, reason = null)
 
     override suspend fun sendLocation(
         body: String,
@@ -450,20 +469,19 @@ class RustTimeline(
         pollKind: PollKind,
     ): Result<Unit> = withContext(dispatcher) {
         runCatching {
-            val pollStartEvent =
-                inner.getEventTimelineItemByEventId(
-                    eventId = pollStartId.value
-                )
-            pollStartEvent.use {
-                inner.editPoll(
+            val editedContent = EditedContent.PollStart(
+                pollData = PollData(
                     question = question,
                     answers = answers,
                     maxSelections = maxSelections.toUByte(),
                     pollKind = pollKind.toInner(),
-                    editItem = pollStartEvent,
-                )
-            }
-        }
+                ),
+            )
+            inner.edit(
+                newContent = editedContent,
+                eventOrTransactionId = EventOrTransactionId.EventId(pollStartId.value),
+            )
+        }.map { }
     }
 
     override suspend fun sendPollResponse(
@@ -472,7 +490,7 @@ class RustTimeline(
     ): Result<Unit> = withContext(dispatcher) {
         runCatching {
             inner.sendPollResponse(
-                pollStartId = pollStartId.value,
+                pollStartEventId = pollStartId.value,
                 answers = answers,
             )
         }
@@ -484,7 +502,7 @@ class RustTimeline(
     ): Result<Unit> = withContext(dispatcher) {
         runCatching {
             inner.endPoll(
-                pollStartId = pollStartId.value,
+                pollStartEventId = pollStartId.value,
                 text = text,
             )
         }
@@ -514,7 +532,7 @@ class RustTimeline(
     }
 
     override suspend fun loadReplyDetails(eventId: EventId): InReplyTo = withContext(dispatcher) {
-        val timelineItem = _timelineItems.value.firstOrNull { timelineItem ->
+        val timelineItem = _timelineItems.first().firstOrNull { timelineItem ->
             timelineItem is MatrixTimelineItem.Event && timelineItem.eventId == eventId
         } as? MatrixTimelineItem.Event
 
@@ -546,16 +564,5 @@ class RustTimeline(
         return runCatching {
             inner.fetchDetailsForEvent(eventId.value)
         }
-    }
-}
-
-private suspend fun List<MatrixTimelineItem>.process(
-    predicate: Boolean = true,
-    processor: suspend (List<MatrixTimelineItem>) -> List<MatrixTimelineItem>
-): List<MatrixTimelineItem> {
-    return if (predicate) {
-        processor(this)
-    } else {
-        this
     }
 }

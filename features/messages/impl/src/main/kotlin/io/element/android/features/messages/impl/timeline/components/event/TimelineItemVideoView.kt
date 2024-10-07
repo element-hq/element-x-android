@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl.timeline.components.event
@@ -60,6 +51,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemGrou
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContentProvider
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemVideoContent
+import io.element.android.features.messages.impl.timeline.protection.ProtectedView
 import io.element.android.libraries.designsystem.components.blurhash.blurHashBackground
 import io.element.android.libraries.designsystem.modifiers.roundedBackground
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -73,6 +65,8 @@ import io.element.android.wysiwyg.compose.EditorStyledText
 @Composable
 fun TimelineItemVideoView(
     content: TimelineItemVideoContent,
+    hideMediaContent: Boolean,
+    onShowClick: () -> Unit,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -81,7 +75,9 @@ fun TimelineItemVideoView(
         modifier = modifier.semantics { contentDescription = description }
     ) {
         val containerModifier = if (content.showCaption) {
-            Modifier.padding(top = 6.dp).clip(RoundedCornerShape(6.dp))
+            Modifier
+                .padding(top = 6.dp)
+                .clip(RoundedCornerShape(6.dp))
         } else {
             Modifier
         }
@@ -90,27 +86,38 @@ fun TimelineItemVideoView(
             aspectRatio = content.aspectRatio,
             contentAlignment = Alignment.Center,
         ) {
-            var isLoaded by remember { mutableStateOf(false) }
-            AsyncImage(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .then(if (isLoaded) Modifier.background(Color.White) else Modifier),
-                model = MediaRequestData(content.thumbnailSource, MediaRequestData.Kind.File(content.body, content.mimeType)),
-                contentScale = ContentScale.Fit,
-                alignment = Alignment.Center,
-                contentDescription = description,
-                onState = { isLoaded = it is AsyncImagePainter.State.Success },
-            )
-
-            Box(
-                modifier = Modifier.roundedBackground(),
-                contentAlignment = Alignment.Center,
+            ProtectedView(
+                hideContent = hideMediaContent,
+                onShowClick = onShowClick,
             ) {
-                Image(
-                    Icons.Default.PlayArrow,
-                    contentDescription = stringResource(id = CommonStrings.a11y_play),
-                    colorFilter = ColorFilter.tint(Color.White),
+                var isLoaded by remember { mutableStateOf(false) }
+                AsyncImage(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .then(if (isLoaded) Modifier.background(Color.White) else Modifier),
+                    model = MediaRequestData(
+                        source = content.thumbnailSource,
+                        kind = MediaRequestData.Kind.File(
+                            body = content.filename ?: content.body,
+                            mimeType = content.mimeType
+                        )
+                    ),
+                    contentScale = ContentScale.Fit,
+                    alignment = Alignment.Center,
+                    contentDescription = description,
+                    onState = { isLoaded = it is AsyncImagePainter.State.Success },
                 )
+
+                Box(
+                    modifier = Modifier.roundedBackground(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Image(
+                        Icons.Default.PlayArrow,
+                        contentDescription = stringResource(id = CommonStrings.a11y_play),
+                        colorFilter = ColorFilter.tint(Color.White),
+                    )
+                }
             }
         }
 
@@ -125,9 +132,10 @@ fun TimelineItemVideoView(
                 LocalContentColor provides ElementTheme.colors.textPrimary,
                 LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular,
             ) {
+                val aspectRatio = content.aspectRatio ?: DEFAULT_ASPECT_RATIO
                 EditorStyledText(
                     modifier = Modifier
-                        .widthIn(min = MIN_HEIGHT_IN_DP.dp * content.aspectRatio!!, max = MAX_HEIGHT_IN_DP.dp * content.aspectRatio),
+                        .widthIn(min = MIN_HEIGHT_IN_DP.dp * aspectRatio, max = MAX_HEIGHT_IN_DP.dp * aspectRatio),
                     text = caption,
                     style = ElementRichTextEditorStyle.textStyle(),
                     releaseOnDetach = false,
@@ -141,7 +149,23 @@ fun TimelineItemVideoView(
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemVideoViewPreview(@PreviewParameter(TimelineItemVideoContentProvider::class) content: TimelineItemVideoContent) = ElementPreview {
-    TimelineItemVideoView(content, {})
+    TimelineItemVideoView(
+        content = content,
+        hideMediaContent = false,
+        onShowClick = {},
+        onContentLayoutChange = {},
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemVideoViewHideMediaContentPreview() = ElementPreview {
+    TimelineItemVideoView(
+        content = aTimelineItemVideoContent(),
+        hideMediaContent = true,
+        onShowClick = {},
+        onContentLayoutChange = {},
+    )
 }
 
 @PreviewsDayNight
@@ -161,5 +185,16 @@ internal fun TimelineVideoWithCaptionRowPreview() = ElementPreview {
                 ),
             )
         }
+        ATimelineItemEventRow(
+            event = aTimelineItemEvent(
+                isMine = false,
+                content = aTimelineItemVideoContent().copy(
+                    filename = "video.mp4",
+                    body = "Video with null aspect ratio",
+                    aspectRatio = null,
+                ),
+                groupPosition = TimelineItemGroupPosition.Last,
+            ),
+        )
     }
 }

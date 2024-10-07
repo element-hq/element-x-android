@@ -15,7 +15,6 @@
   <string name="notification_fallback_content">"Melding"</string>
   <string name="notification_inline_reply_failed">"** Verzenden is mislukt - open de kamer"</string>
   <string name="notification_invitation_action_join">"Deelnemen"</string>
-  <string name="notification_invitation_action_reject">"Afwijzen"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d uitnodiging"</item>
     <item quantity="other">"%d uitnodigingen"</item>
@@ -49,4 +48,28 @@
   <string name="push_distributor_background_sync_android">"Achtergrondsynchronisatie"</string>
   <string name="push_distributor_firebase_android">"Google-services"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Geen geldige Google Play-services gevonden. Meldingen werken mogelijk niet goed."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Naam van de huidige provider aan het ophalen."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Er zijn geen push-providers geselecteerd."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Huidige push-provider: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Huidige push-provider"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Zorg ervoor dat de applicatie minimaal één push-provider heeft."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Geen push-providers gevonden."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"%1$d push-provider gevonden: %2$s"</item>
+    <item quantity="other">"%1$d push-providers gevonden: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Push-providers detecteren"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Controleer of de applicatie een melding kan weergeven."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"Er is niet op de melding geklikt."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Kan de melding niet weergeven."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"Er is op de melding geklikt!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Melding weergeven"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Klik op de melding om verder te gaan met de test."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"Ervoor zorgen dat de applicatie pushberichten ontvangt."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Fout: pusher heeft het verzoek afgewezen."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Fout: %1$s."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Fout, kan push niet testen."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Fout, time-out tijdens het wachten op push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"Push terugkoppeling duurde %1$d ms."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"Test Push terugkoppeling"</string>
 </resources>

@@ -1,17 +1,8 @@
 /*
- * Copyright (c) 2023 New Vector Ltd
+ * Copyright 2023, 2024 New Vector Ltd.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * Please see LICENSE in the repository root for full details.
  */
 
 package io.element.android.features.rageshake.impl.bugreport
@@ -32,7 +23,7 @@ import io.element.android.features.rageshake.test.screenshot.FakeScreenshotHolde
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.test.A_FAILURE_REASON
 import io.element.android.tests.testutils.WarmUpRule
-import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.LambdaOneParamRecorder
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -120,11 +111,11 @@ class BugReportPresenterTest {
 
     @Test
     fun `present - reset all`() = runTest {
-        val logFilesRemoverLambda = lambdaRecorder { -> }
+        val logFilesRemover = FakeLogFilesRemover()
         val presenter = createPresenter(
             crashDataStore = FakeCrashDataStore(crashData = A_CRASH_DATA, appHasCrashed = true),
             screenshotHolder = FakeScreenshotHolder(screenshotUri = A_SCREENSHOT_URI),
-            logFilesRemover = FakeLogFilesRemover(logFilesRemoverLambda),
+            logFilesRemover = logFilesRemover,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -136,7 +127,7 @@ class BugReportPresenterTest {
             initialState.eventSink.invoke(BugReportEvents.ResetAll)
             val resetState = awaitItem()
             assertThat(resetState.hasCrashLogs).isFalse()
-            logFilesRemoverLambda.assertions().isCalledOnce()
+            logFilesRemover.performLambda.assertions().isCalledOnce()
             // TODO Make it live assertThat(resetState.screenshotUri).isNull()
         }
     }
@@ -245,7 +236,7 @@ class BugReportPresenterTest {
         bugReporter: BugReporter = FakeBugReporter(),
         crashDataStore: CrashDataStore = FakeCrashDataStore(),
         screenshotHolder: ScreenshotHolder = FakeScreenshotHolder(),
-        logFilesRemover: LogFilesRemover = FakeLogFilesRemover(lambdaRecorder(ensureNeverCalled = true) { -> }),
+        logFilesRemover: LogFilesRemover = FakeLogFilesRemover(LambdaOneParamRecorder(ensureNeverCalled = true) { }),
     ) = BugReportPresenter(
         bugReporter = bugReporter,
         crashDataStore = crashDataStore,
