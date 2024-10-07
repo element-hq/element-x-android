@@ -74,5 +74,4 @@ dependencies {
     testImplementation(projects.features.networkmonitor.test)
     testImplementation(projects.features.logout.test)
     testImplementation(projects.tests.testutils)
-    testImplementation(projects.features.leaveroom.test)
 }

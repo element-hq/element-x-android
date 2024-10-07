@@ -17,7 +17,7 @@ import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
-import io.element.android.features.leaveroom.fake.FakeLeaveRoomPresenter
+import io.element.android.features.leaveroom.api.aLeaveRoomState
 import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
@@ -368,15 +368,18 @@ class RoomListPresenterTest {
 
     @Test
     fun `present - leave room calls into leave room presenter`() = runTest {
-        val leaveRoomPresenter = FakeLeaveRoomPresenter()
+        val leaveRoomEventsRecorder = EventsRecorder<LeaveRoomEvent>()
         val scope = CoroutineScope(coroutineContext + SupervisorJob())
-        val presenter = createRoomListPresenter(leaveRoomPresenter = leaveRoomPresenter, coroutineScope = scope)
+        val presenter = createRoomListPresenter(
+            leaveRoomState = aLeaveRoomState(eventSink = leaveRoomEventsRecorder),
+            coroutineScope = scope,
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             initialState.eventSink(RoomListEvents.LeaveRoom(A_ROOM_ID))
-            assertThat(leaveRoomPresenter.events).containsExactly(LeaveRoomEvent.ShowConfirmation(A_ROOM_ID))
+            leaveRoomEventsRecorder.assertSingle(LeaveRoomEvent.ShowConfirmation(A_ROOM_ID))
             cancelAndIgnoreRemainingEvents()
             scope.cancel()
         }
@@ -671,7 +674,7 @@ class RoomListPresenterTest {
         client: MatrixClient = FakeMatrixClient(),
         networkMonitor: NetworkMonitor = FakeNetworkMonitor(),
         snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
-        leaveRoomPresenter: Presenter<LeaveRoomState> = FakeLeaveRoomPresenter(),
+        leaveRoomState: LeaveRoomState = aLeaveRoomState(),
         lastMessageTimestampFormatter: LastMessageTimestampFormatter = FakeLastMessageTimestampFormatter().apply {
             givenFormat(A_FORMATTED_DATE)
         },
@@ -688,7 +691,7 @@ class RoomListPresenterTest {
         client = client,
         networkMonitor = networkMonitor,
         snackbarDispatcher = snackbarDispatcher,
-        leaveRoomPresenter = leaveRoomPresenter,
+        leaveRoomPresenter = { leaveRoomState },
         roomListDataSource = RoomListDataSource(
             roomListService = client.roomListService,
             roomListRoomSummaryFactory = RoomListRoomSummaryFactory(
