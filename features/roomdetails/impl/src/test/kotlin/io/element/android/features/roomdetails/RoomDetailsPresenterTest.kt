@@ -16,7 +16,7 @@ import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.createroom.test.FakeStartDMAction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
-import io.element.android.features.leaveroom.api.LeaveRoomPresenter
+import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.fake.FakeLeaveRoomPresenter
 import io.element.android.features.roomdetails.impl.RoomDetailsEvent
 import io.element.android.features.roomdetails.impl.RoomDetailsPresenter
@@ -25,6 +25,7 @@ import io.element.android.features.roomdetails.impl.RoomDetailsType
 import io.element.android.features.roomdetails.impl.RoomTopicState
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
@@ -72,7 +73,7 @@ class RoomDetailsPresenterTest {
 
     private fun TestScope.createRoomDetailsPresenter(
         room: MatrixRoom = aMatrixRoom(),
-        leaveRoomPresenter: LeaveRoomPresenter = FakeLeaveRoomPresenter(),
+        leaveRoomPresenter: Presenter<LeaveRoomState> = FakeLeaveRoomPresenter(),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
         analyticsService: AnalyticsService = FakeAnalyticsService(),

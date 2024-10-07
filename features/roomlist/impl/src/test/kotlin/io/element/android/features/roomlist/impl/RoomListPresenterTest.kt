@@ -16,7 +16,7 @@ import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.anAcceptDeclineInviteState
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
-import io.element.android.features.leaveroom.api.LeaveRoomPresenter
+import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.fake.FakeLeaveRoomPresenter
 import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.features.networkmonitor.api.NetworkMonitor
@@ -671,7 +671,7 @@ class RoomListPresenterTest {
         client: MatrixClient = FakeMatrixClient(),
         networkMonitor: NetworkMonitor = FakeNetworkMonitor(),
         snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
-        leaveRoomPresenter: LeaveRoomPresenter = FakeLeaveRoomPresenter(),
+        leaveRoomPresenter: Presenter<LeaveRoomState> = FakeLeaveRoomPresenter(),
         lastMessageTimestampFormatter: LastMessageTimestampFormatter = FakeLastMessageTimestampFormatter().apply {
             givenFormat(A_FORMATTED_DATE)
         },

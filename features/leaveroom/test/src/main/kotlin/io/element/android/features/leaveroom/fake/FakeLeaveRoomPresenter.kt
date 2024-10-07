@@ -9,10 +9,10 @@ package io.element.android.features.leaveroom.fake
 
 import androidx.compose.runtime.Composable
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
-import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.leaveroom.api.LeaveRoomState
+import io.element.android.libraries.architecture.Presenter
 
-class FakeLeaveRoomPresenter : LeaveRoomPresenter {
+class FakeLeaveRoomPresenter : Presenter<LeaveRoomState> {
     val events = mutableListOf<LeaveRoomEvent>()
 
     private fun handleEvent(event: LeaveRoomEvent) {

@@ -12,16 +12,14 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
-import io.element.android.features.leaveroom.api.LeaveRoomPresenter
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.leaveroom.api.LeaveRoomState.Confirmation.Dm
 import io.element.android.features.leaveroom.api.LeaveRoomState.Confirmation.Generic
 import io.element.android.features.leaveroom.api.LeaveRoomState.Confirmation.LastUserInRoom
 import io.element.android.features.leaveroom.api.LeaveRoomState.Confirmation.PrivateRoom
+import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
@@ -30,12 +28,11 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-@ContributesBinding(SessionScope::class)
-class DefaultLeaveRoomPresenter @Inject constructor(
+class LeaveRoomPresenter @Inject constructor(
     private val client: MatrixClient,
     private val roomMembershipObserver: RoomMembershipObserver,
     private val dispatchers: CoroutineDispatchers,
-) : LeaveRoomPresenter {
+) : Presenter<LeaveRoomState> {
     @Composable
     override fun present(): LeaveRoomState {
         val scope = rememberCoroutineScope()

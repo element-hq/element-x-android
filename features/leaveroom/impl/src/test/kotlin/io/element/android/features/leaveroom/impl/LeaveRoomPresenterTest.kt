@@ -27,13 +27,13 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
-class DefaultLeaveRoomPresenterTest {
+class LeaveRoomPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
     @Test
     fun `present - initial state hides all dialogs`() = runTest {
-        val presenter = createDefaultLeaveRoomPresenter()
+        val presenter = createLeaveRoomPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -46,7 +46,7 @@ class DefaultLeaveRoomPresenterTest {
 
     @Test
     fun `present - show generic confirmation`() = runTest {
-        val presenter = createDefaultLeaveRoomPresenter(
+        val presenter = createLeaveRoomPresenter(
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
@@ -66,7 +66,7 @@ class DefaultLeaveRoomPresenterTest {
 
     @Test
     fun `present - show private room confirmation`() = runTest {
-        val presenter = createDefaultLeaveRoomPresenter(
+        val presenter = createLeaveRoomPresenter(
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
@@ -86,7 +86,7 @@ class DefaultLeaveRoomPresenterTest {
 
     @Test
     fun `present - show last user in room confirmation`() = runTest {
-        val presenter = createDefaultLeaveRoomPresenter(
+        val presenter = createLeaveRoomPresenter(
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
@@ -106,7 +106,7 @@ class DefaultLeaveRoomPresenterTest {
 
     @Test
     fun `present - show DM confirmation`() = runTest {
-        val presenter = createDefaultLeaveRoomPresenter(
+        val presenter = createLeaveRoomPresenter(
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
@@ -127,7 +127,7 @@ class DefaultLeaveRoomPresenterTest {
     @Test
     fun `present - leaving a room leaves the room`() = runTest {
         val roomMembershipObserver = RoomMembershipObserver()
-        val presenter = createDefaultLeaveRoomPresenter(
+        val presenter = createLeaveRoomPresenter(
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
@@ -151,7 +151,7 @@ class DefaultLeaveRoomPresenterTest {
 
     @Test
     fun `present - show error if leave room fails`() = runTest {
-        val presenter = createDefaultLeaveRoomPresenter(
+        val presenter = createLeaveRoomPresenter(
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
@@ -175,7 +175,7 @@ class DefaultLeaveRoomPresenterTest {
 
     @Test
     fun `present - show progress indicator while leaving a room`() = runTest {
-        val presenter = createDefaultLeaveRoomPresenter(
+        val presenter = createLeaveRoomPresenter(
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
@@ -199,7 +199,7 @@ class DefaultLeaveRoomPresenterTest {
 
     @Test
     fun `present - hide error hides the error`() = runTest {
-        val presenter = createDefaultLeaveRoomPresenter(
+        val presenter = createLeaveRoomPresenter(
             client = FakeMatrixClient().apply {
                 givenGetRoomResult(
                     roomId = A_ROOM_ID,
@@ -225,10 +225,10 @@ class DefaultLeaveRoomPresenterTest {
     }
 }
 
-private fun TestScope.createDefaultLeaveRoomPresenter(
+private fun TestScope.createLeaveRoomPresenter(
     client: MatrixClient = FakeMatrixClient(),
     roomMembershipObserver: RoomMembershipObserver = RoomMembershipObserver(),
-): DefaultLeaveRoomPresenter = DefaultLeaveRoomPresenter(
+): LeaveRoomPresenter = LeaveRoomPresenter(
     client = client,
     roomMembershipObserver = roomMembershipObserver,
     dispatchers = testCoroutineDispatchers(false),
