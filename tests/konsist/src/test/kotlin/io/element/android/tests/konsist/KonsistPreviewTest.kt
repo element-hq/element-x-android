@@ -75,6 +75,7 @@ class KonsistPreviewTest {
                 "MessageComposerViewVoicePreview",
                 "MessagesReactionButtonAddPreview",
                 "MessagesReactionButtonExtraPreview",
+                "MessagesViewWithIdentityChangePreview",
                 "MessagesViewWithTypingPreview",
                 "PageTitleWithIconFullPreview",
                 "PageTitleWithIconMinimalPreview",

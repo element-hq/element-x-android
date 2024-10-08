@@ -10,6 +10,8 @@ package io.element.android.features.messages.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.anActionListState
+import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
+import io.element.android.features.messages.impl.crypto.identity.anIdentityChangeState
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
@@ -106,6 +108,7 @@ fun aMessagesState(
         focusedEventIndex = 2,
     ),
     timelineProtectionState: TimelineProtectionState = aTimelineProtectionState(),
+    identityChangeState: IdentityChangeState = anIdentityChangeState(),
     readReceiptBottomSheetState: ReadReceiptBottomSheetState = aReadReceiptBottomSheetState(),
     actionListState: ActionListState = anActionListState(),
     customReactionState: CustomReactionState = aCustomReactionState(),
@@ -125,6 +128,7 @@ fun aMessagesState(
     composerState = composerState,
     voiceMessageComposerState = voiceMessageComposerState,
     timelineProtectionState = timelineProtectionState,
+    identityChangeState = identityChangeState,
     timelineState = timelineState,
     readReceiptBottomSheetState = readReceiptBottomSheetState,
     actionListState = actionListState,

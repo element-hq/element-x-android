@@ -57,6 +57,7 @@ import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.crypto.identity.IdentityChangeStateView
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsBottomSheet
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
@@ -103,6 +104,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import timber.log.Timber
@@ -415,6 +417,7 @@ private fun MessagesViewContent(
                 MessagesViewComposerBottomSheetContents(
                     subcomposing = subcomposing,
                     state = state,
+                    onLinkClick = onLinkClick,
                 )
             },
             sheetContentKey = sheetResizeContentKey.intValue,
@@ -428,6 +431,7 @@ private fun MessagesViewContent(
 private fun MessagesViewComposerBottomSheetContents(
     subcomposing: Boolean,
     state: MessagesState,
+    onLinkClick: (String) -> Unit,
 ) {
     if (state.userEventPermissions.canSendMessage) {
         Column(modifier = Modifier.fillMaxWidth()) {
@@ -448,6 +452,14 @@ private fun MessagesViewComposerBottomSheetContents(
                     state.composerState.eventSink(MessageComposerEvents.InsertSuggestion(it))
                 }
             )
+            // Do not show the identity change if user is composing a Rich message or is seeing suggestion(s).
+            if (state.composerState.suggestions.isEmpty() &&
+                state.composerState.textEditorState is TextEditorState.Markdown) {
+                IdentityChangeStateView(
+                    state = state.identityChangeState,
+                    onLinkClick = onLinkClick,
+                )
+            }
             MessageComposerView(
                 state = state.composerState,
                 voiceMessageState = state.voiceMessageComposerState,

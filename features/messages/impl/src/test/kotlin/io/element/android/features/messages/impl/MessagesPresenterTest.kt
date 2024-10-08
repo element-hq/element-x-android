@@ -16,6 +16,7 @@ import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.FakeActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.crypto.identity.anIdentityChangeState
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
@@ -1026,6 +1027,7 @@ class MessagesPresenterTest {
             customReactionPresenter = { aCustomReactionState() },
             reactionSummaryPresenter = { aReactionSummaryState() },
             readReceiptBottomSheetPresenter = { aReadReceiptBottomSheetState() },
+            identityChangeStatePresenter = { anIdentityChangeState() },
             pinnedMessagesBannerPresenter = { aLoadedPinnedMessagesBannerState() },
             networkMonitor = FakeNetworkMonitor(),
             snackbarDispatcher = SnackbarDispatcher(),

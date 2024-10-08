@@ -31,6 +31,7 @@ import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
+import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
@@ -91,6 +92,7 @@ class MessagesPresenter @AssistedInject constructor(
     private val voiceMessageComposerPresenter: Presenter<VoiceMessageComposerState>,
     timelinePresenterFactory: TimelinePresenter.Factory,
     private val timelineProtectionPresenter: Presenter<TimelineProtectionState>,
+    private val identityChangeStatePresenter: Presenter<IdentityChangeState>,
     private val actionListPresenterFactory: ActionListPresenter.Factory,
     private val customReactionPresenter: Presenter<CustomReactionState>,
     private val reactionSummaryPresenter: Presenter<ReactionSummaryState>,
@@ -125,6 +127,7 @@ class MessagesPresenter @AssistedInject constructor(
         val voiceMessageComposerState = voiceMessageComposerPresenter.present()
         val timelineState = timelinePresenter.present()
         val timelineProtectionState = timelineProtectionPresenter.present()
+        val identityChangeState = identityChangeStatePresenter.present()
         val actionListState = actionListPresenter.present()
         val customReactionState = customReactionPresenter.present()
         val reactionSummaryState = reactionSummaryPresenter.present()
@@ -217,6 +220,7 @@ class MessagesPresenter @AssistedInject constructor(
             voiceMessageComposerState = voiceMessageComposerState,
             timelineState = timelineState,
             timelineProtectionState = timelineProtectionState,
+            identityChangeState = identityChangeState,
             actionListState = actionListState,
             customReactionState = customReactionState,
             reactionSummaryState = reactionSummaryState,

@@ -8,29 +8,30 @@
 package io.element.android.features.messages.impl.utils
 
 import org.junit.Assert
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class EmojiTest {
     @Test
     fun validEmojis() {
         // Simple single/multiple single-codepoint emojis per string
-        Assert.assertTrue("👍".containsOnlyEmojis())
-        Assert.assertTrue("😀".containsOnlyEmojis())
-        Assert.assertTrue("🙂🙁".containsOnlyEmojis())
-        Assert.assertTrue("👁❤️🍝".containsOnlyEmojis()) // 👁 is a pictographic
-        Assert.assertTrue("👨‍👩‍👦1️⃣🚀👳🏾‍♂️🪩".containsOnlyEmojis())
-        Assert.assertTrue("🌍🌎🌏".containsOnlyEmojis())
+        assertTrue("👍".containsOnlyEmojisInternal())
+        assertTrue("😀".containsOnlyEmojisInternal())
+        assertTrue("🙂🙁".containsOnlyEmojisInternal())
+        assertTrue("👁❤️🍝".containsOnlyEmojisInternal()) // 👁 is a pictographic
+        assertTrue("👨‍👩‍👦1️⃣🚀👳🏾‍♂️🪩".containsOnlyEmojisInternal())
+        assertTrue("🌍🌎🌏".containsOnlyEmojisInternal())
 
         // Awkward multi-codepoint graphemes
-        Assert.assertTrue("🧑‍🧑‍🧒‍🧒".containsOnlyEmojis())
-        Assert.assertTrue("🏴‍☠".containsOnlyEmojis())
-        Assert.assertTrue("👩🏿‍🔧".containsOnlyEmojis())
+        assertTrue("🧑‍🧑‍🧒‍🧒".containsOnlyEmojisInternal())
+        assertTrue("🏴‍☠".containsOnlyEmojisInternal())
+        assertTrue("👩🏿‍🔧".containsOnlyEmojisInternal())
 
-        Assert.assertFalse("".containsOnlyEmojis())
-        Assert.assertFalse(" ".containsOnlyEmojis())
-        Assert.assertFalse("🙂 🙁".containsOnlyEmojis())
-        Assert.assertFalse(" 🙂 🙁 ".containsOnlyEmojis())
-        Assert.assertFalse("Hello".containsOnlyEmojis())
-        Assert.assertFalse("Hello 👋".containsOnlyEmojis())
+        Assert.assertFalse("".containsOnlyEmojisInternal())
+        Assert.assertFalse(" ".containsOnlyEmojisInternal())
+        Assert.assertFalse("🙂 🙁".containsOnlyEmojisInternal())
+        Assert.assertFalse(" 🙂 🙁 ".containsOnlyEmojisInternal())
+        Assert.assertFalse("Hello".containsOnlyEmojisInternal())
+        Assert.assertFalse("Hello 👋".containsOnlyEmojisInternal())
     }
 }
