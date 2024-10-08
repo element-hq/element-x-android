@@ -9,4 +9,5 @@ package io.element.android.appconfig
 
 object LearnMoreConfig {
     const val SECURE_BACKUP_URL: String = "https://element.io/help#encryption5"
+    const val IDENTITY_CHANGE_URL: String = "https://element.io/help#encryption18"
 }

@@ -417,6 +417,7 @@ private fun MessagesViewContent(
                 MessagesViewComposerBottomSheetContents(
                     subcomposing = subcomposing,
                     state = state,
+                    onLinkClick = onLinkClick,
                 )
             },
             sheetContentKey = sheetResizeContentKey.intValue,
@@ -430,6 +431,7 @@ private fun MessagesViewContent(
 private fun MessagesViewComposerBottomSheetContents(
     subcomposing: Boolean,
     state: MessagesState,
+    onLinkClick: (String) -> Unit,
 ) {
     if (state.userEventPermissions.canSendMessage) {
         Column(modifier = Modifier.fillMaxWidth()) {
@@ -453,7 +455,10 @@ private fun MessagesViewComposerBottomSheetContents(
             // Do not show the identity change if user is composing a Rich message or is seeing suggestion(s).
             if (state.composerState.suggestions.isEmpty() &&
                 state.composerState.textEditorState is TextEditorState.Markdown) {
-                IdentityChangeStateView(state.identityChangeState)
+                IdentityChangeStateView(
+                    state = state.identityChangeState,
+                    onLinkClick = onLinkClick,
+                )
             }
             MessageComposerView(
                 state = state.composerState,

@@ -10,11 +10,13 @@ package io.element.android.features.messages.impl.crypto.identity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import io.element.android.appconfig.LearnMoreConfig
 import io.element.android.libraries.designsystem.atomic.molecules.ComposerAlertMolecule
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -26,6 +28,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun IdentityChangeStateView(
     state: IdentityChangeState,
+    onLinkClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     // Pick the first identity change to PinViolation
@@ -38,27 +41,31 @@ fun IdentityChangeStateView(
             modifier = modifier,
             avatar = identityChange.roomMember.getAvatarData(AvatarSize.ComposerAlert),
             content = buildAnnotatedString {
-                val coloredPart = stringResource(CommonStrings.action_learn_more)
+                val learnMoreStr = stringResource(CommonStrings.action_learn_more)
                 val fullText = stringResource(
-                    CommonStrings.crypto_identity_change_pin_violation,
+                    id = CommonStrings.crypto_identity_change_pin_violation,
                     identityChange.roomMember.disambiguatedDisplayName,
-                    coloredPart,
+                    learnMoreStr,
                 )
-                val startIndex = fullText.indexOf(coloredPart)
+                val learnMoreStartIndex = fullText.indexOf(learnMoreStr)
                 append(fullText)
                 addStyle(
                     style = SpanStyle(
                         textDecoration = TextDecoration.Underline,
                         fontWeight = FontWeight.Bold,
                     ),
-                    start = startIndex,
-                    end = startIndex + coloredPart.length,
+                    start = learnMoreStartIndex,
+                    end = learnMoreStartIndex + learnMoreStr.length,
                 )
-                addStringAnnotation(
-                    tag = "LEARN_MORE",
-                    annotation = "TODO",
-                    start = startIndex,
-                    end = startIndex + coloredPart.length
+                addLink(
+                    url = LinkAnnotation.Url(
+                        url = LearnMoreConfig.IDENTITY_CHANGE_URL,
+                        linkInteractionListener = { t ->
+                            onLinkClick(LearnMoreConfig.IDENTITY_CHANGE_URL)
+                        }
+                    ),
+                    start = learnMoreStartIndex,
+                    end = learnMoreStartIndex + learnMoreStr.length,
                 )
             },
             onSubmitClick = { state.eventSink(IdentityChangeEvent.Submit(identityChange.roomMember.userId)) },
@@ -74,5 +81,6 @@ internal fun IdentityChangeStateViewPreview(
 ) = ElementPreview {
     IdentityChangeStateView(
         state = state,
+        onLinkClick = {},
     )
 }

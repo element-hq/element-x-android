@@ -27,13 +27,14 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.libraries.androidutils.system.openUrlInExternalApp
+import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.androidutils.system.toast
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
@@ -122,7 +123,8 @@ class MessagesNode @AssistedInject constructor(
     }
 
     private fun onLinkClick(
-        context: Context,
+        activity: Activity,
+        darkTheme: Boolean,
         url: String,
         eventSink: (TimelineEvents) -> Unit,
     ) {
@@ -133,11 +135,11 @@ class MessagesNode @AssistedInject constructor(
                 callbacks.forEach { it.onUserDataClick(permalink.userId) }
             }
             is PermalinkData.RoomLink -> {
-                handleRoomLinkClick(context, permalink, eventSink)
+                handleRoomLinkClick(activity, permalink, eventSink)
             }
             is PermalinkData.FallbackLink,
             is PermalinkData.RoomEmailInviteLink -> {
-                context.openUrlInExternalApp(url)
+                activity.openUrlInChromeCustomTab(null, darkTheme, url)
             }
         }
     }
@@ -195,6 +197,7 @@ class MessagesNode @AssistedInject constructor(
     @Composable
     override fun View(modifier: Modifier) {
         val activity = LocalContext.current as Activity
+        val isDark = ElementTheme.isLightTheme.not()
         CompositionLocalProvider(
             LocalTimelineItemPresenterFactories provides timelineItemPresenterFactories,
         ) {
@@ -212,7 +215,7 @@ class MessagesNode @AssistedInject constructor(
                 onEventClick = this::onEventClick,
                 onPreviewAttachments = this::onPreviewAttachments,
                 onUserDataClick = this::onUserDataClick,
-                onLinkClick = { onLinkClick(activity, it, state.timelineState.eventSink) },
+                onLinkClick = { url -> onLinkClick(activity, isDark, url, state.timelineState.eventSink) },
                 onSendLocationClick = this::onSendLocationClick,
                 onCreatePollClick = this::onCreatePollClick,
                 onJoinCallClick = this::onJoinCallClick,
