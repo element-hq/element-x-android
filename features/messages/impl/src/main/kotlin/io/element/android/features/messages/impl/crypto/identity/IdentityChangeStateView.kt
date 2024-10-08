@@ -32,19 +32,19 @@ fun IdentityChangeStateView(
     modifier: Modifier = Modifier,
 ) {
     // Pick the first identity change to PinViolation
-    val identityChange = state.roomMemberIdentityStateChanges.firstOrNull {
+    val pinViolationIdentityChange = state.roomMemberIdentityStateChanges.firstOrNull {
         // For now only render PinViolation
         it.identityState == IdentityState.PinViolation
     }
-    if (identityChange != null) {
+    if (pinViolationIdentityChange != null) {
         ComposerAlertMolecule(
             modifier = modifier,
-            avatar = identityChange.roomMember.getAvatarData(AvatarSize.ComposerAlert),
+            avatar = pinViolationIdentityChange.roomMember.getAvatarData(AvatarSize.ComposerAlert),
             content = buildAnnotatedString {
                 val learnMoreStr = stringResource(CommonStrings.action_learn_more)
                 val fullText = stringResource(
                     id = CommonStrings.crypto_identity_change_pin_violation,
-                    identityChange.roomMember.disambiguatedDisplayName,
+                    pinViolationIdentityChange.roomMember.disambiguatedDisplayName,
                     learnMoreStr,
                 )
                 val learnMoreStartIndex = fullText.indexOf(learnMoreStr)
@@ -68,8 +68,8 @@ fun IdentityChangeStateView(
                     end = learnMoreStartIndex + learnMoreStr.length,
                 )
             },
-            onSubmitClick = { state.eventSink(IdentityChangeEvent.Submit(identityChange.roomMember.userId)) },
-            isCritical = identityChange.identityState == IdentityState.VerificationViolation,
+            onSubmitClick = { state.eventSink(IdentityChangeEvent.Submit(pinViolationIdentityChange.roomMember.userId)) },
+            isCritical = pinViolationIdentityChange.identityState == IdentityState.VerificationViolation,
         )
     }
 }
