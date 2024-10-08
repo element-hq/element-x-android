@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.api.encryption
 
+import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -58,6 +59,11 @@ interface EncryptionService {
      * Starts the identity reset process. This will return a handle that can be used to reset the identity.
      */
     suspend fun startIdentityReset(): Result<IdentityResetHandle?>
+
+    /**
+     * Remember this identity, ensuring it does not result in a pin violation.
+     */
+    suspend fun pinUserIdentity(userId: UserId): Result<Unit>
 }
 
 /**

@@ -5,7 +5,7 @@
 # Project
 android_gradle_plugin = "8.7.0"
 kotlin = "1.9.25"
-kotlinpoetKsp = "1.17.0"
+kotlinpoetKsp = "1.18.1"
 ksp = "1.9.25-1.0.20"
 firebaseAppDistribution = "5.0.0"
 
@@ -167,7 +167,7 @@ jsoup = "org.jsoup:jsoup:1.18.1"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.0.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.51"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:0.2.53"
 matrix_richtexteditor = { module = "io.element.android:wysiwyg", version.ref = "wysiwyg" }
 matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose", version.ref = "wysiwyg" }
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }

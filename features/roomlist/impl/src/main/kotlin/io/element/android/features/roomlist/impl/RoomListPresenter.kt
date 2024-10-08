@@ -28,8 +28,8 @@ import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.response.AcceptDeclineInviteState
 import io.element.android.features.invite.api.response.InviteData
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
-import io.element.android.features.leaveroom.api.LeaveRoomPresenter
-import io.element.android.features.logout.api.direct.DirectLogoutPresenter
+import io.element.android.features.leaveroom.api.LeaveRoomState
+import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.roomlist.impl.datasource.RoomListDataSource
@@ -44,7 +44,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatch
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsPresenter
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -52,7 +52,6 @@ import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.sync.SyncService
-import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
@@ -80,7 +79,7 @@ class RoomListPresenter @Inject constructor(
     private val client: MatrixClient,
     private val networkMonitor: NetworkMonitor,
     private val snackbarDispatcher: SnackbarDispatcher,
-    private val leaveRoomPresenter: LeaveRoomPresenter,
+    private val leaveRoomPresenter: Presenter<LeaveRoomState>,
     private val roomListDataSource: RoomListDataSource,
     private val featureFlagService: FeatureFlagService,
     private val indicatorService: IndicatorService,
@@ -89,9 +88,9 @@ class RoomListPresenter @Inject constructor(
     private val sessionPreferencesStore: SessionPreferencesStore,
     private val analyticsService: AnalyticsService,
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
-    private val fullScreenIntentPermissionsPresenter: FullScreenIntentPermissionsPresenter,
+    private val fullScreenIntentPermissionsPresenter: Presenter<FullScreenIntentPermissionsState>,
     private val notificationCleaner: NotificationCleaner,
-    private val logoutPresenter: DirectLogoutPresenter,
+    private val logoutPresenter: Presenter<DirectLogoutState>,
 ) : Presenter<RoomListState> {
     private val encryptionService: EncryptionService = client.encryptionService()
     private val syncService: SyncService = client.syncService()
@@ -173,31 +172,46 @@ class RoomListPresenter @Inject constructor(
     }
 
     @Composable
-    private fun securityBannerState(
+    private fun rememberSecurityBannerState(
         securityBannerDismissed: Boolean,
         needsSlidingSyncMigration: Boolean,
     ): State<SecurityBannerState> {
         val currentSecurityBannerDismissed by rememberUpdatedState(securityBannerDismissed)
+        val currentNeedsSlidingSyncMigration by rememberUpdatedState(needsSlidingSyncMigration)
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
-        val syncState by syncService.syncState.collectAsState()
         return remember {
             derivedStateOf {
-                when {
-                    currentSecurityBannerDismissed -> SecurityBannerState.None
-                    syncState == SyncState.Running -> {
-                        when (recoveryState) {
-                            RecoveryState.DISABLED -> SecurityBannerState.SetUpRecovery
-                            RecoveryState.INCOMPLETE -> SecurityBannerState.RecoveryKeyConfirmation
-                            RecoveryState.UNKNOWN,
-                            RecoveryState.WAITING_FOR_SYNC,
-                            RecoveryState.ENABLED -> SecurityBannerState.None
-                        }
-                    }
-                    needsSlidingSyncMigration -> SecurityBannerState.NeedsNativeSlidingSyncMigration
-                    else -> SecurityBannerState.None
-                }
+                calculateBannerState(
+                    securityBannerDismissed = currentSecurityBannerDismissed,
+                    needsSlidingSyncMigration = currentNeedsSlidingSyncMigration,
+                    recoveryState = recoveryState,
+                )
             }
         }
+    }
+
+    private fun calculateBannerState(
+        securityBannerDismissed: Boolean,
+        needsSlidingSyncMigration: Boolean,
+        recoveryState: RecoveryState,
+    ): SecurityBannerState {
+        if (securityBannerDismissed) {
+            return SecurityBannerState.None
+        }
+
+        when (recoveryState) {
+            RecoveryState.DISABLED -> return SecurityBannerState.SetUpRecovery
+            RecoveryState.INCOMPLETE -> return SecurityBannerState.RecoveryKeyConfirmation
+            RecoveryState.UNKNOWN,
+            RecoveryState.WAITING_FOR_SYNC,
+            RecoveryState.ENABLED -> Unit
+        }
+
+        if (needsSlidingSyncMigration) {
+            return SecurityBannerState.NeedsNativeSlidingSyncMigration
+        }
+
+        return SecurityBannerState.None
     }
 
     @Composable
@@ -228,7 +242,7 @@ class RoomListPresenter @Inject constructor(
             showEmpty -> RoomListContentState.Empty
             showSkeleton -> RoomListContentState.Skeleton(count = 16)
             else -> {
-                val securityBannerState by securityBannerState(securityBannerDismissed, needsSlidingSyncMigration)
+                val securityBannerState by rememberSecurityBannerState(securityBannerDismissed, needsSlidingSyncMigration)
                 RoomListContentState.Rooms(
                     securityBannerState = securityBannerState,
                     fullScreenIntentPermissionsState = fullScreenIntentPermissionsPresenter.present(),

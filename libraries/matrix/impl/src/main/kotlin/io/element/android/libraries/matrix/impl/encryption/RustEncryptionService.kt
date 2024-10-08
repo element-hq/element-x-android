@@ -11,6 +11,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.EnableRecoveryProgress
@@ -201,5 +202,10 @@ internal class RustEncryptionService(
         }.flatMap { handle ->
             RustIdentityResetHandleFactory.create(sessionId, handle)
         }
+    }
+
+    override suspend fun pinUserIdentity(userId: UserId): Result<Unit> = runCatching {
+        val userIdentity = service.getUserIdentity(userId.value) ?: error("User identity not found")
+        userIdentity.pin()
     }
 }

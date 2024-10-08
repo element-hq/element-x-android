@@ -25,7 +25,7 @@ class AnalyticsPreferencesPresenterTest {
 
     @Test
     fun `present - initial state available`() = runTest {
-        val presenter = DefaultAnalyticsPreferencesPresenter(
+        val presenter = AnalyticsPreferencesPresenter(
             FakeAnalyticsService(isEnabled = true, didAskUserConsent = true),
             aBuildMeta()
         )
@@ -41,7 +41,7 @@ class AnalyticsPreferencesPresenterTest {
 
     @Test
     fun `present - initial state not available`() = runTest {
-        val presenter = DefaultAnalyticsPreferencesPresenter(
+        val presenter = AnalyticsPreferencesPresenter(
             FakeAnalyticsService(isEnabled = false, didAskUserConsent = false),
             aBuildMeta()
         )
@@ -55,7 +55,7 @@ class AnalyticsPreferencesPresenterTest {
 
     @Test
     fun `present - enable and disable`() = runTest {
-        val presenter = DefaultAnalyticsPreferencesPresenter(
+        val presenter = AnalyticsPreferencesPresenter(
             FakeAnalyticsService(isEnabled = true, didAskUserConsent = true),
             aBuildMeta()
         )

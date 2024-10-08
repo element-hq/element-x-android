@@ -12,7 +12,8 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.fullscreenintent.test.FakeFullScreenIntentPermissionsPresenter
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
+import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.test.A_THROWABLE
@@ -263,12 +264,11 @@ class NotificationSettingsPresenterTest {
 
     @Test
     fun `present - RefreshSystemNotificationsEnabled also refreshes fullScreenIntentState`() = runTest {
-        val fullScreenIntentPermissionsPresenter = FakeFullScreenIntentPermissionsPresenter().apply {
-            state = state.copy(permissionGranted = false)
-        }
+        var lambdaResult = aFullScreenIntentPermissionsState(permissionGranted = false)
+        val fullScreenIntentPermissionsStateLambda = { lambdaResult }
         val presenter = createNotificationSettingsPresenter(
             pushService = createFakePushService(),
-            fullScreenIntentPermissionsPresenter = fullScreenIntentPermissionsPresenter,
+            fullScreenIntentPermissionsStateLambda = fullScreenIntentPermissionsStateLambda,
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -277,7 +277,7 @@ class NotificationSettingsPresenterTest {
             assertThat(initialState.fullScreenIntentPermissionsState.permissionGranted).isFalse()
 
             // Change the notification settings
-            fullScreenIntentPermissionsPresenter.state = fullScreenIntentPermissionsPresenter.state.copy(permissionGranted = true)
+            lambdaResult = lambdaResult.copy(permissionGranted = true)
             // Check it's not changed unless we refresh
             expectNoEvents()
 
@@ -336,7 +336,7 @@ class NotificationSettingsPresenterTest {
     private fun createNotificationSettingsPresenter(
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
         pushService: PushService = FakePushService(),
-        fullScreenIntentPermissionsPresenter: FakeFullScreenIntentPermissionsPresenter = FakeFullScreenIntentPermissionsPresenter()
+        fullScreenIntentPermissionsStateLambda: () -> FullScreenIntentPermissionsState = { aFullScreenIntentPermissionsState() },
     ): NotificationSettingsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
         return NotificationSettingsPresenter(
@@ -345,7 +345,7 @@ class NotificationSettingsPresenterTest {
             matrixClient = matrixClient,
             pushService = pushService,
             systemNotificationsEnabledProvider = FakeSystemNotificationsEnabledProvider(),
-            fullScreenIntentPermissionsPresenter = fullScreenIntentPermissionsPresenter,
+            fullScreenIntentPermissionsPresenter = { fullScreenIntentPermissionsStateLambda() },
         )
     }
 }

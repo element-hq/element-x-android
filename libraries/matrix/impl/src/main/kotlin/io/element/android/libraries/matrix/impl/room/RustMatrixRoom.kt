@@ -19,6 +19,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.encryption.identity.IdentityStateChange
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -43,6 +44,7 @@ import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
+import io.element.android.libraries.matrix.impl.mapper.map
 import io.element.android.libraries.matrix.impl.room.draft.into
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
@@ -69,6 +71,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.IdentityStatusChangeListener
 import org.matrix.rustcomponents.sdk.RoomInfo
 import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.RoomListItem
@@ -82,6 +85,7 @@ import timber.log.Timber
 import uniffi.matrix_sdk.RoomPowerLevelChanges
 import java.io.File
 import kotlin.coroutines.cancellation.CancellationException
+import org.matrix.rustcomponents.sdk.IdentityStatusChange as RustIdentityStateChange
 import org.matrix.rustcomponents.sdk.Room as InnerRoom
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
@@ -125,6 +129,23 @@ class RustMatrixRoom(
                     typingUserIds
                         .filter { it != sessionId.value }
                         .map(::UserId)
+                )
+            }
+        })
+    }
+
+    override val identityStateChangesFlow: Flow<List<IdentityStateChange>> = mxCallbackFlow {
+        val initial = emptyList<IdentityStateChange>()
+        channel.trySend(initial)
+        innerRoom.subscribeToIdentityStatusChanges(object : IdentityStatusChangeListener {
+            override fun call(identityStatusChange: List<RustIdentityStateChange>) {
+                channel.trySend(
+                    identityStatusChange.map {
+                        IdentityStateChange(
+                            userId = UserId(it.userId),
+                            identityState = it.changedTo.map(),
+                        )
+                    }
                 )
             }
         })
