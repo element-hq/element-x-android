@@ -8,7 +8,6 @@
 package io.element.android.features.messages.impl.crypto.identity
 
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
-import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.collections.immutable.ImmutableList
 
 data class IdentityChangeState(
@@ -17,6 +16,6 @@ data class IdentityChangeState(
 )
 
 data class RoomMemberIdentityStateChange(
-    val roomMember: RoomMember,
+    val identityRoomMember: IdentityRoomMember,
     val identityState: IdentityState,
 )

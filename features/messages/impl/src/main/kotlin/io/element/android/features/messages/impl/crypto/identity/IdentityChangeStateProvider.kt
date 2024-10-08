@@ -8,7 +8,9 @@
 package io.element.android.features.messages.impl.crypto.identity
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.messages.impl.typing.aTypingRoomMember
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import kotlinx.collections.immutable.toImmutableList
 
@@ -19,7 +21,7 @@ class IdentityChangeStateProvider : PreviewParameterProvider<IdentityChangeState
             anIdentityChangeState(
                 roomMemberIdentityStateChanges = listOf(
                     RoomMemberIdentityStateChange(
-                        roomMember = aTypingRoomMember(displayName = "Alice"),
+                        identityRoomMember = anIdentityRoomMember(disambiguatedDisplayName = "Alice"),
                         identityState = IdentityState.PinViolation,
                     ),
                 ),
@@ -32,4 +34,19 @@ internal fun anIdentityChangeState(
 ) = IdentityChangeState(
     roomMemberIdentityStateChanges = roomMemberIdentityStateChanges.toImmutableList(),
     eventSink = {},
+)
+
+internal fun anIdentityRoomMember(
+    userId: UserId = UserId("@alice:example.com"),
+    disambiguatedDisplayName: String = userId.value,
+    avatarData: AvatarData = AvatarData(
+        id = userId.value,
+        name = null,
+        url = null,
+        size = AvatarSize.ComposerAlert,
+    ),
+) = IdentityRoomMember(
+    userId = userId,
+    disambiguatedDisplayName = disambiguatedDisplayName,
+    avatarData = avatarData,
 )

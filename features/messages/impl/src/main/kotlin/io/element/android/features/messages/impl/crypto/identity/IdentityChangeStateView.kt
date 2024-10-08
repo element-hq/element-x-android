@@ -39,12 +39,12 @@ fun IdentityChangeStateView(
     if (pinViolationIdentityChange != null) {
         ComposerAlertMolecule(
             modifier = modifier,
-            avatar = pinViolationIdentityChange.roomMember.getAvatarData(AvatarSize.ComposerAlert),
+            avatar = pinViolationIdentityChange.identityRoomMember.avatarData,
             content = buildAnnotatedString {
                 val learnMoreStr = stringResource(CommonStrings.action_learn_more)
                 val fullText = stringResource(
                     id = CommonStrings.crypto_identity_change_pin_violation,
-                    pinViolationIdentityChange.roomMember.disambiguatedDisplayName,
+                    pinViolationIdentityChange.identityRoomMember.disambiguatedDisplayName,
                     learnMoreStr,
                 )
                 val learnMoreStartIndex = fullText.indexOf(learnMoreStr)
@@ -68,7 +68,7 @@ fun IdentityChangeStateView(
                     end = learnMoreStartIndex + learnMoreStr.length,
                 )
             },
-            onSubmitClick = { state.eventSink(IdentityChangeEvent.Submit(pinViolationIdentityChange.roomMember.userId)) },
+            onSubmitClick = { state.eventSink(IdentityChangeEvent.Submit(pinViolationIdentityChange.identityRoomMember.userId)) },
             isCritical = pinViolationIdentityChange.identityState == IdentityState.VerificationViolation,
         )
     }

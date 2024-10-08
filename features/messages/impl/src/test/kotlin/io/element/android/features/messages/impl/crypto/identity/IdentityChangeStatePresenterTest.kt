@@ -8,7 +8,7 @@
 package io.element.android.features.messages.impl.crypto.identity
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.messages.impl.typing.aTypingRoomMember
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
@@ -19,6 +19,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
+import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -59,7 +60,7 @@ class IdentityChangeStatePresenterTest {
             val finalItem = awaitItem()
             assertThat(finalItem.roomMemberIdentityStateChanges).hasSize(1)
             val value = finalItem.roomMemberIdentityStateChanges.first()
-            assertThat(value.roomMember.userId).isEqualTo(A_USER_ID_2)
+            assertThat(value.identityRoomMember.userId).isEqualTo(A_USER_ID_2)
             assertThat(value.identityState).isEqualTo(IdentityState.PinViolation)
         }
     }
@@ -71,7 +72,7 @@ class IdentityChangeStatePresenterTest {
                 givenRoomMembersState(
                     MatrixRoomMembersState.Ready(
                         listOf(
-                            aTypingRoomMember(
+                            aRoomMember(
                                 A_USER_ID_2,
                                 displayName = "Alice",
                             ),
@@ -94,8 +95,9 @@ class IdentityChangeStatePresenterTest {
                 val finalItem = awaitItem()
                 assertThat(finalItem.roomMemberIdentityStateChanges).hasSize(1)
                 val value = finalItem.roomMemberIdentityStateChanges.first()
-                assertThat(value.roomMember.userId).isEqualTo(A_USER_ID_2)
-                assertThat(value.roomMember.displayName).isEqualTo("Alice")
+                assertThat(value.identityRoomMember.userId).isEqualTo(A_USER_ID_2)
+                assertThat(value.identityRoomMember.disambiguatedDisplayName).isEqualTo("Alice")
+                assertThat(value.identityRoomMember.avatarData.size).isEqualTo(AvatarSize.ComposerAlert)
                 assertThat(value.identityState).isEqualTo(IdentityState.PinViolation)
             }
         }

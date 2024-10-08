@@ -13,12 +13,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.roomMembers
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -59,9 +61,10 @@ class IdentityChangeStatePresenter @Inject constructor(
             identityStateChanges.map { identityStateChange ->
                 val member = membersState.roomMembers()
                     ?.firstOrNull { roomMember -> roomMember.userId == identityStateChange.userId }
+                    ?.toIdentityRoomMember()
                     ?: createDefaultRoomMemberForIdentityChange(identityStateChange.userId)
                 RoomMemberIdentityStateChange(
-                    roomMember = member,
+                    identityRoomMember = member,
                     identityState = identityStateChange.identityState,
                 )
             }
@@ -81,21 +84,19 @@ class IdentityChangeStatePresenter @Inject constructor(
     }
 }
 
-/**
- * Create a default [RoomMember] for identity change events.
- * In this case, only the userId will be used for rendering, other fields are not used, but keep them
- * as close as possible to the actual data.
- */
-private fun createDefaultRoomMemberForIdentityChange(userId: UserId): RoomMember {
-    return RoomMember(
-        userId = userId,
-        displayName = null,
-        avatarUrl = null,
-        membership = RoomMembershipState.JOIN,
-        isNameAmbiguous = false,
-        powerLevel = 0,
-        normalizedPowerLevel = 0,
-        isIgnored = false,
-        role = RoomMember.Role.USER,
-    )
-}
+private fun RoomMember.toIdentityRoomMember() = IdentityRoomMember(
+    userId = userId,
+    disambiguatedDisplayName = disambiguatedDisplayName,
+    avatarData = getAvatarData(AvatarSize.ComposerAlert),
+)
+
+private fun createDefaultRoomMemberForIdentityChange(userId: UserId) = IdentityRoomMember(
+    userId = userId,
+    disambiguatedDisplayName = userId.value,
+    avatarData = AvatarData(
+        id = userId.value,
+        name = null,
+        url = null,
+        size = AvatarSize.ComposerAlert,
+    ),
+)

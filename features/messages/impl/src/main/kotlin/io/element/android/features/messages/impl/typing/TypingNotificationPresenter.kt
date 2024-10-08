@@ -20,7 +20,6 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.collections.immutable.ImmutableList
@@ -60,12 +59,13 @@ class TypingNotificationPresenter @Inject constructor(
         )
     }
 
-    private fun ProduceStateScope<ImmutableList<RoomMember>>.observeRoomTypingMembers() {
+    private fun ProduceStateScope<ImmutableList<TypingRoomMember>>.observeRoomTypingMembers() {
         combine(room.roomTypingMembersFlow, room.membersStateFlow) { typingMembers, membersState ->
             typingMembers
                 .map { userId ->
                     membersState.roomMembers()
                         ?.firstOrNull { roomMember -> roomMember.userId == userId }
+                        ?.toTypingRoomMember()
                         ?: createDefaultRoomMemberForTyping(userId)
                 }
         }
@@ -77,21 +77,14 @@ class TypingNotificationPresenter @Inject constructor(
     }
 }
 
-/**
- * Create a default [RoomMember] for typing events.
- * In this case, only the userId will be used for rendering, other fields are not used, but keep them
- * as close as possible to the actual data.
- */
-private fun createDefaultRoomMemberForTyping(userId: UserId): RoomMember {
-    return RoomMember(
-        userId = userId,
-        displayName = null,
-        avatarUrl = null,
-        membership = RoomMembershipState.JOIN,
-        isNameAmbiguous = false,
-        powerLevel = 0,
-        normalizedPowerLevel = 0,
-        isIgnored = false,
-        role = RoomMember.Role.USER,
+private fun RoomMember.toTypingRoomMember(): TypingRoomMember {
+    return TypingRoomMember(
+        disambiguatedDisplayName = disambiguatedDisplayName,
+    )
+}
+
+private fun createDefaultRoomMemberForTyping(userId: UserId): TypingRoomMember {
+    return TypingRoomMember(
+        disambiguatedDisplayName = userId.value,
     )
 }
