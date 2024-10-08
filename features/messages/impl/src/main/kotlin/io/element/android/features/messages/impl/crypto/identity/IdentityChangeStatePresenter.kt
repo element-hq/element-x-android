@@ -25,6 +25,7 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -69,6 +70,7 @@ class IdentityChangeStatePresenter @Inject constructor(
             .onEach { roomMemberIdentityStateChanges ->
                 value = roomMemberIdentityStateChanges.toPersistentList()
             }
+            .launchIn(this)
     }
 
     private fun CoroutineScope.pinUserIdentity(userId: UserId) = launch {
