@@ -60,7 +60,7 @@ fun IdentityChangeStateView(
                 addLink(
                     url = LinkAnnotation.Url(
                         url = LearnMoreConfig.IDENTITY_CHANGE_URL,
-                        linkInteractionListener = { t ->
+                        linkInteractionListener = {
                             onLinkClick(LearnMoreConfig.IDENTITY_CHANGE_URL)
                         }
                     ),
