@@ -151,7 +151,6 @@ class TypingNotificationPresenterTest {
 
     @Test
     fun `present - state is updated when a member is typing, member is not known, then known`() = runTest {
-        val aDefaultRoomMember = createDefaultRoomMember(A_USER_ID_2)
         val aKnownRoomMember = createKnownRoomMember(A_USER_ID_2)
         val room = FakeMatrixRoom()
         val presenter = createPresenter(matrixRoom = room)
@@ -219,14 +218,6 @@ class TypingNotificationPresenterTest {
     ) = TypingNotificationPresenter(
         room = matrixRoom,
         sessionPreferencesStore = sessionPreferencesStore,
-    )
-
-    private fun createDefaultRoomMember(
-        userId: UserId,
-    ) = aRoomMember(
-        userId = userId,
-        displayName = null,
-        isNameAmbiguous = false,
     )
 
     private fun createKnownRoomMember(
