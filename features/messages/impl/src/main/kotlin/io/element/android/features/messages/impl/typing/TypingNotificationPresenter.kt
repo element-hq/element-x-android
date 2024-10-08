@@ -41,6 +41,8 @@ class TypingNotificationPresenter @Inject constructor(
         val typingMembersState by produceState(initialValue = persistentListOf(), key1 = renderTypingNotifications) {
             if (renderTypingNotifications) {
                 observeRoomTypingMembers()
+            } else {
+                value = persistentListOf<TypingRoomMember>()
             }
         }
 
