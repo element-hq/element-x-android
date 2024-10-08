@@ -9,10 +9,11 @@ package io.element.android.features.messages.impl.typing
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.ProduceStateScope
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import io.element.android.libraries.architecture.Presenter
@@ -22,8 +23,9 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
@@ -36,33 +38,29 @@ class TypingNotificationPresenter @Inject constructor(
 ) : Presenter<TypingNotificationState> {
     @Composable
     override fun present(): TypingNotificationState {
-        val typingMembersState = remember { mutableStateOf(emptyList<RoomMember>()) }
         val renderTypingNotifications by sessionPreferencesStore.isRenderTypingNotificationsEnabled().collectAsState(initial = true)
-
-        LaunchedEffect(renderTypingNotifications) {
+        val typingMembersState by produceState(initialValue = persistentListOf(), key1 = renderTypingNotifications) {
             if (renderTypingNotifications) {
-                observeRoomTypingMembers(typingMembersState)
-            } else {
-                typingMembersState.value = emptyList()
+                observeRoomTypingMembers()
             }
         }
 
         // This will keep the space reserved for the typing notifications after the first one is displayed
         var reserveSpace by remember { mutableStateOf(false) }
-        LaunchedEffect(renderTypingNotifications, typingMembersState.value) {
-            if (renderTypingNotifications && typingMembersState.value.isNotEmpty()) {
+        LaunchedEffect(renderTypingNotifications, typingMembersState) {
+            if (renderTypingNotifications && typingMembersState.isNotEmpty()) {
                 reserveSpace = true
             }
         }
 
         return TypingNotificationState(
             renderTypingNotifications = renderTypingNotifications,
-            typingMembers = typingMembersState.value.toImmutableList(),
+            typingMembers = typingMembersState,
             reserveSpace = reserveSpace,
         )
     }
 
-    private fun CoroutineScope.observeRoomTypingMembers(typingMembersState: MutableState<List<RoomMember>>) {
+    private fun ProduceStateScope<ImmutableList<RoomMember>>.observeRoomTypingMembers() {
         combine(room.roomTypingMembersFlow, room.membersStateFlow) { typingMembers, membersState ->
             typingMembers
                 .map { userId ->
@@ -73,7 +71,7 @@ class TypingNotificationPresenter @Inject constructor(
         }
             .distinctUntilChanged()
             .onEach { members ->
-                typingMembersState.value = members
+                value = members.toImmutableList()
             }
             .launchIn(this)
     }
