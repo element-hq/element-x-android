@@ -9,13 +9,12 @@ package io.element.android.features.preferences.impl.notifications.edit
 
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
-import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.collections.immutable.ImmutableList
 
 data class EditDefaultNotificationSettingState(
     val isOneToOne: Boolean,
     val mode: RoomNotificationMode?,
-    val roomsWithUserDefinedMode: ImmutableList<RoomSummary>,
+    val roomsWithUserDefinedMode: ImmutableList<EditNotificationSettingRoomInfo>,
     val changeNotificationSettingAction: AsyncAction<Unit>,
     val displayMentionsOnlyDisclaimer: Boolean,
     val eventSink: (EditDefaultNotificationSettingStateEvents) -> Unit,

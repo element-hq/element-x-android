@@ -11,8 +11,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import io.element.android.libraries.matrix.ui.components.aRoomSummaryDetails
+import io.element.android.libraries.matrix.ui.components.aSelectRoomInfo
+import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -32,7 +32,7 @@ open class RoomSelectStateProvider : PreviewParameterProvider<RoomSelectState> {
                 resultState = SearchBarResultState.Results(aRoomSelectRoomList()),
                 query = "Test",
                 isSearchActive = true,
-                selectedRooms = persistentListOf(aRoomSummaryDetails(roomId = RoomId("!room2:domain")))
+                selectedRooms = aRoomSelectRoomList().subList(0, 1),
             ),
             aRoomSelectState(
                 mode = RoomSelectMode.Share,
@@ -43,10 +43,10 @@ open class RoomSelectStateProvider : PreviewParameterProvider<RoomSelectState> {
 
 private fun aRoomSelectState(
     mode: RoomSelectMode = RoomSelectMode.Forward,
-    resultState: SearchBarResultState<ImmutableList<RoomSummary>> = SearchBarResultState.Initial(),
+    resultState: SearchBarResultState<ImmutableList<SelectRoomInfo>> = SearchBarResultState.Initial(),
     query: String = "",
     isSearchActive: Boolean = false,
-    selectedRooms: ImmutableList<RoomSummary> = persistentListOf(),
+    selectedRooms: ImmutableList<SelectRoomInfo> = persistentListOf(),
 ) = RoomSelectState(
     mode = mode,
     resultState = resultState,
@@ -57,14 +57,16 @@ private fun aRoomSelectState(
 )
 
 private fun aRoomSelectRoomList() = persistentListOf(
-    aRoomSummaryDetails(),
-    aRoomSummaryDetails(
+    aSelectRoomInfo(
+        roomId = RoomId("!room1:domain"),
+        name = "Room with name",
+    ),
+    aSelectRoomInfo(
         roomId = RoomId("!room2:domain"),
         name = "Room with alias",
         canonicalAlias = RoomAlias("#alias:example.org"),
     ),
-    aRoomSummaryDetails(
+    aSelectRoomInfo(
         roomId = RoomId("!room3:domain"),
-        name = null,
     ),
 )

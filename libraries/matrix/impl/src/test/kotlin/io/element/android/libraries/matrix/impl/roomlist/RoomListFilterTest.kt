@@ -16,10 +16,11 @@ import org.junit.Test
 
 class RoomListFilterTest {
     private val regularRoom = aRoomSummary(
-        isDm = false
+        isDirect = false,
     )
     private val dmRoom = aRoomSummary(
-        isDm = true
+        isDirect = true,
+        activeMembersCount = 2
     )
     private val favoriteRoom = aRoomSummary(
         isFavorite = true

@@ -12,8 +12,8 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.roomlist.loadAllIncrementally
+import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.coroutineScope
@@ -38,11 +38,20 @@ class RoomSelectSearchDataSource @Inject constructor(
         source = RoomList.Source.All,
     )
 
-    val roomSummaries: Flow<PersistentList<RoomSummary>> = roomList.filteredSummaries
+    val roomInfoList: Flow<PersistentList<SelectRoomInfo>> = roomList.filteredSummaries
         .map { roomSummaries ->
             roomSummaries
-                .filter { it.currentUserMembership == CurrentUserMembership.JOINED }
+                .filter { it.info.currentUserMembership == CurrentUserMembership.JOINED }
                 .distinctBy { it.roomId } // This should be removed once we're sure no duplicate Rooms can be received
+                .map { roomSummary ->
+                    SelectRoomInfo(
+                        roomId = roomSummary.roomId,
+                        name = roomSummary.info.name,
+                        avatarUrl = roomSummary.info.avatarUrl,
+                        heroes = roomSummary.info.heroes,
+                        canonicalAlias = roomSummary.info.canonicalAlias,
+                    )
+                }
                 .toPersistentList()
         }
         .flowOn(coroutineDispatchers.computation)

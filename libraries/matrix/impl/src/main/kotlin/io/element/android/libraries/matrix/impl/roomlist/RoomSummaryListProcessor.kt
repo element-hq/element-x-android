@@ -23,7 +23,7 @@ class RoomSummaryListProcessor(
     private val roomSummaries: MutableSharedFlow<List<RoomSummary>>,
     private val roomListService: RoomListServiceInterface,
     private val coroutineContext: CoroutineContext,
-    private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
+    private val roomSummaryDetailsFactory: RoomSummaryFactory = RoomSummaryFactory(),
 ) {
     private val roomSummariesByIdentifier = HashMap<String, RoomSummary>()
     private val mutex = Mutex()

@@ -105,6 +105,10 @@ class MatrixRoomInfoMapperTest {
                 ).toImmutableList(),
                 pinnedEventIds = listOf(AN_EVENT_ID).toPersistentList(),
                 creator = A_USER_ID,
+                isMarkedUnread = false,
+                numUnreadMessages = 12L,
+                numUnreadNotifications = 13L,
+                numUnreadMentions = 14L,
             )
         )
     }
@@ -174,6 +178,10 @@ class MatrixRoomInfoMapperTest {
                 heroes = emptyList<MatrixUser>().toImmutableList(),
                 pinnedEventIds = emptyList<EventId>().toPersistentList(),
                 creator = null,
+                isMarkedUnread = true,
+                numUnreadMessages = 12L,
+                numUnreadNotifications = 13L,
+                numUnreadMentions = 14L,
             )
         )
     }

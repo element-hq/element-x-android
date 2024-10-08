@@ -76,9 +76,9 @@ class RoomListRoomSummaryTest {
 }
 
 internal fun createRoomListRoomSummary(
-    numberOfUnreadMentions: Int = 0,
-    numberOfUnreadMessages: Int = 0,
-    numberOfUnreadNotifications: Int = 0,
+    numberOfUnreadMentions: Long = 0,
+    numberOfUnreadMessages: Long = 0,
+    numberOfUnreadNotifications: Long = 0,
     isMarkedUnread: Boolean = false,
     userDefinedNotificationMode: RoomNotificationMode? = null,
     isFavorite: Boolean = false,
