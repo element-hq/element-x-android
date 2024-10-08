@@ -22,7 +22,10 @@ import io.element.android.features.messages.impl.timeline.model.event.AN_EMOJI_O
 fun String.containsOnlyEmojis(): Boolean {
     if (LocalInspectionMode.current) return this == AN_EMOJI_ONLY_TEXT
     if (isEmpty()) return false
+    return containsOnlyEmojisInternal()
+}
 
+internal fun String.containsOnlyEmojisInternal(): Boolean {
     val matcher = GraphemeMatcher(this)
     var m: GraphemeMatchResult? = null
     var contiguous = true
