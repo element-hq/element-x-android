@@ -8,10 +8,9 @@
 package io.element.android.features.messages.impl.crypto.identity
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.ProduceStateScope
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.UserId
@@ -26,7 +25,6 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -39,12 +37,8 @@ class IdentityChangeStatePresenter @Inject constructor(
     @Composable
     override fun present(): IdentityChangeState {
         val coroutineScope = rememberCoroutineScope()
-        val roomMemberIdentityStateChange = remember {
-            mutableStateOf(persistentListOf<RoomMemberIdentityStateChange>())
-        }
-
-        LaunchedEffect(Unit) {
-            observeRoomMemberIdentityStateChange(roomMemberIdentityStateChange)
+        val roomMemberIdentityStateChange by produceState(persistentListOf()) {
+            observeRoomMemberIdentityStateChange()
         }
 
         fun handleEvent(event: IdentityChangeEvent) {
@@ -54,14 +48,12 @@ class IdentityChangeStatePresenter @Inject constructor(
         }
 
         return IdentityChangeState(
-            roomMemberIdentityStateChanges = roomMemberIdentityStateChange.value,
+            roomMemberIdentityStateChanges = roomMemberIdentityStateChange,
             eventSink = ::handleEvent,
         )
     }
 
-    private fun CoroutineScope.observeRoomMemberIdentityStateChange(
-        roomMemberIdentityStateChange: MutableState<PersistentList<RoomMemberIdentityStateChange>>
-    ) {
+    private fun ProduceStateScope<PersistentList<RoomMemberIdentityStateChange>>.observeRoomMemberIdentityStateChange() {
         combine(room.identityStateChangesFlow, room.membersStateFlow) { identityStateChanges, membersState ->
             identityStateChanges.map { identityStateChange ->
                 val member = membersState.roomMembers()
@@ -75,9 +67,8 @@ class IdentityChangeStatePresenter @Inject constructor(
         }
             .distinctUntilChanged()
             .onEach { roomMemberIdentityStateChanges ->
-                roomMemberIdentityStateChange.value = roomMemberIdentityStateChanges.toPersistentList()
+                value = roomMemberIdentityStateChanges.toPersistentList()
             }
-            .launchIn(this)
     }
 
     private fun CoroutineScope.pinUserIdentity(userId: UserId) = launch {
