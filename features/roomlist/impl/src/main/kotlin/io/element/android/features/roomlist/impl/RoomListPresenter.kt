@@ -52,7 +52,6 @@ import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.sync.SyncService
-import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
@@ -180,14 +179,12 @@ class RoomListPresenter @Inject constructor(
         val currentSecurityBannerDismissed by rememberUpdatedState(securityBannerDismissed)
         val currentNeedsSlidingSyncMigration by rememberUpdatedState(needsSlidingSyncMigration)
         val recoveryState by encryptionService.recoveryStateStateFlow.collectAsState()
-        val syncState by syncService.syncState.collectAsState()
         return remember {
             derivedStateOf {
                 calculateBannerState(
                     securityBannerDismissed = currentSecurityBannerDismissed,
                     needsSlidingSyncMigration = currentNeedsSlidingSyncMigration,
                     recoveryState = recoveryState,
-                    syncState = syncState,
                 )
             }
         }
@@ -196,21 +193,18 @@ class RoomListPresenter @Inject constructor(
     private fun calculateBannerState(
         securityBannerDismissed: Boolean,
         needsSlidingSyncMigration: Boolean,
-        syncState: SyncState,
         recoveryState: RecoveryState,
     ): SecurityBannerState {
         if (securityBannerDismissed) {
             return SecurityBannerState.None
         }
 
-        if (syncState == SyncState.Running) {
-            when (recoveryState) {
-                RecoveryState.DISABLED -> return SecurityBannerState.SetUpRecovery
-                RecoveryState.INCOMPLETE -> return SecurityBannerState.RecoveryKeyConfirmation
-                RecoveryState.UNKNOWN,
-                RecoveryState.WAITING_FOR_SYNC,
-                RecoveryState.ENABLED -> Unit
-            }
+        when (recoveryState) {
+            RecoveryState.DISABLED -> return SecurityBannerState.SetUpRecovery
+            RecoveryState.INCOMPLETE -> return SecurityBannerState.RecoveryKeyConfirmation
+            RecoveryState.UNKNOWN,
+            RecoveryState.WAITING_FOR_SYNC,
+            RecoveryState.ENABLED -> Unit
         }
 
         if (needsSlidingSyncMigration) {
