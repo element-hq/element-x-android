@@ -14,7 +14,8 @@ jobs:
   nightly:
     name: Build and publish nightly bundle to Firebase
     runs-on: ubuntu-latest
-    if: ${{ github.repository == 'element-hq/element-x-android' }}
+    # Skip in forks
+    if: ${{ github.repository == 'element-hq/element-x-android' && ('pull_request' != github.event_name || github.event.pull_request.head.repo.full_name == github.repository) }}
     steps:
       - uses: actions/checkout@v4
       - name: Use JDK 21

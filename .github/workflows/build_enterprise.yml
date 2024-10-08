@@ -17,7 +17,7 @@ jobs:
     name: Build Enterprise APKs
     runs-on: ubuntu-latest
     # Skip in forks
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
+    if: ${{ github.repository == 'element-hq/element-x-android' && ('pull_request' != github.event_name || github.event.pull_request.head.repo.full_name == github.repository) }}
     strategy:
       matrix:
         variant: [debug, release, nightly]
