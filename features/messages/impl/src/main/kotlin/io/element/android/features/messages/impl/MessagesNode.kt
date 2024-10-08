@@ -7,6 +7,7 @@
 
 package io.element.android.features.messages.impl
 
+import android.app.Activity
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -38,7 +39,6 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.analytics.toAnalyticsViewRoom
 import io.element.android.libraries.matrix.api.core.EventId
@@ -63,8 +63,6 @@ class MessagesNode @AssistedInject constructor(
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
     private val mediaPlayer: MediaPlayer,
     private val permalinkParser: PermalinkParser,
-    @ApplicationContext
-    private val context: Context,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
     private val presenter = presenterFactory.create(this)
     private val callbacks = plugins<Callback>()
@@ -135,7 +133,7 @@ class MessagesNode @AssistedInject constructor(
                 callbacks.forEach { it.onUserDataClick(permalink.userId) }
             }
             is PermalinkData.RoomLink -> {
-                handleRoomLinkClick(permalink, eventSink)
+                handleRoomLinkClick(context, permalink, eventSink)
             }
             is PermalinkData.FallbackLink,
             is PermalinkData.RoomEmailInviteLink -> {
@@ -144,7 +142,11 @@ class MessagesNode @AssistedInject constructor(
         }
     }
 
-    private fun handleRoomLinkClick(roomLink: PermalinkData.RoomLink, eventSink: (TimelineEvents) -> Unit) {
+    private fun handleRoomLinkClick(
+        context: Context,
+        roomLink: PermalinkData.RoomLink,
+        eventSink: (TimelineEvents) -> Unit,
+    ) {
         if (room.matches(roomLink.roomIdOrAlias)) {
             val eventId = roomLink.eventId
             if (eventId != null) {
@@ -192,7 +194,7 @@ class MessagesNode @AssistedInject constructor(
 
     @Composable
     override fun View(modifier: Modifier) {
-        val context = LocalContext.current
+        val activity = LocalContext.current as Activity
         CompositionLocalProvider(
             LocalTimelineItemPresenterFactories provides timelineItemPresenterFactories,
         ) {
@@ -210,7 +212,7 @@ class MessagesNode @AssistedInject constructor(
                 onEventClick = this::onEventClick,
                 onPreviewAttachments = this::onPreviewAttachments,
                 onUserDataClick = this::onUserDataClick,
-                onLinkClick = { onLinkClick(context, it, state.timelineState.eventSink) },
+                onLinkClick = { onLinkClick(activity, it, state.timelineState.eventSink) },
                 onSendLocationClick = this::onSendLocationClick,
                 onCreatePollClick = this::onCreatePollClick,
                 onJoinCallClick = this::onJoinCallClick,
