@@ -60,6 +60,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import java.io.File
 
 class FakeMatrixRoom(
@@ -68,7 +69,7 @@ class FakeMatrixRoom(
     override val displayName: String = "",
     override val topic: String? = null,
     override val avatarUrl: String? = null,
-    override val isEncrypted: Boolean = false,
+    override var isEncrypted: Boolean = false,
     override val alias: RoomAlias? = null,
     override val alternativeAliases: List<RoomAlias> = emptyList(),
     override val isPublic: Boolean = true,
@@ -181,7 +182,17 @@ class FakeMatrixRoom(
         return Result.success(Unit)
     }
 
-    override val syncUpdateFlow: StateFlow<Long> = MutableStateFlow(0L)
+    fun enableEncryption() {
+        isEncrypted = true
+        emitSyncUpdate()
+    }
+
+    private val _syncUpdateFlow = MutableStateFlow(0L)
+    override val syncUpdateFlow: StateFlow<Long> = _syncUpdateFlow.asStateFlow()
+
+    fun emitSyncUpdate() {
+        _syncUpdateFlow.tryEmit(_syncUpdateFlow.value + 1)
+    }
 
     override suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline> = simulateLongTask {
         timelineFocusedOnEventResult(eventId)
