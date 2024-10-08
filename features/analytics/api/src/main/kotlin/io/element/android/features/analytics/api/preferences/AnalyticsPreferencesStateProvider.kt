@@ -17,8 +17,8 @@ open class AnalyticsPreferencesStateProvider : PreviewParameterProvider<Analytic
 }
 
 fun aAnalyticsPreferencesState() = AnalyticsPreferencesState(
-    applicationName = "Element X",
+    applicationName = "Tchap X",
     isEnabled = false,
-    policyUrl = "https://element.io",
+    policyUrl = "https://www.tchap.gouv.fr",
     eventSink = {}
 )

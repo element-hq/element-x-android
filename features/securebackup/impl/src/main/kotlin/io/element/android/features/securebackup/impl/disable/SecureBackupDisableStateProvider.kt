@@ -28,6 +28,6 @@ fun aSecureBackupDisableState(
 ) = SecureBackupDisableState(
     backupState = backupState,
     disableAction = disableAction,
-    appName = "Element",
+    appName = "Tchap",
     eventSink = {}
 )

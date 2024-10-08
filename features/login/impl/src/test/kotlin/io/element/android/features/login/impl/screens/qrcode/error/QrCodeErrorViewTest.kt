@@ -49,7 +49,7 @@ class QrCodeErrorViewTest {
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setQrCodeErrorView(
         onRetry: () -> Unit,
         errorScreenType: QrCodeErrorScreenType = QrCodeErrorScreenType.UnknownError,
-        appName: String = "Element X",
+        appName: String = "Tchap X",
     ) {
         setContent {
             QrCodeErrorView(

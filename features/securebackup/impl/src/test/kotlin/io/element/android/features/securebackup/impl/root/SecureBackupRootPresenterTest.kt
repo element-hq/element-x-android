@@ -42,7 +42,7 @@ class SecureBackupRootPresenterTest {
             assertThat(initialState.enableAction).isEqualTo(AsyncAction.Uninitialized)
             assertThat(initialState.displayKeyStorageDisabledError).isFalse()
             assertThat(initialState.recoveryState).isEqualTo(RecoveryState.UNKNOWN)
-            assertThat(initialState.appName).isEqualTo("Element")
+            assertThat(initialState.appName).isEqualTo("Tchap")
             assertThat(initialState.snackbarMessage).isNull()
         }
     }
@@ -104,7 +104,7 @@ class SecureBackupRootPresenterTest {
 
     private fun createSecureBackupRootPresenter(
         encryptionService: EncryptionService = FakeEncryptionService(),
-        appName: String = "Element",
+        appName: String = "Tchap",
     ): SecureBackupRootPresenter {
         return SecureBackupRootPresenter(
             encryptionService = encryptionService,

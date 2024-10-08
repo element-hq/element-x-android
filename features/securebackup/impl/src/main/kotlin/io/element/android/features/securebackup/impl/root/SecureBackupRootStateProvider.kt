@@ -62,7 +62,7 @@ fun aSecureBackupRootState(
     backupState = backupState,
     doesBackupExistOnServer = doesBackupExistOnServer,
     recoveryState = recoveryState,
-    appName = "Element",
+    appName = "Tchap",
     displayKeyStorageDisabledError = displayKeyStorageDisabledError,
     snackbarMessage = snackbarMessage,
     eventSink = {},

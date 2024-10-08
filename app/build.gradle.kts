@@ -46,7 +46,7 @@ android {
         applicationId = if (isEnterpriseBuild) {
             "io.element.enterprise"
         } else {
-            "io.element.android.x"
+            "fr.gouv.tchap.android.x"
         }
         targetSdk = Versions.TARGET_SDK
         versionCode = Versions.VERSION_CODE
@@ -100,7 +100,7 @@ android {
     val baseAppName = if (isEnterpriseBuild) {
         "Element Enterprise"
     } else {
-        "Element X"
+        "Tchap X"
     }
     logger.warnInBox("Building $baseAppName")
 
