@@ -59,9 +59,11 @@ class IdentityChangeStatePresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.observeRoomMemberIdentityStateChange(roomMemberIdentityStateChange: MutableState<PersistentList<RoomMemberIdentityStateChange>>) {
-        combine(room.identityStateChangesFlow, room.membersStateFlow) { IdentityStateChanges, membersState ->
-            IdentityStateChanges.map { identityStateChange ->
+    private fun CoroutineScope.observeRoomMemberIdentityStateChange(
+        roomMemberIdentityStateChange: MutableState<PersistentList<RoomMemberIdentityStateChange>>
+    ) {
+        combine(room.identityStateChangesFlow, room.membersStateFlow) { identityStateChanges, membersState ->
+            identityStateChanges.map { identityStateChange ->
                 val member = membersState.roomMembers()
                     ?.firstOrNull { roomMember -> roomMember.userId == identityStateChange.userId }
                     ?: createDefaultRoomMemberForIdentityChange(identityStateChange.userId)

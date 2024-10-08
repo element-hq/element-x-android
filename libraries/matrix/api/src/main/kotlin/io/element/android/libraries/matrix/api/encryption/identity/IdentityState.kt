@@ -8,7 +8,7 @@
 package io.element.android.libraries.matrix.api.encryption.identity
 
 enum class IdentityState {
-    /** The user is verified with us */
+    /** The user is verified with us. */
     Verified,
 
     /**
