@@ -14,6 +14,7 @@ jobs:
   nightly:
     name: Build and publish Enterprise nightly bundle to Firebase
     runs-on: ubuntu-latest
+    # Skip in forks
     if: ${{ github.repository == 'element-hq/element-x-android' }}
     steps:
       - uses: actions/checkout@v4
