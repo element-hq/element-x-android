@@ -20,7 +20,7 @@ internal fun MessagesViewWithIdentityChangePreview(
     @PreviewParameter(IdentityChangeStateProvider::class) identityChangeState: IdentityChangeState
 ) = ElementPreview {
     MessagesView(
-        state = aMessagesState().copy(identityChangeState = identityChangeState),
+        state = aMessagesState(identityChangeState = identityChangeState),
         onBackClick = {},
         onRoomDetailsClick = {},
         onEventClick = { false },
