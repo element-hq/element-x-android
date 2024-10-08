@@ -138,7 +138,7 @@ fun aMessagesState(
     enableTextFormatting = true,
     enableVoiceMessages = enableVoiceMessages,
     callState = callState,
-    appName = "Element",
+    appName = "Tchap",
     pinnedMessagesBannerState = pinnedMessagesBannerState,
     eventSink = eventSink,
 )

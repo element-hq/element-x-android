@@ -43,7 +43,7 @@ fun aSecureBackupRootState(
     backupState = backupState,
     doesBackupExistOnServer = doesBackupExistOnServer,
     recoveryState = recoveryState,
-    appName = "Element",
+    appName = "Tchap",
     snackbarMessage = snackbarMessage,
     eventSink = {},
 )

@@ -18,6 +18,6 @@ open class AnalyticsOptInStateProvider @Inject constructor() : PreviewParameterP
 }
 
 fun aAnalyticsOptInState() = AnalyticsOptInState(
-    applicationName = "Element X",
+    applicationName = "Tchap X",
     eventSink = {}
 )

@@ -104,6 +104,6 @@ private fun listItems() = persistentListOf(
 @Composable
 internal fun WelcomeViewPreview() {
     ElementPreview {
-        WelcomeView(applicationName = "Element X", onContinueClick = {})
+        WelcomeView(applicationName = "Tchap X", onContinueClick = {})
     }
 }

@@ -45,6 +45,6 @@ fun aSetupPinState(
     confirmPinEntry = confirmPinEntry,
     isConfirmationStep = isConfirmationStep,
     setupPinFailure = creationFailure,
-    appName = "Element",
+    appName = "Tchap",
     eventSink = {}
 )

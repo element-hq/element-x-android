@@ -39,7 +39,7 @@ class SecureBackupRootPresenterTest {
             assertThat(initialState.backupState).isEqualTo(BackupState.UNKNOWN)
             assertThat(initialState.doesBackupExistOnServer.dataOrNull()).isTrue()
             assertThat(initialState.recoveryState).isEqualTo(RecoveryState.UNKNOWN)
-            assertThat(initialState.appName).isEqualTo("Element")
+            assertThat(initialState.appName).isEqualTo("Tchap")
             assertThat(initialState.snackbarMessage).isNull()
         }
     }
@@ -72,7 +72,7 @@ class SecureBackupRootPresenterTest {
 
     private fun createSecureBackupRootPresenter(
         encryptionService: EncryptionService = FakeEncryptionService(),
-        appName: String = "Element",
+        appName: String = "Tchap",
     ): SecureBackupRootPresenter {
         return SecureBackupRootPresenter(
             encryptionService = encryptionService,
