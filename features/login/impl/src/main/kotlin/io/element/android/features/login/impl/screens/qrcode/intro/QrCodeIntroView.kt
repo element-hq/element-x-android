@@ -30,7 +30,6 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.utils.annotatedTextWithBold
 import io.element.android.libraries.permissions.api.PermissionsView
-import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
@@ -51,6 +50,7 @@ fun QrCodeIntroView(
         onBackClick = onBackClick,
         iconStyle = BigIcon.Style.Default(CompoundIcons.Computer()),
         title = stringResource(id = R.string.screen_qr_code_login_initial_state_title, state.desktopAppName),
+        subTitle = stringResource(id = R.string.screen_qr_code_login_initial_state_subtitle),
         content = { Content(state = state) },
         buttons = { Buttons(state = state) }
     )
@@ -87,7 +87,7 @@ private fun ColumnScope.Buttons(
     state: QrCodeIntroState,
 ) {
     Button(
-        text = stringResource(id = CommonStrings.action_continue),
+        text = stringResource(id = R.string.screen_qr_code_login_initial_state_button_title),
         modifier = Modifier.fillMaxWidth(),
         onClick = {
             state.eventSink.invoke(QrCodeIntroEvents.Continue)
