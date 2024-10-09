@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.core.net.toUri
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -23,6 +24,7 @@ import io.element.android.features.login.impl.accountprovider.AccountProviderDat
 import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
 import io.element.android.features.login.impl.web.WebClientUrlForAuthenticationRetriever
+import io.element.android.libraries.androidutils.uri.setQueryParameter
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -92,7 +94,16 @@ class ConfirmAccountProviderPresenter @AssistedInject constructor(
                 val matrixHomeServerDetails = authenticationService.getHomeserverDetails().value!!
                 if (matrixHomeServerDetails.supportsOidcLogin) {
                     // Retrieve the details right now
-                    LoginFlow.OidcFlow(authenticationService.getOidcUrl().getOrThrow())
+                    val oidcDetails = authenticationService.getOidcUrl().getOrThrow()
+                    if (params.isAccountCreation) {
+                        // In this case, add or replace the "prompt" parameter to "create"
+                        val newUrl = oidcDetails.url.toUri()
+                            .setQueryParameter("prompt", "create")
+                            .toString()
+                        LoginFlow.OidcFlow(oidcDetails.copy(url = newUrl))
+                    } else {
+                        LoginFlow.OidcFlow(oidcDetails)
+                    }
                 } else if (params.isAccountCreation) {
                     val url = webClientUrlForAuthenticationRetriever.retrieve(homeserverUrl)
                     LoginFlow.AccountCreationFlow(url)
