@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.loadAllIncrementally
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
+import io.element.android.libraries.matrix.ui.model.toSelectRoomInfo
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.coroutineScope
@@ -43,15 +44,7 @@ class RoomSelectSearchDataSource @Inject constructor(
             roomSummaries
                 .filter { it.info.currentUserMembership == CurrentUserMembership.JOINED }
                 .distinctBy { it.roomId } // This should be removed once we're sure no duplicate Rooms can be received
-                .map { roomSummary ->
-                    SelectRoomInfo(
-                        roomId = roomSummary.roomId,
-                        name = roomSummary.info.name,
-                        avatarUrl = roomSummary.info.avatarUrl,
-                        heroes = roomSummary.info.heroes,
-                        canonicalAlias = roomSummary.info.canonicalAlias,
-                    )
-                }
+                .map { roomSummary -> roomSummary.toSelectRoomInfo() }
                 .toPersistentList()
         }
         .flowOn(coroutineDispatchers.computation)

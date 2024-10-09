@@ -11,6 +11,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
@@ -28,3 +29,11 @@ data class SelectRoomInfo(
         size = size,
     )
 }
+
+fun RoomSummary.toSelectRoomInfo() = SelectRoomInfo(
+    roomId = roomId,
+    name = info.name,
+    avatarUrl = info.avatarUrl,
+    heroes = info.heroes,
+    canonicalAlias = info.canonicalAlias,
+)

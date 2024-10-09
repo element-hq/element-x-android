@@ -14,10 +14,9 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
-import io.element.android.libraries.matrix.ui.components.aSelectRoomInfo
+import io.element.android.libraries.matrix.ui.model.toSelectRoomInfo
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -122,13 +121,5 @@ class RoomSelectPresenterTest {
             roomListService = roomListService,
             coroutineDispatchers = testCoroutineDispatchers(),
         ),
-    )
-
-    private fun RoomSummary.toSelectRoomInfo() = aSelectRoomInfo(
-        roomId = roomId,
-        name = info.name,
-        avatarUrl = info.avatarUrl,
-        heroes = info.heroes,
-        canonicalAlias = info.canonicalAlias,
     )
 }
