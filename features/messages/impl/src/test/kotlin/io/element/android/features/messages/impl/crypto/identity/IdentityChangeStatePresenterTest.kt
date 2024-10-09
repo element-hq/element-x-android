@@ -44,7 +44,7 @@ class IdentityChangeStatePresenterTest {
 
     @Test
     fun `present - when the room emits identity change, the presenter emits new state`() = runTest {
-        val room = FakeMatrixRoom()
+        val room = FakeMatrixRoom(isEncrypted = true)
         val presenter = createIdentityChangeStatePresenter(room)
         presenter.test {
             val initialState = awaitItem()
@@ -66,9 +66,36 @@ class IdentityChangeStatePresenterTest {
     }
 
     @Test
+    fun `present - when the clear room emits identity change, the presenter does not emits new state`() = runTest {
+        val room = FakeMatrixRoom(isEncrypted = false)
+        val presenter = createIdentityChangeStatePresenter(room)
+        presenter.test {
+            val initialState = awaitItem()
+            assertThat(initialState.roomMemberIdentityStateChanges).isEmpty()
+            room.emitIdentityStateChanges(
+                listOf(
+                    IdentityStateChange(
+                        userId = A_USER_ID_2,
+                        identityState = IdentityState.PinViolation,
+                    ),
+                )
+            )
+            // No item emitted.
+            expectNoEvents()
+            // Room become encrypted.
+            room.enableEncryption()
+            val finalItem = awaitItem()
+            assertThat(finalItem.roomMemberIdentityStateChanges).hasSize(1)
+            val value = finalItem.roomMemberIdentityStateChanges.first()
+            assertThat(value.identityRoomMember.userId).isEqualTo(A_USER_ID_2)
+            assertThat(value.identityState).isEqualTo(IdentityState.PinViolation)
+        }
+    }
+
+    @Test
     fun `present - when the room emits identity change, the presenter emits new state with member details`() =
         runTest {
-            val room = FakeMatrixRoom().apply {
+            val room = FakeMatrixRoom(isEncrypted = true).apply {
                 givenRoomMembersState(
                     MatrixRoomMembersState.Ready(
                         listOf(

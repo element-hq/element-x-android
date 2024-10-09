@@ -25,9 +25,13 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -56,22 +60,31 @@ class IdentityChangeStatePresenter @Inject constructor(
         )
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun ProduceStateScope<PersistentList<RoomMemberIdentityStateChange>>.observeRoomMemberIdentityStateChange() {
-        combine(room.identityStateChangesFlow, room.membersStateFlow) { identityStateChanges, membersState ->
-            identityStateChanges.map { identityStateChange ->
-                val member = membersState.roomMembers()
-                    ?.firstOrNull { roomMember -> roomMember.userId == identityStateChange.userId }
-                    ?.toIdentityRoomMember()
-                    ?: createDefaultRoomMemberForIdentityChange(identityStateChange.userId)
-                RoomMemberIdentityStateChange(
-                    identityRoomMember = member,
-                    identityState = identityStateChange.identityState,
-                )
+        room.syncUpdateFlow
+            .filter {
+                // Room cannot become unencrypted, so we can just apply a filter here.
+                room.isEncrypted
             }
-        }
             .distinctUntilChanged()
-            .onEach { roomMemberIdentityStateChanges ->
-                value = roomMemberIdentityStateChanges.toPersistentList()
+            .flatMapLatest {
+                combine(room.identityStateChangesFlow, room.membersStateFlow,) { identityStateChanges, membersState ->
+                    identityStateChanges.map { identityStateChange ->
+                        val member = membersState.roomMembers()
+                            ?.firstOrNull { roomMember -> roomMember.userId == identityStateChange.userId }
+                            ?.toIdentityRoomMember()
+                            ?: createDefaultRoomMemberForIdentityChange(identityStateChange.userId)
+                        RoomMemberIdentityStateChange(
+                            identityRoomMember = member,
+                            identityState = identityStateChange.identityState,
+                        )
+                    }
+                }
+                    .distinctUntilChanged()
+                    .onEach { roomMemberIdentityStateChanges ->
+                        value = roomMemberIdentityStateChanges.toPersistentList()
+                    }
             }
             .launchIn(this)
     }
