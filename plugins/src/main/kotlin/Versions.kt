@@ -47,7 +47,7 @@ private const val versionMinor = 6
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-private const val versionPatch = 5
+private const val versionPatch = 6
 
 object Versions {
     val versionCode = 4_000_000 + versionMajor * 1_00_00 + versionMinor * 1_00 + versionPatch
