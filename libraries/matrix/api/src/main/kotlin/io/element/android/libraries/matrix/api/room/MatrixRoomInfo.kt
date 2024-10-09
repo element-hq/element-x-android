@@ -33,6 +33,13 @@ data class MatrixRoomInfo(
     val canonicalAlias: RoomAlias?,
     val alternativeAliases: ImmutableList<RoomAlias>,
     val currentUserMembership: CurrentUserMembership,
+    /**
+     * Member who invited the current user to a room that's in the invited
+     * state.
+     *
+     * Can be missing if the room membership invite event is missing from the
+     * store.
+     */
     val inviter: RoomMember?,
     val activeMembersCount: Long,
     val invitedMembersCount: Long,
@@ -43,7 +50,26 @@ data class MatrixRoomInfo(
     val userDefinedNotificationMode: RoomNotificationMode?,
     val hasRoomCall: Boolean,
     val activeRoomCallParticipants: ImmutableList<UserId>,
+    val isMarkedUnread: Boolean,
+    /**
+     * "Interesting" messages received in that room, independently of the
+     * notification settings.
+     */
+    val numUnreadMessages: Long,
+    /**
+     * Events that will notify the user, according to their
+     * notification settings.
+     */
+    val numUnreadNotifications: Long,
+    /**
+     * Events causing mentions/highlights for the user, according to their
+     * notification settings.
+     */
+    val numUnreadMentions: Long,
     val heroes: ImmutableList<MatrixUser>,
     val pinnedEventIds: ImmutableList<EventId>,
     val creator: UserId?,
-)
+) {
+    val aliases: List<RoomAlias>
+        get() = listOfNotNull(canonicalAlias) + alternativeAliases
+}

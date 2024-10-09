@@ -8,7 +8,6 @@
 package io.element.android.features.messages.impl.messagecomposer.suggestions
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.messages.impl.messagecomposer.RoomAliasSuggestion
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
@@ -110,13 +109,25 @@ class SuggestionsProcessorTest {
         val result = suggestionsProcessor.process(
             suggestion = aRoomSuggestion("ALI"),
             roomMembersState = MatrixRoomMembersState.Ready(persistentListOf()),
-            roomAliasSuggestions = listOf(RoomAliasSuggestion(A_ROOM_ALIAS, aRoomSummary)),
+            roomAliasSuggestions = listOf(
+                RoomAliasSuggestion(
+                    roomAlias = A_ROOM_ALIAS,
+                    roomId = aRoomSummary.roomId,
+                    roomName = aRoomSummary.info.name,
+                    roomAvatarUrl = aRoomSummary.info.avatarUrl,
+                )
+            ),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
         )
         assertThat(result).isEqualTo(
             listOf(
-                ResolvedSuggestion.Alias(A_ROOM_ALIAS, aRoomSummary)
+                ResolvedSuggestion.Alias(
+                    roomAlias = A_ROOM_ALIAS,
+                    roomId = aRoomSummary.roomId,
+                    roomName = aRoomSummary.info.name,
+                    roomAvatarUrl = aRoomSummary.info.avatarUrl,
+                )
             )
         )
     }
@@ -127,13 +138,25 @@ class SuggestionsProcessorTest {
         val result = suggestionsProcessor.process(
             suggestion = aRoomSuggestion("ali"),
             roomMembersState = MatrixRoomMembersState.Ready(persistentListOf()),
-            roomAliasSuggestions = listOf(RoomAliasSuggestion(A_ROOM_ALIAS, aRoomSummary)),
+            roomAliasSuggestions = listOf(
+                RoomAliasSuggestion(
+                    roomAlias = A_ROOM_ALIAS,
+                    roomId = aRoomSummary.roomId,
+                    roomName = aRoomSummary.info.name,
+                    roomAvatarUrl = aRoomSummary.info.avatarUrl,
+                )
+            ),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
         )
         assertThat(result).isEqualTo(
             listOf(
-                ResolvedSuggestion.Alias(A_ROOM_ALIAS, aRoomSummary)
+                ResolvedSuggestion.Alias(
+                    roomAlias = A_ROOM_ALIAS,
+                    roomId = aRoomSummary.roomId,
+                    roomName = aRoomSummary.info.name,
+                    roomAvatarUrl = aRoomSummary.info.avatarUrl,
+                )
             )
         )
     }
@@ -144,7 +167,14 @@ class SuggestionsProcessorTest {
         val result = suggestionsProcessor.process(
             suggestion = aRoomSuggestion("tot"),
             roomMembersState = MatrixRoomMembersState.Ready(persistentListOf()),
-            roomAliasSuggestions = listOf(RoomAliasSuggestion(A_ROOM_ALIAS, aRoomSummary)),
+            roomAliasSuggestions = listOf(
+                RoomAliasSuggestion(
+                    roomAlias = A_ROOM_ALIAS,
+                    roomId = aRoomSummary.roomId,
+                    roomName = aRoomSummary.info.name,
+                    roomAvatarUrl = aRoomSummary.info.avatarUrl,
+                )
+            ),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
         )

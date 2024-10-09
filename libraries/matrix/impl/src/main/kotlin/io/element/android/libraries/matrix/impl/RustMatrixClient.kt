@@ -32,7 +32,6 @@ import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.InvitedRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
@@ -84,8 +83,8 @@ import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -105,8 +104,8 @@ import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import java.io.File
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.INFINITE
 import kotlin.time.Duration.Companion.seconds
 import org.matrix.rustcomponents.sdk.CreateRoomParameters as RustCreateRoomParameters
 import org.matrix.rustcomponents.sdk.RoomPreset as RustRoomPreset
@@ -262,21 +261,14 @@ class RustMatrixClient(
      * @param timeout the timeout to wait for the room to be available
      * @throws TimeoutCancellationException if the room is not available after the timeout
      */
-    private suspend fun awaitJoinedRoom(roomIdOrAlias: RoomIdOrAlias, timeout: Duration): RoomSummary {
-        val predicate: (List<RoomSummary>) -> Boolean = when (roomIdOrAlias) {
-            is RoomIdOrAlias.Alias -> { roomSummaries: List<RoomSummary> ->
-                val found = roomSummaries.find { it.aliases.contains(roomIdOrAlias.roomAlias) }
-                found != null && found.currentUserMembership == CurrentUserMembership.JOINED
-            }
-            is RoomIdOrAlias.Id -> { roomSummaries: List<RoomSummary> ->
-                val found = roomSummaries.find { it.roomId == roomIdOrAlias.roomId }
-                found != null && found.currentUserMembership == CurrentUserMembership.JOINED
-            }
-        }
+    private suspend fun awaitJoinedRoom(
+        roomIdOrAlias: RoomIdOrAlias,
+        timeout: Duration
+    ): RoomSummary {
         return withTimeout(timeout) {
-            roomListService.allRooms.summaries
-                .filter(predicate)
-                .first()
+            getRoomSummaryFlow(roomIdOrAlias)
+                .mapNotNull { optionalRoomSummary -> optionalRoomSummary.getOrNull() }
+                .filter { roomSummary -> roomSummary.info.currentUserMembership == CurrentUserMembership.JOINED }
                 .first()
                 // Ensure that the room is ready
                 .also { client.awaitRoomRemoteEcho(it.roomId.value) }
@@ -568,20 +560,21 @@ class RustMatrixClient(
 
     override fun roomMembershipObserver(): RoomMembershipObserver = roomMembershipObserver
 
-    override fun getRoomInfoFlow(roomId: RoomId): Flow<Optional<MatrixRoomInfo>> {
-        return flow {
-            var room = getRoom(roomId)
-            if (room == null) {
-                emit(Optional.empty())
-                awaitJoinedRoom(roomId.toRoomIdOrAlias(), INFINITE)
-                room = getRoom(roomId)
+    override fun getRoomSummaryFlow(roomIdOrAlias: RoomIdOrAlias): Flow<Optional<RoomSummary>> {
+        val predicate: (RoomSummary) -> Boolean = when (roomIdOrAlias) {
+            is RoomIdOrAlias.Alias -> { roomSummary ->
+                roomSummary.info.aliases.contains(roomIdOrAlias.roomAlias)
             }
-            room?.use {
-                room.roomInfoFlow
-                    .map { roomInfo -> Optional.of(roomInfo) }
-                    .collect(this)
+            is RoomIdOrAlias.Id -> { roomSummary ->
+                roomSummary.roomId == roomIdOrAlias.roomId
             }
-        }.distinctUntilChanged()
+        }
+        return roomListService.allRooms.summaries
+            .map { roomSummaries ->
+                val roomSummary = roomSummaries.firstOrNull(predicate)
+                Optional.ofNullable(roomSummary)
+            }
+            .distinctUntilChanged()
     }
 
     override suspend fun setAllSendQueuesEnabled(enabled: Boolean) = withContext(sessionDispatcher) {

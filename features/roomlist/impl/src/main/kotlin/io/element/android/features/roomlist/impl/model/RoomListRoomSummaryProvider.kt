@@ -119,9 +119,9 @@ internal fun anInviteSender(
 internal fun aRoomListRoomSummary(
     id: String = "!roomId:domain",
     name: String? = "Room name",
-    numberOfUnreadMessages: Int = 0,
-    numberOfUnreadMentions: Int = 0,
-    numberOfUnreadNotifications: Int = 0,
+    numberOfUnreadMessages: Long = 0,
+    numberOfUnreadMentions: Long = 0,
+    numberOfUnreadNotifications: Long = 0,
     isMarkedUnread: Boolean = false,
     lastMessage: String? = "Last message",
     timestamp: String? = lastMessage?.let { "88:88" },

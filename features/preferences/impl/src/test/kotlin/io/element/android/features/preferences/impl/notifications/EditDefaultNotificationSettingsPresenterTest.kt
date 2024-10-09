@@ -14,11 +14,8 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingPresenter
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingStateEvents
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
-import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_THROWABLE
-import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
-import io.element.android.libraries.matrix.test.room.FakeMatrixRoom
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.tests.testutils.awaitLastSequentialItem
@@ -49,24 +46,20 @@ class EditDefaultNotificationSettingsPresenterTest {
 
     @Test
     fun `present - ensure list of rooms with user defined mode`() = runTest {
-        val room = FakeMatrixRoom()
         val notificationSettingsService = FakeNotificationSettingsService(
             initialRoomMode = RoomNotificationMode.ALL_MESSAGES,
             initialRoomModeIsDefault = false
         )
-        val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService).apply {
-            givenGetRoomResult(A_ROOM_ID, room)
-        }
         val roomListService = FakeRoomListService()
-        val presenter = createEditDefaultNotificationSettingPresenter(notificationSettingsService, roomListService, matrixClient)
+        val presenter = createEditDefaultNotificationSettingPresenter(notificationSettingsService, roomListService)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            roomListService.postAllRooms(listOf(aRoomSummary(notificationMode = RoomNotificationMode.ALL_MESSAGES)))
+            roomListService.postAllRooms(listOf(aRoomSummary(userDefinedNotificationMode = RoomNotificationMode.ALL_MESSAGES)))
             val loadedState = consumeItemsUntilPredicate { state ->
-                state.roomsWithUserDefinedMode.any { it.userDefinedNotificationMode == RoomNotificationMode.ALL_MESSAGES }
+                state.roomsWithUserDefinedMode.any { it.notificationMode == RoomNotificationMode.ALL_MESSAGES }
             }.last()
-            assertThat(loadedState.roomsWithUserDefinedMode.any { it.userDefinedNotificationMode == RoomNotificationMode.ALL_MESSAGES }).isTrue()
+            assertThat(loadedState.roomsWithUserDefinedMode.any { it.notificationMode == RoomNotificationMode.ALL_MESSAGES }).isTrue()
         }
     }
 
@@ -121,13 +114,11 @@ class EditDefaultNotificationSettingsPresenterTest {
     private fun createEditDefaultNotificationSettingPresenter(
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
         roomListService: FakeRoomListService = FakeRoomListService(),
-        matrixClient: FakeMatrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
     ): EditDefaultNotificationSettingPresenter {
         return EditDefaultNotificationSettingPresenter(
             notificationSettingsService = notificationSettingsService,
             isOneToOne = false,
             roomListService = roomListService,
-            matrixClient = matrixClient
         )
     }
 }

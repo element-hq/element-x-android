@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
+import io.element.android.libraries.matrix.ui.model.toSelectRoomInfo
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -58,8 +59,9 @@ class RoomSelectPresenterTest {
 
     @Test
     fun `present - update query`() = runTest {
+        val roomSummary = aRoomSummary()
         val roomListService = FakeRoomListService().apply {
-            postAllRooms(listOf(aRoomSummary()))
+            postAllRooms(listOf(roomSummary))
         }
         val presenter = createRoomSelectPresenter(
             roomListService = roomListService
@@ -68,19 +70,10 @@ class RoomSelectPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            val expectedRoomSummary = aRoomSummary()
+            val expectedRoomInfo = roomSummary.toSelectRoomInfo()
             // Do not compare the lambda because they will be different. So copy the lambda from expectedRoomSummary to result
-            val result = (awaitItem().resultState as SearchBarResultState.Results).results.map { roomSummary ->
-                roomSummary.copy(
-                    lastMessage = roomSummary.lastMessage!!.copy(
-                        event = roomSummary.lastMessage!!.event.copy(
-                            debugInfoProvider = expectedRoomSummary.lastMessage!!.event.debugInfoProvider,
-                            messageShieldProvider = expectedRoomSummary.lastMessage!!.event.messageShieldProvider,
-                        )
-                    ),
-                )
-            }
-            assertThat(result).isEqualTo(listOf(expectedRoomSummary))
+            val result = (awaitItem().resultState as SearchBarResultState.Results).results
+            assertThat(result).isEqualTo(listOf(expectedRoomInfo))
             initialState.eventSink(RoomSelectEvents.ToggleSearchActive)
             skipItems(1)
             initialState.eventSink(RoomSelectEvents.UpdateQuery("string not contained"))
@@ -99,8 +92,9 @@ class RoomSelectPresenterTest {
 
     @Test
     fun `present - select and remove a room`() = runTest {
+        val roomSummary = aRoomSummary()
         val roomListService = FakeRoomListService().apply {
-            postAllRooms(listOf(aRoomSummary()))
+            postAllRooms(listOf(roomSummary))
         }
         val presenter = createRoomSelectPresenter(
             roomListService = roomListService,
@@ -109,9 +103,9 @@ class RoomSelectPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            val summary = aRoomSummary()
-            initialState.eventSink(RoomSelectEvents.SetSelectedRoom(summary))
-            assertThat(awaitItem().selectedRooms).isEqualTo(persistentListOf(summary))
+            val roomInfo = roomSummary.toSelectRoomInfo()
+            initialState.eventSink(RoomSelectEvents.SetSelectedRoom(roomInfo))
+            assertThat(awaitItem().selectedRooms).isEqualTo(persistentListOf(roomInfo))
             initialState.eventSink(RoomSelectEvents.RemoveSelectedRoom)
             assertThat(awaitItem().selectedRooms).isEmpty()
             cancel()

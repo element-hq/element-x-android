@@ -24,7 +24,6 @@ import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.InvitedRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoom
-import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.preview.RoomPreview
@@ -118,8 +117,8 @@ class FakeMatrixClient(
     var knockRoomLambda: (RoomId) -> Result<Unit> = {
         Result.success(Unit)
     }
-    var getRoomInfoFlowLambda = { _: RoomId ->
-        flowOf<Optional<MatrixRoomInfo>>(Optional.empty())
+    var getRoomSummaryFlowLambda = { _: RoomIdOrAlias ->
+        flowOf<Optional<RoomSummary>>(Optional.empty())
     }
     var logoutLambda: (Boolean, Boolean) -> String? = { _, _ ->
         null
@@ -316,7 +315,7 @@ class FakeMatrixClient(
         return Result.success(visitedRoomsId)
     }
 
-    override fun getRoomInfoFlow(roomId: RoomId) = getRoomInfoFlowLambda(roomId)
+    override fun getRoomSummaryFlow(roomIdOrAlias: RoomIdOrAlias) = getRoomSummaryFlowLambda(roomIdOrAlias)
 
     var setAllSendQueuesEnabledLambda = lambdaRecorder(ensureNeverCalled = true) { _: Boolean ->
         // no-op

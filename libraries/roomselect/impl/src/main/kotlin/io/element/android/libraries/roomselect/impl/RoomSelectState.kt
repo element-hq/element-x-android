@@ -8,15 +8,15 @@
 package io.element.android.libraries.roomselect.impl
 
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
-import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import kotlinx.collections.immutable.ImmutableList
 
 data class RoomSelectState(
     val mode: RoomSelectMode,
-    val resultState: SearchBarResultState<ImmutableList<RoomSummary>>,
+    val resultState: SearchBarResultState<ImmutableList<SelectRoomInfo>>,
     val query: String,
     val isSearchActive: Boolean,
-    val selectedRooms: ImmutableList<RoomSummary>,
+    val selectedRooms: ImmutableList<SelectRoomInfo>,
     val eventSink: (RoomSelectEvents) -> Unit
 )

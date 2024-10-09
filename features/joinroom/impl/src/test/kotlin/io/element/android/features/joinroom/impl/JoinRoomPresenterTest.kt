@@ -32,8 +32,8 @@ import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SERVER_LIST
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
-import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
+import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.room.join.FakeJoinRoom
 import io.element.android.libraries.matrix.ui.model.toInviteSender
 import io.element.android.tests.testutils.WarmUpRule
@@ -67,10 +67,10 @@ class JoinRoomPresenterTest {
 
     @Test
     fun `present - when room is joined then content state is filled with his data`() = runTest {
-        val roomInfo = aRoomInfo()
+        val roomSummary = aRoomSummary()
         val matrixClient = FakeMatrixClient().apply {
-            getRoomInfoFlowLambda = { _ ->
-                flowOf(Optional.of(roomInfo))
+            getRoomSummaryFlowLambda = { _ ->
+                flowOf(Optional.of(roomSummary))
             }
         }
         val presenter = createJoinRoomPresenter(
@@ -81,22 +81,22 @@ class JoinRoomPresenterTest {
             awaitItem().also { state ->
                 val contentState = state.contentState as ContentState.Loaded
                 assertThat(contentState.roomId).isEqualTo(A_ROOM_ID)
-                assertThat(contentState.name).isEqualTo(roomInfo.name)
-                assertThat(contentState.topic).isEqualTo(roomInfo.topic)
-                assertThat(contentState.alias).isEqualTo(roomInfo.canonicalAlias)
-                assertThat(contentState.numberOfMembers).isEqualTo(roomInfo.activeMembersCount)
-                assertThat(contentState.isDm).isEqualTo(roomInfo.isDirect)
-                assertThat(contentState.roomAvatarUrl).isEqualTo(roomInfo.avatarUrl)
+                assertThat(contentState.name).isEqualTo(roomSummary.info.name)
+                assertThat(contentState.topic).isEqualTo(roomSummary.info.topic)
+                assertThat(contentState.alias).isEqualTo(roomSummary.info.canonicalAlias)
+                assertThat(contentState.numberOfMembers).isEqualTo(roomSummary.info.activeMembersCount)
+                assertThat(contentState.isDm).isEqualTo(roomSummary.info.isDirect)
+                assertThat(contentState.roomAvatarUrl).isEqualTo(roomSummary.info.avatarUrl)
             }
         }
     }
 
     @Test
     fun `present - when room is invited then join authorization is equal to invited`() = runTest {
-        val roomInfo = aRoomInfo(currentUserMembership = CurrentUserMembership.INVITED)
+        val roomSummary = aRoomSummary(currentUserMembership = CurrentUserMembership.INVITED)
         val matrixClient = FakeMatrixClient().apply {
-            getRoomInfoFlowLambda = { _ ->
-                flowOf(Optional.of(roomInfo))
+            getRoomSummaryFlowLambda = { _ ->
+                flowOf(Optional.of(roomSummary))
             }
         }
         val presenter = createJoinRoomPresenter(
@@ -114,13 +114,13 @@ class JoinRoomPresenterTest {
     fun `present - when room is invited then join authorization is equal to invited, an inviter is provided`() = runTest {
         val inviter = aRoomMember(userId = UserId("@bob:example.com"), displayName = "Bob")
         val expectedInviteSender = inviter.toInviteSender()
-        val roomInfo = aRoomInfo(
+        val roomSummary = aRoomSummary(
             currentUserMembership = CurrentUserMembership.INVITED,
             inviter = inviter,
         )
         val matrixClient = FakeMatrixClient().apply {
-            getRoomInfoFlowLambda = { _ ->
-                flowOf(Optional.of(roomInfo))
+            getRoomSummaryFlowLambda = { _ ->
+                flowOf(Optional.of(roomSummary))
             }
         }
         val presenter = createJoinRoomPresenter(
@@ -140,10 +140,10 @@ class JoinRoomPresenterTest {
         val acceptDeclinePresenter = Presenter {
             anAcceptDeclineInviteState(eventSink = eventSinkRecorder)
         }
-        val roomInfo = aRoomInfo(currentUserMembership = CurrentUserMembership.INVITED)
+        val roomSummary = aRoomSummary(currentUserMembership = CurrentUserMembership.INVITED)
         val matrixClient = FakeMatrixClient().apply {
-            getRoomInfoFlowLambda = { _ ->
-                flowOf(Optional.of(roomInfo))
+            getRoomSummaryFlowLambda = { _ ->
+                flowOf(Optional.of(roomSummary))
             }
         }
         val presenter = createJoinRoomPresenter(
@@ -224,10 +224,10 @@ class JoinRoomPresenterTest {
 
     @Test
     fun `present - when room is left and public then join authorization is equal to canJoin`() = runTest {
-        val roomInfo = aRoomInfo(currentUserMembership = CurrentUserMembership.LEFT, isPublic = true)
+        val roomSummary = aRoomSummary(currentUserMembership = CurrentUserMembership.LEFT, isPublic = true)
         val matrixClient = FakeMatrixClient().apply {
-            getRoomInfoFlowLambda = { _ ->
-                flowOf(Optional.of(roomInfo))
+            getRoomSummaryFlowLambda = { _ ->
+                flowOf(Optional.of(roomSummary))
             }
         }
         val presenter = createJoinRoomPresenter(
@@ -243,10 +243,10 @@ class JoinRoomPresenterTest {
 
     @Test
     fun `present - when room is left and not public then join authorization is equal to unknown`() = runTest {
-        val roomInfo = aRoomInfo(currentUserMembership = CurrentUserMembership.LEFT, isPublic = false)
+        val roomSummary = aRoomSummary(currentUserMembership = CurrentUserMembership.LEFT, isPublic = false)
         val matrixClient = FakeMatrixClient().apply {
-            getRoomInfoFlowLambda = { _ ->
-                flowOf(Optional.of(roomInfo))
+            getRoomSummaryFlowLambda = { _ ->
+                flowOf(Optional.of(roomSummary))
             }
         }
         val presenter = createJoinRoomPresenter(
