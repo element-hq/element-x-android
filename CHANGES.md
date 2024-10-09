@@ -1,3 +1,77 @@
+Changes in Element X v0.6.5 (2024-10-09)
+========================================
+
+## What's Changed
+### ✨ Features
+* Add developer setting to hide images in the timeline by @bmarty in https://github.com/element-hq/element-x-android/pull/3592
+* Warn the user when unverified user has changed their identity by @bmarty in https://github.com/element-hq/element-x-android/pull/3621
+### 🙌 Improvements
+* Handle no network error when starting Element Call. by @bmarty in https://github.com/element-hq/element-x-android/pull/3527
+### 🐛 Bugfixes
+* Fix room settings not treating unencrypted DMs as DMs by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3545
+* Fix crash when aspectRatio is null. by @bmarty in https://github.com/element-hq/element-x-android/pull/3561
+* Don't delete uploaded logs by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3540
+* Don't display security banner for unknown RecoveryState by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3579
+* Fix the logic of the room list banner state by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3615
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/3560
+* Sync Strings - import translations to Persian by @ElementBot in https://github.com/element-hq/element-x-android/pull/3612
+### 🧱 Build
+* Introduce ModulesConfig by @bmarty in https://github.com/element-hq/element-x-android/pull/3530
+* Centralise the DI code generation logic by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3562
+* Update Gradle impl module template with `setupAnvil()` call by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3563
+* Use Anvil KSP instead of the Square KAPT one by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3564
+* Upgrade the used JDK in the project to v21 by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3582
+* Merge unit, screenshot tests and coverage in a single CI call by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3593
+* Disable configuration cache in the CI by default by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3601
+* Fix screenshot recording in CI by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3607
+* Ensure the CI compile and execute all the unit tests. by @bmarty in https://github.com/element-hq/element-x-android/pull/3617
+### Dependency upgrades
+* Update dependency androidx.compose:compose-bom to v2024.09.00 by @renovate in https://github.com/element-hq/element-x-android/pull/3399
+* Update dependency androidx.compose:compose-bom to v2024.09.02 by @renovate in https://github.com/element-hq/element-x-android/pull/3544
+* Update dependency io.element.android:compound-android to v0.1.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3524
+* Update dependency com.google.firebase:firebase-bom to v33.3.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3549
+* Update dependency org.maplibre.gl:android-sdk to v11.5.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3550
+* Update dependency org.maplibre.gl:android-plugin-annotation-v9 to v3.0.1 by @renovate in https://github.com/element-hq/element-x-android/pull/3505
+* Update dependency androidx.webkit:webkit to v1.12.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3520
+* Update dependency com.posthog:posthog-android to v3.7.5 by @renovate in https://github.com/element-hq/element-x-android/pull/3546
+* Update gradle-update/update-gradle-wrapper-action action to v2 by @renovate in https://github.com/element-hq/element-x-android/pull/3551
+* Update dependency com.lemonappdev:konsist to v0.16.1 by @renovate in https://github.com/element-hq/element-x-android/pull/3371
+* Update android.gradle.plugin to v8.6.1 by @renovate in https://github.com/element-hq/element-x-android/pull/3504
+* Update dependency org.matrix.rustcomponents:sdk-android to v0.2.49 by @renovate in https://github.com/element-hq/element-x-android/pull/3553
+* Update lifecycle to v2.8.6 by @renovate in https://github.com/element-hq/element-x-android/pull/3398
+* Update dependency com.google.accompanist:accompanist-permissions to v0.36.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3400
+* Update dependency org.matrix.rustcomponents:sdk-android to v0.2.50 by @renovate in https://github.com/element-hq/element-x-android/pull/3565
+* Update dependency com.google.firebase:firebase-bom to v33.4.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3578
+* Update android.gradle.plugin to v8.7.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3577
+* Update dependency com.posthog:posthog-android to v3.8.0 by @renovate in https://github.com/element-hq/element-x-android/pull/3591
+* dependency: Bump rust sdk to 0.2.51 by @BillCarsonFr in https://github.com/element-hq/element-x-android/pull/3602
+* chore(deps): update dependencyanalysis to v2.1.3 by @renovate in https://github.com/element-hq/element-x-android/pull/3559
+* Update wysiwyg to v2.37.13 by @renovate in https://github.com/element-hq/element-x-android/pull/3596
+* fix(deps): update dependency io.nlopez.compose.rules:detekt to v0.4.15 by @renovate in https://github.com/element-hq/element-x-android/pull/3595
+* fix(deps): update dependency com.google.testparameterinjector:test-parameter-injector to v1.18 by @renovate in https://github.com/element-hq/element-x-android/pull/3606
+* fix(deps): update dependency com.squareup:kotlinpoet-ksp to v1.18.1 by @renovate in https://github.com/element-hq/element-x-android/pull/3580
+* Update dependency org.matrix.rustcomponents:sdk-android to v0.2.52 by @renovate in https://github.com/element-hq/element-x-android/pull/3619
+* SDK 0.2.53 19b9a73ecc3e31d502dbf0c5850bfdfaddf02afe by @bmarty in https://github.com/element-hq/element-x-android/pull/3622
+* Update dependency org.maplibre.gl:android-sdk to v11.5.1 by @renovate in https://github.com/element-hq/element-x-android/pull/3608
+### Others
+* rename invisible flag to onlySignedDeviceIsolation flag by @BillCarsonFr in https://github.com/element-hq/element-x-android/pull/3542
+* Fix image viewer glitch by @ganfra in https://github.com/element-hq/element-x-android/pull/3537
+* Prefix message sent by the current user by `You` instead of the sender name. by @bmarty in https://github.com/element-hq/element-x-android/pull/3547
+* timeline : remove animateItem by @ganfra in https://github.com/element-hq/element-x-android/pull/3548
+* Fix a couple of build-time warnings in Gradle output by @frebib in https://github.com/element-hq/element-x-android/pull/3349
+* Use MSC2530 filename when loading media by @frebib in https://github.com/element-hq/element-x-android/pull/3567
+* Prevent crash with duplicate room suggestion by @frebib in https://github.com/element-hq/element-x-android/pull/3576
+* Add unit tests on TimelineItemsSubscriber by @bmarty in https://github.com/element-hq/element-x-android/pull/3554
+* Fix tests on develop by @bmarty in https://github.com/element-hq/element-x-android/pull/3585
+* Timeline better jump to behaviours by @ganfra in https://github.com/element-hq/element-x-android/pull/3597
+* Fix building the app using a local SDK. by @bmarty in https://github.com/element-hq/element-x-android/pull/3604
+* crypto: Use OnlySigned isolation flag to setup decryption trust req. by @BillCarsonFr in https://github.com/element-hq/element-x-android/pull/3569
+* Fix black-on-black status bars with hidden media by @frebib in https://github.com/element-hq/element-x-android/pull/3611
+* Remove supportSlidingSync boolean. by @bmarty in https://github.com/element-hq/element-x-android/pull/3609
+* Ensure that `Presenter`s do not depend on other presenters. by @bmarty in https://github.com/element-hq/element-x-android/pull/3618
+* Do not render pin violation in clear rooms. by @bmarty in https://github.com/element-hq/element-x-android/pull/3630
+
 Changes in Element X v0.6.4 (2024-09-25)
 ========================================
 
