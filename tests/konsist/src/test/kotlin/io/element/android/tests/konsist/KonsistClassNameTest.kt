@@ -74,7 +74,14 @@ class KonsistClassNameTest {
                     .replace("FakeRust", "")
                     .replace("Fake", "")
                 (it.name.startsWith("Fake") || it.name.startsWith("FakeRust")) &&
-                    it.parents().any { parent -> parent.name.replace(".", "") == interfaceName }
+                    it.parents().any { parent ->
+                        // Workaround to get the parent name. For instance:
+                        // parent.name used to return `UserListPresenter.Factory` but is now returning `Factory`.
+                        // So we need to retrieve the name of the parent class differently.
+                        val packageName = parent.packagee!!.name
+                        val parentName = parent.fullyQualifiedName!!.substringAfter("$packageName.").replace(".", "")
+                        parentName == interfaceName
+                    }
             }
     }
 

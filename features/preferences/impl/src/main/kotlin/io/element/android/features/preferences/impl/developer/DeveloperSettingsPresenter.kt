@@ -22,7 +22,7 @@ import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.logout.api.LogoutUseCase
 import io.element.android.features.preferences.impl.tasks.ClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.ComputeCacheSizeUseCase
-import io.element.android.features.rageshake.api.preferences.RageshakePreferencesPresenter
+import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
@@ -44,7 +44,7 @@ class DeveloperSettingsPresenter @Inject constructor(
     private val featureFlagService: FeatureFlagService,
     private val computeCacheSizeUseCase: ComputeCacheSizeUseCase,
     private val clearCacheUseCase: ClearCacheUseCase,
-    private val rageshakePresenter: RageshakePreferencesPresenter,
+    private val rageshakePresenter: Presenter<RageshakePreferencesState>,
     private val appPreferencesStore: AppPreferencesStore,
     private val buildMeta: BuildMeta,
     private val logoutUseCase: LogoutUseCase,
@@ -70,6 +70,9 @@ class DeveloperSettingsPresenter @Inject constructor(
             .collectAsState(initial = null)
         val isSimplifiedSlidingSyncEnabled by appPreferencesStore
             .isSimplifiedSlidingSyncEnabledFlow()
+            .collectAsState(initial = false)
+        val hideImagesAndVideos by appPreferencesStore
+            .doesHideImagesAndVideosFlow()
             .collectAsState(initial = false)
 
         LaunchedEffect(Unit) {
@@ -114,6 +117,9 @@ class DeveloperSettingsPresenter @Inject constructor(
                     appPreferencesStore.setSimplifiedSlidingSyncEnabled(event.isEnabled)
                     logoutUseCase.logout(ignoreSdkError = true)
                 }
+                is DeveloperSettingsEvents.SetHideImagesAndVideos -> coroutineScope.launch {
+                    appPreferencesStore.setHideImagesAndVideos(event.value)
+                }
             }
         }
 
@@ -128,6 +134,7 @@ class DeveloperSettingsPresenter @Inject constructor(
                 validator = ::customElementCallUrlValidator,
             ),
             isSimpleSlidingSyncEnabled = isSimplifiedSlidingSyncEnabled,
+            hideImagesAndVideos = hideImagesAndVideos,
             eventSink = ::handleEvents
         )
     }

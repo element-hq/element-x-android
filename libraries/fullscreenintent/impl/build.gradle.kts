@@ -1,3 +1,5 @@
+import extension.setupAnvil
+
 /*
  * Copyright 2024 New Vector Ltd.
  *
@@ -7,21 +9,16 @@
 
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.anvil)
 }
 
 android {
     namespace = "io.element.android.libraries.fullscreenintent.impl"
 }
 
-anvil {
-    generateDaggerFactories.set(true)
-}
+setupAnvil()
 
 dependencies {
     api(projects.libraries.fullscreenintent.api)
-    implementation(projects.anvilannotations)
-    anvil(projects.anvilcodegen)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.permissions.api)
@@ -30,7 +27,6 @@ dependencies {
     implementation(projects.services.toolbox.api)
     implementation(libs.androidx.datastore.preferences)
 
-    testImplementation(projects.libraries.fullscreenintent.test)
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.molecule.runtime)

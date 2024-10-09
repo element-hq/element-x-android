@@ -1,3 +1,6 @@
+import extension.ComponentMergingStrategy
+import extension.setupAnvil
+
 /*
  * Copyright 2022-2024 New Vector Ltd.
  *
@@ -7,7 +10,6 @@
 
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.anvil)
     id("kotlin-parcelize")
     alias(libs.plugins.kotlin.serialization)
 }
@@ -22,14 +24,10 @@ android {
     }
 }
 
-anvil {
-    generateDaggerFactories.set(true)
-}
+setupAnvil(componentMergingStrategy = ComponentMergingStrategy.KSP)
 
 dependencies {
-    implementation(projects.anvilannotations)
     implementation(projects.appconfig)
-    anvil(projects.anvilcodegen)
     implementation(projects.libraries.core)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)

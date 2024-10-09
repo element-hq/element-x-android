@@ -65,7 +65,7 @@
   <string name="screen_qr_code_login_verify_code_loading">"Aan het wachten op je andere apparaat"</string>
   <string name="screen_qr_code_login_verify_code_subtitle">"Je accountprovider kan om de volgende code vragen om de aanmelding te verifiëren."</string>
   <string name="screen_qr_code_login_verify_code_title">"Je verificatiecode"</string>
-  <string name="screen_server_confirmation_change_server">"Accountprovider wijzigen"</string>
+  <string name="screen_server_confirmation_change_server">"Wijzig accountprovider"</string>
   <string name="screen_server_confirmation_message_login_element_dot_io">"Een privéserver voor medewerkers van Element."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix is een open netwerk voor veilige, gedecentraliseerde communicatie."</string>
   <string name="screen_server_confirmation_message_register">"Dit is waar je gesprekken zullen worden bewaard — net zoals je een e-mailprovider zou gebruiken om je e-mails te bewaren."</string>

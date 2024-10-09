@@ -53,6 +53,7 @@ captures/
 # Comment next line if keeping position of elements in Navigation Editor is relevant for you
 .idea/navEditor.xml
 .idea/other.xml
+.idea/runConfigurations.xml
 .idea/tasks.xml
 .idea/workspace.xml
 .idea/libraries

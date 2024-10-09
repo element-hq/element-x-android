@@ -145,7 +145,7 @@ data class AttachmentThumbnailInfo(
 @Composable
 internal fun AttachmentThumbnailPreview(@PreviewParameter(AttachmentThumbnailInfoProvider::class) data: AttachmentThumbnailInfo) = ElementPreview {
     AttachmentThumbnail(
-        data,
+        info = data,
         modifier = Modifier
             .size(36.dp)
             .clip(RoundedCornerShape(4.dp))

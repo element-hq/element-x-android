@@ -71,7 +71,7 @@
   </plurals>
   <string name="screen_room_member_list_manage_member_ban">"Вилучити й заблокувати учасника"</string>
   <string name="screen_room_member_list_manage_member_remove">"Вилучити з кімнати"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Видалити та заблокувати учасника"</string>
+  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Вилучити й заблокувати учасника"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Лише видалити учасника"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_title">"Видалити учасника та заборонити приєднання в майбутньому?"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Розблокувати"</string>

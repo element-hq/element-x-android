@@ -7,16 +7,32 @@
 
 package io.element.android.tests.konsist
 
+import com.google.common.truth.Truth.assertThat
 import com.lemonappdev.konsist.api.Konsist
 import com.lemonappdev.konsist.api.ext.list.modifierprovider.withoutOverrideModifier
+import com.lemonappdev.konsist.api.ext.list.withAnnotationOf
 import com.lemonappdev.konsist.api.ext.list.withFunction
 import com.lemonappdev.konsist.api.ext.list.withReturnType
+import com.lemonappdev.konsist.api.ext.list.withoutAnnotationOf
 import com.lemonappdev.konsist.api.ext.list.withoutName
 import com.lemonappdev.konsist.api.verify.assertFalse
 import com.lemonappdev.konsist.api.verify.assertTrue
+import org.junit.Ignore
 import org.junit.Test
 
 class KonsistTestTest {
+    @Test
+    fun `Ensure that unit tests are detected`() {
+        val numberOfTests = Konsist
+            .scopeFromTest()
+            .functions()
+            .withAnnotationOf(Test::class)
+            .withoutAnnotationOf(Ignore::class)
+            .size
+        println("Number of unit tests: $numberOfTests")
+        assertThat(numberOfTests).isGreaterThan(2000)
+    }
+
     @Test
     fun `Classes name containing @Test must end with 'Test'`() {
         Konsist

@@ -47,15 +47,18 @@ private const val versionMinor = 6
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-private const val versionPatch = 4
+private const val versionPatch = 5
 
 object Versions {
     val versionCode = 4_000_000 + versionMajor * 1_00_00 + versionMinor * 1_00 + versionPatch
     val versionName = "$versionMajor.$versionMinor.$versionPatch"
     const val compileSdk = 34
     const val targetSdk = 34
+
     // When updating the `minSdk`, make sure to update the value of `minSdkVersion` in the file `tools/release/release.sh`
     val minSdk = if (isEnterpriseBuild) 26 else 24
-    val javaCompileVersion = JavaVersion.VERSION_17
-    val javaLanguageVersion: JavaLanguageVersion = JavaLanguageVersion.of(11)
+
+    private const val JAVA_VERSION = 21
+    val javaVersion: JavaVersion = JavaVersion.toVersion(JAVA_VERSION)
+    val javaLanguageVersion: JavaLanguageVersion = JavaLanguageVersion.of(JAVA_VERSION)
 }

@@ -60,7 +60,7 @@ fun SuggestionsPickerView(
                 when (suggestion) {
                     is ResolvedSuggestion.AtRoom -> "@room"
                     is ResolvedSuggestion.Member -> suggestion.roomMember.userId.value
-                    is ResolvedSuggestion.Alias -> suggestion.roomAlias.value
+                    is ResolvedSuggestion.Alias -> suggestion.roomSummary.roomId.value
                 }
             }
         ) {

@@ -22,6 +22,8 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
+import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
@@ -83,12 +85,14 @@ fun anEmptyPinnedMessagesListState() = PinnedMessagesListState.Empty
 
 fun aLoadedPinnedMessagesListState(
     timelineRoomInfo: TimelineRoomInfo = aTimelineRoomInfo(),
+    timelineProtectionState: TimelineProtectionState = aTimelineProtectionState(),
     timelineItems: List<TimelineItem> = emptyList(),
     actionListState: ActionListState = anActionListState(),
     aUserEventPermissions: UserEventPermissions = UserEventPermissions.DEFAULT,
     eventSink: (PinnedMessagesListEvents) -> Unit = {}
 ) = PinnedMessagesListState.Filled(
     timelineRoomInfo = timelineRoomInfo,
+    timelineProtectionState = timelineProtectionState,
     timelineItems = timelineItems.toImmutableList(),
     actionListState = actionListState,
     userEventPermissions = aUserEventPermissions,

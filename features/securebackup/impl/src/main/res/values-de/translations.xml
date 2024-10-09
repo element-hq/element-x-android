@@ -5,7 +5,7 @@
   <string name="screen_chat_backup_key_backup_description">"Das Backup stellt sicher, dass du deinen Nachrichtenverlauf nicht verlierst. %1$s."</string>
   <string name="screen_chat_backup_key_backup_title">"Backup"</string>
   <string name="screen_chat_backup_recovery_action_change">"Wiederherstellungsschlüssel ändern"</string>
-  <string name="screen_chat_backup_recovery_action_confirm">"Wiederherstellungsschlüssel bestätigen"</string>
+  <string name="screen_chat_backup_recovery_action_confirm">"Wiederherstellungsschlüssel eingeben"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Dein Chat-Backup ist derzeit nicht synchronisiert."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Wiederherstellung einrichten"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Erhalte Zugriff auf deine verschlüsselten Nachrichten, wenn du alle deine Geräte verlierst oder von %1$s überall abgemeldet bist."</string>
@@ -30,6 +30,9 @@
     " mit einem anderen Gerät"
   </string>
   <string name="screen_encryption_reset_action_continue_reset">"Zurücksetzen fortsetzen"</string>
+  <string name="screen_encryption_reset_bullet_1">"Deine Kontodaten, Kontakte, Einstellungen und die Liste der Chats bleiben erhalten"</string>
+  <string name="screen_encryption_reset_bullet_2">"Du verlierst alle deine bisherigen Nachrichten sofern sie nicht auf einem anderen Gerät vorliegen"</string>
+  <string name="screen_encryption_reset_bullet_3">"Du musst alle deine bestehenden Geräte und Kontakte erneut verifizieren."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Ausschalten"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Du verlierst deine verschlüsselten Nachrichten, wenn du auf allen Geräten abgemeldet bist."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Bist du sicher, dass du das Backup deaktivieren willst?"</string>
@@ -54,7 +57,7 @@
   <string name="screen_recovery_key_confirm_key_placeholder">"Eingeben…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Hast du deinen Wiederherstellungschlüssel vergessen?"</string>
   <string name="screen_recovery_key_confirm_success">"Wiederherstellungsschlüssel bestätigt"</string>
-  <string name="screen_recovery_key_confirm_title">"Bitte Wiederherstellungsschlüssel eingeben"</string>
+  <string name="screen_recovery_key_confirm_title">"Wiederherstellungsschlüssel bestätigen."</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Wiederherstellungsschlüssel kopiert"</string>
   <string name="screen_recovery_key_generating_key">"Generieren…"</string>
   <string name="screen_recovery_key_save_action">"Wiederherstellungsschlüssel speichern"</string>
@@ -68,6 +71,11 @@
   <string name="screen_recovery_key_setup_generate_key_description">"Stelle sicher, dass du deinen Wiederherstellungsschlüssel an einem sicheren Ort aufbewahren kannst"</string>
   <string name="screen_recovery_key_setup_success">"Einrichtung der Wiederherstellung erfolgreich"</string>
   <string name="screen_recovery_key_setup_title">"Wiederherstellung einrichten"</string>
+  <string name="screen_reset_encryption_confirmation_alert_action">"Ja, zurücksetzen"</string>
+  <string name="screen_reset_encryption_confirmation_alert_subtitle">"Das Zurücksetzen kann nicht rückgängig gemacht werden."</string>
+  <string name="screen_reset_encryption_confirmation_alert_title">"Bist du sicher, dass du deine Identität zurücksetzen möchtest?"</string>
   <string name="screen_reset_encryption_password_error">"Es ist ein unbekannter Fehler aufgetreten. Bitte überprüfe das Passwort deines Kontos und versuche es erneut."</string>
   <string name="screen_reset_encryption_password_placeholder">"Eingeben…"</string>
+  <string name="screen_reset_encryption_password_subtitle">"Bestätige, dass du deine Identität zurücksetzen möchtest."</string>
+  <string name="screen_reset_encryption_password_title">"Gib dein Passwort ein, um fortzufahren"</string>
 </resources>

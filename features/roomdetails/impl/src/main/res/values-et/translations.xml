@@ -70,7 +70,7 @@
   </plurals>
   <string name="screen_room_member_list_manage_member_ban">"Eemalda ja sea suhtluskeeld"</string>
   <string name="screen_room_member_list_manage_member_remove">"Eemalda kasutaja jututoast"</string>
-  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Eemalda kasutaja jututoast ja sea talle suhtluskeeld"</string>
+  <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Eemalda ja sea suhtluskeeld"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Ainult eemalda kasutaja"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_title">"Kas eemaldama kasutaja ja seame talle tulevikuks suhtluskeelu?"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Eemalda suhtluskeeld"</string>

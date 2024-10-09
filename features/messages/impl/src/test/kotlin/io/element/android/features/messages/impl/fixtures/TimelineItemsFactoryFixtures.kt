@@ -7,7 +7,6 @@
 
 package io.element.android.features.messages.impl.fixtures
 
-import io.element.android.features.messages.impl.timeline.TimelineItemIndexer
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFactory
@@ -40,19 +39,16 @@ import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractorW
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 
-internal fun TestScope.aTimelineItemsFactoryCreator(
-    timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
-): TimelineItemsFactory.Creator {
+internal fun TestScope.aTimelineItemsFactoryCreator(): TimelineItemsFactory.Creator {
     return object : TimelineItemsFactory.Creator {
         override fun create(config: TimelineItemsFactoryConfig): TimelineItemsFactory {
-            return aTimelineItemsFactory(config, timelineItemIndexer)
+            return aTimelineItemsFactory(config)
         }
     }
 }
 
 internal fun TestScope.aTimelineItemsFactory(
     config: TimelineItemsFactoryConfig,
-    timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
 ): TimelineItemsFactory {
     val timelineEventFormatter = aTimelineEventFormatter()
     val matrixClient = FakeMatrixClient()
@@ -96,7 +92,6 @@ internal fun TestScope.aTimelineItemsFactory(
             ),
         ),
         timelineItemGrouper = TimelineItemGrouper(),
-        timelineItemIndexer = timelineItemIndexer,
         config = config
     )
 }

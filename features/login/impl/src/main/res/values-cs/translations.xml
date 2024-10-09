@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"Změna poskytovatele účtu"</string>
+  <string name="screen_account_provider_change">"Změnit poskytovatele účtu"</string>
   <string name="screen_account_provider_form_hint">"Adresa domovského serveru"</string>
   <string name="screen_account_provider_form_notice">"Zadejte hledaný výraz nebo adresu domény."</string>
   <string name="screen_account_provider_form_subtitle">"Vyhledejte společnost, komunitu nebo soukromý server."</string>

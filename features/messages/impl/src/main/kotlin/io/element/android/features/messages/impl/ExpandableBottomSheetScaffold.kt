@@ -58,6 +58,8 @@ import kotlin.math.roundToInt
 @Composable
 internal fun ExpandableBottomSheetScaffold(
     content: @Composable (padding: PaddingValues) -> Unit,
+    // False positive, it's not being reused
+    @Suppress("ContentSlotReused")
     sheetContent: @Composable (subcomposing: Boolean) -> Unit,
     sheetDragHandle: @Composable () -> Unit,
     sheetSwipeEnabled: Boolean,

@@ -57,7 +57,7 @@ class TimelineController @Inject constructor(
         return detachedTimeline.map { !it.isPresent }
     }
 
-    suspend fun invokeOnCurrentTimeline(block: suspend (Timeline.() -> Any)) {
+    suspend fun invokeOnCurrentTimeline(block: suspend (Timeline.() -> Unit)) {
         currentTimelineFlow.value.run {
             block(this)
         }

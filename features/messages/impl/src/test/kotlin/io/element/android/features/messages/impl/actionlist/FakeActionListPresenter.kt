@@ -10,15 +10,15 @@ package io.element.android.features.messages.impl.actionlist
 import androidx.compose.runtime.Composable
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
 
-class FakeActionListPresenter : ActionListPresenter {
-    object Factory : ActionListPresenter.Factory {
+class FakeActionListPresenter(private val eventSink: (ActionListEvents) -> Unit = {}) : ActionListPresenter {
+    class Factory(private val eventSink: (ActionListEvents) -> Unit = {}) : ActionListPresenter.Factory {
         override fun create(postProcessor: TimelineItemActionPostProcessor): ActionListPresenter {
-            return FakeActionListPresenter()
+            return FakeActionListPresenter(eventSink)
         }
     }
 
     @Composable
     override fun present(): ActionListState {
-        return anActionListState()
+        return anActionListState(eventSink = eventSink)
     }
 }

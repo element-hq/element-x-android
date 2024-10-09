@@ -1,3 +1,5 @@
+import extension.setupAnvil
+
 /*
  * Copyright 2022-2024 New Vector Ltd.
  *
@@ -7,7 +9,6 @@
 
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.anvil)
     id("kotlin-parcelize")
 }
 
@@ -21,13 +22,9 @@ android {
     }
 }
 
-anvil {
-    generateDaggerFactories.set(true)
-}
+setupAnvil()
 
 dependencies {
-    implementation(projects.anvilannotations)
-    anvil(projects.anvilcodegen)
     implementation(projects.appconfig)
     implementation(projects.libraries.core)
     implementation(projects.libraries.androidutils)
@@ -68,7 +65,6 @@ dependencies {
     testImplementation(projects.libraries.dateformatter.test)
     testImplementation(projects.libraries.eventformatter.test)
     testImplementation(projects.libraries.indicator.impl)
-    testImplementation(projects.libraries.fullscreenintent.test)
     testImplementation(projects.libraries.permissions.noop)
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.libraries.preferences.test)
@@ -78,5 +74,4 @@ dependencies {
     testImplementation(projects.features.networkmonitor.test)
     testImplementation(projects.features.logout.test)
     testImplementation(projects.tests.testutils)
-    testImplementation(projects.features.leaveroom.test)
 }

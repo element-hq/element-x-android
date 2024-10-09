@@ -1,3 +1,5 @@
+import extension.setupAnvil
+
 /*
  * Copyright 2022-2024 New Vector Ltd.
  *
@@ -7,21 +9,16 @@
 
 plugins {
     id("io.element.android-library")
-    alias(libs.plugins.anvil)
 }
 
-anvil {
-    generateDaggerFactories.set(true)
-}
+setupAnvil()
 
 android {
     namespace = "io.element.android.libraries.dateformatter.impl"
 
     dependencies {
-        anvil(projects.anvilcodegen)
         implementation(libs.dagger)
         implementation(projects.libraries.di)
-        implementation(projects.anvilannotations)
 
         api(projects.libraries.dateformatter.api)
         api(libs.datetime)

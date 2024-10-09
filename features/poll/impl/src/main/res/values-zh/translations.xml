@@ -4,7 +4,7 @@
   <string name="screen_create_poll_anonymous_desc">"仅在投票结束后显示结果"</string>
   <string name="screen_create_poll_anonymous_headline">"隐藏投票"</string>
   <string name="screen_create_poll_answer_hint">"选项 %1$d"</string>
-  <string name="screen_create_poll_cancel_confirmation_content_android">"您的更改尚未保存。确定要返回吗？"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"更改尚未保存，确定要返回吗？"</string>
   <string name="screen_create_poll_question_desc">"问题或话题"</string>
   <string name="screen_create_poll_question_hint">"投票的内容是什么？"</string>
   <string name="screen_create_poll_title">"创建投票"</string>

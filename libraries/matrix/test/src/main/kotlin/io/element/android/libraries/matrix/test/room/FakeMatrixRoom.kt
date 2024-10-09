@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.encryption.identity.IdentityStateChange
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
@@ -59,6 +60,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import java.io.File
 
 class FakeMatrixRoom(
@@ -67,7 +69,7 @@ class FakeMatrixRoom(
     override val displayName: String = "",
     override val topic: String? = null,
     override val avatarUrl: String? = null,
-    override val isEncrypted: Boolean = false,
+    override var isEncrypted: Boolean = false,
     override val alias: RoomAlias? = null,
     override val alternativeAliases: List<RoomAlias> = emptyList(),
     override val isPublic: Boolean = true,
@@ -103,7 +105,7 @@ class FakeMatrixRoom(
     private val updateUserRoleResult: () -> Result<Unit> = { lambdaError() },
     private val toggleReactionResult: (String, UniqueId) -> Result<Unit> = { _, _ -> lambdaError() },
     private val retrySendMessageResult: (TransactionId) -> Result<Unit> = { lambdaError() },
-    private val cancelSendResult: (TransactionId) -> Result<Boolean> = { lambdaError() },
+    private val cancelSendResult: (TransactionId) -> Result<Unit> = { lambdaError() },
     private val forwardEventResult: (EventId, List<RoomId>) -> Result<Unit> = { _, _ -> lambdaError() },
     private val reportContentResult: (EventId, String, UserId?) -> Result<Unit> = { _, _, _ -> lambdaError() },
     private val kickUserResult: (UserId, String?) -> Result<Unit> = { _, _ -> lambdaError() },
@@ -137,7 +139,7 @@ class FakeMatrixRoom(
     private val subscribeToSyncLambda: () -> Unit = { lambdaError() },
     private val ignoreDeviceTrustAndResendResult: (Map<UserId, List<DeviceId>>, TransactionId) -> Result<Unit> = { _, _ -> lambdaError() },
     private val withdrawVerificationAndResendResult: (List<UserId>, TransactionId) -> Result<Unit> = { _, _ -> lambdaError() },
-    ) : MatrixRoom {
+) : MatrixRoom {
     private val _roomInfoFlow: MutableSharedFlow<MatrixRoomInfo> = MutableSharedFlow(replay = 1)
     override val roomInfoFlow: Flow<MatrixRoomInfo> = _roomInfoFlow
 
@@ -150,6 +152,13 @@ class FakeMatrixRoom(
 
     fun givenRoomTypingMembers(typingMembers: List<UserId>) {
         _roomTypingMembersFlow.tryEmit(typingMembers)
+    }
+
+    private val _identityStateChangesFlow: MutableSharedFlow<List<IdentityStateChange>> = MutableSharedFlow(replay = 1)
+    override val identityStateChangesFlow: Flow<List<IdentityStateChange>> = _identityStateChangesFlow
+
+    fun emitIdentityStateChanges(identityStateChanges: List<IdentityStateChange>) {
+        _identityStateChangesFlow.tryEmit(identityStateChanges)
     }
 
     override val membersStateFlow: MutableStateFlow<MatrixRoomMembersState> = MutableStateFlow(MatrixRoomMembersState.Unknown)
@@ -173,7 +182,17 @@ class FakeMatrixRoom(
         return Result.success(Unit)
     }
 
-    override val syncUpdateFlow: StateFlow<Long> = MutableStateFlow(0L)
+    fun enableEncryption() {
+        isEncrypted = true
+        emitSyncUpdate()
+    }
+
+    private val _syncUpdateFlow = MutableStateFlow(0L)
+    override val syncUpdateFlow: StateFlow<Long> = _syncUpdateFlow.asStateFlow()
+
+    fun emitSyncUpdate() {
+        _syncUpdateFlow.tryEmit(_syncUpdateFlow.value + 1)
+    }
 
     override suspend fun timelineFocusedOnEvent(eventId: EventId): Result<Timeline> = simulateLongTask {
         timelineFocusedOnEventResult(eventId)
@@ -233,7 +252,7 @@ class FakeMatrixRoom(
         return retrySendMessageResult(transactionId)
     }
 
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Boolean> {
+    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> {
         return cancelSendResult(transactionId)
     }
 

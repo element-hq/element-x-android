@@ -10,12 +10,12 @@ package io.element.android.features.login.impl.screens.changeaccountprovider
 import androidx.compose.runtime.Composable
 import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.login.impl.accountprovider.AccountProvider
-import io.element.android.features.login.impl.changeserver.ChangeServerPresenter
+import io.element.android.features.login.impl.changeserver.ChangeServerState
 import io.element.android.libraries.architecture.Presenter
 import javax.inject.Inject
 
 class ChangeAccountProviderPresenter @Inject constructor(
-    private val changeServerPresenter: ChangeServerPresenter,
+    private val changeServerPresenter: Presenter<ChangeServerState>,
 ) : Presenter<ChangeAccountProviderState> {
     @Composable
     override fun present(): ChangeAccountProviderState {
@@ -29,7 +29,6 @@ class ChangeAccountProviderPresenter @Inject constructor(
                     isPublic = true,
                     isMatrixOrg = true,
                     isValid = true,
-                    supportSlidingSync = true,
                 )
             ),
             changeServerState = changeServerState,

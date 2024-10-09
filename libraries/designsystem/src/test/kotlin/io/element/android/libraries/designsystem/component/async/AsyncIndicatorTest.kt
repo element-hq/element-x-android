@@ -8,7 +8,7 @@
 package io.element.android.libraries.designsystem.component.async
 
 import androidx.compose.animation.core.Transition
-import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.core.rememberTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -237,7 +237,7 @@ class AsyncIndicatorTest {
         val coroutineScope = rememberCoroutineScope()
         val transition = state.currentItem.value?.let {
             // If there is an item, update its transition state to simulate an animation
-            updateTransition(state.currentAnimationState, label = "")
+            rememberTransition(state.currentAnimationState, label = "")
         }
         if (state.currentAnimationState.hasEntered() && state.currentItem.value?.durationMs != null) {
             SideEffect {

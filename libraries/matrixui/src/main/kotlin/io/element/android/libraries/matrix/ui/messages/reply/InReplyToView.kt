@@ -48,6 +48,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun InReplyToView(
     inReplyTo: InReplyToDetails,
+    hideImage: Boolean,
     modifier: Modifier = Modifier,
 ) {
     when (inReplyTo) {
@@ -55,7 +56,7 @@ fun InReplyToView(
             ReplyToReadyContent(
                 senderId = inReplyTo.senderId,
                 senderProfile = inReplyTo.senderProfile,
-                metadata = inReplyTo.metadata(),
+                metadata = inReplyTo.metadata(hideImage),
                 modifier = modifier
             )
         }
@@ -191,5 +192,8 @@ private fun ReplyToContentText(metadata: InReplyToMetadata?) {
 @PreviewsDayNight
 @Composable
 internal fun InReplyToViewPreview(@PreviewParameter(provider = InReplyToDetailsProvider::class) inReplyTo: InReplyToDetails) = ElementPreview {
-    InReplyToView(inReplyTo)
+    InReplyToView(
+        inReplyTo = inReplyTo,
+        hideImage = false,
+    )
 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Potwierdź dezaktywacje konta. Tej akcji nie można cofnąć."</string>
+  <string name="screen_deactivate_account_delete_all_messages">"Usuń wszystkie moje wiadomości"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"Ostrzeżenie: Przyszli użytkownicy mogą zobaczyć niekompletne rozmowy."</string>
+  <string name="screen_deactivate_account_description">"Dezaktywacja konta jest %1$s, zostanie:"</string>
+  <string name="screen_deactivate_account_description_bold_part">"nieodwracalna"</string>
+  <string name="screen_deactivate_account_list_item_1">"%1$s twoje konto (nie będziesz mógł się zalogować, a twoje ID przepadnie)."</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"Permanentnie wyłączy"</string>
+  <string name="screen_deactivate_account_list_item_2">"Usunie Ciebie ze wszystkich pokoi rozmów."</string>
+  <string name="screen_deactivate_account_list_item_3">"Usunięte wszystkie dane konta z naszego serwera tożsamości."</string>
+  <string name="screen_deactivate_account_list_item_4">"Twoje wiadomości wciąż będą widoczne dla zarejestrowanych użytkowników, ale nie będą dostępne dla nowych lub niezarejestrowanych użytkowników, jeśli je usuniesz."</string>
+  <string name="screen_deactivate_account_title">"Dezaktywuj konto"</string>
+</resources>

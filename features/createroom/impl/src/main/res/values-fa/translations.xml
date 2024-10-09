@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"اتاق جدید"</string>
+  <string name="screen_create_room_add_people_title">"دعوت افراد"</string>
+  <string name="screen_create_room_error_creating_room">"هنگام ایجاد اتاق خطایی رخ داد"</string>
+  <string name="screen_create_room_private_option_description">"پیام‌های این اتاق رمز شده‌اند. رمزنگاری نمی‌تواند از این پس تغییر کند."</string>
+  <string name="screen_create_room_private_option_title">"اتاق خصوصی (فقط دعوت)"</string>
+  <string name="screen_create_room_public_option_description">"پیام‌ها رمزنگاری نشده و هرکسی می‌تواند بخواندشان. می‌توانید بعداً رمزنگاری را به کار بیندازید."</string>
+  <string name="screen_create_room_public_option_title">"اتاق عمومی (هرکسی)"</string>
+  <string name="screen_create_room_room_name_label">"نام اتاق"</string>
+  <string name="screen_create_room_title">"ایجاد اتاق"</string>
+  <string name="screen_create_room_topic_label">"موضوع (اختیاری)"</string>
+</resources>

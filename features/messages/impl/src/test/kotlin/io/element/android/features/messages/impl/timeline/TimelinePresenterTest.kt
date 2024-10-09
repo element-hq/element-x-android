@@ -19,6 +19,7 @@ import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactoryC
 import io.element.android.features.messages.impl.timeline.components.aCriticalShield
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.typing.aTypingNotificationState
 import io.element.android.features.messages.impl.voicemessages.timeline.FakeRedactedVoiceMessageManager
 import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
 import io.element.android.features.messages.impl.voicemessages.timeline.aRedactedMatrixTimeline
@@ -503,7 +504,7 @@ import kotlin.time.Duration.Companion.seconds
                 assertThat(state.timelineItems).isNotEmpty()
             }
             initialState.eventSink.invoke(TimelineEvents.JumpToLive)
-            skipItems(1)
+            skipItems(2)
             awaitItem().also { state ->
                 // Event stays focused
                 assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
@@ -655,33 +656,34 @@ import kotlin.time.Duration.Companion.seconds
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
         return awaitItem()
     }
+}
 
-    private fun TestScope.createTimelinePresenter(
-        timeline: Timeline = FakeTimeline(),
-        room: FakeMatrixRoom = FakeMatrixRoom(
-            liveTimeline = timeline,
-            canUserSendMessageResult = { _, _ -> Result.success(true) }
-        ),
-        redactedVoiceMessageManager: RedactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
-        messagesNavigator: FakeMessagesNavigator = FakeMessagesNavigator(),
-        endPollAction: EndPollAction = FakeEndPollAction(),
-        sendPollResponseAction: SendPollResponseAction = FakeSendPollResponseAction(),
-        sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
-        timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
-    ): TimelinePresenter {
-        return TimelinePresenter(
-            timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(),
-            room = room,
-            dispatchers = testCoroutineDispatchers(),
-            appScope = this,
-            navigator = messagesNavigator,
-            redactedVoiceMessageManager = redactedVoiceMessageManager,
-            endPollAction = endPollAction,
-            sendPollResponseAction = sendPollResponseAction,
-            sessionPreferencesStore = sessionPreferencesStore,
-            timelineItemIndexer = timelineItemIndexer,
-            timelineController = TimelineController(room),
-            resolveVerifiedUserSendFailurePresenter = { aResolveVerifiedUserSendFailureState() },
-        )
-    }
+internal fun TestScope.createTimelinePresenter(
+    timeline: Timeline = FakeTimeline(),
+    room: FakeMatrixRoom = FakeMatrixRoom(
+        liveTimeline = timeline,
+        canUserSendMessageResult = { _, _ -> Result.success(true) }
+    ),
+    redactedVoiceMessageManager: RedactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
+    messagesNavigator: FakeMessagesNavigator = FakeMessagesNavigator(),
+    endPollAction: EndPollAction = FakeEndPollAction(),
+    sendPollResponseAction: SendPollResponseAction = FakeSendPollResponseAction(),
+    sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
+    timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
+): TimelinePresenter {
+    return TimelinePresenter(
+        timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(),
+        room = room,
+        dispatchers = testCoroutineDispatchers(),
+        appScope = this,
+        navigator = messagesNavigator,
+        redactedVoiceMessageManager = redactedVoiceMessageManager,
+        endPollAction = endPollAction,
+        sendPollResponseAction = sendPollResponseAction,
+        sessionPreferencesStore = sessionPreferencesStore,
+        timelineItemIndexer = timelineItemIndexer,
+        timelineController = TimelineController(room),
+        resolveVerifiedUserSendFailurePresenter = { aResolveVerifiedUserSendFailureState() },
+        typingNotificationPresenter = { aTypingNotificationState() },
+    )
 }

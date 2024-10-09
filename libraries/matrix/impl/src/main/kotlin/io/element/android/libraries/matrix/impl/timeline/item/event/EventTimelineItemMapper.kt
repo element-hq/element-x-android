@@ -12,7 +12,9 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import io.element.android.libraries.matrix.api.timeline.item.event.EventDebugInfoProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
+import io.element.android.libraries.matrix.api.timeline.item.event.EventShieldsProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
@@ -23,11 +25,14 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemE
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import org.matrix.rustcomponents.sdk.EventOrTransactionId
 import org.matrix.rustcomponents.sdk.EventSendState
+import org.matrix.rustcomponents.sdk.EventTimelineItemDebugInfoProvider
 import org.matrix.rustcomponents.sdk.Reaction
 import org.matrix.rustcomponents.sdk.ShieldState
 import uniffi.matrix_sdk_common.ShieldStateCode
 import org.matrix.rustcomponents.sdk.EventSendState as RustEventSendState
+import org.matrix.rustcomponents.sdk.EventShieldsProvider as RustEventShieldsProvider
 import org.matrix.rustcomponents.sdk.EventTimelineItem as RustEventTimelineItem
 import org.matrix.rustcomponents.sdk.EventTimelineItemDebugInfo as RustEventTimelineItemDebugInfo
 import org.matrix.rustcomponents.sdk.ProfileDetails as RustProfileDetails
@@ -37,25 +42,25 @@ import uniffi.matrix_sdk_ui.EventItemOrigin as RustEventItemOrigin
 class EventTimelineItemMapper(
     private val contentMapper: TimelineEventContentMapper = TimelineEventContentMapper(),
 ) {
-    fun map(eventTimelineItem: RustEventTimelineItem): EventTimelineItem = eventTimelineItem.use {
+    fun map(eventTimelineItem: RustEventTimelineItem): EventTimelineItem = eventTimelineItem.run {
         EventTimelineItem(
-            eventId = it.eventId()?.let(::EventId),
-            transactionId = it.transactionId()?.let(::TransactionId),
-            isEditable = it.isEditable(),
-            canBeRepliedTo = it.canBeRepliedTo(),
-            isLocal = it.isLocal(),
-            isOwn = it.isOwn(),
-            isRemote = it.isRemote(),
-            localSendState = it.localSendState()?.map(),
-            reactions = it.reactions().map(),
-            receipts = it.readReceipts().map(),
-            sender = UserId(it.sender()),
-            senderProfile = it.senderProfile().map(),
-            timestamp = it.timestamp().toLong(),
-            content = contentMapper.map(it.content()),
-            debugInfo = it.debugInfo().map(),
-            origin = it.origin()?.map(),
-            messageShield = it.getShield(false)?.map(),
+            eventId = eventOrTransactionId.eventId(),
+            transactionId = eventOrTransactionId.transactionId(),
+            isEditable = isEditable,
+            canBeRepliedTo = canBeRepliedTo,
+            isLocal = isLocal,
+            isOwn = isOwn,
+            isRemote = isRemote,
+            localSendState = localSendState?.map(),
+            reactions = reactions.map(),
+            receipts = readReceipts.map(),
+            sender = UserId(sender),
+            senderProfile = senderProfile.map(),
+            timestamp = timestamp.toLong(),
+            content = contentMapper.map(content),
+            debugInfoProvider = RustEventDebugInfoProvider(debugInfoProvider),
+            origin = origin?.map(),
+            messageShieldProvider = RustEventShieldsProvider(shieldsProvider)
         )
     }
 }
@@ -159,6 +164,26 @@ private fun ShieldState?.map(): MessageShield? {
         ShieldStateCode.UNSIGNED_DEVICE -> MessageShield.UnsignedDevice(isCritical)
         ShieldStateCode.UNVERIFIED_IDENTITY -> MessageShield.UnverifiedIdentity(isCritical)
         ShieldStateCode.SENT_IN_CLEAR -> MessageShield.SentInClear(isCritical)
-        ShieldStateCode.PREVIOUSLY_VERIFIED -> MessageShield.PreviouslyVerified(isCritical)
+        ShieldStateCode.VERIFICATION_VIOLATION -> MessageShield.VerificationViolation(isCritical)
     }
+}
+
+class RustEventDebugInfoProvider(private val debugInfoProvider: EventTimelineItemDebugInfoProvider) : EventDebugInfoProvider {
+    override fun get(): TimelineItemDebugInfo {
+        return debugInfoProvider.get().map()
+    }
+}
+
+class RustEventShieldsProvider(private val shieldsProvider: RustEventShieldsProvider) : EventShieldsProvider {
+    override fun getShield(strict: Boolean): MessageShield? {
+        return shieldsProvider.getShields(strict)?.map()
+    }
+}
+
+private fun EventOrTransactionId.eventId(): EventId? {
+    return (this as? EventOrTransactionId.EventId)?.let { EventId(it.eventId) }
+}
+
+private fun EventOrTransactionId.transactionId(): TransactionId? {
+    return (this as? EventOrTransactionId.TransactionId)?.let { TransactionId(it.transactionId) }
 }

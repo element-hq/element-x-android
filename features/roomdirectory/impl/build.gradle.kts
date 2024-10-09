@@ -1,3 +1,5 @@
+import extension.setupAnvil
+
 /*
  * Copyright 2024 New Vector Ltd.
  *
@@ -20,13 +22,9 @@ android {
     }
 }
 
-anvil {
-    generateDaggerFactories.set(true)
-}
+setupAnvil()
 
 dependencies {
-    implementation(projects.anvilannotations)
-    anvil(projects.anvilcodegen)
     api(projects.features.roomdirectory.api)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)

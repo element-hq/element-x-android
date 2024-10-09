@@ -48,8 +48,7 @@ fun Modifier.blurredShapeShadow(
     offsetX: Dp = 0.dp,
     offsetY: Dp = 0.dp,
     blurRadius: Dp = 0.dp,
-) = then(
-    drawBehind {
+) = drawBehind {
         drawIntoCanvas { canvas ->
             val path = Path().apply {
                 addRoundRect(RoundRect(Rect(Offset.Zero, size), CornerRadius(cornerRadius.toPx())))
@@ -78,8 +77,7 @@ fun Modifier.blurredShapeShadow(
                 )
             }
         }
-    }
-)
+}
 
 fun Modifier.blurCompat(
     radius: Dp,

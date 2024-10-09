@@ -11,7 +11,9 @@ import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureState
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import kotlinx.collections.immutable.ImmutableList
 import kotlin.time.Duration
@@ -29,8 +31,13 @@ data class TimelineState(
     val resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState,
     val eventSink: (TimelineEvents) -> Unit,
 ) {
-    val hasAnyEvent = timelineItems.any { it is TimelineItem.Event }
+    private val lastTimelineEvent = timelineItems.firstOrNull { it is TimelineItem.Event } as? TimelineItem.Event
+    val hasAnyEvent = lastTimelineEvent != null
     val focusedEventId = focusRequestState.eventId()
+
+    fun isLastOutgoingMessage(uniqueId: UniqueId): Boolean {
+        return isLive && lastTimelineEvent != null && lastTimelineEvent.isMine && lastTimelineEvent.id == uniqueId
+    }
 }
 
 @Immutable
@@ -67,5 +74,6 @@ data class TimelineRoomInfo(
     val userHasPermissionToSendMessage: Boolean,
     val userHasPermissionToSendReaction: Boolean,
     val isCallOngoing: Boolean,
-    val pinnedEventIds: List<EventId>
+    val pinnedEventIds: List<EventId>,
+    val typingNotificationState: TypingNotificationState,
 )

@@ -59,7 +59,7 @@ class PollRepository @Inject constructor(
 
     suspend fun deletePoll(
         pollStartId: EventId,
-    ): Result<Boolean> =
+    ): Result<Unit> =
         timelineProvider
             .getActiveTimeline()
             .redactEvent(

@@ -63,15 +63,15 @@ class FakeTimeline(
         intentionalMentions: List<IntentionalMention>,
     ): Result<Unit> = sendMessageLambda(body, htmlBody, intentionalMentions)
 
-    var redactEventLambda: (eventId: EventId?, transactionId: TransactionId?, reason: String?) -> Result<Boolean> = { _, _, _ ->
-        Result.success(true)
+    var redactEventLambda: (eventId: EventId?, transactionId: TransactionId?, reason: String?) -> Result<Unit> = { _, _, _ ->
+        Result.success(Unit)
     }
 
     override suspend fun redactEvent(
         eventId: EventId?,
         transactionId: TransactionId?,
         reason: String?
-    ): Result<Boolean> = redactEventLambda(eventId, transactionId, reason)
+    ): Result<Unit> = redactEventLambda(eventId, transactionId, reason)
 
     var editMessageLambda: (
         originalEventId: EventId?,
@@ -217,7 +217,7 @@ class FakeTimeline(
     var forwardEventLambda: (eventId: EventId, roomIds: List<RoomId>) -> Result<Unit> = { _, _ -> Result.success(Unit) }
     override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> = forwardEventLambda(eventId, roomIds)
 
-    override suspend fun cancelSend(transactionId: TransactionId): Result<Boolean> = redactEvent(null, transactionId, null)
+    override suspend fun cancelSend(transactionId: TransactionId): Result<Unit> = redactEvent(null, transactionId, null)
 
     var sendLocationLambda: (
         body: String,

@@ -324,7 +324,7 @@ class MessagesFlowNode @AssistedInject constructor(
             is TimelineItemImageContent -> {
                 val navTarget = NavTarget.MediaViewer(
                     mediaInfo = MediaInfo(
-                        name = event.content.body,
+                        name = event.content.filename ?: event.content.body,
                         mimeType = event.content.mimeType,
                         formattedFileSize = event.content.formattedFileSize,
                         fileExtension = event.content.fileExtension
@@ -358,7 +358,7 @@ class MessagesFlowNode @AssistedInject constructor(
             is TimelineItemVideoContent -> {
                 val navTarget = NavTarget.MediaViewer(
                     mediaInfo = MediaInfo(
-                        name = event.content.body,
+                        name = event.content.filename ?: event.content.body,
                         mimeType = event.content.mimeType,
                         formattedFileSize = event.content.formattedFileSize,
                         fileExtension = event.content.fileExtension

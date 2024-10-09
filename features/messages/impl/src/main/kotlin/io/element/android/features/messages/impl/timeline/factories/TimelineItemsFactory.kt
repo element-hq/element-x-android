@@ -10,7 +10,6 @@ package io.element.android.features.messages.impl.timeline.factories
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.element.android.features.messages.impl.timeline.TimelineItemIndexer
 import io.element.android.features.messages.impl.timeline.diff.TimelineItemsCacheInvalidator
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemEventFactory
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemVirtualFactory
@@ -36,7 +35,6 @@ class TimelineItemsFactory @AssistedInject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val virtualItemFactory: TimelineItemVirtualFactory,
     private val timelineItemGrouper: TimelineItemGrouper,
-    private val timelineItemIndexer: TimelineItemIndexer,
 ) {
     @AssistedFactory
     interface Creator {
@@ -96,7 +94,6 @@ class TimelineItemsFactory @AssistedInject constructor(
             }
         }
         val result = timelineItemGrouper.group(newTimelineItemStates).toPersistentList()
-        timelineItemIndexer.process(result)
         this._timelineItems.emit(result)
     }
 

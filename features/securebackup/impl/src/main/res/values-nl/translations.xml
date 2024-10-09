@@ -50,4 +50,5 @@
   <string name="screen_recovery_key_setup_generate_key_description">"Zorg ervoor dat je je herstelsleutel op een veilige plek kunt bewaren"</string>
   <string name="screen_recovery_key_setup_success">"Herstelmogelijkheid succesvol ingesteld"</string>
   <string name="screen_recovery_key_setup_title">"Herstelmogelijkheid instellen"</string>
+  <string name="screen_reset_encryption_password_placeholder">"Voer in…"</string>
 </resources>

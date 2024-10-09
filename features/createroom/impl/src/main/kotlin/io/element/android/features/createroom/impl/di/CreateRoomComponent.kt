@@ -9,7 +9,6 @@ package io.element.android.features.createroom.impl.di
 
 import com.squareup.anvil.annotations.ContributesTo
 import com.squareup.anvil.annotations.MergeSubcomponent
-import dagger.Subcomponent
 import io.element.android.libraries.architecture.NodeFactoriesBindings
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.SingleIn
@@ -17,7 +16,7 @@ import io.element.android.libraries.di.SingleIn
 @SingleIn(CreateRoomScope::class)
 @MergeSubcomponent(CreateRoomScope::class)
 interface CreateRoomComponent : NodeFactoriesBindings {
-    @Subcomponent.Builder
+    @MergeSubcomponent.Builder
     interface Builder {
         fun build(): CreateRoomComponent
     }

@@ -29,7 +29,7 @@ class HomeserverResolver @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val wellknownRequest: WellknownRequest,
 ) {
-    suspend fun resolve(userInput: String): Flow<List<HomeserverData>> = flow {
+    fun resolve(userInput: String): Flow<List<HomeserverData>> = flow {
         val flowContext = currentCoroutineContext()
         val trimmedUserInput = userInput.trim()
         if (trimmedUserInput.length < 4) return@flow
@@ -46,13 +46,11 @@ class HomeserverResolver @Inject constructor(
                 }
                 val isValid = wellKnown?.isValid().orFalse()
                 if (isValid) {
-                    val supportSlidingSync = wellKnown?.supportSlidingSync().orFalse()
                     // Emit the list as soon as possible
                     currentList.add(
                         HomeserverData(
                             homeserverUrl = url,
                             isWellknownValid = true,
-                            supportSlidingSync = supportSlidingSync
                         )
                     )
                     withContext(flowContext) {
@@ -68,7 +66,6 @@ class HomeserverResolver @Inject constructor(
                     HomeserverData(
                         homeserverUrl = trimmedUserInput,
                         isWellknownValid = false,
-                        supportSlidingSync = false,
                     )
                 )
             )

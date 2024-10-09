@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"Переключить аккаунт"</string>
+  <string name="screen_account_provider_change">"Сменить поставщика учетной записи"</string>
   <string name="screen_account_provider_form_hint">"Адрес домашнего сервера"</string>
   <string name="screen_account_provider_form_notice">"Введите поисковый запрос или адрес домена."</string>
   <string name="screen_account_provider_form_subtitle">"Поиск компании, сообщества или частного сервера."</string>
@@ -73,7 +73,7 @@
   <string name="screen_qr_code_login_verify_code_loading">"В ожидании другого устройства"</string>
   <string name="screen_qr_code_login_verify_code_subtitle">"Поставщик учетной записи может запросить следующий код для подтверждения входа."</string>
   <string name="screen_qr_code_login_verify_code_title">"Ваш код подтверждения"</string>
-  <string name="screen_server_confirmation_change_server">"Сменить учетную запись"</string>
+  <string name="screen_server_confirmation_change_server">"Сменить поставщика учетной записи"</string>
   <string name="screen_server_confirmation_message_login_element_dot_io">"Частный сервер для сотрудников Element."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix — это открытая сеть для безопасной децентрализованной связи."</string>
   <string name="screen_server_confirmation_message_register">"Здесь будут храниться ваши разговоры - точно так же, как вы используете почтового провайдера для хранения своих писем."</string>

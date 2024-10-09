@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"نمی‌توانید تأیید کنید؟"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"ایجاد کلید بازیابی جدید"</string>
+  <string name="screen_identity_confirmation_subtitle">"تأیید این افزاره برای برپایی پیام‌رسانی امن."</string>
+  <string name="screen_identity_confirmation_title">"تأیید هویتتان"</string>
+  <string name="screen_identity_confirmation_use_another_device">"استفاده از افزاره‌ای دیگر"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"استفاده از کلید بازیابی"</string>
+  <string name="screen_identity_confirmed_subtitle">"اکنون می‌توانید پیام‌ها را به صورت امن فرستاده و بگیرید و هرکسی که با او گپ می‌زنید نیز می‌تواند به این افزاره اعتماد کند."</string>
+  <string name="screen_identity_confirmed_title">"افزاره تأیید شده"</string>
+  <string name="screen_identity_use_another_device">"استفاده از افزاره‌ای دیگر"</string>
+  <string name="screen_identity_waiting_on_other_device">"منتظر افزارهٔ دیگر…"</string>
+  <string name="screen_session_verification_compare_emojis_title">"مقایسهٔ شکلک‌ها"</string>
+  <string name="screen_session_verification_compare_numbers_title">"مقایسهٔ اعداد"</string>
+  <string name="screen_session_verification_complete_subtitle">"نشست جدید شما اکنون تأیید شده‌است. این نشست به پیام‌های رمزگذاری شده‌ی شما دسترسی داشته و سایر کاربران نیز این نشست را قابل اعتماد می دانند."</string>
+  <string name="screen_session_verification_enter_recovery_key">"ورود کلید بازیابی"</string>
+  <string name="screen_session_verification_open_existing_session_title">"گشودن نشستی موجود"</string>
+  <string name="screen_session_verification_positive_button_canceled">"تلاش برای تأیید دوباره"</string>
+  <string name="screen_session_verification_positive_button_initial">"آماده‌ام"</string>
+  <string name="screen_session_verification_positive_button_verifying_ongoing">"منتظر تطابق"</string>
+  <string name="screen_session_verification_ready_subtitle">"مقایسهٔ مجموعه‌ای یکتا از شکلک‌ها."</string>
+  <string name="screen_session_verification_request_accepted_subtitle">"شکلک‌ها را مقایسه کنید، از ترتیب نمایش آنان نیز مطمئن شوید."</string>
+  <string name="screen_session_verification_they_dont_match">"مطابق نیستند"</string>
+  <string name="screen_session_verification_they_match">"مطابقند"</string>
+  <string name="screen_session_verification_waiting_to_accept_title">"منظر پذیرش درخواست"</string>
+  <string name="screen_signout_in_progress_dialog_content">"خارج شدن…"</string>
+</resources>

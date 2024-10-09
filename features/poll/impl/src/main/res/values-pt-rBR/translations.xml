@@ -4,6 +4,7 @@
   <string name="screen_create_poll_anonymous_desc">"Mostrar resultados somente após o término da enquete"</string>
   <string name="screen_create_poll_anonymous_headline">"Ocultar votos"</string>
   <string name="screen_create_poll_answer_hint">"Opção %1$d"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Suas alterações não foram salvas. Tem certeza de que você quer voltar?"</string>
   <string name="screen_create_poll_question_desc">"Pergunta ou tópico"</string>
   <string name="screen_create_poll_question_hint">"Sobre o que é a enquete?"</string>
   <string name="screen_create_poll_title">"Criar enquete"</string>

@@ -26,6 +26,7 @@
     <item quantity="many">"%d zaproszeń"</item>
   </plurals>
   <string name="notification_invite_body">"Zaprosił(a) cię do czatu"</string>
+  <string name="notification_invite_body_with_sender">"%1$s zaprosił Cię do czatu"</string>
   <string name="notification_mentioned_you_body">"Wspomniano o Tobie: %1$s"</string>
   <string name="notification_new_messages">"Nowe wiadomości"</string>
   <plurals name="notification_new_messages_for_room">
@@ -37,7 +38,9 @@
   <string name="notification_room_action_mark_as_read">"Oznacz jako przeczytane"</string>
   <string name="notification_room_action_quick_reply">"Szybka odpowiedź"</string>
   <string name="notification_room_invite_body">"Zaprosił Cię do dołączenia do pokoju"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s zaprosił Cię do pokoju"</string>
   <string name="notification_sender_me">"Ja"</string>
+  <string name="notification_sender_mention_reply">"%1$s wspomniał lub odpowiedział"</string>
   <string name="notification_test_push_notification_content">"Wyświetlasz powiadomienie! Kliknij mnie!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>

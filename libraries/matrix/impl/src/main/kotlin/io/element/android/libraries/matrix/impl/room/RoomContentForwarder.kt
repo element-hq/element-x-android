@@ -18,6 +18,8 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.RoomListService
 import org.matrix.rustcomponents.sdk.Timeline
+import org.matrix.rustcomponents.sdk.TimelineItemContent
+import org.matrix.rustcomponents.sdk.contentWithoutRelationFromMessage
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
@@ -40,11 +42,7 @@ class RoomContentForwarder(
         toRoomIds: List<RoomId>,
         timeoutMs: Long = 5000L
     ) {
-        val content = fromTimeline
-            .getEventTimelineItemByEventId(eventId.value)
-            .content()
-            .asMessage()
-            ?.content()
+        val content = (fromTimeline.getEventTimelineItemByEventId(eventId.value).content as? TimelineItemContent.Message)?.content
             ?: throw ForwardEventException(toRoomIds)
 
         val targetSlidingSyncRooms = toRoomIds.mapNotNull { roomId -> roomListService.roomOrNull(roomId.value) }
@@ -58,7 +56,7 @@ class RoomContentForwarder(
                     // Sending a message requires a registered timeline listener
                     targetRoom.timeline().runWithTimelineListenerRegistered {
                         withTimeout(timeoutMs.milliseconds) {
-                            targetRoom.timeline().send(content)
+                            targetRoom.timeline().send(contentWithoutRelationFromMessage(content))
                         }
                     }
                 }

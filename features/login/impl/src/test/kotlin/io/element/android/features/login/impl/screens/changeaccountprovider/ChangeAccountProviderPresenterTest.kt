@@ -12,9 +12,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.login.impl.accountprovider.AccountProvider
-import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
-import io.element.android.features.login.impl.changeserver.ChangeServerPresenter
-import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
+import io.element.android.features.login.impl.changeserver.aChangeServerState
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -26,12 +24,8 @@ class ChangeAccountProviderPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val changeServerPresenter = ChangeServerPresenter(
-            FakeMatrixAuthenticationService(),
-            AccountProviderDataSource()
-        )
         val presenter = ChangeAccountProviderPresenter(
-            changeServerPresenter
+            changeServerPresenter = { aChangeServerState() }
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -46,7 +40,6 @@ class ChangeAccountProviderPresenterTest {
                         isPublic = true,
                         isMatrixOrg = true,
                         isValid = true,
-                        supportSlidingSync = true,
                     )
                 )
             )

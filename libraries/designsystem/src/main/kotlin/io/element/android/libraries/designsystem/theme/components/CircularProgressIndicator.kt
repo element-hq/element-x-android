@@ -9,8 +9,10 @@ package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -25,12 +27,14 @@ fun CircularProgressIndicator(
     progress: () -> Float,
     modifier: Modifier = Modifier,
     color: Color = ProgressIndicatorDefaults.circularColor,
+    trackColor: Color = ProgressIndicatorDefaults.circularDeterminateTrackColor,
     strokeWidth: Dp = ProgressIndicatorDefaults.CircularStrokeWidth
 ) {
     androidx.compose.material3.CircularProgressIndicator(
         modifier = modifier,
         progress = progress,
         color = color,
+        trackColor = trackColor,
         strokeWidth = strokeWidth,
     )
 }
@@ -39,6 +43,7 @@ fun CircularProgressIndicator(
 fun CircularProgressIndicator(
     modifier: Modifier = Modifier,
     color: Color = ProgressIndicatorDefaults.circularColor,
+    trackColor: Color = ProgressIndicatorDefaults.circularIndeterminateTrackColor,
     strokeWidth: Dp = ProgressIndicatorDefaults.CircularStrokeWidth,
 ) {
     if (LocalInspectionMode.current) {
@@ -47,12 +52,14 @@ fun CircularProgressIndicator(
             modifier = modifier,
             progress = { 0.75F },
             color = color,
+            trackColor = trackColor,
             strokeWidth = strokeWidth,
         )
     } else {
         androidx.compose.material3.CircularProgressIndicator(
             modifier = modifier,
             color = color,
+            trackColor = trackColor,
             strokeWidth = strokeWidth,
         )
     }
@@ -61,12 +68,18 @@ fun CircularProgressIndicator(
 @Preview(group = PreviewGroup.Progress)
 @Composable
 internal fun CircularProgressIndicatorPreview() = ElementThemedPreview(vertical = false) {
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    Column(
+        modifier = Modifier.padding(6.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         // Indeterminate progress
+        Text("Indeterminate")
         CircularProgressIndicator()
         // Fixed progress
+        Text("Fixed progress")
         CircularProgressIndicator(
-            progress = { 0.90F }
+            progress = { 0.50F }
         )
     }
 }

@@ -22,4 +22,6 @@ dependencies {
     implementation(libs.firebase.appdistribution.gradle)
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
     implementation(libs.autonomousapps.dependencyanalysis.plugin)
+    implementation(libs.anvil.gradle.plugin)
+    implementation(libs.ksp.gradle.plugin)
 }

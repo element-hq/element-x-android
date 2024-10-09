@@ -28,7 +28,6 @@ dependencies {
 // - Add every single module as a dependency of this one.
 // - Move the Konsist tests to the `app` module, but the `app` module does not need to know about Konsist.
 tasks.withType<Test>().configureEach {
-    outputs.upToDateWhen {
-        gradle.startParameter.taskNames.any { it.contains("check", ignoreCase = true).not() }
-    }
+    val isNotCheckTask = gradle.startParameter.taskNames.any { it.contains("check", ignoreCase = true).not() }
+    outputs.upToDateWhen { isNotCheckTask }
 }

@@ -7,7 +7,8 @@ on:
 
 # Enrich gradle.properties for CI/CD
 env:
-  GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx9g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC -Dkotlin.daemon.jvm.options=-Xmx4g -Dkotlin.incremental=false -Dsonar.gradle.skipCompile=true
+  GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx9g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC -Dkotlin.daemon.jvm.options=-Xmx4g -Dsonar.gradle.skipCompile=true
+  CI_GRADLE_ARG_PROPERTIES: --no-configuration-cache
 
 jobs:
   record:
@@ -32,11 +33,11 @@ jobs:
         uses: nschloe/action-cached-lfs-checkout@v1.2.2
         with:
           persist-credentials: false
-      - name: ☕️ Use JDK 17
+      - name: ☕️ Use JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '17'
+          java-version: '21'
       # Add gradle cache, this should speed up the process
       - name: Configure gradle
         uses: gradle/actions/setup-gradle@v4
@@ -48,3 +49,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN || secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
+          GRADLE_ARGS: ${{ env.CI_GRADLE_ARG_PROPERTIES }}

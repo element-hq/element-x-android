@@ -11,13 +11,13 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeRustRoomListService
 import io.element.android.libraries.matrix.impl.room.RoomSyncSubscriber
-import io.element.android.tests.testutils.runCancellableScopeTestWithTestScope
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.RoomListServiceSyncIndicator
 import org.matrix.rustcomponents.sdk.RoomListService as RustRoomListService
@@ -25,14 +25,14 @@ import org.matrix.rustcomponents.sdk.RoomListService as RustRoomListService
 @OptIn(ExperimentalCoroutinesApi::class)
 class RustRoomListServiceTest {
     @Test
-    fun `syncIndicator should emit the expected values`() = runCancellableScopeTestWithTestScope { testScope, cancellableScope ->
+    fun `syncIndicator should emit the expected values`() = runTest {
         val roomListService = FakeRustRoomListService()
-        val sut = testScope.createRustRoomListService(
-            sessionCoroutineScope = cancellableScope,
+        val sut = createRustRoomListService(
+            sessionCoroutineScope = backgroundScope,
             roomListService = roomListService,
         )
         // Give time for mxCallback to setup
-        testScope.runCurrent()
+        runCurrent()
         sut.syncIndicator.test {
             assertThat(awaitItem()).isEqualTo(RoomListService.SyncIndicator.Hide)
             roomListService.emitRoomListServiceSyncIndicator(RoomListServiceSyncIndicator.SHOW)

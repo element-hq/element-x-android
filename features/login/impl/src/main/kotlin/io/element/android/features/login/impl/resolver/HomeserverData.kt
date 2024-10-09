@@ -12,6 +12,4 @@ data class HomeserverData(
     val homeserverUrl: String,
     // True if a wellknown file has been found and is valid. If false, it means that the [homeserverUrl] is valid
     val isWellknownValid: Boolean,
-    // True if a wellknown file has been found and is valid and is claiming a sliding sync Url
-    val supportSlidingSync: Boolean,
 )

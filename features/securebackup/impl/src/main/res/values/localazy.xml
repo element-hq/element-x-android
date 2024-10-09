@@ -18,7 +18,7 @@
   <string name="screen_create_new_recovery_key_title">"Reset the encryption for your account using another device"</string>
   <string name="screen_encryption_reset_action_continue_reset">"Continue reset"</string>
   <string name="screen_encryption_reset_bullet_1">"Your account details, contacts, preferences, and chat list will be kept"</string>
-  <string name="screen_encryption_reset_bullet_2">"You will lose your existing message history"</string>
+  <string name="screen_encryption_reset_bullet_2">"You will lose your existing message history unless it is stored on another device"</string>
   <string name="screen_encryption_reset_bullet_3">"You will need to verify all your existing devices and contacts again"</string>
   <string name="screen_encryption_reset_footer">"Only reset your identity if you don’t have access to another signed-in device and you’ve lost your recovery key."</string>
   <string name="screen_encryption_reset_title">"Can\'t confirm? You’ll need to reset your identity."</string>

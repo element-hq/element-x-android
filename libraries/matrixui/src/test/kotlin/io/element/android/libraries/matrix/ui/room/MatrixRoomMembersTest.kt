@@ -60,7 +60,7 @@ class MatrixRoomMembersTest {
     }
 
     @Test
-    fun `getDirectRoomMember emit null if the room is not encrypted`() = runTest {
+    fun `getDirectRoomMember emits other member even if the room is not encrypted`() = runTest {
         val matrixRoom = FakeMatrixRoom(
             sessionId = A_USER_ID,
             isEncrypted = false,
@@ -71,7 +71,7 @@ class MatrixRoomMembersTest {
                 MatrixRoomMembersState.Ready(persistentListOf(roomMember1, roomMember2))
             )
         }.test {
-            assertThat(awaitItem().value).isNull()
+            assertThat(awaitItem().value).isEqualTo(roomMember2)
         }
     }
 

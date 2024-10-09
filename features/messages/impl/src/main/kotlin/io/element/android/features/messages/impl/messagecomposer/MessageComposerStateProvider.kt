@@ -33,6 +33,7 @@ fun aMessageComposerState(
     canCreatePoll: Boolean = true,
     attachmentsState: AttachmentsState = AttachmentsState.None,
     suggestions: ImmutableList<ResolvedSuggestion> = persistentListOf(),
+    eventSink: (MessageComposerEvents) -> Unit = {},
 ) = MessageComposerState(
     textEditorState = textEditorState,
     isFullScreen = isFullScreen,
@@ -44,5 +45,5 @@ fun aMessageComposerState(
     attachmentsState = attachmentsState,
     suggestions = suggestions,
     resolveMentionDisplay = { _, _ -> TextDisplay.Plain },
-    eventSink = {},
+    eventSink = eventSink,
 )

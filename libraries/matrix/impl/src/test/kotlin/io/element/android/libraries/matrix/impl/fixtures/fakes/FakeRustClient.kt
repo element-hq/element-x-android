@@ -42,7 +42,7 @@ class FakeRustClient(
     override fun cachedAvatarUrl(): String? = null
     override suspend fun restoreSession(session: Session) = Unit
     override fun syncService(): SyncServiceBuilder = FakeRustSyncServiceBuilder()
-    override fun roomDirectorySearch(): RoomDirectorySearch = FakeRoomDirectorySearch()
+    override fun roomDirectorySearch(): RoomDirectorySearch = FakeRustRoomDirectorySearch()
     override suspend fun setPusher(
         identifiers: PusherIdentifiers,
         kind: PusherKind,

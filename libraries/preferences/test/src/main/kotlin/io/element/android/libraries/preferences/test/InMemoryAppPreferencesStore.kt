@@ -13,11 +13,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class InMemoryAppPreferencesStore(
     isDeveloperModeEnabled: Boolean = false,
+    hideImagesAndVideos: Boolean = false,
     customElementCallBaseUrl: String? = null,
     theme: String? = null,
     simplifiedSlidingSyncEnabled: Boolean = false
 ) : AppPreferencesStore {
     private val isDeveloperModeEnabled = MutableStateFlow(isDeveloperModeEnabled)
+    private val hideImagesAndVideos = MutableStateFlow(hideImagesAndVideos)
     private val customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
     private val theme = MutableStateFlow(theme)
     private val simplifiedSlidingSyncEnabled = MutableStateFlow(simplifiedSlidingSyncEnabled)
@@ -52,6 +54,14 @@ class InMemoryAppPreferencesStore(
 
     override fun isSimplifiedSlidingSyncEnabledFlow(): Flow<Boolean> {
         return simplifiedSlidingSyncEnabled
+    }
+
+    override suspend fun setHideImagesAndVideos(value: Boolean) {
+        hideImagesAndVideos.value = value
+    }
+
+    override fun doesHideImagesAndVideosFlow(): Flow<Boolean> {
+        return hideImagesAndVideos
     }
 
     override suspend fun reset() {

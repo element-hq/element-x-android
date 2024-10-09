@@ -8,6 +8,7 @@
 package io.element.android.libraries.textcomposer.components.markdown
 
 import android.content.Context
+import android.view.View
 import androidx.appcompat.widget.AppCompatEditText
 
 internal class MarkdownEditText(
@@ -35,5 +36,9 @@ internal class MarkdownEditText(
         if (!isModifyingText) {
             onSelectionChangeListener?.invoke(selStart, selEnd)
         }
+    }
+
+    override fun focusSearch(direction: Int): View? {
+        return null
     }
 }

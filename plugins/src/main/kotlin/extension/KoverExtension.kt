@@ -14,7 +14,6 @@ import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
 import kotlinx.kover.gradle.plugin.dsl.KoverVariantCreateConfig
 import org.gradle.api.Action
 import org.gradle.api.Project
-import org.gradle.configurationcache.extensions.capitalized
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.assign
 
@@ -58,7 +57,7 @@ fun Project.setupKover() {
     task("koverVerifyAll") {
         group = "verification"
         description = "Verifies the code coverage of all subprojects."
-        val dependencies = listOf(":app:koverVerifyGplayDebug") + koverVariants.map { ":app:koverVerify${it.capitalized()}" }
+        val dependencies = listOf(":app:koverVerifyGplayDebug") + koverVariants.map { ":app:koverVerify${it.replaceFirstChar(Char::titlecase)}" }
         dependsOn(dependencies)
 
     }
@@ -105,8 +104,7 @@ fun Project.setupKover() {
                     annotatedBy(
                         "androidx.compose.ui.tooling.preview.Preview",
                         "io.element.android.libraries.architecture.coverage.ExcludeFromCoverage",
-                        "io.element.android.libraries.designsystem.preview.PreviewsDayNight",
-                        "io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight",
+                        "io.element.android.libraries.designsystem.preview.*",
                     )
                 }
             }
@@ -142,24 +140,18 @@ fun Project.setupKover() {
                     }
                 }
                 filters {
-                    includes {
-                        classes(
-                            "*Presenter",
-                        )
-                    }
-                    excludes {
-                        classes(
-                            "*Fake*Presenter*",
-                            "io.element.android.appnav.loggedin.LoggedInPresenter$*",
-                            // Some options can't be tested at the moment
-                            "io.element.android.features.preferences.impl.developer.DeveloperSettingsPresenter$*",
-                            // Need an Activity to use rememberMultiplePermissionsState
-                            "io.element.android.features.location.impl.common.permissions.DefaultPermissionsPresenter",
-                            "*Presenter\$present\$*",
-                            // Too small to be > 85% tested
-                            "io.element.android.libraries.fullscreenintent.impl.DefaultFullScreenIntentPermissionsPresenter",
-                        )
-                    }
+                    excludes.classes(
+                        "*Fake*Presenter*",
+                        "io.element.android.appnav.loggedin.LoggedInPresenter$*",
+                        // Some options can't be tested at the moment
+                        "io.element.android.features.preferences.impl.developer.DeveloperSettingsPresenter$*",
+                        // Need an Activity to use rememberMultiplePermissionsState
+                        "io.element.android.features.location.impl.common.permissions.DefaultPermissionsPresenter",
+                        "*Presenter\$present\$*",
+                        // Too small to be > 85% tested
+                        "io.element.android.libraries.fullscreenintent.impl.DefaultFullScreenIntentPermissionsPresenter",
+                    )
+                    includes.inheritedFrom("io.element.android.libraries.architecture.Presenter")
                 }
             }
             variant(KoverVariant.States.variantName) {
@@ -175,33 +167,31 @@ fun Project.setupKover() {
                     }
                 }
                 filters {
-                    includes {
-                        classes(
-                            "^*State$",
-                        )
-                    }
-                    excludes {
-                        classes(
-                            "io.element.android.appnav.root.RootNavState*",
-                            "io.element.android.libraries.matrix.api.timeline.item.event.OtherState$*",
-                            "io.element.android.libraries.matrix.api.timeline.item.event.EventSendState$*",
-                            "io.element.android.libraries.matrix.api.room.RoomMembershipState*",
-                            "io.element.android.libraries.matrix.api.room.MatrixRoomMembersState*",
-                            "io.element.android.libraries.push.impl.notifications.NotificationState*",
-                            "io.element.android.features.messages.impl.media.local.pdf.PdfViewerState",
-                            "io.element.android.features.messages.impl.media.local.LocalMediaViewState",
-                            "io.element.android.features.location.impl.map.MapState*",
-                            "io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState*",
-                            "io.element.android.libraries.designsystem.swipe.SwipeableActionsState*",
-                            "io.element.android.features.messages.impl.timeline.components.ExpandableState*",
-                            "io.element.android.features.messages.impl.timeline.model.bubble.BubbleState*",
-                            "io.element.android.libraries.maplibre.compose.CameraPositionState*",
-                            "io.element.android.libraries.maplibre.compose.SaveableCameraPositionState",
-                            "io.element.android.libraries.maplibre.compose.SymbolState*",
-                            "io.element.android.features.ftue.api.state.*",
-                            "io.element.android.features.ftue.impl.welcome.state.*",
-                        )
-                    }
+                    excludes.classes(
+                        "*State$*", // Exclude inner classes
+                        "io.element.android.appnav.root.RootNavState*",
+                        "io.element.android.libraries.matrix.api.timeline.item.event.OtherState$*",
+                        "io.element.android.libraries.matrix.api.timeline.item.event.EventSendState$*",
+                        "io.element.android.libraries.matrix.api.room.RoomMembershipState*",
+                        "io.element.android.libraries.matrix.api.room.MatrixRoomMembersState*",
+                        "io.element.android.libraries.push.impl.notifications.NotificationState*",
+                        "io.element.android.features.messages.impl.media.local.pdf.PdfViewerState",
+                        "io.element.android.features.messages.impl.media.local.LocalMediaViewState",
+                        "io.element.android.features.location.impl.map.MapState*",
+                        "io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState*",
+                        "io.element.android.libraries.designsystem.swipe.SwipeableActionsState*",
+                        "io.element.android.features.messages.impl.timeline.components.ExpandableState*",
+                        "io.element.android.features.messages.impl.timeline.model.bubble.BubbleState*",
+                        "io.element.android.libraries.maplibre.compose.CameraPositionState*",
+                        "io.element.android.libraries.maplibre.compose.SaveableCameraPositionState",
+                        "io.element.android.libraries.maplibre.compose.SymbolState*",
+                        "io.element.android.features.ftue.api.state.*",
+                        "io.element.android.features.ftue.impl.welcome.state.*",
+                        "io.element.android.libraries.designsystem.theme.components.bottomsheet.CustomSheetState",
+                        "io.element.android.libraries.mediaviewer.api.local.pdf.PdfViewerState",
+                        "io.element.android.libraries.textcomposer.model.TextEditorState",
+                    )
+                    includes.classes("*State")
                 }
             }
             variant(KoverVariant.Views.variantName) {
@@ -218,11 +208,8 @@ fun Project.setupKover() {
                     }
                 }
                 filters {
-                    includes {
-                        classes(
-                            "*ViewKt",
-                        )
-                    }
+                    excludes.classes("*ViewKt$*") // Exclude inner classes
+                    includes.classes("*ViewKt")
                 }
             }
         }
@@ -236,16 +223,31 @@ fun Project.applyKoverPluginToAllSubProjects() = rootProject.subprojects {
             currentProject {
                 for (variant in koverVariants) {
                     createVariant(variant) {
-                        defaultVariants()
+                        defaultVariants(project)
                     }
+                }
+            }
+        }
+
+        project.afterEvaluate {
+            for (variant in koverVariants) {
+                // Using the cache for coverage verification seems to be flaky, so we disable it for now.
+                val taskName = "koverCachedVerify${variant.replaceFirstChar(Char::titlecase)}"
+                val cachedTask = project.tasks.findByName(taskName)
+                cachedTask?.let {
+                    it.outputs.upToDateWhen { false }
                 }
             }
         }
     }
 }
 
-fun KoverVariantCreateConfig.defaultVariants() {
-    addWithDependencies("gplayDebug", "debug", optional = true)
+fun KoverVariantCreateConfig.defaultVariants(project: Project) {
+    if (project.name == "app") {
+        addWithDependencies("gplayDebug")
+    } else {
+        addWithDependencies("debug", "jvm", optional = true)
+    }
 }
 
 fun Project.koverSubprojects() = project.rootProject.subprojects

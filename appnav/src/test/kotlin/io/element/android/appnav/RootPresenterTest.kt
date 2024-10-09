@@ -12,17 +12,11 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appnav.root.RootPresenter
-import io.element.android.features.rageshake.impl.crash.DefaultCrashDetectionPresenter
-import io.element.android.features.rageshake.impl.detection.DefaultRageshakeDetectionPresenter
-import io.element.android.features.rageshake.impl.preferences.DefaultRageshakePreferencesPresenter
-import io.element.android.features.rageshake.test.crash.FakeCrashDataStore
-import io.element.android.features.rageshake.test.rageshake.FakeRageShake
-import io.element.android.features.rageshake.test.rageshake.FakeRageshakeDataStore
-import io.element.android.features.rageshake.test.screenshot.FakeScreenshotHolder
+import io.element.android.features.rageshake.api.crash.aCrashDetectionState
+import io.element.android.features.rageshake.api.detection.aRageshakeDetectionState
 import io.element.android.features.share.api.ShareService
 import io.element.android.features.share.test.FakeShareService
 import io.element.android.libraries.matrix.test.FakeSdkMetadata
-import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.apperror.api.AppErrorState
 import io.element.android.services.apperror.api.AppErrorStateService
@@ -44,7 +38,6 @@ class RootPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.crashDetectionState.crashDetected).isFalse()
         }
@@ -61,7 +54,7 @@ class RootPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(2)
+            skipItems(1)
             lambda.assertions().isCalledOnce()
         }
     }
@@ -76,8 +69,6 @@ class RootPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
-
             val initialState = awaitItem()
             assertThat(initialState.errorState).isInstanceOf(AppErrorState.Error::class.java)
             val initialErrorState = initialState.errorState as AppErrorState.Error
@@ -93,25 +84,9 @@ class RootPresenterTest {
         appErrorService: AppErrorStateService = DefaultAppErrorStateService(),
         shareService: ShareService = FakeShareService {},
     ): RootPresenter {
-        val crashDataStore = FakeCrashDataStore()
-        val rageshakeDataStore = FakeRageshakeDataStore()
-        val rageshake = FakeRageShake()
-        val screenshotHolder = FakeScreenshotHolder()
-        val crashDetectionPresenter = DefaultCrashDetectionPresenter(
-            buildMeta = aBuildMeta(),
-            crashDataStore = crashDataStore
-        )
-        val rageshakeDetectionPresenter = DefaultRageshakeDetectionPresenter(
-            screenshotHolder = screenshotHolder,
-            rageShake = rageshake,
-            preferencesPresenter = DefaultRageshakePreferencesPresenter(
-                rageshake = rageshake,
-                rageshakeDataStore = rageshakeDataStore,
-            )
-        )
         return RootPresenter(
-            crashDetectionPresenter = crashDetectionPresenter,
-            rageshakeDetectionPresenter = rageshakeDetectionPresenter,
+            crashDetectionPresenter = { aCrashDetectionState() },
+            rageshakeDetectionPresenter = { aRageshakeDetectionState() },
             appErrorStateService = appErrorService,
             analyticsService = FakeAnalyticsService(),
             shareService = shareService,

@@ -585,10 +585,18 @@ class MessageComposerPresenter @Inject constructor(
                 content = htmlText ?: markdownText
             )
             is ComposerDraftType.Reply -> {
-                messageComposerContext.composerMode = MessageComposerMode.Reply(InReplyToDetails.Loading(draftType.eventId))
+                messageComposerContext.composerMode = MessageComposerMode.Reply(
+                    replyToDetails = InReplyToDetails.Loading(draftType.eventId),
+                    // I guess it's fine to always render the image when restoring a draft
+                    hideImage = false
+                )
                 timelineController.invokeOnCurrentTimeline {
                     val replyToDetails = loadReplyDetails(draftType.eventId).map(permalinkParser)
-                    run { messageComposerContext.composerMode = MessageComposerMode.Reply(replyToDetails) }
+                    messageComposerContext.composerMode = MessageComposerMode.Reply(
+                        replyToDetails = replyToDetails,
+                        // I guess it's fine to always render the image when restoring a draft
+                        hideImage = false
+                    )
                 }
             }
         }

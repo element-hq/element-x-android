@@ -5,7 +5,7 @@
   <string name="screen_chat_backup_key_backup_description">"Zálohování zajistí, že neztratíte historii zpráv. %1$s."</string>
   <string name="screen_chat_backup_key_backup_title">"Záloha"</string>
   <string name="screen_chat_backup_recovery_action_change">"Změnit klíč pro obnovení"</string>
-  <string name="screen_chat_backup_recovery_action_confirm">"Potvrďte klíč pro obnovení"</string>
+  <string name="screen_chat_backup_recovery_action_confirm">"Zadejte klíč pro obnovení"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Vaše záloha chatu není aktuálně synchronizována."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Nastavení obnovy"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Získejte přístup ke svým zašifrovaným zprávám, pokud ztratíte všechna zařízení nebo jste všude odhlášeni z %1$s."</string>
@@ -42,7 +42,7 @@
   <string name="screen_recovery_key_confirm_key_placeholder">"Zadejte…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Ztratili jste klíč pro obnovení?"</string>
   <string name="screen_recovery_key_confirm_success">"Klíč pro obnovení potvrzen"</string>
-  <string name="screen_recovery_key_confirm_title">"Zadejte klíč pro obnovení"</string>
+  <string name="screen_recovery_key_confirm_title">"Potvrďte klíč pro obnovení"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Klíč pro obnovení zkopírován"</string>
   <string name="screen_recovery_key_generating_key">"Generování…"</string>
   <string name="screen_recovery_key_save_action">"Uložit klíč pro obnovení"</string>
@@ -60,7 +60,7 @@
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Tento proces je nevratný."</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"Opravdu chcete obnovit šifrování?"</string>
   <string name="screen_reset_encryption_password_error">"Došlo k neznámé chybě. Zkontrolujte, zda je heslo k účtu správné a zkuste to znovu."</string>
-  <string name="screen_reset_encryption_password_placeholder">"Zadat…"</string>
+  <string name="screen_reset_encryption_password_placeholder">"Zadejte…"</string>
   <string name="screen_reset_encryption_password_subtitle">"Potvrďte, že chcete obnovit šifrování."</string>
   <string name="screen_reset_encryption_password_title">"Pro pokračování zadejte heslo k účtu"</string>
 </resources>

@@ -21,9 +21,6 @@ import kotlinx.serialization.Serializable
  *     "m.identity_server": {
  *         "base_url": "https://vector.im"
  *     },
- *     "org.matrix.msc3575.proxy": {
- *         "url": "https://slidingsync.lab.matrix.org"
- *     }
  * }
  * </pre>
  * .
@@ -34,14 +31,8 @@ data class WellKnown(
     val homeServer: WellKnownBaseConfig? = null,
     @SerialName("m.identity_server")
     val identityServer: WellKnownBaseConfig? = null,
-    @SerialName("org.matrix.msc3575.proxy")
-    val slidingSyncProxy: WellKnownSlidingSyncConfig? = null,
 ) {
     fun isValid(): Boolean {
         return homeServer?.baseURL?.isNotBlank().orFalse()
-    }
-
-    fun supportSlidingSync(): Boolean {
-        return slidingSyncProxy?.url?.isNotBlank().orFalse()
     }
 }

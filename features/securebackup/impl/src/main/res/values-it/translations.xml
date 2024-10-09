@@ -5,7 +5,7 @@
   <string name="screen_chat_backup_key_backup_description">"Il backup ti garantisce di non perdere la cronologia dei messaggi. %1$s."</string>
   <string name="screen_chat_backup_key_backup_title">"Backup"</string>
   <string name="screen_chat_backup_recovery_action_change">"Cambia la chiave di recupero"</string>
-  <string name="screen_chat_backup_recovery_action_confirm">"Conferma la chiave di recupero"</string>
+  <string name="screen_chat_backup_recovery_action_confirm">"Inserisci la chiave di recupero"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Il backup delle conversazioni non è attualmente sincronizzato."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Configura il recupero"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Ottieni l\'accesso ai tuoi messaggi cifrati se perdi tutti i tuoi dispositivi o se sei disconnesso da %1$s ovunque."</string>
@@ -16,6 +16,7 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Segui le istruzioni per creare una nuova chiave di recupero"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Salva la tua nuova chiave di recupero in un gestore di password o in una nota cifrata."</string>
   <string name="screen_create_new_recovery_key_title">"Reimposta la crittografia del tuo account utilizzando un altro dispositivo"</string>
+  <string name="screen_encryption_reset_action_continue_reset">"Continua il ripristino"</string>
   <string name="screen_encryption_reset_bullet_1">"I dettagli del tuo account, i contatti, le preferenze e l\'elenco delle conversazioni verranno conservati"</string>
   <string name="screen_encryption_reset_bullet_2">"Perderai la cronologia dei messaggi esistente"</string>
   <string name="screen_encryption_reset_bullet_3">"Dovrai verificare nuovamente tutti i dispositivi e i contatti esistenti"</string>
@@ -41,7 +42,7 @@
   <string name="screen_recovery_key_confirm_key_placeholder">"Inserisci…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Hai perso la chiave di recupero?"</string>
   <string name="screen_recovery_key_confirm_success">"Chiave di recupero confermata"</string>
-  <string name="screen_recovery_key_confirm_title">"Inserisci la tua chiave di recupero"</string>
+  <string name="screen_recovery_key_confirm_title">"Inserisci la chiave di recupero"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Chiave di recupero copiata"</string>
   <string name="screen_recovery_key_generating_key">"Generazione…"</string>
   <string name="screen_recovery_key_save_action">"Salva la chiave di recupero"</string>
@@ -58,6 +59,7 @@
   <string name="screen_reset_encryption_confirmation_alert_action">"Sì, reimposta ora"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Questo processo è irreversibile."</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"Sei sicuro di voler reimpostare la crittografia?"</string>
+  <string name="screen_reset_encryption_password_error">"Si è verificato un errore sconosciuto. Controlla che la password del tuo account sia corretta e riprova."</string>
   <string name="screen_reset_encryption_password_placeholder">"Inserisci…"</string>
   <string name="screen_reset_encryption_password_subtitle">"Conferma di voler reimpostare la crittografia."</string>
   <string name="screen_reset_encryption_password_title">"Inserisci la password del tuo account per continuare"</string>

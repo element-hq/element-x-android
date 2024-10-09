@@ -29,7 +29,7 @@ fun AnalyticsSettingsView(
         title = stringResource(id = CommonStrings.common_analytics)
     ) {
         AnalyticsPreferencesView(
-            state = state.analyticsState,
+            state = state.analyticsPreferencesState,
         )
     }
 }

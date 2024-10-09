@@ -85,35 +85,48 @@ internal fun CallScreenView(
         BackHandler {
             handleBack()
         }
-        CallWebView(
-            modifier = Modifier
+        if (state.webViewError != null) {
+            ErrorDialog(
+                content = buildString {
+                    append(stringResource(CommonStrings.error_unknown))
+                    state.webViewError.takeIf { it.isNotEmpty() }?.let { append("\n\n").append(it) }
+                },
+                onSubmit = { state.eventSink(CallScreenEvents.Hangup) },
+            )
+        } else {
+            CallWebView(
+                modifier = Modifier
                     .padding(padding)
                     .consumeWindowInsets(padding)
                     .fillMaxSize(),
-            url = state.urlState,
-            userAgent = state.userAgent,
-            onPermissionsRequest = { request ->
-                val androidPermissions = mapWebkitPermissions(request.resources)
-                val callback: RequestPermissionCallback = { request.grant(it) }
-                requestPermissions(androidPermissions.toTypedArray(), callback)
-            },
-            onWebViewCreate = { webView ->
-                val interceptor = WebViewWidgetMessageInterceptor(webView)
-                state.eventSink(CallScreenEvents.SetupMessageChannels(interceptor))
-                val pipController = WebViewPipController(webView)
-                pipState.eventSink(PictureInPictureEvents.SetPipController(pipController))
+                url = state.urlState,
+                userAgent = state.userAgent,
+                onPermissionsRequest = { request ->
+                    val androidPermissions = mapWebkitPermissions(request.resources)
+                    val callback: RequestPermissionCallback = { request.grant(it) }
+                    requestPermissions(androidPermissions.toTypedArray(), callback)
+                },
+                onWebViewCreate = { webView ->
+                    val interceptor = WebViewWidgetMessageInterceptor(
+                        webView = webView,
+                        onError = { state.eventSink(CallScreenEvents.OnWebViewError(it)) },
+                    )
+                    state.eventSink(CallScreenEvents.SetupMessageChannels(interceptor))
+                    val pipController = WebViewPipController(webView)
+                    pipState.eventSink(PictureInPictureEvents.SetPipController(pipController))
+                }
+            )
+            when (state.urlState) {
+                AsyncData.Uninitialized,
+                is AsyncData.Loading ->
+                    ProgressDialog(text = stringResource(id = CommonStrings.common_please_wait))
+                is AsyncData.Failure ->
+                    ErrorDialog(
+                        content = state.urlState.error.message.orEmpty(),
+                        onSubmit = { state.eventSink(CallScreenEvents.Hangup) },
+                    )
+                is AsyncData.Success -> Unit
             }
-        )
-        when (state.urlState) {
-            AsyncData.Uninitialized,
-            is AsyncData.Loading ->
-                ProgressDialog(text = stringResource(id = CommonStrings.common_please_wait))
-            is AsyncData.Failure ->
-                ErrorDialog(
-                    content = state.urlState.error.message.orEmpty(),
-                    onSubmit = { state.eventSink(CallScreenEvents.Hangup) },
-                )
-            is AsyncData.Success -> Unit
         }
     }
 }

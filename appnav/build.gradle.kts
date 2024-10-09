@@ -8,11 +8,10 @@
 @file:Suppress("UnstableApiUsage")
 
 import extension.allFeaturesApi
+import extension.setupAnvil
 
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.anvil)
-    alias(libs.plugins.kapt)
     id("kotlin-parcelize")
 }
 
@@ -20,13 +19,10 @@ android {
     namespace = "io.element.android.appnav"
 }
 
-dependencies {
-    implementation(projects.anvilannotations)
-    anvil(projects.anvilcodegen)
-    implementation(libs.dagger)
-    kapt(libs.dagger.compiler)
+setupAnvil()
 
-    allFeaturesApi(rootDir, logger)
+dependencies {
+    allFeaturesApi(project)
 
     implementation(projects.libraries.core)
     implementation(projects.libraries.androidutils)
