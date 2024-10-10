@@ -18,7 +18,6 @@ import io.element.android.libraries.push.test.test.FakePushHandler
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushproviders.api.PushHandler
 import io.element.android.tests.testutils.lambda.lambdaRecorder
-import io.element.android.tests.testutils.lambda.lambdaSuspendRecorder
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -32,7 +31,7 @@ import org.robolectric.RobolectricTestRunner
 class VectorFirebaseMessagingServiceTest {
     @Test
     fun `test receiving invalid data`() = runTest {
-        val lambda = lambdaSuspendRecorder<PushData, Unit>(ensureNeverCalled = true) { }
+        val lambda = lambdaRecorder<PushData, Unit>(ensureNeverCalled = true) { }
         val vectorFirebaseMessagingService = createVectorFirebaseMessagingService(
             pushHandler = FakePushHandler(handleResult = lambda)
         )
@@ -41,7 +40,7 @@ class VectorFirebaseMessagingServiceTest {
 
     @Test
     fun `test receiving valid data`() = runTest {
-        val lambda = lambdaSuspendRecorder<PushData, Unit> { }
+        val lambda = lambdaRecorder<PushData, Unit> { }
         val vectorFirebaseMessagingService = createVectorFirebaseMessagingService(
             pushHandler = FakePushHandler(handleResult = lambda)
         )

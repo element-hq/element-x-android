@@ -22,7 +22,6 @@ import io.element.android.libraries.pushproviders.api.PushHandler
 import io.element.android.libraries.pushproviders.unifiedpush.registration.EndpointRegistrationHandler
 import io.element.android.libraries.pushproviders.unifiedpush.registration.RegistrationResult
 import io.element.android.tests.testutils.lambda.lambdaRecorder
-import io.element.android.tests.testutils.lambda.lambdaSuspendRecorder
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -51,7 +50,7 @@ class VectorUnifiedPushMessagingReceiverTest {
     @Test
     fun `onMessage valid invoke the push handler`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val pushHandlerResult = lambdaSuspendRecorder<PushData, Unit> {}
+        val pushHandlerResult = lambdaRecorder<PushData, Unit> {}
         val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver(
             pushHandler = FakePushHandler(
                 handleResult = pushHandlerResult
@@ -76,7 +75,7 @@ class VectorUnifiedPushMessagingReceiverTest {
     @Test
     fun `onMessage invalid does not invoke the push handler`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val pushHandlerResult = lambdaSuspendRecorder<PushData, Unit> {}
+        val pushHandlerResult = lambdaRecorder<PushData, Unit> {}
         val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver(
             pushHandler = FakePushHandler(
                 handleResult = pushHandlerResult
@@ -98,7 +97,7 @@ class VectorUnifiedPushMessagingReceiverTest {
             storeUpEndpointResult = storeUpEndpointResult,
         )
         val endpointRegistrationHandler = EndpointRegistrationHandler()
-        val handleResult = lambdaSuspendRecorder<String, String, String, Result<Unit>> { _, _, _ -> Result.success(Unit) }
+        val handleResult = lambdaRecorder<String, String, String, Result<Unit>> { _, _, _ -> Result.success(Unit) }
         val unifiedPushNewGatewayHandler = FakeUnifiedPushNewGatewayHandler(
             handleResult = handleResult
         )
@@ -138,7 +137,7 @@ class VectorUnifiedPushMessagingReceiverTest {
             storeUpEndpointResult = storeUpEndpointResult,
         )
         val endpointRegistrationHandler = EndpointRegistrationHandler()
-        val handleResult = lambdaSuspendRecorder<String, String, String, Result<Unit>> { _, _, _ -> Result.failure(AN_EXCEPTION) }
+        val handleResult = lambdaRecorder<String, String, String, Result<Unit>> { _, _, _ -> Result.failure(AN_EXCEPTION) }
         val unifiedPushNewGatewayHandler = FakeUnifiedPushNewGatewayHandler(
             handleResult = handleResult
         )
