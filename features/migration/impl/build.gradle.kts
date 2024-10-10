@@ -1,3 +1,5 @@
+import extension.setupAnvil
+
 /*
  * Copyright 2024 New Vector Ltd.
  *
@@ -7,12 +9,13 @@
 
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.anvil)
 }
 
 android {
     namespace = "io.element.android.features.migration.impl"
 }
+
+setupAnvil()
 
 dependencies {
     implementation(projects.features.migration.api)

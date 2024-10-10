@@ -45,6 +45,8 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
+import io.element.android.libraries.matrix.api.getRoomInfoFlow
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import kotlinx.coroutines.flow.combine
@@ -120,12 +122,9 @@ class RoomFlowNode @AssistedInject constructor(
     }
 
     private fun subscribeToRoomInfoFlow(roomId: RoomId, serverNames: List<String>) {
-        val roomInfoFlow = client.getRoomInfoFlow(
-            roomId = roomId
-        ).map { it.getOrNull() }
-
-        val isSpaceFlow = roomInfoFlow.map { it?.isSpace.orFalse() }.distinctUntilChanged()
-        val currentMembershipFlow = roomInfoFlow.map { it?.currentUserMembership }.distinctUntilChanged()
+        val roomInfoFlow = client.getRoomInfoFlow(roomIdOrAlias = roomId.toRoomIdOrAlias())
+        val isSpaceFlow = roomInfoFlow.map { it.getOrNull()?.isSpace.orFalse() }.distinctUntilChanged()
+        val currentMembershipFlow = roomInfoFlow.map { it.getOrNull()?.currentUserMembership }.distinctUntilChanged()
         combine(currentMembershipFlow, isSpaceFlow) { membership, isSpace ->
             Timber.d("Room membership: $membership")
             when (membership) {

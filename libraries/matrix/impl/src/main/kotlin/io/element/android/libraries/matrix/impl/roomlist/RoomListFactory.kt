@@ -31,7 +31,7 @@ internal class RoomListFactory(
     private val innerRoomListService: RoomListService,
     private val sessionCoroutineScope: CoroutineScope,
 ) {
-    private val roomSummaryDetailsFactory: RoomSummaryDetailsFactory = RoomSummaryDetailsFactory()
+    private val roomSummaryDetailsFactory: RoomSummaryFactory = RoomSummaryFactory()
 
     /**
      * Creates a room list that can be used to load more rooms and filter them dynamically.

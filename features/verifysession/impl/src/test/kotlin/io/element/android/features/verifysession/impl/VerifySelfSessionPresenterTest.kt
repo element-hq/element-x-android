@@ -343,6 +343,7 @@ class VerifySelfSessionPresenterTest {
             skipItems(1)
             val initialItem = awaitItem()
             initialItem.eventSink(VerifySelfSessionViewEvents.SignOut)
+            assertThat(awaitItem().signOutAction.isLoading()).isTrue()
             val finalItem = awaitItem()
             assertThat(finalItem.signOutAction.isSuccess()).isTrue()
             assertThat(finalItem.signOutAction.dataOrNull()).isEqualTo("aUrl")

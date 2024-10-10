@@ -8,7 +8,9 @@
 package io.element.android.features.call.impl.ui
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.ViewGroup
+import android.webkit.ConsoleMessage
 import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -43,6 +45,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
+import timber.log.Timber
 
 typealias RequestPermissionCallback = (Array<String>) -> Unit
 
@@ -188,6 +191,25 @@ private fun WebView.setup(
     webChromeClient = object : WebChromeClient() {
         override fun onPermissionRequest(request: PermissionRequest) {
             onPermissionsRequested(request)
+        }
+
+        override fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
+            val priority = when (consoleMessage.messageLevel()) {
+                ConsoleMessage.MessageLevel.ERROR -> Log.ERROR
+                ConsoleMessage.MessageLevel.WARNING -> Log.WARN
+                else -> Log.DEBUG
+            }
+            Timber.tag("WebView").log(
+                priority = priority,
+                message = buildString {
+                    append(consoleMessage.sourceId())
+                    append(":")
+                    append(consoleMessage.lineNumber())
+                    append(" ")
+                    append(consoleMessage.message())
+                },
+            )
+            return true
         }
     }
 }

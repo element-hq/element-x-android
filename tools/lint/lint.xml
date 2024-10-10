@@ -117,4 +117,9 @@
 
     <!-- Compose -->
     <issue id="UnnecessaryComposedModifier" severity="error" />
+
+    <!-- There seems to be an issue with this check, it flags lots of false positives. -->
+    <!-- See https://issuetracker.google.com/issues/349411310 -->
+    <!-- TODO: check again in the near future. -->
+    <issue id="ProduceStateDoesNotAssignValue" severity="ignore" />
 </lint>

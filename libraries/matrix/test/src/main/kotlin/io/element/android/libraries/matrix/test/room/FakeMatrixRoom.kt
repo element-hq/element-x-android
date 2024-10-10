@@ -24,7 +24,6 @@ import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.poll.PollKind
-import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomInfo
@@ -32,7 +31,6 @@ import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.MatrixRoomNotificationSettingsState
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.location.AssetType
@@ -40,21 +38,15 @@ import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerL
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
-import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_ROOM_ID
-import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
-import kotlinx.collections.immutable.ImmutableMap
-import kotlinx.collections.immutable.persistentMapOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -526,62 +518,6 @@ class FakeMatrixRoom(
         membersStateFlow.value = state
     }
 }
-
-fun aRoomInfo(
-    id: RoomId = A_ROOM_ID,
-    name: String? = A_ROOM_NAME,
-    rawName: String? = name,
-    topic: String? = "A topic",
-    avatarUrl: String? = AN_AVATAR_URL,
-    isDirect: Boolean = false,
-    isPublic: Boolean = true,
-    isSpace: Boolean = false,
-    isTombstoned: Boolean = false,
-    isFavorite: Boolean = false,
-    canonicalAlias: RoomAlias? = null,
-    alternativeAliases: List<RoomAlias> = emptyList(),
-    currentUserMembership: CurrentUserMembership = CurrentUserMembership.JOINED,
-    inviter: RoomMember? = null,
-    activeMembersCount: Long = 1,
-    invitedMembersCount: Long = 0,
-    joinedMembersCount: Long = 1,
-    highlightCount: Long = 0,
-    notificationCount: Long = 0,
-    userDefinedNotificationMode: RoomNotificationMode? = null,
-    hasRoomCall: Boolean = false,
-    userPowerLevels: ImmutableMap<UserId, Long> = persistentMapOf(),
-    activeRoomCallParticipants: List<UserId> = emptyList(),
-    heroes: List<MatrixUser> = emptyList(),
-    pinnedEventIds: List<EventId> = emptyList(),
-    roomCreator: UserId? = null,
-) = MatrixRoomInfo(
-    id = id,
-    name = name,
-    rawName = rawName,
-    topic = topic,
-    avatarUrl = avatarUrl,
-    isDirect = isDirect,
-    isPublic = isPublic,
-    isSpace = isSpace,
-    isTombstoned = isTombstoned,
-    isFavorite = isFavorite,
-    canonicalAlias = canonicalAlias,
-    alternativeAliases = alternativeAliases.toImmutableList(),
-    currentUserMembership = currentUserMembership,
-    inviter = inviter,
-    activeMembersCount = activeMembersCount,
-    invitedMembersCount = invitedMembersCount,
-    joinedMembersCount = joinedMembersCount,
-    highlightCount = highlightCount,
-    notificationCount = notificationCount,
-    userDefinedNotificationMode = userDefinedNotificationMode,
-    hasRoomCall = hasRoomCall,
-    userPowerLevels = userPowerLevels,
-    activeRoomCallParticipants = activeRoomCallParticipants.toImmutableList(),
-    heroes = heroes.toImmutableList(),
-    pinnedEventIds = pinnedEventIds.toImmutableList(),
-    creator = roomCreator,
-)
 
 fun defaultRoomPowerLevels() = MatrixRoomPowerLevels(
     ban = 50,

@@ -478,7 +478,7 @@ class LoggedInPresenterTest {
             distributors = listOf(Distributor("aDistributorValue1", "aDistributorName1")),
             currentDistributor = { null },
         ),
-        registerWithLambda: suspend (MatrixClient, PushProvider, Distributor) -> Result<Unit> = { _, _, _ ->
+        registerWithLambda: (MatrixClient, PushProvider, Distributor) -> Result<Unit> = { _, _, _ ->
             Result.success(Unit)
         },
         selectPushProviderLambda: (MatrixClient, PushProvider) -> Unit = { _, _ -> lambdaError() },

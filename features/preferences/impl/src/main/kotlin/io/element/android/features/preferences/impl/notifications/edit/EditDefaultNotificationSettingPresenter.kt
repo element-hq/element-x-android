@@ -21,11 +21,12 @@ import dagger.assisted.AssistedInject
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingStateNoSuccess
-import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
@@ -40,7 +41,6 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
     private val notificationSettingsService: NotificationSettingsService,
     @Assisted private val isOneToOne: Boolean,
     private val roomListService: RoomListService,
-    private val matrixClient: MatrixClient,
 ) : Presenter<EditDefaultNotificationSettingState> {
     @AssistedFactory
     interface Factory {
@@ -57,8 +57,8 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
 
         val changeNotificationSettingAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
-        val roomsWithUserDefinedMode: MutableState<List<RoomSummary>> = remember {
-            mutableStateOf(listOf())
+        val roomsWithUserDefinedMode: MutableState<List<EditNotificationSettingRoomInfo>> = remember {
+            mutableStateOf(emptyList())
         }
 
         val localCoroutineScope = rememberCoroutineScope()
@@ -106,31 +106,37 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
             .launchIn(this)
     }
 
-    private fun CoroutineScope.observeRoomSummaries(roomsWithUserDefinedMode: MutableState<List<RoomSummary>>) {
+    private fun CoroutineScope.observeRoomSummaries(roomsWithUserDefinedMode: MutableState<List<EditNotificationSettingRoomInfo>>) {
         roomListService.allRooms
             .summaries
-            .onEach {
-                updateRoomsWithUserDefinedMode(it, roomsWithUserDefinedMode)
+            .onEach { roomSummaries ->
+                updateRoomsWithUserDefinedMode(roomSummaries, roomsWithUserDefinedMode)
             }
             .launchIn(this)
     }
 
-    private fun CoroutineScope.updateRoomsWithUserDefinedMode(
+    private suspend fun updateRoomsWithUserDefinedMode(
         summaries: List<RoomSummary>,
-        roomsWithUserDefinedMode: MutableState<List<RoomSummary>>
-    ) = launch {
-        val roomWithUserDefinedRules: Set<String> = notificationSettingsService.getRoomsWithUserDefinedRules().getOrThrow().toSet()
-
-        val sortedSummaries = summaries
-            .filterIsInstance<RoomSummary>()
-            .filter {
-                val room = matrixClient.getRoom(it.roomId) ?: return@filter false
-                roomWithUserDefinedRules.contains(it.roomId.value) && isOneToOne == room.isOneToOne
+        roomsWithUserDefinedMode: MutableState<List<EditNotificationSettingRoomInfo>>
+    ) {
+        val roomWithUserDefinedRules: Set<String> = notificationSettingsService.getRoomsWithUserDefinedRules().getOrDefault(emptyList()).toSet()
+        roomsWithUserDefinedMode.value = summaries
+            .filter { roomSummary ->
+                roomWithUserDefinedRules.contains(roomSummary.roomId.value) && roomSummary.isOneToOne == isOneToOne
+            }
+            .map { roomSummary ->
+                EditNotificationSettingRoomInfo(
+                    roomId = roomSummary.roomId,
+                    name = roomSummary.info.name,
+                    heroesAvatar = roomSummary.info.heroes.map { hero ->
+                        hero.getAvatarData(AvatarSize.CustomRoomNotificationSetting)
+                    }.toImmutableList(),
+                    avatarData = roomSummary.info.getAvatarData(AvatarSize.CustomRoomNotificationSetting),
+                    notificationMode = roomSummary.info.userDefinedNotificationMode,
+                )
             }
             // locale sensitive sorting
-            .sortedWith(compareBy(Collator.getInstance()) { it.name })
-
-        roomsWithUserDefinedMode.value = sortedSummaries
+            .sortedWith(compareBy(Collator.getInstance()) { roomSummary -> roomSummary.name })
     }
 
     private fun CoroutineScope.setDefaultNotificationMode(mode: RoomNotificationMode, action: MutableState<AsyncAction<Unit>>) = launch {

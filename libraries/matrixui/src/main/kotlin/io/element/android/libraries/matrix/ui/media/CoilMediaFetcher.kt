@@ -20,10 +20,8 @@ import okio.Buffer
 import okio.Path.Companion.toOkioPath
 import timber.log.Timber
 import java.nio.ByteBuffer
-import kotlin.math.roundToLong
 
 internal class CoilMediaFetcher(
-    private val scalingFunction: (Float) -> Float,
     private val mediaLoader: MatrixMediaLoader,
     private val mediaData: MediaRequestData,
     private val options: Options
@@ -74,8 +72,8 @@ internal class CoilMediaFetcher(
     private suspend fun fetchThumbnail(mediaSource: MediaSource, kind: MediaRequestData.Kind.Thumbnail, options: Options): FetchResult? {
         return mediaLoader.loadMediaThumbnail(
             source = mediaSource,
-            width = scalingFunction(kind.width.toFloat()).roundToLong(),
-            height = scalingFunction(kind.height.toFloat()).roundToLong(),
+            width = kind.width,
+            height = kind.height,
         ).map { byteArray ->
             byteArray.asSourceResult(options)
         }.onFailure {

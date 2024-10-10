@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.impl.roomlist
 
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
+import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 
@@ -17,19 +18,19 @@ val RoomListFilter.predicate
         is RoomListFilter.Any -> { _: RoomSummary -> true }
         RoomListFilter.None -> { _: RoomSummary -> false }
         RoomListFilter.Category.Group -> { roomSummary: RoomSummary ->
-            !roomSummary.isDm && !roomSummary.isInvited()
+            !roomSummary.info.isDm && !roomSummary.isInvited()
         }
         RoomListFilter.Category.People -> { roomSummary: RoomSummary ->
-            roomSummary.isDm && !roomSummary.isInvited()
+            roomSummary.info.isDm && !roomSummary.isInvited()
         }
         RoomListFilter.Favorite -> { roomSummary: RoomSummary ->
-            roomSummary.isFavorite && !roomSummary.isInvited()
+            roomSummary.info.isFavorite && !roomSummary.isInvited()
         }
         RoomListFilter.Unread -> { roomSummary: RoomSummary ->
-            !roomSummary.isInvited() && (roomSummary.numUnreadNotifications > 0 || roomSummary.isMarkedUnread)
+            !roomSummary.isInvited() && (roomSummary.info.numUnreadNotifications > 0 || roomSummary.info.isMarkedUnread)
         }
         is RoomListFilter.NormalizedMatchRoomName -> { roomSummary: RoomSummary ->
-            roomSummary.name.orEmpty().contains(pattern, ignoreCase = true)
+            roomSummary.info.name.orEmpty().contains(pattern, ignoreCase = true)
         }
         RoomListFilter.Invite -> { roomSummary: RoomSummary ->
             roomSummary.isInvited()
@@ -50,4 +51,4 @@ fun List<RoomSummary>.filter(filter: RoomListFilter): List<RoomSummary> {
     }
 }
 
-private fun RoomSummary.isInvited() = currentUserMembership == CurrentUserMembership.INVITED
+private fun RoomSummary.isInvited() = info.currentUserMembership == CurrentUserMembership.INVITED

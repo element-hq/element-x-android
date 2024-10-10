@@ -396,7 +396,7 @@ class RoomListPresenterTest {
         val notificationSettingsService = FakeNotificationSettingsService()
         val roomListService = FakeRoomListService()
         roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
-        roomListService.postAllRooms(listOf(aRoomSummary(notificationMode = userDefinedMode)))
+        roomListService.postAllRooms(listOf(aRoomSummary(userDefinedNotificationMode = userDefinedMode)))
         val matrixClient = FakeMatrixClient(
             roomListService = roomListService,
             notificationSettingsService = notificationSettingsService

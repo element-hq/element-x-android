@@ -15,7 +15,6 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_ID_3
 import io.element.android.libraries.matrix.test.room.aRoomSummary
-import io.element.android.libraries.matrix.test.room.aRoomSummaryFilled
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
@@ -40,7 +39,7 @@ class RoomSummaryListProcessorTest {
 
     @Test
     fun `PushBack adds a new entry at the end of the list`() = runTest {
-        summaries.value = listOf(aRoomSummaryFilled())
+        summaries.value = listOf(aRoomSummary())
         val processor = createProcessor()
         processor.postUpdate(listOf(RoomListEntriesUpdate.PushBack(FakeRustRoomListItem(A_ROOM_ID_2))))
 
@@ -50,7 +49,7 @@ class RoomSummaryListProcessorTest {
 
     @Test
     fun `PushFront inserts a new entry at the start of the list`() = runTest {
-        summaries.value = listOf(aRoomSummaryFilled())
+        summaries.value = listOf(aRoomSummary())
         val processor = createProcessor()
         processor.postUpdate(listOf(RoomListEntriesUpdate.PushFront(FakeRustRoomListItem(A_ROOM_ID_2))))
 
@@ -60,7 +59,7 @@ class RoomSummaryListProcessorTest {
 
     @Test
     fun `Set replaces an entry at some index`() = runTest {
-        summaries.value = listOf(aRoomSummaryFilled())
+        summaries.value = listOf(aRoomSummary())
         val processor = createProcessor()
         val index = 0
 
@@ -72,7 +71,7 @@ class RoomSummaryListProcessorTest {
 
     @Test
     fun `Insert inserts a new entry at the provided index`() = runTest {
-        summaries.value = listOf(aRoomSummaryFilled())
+        summaries.value = listOf(aRoomSummary())
         val processor = createProcessor()
         val index = 0
 
@@ -84,7 +83,10 @@ class RoomSummaryListProcessorTest {
 
     @Test
     fun `Remove removes an entry at some index`() = runTest {
-        summaries.value = listOf(aRoomSummaryFilled(roomId = A_ROOM_ID), aRoomSummaryFilled(A_ROOM_ID_2))
+        summaries.value = listOf(
+            aRoomSummary(roomId = A_ROOM_ID),
+            aRoomSummary(A_ROOM_ID_2)
+        )
         val processor = createProcessor()
         val index = 0
 
@@ -96,7 +98,10 @@ class RoomSummaryListProcessorTest {
 
     @Test
     fun `PopBack removes an entry at the end of the list`() = runTest {
-        summaries.value = listOf(aRoomSummaryFilled(roomId = A_ROOM_ID), aRoomSummaryFilled(A_ROOM_ID_2))
+        summaries.value = listOf(
+            aRoomSummary(roomId = A_ROOM_ID),
+            aRoomSummary(A_ROOM_ID_2)
+        )
         val processor = createProcessor()
         val index = 0
 
@@ -108,7 +113,10 @@ class RoomSummaryListProcessorTest {
 
     @Test
     fun `PopFront removes an entry at the start of the list`() = runTest {
-        summaries.value = listOf(aRoomSummaryFilled(roomId = A_ROOM_ID), aRoomSummaryFilled(A_ROOM_ID_2))
+        summaries.value = listOf(
+            aRoomSummary(roomId = A_ROOM_ID),
+            aRoomSummary(A_ROOM_ID_2)
+        )
         val processor = createProcessor()
         val index = 0
 
@@ -120,7 +128,10 @@ class RoomSummaryListProcessorTest {
 
     @Test
     fun `Clear removes all the entries`() = runTest {
-        summaries.value = listOf(aRoomSummaryFilled(roomId = A_ROOM_ID), aRoomSummaryFilled(A_ROOM_ID_2))
+        summaries.value = listOf(
+            aRoomSummary(roomId = A_ROOM_ID),
+            aRoomSummary(A_ROOM_ID_2)
+        )
         val processor = createProcessor()
 
         processor.postUpdate(listOf(RoomListEntriesUpdate.Clear))
@@ -130,7 +141,10 @@ class RoomSummaryListProcessorTest {
 
     @Test
     fun `Truncate removes all entries after the provided length`() = runTest {
-        summaries.value = listOf(aRoomSummaryFilled(roomId = A_ROOM_ID), aRoomSummaryFilled(A_ROOM_ID_2))
+        summaries.value = listOf(
+            aRoomSummary(roomId = A_ROOM_ID),
+            aRoomSummary(A_ROOM_ID_2)
+        )
         val processor = createProcessor()
         val index = 0
 
@@ -142,7 +156,10 @@ class RoomSummaryListProcessorTest {
 
     @Test
     fun `Reset removes all entries and add the provided ones`() = runTest {
-        summaries.value = listOf(aRoomSummaryFilled(roomId = A_ROOM_ID), aRoomSummaryFilled(A_ROOM_ID_2))
+        summaries.value = listOf(
+            aRoomSummary(roomId = A_ROOM_ID),
+            aRoomSummary(A_ROOM_ID_2)
+        )
         val processor = createProcessor()
         val index = 0
 
@@ -156,6 +173,6 @@ class RoomSummaryListProcessorTest {
         summaries,
         FakeRustRoomListService(),
         coroutineContext = StandardTestDispatcher(testScheduler),
-        roomSummaryDetailsFactory = RoomSummaryDetailsFactory(),
+        roomSummaryDetailsFactory = RoomSummaryFactory(),
     )
 }

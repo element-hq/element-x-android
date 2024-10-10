@@ -19,6 +19,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.ui.media.AVATAR_THUMBNAIL_SIZE_IN_PIXEL
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
@@ -45,7 +46,7 @@ class DefaultNotificationBitmapLoader @Inject constructor(
     private suspend fun loadRoomBitmap(path: String, imageLoader: ImageLoader): Bitmap? {
         return try {
             val imageRequest = ImageRequest.Builder(context)
-                .data(MediaRequestData(MediaSource(path), MediaRequestData.Kind.Thumbnail(1024)))
+                .data(MediaRequestData(MediaSource(path), MediaRequestData.Kind.Thumbnail(AVATAR_THUMBNAIL_SIZE_IN_PIXEL)))
                 .transformations(CircleCropTransformation())
                 .build()
             val result = imageLoader.execute(imageRequest)
@@ -73,7 +74,7 @@ class DefaultNotificationBitmapLoader @Inject constructor(
     private suspend fun loadUserIcon(path: String, imageLoader: ImageLoader): IconCompat? {
         return try {
             val imageRequest = ImageRequest.Builder(context)
-                .data(MediaRequestData(MediaSource(path), MediaRequestData.Kind.Thumbnail(1024)))
+                .data(MediaRequestData(MediaSource(path), MediaRequestData.Kind.Thumbnail(AVATAR_THUMBNAIL_SIZE_IN_PIXEL)))
                 .transformations(CircleCropTransformation())
                 .build()
             val result = imageLoader.execute(imageRequest)

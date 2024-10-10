@@ -99,7 +99,7 @@ class AcceptDeclineInvitePresenterTest {
                     InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite
                 )
             }
-            skipItems(1)
+            skipItems(2)
             awaitItem().also { state ->
                 assertThat(state.declineAction).isInstanceOf(AsyncAction.Failure::class.java)
                 state.eventSink(
@@ -147,7 +147,7 @@ class AcceptDeclineInvitePresenterTest {
                     InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite
                 )
             }
-            skipItems(1)
+            skipItems(2)
             awaitItem().also { state ->
                 assertThat(state.declineAction).isInstanceOf(AsyncAction.Success::class.java)
             }

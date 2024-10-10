@@ -38,6 +38,8 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import java.io.Closeable
 import java.util.Optional
 
@@ -94,7 +96,13 @@ interface MatrixClient : Closeable {
     suspend fun getAccountManagementUrl(action: AccountManagementAction?): Result<String?>
     suspend fun uploadMedia(mimeType: String, data: ByteArray, progressCallback: ProgressCallback?): Result<String>
     fun roomMembershipObserver(): RoomMembershipObserver
-    fun getRoomInfoFlow(roomId: RoomId): Flow<Optional<MatrixRoomInfo>>
+
+    /**
+     * Get a room summary flow for a given room ID or alias.
+     * The flow will emit a new value whenever the room summary is updated.
+     * The flow will emit Optional.empty item if the room is not found.
+     */
+    fun getRoomSummaryFlow(roomIdOrAlias: RoomIdOrAlias): Flow<Optional<RoomSummary>>
 
     fun isMe(userId: UserId?) = userId == sessionId
 
@@ -141,4 +149,15 @@ interface MatrixClient : Closeable {
 
     fun canDeactivateAccount(): Boolean
     suspend fun deactivateAccount(password: String, eraseData: Boolean): Result<Unit>
+}
+
+/**
+ * Get a room info flow for a given room ID or alias.
+ * The flow will emit a new value whenever the room info is updated.
+ * The flow will emit Optional.empty item if the room is not found.
+ */
+fun MatrixClient.getRoomInfoFlow(roomIdOrAlias: RoomIdOrAlias): Flow<Optional<MatrixRoomInfo>> {
+    return getRoomSummaryFlow(roomIdOrAlias)
+        .map { roomSummary -> roomSummary.map { it.info } }
+        .distinctUntilChanged()
 }

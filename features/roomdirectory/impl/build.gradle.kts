@@ -9,7 +9,6 @@ import extension.setupAnvil
 
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.anvil)
     id("kotlin-parcelize")
 }
 
