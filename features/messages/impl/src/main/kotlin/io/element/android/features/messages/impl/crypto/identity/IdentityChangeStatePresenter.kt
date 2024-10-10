@@ -15,6 +15,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -31,7 +33,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -40,6 +41,7 @@ import javax.inject.Inject
 class IdentityChangeStatePresenter @Inject constructor(
     private val room: MatrixRoom,
     private val encryptionService: EncryptionService,
+    private val featureFlagService: FeatureFlagService,
 ) : Presenter<IdentityChangeState> {
     @Composable
     override fun present(): IdentityChangeState {
@@ -62,14 +64,18 @@ class IdentityChangeStatePresenter @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun ProduceStateScope<PersistentList<RoomMemberIdentityStateChange>>.observeRoomMemberIdentityStateChange() {
-        room.syncUpdateFlow
+        featureFlagService.isFeatureEnabledFlow(FeatureFlags.IdentityPinningViolationNotifications)
+            .filter { it }
+            .flatMapLatest {
+                room.syncUpdateFlow
+            }
             .filter {
                 // Room cannot become unencrypted, so we can just apply a filter here.
                 room.isEncrypted
             }
             .distinctUntilChanged()
             .flatMapLatest {
-                combine(room.identityStateChangesFlow, room.membersStateFlow,) { identityStateChanges, membersState ->
+                combine(room.identityStateChangesFlow, room.membersStateFlow) { identityStateChanges, membersState ->
                     identityStateChanges.map { identityStateChange ->
                         val member = membersState.roomMembers()
                             ?.firstOrNull { roomMember -> roomMember.userId == identityStateChange.userId }

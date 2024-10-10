@@ -132,4 +132,17 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
+    IdentityPinningViolationNotifications(
+        key = "feature.identityPinningViolationNotifications",
+        title = "Identity pinning violation notifications",
+        description = null,
+        defaultValue = { buildMeta ->
+            when (buildMeta.buildType) {
+                // Do not enable this feature in release builds
+                BuildType.RELEASE -> false
+                else -> true
+            }
+        },
+        isFinished = false,
+    ),
 }
