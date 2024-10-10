@@ -15,7 +15,10 @@ import androidx.compose.runtime.produceState
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.room.powerlevels.canBan
 import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
+import io.element.android.libraries.matrix.api.room.powerlevels.canKick
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendMessage
@@ -59,6 +62,36 @@ fun MatrixRoom.canCall(updateKey: Long): State<Boolean> {
 fun MatrixRoom.canPinUnpin(updateKey: Long): State<Boolean> {
     return produceState(initialValue = false, key1 = updateKey) {
         value = canUserPinUnpin(sessionId).getOrElse { false }
+    }
+}
+
+@Composable
+fun MatrixRoom.isDmAsState(updateKey: Long): State<Boolean> {
+    return produceState(initialValue = false, key1 = updateKey) {
+        value = isDm
+    }
+}
+
+@Composable
+fun MatrixRoom.canKickAsState(updateKey: Long): State<Boolean> {
+    return produceState(initialValue = false, key1 = updateKey) {
+        value = canKick().getOrElse { false }
+    }
+}
+
+@Composable
+fun MatrixRoom.canBanAsState(updateKey: Long): State<Boolean> {
+    return produceState(initialValue = false, key1 = updateKey) {
+        value = canBan().getOrElse { false }
+    }
+}
+
+@Composable
+fun MatrixRoom.userPowerLevelAsState(updateKey: Long): State<Long> {
+    return produceState(initialValue = 0, key1 = updateKey) {
+        value = userRole(sessionId)
+            .getOrDefault(RoomMember.Role.USER)
+            .powerLevel
     }
 }
 
