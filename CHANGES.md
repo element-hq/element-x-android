@@ -1,3 +1,28 @@
+Changes in Element X v0.7.0 (2024-10-10)
+========================================
+
+## What's Changed
+### 🙌 Improvements
+* Enable Login with QR code in release builds. by @bmarty in https://github.com/element-hq/element-x-android/pull/3646
+* Remove unused `RoomSummary` cache by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3647
+### 🐛 Bugfixes
+* Add the `CallWebView` logs to our logging stack by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3637
+### Dependency upgrades
+* Update dependency io.element.android:emojibase-bindings to v1.3.3 by @renovate in https://github.com/element-hq/element-x-android/pull/3620
+* fix(deps): update dependency androidx.compose:compose-bom to v2024.09.03 by @renovate in https://github.com/element-hq/element-x-android/pull/3583
+* fix(deps): update dependency io.mockk:mockk to v1.13.13 by @renovate in https://github.com/element-hq/element-x-android/pull/3634
+* chore(deps): update dependencyanalysis to v2.1.4 by @renovate in https://github.com/element-hq/element-x-android/pull/3610
+* fix(deps): update dependency androidx.webkit:webkit to v1.12.1 by @renovate in https://github.com/element-hq/element-x-android/pull/3584
+* fix(deps): update dependency com.posthog:posthog-android to v3.8.1 by @renovate in https://github.com/element-hq/element-x-android/pull/3638
+* Upgrade Kotlin to v2.0 by @jmartinesp in https://github.com/element-hq/element-x-android/pull/3594
+### Others
+* Rework room summary by @ganfra in https://github.com/element-hq/element-x-android/pull/3631
+* QrCode intro screen: add subtitle and fix button wording #3632 by @bmarty in https://github.com/element-hq/element-x-android/pull/3633
+* Improve avatar rendering by @ganfra in https://github.com/element-hq/element-x-android/pull/3642
+* Add feature flag IdentityPinningViolationNotifications. by @bmarty in https://github.com/element-hq/element-x-android/pull/3648
+* Crypto copy adjustment by @bmarty in https://github.com/element-hq/element-x-android/pull/3649
+
+
 Changes in Element X v0.6.5 (2024-10-09)
 ========================================
 
