@@ -32,20 +32,35 @@ class AndroidLocalMediaFactory @Inject constructor(
     private val fileSizeFormatter: FileSizeFormatter,
     private val fileExtensionExtractor: FileExtensionExtractor,
 ) : LocalMediaFactory {
-    override fun createFromMediaFile(mediaFile: MediaFile, mediaInfo: MediaInfo): LocalMedia {
-        val uri = mediaFile.toFile().toUri()
-        return createFromUri(
-            uri = uri,
-            mimeType = mediaInfo.mimeType,
-            name = mediaInfo.name,
-            formattedFileSize = mediaInfo.formattedFileSize,
-        )
-    }
+    override fun createFromMediaFile(
+        mediaFile: MediaFile,
+        mediaInfo: MediaInfo,
+    ): LocalMedia = createFromUri(
+        uri = mediaFile.toFile().toUri(),
+        mimeType = mediaInfo.mimeType,
+        name = mediaInfo.filename,
+        caption = mediaInfo.caption,
+        formattedFileSize = mediaInfo.formattedFileSize,
+    )
 
     override fun createFromUri(
         uri: Uri,
         mimeType: String?,
         name: String?,
+        formattedFileSize: String?
+    ): LocalMedia = createFromUri(
+        uri = uri,
+        mimeType = mimeType,
+        name = name,
+        caption = null,
+        formattedFileSize = formattedFileSize,
+    )
+
+    private fun createFromUri(
+        uri: Uri,
+        mimeType: String?,
+        name: String?,
+        caption: String?,
         formattedFileSize: String?
     ): LocalMedia {
         val resolvedMimeType = mimeType ?: context.getMimeType(uri) ?: MimeTypes.OctetStream
@@ -56,7 +71,8 @@ class AndroidLocalMediaFactory @Inject constructor(
             uri = uri,
             info = MediaInfo(
                 mimeType = resolvedMimeType,
-                name = fileName,
+                filename = fileName,
+                caption = caption,
                 formattedFileSize = fileSize,
                 fileExtension = fileExtension
             )

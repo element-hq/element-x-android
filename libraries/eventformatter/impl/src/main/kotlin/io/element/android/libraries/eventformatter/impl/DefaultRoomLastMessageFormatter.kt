@@ -67,7 +67,7 @@ class DefaultRoomLastMessageFormatter @Inject constructor(
                 message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is StickerContent -> {
-                val message = sp.getString(CommonStrings.common_sticker) + " (" + content.body + ")"
+                val message = sp.getString(CommonStrings.common_sticker) + " (" + content.bestDescription + ")"
                 message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is UnableToDecryptContent -> {

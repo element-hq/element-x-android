@@ -38,7 +38,7 @@ internal fun TimelineItemEventRowForDirectRoomPreview() = ElementPreview {
             ATimelineItemEventRow(
                 event = aTimelineItemEvent(
                     isMine = it,
-                    content = aTimelineItemImageContent().copy(
+                    content = aTimelineItemImageContent(
                         aspectRatio = 5f
                     ),
                     groupPosition = TimelineItemGroupPosition.Last,

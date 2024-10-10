@@ -49,11 +49,11 @@ open class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails>
             ),
             aMessageContent(
                 body = "Audio",
-                type = AudioMessageType("Audio", MediaSource("url"), null),
+                type = AudioMessageType("Audio", null, null, MediaSource("url"), null),
             ),
             aMessageContent(
                 body = "Voice",
-                type = VoiceMessageType("Voice", MediaSource("url"), null, null),
+                type = VoiceMessageType("Voice", null, null, MediaSource("url"), null, null),
             ),
             aMessageContent(
                 body = "Image",
@@ -61,11 +61,11 @@ open class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails>
             ),
             aMessageContent(
                 body = "Sticker",
-                type = StickerMessageType("Image", MediaSource("url"), null),
+                type = StickerMessageType("Image", null, null, MediaSource("url"), null),
             ),
             aMessageContent(
                 body = "File",
-                type = FileMessageType("File", MediaSource("url"), null),
+                type = FileMessageType("File", null, null, MediaSource("url"), null),
             ),
             aMessageContent(
                 body = "Location",

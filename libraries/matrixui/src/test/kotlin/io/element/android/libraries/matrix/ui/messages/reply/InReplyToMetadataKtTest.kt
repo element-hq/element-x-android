@@ -75,9 +75,9 @@ class InReplyToMetadataKtTest {
             anInReplyToDetailsReady(
                 eventContent = aMessageContent(
                     messageType = ImageMessageType(
-                        body = "body",
-                        formatted = null,
-                        filename = null,
+                        filename = "filename",
+                        caption = null,
+                        formattedCaption = null,
                         source = aMediaSource(),
                         info = anImageInfo(),
                     )
@@ -105,9 +105,9 @@ class InReplyToMetadataKtTest {
             anInReplyToDetailsReady(
                 eventContent = aMessageContent(
                     messageType = ImageMessageType(
-                        body = "body",
-                        formatted = null,
-                        filename = null,
+                        filename = "filename",
+                        caption = "caption",
+                        formattedCaption = null,
                         source = aMediaSource(),
                         info = anImageInfo(),
                     )
@@ -134,6 +134,7 @@ class InReplyToMetadataKtTest {
         moleculeFlow(RecompositionMode.Immediate) {
             anInReplyToDetailsReady(
                 eventContent = StickerContent(
+                    filename = "filename",
                     body = "body",
                     info = anImageInfo(),
                     source = aMediaSource(url = "url")
@@ -160,6 +161,7 @@ class InReplyToMetadataKtTest {
         moleculeFlow(RecompositionMode.Immediate) {
             anInReplyToDetailsReady(
                 eventContent = StickerContent(
+                    filename = "filename",
                     body = "body",
                     info = anImageInfo(),
                     source = aMediaSource(url = "url")
@@ -187,9 +189,9 @@ class InReplyToMetadataKtTest {
             anInReplyToDetailsReady(
                 eventContent = aMessageContent(
                     messageType = VideoMessageType(
-                        body = "body",
-                        formatted = null,
-                        filename = null,
+                        filename = "filename",
+                        caption = null,
+                        formattedCaption = null,
                         source = aMediaSource(),
                         info = aVideoInfo(),
                     )
@@ -217,9 +219,9 @@ class InReplyToMetadataKtTest {
             anInReplyToDetailsReady(
                 eventContent = aMessageContent(
                     messageType = VideoMessageType(
-                        body = "body",
-                        formatted = null,
-                        filename = null,
+                        filename = "filename",
+                        caption = "caption",
+                        formattedCaption = null,
                         source = aMediaSource(),
                         info = aVideoInfo(),
                     )
@@ -247,7 +249,9 @@ class InReplyToMetadataKtTest {
             anInReplyToDetailsReady(
                 eventContent = aMessageContent(
                     messageType = FileMessageType(
-                        body = "body",
+                        filename = "filename",
+                        caption = "caption",
+                        formattedCaption = null,
                         source = aMediaSource(),
                         info = FileInfo(
                             mimetype = null,
@@ -280,7 +284,9 @@ class InReplyToMetadataKtTest {
             anInReplyToDetailsReady(
                 eventContent = aMessageContent(
                     messageType = FileMessageType(
-                        body = "body",
+                        filename = "filename",
+                        caption = "caption",
+                        formattedCaption = null,
                         source = aMediaSource(),
                         info = FileInfo(
                             mimetype = null,
@@ -313,7 +319,9 @@ class InReplyToMetadataKtTest {
             anInReplyToDetailsReady(
                 eventContent = aMessageContent(
                     messageType = AudioMessageType(
-                        body = "body",
+                        filename = "filename",
+                        caption = "caption",
+                        formattedCaption = null,
                         source = aMediaSource(),
                         info = AudioInfo(
                             duration = null,
@@ -375,7 +383,9 @@ class InReplyToMetadataKtTest {
                 anInReplyToDetailsReady(
                     eventContent = aMessageContent(
                         messageType = VoiceMessageType(
-                            body = "body",
+                            filename = "filename",
+                            caption = "caption",
+                            formattedCaption = null,
                             source = aMediaSource(),
                             info = null,
                             details = null,

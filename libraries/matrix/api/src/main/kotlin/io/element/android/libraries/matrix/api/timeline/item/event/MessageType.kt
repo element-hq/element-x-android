@@ -18,24 +18,37 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 @Immutable
 sealed interface MessageType
 
+@Immutable
+sealed interface MessageTypeWithAttachment : MessageType {
+    val filename: String
+    val caption: String?
+    val formattedCaption: FormattedBody?
+
+    val bestDescription: String
+        get() = caption ?: filename
+}
+
 data class EmoteMessageType(
     val body: String,
     val formatted: FormattedBody?
 ) : MessageType
 
 data class ImageMessageType(
-    val body: String,
-    val formatted: FormattedBody?,
-    val filename: String?,
+    override val filename: String,
+    override val caption: String?,
+    override val formattedCaption: FormattedBody?,
     val source: MediaSource,
     val info: ImageInfo?
-) : MessageType
+) : MessageTypeWithAttachment
 
+// FIXME This is never used in production code.
 data class StickerMessageType(
-    val body: String,
+    override val filename: String,
+    override val caption: String?,
+    override val formattedCaption: FormattedBody?,
     val source: MediaSource,
     val info: ImageInfo?
-) : MessageType
+) : MessageTypeWithAttachment
 
 data class LocationMessageType(
     val body: String,
@@ -44,31 +57,37 @@ data class LocationMessageType(
 ) : MessageType
 
 data class AudioMessageType(
-    val body: String,
+    override val filename: String,
+    override val caption: String?,
+    override val formattedCaption: FormattedBody?,
     val source: MediaSource,
     val info: AudioInfo?,
-) : MessageType
+) : MessageTypeWithAttachment
 
 data class VoiceMessageType(
-    val body: String,
+    override val filename: String,
+    override val caption: String?,
+    override val formattedCaption: FormattedBody?,
     val source: MediaSource,
     val info: AudioInfo?,
     val details: AudioDetails?,
-) : MessageType
+) : MessageTypeWithAttachment
 
 data class VideoMessageType(
-    val body: String,
-    val formatted: FormattedBody?,
-    val filename: String?,
+    override val filename: String,
+    override val caption: String?,
+    override val formattedCaption: FormattedBody?,
     val source: MediaSource,
     val info: VideoInfo?
-) : MessageType
+) : MessageTypeWithAttachment
 
 data class FileMessageType(
-    val body: String,
+    override val filename: String,
+    override val caption: String?,
+    override val formattedCaption: FormattedBody?,
     val source: MediaSource,
     val info: FileInfo?
-) : MessageType
+) : MessageTypeWithAttachment
 
 data class NoticeMessageType(
     val body: String,

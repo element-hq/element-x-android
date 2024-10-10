@@ -59,7 +59,7 @@ class VoiceMessagePresenter @AssistedInject constructor(
         eventId = content.eventId,
         mediaSource = content.mediaSource,
         mimeType = content.mimeType,
-        body = content.body,
+        body = content.caption,
     )
 
     private val play = mutableStateOf<AsyncData<Unit>>(AsyncData.Uninitialized)

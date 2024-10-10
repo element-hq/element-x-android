@@ -12,9 +12,9 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 
 data class TimelineItemImageContent(
-    val body: String,
-    val formatted: FormattedBody?,
-    val filename: String?,
+    override val filename: String,
+    override val caption: String?,
+    override val formattedCaption: FormattedBody?,
     val mediaSource: MediaSource,
     val thumbnailSource: MediaSource?,
     val formattedFileSize: String,
@@ -24,11 +24,10 @@ data class TimelineItemImageContent(
     val width: Int?,
     val height: Int?,
     val aspectRatio: Float?
-) : TimelineItemEventContent {
+) : TimelineItemEventContentWithAttachment {
     override val type: String = "TimelineItemImageContent"
 
-    val showCaption = filename != null && filename != body
-    val caption = if (showCaption) body else ""
+    val showCaption = caption != null
 
     val preferredMediaSource = if (mimeType == MimeTypes.Gif) {
         mediaSource

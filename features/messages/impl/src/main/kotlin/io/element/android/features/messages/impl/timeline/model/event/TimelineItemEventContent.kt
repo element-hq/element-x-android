@@ -8,10 +8,21 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 
 @Immutable
 sealed interface TimelineItemEventContent {
     val type: String
+}
+
+@Immutable
+sealed interface TimelineItemEventContentWithAttachment : TimelineItemEventContent {
+    val filename: String
+    val caption: String?
+    val formattedCaption: FormattedBody?
+
+    val bestDescription: String
+        get() = caption ?: filename
 }
 
 /**
