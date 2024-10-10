@@ -16,6 +16,10 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.ui.model.InviteSender
 import kotlinx.collections.immutable.toImmutableList
+import java.time.Duration
+import java.time.Instant
+import java.time.temporal.TemporalAmount
+import java.util.Date
 
 open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSummary> {
     override val values: Sequence<RoomListRoomSummary>
@@ -30,7 +34,7 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                     lastMessage = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt" +
                         " ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea com" +
                         "modo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-                    timestamp = "yesterday",
+                    timestamp = Date.from(Instant.now().minus(Duration.ofDays(1))),
                     numberOfUnreadMessages = 1,
                 ),
             ),
@@ -124,7 +128,7 @@ internal fun aRoomListRoomSummary(
     numberOfUnreadNotifications: Long = 0,
     isMarkedUnread: Boolean = false,
     lastMessage: String? = "Last message",
-    timestamp: String? = lastMessage?.let { "88:88" },
+    timestamp: Date? = lastMessage?.let { Date.from(Instant.MIN) },
     notificationMode: RoomNotificationMode? = null,
     hasRoomCall: Boolean = false,
     avatarData: AvatarData = AvatarData(id, name, size = AvatarSize.RoomListItem),

@@ -30,6 +30,8 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import java.util.Calendar
+import java.util.Date
 
 open class RoomListStateProvider : PreviewParameterProvider<RoomListState> {
     override val values: Sequence<RoomListState>
@@ -88,7 +90,10 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
         aRoomListRoomSummary(
             name = "Room",
             numberOfUnreadMessages = 1,
-            timestamp = "14:18",
+            timestamp = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, 14)
+                set(Calendar.MINUTE, 18)
+            }.time,
             lastMessage = "A very very very very long message which suites on two lines",
             avatarData = AvatarData("!id", "R", size = AvatarSize.RoomListItem),
             id = "!roomId:domain",
@@ -96,7 +101,10 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
         aRoomListRoomSummary(
             name = "Room#2",
             numberOfUnreadMessages = 0,
-            timestamp = "14:16",
+            timestamp = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, 14)
+                set(Calendar.MINUTE, 16)
+            }.time,
             lastMessage = "A short message",
             avatarData = AvatarData("!id", "Z", size = AvatarSize.RoomListItem),
             id = "!roomId2:domain",

@@ -40,6 +40,7 @@ import io.element.android.features.roomlist.impl.search.RoomListSearchState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.dateformatter.api.LastMessageTimestampFormatter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -70,6 +71,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
+import java.util.Date
 import javax.inject.Inject
 
 private const val EXTENDED_RANGE_SIZE = 40
@@ -91,6 +93,7 @@ class RoomListPresenter @Inject constructor(
     private val fullScreenIntentPermissionsPresenter: Presenter<FullScreenIntentPermissionsState>,
     private val notificationCleaner: NotificationCleaner,
     private val logoutPresenter: Presenter<DirectLogoutState>,
+    private val lastMessageTimestampFormatter: LastMessageTimestampFormatter,
 ) : Presenter<RoomListState> {
     private val encryptionService: EncryptionService = client.encryptionService()
     private val syncService: SyncService = client.syncService()
@@ -171,6 +174,10 @@ class RoomListPresenter @Inject constructor(
         )
     }
 
+    private fun formatTimestamp(timestamp: Date?): String {
+        return lastMessageTimestampFormatter.format(timestamp?.time)
+    }
+
     @Composable
     private fun rememberSecurityBannerState(
         securityBannerDismissed: Boolean,
@@ -246,7 +253,8 @@ class RoomListPresenter @Inject constructor(
                 RoomListContentState.Rooms(
                     securityBannerState = securityBannerState,
                     fullScreenIntentPermissionsState = fullScreenIntentPermissionsPresenter.present(),
-                    summaries = roomSummaries.dataOrNull().orEmpty().toPersistentList()
+                    summaries = roomSummaries.dataOrNull().orEmpty().toPersistentList(),
+                    formatTimestamp = ::formatTimestamp,
                 )
             }
         }

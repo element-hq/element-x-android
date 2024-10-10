@@ -37,5 +37,6 @@ fun aRoomListSearchState(
     query = query,
     results = results,
     isRoomDirectorySearchEnabled = isRoomDirectorySearchEnabled,
+    formatTimestamp = { "Yesterday" },
     eventSink = eventSink,
 )

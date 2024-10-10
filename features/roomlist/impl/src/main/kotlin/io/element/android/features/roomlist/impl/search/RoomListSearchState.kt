@@ -9,12 +9,14 @@ package io.element.android.features.roomlist.impl.search
 
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import kotlinx.collections.immutable.ImmutableList
+import java.util.Date
 
 data class RoomListSearchState(
     val isSearchActive: Boolean,
     val query: String,
     val results: ImmutableList<RoomListRoomSummary>,
     val isRoomDirectorySearchEnabled: Boolean,
+    val formatTimestamp: (Date?) -> String,
     val eventSink: (RoomListSearchEvents) -> Unit
 ) {
     val displayRoomDirectorySearch = query.isEmpty() && isRoomDirectorySearchEnabled
