@@ -338,11 +338,15 @@ class JoinRoomPresenterTest {
             awaitItem().also { state ->
                 state.eventSink(JoinRoomEvents.KnockRoom)
             }
+
+            assertThat(awaitItem().knockAction).isEqualTo(AsyncAction.Loading)
             awaitItem().also { state ->
                 assertThat(state.knockAction).isEqualTo(AsyncAction.Success(Unit))
                 fakeKnockRoom.lambda = knockRoomFailure
                 state.eventSink(JoinRoomEvents.KnockRoom)
             }
+
+            assertThat(awaitItem().knockAction).isEqualTo(AsyncAction.Loading)
             awaitItem().also { state ->
                 assertThat(state.knockAction).isInstanceOf(AsyncAction.Failure::class.java)
             }

@@ -52,7 +52,7 @@ class RoomSelectPresenter @AssistedInject constructor(
 
         val roomSummaryDetailsList by dataSource.roomInfoList.collectAsState(initial = persistentListOf())
 
-        val searchResults by remember<State<SearchBarResultState<ImmutableList<RoomSummary>>>> {
+        val searchResults by remember<State<SearchBarResultState<ImmutableList<SelectRoomInfo>>>> {
             derivedStateOf {
                 when {
                     roomSummaryDetailsList.isNotEmpty() -> SearchBarResultState.Results(roomSummaryDetailsList.toImmutableList())
