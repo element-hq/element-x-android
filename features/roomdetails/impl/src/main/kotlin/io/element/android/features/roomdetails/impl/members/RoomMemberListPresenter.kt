@@ -14,7 +14,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import dagger.assisted.Assisted
@@ -33,7 +32,6 @@ import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.roomMembers
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class RoomMemberListPresenter @AssistedInject constructor(
@@ -50,7 +48,6 @@ class RoomMemberListPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): RoomMemberListState {
-        val coroutineScope = rememberCoroutineScope()
         var roomMembers: AsyncData<RoomMembers> by remember { mutableStateOf(AsyncData.Loading()) }
         var searchQuery by rememberSaveable { mutableStateOf("") }
         var searchResults by remember {
@@ -135,13 +132,12 @@ class RoomMemberListPresenter @AssistedInject constructor(
             when (event) {
                 is RoomMemberListEvents.OnSearchActiveChanged -> isSearchActive = event.active
                 is RoomMemberListEvents.UpdateSearchQuery -> searchQuery = event.query
-                is RoomMemberListEvents.RoomMemberSelected -> coroutineScope.launch {
+                is RoomMemberListEvents.RoomMemberSelected ->
                     if (roomModerationState.canDisplayModerationActions) {
                         roomModerationState.eventSink(RoomMembersModerationEvents.SelectRoomMember(event.roomMember))
                     } else {
                         navigator.openRoomMemberDetails(event.roomMember.userId)
                     }
-                }
             }
         }
 
