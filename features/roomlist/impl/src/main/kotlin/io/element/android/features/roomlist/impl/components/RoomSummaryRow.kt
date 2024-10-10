@@ -116,10 +116,9 @@ internal fun RoomSummaryRow(
                 },
                 modifier = modifier
             ) {
-                val timestamp = remember(room.timestamp) { formatTimestamp(room.timestamp) }
                 NameAndTimestampRow(
                     name = room.name,
-                    timestamp = timestamp,
+                    timestamp = formatTimestamp(room.timestamp),
                     isHighlighted = room.isHighlighted
                 )
                 LastMessageAndIndicatorRow(room = room)
