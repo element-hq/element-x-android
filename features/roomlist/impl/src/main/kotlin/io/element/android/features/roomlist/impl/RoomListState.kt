@@ -19,6 +19,7 @@ import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermiss
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
+import java.util.Date
 
 @Immutable
 data class RoomListState(
@@ -66,5 +67,6 @@ sealed interface RoomListContentState {
         val securityBannerState: SecurityBannerState,
         val fullScreenIntentPermissionsState: FullScreenIntentPermissionsState,
         val summaries: ImmutableList<RoomListRoomSummary>,
+        val formatTimestamp: (Date?) -> String,
     ) : RoomListContentState
 }

@@ -62,12 +62,14 @@ import io.element.android.libraries.matrix.ui.components.InviteSenderView
 import io.element.android.libraries.matrix.ui.model.InviteSender
 import io.element.android.libraries.ui.strings.CommonStrings
 import timber.log.Timber
+import java.util.Date
 
 internal val minHeight = 84.dp
 
 @Composable
 internal fun RoomSummaryRow(
     room: RoomListRoomSummary,
+    formatTimestamp: (Date?) -> String,
     onClick: (RoomListRoomSummary) -> Unit,
     eventSink: (RoomListEvents) -> Unit,
     modifier: Modifier = Modifier,
@@ -116,7 +118,7 @@ internal fun RoomSummaryRow(
             ) {
                 NameAndTimestampRow(
                     name = room.name,
-                    timestamp = room.timestamp,
+                    timestamp = formatTimestamp(room.timestamp),
                     isHighlighted = room.isHighlighted
                 )
                 LastMessageAndIndicatorRow(room = room)
@@ -355,5 +357,6 @@ internal fun RoomSummaryRowPreview(@PreviewParameter(RoomListRoomSummaryProvider
         room = data,
         onClick = {},
         eventSink = {},
+        formatTimestamp = { "Yesterday" }
     )
 }

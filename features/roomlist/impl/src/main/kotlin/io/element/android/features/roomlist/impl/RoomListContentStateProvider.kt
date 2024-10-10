@@ -33,6 +33,7 @@ internal fun aRoomsContentState(
     securityBannerState = securityBannerState,
     fullScreenIntentPermissionsState = fullScreenIntentPermissionsState,
     summaries = summaries,
+    formatTimestamp = { "Yesterday" },
 )
 
 internal fun aSkeletonContentState() = RoomListContentState.Skeleton(16)

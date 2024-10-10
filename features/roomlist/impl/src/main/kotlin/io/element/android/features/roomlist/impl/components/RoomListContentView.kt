@@ -179,6 +179,7 @@ private fun RoomsViewList(
     LaunchedEffect(visibleRange) {
         updatedEventSink(RoomListEvents.UpdateVisibleRange(visibleRange))
     }
+
     LazyColumn(
         state = lazyListState,
         modifier = modifier,
@@ -227,6 +228,7 @@ private fun RoomsViewList(
                 room = room,
                 onClick = onRoomClick,
                 eventSink = eventSink,
+                formatTimestamp = state.formatTimestamp,
             )
             if (index != state.summaries.lastIndex) {
                 HorizontalDivider()

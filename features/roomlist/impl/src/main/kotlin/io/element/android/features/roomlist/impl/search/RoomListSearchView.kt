@@ -194,6 +194,7 @@ private fun RoomListSearchContent(
                         room = room,
                         onClick = ::onRoomClick,
                         eventSink = eventSink,
+                        formatTimestamp = state.formatTimestamp,
                     )
                 }
             }
