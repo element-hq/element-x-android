@@ -143,6 +143,7 @@ inline fun <C, T> MutableState<AsyncAction<C, T>>.runUpdatingStateNoSuccess(
  * encapsulating its progress and return value into an [AsyncAction] while
  * posting its updates to the MutableState [state].
  *
+ * @param C the type of data required to confirm the operation.
  * @param T the type of data returned by the operation.
  * @param state the [MutableState] to post updates to.
  * @param errorTransform a function to transform the error before posting it.
