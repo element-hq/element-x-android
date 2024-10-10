@@ -8,6 +8,7 @@
 package io.element.android.features.call.impl.ui
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.ViewGroup
 import android.webkit.ConsoleMessage
 import android.webkit.PermissionRequest
@@ -192,8 +193,22 @@ private fun WebView.setup(
             onPermissionsRequested(request)
         }
 
-        override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
-            consoleMessage?.let { Timber.d("[WebView]: ${it.message()}") }
+        override fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
+            val priority = when (consoleMessage.messageLevel()) {
+                ConsoleMessage.MessageLevel.ERROR -> Log.ERROR
+                ConsoleMessage.MessageLevel.WARNING -> Log.WARN
+                else -> Log.DEBUG
+            }
+            Timber.tag("WebView").log(
+                priority = priority,
+                message = buildString {
+                    append(consoleMessage.sourceId())
+                    append(":")
+                    append(consoleMessage.lineNumber())
+                    append(" ")
+                    append(consoleMessage.message())
+                },
+            )
             return true
         }
     }
