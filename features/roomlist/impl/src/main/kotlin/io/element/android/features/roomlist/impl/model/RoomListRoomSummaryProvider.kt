@@ -19,6 +19,7 @@ import kotlinx.collections.immutable.toImmutableList
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.TemporalAmount
+import java.util.Calendar
 import java.util.Date
 
 open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSummary> {
@@ -128,7 +129,12 @@ internal fun aRoomListRoomSummary(
     numberOfUnreadNotifications: Long = 0,
     isMarkedUnread: Boolean = false,
     lastMessage: String? = "Last message",
-    timestamp: Date? = lastMessage?.let { Date.from(Instant.MIN) },
+    timestamp: Date? = lastMessage?.let {
+        Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 14)
+            set(Calendar.MINUTE, 16)
+        }.time
+    },
     notificationMode: RoomNotificationMode? = null,
     hasRoomCall: Boolean = false,
     avatarData: AvatarData = AvatarData(id, name, size = AvatarSize.RoomListItem),
