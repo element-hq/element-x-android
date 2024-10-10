@@ -7,14 +7,12 @@
 
 package io.element.android.libraries.matrix.ui.media
 
-import android.content.Context
 import coil.ImageLoader
 import coil.fetch.Fetcher
 import coil.request.Options
 import io.element.android.libraries.matrix.api.MatrixClient
 
 internal class MediaRequestDataFetcherFactory(
-    private val context: Context,
     private val client: MatrixClient
 ) : Fetcher.Factory<MediaRequestData> {
     override fun create(
@@ -23,7 +21,6 @@ internal class MediaRequestDataFetcherFactory(
         imageLoader: ImageLoader
     ): Fetcher {
         return CoilMediaFetcher(
-            scalingFunction = { context.resources.displayMetrics.density * it },
             mediaLoader = client.mediaLoader,
             mediaData = data,
             options = options
