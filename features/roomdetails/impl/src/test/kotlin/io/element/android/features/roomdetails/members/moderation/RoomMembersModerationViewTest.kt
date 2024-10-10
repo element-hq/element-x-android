@@ -163,8 +163,7 @@ class RoomMembersModerationViewTest {
         val eventsRecorder = EventsRecorder<RoomMembersModerationEvents>()
         val roomMember = anAlice()
         val state = aRoomMembersModerationState(
-            selectedRoomMember = roomMember,
-            unbanUserAsyncAction = AsyncAction.Confirming(Unit),
+            unbanUserAsyncAction = AsyncAction.Confirming(roomMember),
             eventSink = eventsRecorder
         )
         rule.setRoomMembersModerationView(
@@ -180,8 +179,7 @@ class RoomMembersModerationViewTest {
         val eventsRecorder = EventsRecorder<RoomMembersModerationEvents>()
         val roomMember = anAlice()
         val state = aRoomMembersModerationState(
-            selectedRoomMember = roomMember,
-            unbanUserAsyncAction = AsyncAction.Confirming(Unit),
+            unbanUserAsyncAction = AsyncAction.Confirming(roomMember),
             eventSink = eventsRecorder
         )
         rule.setRoomMembersModerationView(
@@ -189,7 +187,7 @@ class RoomMembersModerationViewTest {
         )
         // Note: the string key semantics is not perfect here :/
         rule.clickOn(R.string.screen_room_member_list_manage_member_unban_action)
-        eventsRecorder.assertSingle(RoomMembersModerationEvents.UnbanUser)
+        eventsRecorder.assertSingle(RoomMembersModerationEvents.UnbanUser(roomMember.userId))
     }
 }
 

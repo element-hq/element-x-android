@@ -117,7 +117,7 @@ fun RoomMembersModerationView(
                     title = stringResource(R.string.screen_room_member_list_ban_member_confirmation_title),
                     content = stringResource(R.string.screen_room_member_list_ban_member_confirmation_description),
                     submitText = stringResource(R.string.screen_room_member_list_ban_member_confirmation_action),
-                    onSubmitClick = { state.selectedRoomMember?.userId?.let { state.eventSink(RoomMembersModerationEvents.BanUser) } },
+                    onSubmitClick = { state.eventSink(RoomMembersModerationEvents.BanUser) },
                     onDismiss = { state.eventSink(RoomMembersModerationEvents.Reset) }
                 )
             }
@@ -147,23 +147,19 @@ fun RoomMembersModerationView(
 
         when (val action = state.unbanUserAsyncAction) {
             is AsyncAction.Confirming -> {
-                state.selectedRoomMember?.let {
-                    ConfirmationDialog(
-                        title = stringResource(R.string.screen_room_member_list_manage_member_unban_title),
-                        content = stringResource(R.string.screen_room_member_list_manage_member_unban_message),
-                        submitText = stringResource(R.string.screen_room_member_list_manage_member_unban_action),
-                        onSubmitClick = { state.eventSink(RoomMembersModerationEvents.UnbanUser) },
-                        onDismiss = { state.eventSink(RoomMembersModerationEvents.Reset) },
-                    )
-                }
-            }
-            is AsyncAction.Loading -> {
-                LaunchedEffect(action) {
-                    val userDisplayName = state.selectedRoomMember?.getBestName().orEmpty()
-                    asyncIndicatorState.enqueue {
-                        AsyncIndicator.Loading(text = stringResource(R.string.screen_room_member_list_unbanning_user, userDisplayName))
-                    }
-                }
+                ConfirmationDialog(
+                    title = stringResource(R.string.screen_room_member_list_manage_member_unban_title),
+                    content = stringResource(R.string.screen_room_member_list_manage_member_unban_message),
+                    submitText = stringResource(R.string.screen_room_member_list_manage_member_unban_action),
+                    onSubmitClick = {
+                        val userDisplayName = action.confirmationData.getBestName()
+                        asyncIndicatorState.enqueue {
+                            AsyncIndicator.Loading(text = stringResource(R.string.screen_room_member_list_unbanning_user, userDisplayName))
+                        }
+                        state.eventSink(RoomMembersModerationEvents.UnbanUser(action.confirmationData.userId))
+                    },
+                    onDismiss = { state.eventSink(RoomMembersModerationEvents.Reset) },
+                )
             }
             is AsyncAction.Failure -> {
                 Timber.e(action.error, "Failed to unban user.")
@@ -178,7 +174,8 @@ fun RoomMembersModerationView(
             is AsyncAction.Success -> {
                 LaunchedEffect(action) { asyncIndicatorState.clear() }
             }
-            else -> Unit
+            is AsyncAction.Loading,
+            AsyncAction.Uninitialized -> Unit
         }
     }
 }

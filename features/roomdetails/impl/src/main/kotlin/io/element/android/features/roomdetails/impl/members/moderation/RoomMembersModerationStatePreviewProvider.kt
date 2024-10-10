@@ -60,7 +60,7 @@ class RoomMembersModerationStatePreviewProvider : PreviewParameterProvider<RoomM
             ),
             aRoomMembersModerationState(
                 selectedRoomMember = anAlice(),
-                unbanUserAsyncAction = AsyncAction.Confirming(Unit),
+                unbanUserAsyncAction = AsyncAction.Confirming(anAlice()),
             ),
             aRoomMembersModerationState(
                 kickUserAsyncAction = AsyncAction.Success(Unit),
@@ -76,7 +76,7 @@ fun aRoomMembersModerationState(
     actions: List<ModerationAction> = emptyList(),
     kickUserAsyncAction: AsyncAction<Unit, Unit> = AsyncAction.Uninitialized,
     banUserAsyncAction: AsyncAction<Unit, Unit> = AsyncAction.Uninitialized,
-    unbanUserAsyncAction: AsyncAction<Unit, Unit> = AsyncAction.Uninitialized,
+    unbanUserAsyncAction: AsyncAction<RoomMember, Unit> = AsyncAction.Uninitialized,
     canDisplayBannedUsers: Boolean = false,
     eventSink: (RoomMembersModerationEvents) -> Unit = {},
 ) = RoomMembersModerationState(

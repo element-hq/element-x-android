@@ -18,7 +18,7 @@ data class RoomMembersModerationState(
     val actions: ImmutableList<ModerationAction>,
     val kickUserAsyncAction: AsyncAction<Unit, Unit>,
     val banUserAsyncAction: AsyncAction<Unit, Unit>,
-    val unbanUserAsyncAction: AsyncAction<Unit, Unit>,
+    val unbanUserAsyncAction: AsyncAction<RoomMember, Unit>,
     val canDisplayBannedUsers: Boolean,
     val eventSink: (RoomMembersModerationEvents) -> Unit,
 )
