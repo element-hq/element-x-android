@@ -292,14 +292,14 @@ private fun BottomMenu(
                         text = stringResource(R.string.screen_identity_use_another_device),
                         onClick = { eventSink(VerifySelfSessionViewEvents.RequestVerification) },
                     )
-                    OutlinedButton(
+                    Button(
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.screen_session_verification_enter_recovery_key),
                         onClick = onEnterRecoveryKey,
                     )
                 }
                 // This option should always be displayed
-                TextButton(
+                OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.screen_identity_confirmation_cannot_confirm),
                     onClick = onResetKey,
