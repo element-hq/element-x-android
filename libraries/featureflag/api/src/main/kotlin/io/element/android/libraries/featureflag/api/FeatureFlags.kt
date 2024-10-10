@@ -9,7 +9,6 @@ package io.element.android.libraries.featureflag.api
 
 import io.element.android.appconfig.OnBoardingConfig
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.core.meta.BuildType
 
 /**
  * To enable or disable a FeatureFlags, change the `defaultValue` value.
@@ -93,13 +92,7 @@ enum class FeatureFlags(
         key = "feature.qrCodeLogin",
         title = "Enable login using QR code",
         description = "Allow the user to login using the QR code flow",
-        defaultValue = { buildMeta ->
-            when (buildMeta.buildType) {
-                // TODO remove once the feature is ready to publish
-                BuildType.RELEASE -> false
-                else -> OnBoardingConfig.CAN_LOGIN_WITH_QR_CODE
-            }
-        },
+        defaultValue = { OnBoardingConfig.CAN_LOGIN_WITH_QR_CODE },
         isFinished = false,
     ),
     IncomingShare(
