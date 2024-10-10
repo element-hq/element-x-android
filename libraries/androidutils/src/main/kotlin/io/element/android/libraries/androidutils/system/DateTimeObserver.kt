@@ -28,6 +28,7 @@ class DateTimeObserver @Inject constructor(
             when (intent.action) {
                 Intent.ACTION_TIMEZONE_CHANGED -> _changes.tryEmit(Event.TimeZoneChanged)
                 Intent.ACTION_DATE_CHANGED -> _changes.tryEmit(Event.DateChanged(lastTime, newDate))
+                Intent.ACTION_TIME_CHANGED -> _changes.tryEmit(Event.DateChanged(lastTime, newDate))
             }
             lastTime = newDate
         }
@@ -40,6 +41,7 @@ class DateTimeObserver @Inject constructor(
         context.registerReceiver(dateTimeReceiver, IntentFilter().apply {
             addAction(Intent.ACTION_TIMEZONE_CHANGED)
             addAction(Intent.ACTION_DATE_CHANGED)
+            addAction(Intent.ACTION_TIME_CHANGED)
         })
     }
 
