@@ -17,8 +17,11 @@ import io.element.android.features.createroom.test.FakeStartDMAction
 import io.element.android.features.userprofile.impl.root.UserProfilePresenter
 import io.element.android.features.userprofile.shared.UserProfileEvents
 import io.element.android.features.userprofile.shared.UserProfileState
+import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
@@ -28,7 +31,9 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -217,15 +222,21 @@ class UserProfilePresenterTest {
         return awaitItem()
     }
 
-    private fun createUserProfilePresenter(
+    private fun TestScope.createUserProfilePresenter(
         client: MatrixClient = FakeMatrixClient(),
         userId: UserId = UserId("@alice:server.org"),
-        startDMAction: StartDMAction = FakeStartDMAction()
+        startDMAction: StartDMAction = FakeStartDMAction(),
+        dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
+        clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
+        snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
     ): UserProfilePresenter {
         return UserProfilePresenter(
             userId = userId,
             client = client,
-            startDMAction = startDMAction
+            startDMAction = startDMAction,
+            dispatchers = dispatchers,
+            clipboardHelper = clipboardHelper,
+            snackbarDispatcher = snackbarDispatcher,
         )
     }
 }

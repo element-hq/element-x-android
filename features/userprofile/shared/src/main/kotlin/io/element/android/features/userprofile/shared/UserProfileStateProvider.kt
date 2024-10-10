@@ -10,6 +10,7 @@ package io.element.android.features.userprofile.shared
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 
@@ -39,6 +40,7 @@ fun aUserProfileState(
     isCurrentUser: Boolean = false,
     dmRoomId: RoomId? = null,
     canCall: Boolean = false,
+    snackbarMessage: SnackbarMessage? = null,
     eventSink: (UserProfileEvents) -> Unit = {},
 ) = UserProfileState(
     userId = userId,
@@ -50,5 +52,6 @@ fun aUserProfileState(
     isCurrentUser = isCurrentUser,
     dmRoomId = dmRoomId,
     canCall = canCall,
+    snackbarMessage = snackbarMessage,
     eventSink = eventSink,
 )

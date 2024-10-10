@@ -25,7 +25,9 @@ import io.element.android.features.roomdetails.impl.RoomDetailsType
 import io.element.android.features.roomdetails.impl.RoomTopicState
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
+import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.UserId
@@ -78,11 +80,13 @@ class RoomDetailsPresenterTest {
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
         analyticsService: AnalyticsService = FakeAnalyticsService(),
         isPinnedMessagesFeatureEnabled: Boolean = true,
+        clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
+        snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
     ): RoomDetailsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
             override fun create(roomMemberId: UserId): RoomMemberDetailsPresenter {
-                return RoomMemberDetailsPresenter(roomMemberId, matrixClient, room, FakeStartDMAction())
+                return RoomMemberDetailsPresenter(roomMemberId, matrixClient, room, FakeStartDMAction(), dispatchers, clipboardHelper, snackbarDispatcher)
             }
         }
         val featureFlagService = FakeFeatureFlagService(
@@ -98,6 +102,8 @@ class RoomDetailsPresenterTest {
             dispatchers = dispatchers,
             isPinnedMessagesFeatureEnabled = { isPinnedMessagesFeatureEnabled },
             analyticsService = analyticsService,
+            clipboardHelper = clipboardHelper,
+            snackbarDispatcher = snackbarDispatcher,
         )
     }
 

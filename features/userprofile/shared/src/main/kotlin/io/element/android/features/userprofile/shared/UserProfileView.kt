@@ -30,6 +30,8 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
+import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -44,12 +46,15 @@ fun UserProfileView(
     openAvatarPreview: (username: String, url: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
+
     BackHandler { goBack() }
     Scaffold(
         modifier = modifier,
         topBar = {
             TopAppBar(title = { }, navigationIcon = { BackButton(onClick = goBack) })
         },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { padding ->
         Column(
             modifier = Modifier
@@ -63,6 +68,9 @@ fun UserProfileView(
                 userName = state.userName,
                 openAvatarPreview = { avatarUrl ->
                     openAvatarPreview(state.userName ?: state.userId.value, avatarUrl)
+                },
+                onUserIdClick = { userId ->
+                    state.eventSink(UserProfileEvents.CopyID(userId))
                 },
             )
 

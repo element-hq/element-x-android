@@ -22,9 +22,13 @@ import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.messages.api.pinned.IsPinnedMessagesFeatureEnabled
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -41,6 +45,7 @@ import io.element.android.libraries.matrix.ui.room.canCall
 import io.element.android.libraries.matrix.ui.room.getCurrentRoomMember
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import io.element.android.libraries.matrix.ui.room.isOwnUserAdmin
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.toPersistentList
@@ -60,6 +65,8 @@ class RoomDetailsPresenter @Inject constructor(
     private val dispatchers: CoroutineDispatchers,
     private val analyticsService: AnalyticsService,
     private val isPinnedMessagesFeatureEnabled: IsPinnedMessagesFeatureEnabled,
+    private val clipboardHelper: ClipboardHelper,
+    private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<RoomDetailsState> {
     @Composable
     override fun present(): RoomDetailsState {
@@ -110,6 +117,7 @@ class RoomDetailsPresenter @Inject constructor(
             }
         }
 
+        val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         val roomNotificationSettingsState by room.roomNotificationSettingsStateFlow.collectAsState()
 
         fun handleEvents(event: RoomDetailsEvent) {
@@ -124,6 +132,12 @@ class RoomDetailsPresenter @Inject constructor(
                 RoomDetailsEvent.UnmuteNotification -> {
                     scope.launch(dispatchers.io) {
                         client.notificationSettingsService().unmuteRoom(room.roomId, room.isEncrypted, room.isOneToOne)
+                    }
+                }
+                is RoomDetailsEvent.CopyID -> {
+                    scope.launch(dispatchers.io) {
+                        clipboardHelper.copyPlainText(event.text)
+                        snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
                     }
                 }
                 is RoomDetailsEvent.SetFavorite -> scope.setFavorite(event.isFavorite)
@@ -154,6 +168,7 @@ class RoomDetailsPresenter @Inject constructor(
             heroes = roomInfo?.heroes.orEmpty().toPersistentList(),
             canShowPinnedMessages = canShowPinnedMessages,
             pinnedMessagesCount = pinnedMessagesCount,
+            snackbarMessage = snackbarMessage,
             eventSink = ::handleEvents,
         )
     }

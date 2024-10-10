@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -33,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -71,6 +73,8 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
+import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -102,6 +106,8 @@ fun RoomDetailsView(
     onPinnedMessagesClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -111,6 +117,7 @@ fun RoomDetailsView(
                 onActionClick = onActionClick
             )
         },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { padding ->
         Column(
             modifier = Modifier
@@ -131,6 +138,9 @@ fun RoomDetailsView(
                         openAvatarPreview = { avatarUrl ->
                             openAvatarPreview(state.roomName, avatarUrl)
                         },
+                        onSubtitleClick = { subtitle ->
+                            state.eventSink(RoomDetailsEvent.CopyID(subtitle))
+                        },
                     )
                 }
                 is RoomDetailsType.Dm -> {
@@ -140,6 +150,9 @@ fun RoomDetailsView(
                         roomName = state.roomName,
                         openAvatarPreview = { name, avatarUrl ->
                             openAvatarPreview(name, avatarUrl)
+                        },
+                        onSubtitleClick = { subtitle ->
+                            state.eventSink(RoomDetailsEvent.CopyID(subtitle))
                         },
                     )
                 }
@@ -330,6 +343,7 @@ private fun RoomHeaderSection(
     roomAlias: RoomAlias?,
     heroes: ImmutableList<MatrixUser>,
     openAvatarPreview: (url: String) -> Unit,
+    onSubtitleClick: (String) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -346,7 +360,11 @@ private fun RoomHeaderSection(
                     .clickable(enabled = avatarUrl != null) { openAvatarPreview(avatarUrl!!) }
                     .testTag(TestTags.roomDetailAvatar)
         )
-        TitleAndSubtitle(title = roomName, subtitle = roomAlias?.value)
+        TitleAndSubtitle(
+            title = roomName,
+            subtitle = roomAlias?.value,
+            onSubtitleClick = onSubtitleClick,
+        )
     }
 }
 
@@ -356,6 +374,7 @@ private fun DmHeaderSection(
     otherMember: RoomMember,
     roomName: String,
     openAvatarPreview: (name: String, url: String) -> Unit,
+    onSubtitleClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -373,6 +392,7 @@ private fun DmHeaderSection(
         TitleAndSubtitle(
             title = roomName,
             subtitle = otherMember.userId.value,
+            onSubtitleClick = onSubtitleClick,
         )
     }
 }
@@ -381,6 +401,7 @@ private fun DmHeaderSection(
 private fun ColumnScope.TitleAndSubtitle(
     title: String,
     subtitle: String?,
+    onSubtitleClick: (String) -> Unit,
 ) {
     Spacer(modifier = Modifier.height(24.dp))
     Text(
@@ -391,6 +412,10 @@ private fun ColumnScope.TitleAndSubtitle(
     if (subtitle != null) {
         Spacer(modifier = Modifier.height(6.dp))
         Text(
+            modifier = Modifier
+                .clip(RoundedCornerShape(4.dp))
+                .clickable { onSubtitleClick(subtitle) }
+                .padding(horizontal = 4.dp),
             text = subtitle,
             style = ElementTheme.typography.fontBodyLgRegular,
             color = MaterialTheme.colorScheme.secondary,

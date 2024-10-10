@@ -14,4 +14,5 @@ sealed interface UserProfileEvents {
     data class UnblockUser(val needsConfirmation: Boolean = false) : UserProfileEvents
     data object ClearBlockUserError : UserProfileEvents
     data object ClearConfirmationDialog : UserProfileEvents
+    data class CopyID(val text: String) : UserProfileEvents
 }

@@ -19,8 +19,10 @@ import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.userprofile.shared.UserProfileEvents
 import io.element.android.features.userprofile.shared.UserProfileState
+import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.MatrixRoom
@@ -31,8 +33,10 @@ import io.element.android.libraries.matrix.test.A_THROWABLE
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -332,17 +336,22 @@ class RoomMemberDetailsPresenterTest {
         return awaitItem()
     }
 
-    private fun createRoomMemberDetailsPresenter(
+    private fun TestScope.createRoomMemberDetailsPresenter(
         room: MatrixRoom,
         client: MatrixClient = FakeMatrixClient(),
         roomMemberId: UserId = UserId("@alice:server.org"),
-        startDMAction: StartDMAction = FakeStartDMAction()
+        startDMAction: StartDMAction = FakeStartDMAction(),
+        clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
+        snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
     ): RoomMemberDetailsPresenter {
         return RoomMemberDetailsPresenter(
             roomMemberId = roomMemberId,
             client = client,
             room = room,
-            startDMAction = startDMAction
+            startDMAction = startDMAction,
+            dispatchers = testCoroutineDispatchers(),
+            clipboardHelper = clipboardHelper,
+            snackbarDispatcher = snackbarDispatcher,
         )
     }
 }

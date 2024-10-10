@@ -22,14 +22,20 @@ import io.element.android.features.userprofile.shared.UserProfileEvents
 import io.element.android.features.userprofile.shared.UserProfilePresenterHelper
 import io.element.android.features.userprofile.shared.UserProfileState
 import io.element.android.features.userprofile.shared.UserProfileState.ConfirmationDialog
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -40,6 +46,9 @@ class UserProfilePresenter @AssistedInject constructor(
     @Assisted private val userId: UserId,
     private val client: MatrixClient,
     private val startDMAction: StartDMAction,
+    private val dispatchers: CoroutineDispatchers,
+    private val clipboardHelper: ClipboardHelper,
+    private val snackbarDispatcher: SnackbarDispatcher,
 ) : Presenter<UserProfileState> {
     interface Factory {
         fun create(userId: UserId): UserProfilePresenter
@@ -59,6 +68,7 @@ class UserProfilePresenter @AssistedInject constructor(
         val isBlocked: MutableState<AsyncData<Boolean>> = remember { mutableStateOf(AsyncData.Uninitialized) }
         val dmRoomId by userProfilePresenterHelper.getDmRoomId()
         val canCall by userProfilePresenterHelper.getCanCall(dmRoomId)
+        val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         LaunchedEffect(Unit) {
             client.ignoredUsersFlow
                 .map { ignoredUsers -> userId in ignoredUsers }
@@ -100,6 +110,12 @@ class UserProfilePresenter @AssistedInject constructor(
                 UserProfileEvents.ClearStartDMState -> {
                     startDmActionState.value = AsyncAction.Uninitialized
                 }
+                is UserProfileEvents.CopyID -> {
+                    coroutineScope.launch(dispatchers.io) {
+                        clipboardHelper.copyPlainText(event.text)
+                        snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
+                    }
+                }
             }
         }
 
@@ -113,7 +129,8 @@ class UserProfilePresenter @AssistedInject constructor(
             isCurrentUser = client.isMe(userId),
             dmRoomId = dmRoomId,
             canCall = canCall,
-            eventSink = ::handleEvents
+            snackbarMessage = snackbarMessage,
+            eventSink = ::handleEvents,
         )
     }
 }
