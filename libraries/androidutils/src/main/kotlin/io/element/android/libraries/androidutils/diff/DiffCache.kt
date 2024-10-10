@@ -24,6 +24,7 @@ interface MutableDiffCache<E> : DiffCache<E> {
     fun removeAt(index: Int): E?
     fun add(index: Int, element: E?)
     operator fun set(index: Int, element: E?)
+    fun clear()
 }
 
 /**
@@ -53,5 +54,9 @@ class MutableListDiffCache<E>(private val mutableList: MutableList<E?> = ArrayLi
 
     override fun add(index: Int, element: E?) {
         mutableList.add(index, element)
+    }
+
+    override fun clear() {
+        mutableList.clear()
     }
 }
