@@ -22,7 +22,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlin.jvm.optionals.getOrNull
 
 @Composable
 fun AcceptDeclineInviteView(
@@ -45,19 +44,16 @@ fun AcceptDeclineInviteView(
             onErrorDismiss = {
                 state.eventSink(InternalAcceptDeclineInviteEvents.DismissDeclineError)
             },
-            confirmationDialog = {
-                val invite = state.invite.getOrNull()
-                if (invite != null) {
-                    DeclineConfirmationDialog(
-                        invite = invite,
-                        onConfirmClick = {
-                            state.eventSink(InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite)
-                        },
-                        onDismissClick = {
-                            state.eventSink(InternalAcceptDeclineInviteEvents.CancelDeclineInvite)
-                        }
-                    )
-                }
+            confirmationDialog = { inviteData ->
+                DeclineConfirmationDialog(
+                    invite = inviteData,
+                    onConfirmClick = {
+                        state.eventSink(InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite(inviteData.roomId))
+                    },
+                    onDismissClick = {
+                        state.eventSink(InternalAcceptDeclineInviteEvents.CancelDeclineInvite)
+                    }
+                )
             }
         )
     }

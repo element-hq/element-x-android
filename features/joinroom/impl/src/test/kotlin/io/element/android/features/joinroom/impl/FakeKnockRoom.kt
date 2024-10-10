@@ -9,9 +9,12 @@ package io.element.android.features.joinroom.impl
 
 import io.element.android.features.joinroom.impl.di.KnockRoom
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.tests.testutils.simulateLongTask
 
 class FakeKnockRoom(
     var lambda: (RoomId) -> Result<Unit> = { Result.success(Unit) }
 ) : KnockRoom {
-    override suspend fun invoke(roomId: RoomId) = lambda(roomId)
+    override suspend fun invoke(roomId: RoomId) = simulateLongTask {
+        lambda(roomId)
+    }
 }

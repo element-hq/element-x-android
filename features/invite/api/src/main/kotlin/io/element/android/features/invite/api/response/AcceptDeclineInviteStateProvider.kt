@@ -10,23 +10,20 @@ package io.element.android.features.invite.api.response
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
-import java.util.Optional
 
 open class AcceptDeclineInviteStateProvider : PreviewParameterProvider<AcceptDeclineInviteState> {
     override val values: Sequence<AcceptDeclineInviteState>
         get() = sequenceOf(
             anAcceptDeclineInviteState(),
             anAcceptDeclineInviteState(
-                invite = Optional.of(
-                    InviteData(RoomId("!room:matrix.org"), isDm = true, roomName = "Alice"),
+                declineAction = AsyncAction.Confirming(
+                    InviteData(RoomId("!room:matrix.org"), isDm = true, roomName = "Alice")
                 ),
-                declineAction = AsyncAction.Confirming(Unit),
             ),
             anAcceptDeclineInviteState(
-                invite = Optional.of(
-                    InviteData(RoomId("!room:matrix.org"), isDm = false, roomName = "Some room"),
+                declineAction = AsyncAction.Confirming(
+                    InviteData(RoomId("!room:matrix.org"), isDm = false, roomName = "Some room")
                 ),
-                declineAction = AsyncAction.Confirming(Unit),
             ),
             anAcceptDeclineInviteState(
                 acceptAction = AsyncAction.Failure(Throwable("Whoops")),
@@ -38,12 +35,10 @@ open class AcceptDeclineInviteStateProvider : PreviewParameterProvider<AcceptDec
 }
 
 fun anAcceptDeclineInviteState(
-    invite: Optional<InviteData> = Optional.empty(),
     acceptAction: AsyncAction<Unit, RoomId> = AsyncAction.Uninitialized,
-    declineAction: AsyncAction<Unit, RoomId> = AsyncAction.Uninitialized,
+    declineAction: AsyncAction<InviteData, RoomId> = AsyncAction.Uninitialized,
     eventSink: (AcceptDeclineInviteEvents) -> Unit = {}
 ) = AcceptDeclineInviteState(
-    invite = invite,
     acceptAction = acceptAction,
     declineAction = declineAction,
     eventSink = eventSink,
