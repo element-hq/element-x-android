@@ -12,6 +12,6 @@ import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginDat
 
 data class QrCodeScanState(
     val isScanning: Boolean,
-    val authenticationAction: AsyncAction<MatrixQrCodeLoginData>,
+    val authenticationAction: AsyncAction<Unit, MatrixQrCodeLoginData>,
     val eventSink: (QrCodeScanEvents) -> Unit
 )

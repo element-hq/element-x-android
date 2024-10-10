@@ -10,6 +10,6 @@ package io.element.android.features.securebackup.impl.reset.password
 import io.element.android.libraries.architecture.AsyncAction
 
 data class ResetIdentityPasswordState(
-    val resetAction: AsyncAction<Unit>,
+    val resetAction: AsyncAction<Unit, Unit>,
     val eventSink: (ResetIdentityPasswordEvent) -> Unit,
 )

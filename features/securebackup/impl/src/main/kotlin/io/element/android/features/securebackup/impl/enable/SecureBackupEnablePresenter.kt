@@ -27,7 +27,7 @@ class SecureBackupEnablePresenter @Inject constructor(
 ) : Presenter<SecureBackupEnableState> {
     @Composable
     override fun present(): SecureBackupEnableState {
-        val enableAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
+        val enableAction = remember { mutableStateOf<AsyncAction<Unit, Unit>>(AsyncAction.Uninitialized) }
         val coroutineScope = rememberCoroutineScope()
         fun handleEvents(event: SecureBackupEnableEvents) {
             when (event) {
@@ -45,7 +45,7 @@ class SecureBackupEnablePresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.enableBackup(action: MutableState<AsyncAction<Unit>>) = launch {
+    private fun CoroutineScope.enableBackup(action: MutableState<AsyncAction<Unit, Unit>>) = launch {
         suspend {
             Timber.tag(loggerTagDisable.value).d("Calling encryptionService.enableBackups()")
             encryptionService.enableBackups().getOrThrow()

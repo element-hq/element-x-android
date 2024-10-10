@@ -18,7 +18,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class NotificationSettingsState(
     val matrixSettings: MatrixSettings,
     val appSettings: AppSettings,
-    val changeNotificationSettingAction: AsyncAction<Unit>,
+    val changeNotificationSettingAction: AsyncAction<Unit, Unit>,
     val currentPushDistributor: AsyncData<String>,
     val availablePushDistributors: ImmutableList<String>,
     val showChangePushProviderDialog: Boolean,

@@ -55,7 +55,7 @@ open class CreateRoomRootStateProvider : PreviewParameterProvider<CreateRoomRoot
 fun aCreateRoomRootState(
     applicationName: String = "Element X Preview",
     userListState: UserListState = aUserListState(),
-    startDmAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
+    startDmAction: AsyncAction<Unit, RoomId> = AsyncAction.Uninitialized,
     eventSink: (CreateRoomRootEvents) -> Unit = {},
 ) = CreateRoomRootState(
     applicationName = applicationName,

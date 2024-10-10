@@ -26,7 +26,7 @@ open class ReportMessageStateProvider : PreviewParameterProvider<ReportMessageSt
 fun aReportMessageState(
     reason: String = "",
     blockUser: Boolean = false,
-    result: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    result: AsyncAction<Unit, Unit> = AsyncAction.Uninitialized,
 ) = ReportMessageState(
     reason = reason,
     blockUser = blockUser,

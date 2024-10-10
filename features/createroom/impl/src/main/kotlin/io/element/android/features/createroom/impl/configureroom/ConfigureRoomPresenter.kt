@@ -81,7 +81,7 @@ class ConfigureRoomPresenter @Inject constructor(
         }
 
         val localCoroutineScope = rememberCoroutineScope()
-        val createRoomAction: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val createRoomAction: MutableState<AsyncAction<Unit, RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
         fun createRoom(config: CreateRoomConfig) {
             createRoomAction.value = AsyncAction.Uninitialized
@@ -123,7 +123,7 @@ class ConfigureRoomPresenter @Inject constructor(
 
     private fun CoroutineScope.createRoom(
         config: CreateRoomConfig,
-        createRoomAction: MutableState<AsyncAction<RoomId>>
+        createRoomAction: MutableState<AsyncAction<Unit, RoomId>>
     ) = launch {
         suspend {
             val avatarUrl = config.avatarUri?.let { uploadAvatar(it) }

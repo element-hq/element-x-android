@@ -13,7 +13,7 @@ import kotlinx.parcelize.Parcelize
 
 data class AccountDeactivationState(
     val deactivateFormState: DeactivateFormState,
-    val accountDeactivationAction: AsyncAction<Unit>,
+    val accountDeactivationAction: AsyncAction<Unit, Unit>,
     val eventSink: (AccountDeactivationEvents) -> Unit,
 ) {
     val submitEnabled: Boolean

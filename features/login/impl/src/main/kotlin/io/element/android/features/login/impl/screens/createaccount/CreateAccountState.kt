@@ -13,7 +13,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 data class CreateAccountState(
     val url: String,
     val pageProgress: Int,
-    val createAction: AsyncAction<SessionId>,
+    val createAction: AsyncAction<Unit, SessionId>,
     val isDebugBuild: Boolean,
     val eventSink: (CreateAccountEvents) -> Unit
 )

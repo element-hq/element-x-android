@@ -20,7 +20,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun LogoutActionDialog(
-    state: AsyncAction<String?>,
+    state: AsyncAction<Unit, String?>,
     onConfirmClick: () -> Unit,
     onForceLogoutClick: () -> Unit,
     onDismissDialog: () -> Unit,
@@ -29,7 +29,7 @@ fun LogoutActionDialog(
     when (state) {
         AsyncAction.Uninitialized ->
             Unit
-        AsyncAction.Confirming ->
+        is AsyncAction.Confirming ->
             LogoutConfirmationDialog(
                 onSubmitClick = onConfirmClick,
                 onDismiss = onDismissDialog

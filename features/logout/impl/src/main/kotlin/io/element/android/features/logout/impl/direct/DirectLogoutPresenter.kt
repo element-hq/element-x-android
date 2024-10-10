@@ -35,7 +35,7 @@ class DirectLogoutPresenter @Inject constructor(
     override fun present(): DirectLogoutState {
         val localCoroutineScope = rememberCoroutineScope()
 
-        val logoutAction: MutableState<AsyncAction<String?>> = remember {
+        val logoutAction: MutableState<AsyncAction<Unit, String?>> = remember {
             mutableStateOf(AsyncAction.Uninitialized)
         }
 
@@ -52,7 +52,7 @@ class DirectLogoutPresenter @Inject constructor(
                     if (logoutAction.value.isConfirming() || event.ignoreSdkError) {
                         localCoroutineScope.logout(logoutAction, event.ignoreSdkError)
                     } else {
-                        logoutAction.value = AsyncAction.Confirming
+                        logoutAction.value = AsyncAction.Confirming(Unit)
                     }
                 }
                 DirectLogoutEvents.CloseDialogs -> {
@@ -70,7 +70,7 @@ class DirectLogoutPresenter @Inject constructor(
     }
 
     private fun CoroutineScope.logout(
-        logoutAction: MutableState<AsyncAction<String?>>,
+        logoutAction: MutableState<AsyncAction<Unit, String?>>,
         ignoreSdkError: Boolean,
     ) = launch {
         suspend {

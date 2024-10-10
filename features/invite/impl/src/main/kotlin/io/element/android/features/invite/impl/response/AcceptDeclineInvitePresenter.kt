@@ -41,8 +41,8 @@ class AcceptDeclineInvitePresenter @Inject constructor(
     @Composable
     override fun present(): AcceptDeclineInviteState {
         val localCoroutineScope = rememberCoroutineScope()
-        val acceptedAction: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
-        val declinedAction: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val acceptedAction: MutableState<AsyncAction<Unit, RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val declinedAction: MutableState<AsyncAction<Unit, RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         var currentInvite by remember {
             mutableStateOf<Optional<InviteData>>(Optional.empty())
         }
@@ -59,7 +59,7 @@ class AcceptDeclineInvitePresenter @Inject constructor(
 
                 is AcceptDeclineInviteEvents.DeclineInvite -> {
                     currentInvite = Optional.of(event.invite)
-                    declinedAction.value = AsyncAction.Confirming
+                    declinedAction.value = AsyncAction.Confirming(Unit)
                 }
 
                 is InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite -> {
@@ -95,7 +95,7 @@ class AcceptDeclineInvitePresenter @Inject constructor(
 
     private fun CoroutineScope.acceptInvite(
         roomId: RoomId,
-        acceptedAction: MutableState<AsyncAction<RoomId>>,
+        acceptedAction: MutableState<AsyncAction<Unit, RoomId>>,
     ) = launch {
         acceptedAction.runUpdatingState {
             joinRoom(
@@ -110,7 +110,7 @@ class AcceptDeclineInvitePresenter @Inject constructor(
         }
     }
 
-    private fun CoroutineScope.declineInvite(roomId: RoomId, declinedAction: MutableState<AsyncAction<RoomId>>) = launch {
+    private fun CoroutineScope.declineInvite(roomId: RoomId, declinedAction: MutableState<AsyncAction<Unit, RoomId>>) = launch {
         suspend {
             client.getInvitedRoom(roomId)?.use {
                 it.declineInvite().getOrThrow()

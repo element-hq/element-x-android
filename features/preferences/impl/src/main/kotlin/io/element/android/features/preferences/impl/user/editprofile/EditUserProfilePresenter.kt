@@ -82,7 +82,7 @@ class EditUserProfilePresenter @AssistedInject constructor(
             }
         }
 
-        val saveAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val saveAction: MutableState<AsyncAction<Unit, Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val localCoroutineScope = rememberCoroutineScope()
         fun handleEvents(event: EditUserProfileEvents) {
             when (event) {
@@ -134,7 +134,7 @@ class EditUserProfilePresenter @AssistedInject constructor(
         name: String?,
         avatarUri: Uri?,
         currentUser: MatrixUser,
-        action: MutableState<AsyncAction<Unit>>,
+        action: MutableState<AsyncAction<Unit, Unit>>,
     ) = launch {
         val results = mutableListOf<Result<Unit>>()
         suspend {

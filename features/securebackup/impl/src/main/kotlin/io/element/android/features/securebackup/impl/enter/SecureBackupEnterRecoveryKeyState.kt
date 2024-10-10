@@ -14,6 +14,6 @@ import io.element.android.libraries.architecture.AsyncAction
 data class SecureBackupEnterRecoveryKeyState(
     val recoveryKeyViewState: RecoveryKeyViewState,
     val isSubmitEnabled: Boolean,
-    val submitAction: AsyncAction<Unit>,
+    val submitAction: AsyncAction<Unit, Unit>,
     val eventSink: (SecureBackupEnterRecoveryKeyEvents) -> Unit
 )

@@ -55,7 +55,7 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
             mutableStateOf(null)
         }
 
-        val changeNotificationSettingAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val changeNotificationSettingAction: MutableState<AsyncAction<Unit, Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
         val roomsWithUserDefinedMode: MutableState<List<EditNotificationSettingRoomInfo>> = remember {
             mutableStateOf(emptyList())
@@ -95,7 +95,7 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
     @OptIn(FlowPreview::class)
     private fun CoroutineScope.observeNotificationSettings(
         mode: MutableState<RoomNotificationMode?>,
-        changeNotificationSettingAction: MutableState<AsyncAction<Unit>>,
+        changeNotificationSettingAction: MutableState<AsyncAction<Unit, Unit>>,
     ) {
         notificationSettingsService.notificationSettingsChangeFlow
             .debounce(0.5.seconds)
@@ -139,7 +139,7 @@ class EditDefaultNotificationSettingPresenter @AssistedInject constructor(
             .sortedWith(compareBy(Collator.getInstance()) { roomSummary -> roomSummary.name })
     }
 
-    private fun CoroutineScope.setDefaultNotificationMode(mode: RoomNotificationMode, action: MutableState<AsyncAction<Unit>>) = launch {
+    private fun CoroutineScope.setDefaultNotificationMode(mode: RoomNotificationMode, action: MutableState<AsyncAction<Unit, Unit>>) = launch {
         action.runUpdatingStateNoSuccess {
             // On modern clients, we don't have different settings for encrypted and non-encrypted rooms (Legacy clients did).
             notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = true, mode = mode, isOneToOne = isOneToOne)

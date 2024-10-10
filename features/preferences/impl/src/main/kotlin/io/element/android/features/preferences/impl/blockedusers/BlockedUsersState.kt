@@ -13,6 +13,6 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class BlockedUsersState(
     val blockedUsers: ImmutableList<MatrixUser>,
-    val unblockUserAction: AsyncAction<Unit>,
+    val unblockUserAction: AsyncAction<Unit, Unit>,
     val eventSink: (BlockedUsersEvents) -> Unit,
 )

@@ -30,11 +30,11 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
  */
 @Suppress("ContentSlotReused") // False positive, the lambdas don't add composable views
 @Composable
-fun <T> AsyncActionView(
-    async: AsyncAction<T>,
+fun <C, T> AsyncActionView(
+    async: AsyncAction<C, T>,
     onSuccess: (T) -> Unit,
     onErrorDismiss: () -> Unit,
-    confirmationDialog: @Composable () -> Unit = { },
+    confirmationDialog: @Composable (C) -> Unit = { },
     progressDialog: @Composable () -> Unit = { AsyncActionViewDefaults.ProgressDialog() },
     errorTitle: @Composable (Throwable) -> String = { ErrorDialogDefaults.title },
     errorMessage: @Composable (Throwable) -> String = { it.message ?: it.toString() },
@@ -42,7 +42,7 @@ fun <T> AsyncActionView(
 ) {
     when (async) {
         AsyncAction.Uninitialized -> Unit
-        AsyncAction.Confirming -> confirmationDialog()
+        is AsyncAction.Confirming -> confirmationDialog(async.confirmationData)
         is AsyncAction.Loading -> progressDialog()
         is AsyncAction.Failure -> {
             if (onRetry == null) {
@@ -81,7 +81,7 @@ object AsyncActionViewDefaults {
 @PreviewsDayNight
 @Composable
 internal fun AsyncActionViewPreview(
-    @PreviewParameter(AsyncActionProvider::class) async: AsyncAction<Unit>,
+    @PreviewParameter(AsyncActionProvider::class) async: AsyncAction<Unit, Unit>,
 ) = ElementPreview {
     AsyncActionView(
         async = async,

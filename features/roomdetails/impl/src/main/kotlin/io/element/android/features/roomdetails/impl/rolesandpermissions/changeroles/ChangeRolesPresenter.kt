@@ -71,8 +71,8 @@ class ChangeRolesPresenter @AssistedInject constructor(
         val selectedUsers = remember {
             mutableStateOf<ImmutableList<MatrixUser>>(persistentListOf())
         }
-        val exitState: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
-        val saveState: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val exitState: MutableState<AsyncAction<Unit, Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val saveState: MutableState<AsyncAction<Unit, Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val usersWithRole = produceState(initialValue = persistentListOf()) {
             room.usersWithRole(role)
                 .map { members -> members.map { it.toMatrixUser() } }
@@ -134,7 +134,7 @@ class ChangeRolesPresenter @AssistedInject constructor(
                 is ChangeRolesEvent.Save -> {
                     if (role == RoomMember.Role.ADMIN && selectedUsers != usersWithRole && !saveState.value.isConfirming()) {
                         // Confirm adding admin
-                        saveState.value = AsyncAction.Confirming
+                        saveState.value = AsyncAction.Confirming(Unit)
                     } else if (!saveState.value.isLoading()) {
                         coroutineScope.save(usersWithRole.value, selectedUsers, saveState)
                     }
@@ -145,7 +145,7 @@ class ChangeRolesPresenter @AssistedInject constructor(
                 is ChangeRolesEvent.Exit -> {
                     exitState.value = if (exitState.value.isUninitialized() && hasPendingChanges) {
                         // Has pending changes, confirm exit
-                        AsyncAction.Confirming
+                        AsyncAction.Confirming(Unit)
                     } else {
                         // No pending changes, exit immediately
                         AsyncAction.Success(Unit)
@@ -188,7 +188,7 @@ class ChangeRolesPresenter @AssistedInject constructor(
     private fun CoroutineScope.save(
         usersWithRole: ImmutableList<MatrixUser>,
         selectedUsers: MutableState<ImmutableList<MatrixUser>>,
-        saveState: MutableState<AsyncAction<Unit>>,
+        saveState: MutableState<AsyncAction<Unit, Unit>>,
     ) = launch {
         saveState.value = AsyncAction.Loading
 

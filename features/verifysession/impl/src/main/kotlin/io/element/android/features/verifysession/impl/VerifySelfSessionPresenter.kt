@@ -68,7 +68,7 @@ class VerifySelfSessionPresenter @AssistedInject constructor(
         val skipVerification by sessionPreferencesStore.isSessionVerificationSkipped().collectAsState(initial = false)
         val sessionVerifiedStatus by sessionVerificationService.sessionVerifiedStatus.collectAsState()
         val signOutAction = remember {
-            mutableStateOf<AsyncAction<String?>>(AsyncAction.Uninitialized)
+            mutableStateOf<AsyncAction<Unit, String?>>(AsyncAction.Uninitialized)
         }
         val verificationFlowStep by remember {
             derivedStateOf {
@@ -186,7 +186,7 @@ class VerifySelfSessionPresenter @AssistedInject constructor(
         }.launchIn(this)
     }
 
-    private fun CoroutineScope.signOut(signOutAction: MutableState<AsyncAction<String?>>) = launch {
+    private fun CoroutineScope.signOut(signOutAction: MutableState<AsyncAction<Unit, String?>>) = launch {
         suspend {
             logoutUseCase.logout(ignoreSdkError = true)
         }.runCatchingUpdatingState(signOutAction)

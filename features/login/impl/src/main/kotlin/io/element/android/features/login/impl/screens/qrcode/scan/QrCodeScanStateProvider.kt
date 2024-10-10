@@ -25,7 +25,7 @@ open class QrCodeScanStateProvider : PreviewParameterProvider<QrCodeScanState> {
 
 fun aQrCodeScanState(
     isScanning: Boolean = true,
-    authenticationAction: AsyncAction<MatrixQrCodeLoginData> = AsyncAction.Uninitialized,
+    authenticationAction: AsyncAction<Unit, MatrixQrCodeLoginData> = AsyncAction.Uninitialized,
     eventSink: (QrCodeScanEvents) -> Unit = {},
 ) = QrCodeScanState(
     isScanning = isScanning,

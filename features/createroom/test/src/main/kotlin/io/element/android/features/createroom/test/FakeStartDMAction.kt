@@ -16,13 +16,13 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import kotlinx.coroutines.delay
 
 class FakeStartDMAction : StartDMAction {
-    private var executeResult: AsyncAction<RoomId> = AsyncAction.Success(A_ROOM_ID)
+    private var executeResult: AsyncAction<Unit, RoomId> = AsyncAction.Success(A_ROOM_ID)
 
-    fun givenExecuteResult(result: AsyncAction<RoomId>) {
+    fun givenExecuteResult(result: AsyncAction<Unit, RoomId>) {
         executeResult = result
     }
 
-    override suspend fun execute(userId: UserId, actionState: MutableState<AsyncAction<RoomId>>) {
+    override suspend fun execute(userId: UserId, actionState: MutableState<AsyncAction<Unit, RoomId>>) {
         actionState.value = AsyncAction.Loading
         delay(1)
         actionState.value = executeResult

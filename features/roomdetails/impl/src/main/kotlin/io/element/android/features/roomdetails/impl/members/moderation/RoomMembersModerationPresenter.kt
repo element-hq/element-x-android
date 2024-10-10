@@ -61,11 +61,11 @@ class RoomMembersModerationPresenter @Inject constructor(
             value = !room.isDm && (canBan() || canKick())
         }
         val kickUserAsyncAction =
-            remember { mutableStateOf(AsyncAction.Uninitialized as AsyncAction<Unit>) }
+            remember { mutableStateOf(AsyncAction.Uninitialized as AsyncAction<Unit, Unit>) }
         val banUserAsyncAction =
-            remember { mutableStateOf(AsyncAction.Uninitialized as AsyncAction<Unit>) }
+            remember { mutableStateOf(AsyncAction.Uninitialized as AsyncAction<Unit, Unit>) }
         val unbanUserAsyncAction =
-            remember { mutableStateOf(AsyncAction.Uninitialized as AsyncAction<Unit>) }
+            remember { mutableStateOf(AsyncAction.Uninitialized as AsyncAction<Unit, Unit>) }
 
         val canDisplayBannedUsers by produceState(initialValue = false) {
             value = !room.isDm && canBan()
@@ -77,7 +77,7 @@ class RoomMembersModerationPresenter @Inject constructor(
                     coroutineScope.launch {
                         selectedMember = event.roomMember
                         if (event.roomMember.membership == RoomMembershipState.BAN && canBan()) {
-                            unbanUserAsyncAction.value = AsyncAction.Confirming
+                            unbanUserAsyncAction.value = AsyncAction.Confirming(Unit)
                         } else {
                             moderationActions = buildList {
                                 add(ModerationAction.DisplayProfile(event.roomMember.userId))
@@ -109,7 +109,7 @@ class RoomMembersModerationPresenter @Inject constructor(
                             coroutineScope.banUser(it.userId, banUserAsyncAction)
                         }
                     } else {
-                        banUserAsyncAction.value = AsyncAction.Confirming
+                        banUserAsyncAction.value = AsyncAction.Confirming(Unit)
                     }
                 }
                 is RoomMembersModerationEvents.UnbanUser -> {
@@ -119,7 +119,7 @@ class RoomMembersModerationPresenter @Inject constructor(
                             coroutineScope.unbanUser(it.userId, unbanUserAsyncAction)
                         }
                     } else {
-                        unbanUserAsyncAction.value = AsyncAction.Confirming
+                        unbanUserAsyncAction.value = AsyncAction.Confirming(Unit)
                     }
                 }
                 is RoomMembersModerationEvents.Reset -> {
@@ -146,7 +146,7 @@ class RoomMembersModerationPresenter @Inject constructor(
 
     private fun CoroutineScope.kickUser(
         userId: UserId,
-        kickUserAction: MutableState<AsyncAction<Unit>>,
+        kickUserAction: MutableState<AsyncAction<Unit, Unit>>,
     ) = runActionAndWaitForMembershipChange(kickUserAction) {
         analyticsService.capture(RoomModeration(RoomModeration.Action.KickMember))
         room.kickUser(userId).finally { selectedMember = null }
@@ -154,7 +154,7 @@ class RoomMembersModerationPresenter @Inject constructor(
 
     private fun CoroutineScope.banUser(
         userId: UserId,
-        banUserAction: MutableState<AsyncAction<Unit>>,
+        banUserAction: MutableState<AsyncAction<Unit, Unit>>,
     ) = runActionAndWaitForMembershipChange(banUserAction) {
         analyticsService.capture(RoomModeration(RoomModeration.Action.BanMember))
         room.banUser(userId).finally { selectedMember = null }
@@ -162,14 +162,14 @@ class RoomMembersModerationPresenter @Inject constructor(
 
     private fun CoroutineScope.unbanUser(
         userId: UserId,
-        unbanUserAction: MutableState<AsyncAction<Unit>>,
+        unbanUserAction: MutableState<AsyncAction<Unit, Unit>>,
     ) = runActionAndWaitForMembershipChange(unbanUserAction) {
         analyticsService.capture(RoomModeration(RoomModeration.Action.UnbanMember))
         room.unbanUser(userId).finally { selectedMember = null }
     }
 
     private fun <T> CoroutineScope.runActionAndWaitForMembershipChange(
-        action: MutableState<AsyncAction<T>>,
+        action: MutableState<AsyncAction<Unit, T>>,
         block: suspend () -> Result<T>
     ) {
         launch(dispatchers.io) {

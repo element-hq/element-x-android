@@ -21,7 +21,7 @@ open class SecureBackupEnableStateProvider : PreviewParameterProvider<SecureBack
 }
 
 fun aSecureBackupEnableState(
-    enableAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    enableAction: AsyncAction<Unit, Unit> = AsyncAction.Uninitialized,
 ) = SecureBackupEnableState(
     enableAction = enableAction,
     eventSink = {}

@@ -12,6 +12,6 @@ import io.element.android.libraries.matrix.api.auth.OidcDetails
 
 data class OidcState(
     val oidcDetails: OidcDetails,
-    val requestState: AsyncAction<Unit>,
+    val requestState: AsyncAction<Unit, Unit>,
     val eventSink: (OidcEvents) -> Unit
 )

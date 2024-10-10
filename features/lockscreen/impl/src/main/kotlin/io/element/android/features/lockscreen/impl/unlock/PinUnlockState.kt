@@ -18,7 +18,7 @@ data class PinUnlockState(
     val showWrongPinTitle: Boolean,
     val remainingAttempts: AsyncData<Int>,
     val showSignOutPrompt: Boolean,
-    val signOutAction: AsyncAction<String?>,
+    val signOutAction: AsyncAction<Unit, String?>,
     val showBiometricUnlock: Boolean,
     val isUnlocked: Boolean,
     val biometricUnlockResult: BiometricUnlock.AuthenticationResult?,

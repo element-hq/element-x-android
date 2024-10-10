@@ -13,7 +13,7 @@ import java.util.Optional
 
 data class AcceptDeclineInviteState(
     val invite: Optional<InviteData>,
-    val acceptAction: AsyncAction<RoomId>,
-    val declineAction: AsyncAction<RoomId>,
+    val acceptAction: AsyncAction<Unit, RoomId>,
+    val declineAction: AsyncAction<Unit, RoomId>,
     val eventSink: (AcceptDeclineInviteEvents) -> Unit,
 )

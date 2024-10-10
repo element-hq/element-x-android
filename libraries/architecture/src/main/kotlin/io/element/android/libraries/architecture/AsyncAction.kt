@@ -15,23 +15,27 @@ import kotlin.contracts.contract
 
 /**
  * Sealed type that allows to model an asynchronous operation triggered by the user.
+ * @param C the type of data required to confirm the operation.
+ * @param T the type of data returned by the operation.
  */
 @Stable
-sealed interface AsyncAction<out T> {
+sealed interface AsyncAction<out C, out T> {
     /**
      * Represents an uninitialized operation (i.e. yet to be run by the user).
      */
-    data object Uninitialized : AsyncAction<Nothing>
+    data object Uninitialized : AsyncAction<Nothing, Nothing>
 
     /**
      * Represents an operation that is currently waiting for user confirmation.
      */
-    data object Confirming : AsyncAction<Nothing>
+    data class Confirming<out C>(
+        val confirmationData: C,
+    ) : AsyncAction<C, Nothing>
 
     /**
      * Represents an operation that is currently ongoing.
      */
-    data object Loading : AsyncAction<Nothing>
+    data object Loading : AsyncAction<Nothing, Nothing>
 
     /**
      * Represents a failed operation.
@@ -40,7 +44,7 @@ sealed interface AsyncAction<out T> {
      */
     data class Failure(
         val error: Throwable,
-    ) : AsyncAction<Nothing>
+    ) : AsyncAction<Nothing, Nothing>
 
     /**
      * Represents a successful operation.
@@ -50,7 +54,7 @@ sealed interface AsyncAction<out T> {
      */
     data class Success<out T>(
         val data: T,
-    ) : AsyncAction<T>
+    ) : AsyncAction<Nothing, T>
 
     /**
      * Returns the data returned by the operation, or null otherwise.
@@ -70,7 +74,7 @@ sealed interface AsyncAction<out T> {
 
     fun isUninitialized(): Boolean = this == Uninitialized
 
-    fun isConfirming(): Boolean = this == Confirming
+    fun isConfirming(): Boolean = this is Confirming
 
     fun isLoading(): Boolean = this == Loading
 
@@ -81,7 +85,7 @@ sealed interface AsyncAction<out T> {
     fun isReady() = isSuccess() || isFailure()
 }
 
-suspend inline fun <T> MutableState<AsyncAction<T>>.runCatchingUpdatingState(
+suspend inline fun <C, T> MutableState<AsyncAction<C, T>>.runCatchingUpdatingState(
     errorTransform: (Throwable) -> Throwable = { it },
     block: () -> T,
 ): Result<T> = runUpdatingState(
@@ -94,8 +98,8 @@ suspend inline fun <T> MutableState<AsyncAction<T>>.runCatchingUpdatingState(
     },
 )
 
-suspend inline fun <T> (suspend () -> T).runCatchingUpdatingState(
-    state: MutableState<AsyncAction<T>>,
+suspend inline fun <C, T> (suspend () -> T).runCatchingUpdatingState(
+    state: MutableState<AsyncAction<C, T>>,
     errorTransform: (Throwable) -> Throwable = { it },
 ): Result<T> = runUpdatingState(
     state = state,
@@ -107,7 +111,7 @@ suspend inline fun <T> (suspend () -> T).runCatchingUpdatingState(
     },
 )
 
-suspend inline fun <T> MutableState<AsyncAction<T>>.runUpdatingState(
+suspend inline fun <C, T> MutableState<AsyncAction<C, T>>.runUpdatingState(
     errorTransform: (Throwable) -> Throwable = { it },
     resultBlock: () -> Result<T>,
 ): Result<T> = runUpdatingState(
@@ -121,7 +125,7 @@ suspend inline fun <T> MutableState<AsyncAction<T>>.runUpdatingState(
  * It's up to the caller to manage the Success state.
  */
 @OptIn(ExperimentalContracts::class)
-inline fun <T> MutableState<AsyncAction<T>>.runUpdatingStateNoSuccess(
+inline fun <C, T> MutableState<AsyncAction<C, T>>.runUpdatingStateNoSuccess(
     resultBlock: () -> Result<Unit>,
 ): Result<Unit> {
     contract {
@@ -147,8 +151,8 @@ inline fun <T> MutableState<AsyncAction<T>>.runUpdatingStateNoSuccess(
  */
 @OptIn(ExperimentalContracts::class)
 @Suppress("REDUNDANT_INLINE_SUSPEND_FUNCTION_TYPE")
-suspend inline fun <T> runUpdatingState(
-    state: MutableState<AsyncAction<T>>,
+suspend inline fun <C, T> runUpdatingState(
+    state: MutableState<AsyncAction<C, T>>,
     errorTransform: (Throwable) -> Throwable = { it },
     resultBlock: suspend () -> Result<T>,
 ): Result<T> {

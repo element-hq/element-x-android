@@ -33,14 +33,14 @@ class SecureBackupDisablePresenter @Inject constructor(
     override fun present(): SecureBackupDisableState {
         val backupState by encryptionService.backupStateStateFlow.collectAsState()
         Timber.tag(loggerTagDisable.value).d("backupState: $backupState")
-        val disableAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val disableAction: MutableState<AsyncAction<Unit, Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val coroutineScope = rememberCoroutineScope()
         fun handleEvents(event: SecureBackupDisableEvents) {
             when (event) {
                 is SecureBackupDisableEvents.DisableBackup -> if (disableAction.value.isConfirming()) {
                     coroutineScope.disableBackup(disableAction)
                 } else {
-                    disableAction.value = AsyncAction.Confirming
+                    disableAction.value = AsyncAction.Confirming(Unit)
                 }
                 SecureBackupDisableEvents.DismissDialogs -> {
                     disableAction.value = AsyncAction.Uninitialized
@@ -56,7 +56,7 @@ class SecureBackupDisablePresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.disableBackup(disableAction: MutableState<AsyncAction<Unit>>) = launch {
+    private fun CoroutineScope.disableBackup(disableAction: MutableState<AsyncAction<Unit, Unit>>) = launch {
         suspend {
             Timber.tag(loggerTagDisable.value).d("Calling encryptionService.disableRecovery()")
             encryptionService.disableRecovery().getOrThrow()

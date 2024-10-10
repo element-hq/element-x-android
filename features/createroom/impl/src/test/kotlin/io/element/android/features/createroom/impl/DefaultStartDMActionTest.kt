@@ -29,7 +29,7 @@ class DefaultStartDMActionTest {
             givenFindDmResult(A_ROOM_ID)
         }
         val action = createStartDMAction(matrixClient)
-        val state = mutableStateOf<AsyncAction<RoomId>>(AsyncAction.Uninitialized)
+        val state = mutableStateOf<AsyncAction<Unit, RoomId>>(AsyncAction.Uninitialized)
         action.execute(A_USER_ID, state)
         assertThat(state.value).isEqualTo(AsyncAction.Success(A_ROOM_ID))
     }
@@ -42,7 +42,7 @@ class DefaultStartDMActionTest {
         }
         val analyticsService = FakeAnalyticsService()
         val action = createStartDMAction(matrixClient, analyticsService)
-        val state = mutableStateOf<AsyncAction<RoomId>>(AsyncAction.Uninitialized)
+        val state = mutableStateOf<AsyncAction<Unit, RoomId>>(AsyncAction.Uninitialized)
         action.execute(A_USER_ID, state)
         assertThat(state.value).isEqualTo(AsyncAction.Success(A_ROOM_ID))
         assertThat(analyticsService.capturedEvents).containsExactly(CreatedRoom(isDM = true))
@@ -55,7 +55,7 @@ class DefaultStartDMActionTest {
             givenCreateDmResult(Result.failure(A_THROWABLE))
         }
         val action = createStartDMAction(matrixClient)
-        val state = mutableStateOf<AsyncAction<RoomId>>(AsyncAction.Uninitialized)
+        val state = mutableStateOf<AsyncAction<Unit, RoomId>>(AsyncAction.Uninitialized)
         action.execute(A_USER_ID, state)
         assertThat(state.value).isEqualTo(AsyncAction.Failure(A_THROWABLE))
     }

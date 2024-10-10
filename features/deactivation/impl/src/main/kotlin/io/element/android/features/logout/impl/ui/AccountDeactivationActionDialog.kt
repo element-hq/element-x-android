@@ -16,7 +16,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun AccountDeactivationActionDialog(
-    state: AsyncAction<Unit>,
+    state: AsyncAction<Unit, Unit>,
     onConfirmClick: () -> Unit,
     onRetryClick: () -> Unit,
     onDismissDialog: () -> Unit,
@@ -24,7 +24,7 @@ fun AccountDeactivationActionDialog(
     when (state) {
         AsyncAction.Uninitialized ->
             Unit
-        AsyncAction.Confirming ->
+        is AsyncAction.Confirming ->
             AccountDeactivationConfirmationDialog(
                 onSubmitClick = onConfirmClick,
                 onDismiss = onDismissDialog

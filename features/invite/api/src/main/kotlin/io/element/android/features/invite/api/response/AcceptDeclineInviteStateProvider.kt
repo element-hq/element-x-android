@@ -20,13 +20,13 @@ open class AcceptDeclineInviteStateProvider : PreviewParameterProvider<AcceptDec
                 invite = Optional.of(
                     InviteData(RoomId("!room:matrix.org"), isDm = true, roomName = "Alice"),
                 ),
-                declineAction = AsyncAction.Confirming,
+                declineAction = AsyncAction.Confirming(Unit),
             ),
             anAcceptDeclineInviteState(
                 invite = Optional.of(
                     InviteData(RoomId("!room:matrix.org"), isDm = false, roomName = "Some room"),
                 ),
-                declineAction = AsyncAction.Confirming,
+                declineAction = AsyncAction.Confirming(Unit),
             ),
             anAcceptDeclineInviteState(
                 acceptAction = AsyncAction.Failure(Throwable("Whoops")),
@@ -39,8 +39,8 @@ open class AcceptDeclineInviteStateProvider : PreviewParameterProvider<AcceptDec
 
 fun anAcceptDeclineInviteState(
     invite: Optional<InviteData> = Optional.empty(),
-    acceptAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
-    declineAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
+    acceptAction: AsyncAction<Unit, RoomId> = AsyncAction.Uninitialized,
+    declineAction: AsyncAction<Unit, RoomId> = AsyncAction.Uninitialized,
     eventSink: (AcceptDeclineInviteEvents) -> Unit = {}
 ) = AcceptDeclineInviteState(
     invite = invite,

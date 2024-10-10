@@ -20,7 +20,7 @@ open class AccountDeactivationStateProvider : PreviewParameterProvider<AccountDe
             ),
             anAccountDeactivationState(
                 deactivateFormState = filledForm,
-                accountDeactivationAction = AsyncAction.Confirming,
+                accountDeactivationAction = AsyncAction.Confirming(Unit),
             ),
             anAccountDeactivationState(
                 deactivateFormState = filledForm,
@@ -43,7 +43,7 @@ internal fun aDeactivateFormState(
 
 internal fun anAccountDeactivationState(
     deactivateFormState: DeactivateFormState = aDeactivateFormState(),
-    accountDeactivationAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    accountDeactivationAction: AsyncAction<Unit, Unit> = AsyncAction.Uninitialized,
     eventSink: (AccountDeactivationEvents) -> Unit = {},
 ) = AccountDeactivationState(
     deactivateFormState = deactivateFormState,

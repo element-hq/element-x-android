@@ -73,8 +73,8 @@ class JoinRoomPresenter @AssistedInject constructor(
         val coroutineScope = rememberCoroutineScope()
         var retryCount by remember { mutableIntStateOf(0) }
         val roomInfo by matrixClient.getRoomInfoFlow(roomId.toRoomIdOrAlias()).collectAsState(initial = Optional.empty())
-        val joinAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
-        val knockAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val joinAction: MutableState<AsyncAction<Unit, Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val knockAction: MutableState<AsyncAction<Unit, Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val contentState by produceState<ContentState>(
             initialValue = ContentState.Loading(roomIdOrAlias),
             key1 = roomInfo,
@@ -143,7 +143,7 @@ class JoinRoomPresenter @AssistedInject constructor(
         )
     }
 
-    private fun CoroutineScope.joinRoom(joinAction: MutableState<AsyncAction<Unit>>) = launch {
+    private fun CoroutineScope.joinRoom(joinAction: MutableState<AsyncAction<Unit, Unit>>) = launch {
         joinAction.runUpdatingState {
             joinRoom.invoke(
                 roomIdOrAlias = roomIdOrAlias,
@@ -153,7 +153,7 @@ class JoinRoomPresenter @AssistedInject constructor(
         }
     }
 
-    private fun CoroutineScope.knockRoom(knockAction: MutableState<AsyncAction<Unit>>) = launch {
+    private fun CoroutineScope.knockRoom(knockAction: MutableState<AsyncAction<Unit, Unit>>) = launch {
         knockAction.runUpdatingState {
             knockRoom(roomId)
         }

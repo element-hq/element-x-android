@@ -58,13 +58,13 @@ class RolesAndPermissionsPresenter @Inject constructor(
                 roomInfo.userCountWithRole(activeRoomMemberIds, RoomMember.Role.ADMIN)
             }
         }
-        val changeOwnRoleAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
-        val resetPermissionsAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
+        val changeOwnRoleAction = remember { mutableStateOf<AsyncAction<Unit, Unit>>(AsyncAction.Uninitialized) }
+        val resetPermissionsAction = remember { mutableStateOf<AsyncAction<Unit, Unit>>(AsyncAction.Uninitialized) }
 
         fun handleEvent(event: RolesAndPermissionsEvents) {
             when (event) {
                 is RolesAndPermissionsEvents.ChangeOwnRole -> {
-                    changeOwnRoleAction.value = AsyncAction.Confirming
+                    changeOwnRoleAction.value = AsyncAction.Confirming(Unit)
                 }
                 is RolesAndPermissionsEvents.CancelPendingAction -> {
                     changeOwnRoleAction.value = AsyncAction.Uninitialized
@@ -77,7 +77,7 @@ class RolesAndPermissionsPresenter @Inject constructor(
                 is RolesAndPermissionsEvents.ResetPermissions -> if (resetPermissionsAction.value.isConfirming()) {
                     coroutineScope.resetPermissions(resetPermissionsAction)
                 } else {
-                    resetPermissionsAction.value = AsyncAction.Confirming
+                    resetPermissionsAction.value = AsyncAction.Confirming(Unit)
                 }
             }
         }
@@ -93,7 +93,7 @@ class RolesAndPermissionsPresenter @Inject constructor(
 
     private fun CoroutineScope.demoteSelfTo(
         role: RoomMember.Role,
-        changeOwnRoleAction: MutableState<AsyncAction<Unit>>,
+        changeOwnRoleAction: MutableState<AsyncAction<Unit, Unit>>,
     ) = launch(dispatchers.io) {
         runUpdatingState(changeOwnRoleAction) {
             room.updateUsersRoles(listOf(UserRoleChange(room.sessionId, role)))
@@ -101,7 +101,7 @@ class RolesAndPermissionsPresenter @Inject constructor(
     }
 
     private fun CoroutineScope.resetPermissions(
-        resetPermissionsAction: MutableState<AsyncAction<Unit>>,
+        resetPermissionsAction: MutableState<AsyncAction<Unit, Unit>>,
     ) = launch(dispatchers.io) {
         runUpdatingState(resetPermissionsAction) {
             analyticsService.capture(RoomModeration(RoomModeration.Action.ResetPermissions))

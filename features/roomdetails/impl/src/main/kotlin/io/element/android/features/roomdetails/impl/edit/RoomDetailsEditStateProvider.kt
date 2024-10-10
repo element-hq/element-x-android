@@ -40,7 +40,7 @@ fun aRoomDetailsEditState(
     canChangeAvatar: Boolean = true,
     avatarActions: List<AvatarAction> = emptyList(),
     saveButtonEnabled: Boolean = true,
-    saveAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    saveAction: AsyncAction<Unit, Unit> = AsyncAction.Uninitialized,
     cameraPermissionState: PermissionsState = aPermissionsState(showDialog = false),
     eventSink: (RoomDetailsEditEvents) -> Unit = {},
 ) = RoomDetailsEditState(

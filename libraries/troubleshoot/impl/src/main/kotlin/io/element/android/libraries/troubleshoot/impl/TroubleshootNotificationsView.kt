@@ -122,7 +122,7 @@ private fun ColumnScope.TroubleshootTestView(
 private fun ColumnScope.TroubleshootNotificationsContent(state: TroubleshootNotificationsState) {
     when (state.testSuiteState.mainState) {
         AsyncAction.Loading,
-        AsyncAction.Confirming,
+        is AsyncAction.Confirming,
         is AsyncAction.Success,
         is AsyncAction.Failure -> {
             TestSuiteView(
@@ -150,7 +150,7 @@ private fun ColumnScope.TroubleshootNotificationsContent(state: TroubleshootNoti
             })
             RunTestButton(state = state)
         }
-        AsyncAction.Confirming -> {
+        is AsyncAction.Confirming -> {
             ListItem(headlineContent = {
                 Text(
                     text = stringResource(id = R.string.troubleshoot_notifications_screen_waiting)

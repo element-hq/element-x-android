@@ -53,8 +53,8 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
             mutableStateOf(null)
         }
         val localCoroutineScope = rememberCoroutineScope()
-        val setNotificationSettingAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
-        val restoreDefaultAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val setNotificationSettingAction: MutableState<AsyncAction<Unit, Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val restoreDefaultAction: MutableState<AsyncAction<Unit, Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
         val roomNotificationSettings: MutableState<AsyncData<RoomNotificationSettings>> = remember {
             mutableStateOf(AsyncData.Uninitialized)
@@ -161,7 +161,7 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
         mode: RoomNotificationMode,
         pendingModeState: MutableState<RoomNotificationMode?>,
         pendingDefaultState: MutableState<Boolean?>,
-        action: MutableState<AsyncAction<Unit>>
+        action: MutableState<AsyncAction<Unit, Unit>>
     ) = launch {
         suspendWithMinimumDuration {
             pendingModeState.value = mode
@@ -176,7 +176,7 @@ class RoomNotificationSettingsPresenter @AssistedInject constructor(
     }
 
     private fun CoroutineScope.restoreDefaultRoomNotificationMode(
-        action: MutableState<AsyncAction<Unit>>,
+        action: MutableState<AsyncAction<Unit, Unit>>,
         pendingDefaultState: MutableState<Boolean?>
     ) = launch {
         suspendWithMinimumDuration {

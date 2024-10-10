@@ -121,7 +121,7 @@ class RoomDetailsEditPresenter @Inject constructor(
             }
         }
 
-        val saveAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val saveAction: MutableState<AsyncAction<Unit, Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val localCoroutineScope = rememberCoroutineScope()
         fun handleEvents(event: RoomDetailsEditEvents) {
             when (event) {
@@ -176,7 +176,7 @@ class RoomDetailsEditPresenter @Inject constructor(
         newTopicTrimmed: String,
         currentAvatar: Uri?,
         newAvatarUri: Uri?,
-        action: MutableState<AsyncAction<Unit>>,
+        action: MutableState<AsyncAction<Unit, Unit>>,
     ) = launch {
         val results = mutableListOf<Result<Unit>>()
         suspend {

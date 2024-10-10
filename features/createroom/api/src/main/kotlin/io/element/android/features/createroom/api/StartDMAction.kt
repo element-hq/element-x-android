@@ -18,5 +18,5 @@ interface StartDMAction {
      * @param userId The user to start a DM with.
      * @param actionState The state to update with the result of the action.
      */
-    suspend fun execute(userId: UserId, actionState: MutableState<AsyncAction<RoomId>>)
+    suspend fun execute(userId: UserId, actionState: MutableState<AsyncAction<Unit, RoomId>>)
 }

@@ -26,7 +26,7 @@ class ChangeRoomPermissionsStatePreviewProvider : PreviewParameterProvider<Chang
                 hasChanges = true,
                 saveAction = AsyncAction.Failure(IllegalStateException("Failed to save changes"))
             ),
-            aChangeRoomPermissionsState(section = ChangeRoomPermissionsSection.RoomDetails, hasChanges = true, confirmExitAction = AsyncAction.Confirming),
+            aChangeRoomPermissionsState(section = ChangeRoomPermissionsSection.RoomDetails, hasChanges = true, confirmExitAction = AsyncAction.Confirming(Unit)),
         )
 }
 
@@ -35,8 +35,8 @@ internal fun aChangeRoomPermissionsState(
     currentPermissions: MatrixRoomPowerLevels = previewPermissions(),
     items: List<RoomPermissionType> = ChangeRoomPermissionsPresenter.itemsForSection(section),
     hasChanges: Boolean = false,
-    saveAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
-    confirmExitAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    saveAction: AsyncAction<Unit, Unit> = AsyncAction.Uninitialized,
+    confirmExitAction: AsyncAction<Unit, Unit> = AsyncAction.Uninitialized,
     eventSink: (ChangeRoomPermissionsEvent) -> Unit = {},
 ) = ChangeRoomPermissionsState(
     section = section,

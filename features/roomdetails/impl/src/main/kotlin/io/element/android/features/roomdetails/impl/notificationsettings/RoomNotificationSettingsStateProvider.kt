@@ -27,8 +27,8 @@ internal class RoomNotificationSettingsStateProvider : PreviewParameterProvider<
 
     private fun aRoomNotificationSettingsState(
         isDefault: Boolean = true,
-        setNotificationSettingAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
-        restoreDefaultAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+        setNotificationSettingAction: AsyncAction<Unit, Unit> = AsyncAction.Uninitialized,
+        restoreDefaultAction: AsyncAction<Unit, Unit> = AsyncAction.Uninitialized,
         displayMentionsOnlyDisclaimer: Boolean = false,
     ): RoomNotificationSettingsState {
         return RoomNotificationSettingsState(

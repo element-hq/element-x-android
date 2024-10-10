@@ -74,7 +74,7 @@ private fun aDecimalsSessionVerificationData(
 
 internal fun aVerifySelfSessionState(
     verificationFlowStep: VerificationStep = VerificationStep.Initial(canEnterRecoveryKey = false),
-    signOutAction: AsyncAction<String?> = AsyncAction.Uninitialized,
+    signOutAction: AsyncAction<Unit, String?> = AsyncAction.Uninitialized,
     displaySkipButton: Boolean = false,
     eventSink: (VerifySelfSessionViewEvents) -> Unit = {},
 ) = VerifySelfSessionState(

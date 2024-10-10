@@ -28,7 +28,7 @@ class ResetIdentityPasswordPresenter(
     override fun present(): ResetIdentityPasswordState {
         val coroutineScope = rememberCoroutineScope()
 
-        val resetAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
+        val resetAction = remember { mutableStateOf<AsyncAction<Unit, Unit>>(AsyncAction.Uninitialized) }
 
         fun handleEvent(event: ResetIdentityPasswordEvent) {
             when (event) {
@@ -43,7 +43,7 @@ class ResetIdentityPasswordPresenter(
         )
     }
 
-    private fun CoroutineScope.reset(password: String, action: MutableState<AsyncAction<Unit>>) = launch(dispatchers.io) {
+    private fun CoroutineScope.reset(password: String, action: MutableState<AsyncAction<Unit, Unit>>) = launch(dispatchers.io) {
         suspend {
             identityPasswordResetHandle.resetPassword(password).getOrThrow()
         }.runCatchingUpdatingState(action)

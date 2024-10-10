@@ -35,7 +35,7 @@ class LogoutPresenter @Inject constructor(
     @Composable
     override fun present(): LogoutState {
         val localCoroutineScope = rememberCoroutineScope()
-        val logoutAction: MutableState<AsyncAction<String?>> = remember {
+        val logoutAction: MutableState<AsyncAction<Unit, String?>> = remember {
             mutableStateOf(AsyncAction.Uninitialized)
         }
 
@@ -64,7 +64,7 @@ class LogoutPresenter @Inject constructor(
                     if (logoutAction.value.isConfirming() || event.ignoreSdkError) {
                         localCoroutineScope.logout(logoutAction, event.ignoreSdkError)
                     } else {
-                        logoutAction.value = AsyncAction.Confirming
+                        logoutAction.value = AsyncAction.Confirming(Unit)
                     }
                 }
                 LogoutEvents.CloseDialogs -> {
@@ -91,7 +91,7 @@ class LogoutPresenter @Inject constructor(
     }
 
     private fun CoroutineScope.logout(
-        logoutAction: MutableState<AsyncAction<String?>>,
+        logoutAction: MutableState<AsyncAction<Unit, String?>>,
         ignoreSdkError: Boolean,
     ) = launch {
         suspend {

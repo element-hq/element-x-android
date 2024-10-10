@@ -10,11 +10,11 @@ package io.element.android.libraries.designsystem.components.async
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
 
-open class AsyncActionProvider : PreviewParameterProvider<AsyncAction<Unit>> {
-    override val values: Sequence<AsyncAction<Unit>>
+open class AsyncActionProvider : PreviewParameterProvider<AsyncAction<Unit, Unit>> {
+    override val values: Sequence<AsyncAction<Unit, Unit>>
         get() = sequenceOf(
             AsyncAction.Uninitialized,
-            AsyncAction.Confirming,
+            AsyncAction.Confirming(Unit),
             AsyncAction.Loading,
             AsyncAction.Failure(Exception("An error occurred")),
             AsyncAction.Success(Unit),
