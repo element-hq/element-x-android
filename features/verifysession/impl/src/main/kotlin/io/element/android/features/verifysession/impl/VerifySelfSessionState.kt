@@ -23,6 +23,8 @@ data class VerifySelfSessionState(
     @Stable
     sealed interface VerificationStep {
         data object Loading : VerificationStep
+
+        // FIXME canEnterRecoveryKey value is never read.
         data class Initial(val canEnterRecoveryKey: Boolean, val isLastDevice: Boolean = false) : VerificationStep
         data object Canceled : VerificationStep
         data object AwaitingOtherDeviceResponse : VerificationStep

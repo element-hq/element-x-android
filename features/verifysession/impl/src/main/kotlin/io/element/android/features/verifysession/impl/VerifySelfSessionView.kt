@@ -9,13 +9,13 @@ package io.element.android.features.verifysession.impl
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -64,6 +64,7 @@ import io.element.android.features.verifysession.impl.VerifySelfSessionState.Ver
 @Composable
 fun VerifySelfSessionView(
     state: VerifySelfSessionState,
+    onLearnMoreClick: () -> Unit,
     onEnterRecoveryKey: () -> Unit,
     onResetKey: () -> Unit,
     onFinish: () -> Unit,
@@ -140,7 +141,10 @@ fun VerifySelfSessionView(
                 )
             }
         ) {
-            Content(flowState = verificationFlowStep)
+            Content(
+                flowState = verificationFlowStep,
+                onLearnMoreClick = onLearnMoreClick,
+            )
         }
     }
 
@@ -203,38 +207,68 @@ private fun HeaderContent(verificationFlowStep: FlowStep) {
 }
 
 @Composable
-private fun Content(flowState: FlowStep) {
-    Column(Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
-        if (flowState is FlowStep.Verifying) {
+private fun Content(
+    flowState: FlowStep,
+    onLearnMoreClick: () -> Unit,
+) {
+    when (flowState) {
+        is VerifySelfSessionState.VerificationStep.Initial -> {
+            ContentInitial(onLearnMoreClick)
+        }
+        is FlowStep.Verifying -> {
             ContentVerifying(flowState)
         }
+        else -> Unit
+    }
+}
+
+@Composable
+private fun ContentInitial(
+    onLearnMoreClick: () -> Unit,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+    ) {
+        Text(
+            modifier = Modifier
+                .clickable { onLearnMoreClick() }
+                .padding(vertical = 4.dp, horizontal = 16.dp),
+            text = stringResource(CommonStrings.action_learn_more),
+            style = ElementTheme.typography.fontBodyLgMedium
+        )
     }
 }
 
 @Composable
 private fun ContentVerifying(verificationFlowStep: FlowStep.Verifying) {
-    when (verificationFlowStep.data) {
-        is SessionVerificationData.Decimals -> {
-            val text = verificationFlowStep.data.decimals.joinToString(separator = " - ") { it.toString() }
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = text,
-                style = ElementTheme.typography.fontHeadingLgBold,
-                color = MaterialTheme.colorScheme.primary,
-                textAlign = TextAlign.Center,
-            )
-        }
-        is SessionVerificationData.Emojis -> {
-            // We want each row to have up to 4 emojis
-            val rows = verificationFlowStep.data.emojis.chunked(4)
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(40.dp),
-            ) {
-                rows.forEach { emojis ->
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                        for (emoji in emojis) {
-                            EmojiItemView(emoji = emoji, modifier = Modifier.widthIn(max = 60.dp))
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        when (verificationFlowStep.data) {
+            is SessionVerificationData.Decimals -> {
+                val text = verificationFlowStep.data.decimals.joinToString(separator = " - ") { it.toString() }
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = text,
+                    style = ElementTheme.typography.fontHeadingLgBold,
+                    color = MaterialTheme.colorScheme.primary,
+                    textAlign = TextAlign.Center,
+                )
+            }
+            is SessionVerificationData.Emojis -> {
+                // We want each row to have up to 4 emojis
+                val rows = verificationFlowStep.data.emojis.chunked(4)
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(40.dp),
+                ) {
+                    rows.forEach { emojis ->
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                            for (emoji in emojis) {
+                                EmojiItemView(emoji = emoji, modifier = Modifier.widthIn(max = 60.dp))
+                            }
                         }
                     }
                 }
@@ -292,14 +326,14 @@ private fun BottomMenu(
                         text = stringResource(R.string.screen_identity_use_another_device),
                         onClick = { eventSink(VerifySelfSessionViewEvents.RequestVerification) },
                     )
-                    OutlinedButton(
+                    Button(
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.screen_session_verification_enter_recovery_key),
                         onClick = onEnterRecoveryKey,
                     )
                 }
                 // This option should always be displayed
-                TextButton(
+                OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.screen_identity_confirmation_cannot_confirm),
                     onClick = onResetKey,
@@ -402,6 +436,7 @@ private fun BottomMenu(
 internal fun VerifySelfSessionViewPreview(@PreviewParameter(VerifySelfSessionStateProvider::class) state: VerifySelfSessionState) = ElementPreview {
     VerifySelfSessionView(
         state = state,
+        onLearnMoreClick = {},
         onEnterRecoveryKey = {},
         onResetKey = {},
         onFinish = {},

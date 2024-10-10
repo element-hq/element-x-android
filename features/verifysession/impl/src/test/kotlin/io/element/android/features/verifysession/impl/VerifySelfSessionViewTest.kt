@@ -146,6 +146,22 @@ class VerifySelfSessionViewTest {
         }
     }
 
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `clicking on learn more invokes the expected callback`() {
+        val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>(expectEvents = false)
+        ensureCalledOnce { callback ->
+            rule.setVerifySelfSessionView(
+                aVerifySelfSessionState(
+                    verificationFlowStep = VerifySelfSessionState.VerificationStep.Initial(true),
+                    eventSink = eventsRecorder
+                ),
+                onLearnMoreClick = callback,
+            )
+            rule.clickOn(CommonStrings.action_learn_more)
+        }
+    }
+
     @Test
     fun `clicking on they match emits the expected event`() {
         val eventsRecorder = EventsRecorder<VerifySelfSessionViewEvents>()
@@ -222,6 +238,7 @@ class VerifySelfSessionViewTest {
 
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setVerifySelfSessionView(
         state: VerifySelfSessionState,
+        onLearnMoreClick: () -> Unit = EnsureNeverCalled(),
         onEnterRecoveryKey: () -> Unit = EnsureNeverCalled(),
         onFinished: () -> Unit = EnsureNeverCalled(),
         onResetKey: () -> Unit = EnsureNeverCalled(),
@@ -230,6 +247,7 @@ class VerifySelfSessionViewTest {
         setContent {
             VerifySelfSessionView(
                 state = state,
+                onLearnMoreClick = onLearnMoreClick,
                 onEnterRecoveryKey = onEnterRecoveryKey,
                 onFinish = onFinished,
                 onResetKey = onResetKey,

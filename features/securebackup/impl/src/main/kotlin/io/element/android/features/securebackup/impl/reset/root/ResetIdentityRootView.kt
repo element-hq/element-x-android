@@ -31,7 +31,6 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
@@ -50,7 +49,7 @@ fun ResetIdentityRootView(
         buttons = {
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(id = CommonStrings.action_continue),
+                text = stringResource(id = R.string.screen_encryption_reset_action_continue_reset),
                 onClick = { state.eventSink(ResetIdentityRootEvent.Continue) },
                 destructive = true,
             )
@@ -98,9 +97,9 @@ private fun Content() {
                     iconComposable = {
                         Icon(
                             modifier = Modifier.size(20.dp),
-                            imageVector = CompoundIcons.Close(),
+                            imageVector = CompoundIcons.Info(),
                             contentDescription = null,
-                            tint = ElementTheme.colors.iconCriticalPrimary,
+                            tint = ElementTheme.colors.iconSecondary,
                         )
                     },
                 ),
@@ -109,9 +108,9 @@ private fun Content() {
                     iconComposable = {
                         Icon(
                             modifier = Modifier.size(20.dp),
-                            imageVector = CompoundIcons.Close(),
+                            imageVector = CompoundIcons.Info(),
                             contentDescription = null,
-                            tint = ElementTheme.colors.iconCriticalPrimary,
+                            tint = ElementTheme.colors.iconSecondary,
                         )
                     },
                 ),
