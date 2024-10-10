@@ -25,7 +25,6 @@ class RoomSummaryListProcessor(
     private val coroutineContext: CoroutineContext,
     private val roomSummaryDetailsFactory: RoomSummaryFactory = RoomSummaryFactory(),
 ) {
-    private val roomSummariesByIdentifier = HashMap<String, RoomSummary>()
     private val mutex = Mutex()
 
     suspend fun postUpdate(updates: List<RoomListEntriesUpdate>) {
@@ -40,7 +39,7 @@ class RoomSummaryListProcessor(
     suspend fun rebuildRoomSummaries() {
         updateRoomSummaries {
             forEachIndexed { i, summary ->
-                val result = buildAndCacheRoomSummaryForIdentifier(summary.roomId.value)
+                val result = buildRoomSummaryForIdentifier(summary.roomId.value)
                 if (result != null) {
                     this[i] = result
                 }
@@ -97,23 +96,17 @@ class RoomSummaryListProcessor(
     }
 
     private suspend fun buildSummaryForRoomListEntry(entry: RoomListItem): RoomSummary {
-        return buildAndCacheRoomSummaryForRoomListItem(entry)
+        return buildRoomSummaryForRoomListItem(entry)
     }
 
-    private suspend fun buildAndCacheRoomSummaryForIdentifier(identifier: String): RoomSummary? {
-        val builtRoomSummary = roomListService.roomOrNull(identifier)?.use { roomListItem ->
-            buildAndCacheRoomSummaryForRoomListItem(roomListItem)
+    private suspend fun buildRoomSummaryForIdentifier(identifier: String): RoomSummary? {
+        return roomListService.roomOrNull(identifier)?.use { roomListItem ->
+            buildRoomSummaryForRoomListItem(roomListItem)
         }
-        if (builtRoomSummary == null) {
-            roomSummariesByIdentifier.remove(identifier)
-        }
-        return builtRoomSummary
     }
 
-    private suspend fun buildAndCacheRoomSummaryForRoomListItem(roomListItem: RoomListItem): RoomSummary {
-        val builtRoomSummary = roomSummaryDetailsFactory.create(roomListItem = roomListItem)
-        roomSummariesByIdentifier[builtRoomSummary.roomId.value] = builtRoomSummary
-        return builtRoomSummary
+    private suspend fun buildRoomSummaryForRoomListItem(roomListItem: RoomListItem): RoomSummary {
+        return roomSummaryDetailsFactory.create(roomListItem = roomListItem)
     }
 
     private suspend fun updateRoomSummaries(block: suspend MutableList<RoomSummary>.() -> Unit) = withContext(coroutineContext) {
