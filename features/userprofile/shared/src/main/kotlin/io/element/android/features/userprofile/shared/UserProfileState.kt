@@ -17,7 +17,7 @@ data class UserProfileState(
     val userName: String?,
     val avatarUrl: String?,
     val isBlocked: AsyncData<Boolean>,
-    val startDmActionState: AsyncAction<RoomId>,
+    val startDmActionState: AsyncAction<Unit, RoomId>,
     val displayConfirmationDialog: ConfirmationDialog?,
     val isCurrentUser: Boolean,
     val dmRoomId: RoomId?,

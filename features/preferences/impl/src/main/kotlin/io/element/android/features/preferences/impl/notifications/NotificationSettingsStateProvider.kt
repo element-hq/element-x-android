@@ -39,7 +39,7 @@ open class NotificationSettingsStateProvider : PreviewParameterProvider<Notifica
 }
 
 fun aValidNotificationSettingsState(
-    changeNotificationSettingAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    changeNotificationSettingAction: AsyncAction<Unit, Unit> = AsyncAction.Uninitialized,
     atRoomNotificationsEnabled: Boolean = true,
     callNotificationsEnabled: Boolean = true,
     inviteForMeNotificationsEnabled: Boolean = true,

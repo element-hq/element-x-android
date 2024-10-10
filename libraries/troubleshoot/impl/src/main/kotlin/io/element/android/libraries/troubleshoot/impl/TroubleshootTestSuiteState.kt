@@ -12,6 +12,6 @@ import io.element.android.libraries.troubleshoot.api.test.NotificationTroublesho
 import kotlinx.collections.immutable.ImmutableList
 
 data class TroubleshootTestSuiteState(
-    val mainState: AsyncAction<Unit>,
+    val mainState: AsyncAction<Unit, Unit>,
     val tests: ImmutableList<NotificationTroubleshootTestState>,
 )

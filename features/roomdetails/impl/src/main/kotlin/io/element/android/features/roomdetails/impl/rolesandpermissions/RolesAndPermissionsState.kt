@@ -12,7 +12,7 @@ import io.element.android.libraries.architecture.AsyncAction
 data class RolesAndPermissionsState(
     val adminCount: Int,
     val moderatorCount: Int,
-    val changeOwnRoleAction: AsyncAction<Unit>,
-    val resetPermissionsAction: AsyncAction<Unit>,
+    val changeOwnRoleAction: AsyncAction<Unit, Unit>,
+    val resetPermissionsAction: AsyncAction<Unit, Unit>,
     val eventSink: (RolesAndPermissionsEvents) -> Unit,
 )

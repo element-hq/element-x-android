@@ -26,7 +26,7 @@ open class SecureBackupEnterRecoveryKeyStateProvider : PreviewParameterProvider<
 fun aSecureBackupEnterRecoveryKeyState(
     recoveryKey: String = aFormattedRecoveryKey(),
     isSubmitEnabled: Boolean = recoveryKey.isNotEmpty(),
-    submitAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    submitAction: AsyncAction<Unit, Unit> = AsyncAction.Uninitialized,
     eventSink: (SecureBackupEnterRecoveryKeyEvents) -> Unit = {},
 ) = SecureBackupEnterRecoveryKeyState(
     recoveryKeyViewState = RecoveryKeyViewState(

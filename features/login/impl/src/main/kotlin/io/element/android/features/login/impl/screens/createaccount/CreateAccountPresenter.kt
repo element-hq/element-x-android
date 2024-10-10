@@ -42,7 +42,7 @@ class CreateAccountPresenter @AssistedInject constructor(
     override fun present(): CreateAccountState {
         val coroutineScope = rememberCoroutineScope()
         val pageProgress: MutableState<Int> = remember { mutableIntStateOf(0) }
-        val createAction: MutableState<AsyncAction<SessionId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val createAction: MutableState<AsyncAction<Unit, SessionId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
         fun handleEvents(event: CreateAccountEvents) {
             when (event) {
@@ -66,7 +66,7 @@ class CreateAccountPresenter @AssistedInject constructor(
         )
     }
 
-    private fun CoroutineScope.importSession(message: String, loggedInState: MutableState<AsyncAction<SessionId>>) = launch {
+    private fun CoroutineScope.importSession(message: String, loggedInState: MutableState<AsyncAction<Unit, SessionId>>) = launch {
         loggedInState.value = AsyncAction.Loading
         runCatching {
             messageParser.parse(message)

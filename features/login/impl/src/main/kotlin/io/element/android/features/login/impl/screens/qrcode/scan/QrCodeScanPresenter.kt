@@ -44,7 +44,7 @@ class QrCodeScanPresenter @Inject constructor(
     @Composable
     override fun present(): QrCodeScanState {
         val coroutineScope = rememberCoroutineScope()
-        val authenticationAction: MutableState<AsyncAction<MatrixQrCodeLoginData>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val authenticationAction: MutableState<AsyncAction<Unit, MatrixQrCodeLoginData>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
         ObserveQRCodeLoginFailures {
             authenticationAction.value = AsyncAction.Failure(it)
@@ -85,7 +85,7 @@ class QrCodeScanPresenter @Inject constructor(
         }
     }
 
-    private fun CoroutineScope.getQrCodeData(codeScannedAction: MutableState<AsyncAction<MatrixQrCodeLoginData>>, code: ByteArray) {
+    private fun CoroutineScope.getQrCodeData(codeScannedAction: MutableState<AsyncAction<Unit, MatrixQrCodeLoginData>>, code: ByteArray) {
         if (codeScannedAction.value.isSuccess() || isProcessingCode.compareAndSet(true, true)) return
 
         launch(coroutineDispatchers.computation) {

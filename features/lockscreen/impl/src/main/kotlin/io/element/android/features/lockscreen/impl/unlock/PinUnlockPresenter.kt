@@ -53,7 +53,7 @@ class PinUnlockPresenter @Inject constructor(
             mutableStateOf(false)
         }
         val signOutAction = remember {
-            mutableStateOf<AsyncAction<String?>>(AsyncAction.Uninitialized)
+            mutableStateOf<AsyncAction<Unit, String?>>(AsyncAction.Uninitialized)
         }
         var biometricUnlockResult by remember {
             mutableStateOf<BiometricUnlock.AuthenticationResult?>(null)
@@ -169,7 +169,7 @@ class PinUnlockPresenter @Inject constructor(
         }
     }
 
-    private fun CoroutineScope.signOut(signOutAction: MutableState<AsyncAction<String?>>) = launch {
+    private fun CoroutineScope.signOut(signOutAction: MutableState<AsyncAction<Unit, String?>>) = launch {
         suspend {
             logoutUseCase.logout(ignoreSdkError = true)
         }.runCatchingUpdatingState(signOutAction)

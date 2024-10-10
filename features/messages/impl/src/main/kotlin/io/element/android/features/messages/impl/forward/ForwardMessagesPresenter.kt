@@ -37,7 +37,7 @@ class ForwardMessagesPresenter @AssistedInject constructor(
         fun create(eventId: String, timelineProvider: TimelineProvider): ForwardMessagesPresenter
     }
 
-    private val forwardingActionState: MutableState<AsyncAction<List<RoomId>>> = mutableStateOf(AsyncAction.Uninitialized)
+    private val forwardingActionState: MutableState<AsyncAction<Unit, List<RoomId>>> = mutableStateOf(AsyncAction.Uninitialized)
 
     fun onRoomSelected(roomIds: List<RoomId>) {
         appCoroutineScope.forwardEvent(eventId, roomIds.toPersistentList(), forwardingActionState)
@@ -60,7 +60,7 @@ class ForwardMessagesPresenter @AssistedInject constructor(
     private fun CoroutineScope.forwardEvent(
         eventId: EventId,
         roomIds: ImmutableList<RoomId>,
-        isForwardMessagesState: MutableState<AsyncAction<List<RoomId>>>,
+        isForwardMessagesState: MutableState<AsyncAction<Unit, List<RoomId>>>,
     ) = launch {
         suspend {
             timelineProvider.getActiveTimeline().forwardEvent(eventId, roomIds).getOrThrow()

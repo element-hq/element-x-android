@@ -45,7 +45,7 @@ class CreateRoomRootPresenter @Inject constructor(
         val userListState = presenter.present()
 
         val localCoroutineScope = rememberCoroutineScope()
-        val startDmActionState: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val startDmActionState: MutableState<AsyncAction<Unit, RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
         fun handleEvents(event: CreateRoomRootEvents) {
             when (event) {

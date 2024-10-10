@@ -23,8 +23,8 @@ data class ChangeRolesState(
     val searchResults: SearchBarResultState<MembersByRole>,
     val selectedUsers: ImmutableList<MatrixUser>,
     val hasPendingChanges: Boolean,
-    val exitState: AsyncAction<Unit>,
-    val savingState: AsyncAction<Unit>,
+    val exitState: AsyncAction<Unit, Unit>,
+    val savingState: AsyncAction<Unit, Unit>,
     val canChangeMemberRole: (UserId) -> Boolean,
     val eventSink: (ChangeRolesEvent) -> Unit,
 )

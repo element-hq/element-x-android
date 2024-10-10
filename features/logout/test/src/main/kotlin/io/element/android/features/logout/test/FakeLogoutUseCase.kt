@@ -9,11 +9,12 @@ package io.element.android.features.logout.test
 
 import io.element.android.features.logout.api.LogoutUseCase
 import io.element.android.tests.testutils.lambda.lambdaError
+import io.element.android.tests.testutils.simulateLongTask
 
 class FakeLogoutUseCase(
     var logoutLambda: (Boolean) -> String? = { lambdaError() }
 ) : LogoutUseCase {
-    override suspend fun logout(ignoreSdkError: Boolean): String? {
-        return logoutLambda(ignoreSdkError)
+    override suspend fun logout(ignoreSdkError: Boolean): String? = simulateLongTask {
+        logoutLambda(ignoreSdkError)
     }
 }

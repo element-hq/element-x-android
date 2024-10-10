@@ -39,10 +39,10 @@ class ResolveVerifiedUserSendFailurePresenter @Inject constructor(
         }
 
         val resolveAction = remember {
-            mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
+            mutableStateOf<AsyncAction<Unit, Unit>>(AsyncAction.Uninitialized)
         }
         val retryAction = remember {
-            mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
+            mutableStateOf<AsyncAction<Unit, Unit>>(AsyncAction.Uninitialized)
         }
         val coroutineScope = rememberCoroutineScope()
 

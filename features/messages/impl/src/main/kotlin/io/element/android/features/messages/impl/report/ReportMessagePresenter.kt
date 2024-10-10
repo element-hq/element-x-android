@@ -50,7 +50,7 @@ class ReportMessagePresenter @AssistedInject constructor(
         val coroutineScope = rememberCoroutineScope()
         var reason by rememberSaveable { mutableStateOf("") }
         var blockUser by rememberSaveable { mutableStateOf(false) }
-        var result: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        var result: MutableState<AsyncAction<Unit, Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
         fun handleEvents(event: ReportMessageEvents) {
             when (event) {
@@ -74,7 +74,7 @@ class ReportMessagePresenter @AssistedInject constructor(
         userId: UserId,
         reason: String,
         blockUser: Boolean,
-        result: MutableState<AsyncAction<Unit>>,
+        result: MutableState<AsyncAction<Unit, Unit>>,
     ) = launch {
         result.runUpdatingState {
             val userIdToBlock = userId.takeIf { blockUser }

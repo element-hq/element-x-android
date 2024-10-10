@@ -40,7 +40,7 @@ class BlockedUsersPresenter @Inject constructor(
         var pendingUserToUnblock by remember {
             mutableStateOf<UserId?>(null)
         }
-        val unblockUserAction: MutableState<AsyncAction<Unit>> = remember {
+        val unblockUserAction: MutableState<AsyncAction<Unit, Unit>> = remember {
             mutableStateOf(AsyncAction.Uninitialized)
         }
 
@@ -67,7 +67,7 @@ class BlockedUsersPresenter @Inject constructor(
             when (event) {
                 is BlockedUsersEvents.Unblock -> {
                     pendingUserToUnblock = event.userId
-                    unblockUserAction.value = AsyncAction.Confirming
+                    unblockUserAction.value = AsyncAction.Confirming(Unit)
                 }
                 BlockedUsersEvents.ConfirmUnblock -> {
                     pendingUserToUnblock?.let {
@@ -88,7 +88,7 @@ class BlockedUsersPresenter @Inject constructor(
         )
     }
 
-    private fun CoroutineScope.unblockUser(userId: UserId, asyncAction: MutableState<AsyncAction<Unit>>) = launch {
+    private fun CoroutineScope.unblockUser(userId: UserId, asyncAction: MutableState<AsyncAction<Unit, Unit>>) = launch {
         runUpdatingState(asyncAction) {
             matrixClient.unignoreUser(userId)
         }

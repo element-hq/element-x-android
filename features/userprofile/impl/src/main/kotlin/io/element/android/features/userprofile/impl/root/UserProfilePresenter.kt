@@ -55,7 +55,7 @@ class UserProfilePresenter @AssistedInject constructor(
         val coroutineScope = rememberCoroutineScope()
         var confirmationDialog by remember { mutableStateOf<ConfirmationDialog?>(null) }
         var userProfile by remember { mutableStateOf<MatrixUser?>(null) }
-        val startDmActionState: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val startDmActionState: MutableState<AsyncAction<Unit, RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val isBlocked: MutableState<AsyncData<Boolean>> = remember { mutableStateOf(AsyncData.Uninitialized) }
         val dmRoomId by userProfilePresenterHelper.getDmRoomId()
         val canCall by userProfilePresenterHelper.getCanCall(dmRoomId)

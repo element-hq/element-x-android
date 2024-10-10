@@ -26,7 +26,7 @@ class AccountDeactivationPresenter @Inject constructor(
     @Composable
     override fun present(): AccountDeactivationState {
         val localCoroutineScope = rememberCoroutineScope()
-        val action: MutableState<AsyncAction<Unit>> = remember {
+        val action: MutableState<AsyncAction<Unit, Unit>> = remember {
             mutableStateOf(AsyncAction.Uninitialized)
         }
 
@@ -51,7 +51,7 @@ class AccountDeactivationPresenter @Inject constructor(
                             action
                         )
                     } else {
-                        action.value = AsyncAction.Confirming
+                        action.value = AsyncAction.Confirming(Unit)
                     }
                 AccountDeactivationEvents.CloseDialogs -> {
                     action.value = AsyncAction.Uninitialized
@@ -72,7 +72,7 @@ class AccountDeactivationPresenter @Inject constructor(
 
     private fun CoroutineScope.deactivateAccount(
         formState: DeactivateFormState,
-        action: MutableState<AsyncAction<Unit>>,
+        action: MutableState<AsyncAction<Unit, Unit>>,
     ) = launch {
         suspend {
             matrixClient.deactivateAccount(

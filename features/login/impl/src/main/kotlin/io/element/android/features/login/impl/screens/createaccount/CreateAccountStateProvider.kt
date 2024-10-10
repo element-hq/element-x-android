@@ -23,7 +23,7 @@ open class CreateAccountStateProvider : PreviewParameterProvider<CreateAccountSt
 
 private fun aCreateAccountState(
     pageProgress: Int = 100,
-    createAction: AsyncAction<SessionId> = AsyncAction.Uninitialized,
+    createAction: AsyncAction<Unit, SessionId> = AsyncAction.Uninitialized,
 ) = CreateAccountState(
     url = "https://example.com",
     isDebugBuild = true,

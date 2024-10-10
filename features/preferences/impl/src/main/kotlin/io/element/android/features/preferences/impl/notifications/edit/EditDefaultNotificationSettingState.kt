@@ -15,7 +15,7 @@ data class EditDefaultNotificationSettingState(
     val isOneToOne: Boolean,
     val mode: RoomNotificationMode?,
     val roomsWithUserDefinedMode: ImmutableList<EditNotificationSettingRoomInfo>,
-    val changeNotificationSettingAction: AsyncAction<Unit>,
+    val changeNotificationSettingAction: AsyncAction<Unit, Unit>,
     val displayMentionsOnlyDisclaimer: Boolean,
     val eventSink: (EditDefaultNotificationSettingStateEvents) -> Unit,
 )

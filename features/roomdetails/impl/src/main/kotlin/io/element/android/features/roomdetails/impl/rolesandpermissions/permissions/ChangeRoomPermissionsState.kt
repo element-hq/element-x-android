@@ -16,8 +16,8 @@ data class ChangeRoomPermissionsState(
     val currentPermissions: MatrixRoomPowerLevels?,
     val items: ImmutableList<RoomPermissionType>,
     val hasChanges: Boolean,
-    val saveAction: AsyncAction<Unit>,
-    val confirmExitAction: AsyncAction<Unit>,
+    val saveAction: AsyncAction<Unit, Unit>,
+    val confirmExitAction: AsyncAction<Unit, Unit>,
     val eventSink: (ChangeRoomPermissionsEvent) -> Unit,
 )
 

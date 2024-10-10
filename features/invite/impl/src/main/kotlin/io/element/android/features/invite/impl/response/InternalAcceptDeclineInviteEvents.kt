@@ -8,9 +8,10 @@
 package io.element.android.features.invite.impl.response
 
 import io.element.android.features.invite.api.response.AcceptDeclineInviteEvents
+import io.element.android.libraries.matrix.api.core.RoomId
 
 sealed interface InternalAcceptDeclineInviteEvents : AcceptDeclineInviteEvents {
-    data object ConfirmDeclineInvite : InternalAcceptDeclineInviteEvents
+    data class ConfirmDeclineInvite(val roomId: RoomId) : InternalAcceptDeclineInviteEvents
     data object CancelDeclineInvite : InternalAcceptDeclineInviteEvents
     data object DismissAcceptError : InternalAcceptDeclineInviteEvents
     data object DismissDeclineError : InternalAcceptDeclineInviteEvents

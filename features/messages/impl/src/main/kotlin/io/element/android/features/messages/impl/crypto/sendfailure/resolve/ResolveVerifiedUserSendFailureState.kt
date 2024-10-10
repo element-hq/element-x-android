@@ -12,7 +12,7 @@ import io.element.android.libraries.architecture.AsyncAction
 
 data class ResolveVerifiedUserSendFailureState(
     val verifiedUserSendFailure: VerifiedUserSendFailure,
-    val resolveAction: AsyncAction<Unit>,
-    val retryAction: AsyncAction<Unit>,
+    val resolveAction: AsyncAction<Unit, Unit>,
+    val retryAction: AsyncAction<Unit, Unit>,
     val eventSink: (ResolveVerifiedUserSendFailureEvents) -> Unit
 )

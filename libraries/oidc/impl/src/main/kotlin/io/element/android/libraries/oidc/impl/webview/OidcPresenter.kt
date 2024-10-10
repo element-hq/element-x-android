@@ -34,7 +34,7 @@ class OidcPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): OidcState {
-        var requestState: AsyncAction<Unit> by remember {
+        var requestState: AsyncAction<Unit, Unit> by remember {
             mutableStateOf(AsyncAction.Uninitialized)
         }
         val localCoroutineScope = rememberCoroutineScope()

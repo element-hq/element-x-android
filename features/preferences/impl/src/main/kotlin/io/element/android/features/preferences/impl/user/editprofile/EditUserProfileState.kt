@@ -20,7 +20,7 @@ data class EditUserProfileState(
     val userAvatarUrl: Uri?,
     val avatarActions: ImmutableList<AvatarAction>,
     val saveButtonEnabled: Boolean,
-    val saveAction: AsyncAction<Unit>,
+    val saveAction: AsyncAction<Unit, Unit>,
     val cameraPermissionState: PermissionsState,
     val eventSink: (EditUserProfileEvents) -> Unit
 )

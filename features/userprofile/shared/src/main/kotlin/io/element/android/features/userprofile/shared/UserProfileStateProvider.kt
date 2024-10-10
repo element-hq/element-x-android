@@ -34,7 +34,7 @@ fun aUserProfileState(
     userName: String? = "Daniel",
     avatarUrl: String? = null,
     isBlocked: AsyncData<Boolean> = AsyncData.Success(false),
-    startDmActionState: AsyncAction<RoomId> = AsyncAction.Uninitialized,
+    startDmActionState: AsyncAction<Unit, RoomId> = AsyncAction.Uninitialized,
     displayConfirmationDialog: UserProfileState.ConfirmationDialog? = null,
     isCurrentUser: Boolean = false,
     dmRoomId: RoomId? = null,

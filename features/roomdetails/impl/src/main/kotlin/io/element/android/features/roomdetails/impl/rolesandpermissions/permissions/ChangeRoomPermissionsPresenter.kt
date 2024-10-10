@@ -61,8 +61,8 @@ class ChangeRoomPermissionsPresenter @AssistedInject constructor(
 
     private var initialPermissions by mutableStateOf<MatrixRoomPowerLevels?>(null)
     private var currentPermissions by mutableStateOf<MatrixRoomPowerLevels?>(null)
-    private var saveAction by mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
-    private var confirmExitAction by mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
+    private var saveAction by mutableStateOf<AsyncAction<Unit, Unit>>(AsyncAction.Uninitialized)
+    private var confirmExitAction by mutableStateOf<AsyncAction<Unit, Unit>>(AsyncAction.Uninitialized)
 
     @Composable
     override fun present(): ChangeRoomPermissionsState {
@@ -95,7 +95,7 @@ class ChangeRoomPermissionsPresenter @AssistedInject constructor(
                     confirmExitAction = if (!hasChanges || confirmExitAction.isConfirming()) {
                         AsyncAction.Success(Unit)
                     } else {
-                        AsyncAction.Confirming
+                        AsyncAction.Confirming(Unit)
                     }
                 }
                 is ChangeRoomPermissionsEvent.ResetPendingActions -> {

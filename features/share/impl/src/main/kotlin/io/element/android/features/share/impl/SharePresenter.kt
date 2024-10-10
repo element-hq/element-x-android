@@ -37,7 +37,7 @@ class SharePresenter @AssistedInject constructor(
         fun create(intent: Intent): SharePresenter
     }
 
-    private val shareActionState: MutableState<AsyncAction<List<RoomId>>> = mutableStateOf(AsyncAction.Uninitialized)
+    private val shareActionState: MutableState<AsyncAction<Unit, List<RoomId>>> = mutableStateOf(AsyncAction.Uninitialized)
 
     fun onRoomSelected(roomIds: List<RoomId>) {
         appCoroutineScope.share(intent, roomIds)

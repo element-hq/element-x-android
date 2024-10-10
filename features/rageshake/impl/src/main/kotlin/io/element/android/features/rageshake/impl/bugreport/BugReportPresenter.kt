@@ -36,7 +36,7 @@ class BugReportPresenter @Inject constructor(
 ) : Presenter<BugReportState> {
     private class BugReporterUploadListener(
         private val sendingProgress: MutableFloatState,
-        private val sendingAction: MutableState<AsyncAction<Unit>>
+        private val sendingAction: MutableState<AsyncAction<Unit, Unit>>
     ) : BugReporterListener {
         override fun onUploadCancelled() {
             sendingProgress.floatValue = 0f
@@ -73,7 +73,7 @@ class BugReportPresenter @Inject constructor(
         val sendingProgress = remember {
             mutableFloatStateOf(0f)
         }
-        val sendingAction: MutableState<AsyncAction<Unit>> = remember {
+        val sendingAction: MutableState<AsyncAction<Unit, Unit>> = remember {
             mutableStateOf(AsyncAction.Uninitialized)
         }
         val formState: MutableState<BugReportFormState> = remember {

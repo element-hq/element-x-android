@@ -28,7 +28,7 @@ open class EditDefaultNotificationSettingStateProvider : PreviewParameterProvide
 
 private fun anEditDefaultNotificationSettingsState(
     isOneToOne: Boolean = false,
-    changeNotificationSettingAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    changeNotificationSettingAction: AsyncAction<Unit, Unit> = AsyncAction.Uninitialized,
     displayMentionsOnlyDisclaimer: Boolean = false,
 ) = EditDefaultNotificationSettingState(
     isOneToOne = isOneToOne,

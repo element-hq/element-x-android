@@ -36,7 +36,7 @@ class SecureBackupEnterRecoveryKeyPresenter @Inject constructor(
         var recoveryKey by rememberSaveable {
             mutableStateOf("")
         }
-        val submitAction: MutableState<AsyncAction<Unit>> = remember {
+        val submitAction: MutableState<AsyncAction<Unit, Unit>> = remember {
             mutableStateOf(AsyncAction.Uninitialized)
         }
 
@@ -76,7 +76,7 @@ class SecureBackupEnterRecoveryKeyPresenter @Inject constructor(
 
     private fun CoroutineScope.submitRecoveryKey(
         recoveryKey: String,
-        action: MutableState<AsyncAction<Unit>>
+        action: MutableState<AsyncAction<Unit, Unit>>
     ) = launch {
         suspend {
             encryptionService.recover(recoveryKey).getOrThrow()

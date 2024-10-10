@@ -21,7 +21,7 @@ class ResetIdentityPasswordStateProvider : PreviewParameterProvider<ResetIdentit
 }
 
 private fun aResetIdentityPasswordState(
-    resetAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    resetAction: AsyncAction<Unit, Unit> = AsyncAction.Uninitialized,
     eventSink: (ResetIdentityPasswordEvent) -> Unit = {},
 ) = ResetIdentityPasswordState(
     resetAction = resetAction,

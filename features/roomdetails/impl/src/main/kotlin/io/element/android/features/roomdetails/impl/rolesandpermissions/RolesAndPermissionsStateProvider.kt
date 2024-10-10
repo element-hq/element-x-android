@@ -18,7 +18,7 @@ class RolesAndPermissionsStateProvider : PreviewParameterProvider<RolesAndPermis
             aRolesAndPermissionsState(
                 adminCount = 1,
                 moderatorCount = 2,
-                changeOwnRoleAction = AsyncAction.Confirming,
+                changeOwnRoleAction = AsyncAction.Confirming(Unit),
             ),
             aRolesAndPermissionsState(
                 adminCount = 1,
@@ -33,7 +33,7 @@ class RolesAndPermissionsStateProvider : PreviewParameterProvider<RolesAndPermis
             aRolesAndPermissionsState(
                 adminCount = 1,
                 moderatorCount = 2,
-                resetPermissionsAction = AsyncAction.Confirming,
+                resetPermissionsAction = AsyncAction.Confirming(Unit),
             ),
             aRolesAndPermissionsState(
                 adminCount = 1,
@@ -51,8 +51,8 @@ class RolesAndPermissionsStateProvider : PreviewParameterProvider<RolesAndPermis
 internal fun aRolesAndPermissionsState(
     adminCount: Int = 0,
     moderatorCount: Int = 0,
-    changeOwnRoleAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
-    resetPermissionsAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    changeOwnRoleAction: AsyncAction<Unit, Unit> = AsyncAction.Uninitialized,
+    resetPermissionsAction: AsyncAction<Unit, Unit> = AsyncAction.Uninitialized,
     eventSink: (RolesAndPermissionsEvents) -> Unit = {},
 ) = RolesAndPermissionsState(
     adminCount = adminCount,

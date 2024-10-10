@@ -26,8 +26,8 @@ open class ResolveVerifiedUserSendFailureStateProvider : PreviewParameterProvide
 
 fun aResolveVerifiedUserSendFailureState(
     verifiedUserSendFailure: VerifiedUserSendFailure = VerifiedUserSendFailure.None,
-    resolveAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
-    retryAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    resolveAction: AsyncAction<Unit, Unit> = AsyncAction.Uninitialized,
+    retryAction: AsyncAction<Unit, Unit> = AsyncAction.Uninitialized,
     eventSink: (ResolveVerifiedUserSendFailureEvents) -> Unit = {}
 ) = ResolveVerifiedUserSendFailureState(
     verifiedUserSendFailure = verifiedUserSendFailure,

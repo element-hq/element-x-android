@@ -94,7 +94,7 @@ class TroubleshootTestSuite @Inject constructor(
     }
 }
 
-fun List<NotificationTroubleshootTestState>.computeMainState(): AsyncAction<Unit> {
+fun List<NotificationTroubleshootTestState>.computeMainState(): AsyncAction<Unit, Unit> {
     val isIdle = all { it.status is NotificationTroubleshootTestState.Status.Idle }
     val isRunning = any { it.status is NotificationTroubleshootTestState.Status.InProgress }
     return when {
@@ -102,7 +102,7 @@ fun List<NotificationTroubleshootTestState>.computeMainState(): AsyncAction<Unit
         isRunning -> AsyncAction.Loading
         else -> {
             if (any { it.status is NotificationTroubleshootTestState.Status.WaitingForUser }) {
-                AsyncAction.Confirming
+                AsyncAction.Confirming(Unit)
             } else if (any { it.status is NotificationTroubleshootTestState.Status.Failure }) {
                 AsyncAction.Failure(Exception("Some tests failed"))
             } else {

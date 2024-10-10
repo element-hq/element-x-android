@@ -17,7 +17,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class ConfigureRoomState(
     val config: CreateRoomConfig,
     val avatarActions: ImmutableList<AvatarAction>,
-    val createRoomAction: AsyncAction<RoomId>,
+    val createRoomAction: AsyncAction<Unit, RoomId>,
     val cameraPermissionState: PermissionsState,
     val eventSink: (ConfigureRoomEvents) -> Unit
 ) {

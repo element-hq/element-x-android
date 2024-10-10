@@ -19,8 +19,8 @@ data class RoomNotificationSettingsState(
     val pendingRoomNotificationMode: RoomNotificationMode?,
     val pendingSetDefault: Boolean?,
     val defaultRoomNotificationMode: RoomNotificationMode?,
-    val setNotificationSettingAction: AsyncAction<Unit>,
-    val restoreDefaultAction: AsyncAction<Unit>,
+    val setNotificationSettingAction: AsyncAction<Unit, Unit>,
+    val restoreDefaultAction: AsyncAction<Unit, Unit>,
     val displayMentionsOnlyDisclaimer: Boolean,
     val eventSink: (RoomNotificationSettingsEvents) -> Unit
 )

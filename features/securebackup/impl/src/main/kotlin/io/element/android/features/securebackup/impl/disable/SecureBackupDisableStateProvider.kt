@@ -15,7 +15,7 @@ open class SecureBackupDisableStateProvider : PreviewParameterProvider<SecureBac
     override val values: Sequence<SecureBackupDisableState>
         get() = sequenceOf(
             aSecureBackupDisableState(),
-            aSecureBackupDisableState(disableAction = AsyncAction.Confirming),
+            aSecureBackupDisableState(disableAction = AsyncAction.Confirming(Unit)),
             aSecureBackupDisableState(disableAction = AsyncAction.Loading),
             aSecureBackupDisableState(disableAction = AsyncAction.Failure(Exception("Failed to disable"))),
             // Add other states here
@@ -24,7 +24,7 @@ open class SecureBackupDisableStateProvider : PreviewParameterProvider<SecureBac
 
 fun aSecureBackupDisableState(
     backupState: BackupState = BackupState.UNKNOWN,
-    disableAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    disableAction: AsyncAction<Unit, Unit> = AsyncAction.Uninitialized,
 ) = SecureBackupDisableState(
     backupState = backupState,
     disableAction = disableAction,

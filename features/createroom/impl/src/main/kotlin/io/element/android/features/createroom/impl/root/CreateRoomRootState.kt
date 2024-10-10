@@ -14,6 +14,6 @@ import io.element.android.libraries.matrix.api.core.RoomId
 data class CreateRoomRootState(
     val applicationName: String,
     val userListState: UserListState,
-    val startDmAction: AsyncAction<RoomId>,
+    val startDmAction: AsyncAction<Unit, RoomId>,
     val eventSink: (CreateRoomRootEvents) -> Unit,
 )

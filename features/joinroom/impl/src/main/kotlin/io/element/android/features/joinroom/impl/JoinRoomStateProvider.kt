@@ -122,8 +122,8 @@ fun aLoadedContentState(
 fun aJoinRoomState(
     contentState: ContentState = aLoadedContentState(),
     acceptDeclineInviteState: AcceptDeclineInviteState = anAcceptDeclineInviteState(),
-    joinAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
-    knockAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    joinAction: AsyncAction<Unit, Unit> = AsyncAction.Uninitialized,
+    knockAction: AsyncAction<Unit, Unit> = AsyncAction.Uninitialized,
     eventSink: (JoinRoomEvents) -> Unit = {}
 ) = JoinRoomState(
     contentState = contentState,
