@@ -9,6 +9,7 @@ package io.element.android.libraries.roomselect.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -22,6 +23,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.roomselect.api.RoomSelectMode
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
@@ -50,7 +52,7 @@ class RoomSelectPresenter @AssistedInject constructor(
 
         val roomSummaryDetailsList by dataSource.roomInfoList.collectAsState(initial = persistentListOf())
 
-        val searchResults by remember {
+        val searchResults by remember<State<SearchBarResultState<ImmutableList<SelectRoomInfo>>>> {
             derivedStateOf {
                 when {
                     roomSummaryDetailsList.isNotEmpty() -> SearchBarResultState.Results(roomSummaryDetailsList.toImmutableList())

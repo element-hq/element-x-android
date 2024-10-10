@@ -10,7 +10,6 @@ import extension.setupAnvil
 plugins {
     id("io.element.android-compose-library")
     id("kotlin-parcelize")
-    alias(libs.plugins.anvil)
     alias(libs.plugins.kotlin.serialization)
 }
 

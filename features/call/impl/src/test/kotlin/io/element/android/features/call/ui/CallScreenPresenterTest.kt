@@ -109,12 +109,7 @@ class CallScreenPresenterTest {
             assertThat(initialState.isInWidgetMode).isTrue()
             assertThat(widgetProvider.getWidgetCalled).isTrue()
             assertThat(widgetDriver.runCalledCount).isEqualTo(1)
-            // Called several times because of the recomposition
-            analyticsLambda.assertions().isCalledExactly(2)
-                .withSequence(
-                    listOf(value(MobileScreen.ScreenName.RoomCall)),
-                    listOf(value(MobileScreen.ScreenName.RoomCall))
-                )
+            analyticsLambda.assertions().isCalledOnce().with(value(MobileScreen.ScreenName.RoomCall))
             sendCallNotificationIfNeededLambda.assertions().isCalledOnce()
         }
     }

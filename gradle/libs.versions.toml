@@ -4,9 +4,9 @@
 [versions]
 # Project
 android_gradle_plugin = "8.7.0"
-kotlin = "1.9.25"
+kotlin = "2.0.20"
 kotlinpoetKsp = "1.18.1"
-ksp = "1.9.25-1.0.20"
+ksp = "2.0.20-1.0.25"
 firebaseAppDistribution = "5.0.0"
 
 # AndroidX
@@ -62,6 +62,7 @@ kover = "0.8.3"
 [libraries]
 # Project
 android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref = "android_gradle_plugin" }
+compose_compiler_plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 # https://developer.android.com/studio/write/java8-support#library-desugaring-versions
 android_desugar = "com.android.tools:desugar_jdk_libs:2.1.2"
 anvil_gradle_plugin = { module = "dev.zacsweers.anvil:gradle-plugin", version.ref = "anvil" }
@@ -238,3 +239,4 @@ firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.
 knit = { id = "org.jetbrains.kotlinx.knit", version = "0.5.0" }
 sonarqube = "org.sonarqube:5.1.0.4882"
 licensee = "app.cash.licensee:1.11.0"
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

@@ -1,3 +1,5 @@
+import extension.setupAnvil
+
 /*
  * Copyright 2023, 2024 New Vector Ltd.
  *
@@ -7,8 +9,9 @@
 
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.anvil)
 }
+
+setupAnvil()
 
 android {
     namespace = "io.element.android.libraries.mediapickers.test"

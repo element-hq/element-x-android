@@ -51,7 +51,7 @@ class WebViewMessageInterceptor(
             }
 
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                request ?: return super.shouldOverrideUrlLoading(view, request)
+                request ?: return false
                 // Load the URL in a Chrome Custom Tab, and return true to cancel the load
                 onOpenExternalUrl(request.url.toString())
                 return true
