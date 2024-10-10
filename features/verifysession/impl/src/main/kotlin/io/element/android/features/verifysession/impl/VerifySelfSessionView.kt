@@ -223,7 +223,7 @@ private fun Content(
 }
 
 @Composable
-fun ContentInitial(
+private fun ContentInitial(
     onLearnMoreClick: () -> Unit,
 ) {
     Row(
