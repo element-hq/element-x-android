@@ -18,9 +18,11 @@ import com.bumble.appyx.core.plugin.plugins
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.element.android.anvilannotations.ContributesNode
+import io.element.android.appconfig.LearnMoreConfig
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.logout.api.util.onSuccessLogout
 import io.element.android.features.verifysession.api.VerifySessionEntryPoint
+import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 
@@ -36,6 +38,10 @@ class VerifySelfSessionNode @AssistedInject constructor(
         showDeviceVerifiedScreen = inputs<VerifySessionEntryPoint.Params>().showDeviceVerifiedScreen,
     )
 
+    private fun onLearnMoreClick(activity: Activity, dark: Boolean) {
+        activity.openUrlInChromeCustomTab(null, dark, LearnMoreConfig.ENCRYPTION_URL)
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -44,6 +50,9 @@ class VerifySelfSessionNode @AssistedInject constructor(
         VerifySelfSessionView(
             state = state,
             modifier = modifier,
+            onLearnMoreClick = {
+                onLearnMoreClick(activity, isDark)
+            },
             onEnterRecoveryKey = callback::onEnterRecoveryKey,
             onResetKey = callback::onResetKey,
             onFinish = callback::onDone,
