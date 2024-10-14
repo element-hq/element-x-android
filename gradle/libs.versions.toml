@@ -190,7 +190,7 @@ kotlinpoet = "com.squareup:kotlinpoet:1.18.1"
 zxing_cpp = "io.github.zxing-cpp:android:2.2.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.8.1"
+posthog = "com.posthog:posthog-android:3.8.2"
 sentry = "io.sentry:sentry-android:7.14.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.25.0"
