@@ -59,7 +59,7 @@ class AcceptDeclineInvitePresenter @Inject constructor(
 
                 is AcceptDeclineInviteEvents.DeclineInvite -> {
                     currentInvite = Optional.of(event.invite)
-                    declinedAction.value = AsyncAction.Confirming
+                    declinedAction.value = AsyncAction.ConfirmingNoParams
                 }
 
                 is InternalAcceptDeclineInviteEvents.ConfirmDeclineInvite -> {

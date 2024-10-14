@@ -102,7 +102,7 @@ fun List<NotificationTroubleshootTestState>.computeMainState(): AsyncAction<Unit
         isRunning -> AsyncAction.Loading
         else -> {
             if (any { it.status is NotificationTroubleshootTestState.Status.WaitingForUser }) {
-                AsyncAction.Confirming
+                AsyncAction.ConfirmingNoParams
             } else if (any { it.status is NotificationTroubleshootTestState.Status.Failure }) {
                 AsyncAction.Failure(Exception("Some tests failed"))
             } else {

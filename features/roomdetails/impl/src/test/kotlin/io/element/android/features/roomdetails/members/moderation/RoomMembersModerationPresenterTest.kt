@@ -142,7 +142,7 @@ class RoomMembersModerationPresenterTest {
             awaitItem().eventSink(RoomMembersModerationEvents.SelectRoomMember(selectedMember))
             with(awaitItem()) {
                 assertThat(selectedRoomMember).isNotNull()
-                assertThat(unbanUserAsyncAction).isEqualTo(AsyncAction.Confirming)
+                assertThat(unbanUserAsyncAction).isEqualTo(AsyncAction.ConfirmingNoParams)
             }
         }
     }
@@ -193,7 +193,7 @@ class RoomMembersModerationPresenterTest {
             awaitItem().eventSink(RoomMembersModerationEvents.SelectRoomMember(selectedMember))
             awaitItem().eventSink(RoomMembersModerationEvents.BanUser)
             val confirmingState = awaitItem()
-            assertThat(confirmingState.banUserAsyncAction).isEqualTo(AsyncAction.Confirming)
+            assertThat(confirmingState.banUserAsyncAction).isEqualTo(AsyncAction.ConfirmingNoParams)
 
             // Confirm
             confirmingState.eventSink(RoomMembersModerationEvents.BanUser)

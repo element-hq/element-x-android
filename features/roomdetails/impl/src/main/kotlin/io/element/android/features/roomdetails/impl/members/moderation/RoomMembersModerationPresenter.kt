@@ -77,7 +77,7 @@ class RoomMembersModerationPresenter @Inject constructor(
                     coroutineScope.launch {
                         selectedMember = event.roomMember
                         if (event.roomMember.membership == RoomMembershipState.BAN && canBan()) {
-                            unbanUserAsyncAction.value = AsyncAction.Confirming
+                            unbanUserAsyncAction.value = AsyncAction.ConfirmingNoParams
                         } else {
                             moderationActions = buildList {
                                 add(ModerationAction.DisplayProfile(event.roomMember.userId))
@@ -109,7 +109,7 @@ class RoomMembersModerationPresenter @Inject constructor(
                             coroutineScope.banUser(it.userId, banUserAsyncAction)
                         }
                     } else {
-                        banUserAsyncAction.value = AsyncAction.Confirming
+                        banUserAsyncAction.value = AsyncAction.ConfirmingNoParams
                     }
                 }
                 is RoomMembersModerationEvents.UnbanUser -> {
@@ -119,7 +119,7 @@ class RoomMembersModerationPresenter @Inject constructor(
                             coroutineScope.unbanUser(it.userId, unbanUserAsyncAction)
                         }
                     } else {
-                        unbanUserAsyncAction.value = AsyncAction.Confirming
+                        unbanUserAsyncAction.value = AsyncAction.ConfirmingNoParams
                     }
                 }
                 is RoomMembersModerationEvents.Reset -> {

@@ -48,7 +48,7 @@ class LogoutViewTest {
         val eventsRecorder = EventsRecorder<LogoutEvents>()
         rule.setLogoutView(
             aLogoutState(
-                logoutAction = AsyncAction.Confirming,
+                logoutAction = AsyncAction.ConfirmingNoParams,
                 eventSink = eventsRecorder
             ),
         )

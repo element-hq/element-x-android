@@ -130,7 +130,7 @@ class RoomMembersModerationViewTest {
         val roomMember = anAlice()
         val state = aRoomMembersModerationState(
             selectedRoomMember = roomMember,
-            banUserAsyncAction = AsyncAction.Confirming,
+            banUserAsyncAction = AsyncAction.ConfirmingNoParams,
             eventSink = eventsRecorder
         )
         rule.setRoomMembersModerationView(
@@ -147,7 +147,7 @@ class RoomMembersModerationViewTest {
         val roomMember = anAlice()
         val state = aRoomMembersModerationState(
             selectedRoomMember = roomMember,
-            banUserAsyncAction = AsyncAction.Confirming,
+            banUserAsyncAction = AsyncAction.ConfirmingNoParams,
             eventSink = eventsRecorder
         )
         rule.setRoomMembersModerationView(
@@ -164,7 +164,7 @@ class RoomMembersModerationViewTest {
         val roomMember = anAlice()
         val state = aRoomMembersModerationState(
             selectedRoomMember = roomMember,
-            unbanUserAsyncAction = AsyncAction.Confirming,
+            unbanUserAsyncAction = AsyncAction.ConfirmingNoParams,
             eventSink = eventsRecorder
         )
         rule.setRoomMembersModerationView(
@@ -181,7 +181,7 @@ class RoomMembersModerationViewTest {
         val roomMember = anAlice()
         val state = aRoomMembersModerationState(
             selectedRoomMember = roomMember,
-            unbanUserAsyncAction = AsyncAction.Confirming,
+            unbanUserAsyncAction = AsyncAction.ConfirmingNoParams,
             eventSink = eventsRecorder
         )
         rule.setRoomMembersModerationView(

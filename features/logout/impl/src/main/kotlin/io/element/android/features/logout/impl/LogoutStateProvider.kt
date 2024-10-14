@@ -21,7 +21,7 @@ open class LogoutStateProvider : PreviewParameterProvider<LogoutState> {
             aLogoutState(isLastDevice = true),
             aLogoutState(isLastDevice = false, backupUploadState = BackupUploadState.Uploading(66, 200)),
             aLogoutState(isLastDevice = true, backupUploadState = BackupUploadState.Done),
-            aLogoutState(logoutAction = AsyncAction.Confirming),
+            aLogoutState(logoutAction = AsyncAction.ConfirmingNoParams),
             aLogoutState(logoutAction = AsyncAction.Loading),
             aLogoutState(logoutAction = AsyncAction.Failure(Exception("Failed to logout"))),
             aLogoutState(backupUploadState = BackupUploadState.SteadyException(SteadyStateException.Connection("No network"))),

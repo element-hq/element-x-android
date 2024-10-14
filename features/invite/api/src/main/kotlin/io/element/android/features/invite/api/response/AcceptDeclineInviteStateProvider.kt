@@ -20,13 +20,13 @@ open class AcceptDeclineInviteStateProvider : PreviewParameterProvider<AcceptDec
                 invite = Optional.of(
                     InviteData(RoomId("!room:matrix.org"), isDm = true, roomName = "Alice"),
                 ),
-                declineAction = AsyncAction.Confirming,
+                declineAction = AsyncAction.ConfirmingNoParams,
             ),
             anAcceptDeclineInviteState(
                 invite = Optional.of(
                     InviteData(RoomId("!room:matrix.org"), isDm = false, roomName = "Some room"),
                 ),
-                declineAction = AsyncAction.Confirming,
+                declineAction = AsyncAction.ConfirmingNoParams,
             ),
             anAcceptDeclineInviteState(
                 acceptAction = AsyncAction.Failure(Throwable("Whoops")),

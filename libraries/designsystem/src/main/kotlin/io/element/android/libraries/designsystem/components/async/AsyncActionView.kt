@@ -42,7 +42,7 @@ fun <T> AsyncActionView(
 ) {
     when (async) {
         AsyncAction.Uninitialized -> Unit
-        AsyncAction.Confirming -> confirmationDialog()
+        is AsyncAction.Confirming -> confirmationDialog()
         is AsyncAction.Loading -> progressDialog()
         is AsyncAction.Failure -> {
             if (onRetry == null) {

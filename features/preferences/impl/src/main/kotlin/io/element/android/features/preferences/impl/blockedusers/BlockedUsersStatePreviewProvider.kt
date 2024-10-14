@@ -19,7 +19,7 @@ class BlockedUsersStatePreviewProvider : PreviewParameterProvider<BlockedUsersSt
             aBlockedUsersState(),
             aBlockedUsersState(blockedUsers = aMatrixUserList().map { it.copy(displayName = null, avatarUrl = null) }),
             aBlockedUsersState(blockedUsers = emptyList()),
-            aBlockedUsersState(unblockUserAction = AsyncAction.Confirming),
+            aBlockedUsersState(unblockUserAction = AsyncAction.ConfirmingNoParams),
             aBlockedUsersState(unblockUserAction = AsyncAction.Loading),
             aBlockedUsersState(unblockUserAction = AsyncAction.Failure(Throwable("Failed to unblock user"))),
             aBlockedUsersState(unblockUserAction = AsyncAction.Success(Unit)),
