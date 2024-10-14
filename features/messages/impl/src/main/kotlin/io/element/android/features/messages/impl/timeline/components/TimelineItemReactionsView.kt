@@ -96,11 +96,13 @@ private fun TimelineItemReactionsView(
             },
             addMoreButton = if (userCanSendReaction) {
                 {
-                    MessagesReactionButton(
-                        content = MessagesReactionsButtonContent.Icon(CompoundDrawables.ic_compound_reaction_add),
-                        onClick = onMoreReactionsClick,
-                        onLongClick = {}
-                    )
+                    CompositionLocalProvider(LocalLayoutDirection provides currentLayout) {
+                        MessagesReactionButton(
+                            content = MessagesReactionsButtonContent.Icon(CompoundDrawables.ic_compound_reaction_add),
+                            onClick = onMoreReactionsClick,
+                            onLongClick = {}
+                        )
+                    }
                 }
             } else {
                 null
