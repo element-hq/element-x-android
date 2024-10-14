@@ -4,9 +4,9 @@
 [versions]
 # Project
 android_gradle_plugin = "8.7.1"
-kotlin = "2.0.20"
+kotlin = "2.0.21"
 kotlinpoetKsp = "1.18.1"
-ksp = "2.0.20-1.0.25"
+ksp = "2.0.21-1.0.25"
 firebaseAppDistribution = "5.0.0"
 
 # AndroidX
@@ -29,7 +29,7 @@ compose_bom = "2024.09.03"
 composecompiler = "1.5.15"
 
 # Coroutines
-coroutines = "1.8.1"
+coroutines = "1.9.0"
 
 # Accompanist
 accompanist = "0.36.0"
@@ -39,9 +39,9 @@ test_core = "1.6.1"
 
 #other
 coil = "2.7.0"
-datetime = "0.6.0"
+datetime = "0.6.1"
 dependencyAnalysis = "2.1.4"
-serialization_json = "1.6.3"
+serialization_json = "1.7.3"
 showkase = "1.0.3"
 appyx = "1.4.0"
 sqldelight = "2.0.2"
@@ -161,7 +161,7 @@ coil_test = { module = "io.coil-kt:coil-test", version.ref = "coil" }
 compound = { module = "io.element.android:compound-android", version = "0.1.1" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization_json" }
-kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7"
+kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.8"
 showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
 jsoup = "org.jsoup:jsoup:1.18.1"
