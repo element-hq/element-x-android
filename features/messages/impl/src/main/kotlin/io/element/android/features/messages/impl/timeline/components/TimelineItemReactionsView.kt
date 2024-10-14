@@ -73,7 +73,7 @@ private fun TimelineItemReactionsView(
         else -> LayoutDirection.Ltr
     }
 
-    return CompositionLocalProvider(LocalLayoutDirection provides reactionsLayoutDirection) {
+    CompositionLocalProvider(LocalLayoutDirection provides reactionsLayoutDirection) {
         TimelineItemReactionsLayout(
             modifier = modifier,
             itemSpacing = 4.dp,
