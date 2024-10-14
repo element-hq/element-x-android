@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="full_screen_intent_banner_title">"Verbeter je gesprekservaring"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Kies hoe je meldingen wilt ontvangen"</string>
   <string name="screen_advanced_settings_developer_mode">"Ontwikkelaarsmodus"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Schakel in om toegang te krijgen tot tools en functies voor ontwikkelaars."</string>

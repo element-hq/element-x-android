@@ -280,6 +280,11 @@ Põhjus: %1$s."</string>
   <string name="invite_friends_text">"Hei, suhtle minuga %1$s võrgus: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Veast teatamiseks raputa nutiseadet ägedalt"</string>
+  <string name="screen_create_room_access_section_anyone_option_description">"Kõik võivad selle jututoaga liituda"</string>
+  <string name="screen_create_room_access_section_anyone_option_title">"Kõik"</string>
+  <string name="screen_create_room_access_section_header">"Ligipääs jututoale"</string>
+  <string name="screen_create_room_access_section_knocking_option_description">"Kõik võivad paluda selle jututoaga liitumist, kuid peakasutaja või moderaator peavad selle kinnitama"</string>
+  <string name="screen_create_room_access_section_knocking_option_title">"Küsi võimalust liitumiseks"</string>
   <string name="screen_media_picker_error_failed_selection">"Meediafaili valimine ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Meediafaili töötlemine enne üleslaadimist ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Meediafaili üleslaadimine ei õnnestunud. Palun proovi uuesti."</string>

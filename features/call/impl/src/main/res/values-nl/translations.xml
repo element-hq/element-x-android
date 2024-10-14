@@ -3,4 +3,5 @@
   <string name="call_foreground_service_channel_title_android">"Actieve oproep"</string>
   <string name="call_foreground_service_message_android">"Tik om terug te gaan naar het gesprek"</string>
   <string name="call_foreground_service_title_android">"☎️ In gesprek"</string>
+  <string name="screen_incoming_call_subtitle_android">"Inkomende Element-oproep"</string>
 </resources>

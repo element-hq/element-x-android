@@ -106,6 +106,7 @@
   <string name="action_send_message">"Odeslat zprávu"</string>
   <string name="action_share">"Sdílet"</string>
   <string name="action_share_link">"Sdílet odkaz"</string>
+  <string name="action_show">"Zobrazit"</string>
   <string name="action_sign_in_again">"Přihlásit se znovu"</string>
   <string name="action_signout">"Odhlásit se"</string>
   <string name="action_signout_anyway">"Přesto se odhlásit"</string>
@@ -132,6 +133,7 @@
   <string name="common_call_invite">"Probíhá hovor (nepodporováno)"</string>
   <string name="common_call_started">"Hovor zahájen"</string>
   <string name="common_chat_backup">"Záloha chatu"</string>
+  <string name="common_copied_to_clipboard">"Zkopírováno do schránky"</string>
   <string name="common_copyright">"Autorská práva"</string>
   <string name="common_creating_room">"Vytváření místnosti…"</string>
   <string name="common_current_user_left_room">"Opustit místnost"</string>
@@ -253,6 +255,7 @@ Důvod: %1$s."</string>
   <string name="common_waiting">"Čekání…"</string>
   <string name="common_waiting_for_decryption_key">"Čekání na dešifrovací klíč"</string>
   <string name="common_you">"Vy"</string>
+  <string name="crypto_identity_change_pin_violation">"Zdá se, že se identita %1$s změnila. %2$s"</string>
   <string name="dialog_title_confirmation">"Potvrzení"</string>
   <string name="dialog_title_error">"Chyba"</string>
   <string name="dialog_title_success">"Úspěch"</string>
@@ -281,6 +284,11 @@ Důvod: %1$s."</string>
   <string name="invite_friends_text">"Ahoj, ozvi se mi na %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Zatřeste zařízením pro nahlášení chyby"</string>
+  <string name="screen_create_room_access_section_anyone_option_description">"Do této místnosti může vstoupit kdokoli"</string>
+  <string name="screen_create_room_access_section_anyone_option_title">"Kdokoliv"</string>
+  <string name="screen_create_room_access_section_header">"Přístup do místnosti"</string>
+  <string name="screen_create_room_access_section_knocking_option_description">"Kdokoli může požádat o vstup do místnosti, ale správce nebo moderátor bude muset žádost přijmout"</string>
+  <string name="screen_create_room_access_section_knocking_option_title">"Požádat o připojení"</string>
   <string name="screen_media_picker_error_failed_selection">"Výběr média se nezdařil, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>

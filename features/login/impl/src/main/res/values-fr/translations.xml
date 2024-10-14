@@ -58,6 +58,7 @@
   <string name="screen_qr_code_login_initial_state_item_3">"Choisissez %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"“Associer une nouvelle session”"</string>
   <string name="screen_qr_code_login_initial_state_item_4">"Scanner le code QR avec cet appareil"</string>
+  <string name="screen_qr_code_login_initial_state_subtitle">"Disponible uniquement si votre fournisseur de compte le supporte."</string>
   <string name="screen_qr_code_login_initial_state_title">"Ouvrez %1$s sur un autre appareil pour obtenir le QR code"</string>
   <string name="screen_qr_code_login_invalid_scan_state_description">"Scannez le QR code affiché sur l’autre appareil."</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Essayer à nouveau"</string>

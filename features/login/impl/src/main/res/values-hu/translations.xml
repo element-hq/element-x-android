@@ -60,6 +60,7 @@ Próbáljon meg kézileg bejelentkezni, vagy olvassa be a QR-kódot egy másik e
   <string name="screen_qr_code_login_initial_state_item_3">"Válassza ezt: %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"„Új eszköz összekapcsolása”"</string>
   <string name="screen_qr_code_login_initial_state_item_4">"Olvassa be a QR-kódot ezzel az eszközzel"</string>
+  <string name="screen_qr_code_login_initial_state_subtitle">"Csak akkor érhető el, ha a fiókszolgáltató támogatja."</string>
   <string name="screen_qr_code_login_initial_state_title">"Nyissa meg az %1$set egy másik eszközön a QR-kód lekéréséhez."</string>
   <string name="screen_qr_code_login_invalid_scan_state_description">"Használja a másik eszközön látható QR-kódot."</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Próbálja újra"</string>
