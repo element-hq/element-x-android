@@ -83,6 +83,7 @@
   <string name="action_quick_reply">"Snel antwoord"</string>
   <string name="action_quote">"Citeren"</string>
   <string name="action_react">"Reageren"</string>
+  <string name="action_reject">"Weiger"</string>
   <string name="action_remove">"Verwijderen"</string>
   <string name="action_reply">"Antwoorden"</string>
   <string name="action_reply_in_thread">"Antwoord in subchat"</string>
@@ -197,6 +198,7 @@
   <string name="common_search_results">"Zoekresultaten"</string>
   <string name="common_security">"Beveiliging"</string>
   <string name="common_seen_by">"Gezien door"</string>
+  <string name="common_send_to">"Sturen naar"</string>
   <string name="common_sending">"Verzenden…"</string>
   <string name="common_sending_failed">"Verzenden mislukt"</string>
   <string name="common_sent">"Verzonden"</string>

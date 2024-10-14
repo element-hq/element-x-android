@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="confirm_recovery_key_banner_message">"Je chatback-up is momenteel niet gesynchroniseerd. Je moet je herstelsleutel invoeren om toegang te behouden tot je chatback-up."</string>
   <string name="confirm_recovery_key_banner_title">"Voer je herstelsleutel in"</string>
+  <string name="full_screen_intent_banner_title">"Verbeter je gesprekservaring"</string>
   <string name="screen_invites_decline_chat_message">"Weet je zeker dat je de uitnodiging om toe te treden tot %1$s wilt weigeren?"</string>
   <string name="screen_invites_decline_chat_title">"Uitnodiging weigeren"</string>
   <string name="screen_invites_decline_direct_chat_message">"Weet je zeker dat je deze privéchat met %1$s wilt weigeren?"</string>

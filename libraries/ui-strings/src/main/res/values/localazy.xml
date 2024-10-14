@@ -280,6 +280,11 @@ Reason: %1$s."</string>
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
+  <string name="screen_create_room_access_section_anyone_option_description">"Anyone can join this room"</string>
+  <string name="screen_create_room_access_section_anyone_option_title">"Anyone"</string>
+  <string name="screen_create_room_access_section_header">"Room Access"</string>
+  <string name="screen_create_room_access_section_knocking_option_description">"Anyone can ask to join the room but an administrator or a moderator will have to accept the request"</string>
+  <string name="screen_create_room_access_section_knocking_option_title">"Ask to join"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Failed processing media to upload, please try again."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Failed uploading media, please try again."</string>

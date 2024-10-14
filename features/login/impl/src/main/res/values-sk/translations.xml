@@ -60,6 +60,7 @@ Skúste sa prihlásiť manuálne alebo naskenujte QR kód pomocou iného zariade
   <string name="screen_qr_code_login_initial_state_item_3">"Vyberte %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"„Prepojiť nové zariadenie“"</string>
   <string name="screen_qr_code_login_initial_state_item_4">"Naskenujte QR kód pomocou tohto zariadenia"</string>
+  <string name="screen_qr_code_login_initial_state_subtitle">"Dostupné iba v prípade, že to podporuje váš poskytovateľ účtu."</string>
   <string name="screen_qr_code_login_initial_state_title">"Ak chcete získať QR kód, otvorte %1$s na inom zariadení"</string>
   <string name="screen_qr_code_login_invalid_scan_state_description">"Použite QR kód zobrazený na druhom zariadení."</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Skúste to znova"</string>

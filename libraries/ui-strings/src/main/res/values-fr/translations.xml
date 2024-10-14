@@ -104,6 +104,7 @@
   <string name="action_send_message">"Envoyer un message"</string>
   <string name="action_share">"Partager"</string>
   <string name="action_share_link">"Partager le lien"</string>
+  <string name="action_show">"Afficher"</string>
   <string name="action_sign_in_again">"Se connecter à nouveau"</string>
   <string name="action_signout">"Se déconnecter"</string>
   <string name="action_signout_anyway">"Se déconnecter quand même"</string>
@@ -130,6 +131,7 @@
   <string name="common_call_invite">"Appel en cours (non supporté)"</string>
   <string name="common_call_started">"Appel démarré"</string>
   <string name="common_chat_backup">"Sauvegarde des discussions"</string>
+  <string name="common_copied_to_clipboard">"Copié dans le presse-papiers"</string>
   <string name="common_copyright">"Droits d’auteur"</string>
   <string name="common_creating_room">"Création du salon…"</string>
   <string name="common_current_user_left_room">"Quitter le salon"</string>
@@ -249,6 +251,7 @@ Raison: %1$s."</string>
   <string name="common_waiting">"En attente…"</string>
   <string name="common_waiting_for_decryption_key">"En attente de la clé de déchiffrement"</string>
   <string name="common_you">"Vous"</string>
+  <string name="crypto_identity_change_pin_violation">"L’identité de %1$s semble avoir changé. %2$s"</string>
   <string name="dialog_title_confirmation">"Confirmation"</string>
   <string name="dialog_title_error">"Erreur"</string>
   <string name="dialog_title_success">"Succès"</string>
@@ -277,6 +280,11 @@ Raison: %1$s."</string>
   <string name="invite_friends_text">"Salut, parle-moi sur %1$s : %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake pour signaler un problème"</string>
+  <string name="screen_create_room_access_section_anyone_option_description">"Tout le monde peut rejoindre ce salon"</string>
+  <string name="screen_create_room_access_section_anyone_option_title">"Tout le monde"</string>
+  <string name="screen_create_room_access_section_header">"Accès au salon"</string>
+  <string name="screen_create_room_access_section_knocking_option_description">"Tout le monde peut demander à rejoindre le salon, mais un administrateur ou un modérateur devra accepter la demande"</string>
+  <string name="screen_create_room_access_section_knocking_option_title">"Demander à rejoindre"</string>
   <string name="screen_media_picker_error_failed_selection">"Échec de la sélection du média, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Échec du téléchargement du média, veuillez réessayer."</string>

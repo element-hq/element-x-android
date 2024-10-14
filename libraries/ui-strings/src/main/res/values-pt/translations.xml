@@ -272,7 +272,7 @@ Razão: %1$s."</string>
   <string name="error_unknown">"Ocorreu um erro, desculpa"</string>
   <string name="event_shield_reason_authenticity_not_guaranteed">"A autenticidade desta mensagem cifrada não pode ser garantida neste dispositivo."</string>
   <string name="event_shield_reason_previously_verified">"Criptografado por um usuário verificado anteriormente."</string>
-  <string name="event_shield_reason_sent_in_clear">"Não encriptado."</string>
+  <string name="event_shield_reason_sent_in_clear">"Não cifrado."</string>
   <string name="event_shield_reason_unknown_device">"Cifragem com origem num dispositivo eliminado ou desconhecido."</string>
   <string name="event_shield_reason_unsigned_device">"Cifragem com origem num dispositivo não verificado pelo seu dono."</string>
   <string name="event_shield_reason_unverified_identity">"Cifragem com origem num utilizador não verificado."</string>
