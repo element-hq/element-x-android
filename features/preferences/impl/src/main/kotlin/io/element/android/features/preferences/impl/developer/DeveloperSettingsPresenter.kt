@@ -115,7 +115,9 @@ class DeveloperSettingsPresenter @Inject constructor(
                 DeveloperSettingsEvents.ClearCache -> coroutineScope.clearCache(clearCacheAction)
                 is DeveloperSettingsEvents.SetSimplifiedSlidingSyncEnabled -> coroutineScope.launch {
                     appPreferencesStore.setSimplifiedSlidingSyncEnabled(event.isEnabled)
-                    logoutUseCase.logout(ignoreSdkError = true)
+                    runCatching {
+                        logoutUseCase.logout(ignoreSdkError = true)
+                    }
                 }
                 is DeveloperSettingsEvents.SetHideImagesAndVideos -> coroutineScope.launch {
                     appPreferencesStore.setHideImagesAndVideos(event.value)
