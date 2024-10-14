@@ -13,7 +13,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.powerlevels.MatrixRoomPowerLevels
 import kotlinx.collections.immutable.toPersistentList
 
-class ChangeRoomPermissionsStatePreviewProvider : PreviewParameterProvider<ChangeRoomPermissionsState> {
+class ChangeRoomPermissionsStateProvider : PreviewParameterProvider<ChangeRoomPermissionsState> {
     override val values: Sequence<ChangeRoomPermissionsState>
         get() = sequenceOf(
             aChangeRoomPermissionsState(section = ChangeRoomPermissionsSection.RoomDetails),

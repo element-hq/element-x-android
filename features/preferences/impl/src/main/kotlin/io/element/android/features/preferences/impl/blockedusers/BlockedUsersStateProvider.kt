@@ -13,7 +13,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import kotlinx.collections.immutable.toPersistentList
 
-class BlockedUsersStatePreviewProvider : PreviewParameterProvider<BlockedUsersState> {
+class BlockedUsersStateProvider : PreviewParameterProvider<BlockedUsersState> {
     override val values: Sequence<BlockedUsersState>
         get() = sequenceOf(
             aBlockedUsersState(),

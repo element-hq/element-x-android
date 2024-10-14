@@ -284,7 +284,7 @@ private fun RoomMemberActionsBottomSheet(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomMembersModerationViewPreview(@PreviewParameter(RoomMembersModerationStatePreviewProvider::class) state: RoomMembersModerationState) {
+internal fun RoomMembersModerationViewPreview(@PreviewParameter(RoomMembersModerationStateProvider::class) state: RoomMembersModerationState) {
     ElementPreview {
         Box(
             modifier = Modifier
