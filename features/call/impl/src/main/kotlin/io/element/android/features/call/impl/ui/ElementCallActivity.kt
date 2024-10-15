@@ -26,6 +26,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberUpdatedState
@@ -95,7 +96,6 @@ class ElementCallActivity :
         pictureInPicturePresenter.setPipView(this)
 
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-        requestAudioFocus()
 
         setContent {
             val pipState = pictureInPicturePresenter.present()
@@ -103,6 +103,11 @@ class ElementCallActivity :
             ElementThemeApp(appPreferencesStore) {
                 val state = presenter.present()
                 eventSink = state.eventSink
+                LaunchedEffect(state.isCallActive) {
+                    if (state.isCallActive) {
+                        setCallIsActive()
+                    }
+                }
                 CallScreenView(
                     state = state,
                     pipState = pipState,
@@ -113,6 +118,11 @@ class ElementCallActivity :
                 )
             }
         }
+    }
+
+    private fun setCallIsActive() {
+        requestAudioFocus()
+        CallForegroundService.start(this)
     }
 
     @Composable
@@ -154,18 +164,6 @@ class ElementCallActivity :
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setCallType(intent)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        CallForegroundService.stop(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        if (!isFinishing && !isChangingConfigurations) {
-            CallForegroundService.start(this)
-        }
     }
 
     override fun onDestroy() {

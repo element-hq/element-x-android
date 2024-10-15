@@ -180,6 +180,7 @@ class CallScreenPresenter @AssistedInject constructor(
             urlState = urlState.value,
             webViewError = webViewError,
             userAgent = userAgent,
+            isCallActive = isJoinedCall,
             isInWidgetMode = isInWidgetMode,
             eventSink = { handleEvents(it) },
         )
