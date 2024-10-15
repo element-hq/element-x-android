@@ -40,13 +40,27 @@ fun IdentityChangeStateView(
             avatar = pinViolationIdentityChange.identityRoomMember.avatarData,
             content = buildAnnotatedString {
                 val learnMoreStr = stringResource(CommonStrings.action_learn_more)
+                val displayName = pinViolationIdentityChange.identityRoomMember.displayNameOrDefault
+                val userIdStr = stringResource(
+                    CommonStrings.crypto_identity_change_pin_violation_new_user_id,
+                    pinViolationIdentityChange.identityRoomMember.userId,
+                )
                 val fullText = stringResource(
-                    id = CommonStrings.crypto_identity_change_pin_violation,
-                    pinViolationIdentityChange.identityRoomMember.disambiguatedDisplayName,
+                    id = CommonStrings.crypto_identity_change_pin_violation_new,
+                    displayName,
+                    userIdStr,
                     learnMoreStr,
                 )
-                val learnMoreStartIndex = fullText.indexOf(learnMoreStr)
                 append(fullText)
+                val userIdStartIndex = fullText.indexOf(userIdStr)
+                addStyle(
+                    style = SpanStyle(
+                        fontWeight = FontWeight.Bold,
+                    ),
+                    start = userIdStartIndex,
+                    end = userIdStartIndex + userIdStr.length,
+                )
+                val learnMoreStartIndex = fullText.lastIndexOf(learnMoreStr)
                 addStyle(
                     style = SpanStyle(
                         textDecoration = TextDecoration.Underline,
