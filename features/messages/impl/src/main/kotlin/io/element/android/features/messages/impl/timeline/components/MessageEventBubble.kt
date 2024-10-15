@@ -18,7 +18,10 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,7 +32,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
@@ -101,6 +107,8 @@ fun MessageEventBubble(
     val bubbleShape = bubbleShape()
     val radiusPx = (avatarRadius + SENDER_AVATAR_BORDER_WIDTH).toPx()
     val yOffsetPx = -(NEGATIVE_MARGIN_FOR_BUBBLE + avatarRadius).toPx()
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+    var contentWidthPx by remember { mutableFloatStateOf(0f) }
     BoxWithConstraints(
         modifier = modifier
             .graphicsLayer {
@@ -112,7 +120,7 @@ fun MessageEventBubble(
                     drawCircle(
                         color = Color.Black,
                         center = Offset(
-                            x = 0f,
+                            x = if (isRtl) contentWidthPx else 0f,
                             y = yOffsetPx,
                         ),
                         radius = radiusPx,
@@ -129,7 +137,9 @@ fun MessageEventBubble(
                 .testTag(TestTags.messageBubble)
                 .widthIn(
                     min = MIN_BUBBLE_WIDTH,
-                    max = (constraints.maxWidth * BUBBLE_WIDTH_RATIO).toInt().toDp()
+                    max = (constraints.maxWidth * BUBBLE_WIDTH_RATIO)
+                        .toInt()
+                        .toDp()
                 )
                 .clip(bubbleShape)
                 .combinedClickable(
@@ -137,7 +147,10 @@ fun MessageEventBubble(
                     onLongClick = onLongClick,
                     indication = ripple(),
                     interactionSource = interactionSource
-                ),
+                )
+                .onGloballyPositioned { coordinates ->
+                    contentWidthPx = coordinates.size.width.toFloat()
+                },
             color = backgroundBubbleColor,
             shape = bubbleShape,
             content = content
