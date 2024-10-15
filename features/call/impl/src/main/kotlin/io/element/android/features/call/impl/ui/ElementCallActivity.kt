@@ -41,6 +41,7 @@ import io.element.android.features.call.impl.pip.PictureInPicturePresenter
 import io.element.android.features.call.impl.pip.PictureInPictureState
 import io.element.android.features.call.impl.pip.PipView
 import io.element.android.features.call.impl.services.CallForegroundService
+import io.element.android.features.call.impl.services.MicrophoneAccessService
 import io.element.android.features.call.impl.utils.CallIntentDataParser
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
@@ -156,22 +157,27 @@ class ElementCallActivity :
         setCallType(intent)
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
+        Timber.d("onResume, stop foreground services")
         CallForegroundService.stop(this)
+        MicrophoneAccessService.stop(this)
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
         if (!isFinishing && !isChangingConfigurations) {
+            Timber.d("onPause, start foreground services")
             CallForegroundService.start(this)
+            MicrophoneAccessService.start(this)
+        } else {
+            Timber.d("onPause, not starting foreground services")
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         releaseAudioFocus()
-        CallForegroundService.stop(this)
         pictureInPicturePresenter.setPipView(null)
     }
 

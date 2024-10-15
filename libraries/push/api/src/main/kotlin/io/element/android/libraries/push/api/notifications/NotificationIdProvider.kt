@@ -57,4 +57,5 @@ object NotificationIdProvider {
 enum class ForegroundServiceType(val id: Int) {
     INCOMING_CALL(1),
     ONGOING_CALL(2),
+    MICROPHONE(3),
 }
