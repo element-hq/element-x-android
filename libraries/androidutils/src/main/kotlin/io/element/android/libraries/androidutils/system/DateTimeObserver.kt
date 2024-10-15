@@ -11,31 +11,43 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import com.squareup.anvil.annotations.ContributesBinding
+import io.element.android.libraries.androidutils.system.DateTimeObserver.Event
+import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import java.time.Instant
 import javax.inject.Inject
 
-class DateTimeObserver @Inject constructor(
-    @ApplicationContext private val context: Context
-) {
+interface DateTimeObserver {
+    val changes: Flow<Event>
+
+    sealed interface Event {
+        data object TimeZoneChanged : Event
+        data class DateChanged(val previous: Instant, val new: Instant) : Event
+    }
+}
+
+@ContributesBinding(AppScope::class)
+class DefaultDateTimeObserver @Inject constructor(
+    @ApplicationContext context: Context
+) : DateTimeObserver {
     private val dateTimeReceiver = object : BroadcastReceiver() {
         private var lastTime = Instant.now()
 
         override fun onReceive(context: Context, intent: Intent) {
             val newDate = Instant.now()
             when (intent.action) {
-                Intent.ACTION_TIMEZONE_CHANGED -> _changes.tryEmit(Event.TimeZoneChanged)
-                Intent.ACTION_DATE_CHANGED -> _changes.tryEmit(Event.DateChanged(lastTime, newDate))
-                Intent.ACTION_TIME_CHANGED -> _changes.tryEmit(Event.DateChanged(lastTime, newDate))
+                Intent.ACTION_TIMEZONE_CHANGED -> changes.tryEmit(Event.TimeZoneChanged)
+                Intent.ACTION_DATE_CHANGED -> changes.tryEmit(Event.DateChanged(lastTime, newDate))
+                Intent.ACTION_TIME_CHANGED -> changes.tryEmit(Event.DateChanged(lastTime, newDate))
             }
             lastTime = newDate
         }
     }
 
-    private val _changes = MutableSharedFlow<Event>(extraBufferCapacity = 10)
-    val changes: Flow<Event> = _changes
+    override val changes = MutableSharedFlow<Event>(extraBufferCapacity = 10)
 
     init {
         context.registerReceiver(dateTimeReceiver, IntentFilter().apply {
@@ -43,10 +55,5 @@ class DateTimeObserver @Inject constructor(
             addAction(Intent.ACTION_DATE_CHANGED)
             addAction(Intent.ACTION_TIME_CHANGED)
         })
-    }
-
-    sealed interface Event {
-        data object TimeZoneChanged : Event
-        data class DateChanged(val previous: Instant, val new: Instant) : Event
     }
 }

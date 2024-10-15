@@ -7,13 +7,11 @@
 
 package io.element.android.features.roomlist.impl.datasource
 
-import android.content.Context
 import io.element.android.features.roomlist.impl.model.RoomListRoomSummary
 import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
 import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.androidutils.system.DateTimeObserver
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.di.ApplicationContext
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
@@ -34,7 +32,6 @@ import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
 class RoomListDataSource @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val roomListService: RoomListService,
     private val roomListRoomSummaryFactory: RoomListRoomSummaryFactory,
     private val coroutineDispatchers: CoroutineDispatchers,
