@@ -2,7 +2,7 @@ Element X brings you both sovereign & seamless collaboration built on Matrix.
 
 The collaboration capabilities include chat & video calls with the modern set of features such as:
  • public & private channels
- • room moderation & access conUpdatetrol
+ • room moderation & access control
  • replies, reactions, polls, read receipts, pinned messages, etc.
  • simultaneous chat & calls (picture in picture)
  • decentralized & federated communication across organizations
