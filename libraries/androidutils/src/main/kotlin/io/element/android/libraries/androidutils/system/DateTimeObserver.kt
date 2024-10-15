@@ -15,6 +15,7 @@ import com.squareup.anvil.annotations.ContributesBinding
 import io.element.android.libraries.androidutils.system.DateTimeObserver.Event
 import io.element.android.libraries.di.AppScope
 import io.element.android.libraries.di.ApplicationContext
+import io.element.android.libraries.di.SingleIn
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import java.time.Instant
@@ -30,6 +31,7 @@ interface DateTimeObserver {
 }
 
 @ContributesBinding(AppScope::class)
+@SingleIn(AppScope::class)
 class DefaultDateTimeObserver @Inject constructor(
     @ApplicationContext context: Context
 ) : DateTimeObserver {
