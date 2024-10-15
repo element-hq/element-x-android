@@ -12,7 +12,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -28,8 +27,8 @@ import io.element.android.libraries.designsystem.theme.components.SearchBarResul
 import io.element.android.libraries.matrix.api.room.MatrixRoom
 import io.element.android.libraries.matrix.api.room.MatrixRoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
-import io.element.android.libraries.matrix.api.room.powerlevels.canInvite
 import io.element.android.libraries.matrix.api.room.roomMembers
+import io.element.android.libraries.matrix.ui.room.canInviteAsState
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -56,9 +55,8 @@ class RoomMemberListPresenter @AssistedInject constructor(
         var isSearchActive by rememberSaveable { mutableStateOf(false) }
 
         val membersState by room.membersStateFlow.collectAsState()
-        val canInvite by produceState(initialValue = false, key1 = membersState) {
-            value = room.canInvite().getOrElse { false }
-        }
+        val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
+        val canInvite by room.canInviteAsState(syncUpdateFlow.value)
 
         val roomModerationState = roomMembersModerationPresenter.present()
 
