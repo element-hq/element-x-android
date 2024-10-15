@@ -9,6 +9,6 @@ package io.element.android.libraries.eventformatter.api
 
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 
-interface RoomLastMessageFormatter {
+fun interface RoomLastMessageFormatter {
     fun format(event: EventTimelineItem, isDmRoom: Boolean): CharSequence?
 }

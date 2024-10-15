@@ -677,7 +677,7 @@ class RoomListPresenterTest {
 }
 
 class FakeDateTimeObserver : DateTimeObserver {
-    override val changes = MutableSharedFlow<DateTimeObserver.Event>()
+    override val changes = MutableSharedFlow<DateTimeObserver.Event>(extraBufferCapacity = 1)
 
     fun given(event: DateTimeObserver.Event) {
         changes.tryEmit(event)
