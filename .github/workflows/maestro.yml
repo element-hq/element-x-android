@@ -79,7 +79,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: elementx-apk-maestro
-      - uses: mobile-dev-inc/action-maestro-cloud@v1.9.1
+      - uses: mobile-dev-inc/action-maestro-cloud@v1.9.2
         if: (github.event_name == 'pull_request' && github.event.pull_request.fork == null) || github.event_name == 'workflow_dispatch'
         with:
           api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
